@@ -1,0 +1,7 @@
+vendor/
+VERSION
+.cache
+_binaries
+.terraform
+*.tfstate*
+.vscode

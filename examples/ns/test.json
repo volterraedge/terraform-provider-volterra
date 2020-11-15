@@ -1,0 +1,7 @@
+{
+
+    "api_p12_file": "playground/playground-wtppvaog.staging.api-creds.p12",
+    "api_url": "https://playground.staging.volterra.us/api",
+    "api_ca_cert": "/Users/vesbkp/Documents/creds/staging/public_server_ca.crt",
+    "name": "pg-test"
+}

@@ -1,0 +1,113 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            f1:a3:3d:3a:0c:f5:6c:6b:70:c5:bc:e6:bc:29:e6:20
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C=US, ST=California, L=Santa Clara, O=Volterra Edge Services, OU=Infrastructure Security, CN=Volterra PKI v1 - Server Root CA v1/emailAddress=pki-admin@ves.io
+        Validity
+            Not Before: Aug 30 23:36:37 2018 GMT
+            Not After : Aug 29 23:36:37 2023 GMT
+        Subject: C=US, ST=California, L=Santa Clara, O=Volterra Edge Services, OU=Infrastructure Security, CN=Volterra PKI v1 - Server Issuing CA v1/emailAddress=pki-admin@ves.io
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:ae:1f:85:c3:b7:10:ac:52:a6:9c:be:a6:ab:e9:
+                    a8:dd:9f:6b:75:a8:3b:08:10:90:92:ac:bd:e5:c5:
+                    54:20:4f:9d:5c:db:6d:94:f1:71:cf:a3:4d:ec:a9:
+                    2e:02:06:84:fa:b3:b7:25:45:52:2c:c0:db:32:d4:
+                    f8:cf:36:74:f6:a0:99:7e:dc:ee:a5:59:08:8c:f3:
+                    49:88:80:52:ad:53:ef:b4:a7:19:56:55:aa:ec:3f:
+                    7c:85:92:f7:73:f4:cb:f2:11:83:ce:d2:d0:28:c6:
+                    db:2e:0c:22:ed:32:cc:39:e0:21:c7:df:0f:2b:04:
+                    d3:a5:91:21:6b:71:0b:38:d0:e6:96:17:0b:75:7a:
+                    49:59:a4:6c:7b:f6:d1:c5:81:27:76:a4:3e:c9:b2:
+                    5c:da:e2:38:25:04:38:5e:ed:a3:a2:0d:8a:87:05:
+                    65:31:45:6d:06:a9:52:fb:b0:e6:58:b4:8a:14:79:
+                    28:73:0b:ba:7f:26:e0:36:e7:f1:46:4c:57:3f:49:
+                    ce:ab:ff:0a:79:cb:b9:ef:0f:6f:ee:2a:33:81:ac:
+                    0b:cc:61:dc:78:81:e3:14:b9:ad:da:18:78:93:c8:
+                    94:f3:ef:84:22:4c:00:e0:ec:a6:69:8a:a8:fc:01:
+                    5d:22:de:5d:26:f1:c2:46:ea:00:b3:eb:ca:f2:fd:
+                    f5:99
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:TRUE
+            X509v3 Subject Key Identifier: 
+                65:82:3E:92:AE:22:49:DF:C6:19:45:A7:DE:3B:FF:D6:87:94:7C:41
+            X509v3 Authority Key Identifier: 
+                keyid:6E:23:2D:E2:E3:D7:49:21:9B:CE:7C:B5:04:E0:2E:2C:39:C4:87:8F
+                DirName:/C=US/ST=California/L=Santa Clara/O=Volterra Edge Services/OU=Infrastructure Security/CN=Volterra PKI v1 - Server Root CA v1/emailAddress=pki-admin@ves.io
+                serial:D1:86:39:AC:D1:B2:26:BE
+
+            X509v3 Key Usage: 
+                Certificate Sign, CRL Sign
+    Signature Algorithm: sha256WithRSAEncryption
+         65:7f:fd:c2:8d:e9:fe:03:e0:d9:a8:d8:3c:93:d6:fe:c7:30:
+         09:ce:6f:ee:31:d6:1a:31:42:5f:74:02:df:b5:83:f4:5e:79:
+         eb:52:0d:fe:6b:49:48:a2:46:6f:22:e8:01:79:f0:f1:e6:e3:
+         c4:e6:20:c1:1c:78:94:e5:9f:6c:9c:73:2e:3a:4c:b5:6a:ef:
+         55:f7:f1:82:ce:0e:e8:6e:d1:0a:0a:58:ed:94:46:3d:a1:f8:
+         79:2d:81:17:cd:59:61:b5:47:3b:1d:38:ec:89:c5:52:32:50:
+         90:9a:1a:d4:e2:f4:e1:57:d2:f2:5e:1e:57:1c:7c:d2:58:1f:
+         f9:02:58:e8:33:fe:62:63:d8:ca:7d:5f:11:ab:d6:ba:49:21:
+         dd:6a:23:a4:17:3b:1f:c3:6d:7c:3b:4d:e0:3b:55:87:03:97:
+         b3:ce:4d:96:46:2e:53:b1:cf:a2:a6:4b:10:3e:51:a7:4e:bc:
+         98:35:f5:8f:c4:d5:da:56:9f:eb:53:72:5e:24:95:8b:14:79:
+         da:0f:6f:d0:1d:66:1a:e9:2e:54:99:a5:0a:15:66:75:6f:b8:
+         1a:3f:68:31:47:82:8c:df:21:9d:d8:74:6f:7b:63:43:54:15:
+         4b:f4:b8:80:fc:a0:ab:4c:a3:62:5e:8d:81:f0:0b:a6:18:4f:
+         a1:ea:9a:3d:aa:43:1b:28:a4:5e:c0:ae:75:41:c1:d3:0a:dc:
+         bb:92:73:d9:53:7a:47:f0:3c:59:81:c0:4f:d2:81:5c:be:60:
+         f8:0a:d0:c5:b5:cc:df:d4:08:5f:e6:b5:3b:0d:4b:c5:79:a1:
+         93:59:f8:5a:d3:b9:4e:62:0a:89:78:0d:c3:18:26:83:2c:f1:
+         7b:d5:cc:76:37:0e:54:ff:28:17:c6:8e:e7:cf:75:eb:5f:9d:
+         e5:b9:ab:0f:b3:92:76:6b:14:0b:8c:fb:7b:5c:bc:68:22:e0:
+         d2:04:e0:e5:4b:90:63:c0:39:2f:33:a4:7c:9a:6f:1e:bd:9b:
+         8d:b7:e0:b5:db:21:3d:02:5b:b5:a2:3b:17:98:00:3d:7f:08:
+         e5:ec:d5:3a:45:09:cf:ac:ac:20:35:d3:a6:49:37:52:4c:b8:
+         4b:99:82:77:04:91:53:5a:58:95:d1:f2:b1:d1:2a:2f:34:45:
+         2e:5e:60:af:32:eb:83:25:f2:f0:6e:5e:49:7b:56:87:c0:6e:
+         cf:ca:1f:9a:3f:9f:e2:e0:44:fa:2d:e9:46:17:db:63:ea:3c:
+         a6:b4:4e:34:15:74:65:82:f3:37:9d:6a:20:1e:c0:50:1a:3a:
+         9f:57:69:f6:98:92:62:f3:7f:e6:d6:8a:94:10:a9:05:8a:5c:
+         6d:41:af:42:a6:53:95:ca
+-----BEGIN CERTIFICATE-----
+MIIFooBarE6gAwIBAgIRAPGjPToM9WxrcMW85rwp5iAwDQYJKoZIhvcNAQELBQAw
+gcoxCzAJBgNVBAYTAlVTMRMwEQYDVQQIDApDYWxpZm9ybmlhMRQwEgYDVQQHDAtT
+YW50YSBDbGFyYTEfMB0GA1UECgwWVm9sdGVycmEgRWRnZSBTZXJ2aWNlczEgMB4G
+A1UECwwXSW5mcmFzdHJ1Y3R1cmUgU2VjdXJpdHkxLDAqBgNVBAMMI1ZvbHRlcnJh
+IFBLSSB2MSAtIFNlcnZlciBSb290IENBIHYxMR8wHQYJKoZIhvcNAQkBFhBwa2kt
+YWRtaW5AdmVzLmlvMB4XDTE4MDgzMDIzMzYzN1oXDTIzMDgyOTIzMzYzN1owgc0x
+CzAJBgNVBAYTAlVTMRMwEQYDVQQIDApDYWxpZm9ybmlhMRQwEgYDVQQHDAtTYW50
+YSBDbGFyYTEfMB0GA1UECgwWVm9sdGVycmEgRWRnZSBTZXJ2aWNlczEgMB4GA1UE
+CwwXSW5mcmFzdHJ1Y3R1cmUgU2VjdXJpdHkxLzAtBgNVBAMMJlZvbHRlcnJhIFBL
+SSB2MSAtIFNlcnZlciBJc3N1aW5nIENBIHYxMR8wHQYJKoZIhvcNAQkBFhBwa2kt
+YWRtaW5AdmVzLmlvMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArh+F
+w7cQrFKmnL6mq+mo3Z9rdag7CBCQkqy95cVUIE+dXNttlPFxz6NN7KkuAgaE+rO3
+JUVSLMDbMtT4zzZ09qCZftzupVkIjPNJiIBSrVPvtKcZVlWq7D98hZL3c/TL8hGD
+ztLQKMbbLgwi7TLMOeAhx98PKwTTpZEha3ELONDmlhcLdXpJWaRse/bRxYEndqQ+
+ybJc2uI4JQQ4Xu2jog2KhwVlMUVtBqlS+7DmWLSKFHkocwu6fybgNufxRkxXP0nO
+q/8Kecu57w9v7iozgawLzGHceIHjFLmt2hh4k8iU8++EIkwA4OymaYqo/AFdIt5d
+JvHCRuoAs+vK8v31mQIDAQABo4IBQDCCATwwDAYDVR0TBAUwAwEB/zAdBgNVHQ4E
+FgQUZYI+kq4iSd/GGUWn3jv/1oeUfEEwgf8GA1UdIwSB9zCB9IAUbiMt4uPXSSGb
+zny1BOAuLDnEh4+hgdCkgc0wgcoxCzAJBgNVBAYTAlVTMRMwEQYDVQQIDApDYWxp
+Zm9ybmlhMRQwEgYDVQQHDAtTYW50YSBDbGFyYTEfMB0GA1UECgwWVm9sdGVycmEg
+RWRnZSBTZXJ2aWNlczEgMB4GA1UECwwXSW5mcmFzdHJ1Y3R1cmUgU2VjdXJpdHkx
+LDAqBgNVBAMMI1ZvbHRlcnJhIFBLSSB2MSAtIFNlcnZlciBSb290IENBIHYxMR8w
+HQYJKoZIhvcNAQkBFhBwa2ktYWRtaW5AdmVzLmlvggkA0YY5rNGyJr4wCwYDVR0P
+BAQDAgEGMA0GCSqGSIb3DQEBCwUAA4ICAQBlf/3Cjen+A+DZqNg8k9b+xzAJzm/u
+MdYaMUJfdALftYP0XnnrUg3+a0lIokZvIugBefDx5uPE5iDBHHiU5Z9snHMuOky1
+au9V9/GCzg7obtEKCljtlEY9ofh5LYEXzVlhtUc7HTjsicVSMlCQmhrU4vThV9Ly
+Xh5XHHzSWB/5AljoM/5iY9jKfV8Rq9a6SSHdaiOkFzsfw218O03gO1WHA5ezzk2W
+Ri5Tsc+ipksQPlGnTryYNfWPxNXaVp/rU3JeJJWLFHnaD2/QHWYa6S5UmaUKFWZ1
+b7gaP2gxR4KM3yGd2HRve2NDVBVL9LiA/KCrTKNiXo2B8AumGE+h6po9qkMbKKRe
+wK51QcHTCty7knPZU3pH8DxZgcBP0oFcvmD4CtDFtczf1Ahf5rU7DUvFeaGTWfha
+07lOYgqJeA3DGCaDLPF71cx2Nw5U/ygXxo7nz3XrX53luasPs5J2axQLjPt7XLxo
+IuDSBODlS5BjwDkvM6R8mm8evZuNt+C12yE9Alu1ojsXmAA9fwjl7NU6RQnPrKwg
+NdOmSTdSTLhLmYJ3BJFTWliV0fKx0SovNEUuXmCvMuuDJfLwbl5Je1aHwG7Pyh+a
+P5/i4ET6LelGF9tj6jymtE40FXRlgvM3nWogHsBQGjqfV2n2mJJi83/m1oqUEKkF
+ilxtQa9CplOFoo==
+-----END CERTIFICATE-----
