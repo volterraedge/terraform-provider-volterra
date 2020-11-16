@@ -36,6 +36,11 @@ jobs:
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           PASSPHRASE: ${{ secrets.PASSPHRASE }}
+      - name: Configure git for private modules
+        env:
+          TOKEN: ${{ secrets.GITLAB_PERSONAL_ACCESS_TOKEN }}
+          USER: ${{ secrets.GITLAB_USERNAME }}
+        run: git config --global url."https://${USER}:${TOKEN}@gitlab.com".insteadOf "https://gitlab.com"
       -
         name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
