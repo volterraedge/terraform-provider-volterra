@@ -1318,7 +1318,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-AcceptTOS"
+                    "url": "http://some-url-here/ves-io-schema-user-CustomAPI-AcceptTOS"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.AcceptTOS"
             },
@@ -1408,7 +1408,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-AssignRole"
+                    "url": "http://some-url-here/ves-io-schema-user-CustomAPI-AssignRole"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.AssignRole"
             },
@@ -1576,7 +1576,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-GetTOS"
+                    "url": "http://some-url-here/ves-io-schema-user-CustomAPI-GetTOS"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.GetTOS"
             },
@@ -1658,7 +1658,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-List"
+                    "url": "http://some-url-here/ves-io-schema-user-CustomAPI-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.List"
             },
@@ -1743,7 +1743,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-Create"
+                    "url": "http://some-url-here/ves-io-schema-user-CustomAPI-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.Create"
             },
@@ -2006,7 +2006,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-CascadeDelete"
+                    "url": "http://some-url-here/ves-io-schema-user-CustomAPI-CascadeDelete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.CascadeDelete"
             },
@@ -2088,7 +2088,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-CustomAPI-Get"
+                    "url": "http://some-url-here/ves-io-schema-user-CustomAPI-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.Get"
             },
@@ -2552,23 +2552,13 @@ var CustomAPISwaggerJSON string = `{
         },
         "userBillingFlag": {
             "type": "string",
-            "description": "Possible billing flags used to indicate problems with customer billing.\n\n - VALID_PAYMENT_METHOD: customer has a valid payment method on our file\n - OVERDUE_INVOICE: customer has at least one overdue invoice with with us\n - LAST_TRANSACTION_STATUS: status of customer's last transaction. a retry may be triggered so this is an early warning.\n - PAYMENT_METHOD_EXPIRED: this flag is on when the customer has no but expired payment method on it's file.\nWe could not charge your primary payment method due to insufficient funds\nYour primary payment method was declined\nSecurity code for your primary payment method is incorrect\nZIP code for your primary payment method is incorrect\nWe could not charge your primary payment method due to insufficient funds. Your secondary payment method was charged\nYour primary payment method has expired. Your secondary payment method was charged\nYour primary payment method was declined. Your secondary payment method was charged\nWe could not charge any of the active payment methods\nWe could not charge any of the active payment methods\nAdding a payment method resulted in an error",
+            "description": "Possible billing flags used to indicate problems with customer billing.\n\n - VALID_PAYMENT_METHOD: customer has a valid payment method on our file\n - OVERDUE_INVOICE: customer has at least one overdue invoice with with us\n - LAST_TRANSACTION_STATUS: status of customer's last transaction. a retry may be triggered so this is an early warning.\n - PAYMENT_METHOD_EXPIRED: this flag is on when the customer has no but expired payment method on it's file.",
             "title": "Billing flag",
             "enum": [
                 "VALID_PAYMENT_METHOD",
                 "OVERDUE_INVOICE",
                 "LAST_TRANSACTION_STATUS",
-                "PAYMENT_METHOD_EXPIRED",
-                "PAYMENT_METHOD_INSUFFICIENT_FUNDS",
-                "PAYMENT_METHOD_PRIMARY_DECLINED",
-                "PAYMENT_METHOD_CVC_INVALID",
-                "PAYMENT_METHOD_ZIP_INVALID",
-                "PAYMENT_METHOD_INSUFFICIENT_FUNDS_SECONDARY_CHARGED",
-                "PAYMENT_METHOD_PRIMARY_EXPIRED_SECONDARY_CHARGED",
-                "PAYMENT_METHOD_PRIMARY_DECLINED_SECONDARY_CHARGED",
-                "PAYMENT_METHOD_BOTH_PAYMENT_METHOD_FAILED",
-                "PAYMENT_METHOD_GENERIC_FAILURE",
-                "PAYMENT_METHOD_GENERIC_ADD_FAILURE"
+                "PAYMENT_METHOD_EXPIRED"
             ],
             "default": "VALID_PAYMENT_METHOD",
             "x-displayname": "Billing flag",

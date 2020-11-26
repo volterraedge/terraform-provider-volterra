@@ -28,8 +28,8 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-	object "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	object "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
 )
 
 var (
@@ -994,19 +994,7 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
-func (s *APISrv) validateTransport(ctx context.Context) error {
-	if s.sf.IsTransportNotSupported("ves.io.schema.service_policy_rule.crudapi.API", server.TransportFromContext(ctx)) {
-		userMsg := fmt.Sprintf("ves.io.schema.service_policy_rule.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
-		return server.GRPCStatusFromError(err).Err()
-	}
-	return nil
-}
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.service_policy_rule.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1031,9 +1019,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1058,9 +1043,6 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.service_policy_rule.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1083,9 +1065,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.service_policy_rule.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1137,9 +1116,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.service_policy_rule.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1518,7 +1494,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-API-Get"
+                    "url": "http://some-url-here/ves-io-schema-service_policy_rule-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.Get"
             },
@@ -1593,7 +1569,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-API-Delete"
+                    "url": "http://some-url-here/ves-io-schema-service_policy_rule-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.Delete"
             },
@@ -1676,7 +1652,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-API-Replace"
+                    "url": "http://some-url-here/ves-io-schema-service_policy_rule-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.Replace"
             },
@@ -1805,7 +1781,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-API-List"
+                    "url": "http://some-url-here/ves-io-schema-service_policy_rule-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.List"
             },
@@ -1882,7 +1858,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-API-Create"
+                    "url": "http://some-url-here/ves-io-schema-service_policy_rule-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.Create"
             },
@@ -2011,7 +1987,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-API-ListStream"
+                    "url": "http://some-url-here/ves-io-schema-service_policy_rule-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.ListStream"
             },
@@ -2933,7 +2909,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -3020,12 +2996,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "L4 Destination",
             "x-ves-proto-message": "ves.io.schema.L4DestType",
             "properties": {
-                "port_ranges": {
+                "ports": {
                     "type": "string",
-                    "description": " A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-",
-                    "title": "port_ranges",
-                    "x-displayname": "Port Ranges",
-                    "x-ves-example": "80,443,8080-8191,9080"
+                    "description": " Destination port range.\n\nExample: - \"100-200\"-",
+                    "title": "ports",
+                    "x-displayname": "Port Range",
+                    "x-ves-example": "100-200"
                 },
                 "prefixes": {
                     "type": "array",
@@ -3818,14 +3794,8 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Scheme",
                     "x-ves-example": "HTTPS"
                 },
-                "server_selector": {
-                    "description": " A label selector that describes the expected set of servers.\n The predicate evaluates to true if the expressions in the label selector are true for the server labels.",
-                    "title": "server selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType",
-                    "x-displayname": "Group of Servers by Label Selector"
-                },
                 "tls_fingerprint_matcher": {
-                    "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
+                    "description": " TLS JA3 fingerprints to be matched. The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints\n in the virtual_host matcher.",
                     "title": "TLS JA3 fingerprint matcher",
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType",
                     "x-displayname": "TLS Fingerprint Matcher"

@@ -30,7 +30,7 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 const (
@@ -1100,19 +1100,7 @@ type APISrv struct {
 	// resource handler function pointers
 }
 
-func (s *APISrv) validateTransport(ctx context.Context) error {
-	if s.sf.IsTransportNotSupported("ves.io.schema.network_interface.API", server.TransportFromContext(ctx)) {
-		userMsg := fmt.Sprintf("ves.io.schema.network_interface.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
-		return server.GRPCStatusFromError(err).Err()
-	}
-	return nil
-}
-
 func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateResponse, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_interface.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1159,9 +1147,6 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResponse, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
@@ -1197,9 +1182,6 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 }
 
 func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_interface.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1245,9 +1227,6 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 }
 
 func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_interface.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1281,9 +1260,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protobuf.Empty, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_interface.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1520,11 +1496,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				)
 			}
 
-			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
-			item.Metadata.FromObjectMetaType(o.Metadata)
-			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
-			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.network_interface.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1673,7 +1644,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-API-Create"
+                    "url": "http://some-url-here/ves-io-schema-network_interface-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.API.Create"
             },
@@ -1769,7 +1740,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-API-Replace"
+                    "url": "http://some-url-here/ves-io-schema-network_interface-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.API.Replace"
             },
@@ -1881,7 +1852,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-API-List"
+                    "url": "http://some-url-here/ves-io-schema-network_interface-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.API.List"
             },
@@ -1985,7 +1956,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-API-Get"
+                    "url": "http://some-url-here/ves-io-schema-network_interface-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.API.Get"
             },
@@ -2068,7 +2039,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-API-Delete"
+                    "url": "http://some-url-here/ves-io-schema-network_interface-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.API.Delete"
             },
@@ -2385,7 +2356,6 @@ var APISwaggerJSON string = `{
             "description": "Dedicated Interface Configuration",
             "title": "Dedicated Interface",
             "x-displayname": "Dedicated Interface",
-            "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
             "x-ves-oneof-field-primary_choice": "[\"is_primary\",\"not_primary\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.DedicatedInterfaceType",
@@ -2406,16 +2376,6 @@ var APISwaggerJSON string = `{
                 "is_primary": {
                     "description": "Exclusive with [not_primary]\nx-displayName: \"Interface is Primary\"\nThis interface is primary",
                     "title": "Interface is Primary",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "monitor": {
-                    "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
-                    "title": "Monitoring enabled",
-                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig"
-                },
-                "monitor_disabled": {
-                    "description": "Exclusive with [monitor]\nx-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
-                    "title": "Monitoring disabled",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "mtu": {
@@ -2488,7 +2448,6 @@ var APISwaggerJSON string = `{
             "title": "Ethernet Interface",
             "x-displayname": "Ethernet Interface",
             "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"static_ip\"]",
-            "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-oneof-field-network_choice": "[\"inside_network\",\"site_local_inside_network\",\"site_local_network\",\"storage_network\"]",
             "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
             "x-ves-oneof-field-primary_choice": "[\"is_primary\",\"not_primary\"]",
@@ -2526,16 +2485,6 @@ var APISwaggerJSON string = `{
                 "is_primary": {
                     "description": "Exclusive with [not_primary]\nx-displayName: \"Interface is Primary\"\nThis interface is primary",
                     "title": "Interface is Primary",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "monitor": {
-                    "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
-                    "title": "Monitoring enabled",
-                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig"
-                },
-                "monitor_disabled": {
-                    "description": "Exclusive with [monitor]\nx-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
-                    "title": "Monitoring disabled",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "mtu": {
@@ -2711,7 +2660,6 @@ var APISwaggerJSON string = `{
             "title": "Global Specification",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"legacy\",\"tunnel_interface\"]",
-            "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.GlobalSpecType",
             "properties": {
                 "DHCP_server": {
@@ -2794,16 +2742,6 @@ var APISwaggerJSON string = `{
                 "legacy": {
                     "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface tunnel_interface]\nx-displayName: \"Internal\"\nInternal helps in conversion",
                     "title": "Internal",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "monitor": {
-                    "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
-                    "title": "Monitoring enabled",
-                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig"
-                },
-                "monitor_disabled": {
-                    "description": "Exclusive with [monitor]\nx-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
-                    "title": "Monitoring disabled",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "mtu": {
@@ -2907,10 +2845,8 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceLegacyInterfaceType": {
             "type": "object",
-            "description": "Legacy Interface Configuration",
+            "description": "x-displayName: \"Legacy Configuration\nLegacy Interface Configuration",
             "title": "Legacy Configuration",
-            "x-displayname": "Legacy Configuration",
-            "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.LegacyInterfaceType",
             "properties": {
                 "DHCP_server": {
@@ -2955,16 +2891,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_interfaceNetworkInterfaceDHCP",
                     "x-displayname": "Enable DHCP Client",
                     "x-ves-required": "true"
-                },
-                "monitor": {
-                    "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
-                    "title": "Monitoring enabled",
-                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig"
-                },
-                "monitor_disabled": {
-                    "description": "Exclusive with [monitor]\nx-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
-                    "title": "Monitoring disabled",
-                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "mtu": {
                     "type": "integer",
@@ -3030,13 +2956,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "network_interfaceLinkQualityMonitorConfig": {
-            "type": "object",
-            "description": "Link Quality Monitoring configuration for a network interface.",
-            "title": "Link Quality Monitoring Configuration",
-            "x-displayname": "Link Quality Monitoring Configuration",
-            "x-ves-proto-message": "ves.io.schema.network_interface.LinkQualityMonitorConfig"
-        },
         "network_interfaceListResponse": {
             "type": "object",
             "description": "This is the output message of 'List' RPC.",
@@ -3093,12 +3012,6 @@ var APISwaggerJSON string = `{
                     "title": "labels",
                     "x-displayname": "Labels"
                 },
-                "metadata": {
-                    "description": " If list request has report_fields set then metadata will\n contain all the metadata associated with the object.",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectGetMetaType",
-                    "x-displayname": "Metadata"
-                },
                 "name": {
                     "type": "string",
                     "description": " The name of this network_interface\n\nExample: - \"name\"-",
@@ -3114,7 +3027,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "ns1"
                 },
                 "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
+                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec",
                     "title": "object",
                     "$ref": "#/definitions/network_interfaceObject",
                     "x-displayname": "Object"
@@ -3133,12 +3046,6 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/network_interfaceStatusObject"
                     },
                     "x-displayname": "Status"
-                },
-                "system_metadata": {
-                    "description": " If list request has report_fields set then system_metadata will\n contain all the system generated details of this object.",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
-                    "x-displayname": "System Metadata"
                 },
                 "tenant": {
                     "type": "string",
@@ -3672,7 +3579,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"

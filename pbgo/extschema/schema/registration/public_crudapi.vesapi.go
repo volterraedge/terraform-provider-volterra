@@ -30,7 +30,7 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 const (
@@ -1089,19 +1089,7 @@ type APISrv struct {
 	// resource handler function pointers
 }
 
-func (s *APISrv) validateTransport(ctx context.Context) error {
-	if s.sf.IsTransportNotSupported("ves.io.schema.registration.API", server.TransportFromContext(ctx)) {
-		userMsg := fmt.Sprintf("ves.io.schema.registration.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
-		return server.GRPCStatusFromError(err).Err()
-	}
-	return nil
-}
-
 func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateResponse, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.registration.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1148,9 +1136,6 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResponse, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
@@ -1186,9 +1171,6 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 }
 
 func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.registration.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1231,9 +1213,6 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 }
 
 func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.registration.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1267,9 +1246,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protobuf.Empty, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.registration.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1495,11 +1471,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				)
 			}
 
-			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
-			item.Metadata.FromObjectMetaType(o.Metadata)
-			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
-			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
 			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.registration.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1637,7 +1608,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-API-Create"
+                    "url": "http://some-url-here/ves-io-schema-registration-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.API.Create"
             },
@@ -1733,7 +1704,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-API-Replace"
+                    "url": "http://some-url-here/ves-io-schema-registration-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.API.Replace"
             },
@@ -1845,7 +1816,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-API-List"
+                    "url": "http://some-url-here/ves-io-schema-registration-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.API.List"
             },
@@ -1948,7 +1919,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-API-Get"
+                    "url": "http://some-url-here/ves-io-schema-registration-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.API.Get"
             },
@@ -2031,7 +2002,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-API-Delete"
+                    "url": "http://some-url-here/ves-io-schema-registration-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.API.Delete"
             },
@@ -2378,12 +2349,6 @@ var APISwaggerJSON string = `{
                     "title": "labels",
                     "x-displayname": "Labels"
                 },
-                "metadata": {
-                    "description": " If list request has report_fields set then metadata will\n contain all the metadata associated with the object.",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectGetMetaType",
-                    "x-displayname": "Metadata"
-                },
                 "name": {
                     "type": "string",
                     "description": " The name of this registration\n\nExample: - \"name\"-",
@@ -2399,7 +2364,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "ns1"
                 },
                 "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
+                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec",
                     "title": "object",
                     "$ref": "#/definitions/registrationObject",
                     "x-displayname": "Object"
@@ -2409,12 +2374,6 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
-                },
-                "system_metadata": {
-                    "description": " If list request has report_fields set then system_metadata will\n contain all the system generated details of this object.",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
-                    "x-displayname": "System Metadata"
                 },
                 "tenant": {
                     "type": "string",
@@ -3507,13 +3466,12 @@ var APISwaggerJSON string = `{
         },
         "siteLinkQuality": {
             "type": "string",
-            "description": "Link quality determined by VER using different probes\n\nUnknown quality\nLink quality is good\nLink quality is poor\n - QUALITY_DISABLED: Quality disabled",
+            "description": "Link quality determined by VER using different probes\n\nUnknown quality\nLink quality is good\nLink quality is poor",
             "title": "Link quality",
             "enum": [
                 "QUALITY_UNKNOWN",
                 "QUALITY_GOOD",
-                "QUALITY_POOR",
-                "QUALITY_DISABLED"
+                "QUALITY_POOR"
             ],
             "default": "QUALITY_UNKNOWN",
             "x-displayname": "Link quality",

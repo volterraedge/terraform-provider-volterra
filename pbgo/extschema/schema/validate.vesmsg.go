@@ -3145,17 +3145,6 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-	case *StringRules_PortRangeList:
-		if fv, exists := v.FldValidators["well_known.port_range_list"]; exists {
-			val := m.GetWellKnown().(*StringRules_PortRangeList).PortRangeList
-			vOpts := append(opts,
-				db.WithValidateField("well_known"),
-				db.WithValidateField("port_range_list"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 
 	}
 

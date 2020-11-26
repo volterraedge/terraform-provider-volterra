@@ -15,7 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -215,20 +215,14 @@ type ValidateAWSVPCParamsType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateAWSVPCParamsType) NameChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for name_choice")
-	}
-	return validatorFn, nil
-}
+func (v *ValidateAWSVPCParamsType) NameTagValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-func (v *ValidateAWSVPCParamsType) NameChoiceNameTagValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_NameTag, err := db.NewStringValidationRuleHandler(rules)
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name_tag")
 	}
-	return oValidatorFn_NameTag, nil
+
+	return validatorFn, nil
 }
 
 func (v *ValidateAWSVPCParamsType) PrimaryIpv4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -264,38 +258,11 @@ func (v *ValidateAWSVPCParamsType) Validate(ctx context.Context, pm interface{},
 
 	}
 
-	if fv, exists := v.FldValidators["name_choice"]; exists {
-		val := m.GetNameChoice()
-		vOpts := append(opts,
-			db.WithValidateField("name_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
+	if fv, exists := v.FldValidators["name_tag"]; exists {
 
-	switch m.GetNameChoice().(type) {
-	case *AWSVPCParamsType_NameTag:
-		if fv, exists := v.FldValidators["name_choice.name_tag"]; exists {
-			val := m.GetNameChoice().(*AWSVPCParamsType_NameTag).NameTag
-			vOpts := append(opts,
-				db.WithValidateField("name_choice"),
-				db.WithValidateField("name_tag"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AWSVPCParamsType_Autogenerate:
-		if fv, exists := v.FldValidators["name_choice.autogenerate"]; exists {
-			val := m.GetNameChoice().(*AWSVPCParamsType_Autogenerate).Autogenerate
-			vOpts := append(opts,
-				db.WithValidateField("name_choice"),
-				db.WithValidateField("autogenerate"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+		vOpts := append(opts, db.WithValidateField("name_tag"))
+		if err := fv(ctx, m.GetNameTag(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -324,28 +291,17 @@ var DefaultAWSVPCParamsTypeValidator = func() *ValidateAWSVPCParamsType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhNameChoice := v.NameChoiceValidationRuleHandler
-	rulesNameChoice := map[string]string{
+	vrhNameTag := v.NameTagValidationRuleHandler
+	rulesNameTag := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
 	}
-	vFn, err = vrhNameChoice(rulesNameChoice)
+	vFn, err = vrhNameTag(rulesNameTag)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSVPCParamsType.name_choice: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSVPCParamsType.name_tag: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["name_choice"] = vFn
-
-	vrhNameChoiceNameTag := v.NameChoiceNameTagValidationRuleHandler
-	rulesNameChoiceNameTag := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-	}
-	vFnMap["name_choice.name_tag"], err = vrhNameChoiceNameTag(rulesNameChoiceNameTag)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AWSVPCParamsType.name_choice_name_tag: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["name_choice.name_tag"] = vFnMap["name_choice.name_tag"]
+	v.FldValidators["name_tag"] = vFn
 
 	vrhPrimaryIpv4 := v.PrimaryIpv4ValidationRuleHandler
 	rulesPrimaryIpv4 := map[string]string{
@@ -885,19 +841,21 @@ type ValidateAzureSubnetType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateAzureSubnetType) ResourceGroupChoiceSubnetResourceGrpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_SubnetResourceGrp, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for subnet_resource_grp")
-	}
-	return oValidatorFn_SubnetResourceGrp, nil
-}
-
 func (v *ValidateAzureSubnetType) SubnetNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for subnet_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureSubnetType) SubnetResourceGrpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for subnet_resource_grp")
 	}
 
 	return validatorFn, nil
@@ -917,36 +875,19 @@ func (v *ValidateAzureSubnetType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
-	switch m.GetResourceGroupChoice().(type) {
-	case *AzureSubnetType_SubnetResourceGrp:
-		if fv, exists := v.FldValidators["resource_group_choice.subnet_resource_grp"]; exists {
-			val := m.GetResourceGroupChoice().(*AzureSubnetType_SubnetResourceGrp).SubnetResourceGrp
-			vOpts := append(opts,
-				db.WithValidateField("resource_group_choice"),
-				db.WithValidateField("subnet_resource_grp"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AzureSubnetType_VnetResourceGroup:
-		if fv, exists := v.FldValidators["resource_group_choice.vnet_resource_group"]; exists {
-			val := m.GetResourceGroupChoice().(*AzureSubnetType_VnetResourceGroup).VnetResourceGroup
-			vOpts := append(opts,
-				db.WithValidateField("resource_group_choice"),
-				db.WithValidateField("vnet_resource_group"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["subnet_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("subnet_name"))
 		if err := fv(ctx, m.GetSubnetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["subnet_resource_grp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("subnet_resource_grp"))
+		if err := fv(ctx, m.GetSubnetResourceGrp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -967,18 +908,6 @@ var DefaultAzureSubnetTypeValidator = func() *ValidateAzureSubnetType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhResourceGroupChoiceSubnetResourceGrp := v.ResourceGroupChoiceSubnetResourceGrpValidationRuleHandler
-	rulesResourceGroupChoiceSubnetResourceGrp := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-	}
-	vFnMap["resource_group_choice.subnet_resource_grp"], err = vrhResourceGroupChoiceSubnetResourceGrp(rulesResourceGroupChoiceSubnetResourceGrp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AzureSubnetType.resource_group_choice_subnet_resource_grp: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["resource_group_choice.subnet_resource_grp"] = vFnMap["resource_group_choice.subnet_resource_grp"]
-
 	vrhSubnetName := v.SubnetNameValidationRuleHandler
 	rulesSubnetName := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -990,6 +919,17 @@ var DefaultAzureSubnetTypeValidator = func() *ValidateAzureSubnetType {
 		panic(errMsg)
 	}
 	v.FldValidators["subnet_name"] = vFn
+
+	vrhSubnetResourceGrp := v.SubnetResourceGrpValidationRuleHandler
+	rulesSubnetResourceGrp := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+	}
+	vFn, err = vrhSubnetResourceGrp(rulesSubnetResourceGrp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureSubnetType.subnet_resource_grp: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["subnet_resource_grp"] = vFn
 
 	return v
 }()
@@ -1323,20 +1263,14 @@ type ValidateAzureVnetParamsType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateAzureVnetParamsType) NameChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for name_choice")
-	}
-	return validatorFn, nil
-}
+func (v *ValidateAzureVnetParamsType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-func (v *ValidateAzureVnetParamsType) NameChoiceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_Name, err := db.NewStringValidationRuleHandler(rules)
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
 	}
-	return oValidatorFn_Name, nil
+
+	return validatorFn, nil
 }
 
 func (v *ValidateAzureVnetParamsType) PrimaryIpv4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -1363,38 +1297,11 @@ func (v *ValidateAzureVnetParamsType) Validate(ctx context.Context, pm interface
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["name_choice"]; exists {
-		val := m.GetNameChoice()
-		vOpts := append(opts,
-			db.WithValidateField("name_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
+	if fv, exists := v.FldValidators["name"]; exists {
 
-	switch m.GetNameChoice().(type) {
-	case *AzureVnetParamsType_Name:
-		if fv, exists := v.FldValidators["name_choice.name"]; exists {
-			val := m.GetNameChoice().(*AzureVnetParamsType_Name).Name
-			vOpts := append(opts,
-				db.WithValidateField("name_choice"),
-				db.WithValidateField("name"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AzureVnetParamsType_Autogenerate:
-		if fv, exists := v.FldValidators["name_choice.autogenerate"]; exists {
-			val := m.GetNameChoice().(*AzureVnetParamsType_Autogenerate).Autogenerate
-			vOpts := append(opts,
-				db.WithValidateField("name_choice"),
-				db.WithValidateField("autogenerate"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1423,29 +1330,18 @@ var DefaultAzureVnetParamsTypeValidator = func() *ValidateAzureVnetParamsType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhNameChoice := v.NameChoiceValidationRuleHandler
-	rulesNameChoice := map[string]string{
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.min_len":   "1",
 	}
-	vFn, err = vrhNameChoice(rulesNameChoice)
+	vFn, err = vrhName(rulesName)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetParamsType.name_choice: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetParamsType.name: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["name_choice"] = vFn
-
-	vrhNameChoiceName := v.NameChoiceNameValidationRuleHandler
-	rulesNameChoiceName := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-		"ves.io.schema.rules.string.min_len": "1",
-	}
-	vFnMap["name_choice.name"], err = vrhNameChoiceName(rulesNameChoiceName)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AzureVnetParamsType.name_choice_name: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["name_choice.name"] = vFnMap["name_choice.name"]
+	v.FldValidators["name"] = vFn
 
 	vrhPrimaryIpv4 := v.PrimaryIpv4ValidationRuleHandler
 	rulesPrimaryIpv4 := map[string]string{
@@ -2173,7 +2069,9 @@ var DefaultGCPSubnetParamsTypeValidator = func() *ValidateGCPSubnetParamsType {
 
 	vrhSubnetName := v.SubnetNameValidationRuleHandler
 	rulesSubnetName := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFn, err = vrhSubnetName(rulesSubnetName)
 	if err != nil {
@@ -2314,84 +2212,6 @@ func GCPSubnetTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *GCPVPCNetworkAutogenerateParamsType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *GCPVPCNetworkAutogenerateParamsType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *GCPVPCNetworkAutogenerateParamsType) DeepCopy() *GCPVPCNetworkAutogenerateParamsType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &GCPVPCNetworkAutogenerateParamsType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *GCPVPCNetworkAutogenerateParamsType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *GCPVPCNetworkAutogenerateParamsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return GCPVPCNetworkAutogenerateParamsTypeValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateGCPVPCNetworkAutogenerateParamsType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateGCPVPCNetworkAutogenerateParamsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*GCPVPCNetworkAutogenerateParamsType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *GCPVPCNetworkAutogenerateParamsType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["autogenerate"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("autogenerate"))
-		if err := fv(ctx, m.GetAutogenerate(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultGCPVPCNetworkAutogenerateParamsTypeValidator = func() *ValidateGCPVPCNetworkAutogenerateParamsType {
-	v := &ValidateGCPVPCNetworkAutogenerateParamsType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	return v
-}()
-
-func GCPVPCNetworkAutogenerateParamsTypeValidator() db.Validator {
-	return DefaultGCPVPCNetworkAutogenerateParamsTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
 func (m *GCPVPCNetworkChoiceType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2481,17 +2301,6 @@ func (v *ValidateGCPVPCNetworkChoiceType) Validate(ctx context.Context, pm inter
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("existing_network"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GCPVPCNetworkChoiceType_NewNetworkAutogenerate:
-		if fv, exists := v.FldValidators["choice.new_network_autogenerate"]; exists {
-			val := m.GetChoice().(*GCPVPCNetworkChoiceType_NewNetworkAutogenerate).NewNetworkAutogenerate
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("new_network_autogenerate"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -2756,6 +2565,125 @@ func GCPVPCNetworkTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *GCPVPCOneInterfaceNodeType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GCPVPCOneInterfaceNodeType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GCPVPCOneInterfaceNodeType) DeepCopy() *GCPVPCOneInterfaceNodeType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GCPVPCOneInterfaceNodeType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GCPVPCOneInterfaceNodeType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GCPVPCOneInterfaceNodeType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GCPVPCOneInterfaceNodeTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGCPVPCOneInterfaceNodeType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGCPVPCOneInterfaceNodeType) GcpZoneNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for gcp_zone_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGCPVPCOneInterfaceNodeType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GCPVPCOneInterfaceNodeType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GCPVPCOneInterfaceNodeType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["gcp_zone_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gcp_zone_name"))
+		if err := fv(ctx, m.GetGcpZoneName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["local_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_subnet"))
+		if err := fv(ctx, m.GetLocalSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGCPVPCOneInterfaceNodeTypeValidator = func() *ValidateGCPVPCOneInterfaceNodeType {
+	v := &ValidateGCPVPCOneInterfaceNodeType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhGcpZoneName := v.GcpZoneNameValidationRuleHandler
+	rulesGcpZoneName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.in":        "[\"asia-east1-a\",\"asia-east1-b\",\"asia-east1-c\",\"asia-east2-a\",\"asia-east2-b\",\"asia-east2-c\",\"asia-northeast1-a\",\"asia-northeast1-b\",\"asia-northeast1-c\",\"asia-northeast2-a\",\"asia-northeast2-b\",\"asia-northeast2-c\",\"asia-northeast3-a\",\"asia-northeast3-b\",\"asia-northeast3-c\",\"asia-south1-a\",\"asia-south1-b\",\"asia-south1-c\",\"asia-southeast1-a\",\"asia-southeast1-b\",\"asia-southeast1-c\",\"asia-southeast2-a\",\"asia-southeast2-b\",\"asia-southeast2-c\",\"australia-southeast1-a\",\"australia-southeast1-b\",\"australia-southeast1-c\",\"europe-north1-a\",\"europe-north1-b\",\"europe-north1-c\",\"europe-west1-b\",\"europe-west1-c\",\"europe-west1-d\",\"europe-west2-a\",\"europe-west2-b\",\"europe-west2-c\",\"europe-west3-a\",\"europe-west3-b\",\"europe-west3-c\",\"europe-west4-a\",\"europe-west4-b\",\"europe-west4-c\",\"europe-west6-a\",\"europe-west6-b\",\"europe-west6-c\",\"northamerica-northeast1-a\",\"northamerica-northeast1-b\",\"northamerica-northeast1-c\",\"southamerica-east1-a\",\"southamerica-east1-b\",\"southamerica-east1-c\",\"us-central1-a\",\"us-central1-b\",\"us-central1-c\",\"us-central1-f\",\"us-east1-b\",\"us-east1-c\",\"us-east1-d\",\"us-east4-a\",\"us-east4-b\",\"us-east4-c\",\"us-west1-a\",\"us-west1-b\",\"us-west1-c\",\"us-west2-a\",\"us-west2-b\",\"us-west2-c\",\"us-west3-a\",\"us-west3-b\",\"us-west3-c\",\"us-west4-a\",\"us-west4-b\",\"us-west4-c\"]",
+	}
+	vFn, err = vrhGcpZoneName(rulesGcpZoneName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCOneInterfaceNodeType.gcp_zone_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["gcp_zone_name"] = vFn
+
+	v.FldValidators["local_subnet"] = GCPVPCSubnetChoiceTypeValidator().Validate
+
+	return v
+}()
+
+func GCPVPCOneInterfaceNodeTypeValidator() db.Validator {
+	return DefaultGCPVPCOneInterfaceNodeTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GCPVPCSubnetChoiceType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2887,6 +2815,136 @@ var DefaultGCPVPCSubnetChoiceTypeValidator = func() *ValidateGCPVPCSubnetChoiceT
 
 func GCPVPCSubnetChoiceTypeValidator() db.Validator {
 	return DefaultGCPVPCSubnetChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GCPVPCTwoInterfaceNodeType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GCPVPCTwoInterfaceNodeType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GCPVPCTwoInterfaceNodeType) DeepCopy() *GCPVPCTwoInterfaceNodeType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GCPVPCTwoInterfaceNodeType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GCPVPCTwoInterfaceNodeType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GCPVPCTwoInterfaceNodeType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GCPVPCTwoInterfaceNodeTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGCPVPCTwoInterfaceNodeType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGCPVPCTwoInterfaceNodeType) GcpZoneNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for gcp_zone_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGCPVPCTwoInterfaceNodeType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GCPVPCTwoInterfaceNodeType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GCPVPCTwoInterfaceNodeType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["gcp_zone_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gcp_zone_name"))
+		if err := fv(ctx, m.GetGcpZoneName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["inside_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_subnet"))
+		if err := fv(ctx, m.GetInsideSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_subnet"))
+		if err := fv(ctx, m.GetOutsideSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGCPVPCTwoInterfaceNodeTypeValidator = func() *ValidateGCPVPCTwoInterfaceNodeType {
+	v := &ValidateGCPVPCTwoInterfaceNodeType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhGcpZoneName := v.GcpZoneNameValidationRuleHandler
+	rulesGcpZoneName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.in":        "[\"asia-east1-a\",\"asia-east1-b\",\"asia-east1-c\",\"asia-east2-a\",\"asia-east2-b\",\"asia-east2-c\",\"asia-northeast1-a\",\"asia-northeast1-b\",\"asia-northeast1-c\",\"asia-northeast2-a\",\"asia-northeast2-b\",\"asia-northeast2-c\",\"asia-northeast3-a\",\"asia-northeast3-b\",\"asia-northeast3-c\",\"asia-south1-a\",\"asia-south1-b\",\"asia-south1-c\",\"asia-southeast1-a\",\"asia-southeast1-b\",\"asia-southeast1-c\",\"asia-southeast2-a\",\"asia-southeast2-b\",\"asia-southeast2-c\",\"australia-southeast1-a\",\"australia-southeast1-b\",\"australia-southeast1-c\",\"europe-north1-a\",\"europe-north1-b\",\"europe-north1-c\",\"europe-west1-b\",\"europe-west1-c\",\"europe-west1-d\",\"europe-west2-a\",\"europe-west2-b\",\"europe-west2-c\",\"europe-west3-a\",\"europe-west3-b\",\"europe-west3-c\",\"europe-west4-a\",\"europe-west4-b\",\"europe-west4-c\",\"europe-west6-a\",\"europe-west6-b\",\"europe-west6-c\",\"northamerica-northeast1-a\",\"northamerica-northeast1-b\",\"northamerica-northeast1-c\",\"southamerica-east1-a\",\"southamerica-east1-b\",\"southamerica-east1-c\",\"us-central1-a\",\"us-central1-b\",\"us-central1-c\",\"us-central1-f\",\"us-east1-b\",\"us-east1-c\",\"us-east1-d\",\"us-east4-a\",\"us-east4-b\",\"us-east4-c\",\"us-west1-a\",\"us-west1-b\",\"us-west1-c\",\"us-west2-a\",\"us-west2-b\",\"us-west2-c\",\"us-west3-a\",\"us-west3-b\",\"us-west3-c\",\"us-west4-a\",\"us-west4-b\",\"us-west4-c\"]",
+	}
+	vFn, err = vrhGcpZoneName(rulesGcpZoneName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCTwoInterfaceNodeType.gcp_zone_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["gcp_zone_name"] = vFn
+
+	v.FldValidators["inside_subnet"] = GCPVPCSubnetChoiceTypeValidator().Validate
+
+	v.FldValidators["outside_subnet"] = GCPVPCSubnetChoiceTypeValidator().Validate
+
+	return v
+}()
+
+func GCPVPCTwoInterfaceNodeTypeValidator() db.Validator {
+	return DefaultGCPVPCTwoInterfaceNodeTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

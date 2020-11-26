@@ -15,7 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -945,8 +945,6 @@ var DefaultMirrorPolicyTypeValidator = func() *ValidateMirrorPolicyType {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster"] = vFn
-
-	v.FldValidators["percent"] = ves_io_schema.FractionalPercentValidator().Validate
 
 	return v
 }()

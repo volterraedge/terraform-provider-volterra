@@ -8,7 +8,6 @@ It is generated from these files:
 	ves.io/schema/namespace/object.proto
 	ves.io/schema/namespace/public_crudapi.proto
 	ves.io/schema/namespace/public_customapi.proto
-	ves.io/schema/namespace/public_customapi_akar.proto
 	ves.io/schema/namespace/types.proto
 
 It has these top-level messages:
@@ -26,14 +25,6 @@ It has these top-level messages:
 	CascadeDeleteRequest
 	CascadeDeleteResponse
 	CascadeDeleteItemType
-	SetFastACLsForInternetVIPsRequest
-	SetFastACLsForInternetVIPsResponse
-	GetFastACLsForInternetVIPsRequest
-	GetFastACLsForInternetVIPsResponse
-	SetActiveServicePoliciesRequest
-	SetActiveServicePoliciesResponse
-	GetActiveServicePoliciesRequest
-	GetActiveServicePoliciesResponse
 	GlobalSpecType
 	CreateSpecType
 	ReplaceSpecType
@@ -61,11 +52,9 @@ import (
 
 	_ "github.com/gogo/protobuf/gogoproto"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.

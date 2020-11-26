@@ -352,7 +352,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-network_policy_view-CustomDataAPI-NetworkPolicyHits"
+                    "url": "http://some-url-here/ves-io-schema-views-network_policy_view-CustomDataAPI-NetworkPolicyHits"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.network_policy_view.CustomDataAPI.NetworkPolicyHits"
             },

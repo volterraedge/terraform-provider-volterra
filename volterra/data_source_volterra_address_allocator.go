@@ -15,7 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 	"gopkg.volterra.us/stdlib/server"
 
-	ves_io_schema_addr_allocator "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/address_allocator"
+	ves_io_schema_addr_allocator "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/address_allocator"
 )
 
 // dataSourceAddressAllocator is implementation of Volterra's Namespace resource read

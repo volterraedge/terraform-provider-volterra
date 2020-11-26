@@ -13,25 +13,23 @@ import (
 
 	_ "github.com/gogo/protobuf/gogoproto"
 
-	ves_io_schema_cluster "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cluster"
+	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/healthcheck"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/healthcheck"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	ves_io_schema4 "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
 	strings "strings"
 
 	reflect "reflect"
-
-	sortkeys "github.com/gogo/protobuf/sortkeys"
 
 	io "io"
 )
@@ -411,7 +409,7 @@ func _OriginServerPrivateName_OneofSizer(msg proto.Message) (n int) {
 // OriginServerK8SService
 //
 // x-displayName: "K8s Service Name on given Sites"
-// Specify origin server with K8s service name and site information
+// Specify origin server with k8s service name and site information
 type OriginServerK8SService struct {
 	// Service Name
 	//
@@ -801,11 +799,6 @@ type OriginServerType struct {
 	//	*OriginServerType_ConsulService
 	//	*OriginServerType_CustomEndpointObject
 	Choice isOriginServerType_Choice `protobuf_oneof:"choice"`
-	// Origin Server Labels
-	//
-	// x-displayName: "Origin Server Labels"
-	// Add Labels for this origin server, these labels can be used to form subset.
-	Labels map[string]string `protobuf:"bytes,9,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (m *OriginServerType) Reset()                    { *m = OriginServerType{} }
@@ -901,13 +894,6 @@ func (m *OriginServerType) GetConsulService() *OriginServerConsulService {
 func (m *OriginServerType) GetCustomEndpointObject() *OriginServerCustomEndpoint {
 	if x, ok := m.GetChoice().(*OriginServerType_CustomEndpointObject); ok {
 		return x.CustomEndpointObject
-	}
-	return nil
-}
-
-func (m *OriginServerType) GetLabels() map[string]string {
-	if m != nil {
-		return m.Labels
 	}
 	return nil
 }
@@ -1524,664 +1510,6 @@ func _UpstreamTlsParameters_OneofSizer(msg proto.Message) (n int) {
 	return n
 }
 
-// Origin Pool Default Subset
-//
-// x-displayName: "Origin Pool Default Subset"
-// Default Subset definition
-type OriginPoolDefaultSubset struct {
-	// default_subset
-	//
-	// x-displayName: "Default Subset for Origin Pool"
-	// x-example: "key:value"
-	// List of key-value pairs that define default subset.
-	// which gets used when route specifies no metadata or no subset matching the metadata exists.
-	DefaultSubset map[string]string `protobuf:"bytes,6,rep,name=default_subset,json=defaultSubset" json:"default_subset,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-}
-
-func (m *OriginPoolDefaultSubset) Reset()                    { *m = OriginPoolDefaultSubset{} }
-func (*OriginPoolDefaultSubset) ProtoMessage()               {}
-func (*OriginPoolDefaultSubset) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
-
-func (m *OriginPoolDefaultSubset) GetDefaultSubset() map[string]string {
-	if m != nil {
-		return m.DefaultSubset
-	}
-	return nil
-}
-
-// Origin Pool Subset Options
-//
-// x-displayName: "Origin Pool Subset Options"
-// Configure subset options for origin pool
-type OriginPoolSubsets struct {
-	// Origin Server Subsets Classes
-	//
-	// x-displayName: "Origin Server Subsets Classes"
-	// List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class.
-	EndpointSubsets []*ves_io_schema_cluster.EndpointSubsetSelectorType `protobuf:"bytes,1,rep,name=endpoint_subsets,json=endpointSubsets" json:"endpoint_subsets,omitempty"`
-	// Fallback Policy Choice
-	//
-	// x-displayName: "Fallback Policy Choice"
-	// x-required
-	// Select subset fallback policy if no subset could be determined based on route.
-	//
-	// Types that are valid to be assigned to FallbackPolicyChoice:
-	//	*OriginPoolSubsets_AnyEndpoint
-	//	*OriginPoolSubsets_DefaultSubset
-	//	*OriginPoolSubsets_FailRequest
-	FallbackPolicyChoice isOriginPoolSubsets_FallbackPolicyChoice `protobuf_oneof:"fallback_policy_choice"`
-}
-
-func (m *OriginPoolSubsets) Reset()                    { *m = OriginPoolSubsets{} }
-func (*OriginPoolSubsets) ProtoMessage()               {}
-func (*OriginPoolSubsets) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
-
-type isOriginPoolSubsets_FallbackPolicyChoice interface {
-	isOriginPoolSubsets_FallbackPolicyChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type OriginPoolSubsets_AnyEndpoint struct {
-	AnyEndpoint *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=any_endpoint,json=anyEndpoint,oneof"`
-}
-type OriginPoolSubsets_DefaultSubset struct {
-	DefaultSubset *OriginPoolDefaultSubset `protobuf:"bytes,4,opt,name=default_subset,json=defaultSubset,oneof"`
-}
-type OriginPoolSubsets_FailRequest struct {
-	FailRequest *ves_io_schema4.Empty `protobuf:"bytes,5,opt,name=fail_request,json=failRequest,oneof"`
-}
-
-func (*OriginPoolSubsets_AnyEndpoint) isOriginPoolSubsets_FallbackPolicyChoice()   {}
-func (*OriginPoolSubsets_DefaultSubset) isOriginPoolSubsets_FallbackPolicyChoice() {}
-func (*OriginPoolSubsets_FailRequest) isOriginPoolSubsets_FallbackPolicyChoice()   {}
-
-func (m *OriginPoolSubsets) GetFallbackPolicyChoice() isOriginPoolSubsets_FallbackPolicyChoice {
-	if m != nil {
-		return m.FallbackPolicyChoice
-	}
-	return nil
-}
-
-func (m *OriginPoolSubsets) GetEndpointSubsets() []*ves_io_schema_cluster.EndpointSubsetSelectorType {
-	if m != nil {
-		return m.EndpointSubsets
-	}
-	return nil
-}
-
-func (m *OriginPoolSubsets) GetAnyEndpoint() *ves_io_schema4.Empty {
-	if x, ok := m.GetFallbackPolicyChoice().(*OriginPoolSubsets_AnyEndpoint); ok {
-		return x.AnyEndpoint
-	}
-	return nil
-}
-
-func (m *OriginPoolSubsets) GetDefaultSubset() *OriginPoolDefaultSubset {
-	if x, ok := m.GetFallbackPolicyChoice().(*OriginPoolSubsets_DefaultSubset); ok {
-		return x.DefaultSubset
-	}
-	return nil
-}
-
-func (m *OriginPoolSubsets) GetFailRequest() *ves_io_schema4.Empty {
-	if x, ok := m.GetFallbackPolicyChoice().(*OriginPoolSubsets_FailRequest); ok {
-		return x.FailRequest
-	}
-	return nil
-}
-
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*OriginPoolSubsets) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _OriginPoolSubsets_OneofMarshaler, _OriginPoolSubsets_OneofUnmarshaler, _OriginPoolSubsets_OneofSizer, []interface{}{
-		(*OriginPoolSubsets_AnyEndpoint)(nil),
-		(*OriginPoolSubsets_DefaultSubset)(nil),
-		(*OriginPoolSubsets_FailRequest)(nil),
-	}
-}
-
-func _OriginPoolSubsets_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*OriginPoolSubsets)
-	// fallback_policy_choice
-	switch x := m.FallbackPolicyChoice.(type) {
-	case *OriginPoolSubsets_AnyEndpoint:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AnyEndpoint); err != nil {
-			return err
-		}
-	case *OriginPoolSubsets_DefaultSubset:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultSubset); err != nil {
-			return err
-		}
-	case *OriginPoolSubsets_FailRequest:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.FailRequest); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("OriginPoolSubsets.FallbackPolicyChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _OriginPoolSubsets_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*OriginPoolSubsets)
-	switch tag {
-	case 3: // fallback_policy_choice.any_endpoint
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.FallbackPolicyChoice = &OriginPoolSubsets_AnyEndpoint{msg}
-		return true, err
-	case 4: // fallback_policy_choice.default_subset
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(OriginPoolDefaultSubset)
-		err := b.DecodeMessage(msg)
-		m.FallbackPolicyChoice = &OriginPoolSubsets_DefaultSubset{msg}
-		return true, err
-	case 5: // fallback_policy_choice.fail_request
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.FallbackPolicyChoice = &OriginPoolSubsets_FailRequest{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _OriginPoolSubsets_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*OriginPoolSubsets)
-	// fallback_policy_choice
-	switch x := m.FallbackPolicyChoice.(type) {
-	case *OriginPoolSubsets_AnyEndpoint:
-		s := proto.Size(x.AnyEndpoint)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *OriginPoolSubsets_DefaultSubset:
-		s := proto.Size(x.DefaultSubset)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *OriginPoolSubsets_FailRequest:
-		s := proto.Size(x.FailRequest)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
-// Origin Pool Advanced Options
-//
-// x-displayName: "Origin Pool Advanced Options"
-// Configure Advance options for origin pool
-type OriginPoolAdvancedOptions struct {
-	// connection_timeout
-	//
-	// x-displayName: "Connection Timeout"
-	// x-example: "4000"
-	// The timeout for new network connections to endpoints in the cluster.
-	// This is specified in milliseconds. The default value is 2 seconds
-	ConnectionTimeout uint32 `protobuf:"varint,1,opt,name=connection_timeout,json=connectionTimeout,proto3" json:"connection_timeout,omitempty"`
-	// http_idle_timeout
-	//
-	// x-displayName: "HTTP Idle Timeout"
-	// x-example: "60000"
-	// The idle timeout for upstream connection pool connections. The idle timeout is defined as the
-	// period in which there are no active requests. When the idle timeout is reached the connection
-	// will be closed. Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive.
-	// This is specified in milliseconds. The default value is 5 minutes.
-	HttpIdleTimeout uint32 `protobuf:"varint,2,opt,name=http_idle_timeout,json=httpIdleTimeout,proto3" json:"http_idle_timeout,omitempty"`
-	// Enable Circuit Breaker
-	//
-	// x-displayName: "Enable/Disable Circuit Breaker"
-	// x-required
-	// Select to enable or disable circuit breaker configuration
-	//
-	// Types that are valid to be assigned to CircuitBreakerChoice:
-	//	*OriginPoolAdvancedOptions_DisableCircuitBreaker
-	//	*OriginPoolAdvancedOptions_CircuitBreaker
-	CircuitBreakerChoice isOriginPoolAdvancedOptions_CircuitBreakerChoice `protobuf_oneof:"circuit_breaker_choice"`
-	// Enable Outlier Detection
-	//
-	// x-displayName: "Enable/Disable Outlier Detection"
-	// x-required
-	// Select to enable or disable circuit breaker configuration
-	//
-	// Types that are valid to be assigned to OutlierDetectionChoice:
-	//	*OriginPoolAdvancedOptions_DisableOutlierDetection
-	//	*OriginPoolAdvancedOptions_OutlierDetection
-	OutlierDetectionChoice isOriginPoolAdvancedOptions_OutlierDetectionChoice `protobuf_oneof:"outlier_detection_choice"`
-	// Panic threshold
-	//
-	// x-displayName: "Panic threshold"
-	// x-required
-	// During load balancing, ADC will only consider healthy endpoints in an upstream cluster.
-	// However, if the percentage of healthy endpoints in the cluster becomes too low, ADC can disregard health status
-	// and load balance either amongst all endpoints or no endpoints. This is known as the panic threshold.
-	//
-	// Types that are valid to be assigned to PanicThresholdType:
-	//	*OriginPoolAdvancedOptions_NoPanicThreshold
-	//	*OriginPoolAdvancedOptions_PanicThreshold
-	PanicThresholdType isOriginPoolAdvancedOptions_PanicThresholdType `protobuf_oneof:"panic_threshold_type"`
-	// Enable Subset Load Balancing
-	//
-	// x-displayName: "Enable/Disable Subset Load Balancing"
-	// x-required
-	// Select enable or disable subset load balancing. origin servers could be divided into subsets and chosen from routes.
-	//
-	// Types that are valid to be assigned to SubsetChoice:
-	//	*OriginPoolAdvancedOptions_DisableSubsets
-	//	*OriginPoolAdvancedOptions_EnableSubsets
-	SubsetChoice isOriginPoolAdvancedOptions_SubsetChoice `protobuf_oneof:"subset_choice"`
-	// http2_options
-	//
-	// x-displayName: "Http2 Protocol Configuration"
-	// Http2 Protocol options for upstream connections
-	Http2Options *ves_io_schema_cluster.Http2ProtocolOptions `protobuf:"bytes,15,opt,name=http2_options,json=http2Options" json:"http2_options,omitempty"`
-}
-
-func (m *OriginPoolAdvancedOptions) Reset()                    { *m = OriginPoolAdvancedOptions{} }
-func (*OriginPoolAdvancedOptions) ProtoMessage()               {}
-func (*OriginPoolAdvancedOptions) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{13} }
-
-type isOriginPoolAdvancedOptions_CircuitBreakerChoice interface {
-	isOriginPoolAdvancedOptions_CircuitBreakerChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isOriginPoolAdvancedOptions_OutlierDetectionChoice interface {
-	isOriginPoolAdvancedOptions_OutlierDetectionChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isOriginPoolAdvancedOptions_PanicThresholdType interface {
-	isOriginPoolAdvancedOptions_PanicThresholdType()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isOriginPoolAdvancedOptions_SubsetChoice interface {
-	isOriginPoolAdvancedOptions_SubsetChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type OriginPoolAdvancedOptions_DisableCircuitBreaker struct {
-	DisableCircuitBreaker *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=disable_circuit_breaker,json=disableCircuitBreaker,oneof"`
-}
-type OriginPoolAdvancedOptions_CircuitBreaker struct {
-	CircuitBreaker *ves_io_schema_cluster.CircuitBreaker `protobuf:"bytes,5,opt,name=circuit_breaker,json=circuitBreaker,oneof"`
-}
-type OriginPoolAdvancedOptions_DisableOutlierDetection struct {
-	DisableOutlierDetection *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=disable_outlier_detection,json=disableOutlierDetection,oneof"`
-}
-type OriginPoolAdvancedOptions_OutlierDetection struct {
-	OutlierDetection *ves_io_schema_cluster.OutlierDetectionType `protobuf:"bytes,8,opt,name=outlier_detection,json=outlierDetection,oneof"`
-}
-type OriginPoolAdvancedOptions_NoPanicThreshold struct {
-	NoPanicThreshold *ves_io_schema4.Empty `protobuf:"bytes,10,opt,name=no_panic_threshold,json=noPanicThreshold,oneof"`
-}
-type OriginPoolAdvancedOptions_PanicThreshold struct {
-	PanicThreshold uint32 `protobuf:"varint,11,opt,name=panic_threshold,json=panicThreshold,proto3,oneof"`
-}
-type OriginPoolAdvancedOptions_DisableSubsets struct {
-	DisableSubsets *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=disable_subsets,json=disableSubsets,oneof"`
-}
-type OriginPoolAdvancedOptions_EnableSubsets struct {
-	EnableSubsets *OriginPoolSubsets `protobuf:"bytes,14,opt,name=enable_subsets,json=enableSubsets,oneof"`
-}
-
-func (*OriginPoolAdvancedOptions_DisableCircuitBreaker) isOriginPoolAdvancedOptions_CircuitBreakerChoice() {
-}
-func (*OriginPoolAdvancedOptions_CircuitBreaker) isOriginPoolAdvancedOptions_CircuitBreakerChoice() {}
-func (*OriginPoolAdvancedOptions_DisableOutlierDetection) isOriginPoolAdvancedOptions_OutlierDetectionChoice() {
-}
-func (*OriginPoolAdvancedOptions_OutlierDetection) isOriginPoolAdvancedOptions_OutlierDetectionChoice() {
-}
-func (*OriginPoolAdvancedOptions_NoPanicThreshold) isOriginPoolAdvancedOptions_PanicThresholdType() {}
-func (*OriginPoolAdvancedOptions_PanicThreshold) isOriginPoolAdvancedOptions_PanicThresholdType()   {}
-func (*OriginPoolAdvancedOptions_DisableSubsets) isOriginPoolAdvancedOptions_SubsetChoice()         {}
-func (*OriginPoolAdvancedOptions_EnableSubsets) isOriginPoolAdvancedOptions_SubsetChoice()          {}
-
-func (m *OriginPoolAdvancedOptions) GetCircuitBreakerChoice() isOriginPoolAdvancedOptions_CircuitBreakerChoice {
-	if m != nil {
-		return m.CircuitBreakerChoice
-	}
-	return nil
-}
-func (m *OriginPoolAdvancedOptions) GetOutlierDetectionChoice() isOriginPoolAdvancedOptions_OutlierDetectionChoice {
-	if m != nil {
-		return m.OutlierDetectionChoice
-	}
-	return nil
-}
-func (m *OriginPoolAdvancedOptions) GetPanicThresholdType() isOriginPoolAdvancedOptions_PanicThresholdType {
-	if m != nil {
-		return m.PanicThresholdType
-	}
-	return nil
-}
-func (m *OriginPoolAdvancedOptions) GetSubsetChoice() isOriginPoolAdvancedOptions_SubsetChoice {
-	if m != nil {
-		return m.SubsetChoice
-	}
-	return nil
-}
-
-func (m *OriginPoolAdvancedOptions) GetConnectionTimeout() uint32 {
-	if m != nil {
-		return m.ConnectionTimeout
-	}
-	return 0
-}
-
-func (m *OriginPoolAdvancedOptions) GetHttpIdleTimeout() uint32 {
-	if m != nil {
-		return m.HttpIdleTimeout
-	}
-	return 0
-}
-
-func (m *OriginPoolAdvancedOptions) GetDisableCircuitBreaker() *ves_io_schema4.Empty {
-	if x, ok := m.GetCircuitBreakerChoice().(*OriginPoolAdvancedOptions_DisableCircuitBreaker); ok {
-		return x.DisableCircuitBreaker
-	}
-	return nil
-}
-
-func (m *OriginPoolAdvancedOptions) GetCircuitBreaker() *ves_io_schema_cluster.CircuitBreaker {
-	if x, ok := m.GetCircuitBreakerChoice().(*OriginPoolAdvancedOptions_CircuitBreaker); ok {
-		return x.CircuitBreaker
-	}
-	return nil
-}
-
-func (m *OriginPoolAdvancedOptions) GetDisableOutlierDetection() *ves_io_schema4.Empty {
-	if x, ok := m.GetOutlierDetectionChoice().(*OriginPoolAdvancedOptions_DisableOutlierDetection); ok {
-		return x.DisableOutlierDetection
-	}
-	return nil
-}
-
-func (m *OriginPoolAdvancedOptions) GetOutlierDetection() *ves_io_schema_cluster.OutlierDetectionType {
-	if x, ok := m.GetOutlierDetectionChoice().(*OriginPoolAdvancedOptions_OutlierDetection); ok {
-		return x.OutlierDetection
-	}
-	return nil
-}
-
-func (m *OriginPoolAdvancedOptions) GetNoPanicThreshold() *ves_io_schema4.Empty {
-	if x, ok := m.GetPanicThresholdType().(*OriginPoolAdvancedOptions_NoPanicThreshold); ok {
-		return x.NoPanicThreshold
-	}
-	return nil
-}
-
-func (m *OriginPoolAdvancedOptions) GetPanicThreshold() uint32 {
-	if x, ok := m.GetPanicThresholdType().(*OriginPoolAdvancedOptions_PanicThreshold); ok {
-		return x.PanicThreshold
-	}
-	return 0
-}
-
-func (m *OriginPoolAdvancedOptions) GetDisableSubsets() *ves_io_schema4.Empty {
-	if x, ok := m.GetSubsetChoice().(*OriginPoolAdvancedOptions_DisableSubsets); ok {
-		return x.DisableSubsets
-	}
-	return nil
-}
-
-func (m *OriginPoolAdvancedOptions) GetEnableSubsets() *OriginPoolSubsets {
-	if x, ok := m.GetSubsetChoice().(*OriginPoolAdvancedOptions_EnableSubsets); ok {
-		return x.EnableSubsets
-	}
-	return nil
-}
-
-func (m *OriginPoolAdvancedOptions) GetHttp2Options() *ves_io_schema_cluster.Http2ProtocolOptions {
-	if m != nil {
-		return m.Http2Options
-	}
-	return nil
-}
-
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*OriginPoolAdvancedOptions) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _OriginPoolAdvancedOptions_OneofMarshaler, _OriginPoolAdvancedOptions_OneofUnmarshaler, _OriginPoolAdvancedOptions_OneofSizer, []interface{}{
-		(*OriginPoolAdvancedOptions_DisableCircuitBreaker)(nil),
-		(*OriginPoolAdvancedOptions_CircuitBreaker)(nil),
-		(*OriginPoolAdvancedOptions_DisableOutlierDetection)(nil),
-		(*OriginPoolAdvancedOptions_OutlierDetection)(nil),
-		(*OriginPoolAdvancedOptions_NoPanicThreshold)(nil),
-		(*OriginPoolAdvancedOptions_PanicThreshold)(nil),
-		(*OriginPoolAdvancedOptions_DisableSubsets)(nil),
-		(*OriginPoolAdvancedOptions_EnableSubsets)(nil),
-	}
-}
-
-func _OriginPoolAdvancedOptions_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*OriginPoolAdvancedOptions)
-	// circuit_breaker_choice
-	switch x := m.CircuitBreakerChoice.(type) {
-	case *OriginPoolAdvancedOptions_DisableCircuitBreaker:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableCircuitBreaker); err != nil {
-			return err
-		}
-	case *OriginPoolAdvancedOptions_CircuitBreaker:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CircuitBreaker); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("OriginPoolAdvancedOptions.CircuitBreakerChoice has unexpected type %T", x)
-	}
-	// outlier_detection_choice
-	switch x := m.OutlierDetectionChoice.(type) {
-	case *OriginPoolAdvancedOptions_DisableOutlierDetection:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableOutlierDetection); err != nil {
-			return err
-		}
-	case *OriginPoolAdvancedOptions_OutlierDetection:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OutlierDetection); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("OriginPoolAdvancedOptions.OutlierDetectionChoice has unexpected type %T", x)
-	}
-	// panic_threshold_type
-	switch x := m.PanicThresholdType.(type) {
-	case *OriginPoolAdvancedOptions_NoPanicThreshold:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoPanicThreshold); err != nil {
-			return err
-		}
-	case *OriginPoolAdvancedOptions_PanicThreshold:
-		_ = b.EncodeVarint(11<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.PanicThreshold))
-	case nil:
-	default:
-		return fmt.Errorf("OriginPoolAdvancedOptions.PanicThresholdType has unexpected type %T", x)
-	}
-	// subset_choice
-	switch x := m.SubsetChoice.(type) {
-	case *OriginPoolAdvancedOptions_DisableSubsets:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableSubsets); err != nil {
-			return err
-		}
-	case *OriginPoolAdvancedOptions_EnableSubsets:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableSubsets); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("OriginPoolAdvancedOptions.SubsetChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _OriginPoolAdvancedOptions_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*OriginPoolAdvancedOptions)
-	switch tag {
-	case 4: // circuit_breaker_choice.disable_circuit_breaker
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.CircuitBreakerChoice = &OriginPoolAdvancedOptions_DisableCircuitBreaker{msg}
-		return true, err
-	case 5: // circuit_breaker_choice.circuit_breaker
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_cluster.CircuitBreaker)
-		err := b.DecodeMessage(msg)
-		m.CircuitBreakerChoice = &OriginPoolAdvancedOptions_CircuitBreaker{msg}
-		return true, err
-	case 7: // outlier_detection_choice.disable_outlier_detection
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.OutlierDetectionChoice = &OriginPoolAdvancedOptions_DisableOutlierDetection{msg}
-		return true, err
-	case 8: // outlier_detection_choice.outlier_detection
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_cluster.OutlierDetectionType)
-		err := b.DecodeMessage(msg)
-		m.OutlierDetectionChoice = &OriginPoolAdvancedOptions_OutlierDetection{msg}
-		return true, err
-	case 10: // panic_threshold_type.no_panic_threshold
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.PanicThresholdType = &OriginPoolAdvancedOptions_NoPanicThreshold{msg}
-		return true, err
-	case 11: // panic_threshold_type.panic_threshold
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.PanicThresholdType = &OriginPoolAdvancedOptions_PanicThreshold{uint32(x)}
-		return true, err
-	case 13: // subset_choice.disable_subsets
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.SubsetChoice = &OriginPoolAdvancedOptions_DisableSubsets{msg}
-		return true, err
-	case 14: // subset_choice.enable_subsets
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(OriginPoolSubsets)
-		err := b.DecodeMessage(msg)
-		m.SubsetChoice = &OriginPoolAdvancedOptions_EnableSubsets{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _OriginPoolAdvancedOptions_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*OriginPoolAdvancedOptions)
-	// circuit_breaker_choice
-	switch x := m.CircuitBreakerChoice.(type) {
-	case *OriginPoolAdvancedOptions_DisableCircuitBreaker:
-		s := proto.Size(x.DisableCircuitBreaker)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *OriginPoolAdvancedOptions_CircuitBreaker:
-		s := proto.Size(x.CircuitBreaker)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// outlier_detection_choice
-	switch x := m.OutlierDetectionChoice.(type) {
-	case *OriginPoolAdvancedOptions_DisableOutlierDetection:
-		s := proto.Size(x.DisableOutlierDetection)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *OriginPoolAdvancedOptions_OutlierDetection:
-		s := proto.Size(x.OutlierDetection)
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// panic_threshold_type
-	switch x := m.PanicThresholdType.(type) {
-	case *OriginPoolAdvancedOptions_NoPanicThreshold:
-		s := proto.Size(x.NoPanicThreshold)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *OriginPoolAdvancedOptions_PanicThreshold:
-		n += proto.SizeVarint(11<<3 | proto.WireVarint)
-		n += proto.SizeVarint(uint64(x.PanicThreshold))
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// subset_choice
-	switch x := m.SubsetChoice.(type) {
-	case *OriginPoolAdvancedOptions_DisableSubsets:
-		s := proto.Size(x.DisableSubsets)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *OriginPoolAdvancedOptions_EnableSubsets:
-		s := proto.Size(x.EnableSubsets)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 // GlobalSpecType
 //
 // x-displayName: "Global Specification"
@@ -2210,17 +1538,6 @@ type GlobalSpecType struct {
 	// x-example: "9080"
 	// Endpoint service is available on this port
 	Port uint32 `protobuf:"varint,5,opt,name=port,proto3" json:"port,omitempty"`
-	// Health check Port
-	//
-	// x-displayName: "Port used for health check"
-	// x-example: "9080"
-	// By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port.
-	// Setting this with a non-zero value allows an endpoint to have different health check port.
-	//
-	// Types that are valid to be assigned to HealthCheckPortChoice:
-	//	*GlobalSpecType_SameAsEndpointPort
-	//	*GlobalSpecType_HealthCheckPort
-	HealthCheckPortChoice isGlobalSpecType_HealthCheckPortChoice `protobuf_oneof:"health_check_port_choice"`
 	// Health Check
 	//
 	// x-displayName: "Health Check object"
@@ -2239,11 +1556,6 @@ type GlobalSpecType struct {
 	// x-required
 	// Policy for selection of endpoints from local site or remote site or both
 	EndpointSelection ves_io_schema_cluster.EndpointSelectionPolicy `protobuf:"varint,8,opt,name=endpoint_selection,json=endpointSelection,proto3,enum=ves.io.schema.cluster.EndpointSelectionPolicy" json:"endpoint_selection,omitempty"`
-	// Advance Options
-	//
-	// x-displayName: "Advance Options"
-	// Advance options configuration like timeouts, circuit breaker, subset load balancing
-	AdvancedOptions *OriginPoolAdvancedOptions `protobuf:"bytes,12,opt,name=advanced_options,json=advancedOptions" json:"advanced_options,omitempty"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
@@ -2253,16 +1565,10 @@ type GlobalSpecType struct {
 
 func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{14} }
+func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
 
 type isGlobalSpecType_TlsChoice interface {
 	isGlobalSpecType_TlsChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isGlobalSpecType_HealthCheckPortChoice interface {
-	isGlobalSpecType_HealthCheckPortChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -2274,27 +1580,13 @@ type GlobalSpecType_NoTls struct {
 type GlobalSpecType_UseTls struct {
 	UseTls *UpstreamTlsParameters `protobuf:"bytes,3,opt,name=use_tls,json=useTls,oneof"`
 }
-type GlobalSpecType_SameAsEndpointPort struct {
-	SameAsEndpointPort *ves_io_schema4.Empty `protobuf:"bytes,10,opt,name=same_as_endpoint_port,json=sameAsEndpointPort,oneof"`
-}
-type GlobalSpecType_HealthCheckPort struct {
-	HealthCheckPort uint32 `protobuf:"varint,11,opt,name=health_check_port,json=healthCheckPort,proto3,oneof"`
-}
 
-func (*GlobalSpecType_NoTls) isGlobalSpecType_TlsChoice()                          {}
-func (*GlobalSpecType_UseTls) isGlobalSpecType_TlsChoice()                         {}
-func (*GlobalSpecType_SameAsEndpointPort) isGlobalSpecType_HealthCheckPortChoice() {}
-func (*GlobalSpecType_HealthCheckPort) isGlobalSpecType_HealthCheckPortChoice()    {}
+func (*GlobalSpecType_NoTls) isGlobalSpecType_TlsChoice()  {}
+func (*GlobalSpecType_UseTls) isGlobalSpecType_TlsChoice() {}
 
 func (m *GlobalSpecType) GetTlsChoice() isGlobalSpecType_TlsChoice {
 	if m != nil {
 		return m.TlsChoice
-	}
-	return nil
-}
-func (m *GlobalSpecType) GetHealthCheckPortChoice() isGlobalSpecType_HealthCheckPortChoice {
-	if m != nil {
-		return m.HealthCheckPortChoice
 	}
 	return nil
 }
@@ -2327,20 +1619,6 @@ func (m *GlobalSpecType) GetPort() uint32 {
 	return 0
 }
 
-func (m *GlobalSpecType) GetSameAsEndpointPort() *ves_io_schema4.Empty {
-	if x, ok := m.GetHealthCheckPortChoice().(*GlobalSpecType_SameAsEndpointPort); ok {
-		return x.SameAsEndpointPort
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetHealthCheckPort() uint32 {
-	if x, ok := m.GetHealthCheckPortChoice().(*GlobalSpecType_HealthCheckPort); ok {
-		return x.HealthCheckPort
-	}
-	return 0
-}
-
 func (m *GlobalSpecType) GetHealthcheck() []*ves_io_schema_views.ObjectRefType {
 	if m != nil {
 		return m.Healthcheck
@@ -2362,13 +1640,6 @@ func (m *GlobalSpecType) GetEndpointSelection() ves_io_schema_cluster.EndpointSe
 	return ves_io_schema_cluster.DISTRIBUTED
 }
 
-func (m *GlobalSpecType) GetAdvancedOptions() *OriginPoolAdvancedOptions {
-	if m != nil {
-		return m.AdvancedOptions
-	}
-	return nil
-}
-
 func (m *GlobalSpecType) GetViewInternal() *ves_io_schema_views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
@@ -2381,8 +1652,6 @@ func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
 		(*GlobalSpecType_NoTls)(nil),
 		(*GlobalSpecType_UseTls)(nil),
-		(*GlobalSpecType_SameAsEndpointPort)(nil),
-		(*GlobalSpecType_HealthCheckPort)(nil),
 	}
 }
 
@@ -2403,20 +1672,6 @@ func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("GlobalSpecType.TlsChoice has unexpected type %T", x)
-	}
-	// health_check_port_choice
-	switch x := m.HealthCheckPortChoice.(type) {
-	case *GlobalSpecType_SameAsEndpointPort:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SameAsEndpointPort); err != nil {
-			return err
-		}
-	case *GlobalSpecType_HealthCheckPort:
-		_ = b.EncodeVarint(11<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.HealthCheckPort))
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.HealthCheckPortChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -2439,21 +1694,6 @@ func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto
 		msg := new(UpstreamTlsParameters)
 		err := b.DecodeMessage(msg)
 		m.TlsChoice = &GlobalSpecType_UseTls{msg}
-		return true, err
-	case 10: // health_check_port_choice.same_as_endpoint_port
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HealthCheckPortChoice = &GlobalSpecType_SameAsEndpointPort{msg}
-		return true, err
-	case 11: // health_check_port_choice.health_check_port
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.HealthCheckPortChoice = &GlobalSpecType_HealthCheckPort{uint32(x)}
 		return true, err
 	default:
 		return false, nil
@@ -2478,20 +1718,6 @@ func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
-	// health_check_port_choice
-	switch x := m.HealthCheckPortChoice.(type) {
-	case *GlobalSpecType_SameAsEndpointPort:
-		s := proto.Size(x.SameAsEndpointPort)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_HealthCheckPort:
-		n += proto.SizeVarint(11<<3 | proto.WireVarint)
-		n += proto.SizeVarint(uint64(x.HealthCheckPort))
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
 	return n
 }
 
@@ -2504,30 +1730,19 @@ type CreateSpecType struct {
 	// Types that are valid to be assigned to TlsChoice:
 	//	*CreateSpecType_NoTls
 	//	*CreateSpecType_UseTls
-	TlsChoice isCreateSpecType_TlsChoice `protobuf_oneof:"tls_choice"`
-	Port      uint32                     `protobuf:"varint,5,opt,name=port,proto3" json:"port,omitempty"`
-	// Types that are valid to be assigned to HealthCheckPortChoice:
-	//	*CreateSpecType_SameAsEndpointPort
-	//	*CreateSpecType_HealthCheckPort
-	HealthCheckPortChoice isCreateSpecType_HealthCheckPortChoice        `protobuf_oneof:"health_check_port_choice"`
+	TlsChoice             isCreateSpecType_TlsChoice                    `protobuf_oneof:"tls_choice"`
+	Port                  uint32                                        `protobuf:"varint,5,opt,name=port,proto3" json:"port,omitempty"`
 	Healthcheck           []*ves_io_schema_views.ObjectRefType          `protobuf:"bytes,6,rep,name=healthcheck" json:"healthcheck,omitempty"`
 	LoadbalancerAlgorithm ves_io_schema_cluster.LoadbalancerAlgorithm   `protobuf:"varint,7,opt,name=loadbalancer_algorithm,json=loadbalancerAlgorithm,proto3,enum=ves.io.schema.cluster.LoadbalancerAlgorithm" json:"loadbalancer_algorithm,omitempty"`
 	EndpointSelection     ves_io_schema_cluster.EndpointSelectionPolicy `protobuf:"varint,8,opt,name=endpoint_selection,json=endpointSelection,proto3,enum=ves.io.schema.cluster.EndpointSelectionPolicy" json:"endpoint_selection,omitempty"`
-	AdvancedOptions       *OriginPoolAdvancedOptions                    `protobuf:"bytes,12,opt,name=advanced_options,json=advancedOptions" json:"advanced_options,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{15} }
+func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
 
 type isCreateSpecType_TlsChoice interface {
 	isCreateSpecType_TlsChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isCreateSpecType_HealthCheckPortChoice interface {
-	isCreateSpecType_HealthCheckPortChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -2539,27 +1754,13 @@ type CreateSpecType_NoTls struct {
 type CreateSpecType_UseTls struct {
 	UseTls *UpstreamTlsParameters `protobuf:"bytes,3,opt,name=use_tls,json=useTls,oneof"`
 }
-type CreateSpecType_SameAsEndpointPort struct {
-	SameAsEndpointPort *ves_io_schema4.Empty `protobuf:"bytes,10,opt,name=same_as_endpoint_port,json=sameAsEndpointPort,oneof"`
-}
-type CreateSpecType_HealthCheckPort struct {
-	HealthCheckPort uint32 `protobuf:"varint,11,opt,name=health_check_port,json=healthCheckPort,proto3,oneof"`
-}
 
-func (*CreateSpecType_NoTls) isCreateSpecType_TlsChoice()                          {}
-func (*CreateSpecType_UseTls) isCreateSpecType_TlsChoice()                         {}
-func (*CreateSpecType_SameAsEndpointPort) isCreateSpecType_HealthCheckPortChoice() {}
-func (*CreateSpecType_HealthCheckPort) isCreateSpecType_HealthCheckPortChoice()    {}
+func (*CreateSpecType_NoTls) isCreateSpecType_TlsChoice()  {}
+func (*CreateSpecType_UseTls) isCreateSpecType_TlsChoice() {}
 
 func (m *CreateSpecType) GetTlsChoice() isCreateSpecType_TlsChoice {
 	if m != nil {
 		return m.TlsChoice
-	}
-	return nil
-}
-func (m *CreateSpecType) GetHealthCheckPortChoice() isCreateSpecType_HealthCheckPortChoice {
-	if m != nil {
-		return m.HealthCheckPortChoice
 	}
 	return nil
 }
@@ -2592,20 +1793,6 @@ func (m *CreateSpecType) GetPort() uint32 {
 	return 0
 }
 
-func (m *CreateSpecType) GetSameAsEndpointPort() *ves_io_schema4.Empty {
-	if x, ok := m.GetHealthCheckPortChoice().(*CreateSpecType_SameAsEndpointPort); ok {
-		return x.SameAsEndpointPort
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetHealthCheckPort() uint32 {
-	if x, ok := m.GetHealthCheckPortChoice().(*CreateSpecType_HealthCheckPort); ok {
-		return x.HealthCheckPort
-	}
-	return 0
-}
-
 func (m *CreateSpecType) GetHealthcheck() []*ves_io_schema_views.ObjectRefType {
 	if m != nil {
 		return m.Healthcheck
@@ -2627,20 +1814,11 @@ func (m *CreateSpecType) GetEndpointSelection() ves_io_schema_cluster.EndpointSe
 	return ves_io_schema_cluster.DISTRIBUTED
 }
 
-func (m *CreateSpecType) GetAdvancedOptions() *OriginPoolAdvancedOptions {
-	if m != nil {
-		return m.AdvancedOptions
-	}
-	return nil
-}
-
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
 		(*CreateSpecType_NoTls)(nil),
 		(*CreateSpecType_UseTls)(nil),
-		(*CreateSpecType_SameAsEndpointPort)(nil),
-		(*CreateSpecType_HealthCheckPort)(nil),
 	}
 }
 
@@ -2661,20 +1839,6 @@ func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("CreateSpecType.TlsChoice has unexpected type %T", x)
-	}
-	// health_check_port_choice
-	switch x := m.HealthCheckPortChoice.(type) {
-	case *CreateSpecType_SameAsEndpointPort:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SameAsEndpointPort); err != nil {
-			return err
-		}
-	case *CreateSpecType_HealthCheckPort:
-		_ = b.EncodeVarint(11<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.HealthCheckPort))
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.HealthCheckPortChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -2697,21 +1861,6 @@ func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto
 		msg := new(UpstreamTlsParameters)
 		err := b.DecodeMessage(msg)
 		m.TlsChoice = &CreateSpecType_UseTls{msg}
-		return true, err
-	case 10: // health_check_port_choice.same_as_endpoint_port
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HealthCheckPortChoice = &CreateSpecType_SameAsEndpointPort{msg}
-		return true, err
-	case 11: // health_check_port_choice.health_check_port
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.HealthCheckPortChoice = &CreateSpecType_HealthCheckPort{uint32(x)}
 		return true, err
 	default:
 		return false, nil
@@ -2736,20 +1885,6 @@ func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
-	// health_check_port_choice
-	switch x := m.HealthCheckPortChoice.(type) {
-	case *CreateSpecType_SameAsEndpointPort:
-		s := proto.Size(x.SameAsEndpointPort)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_HealthCheckPort:
-		n += proto.SizeVarint(11<<3 | proto.WireVarint)
-		n += proto.SizeVarint(uint64(x.HealthCheckPort))
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
 	return n
 }
 
@@ -2762,30 +1897,19 @@ type ReplaceSpecType struct {
 	// Types that are valid to be assigned to TlsChoice:
 	//	*ReplaceSpecType_NoTls
 	//	*ReplaceSpecType_UseTls
-	TlsChoice isReplaceSpecType_TlsChoice `protobuf_oneof:"tls_choice"`
-	Port      uint32                      `protobuf:"varint,5,opt,name=port,proto3" json:"port,omitempty"`
-	// Types that are valid to be assigned to HealthCheckPortChoice:
-	//	*ReplaceSpecType_SameAsEndpointPort
-	//	*ReplaceSpecType_HealthCheckPort
-	HealthCheckPortChoice isReplaceSpecType_HealthCheckPortChoice       `protobuf_oneof:"health_check_port_choice"`
+	TlsChoice             isReplaceSpecType_TlsChoice                   `protobuf_oneof:"tls_choice"`
+	Port                  uint32                                        `protobuf:"varint,5,opt,name=port,proto3" json:"port,omitempty"`
 	Healthcheck           []*ves_io_schema_views.ObjectRefType          `protobuf:"bytes,6,rep,name=healthcheck" json:"healthcheck,omitempty"`
 	LoadbalancerAlgorithm ves_io_schema_cluster.LoadbalancerAlgorithm   `protobuf:"varint,7,opt,name=loadbalancer_algorithm,json=loadbalancerAlgorithm,proto3,enum=ves.io.schema.cluster.LoadbalancerAlgorithm" json:"loadbalancer_algorithm,omitempty"`
 	EndpointSelection     ves_io_schema_cluster.EndpointSelectionPolicy `protobuf:"varint,8,opt,name=endpoint_selection,json=endpointSelection,proto3,enum=ves.io.schema.cluster.EndpointSelectionPolicy" json:"endpoint_selection,omitempty"`
-	AdvancedOptions       *OriginPoolAdvancedOptions                    `protobuf:"bytes,12,opt,name=advanced_options,json=advancedOptions" json:"advanced_options,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{16} }
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{13} }
 
 type isReplaceSpecType_TlsChoice interface {
 	isReplaceSpecType_TlsChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isReplaceSpecType_HealthCheckPortChoice interface {
-	isReplaceSpecType_HealthCheckPortChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -2797,27 +1921,13 @@ type ReplaceSpecType_NoTls struct {
 type ReplaceSpecType_UseTls struct {
 	UseTls *UpstreamTlsParameters `protobuf:"bytes,3,opt,name=use_tls,json=useTls,oneof"`
 }
-type ReplaceSpecType_SameAsEndpointPort struct {
-	SameAsEndpointPort *ves_io_schema4.Empty `protobuf:"bytes,10,opt,name=same_as_endpoint_port,json=sameAsEndpointPort,oneof"`
-}
-type ReplaceSpecType_HealthCheckPort struct {
-	HealthCheckPort uint32 `protobuf:"varint,11,opt,name=health_check_port,json=healthCheckPort,proto3,oneof"`
-}
 
-func (*ReplaceSpecType_NoTls) isReplaceSpecType_TlsChoice()                          {}
-func (*ReplaceSpecType_UseTls) isReplaceSpecType_TlsChoice()                         {}
-func (*ReplaceSpecType_SameAsEndpointPort) isReplaceSpecType_HealthCheckPortChoice() {}
-func (*ReplaceSpecType_HealthCheckPort) isReplaceSpecType_HealthCheckPortChoice()    {}
+func (*ReplaceSpecType_NoTls) isReplaceSpecType_TlsChoice()  {}
+func (*ReplaceSpecType_UseTls) isReplaceSpecType_TlsChoice() {}
 
 func (m *ReplaceSpecType) GetTlsChoice() isReplaceSpecType_TlsChoice {
 	if m != nil {
 		return m.TlsChoice
-	}
-	return nil
-}
-func (m *ReplaceSpecType) GetHealthCheckPortChoice() isReplaceSpecType_HealthCheckPortChoice {
-	if m != nil {
-		return m.HealthCheckPortChoice
 	}
 	return nil
 }
@@ -2850,20 +1960,6 @@ func (m *ReplaceSpecType) GetPort() uint32 {
 	return 0
 }
 
-func (m *ReplaceSpecType) GetSameAsEndpointPort() *ves_io_schema4.Empty {
-	if x, ok := m.GetHealthCheckPortChoice().(*ReplaceSpecType_SameAsEndpointPort); ok {
-		return x.SameAsEndpointPort
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetHealthCheckPort() uint32 {
-	if x, ok := m.GetHealthCheckPortChoice().(*ReplaceSpecType_HealthCheckPort); ok {
-		return x.HealthCheckPort
-	}
-	return 0
-}
-
 func (m *ReplaceSpecType) GetHealthcheck() []*ves_io_schema_views.ObjectRefType {
 	if m != nil {
 		return m.Healthcheck
@@ -2885,20 +1981,11 @@ func (m *ReplaceSpecType) GetEndpointSelection() ves_io_schema_cluster.EndpointS
 	return ves_io_schema_cluster.DISTRIBUTED
 }
 
-func (m *ReplaceSpecType) GetAdvancedOptions() *OriginPoolAdvancedOptions {
-	if m != nil {
-		return m.AdvancedOptions
-	}
-	return nil
-}
-
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
 		(*ReplaceSpecType_NoTls)(nil),
 		(*ReplaceSpecType_UseTls)(nil),
-		(*ReplaceSpecType_SameAsEndpointPort)(nil),
-		(*ReplaceSpecType_HealthCheckPort)(nil),
 	}
 }
 
@@ -2919,20 +2006,6 @@ func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("ReplaceSpecType.TlsChoice has unexpected type %T", x)
-	}
-	// health_check_port_choice
-	switch x := m.HealthCheckPortChoice.(type) {
-	case *ReplaceSpecType_SameAsEndpointPort:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SameAsEndpointPort); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_HealthCheckPort:
-		_ = b.EncodeVarint(11<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.HealthCheckPort))
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.HealthCheckPortChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -2955,21 +2028,6 @@ func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *prot
 		msg := new(UpstreamTlsParameters)
 		err := b.DecodeMessage(msg)
 		m.TlsChoice = &ReplaceSpecType_UseTls{msg}
-		return true, err
-	case 10: // health_check_port_choice.same_as_endpoint_port
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HealthCheckPortChoice = &ReplaceSpecType_SameAsEndpointPort{msg}
-		return true, err
-	case 11: // health_check_port_choice.health_check_port
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.HealthCheckPortChoice = &ReplaceSpecType_HealthCheckPort{uint32(x)}
 		return true, err
 	default:
 		return false, nil
@@ -2994,20 +2052,6 @@ func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
-	// health_check_port_choice
-	switch x := m.HealthCheckPortChoice.(type) {
-	case *ReplaceSpecType_SameAsEndpointPort:
-		s := proto.Size(x.SameAsEndpointPort)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_HealthCheckPort:
-		n += proto.SizeVarint(11<<3 | proto.WireVarint)
-		n += proto.SizeVarint(uint64(x.HealthCheckPort))
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
 	return n
 }
 
@@ -3020,30 +2064,19 @@ type GetSpecType struct {
 	// Types that are valid to be assigned to TlsChoice:
 	//	*GetSpecType_NoTls
 	//	*GetSpecType_UseTls
-	TlsChoice isGetSpecType_TlsChoice `protobuf_oneof:"tls_choice"`
-	Port      uint32                  `protobuf:"varint,5,opt,name=port,proto3" json:"port,omitempty"`
-	// Types that are valid to be assigned to HealthCheckPortChoice:
-	//	*GetSpecType_SameAsEndpointPort
-	//	*GetSpecType_HealthCheckPort
-	HealthCheckPortChoice isGetSpecType_HealthCheckPortChoice           `protobuf_oneof:"health_check_port_choice"`
+	TlsChoice             isGetSpecType_TlsChoice                       `protobuf_oneof:"tls_choice"`
+	Port                  uint32                                        `protobuf:"varint,5,opt,name=port,proto3" json:"port,omitempty"`
 	Healthcheck           []*ves_io_schema_views.ObjectRefType          `protobuf:"bytes,6,rep,name=healthcheck" json:"healthcheck,omitempty"`
 	LoadbalancerAlgorithm ves_io_schema_cluster.LoadbalancerAlgorithm   `protobuf:"varint,7,opt,name=loadbalancer_algorithm,json=loadbalancerAlgorithm,proto3,enum=ves.io.schema.cluster.LoadbalancerAlgorithm" json:"loadbalancer_algorithm,omitempty"`
 	EndpointSelection     ves_io_schema_cluster.EndpointSelectionPolicy `protobuf:"varint,8,opt,name=endpoint_selection,json=endpointSelection,proto3,enum=ves.io.schema.cluster.EndpointSelectionPolicy" json:"endpoint_selection,omitempty"`
-	AdvancedOptions       *OriginPoolAdvancedOptions                    `protobuf:"bytes,12,opt,name=advanced_options,json=advancedOptions" json:"advanced_options,omitempty"`
 }
 
 func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{17} }
+func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{14} }
 
 type isGetSpecType_TlsChoice interface {
 	isGetSpecType_TlsChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isGetSpecType_HealthCheckPortChoice interface {
-	isGetSpecType_HealthCheckPortChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -3055,27 +2088,13 @@ type GetSpecType_NoTls struct {
 type GetSpecType_UseTls struct {
 	UseTls *UpstreamTlsParameters `protobuf:"bytes,3,opt,name=use_tls,json=useTls,oneof"`
 }
-type GetSpecType_SameAsEndpointPort struct {
-	SameAsEndpointPort *ves_io_schema4.Empty `protobuf:"bytes,10,opt,name=same_as_endpoint_port,json=sameAsEndpointPort,oneof"`
-}
-type GetSpecType_HealthCheckPort struct {
-	HealthCheckPort uint32 `protobuf:"varint,11,opt,name=health_check_port,json=healthCheckPort,proto3,oneof"`
-}
 
-func (*GetSpecType_NoTls) isGetSpecType_TlsChoice()                          {}
-func (*GetSpecType_UseTls) isGetSpecType_TlsChoice()                         {}
-func (*GetSpecType_SameAsEndpointPort) isGetSpecType_HealthCheckPortChoice() {}
-func (*GetSpecType_HealthCheckPort) isGetSpecType_HealthCheckPortChoice()    {}
+func (*GetSpecType_NoTls) isGetSpecType_TlsChoice()  {}
+func (*GetSpecType_UseTls) isGetSpecType_TlsChoice() {}
 
 func (m *GetSpecType) GetTlsChoice() isGetSpecType_TlsChoice {
 	if m != nil {
 		return m.TlsChoice
-	}
-	return nil
-}
-func (m *GetSpecType) GetHealthCheckPortChoice() isGetSpecType_HealthCheckPortChoice {
-	if m != nil {
-		return m.HealthCheckPortChoice
 	}
 	return nil
 }
@@ -3108,20 +2127,6 @@ func (m *GetSpecType) GetPort() uint32 {
 	return 0
 }
 
-func (m *GetSpecType) GetSameAsEndpointPort() *ves_io_schema4.Empty {
-	if x, ok := m.GetHealthCheckPortChoice().(*GetSpecType_SameAsEndpointPort); ok {
-		return x.SameAsEndpointPort
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetHealthCheckPort() uint32 {
-	if x, ok := m.GetHealthCheckPortChoice().(*GetSpecType_HealthCheckPort); ok {
-		return x.HealthCheckPort
-	}
-	return 0
-}
-
 func (m *GetSpecType) GetHealthcheck() []*ves_io_schema_views.ObjectRefType {
 	if m != nil {
 		return m.Healthcheck
@@ -3143,20 +2148,11 @@ func (m *GetSpecType) GetEndpointSelection() ves_io_schema_cluster.EndpointSelec
 	return ves_io_schema_cluster.DISTRIBUTED
 }
 
-func (m *GetSpecType) GetAdvancedOptions() *OriginPoolAdvancedOptions {
-	if m != nil {
-		return m.AdvancedOptions
-	}
-	return nil
-}
-
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
 		(*GetSpecType_NoTls)(nil),
 		(*GetSpecType_UseTls)(nil),
-		(*GetSpecType_SameAsEndpointPort)(nil),
-		(*GetSpecType_HealthCheckPort)(nil),
 	}
 }
 
@@ -3177,20 +2173,6 @@ func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("GetSpecType.TlsChoice has unexpected type %T", x)
-	}
-	// health_check_port_choice
-	switch x := m.HealthCheckPortChoice.(type) {
-	case *GetSpecType_SameAsEndpointPort:
-		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SameAsEndpointPort); err != nil {
-			return err
-		}
-	case *GetSpecType_HealthCheckPort:
-		_ = b.EncodeVarint(11<<3 | proto.WireVarint)
-		_ = b.EncodeVarint(uint64(x.HealthCheckPort))
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.HealthCheckPortChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -3214,21 +2196,6 @@ func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Bu
 		err := b.DecodeMessage(msg)
 		m.TlsChoice = &GetSpecType_UseTls{msg}
 		return true, err
-	case 10: // health_check_port_choice.same_as_endpoint_port
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HealthCheckPortChoice = &GetSpecType_SameAsEndpointPort{msg}
-		return true, err
-	case 11: // health_check_port_choice.health_check_port
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.HealthCheckPortChoice = &GetSpecType_HealthCheckPort{uint32(x)}
-		return true, err
 	default:
 		return false, nil
 	}
@@ -3248,20 +2215,6 @@ func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
 		n += proto.SizeVarint(3<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// health_check_port_choice
-	switch x := m.HealthCheckPortChoice.(type) {
-	case *GetSpecType_SameAsEndpointPort:
-		s := proto.Size(x.SameAsEndpointPort)
-		n += proto.SizeVarint(10<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_HealthCheckPort:
-		n += proto.SizeVarint(11<<3 | proto.WireVarint)
-		n += proto.SizeVarint(uint64(x.HealthCheckPort))
 	case nil:
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
@@ -3292,12 +2245,6 @@ func init() {
 	golang_proto.RegisterType((*TlsCertificatesType)(nil), "ves.io.schema.views.origin_pool.TlsCertificatesType")
 	proto.RegisterType((*UpstreamTlsParameters)(nil), "ves.io.schema.views.origin_pool.UpstreamTlsParameters")
 	golang_proto.RegisterType((*UpstreamTlsParameters)(nil), "ves.io.schema.views.origin_pool.UpstreamTlsParameters")
-	proto.RegisterType((*OriginPoolDefaultSubset)(nil), "ves.io.schema.views.origin_pool.OriginPoolDefaultSubset")
-	golang_proto.RegisterType((*OriginPoolDefaultSubset)(nil), "ves.io.schema.views.origin_pool.OriginPoolDefaultSubset")
-	proto.RegisterType((*OriginPoolSubsets)(nil), "ves.io.schema.views.origin_pool.OriginPoolSubsets")
-	golang_proto.RegisterType((*OriginPoolSubsets)(nil), "ves.io.schema.views.origin_pool.OriginPoolSubsets")
-	proto.RegisterType((*OriginPoolAdvancedOptions)(nil), "ves.io.schema.views.origin_pool.OriginPoolAdvancedOptions")
-	golang_proto.RegisterType((*OriginPoolAdvancedOptions)(nil), "ves.io.schema.views.origin_pool.OriginPoolAdvancedOptions")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.origin_pool.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.origin_pool.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.views.origin_pool.CreateSpecType")
@@ -3767,14 +2714,6 @@ func (this *OriginServerType) Equal(that interface{}) bool {
 	} else if !this.Choice.Equal(that1.Choice) {
 		return false
 	}
-	if len(this.Labels) != len(that1.Labels) {
-		return false
-	}
-	for i := range this.Labels {
-		if this.Labels[i] != that1.Labels[i] {
-			return false
-		}
-	}
 	return true
 }
 func (this *OriginServerType_PublicIp) Equal(that interface{}) bool {
@@ -4241,403 +3180,6 @@ func (this *UpstreamTlsParameters_UseMtls) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *OriginPoolDefaultSubset) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OriginPoolDefaultSubset)
-	if !ok {
-		that2, ok := that.(OriginPoolDefaultSubset)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.DefaultSubset) != len(that1.DefaultSubset) {
-		return false
-	}
-	for i := range this.DefaultSubset {
-		if this.DefaultSubset[i] != that1.DefaultSubset[i] {
-			return false
-		}
-	}
-	return true
-}
-func (this *OriginPoolSubsets) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OriginPoolSubsets)
-	if !ok {
-		that2, ok := that.(OriginPoolSubsets)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.EndpointSubsets) != len(that1.EndpointSubsets) {
-		return false
-	}
-	for i := range this.EndpointSubsets {
-		if !this.EndpointSubsets[i].Equal(that1.EndpointSubsets[i]) {
-			return false
-		}
-	}
-	if that1.FallbackPolicyChoice == nil {
-		if this.FallbackPolicyChoice != nil {
-			return false
-		}
-	} else if this.FallbackPolicyChoice == nil {
-		return false
-	} else if !this.FallbackPolicyChoice.Equal(that1.FallbackPolicyChoice) {
-		return false
-	}
-	return true
-}
-func (this *OriginPoolSubsets_AnyEndpoint) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OriginPoolSubsets_AnyEndpoint)
-	if !ok {
-		that2, ok := that.(OriginPoolSubsets_AnyEndpoint)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AnyEndpoint.Equal(that1.AnyEndpoint) {
-		return false
-	}
-	return true
-}
-func (this *OriginPoolSubsets_DefaultSubset) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OriginPoolSubsets_DefaultSubset)
-	if !ok {
-		that2, ok := that.(OriginPoolSubsets_DefaultSubset)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DefaultSubset.Equal(that1.DefaultSubset) {
-		return false
-	}
-	return true
-}
-func (this *OriginPoolSubsets_FailRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OriginPoolSubsets_FailRequest)
-	if !ok {
-		that2, ok := that.(OriginPoolSubsets_FailRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FailRequest.Equal(that1.FailRequest) {
-		return false
-	}
-	return true
-}
-func (this *OriginPoolAdvancedOptions) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OriginPoolAdvancedOptions)
-	if !ok {
-		that2, ok := that.(OriginPoolAdvancedOptions)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.ConnectionTimeout != that1.ConnectionTimeout {
-		return false
-	}
-	if this.HttpIdleTimeout != that1.HttpIdleTimeout {
-		return false
-	}
-	if that1.CircuitBreakerChoice == nil {
-		if this.CircuitBreakerChoice != nil {
-			return false
-		}
-	} else if this.CircuitBreakerChoice == nil {
-		return false
-	} else if !this.CircuitBreakerChoice.Equal(that1.CircuitBreakerChoice) {
-		return false
-	}
-	if that1.OutlierDetectionChoice == nil {
-		if this.OutlierDetectionChoice != nil {
-			return false
-		}
-	} else if this.OutlierDetectionChoice == nil {
-		return false
-	} else if !this.OutlierDetectionChoice.Equal(that1.OutlierDetectionChoice) {
-		return false
-	}
-	if that1.PanicThresholdType == nil {
-		if this.PanicThresholdType != nil {
-			return false
-		}
-	} else if this.PanicThresholdType == nil {
-		return false
-	} else if !this.PanicThresholdType.Equal(that1.PanicThresholdType) {
-		return false
-	}
-	if that1.SubsetChoice == nil {
-		if this.SubsetChoice != nil {
-			return false
-		}
-	} else if this.SubsetChoice == nil {
-		return false
-	} else if !this.SubsetChoice.Equal(that1.SubsetChoice) {
-		return false
-	}
-	if !this.Http2Options.Equal(that1.Http2Options) {
-		return false
-	}
-	return true
-}
-func (this *OriginPoolAdvancedOptions_DisableCircuitBreaker) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OriginPoolAdvancedOptions_DisableCircuitBreaker)
-	if !ok {
-		that2, ok := that.(OriginPoolAdvancedOptions_DisableCircuitBreaker)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableCircuitBreaker.Equal(that1.DisableCircuitBreaker) {
-		return false
-	}
-	return true
-}
-func (this *OriginPoolAdvancedOptions_CircuitBreaker) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OriginPoolAdvancedOptions_CircuitBreaker)
-	if !ok {
-		that2, ok := that.(OriginPoolAdvancedOptions_CircuitBreaker)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.CircuitBreaker.Equal(that1.CircuitBreaker) {
-		return false
-	}
-	return true
-}
-func (this *OriginPoolAdvancedOptions_DisableOutlierDetection) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OriginPoolAdvancedOptions_DisableOutlierDetection)
-	if !ok {
-		that2, ok := that.(OriginPoolAdvancedOptions_DisableOutlierDetection)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableOutlierDetection.Equal(that1.DisableOutlierDetection) {
-		return false
-	}
-	return true
-}
-func (this *OriginPoolAdvancedOptions_OutlierDetection) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OriginPoolAdvancedOptions_OutlierDetection)
-	if !ok {
-		that2, ok := that.(OriginPoolAdvancedOptions_OutlierDetection)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OutlierDetection.Equal(that1.OutlierDetection) {
-		return false
-	}
-	return true
-}
-func (this *OriginPoolAdvancedOptions_NoPanicThreshold) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OriginPoolAdvancedOptions_NoPanicThreshold)
-	if !ok {
-		that2, ok := that.(OriginPoolAdvancedOptions_NoPanicThreshold)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.NoPanicThreshold.Equal(that1.NoPanicThreshold) {
-		return false
-	}
-	return true
-}
-func (this *OriginPoolAdvancedOptions_PanicThreshold) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OriginPoolAdvancedOptions_PanicThreshold)
-	if !ok {
-		that2, ok := that.(OriginPoolAdvancedOptions_PanicThreshold)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.PanicThreshold != that1.PanicThreshold {
-		return false
-	}
-	return true
-}
-func (this *OriginPoolAdvancedOptions_DisableSubsets) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OriginPoolAdvancedOptions_DisableSubsets)
-	if !ok {
-		that2, ok := that.(OriginPoolAdvancedOptions_DisableSubsets)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableSubsets.Equal(that1.DisableSubsets) {
-		return false
-	}
-	return true
-}
-func (this *OriginPoolAdvancedOptions_EnableSubsets) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*OriginPoolAdvancedOptions_EnableSubsets)
-	if !ok {
-		that2, ok := that.(OriginPoolAdvancedOptions_EnableSubsets)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EnableSubsets.Equal(that1.EnableSubsets) {
-		return false
-	}
-	return true
-}
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -4677,15 +3219,6 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if this.Port != that1.Port {
 		return false
 	}
-	if that1.HealthCheckPortChoice == nil {
-		if this.HealthCheckPortChoice != nil {
-			return false
-		}
-	} else if this.HealthCheckPortChoice == nil {
-		return false
-	} else if !this.HealthCheckPortChoice.Equal(that1.HealthCheckPortChoice) {
-		return false
-	}
 	if len(this.Healthcheck) != len(that1.Healthcheck) {
 		return false
 	}
@@ -4698,9 +3231,6 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if this.EndpointSelection != that1.EndpointSelection {
-		return false
-	}
-	if !this.AdvancedOptions.Equal(that1.AdvancedOptions) {
 		return false
 	}
 	if !this.ViewInternal.Equal(that1.ViewInternal) {
@@ -4756,54 +3286,6 @@ func (this *GlobalSpecType_UseTls) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *GlobalSpecType_SameAsEndpointPort) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_SameAsEndpointPort)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_SameAsEndpointPort)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.SameAsEndpointPort.Equal(that1.SameAsEndpointPort) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_HealthCheckPort) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_HealthCheckPort)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_HealthCheckPort)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.HealthCheckPort != that1.HealthCheckPort {
-		return false
-	}
-	return true
-}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -4843,15 +3325,6 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if this.Port != that1.Port {
 		return false
 	}
-	if that1.HealthCheckPortChoice == nil {
-		if this.HealthCheckPortChoice != nil {
-			return false
-		}
-	} else if this.HealthCheckPortChoice == nil {
-		return false
-	} else if !this.HealthCheckPortChoice.Equal(that1.HealthCheckPortChoice) {
-		return false
-	}
 	if len(this.Healthcheck) != len(that1.Healthcheck) {
 		return false
 	}
@@ -4864,9 +3337,6 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if this.EndpointSelection != that1.EndpointSelection {
-		return false
-	}
-	if !this.AdvancedOptions.Equal(that1.AdvancedOptions) {
 		return false
 	}
 	return true
@@ -4919,54 +3389,6 @@ func (this *CreateSpecType_UseTls) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *CreateSpecType_SameAsEndpointPort) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_SameAsEndpointPort)
-	if !ok {
-		that2, ok := that.(CreateSpecType_SameAsEndpointPort)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.SameAsEndpointPort.Equal(that1.SameAsEndpointPort) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_HealthCheckPort) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_HealthCheckPort)
-	if !ok {
-		that2, ok := that.(CreateSpecType_HealthCheckPort)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.HealthCheckPort != that1.HealthCheckPort {
-		return false
-	}
-	return true
-}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -5006,15 +3428,6 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if this.Port != that1.Port {
 		return false
 	}
-	if that1.HealthCheckPortChoice == nil {
-		if this.HealthCheckPortChoice != nil {
-			return false
-		}
-	} else if this.HealthCheckPortChoice == nil {
-		return false
-	} else if !this.HealthCheckPortChoice.Equal(that1.HealthCheckPortChoice) {
-		return false
-	}
 	if len(this.Healthcheck) != len(that1.Healthcheck) {
 		return false
 	}
@@ -5027,9 +3440,6 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if this.EndpointSelection != that1.EndpointSelection {
-		return false
-	}
-	if !this.AdvancedOptions.Equal(that1.AdvancedOptions) {
 		return false
 	}
 	return true
@@ -5082,54 +3492,6 @@ func (this *ReplaceSpecType_UseTls) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *ReplaceSpecType_SameAsEndpointPort) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_SameAsEndpointPort)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_SameAsEndpointPort)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.SameAsEndpointPort.Equal(that1.SameAsEndpointPort) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_HealthCheckPort) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_HealthCheckPort)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_HealthCheckPort)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.HealthCheckPort != that1.HealthCheckPort {
-		return false
-	}
-	return true
-}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -5169,15 +3531,6 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if this.Port != that1.Port {
 		return false
 	}
-	if that1.HealthCheckPortChoice == nil {
-		if this.HealthCheckPortChoice != nil {
-			return false
-		}
-	} else if this.HealthCheckPortChoice == nil {
-		return false
-	} else if !this.HealthCheckPortChoice.Equal(that1.HealthCheckPortChoice) {
-		return false
-	}
 	if len(this.Healthcheck) != len(that1.Healthcheck) {
 		return false
 	}
@@ -5190,9 +3543,6 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if this.EndpointSelection != that1.EndpointSelection {
-		return false
-	}
-	if !this.AdvancedOptions.Equal(that1.AdvancedOptions) {
 		return false
 	}
 	return true
@@ -5241,54 +3591,6 @@ func (this *GetSpecType_UseTls) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.UseTls.Equal(that1.UseTls) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_SameAsEndpointPort) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_SameAsEndpointPort)
-	if !ok {
-		that2, ok := that.(GetSpecType_SameAsEndpointPort)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.SameAsEndpointPort.Equal(that1.SameAsEndpointPort) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_HealthCheckPort) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_HealthCheckPort)
-	if !ok {
-		that2, ok := that.(GetSpecType_HealthCheckPort)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.HealthCheckPort != that1.HealthCheckPort {
 		return false
 	}
 	return true
@@ -5465,23 +3767,10 @@ func (this *OriginServerType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 12)
+	s := make([]string, 0, 11)
 	s = append(s, "&origin_pool.OriginServerType{")
 	if this.Choice != nil {
 		s = append(s, "Choice: "+fmt.Sprintf("%#v", this.Choice)+",\n")
-	}
-	keysForLabels := make([]string, 0, len(this.Labels))
-	for k, _ := range this.Labels {
-		keysForLabels = append(keysForLabels, k)
-	}
-	sortkeys.Strings(keysForLabels)
-	mapStringForLabels := "map[string]string{"
-	for _, k := range keysForLabels {
-		mapStringForLabels += fmt.Sprintf("%#v: %#v,", k, this.Labels[k])
-	}
-	mapStringForLabels += "}"
-	if this.Labels != nil {
-		s = append(s, "Labels: "+mapStringForLabels+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -5649,162 +3938,11 @@ func (this *UpstreamTlsParameters_UseMtls) GoString() string {
 		`UseMtls:` + fmt.Sprintf("%#v", this.UseMtls) + `}`}, ", ")
 	return s
 }
-func (this *OriginPoolDefaultSubset) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&origin_pool.OriginPoolDefaultSubset{")
-	keysForDefaultSubset := make([]string, 0, len(this.DefaultSubset))
-	for k, _ := range this.DefaultSubset {
-		keysForDefaultSubset = append(keysForDefaultSubset, k)
-	}
-	sortkeys.Strings(keysForDefaultSubset)
-	mapStringForDefaultSubset := "map[string]string{"
-	for _, k := range keysForDefaultSubset {
-		mapStringForDefaultSubset += fmt.Sprintf("%#v: %#v,", k, this.DefaultSubset[k])
-	}
-	mapStringForDefaultSubset += "}"
-	if this.DefaultSubset != nil {
-		s = append(s, "DefaultSubset: "+mapStringForDefaultSubset+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *OriginPoolSubsets) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 8)
-	s = append(s, "&origin_pool.OriginPoolSubsets{")
-	if this.EndpointSubsets != nil {
-		s = append(s, "EndpointSubsets: "+fmt.Sprintf("%#v", this.EndpointSubsets)+",\n")
-	}
-	if this.FallbackPolicyChoice != nil {
-		s = append(s, "FallbackPolicyChoice: "+fmt.Sprintf("%#v", this.FallbackPolicyChoice)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *OriginPoolSubsets_AnyEndpoint) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.OriginPoolSubsets_AnyEndpoint{` +
-		`AnyEndpoint:` + fmt.Sprintf("%#v", this.AnyEndpoint) + `}`}, ", ")
-	return s
-}
-func (this *OriginPoolSubsets_DefaultSubset) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.OriginPoolSubsets_DefaultSubset{` +
-		`DefaultSubset:` + fmt.Sprintf("%#v", this.DefaultSubset) + `}`}, ", ")
-	return s
-}
-func (this *OriginPoolSubsets_FailRequest) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.OriginPoolSubsets_FailRequest{` +
-		`FailRequest:` + fmt.Sprintf("%#v", this.FailRequest) + `}`}, ", ")
-	return s
-}
-func (this *OriginPoolAdvancedOptions) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 15)
-	s = append(s, "&origin_pool.OriginPoolAdvancedOptions{")
-	s = append(s, "ConnectionTimeout: "+fmt.Sprintf("%#v", this.ConnectionTimeout)+",\n")
-	s = append(s, "HttpIdleTimeout: "+fmt.Sprintf("%#v", this.HttpIdleTimeout)+",\n")
-	if this.CircuitBreakerChoice != nil {
-		s = append(s, "CircuitBreakerChoice: "+fmt.Sprintf("%#v", this.CircuitBreakerChoice)+",\n")
-	}
-	if this.OutlierDetectionChoice != nil {
-		s = append(s, "OutlierDetectionChoice: "+fmt.Sprintf("%#v", this.OutlierDetectionChoice)+",\n")
-	}
-	if this.PanicThresholdType != nil {
-		s = append(s, "PanicThresholdType: "+fmt.Sprintf("%#v", this.PanicThresholdType)+",\n")
-	}
-	if this.SubsetChoice != nil {
-		s = append(s, "SubsetChoice: "+fmt.Sprintf("%#v", this.SubsetChoice)+",\n")
-	}
-	if this.Http2Options != nil {
-		s = append(s, "Http2Options: "+fmt.Sprintf("%#v", this.Http2Options)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *OriginPoolAdvancedOptions_DisableCircuitBreaker) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.OriginPoolAdvancedOptions_DisableCircuitBreaker{` +
-		`DisableCircuitBreaker:` + fmt.Sprintf("%#v", this.DisableCircuitBreaker) + `}`}, ", ")
-	return s
-}
-func (this *OriginPoolAdvancedOptions_CircuitBreaker) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.OriginPoolAdvancedOptions_CircuitBreaker{` +
-		`CircuitBreaker:` + fmt.Sprintf("%#v", this.CircuitBreaker) + `}`}, ", ")
-	return s
-}
-func (this *OriginPoolAdvancedOptions_DisableOutlierDetection) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.OriginPoolAdvancedOptions_DisableOutlierDetection{` +
-		`DisableOutlierDetection:` + fmt.Sprintf("%#v", this.DisableOutlierDetection) + `}`}, ", ")
-	return s
-}
-func (this *OriginPoolAdvancedOptions_OutlierDetection) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.OriginPoolAdvancedOptions_OutlierDetection{` +
-		`OutlierDetection:` + fmt.Sprintf("%#v", this.OutlierDetection) + `}`}, ", ")
-	return s
-}
-func (this *OriginPoolAdvancedOptions_NoPanicThreshold) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.OriginPoolAdvancedOptions_NoPanicThreshold{` +
-		`NoPanicThreshold:` + fmt.Sprintf("%#v", this.NoPanicThreshold) + `}`}, ", ")
-	return s
-}
-func (this *OriginPoolAdvancedOptions_PanicThreshold) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.OriginPoolAdvancedOptions_PanicThreshold{` +
-		`PanicThreshold:` + fmt.Sprintf("%#v", this.PanicThreshold) + `}`}, ", ")
-	return s
-}
-func (this *OriginPoolAdvancedOptions_DisableSubsets) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.OriginPoolAdvancedOptions_DisableSubsets{` +
-		`DisableSubsets:` + fmt.Sprintf("%#v", this.DisableSubsets) + `}`}, ", ")
-	return s
-}
-func (this *OriginPoolAdvancedOptions_EnableSubsets) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.OriginPoolAdvancedOptions_EnableSubsets{` +
-		`EnableSubsets:` + fmt.Sprintf("%#v", this.EnableSubsets) + `}`}, ", ")
-	return s
-}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 15)
+	s := make([]string, 0, 12)
 	s = append(s, "&origin_pool.GlobalSpecType{")
 	if this.OriginServers != nil {
 		s = append(s, "OriginServers: "+fmt.Sprintf("%#v", this.OriginServers)+",\n")
@@ -5813,17 +3951,11 @@ func (this *GlobalSpecType) GoString() string {
 		s = append(s, "TlsChoice: "+fmt.Sprintf("%#v", this.TlsChoice)+",\n")
 	}
 	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
-	if this.HealthCheckPortChoice != nil {
-		s = append(s, "HealthCheckPortChoice: "+fmt.Sprintf("%#v", this.HealthCheckPortChoice)+",\n")
-	}
 	if this.Healthcheck != nil {
 		s = append(s, "Healthcheck: "+fmt.Sprintf("%#v", this.Healthcheck)+",\n")
 	}
 	s = append(s, "LoadbalancerAlgorithm: "+fmt.Sprintf("%#v", this.LoadbalancerAlgorithm)+",\n")
 	s = append(s, "EndpointSelection: "+fmt.Sprintf("%#v", this.EndpointSelection)+",\n")
-	if this.AdvancedOptions != nil {
-		s = append(s, "AdvancedOptions: "+fmt.Sprintf("%#v", this.AdvancedOptions)+",\n")
-	}
 	if this.ViewInternal != nil {
 		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
 	}
@@ -5846,27 +3978,11 @@ func (this *GlobalSpecType_UseTls) GoString() string {
 		`UseTls:` + fmt.Sprintf("%#v", this.UseTls) + `}`}, ", ")
 	return s
 }
-func (this *GlobalSpecType_SameAsEndpointPort) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.GlobalSpecType_SameAsEndpointPort{` +
-		`SameAsEndpointPort:` + fmt.Sprintf("%#v", this.SameAsEndpointPort) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_HealthCheckPort) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.GlobalSpecType_HealthCheckPort{` +
-		`HealthCheckPort:` + fmt.Sprintf("%#v", this.HealthCheckPort) + `}`}, ", ")
-	return s
-}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 14)
+	s := make([]string, 0, 11)
 	s = append(s, "&origin_pool.CreateSpecType{")
 	if this.OriginServers != nil {
 		s = append(s, "OriginServers: "+fmt.Sprintf("%#v", this.OriginServers)+",\n")
@@ -5875,17 +3991,11 @@ func (this *CreateSpecType) GoString() string {
 		s = append(s, "TlsChoice: "+fmt.Sprintf("%#v", this.TlsChoice)+",\n")
 	}
 	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
-	if this.HealthCheckPortChoice != nil {
-		s = append(s, "HealthCheckPortChoice: "+fmt.Sprintf("%#v", this.HealthCheckPortChoice)+",\n")
-	}
 	if this.Healthcheck != nil {
 		s = append(s, "Healthcheck: "+fmt.Sprintf("%#v", this.Healthcheck)+",\n")
 	}
 	s = append(s, "LoadbalancerAlgorithm: "+fmt.Sprintf("%#v", this.LoadbalancerAlgorithm)+",\n")
 	s = append(s, "EndpointSelection: "+fmt.Sprintf("%#v", this.EndpointSelection)+",\n")
-	if this.AdvancedOptions != nil {
-		s = append(s, "AdvancedOptions: "+fmt.Sprintf("%#v", this.AdvancedOptions)+",\n")
-	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -5905,27 +4015,11 @@ func (this *CreateSpecType_UseTls) GoString() string {
 		`UseTls:` + fmt.Sprintf("%#v", this.UseTls) + `}`}, ", ")
 	return s
 }
-func (this *CreateSpecType_SameAsEndpointPort) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.CreateSpecType_SameAsEndpointPort{` +
-		`SameAsEndpointPort:` + fmt.Sprintf("%#v", this.SameAsEndpointPort) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_HealthCheckPort) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.CreateSpecType_HealthCheckPort{` +
-		`HealthCheckPort:` + fmt.Sprintf("%#v", this.HealthCheckPort) + `}`}, ", ")
-	return s
-}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 14)
+	s := make([]string, 0, 11)
 	s = append(s, "&origin_pool.ReplaceSpecType{")
 	if this.OriginServers != nil {
 		s = append(s, "OriginServers: "+fmt.Sprintf("%#v", this.OriginServers)+",\n")
@@ -5934,17 +4028,11 @@ func (this *ReplaceSpecType) GoString() string {
 		s = append(s, "TlsChoice: "+fmt.Sprintf("%#v", this.TlsChoice)+",\n")
 	}
 	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
-	if this.HealthCheckPortChoice != nil {
-		s = append(s, "HealthCheckPortChoice: "+fmt.Sprintf("%#v", this.HealthCheckPortChoice)+",\n")
-	}
 	if this.Healthcheck != nil {
 		s = append(s, "Healthcheck: "+fmt.Sprintf("%#v", this.Healthcheck)+",\n")
 	}
 	s = append(s, "LoadbalancerAlgorithm: "+fmt.Sprintf("%#v", this.LoadbalancerAlgorithm)+",\n")
 	s = append(s, "EndpointSelection: "+fmt.Sprintf("%#v", this.EndpointSelection)+",\n")
-	if this.AdvancedOptions != nil {
-		s = append(s, "AdvancedOptions: "+fmt.Sprintf("%#v", this.AdvancedOptions)+",\n")
-	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -5964,27 +4052,11 @@ func (this *ReplaceSpecType_UseTls) GoString() string {
 		`UseTls:` + fmt.Sprintf("%#v", this.UseTls) + `}`}, ", ")
 	return s
 }
-func (this *ReplaceSpecType_SameAsEndpointPort) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.ReplaceSpecType_SameAsEndpointPort{` +
-		`SameAsEndpointPort:` + fmt.Sprintf("%#v", this.SameAsEndpointPort) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_HealthCheckPort) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.ReplaceSpecType_HealthCheckPort{` +
-		`HealthCheckPort:` + fmt.Sprintf("%#v", this.HealthCheckPort) + `}`}, ", ")
-	return s
-}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 14)
+	s := make([]string, 0, 11)
 	s = append(s, "&origin_pool.GetSpecType{")
 	if this.OriginServers != nil {
 		s = append(s, "OriginServers: "+fmt.Sprintf("%#v", this.OriginServers)+",\n")
@@ -5993,17 +4065,11 @@ func (this *GetSpecType) GoString() string {
 		s = append(s, "TlsChoice: "+fmt.Sprintf("%#v", this.TlsChoice)+",\n")
 	}
 	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
-	if this.HealthCheckPortChoice != nil {
-		s = append(s, "HealthCheckPortChoice: "+fmt.Sprintf("%#v", this.HealthCheckPortChoice)+",\n")
-	}
 	if this.Healthcheck != nil {
 		s = append(s, "Healthcheck: "+fmt.Sprintf("%#v", this.Healthcheck)+",\n")
 	}
 	s = append(s, "LoadbalancerAlgorithm: "+fmt.Sprintf("%#v", this.LoadbalancerAlgorithm)+",\n")
 	s = append(s, "EndpointSelection: "+fmt.Sprintf("%#v", this.EndpointSelection)+",\n")
-	if this.AdvancedOptions != nil {
-		s = append(s, "AdvancedOptions: "+fmt.Sprintf("%#v", this.AdvancedOptions)+",\n")
-	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -6021,22 +4087,6 @@ func (this *GetSpecType_UseTls) GoString() string {
 	}
 	s := strings.Join([]string{`&origin_pool.GetSpecType_UseTls{` +
 		`UseTls:` + fmt.Sprintf("%#v", this.UseTls) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_SameAsEndpointPort) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.GetSpecType_SameAsEndpointPort{` +
-		`SameAsEndpointPort:` + fmt.Sprintf("%#v", this.SameAsEndpointPort) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_HealthCheckPort) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&origin_pool.GetSpecType_HealthCheckPort{` +
-		`HealthCheckPort:` + fmt.Sprintf("%#v", this.HealthCheckPort) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -6435,28 +4485,6 @@ func (m *OriginServerType) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += nn19
 	}
-	if len(m.Labels) > 0 {
-		keysForLabels := make([]string, 0, len(m.Labels))
-		for k, _ := range m.Labels {
-			keysForLabels = append(keysForLabels, string(k))
-		}
-		sortkeys.Strings(keysForLabels)
-		for _, k := range keysForLabels {
-			dAtA[i] = 0x4a
-			i++
-			v := m.Labels[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
-		}
-	}
 	return i, nil
 }
 
@@ -6767,296 +4795,6 @@ func (m *UpstreamTlsParameters_VolterraTrustedCa) MarshalTo(dAtA []byte) (int, e
 	}
 	return i, nil
 }
-func (m *OriginPoolDefaultSubset) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *OriginPoolDefaultSubset) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.DefaultSubset) > 0 {
-		keysForDefaultSubset := make([]string, 0, len(m.DefaultSubset))
-		for k, _ := range m.DefaultSubset {
-			keysForDefaultSubset = append(keysForDefaultSubset, string(k))
-		}
-		sortkeys.Strings(keysForDefaultSubset)
-		for _, k := range keysForDefaultSubset {
-			dAtA[i] = 0x32
-			i++
-			v := m.DefaultSubset[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
-		}
-	}
-	return i, nil
-}
-
-func (m *OriginPoolSubsets) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *OriginPoolSubsets) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.EndpointSubsets) > 0 {
-		for _, msg := range m.EndpointSubsets {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.FallbackPolicyChoice != nil {
-		nn38, err := m.FallbackPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn38
-	}
-	return i, nil
-}
-
-func (m *OriginPoolSubsets_AnyEndpoint) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.AnyEndpoint != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AnyEndpoint.Size()))
-		n39, err := m.AnyEndpoint.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n39
-	}
-	return i, nil
-}
-func (m *OriginPoolSubsets_DefaultSubset) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DefaultSubset != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultSubset.Size()))
-		n40, err := m.DefaultSubset.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n40
-	}
-	return i, nil
-}
-func (m *OriginPoolSubsets_FailRequest) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.FailRequest != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.FailRequest.Size()))
-		n41, err := m.FailRequest.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n41
-	}
-	return i, nil
-}
-func (m *OriginPoolAdvancedOptions) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *OriginPoolAdvancedOptions) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.ConnectionTimeout != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ConnectionTimeout))
-	}
-	if m.HttpIdleTimeout != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.HttpIdleTimeout))
-	}
-	if m.CircuitBreakerChoice != nil {
-		nn42, err := m.CircuitBreakerChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn42
-	}
-	if m.OutlierDetectionChoice != nil {
-		nn43, err := m.OutlierDetectionChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn43
-	}
-	if m.PanicThresholdType != nil {
-		nn44, err := m.PanicThresholdType.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn44
-	}
-	if m.SubsetChoice != nil {
-		nn45, err := m.SubsetChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn45
-	}
-	if m.Http2Options != nil {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Http2Options.Size()))
-		n46, err := m.Http2Options.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n46
-	}
-	return i, nil
-}
-
-func (m *OriginPoolAdvancedOptions_DisableCircuitBreaker) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DisableCircuitBreaker != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableCircuitBreaker.Size()))
-		n47, err := m.DisableCircuitBreaker.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n47
-	}
-	return i, nil
-}
-func (m *OriginPoolAdvancedOptions_CircuitBreaker) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.CircuitBreaker != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CircuitBreaker.Size()))
-		n48, err := m.CircuitBreaker.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n48
-	}
-	return i, nil
-}
-func (m *OriginPoolAdvancedOptions_DisableOutlierDetection) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DisableOutlierDetection != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableOutlierDetection.Size()))
-		n49, err := m.DisableOutlierDetection.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n49
-	}
-	return i, nil
-}
-func (m *OriginPoolAdvancedOptions_OutlierDetection) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.OutlierDetection != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OutlierDetection.Size()))
-		n50, err := m.OutlierDetection.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n50
-	}
-	return i, nil
-}
-func (m *OriginPoolAdvancedOptions_NoPanicThreshold) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.NoPanicThreshold != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoPanicThreshold.Size()))
-		n51, err := m.NoPanicThreshold.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n51
-	}
-	return i, nil
-}
-func (m *OriginPoolAdvancedOptions_PanicThreshold) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x58
-	i++
-	i = encodeVarintTypes(dAtA, i, uint64(m.PanicThreshold))
-	return i, nil
-}
-func (m *OriginPoolAdvancedOptions_DisableSubsets) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DisableSubsets != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableSubsets.Size()))
-		n52, err := m.DisableSubsets.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n52
-	}
-	return i, nil
-}
-func (m *OriginPoolAdvancedOptions_EnableSubsets) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.EnableSubsets != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableSubsets.Size()))
-		n53, err := m.EnableSubsets.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n53
-	}
-	return i, nil
-}
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -7085,11 +4823,11 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.TlsChoice != nil {
-		nn54, err := m.TlsChoice.MarshalTo(dAtA[i:])
+		nn38, err := m.TlsChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn54
+		i += nn38
 	}
 	if m.Port != 0 {
 		dAtA[i] = 0x28
@@ -7118,34 +4856,17 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.EndpointSelection))
 	}
-	if m.HealthCheckPortChoice != nil {
-		nn55, err := m.HealthCheckPortChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn55
-	}
-	if m.AdvancedOptions != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvancedOptions.Size()))
-		n56, err := m.AdvancedOptions.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n56
-	}
 	if m.ViewInternal != nil {
 		dAtA[i] = 0xc2
 		i++
 		dAtA[i] = 0x3e
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ViewInternal.Size()))
-		n57, err := m.ViewInternal.MarshalTo(dAtA[i:])
+		n39, err := m.ViewInternal.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n57
+		i += n39
 	}
 	return i, nil
 }
@@ -7156,11 +4877,11 @@ func (m *GlobalSpecType_NoTls) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.NoTls.Size()))
-		n58, err := m.NoTls.MarshalTo(dAtA[i:])
+		n40, err := m.NoTls.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n58
+		i += n40
 	}
 	return i, nil
 }
@@ -7170,33 +4891,12 @@ func (m *GlobalSpecType_UseTls) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.UseTls.Size()))
-		n59, err := m.UseTls.MarshalTo(dAtA[i:])
+		n41, err := m.UseTls.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n59
+		i += n41
 	}
-	return i, nil
-}
-func (m *GlobalSpecType_SameAsEndpointPort) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.SameAsEndpointPort != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SameAsEndpointPort.Size()))
-		n60, err := m.SameAsEndpointPort.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n60
-	}
-	return i, nil
-}
-func (m *GlobalSpecType_HealthCheckPort) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x58
-	i++
-	i = encodeVarintTypes(dAtA, i, uint64(m.HealthCheckPort))
 	return i, nil
 }
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
@@ -7227,11 +4927,11 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.TlsChoice != nil {
-		nn61, err := m.TlsChoice.MarshalTo(dAtA[i:])
+		nn42, err := m.TlsChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn61
+		i += nn42
 	}
 	if m.Port != 0 {
 		dAtA[i] = 0x28
@@ -7260,23 +4960,6 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.EndpointSelection))
 	}
-	if m.HealthCheckPortChoice != nil {
-		nn62, err := m.HealthCheckPortChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn62
-	}
-	if m.AdvancedOptions != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvancedOptions.Size()))
-		n63, err := m.AdvancedOptions.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n63
-	}
 	return i, nil
 }
 
@@ -7286,11 +4969,11 @@ func (m *CreateSpecType_NoTls) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.NoTls.Size()))
-		n64, err := m.NoTls.MarshalTo(dAtA[i:])
+		n43, err := m.NoTls.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n64
+		i += n43
 	}
 	return i, nil
 }
@@ -7300,33 +4983,12 @@ func (m *CreateSpecType_UseTls) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.UseTls.Size()))
-		n65, err := m.UseTls.MarshalTo(dAtA[i:])
+		n44, err := m.UseTls.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n65
+		i += n44
 	}
-	return i, nil
-}
-func (m *CreateSpecType_SameAsEndpointPort) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.SameAsEndpointPort != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SameAsEndpointPort.Size()))
-		n66, err := m.SameAsEndpointPort.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n66
-	}
-	return i, nil
-}
-func (m *CreateSpecType_HealthCheckPort) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x58
-	i++
-	i = encodeVarintTypes(dAtA, i, uint64(m.HealthCheckPort))
 	return i, nil
 }
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
@@ -7357,11 +5019,11 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.TlsChoice != nil {
-		nn67, err := m.TlsChoice.MarshalTo(dAtA[i:])
+		nn45, err := m.TlsChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn67
+		i += nn45
 	}
 	if m.Port != 0 {
 		dAtA[i] = 0x28
@@ -7390,23 +5052,6 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.EndpointSelection))
 	}
-	if m.HealthCheckPortChoice != nil {
-		nn68, err := m.HealthCheckPortChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn68
-	}
-	if m.AdvancedOptions != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvancedOptions.Size()))
-		n69, err := m.AdvancedOptions.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n69
-	}
 	return i, nil
 }
 
@@ -7416,11 +5061,11 @@ func (m *ReplaceSpecType_NoTls) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.NoTls.Size()))
-		n70, err := m.NoTls.MarshalTo(dAtA[i:])
+		n46, err := m.NoTls.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n70
+		i += n46
 	}
 	return i, nil
 }
@@ -7430,33 +5075,12 @@ func (m *ReplaceSpecType_UseTls) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.UseTls.Size()))
-		n71, err := m.UseTls.MarshalTo(dAtA[i:])
+		n47, err := m.UseTls.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n71
+		i += n47
 	}
-	return i, nil
-}
-func (m *ReplaceSpecType_SameAsEndpointPort) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.SameAsEndpointPort != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SameAsEndpointPort.Size()))
-		n72, err := m.SameAsEndpointPort.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n72
-	}
-	return i, nil
-}
-func (m *ReplaceSpecType_HealthCheckPort) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x58
-	i++
-	i = encodeVarintTypes(dAtA, i, uint64(m.HealthCheckPort))
 	return i, nil
 }
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
@@ -7487,11 +5111,11 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.TlsChoice != nil {
-		nn73, err := m.TlsChoice.MarshalTo(dAtA[i:])
+		nn48, err := m.TlsChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn73
+		i += nn48
 	}
 	if m.Port != 0 {
 		dAtA[i] = 0x28
@@ -7520,23 +5144,6 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.EndpointSelection))
 	}
-	if m.HealthCheckPortChoice != nil {
-		nn74, err := m.HealthCheckPortChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn74
-	}
-	if m.AdvancedOptions != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvancedOptions.Size()))
-		n75, err := m.AdvancedOptions.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n75
-	}
 	return i, nil
 }
 
@@ -7546,11 +5153,11 @@ func (m *GetSpecType_NoTls) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.NoTls.Size()))
-		n76, err := m.NoTls.MarshalTo(dAtA[i:])
+		n49, err := m.NoTls.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n76
+		i += n49
 	}
 	return i, nil
 }
@@ -7560,33 +5167,12 @@ func (m *GetSpecType_UseTls) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.UseTls.Size()))
-		n77, err := m.UseTls.MarshalTo(dAtA[i:])
+		n50, err := m.UseTls.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n77
+		i += n50
 	}
-	return i, nil
-}
-func (m *GetSpecType_SameAsEndpointPort) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.SameAsEndpointPort != nil {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SameAsEndpointPort.Size()))
-		n78, err := m.SameAsEndpointPort.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n78
-	}
-	return i, nil
-}
-func (m *GetSpecType_HealthCheckPort) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x58
-	i++
-	i = encodeVarintTypes(dAtA, i, uint64(m.HealthCheckPort))
 	return i, nil
 }
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
@@ -7762,13 +5348,6 @@ func NewPopulatedOriginServerType(r randyTypes, easy bool) *OriginServerType {
 	case 7:
 		this.Choice = NewPopulatedOriginServerType_CustomEndpointObject(r, easy)
 	}
-	if r.Intn(10) != 0 {
-		v1 := r.Intn(10)
-		this.Labels = make(map[string]string)
-		for i := 0; i < v1; i++ {
-			this.Labels[randStringTypes(r)] = randStringTypes(r)
-		}
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -7820,9 +5399,9 @@ func NewPopulatedUpstreamTlsValidationContext(r randyTypes, easy bool) *Upstream
 func NewPopulatedTlsCertificatesType(r randyTypes, easy bool) *TlsCertificatesType {
 	this := &TlsCertificatesType{}
 	if r.Intn(10) != 0 {
-		v2 := r.Intn(5)
-		this.TlsCertificates = make([]*ves_io_schema4.TlsCertificateType, v2)
-		for i := 0; i < v2; i++ {
+		v1 := r.Intn(5)
+		this.TlsCertificates = make([]*ves_io_schema4.TlsCertificateType, v1)
+		for i := 0; i < v1; i++ {
 			this.TlsCertificates[i] = ves_io_schema4.NewPopulatedTlsCertificateType(r, easy)
 		}
 	}
@@ -7906,144 +5485,12 @@ func NewPopulatedUpstreamTlsParameters_VolterraTrustedCa(r randyTypes, easy bool
 	this.VolterraTrustedCa = ves_io_schema4.NewPopulatedEmpty(r, easy)
 	return this
 }
-func NewPopulatedOriginPoolDefaultSubset(r randyTypes, easy bool) *OriginPoolDefaultSubset {
-	this := &OriginPoolDefaultSubset{}
-	if r.Intn(10) != 0 {
-		v3 := r.Intn(10)
-		this.DefaultSubset = make(map[string]string)
-		for i := 0; i < v3; i++ {
-			this.DefaultSubset[randStringTypes(r)] = randStringTypes(r)
-		}
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedOriginPoolSubsets(r randyTypes, easy bool) *OriginPoolSubsets {
-	this := &OriginPoolSubsets{}
-	if r.Intn(10) != 0 {
-		v4 := r.Intn(5)
-		this.EndpointSubsets = make([]*ves_io_schema_cluster.EndpointSubsetSelectorType, v4)
-		for i := 0; i < v4; i++ {
-			this.EndpointSubsets[i] = ves_io_schema_cluster.NewPopulatedEndpointSubsetSelectorType(r, easy)
-		}
-	}
-	oneofNumber_FallbackPolicyChoice := []int32{3, 4, 5}[r.Intn(3)]
-	switch oneofNumber_FallbackPolicyChoice {
-	case 3:
-		this.FallbackPolicyChoice = NewPopulatedOriginPoolSubsets_AnyEndpoint(r, easy)
-	case 4:
-		this.FallbackPolicyChoice = NewPopulatedOriginPoolSubsets_DefaultSubset(r, easy)
-	case 5:
-		this.FallbackPolicyChoice = NewPopulatedOriginPoolSubsets_FailRequest(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedOriginPoolSubsets_AnyEndpoint(r randyTypes, easy bool) *OriginPoolSubsets_AnyEndpoint {
-	this := &OriginPoolSubsets_AnyEndpoint{}
-	this.AnyEndpoint = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedOriginPoolSubsets_DefaultSubset(r randyTypes, easy bool) *OriginPoolSubsets_DefaultSubset {
-	this := &OriginPoolSubsets_DefaultSubset{}
-	this.DefaultSubset = NewPopulatedOriginPoolDefaultSubset(r, easy)
-	return this
-}
-func NewPopulatedOriginPoolSubsets_FailRequest(r randyTypes, easy bool) *OriginPoolSubsets_FailRequest {
-	this := &OriginPoolSubsets_FailRequest{}
-	this.FailRequest = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedOriginPoolAdvancedOptions(r randyTypes, easy bool) *OriginPoolAdvancedOptions {
-	this := &OriginPoolAdvancedOptions{}
-	this.ConnectionTimeout = uint32(r.Uint32())
-	this.HttpIdleTimeout = uint32(r.Uint32())
-	oneofNumber_CircuitBreakerChoice := []int32{4, 5}[r.Intn(2)]
-	switch oneofNumber_CircuitBreakerChoice {
-	case 4:
-		this.CircuitBreakerChoice = NewPopulatedOriginPoolAdvancedOptions_DisableCircuitBreaker(r, easy)
-	case 5:
-		this.CircuitBreakerChoice = NewPopulatedOriginPoolAdvancedOptions_CircuitBreaker(r, easy)
-	}
-	oneofNumber_OutlierDetectionChoice := []int32{7, 8}[r.Intn(2)]
-	switch oneofNumber_OutlierDetectionChoice {
-	case 7:
-		this.OutlierDetectionChoice = NewPopulatedOriginPoolAdvancedOptions_DisableOutlierDetection(r, easy)
-	case 8:
-		this.OutlierDetectionChoice = NewPopulatedOriginPoolAdvancedOptions_OutlierDetection(r, easy)
-	}
-	oneofNumber_PanicThresholdType := []int32{10, 11}[r.Intn(2)]
-	switch oneofNumber_PanicThresholdType {
-	case 10:
-		this.PanicThresholdType = NewPopulatedOriginPoolAdvancedOptions_NoPanicThreshold(r, easy)
-	case 11:
-		this.PanicThresholdType = NewPopulatedOriginPoolAdvancedOptions_PanicThreshold(r, easy)
-	}
-	oneofNumber_SubsetChoice := []int32{13, 14}[r.Intn(2)]
-	switch oneofNumber_SubsetChoice {
-	case 13:
-		this.SubsetChoice = NewPopulatedOriginPoolAdvancedOptions_DisableSubsets(r, easy)
-	case 14:
-		this.SubsetChoice = NewPopulatedOriginPoolAdvancedOptions_EnableSubsets(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Http2Options = ves_io_schema_cluster.NewPopulatedHttp2ProtocolOptions(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedOriginPoolAdvancedOptions_DisableCircuitBreaker(r randyTypes, easy bool) *OriginPoolAdvancedOptions_DisableCircuitBreaker {
-	this := &OriginPoolAdvancedOptions_DisableCircuitBreaker{}
-	this.DisableCircuitBreaker = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedOriginPoolAdvancedOptions_CircuitBreaker(r randyTypes, easy bool) *OriginPoolAdvancedOptions_CircuitBreaker {
-	this := &OriginPoolAdvancedOptions_CircuitBreaker{}
-	this.CircuitBreaker = ves_io_schema_cluster.NewPopulatedCircuitBreaker(r, easy)
-	return this
-}
-func NewPopulatedOriginPoolAdvancedOptions_DisableOutlierDetection(r randyTypes, easy bool) *OriginPoolAdvancedOptions_DisableOutlierDetection {
-	this := &OriginPoolAdvancedOptions_DisableOutlierDetection{}
-	this.DisableOutlierDetection = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedOriginPoolAdvancedOptions_OutlierDetection(r randyTypes, easy bool) *OriginPoolAdvancedOptions_OutlierDetection {
-	this := &OriginPoolAdvancedOptions_OutlierDetection{}
-	this.OutlierDetection = ves_io_schema_cluster.NewPopulatedOutlierDetectionType(r, easy)
-	return this
-}
-func NewPopulatedOriginPoolAdvancedOptions_NoPanicThreshold(r randyTypes, easy bool) *OriginPoolAdvancedOptions_NoPanicThreshold {
-	this := &OriginPoolAdvancedOptions_NoPanicThreshold{}
-	this.NoPanicThreshold = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedOriginPoolAdvancedOptions_PanicThreshold(r randyTypes, easy bool) *OriginPoolAdvancedOptions_PanicThreshold {
-	this := &OriginPoolAdvancedOptions_PanicThreshold{}
-	this.PanicThreshold = uint32(r.Uint32())
-	return this
-}
-func NewPopulatedOriginPoolAdvancedOptions_DisableSubsets(r randyTypes, easy bool) *OriginPoolAdvancedOptions_DisableSubsets {
-	this := &OriginPoolAdvancedOptions_DisableSubsets{}
-	this.DisableSubsets = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedOriginPoolAdvancedOptions_EnableSubsets(r randyTypes, easy bool) *OriginPoolAdvancedOptions_EnableSubsets {
-	this := &OriginPoolAdvancedOptions_EnableSubsets{}
-	this.EnableSubsets = NewPopulatedOriginPoolSubsets(r, easy)
-	return this
-}
 func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 	this := &GlobalSpecType{}
 	if r.Intn(10) != 0 {
-		v5 := r.Intn(5)
-		this.OriginServers = make([]*OriginServerType, v5)
-		for i := 0; i < v5; i++ {
+		v2 := r.Intn(5)
+		this.OriginServers = make([]*OriginServerType, v2)
+		for i := 0; i < v2; i++ {
 			this.OriginServers[i] = NewPopulatedOriginServerType(r, easy)
 		}
 	}
@@ -8056,24 +5503,14 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 	}
 	this.Port = uint32(r.Uint32())
 	if r.Intn(10) != 0 {
-		v6 := r.Intn(5)
-		this.Healthcheck = make([]*ves_io_schema_views.ObjectRefType, v6)
-		for i := 0; i < v6; i++ {
+		v3 := r.Intn(5)
+		this.Healthcheck = make([]*ves_io_schema_views.ObjectRefType, v3)
+		for i := 0; i < v3; i++ {
 			this.Healthcheck[i] = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 		}
 	}
-	this.LoadbalancerAlgorithm = ves_io_schema_cluster.LoadbalancerAlgorithm([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
+	this.LoadbalancerAlgorithm = ves_io_schema_cluster.LoadbalancerAlgorithm([]int32{0, 1, 2, 3}[r.Intn(4)])
 	this.EndpointSelection = ves_io_schema_cluster.EndpointSelectionPolicy([]int32{0, 1, 2}[r.Intn(3)])
-	oneofNumber_HealthCheckPortChoice := []int32{10, 11}[r.Intn(2)]
-	switch oneofNumber_HealthCheckPortChoice {
-	case 10:
-		this.HealthCheckPortChoice = NewPopulatedGlobalSpecType_SameAsEndpointPort(r, easy)
-	case 11:
-		this.HealthCheckPortChoice = NewPopulatedGlobalSpecType_HealthCheckPort(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.AdvancedOptions = NewPopulatedOriginPoolAdvancedOptions(r, easy)
-	}
 	if r.Intn(10) != 0 {
 		this.ViewInternal = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 	}
@@ -8092,22 +5529,12 @@ func NewPopulatedGlobalSpecType_UseTls(r randyTypes, easy bool) *GlobalSpecType_
 	this.UseTls = NewPopulatedUpstreamTlsParameters(r, easy)
 	return this
 }
-func NewPopulatedGlobalSpecType_SameAsEndpointPort(r randyTypes, easy bool) *GlobalSpecType_SameAsEndpointPort {
-	this := &GlobalSpecType_SameAsEndpointPort{}
-	this.SameAsEndpointPort = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGlobalSpecType_HealthCheckPort(r randyTypes, easy bool) *GlobalSpecType_HealthCheckPort {
-	this := &GlobalSpecType_HealthCheckPort{}
-	this.HealthCheckPort = uint32(r.Uint32())
-	return this
-}
 func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 	this := &CreateSpecType{}
 	if r.Intn(10) != 0 {
-		v7 := r.Intn(5)
-		this.OriginServers = make([]*OriginServerType, v7)
-		for i := 0; i < v7; i++ {
+		v4 := r.Intn(5)
+		this.OriginServers = make([]*OriginServerType, v4)
+		for i := 0; i < v4; i++ {
 			this.OriginServers[i] = NewPopulatedOriginServerType(r, easy)
 		}
 	}
@@ -8120,24 +5547,14 @@ func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 	}
 	this.Port = uint32(r.Uint32())
 	if r.Intn(10) != 0 {
-		v8 := r.Intn(5)
-		this.Healthcheck = make([]*ves_io_schema_views.ObjectRefType, v8)
-		for i := 0; i < v8; i++ {
+		v5 := r.Intn(5)
+		this.Healthcheck = make([]*ves_io_schema_views.ObjectRefType, v5)
+		for i := 0; i < v5; i++ {
 			this.Healthcheck[i] = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 		}
 	}
-	this.LoadbalancerAlgorithm = ves_io_schema_cluster.LoadbalancerAlgorithm([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
+	this.LoadbalancerAlgorithm = ves_io_schema_cluster.LoadbalancerAlgorithm([]int32{0, 1, 2, 3}[r.Intn(4)])
 	this.EndpointSelection = ves_io_schema_cluster.EndpointSelectionPolicy([]int32{0, 1, 2}[r.Intn(3)])
-	oneofNumber_HealthCheckPortChoice := []int32{10, 11}[r.Intn(2)]
-	switch oneofNumber_HealthCheckPortChoice {
-	case 10:
-		this.HealthCheckPortChoice = NewPopulatedCreateSpecType_SameAsEndpointPort(r, easy)
-	case 11:
-		this.HealthCheckPortChoice = NewPopulatedCreateSpecType_HealthCheckPort(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.AdvancedOptions = NewPopulatedOriginPoolAdvancedOptions(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -8153,22 +5570,12 @@ func NewPopulatedCreateSpecType_UseTls(r randyTypes, easy bool) *CreateSpecType_
 	this.UseTls = NewPopulatedUpstreamTlsParameters(r, easy)
 	return this
 }
-func NewPopulatedCreateSpecType_SameAsEndpointPort(r randyTypes, easy bool) *CreateSpecType_SameAsEndpointPort {
-	this := &CreateSpecType_SameAsEndpointPort{}
-	this.SameAsEndpointPort = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedCreateSpecType_HealthCheckPort(r randyTypes, easy bool) *CreateSpecType_HealthCheckPort {
-	this := &CreateSpecType_HealthCheckPort{}
-	this.HealthCheckPort = uint32(r.Uint32())
-	return this
-}
 func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 	this := &ReplaceSpecType{}
 	if r.Intn(10) != 0 {
-		v9 := r.Intn(5)
-		this.OriginServers = make([]*OriginServerType, v9)
-		for i := 0; i < v9; i++ {
+		v6 := r.Intn(5)
+		this.OriginServers = make([]*OriginServerType, v6)
+		for i := 0; i < v6; i++ {
 			this.OriginServers[i] = NewPopulatedOriginServerType(r, easy)
 		}
 	}
@@ -8181,24 +5588,14 @@ func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 	}
 	this.Port = uint32(r.Uint32())
 	if r.Intn(10) != 0 {
-		v10 := r.Intn(5)
-		this.Healthcheck = make([]*ves_io_schema_views.ObjectRefType, v10)
-		for i := 0; i < v10; i++ {
+		v7 := r.Intn(5)
+		this.Healthcheck = make([]*ves_io_schema_views.ObjectRefType, v7)
+		for i := 0; i < v7; i++ {
 			this.Healthcheck[i] = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 		}
 	}
-	this.LoadbalancerAlgorithm = ves_io_schema_cluster.LoadbalancerAlgorithm([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
+	this.LoadbalancerAlgorithm = ves_io_schema_cluster.LoadbalancerAlgorithm([]int32{0, 1, 2, 3}[r.Intn(4)])
 	this.EndpointSelection = ves_io_schema_cluster.EndpointSelectionPolicy([]int32{0, 1, 2}[r.Intn(3)])
-	oneofNumber_HealthCheckPortChoice := []int32{10, 11}[r.Intn(2)]
-	switch oneofNumber_HealthCheckPortChoice {
-	case 10:
-		this.HealthCheckPortChoice = NewPopulatedReplaceSpecType_SameAsEndpointPort(r, easy)
-	case 11:
-		this.HealthCheckPortChoice = NewPopulatedReplaceSpecType_HealthCheckPort(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.AdvancedOptions = NewPopulatedOriginPoolAdvancedOptions(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -8214,22 +5611,12 @@ func NewPopulatedReplaceSpecType_UseTls(r randyTypes, easy bool) *ReplaceSpecTyp
 	this.UseTls = NewPopulatedUpstreamTlsParameters(r, easy)
 	return this
 }
-func NewPopulatedReplaceSpecType_SameAsEndpointPort(r randyTypes, easy bool) *ReplaceSpecType_SameAsEndpointPort {
-	this := &ReplaceSpecType_SameAsEndpointPort{}
-	this.SameAsEndpointPort = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedReplaceSpecType_HealthCheckPort(r randyTypes, easy bool) *ReplaceSpecType_HealthCheckPort {
-	this := &ReplaceSpecType_HealthCheckPort{}
-	this.HealthCheckPort = uint32(r.Uint32())
-	return this
-}
 func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 	this := &GetSpecType{}
 	if r.Intn(10) != 0 {
-		v11 := r.Intn(5)
-		this.OriginServers = make([]*OriginServerType, v11)
-		for i := 0; i < v11; i++ {
+		v8 := r.Intn(5)
+		this.OriginServers = make([]*OriginServerType, v8)
+		for i := 0; i < v8; i++ {
 			this.OriginServers[i] = NewPopulatedOriginServerType(r, easy)
 		}
 	}
@@ -8242,24 +5629,14 @@ func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 	}
 	this.Port = uint32(r.Uint32())
 	if r.Intn(10) != 0 {
-		v12 := r.Intn(5)
-		this.Healthcheck = make([]*ves_io_schema_views.ObjectRefType, v12)
-		for i := 0; i < v12; i++ {
+		v9 := r.Intn(5)
+		this.Healthcheck = make([]*ves_io_schema_views.ObjectRefType, v9)
+		for i := 0; i < v9; i++ {
 			this.Healthcheck[i] = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 		}
 	}
-	this.LoadbalancerAlgorithm = ves_io_schema_cluster.LoadbalancerAlgorithm([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
+	this.LoadbalancerAlgorithm = ves_io_schema_cluster.LoadbalancerAlgorithm([]int32{0, 1, 2, 3}[r.Intn(4)])
 	this.EndpointSelection = ves_io_schema_cluster.EndpointSelectionPolicy([]int32{0, 1, 2}[r.Intn(3)])
-	oneofNumber_HealthCheckPortChoice := []int32{10, 11}[r.Intn(2)]
-	switch oneofNumber_HealthCheckPortChoice {
-	case 10:
-		this.HealthCheckPortChoice = NewPopulatedGetSpecType_SameAsEndpointPort(r, easy)
-	case 11:
-		this.HealthCheckPortChoice = NewPopulatedGetSpecType_HealthCheckPort(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.AdvancedOptions = NewPopulatedOriginPoolAdvancedOptions(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -8273,16 +5650,6 @@ func NewPopulatedGetSpecType_NoTls(r randyTypes, easy bool) *GetSpecType_NoTls {
 func NewPopulatedGetSpecType_UseTls(r randyTypes, easy bool) *GetSpecType_UseTls {
 	this := &GetSpecType_UseTls{}
 	this.UseTls = NewPopulatedUpstreamTlsParameters(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType_SameAsEndpointPort(r randyTypes, easy bool) *GetSpecType_SameAsEndpointPort {
-	this := &GetSpecType_SameAsEndpointPort{}
-	this.SameAsEndpointPort = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType_HealthCheckPort(r randyTypes, easy bool) *GetSpecType_HealthCheckPort {
-	this := &GetSpecType_HealthCheckPort{}
-	this.HealthCheckPort = uint32(r.Uint32())
 	return this
 }
 
@@ -8305,9 +5672,9 @@ func randUTF8RuneTypes(r randyTypes) rune {
 	return rune(ru + 61)
 }
 func randStringTypes(r randyTypes) string {
-	v13 := r.Intn(100)
-	tmps := make([]rune, v13)
-	for i := 0; i < v13; i++ {
+	v10 := r.Intn(100)
+	tmps := make([]rune, v10)
+	for i := 0; i < v10; i++ {
 		tmps[i] = randUTF8RuneTypes(r)
 	}
 	return string(tmps)
@@ -8329,11 +5696,11 @@ func randFieldTypes(dAtA []byte, r randyTypes, fieldNumber int, wire int) []byte
 	switch wire {
 	case 0:
 		dAtA = encodeVarintPopulateTypes(dAtA, uint64(key))
-		v14 := r.Int63()
+		v11 := r.Int63()
 		if r.Intn(2) == 0 {
-			v14 *= -1
+			v11 *= -1
 		}
-		dAtA = encodeVarintPopulateTypes(dAtA, uint64(v14))
+		dAtA = encodeVarintPopulateTypes(dAtA, uint64(v11))
 	case 1:
 		dAtA = encodeVarintPopulateTypes(dAtA, uint64(key))
 		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -8543,14 +5910,6 @@ func (m *OriginServerType) Size() (n int) {
 	if m.Choice != nil {
 		n += m.Choice.Size()
 	}
-	if len(m.Labels) > 0 {
-		for k, v := range m.Labels {
-			_ = k
-			_ = v
-			mapEntrySize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			n += mapEntrySize + 1 + sovTypes(uint64(mapEntrySize))
-		}
-	}
 	return n
 }
 
@@ -8728,159 +6087,6 @@ func (m *UpstreamTlsParameters_VolterraTrustedCa) Size() (n int) {
 	}
 	return n
 }
-func (m *OriginPoolDefaultSubset) Size() (n int) {
-	var l int
-	_ = l
-	if len(m.DefaultSubset) > 0 {
-		for k, v := range m.DefaultSubset {
-			_ = k
-			_ = v
-			mapEntrySize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			n += mapEntrySize + 1 + sovTypes(uint64(mapEntrySize))
-		}
-	}
-	return n
-}
-
-func (m *OriginPoolSubsets) Size() (n int) {
-	var l int
-	_ = l
-	if len(m.EndpointSubsets) > 0 {
-		for _, e := range m.EndpointSubsets {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if m.FallbackPolicyChoice != nil {
-		n += m.FallbackPolicyChoice.Size()
-	}
-	return n
-}
-
-func (m *OriginPoolSubsets_AnyEndpoint) Size() (n int) {
-	var l int
-	_ = l
-	if m.AnyEndpoint != nil {
-		l = m.AnyEndpoint.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *OriginPoolSubsets_DefaultSubset) Size() (n int) {
-	var l int
-	_ = l
-	if m.DefaultSubset != nil {
-		l = m.DefaultSubset.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *OriginPoolSubsets_FailRequest) Size() (n int) {
-	var l int
-	_ = l
-	if m.FailRequest != nil {
-		l = m.FailRequest.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *OriginPoolAdvancedOptions) Size() (n int) {
-	var l int
-	_ = l
-	if m.ConnectionTimeout != 0 {
-		n += 1 + sovTypes(uint64(m.ConnectionTimeout))
-	}
-	if m.HttpIdleTimeout != 0 {
-		n += 1 + sovTypes(uint64(m.HttpIdleTimeout))
-	}
-	if m.CircuitBreakerChoice != nil {
-		n += m.CircuitBreakerChoice.Size()
-	}
-	if m.OutlierDetectionChoice != nil {
-		n += m.OutlierDetectionChoice.Size()
-	}
-	if m.PanicThresholdType != nil {
-		n += m.PanicThresholdType.Size()
-	}
-	if m.SubsetChoice != nil {
-		n += m.SubsetChoice.Size()
-	}
-	if m.Http2Options != nil {
-		l = m.Http2Options.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *OriginPoolAdvancedOptions_DisableCircuitBreaker) Size() (n int) {
-	var l int
-	_ = l
-	if m.DisableCircuitBreaker != nil {
-		l = m.DisableCircuitBreaker.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *OriginPoolAdvancedOptions_CircuitBreaker) Size() (n int) {
-	var l int
-	_ = l
-	if m.CircuitBreaker != nil {
-		l = m.CircuitBreaker.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *OriginPoolAdvancedOptions_DisableOutlierDetection) Size() (n int) {
-	var l int
-	_ = l
-	if m.DisableOutlierDetection != nil {
-		l = m.DisableOutlierDetection.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *OriginPoolAdvancedOptions_OutlierDetection) Size() (n int) {
-	var l int
-	_ = l
-	if m.OutlierDetection != nil {
-		l = m.OutlierDetection.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *OriginPoolAdvancedOptions_NoPanicThreshold) Size() (n int) {
-	var l int
-	_ = l
-	if m.NoPanicThreshold != nil {
-		l = m.NoPanicThreshold.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *OriginPoolAdvancedOptions_PanicThreshold) Size() (n int) {
-	var l int
-	_ = l
-	n += 1 + sovTypes(uint64(m.PanicThreshold))
-	return n
-}
-func (m *OriginPoolAdvancedOptions_DisableSubsets) Size() (n int) {
-	var l int
-	_ = l
-	if m.DisableSubsets != nil {
-		l = m.DisableSubsets.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *OriginPoolAdvancedOptions_EnableSubsets) Size() (n int) {
-	var l int
-	_ = l
-	if m.EnableSubsets != nil {
-		l = m.EnableSubsets.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *GlobalSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -8908,13 +6114,6 @@ func (m *GlobalSpecType) Size() (n int) {
 	if m.EndpointSelection != 0 {
 		n += 1 + sovTypes(uint64(m.EndpointSelection))
 	}
-	if m.HealthCheckPortChoice != nil {
-		n += m.HealthCheckPortChoice.Size()
-	}
-	if m.AdvancedOptions != nil {
-		l = m.AdvancedOptions.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	if m.ViewInternal != nil {
 		l = m.ViewInternal.Size()
 		n += 2 + l + sovTypes(uint64(l))
@@ -8938,21 +6137,6 @@ func (m *GlobalSpecType_UseTls) Size() (n int) {
 		l = m.UseTls.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	return n
-}
-func (m *GlobalSpecType_SameAsEndpointPort) Size() (n int) {
-	var l int
-	_ = l
-	if m.SameAsEndpointPort != nil {
-		l = m.SameAsEndpointPort.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_HealthCheckPort) Size() (n int) {
-	var l int
-	_ = l
-	n += 1 + sovTypes(uint64(m.HealthCheckPort))
 	return n
 }
 func (m *CreateSpecType) Size() (n int) {
@@ -8982,13 +6166,6 @@ func (m *CreateSpecType) Size() (n int) {
 	if m.EndpointSelection != 0 {
 		n += 1 + sovTypes(uint64(m.EndpointSelection))
 	}
-	if m.HealthCheckPortChoice != nil {
-		n += m.HealthCheckPortChoice.Size()
-	}
-	if m.AdvancedOptions != nil {
-		l = m.AdvancedOptions.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	return n
 }
 
@@ -9008,21 +6185,6 @@ func (m *CreateSpecType_UseTls) Size() (n int) {
 		l = m.UseTls.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	return n
-}
-func (m *CreateSpecType_SameAsEndpointPort) Size() (n int) {
-	var l int
-	_ = l
-	if m.SameAsEndpointPort != nil {
-		l = m.SameAsEndpointPort.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_HealthCheckPort) Size() (n int) {
-	var l int
-	_ = l
-	n += 1 + sovTypes(uint64(m.HealthCheckPort))
 	return n
 }
 func (m *ReplaceSpecType) Size() (n int) {
@@ -9052,13 +6214,6 @@ func (m *ReplaceSpecType) Size() (n int) {
 	if m.EndpointSelection != 0 {
 		n += 1 + sovTypes(uint64(m.EndpointSelection))
 	}
-	if m.HealthCheckPortChoice != nil {
-		n += m.HealthCheckPortChoice.Size()
-	}
-	if m.AdvancedOptions != nil {
-		l = m.AdvancedOptions.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	return n
 }
 
@@ -9078,21 +6233,6 @@ func (m *ReplaceSpecType_UseTls) Size() (n int) {
 		l = m.UseTls.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	return n
-}
-func (m *ReplaceSpecType_SameAsEndpointPort) Size() (n int) {
-	var l int
-	_ = l
-	if m.SameAsEndpointPort != nil {
-		l = m.SameAsEndpointPort.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_HealthCheckPort) Size() (n int) {
-	var l int
-	_ = l
-	n += 1 + sovTypes(uint64(m.HealthCheckPort))
 	return n
 }
 func (m *GetSpecType) Size() (n int) {
@@ -9122,13 +6262,6 @@ func (m *GetSpecType) Size() (n int) {
 	if m.EndpointSelection != 0 {
 		n += 1 + sovTypes(uint64(m.EndpointSelection))
 	}
-	if m.HealthCheckPortChoice != nil {
-		n += m.HealthCheckPortChoice.Size()
-	}
-	if m.AdvancedOptions != nil {
-		l = m.AdvancedOptions.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	return n
 }
 
@@ -9148,21 +6281,6 @@ func (m *GetSpecType_UseTls) Size() (n int) {
 		l = m.UseTls.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	return n
-}
-func (m *GetSpecType_SameAsEndpointPort) Size() (n int) {
-	var l int
-	_ = l
-	if m.SameAsEndpointPort != nil {
-		l = m.SameAsEndpointPort.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_HealthCheckPort) Size() (n int) {
-	var l int
-	_ = l
-	n += 1 + sovTypes(uint64(m.HealthCheckPort))
 	return n
 }
 
@@ -9351,19 +6469,8 @@ func (this *OriginServerType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	keysForLabels := make([]string, 0, len(this.Labels))
-	for k, _ := range this.Labels {
-		keysForLabels = append(keysForLabels, k)
-	}
-	sortkeys.Strings(keysForLabels)
-	mapStringForLabels := "map[string]string{"
-	for _, k := range keysForLabels {
-		mapStringForLabels += fmt.Sprintf("%v: %v,", k, this.Labels[k])
-	}
-	mapStringForLabels += "}"
 	s := strings.Join([]string{`&OriginServerType{`,
 		`Choice:` + fmt.Sprintf("%v", this.Choice) + `,`,
-		`Labels:` + mapStringForLabels + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9551,163 +6658,6 @@ func (this *UpstreamTlsParameters_VolterraTrustedCa) String() string {
 	}, "")
 	return s
 }
-func (this *OriginPoolDefaultSubset) String() string {
-	if this == nil {
-		return "nil"
-	}
-	keysForDefaultSubset := make([]string, 0, len(this.DefaultSubset))
-	for k, _ := range this.DefaultSubset {
-		keysForDefaultSubset = append(keysForDefaultSubset, k)
-	}
-	sortkeys.Strings(keysForDefaultSubset)
-	mapStringForDefaultSubset := "map[string]string{"
-	for _, k := range keysForDefaultSubset {
-		mapStringForDefaultSubset += fmt.Sprintf("%v: %v,", k, this.DefaultSubset[k])
-	}
-	mapStringForDefaultSubset += "}"
-	s := strings.Join([]string{`&OriginPoolDefaultSubset{`,
-		`DefaultSubset:` + mapStringForDefaultSubset + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OriginPoolSubsets) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OriginPoolSubsets{`,
-		`EndpointSubsets:` + strings.Replace(fmt.Sprintf("%v", this.EndpointSubsets), "EndpointSubsetSelectorType", "ves_io_schema_cluster.EndpointSubsetSelectorType", 1) + `,`,
-		`FallbackPolicyChoice:` + fmt.Sprintf("%v", this.FallbackPolicyChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OriginPoolSubsets_AnyEndpoint) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OriginPoolSubsets_AnyEndpoint{`,
-		`AnyEndpoint:` + strings.Replace(fmt.Sprintf("%v", this.AnyEndpoint), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OriginPoolSubsets_DefaultSubset) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OriginPoolSubsets_DefaultSubset{`,
-		`DefaultSubset:` + strings.Replace(fmt.Sprintf("%v", this.DefaultSubset), "OriginPoolDefaultSubset", "OriginPoolDefaultSubset", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OriginPoolSubsets_FailRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OriginPoolSubsets_FailRequest{`,
-		`FailRequest:` + strings.Replace(fmt.Sprintf("%v", this.FailRequest), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OriginPoolAdvancedOptions) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OriginPoolAdvancedOptions{`,
-		`ConnectionTimeout:` + fmt.Sprintf("%v", this.ConnectionTimeout) + `,`,
-		`HttpIdleTimeout:` + fmt.Sprintf("%v", this.HttpIdleTimeout) + `,`,
-		`CircuitBreakerChoice:` + fmt.Sprintf("%v", this.CircuitBreakerChoice) + `,`,
-		`OutlierDetectionChoice:` + fmt.Sprintf("%v", this.OutlierDetectionChoice) + `,`,
-		`PanicThresholdType:` + fmt.Sprintf("%v", this.PanicThresholdType) + `,`,
-		`SubsetChoice:` + fmt.Sprintf("%v", this.SubsetChoice) + `,`,
-		`Http2Options:` + strings.Replace(fmt.Sprintf("%v", this.Http2Options), "Http2ProtocolOptions", "ves_io_schema_cluster.Http2ProtocolOptions", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OriginPoolAdvancedOptions_DisableCircuitBreaker) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OriginPoolAdvancedOptions_DisableCircuitBreaker{`,
-		`DisableCircuitBreaker:` + strings.Replace(fmt.Sprintf("%v", this.DisableCircuitBreaker), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OriginPoolAdvancedOptions_CircuitBreaker) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OriginPoolAdvancedOptions_CircuitBreaker{`,
-		`CircuitBreaker:` + strings.Replace(fmt.Sprintf("%v", this.CircuitBreaker), "CircuitBreaker", "ves_io_schema_cluster.CircuitBreaker", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OriginPoolAdvancedOptions_DisableOutlierDetection) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OriginPoolAdvancedOptions_DisableOutlierDetection{`,
-		`DisableOutlierDetection:` + strings.Replace(fmt.Sprintf("%v", this.DisableOutlierDetection), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OriginPoolAdvancedOptions_OutlierDetection) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OriginPoolAdvancedOptions_OutlierDetection{`,
-		`OutlierDetection:` + strings.Replace(fmt.Sprintf("%v", this.OutlierDetection), "OutlierDetectionType", "ves_io_schema_cluster.OutlierDetectionType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OriginPoolAdvancedOptions_NoPanicThreshold) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OriginPoolAdvancedOptions_NoPanicThreshold{`,
-		`NoPanicThreshold:` + strings.Replace(fmt.Sprintf("%v", this.NoPanicThreshold), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OriginPoolAdvancedOptions_PanicThreshold) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OriginPoolAdvancedOptions_PanicThreshold{`,
-		`PanicThreshold:` + fmt.Sprintf("%v", this.PanicThreshold) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OriginPoolAdvancedOptions_DisableSubsets) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OriginPoolAdvancedOptions_DisableSubsets{`,
-		`DisableSubsets:` + strings.Replace(fmt.Sprintf("%v", this.DisableSubsets), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *OriginPoolAdvancedOptions_EnableSubsets) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&OriginPoolAdvancedOptions_EnableSubsets{`,
-		`EnableSubsets:` + strings.Replace(fmt.Sprintf("%v", this.EnableSubsets), "OriginPoolSubsets", "OriginPoolSubsets", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -9719,8 +6669,6 @@ func (this *GlobalSpecType) String() string {
 		`Healthcheck:` + strings.Replace(fmt.Sprintf("%v", this.Healthcheck), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`LoadbalancerAlgorithm:` + fmt.Sprintf("%v", this.LoadbalancerAlgorithm) + `,`,
 		`EndpointSelection:` + fmt.Sprintf("%v", this.EndpointSelection) + `,`,
-		`HealthCheckPortChoice:` + fmt.Sprintf("%v", this.HealthCheckPortChoice) + `,`,
-		`AdvancedOptions:` + strings.Replace(fmt.Sprintf("%v", this.AdvancedOptions), "OriginPoolAdvancedOptions", "OriginPoolAdvancedOptions", 1) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
@@ -9746,26 +6694,6 @@ func (this *GlobalSpecType_UseTls) String() string {
 	}, "")
 	return s
 }
-func (this *GlobalSpecType_SameAsEndpointPort) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_SameAsEndpointPort{`,
-		`SameAsEndpointPort:` + strings.Replace(fmt.Sprintf("%v", this.SameAsEndpointPort), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_HealthCheckPort) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_HealthCheckPort{`,
-		`HealthCheckPort:` + fmt.Sprintf("%v", this.HealthCheckPort) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -9777,8 +6705,6 @@ func (this *CreateSpecType) String() string {
 		`Healthcheck:` + strings.Replace(fmt.Sprintf("%v", this.Healthcheck), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`LoadbalancerAlgorithm:` + fmt.Sprintf("%v", this.LoadbalancerAlgorithm) + `,`,
 		`EndpointSelection:` + fmt.Sprintf("%v", this.EndpointSelection) + `,`,
-		`HealthCheckPortChoice:` + fmt.Sprintf("%v", this.HealthCheckPortChoice) + `,`,
-		`AdvancedOptions:` + strings.Replace(fmt.Sprintf("%v", this.AdvancedOptions), "OriginPoolAdvancedOptions", "OriginPoolAdvancedOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9803,26 +6729,6 @@ func (this *CreateSpecType_UseTls) String() string {
 	}, "")
 	return s
 }
-func (this *CreateSpecType_SameAsEndpointPort) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_SameAsEndpointPort{`,
-		`SameAsEndpointPort:` + strings.Replace(fmt.Sprintf("%v", this.SameAsEndpointPort), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_HealthCheckPort) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_HealthCheckPort{`,
-		`HealthCheckPort:` + fmt.Sprintf("%v", this.HealthCheckPort) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -9834,8 +6740,6 @@ func (this *ReplaceSpecType) String() string {
 		`Healthcheck:` + strings.Replace(fmt.Sprintf("%v", this.Healthcheck), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`LoadbalancerAlgorithm:` + fmt.Sprintf("%v", this.LoadbalancerAlgorithm) + `,`,
 		`EndpointSelection:` + fmt.Sprintf("%v", this.EndpointSelection) + `,`,
-		`HealthCheckPortChoice:` + fmt.Sprintf("%v", this.HealthCheckPortChoice) + `,`,
-		`AdvancedOptions:` + strings.Replace(fmt.Sprintf("%v", this.AdvancedOptions), "OriginPoolAdvancedOptions", "OriginPoolAdvancedOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9860,26 +6764,6 @@ func (this *ReplaceSpecType_UseTls) String() string {
 	}, "")
 	return s
 }
-func (this *ReplaceSpecType_SameAsEndpointPort) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_SameAsEndpointPort{`,
-		`SameAsEndpointPort:` + strings.Replace(fmt.Sprintf("%v", this.SameAsEndpointPort), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_HealthCheckPort) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_HealthCheckPort{`,
-		`HealthCheckPort:` + fmt.Sprintf("%v", this.HealthCheckPort) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -9891,8 +6775,6 @@ func (this *GetSpecType) String() string {
 		`Healthcheck:` + strings.Replace(fmt.Sprintf("%v", this.Healthcheck), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`LoadbalancerAlgorithm:` + fmt.Sprintf("%v", this.LoadbalancerAlgorithm) + `,`,
 		`EndpointSelection:` + fmt.Sprintf("%v", this.EndpointSelection) + `,`,
-		`HealthCheckPortChoice:` + fmt.Sprintf("%v", this.HealthCheckPortChoice) + `,`,
-		`AdvancedOptions:` + strings.Replace(fmt.Sprintf("%v", this.AdvancedOptions), "OriginPoolAdvancedOptions", "OriginPoolAdvancedOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9913,26 +6795,6 @@ func (this *GetSpecType_UseTls) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_UseTls{`,
 		`UseTls:` + strings.Replace(fmt.Sprintf("%v", this.UseTls), "UpstreamTlsParameters", "UpstreamTlsParameters", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_SameAsEndpointPort) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_SameAsEndpointPort{`,
-		`SameAsEndpointPort:` + strings.Replace(fmt.Sprintf("%v", this.SameAsEndpointPort), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_HealthCheckPort) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_HealthCheckPort{`,
-		`HealthCheckPort:` + fmt.Sprintf("%v", this.HealthCheckPort) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -11175,124 +8037,6 @@ func (m *OriginServerType) Unmarshal(dAtA []byte) error {
 			}
 			m.Choice = &OriginServerType_CustomEndpointObject{v}
 			iNdEx = postIndex
-		case 9:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Labels", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Labels == nil {
-				m.Labels = make(map[string]string)
-			}
-			var mapkey string
-			var mapvalue string
-			for iNdEx < postIndex {
-				entryPreIndex := iNdEx
-				var wire uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				fieldNum := int32(wire >> 3)
-				if fieldNum == 1 {
-					var stringLenmapkey uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTypes
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapkey := int(stringLenmapkey)
-					if intStringLenmapkey < 0 {
-						return ErrInvalidLengthTypes
-					}
-					postStringIndexmapkey := iNdEx + intStringLenmapkey
-					if postStringIndexmapkey > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
-					iNdEx = postStringIndexmapkey
-				} else if fieldNum == 2 {
-					var stringLenmapvalue uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTypes
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapvalue := int(stringLenmapvalue)
-					if intStringLenmapvalue < 0 {
-						return ErrInvalidLengthTypes
-					}
-					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
-					if postStringIndexmapvalue > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
-					iNdEx = postStringIndexmapvalue
-				} else {
-					iNdEx = entryPreIndex
-					skippy, err := skipTypes(dAtA[iNdEx:])
-					if err != nil {
-						return err
-					}
-					if skippy < 0 {
-						return ErrInvalidLengthTypes
-					}
-					if (iNdEx + skippy) > postIndex {
-						return io.ErrUnexpectedEOF
-					}
-					iNdEx += skippy
-				}
-			}
-			m.Labels[mapkey] = mapvalue
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -11810,716 +8554,6 @@ func (m *UpstreamTlsParameters) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *OriginPoolDefaultSubset) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: OriginPoolDefaultSubset: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OriginPoolDefaultSubset: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultSubset", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.DefaultSubset == nil {
-				m.DefaultSubset = make(map[string]string)
-			}
-			var mapkey string
-			var mapvalue string
-			for iNdEx < postIndex {
-				entryPreIndex := iNdEx
-				var wire uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				fieldNum := int32(wire >> 3)
-				if fieldNum == 1 {
-					var stringLenmapkey uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTypes
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapkey := int(stringLenmapkey)
-					if intStringLenmapkey < 0 {
-						return ErrInvalidLengthTypes
-					}
-					postStringIndexmapkey := iNdEx + intStringLenmapkey
-					if postStringIndexmapkey > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
-					iNdEx = postStringIndexmapkey
-				} else if fieldNum == 2 {
-					var stringLenmapvalue uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTypes
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapvalue := int(stringLenmapvalue)
-					if intStringLenmapvalue < 0 {
-						return ErrInvalidLengthTypes
-					}
-					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
-					if postStringIndexmapvalue > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
-					iNdEx = postStringIndexmapvalue
-				} else {
-					iNdEx = entryPreIndex
-					skippy, err := skipTypes(dAtA[iNdEx:])
-					if err != nil {
-						return err
-					}
-					if skippy < 0 {
-						return ErrInvalidLengthTypes
-					}
-					if (iNdEx + skippy) > postIndex {
-						return io.ErrUnexpectedEOF
-					}
-					iNdEx += skippy
-				}
-			}
-			m.DefaultSubset[mapkey] = mapvalue
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *OriginPoolSubsets) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: OriginPoolSubsets: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OriginPoolSubsets: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndpointSubsets", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.EndpointSubsets = append(m.EndpointSubsets, &ves_io_schema_cluster.EndpointSubsetSelectorType{})
-			if err := m.EndpointSubsets[len(m.EndpointSubsets)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AnyEndpoint", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FallbackPolicyChoice = &OriginPoolSubsets_AnyEndpoint{v}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultSubset", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &OriginPoolDefaultSubset{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FallbackPolicyChoice = &OriginPoolSubsets_DefaultSubset{v}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FailRequest", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FallbackPolicyChoice = &OriginPoolSubsets_FailRequest{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *OriginPoolAdvancedOptions) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: OriginPoolAdvancedOptions: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OriginPoolAdvancedOptions: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ConnectionTimeout", wireType)
-			}
-			m.ConnectionTimeout = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ConnectionTimeout |= (uint32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field HttpIdleTimeout", wireType)
-			}
-			m.HttpIdleTimeout = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.HttpIdleTimeout |= (uint32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisableCircuitBreaker", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.CircuitBreakerChoice = &OriginPoolAdvancedOptions_DisableCircuitBreaker{v}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CircuitBreaker", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema_cluster.CircuitBreaker{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.CircuitBreakerChoice = &OriginPoolAdvancedOptions_CircuitBreaker{v}
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisableOutlierDetection", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.OutlierDetectionChoice = &OriginPoolAdvancedOptions_DisableOutlierDetection{v}
-			iNdEx = postIndex
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OutlierDetection", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema_cluster.OutlierDetectionType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.OutlierDetectionChoice = &OriginPoolAdvancedOptions_OutlierDetection{v}
-			iNdEx = postIndex
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NoPanicThreshold", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.PanicThresholdType = &OriginPoolAdvancedOptions_NoPanicThreshold{v}
-			iNdEx = postIndex
-		case 11:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PanicThreshold", wireType)
-			}
-			var v uint32
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= (uint32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.PanicThresholdType = &OriginPoolAdvancedOptions_PanicThreshold{v}
-		case 13:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisableSubsets", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.SubsetChoice = &OriginPoolAdvancedOptions_DisableSubsets{v}
-			iNdEx = postIndex
-		case 14:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EnableSubsets", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &OriginPoolSubsets{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.SubsetChoice = &OriginPoolAdvancedOptions_EnableSubsets{v}
-			iNdEx = postIndex
-		case 15:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Http2Options", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Http2Options == nil {
-				m.Http2Options = &ves_io_schema_cluster.Http2ProtocolOptions{}
-			}
-			if err := m.Http2Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
 func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -12732,91 +8766,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SameAsEndpointPort", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HealthCheckPortChoice = &GlobalSpecType_SameAsEndpointPort{v}
-			iNdEx = postIndex
-		case 11:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field HealthCheckPort", wireType)
-			}
-			var v uint32
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= (uint32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.HealthCheckPortChoice = &GlobalSpecType_HealthCheckPort{v}
-		case 12:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AdvancedOptions", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.AdvancedOptions == nil {
-				m.AdvancedOptions = &OriginPoolAdvancedOptions{}
-			}
-			if err := m.AdvancedOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ViewInternal", wireType)
@@ -13083,91 +9032,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SameAsEndpointPort", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HealthCheckPortChoice = &CreateSpecType_SameAsEndpointPort{v}
-			iNdEx = postIndex
-		case 11:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field HealthCheckPort", wireType)
-			}
-			var v uint32
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= (uint32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.HealthCheckPortChoice = &CreateSpecType_HealthCheckPort{v}
-		case 12:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AdvancedOptions", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.AdvancedOptions == nil {
-				m.AdvancedOptions = &OriginPoolAdvancedOptions{}
-			}
-			if err := m.AdvancedOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -13401,91 +9265,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SameAsEndpointPort", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HealthCheckPortChoice = &ReplaceSpecType_SameAsEndpointPort{v}
-			iNdEx = postIndex
-		case 11:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field HealthCheckPort", wireType)
-			}
-			var v uint32
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= (uint32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.HealthCheckPortChoice = &ReplaceSpecType_HealthCheckPort{v}
-		case 12:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AdvancedOptions", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.AdvancedOptions == nil {
-				m.AdvancedOptions = &OriginPoolAdvancedOptions{}
-			}
-			if err := m.AdvancedOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -13719,91 +9498,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SameAsEndpointPort", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HealthCheckPortChoice = &GetSpecType_SameAsEndpointPort{v}
-			iNdEx = postIndex
-		case 11:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field HealthCheckPort", wireType)
-			}
-			var v uint32
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= (uint32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.HealthCheckPortChoice = &GetSpecType_HealthCheckPort{v}
-		case 12:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AdvancedOptions", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.AdvancedOptions == nil {
-				m.AdvancedOptions = &OriginPoolAdvancedOptions{}
-			}
-			if err := m.AdvancedOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -13936,182 +9630,123 @@ func init() {
 }
 
 var fileDescriptorTypes = []byte{
-	// 2818 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0xcf, 0x6f, 0x1b, 0xc7,
-	0xf5, 0xd7, 0x2c, 0x29, 0x8a, 0x7a, 0x94, 0x28, 0x6a, 0x6d, 0xc9, 0xf4, 0x8f, 0x30, 0xb4, 0xbe,
-	0xdf, 0x00, 0x6e, 0x4c, 0x53, 0x22, 0x2d, 0xd9, 0xb4, 0x82, 0x38, 0xf5, 0xca, 0x4a, 0x28, 0x45,
-	0x89, 0xd4, 0x95, 0xe2, 0x14, 0x2e, 0x92, 0xed, 0x6a, 0x39, 0x92, 0xb6, 0x5a, 0xed, 0x6c, 0x77,
-	0x96, 0x8a, 0x05, 0xd4, 0x80, 0x91, 0x02, 0x6d, 0xda, 0x53, 0xd0, 0x4b, 0x81, 0xfe, 0x05, 0x45,
-	0x0e, 0x3d, 0xf4, 0x54, 0x94, 0x3e, 0x08, 0x29, 0x02, 0x04, 0xbd, 0xd4, 0x47, 0xc3, 0xa7, 0x98,
-	0x39, 0xd4, 0xbd, 0x05, 0x3e, 0x14, 0x41, 0x2e, 0x29, 0xe6, 0xc7, 0x52, 0x24, 0x45, 0x51, 0x96,
-	0x91, 0x20, 0x45, 0xea, 0x0b, 0xb1, 0x3b, 0xfb, 0x3e, 0x9f, 0x99, 0x7d, 0xf3, 0xde, 0xe7, 0xbd,
-	0x59, 0x09, 0xce, 0x6f, 0x63, 0x9a, 0xb7, 0xc9, 0x38, 0xb5, 0x36, 0xf0, 0x96, 0x39, 0xbe, 0x6d,
-	0xe3, 0xf7, 0xe8, 0x38, 0xf1, 0xed, 0x75, 0xdb, 0x35, 0x3c, 0x42, 0x9c, 0xf1, 0x60, 0xc7, 0xc3,
-	0x34, 0xef, 0xf9, 0x24, 0x20, 0xea, 0xf3, 0xc2, 0x38, 0x2f, 0x8c, 0xf3, 0xdc, 0x38, 0xdf, 0x64,
-	0x7c, 0xea, 0xc2, 0xba, 0x1d, 0x6c, 0x54, 0x57, 0xf3, 0x16, 0xd9, 0x1a, 0x5f, 0x27, 0xeb, 0x64,
-	0x9c, 0xe3, 0x56, 0xab, 0x6b, 0xfc, 0x8e, 0xdf, 0xf0, 0x2b, 0xc1, 0x77, 0xea, 0x6c, 0xeb, 0xe4,
-	0x96, 0x53, 0xa5, 0x01, 0xf6, 0x9b, 0xa7, 0x3c, 0xf5, 0x42, 0xab, 0xc9, 0x06, 0x36, 0x9d, 0x60,
-	0xc3, 0xda, 0xc0, 0xd6, 0x66, 0x8b, 0xd9, 0xe9, 0x56, 0x33, 0xe2, 0x05, 0x36, 0x71, 0xc3, 0x87,
-	0x27, 0x5b, 0x1f, 0x36, 0xe3, 0xce, 0xb4, 0xbd, 0xbe, 0xe9, 0xd8, 0x15, 0x33, 0xc0, 0xf2, 0x69,
-	0x76, 0xbf, 0x73, 0x8c, 0x56, 0xea, 0xe7, 0x3b, 0xb9, 0xaf, 0x69, 0x82, 0xb1, 0xcb, 0x70, 0x7c,
-	0x91, 0x3b, 0x68, 0x19, 0xfb, 0xdb, 0xd8, 0x5f, 0xaa, 0xae, 0x3a, 0xb6, 0x35, 0xb7, 0xa4, 0x9e,
-	0x04, 0xc5, 0xf6, 0xd2, 0x28, 0x8b, 0xce, 0xf5, 0x6b, 0xfd, 0x7f, 0xfd, 0xd7, 0x6e, 0x24, 0xea,
-	0x2b, 0x1e, 0xd2, 0x15, 0xdb, 0x9b, 0x8e, 0x3e, 0xbe, 0x8a, 0x0a, 0x63, 0x4b, 0x30, 0xba, 0x1f,
-	0xf8, 0xa6, 0xb9, 0x85, 0xd5, 0x09, 0x88, 0x57, 0x5c, 0x6a, 0xb8, 0xe6, 0x16, 0x96, 0x04, 0x23,
-	0x8c, 0xa0, 0xcf, 0xef, 0x4d, 0xa1, 0xf4, 0x1d, 0x45, 0x92, 0x6d, 0x20, 0xbd, 0xaf, 0xe2, 0x52,
-	0x86, 0x90, 0x8c, 0x7f, 0x52, 0x60, 0xa4, 0x85, 0xd2, 0xb7, 0xb7, 0xcd, 0x00, 0x77, 0x5d, 0x8c,
-	0x3a, 0x07, 0x03, 0xd4, 0x0e, 0xb0, 0xe1, 0x10, 0xcb, 0x0c, 0x88, 0x9f, 0x56, 0xb2, 0xe8, 0x5c,
-	0xa2, 0x98, 0xcd, 0x77, 0x8a, 0x84, 0x65, 0x3b, 0xc0, 0x0b, 0xc2, 0x4e, 0x8b, 0x7e, 0x51, 0x43,
-	0x48, 0x4f, 0xd0, 0xbd, 0x21, 0xf5, 0x65, 0x48, 0xda, 0x2e, 0xb5, 0x2b, 0xd8, 0x70, 0x71, 0xf0,
-	0x1e, 0xf1, 0x37, 0xd3, 0x51, 0x4e, 0x76, 0xbc, 0x8d, 0x6c, 0x76, 0xcb, 0x0b, 0x76, 0xca, 0x3d,
-	0xfa, 0xa0, 0xb0, 0x7e, 0x53, 0x18, 0xab, 0xaf, 0xc0, 0x10, 0xa9, 0x06, 0x2d, 0xf8, 0xde, 0xae,
-	0xf8, 0xa4, 0x34, 0x97, 0x04, 0xd3, 0xb1, 0xc7, 0x57, 0x23, 0x85, 0x5c, 0x51, 0x3b, 0x0b, 0x49,
-	0x49, 0x60, 0x58, 0x1b, 0xc4, 0xb6, 0xb0, 0x3a, 0xb4, 0x5b, 0x43, 0xd1, 0x7b, 0x35, 0x14, 0xa9,
-	0xd7, 0x50, 0x64, 0x32, 0x37, 0x35, 0x1f, 0x8d, 0x47, 0x52, 0xd1, 0xb1, 0x3f, 0x2b, 0x70, 0xa2,
-	0x83, 0xc3, 0xf8, 0x26, 0x9c, 0x6c, 0xdf, 0x84, 0x86, 0xb7, 0xbf, 0x4f, 0x2e, 0x8b, 0x3f, 0xbe,
-	0xda, 0x5b, 0xc8, 0x15, 0x73, 0x17, 0x9f, 0xdc, 0x69, 0xff, 0x56, 0x5a, 0x03, 0xf7, 0xf5, 0xd2,
-	0x32, 0xbb, 0x60, 0x88, 0xb3, 0x30, 0x40, 0xc5, 0x65, 0xb3, 0xdf, 0x12, 0x72, 0xec, 0x7b, 0xe6,
-	0x3b, 0xf5, 0x25, 0x18, 0xdc, 0xde, 0x2c, 0xd1, 0x10, 0x4d, 0xd3, 0xb1, 0xae, 0xf0, 0x01, 0x66,
-	0x2c, 0xb1, 0xf4, 0x69, 0x1c, 0x7f, 0x57, 0x81, 0x93, 0xcd, 0x8e, 0x9f, 0x21, 0x2e, 0xad, 0x3a,
-	0xff, 0x93, 0xbe, 0x7f, 0x1a, 0xf7, 0x51, 0x38, 0xd5, 0xe2, 0xbd, 0x2a, 0x0d, 0xc8, 0xd6, 0xac,
-	0x5b, 0xf1, 0x88, 0xed, 0x06, 0xea, 0x22, 0xc4, 0xb1, 0xbc, 0xe6, 0xae, 0x4b, 0x14, 0xc7, 0x3a,
-	0xfa, 0x65, 0x71, 0xf5, 0x67, 0xd8, 0x0a, 0x74, 0xbc, 0xb6, 0xb2, 0xe3, 0x61, 0x6d, 0xe8, 0xa3,
-	0xdb, 0x0d, 0xd8, 0x9d, 0xbb, 0x08, 0xe9, 0x8d, 0x3b, 0x29, 0xc9, 0x1f, 0xf4, 0x41, 0xaa, 0x79,
-	0x56, 0x86, 0x52, 0x57, 0xa0, 0xdf, 0xe3, 0x6a, 0x6f, 0x48, 0x51, 0x4e, 0x14, 0xa7, 0xf2, 0x87,
-	0x54, 0xde, 0x7c, 0xa7, 0x22, 0x53, 0xee, 0xd1, 0xe3, 0x82, 0x69, 0xce, 0x53, 0xdf, 0x06, 0xf0,
-	0x84, 0x7e, 0x31, 0x5a, 0xb1, 0xb7, 0x97, 0x8e, 0x46, 0x1b, 0xd6, 0x8b, 0x72, 0x8f, 0xde, 0x2f,
-	0xb9, 0xe6, 0x3c, 0xf5, 0x26, 0x24, 0xe4, 0x72, 0x79, 0x60, 0x45, 0x38, 0xf3, 0xe5, 0xa7, 0x58,
-	0x30, 0x0b, 0xc2, 0x72, 0x8f, 0x0e, 0xde, 0x5e, 0xa9, 0x7b, 0x07, 0x06, 0xc2, 0x45, 0x73, 0x72,
-	0x11, 0x45, 0xa5, 0xa7, 0x59, 0xb6, 0x64, 0x4f, 0x78, 0x4d, 0x22, 0x7e, 0x13, 0x12, 0x2c, 0x43,
-	0x65, 0x12, 0xc8, 0x18, 0x3b, 0xda, 0xd2, 0xf7, 0xe4, 0x8d, 0x2d, 0x7d, 0xb3, 0x44, 0xc3, 0x84,
-	0xb3, 0x20, 0x69, 0xf1, 0x0c, 0x6c, 0xd0, 0x8b, 0xfc, 0x9f, 0x3e, 0x12, 0x7d, 0x4b, 0x12, 0xb3,
-	0x44, 0xb1, 0x5a, 0xb2, 0x9a, 0xc2, 0xa8, 0xc5, 0x03, 0xd5, 0x08, 0x03, 0xcb, 0x20, 0x3c, 0x02,
-	0xd3, 0x7d, 0x7c, 0xb2, 0x97, 0x8e, 0x36, 0x59, 0x4b, 0xcc, 0x97, 0x7b, 0xf4, 0xe3, 0x56, 0xcb,
-	0x88, 0x08, 0x6e, 0x75, 0x0d, 0x62, 0x8e, 0xb9, 0x8a, 0x1d, 0x9a, 0xee, 0xcf, 0x46, 0xce, 0x25,
-	0x8a, 0x2f, 0x1f, 0x69, 0x12, 0x16, 0xe2, 0xf9, 0x05, 0x8e, 0x9f, 0x75, 0x03, 0x7f, 0x47, 0x63,
-	0xf9, 0x88, 0xea, 0x9f, 0x7d, 0x12, 0x89, 0xfd, 0xf6, 0x2e, 0x52, 0xe2, 0x3d, 0xba, 0x64, 0x3f,
-	0x75, 0x05, 0x12, 0x4d, 0x76, 0x6a, 0x0a, 0x22, 0x9b, 0x78, 0x47, 0x0a, 0x17, 0xbb, 0x54, 0x8f,
-	0x43, 0xef, 0xb6, 0xe9, 0x54, 0x31, 0x8f, 0xe6, 0x7e, 0x5d, 0xdc, 0x4c, 0x2b, 0x25, 0xc4, 0x4b,
-	0xfd, 0x95, 0x5c, 0x49, 0xfb, 0x3f, 0x88, 0xc9, 0xac, 0x3f, 0xb9, 0x5b, 0x43, 0x91, 0x7b, 0x35,
-	0x14, 0xaf, 0xd7, 0xd0, 0x20, 0x97, 0x86, 0xdc, 0x64, 0x6e, 0x2a, 0x77, 0x29, 0x77, 0x79, 0x3e,
-	0x1a, 0x8f, 0xa7, 0xfa, 0xc7, 0xd6, 0xe1, 0xcc, 0x5b, 0x1e, 0x0d, 0x7c, 0x6c, 0x6e, 0xad, 0x38,
-	0xf4, 0x86, 0x68, 0x04, 0x6d, 0xe2, 0xce, 0x10, 0x37, 0xc0, 0xb7, 0x02, 0xf5, 0x1a, 0x24, 0x03,
-	0x9f, 0xf5, 0xa7, 0x15, 0xc3, 0x32, 0x8d, 0xaa, 0xef, 0xc8, 0x7e, 0xe9, 0xf4, 0x97, 0x35, 0x14,
-	0x65, 0x3d, 0x53, 0xdc, 0x67, 0x1b, 0x7c, 0xe7, 0x4e, 0x9c, 0xdd, 0xf4, 0xfa, 0x91, 0x0f, 0x11,
-	0xd2, 0x07, 0x24, 0x64, 0xc6, 0x7c, 0xcb, 0x77, 0x64, 0xce, 0xdb, 0x70, 0x6c, 0xc5, 0xa1, 0x33,
-	0xd8, 0x0f, 0xec, 0x35, 0xdb, 0x32, 0x03, 0x4c, 0x79, 0xd6, 0x2f, 0x40, 0x2a, 0x70, 0xa8, 0x61,
-	0x35, 0x8d, 0xa7, 0x11, 0xf7, 0xef, 0xd9, 0x36, 0xff, 0xb6, 0xa2, 0x19, 0x58, 0x1f, 0x0a, 0x5a,
-	0x19, 0xe5, 0x54, 0x7f, 0x8b, 0xc1, 0x48, 0xd3, 0x4b, 0x2d, 0x99, 0xbe, 0xb9, 0x85, 0x03, 0xec,
-	0x53, 0xf5, 0x3c, 0x44, 0xa8, 0x6b, 0xcb, 0x57, 0x38, 0xf1, 0x65, 0x0d, 0xf5, 0x34, 0xda, 0x46,
-	0xb9, 0xfc, 0xf4, 0x1d, 0xa5, 0xdc, 0xa3, 0x33, 0x2b, 0x75, 0x06, 0x80, 0x2f, 0x8d, 0xb8, 0x6b,
-	0xf6, 0xba, 0x94, 0x8e, 0x4c, 0xc7, 0x4d, 0x67, 0x4b, 0xe3, 0x56, 0xb2, 0x28, 0xf4, 0x07, 0xe1,
-	0x80, 0xfa, 0x1e, 0x9c, 0xa8, 0x52, 0xcc, 0x93, 0x01, 0xfb, 0xc6, 0x36, 0xf6, 0xc5, 0x5a, 0x6d,
-	0xe2, 0xca, 0xac, 0x3e, 0x3c, 0x8c, 0xba, 0xed, 0x4f, 0x19, 0xe9, 0x23, 0x55, 0x8a, 0x45, 0x8c,
-	0xdd, 0x68, 0x62, 0x57, 0x97, 0x20, 0x4d, 0x37, 0x6d, 0xaf, 0xe3, 0xcc, 0xdd, 0xaa, 0x0a, 0xd2,
-	0x47, 0x19, 0xae, 0x03, 0xe3, 0x38, 0xf4, 0xb9, 0xc4, 0xd8, 0x0a, 0x9c, 0xee, 0x35, 0x5d, 0xd1,
-	0x63, 0x2e, 0x79, 0x23, 0x70, 0xa8, 0xfa, 0x36, 0xc4, 0xd9, 0xbb, 0x73, 0x84, 0x48, 0xcc, 0xc9,
-	0x43, 0x5f, 0xb6, 0x43, 0x8c, 0x68, 0xac, 0x6c, 0xa1, 0xb2, 0xa2, 0xf7, 0x55, 0x29, 0xe6, 0xc4,
-	0xcb, 0x30, 0xca, 0x88, 0x37, 0x08, 0x0d, 0x8c, 0x0d, 0x6c, 0x56, 0xb0, 0x6f, 0x98, 0xd4, 0x60,
-	0x3b, 0x9b, 0x38, 0x78, 0x61, 0x5a, 0xdf, 0xfd, 0xdb, 0xe8, 0x11, 0x63, 0xea, 0xd1, 0xd5, 0x2a,
-	0xc5, 0x65, 0x42, 0x83, 0x32, 0x07, 0x5f, 0xa3, 0xcb, 0xae, 0xad, 0x5e, 0x86, 0x44, 0xc5, 0xa6,
-	0xe6, 0xaa, 0x83, 0x39, 0xd3, 0x40, 0xd7, 0xca, 0x0b, 0xd2, 0x94, 0x01, 0x5f, 0x85, 0x63, 0xdb,
-	0xc4, 0x09, 0xb0, 0xef, 0x9b, 0xc6, 0x5e, 0xae, 0xa4, 0x07, 0xbb, 0x3a, 0x79, 0x38, 0x84, 0xac,
-	0x84, 0xa9, 0x32, 0x9d, 0x78, 0x7c, 0x35, 0x5e, 0x98, 0xc8, 0x15, 0x73, 0xa5, 0xdc, 0x15, 0x2d,
-	0x03, 0x40, 0x5d, 0x3b, 0x2c, 0xde, 0x29, 0x26, 0x16, 0xf7, 0x6a, 0x08, 0xea, 0x35, 0x14, 0x2d,
-	0xe4, 0x0a, 0x45, 0x2d, 0x0f, 0xe9, 0x70, 0x67, 0x1b, 0x31, 0x11, 0x5a, 0xab, 0xbb, 0x35, 0x34,
-	0x28, 0x93, 0x3e, 0x56, 0xe0, 0x19, 0xaf, 0x65, 0x20, 0xb1, 0xc5, 0xa3, 0x79, 0xaf, 0x1b, 0x88,
-	0xdd, 0xab, 0xa1, 0x7e, 0xd6, 0x0d, 0x08, 0x35, 0x80, 0x54, 0x42, 0x68, 0xc2, 0x7c, 0x34, 0xde,
-	0x9f, 0x82, 0xb1, 0x7f, 0xa2, 0xf0, 0x18, 0xb0, 0x44, 0x88, 0x73, 0x1d, 0xaf, 0x99, 0x55, 0x27,
-	0x58, 0xae, 0xae, 0x52, 0x1c, 0xa8, 0xbf, 0x41, 0x90, 0xac, 0x88, 0x11, 0x83, 0xf2, 0xa1, 0x74,
-	0x8c, 0x27, 0xed, 0xeb, 0x4f, 0x28, 0x8a, 0xfb, 0x28, 0xf3, 0x2d, 0x77, 0x42, 0x22, 0xf9, 0xf9,
-	0xae, 0xf7, 0x0f, 0x48, 0x49, 0x65, 0x9b, 0x85, 0x72, 0xb0, 0xd2, 0x6c, 0x7a, 0xea, 0x87, 0xa0,
-	0xee, 0xc7, 0x1e, 0x45, 0x36, 0xc7, 0x3e, 0x89, 0xc0, 0xf0, 0xde, 0xb2, 0x04, 0x0b, 0x55, 0x1d,
-	0x48, 0x35, 0xaa, 0x8b, 0x78, 0xc7, 0x50, 0x99, 0x0a, 0x6d, 0x2f, 0x29, 0x0f, 0xf0, 0xf9, 0xb0,
-	0x60, 0x08, 0x86, 0x65, 0xec, 0x60, 0x2b, 0x20, 0x5c, 0xf9, 0xb5, 0x64, 0xa8, 0x35, 0xbd, 0xbf,
-	0x63, 0xaf, 0xa3, 0x0f, 0xe1, 0x16, 0x5b, 0xaa, 0x5e, 0x81, 0x01, 0xd3, 0xdd, 0x69, 0xd4, 0x33,
-	0xd9, 0x4f, 0x1c, 0x14, 0x7e, 0x09, 0xd3, 0xdd, 0x69, 0x34, 0x69, 0xe6, 0xbe, 0xbd, 0x38, 0x5a,
-	0xbf, 0xb0, 0x6f, 0x2f, 0xca, 0xed, 0x3e, 0x66, 0xab, 0x5b, 0x33, 0x6d, 0xc7, 0xf0, 0xf1, 0xcf,
-	0xab, 0x98, 0x06, 0x87, 0xb4, 0xa5, 0x09, 0x66, 0xab, 0x0b, 0xd3, 0xe9, 0x4b, 0x1f, 0xd7, 0x50,
-	0x11, 0x8e, 0x41, 0x52, 0x50, 0x65, 0x67, 0x1c, 0x93, 0x52, 0x4c, 0x55, 0x54, 0x80, 0xd3, 0x30,
-	0x2a, 0x07, 0x5f, 0x35, 0x1d, 0x67, 0xd5, 0xb4, 0x36, 0xb3, 0x4b, 0xc4, 0xb1, 0xad, 0x1d, 0x15,
-	0x15, 0xb5, 0xf3, 0x30, 0xba, 0x26, 0x47, 0x0d, 0x8f, 0x8f, 0x86, 0xb1, 0x3b, 0x2c, 0x6b, 0x9a,
-	0x52, 0xaf, 0xa1, 0x5e, 0x1e, 0xdd, 0xf3, 0xd1, 0xb8, 0x92, 0x8a, 0x8c, 0xdd, 0xef, 0x0f, 0x8f,
-	0x02, 0xec, 0x95, 0xae, 0x55, 0xb6, 0x4d, 0xd7, 0xc2, 0x95, 0x45, 0xf1, 0xe5, 0x42, 0x9d, 0x07,
-	0xd5, 0x22, 0xae, 0x8b, 0x2d, 0x9e, 0x2a, 0x81, 0xbd, 0x85, 0x49, 0x55, 0x74, 0xb5, 0x83, 0xda,
-	0xe9, 0x07, 0x35, 0x14, 0x2d, 0x4e, 0x4c, 0x4c, 0xb0, 0x6d, 0xfa, 0xe0, 0xae, 0xd8, 0xaa, 0xd8,
-	0x8b, 0xd1, 0xf4, 0xee, 0x3f, 0xfe, 0x5f, 0x1f, 0xde, 0x83, 0xad, 0x08, 0x94, 0x3a, 0x07, 0xc3,
-	0x1b, 0x41, 0xe0, 0x19, 0x76, 0xc5, 0xc1, 0x0d, 0x2a, 0x85, 0x53, 0x3d, 0xf7, 0xa0, 0x86, 0x62,
-	0x17, 0x27, 0x26, 0x0e, 0x20, 0x1b, 0x62, 0xb8, 0xb9, 0x8a, 0x83, 0x43, 0xaa, 0x15, 0x38, 0x11,
-	0xca, 0x8e, 0x65, 0xfb, 0x56, 0xd5, 0x0e, 0x8c, 0x55, 0x1f, 0x9b, 0x9b, 0xd8, 0xef, 0x76, 0x78,
-	0xd0, 0xa2, 0xbb, 0x42, 0xc9, 0x46, 0x24, 0x78, 0x46, 0x60, 0x35, 0x01, 0x55, 0x6f, 0xc0, 0x50,
-	0x3b, 0x9b, 0xd8, 0xb3, 0x17, 0x0e, 0x88, 0xdd, 0x56, 0x7c, 0x83, 0x3e, 0x69, 0xb5, 0xf2, 0xfe,
-	0x18, 0x4e, 0x86, 0xab, 0x25, 0xd5, 0xc0, 0xb1, 0xb1, 0x6f, 0x54, 0x70, 0x20, 0x9c, 0x23, 0x35,
-	0xbe, 0xdb, 0x7a, 0x91, 0x1e, 0xbe, 0xec, 0xa2, 0x40, 0x5f, 0x0f, 0xc1, 0xea, 0x4f, 0x61, 0x78,
-	0x3f, 0x63, 0x9c, 0x33, 0x9e, 0x3f, 0x60, 0xcd, 0xed, 0x1c, 0xa2, 0x58, 0xc8, 0x89, 0x52, 0xa4,
-	0x7d, 0x86, 0x79, 0x50, 0x5d, 0x62, 0x78, 0xa6, 0x6b, 0x5b, 0x46, 0xb0, 0xe1, 0x63, 0xba, 0x41,
-	0x9c, 0x4a, 0x1a, 0x0e, 0x5d, 0xb4, 0xa2, 0xa7, 0x5c, 0xb2, 0xc4, 0x60, 0x2b, 0x21, 0x4a, 0xbd,
-	0x0a, 0x43, 0xed, 0x44, 0x09, 0xbe, 0xfd, 0xc7, 0x18, 0xe4, 0x41, 0x0d, 0x29, 0xc5, 0x29, 0xde,
-	0x5a, 0xbc, 0xa8, 0xa4, 0x2b, 0x65, 0x45, 0x4f, 0x7a, 0xad, 0xf8, 0x57, 0x60, 0xa8, 0x51, 0x6c,
-	0xa4, 0xb6, 0x74, 0xab, 0x17, 0x11, 0x3d, 0x19, 0x16, 0x1c, 0xa9, 0x17, 0x26, 0x24, 0xb1, 0xdb,
-	0x82, 0x4f, 0x72, 0x7c, 0xf1, 0x08, 0x49, 0x2f, 0xb9, 0x64, 0x7d, 0x8d, 0xe8, 0x83, 0x82, 0x31,
-	0x9c, 0xe2, 0x5d, 0x18, 0x64, 0xc1, 0x5a, 0x0c, 0xbf, 0xfd, 0xa5, 0x87, 0xba, 0xee, 0x46, 0x99,
-	0xd9, 0x2e, 0xf9, 0x24, 0x20, 0x16, 0x71, 0x64, 0xd2, 0x69, 0x03, 0xcc, 0x1d, 0xac, 0x27, 0x62,
-	0xb9, 0xa0, 0x0f, 0x70, 0x3e, 0xf9, 0x6c, 0xda, 0xf8, 0xb8, 0x86, 0x7e, 0x02, 0xcf, 0x83, 0x3a,
-	0x7b, 0xcb, 0xc2, 0x7c, 0x2c, 0x5b, 0x36, 0xdd, 0x8a, 0x63, 0xbb, 0xeb, 0x6a, 0xbf, 0xe8, 0x55,
-	0x2f, 0xe5, 0xae, 0xc0, 0xe9, 0xf0, 0xf3, 0x5d, 0x56, 0xf4, 0x24, 0xd9, 0x70, 0x7d, 0x4a, 0xa1,
-	0xc8, 0x1e, 0xbe, 0x61, 0x53, 0x0b, 0x3b, 0x8e, 0xe9, 0x62, 0x52, 0xa5, 0xd9, 0x30, 0xdb, 0x95,
-	0xc2, 0x94, 0x76, 0x01, 0x46, 0xdb, 0x92, 0x20, 0x94, 0x10, 0xb6, 0x4b, 0xd1, 0x4f, 0x45, 0x4d,
-	0x0d, 0x0f, 0xc4, 0xda, 0x38, 0xa4, 0xf7, 0x45, 0x60, 0x33, 0xa0, 0x4f, 0x02, 0x62, 0x0c, 0x70,
-	0x39, 0x57, 0xd2, 0x2e, 0xc0, 0xf1, 0xb6, 0x20, 0x30, 0x02, 0xd6, 0xd3, 0x8e, 0xec, 0xd6, 0x10,
-	0x48, 0x63, 0x56, 0x60, 0x7b, 0x0b, 0x13, 0xb9, 0x42, 0x41, 0x1b, 0x83, 0x41, 0xb1, 0x57, 0xcd,
-	0x42, 0xc6, 0xea, 0xf4, 0x00, 0xb7, 0xb9, 0x98, 0x2b, 0x4c, 0x8a, 0x43, 0xf9, 0x7c, 0x34, 0x1e,
-	0x4b, 0xf5, 0x89, 0x32, 0x3c, 0x1f, 0x8d, 0x0f, 0xa4, 0x06, 0xc7, 0x1e, 0x01, 0x24, 0x5f, 0x73,
-	0xc8, 0xaa, 0xe9, 0x2c, 0x7b, 0xd8, 0xe2, 0x9d, 0xf3, 0x2f, 0x20, 0x29, 0xb7, 0x55, 0x34, 0x02,
-	0x07, 0x55, 0xa7, 0xc3, 0xcf, 0x25, 0xda, 0x18, 0xdb, 0xa1, 0xbd, 0xea, 0x14, 0x5e, 0xc5, 0x1b,
-	0x63, 0x69, 0xa4, 0x0f, 0x92, 0x26, 0x14, 0x55, 0x2f, 0x40, 0xcc, 0x25, 0x06, 0xeb, 0xec, 0x94,
-	0xae, 0xb5, 0xa0, 0xd7, 0x25, 0x2b, 0x0e, 0x55, 0x7f, 0x04, 0xac, 0x79, 0xe3, 0xf6, 0x91, 0x27,
-	0x3c, 0x83, 0x77, 0xec, 0xe0, 0xcb, 0x3d, 0x7a, 0xac, 0x4a, 0x31, 0xa3, 0x7c, 0x1f, 0x41, 0xd4,
-	0x23, 0xbe, 0x28, 0x46, 0x83, 0x9a, 0xfb, 0x80, 0x6d, 0xe3, 0xe4, 0xc5, 0x7a, 0x0d, 0xbd, 0x0e,
-	0x4a, 0x69, 0x02, 0xa2, 0xa5, 0x09, 0xfe, 0x5b, 0x62, 0xbf, 0xc5, 0x89, 0xa9, 0x22, 0xfb, 0x2d,
-	0x89, 0xdf, 0x4b, 0xec, 0xf7, 0xca, 0x14, 0x30, 0x00, 0x7f, 0xc8, 0x7f, 0x4b, 0xe2, 0xf7, 0x32,
-	0x7f, 0x78, 0x09, 0xa2, 0xa5, 0xc9, 0xc9, 0x8b, 0x8d, 0x33, 0xc2, 0x8b, 0xca, 0x39, 0x14, 0x0a,
-	0xf9, 0xd7, 0x5f, 0x47, 0x74, 0x3e, 0xb7, 0xfa, 0x2e, 0x24, 0x9a, 0xbe, 0xcd, 0xcb, 0x26, 0xe8,
-	0x49, 0xbe, 0x91, 0xa4, 0x3f, 0xba, 0xdd, 0x8c, 0x6c, 0x38, 0x3f, 0xaa, 0x37, 0x0f, 0xab, 0xb7,
-	0x60, 0xd4, 0x21, 0x66, 0x65, 0xd5, 0x74, 0x58, 0x2d, 0xf3, 0x0d, 0xd3, 0x59, 0x27, 0xbe, 0x1d,
-	0x6c, 0x6c, 0x71, 0xb1, 0x4d, 0x16, 0x73, 0x07, 0x24, 0xe3, 0x42, 0x13, 0xe8, 0x5a, 0x88, 0xd1,
-	0x8e, 0x3d, 0xa8, 0xa1, 0xc4, 0x82, 0x66, 0x2c, 0xde, 0x98, 0xd5, 0xf5, 0xb9, 0xeb, 0xb3, 0x3c,
-	0x29, 0x47, 0x9c, 0x4e, 0xb6, 0xea, 0x36, 0xa8, 0x7b, 0xed, 0x0f, 0x6f, 0x65, 0x42, 0x41, 0x4e,
-	0x16, 0xf3, 0x87, 0x35, 0x40, 0xa1, 0xbd, 0x28, 0xe7, 0xda, 0x89, 0x07, 0x35, 0x34, 0xb4, 0xb0,
-	0x38, 0x73, 0x6d, 0xc1, 0x58, 0xd2, 0x67, 0x5f, 0x9d, 0xd5, 0xf5, 0xd9, 0xeb, 0x7c, 0xee, 0x61,
-	0xdc, 0x8e, 0x50, 0x17, 0x61, 0x84, 0x9a, 0x5b, 0x98, 0x35, 0xf4, 0x8d, 0xf9, 0xf9, 0x36, 0xc3,
-	0x13, 0x54, 0x17, 0x95, 0x41, 0xaf, 0xd1, 0x70, 0x1d, 0x4b, 0x6c, 0x8b, 0x3e, 0x44, 0x30, 0x2c,
-	0x5c, 0x6a, 0x70, 0x9f, 0x0a, 0x36, 0xa1, 0xd6, 0xab, 0xfc, 0x10, 0xfe, 0xed, 0x44, 0x8c, 0x0c,
-	0x94, 0x32, 0xd2, 0x87, 0xc4, 0xf4, 0x33, 0x6c, 0x76, 0xbe, 0xa4, 0x4d, 0x48, 0x99, 0xb2, 0x3b,
-	0x69, 0x88, 0xeb, 0xc0, 0x91, 0x3e, 0x93, 0x74, 0x68, 0x70, 0x84, 0x8c, 0xeb, 0x43, 0x66, 0x5b,
-	0xdf, 0x73, 0x13, 0x06, 0xf9, 0x5f, 0x70, 0x6c, 0x37, 0xc0, 0xbe, 0x6b, 0x3a, 0xe9, 0x47, 0x7d,
-	0x4f, 0xfc, 0x25, 0x2f, 0xf5, 0xd1, 0xed, 0x56, 0xb0, 0x3e, 0xc0, 0x6e, 0xe7, 0xe4, 0xdd, 0x74,
-	0xf0, 0x71, 0x0d, 0x79, 0x90, 0x85, 0x63, 0x9a, 0x49, 0x6d, 0x2b, 0x2b, 0xce, 0xbc, 0x55, 0x5f,
-	0x9c, 0x17, 0xfb, 0x0b, 0xb9, 0xa9, 0xdc, 0x95, 0xdc, 0xe5, 0x5c, 0x09, 0xce, 0xc0, 0x89, 0x05,
-	0x9b, 0x06, 0x59, 0xb2, 0x96, 0x2d, 0x73, 0x5f, 0x64, 0xb9, 0x33, 0xce, 0xd1, 0x1f, 0xa8, 0xe8,
-	0x12, 0x8c, 0xc2, 0xf0, 0xca, 0xc2, 0x72, 0x1b, 0x1a, 0x4d, 0xc2, 0x28, 0xa4, 0xc2, 0x77, 0x6c,
-	0xd2, 0xf5, 0xa2, 0xf6, 0x9c, 0x3c, 0x98, 0xef, 0x1d, 0x65, 0x94, 0x7b, 0x35, 0x14, 0x65, 0xb2,
-	0x5c, 0xcc, 0x5d, 0xd4, 0x0a, 0x90, 0xde, 0xb7, 0xdf, 0xa1, 0x71, 0x67, 0x69, 0x9e, 0x8f, 0xc6,
-	0xa3, 0xa9, 0x5e, 0x79, 0xee, 0xf9, 0x55, 0x1f, 0x24, 0x67, 0x7c, 0x6c, 0x06, 0xb8, 0x21, 0xb5,
-	0xef, 0x7e, 0x73, 0x52, 0x2b, 0x3e, 0x10, 0xfc, 0xd7, 0x89, 0xa9, 0xda, 0xac, 0xa5, 0x52, 0xdb,
-	0x56, 0x9e, 0x56, 0xdb, 0x92, 0xad, 0xda, 0xd6, 0xaa, 0x68, 0xd6, 0x37, 0xa9, 0x68, 0x07, 0x89,
-	0xd7, 0x3b, 0xdf, 0x9c, 0x78, 0x75, 0xd2, 0xa8, 0xb9, 0xa7, 0xd0, 0xa8, 0x03, 0xd4, 0x29, 0x77,
-	0xa0, 0x38, 0x75, 0x12, 0x0e, 0xfc, 0x6d, 0x08, 0xc7, 0x3e, 0xc9, 0x98, 0x1e, 0xfe, 0xfb, 0xd5,
-	0xb6, 0x6e, 0x43, 0x3b, 0xdf, 0x92, 0x73, 0xcf, 0xb5, 0xe5, 0xdc, 0xfb, 0x5f, 0xa1, 0xa6, 0xc7,
-	0x5a, 0xa9, 0x4b, 0x06, 0x9e, 0x79, 0xff, 0x2b, 0x74, 0xe0, 0xd3, 0x96, 0x44, 0xfc, 0x75, 0x1f,
-	0x0c, 0xe9, 0xd8, 0x73, 0x4c, 0xeb, 0x59, 0x26, 0x3e, 0xcb, 0xc4, 0x67, 0x99, 0xf8, 0xdd, 0x65,
-	0xe2, 0x2f, 0xfb, 0x20, 0xf1, 0x1a, 0x0e, 0x9e, 0x65, 0xe1, 0xb3, 0x2c, 0x7c, 0x96, 0x85, 0xdf,
-	0x55, 0x16, 0x6a, 0xbf, 0x47, 0xf7, 0x1e, 0x66, 0x7a, 0xee, 0x3f, 0xcc, 0xf4, 0x7c, 0xf1, 0x30,
-	0x83, 0xbe, 0x7c, 0x98, 0x41, 0x77, 0xea, 0x19, 0xf4, 0xc7, 0x7a, 0x06, 0xfd, 0xa5, 0x9e, 0x41,
-	0xbb, 0xf5, 0x0c, 0xfa, 0xb4, 0x9e, 0x41, 0xf7, 0xea, 0x19, 0x74, 0xbf, 0x9e, 0x41, 0x9f, 0xd5,
-	0x33, 0xe8, 0x51, 0x3d, 0xd3, 0xf3, 0x45, 0x3d, 0x83, 0x3e, 0xfc, 0x3c, 0xd3, 0xb3, 0xfb, 0x79,
-	0x06, 0xdd, 0x7c, 0x6b, 0x9d, 0x78, 0x9b, 0xeb, 0xf9, 0xf0, 0x6f, 0x0f, 0xf9, 0x2a, 0x1d, 0xe7,
-	0x17, 0x6b, 0xc4, 0xdf, 0xba, 0xe0, 0xf9, 0x64, 0xdb, 0xae, 0x60, 0xff, 0x42, 0xf8, 0x78, 0xdc,
-	0x5b, 0x5d, 0x27, 0xe3, 0xf8, 0x56, 0x20, 0xff, 0xcd, 0xeb, 0xa0, 0x7f, 0x96, 0x5b, 0x8d, 0xf1,
-	0x7f, 0xfa, 0xba, 0xf8, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x7a, 0x25, 0x40, 0x3f, 0x56, 0x27,
-	0x00, 0x00,
+	// 1886 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x59, 0xcf, 0x6f, 0xdb, 0xc8,
+	0x15, 0xd6, 0x48, 0xb4, 0x2c, 0x3f, 0xd9, 0xb2, 0xc2, 0xc4, 0xb6, 0x9c, 0xcd, 0x72, 0x15, 0x17,
+	0x05, 0xdc, 0x8d, 0x22, 0xd9, 0xf2, 0x2f, 0xad, 0x17, 0xeb, 0x22, 0xf2, 0xba, 0x2b, 0x67, 0xdd,
+	0xd8, 0xa5, 0x9d, 0x2c, 0x60, 0x60, 0x97, 0xa0, 0xa9, 0xb1, 0xc4, 0x9a, 0xe2, 0x10, 0x9c, 0x91,
+	0x93, 0x00, 0x0d, 0x60, 0xec, 0x5f, 0xb0, 0xe8, 0xa5, 0xff, 0x42, 0x91, 0x43, 0x0f, 0x3d, 0x15,
+	0xd5, 0x1e, 0x8c, 0xa2, 0x87, 0xb6, 0x27, 0x1f, 0x83, 0x9c, 0x1a, 0x05, 0x68, 0xd3, 0x5b, 0x90,
+	0x43, 0x11, 0xf4, 0xb2, 0xc5, 0x0c, 0x29, 0x59, 0xd4, 0x2a, 0x8e, 0x6d, 0x64, 0x81, 0x22, 0xcd,
+	0x85, 0x20, 0x39, 0xef, 0xfb, 0x66, 0xf8, 0xe6, 0xfb, 0xde, 0x1b, 0x5b, 0x70, 0x6d, 0x1f, 0xd3,
+	0xac, 0x49, 0x72, 0xd4, 0xa8, 0xe2, 0x9a, 0x9e, 0xdb, 0x37, 0xf1, 0x5d, 0x9a, 0x23, 0xae, 0x59,
+	0x31, 0x6d, 0xcd, 0x21, 0xc4, 0xca, 0xb1, 0xfb, 0x0e, 0xa6, 0x59, 0xc7, 0x25, 0x8c, 0xc8, 0x1f,
+	0x78, 0xc1, 0x59, 0x2f, 0x38, 0x2b, 0x82, 0xb3, 0x1d, 0xc1, 0x97, 0xaf, 0x57, 0x4c, 0x56, 0xad,
+	0xef, 0x64, 0x0d, 0x52, 0xcb, 0x55, 0x48, 0x85, 0xe4, 0x04, 0x6e, 0xa7, 0xbe, 0x2b, 0x9e, 0xc4,
+	0x83, 0xb8, 0xf3, 0xf8, 0x2e, 0x5f, 0x0d, 0x4e, 0x6e, 0x58, 0x75, 0xca, 0xb0, 0xdb, 0x39, 0xe5,
+	0xe5, 0x1f, 0x07, 0x43, 0xaa, 0x58, 0xb7, 0x58, 0xd5, 0xa8, 0x62, 0x63, 0x2f, 0x10, 0xf6, 0x5e,
+	0x30, 0x8c, 0x38, 0xcc, 0x24, 0x76, 0x6b, 0x70, 0x3c, 0x38, 0xd8, 0x89, 0xbb, 0xd2, 0xf5, 0xf9,
+	0xba, 0x65, 0x96, 0x75, 0x86, 0xfd, 0xd1, 0xf4, 0xf7, 0x93, 0xa3, 0x05, 0xa9, 0x3f, 0xe8, 0x95,
+	0xbe, 0x8e, 0x09, 0x26, 0x16, 0xe0, 0xd2, 0xba, 0x48, 0xd0, 0x26, 0x76, 0xf7, 0xb1, 0xbb, 0x51,
+	0xdf, 0xb1, 0x4c, 0x63, 0x75, 0x43, 0x1e, 0x87, 0xb0, 0xe9, 0xa4, 0x50, 0x1a, 0x4d, 0x0e, 0x14,
+	0x07, 0xfe, 0xf8, 0xaf, 0xc3, 0x88, 0xe4, 0x86, 0x1d, 0xa4, 0x86, 0x4d, 0x67, 0x51, 0x7a, 0xb1,
+	0x84, 0xa6, 0x27, 0x36, 0x60, 0xf4, 0xfb, 0xc0, 0x5b, 0x7a, 0x0d, 0xcb, 0x53, 0x10, 0x2b, 0xdb,
+	0x54, 0xb3, 0xf5, 0x1a, 0xf6, 0x09, 0x46, 0x38, 0x41, 0xbf, 0xdb, 0x97, 0x44, 0xa9, 0x83, 0xb0,
+	0x4f, 0x56, 0x45, 0x6a, 0x7f, 0xd9, 0xa6, 0x1c, 0xe1, 0x33, 0xfe, 0x2e, 0x0c, 0x23, 0x01, 0x4a,
+	0xd7, 0xdc, 0xd7, 0x19, 0x3e, 0x71, 0x31, 0xf2, 0x2a, 0x0c, 0x52, 0x93, 0x61, 0xcd, 0x22, 0x86,
+	0xce, 0x88, 0x9b, 0x0a, 0xa7, 0xd1, 0x64, 0x3c, 0x9f, 0xce, 0xf6, 0x52, 0xc2, 0xa6, 0xc9, 0xf0,
+	0x9a, 0x17, 0x57, 0x94, 0x9e, 0x37, 0x10, 0x52, 0xe3, 0xf4, 0xf8, 0x95, 0xfc, 0x09, 0x24, 0x4c,
+	0x9b, 0x9a, 0x65, 0xac, 0xd9, 0x98, 0xdd, 0x25, 0xee, 0x5e, 0x4a, 0x12, 0x64, 0x97, 0xba, 0xc8,
+	0x56, 0x6a, 0x0e, 0xbb, 0x5f, 0x0a, 0xa9, 0x43, 0x5e, 0xf4, 0x2d, 0x2f, 0x58, 0xfe, 0x29, 0x0c,
+	0x93, 0x3a, 0x0b, 0xe0, 0xfb, 0x4e, 0xc4, 0x27, 0xfc, 0x70, 0x9f, 0x60, 0x31, 0xfa, 0x62, 0x29,
+	0x32, 0x9d, 0xc9, 0x17, 0xaf, 0x42, 0xc2, 0x27, 0xd0, 0x8c, 0x2a, 0x31, 0x0d, 0x2c, 0x0f, 0x1f,
+	0x36, 0x90, 0x74, 0xd4, 0x40, 0x91, 0x66, 0x03, 0x45, 0x66, 0x33, 0x73, 0x37, 0xa5, 0x58, 0x24,
+	0x29, 0x4d, 0xfc, 0x3e, 0x0c, 0x63, 0x3d, 0x12, 0x26, 0x36, 0x61, 0xbc, 0x7b, 0x13, 0xda, 0xd9,
+	0x7e, 0x9b, 0x52, 0x16, 0x7b, 0xb1, 0xd4, 0x37, 0x9d, 0xc9, 0x67, 0x66, 0x4e, 0x9f, 0xb4, 0x7f,
+	0x87, 0x83, 0xc2, 0xfd, 0xbc, 0xb0, 0xc9, 0x6f, 0x38, 0xe2, 0x2a, 0x0c, 0x52, 0xef, 0xb6, 0x33,
+	0x6f, 0x71, 0xff, 0xdd, 0x5b, 0x96, 0x3b, 0xf9, 0x63, 0x18, 0xda, 0xdf, 0x2b, 0xd0, 0x16, 0x9a,
+	0xa6, 0xa2, 0x27, 0xc2, 0x07, 0x79, 0xb0, 0x8f, 0xa5, 0xe7, 0x49, 0xfc, 0xb7, 0x61, 0x18, 0xef,
+	0x4c, 0xfc, 0x32, 0xb1, 0x69, 0xdd, 0xfa, 0xbf, 0xcc, 0xfd, 0x79, 0xd2, 0x47, 0xe1, 0x72, 0x20,
+	0x7b, 0x75, 0xca, 0x48, 0x6d, 0xc5, 0x2e, 0x3b, 0xc4, 0xb4, 0x99, 0xbc, 0x0e, 0x31, 0xec, 0xdf,
+	0x8b, 0xd4, 0xc5, 0xf3, 0x13, 0x3d, 0xf3, 0xb2, 0xbe, 0xf3, 0x4b, 0x6c, 0x30, 0x15, 0xef, 0x6e,
+	0xdd, 0x77, 0x70, 0x71, 0xf8, 0xe1, 0x83, 0x36, 0xec, 0xe0, 0x5b, 0x84, 0xd4, 0xf6, 0x93, 0x5f,
+	0x92, 0x9f, 0xf6, 0x41, 0xb2, 0x73, 0x56, 0x8e, 0x92, 0xb7, 0x60, 0xc0, 0x11, 0xd5, 0x5e, 0xf3,
+	0x8b, 0x72, 0x3c, 0x3f, 0x97, 0x7d, 0x4d, 0xe7, 0xcd, 0xf6, 0x6a, 0x32, 0xa5, 0x90, 0x1a, 0xf3,
+	0x98, 0x56, 0x1d, 0xf9, 0x0b, 0x00, 0xc7, 0xab, 0x5f, 0x9c, 0xd6, 0xdb, 0xdb, 0xf9, 0xb3, 0xd1,
+	0xb6, 0xfa, 0x45, 0x29, 0xa4, 0x0e, 0xf8, 0x5c, 0xab, 0x8e, 0xbc, 0x0d, 0x71, 0x7f, 0xb9, 0x42,
+	0x58, 0x11, 0xc1, 0xbc, 0x70, 0x8e, 0x05, 0x73, 0x11, 0x96, 0x42, 0x2a, 0x38, 0xc7, 0xad, 0xee,
+	0x4b, 0x18, 0x6c, 0x2d, 0x5a, 0x90, 0x7b, 0x2a, 0x2a, 0x9c, 0x67, 0xd9, 0x3e, 0x7b, 0xdc, 0xe9,
+	0x28, 0xe2, 0xdb, 0x10, 0xe7, 0x0e, 0xf5, 0x4d, 0xe0, 0x6b, 0xec, 0x6c, 0x4b, 0x3f, 0x2e, 0x6f,
+	0x7c, 0xe9, 0x7b, 0x05, 0xda, 0x32, 0x9c, 0x01, 0x09, 0x43, 0x38, 0xb0, 0x4d, 0xef, 0xf9, 0x7f,
+	0xf1, 0x4c, 0xf4, 0x01, 0x13, 0x73, 0xa3, 0x18, 0x01, 0x57, 0x53, 0x18, 0x35, 0x84, 0x50, 0xb5,
+	0x96, 0xb0, 0x34, 0x22, 0x14, 0x98, 0xea, 0x17, 0x93, 0x7d, 0x7c, 0xb6, 0xc9, 0x02, 0x9a, 0x2f,
+	0x85, 0xd4, 0x4b, 0x46, 0xe0, 0x8d, 0x27, 0x6e, 0x21, 0xdd, 0x42, 0xf1, 0x47, 0x10, 0xf5, 0x0d,
+	0x35, 0x7e, 0xd8, 0x40, 0x91, 0xa3, 0x06, 0x8a, 0x35, 0x1b, 0x68, 0x48, 0xb8, 0x2e, 0x33, 0x9b,
+	0x99, 0xcb, 0xcc, 0x67, 0x16, 0x6e, 0x4a, 0xb1, 0x58, 0x72, 0x60, 0xa2, 0x02, 0x57, 0x6e, 0x3b,
+	0x94, 0xb9, 0x58, 0xaf, 0x6d, 0x59, 0xf4, 0x8e, 0x77, 0xc6, 0x32, 0x89, 0xbd, 0x4c, 0x6c, 0x86,
+	0xef, 0x31, 0xf9, 0x06, 0x24, 0x98, 0xcb, 0x8f, 0x7e, 0x65, 0xcd, 0xd0, 0xb5, 0xba, 0x6b, 0xf9,
+	0x47, 0x91, 0xf7, 0x5e, 0x36, 0x90, 0xc4, 0x8f, 0x23, 0x31, 0x97, 0xe7, 0xee, 0xe0, 0x20, 0xc6,
+	0x1f, 0xfa, 0xdc, 0xc8, 0x37, 0x08, 0xa9, 0x83, 0x3e, 0x64, 0x59, 0xbf, 0xed, 0x5a, 0xbe, 0x9d,
+	0x4c, 0xb8, 0xb8, 0x65, 0xd1, 0x65, 0xec, 0x32, 0x73, 0xd7, 0x34, 0x74, 0x86, 0xa9, 0x30, 0xd4,
+	0x1a, 0x24, 0x99, 0x45, 0x35, 0xa3, 0xe3, 0x7d, 0x0a, 0xa5, 0x23, 0x93, 0xf1, 0xfc, 0xd5, 0xae,
+	0xfc, 0x04, 0xd1, 0x1c, 0xac, 0x0e, 0xb3, 0x20, 0xa3, 0x3f, 0xd5, 0x5f, 0xa3, 0x30, 0xd2, 0xf1,
+	0x51, 0x1b, 0xba, 0xab, 0xd7, 0x30, 0xc3, 0x2e, 0x95, 0xaf, 0x41, 0x84, 0xda, 0xa6, 0xff, 0x09,
+	0x63, 0x2f, 0x1b, 0x28, 0xd4, 0x3e, 0x91, 0xf9, 0xcb, 0x4f, 0x1d, 0x84, 0x4b, 0x21, 0x95, 0x47,
+	0xc9, 0xcb, 0x00, 0x62, 0x69, 0xc4, 0xde, 0x35, 0x2b, 0xbe, 0x2b, 0x95, 0x9e, 0x9b, 0xc6, 0x97,
+	0x26, 0xa2, 0xfc, 0x7a, 0x3b, 0xc0, 0x5a, 0x2f, 0xe4, 0xbb, 0x30, 0x56, 0xa7, 0x58, 0xe8, 0x0c,
+	0xbb, 0xda, 0x3e, 0x76, 0xbd, 0xb5, 0x9a, 0xc4, 0xf6, 0x0d, 0xf3, 0xc9, 0x6b, 0x65, 0x70, 0xd2,
+	0xfe, 0x94, 0x90, 0x3a, 0x52, 0xa7, 0xd8, 0xd3, 0xc8, 0x9d, 0x0e, 0x76, 0x79, 0x03, 0x52, 0x74,
+	0xcf, 0x74, 0x7a, 0xce, 0x7c, 0x52, 0xc1, 0x46, 0xea, 0x28, 0xc7, 0xf5, 0x60, 0xcc, 0x41, 0xbf,
+	0x4d, 0xb4, 0x1a, 0xb3, 0x4e, 0x6e, 0x97, 0x61, 0x35, 0x6a, 0x93, 0x9f, 0x33, 0x8b, 0xca, 0x5f,
+	0x40, 0x8c, 0x7f, 0xbb, 0x40, 0x78, 0x9a, 0x9f, 0x7d, 0xed, 0xc7, 0xf6, 0xd0, 0x48, 0x91, 0x77,
+	0x04, 0x54, 0x0a, 0xab, 0xfd, 0x75, 0x8a, 0x05, 0xf1, 0x26, 0x8c, 0x72, 0xe2, 0x2a, 0xa1, 0x4c,
+	0xab, 0x62, 0xbd, 0x8c, 0x5d, 0x4d, 0xa7, 0x1a, 0xdf, 0xd9, 0xf8, 0xab, 0x17, 0x56, 0xec, 0x7f,
+	0xf4, 0x00, 0x3d, 0xe3, 0x4c, 0x21, 0x55, 0xae, 0x53, 0x5c, 0x22, 0x94, 0x95, 0x04, 0xf8, 0x06,
+	0xdd, 0xb4, 0x4d, 0x79, 0x01, 0xe2, 0x65, 0x93, 0xea, 0x3b, 0x16, 0x16, 0x4c, 0x83, 0x27, 0x36,
+	0x35, 0xf0, 0x43, 0x39, 0x70, 0x1d, 0x2e, 0xee, 0x13, 0x8b, 0x61, 0xd7, 0xd5, 0xb5, 0x63, 0xaf,
+	0xa4, 0x86, 0x4e, 0xb3, 0x14, 0xa4, 0x5e, 0x68, 0x61, 0xb7, 0x5a, 0x9e, 0x59, 0x8c, 0xbf, 0x58,
+	0x8a, 0x4d, 0x4f, 0x65, 0xf2, 0x99, 0x42, 0xe6, 0xa3, 0xa2, 0x02, 0x40, 0x6d, 0xb3, 0xd5, 0x20,
+	0x93, 0x87, 0x0d, 0x84, 0x8e, 0x1a, 0x08, 0x9a, 0x0d, 0x24, 0x4d, 0x67, 0xa6, 0xf3, 0xc5, 0x6b,
+	0x90, 0x6a, 0x6d, 0x71, 0x5b, 0x1c, 0xdd, 0xed, 0x34, 0xe6, 0xb7, 0xd3, 0xa2, 0x02, 0xf1, 0x9a,
+	0xd0, 0xf4, 0xf1, 0x78, 0xf4, 0xa8, 0x81, 0x06, 0xf8, 0xb8, 0x57, 0x13, 0x20, 0x19, 0xf7, 0x2a,
+	0xc3, 0x4d, 0x29, 0x36, 0x90, 0x84, 0x89, 0x3f, 0xf7, 0x43, 0xe2, 0x33, 0x8b, 0xec, 0xe8, 0xd6,
+	0xa6, 0x83, 0x0d, 0x61, 0xd9, 0x5f, 0x41, 0xc2, 0xdf, 0x31, 0x6f, 0xe2, 0x96, 0x61, 0xa7, 0xcf,
+	0x54, 0xd0, 0xc4, 0xce, 0x4e, 0x70, 0xbb, 0x08, 0xe7, 0xfd, 0x1a, 0x85, 0x93, 0xe9, 0xd6, 0x5d,
+	0xac, 0xfd, 0x2e, 0x85, 0xd4, 0x21, 0xd2, 0x81, 0xa2, 0xf2, 0x75, 0x88, 0xda, 0x44, 0xe3, 0x92,
+	0x0a, 0x9f, 0xb8, 0x43, 0x7d, 0x36, 0xd9, 0xb2, 0xa8, 0xfc, 0x0b, 0xe0, 0xaa, 0x11, 0xf1, 0x91,
+	0x53, 0xf6, 0xd5, 0x9e, 0xa5, 0xa3, 0x14, 0x52, 0xa3, 0x75, 0x8a, 0x39, 0xe5, 0xd7, 0x08, 0x24,
+	0x87, 0xb8, 0x4c, 0xd8, 0x68, 0xa8, 0x68, 0x3f, 0xe6, 0xc9, 0x9d, 0x9d, 0x69, 0x36, 0xd0, 0xe7,
+	0x10, 0x2e, 0x4c, 0x81, 0x54, 0x98, 0x12, 0xd7, 0x02, 0xbf, 0xe6, 0xa7, 0xe6, 0xf2, 0xfc, 0x5a,
+	0xf0, 0xae, 0xf3, 0xfc, 0xfa, 0xd1, 0x1c, 0x70, 0x80, 0x18, 0x14, 0xd7, 0x82, 0x77, 0x5d, 0x10,
+	0x83, 0xf3, 0x20, 0x15, 0x66, 0x67, 0x67, 0xda, 0xc5, 0xe9, 0xc3, 0xf0, 0xa4, 0x48, 0x47, 0xf4,
+	0x43, 0x29, 0xf5, 0xdd, 0x77, 0x11, 0x55, 0xcc, 0x2d, 0x7f, 0x05, 0xf1, 0x8e, 0xbf, 0xb7, 0x53,
+	0x51, 0xb1, 0x03, 0xa7, 0x39, 0xf7, 0xa4, 0x1e, 0x3e, 0xe8, 0x44, 0xb6, 0x93, 0x2f, 0xa9, 0x9d,
+	0xaf, 0xe5, 0x7b, 0x30, 0x6a, 0x11, 0xbd, 0xbc, 0xa3, 0x5b, 0xba, 0x6d, 0x70, 0x7f, 0x59, 0x15,
+	0xe2, 0x9a, 0xac, 0x5a, 0x13, 0x4e, 0x4e, 0xe4, 0x33, 0x5d, 0x53, 0xf9, 0xff, 0x1f, 0xc8, 0xae,
+	0x75, 0x80, 0x6e, 0xb4, 0x30, 0xc5, 0x8b, 0x8f, 0x1b, 0x28, 0xae, 0xae, 0xdf, 0xbe, 0xf5, 0xa9,
+	0xa6, 0xae, 0x17, 0x57, 0x6f, 0xf1, 0x8f, 0x53, 0x47, 0xac, 0x5e, 0xb1, 0xf2, 0x3e, 0xc8, 0xed,
+	0x86, 0x49, 0xb1, 0x85, 0x0d, 0x51, 0xb2, 0x62, 0x62, 0xd6, 0xec, 0x2b, 0x66, 0x6d, 0x75, 0xc1,
+	0xcd, 0x56, 0xfc, 0x06, 0xb1, 0x4c, 0xe3, 0x7e, 0x71, 0xec, 0x71, 0x03, 0x0d, 0xaf, 0xad, 0x2f,
+	0xdf, 0x58, 0xd3, 0x36, 0xd4, 0x95, 0x9f, 0xad, 0xa8, 0xea, 0xca, 0xa7, 0x62, 0xee, 0x0b, 0xb8,
+	0x1b, 0x21, 0x6f, 0xc3, 0x90, 0xf8, 0x27, 0x82, 0x69, 0x33, 0xec, 0xda, 0xba, 0x95, 0x7a, 0xd6,
+	0x7f, 0xea, 0xc3, 0x64, 0xf2, 0xe1, 0x83, 0x20, 0x58, 0x1d, 0xe4, 0x8f, 0xab, 0xfe, 0xd3, 0xe2,
+	0xf6, 0x9f, 0x1a, 0xe8, 0x0e, 0x28, 0x70, 0xb1, 0xa8, 0x53, 0xd3, 0x48, 0x7b, 0xbd, 0xa1, 0xee,
+	0x7a, 0x75, 0xb5, 0x7f, 0x3a, 0x33, 0x97, 0x59, 0xc8, 0x14, 0xe0, 0x0a, 0x8c, 0xad, 0x99, 0x94,
+	0xa5, 0xc9, 0x6e, 0xba, 0x24, 0xb6, 0x22, 0xbd, 0xcc, 0xf7, 0x62, 0x92, 0xfe, 0x44, 0x46, 0xf3,
+	0x30, 0x0a, 0x17, 0xb6, 0xd6, 0x36, 0xbb, 0xb0, 0x68, 0xb6, 0xf8, 0xbe, 0xdf, 0xa6, 0x8e, 0x2d,
+	0x1d, 0x3e, 0x6a, 0x20, 0x89, 0x5b, 0x3a, 0x9f, 0x99, 0xb9, 0x29, 0xc5, 0xa4, 0x64, 0xdf, 0xc4,
+	0x3f, 0x24, 0x48, 0x2c, 0xbb, 0x58, 0x67, 0xb8, 0x6d, 0xe3, 0xaf, 0xde, 0x9c, 0x8d, 0xbd, 0xae,
+	0xf7, 0x3f, 0x67, 0x54, 0xb9, 0xd3, 0xa7, 0xbe, 0x6f, 0xb6, 0xce, 0xeb, 0x9b, 0x44, 0xd0, 0x37,
+	0x41, 0xb7, 0x18, 0x6f, 0xd2, 0x2d, 0xaf, 0x32, 0xc6, 0x97, 0x6f, 0xce, 0x18, 0x3d, 0xf4, 0xbf,
+	0x78, 0xe1, 0x6f, 0x4b, 0x5d, 0x95, 0xbe, 0x78, 0x2d, 0x20, 0xad, 0xf7, 0xbb, 0xa4, 0xf5, 0xf5,
+	0x7f, 0x50, 0xc7, 0xb0, 0x2f, 0xb4, 0x7f, 0x4a, 0x30, 0xac, 0x62, 0xc7, 0xd2, 0x8d, 0x77, 0x4a,
+	0x7b, 0xa7, 0xb4, 0x1f, 0x52, 0x69, 0x4f, 0x25, 0x88, 0x7f, 0x86, 0xd9, 0x3b, 0x95, 0xbd, 0x53,
+	0xd9, 0x0f, 0xa7, 0xb2, 0xe2, 0x6f, 0xd0, 0xd1, 0x13, 0x25, 0xf4, 0xe8, 0x89, 0x12, 0x7a, 0xfe,
+	0x44, 0x41, 0x2f, 0x9f, 0x28, 0xe8, 0xa0, 0xa9, 0xa0, 0xdf, 0x36, 0x15, 0xf4, 0x87, 0xa6, 0x82,
+	0x0e, 0x9b, 0x0a, 0xfa, 0x4b, 0x53, 0x41, 0x47, 0x4d, 0x05, 0x3d, 0x6a, 0x2a, 0xe8, 0xef, 0x4d,
+	0x05, 0x3d, 0x6b, 0x2a, 0xa1, 0xe7, 0x4d, 0x05, 0x7d, 0xf3, 0x54, 0x09, 0x1d, 0x3e, 0x55, 0xd0,
+	0xf6, 0xed, 0x0a, 0x71, 0xf6, 0x2a, 0xd9, 0xd6, 0x39, 0x3f, 0x5b, 0xa7, 0x39, 0x71, 0xb3, 0x4b,
+	0xdc, 0xda, 0x75, 0xc7, 0x25, 0xfb, 0x66, 0x19, 0xbb, 0xd7, 0x5b, 0xc3, 0x39, 0x67, 0xa7, 0x42,
+	0x72, 0xf8, 0x1e, 0xf3, 0x7f, 0xb6, 0x78, 0xd5, 0x8f, 0x3f, 0x3b, 0x51, 0xf1, 0x23, 0xc6, 0xcc,
+	0x7f, 0x03, 0x00, 0x00, 0xff, 0xff, 0xa1, 0xa7, 0xd6, 0x75, 0x26, 0x1a, 0x00, 0x00,
 }

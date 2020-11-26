@@ -15,10 +15,9 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_network_firewall "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
-	ves_io_schema_site "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/site"
-	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -67,12 +66,6 @@ func (m *AzureVnetIngressEgressGwReplaceType) Validate(ctx context.Context, opts
 
 func (m *AzureVnetIngressEgressGwReplaceType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -97,40 +90,13 @@ func (m *AzureVnetIngressEgressGwReplaceType) GetDRefInfo() ([]db.DRefInfo, erro
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
-}
-
-// GetDRefInfo for the field's type
-func (m *AzureVnetIngressEgressGwReplaceType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
-	if m.ForwardProxyChoice == nil {
-		return []db.DRefInfo{}, nil
-	}
-
-	var odrInfos []db.DRefInfo
-
-	switch m.GetForwardProxyChoice().(type) {
-	case *AzureVnetIngressEgressGwReplaceType_NoForwardProxy:
-
-	case *AzureVnetIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
-		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_forward_proxy_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
-
-	case *AzureVnetIngressEgressGwReplaceType_ForwardProxyAllowAll:
-
-	}
-
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -257,16 +223,41 @@ func (m *AzureVnetIngressEgressGwReplaceType) GetOutsideStaticRouteChoiceDRefInf
 	return drInfos, err
 }
 
-type ValidateAzureVnetIngressEgressGwReplaceType struct {
-	FldValidators map[string]db.ValidatorFunc
+// GetDRefInfo for the field's type
+func (m *AzureVnetIngressEgressGwReplaceType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.ServicePolicyChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *AzureVnetIngressEgressGwReplaceType_NoForwardProxyPolicy:
+
+	case *AzureVnetIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
+		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_forward_proxy_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *AzureVnetIngressEgressGwReplaceType_ForwardProxyAllowAll:
+
+	}
+
+	return drInfos, err
 }
 
-func (v *ValidateAzureVnetIngressEgressGwReplaceType) ForwardProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for forward_proxy_choice")
-	}
-	return validatorFn, nil
+type ValidateAzureVnetIngressEgressGwReplaceType struct {
+	FldValidators map[string]db.ValidatorFunc
 }
 
 func (v *ValidateAzureVnetIngressEgressGwReplaceType) GlobalNetworkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -301,6 +292,14 @@ func (v *ValidateAzureVnetIngressEgressGwReplaceType) OutsideStaticRouteChoiceVa
 	return validatorFn, nil
 }
 
+func (v *ValidateAzureVnetIngressEgressGwReplaceType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetIngressEgressGwReplaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AzureVnetIngressEgressGwReplaceType)
 	if !ok {
@@ -313,53 +312,6 @@ func (v *ValidateAzureVnetIngressEgressGwReplaceType) Validate(ctx context.Conte
 	}
 	if m == nil {
 		return nil
-	}
-
-	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
-		val := m.GetForwardProxyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("forward_proxy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetForwardProxyChoice().(type) {
-	case *AzureVnetIngressEgressGwReplaceType_NoForwardProxy:
-		if fv, exists := v.FldValidators["forward_proxy_choice.no_forward_proxy"]; exists {
-			val := m.GetForwardProxyChoice().(*AzureVnetIngressEgressGwReplaceType_NoForwardProxy).NoForwardProxy
-			vOpts := append(opts,
-				db.WithValidateField("forward_proxy_choice"),
-				db.WithValidateField("no_forward_proxy"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AzureVnetIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
-		if fv, exists := v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"]; exists {
-			val := m.GetForwardProxyChoice().(*AzureVnetIngressEgressGwReplaceType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
-			vOpts := append(opts,
-				db.WithValidateField("forward_proxy_choice"),
-				db.WithValidateField("active_forward_proxy_policies"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AzureVnetIngressEgressGwReplaceType_ForwardProxyAllowAll:
-		if fv, exists := v.FldValidators["forward_proxy_choice.forward_proxy_allow_all"]; exists {
-			val := m.GetForwardProxyChoice().(*AzureVnetIngressEgressGwReplaceType_ForwardProxyAllowAll).ForwardProxyAllowAll
-			vOpts := append(opts,
-				db.WithValidateField("forward_proxy_choice"),
-				db.WithValidateField("forward_proxy_allow_all"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
 	}
 
 	if fv, exists := v.FldValidators["global_network_choice"]; exists {
@@ -506,6 +458,53 @@ func (v *ValidateAzureVnetIngressEgressGwReplaceType) Validate(ctx context.Conte
 
 	}
 
+	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
+		val := m.GetServicePolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("service_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *AzureVnetIngressEgressGwReplaceType_NoForwardProxyPolicy:
+		if fv, exists := v.FldValidators["service_policy_choice.no_forward_proxy_policy"]; exists {
+			val := m.GetServicePolicyChoice().(*AzureVnetIngressEgressGwReplaceType_NoForwardProxyPolicy).NoForwardProxyPolicy
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("no_forward_proxy_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.active_forward_proxy_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*AzureVnetIngressEgressGwReplaceType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("active_forward_proxy_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwReplaceType_ForwardProxyAllowAll:
+		if fv, exists := v.FldValidators["service_policy_choice.forward_proxy_allow_all"]; exists {
+			val := m.GetServicePolicyChoice().(*AzureVnetIngressEgressGwReplaceType_ForwardProxyAllowAll).ForwardProxyAllowAll
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("forward_proxy_allow_all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -520,17 +519,6 @@ var DefaultAzureVnetIngressEgressGwReplaceTypeValidator = func() *ValidateAzureV
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
-	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
-	rulesForwardProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwReplaceType.forward_proxy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["forward_proxy_choice"] = vFn
 
 	vrhGlobalNetworkChoice := v.GlobalNetworkChoiceValidationRuleHandler
 	rulesGlobalNetworkChoice := map[string]string{
@@ -576,7 +564,16 @@ var DefaultAzureVnetIngressEgressGwReplaceTypeValidator = func() *ValidateAzureV
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
-	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
+	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
+	rulesServicePolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwReplaceType.service_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_policy_choice"] = vFn
 
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
 
@@ -585,6 +582,8 @@ var DefaultAzureVnetIngressEgressGwReplaceTypeValidator = func() *ValidateAzureV
 	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["service_policy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	return v
 }()
@@ -632,12 +631,6 @@ func (m *AzureVnetIngressEgressGwType) Validate(ctx context.Context, opts ...db.
 
 func (m *AzureVnetIngressEgressGwType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -662,40 +655,13 @@ func (m *AzureVnetIngressEgressGwType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
-}
-
-// GetDRefInfo for the field's type
-func (m *AzureVnetIngressEgressGwType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
-	if m.ForwardProxyChoice == nil {
-		return []db.DRefInfo{}, nil
-	}
-
-	var odrInfos []db.DRefInfo
-
-	switch m.GetForwardProxyChoice().(type) {
-	case *AzureVnetIngressEgressGwType_NoForwardProxy:
-
-	case *AzureVnetIngressEgressGwType_ActiveForwardProxyPolicies:
-		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_forward_proxy_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
-
-	case *AzureVnetIngressEgressGwType_ForwardProxyAllowAll:
-
-	}
-
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -822,16 +788,41 @@ func (m *AzureVnetIngressEgressGwType) GetOutsideStaticRouteChoiceDRefInfo() ([]
 	return drInfos, err
 }
 
-type ValidateAzureVnetIngressEgressGwType struct {
-	FldValidators map[string]db.ValidatorFunc
+// GetDRefInfo for the field's type
+func (m *AzureVnetIngressEgressGwType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.ServicePolicyChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *AzureVnetIngressEgressGwType_NoForwardProxyPolicy:
+
+	case *AzureVnetIngressEgressGwType_ActiveForwardProxyPolicies:
+		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_forward_proxy_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *AzureVnetIngressEgressGwType_ForwardProxyAllowAll:
+
+	}
+
+	return drInfos, err
 }
 
-func (v *ValidateAzureVnetIngressEgressGwType) ForwardProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for forward_proxy_choice")
-	}
-	return validatorFn, nil
+type ValidateAzureVnetIngressEgressGwType struct {
+	FldValidators map[string]db.ValidatorFunc
 }
 
 func (v *ValidateAzureVnetIngressEgressGwType) GlobalNetworkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -862,6 +853,14 @@ func (v *ValidateAzureVnetIngressEgressGwType) OutsideStaticRouteChoiceValidatio
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_static_route_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetIngressEgressGwType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
 	}
 	return validatorFn, nil
 }
@@ -943,53 +942,6 @@ func (v *ValidateAzureVnetIngressEgressGwType) Validate(ctx context.Context, pm 
 		vOpts := append(opts, db.WithValidateField("azure_certified_hw"))
 		if err := fv(ctx, m.GetAzureCertifiedHw(), vOpts...); err != nil {
 			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
-		val := m.GetForwardProxyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("forward_proxy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetForwardProxyChoice().(type) {
-	case *AzureVnetIngressEgressGwType_NoForwardProxy:
-		if fv, exists := v.FldValidators["forward_proxy_choice.no_forward_proxy"]; exists {
-			val := m.GetForwardProxyChoice().(*AzureVnetIngressEgressGwType_NoForwardProxy).NoForwardProxy
-			vOpts := append(opts,
-				db.WithValidateField("forward_proxy_choice"),
-				db.WithValidateField("no_forward_proxy"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AzureVnetIngressEgressGwType_ActiveForwardProxyPolicies:
-		if fv, exists := v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"]; exists {
-			val := m.GetForwardProxyChoice().(*AzureVnetIngressEgressGwType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
-			vOpts := append(opts,
-				db.WithValidateField("forward_proxy_choice"),
-				db.WithValidateField("active_forward_proxy_policies"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AzureVnetIngressEgressGwType_ForwardProxyAllowAll:
-		if fv, exists := v.FldValidators["forward_proxy_choice.forward_proxy_allow_all"]; exists {
-			val := m.GetForwardProxyChoice().(*AzureVnetIngressEgressGwType_ForwardProxyAllowAll).ForwardProxyAllowAll
-			vOpts := append(opts,
-				db.WithValidateField("forward_proxy_choice"),
-				db.WithValidateField("forward_proxy_allow_all"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
 		}
 
 	}
@@ -1138,6 +1090,53 @@ func (v *ValidateAzureVnetIngressEgressGwType) Validate(ctx context.Context, pm 
 
 	}
 
+	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
+		val := m.GetServicePolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("service_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *AzureVnetIngressEgressGwType_NoForwardProxyPolicy:
+		if fv, exists := v.FldValidators["service_policy_choice.no_forward_proxy_policy"]; exists {
+			val := m.GetServicePolicyChoice().(*AzureVnetIngressEgressGwType_NoForwardProxyPolicy).NoForwardProxyPolicy
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("no_forward_proxy_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwType_ActiveForwardProxyPolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.active_forward_proxy_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*AzureVnetIngressEgressGwType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("active_forward_proxy_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetIngressEgressGwType_ForwardProxyAllowAll:
+		if fv, exists := v.FldValidators["service_policy_choice.forward_proxy_allow_all"]; exists {
+			val := m.GetServicePolicyChoice().(*AzureVnetIngressEgressGwType_ForwardProxyAllowAll).ForwardProxyAllowAll
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("forward_proxy_allow_all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -1152,17 +1151,6 @@ var DefaultAzureVnetIngressEgressGwTypeValidator = func() *ValidateAzureVnetIngr
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
-	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
-	rulesForwardProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwType.forward_proxy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["forward_proxy_choice"] = vFn
 
 	vrhGlobalNetworkChoice := v.GlobalNetworkChoiceValidationRuleHandler
 	rulesGlobalNetworkChoice := map[string]string{
@@ -1208,6 +1196,17 @@ var DefaultAzureVnetIngressEgressGwTypeValidator = func() *ValidateAzureVnetIngr
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
+	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
+	rulesServicePolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwType.service_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_policy_choice"] = vFn
+
 	vrhAzNodes := v.AzNodesValidationRuleHandler
 	rulesAzNodes := map[string]string{
 		"ves.io.schema.rules.repeated.num_items": "1,3",
@@ -1232,8 +1231,6 @@ var DefaultAzureVnetIngressEgressGwTypeValidator = func() *ValidateAzureVnetIngr
 	}
 	v.FldValidators["azure_certified_hw"] = vFn
 
-	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
 
 	v.FldValidators["inside_static_route_choice.inside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
@@ -1241,6 +1238,8 @@ var DefaultAzureVnetIngressEgressGwTypeValidator = func() *ValidateAzureVnetIngr
 	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["service_policy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	return v
 }()
@@ -1525,12 +1524,6 @@ func (m *AzureVnetVoltstackClusterReplaceType) Validate(ctx context.Context, opt
 
 func (m *AzureVnetVoltstackClusterReplaceType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -1549,40 +1542,13 @@ func (m *AzureVnetVoltstackClusterReplaceType) GetDRefInfo() ([]db.DRefInfo, err
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
-}
-
-// GetDRefInfo for the field's type
-func (m *AzureVnetVoltstackClusterReplaceType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
-	if m.ForwardProxyChoice == nil {
-		return []db.DRefInfo{}, nil
-	}
-
-	var odrInfos []db.DRefInfo
-
-	switch m.GetForwardProxyChoice().(type) {
-	case *AzureVnetVoltstackClusterReplaceType_NoForwardProxy:
-
-	case *AzureVnetVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
-		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_forward_proxy_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
-
-	case *AzureVnetVoltstackClusterReplaceType_ForwardProxyAllowAll:
-
-	}
-
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -1678,16 +1644,41 @@ func (m *AzureVnetVoltstackClusterReplaceType) GetOutsideStaticRouteChoiceDRefIn
 	return drInfos, err
 }
 
-type ValidateAzureVnetVoltstackClusterReplaceType struct {
-	FldValidators map[string]db.ValidatorFunc
+// GetDRefInfo for the field's type
+func (m *AzureVnetVoltstackClusterReplaceType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.ServicePolicyChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *AzureVnetVoltstackClusterReplaceType_NoForwardProxyPolicy:
+
+	case *AzureVnetVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
+		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_forward_proxy_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *AzureVnetVoltstackClusterReplaceType_ForwardProxyAllowAll:
+
+	}
+
+	return drInfos, err
 }
 
-func (v *ValidateAzureVnetVoltstackClusterReplaceType) ForwardProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for forward_proxy_choice")
-	}
-	return validatorFn, nil
+type ValidateAzureVnetVoltstackClusterReplaceType struct {
+	FldValidators map[string]db.ValidatorFunc
 }
 
 func (v *ValidateAzureVnetVoltstackClusterReplaceType) GlobalNetworkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -1714,6 +1705,14 @@ func (v *ValidateAzureVnetVoltstackClusterReplaceType) OutsideStaticRouteChoiceV
 	return validatorFn, nil
 }
 
+func (v *ValidateAzureVnetVoltstackClusterReplaceType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetVoltstackClusterReplaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AzureVnetVoltstackClusterReplaceType)
 	if !ok {
@@ -1726,53 +1725,6 @@ func (v *ValidateAzureVnetVoltstackClusterReplaceType) Validate(ctx context.Cont
 	}
 	if m == nil {
 		return nil
-	}
-
-	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
-		val := m.GetForwardProxyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("forward_proxy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetForwardProxyChoice().(type) {
-	case *AzureVnetVoltstackClusterReplaceType_NoForwardProxy:
-		if fv, exists := v.FldValidators["forward_proxy_choice.no_forward_proxy"]; exists {
-			val := m.GetForwardProxyChoice().(*AzureVnetVoltstackClusterReplaceType_NoForwardProxy).NoForwardProxy
-			vOpts := append(opts,
-				db.WithValidateField("forward_proxy_choice"),
-				db.WithValidateField("no_forward_proxy"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AzureVnetVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
-		if fv, exists := v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"]; exists {
-			val := m.GetForwardProxyChoice().(*AzureVnetVoltstackClusterReplaceType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
-			vOpts := append(opts,
-				db.WithValidateField("forward_proxy_choice"),
-				db.WithValidateField("active_forward_proxy_policies"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AzureVnetVoltstackClusterReplaceType_ForwardProxyAllowAll:
-		if fv, exists := v.FldValidators["forward_proxy_choice.forward_proxy_allow_all"]; exists {
-			val := m.GetForwardProxyChoice().(*AzureVnetVoltstackClusterReplaceType_ForwardProxyAllowAll).ForwardProxyAllowAll
-			vOpts := append(opts,
-				db.WithValidateField("forward_proxy_choice"),
-				db.WithValidateField("forward_proxy_allow_all"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
 	}
 
 	if fv, exists := v.FldValidators["global_network_choice"]; exists {
@@ -1883,6 +1835,53 @@ func (v *ValidateAzureVnetVoltstackClusterReplaceType) Validate(ctx context.Cont
 
 	}
 
+	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
+		val := m.GetServicePolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("service_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *AzureVnetVoltstackClusterReplaceType_NoForwardProxyPolicy:
+		if fv, exists := v.FldValidators["service_policy_choice.no_forward_proxy_policy"]; exists {
+			val := m.GetServicePolicyChoice().(*AzureVnetVoltstackClusterReplaceType_NoForwardProxyPolicy).NoForwardProxyPolicy
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("no_forward_proxy_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.active_forward_proxy_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*AzureVnetVoltstackClusterReplaceType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("active_forward_proxy_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetVoltstackClusterReplaceType_ForwardProxyAllowAll:
+		if fv, exists := v.FldValidators["service_policy_choice.forward_proxy_allow_all"]; exists {
+			val := m.GetServicePolicyChoice().(*AzureVnetVoltstackClusterReplaceType_ForwardProxyAllowAll).ForwardProxyAllowAll
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("forward_proxy_allow_all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -1897,17 +1896,6 @@ var DefaultAzureVnetVoltstackClusterReplaceTypeValidator = func() *ValidateAzure
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
-	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
-	rulesForwardProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetVoltstackClusterReplaceType.forward_proxy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["forward_proxy_choice"] = vFn
 
 	vrhGlobalNetworkChoice := v.GlobalNetworkChoiceValidationRuleHandler
 	rulesGlobalNetworkChoice := map[string]string{
@@ -1942,13 +1930,24 @@ var DefaultAzureVnetVoltstackClusterReplaceTypeValidator = func() *ValidateAzure
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
-	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
+	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
+	rulesServicePolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetVoltstackClusterReplaceType.service_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_policy_choice"] = vFn
 
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
 
 	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["service_policy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	return v
 }()
@@ -1996,12 +1995,6 @@ func (m *AzureVnetVoltstackClusterType) Validate(ctx context.Context, opts ...db
 
 func (m *AzureVnetVoltstackClusterType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -2020,40 +2013,13 @@ func (m *AzureVnetVoltstackClusterType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
-}
-
-// GetDRefInfo for the field's type
-func (m *AzureVnetVoltstackClusterType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
-	if m.ForwardProxyChoice == nil {
-		return []db.DRefInfo{}, nil
-	}
-
-	var odrInfos []db.DRefInfo
-
-	switch m.GetForwardProxyChoice().(type) {
-	case *AzureVnetVoltstackClusterType_NoForwardProxy:
-
-	case *AzureVnetVoltstackClusterType_ActiveForwardProxyPolicies:
-		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_forward_proxy_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
-
-	case *AzureVnetVoltstackClusterType_ForwardProxyAllowAll:
-
-	}
-
-	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -2149,16 +2115,41 @@ func (m *AzureVnetVoltstackClusterType) GetOutsideStaticRouteChoiceDRefInfo() ([
 	return drInfos, err
 }
 
-type ValidateAzureVnetVoltstackClusterType struct {
-	FldValidators map[string]db.ValidatorFunc
+// GetDRefInfo for the field's type
+func (m *AzureVnetVoltstackClusterType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.ServicePolicyChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *AzureVnetVoltstackClusterType_NoForwardProxyPolicy:
+
+	case *AzureVnetVoltstackClusterType_ActiveForwardProxyPolicies:
+		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_forward_proxy_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *AzureVnetVoltstackClusterType_ForwardProxyAllowAll:
+
+	}
+
+	return drInfos, err
 }
 
-func (v *ValidateAzureVnetVoltstackClusterType) ForwardProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for forward_proxy_choice")
-	}
-	return validatorFn, nil
+type ValidateAzureVnetVoltstackClusterType struct {
+	FldValidators map[string]db.ValidatorFunc
 }
 
 func (v *ValidateAzureVnetVoltstackClusterType) GlobalNetworkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -2181,6 +2172,14 @@ func (v *ValidateAzureVnetVoltstackClusterType) OutsideStaticRouteChoiceValidati
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_static_route_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAzureVnetVoltstackClusterType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
 	}
 	return validatorFn, nil
 }
@@ -2262,53 +2261,6 @@ func (v *ValidateAzureVnetVoltstackClusterType) Validate(ctx context.Context, pm
 		vOpts := append(opts, db.WithValidateField("azure_certified_hw"))
 		if err := fv(ctx, m.GetAzureCertifiedHw(), vOpts...); err != nil {
 			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
-		val := m.GetForwardProxyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("forward_proxy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetForwardProxyChoice().(type) {
-	case *AzureVnetVoltstackClusterType_NoForwardProxy:
-		if fv, exists := v.FldValidators["forward_proxy_choice.no_forward_proxy"]; exists {
-			val := m.GetForwardProxyChoice().(*AzureVnetVoltstackClusterType_NoForwardProxy).NoForwardProxy
-			vOpts := append(opts,
-				db.WithValidateField("forward_proxy_choice"),
-				db.WithValidateField("no_forward_proxy"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AzureVnetVoltstackClusterType_ActiveForwardProxyPolicies:
-		if fv, exists := v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"]; exists {
-			val := m.GetForwardProxyChoice().(*AzureVnetVoltstackClusterType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
-			vOpts := append(opts,
-				db.WithValidateField("forward_proxy_choice"),
-				db.WithValidateField("active_forward_proxy_policies"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AzureVnetVoltstackClusterType_ForwardProxyAllowAll:
-		if fv, exists := v.FldValidators["forward_proxy_choice.forward_proxy_allow_all"]; exists {
-			val := m.GetForwardProxyChoice().(*AzureVnetVoltstackClusterType_ForwardProxyAllowAll).ForwardProxyAllowAll
-			vOpts := append(opts,
-				db.WithValidateField("forward_proxy_choice"),
-				db.WithValidateField("forward_proxy_allow_all"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
 		}
 
 	}
@@ -2421,6 +2373,53 @@ func (v *ValidateAzureVnetVoltstackClusterType) Validate(ctx context.Context, pm
 
 	}
 
+	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
+		val := m.GetServicePolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("service_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *AzureVnetVoltstackClusterType_NoForwardProxyPolicy:
+		if fv, exists := v.FldValidators["service_policy_choice.no_forward_proxy_policy"]; exists {
+			val := m.GetServicePolicyChoice().(*AzureVnetVoltstackClusterType_NoForwardProxyPolicy).NoForwardProxyPolicy
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("no_forward_proxy_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetVoltstackClusterType_ActiveForwardProxyPolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.active_forward_proxy_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*AzureVnetVoltstackClusterType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("active_forward_proxy_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureVnetVoltstackClusterType_ForwardProxyAllowAll:
+		if fv, exists := v.FldValidators["service_policy_choice.forward_proxy_allow_all"]; exists {
+			val := m.GetServicePolicyChoice().(*AzureVnetVoltstackClusterType_ForwardProxyAllowAll).ForwardProxyAllowAll
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("forward_proxy_allow_all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -2435,17 +2434,6 @@ var DefaultAzureVnetVoltstackClusterTypeValidator = func() *ValidateAzureVnetVol
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
-	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
-	rulesForwardProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetVoltstackClusterType.forward_proxy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["forward_proxy_choice"] = vFn
 
 	vrhGlobalNetworkChoice := v.GlobalNetworkChoiceValidationRuleHandler
 	rulesGlobalNetworkChoice := map[string]string{
@@ -2480,6 +2468,17 @@ var DefaultAzureVnetVoltstackClusterTypeValidator = func() *ValidateAzureVnetVol
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
+	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
+	rulesServicePolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetVoltstackClusterType.service_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_policy_choice"] = vFn
+
 	vrhAzureCertifiedHw := v.AzureCertifiedHwValidationRuleHandler
 	rulesAzureCertifiedHw := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -2504,13 +2503,13 @@ var DefaultAzureVnetVoltstackClusterTypeValidator = func() *ValidateAzureVnetVol
 	}
 	v.FldValidators["az_nodes"] = vFn
 
-	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
 
 	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["service_policy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	return v
 }()
@@ -2800,16 +2799,6 @@ func (v *ValidateCreateSpecType) DiskSizeValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -2824,28 +2813,10 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["address"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("address"))
-		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["azure_region"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("azure_region"))
 		if err := fv(ctx, m.GetAzureRegion(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["coordinates"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("coordinates"))
-		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3047,7 +3018,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	rulesResourceGroup := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "64",
-		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFn, err = vrhResourceGroup(rulesResourceGroup)
 	if err != nil {
@@ -3145,24 +3115,11 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["disk_size"] = vFn
 
-	vrhAddress := v.AddressValidationRuleHandler
-	rulesAddress := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhAddress(rulesAddress)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.address: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["address"] = vFn
-
 	v.FldValidators["deployment.azure_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["site_type.ingress_gw"] = AzureVnetIngressGwTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = AzureVnetIngressEgressGwTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = AzureVnetVoltstackClusterTypeValidator().Validate
-
-	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	return v
 }()
@@ -3452,16 +3409,6 @@ func (v *ValidateGetSpecType) DiskSizeValidationRuleHandler(rules map[string]str
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -3476,28 +3423,10 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["address"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("address"))
-		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["azure_region"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("azure_region"))
 		if err := fv(ctx, m.GetAzureRegion(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["coordinates"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("coordinates"))
-		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3699,7 +3628,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	rulesResourceGroup := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "64",
-		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFn, err = vrhResourceGroup(rulesResourceGroup)
 	if err != nil {
@@ -3797,24 +3725,11 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["disk_size"] = vFn
 
-	vrhAddress := v.AddressValidationRuleHandler
-	rulesAddress := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhAddress(rulesAddress)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.address: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["address"] = vFn
-
 	v.FldValidators["deployment.azure_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["site_type.ingress_gw"] = AzureVnetIngressGwTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = AzureVnetIngressEgressGwTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = AzureVnetVoltstackClusterTypeValidator().Validate
-
-	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	return v
 }()
@@ -4216,16 +4131,6 @@ func (v *ValidateGlobalSpecType) DiskSizeValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -4240,28 +4145,10 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["address"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("address"))
-		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["azure_region"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("azure_region"))
 		if err := fv(ctx, m.GetAzureRegion(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["coordinates"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("coordinates"))
-		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4481,7 +4368,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	rulesResourceGroup := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "64",
-		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFn, err = vrhResourceGroup(rulesResourceGroup)
 	if err != nil {
@@ -4579,24 +4465,11 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["disk_size"] = vFn
 
-	vrhAddress := v.AddressValidationRuleHandler
-	rulesAddress := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhAddress(rulesAddress)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.address: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["address"] = vFn
-
 	v.FldValidators["deployment.azure_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["site_type.ingress_gw"] = AzureVnetIngressGwTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = AzureVnetIngressEgressGwTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = AzureVnetVoltstackClusterTypeValidator().Validate
-
-	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -4740,16 +4613,6 @@ func (v *ValidateReplaceSpecType) NodesPerAzValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -4762,24 +4625,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
-	}
-
-	if fv, exists := v.FldValidators["address"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("address"))
-		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["coordinates"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("coordinates"))
-		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
-			return err
-		}
-
 	}
 
 	if fv, exists := v.FldValidators["nodes_per_az"]; exists {
@@ -4915,68 +4760,14 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["nodes_per_az"] = vFn
 
-	vrhAddress := v.AddressValidationRuleHandler
-	rulesAddress := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhAddress(rulesAddress)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.address: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["address"] = vFn
-
 	v.FldValidators["site_type.ingress_egress_gw"] = AzureVnetIngressEgressGwReplaceTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = AzureVnetVoltstackClusterReplaceTypeValidator().Validate
-
-	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	return v
 }()
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
-}
-
-// create setters in AzureVnetIngressEgressGwReplaceType from AzureVnetIngressEgressGwType for oneof fields
-func (r *AzureVnetIngressEgressGwReplaceType) SetForwardProxyChoiceToAzureVnetIngressEgressGwType(o *AzureVnetIngressEgressGwType) error {
-	switch of := r.ForwardProxyChoice.(type) {
-	case nil:
-		o.ForwardProxyChoice = nil
-
-	case *AzureVnetIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
-		o.ForwardProxyChoice = &AzureVnetIngressEgressGwType_ActiveForwardProxyPolicies{ActiveForwardProxyPolicies: of.ActiveForwardProxyPolicies}
-
-	case *AzureVnetIngressEgressGwReplaceType_ForwardProxyAllowAll:
-		o.ForwardProxyChoice = &AzureVnetIngressEgressGwType_ForwardProxyAllowAll{ForwardProxyAllowAll: of.ForwardProxyAllowAll}
-
-	case *AzureVnetIngressEgressGwReplaceType_NoForwardProxy:
-		o.ForwardProxyChoice = &AzureVnetIngressEgressGwType_NoForwardProxy{NoForwardProxy: of.NoForwardProxy}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *AzureVnetIngressEgressGwReplaceType) GetForwardProxyChoiceFromAzureVnetIngressEgressGwType(o *AzureVnetIngressEgressGwType) error {
-	switch of := o.ForwardProxyChoice.(type) {
-	case nil:
-		r.ForwardProxyChoice = nil
-
-	case *AzureVnetIngressEgressGwType_ActiveForwardProxyPolicies:
-		r.ForwardProxyChoice = &AzureVnetIngressEgressGwReplaceType_ActiveForwardProxyPolicies{ActiveForwardProxyPolicies: of.ActiveForwardProxyPolicies}
-
-	case *AzureVnetIngressEgressGwType_ForwardProxyAllowAll:
-		r.ForwardProxyChoice = &AzureVnetIngressEgressGwReplaceType_ForwardProxyAllowAll{ForwardProxyAllowAll: of.ForwardProxyAllowAll}
-
-	case *AzureVnetIngressEgressGwType_NoForwardProxy:
-		r.ForwardProxyChoice = &AzureVnetIngressEgressGwReplaceType_NoForwardProxy{NoForwardProxy: of.NoForwardProxy}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
 }
 
 // create setters in AzureVnetIngressEgressGwReplaceType from AzureVnetIngressEgressGwType for oneof fields
@@ -5119,15 +4910,56 @@ func (r *AzureVnetIngressEgressGwReplaceType) GetOutsideStaticRouteChoiceFromAzu
 	return nil
 }
 
+// create setters in AzureVnetIngressEgressGwReplaceType from AzureVnetIngressEgressGwType for oneof fields
+func (r *AzureVnetIngressEgressGwReplaceType) SetServicePolicyChoiceToAzureVnetIngressEgressGwType(o *AzureVnetIngressEgressGwType) error {
+	switch of := r.ServicePolicyChoice.(type) {
+	case nil:
+		o.ServicePolicyChoice = nil
+
+	case *AzureVnetIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
+		o.ServicePolicyChoice = &AzureVnetIngressEgressGwType_ActiveForwardProxyPolicies{ActiveForwardProxyPolicies: of.ActiveForwardProxyPolicies}
+
+	case *AzureVnetIngressEgressGwReplaceType_ForwardProxyAllowAll:
+		o.ServicePolicyChoice = &AzureVnetIngressEgressGwType_ForwardProxyAllowAll{ForwardProxyAllowAll: of.ForwardProxyAllowAll}
+
+	case *AzureVnetIngressEgressGwReplaceType_NoForwardProxyPolicy:
+		o.ServicePolicyChoice = &AzureVnetIngressEgressGwType_NoForwardProxyPolicy{NoForwardProxyPolicy: of.NoForwardProxyPolicy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *AzureVnetIngressEgressGwReplaceType) GetServicePolicyChoiceFromAzureVnetIngressEgressGwType(o *AzureVnetIngressEgressGwType) error {
+	switch of := o.ServicePolicyChoice.(type) {
+	case nil:
+		r.ServicePolicyChoice = nil
+
+	case *AzureVnetIngressEgressGwType_ActiveForwardProxyPolicies:
+		r.ServicePolicyChoice = &AzureVnetIngressEgressGwReplaceType_ActiveForwardProxyPolicies{ActiveForwardProxyPolicies: of.ActiveForwardProxyPolicies}
+
+	case *AzureVnetIngressEgressGwType_ForwardProxyAllowAll:
+		r.ServicePolicyChoice = &AzureVnetIngressEgressGwReplaceType_ForwardProxyAllowAll{ForwardProxyAllowAll: of.ForwardProxyAllowAll}
+
+	case *AzureVnetIngressEgressGwType_NoForwardProxyPolicy:
+		r.ServicePolicyChoice = &AzureVnetIngressEgressGwReplaceType_NoForwardProxyPolicy{NoForwardProxyPolicy: of.NoForwardProxyPolicy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *AzureVnetIngressEgressGwReplaceType) FromAzureVnetIngressEgressGwType(f *AzureVnetIngressEgressGwType) {
 	if f == nil {
 		return
 	}
-	m.GetForwardProxyChoiceFromAzureVnetIngressEgressGwType(f)
 	m.GetGlobalNetworkChoiceFromAzureVnetIngressEgressGwType(f)
 	m.GetInsideStaticRouteChoiceFromAzureVnetIngressEgressGwType(f)
 	m.GetNetworkPolicyChoiceFromAzureVnetIngressEgressGwType(f)
 	m.GetOutsideStaticRouteChoiceFromAzureVnetIngressEgressGwType(f)
+	m.GetServicePolicyChoiceFromAzureVnetIngressEgressGwType(f)
 }
 
 func (m *AzureVnetIngressEgressGwReplaceType) ToAzureVnetIngressEgressGwType(f *AzureVnetIngressEgressGwType) {
@@ -5136,11 +4968,11 @@ func (m *AzureVnetIngressEgressGwReplaceType) ToAzureVnetIngressEgressGwType(f *
 	if f == nil {
 		return
 	}
-	m1.SetForwardProxyChoiceToAzureVnetIngressEgressGwType(f)
 	m1.SetGlobalNetworkChoiceToAzureVnetIngressEgressGwType(f)
 	m1.SetInsideStaticRouteChoiceToAzureVnetIngressEgressGwType(f)
 	m1.SetNetworkPolicyChoiceToAzureVnetIngressEgressGwType(f)
 	m1.SetOutsideStaticRouteChoiceToAzureVnetIngressEgressGwType(f)
+	m1.SetServicePolicyChoiceToAzureVnetIngressEgressGwType(f)
 }
 
 func (m *AzureVnetIngressGwReplaceType) FromAzureVnetIngressGwType(f *AzureVnetIngressGwType) {
@@ -5155,47 +4987,6 @@ func (m *AzureVnetIngressGwReplaceType) ToAzureVnetIngressGwType(f *AzureVnetIng
 	if f == nil {
 		return
 	}
-}
-
-// create setters in AzureVnetVoltstackClusterReplaceType from AzureVnetVoltstackClusterType for oneof fields
-func (r *AzureVnetVoltstackClusterReplaceType) SetForwardProxyChoiceToAzureVnetVoltstackClusterType(o *AzureVnetVoltstackClusterType) error {
-	switch of := r.ForwardProxyChoice.(type) {
-	case nil:
-		o.ForwardProxyChoice = nil
-
-	case *AzureVnetVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
-		o.ForwardProxyChoice = &AzureVnetVoltstackClusterType_ActiveForwardProxyPolicies{ActiveForwardProxyPolicies: of.ActiveForwardProxyPolicies}
-
-	case *AzureVnetVoltstackClusterReplaceType_ForwardProxyAllowAll:
-		o.ForwardProxyChoice = &AzureVnetVoltstackClusterType_ForwardProxyAllowAll{ForwardProxyAllowAll: of.ForwardProxyAllowAll}
-
-	case *AzureVnetVoltstackClusterReplaceType_NoForwardProxy:
-		o.ForwardProxyChoice = &AzureVnetVoltstackClusterType_NoForwardProxy{NoForwardProxy: of.NoForwardProxy}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *AzureVnetVoltstackClusterReplaceType) GetForwardProxyChoiceFromAzureVnetVoltstackClusterType(o *AzureVnetVoltstackClusterType) error {
-	switch of := o.ForwardProxyChoice.(type) {
-	case nil:
-		r.ForwardProxyChoice = nil
-
-	case *AzureVnetVoltstackClusterType_ActiveForwardProxyPolicies:
-		r.ForwardProxyChoice = &AzureVnetVoltstackClusterReplaceType_ActiveForwardProxyPolicies{ActiveForwardProxyPolicies: of.ActiveForwardProxyPolicies}
-
-	case *AzureVnetVoltstackClusterType_ForwardProxyAllowAll:
-		r.ForwardProxyChoice = &AzureVnetVoltstackClusterReplaceType_ForwardProxyAllowAll{ForwardProxyAllowAll: of.ForwardProxyAllowAll}
-
-	case *AzureVnetVoltstackClusterType_NoForwardProxy:
-		r.ForwardProxyChoice = &AzureVnetVoltstackClusterReplaceType_NoForwardProxy{NoForwardProxy: of.NoForwardProxy}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
 }
 
 // create setters in AzureVnetVoltstackClusterReplaceType from AzureVnetVoltstackClusterType for oneof fields
@@ -5303,14 +5094,55 @@ func (r *AzureVnetVoltstackClusterReplaceType) GetOutsideStaticRouteChoiceFromAz
 	return nil
 }
 
+// create setters in AzureVnetVoltstackClusterReplaceType from AzureVnetVoltstackClusterType for oneof fields
+func (r *AzureVnetVoltstackClusterReplaceType) SetServicePolicyChoiceToAzureVnetVoltstackClusterType(o *AzureVnetVoltstackClusterType) error {
+	switch of := r.ServicePolicyChoice.(type) {
+	case nil:
+		o.ServicePolicyChoice = nil
+
+	case *AzureVnetVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
+		o.ServicePolicyChoice = &AzureVnetVoltstackClusterType_ActiveForwardProxyPolicies{ActiveForwardProxyPolicies: of.ActiveForwardProxyPolicies}
+
+	case *AzureVnetVoltstackClusterReplaceType_ForwardProxyAllowAll:
+		o.ServicePolicyChoice = &AzureVnetVoltstackClusterType_ForwardProxyAllowAll{ForwardProxyAllowAll: of.ForwardProxyAllowAll}
+
+	case *AzureVnetVoltstackClusterReplaceType_NoForwardProxyPolicy:
+		o.ServicePolicyChoice = &AzureVnetVoltstackClusterType_NoForwardProxyPolicy{NoForwardProxyPolicy: of.NoForwardProxyPolicy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *AzureVnetVoltstackClusterReplaceType) GetServicePolicyChoiceFromAzureVnetVoltstackClusterType(o *AzureVnetVoltstackClusterType) error {
+	switch of := o.ServicePolicyChoice.(type) {
+	case nil:
+		r.ServicePolicyChoice = nil
+
+	case *AzureVnetVoltstackClusterType_ActiveForwardProxyPolicies:
+		r.ServicePolicyChoice = &AzureVnetVoltstackClusterReplaceType_ActiveForwardProxyPolicies{ActiveForwardProxyPolicies: of.ActiveForwardProxyPolicies}
+
+	case *AzureVnetVoltstackClusterType_ForwardProxyAllowAll:
+		r.ServicePolicyChoice = &AzureVnetVoltstackClusterReplaceType_ForwardProxyAllowAll{ForwardProxyAllowAll: of.ForwardProxyAllowAll}
+
+	case *AzureVnetVoltstackClusterType_NoForwardProxyPolicy:
+		r.ServicePolicyChoice = &AzureVnetVoltstackClusterReplaceType_NoForwardProxyPolicy{NoForwardProxyPolicy: of.NoForwardProxyPolicy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *AzureVnetVoltstackClusterReplaceType) FromAzureVnetVoltstackClusterType(f *AzureVnetVoltstackClusterType) {
 	if f == nil {
 		return
 	}
-	m.GetForwardProxyChoiceFromAzureVnetVoltstackClusterType(f)
 	m.GetGlobalNetworkChoiceFromAzureVnetVoltstackClusterType(f)
 	m.GetNetworkPolicyChoiceFromAzureVnetVoltstackClusterType(f)
 	m.GetOutsideStaticRouteChoiceFromAzureVnetVoltstackClusterType(f)
+	m.GetServicePolicyChoiceFromAzureVnetVoltstackClusterType(f)
 }
 
 func (m *AzureVnetVoltstackClusterReplaceType) ToAzureVnetVoltstackClusterType(f *AzureVnetVoltstackClusterType) {
@@ -5319,10 +5151,10 @@ func (m *AzureVnetVoltstackClusterReplaceType) ToAzureVnetVoltstackClusterType(f
 	if f == nil {
 		return
 	}
-	m1.SetForwardProxyChoiceToAzureVnetVoltstackClusterType(f)
 	m1.SetGlobalNetworkChoiceToAzureVnetVoltstackClusterType(f)
 	m1.SetNetworkPolicyChoiceToAzureVnetVoltstackClusterType(f)
 	m1.SetOutsideStaticRouteChoiceToAzureVnetVoltstackClusterType(f)
+	m1.SetServicePolicyChoiceToAzureVnetVoltstackClusterType(f)
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
@@ -5405,9 +5237,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	m.Address = f.GetAddress()
 	m.AzureRegion = f.GetAzureRegion()
-	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
 	m.MachineType = f.GetMachineType()
@@ -5426,9 +5256,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	f.Address = m1.Address
 	f.AzureRegion = m1.AzureRegion
-	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
 	f.MachineType = m1.MachineType
@@ -5521,9 +5349,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	m.Address = f.GetAddress()
 	m.AzureRegion = f.GetAzureRegion()
-	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
 	m.MachineType = f.GetMachineType()
@@ -5542,9 +5368,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	f.Address = m1.Address
 	f.AzureRegion = m1.AzureRegion
-	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
 	f.MachineType = m1.MachineType
@@ -5629,8 +5453,6 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	m.Address = f.GetAddress()
-	m.Coordinates = f.GetCoordinates()
 	m.NodesPerAz = f.GetNodesPerAz()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.GetSiteTypeFromGlobalSpecType(f)
@@ -5643,8 +5465,6 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	f.Address = m1.Address
-	f.Coordinates = m1.Coordinates
 	f.NodesPerAz = m1.NodesPerAz
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	m1.SetSiteTypeToGlobalSpecType(f)

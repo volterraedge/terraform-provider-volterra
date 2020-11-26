@@ -28,8 +28,8 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-	object "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	object "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer"
 )
 
 var (
@@ -994,19 +994,7 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
-func (s *APISrv) validateTransport(ctx context.Context) error {
-	if s.sf.IsTransportNotSupported("ves.io.schema.views.tcp_loadbalancer.crudapi.API", server.TransportFromContext(ctx)) {
-		userMsg := fmt.Sprintf("ves.io.schema.views.tcp_loadbalancer.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
-		return server.GRPCStatusFromError(err).Err()
-	}
-	return nil
-}
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.tcp_loadbalancer.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1031,9 +1019,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1058,9 +1043,6 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.tcp_loadbalancer.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1083,9 +1065,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.tcp_loadbalancer.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1137,9 +1116,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.tcp_loadbalancer.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1518,7 +1494,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-Get"
+                    "url": "http://some-url-here/ves-io-schema-views-tcp_loadbalancer-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Get"
             },
@@ -1593,7 +1569,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-Delete"
+                    "url": "http://some-url-here/ves-io-schema-views-tcp_loadbalancer-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Delete"
             },
@@ -1676,7 +1652,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-Replace"
+                    "url": "http://some-url-here/ves-io-schema-views-tcp_loadbalancer-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Replace"
             },
@@ -1805,7 +1781,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-List"
+                    "url": "http://some-url-here/ves-io-schema-views-tcp_loadbalancer-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.List"
             },
@@ -1882,7 +1858,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-Create"
+                    "url": "http://some-url-here/ves-io-schema-views-tcp_loadbalancer-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Create"
             },
@@ -2011,7 +1987,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-tcp_loadbalancer-crudapi-API-ListStream"
+                    "url": "http://some-url-here/ves-io-schema-views-tcp_loadbalancer-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.tcp_loadbalancer.crudapi.API.ListStream"
             },
@@ -2304,7 +2280,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -2792,12 +2768,6 @@ var APISwaggerJSON string = `{
                     "title": "Cluster",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
-                "endpoint_subsets": {
-                    "type": "object",
-                    "description": " Upstream origin pool may be configured to divide its origin servers into subsets based on metadata\n attached to the origin servers. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n For origin servers which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those origin servers of\n upstream origin pool which match this metadata will be selected for load balancing",
-                    "title": "Origin Servers Subset",
-                    "x-displayname": "Origin Servers Subsets"
-                },
                 "pool": {
                     "description": "Exclusive with [cluster]\nx-displayName: \"Origin Pool\"\nx-required\nSimple, commonly used pool parameters with origin pool",
                     "title": "Pool",
@@ -2805,7 +2775,7 @@ var APISwaggerJSON string = `{
                 },
                 "weight": {
                     "type": "integer",
-                    "description": " Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool",
+                    "description": " Weight of this origin pool",
                     "title": "Weight",
                     "format": "int64",
                     "x-displayname": "Weight"
@@ -2887,15 +2857,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsWhereVirtualSite"
                 },
                 "vk8s_service": {
-                    "description": "Exclusive with [site virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vK8s Service Network on RE.",
-                    "title": "vK8s services network",
+                    "description": "Exclusive with [site virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vk8s Service Network on RE.",
+                    "title": "vk8s services network",
                     "$ref": "#/definitions/viewsWhereVK8SService"
                 }
             }
         },
         "viewsWhereVK8SService": {
             "type": "object",
-            "description": "This defines a reference to a RE site or virtual site where a load balancer could be advertised in the vK8s service network",
+            "description": "This defines a reference to a RE site or virtual site where a load balancer could be advertised in the Vk8s service network",
             "title": "WhereVK8SService",
             "x-displayname": "vK8s Services on RE",
             "x-ves-displayorder": "3",

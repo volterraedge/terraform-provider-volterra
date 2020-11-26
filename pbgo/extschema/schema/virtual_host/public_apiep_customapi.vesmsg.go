@@ -15,7 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema_app_type "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/app_type"
+	ves_io_schema_app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
 )
 
 var (
@@ -189,15 +189,6 @@ func (v *ValidateAPIEndpointLearntSchemaRsp) Validate(ctx context.Context, pm in
 
 		vOpts := append(opts, db.WithValidateField("learnt_schema"))
 		if err := fv(ctx, m.GetLearntSchema(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["swagger_spec"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("swagger_spec"))
-		if err := fv(ctx, m.GetSwaggerSpec(), vOpts...); err != nil {
 			return err
 		}
 

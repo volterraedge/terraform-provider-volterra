@@ -15,7 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -851,15 +851,6 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 	}
 	if m == nil {
 		return nil
-	}
-
-	if fv, exists := v.FldValidators["azure_name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("azure_name"))
-		if err := fv(ctx, m.GetAzureName(), vOpts...); err != nil {
-			return err
-		}
-
 	}
 
 	if fv, exists := v.FldValidators["azure_region"]; exists {

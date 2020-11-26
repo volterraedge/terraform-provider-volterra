@@ -18,7 +18,7 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema_tf_params "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/terraform_parameters"
+	ves_io_schema_tf_params "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/terraform_parameters"
 )
 
 const (

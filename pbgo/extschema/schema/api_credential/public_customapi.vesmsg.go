@@ -15,7 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema_user "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/user"
+	ves_io_schema_user "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user"
 )
 
 var (
@@ -264,35 +264,6 @@ func (m *CreateServiceCredentialsRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *CreateServiceCredentialsRequest) String() string {
-	if m == nil {
-		return ""
-	}
-	copy := m.DeepCopy()
-	copy.Password = ""
-
-	return copy.string()
-}
-
-func (m *CreateServiceCredentialsRequest) GoString() string {
-	copy := m.DeepCopy()
-	copy.Password = ""
-
-	return copy.goString()
-}
-
-// Redact squashes sensitive info in m (in-place)
-func (m *CreateServiceCredentialsRequest) Redact(ctx context.Context) error {
-	// clear fields with confidential option set (at message or field level)
-	if m == nil {
-		return nil
-	}
-
-	m.Password = ""
-
-	return nil
-}
-
 func (m *CreateServiceCredentialsRequest) DeepCopy() *CreateServiceCredentialsRequest {
 	if m == nil {
 		return nil
@@ -335,16 +306,6 @@ func (v *ValidateCreateServiceCredentialsRequest) TypeValidationRuleHandler(rule
 	validatorFn, err := db.NewEnumValidationRuleHandler(rules, APICredentialType_name, conv)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for type")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCreateServiceCredentialsRequest) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for password")
 	}
 
 	return validatorFn, nil
@@ -403,37 +364,10 @@ func (v *ValidateCreateServiceCredentialsRequest) Validate(ctx context.Context, 
 
 	}
 
-	if fv, exists := v.FldValidators["password"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("password"))
-		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("type"))
 		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["virtual_k8s_name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("virtual_k8s_name"))
-		if err := fv(ctx, m.GetVirtualK8SName(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["virtual_k8s_namespace"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("virtual_k8s_namespace"))
-		if err := fv(ctx, m.GetVirtualK8SNamespace(), vOpts...); err != nil {
 			return err
 		}
 
@@ -464,17 +398,6 @@ var DefaultCreateServiceCredentialsRequestValidator = func() *ValidateCreateServ
 		panic(errMsg)
 	}
 	v.FldValidators["type"] = vFn
-
-	vrhPassword := v.PasswordValidationRuleHandler
-	rulesPassword := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhPassword(rulesPassword)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateServiceCredentialsRequest.password: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["password"] = vFn
 
 	v.FldValidators["namespace_roles"] = ves_io_schema_user.NamespaceRoleTypeValidator().Validate
 

@@ -15,9 +15,9 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_policy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/policy"
-	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -193,14 +193,6 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateCreateSpecType) ProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for proxy_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateSpecType) RuleChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -221,16 +213,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
-	}
-
-	if fv, exists := v.FldValidators["proxy_choice"]; exists {
-		val := m.GetProxyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("proxy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetProxyChoice().(type) {
@@ -353,17 +335,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
-	vrhProxyChoice := v.ProxyChoiceValidationRuleHandler
-	rulesProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhProxyChoice(rulesProxyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.proxy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["proxy_choice"] = vFn
 
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
@@ -566,12 +537,6 @@ func (m *ForwardProxyAdvancedRuleType) Validate(ctx context.Context, opts ...db.
 
 func (m *ForwardProxyAdvancedRuleType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetDestinationChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	if fdrInfos, err := m.GetSourceChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -579,133 +544,6 @@ func (m *ForwardProxyAdvancedRuleType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
-}
-
-func (m *ForwardProxyAdvancedRuleType) GetDestinationChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
-	switch m.GetDestinationChoice().(type) {
-	case *ForwardProxyAdvancedRuleType_AllDestinations:
-
-	case *ForwardProxyAdvancedRuleType_TlsList:
-
-	case *ForwardProxyAdvancedRuleType_HttpList:
-
-	case *ForwardProxyAdvancedRuleType_DstIpPrefixSet:
-
-		vref := m.GetDstIpPrefixSet()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("ip_prefix_set.Object")
-		odri := db.DRefInfo{
-			RefdType:   "ip_prefix_set.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "dst_ip_prefix_set",
-			Ref:        vdRef,
-		}
-		odrInfos = append(odrInfos, odri)
-
-	case *ForwardProxyAdvancedRuleType_DstPrefixList:
-
-	case *ForwardProxyAdvancedRuleType_DstLabelSelector:
-
-	case *ForwardProxyAdvancedRuleType_DstAsnSet:
-
-		vref := m.GetDstAsnSet()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("bgp_asn_set.Object")
-		odri := db.DRefInfo{
-			RefdType:   "bgp_asn_set.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "dst_asn_set",
-			Ref:        vdRef,
-		}
-		odrInfos = append(odrInfos, odri)
-
-	case *ForwardProxyAdvancedRuleType_DstAsnList:
-
-	}
-
-	return odrInfos, nil
-}
-
-// GetDestinationChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *ForwardProxyAdvancedRuleType) GetDestinationChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetDestinationChoice().(type) {
-	case *ForwardProxyAdvancedRuleType_AllDestinations:
-
-	case *ForwardProxyAdvancedRuleType_TlsList:
-
-	case *ForwardProxyAdvancedRuleType_HttpList:
-
-	case *ForwardProxyAdvancedRuleType_DstIpPrefixSet:
-		refdType, err := d.TypeForEntryKind("", "", "ip_prefix_set.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: ip_prefix_set")
-		}
-
-		vref := m.GetDstIpPrefixSet()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "ip_prefix_set.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-
-	case *ForwardProxyAdvancedRuleType_DstPrefixList:
-
-	case *ForwardProxyAdvancedRuleType_DstLabelSelector:
-
-	case *ForwardProxyAdvancedRuleType_DstAsnSet:
-		refdType, err := d.TypeForEntryKind("", "", "bgp_asn_set.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: bgp_asn_set")
-		}
-
-		vref := m.GetDstAsnSet()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "bgp_asn_set.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-
-	case *ForwardProxyAdvancedRuleType_DstAsnList:
-
-	}
-
-	return entries, nil
 }
 
 func (m *ForwardProxyAdvancedRuleType) GetSourceChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -839,10 +677,10 @@ func (v *ValidateForwardProxyAdvancedRuleType) DestinationChoiceValidationRuleHa
 	return validatorFn, nil
 }
 
-func (v *ValidateForwardProxyAdvancedRuleType) SourceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateForwardProxyAdvancedRuleType) HttpConnectChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for source_choice")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for http_connect_choice")
 	}
 	return validatorFn, nil
 }
@@ -950,62 +788,28 @@ func (v *ValidateForwardProxyAdvancedRuleType) Validate(ctx context.Context, pm 
 				return err
 			}
 		}
-	case *ForwardProxyAdvancedRuleType_DstIpPrefixSet:
-		if fv, exists := v.FldValidators["destination_choice.dst_ip_prefix_set"]; exists {
-			val := m.GetDestinationChoice().(*ForwardProxyAdvancedRuleType_DstIpPrefixSet).DstIpPrefixSet
+	case *ForwardProxyAdvancedRuleType_DestList:
+		if fv, exists := v.FldValidators["destination_choice.dest_list"]; exists {
+			val := m.GetDestinationChoice().(*ForwardProxyAdvancedRuleType_DestList).DestList
 			vOpts := append(opts,
 				db.WithValidateField("destination_choice"),
-				db.WithValidateField("dst_ip_prefix_set"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ForwardProxyAdvancedRuleType_DstPrefixList:
-		if fv, exists := v.FldValidators["destination_choice.dst_prefix_list"]; exists {
-			val := m.GetDestinationChoice().(*ForwardProxyAdvancedRuleType_DstPrefixList).DstPrefixList
-			vOpts := append(opts,
-				db.WithValidateField("destination_choice"),
-				db.WithValidateField("dst_prefix_list"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ForwardProxyAdvancedRuleType_DstLabelSelector:
-		if fv, exists := v.FldValidators["destination_choice.dst_label_selector"]; exists {
-			val := m.GetDestinationChoice().(*ForwardProxyAdvancedRuleType_DstLabelSelector).DstLabelSelector
-			vOpts := append(opts,
-				db.WithValidateField("destination_choice"),
-				db.WithValidateField("dst_label_selector"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ForwardProxyAdvancedRuleType_DstAsnSet:
-		if fv, exists := v.FldValidators["destination_choice.dst_asn_set"]; exists {
-			val := m.GetDestinationChoice().(*ForwardProxyAdvancedRuleType_DstAsnSet).DstAsnSet
-			vOpts := append(opts,
-				db.WithValidateField("destination_choice"),
-				db.WithValidateField("dst_asn_set"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ForwardProxyAdvancedRuleType_DstAsnList:
-		if fv, exists := v.FldValidators["destination_choice.dst_asn_list"]; exists {
-			val := m.GetDestinationChoice().(*ForwardProxyAdvancedRuleType_DstAsnList).DstAsnList
-			vOpts := append(opts,
-				db.WithValidateField("destination_choice"),
-				db.WithValidateField("dst_asn_list"),
+				db.WithValidateField("dest_list"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
 
+	}
+
+	if fv, exists := v.FldValidators["http_connect_choice"]; exists {
+		val := m.GetHttpConnectChoice()
+		vOpts := append(opts,
+			db.WithValidateField("http_connect_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetHttpConnectChoice().(type) {
@@ -1050,16 +854,6 @@ func (v *ValidateForwardProxyAdvancedRuleType) Validate(ctx context.Context, pm 
 			return err
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["source_choice"]; exists {
-		val := m.GetSourceChoice()
-		vOpts := append(opts,
-			db.WithValidateField("source_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetSourceChoice().(type) {
@@ -1169,16 +963,16 @@ var DefaultForwardProxyAdvancedRuleTypeValidator = func() *ValidateForwardProxyA
 	}
 	v.FldValidators["destination_choice"] = vFn
 
-	vrhSourceChoice := v.SourceChoiceValidationRuleHandler
-	rulesSourceChoice := map[string]string{
+	vrhHttpConnectChoice := v.HttpConnectChoiceValidationRuleHandler
+	rulesHttpConnectChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhSourceChoice(rulesSourceChoice)
+	vFn, err = vrhHttpConnectChoice(rulesHttpConnectChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ForwardProxyAdvancedRuleType.source_choice: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ForwardProxyAdvancedRuleType.http_connect_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["source_choice"] = vFn
+	v.FldValidators["http_connect_choice"] = vFn
 
 	vrhRuleName := v.RuleNameValidationRuleHandler
 	rulesRuleName := map[string]string{
@@ -1219,11 +1013,7 @@ var DefaultForwardProxyAdvancedRuleTypeValidator = func() *ValidateForwardProxyA
 
 	v.FldValidators["destination_choice.tls_list"] = DomainListTypeValidator().Validate
 	v.FldValidators["destination_choice.http_list"] = URLListTypeValidator().Validate
-	v.FldValidators["destination_choice.dst_ip_prefix_set"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["destination_choice.dst_prefix_list"] = ves_io_schema_views.PrefixStringListTypeValidator().Validate
-	v.FldValidators["destination_choice.dst_label_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
-	v.FldValidators["destination_choice.dst_asn_set"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["destination_choice.dst_asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
+	v.FldValidators["destination_choice.dest_list"] = L4DestListTypeValidator().Validate
 
 	v.FldValidators["http_connect_choice.port_matcher"] = ves_io_schema_policy.PortMatcherTypeValidator().Validate
 
@@ -1964,14 +1754,6 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateGetSpecType) ProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for proxy_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateGetSpecType) RuleChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1992,16 +1774,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 	if m == nil {
 		return nil
-	}
-
-	if fv, exists := v.FldValidators["proxy_choice"]; exists {
-		val := m.GetProxyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("proxy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetProxyChoice().(type) {
@@ -2124,17 +1896,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
-	vrhProxyChoice := v.ProxyChoiceValidationRuleHandler
-	rulesProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhProxyChoice(rulesProxyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.proxy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["proxy_choice"] = vFn
 
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
@@ -2383,14 +2144,6 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateGlobalSpecType) ProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for proxy_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateGlobalSpecType) RuleChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2411,16 +2164,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
-	}
-
-	if fv, exists := v.FldValidators["proxy_choice"]; exists {
-		val := m.GetProxyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("proxy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetProxyChoice().(type) {
@@ -2553,17 +2296,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhProxyChoice := v.ProxyChoiceValidationRuleHandler
-	rulesProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhProxyChoice(rulesProxyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.proxy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["proxy_choice"] = vFn
-
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -2589,6 +2321,143 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *L4DestListType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *L4DestListType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *L4DestListType) DeepCopy() *L4DestListType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &L4DestListType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *L4DestListType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *L4DestListType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return L4DestListTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateL4DestListType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateL4DestListType) DestListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.L4DestType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.L4DestTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for dest_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.L4DestType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.L4DestType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated dest_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items dest_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateL4DestListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*L4DestListType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *L4DestListType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dest_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("dest_list"))
+		if err := fv(ctx, m.GetDestList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultL4DestListTypeValidator = func() *ValidateL4DestListType {
+	v := &ValidateL4DestListType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDestList := v.DestListValidationRuleHandler
+	rulesDestList := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhDestList(rulesDestList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for L4DestListType.dest_list: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dest_list"] = vFn
+
+	return v
+}()
+
+func L4DestListTypeValidator() db.Validator {
+	return DefaultL4DestListTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2757,14 +2626,6 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateReplaceSpecType) ProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for proxy_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateReplaceSpecType) RuleChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2785,16 +2646,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
-	}
-
-	if fv, exists := v.FldValidators["proxy_choice"]; exists {
-		val := m.GetProxyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("proxy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetProxyChoice().(type) {
@@ -2917,17 +2768,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
-	vrhProxyChoice := v.ProxyChoiceValidationRuleHandler
-	rulesProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhProxyChoice(rulesProxyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.proxy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["proxy_choice"] = vFn
 
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{

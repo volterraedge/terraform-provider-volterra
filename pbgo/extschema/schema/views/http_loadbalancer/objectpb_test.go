@@ -30,9 +30,6 @@ It has these top-level messages:
 	DownstreamTlsParamsType
 	ProxyTypeHttps
 	ProxyTypeHttpsAutoCerts
-	HashPolicyListType
-	MirrorPolicyType
-	RouteSimpleAdvancedOptions
 	RouteTypeSimpleWithDefaultOriginPool
 	RouteTypeSimple
 	RouteTypeRedirect
@@ -42,7 +39,6 @@ It has these top-level messages:
 	AdvancedOptionsType
 	CustomIpAllowedList
 	RateLimitConfigType
-	ServicePolicyList
 	GlobalSpecType
 	CreateSpecType
 	ReplaceSpecType
@@ -70,17 +66,15 @@ import (
 
 	_ "github.com/gogo/protobuf/gogoproto"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/route"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.

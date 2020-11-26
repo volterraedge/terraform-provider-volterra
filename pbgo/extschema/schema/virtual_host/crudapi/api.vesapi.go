@@ -28,8 +28,8 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-	object "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	object "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 )
 
 var (
@@ -994,19 +994,7 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
-func (s *APISrv) validateTransport(ctx context.Context) error {
-	if s.sf.IsTransportNotSupported("ves.io.schema.virtual_host.crudapi.API", server.TransportFromContext(ctx)) {
-		userMsg := fmt.Sprintf("ves.io.schema.virtual_host.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
-		return server.GRPCStatusFromError(err).Err()
-	}
-	return nil
-}
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1031,9 +1019,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1058,9 +1043,6 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1083,9 +1065,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1137,9 +1116,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1518,7 +1494,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-Get"
+                    "url": "http://some-url-here/ves-io-schema-virtual_host-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.Get"
             },
@@ -1593,7 +1569,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-Delete"
+                    "url": "http://some-url-here/ves-io-schema-virtual_host-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.Delete"
             },
@@ -1676,7 +1652,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-Replace"
+                    "url": "http://some-url-here/ves-io-schema-virtual_host-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.Replace"
             },
@@ -1805,7 +1781,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-List"
+                    "url": "http://some-url-here/ves-io-schema-virtual_host-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.List"
             },
@@ -1882,7 +1858,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-Create"
+                    "url": "http://some-url-here/ves-io-schema-virtual_host-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.Create"
             },
@@ -2011,7 +1987,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-crudapi-API-ListStream"
+                    "url": "http://some-url-here/ves-io-schema-virtual_host-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.crudapi.API.ListStream"
             },
@@ -2023,107 +1999,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "authenticationCookieParams": {
-            "type": "object",
-            "description": "Specifies different cookie related config parameters for authentication",
-            "title": "Cookie Parameters Config",
-            "x-displayname": "Cookie Parameters",
-            "x-ves-oneof-field-secret_choice": "[\"auth_hmac\",\"kms_key_hmac\"]",
-            "x-ves-proto-message": "ves.io.schema.authentication.CookieParams",
-            "properties": {
-                "auth_hmac": {
-                    "description": "Exclusive with [kms_key_hmac]\nx-displayName: \"HMAC primary \u0026 secondary key\"\nHMAC pair provided as primary and secondary key",
-                    "title": "HMAC pair",
-                    "$ref": "#/definitions/authenticationHMACKeyPair"
-                },
-                "cookie_expiry": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "cookie_refresh_interval": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "kms_key_hmac": {
-                    "description": "Exclusive with [auth_hmac]\nx-displayName: \"HMAC kms key\"\nHMAC configured using KMS_KEY",
-                    "title": "kms_key",
-                    "$ref": "#/definitions/authenticationKMSKeyRefType"
-                },
-                "session_expiry": {
-                    "type": "integer",
-                    "format": "int64"
-                }
-            }
-        },
-        "authenticationHMACKeyPair": {
-            "type": "object",
-            "description": "HMAC primary and secondary keys to be used for hashing the Cookie.\nEach key also have an associated expiry timestamp, beyond which key is invalid.",
-            "title": "HMAC Key Pair",
-            "x-displayname": "HMAC Key Pair",
-            "x-ves-proto-message": "ves.io.schema.authentication.HMACKeyPair",
-            "properties": {
-                "prim_key": {
-                    "description": " Primary HMAC Key\nRequired: YES",
-                    "title": "HMAC Primary Key",
-                    "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "HMAC Primary Key",
-                    "x-ves-required": "true"
-                },
-                "prim_key_expiry": {
-                    "type": "string",
-                    "description": " Primary HMAC Key Expiry time\nRequired: YES",
-                    "title": "HMAC Primary Key Expiry Time",
-                    "format": "date-time",
-                    "x-displayname": "HMAC Primary Key Expiry",
-                    "x-ves-required": "true"
-                },
-                "sec_key": {
-                    "description": " Secondary HMAC Key\nRequired: YES",
-                    "title": "HMAC Secondary Key",
-                    "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "HMAC Secondary Key",
-                    "x-ves-required": "true"
-                },
-                "sec_key_expiry": {
-                    "type": "string",
-                    "description": " Secondary HMAC Key Expiry time\nRequired: YES",
-                    "title": "HMAC Secondary Key Expiry Time",
-                    "format": "date-time",
-                    "x-displayname": "HMAC Secondary Key Expiry",
-                    "x-ves-required": "true"
-                }
-            }
-        },
-        "authenticationKMSKeyRefType": {
-            "type": "object",
-            "description": "Reference to KMS Key Object",
-            "title": "KMS Key Ref",
-            "x-displayname": "KMS Key Reference",
-            "x-ves-proto-message": "ves.io.schema.authentication.KMSKeyRefType",
-            "properties": {
-                "auth_hmac_kms": {
-                    "description": " HMAC configured using the KMS_KEY reference",
-                    "title": "kms_key Reference",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "HMAC kms key reference"
-                }
-            }
-        },
-        "clusterLoadbalancerAlgorithm": {
-            "type": "string",
-            "description": "Different load balancing algorithms supported\nWhen a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm\nto determine which host is selected.\n\n - ROUND_ROBIN: ROUND_ROBIN\n\nPolicy in which each healthy/available upstream endpoint is selected in round robin order.\n - LEAST_REQUEST: LEAST_REQUEST\n\nPolicy in which loadbalancer picks the upstream endpoint which has the fewest active requests\n - RING_HASH: RING_HASH\n\nPolicy implements consistent hashing to upstream endpoints using ring hash of endpoint names\nHash of the incoming request is calculated using request hash policy.\nThe ring/modulo hash load balancer implements consistent hashing to upstream hosts.\nThe algorithm is based on mapping all hosts onto a circle such that the addition or\nremoval of a host from the host set changes only affect 1/N requests. This technique\nis also commonly known as “ketama” hashing. A consistent hashing load balancer is only\neffective when protocol routing is used that specifies a value to hash on. The minimum\nring size governs the replication factor for each host in the ring. For example, if the\nminimum ring size is 1024 and there are 16 hosts, each host will be replicated 64 times.\n - RANDOM: RANDOM\n\npolicy in which each available upstream endpoint is selected in random order.\nThe random load balancer selects a random healthy host. The random load balancer generally\nperforms better than round robin if no health checking policy is configured. Random selection\navoids bias towards the host in the set that comes after a failed host.\n - LB_OVERRIDE: Load Balancer Override\n\nHash policy is taken from from the load balancer which is using this origin pool",
-            "title": "LoadbalancerAlgorithm",
-            "enum": [
-                "ROUND_ROBIN",
-                "LEAST_REQUEST",
-                "RING_HASH",
-                "RANDOM",
-                "LB_OVERRIDE"
-            ],
-            "default": "ROUND_ROBIN",
-            "x-displayname": "Load Balancer Algorithm",
-            "x-ves-proto-enum": "ves.io.schema.cluster.LoadbalancerAlgorithm"
-        },
         "crudapiErrorCode": {
             "type": "string",
             "enum": [
@@ -2308,50 +2183,6 @@ var APISwaggerJSON string = `{
                 },
                 "system_metadata": {
                     "$ref": "#/definitions/schemaSystemObjectMetaType"
-                }
-            }
-        },
-        "ioschemaObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
-            "properties": {
-                "kind": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
-                    "title": "kind",
-                    "x-displayname": "Kind",
-                    "x-ves-example": "virtual_site"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contactus-route"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
                 }
             }
         },
@@ -2556,7 +2387,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -2842,6 +2673,50 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
         "schemaRetryBackOff": {
             "type": "object",
             "description": "Specifies parameters that control retry back off.",
@@ -2937,12 +2812,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
-                },
-                "blindfold_secret_info_internal": {
-                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
-                    "title": "Blindfold Secret Internal",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
-                    "x-displayname": "Blindfold Secret Internal"
                 },
                 "clear_secret_info": {
                     "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
@@ -3129,7 +2998,7 @@ var APISwaggerJSON string = `{
                     "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
                     "title": "namespace",
                     "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
+                        "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Namespace Reference"
                 },
@@ -3251,7 +3120,6 @@ var APISwaggerJSON string = `{
             "description": "Configuration to enable TLS interception",
             "title": "TlsInterceptionType",
             "x-displayname": "Configuration for TLS interception",
-            "x-ves-oneof-field-interception_policy_choice": "[\"enable_for_all_domains\",\"policy\"]",
             "x-ves-oneof-field-signing_cert_choice": "[\"custom_certificate\",\"volterra_certificate\"]",
             "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\",\"volterra_trusted_ca\"]",
             "x-ves-proto-message": "ves.io.schema.TlsInterceptionType",
@@ -3261,15 +3129,11 @@ var APISwaggerJSON string = `{
                     "title": "Custom Signing Certificate",
                     "$ref": "#/definitions/schemaTlsCertificateType"
                 },
-                "enable_for_all_domains": {
-                    "description": "Exclusive with [policy]\nx-displayName: \"Enable For All Domains\"\nEnable interception for all domains",
-                    "title": "Enable For All Domains",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
                 "policy": {
-                    "description": "Exclusive with [enable_for_all_domains]\nx-displayName: \"Enable/Disable for Specific Domains\"\nPolicy to enable/disable specific domains, with implicit enable all domains",
-                    "title": "Policy for specific domains",
-                    "$ref": "#/definitions/schemaTlsInterceptionPolicy"
+                    "description": " Policy to decide whether a request should be intercepted.\n Interception is enabled for all requests if the policy is not configured.",
+                    "title": "policy",
+                    "$ref": "#/definitions/schemaTlsInterceptionPolicy",
+                    "x-displayname": "TLS interception policy"
                 },
                 "trusted_ca_url": {
                     "type": "string",
@@ -3476,7 +3340,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nVk8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -3505,7 +3369,7 @@ var APISwaggerJSON string = `{
                     "description": " A direct reference to web application firewall configuration object",
                     "title": "waf",
                     "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
+                        "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "WAF"
                 }
@@ -3523,7 +3387,7 @@ var APISwaggerJSON string = `{
                     "description": " References to a set of WAF Rules configuration object",
                     "title": "waf_rules",
                     "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
+                        "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "WAF Rules"
                 }
@@ -3566,43 +3430,11 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaviewsObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\nRequired: YES",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contacts-route",
-                    "x-ves-required": "true"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                }
-            }
-        },
         "schemavirtual_hostGlobalSpecType": {
             "type": "object",
             "description": "Configuration specification for VirtualHost",
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
-            "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.GlobalSpecType",
             "properties": {
@@ -3619,14 +3451,9 @@ var APISwaggerJSON string = `{
                     "description": " Advertise Policy allows you to define networks or sites where you want a VIP for this virtual host to be advertised.\n Each Policy rule can have different parameters, like TLS configuration, ports, optionally ip address to be used for VIP.\n If advertise policy is not specified then no VIP is assigned for this virtual host.",
                     "title": "Advertise Policy",
                     "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
+                        "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Advertise Policies"
-                },
-                "authentication": {
-                    "description": "Exclusive with [no_authentication]\nx-displayName: \"Specify Athentication Object\"\nConfigure authentication details",
-                    "title": "Authentication Enabled",
-                    "$ref": "#/definitions/virtual_hostAuthenticationDetails"
                 },
                 "auto_cert": {
                     "type": "boolean",
@@ -3698,7 +3525,7 @@ var APISwaggerJSON string = `{
                     "description": " Internal reference to dns_domain object",
                     "title": "DNS domain refs",
                     "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
+                        "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "DNS Domains"
                 },
@@ -3758,22 +3585,16 @@ var APISwaggerJSON string = `{
                     "description": " This HTTP filter specifies how to verify JSON Web Token (JWT). It will verify its signature,\n audiences and issuer",
                     "title": "JSON Web Token authentication (JWT) configuration for requests",
                     "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
+                        "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "JWT Config"
-                },
-                "loadbalancer_algorithm": {
-                    "description": " When a connection to a endpoint in an upstream cluster is required, the loadbalancer uses\n loadbalancer_algorithm to determine which host is selected.",
-                    "title": "loadbalancer_algorithm",
-                    "$ref": "#/definitions/clusterLoadbalancerAlgorithm",
-                    "x-displayname": "LoadBalancer Algorithm"
                 },
                 "malicious_user_mitigation": {
                     "type": "array",
                     "description": " Settings that specify the actions to be taken when malicious users are determined to be at different threat levels.\n User's activity is monitored and continuously analyzed for malicious behavior. From this analysis, a threat level is assigned to each user.\n The settings defined in malicious user mitigation specify what mitigation actions to take for users determined to be at different threat levels.",
                     "title": "Malicious User Mitigation",
                     "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
+                        "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Malicious User Mitigation"
                 },
@@ -3784,11 +3605,6 @@ var APISwaggerJSON string = `{
                     "format": "int64",
                     "x-displayname": "Maximum Request Header Size (KiB)",
                     "x-ves-example": "42"
-                },
-                "no_authentication": {
-                    "description": "Exclusive with [authentication]\nx-displayName: \"Disable Authentication\"\nDisable Authentication",
-                    "title": "Disable Authentication",
-                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "no_challenge": {
                     "description": "Exclusive with [captcha_challenge js_challenge]\nx-displayName: \"No Challenge\"\nNo challenge is enabled for this virtual host",
@@ -3806,7 +3622,7 @@ var APISwaggerJSON string = `{
                     "description": " A reference to rate_limiter object.\n Requests to the virtual_host are rate limited based on the parameters specified in the rate_limiter.",
                     "title": "rate_limiter",
                     "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
+                        "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Rate Limiter"
                 },
@@ -3815,7 +3631,7 @@ var APISwaggerJSON string = `{
                     "description": " References to ip_prefix_set objects.\n Requests from source IP addresses that are covered by one of the allowed IP Prefixes are not subjected to rate limiting.",
                     "title": "rate_limiter_allowed_prefixes",
                     "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
+                        "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Rate Limiter Allowed Prefixes"
                 },
@@ -3868,18 +3684,17 @@ var APISwaggerJSON string = `{
                     "description": " The list of routes that will be matched, in order, for incoming requests.\n The first route that matches will be used. Currently route object is redundant in case of TCP proxy but required.\n For TCP_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY VirtualHosts, the route object only specifies the cluster/weighted-cluster\n as route destination without any match condition. In other words, match condition in route object is ignored for\n TCP_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY VirtualHosts. Routes used for TCP_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY\n VirtualHosts cannot have DirectResponse or Redirect as actions.",
                     "title": "routes",
                     "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
+                        "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Routes"
                 },
-                "service_policy_sets": {
+                "service_policy_set": {
                     "type": "array",
-                    "description": " Per VH service policy sets, created by system via policies in the http load balancer and http connect view.",
-                    "title": "Service Policy Sets",
+                    "description": " Per VH service policy set, created by system via policies in the http load balancer and http connect view.",
+                    "title": "Service Policy Set",
                     "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Service Policy Sets"
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    }
                 },
                 "state": {
                     "description": " State of the virtual host",
@@ -3924,7 +3739,7 @@ var APISwaggerJSON string = `{
                     "description": " A reference to user_identification object.\n The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.",
                     "title": "user_identification",
                     "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
+                        "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "User Identification Policy"
                 },
@@ -3947,46 +3762,6 @@ var APISwaggerJSON string = `{
                     "title": "gc_spec",
                     "$ref": "#/definitions/schemavirtual_hostGlobalSpecType",
                     "x-displayname": "GC Spec"
-                }
-            }
-        },
-        "virtual_hostAuthenticationDetails": {
-            "type": "object",
-            "description": "Authentication related information. This allows to configure the URL to redirect after the authentication\nAuthentication Object Reference, configuration of cookie params etc",
-            "title": "AuthenticationDetails",
-            "x-displayname": "Authentication Details",
-            "x-ves-oneof-field-cookie_params_choice": "[\"cookie_params\",\"use_auth_object_config\"]",
-            "x-ves-oneof-field-redirect_url_choice": "[\"redirect_dynamic\",\"redirect_url\"]",
-            "x-ves-proto-message": "ves.io.schema.virtual_host.AuthenticationDetails",
-            "properties": {
-                "auth_config": {
-                    "type": "array",
-                    "description": " Reference to Authentication Config Object",
-                    "title": "Authentication Reference",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Authentication Config Reference"
-                },
-                "cookie_params": {
-                    "description": "Exclusive with [use_auth_object_config]\nx-displayName: \"Cookie Params\"",
-                    "title": "Cookie param configuration details",
-                    "$ref": "#/definitions/authenticationCookieParams"
-                },
-                "redirect_dynamic": {
-                    "description": "Exclusive with [redirect_url]\nx-displayName: \"Set the redirect URL dynamically\"\nIf redirect URL is set to dynamic , then the redirect URL will be obtained from the incoming request\nThis URL must match with the redirect URL configured with the OIDC provider",
-                    "title": "set the redirect URL dynamically",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "redirect_url": {
-                    "type": "string",
-                    "description": "Exclusive with [redirect_dynamic]\nx-displayName: \"Redirect URL is the URL where user gets redirected once authentication is successful\"\nx-example: https://abc.xyz.com\n\nuser can provide a url for e.g https://abc.xyz.com where user gets redirected. This URL configured here\nmust match with the redirect URL configured with the OIDC provider",
-                    "title": "Redirect URL"
-                },
-                "use_auth_object_config": {
-                    "description": "Exclusive with [cookie_params]\nx-displayName: \"Use the cookie parameters from Authentication Object\"",
-                    "title": "Use the Cookie params config from Authentication Config Object",
-                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },
@@ -4131,7 +3906,7 @@ var APISwaggerJSON string = `{
                     "description": " Reference to virtual network where the endpoint is resolved.\n Reference is valid only when the network type is VIRTUAL_NETWORK_PER_SITE or\n VIRTUAL_NETWORK_GLOBAL. It is ignored for all other network types",
                     "title": "resolution_network",
                     "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
+                        "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Resolution Network"
                 },
@@ -4256,7 +4031,7 @@ var APISwaggerJSON string = `{
                     "description": " Object reference",
                     "title": "object_refs",
                     "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
+                        "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
                 }

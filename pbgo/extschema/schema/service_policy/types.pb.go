@@ -15,19 +15,15 @@ import (
 
 	google_protobuf1 "github.com/gogo/protobuf/types"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	ves_io_schema_policy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 
-	ves_io_schema_service_policy_rule "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
+	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	ves_io_schema4 "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-
-	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
 	strings "strings"
 
@@ -58,11 +54,6 @@ type SimpleRule struct {
 	// x-required
 	// Name of the rule.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// metric_name_label
-	//
-	// x-displayName: "Metric Name Label"
-	// Name label to use in service policy rule metrics generated for this simple rule.
-	MetricNameLabel string `protobuf:"bytes,17,opt,name=metric_name_label,json=metricNameLabel,proto3" json:"metric_name_label,omitempty"`
 	// action
 	//
 	// x-displayName: "Action"
@@ -149,12 +140,6 @@ type SimpleRule struct {
 	// List of IPv4 Prefixes values.
 	// The predicate evaluates to true if the destination address is covered by one or more of the IPv4 Prefixes from the list.
 	DstIpPrefixList *ves_io_schema_policy.PrefixMatchList `protobuf:"bytes,16,opt,name=dst_ip_prefix_list,json=dstIpPrefixList" json:"dst_ip_prefix_list,omitempty"`
-	// TLS JA3 fingerprint matcher
-	//
-	// x-displayName: "TLS Fingerprint Matcher"
-	// TLS JA3 fingerprints to be matched.
-	// The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.
-	TlsFingerprintMatcher *ves_io_schema_policy.TlsFingerprintMatcherType `protobuf:"bytes,18,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher" json:"tls_fingerprint_matcher,omitempty"`
 }
 
 func (m *SimpleRule) Reset()                    { *m = SimpleRule{} }
@@ -164,13 +149,6 @@ func (*SimpleRule) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []
 func (m *SimpleRule) GetName() string {
 	if m != nil {
 		return m.Name
-	}
-	return ""
-}
-
-func (m *SimpleRule) GetMetricNameLabel() string {
-	if m != nil {
-		return m.MetricNameLabel
 	}
 	return ""
 }
@@ -273,330 +251,6 @@ func (m *SimpleRule) GetDstIpPrefixList() *ves_io_schema_policy.PrefixMatchList 
 	return nil
 }
 
-func (m *SimpleRule) GetTlsFingerprintMatcher() *ves_io_schema_policy.TlsFingerprintMatcherType {
-	if m != nil {
-		return m.TlsFingerprintMatcher
-	}
-	return nil
-}
-
-// source_list
-//
-// x-displayName: "Source List"
-// List of sources. A request belongs to this list if it satifies any of the match criteria.
-type SourceList struct {
-	// prefix_list
-	//
-	//
-	// x-displayName: "IPv4 Prefix List"
-	// Addresses that are covered by the given list of IPv4 prefixes
-	PrefixList *ves_io_schema_views.PrefixStringListType `protobuf:"bytes,2,opt,name=prefix_list,json=prefixList" json:"prefix_list,omitempty"`
-	// ip_prefix_set
-	//
-	// x-displayName: "IP Prefix Set"
-	// Addresses that are covered by the prefixes in the given ip_prefix_set
-	IpPrefixSet []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,3,rep,name=ip_prefix_set,json=ipPrefixSet" json:"ip_prefix_set,omitempty"`
-	// asn_list
-	//
-	// x-displayName: "BGP ASN List"
-	// Addresses that belong to the ASNs in the given list
-	// The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB.
-	AsnList *ves_io_schema_policy.AsnMatchList `protobuf:"bytes,4,opt,name=asn_list,json=asnList" json:"asn_list,omitempty"`
-	// asn_set
-	//
-	// x-displayName: "BGP ASN Set"
-	// Addresses that belong to the ASNs in the given bgp_asn_set
-	// The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB.
-	AsnSet []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,5,rep,name=asn_set,json=asnSet" json:"asn_set,omitempty"`
-	// country_list
-	//
-	// x-displayName: "Country List"
-	// Addresses that belong to one of the countries in the given list
-	// The country is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB.
-	CountryList []ves_io_schema_policy.CountryCode `protobuf:"varint,6,rep,packed,name=country_list,json=countryList,enum=ves.io.schema.policy.CountryCode" json:"country_list,omitempty"`
-	// tls_fingerprint_classes
-	//
-	// x-displayName: "TLS Fingerprint Classes"
-	// A list of known classes of TLS fingerprints to match the input TLS JA3 fingerprint against.
-	TlsFingerprintClasses []ves_io_schema_policy.KnownTlsFingerprintClass `protobuf:"varint,7,rep,packed,name=tls_fingerprint_classes,json=tlsFingerprintClasses,enum=ves.io.schema.policy.KnownTlsFingerprintClass" json:"tls_fingerprint_classes,omitempty"`
-	// tls_fingerprint_classes
-	//
-	// x-displayName: "TLS Fingerprint Values"
-	// A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against.
-	TlsFingerprintValues []string `protobuf:"bytes,8,rep,name=tls_fingerprint_values,json=tlsFingerprintValues" json:"tls_fingerprint_values,omitempty"`
-	// Default Action
-	//
-	// x-displayName: "Default Action"
-	// x-required
-	// Default action for requests from source that do not belong to this list
-	//
-	// Types that are valid to be assigned to DefaultActionChoice:
-	//	*SourceList_DefaultActionNextPolicy
-	//	*SourceList_DefaultActionDeny
-	//	*SourceList_DefaultActionAllow
-	DefaultActionChoice isSourceList_DefaultActionChoice `protobuf_oneof:"default_action_choice"`
-}
-
-func (m *SourceList) Reset()                    { *m = SourceList{} }
-func (*SourceList) ProtoMessage()               {}
-func (*SourceList) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
-
-type isSourceList_DefaultActionChoice interface {
-	isSourceList_DefaultActionChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type SourceList_DefaultActionNextPolicy struct {
-	DefaultActionNextPolicy *ves_io_schema4.Empty `protobuf:"bytes,11,opt,name=default_action_next_policy,json=defaultActionNextPolicy,oneof"`
-}
-type SourceList_DefaultActionDeny struct {
-	DefaultActionDeny *ves_io_schema4.Empty `protobuf:"bytes,12,opt,name=default_action_deny,json=defaultActionDeny,oneof"`
-}
-type SourceList_DefaultActionAllow struct {
-	DefaultActionAllow *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=default_action_allow,json=defaultActionAllow,oneof"`
-}
-
-func (*SourceList_DefaultActionNextPolicy) isSourceList_DefaultActionChoice() {}
-func (*SourceList_DefaultActionDeny) isSourceList_DefaultActionChoice()       {}
-func (*SourceList_DefaultActionAllow) isSourceList_DefaultActionChoice()      {}
-
-func (m *SourceList) GetDefaultActionChoice() isSourceList_DefaultActionChoice {
-	if m != nil {
-		return m.DefaultActionChoice
-	}
-	return nil
-}
-
-func (m *SourceList) GetPrefixList() *ves_io_schema_views.PrefixStringListType {
-	if m != nil {
-		return m.PrefixList
-	}
-	return nil
-}
-
-func (m *SourceList) GetIpPrefixSet() []*ves_io_schema_views.ObjectRefType {
-	if m != nil {
-		return m.IpPrefixSet
-	}
-	return nil
-}
-
-func (m *SourceList) GetAsnList() *ves_io_schema_policy.AsnMatchList {
-	if m != nil {
-		return m.AsnList
-	}
-	return nil
-}
-
-func (m *SourceList) GetAsnSet() []*ves_io_schema_views.ObjectRefType {
-	if m != nil {
-		return m.AsnSet
-	}
-	return nil
-}
-
-func (m *SourceList) GetCountryList() []ves_io_schema_policy.CountryCode {
-	if m != nil {
-		return m.CountryList
-	}
-	return nil
-}
-
-func (m *SourceList) GetTlsFingerprintClasses() []ves_io_schema_policy.KnownTlsFingerprintClass {
-	if m != nil {
-		return m.TlsFingerprintClasses
-	}
-	return nil
-}
-
-func (m *SourceList) GetTlsFingerprintValues() []string {
-	if m != nil {
-		return m.TlsFingerprintValues
-	}
-	return nil
-}
-
-func (m *SourceList) GetDefaultActionNextPolicy() *ves_io_schema4.Empty {
-	if x, ok := m.GetDefaultActionChoice().(*SourceList_DefaultActionNextPolicy); ok {
-		return x.DefaultActionNextPolicy
-	}
-	return nil
-}
-
-func (m *SourceList) GetDefaultActionDeny() *ves_io_schema4.Empty {
-	if x, ok := m.GetDefaultActionChoice().(*SourceList_DefaultActionDeny); ok {
-		return x.DefaultActionDeny
-	}
-	return nil
-}
-
-func (m *SourceList) GetDefaultActionAllow() *ves_io_schema4.Empty {
-	if x, ok := m.GetDefaultActionChoice().(*SourceList_DefaultActionAllow); ok {
-		return x.DefaultActionAllow
-	}
-	return nil
-}
-
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*SourceList) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _SourceList_OneofMarshaler, _SourceList_OneofUnmarshaler, _SourceList_OneofSizer, []interface{}{
-		(*SourceList_DefaultActionNextPolicy)(nil),
-		(*SourceList_DefaultActionDeny)(nil),
-		(*SourceList_DefaultActionAllow)(nil),
-	}
-}
-
-func _SourceList_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*SourceList)
-	// default_action_choice
-	switch x := m.DefaultActionChoice.(type) {
-	case *SourceList_DefaultActionNextPolicy:
-		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultActionNextPolicy); err != nil {
-			return err
-		}
-	case *SourceList_DefaultActionDeny:
-		_ = b.EncodeVarint(12<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultActionDeny); err != nil {
-			return err
-		}
-	case *SourceList_DefaultActionAllow:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultActionAllow); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("SourceList.DefaultActionChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _SourceList_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*SourceList)
-	switch tag {
-	case 11: // default_action_choice.default_action_next_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.DefaultActionChoice = &SourceList_DefaultActionNextPolicy{msg}
-		return true, err
-	case 12: // default_action_choice.default_action_deny
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.DefaultActionChoice = &SourceList_DefaultActionDeny{msg}
-		return true, err
-	case 13: // default_action_choice.default_action_allow
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.DefaultActionChoice = &SourceList_DefaultActionAllow{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _SourceList_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*SourceList)
-	// default_action_choice
-	switch x := m.DefaultActionChoice.(type) {
-	case *SourceList_DefaultActionNextPolicy:
-		s := proto.Size(x.DefaultActionNextPolicy)
-		n += proto.SizeVarint(11<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *SourceList_DefaultActionDeny:
-		s := proto.Size(x.DefaultActionDeny)
-		n += proto.SizeVarint(12<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *SourceList_DefaultActionAllow:
-		s := proto.Size(x.DefaultActionAllow)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
-// rule
-//
-// x-displayName: "Rule"
-// A Rule consists of an unordered list of predicates and an action. The predicates are evaluated against a set of input fields that are extracted from
-// or derived from an L7 request API. A request API is considered to match the simple rule if all predicates in the rule evaluate to true for that request. Any
-// predicates that are not specified in a rule are implicitly considered to be true. If a request API matches a simple rule, the action for the simple rule is
-// enforced.
-type Rule struct {
-	// metadata
-	//
-	// x-displayName: "Metadata"
-	// x-required
-	// Common attributes for the rule including name and description.
-	Metadata *ves_io_schema4.MessageMetaType `protobuf:"bytes,1,opt,name=metadata" json:"metadata,omitempty"`
-	// spec
-	//
-	// x-displayName: "Rule Specification"
-	// x-required
-	// Specification for the rule including match preicates and actions.
-	Spec *ves_io_schema_service_policy_rule.GlobalSpecType `protobuf:"bytes,2,opt,name=spec" json:"spec,omitempty"`
-}
-
-func (m *Rule) Reset()                    { *m = Rule{} }
-func (*Rule) ProtoMessage()               {}
-func (*Rule) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
-
-func (m *Rule) GetMetadata() *ves_io_schema4.MessageMetaType {
-	if m != nil {
-		return m.Metadata
-	}
-	return nil
-}
-
-func (m *Rule) GetSpec() *ves_io_schema_service_policy_rule.GlobalSpecType {
-	if m != nil {
-		return m.Spec
-	}
-	return nil
-}
-
-// rule list
-//
-// x-displayName: "Rule List"
-// A list of rules.
-// The order of evaluation of the rules depends on the rule combining algorithm.
-type RuleList struct {
-	// rules
-	//
-	// x-displayName: "Rules"
-	// A list of rules.
-	// The order of evaluation of the rules depends on the rule combining algorithm.
-	Rules []*Rule `protobuf:"bytes,1,rep,name=rules" json:"rules,omitempty"`
-}
-
-func (m *RuleList) Reset()                    { *m = RuleList{} }
-func (*RuleList) ProtoMessage()               {}
-func (*RuleList) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
-
-func (m *RuleList) GetRules() []*Rule {
-	if m != nil {
-		return m.Rules
-	}
-	return nil
-}
-
 // GlobalSpecType
 //
 // x-displayName: "Specification"
@@ -653,51 +307,22 @@ type GlobalSpecType struct {
 	// A list of references to service_policy_rule objects.
 	// The order of evaluation of the rules depends on the rule combining algorithm.
 	Rules []*ves_io_schema4.ObjectRefType `protobuf:"bytes,4,rep,name=rules" json:"rules,omitempty"`
-	// rule choice
-	//
-	// x-displayName: "Select Policy Rules"
-	// Configure rules for this policy
-	// TBD mark as z-required after implementation is ready
-	//
-	// Types that are valid to be assigned to RuleChoice:
-	//	*GlobalSpecType_AllowList
-	//	*GlobalSpecType_DenyList
-	//	*GlobalSpecType_RuleList
-	RuleChoice isGlobalSpecType_RuleChoice `protobuf_oneof:"rule_choice"`
-	// view_internal
-	//
-	// x-displayName: "View Internal"
-	// Reference to view internal object
-	ViewInternal *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal" json:"view_internal,omitempty"`
 	// simple_rules
 	//
 	// x-displayName: "Simple Rules"
 	// A list of SimpleRules.
 	// The order of evaluation of the simple rules depends on the rule combining algorithm.
+	//
 	// This is mutually exclusive with the rules field and is for internal use only.
 	SimpleRules []*SimpleRule `protobuf:"bytes,1001,rep,name=simple_rules,json=simpleRules" json:"simple_rules,omitempty"`
-	// original_rules
-	//
-	// x-displayName: "Original Rules"
-	// A list of references to the original user configured service_policy_rule objects.
-	// This is used to save the original user configuration so that we can recover from bugs introduced during the conversion of referred service_policy_rule
-	// objects to Rule messages. Note that the rules field will be used to store the list of child service_policy_rule objects generated from the list of Rule
-	// messages during view processing.
-	OriginalRules []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1002,rep,name=original_rules,json=originalRules" json:"original_rules,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
 
 type isGlobalSpecType_ServerChoice interface {
 	isGlobalSpecType_ServerChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isGlobalSpecType_RuleChoice interface {
-	isGlobalSpecType_RuleChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -715,33 +340,15 @@ type GlobalSpecType_ServerSelector struct {
 type GlobalSpecType_ServerNameMatcher struct {
 	ServerNameMatcher *ves_io_schema_policy.MatcherTypeBasic `protobuf:"bytes,5,opt,name=server_name_matcher,json=serverNameMatcher,oneof"`
 }
-type GlobalSpecType_AllowList struct {
-	AllowList *SourceList `protobuf:"bytes,21,opt,name=allow_list,json=allowList,oneof"`
-}
-type GlobalSpecType_DenyList struct {
-	DenyList *SourceList `protobuf:"bytes,22,opt,name=deny_list,json=denyList,oneof"`
-}
-type GlobalSpecType_RuleList struct {
-	RuleList *RuleList `protobuf:"bytes,23,opt,name=rule_list,json=ruleList,oneof"`
-}
 
 func (*GlobalSpecType_AnyServer) isGlobalSpecType_ServerChoice()         {}
 func (*GlobalSpecType_ServerName) isGlobalSpecType_ServerChoice()        {}
 func (*GlobalSpecType_ServerSelector) isGlobalSpecType_ServerChoice()    {}
 func (*GlobalSpecType_ServerNameMatcher) isGlobalSpecType_ServerChoice() {}
-func (*GlobalSpecType_AllowList) isGlobalSpecType_RuleChoice()           {}
-func (*GlobalSpecType_DenyList) isGlobalSpecType_RuleChoice()            {}
-func (*GlobalSpecType_RuleList) isGlobalSpecType_RuleChoice()            {}
 
 func (m *GlobalSpecType) GetServerChoice() isGlobalSpecType_ServerChoice {
 	if m != nil {
 		return m.ServerChoice
-	}
-	return nil
-}
-func (m *GlobalSpecType) GetRuleChoice() isGlobalSpecType_RuleChoice {
-	if m != nil {
-		return m.RuleChoice
 	}
 	return nil
 }
@@ -816,44 +423,9 @@ func (m *GlobalSpecType) GetRules() []*ves_io_schema4.ObjectRefType {
 	return nil
 }
 
-func (m *GlobalSpecType) GetAllowList() *SourceList {
-	if x, ok := m.GetRuleChoice().(*GlobalSpecType_AllowList); ok {
-		return x.AllowList
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetDenyList() *SourceList {
-	if x, ok := m.GetRuleChoice().(*GlobalSpecType_DenyList); ok {
-		return x.DenyList
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetRuleList() *RuleList {
-	if x, ok := m.GetRuleChoice().(*GlobalSpecType_RuleList); ok {
-		return x.RuleList
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetViewInternal() *ves_io_schema_views.ObjectRefType {
-	if m != nil {
-		return m.ViewInternal
-	}
-	return nil
-}
-
 func (m *GlobalSpecType) GetSimpleRules() []*SimpleRule {
 	if m != nil {
 		return m.SimpleRules
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetOriginalRules() []*ves_io_schema4.ObjectRefType {
-	if m != nil {
-		return m.OriginalRules
 	}
 	return nil
 }
@@ -865,9 +437,6 @@ func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 		(*GlobalSpecType_ServerName)(nil),
 		(*GlobalSpecType_ServerSelector)(nil),
 		(*GlobalSpecType_ServerNameMatcher)(nil),
-		(*GlobalSpecType_AllowList)(nil),
-		(*GlobalSpecType_DenyList)(nil),
-		(*GlobalSpecType_RuleList)(nil),
 	}
 }
 
@@ -896,27 +465,6 @@ func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("GlobalSpecType.ServerChoice has unexpected type %T", x)
-	}
-	// rule_choice
-	switch x := m.RuleChoice.(type) {
-	case *GlobalSpecType_AllowList:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AllowList); err != nil {
-			return err
-		}
-	case *GlobalSpecType_DenyList:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DenyList); err != nil {
-			return err
-		}
-	case *GlobalSpecType_RuleList:
-		_ = b.EncodeVarint(23<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RuleList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.RuleChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -955,30 +503,6 @@ func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto
 		err := b.DecodeMessage(msg)
 		m.ServerChoice = &GlobalSpecType_ServerNameMatcher{msg}
 		return true, err
-	case 21: // rule_choice.allow_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SourceList)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &GlobalSpecType_AllowList{msg}
-		return true, err
-	case 22: // rule_choice.deny_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SourceList)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &GlobalSpecType_DenyList{msg}
-		return true, err
-	case 23: // rule_choice.rule_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(RuleList)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &GlobalSpecType_RuleList{msg}
-		return true, err
 	default:
 		return false, nil
 	}
@@ -1011,27 +535,6 @@ func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
-	// rule_choice
-	switch x := m.RuleChoice.(type) {
-	case *GlobalSpecType_AllowList:
-		s := proto.Size(x.AllowList)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_DenyList:
-		s := proto.Size(x.DenyList)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_RuleList:
-		s := proto.Size(x.RuleList)
-		n += proto.SizeVarint(23<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
 	return n
 }
 
@@ -1047,27 +550,16 @@ type CreateSpecType struct {
 	//	*CreateSpecType_ServerSelector
 	//	*CreateSpecType_ServerNameMatcher
 	ServerChoice isCreateSpecType_ServerChoice         `protobuf_oneof:"server_choice"`
-	PortMatcher  *ves_io_schema_policy.PortMatcherType `protobuf:"bytes,6,opt,name=port_matcher,json=portMatcher" json:"port_matcher,omitempty"`
 	Rules        []*ves_io_schema4.ObjectRefType       `protobuf:"bytes,4,rep,name=rules" json:"rules,omitempty"`
-	// Types that are valid to be assigned to RuleChoice:
-	//	*CreateSpecType_AllowList
-	//	*CreateSpecType_DenyList
-	//	*CreateSpecType_RuleList
-	RuleChoice isCreateSpecType_RuleChoice `protobuf_oneof:"rule_choice"`
+	PortMatcher  *ves_io_schema_policy.PortMatcherType `protobuf:"bytes,6,opt,name=port_matcher,json=portMatcher" json:"port_matcher,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
 
 type isCreateSpecType_ServerChoice interface {
 	isCreateSpecType_ServerChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isCreateSpecType_RuleChoice interface {
-	isCreateSpecType_RuleChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -1085,33 +577,15 @@ type CreateSpecType_ServerSelector struct {
 type CreateSpecType_ServerNameMatcher struct {
 	ServerNameMatcher *ves_io_schema_policy.MatcherTypeBasic `protobuf:"bytes,5,opt,name=server_name_matcher,json=serverNameMatcher,oneof"`
 }
-type CreateSpecType_AllowList struct {
-	AllowList *SourceList `protobuf:"bytes,21,opt,name=allow_list,json=allowList,oneof"`
-}
-type CreateSpecType_DenyList struct {
-	DenyList *SourceList `protobuf:"bytes,22,opt,name=deny_list,json=denyList,oneof"`
-}
-type CreateSpecType_RuleList struct {
-	RuleList *RuleList `protobuf:"bytes,23,opt,name=rule_list,json=ruleList,oneof"`
-}
 
 func (*CreateSpecType_AnyServer) isCreateSpecType_ServerChoice()         {}
 func (*CreateSpecType_ServerName) isCreateSpecType_ServerChoice()        {}
 func (*CreateSpecType_ServerSelector) isCreateSpecType_ServerChoice()    {}
 func (*CreateSpecType_ServerNameMatcher) isCreateSpecType_ServerChoice() {}
-func (*CreateSpecType_AllowList) isCreateSpecType_RuleChoice()           {}
-func (*CreateSpecType_DenyList) isCreateSpecType_RuleChoice()            {}
-func (*CreateSpecType_RuleList) isCreateSpecType_RuleChoice()            {}
 
 func (m *CreateSpecType) GetServerChoice() isCreateSpecType_ServerChoice {
 	if m != nil {
 		return m.ServerChoice
-	}
-	return nil
-}
-func (m *CreateSpecType) GetRuleChoice() isCreateSpecType_RuleChoice {
-	if m != nil {
-		return m.RuleChoice
 	}
 	return nil
 }
@@ -1151,13 +625,6 @@ func (m *CreateSpecType) GetServerNameMatcher() *ves_io_schema_policy.MatcherTyp
 	return nil
 }
 
-func (m *CreateSpecType) GetPortMatcher() *ves_io_schema_policy.PortMatcherType {
-	if m != nil {
-		return m.PortMatcher
-	}
-	return nil
-}
-
 func (m *CreateSpecType) GetRules() []*ves_io_schema4.ObjectRefType {
 	if m != nil {
 		return m.Rules
@@ -1165,23 +632,9 @@ func (m *CreateSpecType) GetRules() []*ves_io_schema4.ObjectRefType {
 	return nil
 }
 
-func (m *CreateSpecType) GetAllowList() *SourceList {
-	if x, ok := m.GetRuleChoice().(*CreateSpecType_AllowList); ok {
-		return x.AllowList
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetDenyList() *SourceList {
-	if x, ok := m.GetRuleChoice().(*CreateSpecType_DenyList); ok {
-		return x.DenyList
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetRuleList() *RuleList {
-	if x, ok := m.GetRuleChoice().(*CreateSpecType_RuleList); ok {
-		return x.RuleList
+func (m *CreateSpecType) GetPortMatcher() *ves_io_schema_policy.PortMatcherType {
+	if m != nil {
+		return m.PortMatcher
 	}
 	return nil
 }
@@ -1193,9 +646,6 @@ func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 		(*CreateSpecType_ServerName)(nil),
 		(*CreateSpecType_ServerSelector)(nil),
 		(*CreateSpecType_ServerNameMatcher)(nil),
-		(*CreateSpecType_AllowList)(nil),
-		(*CreateSpecType_DenyList)(nil),
-		(*CreateSpecType_RuleList)(nil),
 	}
 }
 
@@ -1224,27 +674,6 @@ func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("CreateSpecType.ServerChoice has unexpected type %T", x)
-	}
-	// rule_choice
-	switch x := m.RuleChoice.(type) {
-	case *CreateSpecType_AllowList:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AllowList); err != nil {
-			return err
-		}
-	case *CreateSpecType_DenyList:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DenyList); err != nil {
-			return err
-		}
-	case *CreateSpecType_RuleList:
-		_ = b.EncodeVarint(23<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RuleList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.RuleChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -1283,30 +712,6 @@ func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto
 		err := b.DecodeMessage(msg)
 		m.ServerChoice = &CreateSpecType_ServerNameMatcher{msg}
 		return true, err
-	case 21: // rule_choice.allow_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SourceList)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &CreateSpecType_AllowList{msg}
-		return true, err
-	case 22: // rule_choice.deny_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SourceList)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &CreateSpecType_DenyList{msg}
-		return true, err
-	case 23: // rule_choice.rule_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(RuleList)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &CreateSpecType_RuleList{msg}
-		return true, err
 	default:
 		return false, nil
 	}
@@ -1339,27 +744,6 @@ func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
-	// rule_choice
-	switch x := m.RuleChoice.(type) {
-	case *CreateSpecType_AllowList:
-		s := proto.Size(x.AllowList)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_DenyList:
-		s := proto.Size(x.DenyList)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_RuleList:
-		s := proto.Size(x.RuleList)
-		n += proto.SizeVarint(23<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
 	return n
 }
 
@@ -1375,27 +759,16 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_ServerSelector
 	//	*ReplaceSpecType_ServerNameMatcher
 	ServerChoice isReplaceSpecType_ServerChoice        `protobuf_oneof:"server_choice"`
-	PortMatcher  *ves_io_schema_policy.PortMatcherType `protobuf:"bytes,6,opt,name=port_matcher,json=portMatcher" json:"port_matcher,omitempty"`
 	Rules        []*ves_io_schema4.ObjectRefType       `protobuf:"bytes,4,rep,name=rules" json:"rules,omitempty"`
-	// Types that are valid to be assigned to RuleChoice:
-	//	*ReplaceSpecType_AllowList
-	//	*ReplaceSpecType_DenyList
-	//	*ReplaceSpecType_RuleList
-	RuleChoice isReplaceSpecType_RuleChoice `protobuf_oneof:"rule_choice"`
+	PortMatcher  *ves_io_schema_policy.PortMatcherType `protobuf:"bytes,6,opt,name=port_matcher,json=portMatcher" json:"port_matcher,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
 
 type isReplaceSpecType_ServerChoice interface {
 	isReplaceSpecType_ServerChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isReplaceSpecType_RuleChoice interface {
-	isReplaceSpecType_RuleChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -1413,33 +786,15 @@ type ReplaceSpecType_ServerSelector struct {
 type ReplaceSpecType_ServerNameMatcher struct {
 	ServerNameMatcher *ves_io_schema_policy.MatcherTypeBasic `protobuf:"bytes,5,opt,name=server_name_matcher,json=serverNameMatcher,oneof"`
 }
-type ReplaceSpecType_AllowList struct {
-	AllowList *SourceList `protobuf:"bytes,21,opt,name=allow_list,json=allowList,oneof"`
-}
-type ReplaceSpecType_DenyList struct {
-	DenyList *SourceList `protobuf:"bytes,22,opt,name=deny_list,json=denyList,oneof"`
-}
-type ReplaceSpecType_RuleList struct {
-	RuleList *RuleList `protobuf:"bytes,23,opt,name=rule_list,json=ruleList,oneof"`
-}
 
 func (*ReplaceSpecType_AnyServer) isReplaceSpecType_ServerChoice()         {}
 func (*ReplaceSpecType_ServerName) isReplaceSpecType_ServerChoice()        {}
 func (*ReplaceSpecType_ServerSelector) isReplaceSpecType_ServerChoice()    {}
 func (*ReplaceSpecType_ServerNameMatcher) isReplaceSpecType_ServerChoice() {}
-func (*ReplaceSpecType_AllowList) isReplaceSpecType_RuleChoice()           {}
-func (*ReplaceSpecType_DenyList) isReplaceSpecType_RuleChoice()            {}
-func (*ReplaceSpecType_RuleList) isReplaceSpecType_RuleChoice()            {}
 
 func (m *ReplaceSpecType) GetServerChoice() isReplaceSpecType_ServerChoice {
 	if m != nil {
 		return m.ServerChoice
-	}
-	return nil
-}
-func (m *ReplaceSpecType) GetRuleChoice() isReplaceSpecType_RuleChoice {
-	if m != nil {
-		return m.RuleChoice
 	}
 	return nil
 }
@@ -1479,13 +834,6 @@ func (m *ReplaceSpecType) GetServerNameMatcher() *ves_io_schema_policy.MatcherTy
 	return nil
 }
 
-func (m *ReplaceSpecType) GetPortMatcher() *ves_io_schema_policy.PortMatcherType {
-	if m != nil {
-		return m.PortMatcher
-	}
-	return nil
-}
-
 func (m *ReplaceSpecType) GetRules() []*ves_io_schema4.ObjectRefType {
 	if m != nil {
 		return m.Rules
@@ -1493,23 +841,9 @@ func (m *ReplaceSpecType) GetRules() []*ves_io_schema4.ObjectRefType {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetAllowList() *SourceList {
-	if x, ok := m.GetRuleChoice().(*ReplaceSpecType_AllowList); ok {
-		return x.AllowList
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetDenyList() *SourceList {
-	if x, ok := m.GetRuleChoice().(*ReplaceSpecType_DenyList); ok {
-		return x.DenyList
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetRuleList() *RuleList {
-	if x, ok := m.GetRuleChoice().(*ReplaceSpecType_RuleList); ok {
-		return x.RuleList
+func (m *ReplaceSpecType) GetPortMatcher() *ves_io_schema_policy.PortMatcherType {
+	if m != nil {
+		return m.PortMatcher
 	}
 	return nil
 }
@@ -1521,9 +855,6 @@ func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffe
 		(*ReplaceSpecType_ServerName)(nil),
 		(*ReplaceSpecType_ServerSelector)(nil),
 		(*ReplaceSpecType_ServerNameMatcher)(nil),
-		(*ReplaceSpecType_AllowList)(nil),
-		(*ReplaceSpecType_DenyList)(nil),
-		(*ReplaceSpecType_RuleList)(nil),
 	}
 }
 
@@ -1552,27 +883,6 @@ func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("ReplaceSpecType.ServerChoice has unexpected type %T", x)
-	}
-	// rule_choice
-	switch x := m.RuleChoice.(type) {
-	case *ReplaceSpecType_AllowList:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AllowList); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_DenyList:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DenyList); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_RuleList:
-		_ = b.EncodeVarint(23<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RuleList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.RuleChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -1611,30 +921,6 @@ func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *prot
 		err := b.DecodeMessage(msg)
 		m.ServerChoice = &ReplaceSpecType_ServerNameMatcher{msg}
 		return true, err
-	case 21: // rule_choice.allow_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SourceList)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &ReplaceSpecType_AllowList{msg}
-		return true, err
-	case 22: // rule_choice.deny_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SourceList)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &ReplaceSpecType_DenyList{msg}
-		return true, err
-	case 23: // rule_choice.rule_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(RuleList)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &ReplaceSpecType_RuleList{msg}
-		return true, err
 	default:
 		return false, nil
 	}
@@ -1667,27 +953,6 @@ func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
-	// rule_choice
-	switch x := m.RuleChoice.(type) {
-	case *ReplaceSpecType_AllowList:
-		s := proto.Size(x.AllowList)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_DenyList:
-		s := proto.Size(x.DenyList)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_RuleList:
-		s := proto.Size(x.RuleList)
-		n += proto.SizeVarint(23<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
 	return n
 }
 
@@ -1703,28 +968,17 @@ type GetSpecType struct {
 	//	*GetSpecType_ServerSelector
 	//	*GetSpecType_ServerNameMatcher
 	ServerChoice isGetSpecType_ServerChoice            `protobuf_oneof:"server_choice"`
-	PortMatcher  *ves_io_schema_policy.PortMatcherType `protobuf:"bytes,6,opt,name=port_matcher,json=portMatcher" json:"port_matcher,omitempty"`
 	Rules        []*ves_io_schema4.ObjectRefType       `protobuf:"bytes,4,rep,name=rules" json:"rules,omitempty"`
-	// Types that are valid to be assigned to RuleChoice:
-	//	*GetSpecType_AllowList
-	//	*GetSpecType_DenyList
-	//	*GetSpecType_RuleList
-	RuleChoice  isGetSpecType_RuleChoice `protobuf_oneof:"rule_choice"`
-	SimpleRules []*SimpleRule            `protobuf:"bytes,1001,rep,name=simple_rules,json=simpleRules" json:"simple_rules,omitempty"`
+	PortMatcher  *ves_io_schema_policy.PortMatcherType `protobuf:"bytes,6,opt,name=port_matcher,json=portMatcher" json:"port_matcher,omitempty"`
+	SimpleRules  []*SimpleRule                         `protobuf:"bytes,1001,rep,name=simple_rules,json=simpleRules" json:"simple_rules,omitempty"`
 }
 
 func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
 
 type isGetSpecType_ServerChoice interface {
 	isGetSpecType_ServerChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isGetSpecType_RuleChoice interface {
-	isGetSpecType_RuleChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -1742,33 +996,15 @@ type GetSpecType_ServerSelector struct {
 type GetSpecType_ServerNameMatcher struct {
 	ServerNameMatcher *ves_io_schema_policy.MatcherTypeBasic `protobuf:"bytes,5,opt,name=server_name_matcher,json=serverNameMatcher,oneof"`
 }
-type GetSpecType_AllowList struct {
-	AllowList *SourceList `protobuf:"bytes,21,opt,name=allow_list,json=allowList,oneof"`
-}
-type GetSpecType_DenyList struct {
-	DenyList *SourceList `protobuf:"bytes,22,opt,name=deny_list,json=denyList,oneof"`
-}
-type GetSpecType_RuleList struct {
-	RuleList *RuleList `protobuf:"bytes,23,opt,name=rule_list,json=ruleList,oneof"`
-}
 
 func (*GetSpecType_AnyServer) isGetSpecType_ServerChoice()         {}
 func (*GetSpecType_ServerName) isGetSpecType_ServerChoice()        {}
 func (*GetSpecType_ServerSelector) isGetSpecType_ServerChoice()    {}
 func (*GetSpecType_ServerNameMatcher) isGetSpecType_ServerChoice() {}
-func (*GetSpecType_AllowList) isGetSpecType_RuleChoice()           {}
-func (*GetSpecType_DenyList) isGetSpecType_RuleChoice()            {}
-func (*GetSpecType_RuleList) isGetSpecType_RuleChoice()            {}
 
 func (m *GetSpecType) GetServerChoice() isGetSpecType_ServerChoice {
 	if m != nil {
 		return m.ServerChoice
-	}
-	return nil
-}
-func (m *GetSpecType) GetRuleChoice() isGetSpecType_RuleChoice {
-	if m != nil {
-		return m.RuleChoice
 	}
 	return nil
 }
@@ -1808,13 +1044,6 @@ func (m *GetSpecType) GetServerNameMatcher() *ves_io_schema_policy.MatcherTypeBa
 	return nil
 }
 
-func (m *GetSpecType) GetPortMatcher() *ves_io_schema_policy.PortMatcherType {
-	if m != nil {
-		return m.PortMatcher
-	}
-	return nil
-}
-
 func (m *GetSpecType) GetRules() []*ves_io_schema4.ObjectRefType {
 	if m != nil {
 		return m.Rules
@@ -1822,23 +1051,9 @@ func (m *GetSpecType) GetRules() []*ves_io_schema4.ObjectRefType {
 	return nil
 }
 
-func (m *GetSpecType) GetAllowList() *SourceList {
-	if x, ok := m.GetRuleChoice().(*GetSpecType_AllowList); ok {
-		return x.AllowList
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetDenyList() *SourceList {
-	if x, ok := m.GetRuleChoice().(*GetSpecType_DenyList); ok {
-		return x.DenyList
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetRuleList() *RuleList {
-	if x, ok := m.GetRuleChoice().(*GetSpecType_RuleList); ok {
-		return x.RuleList
+func (m *GetSpecType) GetPortMatcher() *ves_io_schema_policy.PortMatcherType {
+	if m != nil {
+		return m.PortMatcher
 	}
 	return nil
 }
@@ -1857,9 +1072,6 @@ func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) e
 		(*GetSpecType_ServerName)(nil),
 		(*GetSpecType_ServerSelector)(nil),
 		(*GetSpecType_ServerNameMatcher)(nil),
-		(*GetSpecType_AllowList)(nil),
-		(*GetSpecType_DenyList)(nil),
-		(*GetSpecType_RuleList)(nil),
 	}
 }
 
@@ -1888,27 +1100,6 @@ func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("GetSpecType.ServerChoice has unexpected type %T", x)
-	}
-	// rule_choice
-	switch x := m.RuleChoice.(type) {
-	case *GetSpecType_AllowList:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AllowList); err != nil {
-			return err
-		}
-	case *GetSpecType_DenyList:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DenyList); err != nil {
-			return err
-		}
-	case *GetSpecType_RuleList:
-		_ = b.EncodeVarint(23<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RuleList); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.RuleChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -1947,30 +1138,6 @@ func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Bu
 		err := b.DecodeMessage(msg)
 		m.ServerChoice = &GetSpecType_ServerNameMatcher{msg}
 		return true, err
-	case 21: // rule_choice.allow_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SourceList)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &GetSpecType_AllowList{msg}
-		return true, err
-	case 22: // rule_choice.deny_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(SourceList)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &GetSpecType_DenyList{msg}
-		return true, err
-	case 23: // rule_choice.rule_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(RuleList)
-		err := b.DecodeMessage(msg)
-		m.RuleChoice = &GetSpecType_RuleList{msg}
-		return true, err
 	default:
 		return false, nil
 	}
@@ -2003,39 +1170,12 @@ func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
-	// rule_choice
-	switch x := m.RuleChoice.(type) {
-	case *GetSpecType_AllowList:
-		s := proto.Size(x.AllowList)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_DenyList:
-		s := proto.Size(x.DenyList)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_RuleList:
-		s := proto.Size(x.RuleList)
-		n += proto.SizeVarint(23<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
 	return n
 }
 
 func init() {
 	proto.RegisterType((*SimpleRule)(nil), "ves.io.schema.service_policy.SimpleRule")
 	golang_proto.RegisterType((*SimpleRule)(nil), "ves.io.schema.service_policy.SimpleRule")
-	proto.RegisterType((*SourceList)(nil), "ves.io.schema.service_policy.SourceList")
-	golang_proto.RegisterType((*SourceList)(nil), "ves.io.schema.service_policy.SourceList")
-	proto.RegisterType((*Rule)(nil), "ves.io.schema.service_policy.Rule")
-	golang_proto.RegisterType((*Rule)(nil), "ves.io.schema.service_policy.Rule")
-	proto.RegisterType((*RuleList)(nil), "ves.io.schema.service_policy.RuleList")
-	golang_proto.RegisterType((*RuleList)(nil), "ves.io.schema.service_policy.RuleList")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.service_policy.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.service_policy.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.service_policy.CreateSpecType")
@@ -2065,9 +1205,6 @@ func (this *SimpleRule) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Name != that1.Name {
-		return false
-	}
-	if this.MetricNameLabel != that1.MetricNameLabel {
 		return false
 	}
 	if this.Action != that1.Action {
@@ -2121,213 +1258,6 @@ func (this *SimpleRule) Equal(that interface{}) bool {
 	}
 	if !this.DstIpPrefixList.Equal(that1.DstIpPrefixList) {
 		return false
-	}
-	if !this.TlsFingerprintMatcher.Equal(that1.TlsFingerprintMatcher) {
-		return false
-	}
-	return true
-}
-func (this *SourceList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SourceList)
-	if !ok {
-		that2, ok := that.(SourceList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.PrefixList.Equal(that1.PrefixList) {
-		return false
-	}
-	if len(this.IpPrefixSet) != len(that1.IpPrefixSet) {
-		return false
-	}
-	for i := range this.IpPrefixSet {
-		if !this.IpPrefixSet[i].Equal(that1.IpPrefixSet[i]) {
-			return false
-		}
-	}
-	if !this.AsnList.Equal(that1.AsnList) {
-		return false
-	}
-	if len(this.AsnSet) != len(that1.AsnSet) {
-		return false
-	}
-	for i := range this.AsnSet {
-		if !this.AsnSet[i].Equal(that1.AsnSet[i]) {
-			return false
-		}
-	}
-	if len(this.CountryList) != len(that1.CountryList) {
-		return false
-	}
-	for i := range this.CountryList {
-		if this.CountryList[i] != that1.CountryList[i] {
-			return false
-		}
-	}
-	if len(this.TlsFingerprintClasses) != len(that1.TlsFingerprintClasses) {
-		return false
-	}
-	for i := range this.TlsFingerprintClasses {
-		if this.TlsFingerprintClasses[i] != that1.TlsFingerprintClasses[i] {
-			return false
-		}
-	}
-	if len(this.TlsFingerprintValues) != len(that1.TlsFingerprintValues) {
-		return false
-	}
-	for i := range this.TlsFingerprintValues {
-		if this.TlsFingerprintValues[i] != that1.TlsFingerprintValues[i] {
-			return false
-		}
-	}
-	if that1.DefaultActionChoice == nil {
-		if this.DefaultActionChoice != nil {
-			return false
-		}
-	} else if this.DefaultActionChoice == nil {
-		return false
-	} else if !this.DefaultActionChoice.Equal(that1.DefaultActionChoice) {
-		return false
-	}
-	return true
-}
-func (this *SourceList_DefaultActionNextPolicy) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SourceList_DefaultActionNextPolicy)
-	if !ok {
-		that2, ok := that.(SourceList_DefaultActionNextPolicy)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DefaultActionNextPolicy.Equal(that1.DefaultActionNextPolicy) {
-		return false
-	}
-	return true
-}
-func (this *SourceList_DefaultActionDeny) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SourceList_DefaultActionDeny)
-	if !ok {
-		that2, ok := that.(SourceList_DefaultActionDeny)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DefaultActionDeny.Equal(that1.DefaultActionDeny) {
-		return false
-	}
-	return true
-}
-func (this *SourceList_DefaultActionAllow) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SourceList_DefaultActionAllow)
-	if !ok {
-		that2, ok := that.(SourceList_DefaultActionAllow)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DefaultActionAllow.Equal(that1.DefaultActionAllow) {
-		return false
-	}
-	return true
-}
-func (this *Rule) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Rule)
-	if !ok {
-		that2, ok := that.(Rule)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Metadata.Equal(that1.Metadata) {
-		return false
-	}
-	if !this.Spec.Equal(that1.Spec) {
-		return false
-	}
-	return true
-}
-func (this *RuleList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RuleList)
-	if !ok {
-		that2, ok := that.(RuleList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Rules) != len(that1.Rules) {
-		return false
-	}
-	for i := range this.Rules {
-		if !this.Rules[i].Equal(that1.Rules[i]) {
-			return false
-		}
 	}
 	return true
 }
@@ -2387,31 +1317,11 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if that1.RuleChoice == nil {
-		if this.RuleChoice != nil {
-			return false
-		}
-	} else if this.RuleChoice == nil {
-		return false
-	} else if !this.RuleChoice.Equal(that1.RuleChoice) {
-		return false
-	}
-	if !this.ViewInternal.Equal(that1.ViewInternal) {
-		return false
-	}
 	if len(this.SimpleRules) != len(that1.SimpleRules) {
 		return false
 	}
 	for i := range this.SimpleRules {
 		if !this.SimpleRules[i].Equal(that1.SimpleRules[i]) {
-			return false
-		}
-	}
-	if len(this.OriginalRules) != len(that1.OriginalRules) {
-		return false
-	}
-	for i := range this.OriginalRules {
-		if !this.OriginalRules[i].Equal(that1.OriginalRules[i]) {
 			return false
 		}
 	}
@@ -2513,78 +1423,6 @@ func (this *GlobalSpecType_ServerNameMatcher) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *GlobalSpecType_AllowList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_AllowList)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_AllowList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AllowList.Equal(that1.AllowList) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_DenyList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_DenyList)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_DenyList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DenyList.Equal(that1.DenyList) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_RuleList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_RuleList)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_RuleList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RuleList.Equal(that1.RuleList) {
-		return false
-	}
-	return true
-}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2616,9 +1454,6 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if !this.ServerChoice.Equal(that1.ServerChoice) {
 		return false
 	}
-	if !this.PortMatcher.Equal(that1.PortMatcher) {
-		return false
-	}
 	if len(this.Rules) != len(that1.Rules) {
 		return false
 	}
@@ -2627,13 +1462,7 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if that1.RuleChoice == nil {
-		if this.RuleChoice != nil {
-			return false
-		}
-	} else if this.RuleChoice == nil {
-		return false
-	} else if !this.RuleChoice.Equal(that1.RuleChoice) {
+	if !this.PortMatcher.Equal(that1.PortMatcher) {
 		return false
 	}
 	return true
@@ -2734,78 +1563,6 @@ func (this *CreateSpecType_ServerNameMatcher) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *CreateSpecType_AllowList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_AllowList)
-	if !ok {
-		that2, ok := that.(CreateSpecType_AllowList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AllowList.Equal(that1.AllowList) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_DenyList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_DenyList)
-	if !ok {
-		that2, ok := that.(CreateSpecType_DenyList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DenyList.Equal(that1.DenyList) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_RuleList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_RuleList)
-	if !ok {
-		that2, ok := that.(CreateSpecType_RuleList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RuleList.Equal(that1.RuleList) {
-		return false
-	}
-	return true
-}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2837,9 +1594,6 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if !this.ServerChoice.Equal(that1.ServerChoice) {
 		return false
 	}
-	if !this.PortMatcher.Equal(that1.PortMatcher) {
-		return false
-	}
 	if len(this.Rules) != len(that1.Rules) {
 		return false
 	}
@@ -2848,13 +1602,7 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if that1.RuleChoice == nil {
-		if this.RuleChoice != nil {
-			return false
-		}
-	} else if this.RuleChoice == nil {
-		return false
-	} else if !this.RuleChoice.Equal(that1.RuleChoice) {
+	if !this.PortMatcher.Equal(that1.PortMatcher) {
 		return false
 	}
 	return true
@@ -2955,78 +1703,6 @@ func (this *ReplaceSpecType_ServerNameMatcher) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *ReplaceSpecType_AllowList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_AllowList)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_AllowList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AllowList.Equal(that1.AllowList) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_DenyList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_DenyList)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_DenyList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DenyList.Equal(that1.DenyList) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_RuleList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_RuleList)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_RuleList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RuleList.Equal(that1.RuleList) {
-		return false
-	}
-	return true
-}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -3058,9 +1734,6 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if !this.ServerChoice.Equal(that1.ServerChoice) {
 		return false
 	}
-	if !this.PortMatcher.Equal(that1.PortMatcher) {
-		return false
-	}
 	if len(this.Rules) != len(that1.Rules) {
 		return false
 	}
@@ -3069,13 +1742,7 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if that1.RuleChoice == nil {
-		if this.RuleChoice != nil {
-			return false
-		}
-	} else if this.RuleChoice == nil {
-		return false
-	} else if !this.RuleChoice.Equal(that1.RuleChoice) {
+	if !this.PortMatcher.Equal(that1.PortMatcher) {
 		return false
 	}
 	if len(this.SimpleRules) != len(that1.SimpleRules) {
@@ -3184,86 +1851,13 @@ func (this *GetSpecType_ServerNameMatcher) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *GetSpecType_AllowList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_AllowList)
-	if !ok {
-		that2, ok := that.(GetSpecType_AllowList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AllowList.Equal(that1.AllowList) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_DenyList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_DenyList)
-	if !ok {
-		that2, ok := that.(GetSpecType_DenyList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DenyList.Equal(that1.DenyList) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_RuleList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_RuleList)
-	if !ok {
-		that2, ok := that.(GetSpecType_RuleList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RuleList.Equal(that1.RuleList) {
-		return false
-	}
-	return true
-}
 func (this *SimpleRule) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 21)
+	s := make([]string, 0, 19)
 	s = append(s, "&service_policy.SimpleRule{")
 	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
-	s = append(s, "MetricNameLabel: "+fmt.Sprintf("%#v", this.MetricNameLabel)+",\n")
 	s = append(s, "Action: "+fmt.Sprintf("%#v", this.Action)+",\n")
 	if this.DomainMatcher != nil {
 		s = append(s, "DomainMatcher: "+fmt.Sprintf("%#v", this.DomainMatcher)+",\n")
@@ -3300,87 +1894,6 @@ func (this *SimpleRule) GoString() string {
 	if this.DstIpPrefixList != nil {
 		s = append(s, "DstIpPrefixList: "+fmt.Sprintf("%#v", this.DstIpPrefixList)+",\n")
 	}
-	if this.TlsFingerprintMatcher != nil {
-		s = append(s, "TlsFingerprintMatcher: "+fmt.Sprintf("%#v", this.TlsFingerprintMatcher)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *SourceList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 14)
-	s = append(s, "&service_policy.SourceList{")
-	if this.PrefixList != nil {
-		s = append(s, "PrefixList: "+fmt.Sprintf("%#v", this.PrefixList)+",\n")
-	}
-	if this.IpPrefixSet != nil {
-		s = append(s, "IpPrefixSet: "+fmt.Sprintf("%#v", this.IpPrefixSet)+",\n")
-	}
-	if this.AsnList != nil {
-		s = append(s, "AsnList: "+fmt.Sprintf("%#v", this.AsnList)+",\n")
-	}
-	if this.AsnSet != nil {
-		s = append(s, "AsnSet: "+fmt.Sprintf("%#v", this.AsnSet)+",\n")
-	}
-	s = append(s, "CountryList: "+fmt.Sprintf("%#v", this.CountryList)+",\n")
-	s = append(s, "TlsFingerprintClasses: "+fmt.Sprintf("%#v", this.TlsFingerprintClasses)+",\n")
-	s = append(s, "TlsFingerprintValues: "+fmt.Sprintf("%#v", this.TlsFingerprintValues)+",\n")
-	if this.DefaultActionChoice != nil {
-		s = append(s, "DefaultActionChoice: "+fmt.Sprintf("%#v", this.DefaultActionChoice)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *SourceList_DefaultActionNextPolicy) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&service_policy.SourceList_DefaultActionNextPolicy{` +
-		`DefaultActionNextPolicy:` + fmt.Sprintf("%#v", this.DefaultActionNextPolicy) + `}`}, ", ")
-	return s
-}
-func (this *SourceList_DefaultActionDeny) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&service_policy.SourceList_DefaultActionDeny{` +
-		`DefaultActionDeny:` + fmt.Sprintf("%#v", this.DefaultActionDeny) + `}`}, ", ")
-	return s
-}
-func (this *SourceList_DefaultActionAllow) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&service_policy.SourceList_DefaultActionAllow{` +
-		`DefaultActionAllow:` + fmt.Sprintf("%#v", this.DefaultActionAllow) + `}`}, ", ")
-	return s
-}
-func (this *Rule) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&service_policy.Rule{")
-	if this.Metadata != nil {
-		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
-	}
-	if this.Spec != nil {
-		s = append(s, "Spec: "+fmt.Sprintf("%#v", this.Spec)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *RuleList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&service_policy.RuleList{")
-	if this.Rules != nil {
-		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
-	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -3388,7 +1901,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 20)
+	s := make([]string, 0, 15)
 	s = append(s, "&service_policy.GlobalSpecType{")
 	s = append(s, "Algo: "+fmt.Sprintf("%#v", this.Algo)+",\n")
 	if this.ServerChoice != nil {
@@ -3409,17 +1922,8 @@ func (this *GlobalSpecType) GoString() string {
 	if this.Rules != nil {
 		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
 	}
-	if this.RuleChoice != nil {
-		s = append(s, "RuleChoice: "+fmt.Sprintf("%#v", this.RuleChoice)+",\n")
-	}
-	if this.ViewInternal != nil {
-		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
-	}
 	if this.SimpleRules != nil {
 		s = append(s, "SimpleRules: "+fmt.Sprintf("%#v", this.SimpleRules)+",\n")
-	}
-	if this.OriginalRules != nil {
-		s = append(s, "OriginalRules: "+fmt.Sprintf("%#v", this.OriginalRules)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -3456,48 +1960,21 @@ func (this *GlobalSpecType_ServerNameMatcher) GoString() string {
 		`ServerNameMatcher:` + fmt.Sprintf("%#v", this.ServerNameMatcher) + `}`}, ", ")
 	return s
 }
-func (this *GlobalSpecType_AllowList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&service_policy.GlobalSpecType_AllowList{` +
-		`AllowList:` + fmt.Sprintf("%#v", this.AllowList) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_DenyList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&service_policy.GlobalSpecType_DenyList{` +
-		`DenyList:` + fmt.Sprintf("%#v", this.DenyList) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_RuleList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&service_policy.GlobalSpecType_RuleList{` +
-		`RuleList:` + fmt.Sprintf("%#v", this.RuleList) + `}`}, ", ")
-	return s
-}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 14)
+	s := make([]string, 0, 11)
 	s = append(s, "&service_policy.CreateSpecType{")
 	s = append(s, "Algo: "+fmt.Sprintf("%#v", this.Algo)+",\n")
 	if this.ServerChoice != nil {
 		s = append(s, "ServerChoice: "+fmt.Sprintf("%#v", this.ServerChoice)+",\n")
 	}
-	if this.PortMatcher != nil {
-		s = append(s, "PortMatcher: "+fmt.Sprintf("%#v", this.PortMatcher)+",\n")
-	}
 	if this.Rules != nil {
 		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
 	}
-	if this.RuleChoice != nil {
-		s = append(s, "RuleChoice: "+fmt.Sprintf("%#v", this.RuleChoice)+",\n")
+	if this.PortMatcher != nil {
+		s = append(s, "PortMatcher: "+fmt.Sprintf("%#v", this.PortMatcher)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -3534,48 +2011,21 @@ func (this *CreateSpecType_ServerNameMatcher) GoString() string {
 		`ServerNameMatcher:` + fmt.Sprintf("%#v", this.ServerNameMatcher) + `}`}, ", ")
 	return s
 }
-func (this *CreateSpecType_AllowList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&service_policy.CreateSpecType_AllowList{` +
-		`AllowList:` + fmt.Sprintf("%#v", this.AllowList) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_DenyList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&service_policy.CreateSpecType_DenyList{` +
-		`DenyList:` + fmt.Sprintf("%#v", this.DenyList) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_RuleList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&service_policy.CreateSpecType_RuleList{` +
-		`RuleList:` + fmt.Sprintf("%#v", this.RuleList) + `}`}, ", ")
-	return s
-}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 14)
+	s := make([]string, 0, 11)
 	s = append(s, "&service_policy.ReplaceSpecType{")
 	s = append(s, "Algo: "+fmt.Sprintf("%#v", this.Algo)+",\n")
 	if this.ServerChoice != nil {
 		s = append(s, "ServerChoice: "+fmt.Sprintf("%#v", this.ServerChoice)+",\n")
 	}
-	if this.PortMatcher != nil {
-		s = append(s, "PortMatcher: "+fmt.Sprintf("%#v", this.PortMatcher)+",\n")
-	}
 	if this.Rules != nil {
 		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
 	}
-	if this.RuleChoice != nil {
-		s = append(s, "RuleChoice: "+fmt.Sprintf("%#v", this.RuleChoice)+",\n")
+	if this.PortMatcher != nil {
+		s = append(s, "PortMatcher: "+fmt.Sprintf("%#v", this.PortMatcher)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -3612,48 +2062,21 @@ func (this *ReplaceSpecType_ServerNameMatcher) GoString() string {
 		`ServerNameMatcher:` + fmt.Sprintf("%#v", this.ServerNameMatcher) + `}`}, ", ")
 	return s
 }
-func (this *ReplaceSpecType_AllowList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&service_policy.ReplaceSpecType_AllowList{` +
-		`AllowList:` + fmt.Sprintf("%#v", this.AllowList) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_DenyList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&service_policy.ReplaceSpecType_DenyList{` +
-		`DenyList:` + fmt.Sprintf("%#v", this.DenyList) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_RuleList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&service_policy.ReplaceSpecType_RuleList{` +
-		`RuleList:` + fmt.Sprintf("%#v", this.RuleList) + `}`}, ", ")
-	return s
-}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 15)
+	s := make([]string, 0, 12)
 	s = append(s, "&service_policy.GetSpecType{")
 	s = append(s, "Algo: "+fmt.Sprintf("%#v", this.Algo)+",\n")
 	if this.ServerChoice != nil {
 		s = append(s, "ServerChoice: "+fmt.Sprintf("%#v", this.ServerChoice)+",\n")
 	}
-	if this.PortMatcher != nil {
-		s = append(s, "PortMatcher: "+fmt.Sprintf("%#v", this.PortMatcher)+",\n")
-	}
 	if this.Rules != nil {
 		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
 	}
-	if this.RuleChoice != nil {
-		s = append(s, "RuleChoice: "+fmt.Sprintf("%#v", this.RuleChoice)+",\n")
+	if this.PortMatcher != nil {
+		s = append(s, "PortMatcher: "+fmt.Sprintf("%#v", this.PortMatcher)+",\n")
 	}
 	if this.SimpleRules != nil {
 		s = append(s, "SimpleRules: "+fmt.Sprintf("%#v", this.SimpleRules)+",\n")
@@ -3691,30 +2114,6 @@ func (this *GetSpecType_ServerNameMatcher) GoString() string {
 	}
 	s := strings.Join([]string{`&service_policy.GetSpecType_ServerNameMatcher{` +
 		`ServerNameMatcher:` + fmt.Sprintf("%#v", this.ServerNameMatcher) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_AllowList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&service_policy.GetSpecType_AllowList{` +
-		`AllowList:` + fmt.Sprintf("%#v", this.AllowList) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_DenyList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&service_policy.GetSpecType_DenyList{` +
-		`DenyList:` + fmt.Sprintf("%#v", this.DenyList) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_RuleList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&service_policy.GetSpecType_RuleList{` +
-		`RuleList:` + fmt.Sprintf("%#v", this.RuleList) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -3886,254 +2285,6 @@ func (m *SimpleRule) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n10
 	}
-	if len(m.MetricNameLabel) > 0 {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.MetricNameLabel)))
-		i += copy(dAtA[i:], m.MetricNameLabel)
-	}
-	if m.TlsFingerprintMatcher != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TlsFingerprintMatcher.Size()))
-		n11, err := m.TlsFingerprintMatcher.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n11
-	}
-	return i, nil
-}
-
-func (m *SourceList) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *SourceList) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.PrefixList != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PrefixList.Size()))
-		n12, err := m.PrefixList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n12
-	}
-	if len(m.IpPrefixSet) > 0 {
-		for _, msg := range m.IpPrefixSet {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.AsnList != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AsnList.Size()))
-		n13, err := m.AsnList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n13
-	}
-	if len(m.AsnSet) > 0 {
-		for _, msg := range m.AsnSet {
-			dAtA[i] = 0x2a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.CountryList) > 0 {
-		dAtA15 := make([]byte, len(m.CountryList)*10)
-		var j14 int
-		for _, num := range m.CountryList {
-			for num >= 1<<7 {
-				dAtA15[j14] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j14++
-			}
-			dAtA15[j14] = uint8(num)
-			j14++
-		}
-		dAtA[i] = 0x32
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(j14))
-		i += copy(dAtA[i:], dAtA15[:j14])
-	}
-	if len(m.TlsFingerprintClasses) > 0 {
-		dAtA17 := make([]byte, len(m.TlsFingerprintClasses)*10)
-		var j16 int
-		for _, num := range m.TlsFingerprintClasses {
-			for num >= 1<<7 {
-				dAtA17[j16] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j16++
-			}
-			dAtA17[j16] = uint8(num)
-			j16++
-		}
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(j16))
-		i += copy(dAtA[i:], dAtA17[:j16])
-	}
-	if len(m.TlsFingerprintValues) > 0 {
-		for _, s := range m.TlsFingerprintValues {
-			dAtA[i] = 0x42
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
-		}
-	}
-	if m.DefaultActionChoice != nil {
-		nn18, err := m.DefaultActionChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn18
-	}
-	return i, nil
-}
-
-func (m *SourceList_DefaultActionNextPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DefaultActionNextPolicy != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultActionNextPolicy.Size()))
-		n19, err := m.DefaultActionNextPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n19
-	}
-	return i, nil
-}
-func (m *SourceList_DefaultActionDeny) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DefaultActionDeny != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultActionDeny.Size()))
-		n20, err := m.DefaultActionDeny.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n20
-	}
-	return i, nil
-}
-func (m *SourceList_DefaultActionAllow) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DefaultActionAllow != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultActionAllow.Size()))
-		n21, err := m.DefaultActionAllow.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n21
-	}
-	return i, nil
-}
-func (m *Rule) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Rule) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.Metadata != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Metadata.Size()))
-		n22, err := m.Metadata.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n22
-	}
-	if m.Spec != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Spec.Size()))
-		n23, err := m.Spec.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n23
-	}
-	return i, nil
-}
-
-func (m *RuleList) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *RuleList) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.Rules) > 0 {
-		for _, msg := range m.Rules {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
 	return i, nil
 }
 
@@ -4158,11 +2309,11 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Algo))
 	}
 	if m.ServerChoice != nil {
-		nn24, err := m.ServerChoice.MarshalTo(dAtA[i:])
+		nn11, err := m.ServerChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn24
+		i += nn11
 	}
 	if len(m.Rules) > 0 {
 		for _, msg := range m.Rules {
@@ -4180,31 +2331,31 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.PortMatcher.Size()))
-		n25, err := m.PortMatcher.MarshalTo(dAtA[i:])
+		n12, err := m.PortMatcher.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n25
+		i += n12
 	}
 	if m.Role != nil {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Role.Size()))
-		n26, err := m.Role.MarshalTo(dAtA[i:])
+		n13, err := m.Role.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n26
+		i += n13
 	}
 	if m.DenyInfo != nil {
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DenyInfo.Size()))
-		n27, err := m.DenyInfo.MarshalTo(dAtA[i:])
+		n14, err := m.DenyInfo.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n27
+		i += n14
 	}
 	if len(m.DefaultForwardingClasses) > 0 {
 		for _, msg := range m.DefaultForwardingClasses {
@@ -4218,42 +2369,9 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 			i += n
 		}
 	}
-	if m.RuleChoice != nil {
-		nn28, err := m.RuleChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn28
-	}
-	if m.ViewInternal != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x3e
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ViewInternal.Size()))
-		n29, err := m.ViewInternal.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n29
-	}
 	if len(m.SimpleRules) > 0 {
 		for _, msg := range m.SimpleRules {
 			dAtA[i] = 0xca
-			i++
-			dAtA[i] = 0x3e
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.OriginalRules) > 0 {
-		for _, msg := range m.OriginalRules {
-			dAtA[i] = 0xd2
 			i++
 			dAtA[i] = 0x3e
 			i++
@@ -4282,11 +2400,11 @@ func (m *GlobalSpecType_ServerSelector) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ServerSelector.Size()))
-		n30, err := m.ServerSelector.MarshalTo(dAtA[i:])
+		n15, err := m.ServerSelector.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n30
+		i += n15
 	}
 	return i, nil
 }
@@ -4296,11 +2414,11 @@ func (m *GlobalSpecType_ServerNameMatcher) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ServerNameMatcher.Size()))
-		n31, err := m.ServerNameMatcher.MarshalTo(dAtA[i:])
+		n16, err := m.ServerNameMatcher.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n31
+		i += n16
 	}
 	return i, nil
 }
@@ -4310,59 +2428,11 @@ func (m *GlobalSpecType_AnyServer) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x5a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AnyServer.Size()))
-		n32, err := m.AnyServer.MarshalTo(dAtA[i:])
+		n17, err := m.AnyServer.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n32
-	}
-	return i, nil
-}
-func (m *GlobalSpecType_AllowList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.AllowList != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllowList.Size()))
-		n33, err := m.AllowList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n33
-	}
-	return i, nil
-}
-func (m *GlobalSpecType_DenyList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DenyList != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DenyList.Size()))
-		n34, err := m.DenyList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n34
-	}
-	return i, nil
-}
-func (m *GlobalSpecType_RuleList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.RuleList != nil {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RuleList.Size()))
-		n35, err := m.RuleList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n35
+		i += n17
 	}
 	return i, nil
 }
@@ -4387,11 +2457,11 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Algo))
 	}
 	if m.ServerChoice != nil {
-		nn36, err := m.ServerChoice.MarshalTo(dAtA[i:])
+		nn18, err := m.ServerChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn36
+		i += nn18
 	}
 	if len(m.Rules) > 0 {
 		for _, msg := range m.Rules {
@@ -4409,18 +2479,11 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.PortMatcher.Size()))
-		n37, err := m.PortMatcher.MarshalTo(dAtA[i:])
+		n19, err := m.PortMatcher.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n37
-	}
-	if m.RuleChoice != nil {
-		nn38, err := m.RuleChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn38
+		i += n19
 	}
 	return i, nil
 }
@@ -4439,11 +2502,11 @@ func (m *CreateSpecType_ServerSelector) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ServerSelector.Size()))
-		n39, err := m.ServerSelector.MarshalTo(dAtA[i:])
+		n20, err := m.ServerSelector.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n39
+		i += n20
 	}
 	return i, nil
 }
@@ -4453,11 +2516,11 @@ func (m *CreateSpecType_ServerNameMatcher) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ServerNameMatcher.Size()))
-		n40, err := m.ServerNameMatcher.MarshalTo(dAtA[i:])
+		n21, err := m.ServerNameMatcher.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n40
+		i += n21
 	}
 	return i, nil
 }
@@ -4467,59 +2530,11 @@ func (m *CreateSpecType_AnyServer) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x5a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AnyServer.Size()))
-		n41, err := m.AnyServer.MarshalTo(dAtA[i:])
+		n22, err := m.AnyServer.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n41
-	}
-	return i, nil
-}
-func (m *CreateSpecType_AllowList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.AllowList != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllowList.Size()))
-		n42, err := m.AllowList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n42
-	}
-	return i, nil
-}
-func (m *CreateSpecType_DenyList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DenyList != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DenyList.Size()))
-		n43, err := m.DenyList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n43
-	}
-	return i, nil
-}
-func (m *CreateSpecType_RuleList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.RuleList != nil {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RuleList.Size()))
-		n44, err := m.RuleList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n44
+		i += n22
 	}
 	return i, nil
 }
@@ -4544,11 +2559,11 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Algo))
 	}
 	if m.ServerChoice != nil {
-		nn45, err := m.ServerChoice.MarshalTo(dAtA[i:])
+		nn23, err := m.ServerChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn45
+		i += nn23
 	}
 	if len(m.Rules) > 0 {
 		for _, msg := range m.Rules {
@@ -4566,18 +2581,11 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.PortMatcher.Size()))
-		n46, err := m.PortMatcher.MarshalTo(dAtA[i:])
+		n24, err := m.PortMatcher.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n46
-	}
-	if m.RuleChoice != nil {
-		nn47, err := m.RuleChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn47
+		i += n24
 	}
 	return i, nil
 }
@@ -4596,11 +2604,11 @@ func (m *ReplaceSpecType_ServerSelector) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ServerSelector.Size()))
-		n48, err := m.ServerSelector.MarshalTo(dAtA[i:])
+		n25, err := m.ServerSelector.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n48
+		i += n25
 	}
 	return i, nil
 }
@@ -4610,11 +2618,11 @@ func (m *ReplaceSpecType_ServerNameMatcher) MarshalTo(dAtA []byte) (int, error) 
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ServerNameMatcher.Size()))
-		n49, err := m.ServerNameMatcher.MarshalTo(dAtA[i:])
+		n26, err := m.ServerNameMatcher.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n49
+		i += n26
 	}
 	return i, nil
 }
@@ -4624,59 +2632,11 @@ func (m *ReplaceSpecType_AnyServer) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x5a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AnyServer.Size()))
-		n50, err := m.AnyServer.MarshalTo(dAtA[i:])
+		n27, err := m.AnyServer.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n50
-	}
-	return i, nil
-}
-func (m *ReplaceSpecType_AllowList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.AllowList != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllowList.Size()))
-		n51, err := m.AllowList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n51
-	}
-	return i, nil
-}
-func (m *ReplaceSpecType_DenyList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DenyList != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DenyList.Size()))
-		n52, err := m.DenyList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n52
-	}
-	return i, nil
-}
-func (m *ReplaceSpecType_RuleList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.RuleList != nil {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RuleList.Size()))
-		n53, err := m.RuleList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n53
+		i += n27
 	}
 	return i, nil
 }
@@ -4701,11 +2661,11 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Algo))
 	}
 	if m.ServerChoice != nil {
-		nn54, err := m.ServerChoice.MarshalTo(dAtA[i:])
+		nn28, err := m.ServerChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn54
+		i += nn28
 	}
 	if len(m.Rules) > 0 {
 		for _, msg := range m.Rules {
@@ -4723,18 +2683,11 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.PortMatcher.Size()))
-		n55, err := m.PortMatcher.MarshalTo(dAtA[i:])
+		n29, err := m.PortMatcher.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n55
-	}
-	if m.RuleChoice != nil {
-		nn56, err := m.RuleChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn56
+		i += n29
 	}
 	if len(m.SimpleRules) > 0 {
 		for _, msg := range m.SimpleRules {
@@ -4767,11 +2720,11 @@ func (m *GetSpecType_ServerSelector) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ServerSelector.Size()))
-		n57, err := m.ServerSelector.MarshalTo(dAtA[i:])
+		n30, err := m.ServerSelector.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n57
+		i += n30
 	}
 	return i, nil
 }
@@ -4781,11 +2734,11 @@ func (m *GetSpecType_ServerNameMatcher) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ServerNameMatcher.Size()))
-		n58, err := m.ServerNameMatcher.MarshalTo(dAtA[i:])
+		n31, err := m.ServerNameMatcher.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n58
+		i += n31
 	}
 	return i, nil
 }
@@ -4795,59 +2748,11 @@ func (m *GetSpecType_AnyServer) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x5a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AnyServer.Size()))
-		n59, err := m.AnyServer.MarshalTo(dAtA[i:])
+		n32, err := m.AnyServer.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n59
-	}
-	return i, nil
-}
-func (m *GetSpecType_AllowList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.AllowList != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllowList.Size()))
-		n60, err := m.AllowList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n60
-	}
-	return i, nil
-}
-func (m *GetSpecType_DenyList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DenyList != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DenyList.Size()))
-		n61, err := m.DenyList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n61
-	}
-	return i, nil
-}
-func (m *GetSpecType_RuleList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.RuleList != nil {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RuleList.Size()))
-		n62, err := m.RuleList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n62
+		i += n32
 	}
 	return i, nil
 }
@@ -4907,103 +2812,6 @@ func NewPopulatedSimpleRule(r randyTypes, easy bool) *SimpleRule {
 	if r.Intn(10) != 0 {
 		this.DstIpPrefixList = ves_io_schema_policy.NewPopulatedPrefixMatchList(r, easy)
 	}
-	this.MetricNameLabel = string(randStringTypes(r))
-	if r.Intn(10) != 0 {
-		this.TlsFingerprintMatcher = ves_io_schema_policy.NewPopulatedTlsFingerprintMatcherType(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedSourceList(r randyTypes, easy bool) *SourceList {
-	this := &SourceList{}
-	if r.Intn(10) != 0 {
-		this.PrefixList = ves_io_schema_views.NewPopulatedPrefixStringListType(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		v3 := r.Intn(5)
-		this.IpPrefixSet = make([]*ves_io_schema_views.ObjectRefType, v3)
-		for i := 0; i < v3; i++ {
-			this.IpPrefixSet[i] = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
-		}
-	}
-	if r.Intn(10) != 0 {
-		this.AsnList = ves_io_schema_policy.NewPopulatedAsnMatchList(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		v4 := r.Intn(5)
-		this.AsnSet = make([]*ves_io_schema_views.ObjectRefType, v4)
-		for i := 0; i < v4; i++ {
-			this.AsnSet[i] = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
-		}
-	}
-	v5 := r.Intn(10)
-	this.CountryList = make([]ves_io_schema_policy.CountryCode, v5)
-	for i := 0; i < v5; i++ {
-		this.CountryList[i] = ves_io_schema_policy.CountryCode([]int32{0, 4, 8}[r.Intn(3)])
-	}
-	v6 := r.Intn(10)
-	this.TlsFingerprintClasses = make([]ves_io_schema_policy.KnownTlsFingerprintClass, v6)
-	for i := 0; i < v6; i++ {
-		this.TlsFingerprintClasses[i] = ves_io_schema_policy.KnownTlsFingerprintClass([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}[r.Intn(14)])
-	}
-	v7 := r.Intn(10)
-	this.TlsFingerprintValues = make([]string, v7)
-	for i := 0; i < v7; i++ {
-		this.TlsFingerprintValues[i] = string(randStringTypes(r))
-	}
-	oneofNumber_DefaultActionChoice := []int32{11, 12, 13}[r.Intn(3)]
-	switch oneofNumber_DefaultActionChoice {
-	case 11:
-		this.DefaultActionChoice = NewPopulatedSourceList_DefaultActionNextPolicy(r, easy)
-	case 12:
-		this.DefaultActionChoice = NewPopulatedSourceList_DefaultActionDeny(r, easy)
-	case 13:
-		this.DefaultActionChoice = NewPopulatedSourceList_DefaultActionAllow(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedSourceList_DefaultActionNextPolicy(r randyTypes, easy bool) *SourceList_DefaultActionNextPolicy {
-	this := &SourceList_DefaultActionNextPolicy{}
-	this.DefaultActionNextPolicy = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedSourceList_DefaultActionDeny(r randyTypes, easy bool) *SourceList_DefaultActionDeny {
-	this := &SourceList_DefaultActionDeny{}
-	this.DefaultActionDeny = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedSourceList_DefaultActionAllow(r randyTypes, easy bool) *SourceList_DefaultActionAllow {
-	this := &SourceList_DefaultActionAllow{}
-	this.DefaultActionAllow = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedRule(r randyTypes, easy bool) *Rule {
-	this := &Rule{}
-	if r.Intn(10) != 0 {
-		this.Metadata = ves_io_schema4.NewPopulatedMessageMetaType(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Spec = ves_io_schema_service_policy_rule.NewPopulatedGlobalSpecType(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedRuleList(r randyTypes, easy bool) *RuleList {
-	this := &RuleList{}
-	if r.Intn(10) != 0 {
-		v8 := r.Intn(5)
-		this.Rules = make([]*Rule, v8)
-		for i := 0; i < v8; i++ {
-			this.Rules[i] = NewPopulatedRule(r, easy)
-		}
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -5024,9 +2832,9 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 		this.ServerChoice = NewPopulatedGlobalSpecType_AnyServer(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v9 := r.Intn(5)
-		this.Rules = make([]*ves_io_schema4.ObjectRefType, v9)
-		for i := 0; i < v9; i++ {
+		v3 := r.Intn(5)
+		this.Rules = make([]*ves_io_schema4.ObjectRefType, v3)
+		for i := 0; i < v3; i++ {
 			this.Rules[i] = ves_io_schema4.NewPopulatedObjectRefType(r, easy)
 		}
 	}
@@ -5040,36 +2848,17 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 		this.DenyInfo = ves_io_schema_policy.NewPopulatedDenyInformation(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v10 := r.Intn(5)
-		this.DefaultForwardingClasses = make([]*ves_io_schema4.ObjectRefType, v10)
-		for i := 0; i < v10; i++ {
+		v4 := r.Intn(5)
+		this.DefaultForwardingClasses = make([]*ves_io_schema4.ObjectRefType, v4)
+		for i := 0; i < v4; i++ {
 			this.DefaultForwardingClasses[i] = ves_io_schema4.NewPopulatedObjectRefType(r, easy)
 		}
 	}
-	oneofNumber_RuleChoice := []int32{21, 22, 23}[r.Intn(3)]
-	switch oneofNumber_RuleChoice {
-	case 21:
-		this.RuleChoice = NewPopulatedGlobalSpecType_AllowList(r, easy)
-	case 22:
-		this.RuleChoice = NewPopulatedGlobalSpecType_DenyList(r, easy)
-	case 23:
-		this.RuleChoice = NewPopulatedGlobalSpecType_RuleList(r, easy)
-	}
 	if r.Intn(10) != 0 {
-		this.ViewInternal = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		v11 := r.Intn(5)
-		this.SimpleRules = make([]*SimpleRule, v11)
-		for i := 0; i < v11; i++ {
+		v5 := r.Intn(5)
+		this.SimpleRules = make([]*SimpleRule, v5)
+		for i := 0; i < v5; i++ {
 			this.SimpleRules[i] = NewPopulatedSimpleRule(r, easy)
-		}
-	}
-	if r.Intn(10) != 0 {
-		v12 := r.Intn(5)
-		this.OriginalRules = make([]*ves_io_schema4.ObjectRefType, v12)
-		for i := 0; i < v12; i++ {
-			this.OriginalRules[i] = ves_io_schema4.NewPopulatedObjectRefType(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -5097,21 +2886,6 @@ func NewPopulatedGlobalSpecType_AnyServer(r randyTypes, easy bool) *GlobalSpecTy
 	this.AnyServer = ves_io_schema4.NewPopulatedEmpty(r, easy)
 	return this
 }
-func NewPopulatedGlobalSpecType_AllowList(r randyTypes, easy bool) *GlobalSpecType_AllowList {
-	this := &GlobalSpecType_AllowList{}
-	this.AllowList = NewPopulatedSourceList(r, easy)
-	return this
-}
-func NewPopulatedGlobalSpecType_DenyList(r randyTypes, easy bool) *GlobalSpecType_DenyList {
-	this := &GlobalSpecType_DenyList{}
-	this.DenyList = NewPopulatedSourceList(r, easy)
-	return this
-}
-func NewPopulatedGlobalSpecType_RuleList(r randyTypes, easy bool) *GlobalSpecType_RuleList {
-	this := &GlobalSpecType_RuleList{}
-	this.RuleList = NewPopulatedRuleList(r, easy)
-	return this
-}
 func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 	this := &CreateSpecType{}
 	this.Algo = ves_io_schema_policy.RuleCombiningAlgorithm([]int32{0, 1, 2}[r.Intn(3)])
@@ -5127,23 +2901,14 @@ func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 		this.ServerChoice = NewPopulatedCreateSpecType_AnyServer(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v13 := r.Intn(5)
-		this.Rules = make([]*ves_io_schema4.ObjectRefType, v13)
-		for i := 0; i < v13; i++ {
+		v6 := r.Intn(5)
+		this.Rules = make([]*ves_io_schema4.ObjectRefType, v6)
+		for i := 0; i < v6; i++ {
 			this.Rules[i] = ves_io_schema4.NewPopulatedObjectRefType(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
 		this.PortMatcher = ves_io_schema_policy.NewPopulatedPortMatcherType(r, easy)
-	}
-	oneofNumber_RuleChoice := []int32{21, 22, 23}[r.Intn(3)]
-	switch oneofNumber_RuleChoice {
-	case 21:
-		this.RuleChoice = NewPopulatedCreateSpecType_AllowList(r, easy)
-	case 22:
-		this.RuleChoice = NewPopulatedCreateSpecType_DenyList(r, easy)
-	case 23:
-		this.RuleChoice = NewPopulatedCreateSpecType_RuleList(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -5170,21 +2935,6 @@ func NewPopulatedCreateSpecType_AnyServer(r randyTypes, easy bool) *CreateSpecTy
 	this.AnyServer = ves_io_schema4.NewPopulatedEmpty(r, easy)
 	return this
 }
-func NewPopulatedCreateSpecType_AllowList(r randyTypes, easy bool) *CreateSpecType_AllowList {
-	this := &CreateSpecType_AllowList{}
-	this.AllowList = NewPopulatedSourceList(r, easy)
-	return this
-}
-func NewPopulatedCreateSpecType_DenyList(r randyTypes, easy bool) *CreateSpecType_DenyList {
-	this := &CreateSpecType_DenyList{}
-	this.DenyList = NewPopulatedSourceList(r, easy)
-	return this
-}
-func NewPopulatedCreateSpecType_RuleList(r randyTypes, easy bool) *CreateSpecType_RuleList {
-	this := &CreateSpecType_RuleList{}
-	this.RuleList = NewPopulatedRuleList(r, easy)
-	return this
-}
 func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 	this := &ReplaceSpecType{}
 	this.Algo = ves_io_schema_policy.RuleCombiningAlgorithm([]int32{0, 1, 2}[r.Intn(3)])
@@ -5200,23 +2950,14 @@ func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 		this.ServerChoice = NewPopulatedReplaceSpecType_AnyServer(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v14 := r.Intn(5)
-		this.Rules = make([]*ves_io_schema4.ObjectRefType, v14)
-		for i := 0; i < v14; i++ {
+		v7 := r.Intn(5)
+		this.Rules = make([]*ves_io_schema4.ObjectRefType, v7)
+		for i := 0; i < v7; i++ {
 			this.Rules[i] = ves_io_schema4.NewPopulatedObjectRefType(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
 		this.PortMatcher = ves_io_schema_policy.NewPopulatedPortMatcherType(r, easy)
-	}
-	oneofNumber_RuleChoice := []int32{21, 22, 23}[r.Intn(3)]
-	switch oneofNumber_RuleChoice {
-	case 21:
-		this.RuleChoice = NewPopulatedReplaceSpecType_AllowList(r, easy)
-	case 22:
-		this.RuleChoice = NewPopulatedReplaceSpecType_DenyList(r, easy)
-	case 23:
-		this.RuleChoice = NewPopulatedReplaceSpecType_RuleList(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -5243,21 +2984,6 @@ func NewPopulatedReplaceSpecType_AnyServer(r randyTypes, easy bool) *ReplaceSpec
 	this.AnyServer = ves_io_schema4.NewPopulatedEmpty(r, easy)
 	return this
 }
-func NewPopulatedReplaceSpecType_AllowList(r randyTypes, easy bool) *ReplaceSpecType_AllowList {
-	this := &ReplaceSpecType_AllowList{}
-	this.AllowList = NewPopulatedSourceList(r, easy)
-	return this
-}
-func NewPopulatedReplaceSpecType_DenyList(r randyTypes, easy bool) *ReplaceSpecType_DenyList {
-	this := &ReplaceSpecType_DenyList{}
-	this.DenyList = NewPopulatedSourceList(r, easy)
-	return this
-}
-func NewPopulatedReplaceSpecType_RuleList(r randyTypes, easy bool) *ReplaceSpecType_RuleList {
-	this := &ReplaceSpecType_RuleList{}
-	this.RuleList = NewPopulatedRuleList(r, easy)
-	return this
-}
 func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 	this := &GetSpecType{}
 	this.Algo = ves_io_schema_policy.RuleCombiningAlgorithm([]int32{0, 1, 2}[r.Intn(3)])
@@ -5273,28 +2999,19 @@ func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 		this.ServerChoice = NewPopulatedGetSpecType_AnyServer(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v15 := r.Intn(5)
-		this.Rules = make([]*ves_io_schema4.ObjectRefType, v15)
-		for i := 0; i < v15; i++ {
+		v8 := r.Intn(5)
+		this.Rules = make([]*ves_io_schema4.ObjectRefType, v8)
+		for i := 0; i < v8; i++ {
 			this.Rules[i] = ves_io_schema4.NewPopulatedObjectRefType(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
 		this.PortMatcher = ves_io_schema_policy.NewPopulatedPortMatcherType(r, easy)
 	}
-	oneofNumber_RuleChoice := []int32{21, 22, 23}[r.Intn(3)]
-	switch oneofNumber_RuleChoice {
-	case 21:
-		this.RuleChoice = NewPopulatedGetSpecType_AllowList(r, easy)
-	case 22:
-		this.RuleChoice = NewPopulatedGetSpecType_DenyList(r, easy)
-	case 23:
-		this.RuleChoice = NewPopulatedGetSpecType_RuleList(r, easy)
-	}
 	if r.Intn(10) != 0 {
-		v16 := r.Intn(5)
-		this.SimpleRules = make([]*SimpleRule, v16)
-		for i := 0; i < v16; i++ {
+		v9 := r.Intn(5)
+		this.SimpleRules = make([]*SimpleRule, v9)
+		for i := 0; i < v9; i++ {
 			this.SimpleRules[i] = NewPopulatedSimpleRule(r, easy)
 		}
 	}
@@ -5323,21 +3040,6 @@ func NewPopulatedGetSpecType_AnyServer(r randyTypes, easy bool) *GetSpecType_Any
 	this.AnyServer = ves_io_schema4.NewPopulatedEmpty(r, easy)
 	return this
 }
-func NewPopulatedGetSpecType_AllowList(r randyTypes, easy bool) *GetSpecType_AllowList {
-	this := &GetSpecType_AllowList{}
-	this.AllowList = NewPopulatedSourceList(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType_DenyList(r randyTypes, easy bool) *GetSpecType_DenyList {
-	this := &GetSpecType_DenyList{}
-	this.DenyList = NewPopulatedSourceList(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType_RuleList(r randyTypes, easy bool) *GetSpecType_RuleList {
-	this := &GetSpecType_RuleList{}
-	this.RuleList = NewPopulatedRuleList(r, easy)
-	return this
-}
 
 type randyTypes interface {
 	Float32() float32
@@ -5358,9 +3060,9 @@ func randUTF8RuneTypes(r randyTypes) rune {
 	return rune(ru + 61)
 }
 func randStringTypes(r randyTypes) string {
-	v17 := r.Intn(100)
-	tmps := make([]rune, v17)
-	for i := 0; i < v17; i++ {
+	v10 := r.Intn(100)
+	tmps := make([]rune, v10)
+	for i := 0; i < v10; i++ {
 		tmps[i] = randUTF8RuneTypes(r)
 	}
 	return string(tmps)
@@ -5382,11 +3084,11 @@ func randFieldTypes(dAtA []byte, r randyTypes, fieldNumber int, wire int) []byte
 	switch wire {
 	case 0:
 		dAtA = encodeVarintPopulateTypes(dAtA, uint64(key))
-		v18 := r.Int63()
+		v11 := r.Int63()
 		if r.Intn(2) == 0 {
-			v18 *= -1
+			v11 *= -1
 		}
-		dAtA = encodeVarintPopulateTypes(dAtA, uint64(v18))
+		dAtA = encodeVarintPopulateTypes(dAtA, uint64(v11))
 	case 1:
 		dAtA = encodeVarintPopulateTypes(dAtA, uint64(key))
 		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -5477,116 +3179,6 @@ func (m *SimpleRule) Size() (n int) {
 		l = m.DstIpPrefixList.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
-	l = len(m.MetricNameLabel)
-	if l > 0 {
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.TlsFingerprintMatcher != nil {
-		l = m.TlsFingerprintMatcher.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *SourceList) Size() (n int) {
-	var l int
-	_ = l
-	if m.PrefixList != nil {
-		l = m.PrefixList.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if len(m.IpPrefixSet) > 0 {
-		for _, e := range m.IpPrefixSet {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if m.AsnList != nil {
-		l = m.AsnList.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if len(m.AsnSet) > 0 {
-		for _, e := range m.AsnSet {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.CountryList) > 0 {
-		l = 0
-		for _, e := range m.CountryList {
-			l += sovTypes(uint64(e))
-		}
-		n += 1 + sovTypes(uint64(l)) + l
-	}
-	if len(m.TlsFingerprintClasses) > 0 {
-		l = 0
-		for _, e := range m.TlsFingerprintClasses {
-			l += sovTypes(uint64(e))
-		}
-		n += 1 + sovTypes(uint64(l)) + l
-	}
-	if len(m.TlsFingerprintValues) > 0 {
-		for _, s := range m.TlsFingerprintValues {
-			l = len(s)
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if m.DefaultActionChoice != nil {
-		n += m.DefaultActionChoice.Size()
-	}
-	return n
-}
-
-func (m *SourceList_DefaultActionNextPolicy) Size() (n int) {
-	var l int
-	_ = l
-	if m.DefaultActionNextPolicy != nil {
-		l = m.DefaultActionNextPolicy.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *SourceList_DefaultActionDeny) Size() (n int) {
-	var l int
-	_ = l
-	if m.DefaultActionDeny != nil {
-		l = m.DefaultActionDeny.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *SourceList_DefaultActionAllow) Size() (n int) {
-	var l int
-	_ = l
-	if m.DefaultActionAllow != nil {
-		l = m.DefaultActionAllow.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *Rule) Size() (n int) {
-	var l int
-	_ = l
-	if m.Metadata != nil {
-		l = m.Metadata.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.Spec != nil {
-		l = m.Spec.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *RuleList) Size() (n int) {
-	var l int
-	_ = l
-	if len(m.Rules) > 0 {
-		for _, e := range m.Rules {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
 	return n
 }
 
@@ -5623,21 +3215,8 @@ func (m *GlobalSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
-	if m.RuleChoice != nil {
-		n += m.RuleChoice.Size()
-	}
-	if m.ViewInternal != nil {
-		l = m.ViewInternal.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
 	if len(m.SimpleRules) > 0 {
 		for _, e := range m.SimpleRules {
-			l = e.Size()
-			n += 2 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.OriginalRules) > 0 {
-		for _, e := range m.OriginalRules {
 			l = e.Size()
 			n += 2 + l + sovTypes(uint64(l))
 		}
@@ -5679,33 +3258,6 @@ func (m *GlobalSpecType_AnyServer) Size() (n int) {
 	}
 	return n
 }
-func (m *GlobalSpecType_AllowList) Size() (n int) {
-	var l int
-	_ = l
-	if m.AllowList != nil {
-		l = m.AllowList.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_DenyList) Size() (n int) {
-	var l int
-	_ = l
-	if m.DenyList != nil {
-		l = m.DenyList.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_RuleList) Size() (n int) {
-	var l int
-	_ = l
-	if m.RuleList != nil {
-		l = m.RuleList.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *CreateSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -5724,9 +3276,6 @@ func (m *CreateSpecType) Size() (n int) {
 	if m.PortMatcher != nil {
 		l = m.PortMatcher.Size()
 		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.RuleChoice != nil {
-		n += m.RuleChoice.Size()
 	}
 	return n
 }
@@ -5765,33 +3314,6 @@ func (m *CreateSpecType_AnyServer) Size() (n int) {
 	}
 	return n
 }
-func (m *CreateSpecType_AllowList) Size() (n int) {
-	var l int
-	_ = l
-	if m.AllowList != nil {
-		l = m.AllowList.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_DenyList) Size() (n int) {
-	var l int
-	_ = l
-	if m.DenyList != nil {
-		l = m.DenyList.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_RuleList) Size() (n int) {
-	var l int
-	_ = l
-	if m.RuleList != nil {
-		l = m.RuleList.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *ReplaceSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -5810,9 +3332,6 @@ func (m *ReplaceSpecType) Size() (n int) {
 	if m.PortMatcher != nil {
 		l = m.PortMatcher.Size()
 		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.RuleChoice != nil {
-		n += m.RuleChoice.Size()
 	}
 	return n
 }
@@ -5851,33 +3370,6 @@ func (m *ReplaceSpecType_AnyServer) Size() (n int) {
 	}
 	return n
 }
-func (m *ReplaceSpecType_AllowList) Size() (n int) {
-	var l int
-	_ = l
-	if m.AllowList != nil {
-		l = m.AllowList.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_DenyList) Size() (n int) {
-	var l int
-	_ = l
-	if m.DenyList != nil {
-		l = m.DenyList.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_RuleList) Size() (n int) {
-	var l int
-	_ = l
-	if m.RuleList != nil {
-		l = m.RuleList.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *GetSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -5896,9 +3388,6 @@ func (m *GetSpecType) Size() (n int) {
 	if m.PortMatcher != nil {
 		l = m.PortMatcher.Size()
 		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.RuleChoice != nil {
-		n += m.RuleChoice.Size()
 	}
 	if len(m.SimpleRules) > 0 {
 		for _, e := range m.SimpleRules {
@@ -5943,33 +3432,6 @@ func (m *GetSpecType_AnyServer) Size() (n int) {
 	}
 	return n
 }
-func (m *GetSpecType_AllowList) Size() (n int) {
-	var l int
-	_ = l
-	if m.AllowList != nil {
-		l = m.AllowList.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_DenyList) Size() (n int) {
-	var l int
-	_ = l
-	if m.DenyList != nil {
-		l = m.DenyList.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_RuleList) Size() (n int) {
-	var l int
-	_ = l
-	if m.RuleList != nil {
-		l = m.RuleList.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 
 func sovTypes(x uint64) (n int) {
 	for {
@@ -6004,76 +3466,6 @@ func (this *SimpleRule) String() string {
 		`L4DestMatcher:` + strings.Replace(fmt.Sprintf("%v", this.L4DestMatcher), "L4DestMatcherType", "ves_io_schema_policy.L4DestMatcherType", 1) + `,`,
 		`IpPrefixList:` + strings.Replace(fmt.Sprintf("%v", this.IpPrefixList), "PrefixMatchList", "ves_io_schema_policy.PrefixMatchList", 1) + `,`,
 		`DstIpPrefixList:` + strings.Replace(fmt.Sprintf("%v", this.DstIpPrefixList), "PrefixMatchList", "ves_io_schema_policy.PrefixMatchList", 1) + `,`,
-		`MetricNameLabel:` + fmt.Sprintf("%v", this.MetricNameLabel) + `,`,
-		`TlsFingerprintMatcher:` + strings.Replace(fmt.Sprintf("%v", this.TlsFingerprintMatcher), "TlsFingerprintMatcherType", "ves_io_schema_policy.TlsFingerprintMatcherType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SourceList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SourceList{`,
-		`PrefixList:` + strings.Replace(fmt.Sprintf("%v", this.PrefixList), "PrefixStringListType", "ves_io_schema_views.PrefixStringListType", 1) + `,`,
-		`IpPrefixSet:` + strings.Replace(fmt.Sprintf("%v", this.IpPrefixSet), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
-		`AsnList:` + strings.Replace(fmt.Sprintf("%v", this.AsnList), "AsnMatchList", "ves_io_schema_policy.AsnMatchList", 1) + `,`,
-		`AsnSet:` + strings.Replace(fmt.Sprintf("%v", this.AsnSet), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
-		`CountryList:` + fmt.Sprintf("%v", this.CountryList) + `,`,
-		`TlsFingerprintClasses:` + fmt.Sprintf("%v", this.TlsFingerprintClasses) + `,`,
-		`TlsFingerprintValues:` + fmt.Sprintf("%v", this.TlsFingerprintValues) + `,`,
-		`DefaultActionChoice:` + fmt.Sprintf("%v", this.DefaultActionChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SourceList_DefaultActionNextPolicy) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SourceList_DefaultActionNextPolicy{`,
-		`DefaultActionNextPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DefaultActionNextPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SourceList_DefaultActionDeny) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SourceList_DefaultActionDeny{`,
-		`DefaultActionDeny:` + strings.Replace(fmt.Sprintf("%v", this.DefaultActionDeny), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SourceList_DefaultActionAllow) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SourceList_DefaultActionAllow{`,
-		`DefaultActionAllow:` + strings.Replace(fmt.Sprintf("%v", this.DefaultActionAllow), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Rule) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Rule{`,
-		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "ves_io_schema4.MessageMetaType", 1) + `,`,
-		`Spec:` + strings.Replace(fmt.Sprintf("%v", this.Spec), "GlobalSpecType", "ves_io_schema_service_policy_rule.GlobalSpecType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RuleList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RuleList{`,
-		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "Rule", "Rule", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6090,10 +3482,7 @@ func (this *GlobalSpecType) String() string {
 		`Role:` + strings.Replace(fmt.Sprintf("%v", this.Role), "RoleMatcherType", "ves_io_schema_policy.RoleMatcherType", 1) + `,`,
 		`DenyInfo:` + strings.Replace(fmt.Sprintf("%v", this.DenyInfo), "DenyInformation", "ves_io_schema_policy.DenyInformation", 1) + `,`,
 		`DefaultForwardingClasses:` + strings.Replace(fmt.Sprintf("%v", this.DefaultForwardingClasses), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
-		`RuleChoice:` + fmt.Sprintf("%v", this.RuleChoice) + `,`,
-		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`SimpleRules:` + strings.Replace(fmt.Sprintf("%v", this.SimpleRules), "SimpleRule", "SimpleRule", 1) + `,`,
-		`OriginalRules:` + strings.Replace(fmt.Sprintf("%v", this.OriginalRules), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6138,36 +3527,6 @@ func (this *GlobalSpecType_AnyServer) String() string {
 	}, "")
 	return s
 }
-func (this *GlobalSpecType_AllowList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_AllowList{`,
-		`AllowList:` + strings.Replace(fmt.Sprintf("%v", this.AllowList), "SourceList", "SourceList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_DenyList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_DenyList{`,
-		`DenyList:` + strings.Replace(fmt.Sprintf("%v", this.DenyList), "SourceList", "SourceList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_RuleList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_RuleList{`,
-		`RuleList:` + strings.Replace(fmt.Sprintf("%v", this.RuleList), "RuleList", "RuleList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -6177,7 +3536,6 @@ func (this *CreateSpecType) String() string {
 		`ServerChoice:` + fmt.Sprintf("%v", this.ServerChoice) + `,`,
 		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
 		`PortMatcher:` + strings.Replace(fmt.Sprintf("%v", this.PortMatcher), "PortMatcherType", "ves_io_schema_policy.PortMatcherType", 1) + `,`,
-		`RuleChoice:` + fmt.Sprintf("%v", this.RuleChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6222,36 +3580,6 @@ func (this *CreateSpecType_AnyServer) String() string {
 	}, "")
 	return s
 }
-func (this *CreateSpecType_AllowList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_AllowList{`,
-		`AllowList:` + strings.Replace(fmt.Sprintf("%v", this.AllowList), "SourceList", "SourceList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_DenyList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_DenyList{`,
-		`DenyList:` + strings.Replace(fmt.Sprintf("%v", this.DenyList), "SourceList", "SourceList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_RuleList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_RuleList{`,
-		`RuleList:` + strings.Replace(fmt.Sprintf("%v", this.RuleList), "RuleList", "RuleList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -6261,7 +3589,6 @@ func (this *ReplaceSpecType) String() string {
 		`ServerChoice:` + fmt.Sprintf("%v", this.ServerChoice) + `,`,
 		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
 		`PortMatcher:` + strings.Replace(fmt.Sprintf("%v", this.PortMatcher), "PortMatcherType", "ves_io_schema_policy.PortMatcherType", 1) + `,`,
-		`RuleChoice:` + fmt.Sprintf("%v", this.RuleChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6306,36 +3633,6 @@ func (this *ReplaceSpecType_AnyServer) String() string {
 	}, "")
 	return s
 }
-func (this *ReplaceSpecType_AllowList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_AllowList{`,
-		`AllowList:` + strings.Replace(fmt.Sprintf("%v", this.AllowList), "SourceList", "SourceList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_DenyList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_DenyList{`,
-		`DenyList:` + strings.Replace(fmt.Sprintf("%v", this.DenyList), "SourceList", "SourceList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_RuleList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_RuleList{`,
-		`RuleList:` + strings.Replace(fmt.Sprintf("%v", this.RuleList), "RuleList", "RuleList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -6345,7 +3642,6 @@ func (this *GetSpecType) String() string {
 		`ServerChoice:` + fmt.Sprintf("%v", this.ServerChoice) + `,`,
 		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
 		`PortMatcher:` + strings.Replace(fmt.Sprintf("%v", this.PortMatcher), "PortMatcherType", "ves_io_schema_policy.PortMatcherType", 1) + `,`,
-		`RuleChoice:` + fmt.Sprintf("%v", this.RuleChoice) + `,`,
 		`SimpleRules:` + strings.Replace(fmt.Sprintf("%v", this.SimpleRules), "SimpleRule", "SimpleRule", 1) + `,`,
 		`}`,
 	}, "")
@@ -6387,36 +3683,6 @@ func (this *GetSpecType_AnyServer) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_AnyServer{`,
 		`AnyServer:` + strings.Replace(fmt.Sprintf("%v", this.AnyServer), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_AllowList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_AllowList{`,
-		`AllowList:` + strings.Replace(fmt.Sprintf("%v", this.AllowList), "SourceList", "SourceList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_DenyList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_DenyList{`,
-		`DenyList:` + strings.Replace(fmt.Sprintf("%v", this.DenyList), "SourceList", "SourceList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_RuleList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_RuleList{`,
-		`RuleList:` + strings.Replace(fmt.Sprintf("%v", this.RuleList), "RuleList", "RuleList", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6925,692 +4191,6 @@ func (m *SimpleRule) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 17:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MetricNameLabel", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.MetricNameLabel = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 18:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TlsFingerprintMatcher", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.TlsFingerprintMatcher == nil {
-				m.TlsFingerprintMatcher = &ves_io_schema_policy.TlsFingerprintMatcherType{}
-			}
-			if err := m.TlsFingerprintMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *SourceList) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SourceList: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SourceList: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PrefixList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.PrefixList == nil {
-				m.PrefixList = &ves_io_schema_views.PrefixStringListType{}
-			}
-			if err := m.PrefixList.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IpPrefixSet", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.IpPrefixSet = append(m.IpPrefixSet, &ves_io_schema_views.ObjectRefType{})
-			if err := m.IpPrefixSet[len(m.IpPrefixSet)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AsnList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.AsnList == nil {
-				m.AsnList = &ves_io_schema_policy.AsnMatchList{}
-			}
-			if err := m.AsnList.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AsnSet", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AsnSet = append(m.AsnSet, &ves_io_schema_views.ObjectRefType{})
-			if err := m.AsnSet[len(m.AsnSet)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType == 0 {
-				var v ves_io_schema_policy.CountryCode
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= (ves_io_schema_policy.CountryCode(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				m.CountryList = append(m.CountryList, v)
-			} else if wireType == 2 {
-				var packedLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					packedLen |= (int(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if packedLen < 0 {
-					return ErrInvalidLengthTypes
-				}
-				postIndex := iNdEx + packedLen
-				if postIndex > l {
-					return io.ErrUnexpectedEOF
-				}
-				for iNdEx < postIndex {
-					var v ves_io_schema_policy.CountryCode
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTypes
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= (ves_io_schema_policy.CountryCode(b) & 0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					m.CountryList = append(m.CountryList, v)
-				}
-			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field CountryList", wireType)
-			}
-		case 7:
-			if wireType == 0 {
-				var v ves_io_schema_policy.KnownTlsFingerprintClass
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= (ves_io_schema_policy.KnownTlsFingerprintClass(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				m.TlsFingerprintClasses = append(m.TlsFingerprintClasses, v)
-			} else if wireType == 2 {
-				var packedLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					packedLen |= (int(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if packedLen < 0 {
-					return ErrInvalidLengthTypes
-				}
-				postIndex := iNdEx + packedLen
-				if postIndex > l {
-					return io.ErrUnexpectedEOF
-				}
-				for iNdEx < postIndex {
-					var v ves_io_schema_policy.KnownTlsFingerprintClass
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTypes
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= (ves_io_schema_policy.KnownTlsFingerprintClass(b) & 0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					m.TlsFingerprintClasses = append(m.TlsFingerprintClasses, v)
-				}
-			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field TlsFingerprintClasses", wireType)
-			}
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TlsFingerprintValues", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TlsFingerprintValues = append(m.TlsFingerprintValues, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		case 11:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultActionNextPolicy", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DefaultActionChoice = &SourceList_DefaultActionNextPolicy{v}
-			iNdEx = postIndex
-		case 12:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultActionDeny", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DefaultActionChoice = &SourceList_DefaultActionDeny{v}
-			iNdEx = postIndex
-		case 13:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultActionAllow", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DefaultActionChoice = &SourceList_DefaultActionAllow{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Rule) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Rule: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Rule: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Metadata == nil {
-				m.Metadata = &ves_io_schema4.MessageMetaType{}
-			}
-			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Spec", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Spec == nil {
-				m.Spec = &ves_io_schema_service_policy_rule.GlobalSpecType{}
-			}
-			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *RuleList) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: RuleList: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: RuleList: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Rules", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Rules = append(m.Rules, &Rule{})
-			if err := m.Rules[len(m.Rules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -7966,135 +4546,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ServerChoice = &GlobalSpecType_AnyServer{v}
 			iNdEx = postIndex
-		case 21:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllowList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &SourceList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RuleChoice = &GlobalSpecType_AllowList{v}
-			iNdEx = postIndex
-		case 22:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DenyList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &SourceList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RuleChoice = &GlobalSpecType_DenyList{v}
-			iNdEx = postIndex
-		case 23:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuleList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &RuleList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RuleChoice = &GlobalSpecType_RuleList{v}
-			iNdEx = postIndex
-		case 1000:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ViewInternal", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.ViewInternal == nil {
-				m.ViewInternal = &ves_io_schema_views.ObjectRefType{}
-			}
-			if err := m.ViewInternal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 1001:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SimpleRules", wireType)
@@ -8123,37 +4574,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.SimpleRules = append(m.SimpleRules, &SimpleRule{})
 			if err := m.SimpleRules[len(m.SimpleRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 1002:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OriginalRules", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.OriginalRules = append(m.OriginalRules, &ves_io_schema4.ObjectRefType{})
-			if err := m.OriginalRules[len(m.OriginalRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -8415,102 +4835,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ServerChoice = &CreateSpecType_AnyServer{v}
 			iNdEx = postIndex
-		case 21:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllowList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &SourceList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RuleChoice = &CreateSpecType_AllowList{v}
-			iNdEx = postIndex
-		case 22:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DenyList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &SourceList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RuleChoice = &CreateSpecType_DenyList{v}
-			iNdEx = postIndex
-		case 23:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuleList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &RuleList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RuleChoice = &CreateSpecType_RuleList{v}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -8768,102 +5092,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.ServerChoice = &ReplaceSpecType_AnyServer{v}
-			iNdEx = postIndex
-		case 21:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllowList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &SourceList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RuleChoice = &ReplaceSpecType_AllowList{v}
-			iNdEx = postIndex
-		case 22:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DenyList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &SourceList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RuleChoice = &ReplaceSpecType_DenyList{v}
-			iNdEx = postIndex
-		case 23:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuleList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &RuleList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RuleChoice = &ReplaceSpecType_RuleList{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -9123,102 +5351,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ServerChoice = &GetSpecType_AnyServer{v}
 			iNdEx = postIndex
-		case 21:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllowList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &SourceList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RuleChoice = &GetSpecType_AllowList{v}
-			iNdEx = postIndex
-		case 22:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DenyList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &SourceList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RuleChoice = &GetSpecType_DenyList{v}
-			iNdEx = postIndex
-		case 23:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuleList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &RuleList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RuleChoice = &GetSpecType_RuleList{v}
-			iNdEx = postIndex
 		case 1001:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field SimpleRules", wireType)
@@ -9382,231 +5514,88 @@ func init() {
 }
 
 var fileDescriptorTypes = []byte{
-	// 3612 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0xcd, 0x6f, 0x5c, 0x47,
-	0x72, 0xd7, 0x93, 0x28, 0x8a, 0xea, 0x91, 0x28, 0xf9, 0x59, 0xb6, 0x27, 0x8a, 0x41, 0x3f, 0x13,
-	0xbb, 0x0e, 0xb3, 0x4b, 0x51, 0xfd, 0xfd, 0xe1, 0x83, 0xb1, 0xa2, 0xd6, 0x36, 0x6d, 0x4b, 0x5e,
-	0x67, 0xa8, 0x4d, 0x9c, 0x2c, 0xb2, 0xdc, 0xea, 0xee, 0x6a, 0x72, 0x92, 0xe1, 0xcc, 0x60, 0xe6,
-	0x51, 0xb2, 0x0e, 0x02, 0x8c, 0xcd, 0x5e, 0x72, 0x0b, 0x8c, 0x1c, 0xf2, 0x27, 0x04, 0xbe, 0xe6,
-	0x12, 0x44, 0x17, 0x61, 0x73, 0x59, 0x04, 0x41, 0xe0, 0xa3, 0x91, 0x53, 0xcc, 0xbd, 0x78, 0x73,
-	0x72, 0x72, 0x0a, 0x16, 0x39, 0x04, 0xef, 0xcd, 0x90, 0x9c, 0xa1, 0x86, 0xf2, 0x17, 0x0c, 0x04,
-	0x58, 0x9f, 0xf8, 0xa6, 0xbb, 0xea, 0xd7, 0xd5, 0xd5, 0x55, 0xbf, 0xee, 0x2a, 0x90, 0xac, 0xdc,
-	0xc5, 0xe1, 0x5a, 0xbb, 0x77, 0x7d, 0x18, 0x76, 0x70, 0x17, 0xae, 0x0f, 0x71, 0x70, 0xb7, 0x1d,
-	0x70, 0xab, 0xdf, 0xeb, 0xb4, 0xc3, 0xfd, 0xeb, 0xe5, 0xfd, 0x3e, 0x0e, 0xd7, 0xfa, 0x83, 0x5e,
-	0xd9, 0xcb, 0x9f, 0x1f, 0x49, 0xae, 0x8d, 0x24, 0xd7, 0xa6, 0x25, 0xaf, 0x5e, 0xdb, 0x6e, 0x97,
-	0x3b, 0x7b, 0x7e, 0x2d, 0xf4, 0x76, 0xaf, 0x6f, 0xf7, 0xb6, 0x7b, 0xd7, 0x6b, 0x25, 0xbf, 0x97,
-	0xea, 0x5f, 0xf5, 0x8f, 0xfa, 0x6b, 0x04, 0x76, 0xf5, 0x85, 0xed, 0x5e, 0x6f, 0xbb, 0x83, 0x47,
-	0x52, 0x65, 0x7b, 0x17, 0x87, 0x25, 0xec, 0xf6, 0xc7, 0x02, 0xbf, 0x3f, 0x6d, 0x57, 0xaf, 0x5f,
-	0xb6, 0x7b, 0xdd, 0xb1, 0x29, 0x57, 0x8b, 0xe9, 0xc9, 0xc7, 0x8d, 0xbd, 0x7a, 0xed, 0x49, 0xdb,
-	0xda, 0x1a, 0xec, 0x75, 0x70, 0x4a, 0xfc, 0xf7, 0xa6, 0xc5, 0x27, 0xa7, 0x9e, 0x9f, 0x9e, 0xba,
-	0x0b, 0x9d, 0x76, 0x84, 0x12, 0x67, 0x5b, 0x72, 0xb7, 0x8d, 0xf7, 0xb6, 0xa6, 0x6d, 0x7d, 0xe1,
-	0x71, 0x89, 0xe1, 0xe4, 0x02, 0xcb, 0xbf, 0x3c, 0x4f, 0xc8, 0x66, 0x7b, 0xb7, 0xdf, 0xc1, 0xd6,
-	0x5e, 0x07, 0xf3, 0x9c, 0xcc, 0x75, 0x61, 0x17, 0x9b, 0x59, 0x91, 0xad, 0x9c, 0x6f, 0xd5, 0xdf,
-	0xb9, 0x25, 0xf3, 0x10, 0x2a, 0xd0, 0xe6, 0xe9, 0x22, 0x5b, 0x59, 0xe4, 0xc5, 0xda, 0xf4, 0x59,
-	0x8c, 0xb6, 0xb5, 0x56, 0xe9, 0xdf, 0xa8, 0xe5, 0x5a, 0x63, 0xf9, 0x7c, 0x83, 0x2c, 0xc6, 0xde,
-	0x2e, 0xb4, 0xbb, 0x5b, 0xbb, 0x50, 0x86, 0x1d, 0x1c, 0x34, 0xcf, 0x14, 0xd9, 0x4a, 0x83, 0xbf,
-	0x38, 0x1b, 0xe1, 0xf6, 0x48, 0xe8, 0xce, 0xfd, 0x3e, 0xb6, 0x2e, 0x8e, 0x14, 0xc7, 0x43, 0xb9,
-	0x23, 0x73, 0x7d, 0x28, 0x77, 0x9a, 0x73, 0xb5, 0xfe, 0x77, 0x67, 0xeb, 0xbf, 0x03, 0xe5, 0xce,
-	0x24, 0x46, 0xad, 0x92, 0xdf, 0x26, 0xe7, 0x76, 0x10, 0x22, 0x0e, 0x86, 0xcd, 0xb3, 0xc5, 0x99,
-	0x95, 0x06, 0xff, 0x83, 0xd9, 0xda, 0x1b, 0xb5, 0xd0, 0x84, 0xfe, 0x3a, 0xf9, 0xa7, 0xdf, 0x3c,
-	0x3a, 0x73, 0xf6, 0x83, 0xec, 0xf4, 0xe5, 0xcb, 0xad, 0x03, 0x8c, 0xfc, 0x16, 0x69, 0xec, 0x94,
-	0x65, 0x7f, 0x6b, 0x17, 0xcb, 0x9d, 0x5e, 0x6c, 0xce, 0xd7, 0x06, 0x7d, 0xff, 0x04, 0xc8, 0xb2,
-	0xec, 0xdf, 0xae, 0xe5, 0x26, 0xcd, 0x22, 0x3b, 0x87, 0xc3, 0xf9, 0x2b, 0x84, 0xdc, 0x83, 0xb4,
-	0x35, 0xf6, 0xef, 0xb9, 0x1a, 0xec, 0x85, 0xd9, 0x60, 0x7f, 0x02, 0x69, 0xec, 0xde, 0xf3, 0xf7,
-	0x0e, 0x3e, 0xf3, 0xdb, 0xe4, 0x0a, 0xbe, 0xd7, 0x6f, 0x0f, 0xa0, 0xfa, 0xb5, 0x75, 0x18, 0xc6,
-	0xcd, 0x85, 0x1a, 0xe9, 0xea, 0xda, 0x28, 0xd0, 0xd7, 0x0e, 0x02, 0x7d, 0xed, 0xce, 0x81, 0x44,
-	0xeb, 0xe9, 0x23, 0xbd, 0xc3, 0xc1, 0x7c, 0x83, 0x5c, 0xe8, 0xf7, 0x06, 0xe5, 0xe1, 0x71, 0x91,
-	0x27, 0xba, 0xbb, 0x37, 0x28, 0x27, 0xf7, 0xd5, 0xe8, 0x1f, 0x0d, 0xe4, 0xab, 0xa4, 0x11, 0x71,
-	0x18, 0x06, 0xed, 0x3a, 0x1c, 0x9b, 0x8d, 0x2a, 0x9e, 0xc6, 0x0e, 0x1d, 0x9c, 0x69, 0xbe, 0x7f,
-	0xba, 0x35, 0x39, 0x9d, 0xff, 0x8c, 0xcc, 0xd7, 0xd8, 0xd8, 0xbc, 0x50, 0x9c, 0x59, 0x39, 0xbf,
-	0xbe, 0x51, 0x09, 0x5e, 0xff, 0x20, 0x5b, 0x5d, 0xfe, 0xde, 0x60, 0xa5, 0xf5, 0xd2, 0x4f, 0x96,
-	0x6f, 0xbc, 0xfd, 0xa7, 0xcb, 0xab, 0xc5, 0xf2, 0xc6, 0x9d, 0x3b, 0xef, 0x1c, 0xfc, 0xdd, 0xac,
-	0x3e, 0xee, 0xdc, 0xac, 0x7f, 0xdf, 0xb9, 0xb5, 0xb9, 0xfc, 0xe7, 0x87, 0xa7, 0x35, 0x77, 0xf0,
-	0xd5, 0xcc, 0x5a, 0x63, 0xdc, 0xfc, 0x55, 0xd2, 0xd8, 0x1b, 0x74, 0x0e, 0x37, 0x76, 0xb1, 0xde,
-	0xd8, 0x77, 0x66, 0x6f, 0xec, 0xc7, 0xad, 0x5b, 0x53, 0xe7, 0xb5, 0x37, 0xe8, 0x1c, 0x6c, 0xeb,
-	0x5d, 0x72, 0xa9, 0x23, 0xb7, 0x22, 0x0e, 0x8f, 0x7c, 0xb4, 0x58, 0x43, 0x9d, 0x10, 0x54, 0xb7,
-	0xe4, 0x0f, 0x71, 0x38, 0xe9, 0xa5, 0xf5, 0x73, 0x1f, 0x3f, 0xc8, 0x3e, 0x7d, 0x98, 0x65, 0xad,
-	0x8b, 0x9d, 0xc9, 0xb9, 0xfc, 0x2d, 0xb2, 0xd8, 0xee, 0x6f, 0xf5, 0x07, 0x98, 0xda, 0xef, 0x6d,
-	0x75, 0xda, 0xc3, 0xb2, 0x79, 0xe9, 0x89, 0xce, 0xaf, 0x05, 0x6b, 0xe5, 0x5b, 0xed, 0x61, 0xd9,
-	0xba, 0xd0, 0xee, 0x8f, 0x86, 0xaa, 0x5f, 0x79, 0x8b, 0xe4, 0x71, 0x58, 0x6e, 0x1d, 0x03, 0xbc,
-	0xfc, 0x65, 0x00, 0x2f, 0xc5, 0x61, 0xf9, 0xc6, 0x24, 0xe6, 0xf7, 0xc8, 0x53, 0xbb, 0x58, 0x0e,
-	0xda, 0x61, 0xab, 0x62, 0x85, 0xad, 0x0e, 0x78, 0xec, 0x34, 0x9f, 0xaa, 0x79, 0xe2, 0xd2, 0x68,
-	0xe2, 0x6d, 0xd8, 0xc5, 0x5b, 0xd5, 0x70, 0xbe, 0x4d, 0x9e, 0x2b, 0x3b, 0xc3, 0xad, 0xd4, 0xee,
-	0x6e, 0xe3, 0xa0, 0x3f, 0x68, 0x77, 0x8f, 0xdc, 0x95, 0xd7, 0x46, 0x5c, 0x9f, 0x6d, 0xc4, 0x9d,
-	0xce, 0xf0, 0xb5, 0x23, 0x9d, 0xc9, 0x43, 0x78, 0xa6, 0x9c, 0x35, 0xf5, 0xe6, 0xdc, 0xc2, 0xf9,
-	0xcb, 0x64, 0xf9, 0x9f, 0xaf, 0x12, 0xb2, 0xd9, 0xdb, 0x1b, 0x04, 0xac, 0x2d, 0x7d, 0x87, 0x34,
-	0x26, 0xb7, 0x7d, 0xba, 0x5e, 0xf1, 0x0f, 0x8f, 0xad, 0x58, 0x53, 0xe1, 0x78, 0xd7, 0x9b, 0xe5,
-	0xa0, 0xdd, 0xdd, 0xae, 0x74, 0xeb, 0x23, 0x9a, 0xfb, 0xa8, 0x3a, 0x1f, 0xd2, 0x3f, 0xda, 0x7b,
-	0x9f, 0x5c, 0x3c, 0xf2, 0xe5, 0x10, 0xcb, 0xe6, 0x99, 0x9a, 0x49, 0x96, 0x67, 0x62, 0xfe, 0xc8,
-	0xff, 0x05, 0x86, 0xb2, 0x85, 0xa9, 0x06, 0x5b, 0xf9, 0xf0, 0xc1, 0xb4, 0x6e, 0x05, 0x7e, 0x18,
-	0xaa, 0x3f, 0x98, 0x08, 0xd5, 0xc6, 0xc1, 0x11, 0x6e, 0x62, 0x99, 0xdf, 0x24, 0x0b, 0x30, 0xec,
-	0x8e, 0x36, 0x30, 0x22, 0xbd, 0xe5, 0xd9, 0x2e, 0xbb, 0x31, 0xec, 0x1e, 0x1e, 0xda, 0xd8, 0xf2,
-	0x73, 0x30, 0xec, 0xd6, 0x66, 0x07, 0x52, 0x7d, 0xd6, 0x06, 0x9f, 0xfd, 0xc2, 0x06, 0xbf, 0xf4,
-	0xe1, 0x83, 0x86, 0xdf, 0xee, 0x6f, 0x8d, 0x35, 0x4f, 0x34, 0x77, 0x1e, 0x86, 0xdd, 0xca, 0xd2,
-	0x9f, 0x92, 0x0b, 0xa1, 0xb7, 0xd7, 0x2d, 0x07, 0xf7, 0x47, 0xd6, 0xce, 0x17, 0x67, 0x56, 0x16,
-	0x4f, 0xa2, 0xf8, 0x9b, 0x23, 0xc9, 0x9b, 0xbd, 0x88, 0xeb, 0xcd, 0x93, 0x3d, 0x31, 0x06, 0xac,
-	0x37, 0xf1, 0x8b, 0xec, 0xf1, 0x60, 0x0a, 0x1d, 0x18, 0x0e, 0x71, 0xd8, 0x3c, 0x57, 0xaf, 0xb5,
-	0x36, 0x7b, 0xad, 0xb7, 0xba, 0xbd, 0x7b, 0xdd, 0xe9, 0x88, 0xba, 0x59, 0xe9, 0xad, 0x3f, 0xff,
-	0xe8, 0x61, 0x96, 0x4d, 0x2d, 0x7e, 0x79, 0x62, 0xf1, 0x63, 0x91, 0x76, 0x73, 0xb4, 0x54, 0xfe,
-	0x0f, 0x4f, 0x93, 0x67, 0x8f, 0x9b, 0x71, 0x17, 0x3a, 0x7b, 0x38, 0x6c, 0x2e, 0xd4, 0x9c, 0xf5,
-	0xbf, 0xf9, 0x01, 0xec, 0xfe, 0xc3, 0xec, 0x5f, 0x73, 0x52, 0x30, 0x00, 0xe3, 0x93, 0xf5, 0xce,
-	0xa0, 0x92, 0x34, 0x80, 0xc2, 0x18, 0x8d, 0x4a, 0xc6, 0x5b, 0x61, 0xa5, 0x4f, 0x40, 0x0a, 0x11,
-	0x22, 0x28, 0x1e, 0x41, 0x42, 0x44, 0xea, 0x12, 0x4b, 0xc6, 0x32, 0x88, 0x1c, 0x2d, 0x8f, 0x21,
-	0x01, 0xa7, 0xa4, 0x30, 0x31, 0x2a, 0x8a, 0x8c, 0xf1, 0x10, 0xb9, 0x30, 0x42, 0x82, 0x60, 0xd4,
-	0x3b, 0x9a, 0x74, 0x92, 0x12, 0x4c, 0x88, 0xa4, 0x60, 0x1e, 0x05, 0x06, 0xf4, 0xa8, 0x00, 0x5c,
-	0x14, 0x5a, 0x49, 0xd4, 0x68, 0xa8, 0x88, 0x96, 0x25, 0xed, 0xb8, 0x25, 0x45, 0x50, 0x5c, 0xa8,
-	0x28, 0xc0, 0x7a, 0xe7, 0x84, 0xf4, 0x26, 0x79, 0x1f, 0x39, 0x95, 0x51, 0x51, 0x1f, 0xa8, 0xb2,
-	0x91, 0x14, 0xa8, 0x39, 0xa8, 0x24, 0xa3, 0x12, 0x36, 0xf8, 0xc4, 0xb4, 0x0b, 0x1c, 0x92, 0x61,
-	0x1e, 0x03, 0x17, 0xce, 0x79, 0x49, 0x8a, 0xc8, 0x9d, 0x50, 0x41, 0xd9, 0x84, 0xda, 0x68, 0x23,
-	0x65, 0xc2, 0x10, 0xac, 0x66, 0x12, 0x51, 0x09, 0xa5, 0x83, 0x21, 0x45, 0xc4, 0x90, 0xbc, 0xb4,
-	0xa0, 0x84, 0xb1, 0x0e, 0x3d, 0x52, 0xcb, 0xbc, 0xb5, 0x00, 0xde, 0x2b, 0x8b, 0x28, 0x24, 0x29,
-	0x14, 0x0b, 0x5a, 0x06, 0x63, 0x50, 0xd3, 0x24, 0x9c, 0xa5, 0x88, 0xe0, 0xa8, 0xd5, 0xce, 0x6b,
-	0x1b, 0x94, 0x85, 0xca, 0x52, 0xef, 0x2c, 0x70, 0x89, 0x28, 0xbd, 0x63, 0x42, 0x4a, 0x69, 0x53,
-	0xf2, 0xca, 0x30, 0x99, 0xa2, 0x35, 0x14, 0x02, 0x29, 0x84, 0x4c, 0x4c, 0x82, 0x76, 0x10, 0x0d,
-	0xa5, 0x2e, 0x80, 0xb2, 0x5a, 0x08, 0xe3, 0x38, 0xb3, 0x90, 0x98, 0x49, 0x82, 0x14, 0xd1, 0x68,
-	0x44, 0x2d, 0x93, 0x37, 0xdc, 0x08, 0x23, 0x44, 0xf0, 0x28, 0x95, 0x82, 0x60, 0x59, 0xe0, 0x8e,
-	0xa3, 0x26, 0x85, 0x4d, 0x3a, 0x38, 0x66, 0x63, 0xf0, 0xca, 0x2a, 0xf4, 0x1e, 0x81, 0x2a, 0xe4,
-	0x21, 0x38, 0xa9, 0x04, 0x45, 0x51, 0xf9, 0x34, 0x52, 0xa7, 0x50, 0x5b, 0x69, 0x5d, 0x14, 0x41,
-	0x09, 0xc5, 0x9d, 0x09, 0xd1, 0xc6, 0x94, 0x3c, 0xd5, 0xc1, 0x3b, 0x52, 0x24, 0xce, 0x7d, 0x8c,
-	0xca, 0xa0, 0xa8, 0x0e, 0x10, 0xad, 0x0e, 0x11, 0x24, 0x8d, 0xc0, 0xa3, 0x95, 0x68, 0x85, 0x27,
-	0x45, 0xf2, 0xca, 0x5a, 0xc1, 0x92, 0x75, 0x9c, 0x39, 0xaa, 0x2b, 0x97, 0x49, 0x89, 0x5c, 0xf9,
-	0x60, 0x05, 0xf5, 0x52, 0x91, 0x82, 0x86, 0xc0, 0xd0, 0x4a, 0xa5, 0x2d, 0x4a, 0xc3, 0x00, 0x58,
-	0xd4, 0x1c, 0xa2, 0x64, 0xca, 0x42, 0x44, 0xed, 0x15, 0x29, 0x38, 0x75, 0x1c, 0x59, 0x4a, 0xc9,
-	0x4b, 0x15, 0x0d, 0x4a, 0x60, 0x0e, 0x94, 0x49, 0xce, 0x07, 0x85, 0x9c, 0x0a, 0x20, 0x45, 0x64,
-	0x16, 0x64, 0x04, 0x2b, 0x21, 0x29, 0x87, 0x8c, 0x51, 0x6b, 0x35, 0x07, 0xe1, 0x3c, 0xa0, 0x09,
-	0x2e, 0x4a, 0x52, 0x80, 0x66, 0xdc, 0xb9, 0xe4, 0xbc, 0xa2, 0x0c, 0x62, 0x48, 0xda, 0x52, 0xef,
-	0xb8, 0x51, 0xd1, 0xb8, 0x28, 0x21, 0x68, 0x52, 0x78, 0x61, 0xb5, 0x93, 0x1a, 0x14, 0x48, 0x19,
-	0x59, 0x8c, 0x21, 0x58, 0x29, 0x7c, 0x30, 0x4a, 0x08, 0x1d, 0x53, 0x40, 0x52, 0x58, 0xe9, 0x6c,
-	0x42, 0xc9, 0xb5, 0x35, 0x5a, 0x46, 0x9f, 0x1c, 0xd7, 0x20, 0x2c, 0xb7, 0x02, 0x5d, 0x14, 0xd1,
-	0xa6, 0xca, 0xd2, 0x18, 0x99, 0xf5, 0x31, 0x0a, 0x4e, 0x1d, 0x82, 0x61, 0xd6, 0x59, 0x47, 0x05,
-	0x05, 0x9d, 0x9c, 0x10, 0x5a, 0x92, 0xc2, 0x3a, 0xc7, 0x40, 0x58, 0x83, 0xb2, 0xc2, 0x67, 0x46,
-	0xd2, 0xc4, 0x55, 0xd4, 0x49, 0x31, 0xe1, 0x92, 0xe3, 0x91, 0x14, 0x22, 0x5a, 0x17, 0x68, 0x4c,
-	0x9e, 0x25, 0x90, 0xd2, 0x31, 0xe6, 0x6d, 0x02, 0xa3, 0xb8, 0xc0, 0x64, 0x23, 0x46, 0x4f, 0x0a,
-	0x14, 0x82, 0xfa, 0x00, 0xce, 0x05, 0x0b, 0x8a, 0x2b, 0x0d, 0xc8, 0xb8, 0x06, 0xa5, 0x82, 0x0c,
-	0x86, 0xab, 0xa0, 0x48, 0x61, 0x05, 0x52, 0xe9, 0x83, 0xb2, 0x51, 0x52, 0x9e, 0x9c, 0x16, 0xc2,
-	0x59, 0x11, 0x7c, 0xe2, 0xdc, 0x70, 0xe9, 0x29, 0x27, 0x85, 0xb7, 0xc9, 0x32, 0x6d, 0x44, 0xa0,
-	0xc8, 0x22, 0x77, 0x8e, 0x5a, 0x21, 0x75, 0x12, 0x1e, 0xbc, 0x75, 0xdc, 0x3b, 0x4f, 0x8a, 0xa8,
-	0x14, 0x4b, 0x90, 0x82, 0x4c, 0x92, 0x26, 0x16, 0x31, 0x70, 0xef, 0xa5, 0x72, 0x96, 0xfa, 0x04,
-	0x4e, 0x3a, 0x4e, 0x0a, 0xee, 0xa8, 0x55, 0x89, 0x8a, 0x64, 0xd1, 0x02, 0x15, 0x89, 0x7a, 0xe1,
-	0x5c, 0x50, 0xc1, 0x84, 0x44, 0x3d, 0xf5, 0xb6, 0x8a, 0x75, 0x30, 0x10, 0x99, 0x54, 0xd4, 0xa5,
-	0xa8, 0x99, 0x0c, 0xc6, 0x7b, 0x01, 0x8a, 0x06, 0xe9, 0x2c, 0xf7, 0x36, 0x90, 0xc2, 0x07, 0x1d,
-	0x84, 0xd5, 0x49, 0x56, 0x89, 0xe0, 0x8c, 0x77, 0xd1, 0xa1, 0xe2, 0x51, 0x1a, 0xee, 0x8d, 0xe1,
-	0xd1, 0x92, 0xc2, 0x33, 0x11, 0x29, 0xb3, 0x52, 0x43, 0x34, 0xc0, 0x24, 0x18, 0xea, 0x53, 0xe5,
-	0x52, 0xa6, 0x8d, 0x51, 0xc1, 0x58, 0x52, 0x68, 0x67, 0x51, 0x68, 0xce, 0x5c, 0x12, 0xce, 0x38,
-	0xc9, 0x69, 0x02, 0xae, 0x2c, 0xf3, 0x9c, 0x45, 0x08, 0x06, 0x03, 0x29, 0x98, 0x61, 0x9c, 0x5b,
-	0x63, 0x29, 0x85, 0xe0, 0x98, 0x17, 0x32, 0x40, 0x8c, 0xca, 0x5a, 0x19, 0xd0, 0x2a, 0xa5, 0x2b,
-	0x4b, 0x15, 0x8d, 0x01, 0x99, 0x8d, 0xc8, 0xbc, 0x67, 0x52, 0xa0, 0x76, 0x51, 0xc7, 0xe8, 0x24,
-	0x13, 0xde, 0x0a, 0xa5, 0xaa, 0x8c, 0x62, 0x8a, 0x42, 0x92, 0x8a, 0x49, 0x6f, 0xb5, 0x8d, 0x98,
-	0xbc, 0x55, 0x32, 0x7a, 0x9a, 0x34, 0x07, 0x29, 0x19, 0x29, 0x62, 0x52, 0x41, 0x50, 0xd4, 0x86,
-	0x46, 0x0f, 0x55, 0xb0, 0x71, 0x43, 0x31, 0x0a, 0x4d, 0x35, 0x0d, 0x89, 0x2a, 0x49, 0x0a, 0xa1,
-	0x02, 0x05, 0xc1, 0x82, 0xb4, 0xcc, 0x71, 0x93, 0x28, 0xe7, 0x20, 0xbc, 0x12, 0x94, 0x57, 0xa9,
-	0x49, 0x6d, 0xcd, 0x74, 0x21, 0xa0, 0xf2, 0x46, 0x07, 0xeb, 0x99, 0x91, 0x86, 0x47, 0xca, 0xa5,
-	0x51, 0xd6, 0x19, 0x0a, 0x92, 0x6a, 0x4f, 0x0a, 0xc7, 0x98, 0x34, 0x0e, 0x82, 0x05, 0x6a, 0x99,
-	0xc0, 0xc8, 0xb8, 0x64, 0x5e, 0x68, 0xab, 0x43, 0x88, 0x10, 0xd1, 0x91, 0x82, 0x0a, 0x64, 0x56,
-	0x83, 0x49, 0x56, 0x70, 0xab, 0xd0, 0x09, 0x21, 0x59, 0x44, 0x69, 0xac, 0x10, 0x92, 0x52, 0x8d,
-	0x95, 0x3f, 0x52, 0x94, 0xce, 0x70, 0x9e, 0x6c, 0x64, 0x2c, 0x89, 0x68, 0x74, 0x0c, 0x68, 0x65,
-	0xb2, 0x48, 0x9d, 0x03, 0x53, 0xe5, 0x2d, 0xa5, 0x54, 0x29, 0x60, 0xcc, 0x69, 0x40, 0x04, 0x1b,
-	0x99, 0x0f, 0x9a, 0x3a, 0x6b, 0x95, 0x07, 0xa7, 0x04, 0x29, 0xa8, 0xb3, 0x49, 0x29, 0xe4, 0x26,
-	0xda, 0x20, 0x3d, 0x05, 0xe5, 0x28, 0xa3, 0x3c, 0xf8, 0x58, 0x9d, 0x70, 0xaa, 0xb2, 0x12, 0x85,
-	0xe7, 0xe0, 0x59, 0x72, 0xa0, 0x74, 0xe2, 0xc9, 0xcb, 0xe0, 0xb8, 0xb4, 0x89, 0x27, 0xc9, 0xb4,
-	0x60, 0x15, 0xf3, 0x4b, 0x8d, 0x95, 0x21, 0xe0, 0x43, 0x00, 0x8b, 0xe0, 0x3c, 0x80, 0x13, 0x3c,
-	0x82, 0xb6, 0x29, 0x7a, 0xc5, 0x1d, 0x29, 0x64, 0x34, 0xc0, 0x6d, 0xd4, 0x89, 0x73, 0x2d, 0x30,
-	0x6a, 0x16, 0xd1, 0xda, 0x00, 0x5a, 0xa3, 0xa7, 0x8c, 0xa1, 0x20, 0x85, 0xe7, 0x5e, 0xb3, 0xe8,
-	0x8d, 0x77, 0xd2, 0x51, 0xd0, 0x34, 0x72, 0x43, 0x43, 0xf0, 0x9c, 0x7a, 0xa9, 0xb9, 0xe5, 0x9a,
-	0x14, 0x8e, 0x2b, 0xe3, 0x0c, 0x65, 0x89, 0x49, 0xa5, 0xa9, 0x42, 0x87, 0x31, 0x50, 0x4f, 0x19,
-	0x38, 0xca, 0x82, 0x8e, 0x8a, 0x14, 0x46, 0x3b, 0xc6, 0x9d, 0xf1, 0x95, 0x1a, 0x48, 0xc6, 0x85,
-	0x48, 0x91, 0x02, 0xf5, 0x00, 0x14, 0x84, 0xae, 0x6e, 0x0f, 0xa6, 0x31, 0x85, 0x44, 0x91, 0x52,
-	0x45, 0x65, 0x8c, 0x09, 0x63, 0x44, 0x26, 0x7c, 0x42, 0x70, 0xce, 0x38, 0xc5, 0x49, 0xc1, 0x94,
-	0x14, 0x60, 0x82, 0xd4, 0x5a, 0x08, 0x08, 0xc9, 0x54, 0xa4, 0x46, 0x99, 0x87, 0x10, 0x7c, 0xa4,
-	0x75, 0x8c, 0x45, 0x9d, 0xa8, 0xf4, 0x0a, 0x1c, 0xa3, 0x8c, 0xa9, 0x24, 0xbd, 0xa2, 0x18, 0x30,
-	0x50, 0x17, 0x25, 0x05, 0x16, 0x13, 0x29, 0x9c, 0xa8, 0x44, 0x8d, 0xe5, 0x51, 0x4b, 0x17, 0xd1,
-	0x2b, 0x56, 0x11, 0xaa, 0xc4, 0xe0, 0x0d, 0x93, 0xde, 0x53, 0x52, 0x28, 0x54, 0x46, 0x04, 0x17,
-	0x5c, 0xb2, 0x1e, 0x0c, 0xa7, 0x98, 0x9c, 0x67, 0x16, 0x5d, 0x0a, 0xc8, 0x91, 0x27, 0x43, 0x0a,
-	0xe5, 0x28, 0x70, 0xc1, 0x63, 0x75, 0xb5, 0x69, 0x49, 0x5d, 0x02, 0x6f, 0x38, 0x1a, 0xc5, 0xc1,
-	0x02, 0xd7, 0xd5, 0x0d, 0x64, 0xa5, 0xf3, 0x54, 0xfa, 0xe8, 0x23, 0x8b, 0xdc, 0x3b, 0x2b, 0x92,
-	0x46, 0x0b, 0x52, 0x19, 0xa4, 0x5a, 0xf0, 0xea, 0x06, 0x72, 0x81, 0x2b, 0xeb, 0x90, 0x05, 0x8a,
-	0x2e, 0x29, 0x21, 0x80, 0x72, 0x1e, 0x34, 0xa7, 0x2a, 0x39, 0xc3, 0x1c, 0x32, 0x52, 0x38, 0x8d,
-	0x1e, 0x34, 0xaf, 0xae, 0x0f, 0xee, 0xa5, 0xd1, 0xd4, 0x30, 0xc7, 0x3d, 0x18, 0x59, 0x05, 0xb4,
-	0xf2, 0x40, 0x0a, 0x13, 0x24, 0xa3, 0x01, 0xad, 0xe0, 0x68, 0xa5, 0x05, 0x21, 0x38, 0x93, 0x82,
-	0x07, 0x07, 0x96, 0xa3, 0x33, 0xbc, 0xba, 0x1b, 0x74, 0x8a, 0x56, 0x00, 0x67, 0xc9, 0x25, 0x11,
-	0x54, 0x72, 0x29, 0x19, 0xaf, 0x82, 0x16, 0xde, 0x07, 0x66, 0x5c, 0x24, 0x05, 0x8f, 0xd6, 0x38,
-	0x19, 0xbc, 0xf1, 0xaa, 0xe2, 0x03, 0xe3, 0x11, 0xb9, 0x76, 0x0a, 0x8d, 0x0b, 0x4c, 0x19, 0x4d,
-	0x49, 0x91, 0xa2, 0xa5, 0x09, 0x5c, 0xd0, 0x8c, 0xd3, 0x10, 0xab, 0x40, 0x55, 0x9c, 0x2a, 0x46,
-	0x93, 0x08, 0x5a, 0xca, 0xea, 0xae, 0x54, 0x26, 0x09, 0x2d, 0xb9, 0x97, 0x28, 0x0c, 0x72, 0x9b,
-	0x54, 0xf0, 0x28, 0x28, 0xa7, 0xc1, 0x09, 0xc1, 0xbc, 0x0c, 0xa4, 0x70, 0x54, 0x53, 0x2a, 0xf9,
-	0x88, 0xff, 0x14, 0x1a, 0xa5, 0x3c, 0x95, 0x22, 0x50, 0x65, 0xb8, 0x92, 0x50, 0x45, 0x61, 0x50,
-	0x34, 0xe9, 0xea, 0xe5, 0xc0, 0x8c, 0xd0, 0x46, 0x7b, 0x69, 0x3c, 0x68, 0x6a, 0x95, 0x8f, 0x34,
-	0xe8, 0x80, 0x48, 0x8a, 0xc0, 0x29, 0xf3, 0x8e, 0x27, 0xeb, 0xa5, 0x15, 0x09, 0x84, 0xb5, 0x1e,
-	0x99, 0x91, 0x51, 0x6b, 0x5b, 0x79, 0x50, 0x92, 0xc2, 0x3b, 0xea, 0xa3, 0x47, 0xa7, 0x19, 0x68,
-	0x69, 0x13, 0x95, 0xdc, 0x44, 0xcf, 0x19, 0x00, 0xe8, 0x10, 0xbc, 0x72, 0xa4, 0x70, 0x49, 0xf3,
-	0x20, 0x13, 0xd7, 0xde, 0xd1, 0x28, 0xa2, 0x51, 0xc6, 0x23, 0x68, 0xea, 0xd0, 0xf2, 0xc4, 0x11,
-	0x52, 0xf5, 0x3a, 0x23, 0x1f, 0x64, 0xe7, 0x96, 0xcf, 0x0e, 0xce, 0xfc, 0x5d, 0x56, 0xcc, 0x7c,
-	0xb6, 0x5d, 0x99, 0x7e, 0xb6, 0xfd, 0x71, 0xfd, 0x34, 0xcb, 0x37, 0xc9, 0xd5, 0x88, 0x09, 0xf6,
-	0x3a, 0xe5, 0xb8, 0xc6, 0xde, 0xea, 0xe2, 0x7b, 0xe5, 0xb8, 0x13, 0x53, 0x57, 0xa5, 0x0d, 0x7e,
-	0xe5, 0xd8, 0xf3, 0xf1, 0xd5, 0xdd, 0x7e, 0x79, 0x7f, 0xe3, 0x54, 0xeb, 0xb9, 0xb1, 0xe6, 0xa8,
-	0xd4, 0x7e, 0x1b, 0xdf, 0x2b, 0xdf, 0xa9, 0xd5, 0xf2, 0xd7, 0xc8, 0xd3, 0xc7, 0x40, 0x23, 0x76,
-	0xef, 0x37, 0x2f, 0x3c, 0x11, 0xed, 0xa9, 0x29, 0xb4, 0x1f, 0x62, 0xf7, 0x7e, 0xbe, 0x41, 0xae,
-	0x1c, 0xc3, 0x81, 0x4e, 0xa7, 0x77, 0x6f, 0x5c, 0x9c, 0x9e, 0x04, 0x94, 0x4f, 0x01, 0xdd, 0xa8,
-	0x34, 0x5e, 0x5e, 0xfc, 0xef, 0x57, 0x1a, 0x7c, 0x55, 0xac, 0xca, 0x55, 0xb5, 0xaa, 0x57, 0xcd,
-	0xfa, 0x35, 0xf2, 0xcc, 0x31, 0xe4, 0xb0, 0xd3, 0x6b, 0x07, 0xcc, 0xaf, 0x3c, 0x7a, 0x98, 0x35,
-	0x3e, 0x7a, 0x98, 0x91, 0xfd, 0x87, 0xd9, 0x02, 0x63, 0xab, 0x8c, 0xaf, 0x32, 0xf1, 0xe6, 0xdc,
-	0x02, 0xb9, 0xdc, 0x58, 0xfe, 0xeb, 0x8c, 0xcc, 0xd5, 0x4d, 0xa0, 0x97, 0xc9, 0xc2, 0x2e, 0x96,
-	0x10, 0xa1, 0x84, 0xba, 0x11, 0xd4, 0xe0, 0x4b, 0xc7, 0x6c, 0xb9, 0x8d, 0xc3, 0x21, 0x6c, 0xe3,
-	0x6d, 0x2c, 0xa1, 0xae, 0xce, 0x0e, 0xe5, 0xf3, 0x57, 0xc9, 0xdc, 0xb0, 0x8f, 0x61, 0x5c, 0x74,
-	0xb1, 0xb5, 0x27, 0xb5, 0xed, 0xea, 0x4e, 0xd8, 0xda, 0xeb, 0x9d, 0x9e, 0x87, 0xce, 0x66, 0x1f,
-	0xc3, 0xa8, 0x69, 0x53, 0xa9, 0x2f, 0xff, 0x84, 0x2c, 0x54, 0xa6, 0xd4, 0x05, 0xc0, 0x8f, 0xc8,
-	0xd9, 0x4a, 0x70, 0xd8, 0xcc, 0x66, 0xd6, 0x30, 0xd3, 0x98, 0x75, 0x1b, 0x6a, 0xfd, 0x99, 0x2a,
-	0x30, 0xe6, 0x3f, 0xc8, 0xce, 0x5c, 0x7e, 0xff, 0xf4, 0x44, 0x8c, 0x8c, 0x70, 0x96, 0xff, 0xab,
-	0x41, 0x16, 0xa7, 0x57, 0xcd, 0xdf, 0x25, 0x73, 0xd0, 0xd9, 0xee, 0xd5, 0xdb, 0x5d, 0xe4, 0xab,
-	0x27, 0x77, 0xb8, 0x6e, 0xf6, 0x76, 0x7d, 0xbb, 0xdb, 0xee, 0x6e, 0xdf, 0xe8, 0x6c, 0xf7, 0x06,
-	0xed, 0x72, 0x67, 0x77, 0xfd, 0xd9, 0x8f, 0x1f, 0x64, 0xff, 0xfe, 0x30, 0x6b, 0xbc, 0xf6, 0x46,
-	0x6b, 0xf3, 0xce, 0xd6, 0xed, 0x1b, 0x77, 0x6e, 0x6e, 0xd4, 0x05, 0x7e, 0x8d, 0x98, 0x5f, 0x23,
-	0x8d, 0xca, 0x42, 0x1c, 0xd4, 0x65, 0x73, 0xed, 0x97, 0xa3, 0x46, 0xc8, 0xca, 0xfb, 0xa7, 0x37,
-	0x4e, 0xb5, 0xc8, 0x48, 0xa0, 0x2a, 0x9f, 0xf3, 0xb7, 0xc8, 0xa5, 0xb1, 0xf8, 0x10, 0x3b, 0x18,
-	0xca, 0xde, 0x41, 0xcf, 0xec, 0x78, 0xd7, 0xad, 0x2e, 0xb4, 0x37, 0xc7, 0x32, 0xd5, 0x1e, 0x36,
-	0x4e, 0xb5, 0x16, 0x47, 0xaa, 0x07, 0xa3, 0xf9, 0x8f, 0x0f, 0x3c, 0x37, 0x57, 0x7b, 0xee, 0xf9,
-	0x63, 0x10, 0xd3, 0x75, 0xdf, 0x8b, 0x1f, 0x3e, 0x78, 0x7a, 0xc6, 0xf9, 0x4c, 0x78, 0x72, 0xec,
-	0xbf, 0xfc, 0x5d, 0xf2, 0xf4, 0xc4, 0x96, 0x0e, 0x2b, 0xfb, 0xb3, 0xb5, 0x9d, 0x2f, 0x7d, 0x6e,
-	0x6f, 0x6f, 0x1d, 0x86, 0xed, 0x50, 0x65, 0xc4, 0xd1, 0xb6, 0x0f, 0x9a, 0x20, 0x7f, 0x74, 0xac,
-	0xff, 0x34, 0xff, 0x25, 0xfa, 0x4f, 0x47, 0x9d, 0x95, 0xa9, 0x46, 0xd4, 0x3a, 0x99, 0x1b, 0xf4,
-	0x3a, 0x38, 0xee, 0xad, 0x9d, 0x00, 0xd5, 0xea, 0x75, 0x70, 0x26, 0x54, 0xad, 0x9b, 0xbf, 0x45,
-	0xce, 0x57, 0x19, 0xbe, 0xd5, 0xee, 0xa6, 0xde, 0xb8, 0xb5, 0x76, 0x02, 0x50, 0x95, 0xd7, 0x6f,
-	0x74, 0x53, 0x6f, 0xb0, 0x5b, 0x77, 0xd6, 0x8e, 0x80, 0x16, 0xe2, 0x78, 0x26, 0x7f, 0x3f, 0x3b,
-	0xe2, 0xa4, 0xd4, 0x1b, 0xdc, 0x83, 0x41, 0x6c, 0x77, 0xb7, 0x0f, 0x4b, 0xda, 0xf3, 0x5f, 0xe0,
-	0xa8, 0xbe, 0xf3, 0xe1, 0x83, 0xcb, 0xc7, 0x55, 0xc7, 0x0b, 0x1d, 0x72, 0xe3, 0x99, 0x56, 0x73,
-	0xbc, 0xca, 0x6b, 0x87, 0x92, 0x07, 0xb5, 0xac, 0x22, 0x04, 0xba, 0xf7, 0xb7, 0x46, 0xfe, 0xff,
-	0x1c, 0x16, 0x3c, 0x0f, 0xdd, 0xfb, 0x9b, 0xb5, 0x60, 0xde, 0x22, 0xa4, 0x26, 0xa8, 0x51, 0x9d,
-	0xff, 0x4c, 0xad, 0xb6, 0xf2, 0xe4, 0x6c, 0x3c, 0xea, 0xca, 0x1c, 0xba, 0x62, 0x23, 0x6b, 0x9d,
-	0xaf, 0x61, 0xc6, 0xbd, 0x9a, 0x91, 0x6b, 0x6b, 0xc8, 0x67, 0xbf, 0x3a, 0x64, 0xed, 0xdf, 0x1a,
-	0xf1, 0x6d, 0x72, 0xbe, 0x0a, 0xd3, 0x11, 0xe2, 0x73, 0x33, 0x63, 0x72, 0x06, 0x65, 0x3c, 0x86,
-	0x37, 0x38, 0xa0, 0x9f, 0x9f, 0x92, 0x8b, 0x75, 0x63, 0xbd, 0xdd, 0x2d, 0x71, 0xd0, 0x85, 0x4e,
-	0xf3, 0xd3, 0x73, 0x33, 0xfb, 0x31, 0xb3, 0x7a, 0x29, 0x57, 0x3e, 0x7c, 0x30, 0xad, 0x5c, 0xc7,
-	0xc2, 0x85, 0x6a, 0xe8, 0x8d, 0xf1, 0x48, 0xfe, 0x33, 0x72, 0x61, 0x58, 0x37, 0xe0, 0xb7, 0x46,
-	0xb9, 0xfa, 0x9b, 0x73, 0x75, 0x04, 0x7c, 0x9e, 0x17, 0x0e, 0x7b, 0xf6, 0xeb, 0xf9, 0xc4, 0xd1,
-	0x8f, 0x32, 0x75, 0xa1, 0xd5, 0x18, 0x1e, 0xce, 0x0f, 0xf3, 0x2e, 0x59, 0xec, 0x0d, 0xda, 0xdb,
-	0xed, 0x2e, 0x74, 0xc6, 0x6b, 0xfc, 0xe7, 0xb9, 0x2f, 0x10, 0x65, 0x2b, 0xb3, 0x09, 0xe1, 0xb1,
-	0xd5, 0x4e, 0xb7, 0x2e, 0x1e, 0xc0, 0xd7, 0xeb, 0xbd, 0xcc, 0x7f, 0xf9, 0x30, 0x5b, 0x23, 0x97,
-	0x09, 0xb9, 0x51, 0x96, 0x10, 0x76, 0x76, 0xb1, 0x5b, 0xe6, 0xa7, 0x19, 0x25, 0x84, 0x9c, 0x1d,
-	0x19, 0x94, 0x49, 0xb2, 0x48, 0x16, 0x6e, 0xc4, 0xbb, 0xd0, 0x0d, 0x18, 0xf3, 0xd3, 0x9c, 0xae,
-	0x7f, 0x97, 0x5c, 0x1c, 0x73, 0xca, 0x09, 0x37, 0x15, 0x5f, 0x55, 0xab, 0x62, 0xfd, 0xfb, 0xa4,
-	0x51, 0x1f, 0xee, 0x58, 0xe8, 0xf9, 0x47, 0x0f, 0xb3, 0x67, 0x7f, 0x35, 0x6a, 0xbb, 0x5c, 0xa9,
-	0x04, 0x39, 0x5b, 0xe5, 0x7c, 0x95, 0x8b, 0xcf, 0x1e, 0x66, 0xd9, 0xe8, 0x5a, 0x7b, 0x73, 0x6e,
-	0xe1, 0xca, 0xe5, 0x67, 0x96, 0xff, 0x6a, 0x9e, 0x2c, 0xde, 0x1c, 0x20, 0x94, 0x78, 0xc8, 0xf9,
-	0x3f, 0xf8, 0xea, 0x9c, 0x3f, 0xe6, 0xf6, 0x17, 0x67, 0x70, 0xfb, 0x37, 0xc9, 0xe7, 0xfc, 0x4b,
-	0xf0, 0xf9, 0x37, 0x4f, 0xd6, 0x1b, 0x5f, 0x83, 0xac, 0xa7, 0x39, 0xfa, 0x2b, 0xf2, 0xd1, 0x1b,
-	0x5f, 0x87, 0x8f, 0xa6, 0x69, 0xe8, 0xf5, 0xaf, 0x41, 0x43, 0x53, 0xec, 0xf3, 0xea, 0x57, 0x66,
-	0x9f, 0x49, 0xd2, 0x79, 0xf9, 0xa9, 0x7f, 0x79, 0xe5, 0xd8, 0x13, 0x65, 0x7d, 0xf9, 0x78, 0x86,
-	0x3c, 0xf5, 0xf3, 0xdf, 0x66, 0xd3, 0x43, 0xeb, 0x4b, 0xd3, 0xe9, 0x71, 0xe9, 0xe7, 0xbf, 0xcd,
-	0x26, 0x07, 0x96, 0x7f, 0x31, 0x4f, 0x2e, 0xb5, 0xb0, 0xdf, 0x81, 0xf0, 0x6d, 0x1a, 0x7c, 0x9b,
-	0x06, 0xbf, 0xb3, 0x69, 0xf0, 0x6f, 0xf3, 0xa4, 0xf1, 0x3a, 0x96, 0xdf, 0xa6, 0xc0, 0xb7, 0x29,
-	0xf0, 0xff, 0x3d, 0x05, 0xf2, 0x5b, 0x5f, 0xf3, 0x79, 0x38, 0xf5, 0x14, 0xfc, 0x86, 0x12, 0x6a,
-	0xfd, 0x6f, 0xb3, 0x8f, 0x3e, 0x59, 0x3a, 0xf5, 0xf1, 0x27, 0x4b, 0xa7, 0x3e, 0xfb, 0x64, 0x29,
-	0xfb, 0x9f, 0x4f, 0x96, 0xb2, 0xf7, 0xf7, 0x97, 0xb2, 0xbf, 0xdf, 0x5f, 0xca, 0xfe, 0x71, 0x7f,
-	0x29, 0x7b, 0xb4, 0xbf, 0x94, 0xfd, 0x6a, 0x7f, 0x29, 0xfb, 0x68, 0x7f, 0x29, 0xfb, 0x78, 0x7f,
-	0x29, 0xfb, 0x8f, 0xfd, 0xa5, 0xec, 0xd3, 0xfd, 0xa5, 0x53, 0x9f, 0xed, 0x2f, 0x65, 0x7f, 0xf3,
-	0xeb, 0xa5, 0x53, 0x8f, 0x7e, 0xbd, 0x94, 0xfd, 0x59, 0x6b, 0xbb, 0xd7, 0xff, 0xcb, 0xed, 0xb5,
-	0xbb, 0xbd, 0x4e, 0x89, 0x83, 0x01, 0xac, 0xed, 0x0d, 0xaf, 0xd7, 0x1f, 0x55, 0x2d, 0x75, 0xad,
-	0x3f, 0xe8, 0xdd, 0x6d, 0x47, 0x1c, 0x5c, 0x3b, 0x98, 0xbe, 0xde, 0xf7, 0xdb, 0xbd, 0xeb, 0xf8,
-	0x5e, 0x79, 0xf0, 0x2f, 0x36, 0xb3, 0xfe, 0xd3, 0xc6, 0xcf, 0xd7, 0xff, 0xf7, 0x20, 0xfe, 0x2f,
-	0x00, 0x00, 0xff, 0xff, 0x28, 0x4a, 0xb2, 0x07, 0x67, 0x24, 0x00, 0x00,
+	// 1313 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xcf, 0x6f, 0x1b, 0xc5,
+	0x17, 0xf7, 0xd8, 0x4e, 0x62, 0xcf, 0x26, 0x8e, 0x3b, 0xad, 0xbe, 0xda, 0x6f, 0xa8, 0xb6, 0xae,
+	0xd5, 0x16, 0x0b, 0x9c, 0x35, 0x75, 0x53, 0x04, 0x3d, 0x54, 0xc4, 0xe9, 0x0f, 0xb7, 0x75, 0x4a,
+	0x59, 0xbb, 0xa2, 0x80, 0xd0, 0x76, 0xbc, 0x3b, 0xb6, 0x17, 0x76, 0x77, 0x56, 0xbb, 0xe3, 0xa4,
+	0x3e, 0x44, 0x8a, 0xf8, 0x0b, 0x50, 0x85, 0xe0, 0x5f, 0x40, 0x95, 0xb8, 0x23, 0x72, 0x89, 0x38,
+	0x21, 0x4e, 0x3d, 0x46, 0x9c, 0x88, 0x7b, 0x69, 0x6f, 0x15, 0x27, 0xc4, 0x09, 0xed, 0xec, 0xfa,
+	0xc7, 0x1a, 0xa7, 0xd0, 0x96, 0x5e, 0x50, 0x4e, 0x99, 0x1f, 0x9f, 0xf7, 0x99, 0xf7, 0xde, 0x7c,
+	0xde, 0x1b, 0x67, 0x61, 0x61, 0x83, 0x78, 0xb2, 0x41, 0x4b, 0x9e, 0xd6, 0x21, 0x16, 0x2e, 0x79,
+	0xc4, 0xdd, 0x30, 0x34, 0xa2, 0x3a, 0xd4, 0x34, 0xb4, 0x5e, 0x89, 0xf5, 0x1c, 0xe2, 0xc9, 0x8e,
+	0x4b, 0x19, 0x45, 0xc7, 0x03, 0xa4, 0x1c, 0x20, 0xe5, 0x28, 0x72, 0x69, 0xb9, 0x6d, 0xb0, 0x4e,
+	0xb7, 0x29, 0x6b, 0xd4, 0x2a, 0xb5, 0x69, 0x9b, 0x96, 0xb8, 0x51, 0xb3, 0xdb, 0xe2, 0x33, 0x3e,
+	0xe1, 0xa3, 0x80, 0x6c, 0xe9, 0x44, 0x9b, 0xd2, 0xb6, 0x49, 0x46, 0x28, 0x66, 0x58, 0xc4, 0x63,
+	0xd8, 0x72, 0x42, 0xc0, 0x6b, 0x51, 0xbf, 0xa8, 0xc3, 0x0c, 0x6a, 0x87, 0xae, 0x2c, 0xe5, 0xa2,
+	0x9b, 0x7f, 0x75, 0x76, 0xe9, 0xff, 0x51, 0xc4, 0xf8, 0xd6, 0xf1, 0xe8, 0xd6, 0x06, 0x36, 0x0d,
+	0x1d, 0x33, 0x32, 0x9d, 0x7a, 0xc3, 0x20, 0x9b, 0x6a, 0xe4, 0xf0, 0xfc, 0x77, 0x29, 0x08, 0xeb,
+	0x86, 0xe5, 0x98, 0x44, 0xe9, 0x9a, 0x04, 0x21, 0x98, 0xb4, 0xb1, 0x45, 0x44, 0x90, 0x03, 0x85,
+	0xb4, 0xc2, 0xc7, 0xe8, 0x1d, 0x38, 0x8b, 0x35, 0xdf, 0x46, 0x8c, 0xe7, 0x40, 0x21, 0x53, 0xce,
+	0xc9, 0xd1, 0xdc, 0x05, 0x0e, 0xcb, 0xbe, 0xfd, 0x2a, 0xc7, 0x29, 0x21, 0x1e, 0x55, 0x61, 0x46,
+	0xa7, 0x16, 0x36, 0x6c, 0xd5, 0xc2, 0x4c, 0xeb, 0x10, 0x57, 0x4c, 0xe4, 0x40, 0x41, 0x28, 0x9f,
+	0x9c, 0xce, 0xb0, 0x1e, 0x80, 0x1a, 0x3d, 0x87, 0x28, 0x0b, 0x81, 0x61, 0xb8, 0x84, 0xde, 0x85,
+	0x49, 0x07, 0xb3, 0x8e, 0x98, 0xe4, 0xf6, 0xa7, 0xa7, 0xdb, 0xdf, 0xc2, 0xac, 0x33, 0xce, 0xc1,
+	0x4d, 0xd0, 0x3a, 0x9c, 0xeb, 0x10, 0xac, 0x13, 0xd7, 0x13, 0x67, 0x72, 0x89, 0x82, 0x50, 0x7e,
+	0x7d, 0xba, 0x75, 0x95, 0x83, 0xc6, 0xec, 0x2b, 0xf0, 0x87, 0x27, 0xbb, 0x89, 0x99, 0xfb, 0x20,
+	0x9e, 0xcd, 0x2a, 0x03, 0x0e, 0x54, 0x83, 0x42, 0x87, 0x31, 0x47, 0xb5, 0x08, 0xeb, 0x50, 0x5d,
+	0x9c, 0xe5, 0x0e, 0xbd, 0x79, 0x00, 0x25, 0x63, 0xce, 0x3a, 0xc7, 0x8d, 0xbb, 0x05, 0x3b, 0xc3,
+	0x65, 0x74, 0x11, 0xc2, 0x4d, 0xdc, 0x52, 0xc3, 0xfc, 0xce, 0x71, 0xb2, 0x13, 0xd3, 0xc9, 0x3e,
+	0xc4, 0xad, 0x30, 0xbd, 0xe9, 0xcd, 0xc1, 0x10, 0xad, 0xc3, 0x63, 0xe4, 0x9e, 0x63, 0xb8, 0xd8,
+	0x9f, 0xa9, 0x43, 0xd9, 0x89, 0x29, 0xce, 0xb4, 0x24, 0x07, 0xc2, 0x94, 0x07, 0xc2, 0x94, 0x1b,
+	0x03, 0x84, 0x72, 0x74, 0x64, 0x37, 0x5c, 0x44, 0x55, 0x38, 0xef, 0x50, 0x97, 0x0d, 0xaf, 0x0b,
+	0x3e, 0x33, 0xdd, 0xd4, 0x65, 0xe3, 0x71, 0x09, 0xce, 0x68, 0x01, 0x15, 0xa1, 0xa0, 0x13, 0x4f,
+	0x73, 0x0d, 0xae, 0x36, 0x51, 0xf0, 0xf5, 0x14, 0x26, 0xd4, 0x4d, 0x88, 0xdb, 0x71, 0x65, 0x7c,
+	0x1b, 0xdd, 0x85, 0xb3, 0x9c, 0x9b, 0x88, 0xf3, 0xb9, 0x44, 0x21, 0x5d, 0xa9, 0xfa, 0xc0, 0xd2,
+	0x7d, 0x50, 0xcc, 0xbf, 0xe1, 0x16, 0x94, 0x33, 0x9f, 0xe4, 0x57, 0x6f, 0x7e, 0x94, 0x2f, 0xe6,
+	0xf2, 0xd5, 0x46, 0xe3, 0xd6, 0xe0, 0x6f, 0xdd, 0x1f, 0x34, 0xd6, 0xf8, 0xbc, 0x51, 0xab, 0xe7,
+	0x3f, 0x1d, 0xde, 0x56, 0x72, 0x30, 0x12, 0x81, 0x12, 0xf2, 0xa2, 0xcb, 0x50, 0xe8, 0xba, 0xe6,
+	0x30, 0xb0, 0x05, 0x1e, 0xd8, 0xa9, 0xe9, 0x81, 0xdd, 0x56, 0x6a, 0x91, 0xfb, 0xea, 0xba, 0xe6,
+	0x20, 0xac, 0x3b, 0x70, 0xd1, 0x5c, 0x51, 0x75, 0xe2, 0x8d, 0x72, 0x94, 0xe1, 0x54, 0x07, 0x88,
+	0xaa, 0xb6, 0x72, 0x89, 0x78, 0xe3, 0x59, 0xaa, 0xcc, 0xed, 0x6d, 0x81, 0xc7, 0x3b, 0x00, 0x28,
+	0x0b, 0xe6, 0xf8, 0x1e, 0xba, 0x01, 0x33, 0x86, 0xa3, 0x3a, 0x2e, 0x69, 0x19, 0xf7, 0x54, 0xd3,
+	0xf0, 0x98, 0xb8, 0xf8, 0xcc, 0xe4, 0x73, 0x20, 0x37, 0xae, 0x19, 0x1e, 0x53, 0xe6, 0x0d, 0x27,
+	0x58, 0xf2, 0x67, 0x48, 0x81, 0x48, 0xf7, 0x98, 0x3a, 0x41, 0x98, 0x7d, 0x1e, 0xc2, 0x45, 0xdd,
+	0x63, 0xd7, 0xc6, 0x38, 0xaf, 0x27, 0x53, 0xe9, 0x2c, 0xcc, 0x3f, 0x9e, 0x83, 0x99, 0xab, 0x26,
+	0x6d, 0x62, 0xb3, 0xee, 0x10, 0xcd, 0x8f, 0x08, 0xdd, 0x81, 0x49, 0x6c, 0xb6, 0x29, 0xef, 0x19,
+	0x99, 0x72, 0xf1, 0xe0, 0xee, 0xb0, 0x46, 0xad, 0xa6, 0x61, 0x1b, 0x76, 0x7b, 0xd5, 0x6c, 0x53,
+	0xd7, 0x60, 0x1d, 0xab, 0xf2, 0xbf, 0xbd, 0x2d, 0xf0, 0xcb, 0x0e, 0x10, 0xae, 0x5c, 0x53, 0xea,
+	0x0d, 0x75, 0x7d, 0xb5, 0xb1, 0x56, 0xe5, 0xc9, 0xe1, 0x8c, 0x68, 0x19, 0x0a, 0x7e, 0x63, 0x26,
+	0xae, 0xca, 0x9b, 0x52, 0x3c, 0x22, 0xa2, 0xc2, 0x76, 0xbc, 0x1a, 0x53, 0x60, 0x00, 0xb8, 0xe9,
+	0x37, 0xaa, 0x1b, 0x70, 0x31, 0x84, 0x7b, 0xc4, 0x24, 0x1a, 0xa3, 0x83, 0x7e, 0x33, 0xd9, 0xb1,
+	0x6a, 0xb8, 0x49, 0xcc, 0x7a, 0x88, 0xf1, 0x63, 0xa8, 0xc6, 0x94, 0x4c, 0x60, 0x3a, 0x58, 0x45,
+	0xb7, 0xe1, 0x8c, 0xdb, 0x35, 0x89, 0x27, 0x26, 0x79, 0xd3, 0x38, 0x3e, 0x41, 0xf1, 0x7e, 0xf3,
+	0x33, 0xa2, 0x31, 0x85, 0xb4, 0xf8, 0xa5, 0x9e, 0x7c, 0xb0, 0x75, 0x34, 0xfa, 0x84, 0xa8, 0xbe,
+	0xb1, 0xef, 0xe9, 0xec, 0x7d, 0x90, 0xc8, 0x6e, 0xc7, 0x95, 0x80, 0x0d, 0xdd, 0x81, 0x47, 0xc7,
+	0x42, 0x1a, 0x8a, 0x68, 0x86, 0xfb, 0x79, 0xe6, 0x6f, 0xfb, 0x62, 0x05, 0x7b, 0x86, 0x56, 0x8d,
+	0x29, 0x47, 0x46, 0x61, 0x0f, 0x04, 0xf4, 0xc1, 0x44, 0xed, 0xce, 0x3e, 0x47, 0xed, 0x8e, 0x54,
+	0x19, 0x29, 0xe2, 0x0a, 0x4c, 0xba, 0xd4, 0x24, 0x61, 0x5f, 0x3a, 0x80, 0x4a, 0xa1, 0x26, 0x99,
+	0x4a, 0xc5, 0x6d, 0xd1, 0x0d, 0x98, 0xd6, 0x89, 0xdd, 0x53, 0x0d, 0xbb, 0x45, 0xc3, 0xb6, 0x74,
+	0x00, 0xd1, 0x25, 0x62, 0xf7, 0xae, 0xd9, 0x2d, 0xea, 0x5a, 0xbc, 0x2b, 0x8d, 0x88, 0x52, 0x7a,
+	0xb8, 0x83, 0xb6, 0x01, 0x5c, 0xd2, 0x49, 0x0b, 0x77, 0x4d, 0xa6, 0xb6, 0xa8, 0xbb, 0x89, 0x5d,
+	0xdd, 0xb0, 0xdb, 0xaa, 0x66, 0x62, 0xcf, 0x23, 0x9e, 0x98, 0xfe, 0x07, 0x57, 0x75, 0xea, 0xc1,
+	0x56, 0x76, 0xd2, 0x34, 0x3c, 0x68, 0xd8, 0x40, 0x12, 0x8a, 0x18, 0x9e, 0x72, 0x65, 0x88, 0x5c,
+	0x0b, 0xce, 0x40, 0xe7, 0x21, 0xc4, 0x76, 0x4f, 0x0d, 0xf2, 0xcf, 0xfb, 0x9a, 0x50, 0x3e, 0x36,
+	0x71, 0xe2, 0x65, 0xcb, 0x61, 0xbd, 0x6a, 0x4c, 0x49, 0x63, 0xbb, 0x57, 0xe7, 0x40, 0x74, 0x17,
+	0xce, 0x7b, 0xfc, 0x99, 0x55, 0x03, 0x55, 0x3d, 0x99, 0xe3, 0xbe, 0x16, 0xe4, 0x67, 0xfd, 0x0e,
+	0x91, 0x47, 0x2f, 0x73, 0x05, 0x8d, 0x39, 0x19, 0x68, 0x2a, 0xa5, 0x08, 0xde, 0x70, 0xdf, 0xbb,
+	0x90, 0xff, 0x71, 0x07, 0x48, 0x30, 0x0b, 0xe1, 0x2a, 0x63, 0x58, 0xeb, 0x58, 0xc4, 0x66, 0x28,
+	0x7e, 0xf6, 0x2d, 0x08, 0xe1, 0x0c, 0x07, 0x20, 0xb0, 0x52, 0x39, 0x0d, 0x17, 0x42, 0xf5, 0x69,
+	0x1d, 0x6a, 0x68, 0x04, 0x1d, 0xdb, 0xdd, 0x01, 0xc2, 0xc3, 0x1d, 0x00, 0xfb, 0x3b, 0x20, 0x75,
+	0xf6, 0x6c, 0xb1, 0x5c, 0x3c, 0x5f, 0x3c, 0x77, 0x3d, 0x99, 0x82, 0x59, 0x21, 0xff, 0x75, 0x12,
+	0x66, 0xd6, 0x5c, 0x82, 0x19, 0x19, 0x96, 0xfa, 0x7b, 0x2f, 0x5e, 0xea, 0x61, 0x49, 0x9f, 0x9c,
+	0x52, 0xd2, 0xaf, 0xb2, 0x8c, 0xcb, 0xcf, 0x51, 0xc6, 0xaf, 0xbe, 0x46, 0xab, 0x2f, 0x51, 0xa3,
+	0xd1, 0xd2, 0x7c, 0x31, 0x19, 0x5e, 0x38, 0xf1, 0xf3, 0xc5, 0x89, 0xf6, 0xfd, 0xdb, 0x45, 0x21,
+	0xbc, 0xf6, 0xe2, 0x4a, 0xf1, 0xed, 0x4a, 0x7e, 0x52, 0x21, 0x47, 0xbe, 0xf8, 0x03, 0x44, 0x97,
+	0xf2, 0xdf, 0x24, 0xe1, 0xa2, 0x42, 0x1c, 0x13, 0x6b, 0x87, 0xca, 0x38, 0x54, 0xc6, 0xb8, 0x32,
+	0xf6, 0x93, 0x50, 0xb8, 0x4a, 0xd8, 0xa1, 0x2a, 0xfe, 0x23, 0xaa, 0x40, 0xb5, 0x97, 0x7c, 0xb6,
+	0xa2, 0x4f, 0xd4, 0xbf, 0xa1, 0xb1, 0xca, 0x57, 0xe0, 0xe1, 0xbe, 0x14, 0xdb, 0xdb, 0x97, 0x62,
+	0x4f, 0xf7, 0x25, 0xf0, 0xfb, 0xbe, 0x04, 0xb6, 0xfb, 0x12, 0xf8, 0xb6, 0x2f, 0x81, 0xef, 0xfb,
+	0x12, 0xd8, 0xed, 0x4b, 0xe0, 0xa7, 0xbe, 0x04, 0x1e, 0xf6, 0x25, 0xb0, 0xd7, 0x97, 0xc0, 0xaf,
+	0x7d, 0x09, 0x3c, 0xee, 0x4b, 0xb1, 0xa7, 0x7d, 0x09, 0x7c, 0xf9, 0x48, 0x8a, 0xed, 0x3e, 0x92,
+	0xc0, 0xc7, 0x4a, 0x9b, 0x3a, 0x9f, 0xb7, 0xe5, 0x0d, 0x6a, 0x32, 0xe2, 0xba, 0x58, 0xee, 0x7a,
+	0x25, 0x3e, 0xf0, 0x7f, 0x7b, 0x2c, 0x3b, 0x2e, 0xdd, 0x30, 0x74, 0xe2, 0x2e, 0x0f, 0xb6, 0x4b,
+	0x4e, 0xb3, 0x4d, 0x4b, 0xe4, 0x1e, 0x1b, 0x7c, 0x55, 0x98, 0xf6, 0x71, 0xa1, 0x39, 0xcb, 0xff,
+	0xc7, 0x3a, 0xf7, 0x67, 0x00, 0x00, 0x00, 0xff, 0xff, 0x9c, 0x71, 0x82, 0x94, 0x83, 0x10, 0x00,
+	0x00,
 }

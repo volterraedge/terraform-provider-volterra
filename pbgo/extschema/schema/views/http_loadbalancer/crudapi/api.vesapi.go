@@ -28,8 +28,8 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-	object "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	object "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
 )
 
 var (
@@ -994,19 +994,7 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
-func (s *APISrv) validateTransport(ctx context.Context) error {
-	if s.sf.IsTransportNotSupported("ves.io.schema.views.http_loadbalancer.crudapi.API", server.TransportFromContext(ctx)) {
-		userMsg := fmt.Sprintf("ves.io.schema.views.http_loadbalancer.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
-		return server.GRPCStatusFromError(err).Err()
-	}
-	return nil
-}
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.http_loadbalancer.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1031,9 +1019,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1058,9 +1043,6 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.http_loadbalancer.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1083,9 +1065,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.http_loadbalancer.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1137,9 +1116,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.http_loadbalancer.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1518,7 +1494,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-crudapi-API-Get"
+                    "url": "http://some-url-here/ves-io-schema-views-http_loadbalancer-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.crudapi.API.Get"
             },
@@ -1593,7 +1569,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-crudapi-API-Delete"
+                    "url": "http://some-url-here/ves-io-schema-views-http_loadbalancer-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.crudapi.API.Delete"
             },
@@ -1676,7 +1652,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-crudapi-API-Replace"
+                    "url": "http://some-url-here/ves-io-schema-views-http_loadbalancer-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"
             },
@@ -1805,7 +1781,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-crudapi-API-List"
+                    "url": "http://some-url-here/ves-io-schema-views-http_loadbalancer-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.crudapi.API.List"
             },
@@ -1882,7 +1858,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-crudapi-API-Create"
+                    "url": "http://some-url-here/ves-io-schema-views-http_loadbalancer-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.crudapi.API.Create"
             },
@@ -2011,7 +1987,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-crudapi-API-ListStream"
+                    "url": "http://some-url-here/ves-io-schema-views-http_loadbalancer-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.crudapi.API.ListStream"
             },
@@ -2340,25 +2316,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "http_loadbalancerHashPolicyListType": {
-            "type": "object",
-            "description": "List of hash policy rules",
-            "title": "Hash Policy List",
-            "x-displayname": "Hash Policy List",
-            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.HashPolicyListType",
-            "properties": {
-                "hash_policy": {
-                    "type": "array",
-                    "description": " Specifies a list of hash policies to use for ring hash load balancing. Each\n hash policy is evaluated individually and the combined result is used to\n route the request\nRequired: YES",
-                    "title": "hash_policy",
-                    "items": {
-                        "$ref": "#/definitions/routeHashPolicyType"
-                    },
-                    "x-displayname": "Hash Policy",
-                    "x-ves-required": "true"
-                }
-            }
-        },
         "http_loadbalancerProxyTypeHttps": {
             "type": "object",
             "description": "Choice for selecting HTTP proxy with bring your own certificates",
@@ -2440,178 +2397,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "http_loadbalancerRouteSimpleAdvancedOptions": {
-            "type": "object",
-            "description": "Configure Advance options for route, like path rewrite, has policy, etc",
-            "title": "Route Advanced Options",
-            "x-displayname": "Route Advance Options",
-            "x-ves-oneof-field-buffer_choice": "[\"buffer_policy\",\"common_buffering\"]",
-            "x-ves-oneof-field-hash_policy_choice": "[\"common_hash_policy\",\"specific_hash_policy\"]",
-            "x-ves-oneof-field-mirroring_choice": "[\"disable_mirroring\",\"mirror_policy\"]",
-            "x-ves-oneof-field-retry_policy_choice": "[\"default_retry_policy\",\"retry_policy\"]",
-            "x-ves-oneof-field-rewrite_choice": "[\"disable_prefix_rewrite\",\"prefix_rewrite\"]",
-            "x-ves-oneof-field-spdy_choice": "[\"disable_spdy\",\"enable_spdy\"]",
-            "x-ves-oneof-field-waf_choice": "[\"disable_waf\",\"waf\",\"waf_rule\"]",
-            "x-ves-oneof-field-websocket_choice": "[\"disable_web_socket_config\",\"web_socket_config\"]",
-            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteSimpleAdvancedOptions",
-            "properties": {
-                "buffer_policy": {
-                    "description": "Exclusive with [common_buffering]\nx-displayName: \"Route Specific Buffering Configuration\"\nBuffering configuration for requests\nSome upstream applications are not capable of handling streamed data. This config\nenables buffering the entire request before sending to upstream application. We can\nspecify the maximum buffer size and buffer interval with this config.\nRoute level buffer configuration overrides any configuration at VirtualHost level.",
-                    "title": "Route Specific Buffering Configuration",
-                    "$ref": "#/definitions/schemaBufferConfigType"
-                },
-                "common_buffering": {
-                    "description": "Exclusive with [buffer_policy]\nx-displayName: \"Common buffering Configuration\"\nUse common buffering configuration",
-                    "title": "Common buffering Configuration",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "common_hash_policy": {
-                    "description": "Exclusive with [specific_hash_policy]\nx-displayName: \"Common Hash Policy\"\nUse common hash policy for all routes",
-                    "title": "Common Hash Policy",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "cors_policy": {
-                    "description": " Cross-Origin Resource Sharing requests configuration\n\n CORS is a mechanism that uses additional HTTP headers to tell a browser to let\n a web application running at one origin (domain) have permission to access selected\n resources from a server at a different origin",
-                    "title": "cors_policy",
-                    "$ref": "#/definitions/schemaCorsPolicy",
-                    "x-displayname": "CORS Policy"
-                },
-                "default_retry_policy": {
-                    "description": "Exclusive with [retry_policy]\nx-displayName: \"Use Default Retry Policy\"\nUse system default retry policy",
-                    "title": "Use Default Retry Policy",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "disable_location_add": {
-                    "type": "boolean",
-                    "description": " disables append of x-volterra-location = \u003cre-site-name\u003e at route level, if it is configured at\n virtual-host level. This configuration is ignored on CE sites.\n\nExample: - true-",
-                    "title": "disable_location_add",
-                    "format": "boolean",
-                    "x-displayname": "Disable Location Addition"
-                },
-                "disable_mirroring": {
-                    "description": "Exclusive with [mirror_policy]\nx-displayName: \"Disable Mirroring:\nDisable Mirroring of request",
-                    "title": "Disable Mirroring",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "disable_prefix_rewrite": {
-                    "description": "Exclusive with [prefix_rewrite]\nx-displayName: \"Disable Prefix Rewrite\"\nDo not rewrite the path prefix.",
-                    "title": "Disable Prefix Rewrite",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "disable_spdy": {
-                    "description": "Exclusive with [enable_spdy]\nx-displayName: \"Disable SPDY\"\nSPDY upgrade is disabled",
-                    "title": "Disable SPDY",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "disable_waf": {
-                    "description": "Exclusive with [waf waf_rule]\nx-displayName: \"Disable WAF\"\nNo WAF configuration for this load balancer",
-                    "title": "Disable WAF",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "disable_web_socket_config": {
-                    "description": "Exclusive with [web_socket_config]\nx-displayName: \"Disable Websocket\"\nWebsocket upgrade is disabled",
-                    "title": "Disable Websocket",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "enable_spdy": {
-                    "description": "Exclusive with [disable_spdy]\nx-displayName: \"Enable SPDY\"\nSPDY upgrade is enabled",
-                    "title": "Enable SPDY",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "endpoint_subsets": {
-                    "type": "object",
-                    "description": " Upstream origin pool may be configured to divide its origin servers into subsets based on metadata\n attached to the origin servers. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n For origin servers which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those origin servers of\n upstream origin pool which match this metadata will be selected for load balancing",
-                    "title": "Origin Servers Subset",
-                    "x-displayname": "Origin Servers Subsets"
-                },
-                "mirror_policy": {
-                    "description": "Exclusive with [disable_mirroring]\nx-displayName: \"Enable Mirroring\"\nMirrorPolicy is used for shadowing traffic from one cluster to another. The current\nimplementation is \"fire and forget,\" meaning it will not wait for the shadow cluster to\nrespond before returning the response from the primary cluster. All normal statistics are\ncollected for the shadow cluster making this feature useful for testing.\n\nDuring shadowing, the host/authority header is altered such that *-shadow* is appended. This is\nuseful for logging. For example, *cluster1* becomes *cluster1-shadow*.",
-                    "title": "Enable Mirroring",
-                    "$ref": "#/definitions/viewshttp_loadbalancerMirrorPolicyType"
-                },
-                "prefix_rewrite": {
-                    "type": "string",
-                    "description": "Exclusive with [disable_prefix_rewrite]\nx-displayName: \"Enable Prefix Rewrite\"\nx-example: \"/\"\nprefix_rewrite indicates that during forwarding, the matched prefix (or path) should be swapped\nwith its value. When using regex path matching, the entire path (not including\nthe query string) will be swapped with this value.",
-                    "title": "prefix_rewrite"
-                },
-                "priority": {
-                    "description": " Priority routing for each route. Different connection pools are used based on the priority of the route.\n Also, circuit-breaker configuration at destination cluster is chosen based on the route priority.",
-                    "title": "priority",
-                    "$ref": "#/definitions/schemaRoutingPriority",
-                    "x-displayname": "Priority"
-                },
-                "request_headers_to_add": {
-                    "type": "array",
-                    "description": " Headers are key-value pairs to be added to HTTP request being routed towards upstream.",
-                    "title": "Headers to add in request",
-                    "items": {
-                        "$ref": "#/definitions/schemaHeaderManipulationOptionType"
-                    },
-                    "x-displayname": "Add Request Headers"
-                },
-                "request_headers_to_remove": {
-                    "type": "array",
-                    "description": " List of keys of Headers to be removed from the HTTP request being sent towards upstream.\n\nExample: - \"host\"-",
-                    "title": "Header to be removed from request",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Remove Request Headers",
-                    "x-ves-example": "host"
-                },
-                "response_headers_to_add": {
-                    "type": "array",
-                    "description": " Headers are key-value pairs to be added to HTTP response being sent towards downstream.",
-                    "title": "Headers to add in response",
-                    "items": {
-                        "$ref": "#/definitions/schemaHeaderManipulationOptionType"
-                    },
-                    "x-displayname": "Add Response Headers"
-                },
-                "response_headers_to_remove": {
-                    "type": "array",
-                    "description": " List of keys of Headers to be removed from the HTTP response being sent towards downstream.\n\nExample: - \"host\"-",
-                    "title": "Header to be removed from response",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Remove Response Headers",
-                    "x-ves-example": "host"
-                },
-                "retry_policy": {
-                    "description": "Exclusive with [default_retry_policy]\nx-displayName: \"Custom Retry Policy\"\nConfigure custom retry policy",
-                    "title": "Use Default Retry Policy",
-                    "$ref": "#/definitions/schemaRetryPolicyType"
-                },
-                "specific_hash_policy": {
-                    "description": "Exclusive with [common_hash_policy]\nx-displayName: \"Route Specific Hash Policy\"\nConfigure hash policy specific for this route",
-                    "title": "Route Specific Hash Policy",
-                    "$ref": "#/definitions/http_loadbalancerHashPolicyListType"
-                },
-                "timeout": {
-                    "type": "integer",
-                    "description": " Specifies the timeout for the route in milliseconds.\n This timeout includes all retries.\n For server side streaming, configure this field with higher value or leave it 0\n for infinite timeout\n\nExample: - 2000-",
-                    "title": "timeout",
-                    "format": "int64",
-                    "x-displayname": "Timeout"
-                },
-                "waf": {
-                    "description": "Exclusive with [disable_waf waf_rule]\nx-displayName: \"Specify WAF Intent\"\nReference to WAF intent configuration object",
-                    "title": "WAF",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
-                "waf_rule": {
-                    "description": "Exclusive with [disable_waf waf]\nx-displayName: \"Specify WAF Rules\"\nReference to WAF Rules configuration object",
-                    "title": "waf_rules",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
-                "web_socket_config": {
-                    "description": "Exclusive with [disable_web_socket_config]\nx-displayName: \"Enable Websocket\"\nUpgrade to Websocket for this route",
-                    "title": "Websocket Configuration",
-                    "$ref": "#/definitions/routeWebsocketConfigType"
-                }
-            }
-        },
         "http_loadbalancerRouteTypeCustomRoute": {
             "type": "object",
             "description": "A custom route uses a route object created outside of this view.",
@@ -2685,16 +2470,10 @@ var APISwaggerJSON string = `{
             "description": "A simple route matches on path and/or HTTP method and forwards the matching traffic to the associated pools",
             "title": "RouteTypeSimple",
             "x-displayname": "Simple Route",
-            "x-ves-displayorder": "2,1,3,4,8",
+            "x-ves-displayorder": "2,1,3",
             "x-ves-oneof-field-hostrewriteparams": "[\"auto_host_rewrite\",\"disable_host_rewrite\",\"host_rewrite\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteTypeSimple",
             "properties": {
-                "advanced_options": {
-                    "description": " Configure Advanced per route options",
-                    "title": "Advanced Options",
-                    "$ref": "#/definitions/http_loadbalancerRouteSimpleAdvancedOptions",
-                    "x-displayname": "Advanced Options"
-                },
                 "auto_host_rewrite": {
                     "description": "Exclusive with [disable_host_rewrite host_rewrite]\nx-displayName: \"Automatic Host Rewrite\"\nHost header will be swapped with hostname of upstream host chosen by the cluster",
                     "title": "Auto Host Rewrite",
@@ -2730,25 +2509,6 @@ var APISwaggerJSON string = `{
                     "title": "path",
                     "$ref": "#/definitions/ioschemaPathMatcherType",
                     "x-displayname": "Path"
-                }
-            }
-        },
-        "http_loadbalancerServicePolicyList": {
-            "type": "object",
-            "description": "List of service policies.",
-            "title": "service policy list",
-            "x-displayname": "Service Policy List",
-            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ServicePolicyList",
-            "properties": {
-                "policies": {
-                    "type": "array",
-                    "description": " An ordered list of references to service_policy objects.\nRequired: YES",
-                    "title": "policies",
-                    "items": {
-                        "$ref": "#/definitions/schemaviewsObjectRefType"
-                    },
-                    "x-displayname": "Policies",
-                    "x-ves-required": "true"
                 }
             }
         },
@@ -3044,69 +2804,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "routeCookieForHashing": {
-            "type": "object",
-            "description": "Two types of cookie affinity:\n\n1. Passive. Takes a cookie that's present in the cookies header and\n   hashes on its value.\n\n2. Generated. Generates and sets a cookie with an expiration (TTL)\n   on the first request from the client in its response to the client,\n   based on the endpoint the request gets sent to. The client then\n   presents this on the next and all subsequent requests. The hash of\n   this is sufficient to ensure these requests get sent to the same\n   endpoint. The cookie is generated by hashing the source and\n   destination ports and addresses so that multiple independent HTTP2\n   streams on the same connection will independently receive the same\n   cookie, even if they arrive simultaneously.",
-            "title": "Cookie for hashing",
-            "x-displayname": "Hashing using Cookie",
-            "x-ves-proto-message": "ves.io.schema.route.CookieForHashing",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "description": " The name of the cookie that will be used to obtain the hash key. If the\n cookie is not present and TTL below is not set, no hash will be\n produced\n\nExample: - \"userid\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "userid"
-                },
-                "path": {
-                    "type": "string",
-                    "description": " The name of the path for the cookie. If no path is specified here, no path\n will be set for the cookie\n\nExample: - \"/Users/userid/browser/cookies\"-",
-                    "title": "path",
-                    "x-displayname": "Path",
-                    "x-ves-example": "/Users/userid/browser/cookies"
-                },
-                "ttl": {
-                    "type": "integer",
-                    "description": " If specified, a cookie with the TTL will be generated if the cookie is\n not present. If the TTL is present and zero, the generated cookie will\n be a session cookie. TTL value is in milliseconds\n\nExample: - 5000-",
-                    "title": "ttl",
-                    "format": "int64",
-                    "x-displayname": "TTL"
-                }
-            }
-        },
-        "routeHashPolicyType": {
-            "type": "object",
-            "description": "HashPolicyType specifies the field of the incoming request that will be used for\ngenerating hash key. When multiple hash policies are configured, this can also specify\nif the current hash policy is terminal policy or not.",
-            "title": "HashPolicyType",
-            "x-displayname": "Hash Policy",
-            "x-ves-oneof-field-policyspecifier": "[\"cookie\",\"header_name\",\"source_ip\"]",
-            "x-ves-proto-message": "ves.io.schema.route.HashPolicyType",
-            "properties": {
-                "cookie": {
-                    "description": "Exclusive with [header_name source_ip]\nx-displayName: \"Cookie\"\nHash based on cookie",
-                    "title": "Cookie",
-                    "$ref": "#/definitions/routeCookieForHashing"
-                },
-                "header_name": {
-                    "type": "string",
-                    "description": "Exclusive with [cookie source_ip]\nx-displayName: \"Header Name\"\nx-example: \"host\"\nThe name or key of the request header that will be used to obtain the hash key",
-                    "title": "Header"
-                },
-                "source_ip": {
-                    "type": "boolean",
-                    "description": "Exclusive with [cookie header_name]\nx-displayName: \"Source IP\"\nx-example: true\nHash based on source IP address",
-                    "title": "Source IP",
-                    "format": "boolean"
-                },
-                "terminal": {
-                    "type": "boolean",
-                    "description": " Specify if its a terminal policy\n\nExample: - true-",
-                    "title": "terminal",
-                    "format": "boolean",
-                    "x-displayname": "Terminal"
-                }
-            }
-        },
         "routeRouteDirectResponse": {
             "type": "object",
             "description": "Send this direct response in case of route match action is direct response",
@@ -3206,36 +2903,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [all_params remove_all_params retain_all_params]\nx-displayName: \"Query Parameters to Remove\"\nSpecifies the list of query params to be removed. Not supported",
                     "title": "strip_query_params",
                     "$ref": "#/definitions/routeRouteQueryParams"
-                }
-            }
-        },
-        "routeWebsocketConfigType": {
-            "type": "object",
-            "description": "Configuration to allow Websocket\n\nRequest headers of such upgrade looks like below\n  'connection', 'Upgrade'\n  'upgrade', 'websocket'\n\nWith configuration to allow websocket upgrade, ADC will produce following response\n  'HTTP/1.1 101 Switching Protocols\n  'Upgrade': 'websocket'\n  'Connection': 'Upgrade'",
-            "title": "WebsocketConfigType",
-            "x-displayname": "Websocket Configuration",
-            "x-ves-proto-message": "ves.io.schema.route.WebsocketConfigType",
-            "properties": {
-                "idle_timeout": {
-                    "type": "integer",
-                    "description": " Idle Timeout for Websocket in milli seconds. After timeout, connection will be closed\n\nExample: - 2000-",
-                    "title": "idle_timeout",
-                    "format": "int64",
-                    "x-displayname": "Idle Timeout"
-                },
-                "max_connect_attempts": {
-                    "type": "integer",
-                    "description": " The maximum number of unsuccessful connection attempts that will be made before\n giving up. Default is 1\n\nExample: - 5-",
-                    "title": "max_connect_attempts",
-                    "format": "int64",
-                    "x-displayname": "Maximum Connection Attempts"
-                },
-                "use_websocket": {
-                    "type": "boolean",
-                    "description": " Specifies that the HTTP client connection to this route is allowed to upgrade to\n a WebSocket connection\n\nExample: - true-",
-                    "title": "use_websocket",
-                    "format": "boolean",
-                    "x-displayname": "Use Websocket"
                 }
             }
         },
@@ -3362,7 +3029,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -3449,51 +3116,12 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaDenominatorType": {
-            "type": "string",
-            "description": "Denominator used in fraction where sampling percentages are needed. example sampled requests\n\n - HUNDRED: x-displayName \"100\"\nUse hundred as denominator\n - TEN_THOUSAND: x-displayName \"10000\"\nUse ten thousand as denominator\n - MILLION: x-displayName \"1000000\"\nUse million as denominator",
-            "title": "DenominatorType",
-            "enum": [
-                "HUNDRED",
-                "TEN_THOUSAND",
-                "MILLION"
-            ],
-            "default": "HUNDRED",
-            "x-displayname": "Denominator",
-            "x-ves-proto-enum": "ves.io.schema.DenominatorType"
-        },
         "schemaEmpty": {
             "type": "object",
             "description": "This can be used for messages where no values are needed",
             "title": "Empty",
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
-        },
-        "schemaFractionalPercent": {
-            "type": "object",
-            "description": "Fraction used where sampling percentages are needed. example sampled requests",
-            "title": "FractionalPercent",
-            "x-displayname": "Fractional Percent",
-            "x-ves-displayorder": "1,2",
-            "x-ves-proto-message": "ves.io.schema.FractionalPercent",
-            "properties": {
-                "denominator": {
-                    "description": " Samples per denominator. numerator part per 100 or 10000 ro 1000000\nRequired: YES",
-                    "title": "denominator",
-                    "$ref": "#/definitions/schemaDenominatorType",
-                    "x-displayname": "Denominator",
-                    "x-ves-required": "true"
-                },
-                "numerator": {
-                    "type": "integer",
-                    "description": " sampled parts per denominator. If denominator was 10000, then value of 5 will be 5 in 10000\n\nExample: - \"5\"-\nRequired: YES",
-                    "title": "numerator",
-                    "format": "int64",
-                    "x-displayname": "Numerator",
-                    "x-ves-example": "5",
-                    "x-ves-required": "true"
-                }
-            }
         },
         "schemaHeaderManipulationOptionType": {
             "type": "object",
@@ -3660,89 +3288,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaRetryBackOff": {
-            "type": "object",
-            "description": "Specifies parameters that control retry back off.",
-            "title": "RetryBackOff",
-            "x-displayname": "Retry BackOff interval",
-            "x-ves-displayorder": "1,2",
-            "x-ves-proto-message": "ves.io.schema.RetryBackOff",
-            "properties": {
-                "base_interval": {
-                    "type": "integer",
-                    "description": " Specifies the base interval between retries in milliseconds\n\nExample: - 5-",
-                    "title": "base_interval",
-                    "format": "int64",
-                    "x-displayname": "base retry interval"
-                },
-                "max_interval": {
-                    "type": "integer",
-                    "description": " Specifies the maximum interval between retries in milliseconds.\n This parameter is optional, but must be greater than or equal\n to the base_interval if set. The default is 10 times the base_interval.\n\nExample: - 60-",
-                    "title": "max_interval",
-                    "format": "int64",
-                    "x-displayname": "maximum retry interval"
-                }
-            }
-        },
-        "schemaRetryPolicyType": {
-            "type": "object",
-            "description": "Retry policy configuration for route destination.",
-            "title": "RetryPolicyType",
-            "x-displayname": "Retry Policy",
-            "x-ves-displayorder": "1,2,3,4,5",
-            "x-ves-proto-message": "ves.io.schema.RetryPolicyType",
-            "properties": {
-                "back_off": {
-                    "description": " Specifies parameters that control retry back off.\n This parameter is optional, in which case the default base\n interval is 25 milliseconds. The default maximum interval is\n 10 times the base interval",
-                    "title": "Retry BackOff",
-                    "$ref": "#/definitions/schemaRetryBackOff",
-                    "x-displayname": "Retry BackOff interval"
-                },
-                "num_retries": {
-                    "type": "integer",
-                    "description": " Specifies the allowed number of retries. Defaults to 1.\n Retries can be done any number of times. An exponential back-off algorithm\n is used between each retry\n\nExample: - 3-",
-                    "title": "num_retries",
-                    "format": "int64",
-                    "x-displayname": "Number of Retries"
-                },
-                "per_try_timeout": {
-                    "type": "integer",
-                    "description": " Specifies a non-zero timeout per retry attempt. In milliseconds\n\nExample: - 1000-",
-                    "title": "per_try_timeout",
-                    "format": "int64",
-                    "x-displayname": "Per Try Timeout"
-                },
-                "retriable_status_codes": {
-                    "type": "array",
-                    "description": " HTTP status codes that should trigger a retry in addition to those specified by retry_on.\n\nExample: - 403-",
-                    "title": "Retriable status Code",
-                    "items": {
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "x-displayname": "Status Code to Retry"
-                },
-                "retry_on": {
-                    "type": "string",
-                    "description": " Specifies the conditions under which retry takes place. \n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-",
-                    "title": "retry_on",
-                    "x-displayname": "Retry On",
-                    "x-ves-example": "5xx"
-                }
-            }
-        },
-        "schemaRoutingPriority": {
-            "type": "string",
-            "description": "Priority routing for each request.\nDifferent connection pools are used based on the priority selected for the request.\nAlso, circuit-breaker configuration at destination cluster is chosen based on selected priority.\n\n - DEFAULT: Default routing mechanism\n - HIGH: High-Priority routing mechanism",
-            "title": "RoutingPriority",
-            "enum": [
-                "DEFAULT",
-                "HIGH"
-            ],
-            "default": "DEFAULT",
-            "x-displayname": "Routing Priority",
-            "x-ves-proto-enum": "ves.io.schema.RoutingPriority"
-        },
         "schemaSecretEncodingType": {
             "type": "string",
             "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: No Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
@@ -3767,12 +3312,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
-                },
-                "blindfold_secret_info_internal": {
-                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
-                    "title": "Blindfold Secret Internal",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
-                    "x-displayname": "Blindfold Secret Internal"
                 },
                 "clear_secret_info": {
                     "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
@@ -4257,12 +3796,6 @@ var APISwaggerJSON string = `{
                     "title": "Cluster",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
-                "endpoint_subsets": {
-                    "type": "object",
-                    "description": " Upstream origin pool may be configured to divide its origin servers into subsets based on metadata\n attached to the origin servers. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer\n\n For origin servers which are discovered in K8S or Consul cluster, the label of the service is merged with\n endpoint's labels. In case of Consul, the label is derived from the \"Tag\" field.\n For labels that are common between configured endpoint and discovered service, labels from discovered service\n takes precedence.\n\n List of key-value pairs that will be used as matching metadata. Only those origin servers of\n upstream origin pool which match this metadata will be selected for load balancing",
-                    "title": "Origin Servers Subset",
-                    "x-displayname": "Origin Servers Subsets"
-                },
                 "pool": {
                     "description": "Exclusive with [cluster]\nx-displayName: \"Origin Pool\"\nx-required\nSimple, commonly used pool parameters with origin pool",
                     "title": "Pool",
@@ -4270,7 +3803,7 @@ var APISwaggerJSON string = `{
                 },
                 "weight": {
                     "type": "integer",
-                    "description": " Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool",
+                    "description": " Weight of this origin pool",
                     "title": "Weight",
                     "format": "int64",
                     "x-displayname": "Weight"
@@ -4403,15 +3936,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsWhereVirtualSite"
                 },
                 "vk8s_service": {
-                    "description": "Exclusive with [site virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vK8s Service Network on RE.",
-                    "title": "vK8s services network",
+                    "description": "Exclusive with [site virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vk8s Service Network on RE.",
+                    "title": "vk8s services network",
                     "$ref": "#/definitions/viewsWhereVK8SService"
                 }
             }
         },
         "viewsWhereVK8SService": {
             "type": "object",
-            "description": "This defines a reference to a RE site or virtual site where a load balancer could be advertised in the vK8s service network",
+            "description": "This defines a reference to a RE site or virtual site where a load balancer could be advertised in the Vk8s service network",
             "title": "WhereVK8SService",
             "x-displayname": "vK8s Services on RE",
             "x-ves-displayorder": "3",
@@ -4497,19 +4030,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
-            "x-ves-oneof-field-hash_policy_choice": "[\"cookie_stickiness\",\"least_active\",\"random\",\"ring_hash\",\"round_robin\",\"source_ip_stickiness\"]",
             "x-ves-oneof-field-hostrewriteparams": "[\"auto_host_rewrite\",\"disable_host_rewrite\",\"host_rewrite\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"http\",\"https\",\"https_auto_cert\"]",
             "x-ves-oneof-field-rate_limit_choice": "[\"disable_rate_limit\",\"rate_limit\"]",
-            "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
             "x-ves-oneof-field-waf_choice": "[\"disable_waf\",\"waf\",\"waf_rule\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.GlobalSpecType",
             "properties": {
-                "active_service_policies": {
-                    "description": "Exclusive with [no_service_policies service_policies_from_namespace]\nx-displayName: \"Apply Specified Service Policies\"\nApply the specified list of service policies and bypass the namespace service policy set",
-                    "title": "Apply Specified Service Policies",
-                    "$ref": "#/definitions/http_loadbalancerServicePolicyList"
-                },
                 "add_location": {
                     "type": "boolean",
                     "description": " x-example: true\n Appends header x-volterra-location = \u003cre-site-name\u003e in responses. This configuration\n is ignored on CE sites.\n\nExample: - \"true\"-",
@@ -4554,11 +4080,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [js_challenge no_challenge]\nx-displayName: \"Captcha Challenge\"\nConfigure Captcha challenge on this load balancer",
                     "title": "Captcha Challenge",
                     "$ref": "#/definitions/virtual_hostCaptchaChallengeType"
-                },
-                "cookie_stickiness": {
-                    "description": "Exclusive with [least_active random ring_hash round_robin source_ip_stickiness]\nx-displayName: \"Cookie Based Stickiness\"\nRequest are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
-                    "title": "Cookie Based Stickiness",
-                    "$ref": "#/definitions/routeCookieForHashing"
                 },
                 "cors_policy": {
                     "description": " CORS is a mechanism that uses additional HTTP headers to tell a browser to let\n a web application running at one origin (domain) have permission to access selected\n resources from a server at a different origin",
@@ -4628,17 +4149,17 @@ var APISwaggerJSON string = `{
                     "title": "HostRewrite"
                 },
                 "http": {
-                    "description": "Exclusive with [https https_auto_cert]\nx-displayName: \"HTTP\"\nHTTP Load balancer. User is responsible for managing DNS to this Load Balancer.",
+                    "description": "Exclusive with [https https_auto_cert]\nx-displayName: \"HTTP\"\nHTTP Load balancer",
                     "title": "HTTP",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "https": {
-                    "description": "Exclusive with [http https_auto_cert]\nx-displayName: \"HTTPS with Custom Certificate\"\nHTTPS Load balancer with a custom public/private certificate.\nThis is also known as BYOC (Bring Your Own Certificate).\nUser is responsible for managing DNS to this Load Balancer.",
+                    "description": "Exclusive with [http https_auto_cert]\nx-displayName: \"HTTPS with BYOC\"\nHTTPS Load balancer, Bring Your Own Certificate(Private or public)",
                     "title": "HTTPS",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttps"
                 },
                 "https_auto_cert": {
-                    "description": "Exclusive with [http https]\nx-displayName: \"HTTPS with Automatic Certificate\"\nHTTPS Load balancer with automatic public certificate provisioning.\nThis requires the domains to be delegated to Volterra using Delegated Domain feature.\nDNS records will be managed by Volterra.",
+                    "description": "Exclusive with [http https]\nx-displayName: \"HTTPS\"\nHTTPS Load balancer with automatic public certificate provisioning\nThis requires the domain to be delegated to Volterra using delegate domain config",
                     "title": "HTTPS",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttpsAutoCerts"
                 },
@@ -4646,11 +4167,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [captcha_challenge no_challenge]\nx-displayName: \"Javascript Challenge\"\nConfigure Javascript challenge on this load balancer",
                     "title": "Javascript Challenge",
                     "$ref": "#/definitions/virtual_hostJavascriptChallengeType"
-                },
-                "least_active": {
-                    "description": "Exclusive with [cookie_stickiness random ring_hash round_robin source_ip_stickiness]\nx-displayName: \"Least Active Request\"\nRequest are sent to origin server that has least active requests",
-                    "title": "Least Active Requests",
-                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "malicious_user_mitigation": {
                     "description": " Settings that specify the actions to be taken when malicious users are determined to be at different threat levels.\n User's activity is monitored and continuously analyzed for malicious behavior. From this analysis, a threat level is assigned to each user.\n The settings defined in malicious user mitigation specify what mitigation actions to take for users determined to be at different threat levels.",
@@ -4669,30 +4185,10 @@ var APISwaggerJSON string = `{
                     "title": "No Challenge",
                     "$ref": "#/definitions/schemaEmpty"
                 },
-                "no_service_policies": {
-                    "description": "Exclusive with [active_service_policies service_policies_from_namespace]\nx-displayName: \"Do Not Apply Service Policies\"\nDo not apply any service policies i.e. bypass the namespace service policy set",
-                    "title": "Do Not Apply Service Policies",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "random": {
-                    "description": "Exclusive with [cookie_stickiness least_active ring_hash round_robin source_ip_stickiness]\nx-displayName: \"Random\"\nRequest are sent to all eligible origin servers in random fashion",
-                    "title": "Random",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
                 "rate_limit": {
                     "description": "Exclusive with [disable_rate_limit]\nx-displayName: \"Rate Limiting Parameters\"\nRate limiting parameters for this loadbalancer",
                     "title": "Rate Limiting Parameters",
                     "$ref": "#/definitions/http_loadbalancerRateLimitConfigType"
-                },
-                "ring_hash": {
-                    "description": "Exclusive with [cookie_stickiness least_active random round_robin source_ip_stickiness]\nx-displayName: \"Ring Hash Policy\"\nRequest are sent to all eligible origin servers using hash of request based on hash policy. Consistent hashing algorithm, ring hash, is used to select origin server",
-                    "title": "Ring Hash Policy",
-                    "$ref": "#/definitions/http_loadbalancerHashPolicyListType"
-                },
-                "round_robin": {
-                    "description": "Exclusive with [cookie_stickiness least_active random ring_hash source_ip_stickiness]\nx-displayName: \"Round Robin\"\nRequest are sent to all eligible origin servers in round robin fashion",
-                    "title": "Round Robin",
-                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "routes": {
                     "type": "array",
@@ -4702,16 +4198,6 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/viewshttp_loadbalancerRouteType"
                     },
                     "x-displayname": "Routes"
-                },
-                "service_policies_from_namespace": {
-                    "description": "Exclusive with [active_service_policies no_service_policies]\nx-displayName: \"Apply Namespace Service Policies\"\nApply the service policies configured as part of the namespace service policy set",
-                    "title": "Apply Namespace Service Policies",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "source_ip_stickiness": {
-                    "description": "Exclusive with [cookie_stickiness least_active random ring_hash round_robin]\nx-displayName: \"Source IP Stickiness\"\nRequest are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
-                    "title": "Source IP Stickiness",
-                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "state": {
                     "description": " State of the virtual host",
@@ -4749,29 +4235,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [disable_waf waf]\nx-displayName: \"Specify WAF Rules\"\nReference to WAF Rules configuration object",
                     "title": "waf_rules",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
-                }
-            }
-        },
-        "viewshttp_loadbalancerMirrorPolicyType": {
-            "type": "object",
-            "description": "MirrorPolicy is used for shadowing traffic from one origin pool to another. The approach used\nis \"fire and forget\", meaning it will not wait for the shadow origin pool to\nrespond before returning the response from the primary origin pool. All normal statistics are\ncollected for the shadow origin pool making this feature useful for testing and troubleshooting.",
-            "title": "MirrorPolicyType",
-            "x-displayname": "Mirror Policy",
-            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.MirrorPolicyType",
-            "properties": {
-                "origin_pool": {
-                    "description": " Specifies the cluster to which the requests will be mirrored. The cluster object\n referred here must be present.\nRequired: YES",
-                    "title": "cluster",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Mirror Destination Cluster",
-                    "x-ves-required": "true"
-                },
-                "percent": {
-                    "description": " Percentage of requests to be mirrored\nRequired: YES",
-                    "title": "percent",
-                    "$ref": "#/definitions/schemaFractionalPercent",
-                    "x-displayname": "Mirror Percentage",
-                    "x-ves-required": "true"
                 }
             }
         },
