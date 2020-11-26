@@ -23,19 +23,19 @@ import (
 
 	_ "github.com/gogo/protobuf/gogoproto"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_rule"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_rule"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.

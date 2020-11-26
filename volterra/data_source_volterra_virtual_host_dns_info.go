@@ -12,8 +12,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"gopkg.volterra.us/stdlib/codec"
 
-	ves_io_schema_vh "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
-	ves_io_schema_vh_dns_info "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
+	ves_io_schema_vh "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
+	ves_io_schema_vh_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
 )
 
 const (

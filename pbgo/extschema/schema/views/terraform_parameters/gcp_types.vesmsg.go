@@ -15,7 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -107,10 +107,10 @@ func (v *ValidateGCPInstanceType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["master_node_count"]; exists {
+	if fv, exists := v.FldValidators["node_count"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("master_node_count"))
-		if err := fv(ctx, m.GetMasterNodeCount(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("node_count"))
+		if err := fv(ctx, m.GetNodeCount(), vOpts...); err != nil {
 			return err
 		}
 
@@ -152,23 +152,11 @@ func (v *ValidateGCPInstanceType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["worker_node_count"]; exists {
+	if fv, exists := v.FldValidators["zone"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("worker_node_count"))
-		if err := fv(ctx, m.GetWorkerNodeCount(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("zone"))
+		if err := fv(ctx, m.GetZone(), vOpts...); err != nil {
 			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["zones"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("zones"))
-		for idx, item := range m.GetZones() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
 		}
 
 	}
@@ -571,15 +559,6 @@ func (v *ValidateGCPVpcSiteType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["gcp_name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("gcp_name"))
-		if err := fv(ctx, m.GetGcpName(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["gcp_region"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("gcp_region"))
@@ -589,29 +568,26 @@ func (v *ValidateGCPVpcSiteType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["gcp_vpc_network_inside"]; exists {
+	if fv, exists := v.FldValidators["gcp_vpc_networks"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("gcp_vpc_network_inside"))
-		if err := fv(ctx, m.GetGcpVpcNetworkInside(), vOpts...); err != nil {
-			return err
+		vOpts := append(opts, db.WithValidateField("gcp_vpc_networks"))
+		for idx, item := range m.GetGcpVpcNetworks() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["gcp_vpc_network_outside"]; exists {
+	if fv, exists := v.FldValidators["master_nodes"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("gcp_vpc_network_outside"))
-		if err := fv(ctx, m.GetGcpVpcNetworkOutside(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["node"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("node"))
-		if err := fv(ctx, m.GetNode(), vOpts...); err != nil {
-			return err
+		vOpts := append(opts, db.WithValidateField("master_nodes"))
+		for idx, item := range m.GetMasterNodes() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -634,20 +610,14 @@ func (v *ValidateGCPVpcSiteType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["subnet_inside"]; exists {
+	if fv, exists := v.FldValidators["subnets"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("subnet_inside"))
-		if err := fv(ctx, m.GetSubnetInside(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["subnet_outside"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("subnet_outside"))
-		if err := fv(ctx, m.GetSubnetOutside(), vOpts...); err != nil {
-			return err
+		vOpts := append(opts, db.WithValidateField("subnets"))
+		for idx, item := range m.GetSubnets() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -668,15 +638,11 @@ func (v *ValidateGCPVpcSiteType) Validate(ctx context.Context, pm interface{}, o
 var DefaultGCPVpcSiteTypeValidator = func() *ValidateGCPVpcSiteType {
 	v := &ValidateGCPVpcSiteType{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["gcp_vpc_network_outside"] = GCPVPCNetworkChoiceValidator().Validate
+	v.FldValidators["gcp_vpc_networks"] = GCPVPCNetworkChoiceValidator().Validate
 
-	v.FldValidators["subnet_outside"] = GCPSubnetChoiceValidator().Validate
+	v.FldValidators["subnets"] = GCPSubnetChoiceValidator().Validate
 
-	v.FldValidators["node"] = GCPInstanceTypeValidator().Validate
-
-	v.FldValidators["subnet_inside"] = GCPSubnetChoiceValidator().Validate
-
-	v.FldValidators["gcp_vpc_network_inside"] = GCPVPCNetworkChoiceValidator().Validate
+	v.FldValidators["master_nodes"] = GCPInstanceTypeValidator().Validate
 
 	return v
 }()

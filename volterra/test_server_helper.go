@@ -18,13 +18,13 @@ import (
 	"gopkg.volterra.us/stdlib/svcfw/test/generic"
 	"gopkg.volterra.us/stdlib/testutil/fixtures/vesenv"
 
-	ves_io_schema_api_credential "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
-	ves_io_schema_combined "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/combined"
-	ves_io_schema_ns "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/namespace"
-	ves_io_schema_site "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/site"
-	ves_io_schema_aws_tgw_site "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
-	ves_io_schema_tf_params "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/terraform_parameters"
-	ves_io_schema_vh "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
+	ves_io_schema_api_credential "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
+	ves_io_schema_combined "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/combined"
+	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
+	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
+	ves_io_schema_aws_tgw_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
+	ves_io_schema_tf_params "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/terraform_parameters"
+	ves_io_schema_vh "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 )
 
 var (

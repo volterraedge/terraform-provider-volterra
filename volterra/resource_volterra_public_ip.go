@@ -13,8 +13,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_public_ip "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/public_ip"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_public_ip "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/public_ip"
 )
 
 // resourceVolterraPublicIp is implementation of Volterra's PublicIp resources

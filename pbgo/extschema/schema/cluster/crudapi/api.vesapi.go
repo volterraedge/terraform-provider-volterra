@@ -28,8 +28,8 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-	object "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cluster"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	object "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 )
 
 var (
@@ -994,19 +994,7 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
-func (s *APISrv) validateTransport(ctx context.Context) error {
-	if s.sf.IsTransportNotSupported("ves.io.schema.cluster.crudapi.API", server.TransportFromContext(ctx)) {
-		userMsg := fmt.Sprintf("ves.io.schema.cluster.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
-		return server.GRPCStatusFromError(err).Err()
-	}
-	return nil
-}
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.cluster.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1031,9 +1019,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1058,9 +1043,6 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.cluster.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1083,9 +1065,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.cluster.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1137,9 +1116,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.cluster.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1518,7 +1494,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-API-Get"
+                    "url": "http://some-url-here/ves-io-schema-cluster-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.Get"
             },
@@ -1593,7 +1569,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-API-Delete"
+                    "url": "http://some-url-here/ves-io-schema-cluster-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.Delete"
             },
@@ -1676,7 +1652,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-API-Replace"
+                    "url": "http://some-url-here/ves-io-schema-cluster-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.Replace"
             },
@@ -1805,7 +1781,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-API-List"
+                    "url": "http://some-url-here/ves-io-schema-cluster-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.List"
             },
@@ -1882,7 +1858,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-API-Create"
+                    "url": "http://some-url-here/ves-io-schema-cluster-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.Create"
             },
@@ -2011,7 +1987,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-API-ListStream"
+                    "url": "http://some-url-here/ves-io-schema-cluster-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.ListStream"
             },
@@ -2133,7 +2109,6 @@ var APISwaggerJSON string = `{
             "description": "Configuration specification for Cluster",
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
-            "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.GlobalSpecType",
             "properties": {
                 "circuit_breaker": {
@@ -2228,22 +2203,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/clusterLoadbalancerAlgorithm",
                     "x-displayname": "LoadBalancer Algorithm"
                 },
-                "no_panic_threshold": {
-                    "description": "Exclusive with [panic_threshold]\nx-displayName: \"No Panic threshold\"\n\nDisable panic threshold. Only healthy endpoints are considered for loadbalancing.",
-                    "title": "Disable panic threshold",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
                 "outlier_detection": {
                     "description": " Outlier detection and ejection is the process of dynamically determining whether some number\n of hosts in an upstream cluster are performing unlike the others and removing them from the\n healthy load balancing set. Outlier detection is a form of passive health checking.",
                     "title": "outlier_detection",
                     "$ref": "#/definitions/clusterOutlierDetectionType",
                     "x-displayname": "Outlier Detection"
-                },
-                "panic_threshold": {
-                    "type": "integer",
-                    "description": "Exclusive with [no_panic_threshold]\nx-displayName: \"Panic threshold\"\n\nConfigure a threshold (percentage of unhealthy endpoints) below which\nall endpoints will be considered for loadbalancing ignoring its health status.",
-                    "title": "Panic threshold",
-                    "format": "int64"
                 },
                 "tls_parameters": {
                     "description": " TLS parameters to access upstream endpoints for this cluster",
@@ -2271,14 +2235,13 @@ var APISwaggerJSON string = `{
         },
         "clusterLoadbalancerAlgorithm": {
             "type": "string",
-            "description": "Different load balancing algorithms supported\nWhen a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm\nto determine which host is selected.\n\n - ROUND_ROBIN: ROUND_ROBIN\n\nPolicy in which each healthy/available upstream endpoint is selected in round robin order.\n - LEAST_REQUEST: LEAST_REQUEST\n\nPolicy in which loadbalancer picks the upstream endpoint which has the fewest active requests\n - RING_HASH: RING_HASH\n\nPolicy implements consistent hashing to upstream endpoints using ring hash of endpoint names\nHash of the incoming request is calculated using request hash policy.\nThe ring/modulo hash load balancer implements consistent hashing to upstream hosts.\nThe algorithm is based on mapping all hosts onto a circle such that the addition or\nremoval of a host from the host set changes only affect 1/N requests. This technique\nis also commonly known as “ketama” hashing. A consistent hashing load balancer is only\neffective when protocol routing is used that specifies a value to hash on. The minimum\nring size governs the replication factor for each host in the ring. For example, if the\nminimum ring size is 1024 and there are 16 hosts, each host will be replicated 64 times.\n - RANDOM: RANDOM\n\npolicy in which each available upstream endpoint is selected in random order.\nThe random load balancer selects a random healthy host. The random load balancer generally\nperforms better than round robin if no health checking policy is configured. Random selection\navoids bias towards the host in the set that comes after a failed host.\n - LB_OVERRIDE: Load Balancer Override\n\nHash policy is taken from from the load balancer which is using this origin pool",
+            "description": "Different load balancing algorithms supported\nWhen a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm\nto determine which host is selected.\n\n - ROUND_ROBIN: ROUND_ROBIN\n\nPolicy in which each healthy/available upstream endpoint is selected in round robin order.\n - LEAST_REQUEST: LEAST_REQUEST\n\nPolicy in which loadbalancer picks the upstream endpoint which has the fewest active requests\n - RING_HASH: RING_HASH\n\nPolicy implements consistent hashing to upstream endpoints using ring hash of endpoint names\nHash of the incoming request is calculated using request hash policy.\nThe ring/modulo hash load balancer implements consistent hashing to upstream hosts.\nThe algorithm is based on mapping all hosts onto a circle such that the addition or\nremoval of a host from the host set changes only affect 1/N requests. This technique\nis also commonly known as “ketama” hashing. A consistent hashing load balancer is only\neffective when protocol routing is used that specifies a value to hash on. The minimum\nring size governs the replication factor for each host in the ring. For example, if the\nminimum ring size is 1024 and there are 16 hosts, each host will be replicated 64 times.\n - RANDOM: RANDOM\n\npolicy in which each available upstream endpoint is selected in random order.\nThe random load balancer selects a random healthy host. The random load balancer generally\nperforms better than round robin if no health checking policy is configured. Random selection\navoids bias towards the host in the set that comes after a failed host.",
             "title": "LoadbalancerAlgorithm",
             "enum": [
                 "ROUND_ROBIN",
                 "LEAST_REQUEST",
                 "RING_HASH",
-                "RANDOM",
-                "LB_OVERRIDE"
+                "RANDOM"
             ],
             "default": "ROUND_ROBIN",
             "x-displayname": "Load Balancer Algorithm",
@@ -2686,7 +2649,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -2699,13 +2662,6 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "Operational"
                 }
             }
-        },
-        "schemaEmpty": {
-            "type": "object",
-            "description": "This can be used for messages where no values are needed",
-            "title": "Empty",
-            "x-displayname": "Empty",
-            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "schemaInitializerType": {
             "type": "object",
@@ -2902,12 +2858,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
-                },
-                "blindfold_secret_info_internal": {
-                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
-                    "title": "Blindfold Secret Internal",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
-                    "x-displayname": "Blindfold Secret Internal"
                 },
                 "clear_secret_info": {
                     "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",

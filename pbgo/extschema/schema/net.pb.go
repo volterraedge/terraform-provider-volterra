@@ -77,7 +77,7 @@ const (
 	// It is currently only supported as internally created by the system.
 	VIRTUAL_NETWORK_GLOBAL VirtualNetworkType = 4
 	// x-displayName: "Site Local Service Network"
-	// vK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant
+	// Vk8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant
 	// Constraints:
 	// It is an internally created by the system. Must not be created by user
 	VIRTUAL_NETWORK_SITE_SERVICE VirtualNetworkType = 5

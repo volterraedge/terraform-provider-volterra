@@ -15,8 +15,8 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -4216,6 +4216,28 @@ func (v *ValidateFleetStorageClassType) Validate(ctx context.Context, pm interfa
 	}
 
 	switch m.GetDeviceChoice().(type) {
+	case *FleetStorageClassType_DellEmcIsilonF800:
+		if fv, exists := v.FldValidators["device_choice.dell_emc_isilon_f800"]; exists {
+			val := m.GetDeviceChoice().(*FleetStorageClassType_DellEmcIsilonF800).DellEmcIsilonF800
+			vOpts := append(opts,
+				db.WithValidateField("device_choice"),
+				db.WithValidateField("dell_emc_isilon_f800"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *FleetStorageClassType_HpeNimbusStorageAf40:
+		if fv, exists := v.FldValidators["device_choice.hpe_nimbus_storage_af40"]; exists {
+			val := m.GetDeviceChoice().(*FleetStorageClassType_HpeNimbusStorageAf40).HpeNimbusStorageAf40
+			vOpts := append(opts,
+				db.WithValidateField("device_choice"),
+				db.WithValidateField("hpe_nimbus_storage_af40"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *FleetStorageClassType_NetappTrident:
 		if fv, exists := v.FldValidators["device_choice.netapp_trident"]; exists {
 			val := m.GetDeviceChoice().(*FleetStorageClassType_NetappTrident).NetappTrident
@@ -4233,17 +4255,6 @@ func (v *ValidateFleetStorageClassType) Validate(ctx context.Context, pm interfa
 			vOpts := append(opts,
 				db.WithValidateField("device_choice"),
 				db.WithValidateField("pure_service_orchestrator"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *FleetStorageClassType_OpenebsEnterprise:
-		if fv, exists := v.FldValidators["device_choice.openebs_enterprise"]; exists {
-			val := m.GetDeviceChoice().(*FleetStorageClassType_OpenebsEnterprise).OpenebsEnterprise
-			vOpts := append(opts,
-				db.WithValidateField("device_choice"),
-				db.WithValidateField("openebs_enterprise"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -4347,8 +4358,9 @@ var DefaultFleetStorageClassTypeValidator = func() *ValidateFleetStorageClassTyp
 	}
 	v.FldValidators["storage_class_name"] = vFn
 
+	v.FldValidators["device_choice.dell_emc_isilon_f800"] = StorageClassDellIsilonF800TypeValidator().Validate
+	v.FldValidators["device_choice.hpe_nimbus_storage_af40"] = StorageClassHPENimbusStorageAf40TypeValidator().Validate
 	v.FldValidators["device_choice.pure_service_orchestrator"] = StorageClassPureServiceOrchestratorTypeValidator().Validate
-	v.FldValidators["device_choice.openebs_enterprise"] = StorageClassOpenebsEnterpriseTypeValidator().Validate
 
 	return v
 }()
@@ -4527,6 +4539,14 @@ func (m *FleetStorageDeviceType) Redact(ctx context.Context) error {
 		return nil
 	}
 
+	if err := m.GetDellEmcIsilonF800().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting FleetStorageDeviceType.dell_emc_isilon_f800")
+	}
+
+	if err := m.GetHpeNimbusStorageAf40().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting FleetStorageDeviceType.hpe_nimbus_storage_af40")
+	}
+
 	if err := m.GetNetappTrident().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting FleetStorageDeviceType.netapp_trident")
 	}
@@ -4665,6 +4685,28 @@ func (v *ValidateFleetStorageDeviceType) Validate(ctx context.Context, pm interf
 	}
 
 	switch m.GetDeviceChoice().(type) {
+	case *FleetStorageDeviceType_DellEmcIsilonF800:
+		if fv, exists := v.FldValidators["device_choice.dell_emc_isilon_f800"]; exists {
+			val := m.GetDeviceChoice().(*FleetStorageDeviceType_DellEmcIsilonF800).DellEmcIsilonF800
+			vOpts := append(opts,
+				db.WithValidateField("device_choice"),
+				db.WithValidateField("dell_emc_isilon_f800"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *FleetStorageDeviceType_HpeNimbusStorageAf40:
+		if fv, exists := v.FldValidators["device_choice.hpe_nimbus_storage_af40"]; exists {
+			val := m.GetDeviceChoice().(*FleetStorageDeviceType_HpeNimbusStorageAf40).HpeNimbusStorageAf40
+			vOpts := append(opts,
+				db.WithValidateField("device_choice"),
+				db.WithValidateField("hpe_nimbus_storage_af40"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *FleetStorageDeviceType_NetappTrident:
 		if fv, exists := v.FldValidators["device_choice.netapp_trident"]; exists {
 			val := m.GetDeviceChoice().(*FleetStorageDeviceType_NetappTrident).NetappTrident
@@ -4682,17 +4724,6 @@ func (v *ValidateFleetStorageDeviceType) Validate(ctx context.Context, pm interf
 			vOpts := append(opts,
 				db.WithValidateField("device_choice"),
 				db.WithValidateField("pure_service_orchestrator"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *FleetStorageDeviceType_OpenebsEnterprise:
-		if fv, exists := v.FldValidators["device_choice.openebs_enterprise"]; exists {
-			val := m.GetDeviceChoice().(*FleetStorageDeviceType_OpenebsEnterprise).OpenebsEnterprise
-			vOpts := append(opts,
-				db.WithValidateField("device_choice"),
-				db.WithValidateField("openebs_enterprise"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -4763,9 +4794,10 @@ var DefaultFleetStorageDeviceTypeValidator = func() *ValidateFleetStorageDeviceT
 	}
 	v.FldValidators["advanced_advanced_parameters"] = vFn
 
+	v.FldValidators["device_choice.dell_emc_isilon_f800"] = StorageDeviceDellIsilonF800TypeValidator().Validate
+	v.FldValidators["device_choice.hpe_nimbus_storage_af40"] = StorageDeviceHPENimbusStorageAf40TypeValidator().Validate
 	v.FldValidators["device_choice.netapp_trident"] = StorageDeviceNetappTridentTypeValidator().Validate
 	v.FldValidators["device_choice.pure_service_orchestrator"] = StorageDevicePureStorageServiceOrchestratorTypeValidator().Validate
-	v.FldValidators["device_choice.openebs_enterprise"] = StorageDeviceOpenebsEnterpriseTypeValidator().Validate
 
 	return v
 }()
@@ -7281,15 +7313,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["fleet_type"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("fleet_type"))
-		if err := fv(ctx, m.GetFleetType(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["gpu_choice"]; exists {
 		val := m.GetGpuChoice()
 		vOpts := append(opts,
@@ -7409,6 +7432,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["outside_virtual_network"]; exists {
 		vOpts := append(opts, db.WithValidateField("outside_virtual_network"))
 		if err := fv(ctx, m.GetOutsideVirtualNetwork(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["single_site_fleet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("single_site_fleet"))
+		if err := fv(ctx, m.GetSingleSiteFleet(), vOpts...); err != nil {
 			return err
 		}
 
@@ -8357,209 +8389,6 @@ var DefaultOntapVolumeDefaultsValidator = func() *ValidateOntapVolumeDefaults {
 
 func OntapVolumeDefaultsValidator() db.Validator {
 	return DefaultOntapVolumeDefaultsValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *OpenebsMayastorPoolType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *OpenebsMayastorPoolType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *OpenebsMayastorPoolType) DeepCopy() *OpenebsMayastorPoolType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &OpenebsMayastorPoolType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *OpenebsMayastorPoolType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *OpenebsMayastorPoolType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return OpenebsMayastorPoolTypeValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateOpenebsMayastorPoolType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateOpenebsMayastorPoolType) PoolNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for pool_name")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateOpenebsMayastorPoolType) NodeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for node")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateOpenebsMayastorPoolType) PoolDiskDevicesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepStringItemRules(rules)
-	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for pool_disk_devices")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for pool_disk_devices")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]string)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []string, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated pool_disk_devices")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items pool_disk_devices")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateOpenebsMayastorPoolType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*OpenebsMayastorPoolType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *OpenebsMayastorPoolType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["node"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("node"))
-		if err := fv(ctx, m.GetNode(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["pool_disk_devices"]; exists {
-		vOpts := append(opts, db.WithValidateField("pool_disk_devices"))
-		if err := fv(ctx, m.GetPoolDiskDevices(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["pool_name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("pool_name"))
-		if err := fv(ctx, m.GetPoolName(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultOpenebsMayastorPoolTypeValidator = func() *ValidateOpenebsMayastorPoolType {
-	v := &ValidateOpenebsMayastorPoolType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhPoolName := v.PoolNameValidationRuleHandler
-	rulesPoolName := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.hostname":  "true",
-	}
-	vFn, err = vrhPoolName(rulesPoolName)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for OpenebsMayastorPoolType.pool_name: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["pool_name"] = vFn
-
-	vrhNode := v.NodeValidationRuleHandler
-	rulesNode := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.hostname":  "true",
-	}
-	vFn, err = vrhNode(rulesNode)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for OpenebsMayastorPoolType.node: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["node"] = vFn
-
-	vrhPoolDiskDevices := v.PoolDiskDevicesValidationRuleHandler
-	rulesPoolDiskDevices := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "10",
-		"ves.io.schema.rules.repeated.min_items": "1",
-		"ves.io.schema.rules.repeated.unique":    "true",
-	}
-	vFn, err = vrhPoolDiskDevices(rulesPoolDiskDevices)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for OpenebsMayastorPoolType.pool_disk_devices: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["pool_disk_devices"] = vFn
-
-	return v
-}()
-
-func OpenebsMayastorPoolTypeValidator() db.Validator {
-	return DefaultOpenebsMayastorPoolTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -10415,122 +10244,6 @@ var DefaultStorageClassNetappTridentTypeValidator = func() *ValidateStorageClass
 
 func StorageClassNetappTridentTypeValidator() db.Validator {
 	return DefaultStorageClassNetappTridentTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *StorageClassOpenebsEnterpriseType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *StorageClassOpenebsEnterpriseType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *StorageClassOpenebsEnterpriseType) DeepCopy() *StorageClassOpenebsEnterpriseType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &StorageClassOpenebsEnterpriseType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *StorageClassOpenebsEnterpriseType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *StorageClassOpenebsEnterpriseType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return StorageClassOpenebsEnterpriseTypeValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateStorageClassOpenebsEnterpriseType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateStorageClassOpenebsEnterpriseType) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateStorageClassOpenebsEnterpriseType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*StorageClassOpenebsEnterpriseType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *StorageClassOpenebsEnterpriseType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["protocol"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("protocol"))
-		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["replication"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("replication"))
-		if err := fv(ctx, m.GetReplication(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultStorageClassOpenebsEnterpriseTypeValidator = func() *ValidateStorageClassOpenebsEnterpriseType {
-	v := &ValidateStorageClassOpenebsEnterpriseType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhProtocol := v.ProtocolValidationRuleHandler
-	rulesProtocol := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"iscsi\",\"nvmf\"]",
-	}
-	vFn, err = vrhProtocol(rulesProtocol)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageClassOpenebsEnterpriseType.protocol: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["protocol"] = vFn
-
-	return v
-}()
-
-func StorageClassOpenebsEnterpriseTypeValidator() db.Validator {
-	return DefaultStorageClassOpenebsEnterpriseTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -12711,143 +12424,6 @@ var DefaultStorageDeviceNetappTridentTypeValidator = func() *ValidateStorageDevi
 
 func StorageDeviceNetappTridentTypeValidator() db.Validator {
 	return DefaultStorageDeviceNetappTridentTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *StorageDeviceOpenebsEnterpriseType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *StorageDeviceOpenebsEnterpriseType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *StorageDeviceOpenebsEnterpriseType) DeepCopy() *StorageDeviceOpenebsEnterpriseType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &StorageDeviceOpenebsEnterpriseType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *StorageDeviceOpenebsEnterpriseType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *StorageDeviceOpenebsEnterpriseType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return StorageDeviceOpenebsEnterpriseTypeValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateStorageDeviceOpenebsEnterpriseType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateStorageDeviceOpenebsEnterpriseType) MayastorPoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemsValidatorFn := func(ctx context.Context, elems []*OpenebsMayastorPoolType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := OpenebsMayastorPoolTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for mayastor_pools")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*OpenebsMayastorPoolType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*OpenebsMayastorPoolType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated mayastor_pools")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items mayastor_pools")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateStorageDeviceOpenebsEnterpriseType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*StorageDeviceOpenebsEnterpriseType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *StorageDeviceOpenebsEnterpriseType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["mayastor_pools"]; exists {
-		vOpts := append(opts, db.WithValidateField("mayastor_pools"))
-		if err := fv(ctx, m.GetMayastorPools(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultStorageDeviceOpenebsEnterpriseTypeValidator = func() *ValidateStorageDeviceOpenebsEnterpriseType {
-	v := &ValidateStorageDeviceOpenebsEnterpriseType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhMayastorPools := v.MayastorPoolsValidationRuleHandler
-	rulesMayastorPools := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "50",
-		"ves.io.schema.rules.repeated.unique":    "true",
-	}
-	vFn, err = vrhMayastorPools(rulesMayastorPools)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageDeviceOpenebsEnterpriseType.mayastor_pools: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["mayastor_pools"] = vFn
-
-	return v
-}()
-
-func StorageDeviceOpenebsEnterpriseTypeValidator() db.Validator {
-	return DefaultStorageDeviceOpenebsEnterpriseTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

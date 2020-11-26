@@ -23,21 +23,19 @@ import (
 
 	_ "github.com/gogo/protobuf/gogoproto"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/site"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.

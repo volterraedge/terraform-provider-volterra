@@ -28,8 +28,8 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-	object "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	object "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
 )
 
 var (
@@ -994,19 +994,7 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
-func (s *APISrv) validateTransport(ctx context.Context) error {
-	if s.sf.IsTransportNotSupported("ves.io.schema.api_credential.crudapi.API", server.TransportFromContext(ctx)) {
-		userMsg := fmt.Sprintf("ves.io.schema.api_credential.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
-		return server.GRPCStatusFromError(err).Err()
-	}
-	return nil
-}
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.api_credential.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1031,9 +1019,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1058,9 +1043,6 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.api_credential.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1083,9 +1065,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.api_credential.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1137,9 +1116,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.api_credential.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1518,7 +1494,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-crudapi-API-Get"
+                    "url": "http://some-url-here/ves-io-schema-api_credential-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.crudapi.API.Get"
             },
@@ -1593,7 +1569,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-crudapi-API-Delete"
+                    "url": "http://some-url-here/ves-io-schema-api_credential-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.crudapi.API.Delete"
             },
@@ -1676,7 +1652,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-crudapi-API-Replace"
+                    "url": "http://some-url-here/ves-io-schema-api_credential-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.crudapi.API.Replace"
             },
@@ -1805,7 +1781,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-crudapi-API-List"
+                    "url": "http://some-url-here/ves-io-schema-api_credential-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.crudapi.API.List"
             },
@@ -1882,7 +1858,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-crudapi-API-Create"
+                    "url": "http://some-url-here/ves-io-schema-api_credential-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.crudapi.API.Create"
             },
@@ -2011,7 +1987,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-crudapi-API-ListStream"
+                    "url": "http://some-url-here/ves-io-schema-api_credential-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.crudapi.API.ListStream"
             },
@@ -2025,15 +2001,13 @@ var APISwaggerJSON string = `{
     "definitions": {
         "api_credentialAPICredentialType": {
             "type": "string",
-            "description": "Types of API credential given when requesting credentials from volterra\n\n - API_CERTIFICATE: Volterra user certificate to access Volterra public API using mTLS\n - KUBE_CONFIG: Kubernetes config file to access Virtual Kubernetes API in Volterra\n - API_TOKEN: API token to access Volterra public API\n - SERVICE_API_TOKEN: API token for service credentials\n - SERVICE_API_CERTIFICATE: API certificate for service credentials\n - SERVICE_KUBE_CONFIG: API certificate for kube config",
+            "description": "Types of API credential given when requesting credentials from volterra\n\n - API_CERTIFICATE: Volterra user certificate to access Volterra public API using mTLS\n - KUBE_CONFIG: Kubernetes config file to access Virtual Kubernetes API in Volterra\n - API_TOKEN: API token to access Volterra public API\n - SERVICE_API_TOKEN: API token for service credentials",
             "title": "API Credential type",
             "enum": [
                 "API_CERTIFICATE",
                 "KUBE_CONFIG",
                 "API_TOKEN",
-                "SERVICE_API_TOKEN",
-                "SERVICE_API_CERTIFICATE",
-                "SERVICE_KUBE_CONFIG"
+                "SERVICE_API_TOKEN"
             ],
             "default": "API_CERTIFICATE",
             "x-displayname": "Credential Type",
@@ -2090,14 +2064,14 @@ var APISwaggerJSON string = `{
                 },
                 "virtual_k8s_name": {
                     "type": "string",
-                    "description": " Name of virtual K8s cluster",
-                    "title": "Virtual K8s",
+                    "description": " Name of virtual k8s cluster",
+                    "title": "Virtual k8s",
                     "x-displayname": "Virtual K8s"
                 },
                 "virtual_k8s_namespace": {
                     "type": "string",
                     "description": " Namespace of virtual_k8s",
-                    "title": "Virtual K8s namespace",
+                    "title": "Virtual k8s namespace",
                     "x-displayname": "Namespace"
                 }
             }
@@ -2386,7 +2360,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"

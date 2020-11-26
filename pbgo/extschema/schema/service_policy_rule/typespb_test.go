@@ -25,17 +25,17 @@ import (
 
 	_ "github.com/gogo/protobuf/types"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.

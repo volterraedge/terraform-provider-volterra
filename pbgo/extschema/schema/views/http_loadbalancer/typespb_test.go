@@ -23,25 +23,25 @@ import (
 
 	_ "github.com/gogo/protobuf/gogoproto"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/route"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -424,294 +424,6 @@ func BenchmarkProxyTypeHttpsAutoCertsProtoUnmarshal(b *testing.B) {
 		datas[i] = dAtA
 	}
 	msg := &ProxyTypeHttpsAutoCerts{}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		total += len(datas[i%10000])
-		if err := proto.Unmarshal(datas[i%10000], msg); err != nil {
-			panic(err)
-		}
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func TestHashPolicyListTypeProto(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedHashPolicyListType(popr, false)
-	dAtA, err := proto.Marshal(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &HashPolicyListType{}
-	if err := proto.Unmarshal(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	littlefuzz := make([]byte, len(dAtA))
-	copy(littlefuzz, dAtA)
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-	if len(littlefuzz) > 0 {
-		fuzzamount := 100
-		for i := 0; i < fuzzamount; i++ {
-			littlefuzz[popr.Intn(len(littlefuzz))] = byte(popr.Intn(256))
-			littlefuzz = append(littlefuzz, byte(popr.Intn(256)))
-		}
-		// shouldn't panic
-		_ = proto.Unmarshal(littlefuzz, msg)
-	}
-}
-
-func TestHashPolicyListTypeMarshalTo(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedHashPolicyListType(popr, false)
-	size := p.Size()
-	dAtA := make([]byte, size)
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	_, err := p.MarshalTo(dAtA)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &HashPolicyListType{}
-	if err := proto.Unmarshal(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func BenchmarkHashPolicyListTypeProtoMarshal(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	pops := make([]*HashPolicyListType, 10000)
-	for i := 0; i < 10000; i++ {
-		pops[i] = NewPopulatedHashPolicyListType(popr, false)
-	}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		dAtA, err := proto.Marshal(pops[i%10000])
-		if err != nil {
-			panic(err)
-		}
-		total += len(dAtA)
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func BenchmarkHashPolicyListTypeProtoUnmarshal(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	datas := make([][]byte, 10000)
-	for i := 0; i < 10000; i++ {
-		dAtA, err := proto.Marshal(NewPopulatedHashPolicyListType(popr, false))
-		if err != nil {
-			panic(err)
-		}
-		datas[i] = dAtA
-	}
-	msg := &HashPolicyListType{}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		total += len(datas[i%10000])
-		if err := proto.Unmarshal(datas[i%10000], msg); err != nil {
-			panic(err)
-		}
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func TestMirrorPolicyTypeProto(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedMirrorPolicyType(popr, false)
-	dAtA, err := proto.Marshal(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &MirrorPolicyType{}
-	if err := proto.Unmarshal(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	littlefuzz := make([]byte, len(dAtA))
-	copy(littlefuzz, dAtA)
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-	if len(littlefuzz) > 0 {
-		fuzzamount := 100
-		for i := 0; i < fuzzamount; i++ {
-			littlefuzz[popr.Intn(len(littlefuzz))] = byte(popr.Intn(256))
-			littlefuzz = append(littlefuzz, byte(popr.Intn(256)))
-		}
-		// shouldn't panic
-		_ = proto.Unmarshal(littlefuzz, msg)
-	}
-}
-
-func TestMirrorPolicyTypeMarshalTo(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedMirrorPolicyType(popr, false)
-	size := p.Size()
-	dAtA := make([]byte, size)
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	_, err := p.MarshalTo(dAtA)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &MirrorPolicyType{}
-	if err := proto.Unmarshal(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func BenchmarkMirrorPolicyTypeProtoMarshal(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	pops := make([]*MirrorPolicyType, 10000)
-	for i := 0; i < 10000; i++ {
-		pops[i] = NewPopulatedMirrorPolicyType(popr, false)
-	}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		dAtA, err := proto.Marshal(pops[i%10000])
-		if err != nil {
-			panic(err)
-		}
-		total += len(dAtA)
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func BenchmarkMirrorPolicyTypeProtoUnmarshal(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	datas := make([][]byte, 10000)
-	for i := 0; i < 10000; i++ {
-		dAtA, err := proto.Marshal(NewPopulatedMirrorPolicyType(popr, false))
-		if err != nil {
-			panic(err)
-		}
-		datas[i] = dAtA
-	}
-	msg := &MirrorPolicyType{}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		total += len(datas[i%10000])
-		if err := proto.Unmarshal(datas[i%10000], msg); err != nil {
-			panic(err)
-		}
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func TestRouteSimpleAdvancedOptionsProto(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedRouteSimpleAdvancedOptions(popr, false)
-	dAtA, err := proto.Marshal(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &RouteSimpleAdvancedOptions{}
-	if err := proto.Unmarshal(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	littlefuzz := make([]byte, len(dAtA))
-	copy(littlefuzz, dAtA)
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-	if len(littlefuzz) > 0 {
-		fuzzamount := 100
-		for i := 0; i < fuzzamount; i++ {
-			littlefuzz[popr.Intn(len(littlefuzz))] = byte(popr.Intn(256))
-			littlefuzz = append(littlefuzz, byte(popr.Intn(256)))
-		}
-		// shouldn't panic
-		_ = proto.Unmarshal(littlefuzz, msg)
-	}
-}
-
-func TestRouteSimpleAdvancedOptionsMarshalTo(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedRouteSimpleAdvancedOptions(popr, false)
-	size := p.Size()
-	dAtA := make([]byte, size)
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	_, err := p.MarshalTo(dAtA)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &RouteSimpleAdvancedOptions{}
-	if err := proto.Unmarshal(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func BenchmarkRouteSimpleAdvancedOptionsProtoMarshal(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	pops := make([]*RouteSimpleAdvancedOptions, 10000)
-	for i := 0; i < 10000; i++ {
-		pops[i] = NewPopulatedRouteSimpleAdvancedOptions(popr, false)
-	}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		dAtA, err := proto.Marshal(pops[i%10000])
-		if err != nil {
-			panic(err)
-		}
-		total += len(dAtA)
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func BenchmarkRouteSimpleAdvancedOptionsProtoUnmarshal(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	datas := make([][]byte, 10000)
-	for i := 0; i < 10000; i++ {
-		dAtA, err := proto.Marshal(NewPopulatedRouteSimpleAdvancedOptions(popr, false))
-		if err != nil {
-			panic(err)
-		}
-		datas[i] = dAtA
-	}
-	msg := &RouteSimpleAdvancedOptions{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		total += len(datas[i%10000])
@@ -1586,102 +1298,6 @@ func BenchmarkRateLimitConfigTypeProtoUnmarshal(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func TestServicePolicyListProto(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedServicePolicyList(popr, false)
-	dAtA, err := proto.Marshal(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &ServicePolicyList{}
-	if err := proto.Unmarshal(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	littlefuzz := make([]byte, len(dAtA))
-	copy(littlefuzz, dAtA)
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-	if len(littlefuzz) > 0 {
-		fuzzamount := 100
-		for i := 0; i < fuzzamount; i++ {
-			littlefuzz[popr.Intn(len(littlefuzz))] = byte(popr.Intn(256))
-			littlefuzz = append(littlefuzz, byte(popr.Intn(256)))
-		}
-		// shouldn't panic
-		_ = proto.Unmarshal(littlefuzz, msg)
-	}
-}
-
-func TestServicePolicyListMarshalTo(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedServicePolicyList(popr, false)
-	size := p.Size()
-	dAtA := make([]byte, size)
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	_, err := p.MarshalTo(dAtA)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &ServicePolicyList{}
-	if err := proto.Unmarshal(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func BenchmarkServicePolicyListProtoMarshal(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	pops := make([]*ServicePolicyList, 10000)
-	for i := 0; i < 10000; i++ {
-		pops[i] = NewPopulatedServicePolicyList(popr, false)
-	}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		dAtA, err := proto.Marshal(pops[i%10000])
-		if err != nil {
-			panic(err)
-		}
-		total += len(dAtA)
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func BenchmarkServicePolicyListProtoUnmarshal(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	datas := make([][]byte, 10000)
-	for i := 0; i < 10000; i++ {
-		dAtA, err := proto.Marshal(NewPopulatedServicePolicyList(popr, false))
-		if err != nil {
-			panic(err)
-		}
-		datas[i] = dAtA
-	}
-	msg := &ServicePolicyList{}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		total += len(datas[i%10000])
-		if err := proto.Unmarshal(datas[i%10000], msg); err != nil {
-			panic(err)
-		}
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
 func TestGlobalSpecTypeProto(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
@@ -2138,60 +1754,6 @@ func TestProxyTypeHttpsAutoCertsJSON(t *testing.T) {
 		t.Fatalf("seed = %d, %#v !Json Equal %#v", seed, msg, p)
 	}
 }
-func TestHashPolicyListTypeJSON(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedHashPolicyListType(popr, true)
-	marshaler := jsonpb.Marshaler{}
-	jsondata, err := marshaler.MarshalToString(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &HashPolicyListType{}
-	err = jsonpb.UnmarshalString(jsondata, msg)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Json Equal %#v", seed, msg, p)
-	}
-}
-func TestMirrorPolicyTypeJSON(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedMirrorPolicyType(popr, true)
-	marshaler := jsonpb.Marshaler{}
-	jsondata, err := marshaler.MarshalToString(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &MirrorPolicyType{}
-	err = jsonpb.UnmarshalString(jsondata, msg)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Json Equal %#v", seed, msg, p)
-	}
-}
-func TestRouteSimpleAdvancedOptionsJSON(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedRouteSimpleAdvancedOptions(popr, true)
-	marshaler := jsonpb.Marshaler{}
-	jsondata, err := marshaler.MarshalToString(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &RouteSimpleAdvancedOptions{}
-	err = jsonpb.UnmarshalString(jsondata, msg)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Json Equal %#v", seed, msg, p)
-	}
-}
 func TestRouteTypeSimpleWithDefaultOriginPoolJSON(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
@@ -2346,24 +1908,6 @@ func TestRateLimitConfigTypeJSON(t *testing.T) {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
 	msg := &RateLimitConfigType{}
-	err = jsonpb.UnmarshalString(jsondata, msg)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Json Equal %#v", seed, msg, p)
-	}
-}
-func TestServicePolicyListJSON(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedServicePolicyList(popr, true)
-	marshaler := jsonpb.Marshaler{}
-	jsondata, err := marshaler.MarshalToString(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &ServicePolicyList{}
 	err = jsonpb.UnmarshalString(jsondata, msg)
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
@@ -2548,90 +2092,6 @@ func TestProxyTypeHttpsAutoCertsProtoCompactText(t *testing.T) {
 	p := NewPopulatedProxyTypeHttpsAutoCerts(popr, true)
 	dAtA := proto.CompactTextString(p)
 	msg := &ProxyTypeHttpsAutoCerts{}
-	if err := proto.UnmarshalText(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func TestHashPolicyListTypeProtoText(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedHashPolicyListType(popr, true)
-	dAtA := proto.MarshalTextString(p)
-	msg := &HashPolicyListType{}
-	if err := proto.UnmarshalText(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func TestHashPolicyListTypeProtoCompactText(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedHashPolicyListType(popr, true)
-	dAtA := proto.CompactTextString(p)
-	msg := &HashPolicyListType{}
-	if err := proto.UnmarshalText(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func TestMirrorPolicyTypeProtoText(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedMirrorPolicyType(popr, true)
-	dAtA := proto.MarshalTextString(p)
-	msg := &MirrorPolicyType{}
-	if err := proto.UnmarshalText(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func TestMirrorPolicyTypeProtoCompactText(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedMirrorPolicyType(popr, true)
-	dAtA := proto.CompactTextString(p)
-	msg := &MirrorPolicyType{}
-	if err := proto.UnmarshalText(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func TestRouteSimpleAdvancedOptionsProtoText(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedRouteSimpleAdvancedOptions(popr, true)
-	dAtA := proto.MarshalTextString(p)
-	msg := &RouteSimpleAdvancedOptions{}
-	if err := proto.UnmarshalText(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func TestRouteSimpleAdvancedOptionsProtoCompactText(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedRouteSimpleAdvancedOptions(popr, true)
-	dAtA := proto.CompactTextString(p)
-	msg := &RouteSimpleAdvancedOptions{}
 	if err := proto.UnmarshalText(dAtA, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -2892,34 +2352,6 @@ func TestRateLimitConfigTypeProtoCompactText(t *testing.T) {
 	}
 }
 
-func TestServicePolicyListProtoText(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedServicePolicyList(popr, true)
-	dAtA := proto.MarshalTextString(p)
-	msg := &ServicePolicyList{}
-	if err := proto.UnmarshalText(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func TestServicePolicyListProtoCompactText(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedServicePolicyList(popr, true)
-	dAtA := proto.CompactTextString(p)
-	msg := &ServicePolicyList{}
-	if err := proto.UnmarshalText(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
 func TestGlobalSpecTypeProtoText(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
@@ -3084,45 +2516,6 @@ func TestProxyTypeHttpsAutoCertsGoString(t *testing.T) {
 		t.Fatal(err)
 	}
 }
-func TestHashPolicyListTypeGoString(t *testing.T) {
-	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedHashPolicyListType(popr, false)
-	s1 := p.GoString()
-	s2 := fmt.Sprintf("%#v", p)
-	if s1 != s2 {
-		t.Fatalf("GoString want %v got %v", s1, s2)
-	}
-	_, err := parser.ParseExpr(s1)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
-func TestMirrorPolicyTypeGoString(t *testing.T) {
-	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedMirrorPolicyType(popr, false)
-	s1 := p.GoString()
-	s2 := fmt.Sprintf("%#v", p)
-	if s1 != s2 {
-		t.Fatalf("GoString want %v got %v", s1, s2)
-	}
-	_, err := parser.ParseExpr(s1)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
-func TestRouteSimpleAdvancedOptionsGoString(t *testing.T) {
-	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedRouteSimpleAdvancedOptions(popr, false)
-	s1 := p.GoString()
-	s2 := fmt.Sprintf("%#v", p)
-	if s1 != s2 {
-		t.Fatalf("GoString want %v got %v", s1, s2)
-	}
-	_, err := parser.ParseExpr(s1)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
 func TestRouteTypeSimpleWithDefaultOriginPoolGoString(t *testing.T) {
 	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
 	p := NewPopulatedRouteTypeSimpleWithDefaultOriginPool(popr, false)
@@ -3230,19 +2623,6 @@ func TestCustomIpAllowedListGoString(t *testing.T) {
 func TestRateLimitConfigTypeGoString(t *testing.T) {
 	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
 	p := NewPopulatedRateLimitConfigType(popr, false)
-	s1 := p.GoString()
-	s2 := fmt.Sprintf("%#v", p)
-	if s1 != s2 {
-		t.Fatalf("GoString want %v got %v", s1, s2)
-	}
-	_, err := parser.ParseExpr(s1)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
-func TestServicePolicyListGoString(t *testing.T) {
-	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedServicePolicyList(popr, false)
 	s1 := p.GoString()
 	s2 := fmt.Sprintf("%#v", p)
 	if s1 != s2 {
@@ -3441,114 +2821,6 @@ func BenchmarkProxyTypeHttpsAutoCertsSize(b *testing.B) {
 	pops := make([]*ProxyTypeHttpsAutoCerts, 1000)
 	for i := 0; i < 1000; i++ {
 		pops[i] = NewPopulatedProxyTypeHttpsAutoCerts(popr, false)
-	}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		total += pops[i%1000].Size()
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func TestHashPolicyListTypeSize(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedHashPolicyListType(popr, true)
-	size2 := proto.Size(p)
-	dAtA, err := proto.Marshal(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	size := p.Size()
-	if len(dAtA) != size {
-		t.Errorf("seed = %d, size %v != marshalled size %v", seed, size, len(dAtA))
-	}
-	if size2 != size {
-		t.Errorf("seed = %d, size %v != before marshal proto.Size %v", seed, size, size2)
-	}
-	size3 := proto.Size(p)
-	if size3 != size {
-		t.Errorf("seed = %d, size %v != after marshal proto.Size %v", seed, size, size3)
-	}
-}
-
-func BenchmarkHashPolicyListTypeSize(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	pops := make([]*HashPolicyListType, 1000)
-	for i := 0; i < 1000; i++ {
-		pops[i] = NewPopulatedHashPolicyListType(popr, false)
-	}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		total += pops[i%1000].Size()
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func TestMirrorPolicyTypeSize(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedMirrorPolicyType(popr, true)
-	size2 := proto.Size(p)
-	dAtA, err := proto.Marshal(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	size := p.Size()
-	if len(dAtA) != size {
-		t.Errorf("seed = %d, size %v != marshalled size %v", seed, size, len(dAtA))
-	}
-	if size2 != size {
-		t.Errorf("seed = %d, size %v != before marshal proto.Size %v", seed, size, size2)
-	}
-	size3 := proto.Size(p)
-	if size3 != size {
-		t.Errorf("seed = %d, size %v != after marshal proto.Size %v", seed, size, size3)
-	}
-}
-
-func BenchmarkMirrorPolicyTypeSize(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	pops := make([]*MirrorPolicyType, 1000)
-	for i := 0; i < 1000; i++ {
-		pops[i] = NewPopulatedMirrorPolicyType(popr, false)
-	}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		total += pops[i%1000].Size()
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func TestRouteSimpleAdvancedOptionsSize(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedRouteSimpleAdvancedOptions(popr, true)
-	size2 := proto.Size(p)
-	dAtA, err := proto.Marshal(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	size := p.Size()
-	if len(dAtA) != size {
-		t.Errorf("seed = %d, size %v != marshalled size %v", seed, size, len(dAtA))
-	}
-	if size2 != size {
-		t.Errorf("seed = %d, size %v != before marshal proto.Size %v", seed, size, size2)
-	}
-	size3 := proto.Size(p)
-	if size3 != size {
-		t.Errorf("seed = %d, size %v != after marshal proto.Size %v", seed, size, size3)
-	}
-}
-
-func BenchmarkRouteSimpleAdvancedOptionsSize(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	pops := make([]*RouteSimpleAdvancedOptions, 1000)
-	for i := 0; i < 1000; i++ {
-		pops[i] = NewPopulatedRouteSimpleAdvancedOptions(popr, false)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -3881,42 +3153,6 @@ func BenchmarkRateLimitConfigTypeSize(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func TestServicePolicyListSize(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedServicePolicyList(popr, true)
-	size2 := proto.Size(p)
-	dAtA, err := proto.Marshal(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	size := p.Size()
-	if len(dAtA) != size {
-		t.Errorf("seed = %d, size %v != marshalled size %v", seed, size, len(dAtA))
-	}
-	if size2 != size {
-		t.Errorf("seed = %d, size %v != before marshal proto.Size %v", seed, size, size2)
-	}
-	size3 := proto.Size(p)
-	if size3 != size {
-		t.Errorf("seed = %d, size %v != after marshal proto.Size %v", seed, size, size3)
-	}
-}
-
-func BenchmarkServicePolicyListSize(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	pops := make([]*ServicePolicyList, 1000)
-	for i := 0; i < 1000; i++ {
-		pops[i] = NewPopulatedServicePolicyList(popr, false)
-	}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		total += pops[i%1000].Size()
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
 func TestGlobalSpecTypeSize(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
@@ -4097,33 +3333,6 @@ func TestProxyTypeHttpsAutoCertsStringer(t *testing.T) {
 		t.Fatalf("String want %v got %v", s1, s2)
 	}
 }
-func TestHashPolicyListTypeStringer(t *testing.T) {
-	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedHashPolicyListType(popr, false)
-	s1 := p.String()
-	s2 := fmt.Sprintf("%v", p)
-	if s1 != s2 {
-		t.Fatalf("String want %v got %v", s1, s2)
-	}
-}
-func TestMirrorPolicyTypeStringer(t *testing.T) {
-	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedMirrorPolicyType(popr, false)
-	s1 := p.String()
-	s2 := fmt.Sprintf("%v", p)
-	if s1 != s2 {
-		t.Fatalf("String want %v got %v", s1, s2)
-	}
-}
-func TestRouteSimpleAdvancedOptionsStringer(t *testing.T) {
-	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedRouteSimpleAdvancedOptions(popr, false)
-	s1 := p.String()
-	s2 := fmt.Sprintf("%v", p)
-	if s1 != s2 {
-		t.Fatalf("String want %v got %v", s1, s2)
-	}
-}
 func TestRouteTypeSimpleWithDefaultOriginPoolStringer(t *testing.T) {
 	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
 	p := NewPopulatedRouteTypeSimpleWithDefaultOriginPool(popr, false)
@@ -4199,15 +3408,6 @@ func TestCustomIpAllowedListStringer(t *testing.T) {
 func TestRateLimitConfigTypeStringer(t *testing.T) {
 	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
 	p := NewPopulatedRateLimitConfigType(popr, false)
-	s1 := p.String()
-	s2 := fmt.Sprintf("%v", p)
-	if s1 != s2 {
-		t.Fatalf("String want %v got %v", s1, s2)
-	}
-}
-func TestServicePolicyListStringer(t *testing.T) {
-	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedServicePolicyList(popr, false)
 	s1 := p.String()
 	s2 := fmt.Sprintf("%v", p)
 	if s1 != s2 {

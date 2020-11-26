@@ -27,21 +27,17 @@ import (
 
 	_ "github.com/gogo/protobuf/types"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/authentication"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cluster"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -722,102 +718,6 @@ func BenchmarkAutoCertInfoTypeProtoUnmarshal(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func TestAuthenticationDetailsProto(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedAuthenticationDetails(popr, false)
-	dAtA, err := proto.Marshal(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &AuthenticationDetails{}
-	if err := proto.Unmarshal(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	littlefuzz := make([]byte, len(dAtA))
-	copy(littlefuzz, dAtA)
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-	if len(littlefuzz) > 0 {
-		fuzzamount := 100
-		for i := 0; i < fuzzamount; i++ {
-			littlefuzz[popr.Intn(len(littlefuzz))] = byte(popr.Intn(256))
-			littlefuzz = append(littlefuzz, byte(popr.Intn(256)))
-		}
-		// shouldn't panic
-		_ = proto.Unmarshal(littlefuzz, msg)
-	}
-}
-
-func TestAuthenticationDetailsMarshalTo(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedAuthenticationDetails(popr, false)
-	size := p.Size()
-	dAtA := make([]byte, size)
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	_, err := p.MarshalTo(dAtA)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &AuthenticationDetails{}
-	if err := proto.Unmarshal(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func BenchmarkAuthenticationDetailsProtoMarshal(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	pops := make([]*AuthenticationDetails, 10000)
-	for i := 0; i < 10000; i++ {
-		pops[i] = NewPopulatedAuthenticationDetails(popr, false)
-	}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		dAtA, err := proto.Marshal(pops[i%10000])
-		if err != nil {
-			panic(err)
-		}
-		total += len(dAtA)
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func BenchmarkAuthenticationDetailsProtoUnmarshal(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	datas := make([][]byte, 10000)
-	for i := 0; i < 10000; i++ {
-		dAtA, err := proto.Marshal(NewPopulatedAuthenticationDetails(popr, false))
-		if err != nil {
-			panic(err)
-		}
-		datas[i] = dAtA
-	}
-	msg := &AuthenticationDetails{}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		total += len(datas[i%10000])
-		if err := proto.Unmarshal(datas[i%10000], msg); err != nil {
-			panic(err)
-		}
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
 func TestGlobalSpecTypeProto(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
@@ -1328,24 +1228,6 @@ func TestAutoCertInfoTypeJSON(t *testing.T) {
 		t.Fatalf("seed = %d, %#v !Json Equal %#v", seed, msg, p)
 	}
 }
-func TestAuthenticationDetailsJSON(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedAuthenticationDetails(popr, true)
-	marshaler := jsonpb.Marshaler{}
-	jsondata, err := marshaler.MarshalToString(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &AuthenticationDetails{}
-	err = jsonpb.UnmarshalString(jsondata, msg)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Json Equal %#v", seed, msg, p)
-	}
-}
 func TestGlobalSpecTypeJSON(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
@@ -1614,34 +1496,6 @@ func TestAutoCertInfoTypeProtoCompactText(t *testing.T) {
 	}
 }
 
-func TestAuthenticationDetailsProtoText(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedAuthenticationDetails(popr, true)
-	dAtA := proto.MarshalTextString(p)
-	msg := &AuthenticationDetails{}
-	if err := proto.UnmarshalText(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func TestAuthenticationDetailsProtoCompactText(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedAuthenticationDetails(popr, true)
-	dAtA := proto.CompactTextString(p)
-	msg := &AuthenticationDetails{}
-	if err := proto.UnmarshalText(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
 func TestGlobalSpecTypeProtoText(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
@@ -1835,19 +1689,6 @@ func TestTemporaryUserBlockingTypeGoString(t *testing.T) {
 func TestAutoCertInfoTypeGoString(t *testing.T) {
 	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
 	p := NewPopulatedAutoCertInfoType(popr, false)
-	s1 := p.GoString()
-	s2 := fmt.Sprintf("%#v", p)
-	if s1 != s2 {
-		t.Fatalf("GoString want %v got %v", s1, s2)
-	}
-	_, err := parser.ParseExpr(s1)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
-func TestAuthenticationDetailsGoString(t *testing.T) {
-	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedAuthenticationDetails(popr, false)
 	s1 := p.GoString()
 	s2 := fmt.Sprintf("%#v", p)
 	if s1 != s2 {
@@ -2162,42 +2003,6 @@ func BenchmarkAutoCertInfoTypeSize(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func TestAuthenticationDetailsSize(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedAuthenticationDetails(popr, true)
-	size2 := proto.Size(p)
-	dAtA, err := proto.Marshal(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	size := p.Size()
-	if len(dAtA) != size {
-		t.Errorf("seed = %d, size %v != marshalled size %v", seed, size, len(dAtA))
-	}
-	if size2 != size {
-		t.Errorf("seed = %d, size %v != before marshal proto.Size %v", seed, size, size2)
-	}
-	size3 := proto.Size(p)
-	if size3 != size {
-		t.Errorf("seed = %d, size %v != after marshal proto.Size %v", seed, size, size3)
-	}
-}
-
-func BenchmarkAuthenticationDetailsSize(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	pops := make([]*AuthenticationDetails, 1000)
-	for i := 0; i < 1000; i++ {
-		pops[i] = NewPopulatedAuthenticationDetails(popr, false)
-	}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		total += pops[i%1000].Size()
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
 func TestGlobalSpecTypeSize(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
@@ -2399,15 +2204,6 @@ func TestTemporaryUserBlockingTypeStringer(t *testing.T) {
 func TestAutoCertInfoTypeStringer(t *testing.T) {
 	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
 	p := NewPopulatedAutoCertInfoType(popr, false)
-	s1 := p.String()
-	s2 := fmt.Sprintf("%v", p)
-	if s1 != s2 {
-		t.Fatalf("String want %v got %v", s1, s2)
-	}
-}
-func TestAuthenticationDetailsStringer(t *testing.T) {
-	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedAuthenticationDetails(popr, false)
 	s1 := p.String()
 	s2 := fmt.Sprintf("%v", p)
 	if s1 != s2 {

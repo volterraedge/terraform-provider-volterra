@@ -9,10 +9,10 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	ves_io_schema_ap "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/advertise_policy"
-	ves_io_schema_ns "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/namespace"
-	ves_io_schema_vh "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
-	ves_io_schema_vn "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_network"
+	ves_io_schema_ap "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/advertise_policy"
+	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
+	ves_io_schema_vh "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
+	ves_io_schema_vn "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_network"
 )
 
 func TestAccDataSourceVHDNSInfoBasic(t *testing.T) {

@@ -476,7 +476,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-CustomDataAPI-ServicePolicyHits"
+                    "url": "http://some-url-here/ves-io-schema-service_policy-CustomDataAPI-ServicePolicyHits"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.CustomDataAPI.ServicePolicyHits"
             },
@@ -566,7 +566,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-CustomDataAPI-ServicePolicyHitsLatency"
+                    "url": "http://some-url-here/ves-io-schema-service_policy-CustomDataAPI-ServicePolicyHitsLatency"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.CustomDataAPI.ServicePolicyHitsLatency"
             },

@@ -11,8 +11,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"gopkg.volterra.us/stdlib/client"
 	"gopkg.volterra.us/stdlib/server"
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_token "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/token"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_token "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/token"
 )
 
 // TestAccToken token creation test

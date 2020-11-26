@@ -352,7 +352,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-CustomDataAPI-ForwardProxyPolicyHits"
+                    "url": "http://some-url-here/ves-io-schema-views-forward_proxy_policy-CustomDataAPI-ForwardProxyPolicyHits"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.CustomDataAPI.ForwardProxyPolicyHits"
             },
@@ -427,13 +427,6 @@ var CustomDataAPISwaggerJSON string = `{
                     "title": "Site",
                     "x-displayname": "Site",
                     "x-ves-example": "ce1"
-                },
-                "virtual_host": {
-                    "type": "string",
-                    "description": " Virtual Host name\n\nExample: - \"productpage\"-",
-                    "title": "Virtual Host",
-                    "x-displayname": "Virtual Host",
-                    "x-ves-example": "productpage"
                 }
             }
         },
@@ -519,8 +512,7 @@ var CustomDataAPISwaggerJSON string = `{
                 "POLICY",
                 "POLICY_RULE",
                 "ACTION",
-                "SITE",
-                "VIRTUAL_HOST"
+                "SITE"
             ],
             "default": "NAMESPACE",
             "x-displayname": "Forward Proxy Policy Metric Labels",

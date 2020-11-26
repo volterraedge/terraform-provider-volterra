@@ -13,25 +13,25 @@ import (
 
 	_ "github.com/gogo/protobuf/gogoproto"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	ves_io_schema_policy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 
-	ves_io_schema_rate_limiter "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
+	ves_io_schema_rate_limiter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
 
-	ves_io_schema_route "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/route"
+	ves_io_schema_route "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
 
-	ves_io_schema4 "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
-	ves_io_schema_virtual_host "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
+	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 
-	ves_io_schema_virtual_host_dns_info "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
+	ves_io_schema_virtual_host_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
 
 	strings "strings"
 
@@ -314,1040 +314,6 @@ func (m *ProxyTypeHttpsAutoCerts) GetAddHsts() bool {
 	return false
 }
 
-// Hash Policy List
-//
-// x-displayName: "Hash Policy List"
-// List of hash policy rules
-type HashPolicyListType struct {
-	// hash_policy
-	//
-	// x-displayName: "Hash Policy"
-	// x-required
-	// Specifies a list of hash policies to use for ring hash load balancing. Each
-	// hash policy is evaluated individually and the combined result is used to
-	// route the request
-	HashPolicy []*ves_io_schema_route.HashPolicyType `protobuf:"bytes,16,rep,name=hash_policy,json=hashPolicy" json:"hash_policy,omitempty"`
-}
-
-func (m *HashPolicyListType) Reset()                    { *m = HashPolicyListType{} }
-func (*HashPolicyListType) ProtoMessage()               {}
-func (*HashPolicyListType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
-
-func (m *HashPolicyListType) GetHashPolicy() []*ves_io_schema_route.HashPolicyType {
-	if m != nil {
-		return m.HashPolicy
-	}
-	return nil
-}
-
-// MirrorPolicyType
-//
-// x-displayName: "Mirror Policy"
-// MirrorPolicy is used for shadowing traffic from one origin pool to another. The approach used
-// is "fire and forget", meaning it will not wait for the shadow origin pool to
-// respond before returning the response from the primary origin pool. All normal statistics are
-// collected for the shadow origin pool making this feature useful for testing and troubleshooting.
-type MirrorPolicyType struct {
-	// cluster
-	//
-	// x-displayName: "Mirror Destination Cluster"
-	// x-required
-	// Specifies the cluster to which the requests will be mirrored. The cluster object
-	// referred here must be present.
-	OriginPool *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,opt,name=origin_pool,json=originPool" json:"origin_pool,omitempty"`
-	// percent
-	//
-	// x-displayName: "Mirror Percentage"
-	// x-required
-	// Percentage of requests to be mirrored
-	Percent *ves_io_schema4.FractionalPercent `protobuf:"bytes,2,opt,name=percent" json:"percent,omitempty"`
-}
-
-func (m *MirrorPolicyType) Reset()                    { *m = MirrorPolicyType{} }
-func (*MirrorPolicyType) ProtoMessage()               {}
-func (*MirrorPolicyType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
-
-func (m *MirrorPolicyType) GetOriginPool() *ves_io_schema_views.ObjectRefType {
-	if m != nil {
-		return m.OriginPool
-	}
-	return nil
-}
-
-func (m *MirrorPolicyType) GetPercent() *ves_io_schema4.FractionalPercent {
-	if m != nil {
-		return m.Percent
-	}
-	return nil
-}
-
-// Route Advanced Options
-//
-// x-displayName: "Route Advance Options"
-// Configure Advance options for route, like path rewrite, has policy, etc
-type RouteSimpleAdvancedOptions struct {
-	// Hash Policy Choice
-	//
-	// x-displayName: "Hash Policy Choice"
-	// x-required
-	// Enable route specific hash policy for this route
-	//
-	// Types that are valid to be assigned to HashPolicyChoice:
-	//	*RouteSimpleAdvancedOptions_CommonHashPolicy
-	//	*RouteSimpleAdvancedOptions_SpecificHashPolicy
-	HashPolicyChoice isRouteSimpleAdvancedOptions_HashPolicyChoice `protobuf_oneof:"hash_policy_choice"`
-	// priority
-	//
-	// x-displayName: "Priority"
-	// Priority routing for each route. Different connection pools are used based on the priority of the route.
-	// Also, circuit-breaker configuration at destination cluster is chosen based on the route priority.
-	Priority ves_io_schema4.RoutingPriority `protobuf:"varint,4,opt,name=priority,proto3,enum=ves.io.schema.RoutingPriority" json:"priority,omitempty"`
-	// Origin Servers Subset
-	//
-	// x-displayName: "Origin Servers Subsets"
-	// Upstream origin pool may be configured to divide its origin servers into subsets based on metadata
-	// attached to the origin servers. Routes may then specify the metadata that a endpoint must match in
-	// order to be selected by the load balancer
-	//
-	// For origin servers which are discovered in K8S or Consul cluster, the label of the service is merged with
-	// endpoint's labels. In case of Consul, the label is derived from the "Tag" field.
-	// For labels that are common between configured endpoint and discovered service, labels from discovered service
-	// takes precedence.
-	//
-	// List of key-value pairs that will be used as matching metadata. Only those origin servers of
-	// upstream origin pool which match this metadata will be selected for load balancing
-	EndpointSubsets map[string]string `protobuf:"bytes,5,rep,name=endpoint_subsets,json=endpointSubsets" json:"endpoint_subsets,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// Enable Prefix Rewrite
-	//
-	// x-displayName: "Enable Prefix Rewrite"
-	// x-required
-	// Select to enable or disable prefix rewrite
-	//
-	// Types that are valid to be assigned to RewriteChoice:
-	//	*RouteSimpleAdvancedOptions_DisablePrefixRewrite
-	//	*RouteSimpleAdvancedOptions_PrefixRewrite
-	RewriteChoice isRouteSimpleAdvancedOptions_RewriteChoice `protobuf_oneof:"rewrite_choice"`
-	// Headers to add in request
-	//
-	// x-displayName: "Add Request Headers"
-	// Headers are key-value pairs to be added to HTTP request being routed towards upstream.
-	RequestHeadersToAdd []*ves_io_schema4.HeaderManipulationOptionType `protobuf:"bytes,9,rep,name=request_headers_to_add,json=requestHeadersToAdd" json:"request_headers_to_add,omitempty"`
-	// Header to be removed from request
-	//
-	// x-displayName: "Remove Request Headers"
-	// x-example: "host"
-	// List of keys of Headers to be removed from the HTTP request being sent towards upstream.
-	RequestHeadersToRemove []string `protobuf:"bytes,10,rep,name=request_headers_to_remove,json=requestHeadersToRemove" json:"request_headers_to_remove,omitempty"`
-	// Headers to add in response
-	//
-	// x-displayName: "Add Response Headers"
-	// Headers are key-value pairs to be added to HTTP response being sent towards downstream.
-	ResponseHeadersToAdd []*ves_io_schema4.HeaderManipulationOptionType `protobuf:"bytes,11,rep,name=response_headers_to_add,json=responseHeadersToAdd" json:"response_headers_to_add,omitempty"`
-	// Header to be removed from response
-	//
-	// x-displayName: "Remove Response Headers"
-	// x-example: "host"
-	// List of keys of Headers to be removed from the HTTP response being sent towards downstream.
-	ResponseHeadersToRemove []string `protobuf:"bytes,12,rep,name=response_headers_to_remove,json=responseHeadersToRemove" json:"response_headers_to_remove,omitempty"`
-	// disable_location_add
-	//
-	// x-displayName: "Disable Location Addition"
-	// x-example: true
-	// disables append of x-volterra-location = <re-site-name> at route level, if it is configured at
-	// virtual-host level. This configuration is ignored on CE sites.
-	DisableLocationAdd bool `protobuf:"varint,13,opt,name=disable_location_add,json=disableLocationAdd,proto3" json:"disable_location_add,omitempty"`
-	// Enable the WAF (Web Application Firewall) functionality for VirtualHost
-	//
-	// x-displayName: "Select Web Application Firewall (WAF) Config"
-	// x-required
-	//
-	// WAF can be used to analyze inbound and outbound http/https traffic.
-	// WAF can be configured either in BLOCKing Mode or ALERTing Mode.
-	// In BLOCKing mode if WAF detects suspicious inbound/outbound traffic it blocks the request or response.
-	// In ALERTing mode if suspicious traffic is detected, WAF generates ALERTs with details on the
-	// suspicious traffic (instead of blocking traffic).
-	//
-	// waf_type can be either WAF or WAFRules.
-	// WAF Object allows to
-	//     Configure mode of the WAF (BLOCK/ALERT)
-	//     Configure language used by the application which is being protected by the WAF
-	//     Disable different high level security tags if required (e.g. SQLI_DETECTION, XSS_DETECTION etc)
-	// WAFRules allows to
-	//     Configure mode of the WAF (BLOCK/ALERT)
-	//     Enable/Disable individual WAF security rules
-	//
-	// Types that are valid to be assigned to WafChoice:
-	//	*RouteSimpleAdvancedOptions_DisableWaf
-	//	*RouteSimpleAdvancedOptions_Waf
-	//	*RouteSimpleAdvancedOptions_WafRule
-	WafChoice isRouteSimpleAdvancedOptions_WafChoice `protobuf_oneof:"waf_choice"`
-	// cors_policy
-	//
-	// x-displayName: "CORS Policy"
-	// Cross-Origin Resource Sharing requests configuration
-	//
-	// CORS is a mechanism that uses additional HTTP headers to tell a browser to let
-	// a web application running at one origin (domain) have permission to access selected
-	// resources from a server at a different origin
-	CorsPolicy *ves_io_schema4.CorsPolicy `protobuf:"bytes,18,opt,name=cors_policy,json=corsPolicy" json:"cors_policy,omitempty"`
-	// SPDY Choice
-	//
-	// x-displayName: "Enable/Disable SPDY Upgrade"
-	// x-required
-	// Select to enable or disable spdy upgrade
-	//
-	// Types that are valid to be assigned to SpdyChoice:
-	//	*RouteSimpleAdvancedOptions_DisableSpdy
-	//	*RouteSimpleAdvancedOptions_EnableSpdy
-	SpdyChoice isRouteSimpleAdvancedOptions_SpdyChoice `protobuf_oneof:"spdy_choice"`
-	// Websocket Choice
-	//
-	// x-displayName: "Enable/Disable Websocket Upgrade"
-	// x-required
-	// Select to enable or disable websocket upgrade
-	//
-	// Types that are valid to be assigned to WebsocketChoice:
-	//	*RouteSimpleAdvancedOptions_DisableWebSocketConfig
-	//	*RouteSimpleAdvancedOptions_WebSocketConfig
-	WebsocketChoice isRouteSimpleAdvancedOptions_WebsocketChoice `protobuf_oneof:"websocket_choice"`
-	//  Retry Policy Choice
-	//
-	// x-displayName: "Select Retry Policy"
-	// x-required
-	// Select default retry policy or configure custom
-	//
-	// Types that are valid to be assigned to RetryPolicyChoice:
-	//	*RouteSimpleAdvancedOptions_DefaultRetryPolicy
-	//	*RouteSimpleAdvancedOptions_RetryPolicy
-	RetryPolicyChoice isRouteSimpleAdvancedOptions_RetryPolicyChoice `protobuf_oneof:"retry_policy_choice"`
-	// timeout
-	//
-	// x-displayName: "Timeout"
-	// x-example: 2000
-	// Specifies the timeout for the route in milliseconds.
-	// This timeout includes all retries.
-	// For server side streaming, configure this field with higher value or leave it 0
-	// for infinite timeout
-	Timeout uint32 `protobuf:"varint,28,opt,name=timeout,proto3" json:"timeout,omitempty"`
-	// Enable Route Specific Buffering
-	//
-	// x-displayName: "Enable Route Specific Buffering"
-	// x-required
-	// Enable or disable route specific buffering
-	//
-	// Types that are valid to be assigned to BufferChoice:
-	//	*RouteSimpleAdvancedOptions_CommonBuffering
-	//	*RouteSimpleAdvancedOptions_BufferPolicy
-	BufferChoice isRouteSimpleAdvancedOptions_BufferChoice `protobuf_oneof:"buffer_choice"`
-	// Mirroring
-	//
-	// x-displayName: "Mirroring"
-	// x-required
-	// Enable/disable Mirroring
-	//
-	// Types that are valid to be assigned to MirroringChoice:
-	//	*RouteSimpleAdvancedOptions_DisableMirroring
-	//	*RouteSimpleAdvancedOptions_MirrorPolicy
-	MirroringChoice isRouteSimpleAdvancedOptions_MirroringChoice `protobuf_oneof:"mirroring_choice"`
-}
-
-func (m *RouteSimpleAdvancedOptions) Reset()                    { *m = RouteSimpleAdvancedOptions{} }
-func (*RouteSimpleAdvancedOptions) ProtoMessage()               {}
-func (*RouteSimpleAdvancedOptions) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
-
-type isRouteSimpleAdvancedOptions_HashPolicyChoice interface {
-	isRouteSimpleAdvancedOptions_HashPolicyChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isRouteSimpleAdvancedOptions_RewriteChoice interface {
-	isRouteSimpleAdvancedOptions_RewriteChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isRouteSimpleAdvancedOptions_WafChoice interface {
-	isRouteSimpleAdvancedOptions_WafChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isRouteSimpleAdvancedOptions_SpdyChoice interface {
-	isRouteSimpleAdvancedOptions_SpdyChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isRouteSimpleAdvancedOptions_WebsocketChoice interface {
-	isRouteSimpleAdvancedOptions_WebsocketChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isRouteSimpleAdvancedOptions_RetryPolicyChoice interface {
-	isRouteSimpleAdvancedOptions_RetryPolicyChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isRouteSimpleAdvancedOptions_BufferChoice interface {
-	isRouteSimpleAdvancedOptions_BufferChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isRouteSimpleAdvancedOptions_MirroringChoice interface {
-	isRouteSimpleAdvancedOptions_MirroringChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type RouteSimpleAdvancedOptions_CommonHashPolicy struct {
-	CommonHashPolicy *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=common_hash_policy,json=commonHashPolicy,oneof"`
-}
-type RouteSimpleAdvancedOptions_SpecificHashPolicy struct {
-	SpecificHashPolicy *HashPolicyListType `protobuf:"bytes,3,opt,name=specific_hash_policy,json=specificHashPolicy,oneof"`
-}
-type RouteSimpleAdvancedOptions_DisablePrefixRewrite struct {
-	DisablePrefixRewrite *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=disable_prefix_rewrite,json=disablePrefixRewrite,oneof"`
-}
-type RouteSimpleAdvancedOptions_PrefixRewrite struct {
-	PrefixRewrite string `protobuf:"bytes,8,opt,name=prefix_rewrite,json=prefixRewrite,proto3,oneof"`
-}
-type RouteSimpleAdvancedOptions_DisableWaf struct {
-	DisableWaf *ves_io_schema4.Empty `protobuf:"bytes,15,opt,name=disable_waf,json=disableWaf,oneof"`
-}
-type RouteSimpleAdvancedOptions_Waf struct {
-	Waf *ves_io_schema_views.ObjectRefType `protobuf:"bytes,16,opt,name=waf,oneof"`
-}
-type RouteSimpleAdvancedOptions_WafRule struct {
-	WafRule *ves_io_schema_views.ObjectRefType `protobuf:"bytes,17,opt,name=waf_rule,json=wafRule,oneof"`
-}
-type RouteSimpleAdvancedOptions_DisableSpdy struct {
-	DisableSpdy *ves_io_schema4.Empty `protobuf:"bytes,20,opt,name=disable_spdy,json=disableSpdy,oneof"`
-}
-type RouteSimpleAdvancedOptions_EnableSpdy struct {
-	EnableSpdy *ves_io_schema4.Empty `protobuf:"bytes,21,opt,name=enable_spdy,json=enableSpdy,oneof"`
-}
-type RouteSimpleAdvancedOptions_DisableWebSocketConfig struct {
-	DisableWebSocketConfig *ves_io_schema4.Empty `protobuf:"bytes,23,opt,name=disable_web_socket_config,json=disableWebSocketConfig,oneof"`
-}
-type RouteSimpleAdvancedOptions_WebSocketConfig struct {
-	WebSocketConfig *ves_io_schema_route.WebsocketConfigType `protobuf:"bytes,24,opt,name=web_socket_config,json=webSocketConfig,oneof"`
-}
-type RouteSimpleAdvancedOptions_DefaultRetryPolicy struct {
-	DefaultRetryPolicy *ves_io_schema4.Empty `protobuf:"bytes,26,opt,name=default_retry_policy,json=defaultRetryPolicy,oneof"`
-}
-type RouteSimpleAdvancedOptions_RetryPolicy struct {
-	RetryPolicy *ves_io_schema4.RetryPolicyType `protobuf:"bytes,27,opt,name=retry_policy,json=retryPolicy,oneof"`
-}
-type RouteSimpleAdvancedOptions_CommonBuffering struct {
-	CommonBuffering *ves_io_schema4.Empty `protobuf:"bytes,30,opt,name=common_buffering,json=commonBuffering,oneof"`
-}
-type RouteSimpleAdvancedOptions_BufferPolicy struct {
-	BufferPolicy *ves_io_schema4.BufferConfigType `protobuf:"bytes,31,opt,name=buffer_policy,json=bufferPolicy,oneof"`
-}
-type RouteSimpleAdvancedOptions_DisableMirroring struct {
-	DisableMirroring *ves_io_schema4.Empty `protobuf:"bytes,33,opt,name=disable_mirroring,json=disableMirroring,oneof"`
-}
-type RouteSimpleAdvancedOptions_MirrorPolicy struct {
-	MirrorPolicy *MirrorPolicyType `protobuf:"bytes,34,opt,name=mirror_policy,json=mirrorPolicy,oneof"`
-}
-
-func (*RouteSimpleAdvancedOptions_CommonHashPolicy) isRouteSimpleAdvancedOptions_HashPolicyChoice() {}
-func (*RouteSimpleAdvancedOptions_SpecificHashPolicy) isRouteSimpleAdvancedOptions_HashPolicyChoice() {
-}
-func (*RouteSimpleAdvancedOptions_DisablePrefixRewrite) isRouteSimpleAdvancedOptions_RewriteChoice() {
-}
-func (*RouteSimpleAdvancedOptions_PrefixRewrite) isRouteSimpleAdvancedOptions_RewriteChoice() {}
-func (*RouteSimpleAdvancedOptions_DisableWaf) isRouteSimpleAdvancedOptions_WafChoice()        {}
-func (*RouteSimpleAdvancedOptions_Waf) isRouteSimpleAdvancedOptions_WafChoice()               {}
-func (*RouteSimpleAdvancedOptions_WafRule) isRouteSimpleAdvancedOptions_WafChoice()           {}
-func (*RouteSimpleAdvancedOptions_DisableSpdy) isRouteSimpleAdvancedOptions_SpdyChoice()      {}
-func (*RouteSimpleAdvancedOptions_EnableSpdy) isRouteSimpleAdvancedOptions_SpdyChoice()       {}
-func (*RouteSimpleAdvancedOptions_DisableWebSocketConfig) isRouteSimpleAdvancedOptions_WebsocketChoice() {
-}
-func (*RouteSimpleAdvancedOptions_WebSocketConfig) isRouteSimpleAdvancedOptions_WebsocketChoice() {}
-func (*RouteSimpleAdvancedOptions_DefaultRetryPolicy) isRouteSimpleAdvancedOptions_RetryPolicyChoice() {
-}
-func (*RouteSimpleAdvancedOptions_RetryPolicy) isRouteSimpleAdvancedOptions_RetryPolicyChoice()    {}
-func (*RouteSimpleAdvancedOptions_CommonBuffering) isRouteSimpleAdvancedOptions_BufferChoice()     {}
-func (*RouteSimpleAdvancedOptions_BufferPolicy) isRouteSimpleAdvancedOptions_BufferChoice()        {}
-func (*RouteSimpleAdvancedOptions_DisableMirroring) isRouteSimpleAdvancedOptions_MirroringChoice() {}
-func (*RouteSimpleAdvancedOptions_MirrorPolicy) isRouteSimpleAdvancedOptions_MirroringChoice()     {}
-
-func (m *RouteSimpleAdvancedOptions) GetHashPolicyChoice() isRouteSimpleAdvancedOptions_HashPolicyChoice {
-	if m != nil {
-		return m.HashPolicyChoice
-	}
-	return nil
-}
-func (m *RouteSimpleAdvancedOptions) GetRewriteChoice() isRouteSimpleAdvancedOptions_RewriteChoice {
-	if m != nil {
-		return m.RewriteChoice
-	}
-	return nil
-}
-func (m *RouteSimpleAdvancedOptions) GetWafChoice() isRouteSimpleAdvancedOptions_WafChoice {
-	if m != nil {
-		return m.WafChoice
-	}
-	return nil
-}
-func (m *RouteSimpleAdvancedOptions) GetSpdyChoice() isRouteSimpleAdvancedOptions_SpdyChoice {
-	if m != nil {
-		return m.SpdyChoice
-	}
-	return nil
-}
-func (m *RouteSimpleAdvancedOptions) GetWebsocketChoice() isRouteSimpleAdvancedOptions_WebsocketChoice {
-	if m != nil {
-		return m.WebsocketChoice
-	}
-	return nil
-}
-func (m *RouteSimpleAdvancedOptions) GetRetryPolicyChoice() isRouteSimpleAdvancedOptions_RetryPolicyChoice {
-	if m != nil {
-		return m.RetryPolicyChoice
-	}
-	return nil
-}
-func (m *RouteSimpleAdvancedOptions) GetBufferChoice() isRouteSimpleAdvancedOptions_BufferChoice {
-	if m != nil {
-		return m.BufferChoice
-	}
-	return nil
-}
-func (m *RouteSimpleAdvancedOptions) GetMirroringChoice() isRouteSimpleAdvancedOptions_MirroringChoice {
-	if m != nil {
-		return m.MirroringChoice
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetCommonHashPolicy() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*RouteSimpleAdvancedOptions_CommonHashPolicy); ok {
-		return x.CommonHashPolicy
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetSpecificHashPolicy() *HashPolicyListType {
-	if x, ok := m.GetHashPolicyChoice().(*RouteSimpleAdvancedOptions_SpecificHashPolicy); ok {
-		return x.SpecificHashPolicy
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetPriority() ves_io_schema4.RoutingPriority {
-	if m != nil {
-		return m.Priority
-	}
-	return ves_io_schema4.DEFAULT
-}
-
-func (m *RouteSimpleAdvancedOptions) GetEndpointSubsets() map[string]string {
-	if m != nil {
-		return m.EndpointSubsets
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetDisablePrefixRewrite() *ves_io_schema4.Empty {
-	if x, ok := m.GetRewriteChoice().(*RouteSimpleAdvancedOptions_DisablePrefixRewrite); ok {
-		return x.DisablePrefixRewrite
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetPrefixRewrite() string {
-	if x, ok := m.GetRewriteChoice().(*RouteSimpleAdvancedOptions_PrefixRewrite); ok {
-		return x.PrefixRewrite
-	}
-	return ""
-}
-
-func (m *RouteSimpleAdvancedOptions) GetRequestHeadersToAdd() []*ves_io_schema4.HeaderManipulationOptionType {
-	if m != nil {
-		return m.RequestHeadersToAdd
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetRequestHeadersToRemove() []string {
-	if m != nil {
-		return m.RequestHeadersToRemove
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetResponseHeadersToAdd() []*ves_io_schema4.HeaderManipulationOptionType {
-	if m != nil {
-		return m.ResponseHeadersToAdd
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetResponseHeadersToRemove() []string {
-	if m != nil {
-		return m.ResponseHeadersToRemove
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetDisableLocationAdd() bool {
-	if m != nil {
-		return m.DisableLocationAdd
-	}
-	return false
-}
-
-func (m *RouteSimpleAdvancedOptions) GetDisableWaf() *ves_io_schema4.Empty {
-	if x, ok := m.GetWafChoice().(*RouteSimpleAdvancedOptions_DisableWaf); ok {
-		return x.DisableWaf
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetWaf() *ves_io_schema_views.ObjectRefType {
-	if x, ok := m.GetWafChoice().(*RouteSimpleAdvancedOptions_Waf); ok {
-		return x.Waf
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetWafRule() *ves_io_schema_views.ObjectRefType {
-	if x, ok := m.GetWafChoice().(*RouteSimpleAdvancedOptions_WafRule); ok {
-		return x.WafRule
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetCorsPolicy() *ves_io_schema4.CorsPolicy {
-	if m != nil {
-		return m.CorsPolicy
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetDisableSpdy() *ves_io_schema4.Empty {
-	if x, ok := m.GetSpdyChoice().(*RouteSimpleAdvancedOptions_DisableSpdy); ok {
-		return x.DisableSpdy
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetEnableSpdy() *ves_io_schema4.Empty {
-	if x, ok := m.GetSpdyChoice().(*RouteSimpleAdvancedOptions_EnableSpdy); ok {
-		return x.EnableSpdy
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetDisableWebSocketConfig() *ves_io_schema4.Empty {
-	if x, ok := m.GetWebsocketChoice().(*RouteSimpleAdvancedOptions_DisableWebSocketConfig); ok {
-		return x.DisableWebSocketConfig
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetWebSocketConfig() *ves_io_schema_route.WebsocketConfigType {
-	if x, ok := m.GetWebsocketChoice().(*RouteSimpleAdvancedOptions_WebSocketConfig); ok {
-		return x.WebSocketConfig
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetDefaultRetryPolicy() *ves_io_schema4.Empty {
-	if x, ok := m.GetRetryPolicyChoice().(*RouteSimpleAdvancedOptions_DefaultRetryPolicy); ok {
-		return x.DefaultRetryPolicy
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetRetryPolicy() *ves_io_schema4.RetryPolicyType {
-	if x, ok := m.GetRetryPolicyChoice().(*RouteSimpleAdvancedOptions_RetryPolicy); ok {
-		return x.RetryPolicy
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetTimeout() uint32 {
-	if m != nil {
-		return m.Timeout
-	}
-	return 0
-}
-
-func (m *RouteSimpleAdvancedOptions) GetCommonBuffering() *ves_io_schema4.Empty {
-	if x, ok := m.GetBufferChoice().(*RouteSimpleAdvancedOptions_CommonBuffering); ok {
-		return x.CommonBuffering
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetBufferPolicy() *ves_io_schema4.BufferConfigType {
-	if x, ok := m.GetBufferChoice().(*RouteSimpleAdvancedOptions_BufferPolicy); ok {
-		return x.BufferPolicy
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetDisableMirroring() *ves_io_schema4.Empty {
-	if x, ok := m.GetMirroringChoice().(*RouteSimpleAdvancedOptions_DisableMirroring); ok {
-		return x.DisableMirroring
-	}
-	return nil
-}
-
-func (m *RouteSimpleAdvancedOptions) GetMirrorPolicy() *MirrorPolicyType {
-	if x, ok := m.GetMirroringChoice().(*RouteSimpleAdvancedOptions_MirrorPolicy); ok {
-		return x.MirrorPolicy
-	}
-	return nil
-}
-
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*RouteSimpleAdvancedOptions) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _RouteSimpleAdvancedOptions_OneofMarshaler, _RouteSimpleAdvancedOptions_OneofUnmarshaler, _RouteSimpleAdvancedOptions_OneofSizer, []interface{}{
-		(*RouteSimpleAdvancedOptions_CommonHashPolicy)(nil),
-		(*RouteSimpleAdvancedOptions_SpecificHashPolicy)(nil),
-		(*RouteSimpleAdvancedOptions_DisablePrefixRewrite)(nil),
-		(*RouteSimpleAdvancedOptions_PrefixRewrite)(nil),
-		(*RouteSimpleAdvancedOptions_DisableWaf)(nil),
-		(*RouteSimpleAdvancedOptions_Waf)(nil),
-		(*RouteSimpleAdvancedOptions_WafRule)(nil),
-		(*RouteSimpleAdvancedOptions_DisableSpdy)(nil),
-		(*RouteSimpleAdvancedOptions_EnableSpdy)(nil),
-		(*RouteSimpleAdvancedOptions_DisableWebSocketConfig)(nil),
-		(*RouteSimpleAdvancedOptions_WebSocketConfig)(nil),
-		(*RouteSimpleAdvancedOptions_DefaultRetryPolicy)(nil),
-		(*RouteSimpleAdvancedOptions_RetryPolicy)(nil),
-		(*RouteSimpleAdvancedOptions_CommonBuffering)(nil),
-		(*RouteSimpleAdvancedOptions_BufferPolicy)(nil),
-		(*RouteSimpleAdvancedOptions_DisableMirroring)(nil),
-		(*RouteSimpleAdvancedOptions_MirrorPolicy)(nil),
-	}
-}
-
-func _RouteSimpleAdvancedOptions_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*RouteSimpleAdvancedOptions)
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *RouteSimpleAdvancedOptions_CommonHashPolicy:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CommonHashPolicy); err != nil {
-			return err
-		}
-	case *RouteSimpleAdvancedOptions_SpecificHashPolicy:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SpecificHashPolicy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("RouteSimpleAdvancedOptions.HashPolicyChoice has unexpected type %T", x)
-	}
-	// rewrite_choice
-	switch x := m.RewriteChoice.(type) {
-	case *RouteSimpleAdvancedOptions_DisablePrefixRewrite:
-		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisablePrefixRewrite); err != nil {
-			return err
-		}
-	case *RouteSimpleAdvancedOptions_PrefixRewrite:
-		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.PrefixRewrite)
-	case nil:
-	default:
-		return fmt.Errorf("RouteSimpleAdvancedOptions.RewriteChoice has unexpected type %T", x)
-	}
-	// waf_choice
-	switch x := m.WafChoice.(type) {
-	case *RouteSimpleAdvancedOptions_DisableWaf:
-		_ = b.EncodeVarint(15<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableWaf); err != nil {
-			return err
-		}
-	case *RouteSimpleAdvancedOptions_Waf:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Waf); err != nil {
-			return err
-		}
-	case *RouteSimpleAdvancedOptions_WafRule:
-		_ = b.EncodeVarint(17<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.WafRule); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("RouteSimpleAdvancedOptions.WafChoice has unexpected type %T", x)
-	}
-	// spdy_choice
-	switch x := m.SpdyChoice.(type) {
-	case *RouteSimpleAdvancedOptions_DisableSpdy:
-		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableSpdy); err != nil {
-			return err
-		}
-	case *RouteSimpleAdvancedOptions_EnableSpdy:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.EnableSpdy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("RouteSimpleAdvancedOptions.SpdyChoice has unexpected type %T", x)
-	}
-	// websocket_choice
-	switch x := m.WebsocketChoice.(type) {
-	case *RouteSimpleAdvancedOptions_DisableWebSocketConfig:
-		_ = b.EncodeVarint(23<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableWebSocketConfig); err != nil {
-			return err
-		}
-	case *RouteSimpleAdvancedOptions_WebSocketConfig:
-		_ = b.EncodeVarint(24<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.WebSocketConfig); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("RouteSimpleAdvancedOptions.WebsocketChoice has unexpected type %T", x)
-	}
-	// retry_policy_choice
-	switch x := m.RetryPolicyChoice.(type) {
-	case *RouteSimpleAdvancedOptions_DefaultRetryPolicy:
-		_ = b.EncodeVarint(26<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DefaultRetryPolicy); err != nil {
-			return err
-		}
-	case *RouteSimpleAdvancedOptions_RetryPolicy:
-		_ = b.EncodeVarint(27<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RetryPolicy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("RouteSimpleAdvancedOptions.RetryPolicyChoice has unexpected type %T", x)
-	}
-	// buffer_choice
-	switch x := m.BufferChoice.(type) {
-	case *RouteSimpleAdvancedOptions_CommonBuffering:
-		_ = b.EncodeVarint(30<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CommonBuffering); err != nil {
-			return err
-		}
-	case *RouteSimpleAdvancedOptions_BufferPolicy:
-		_ = b.EncodeVarint(31<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.BufferPolicy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("RouteSimpleAdvancedOptions.BufferChoice has unexpected type %T", x)
-	}
-	// mirroring_choice
-	switch x := m.MirroringChoice.(type) {
-	case *RouteSimpleAdvancedOptions_DisableMirroring:
-		_ = b.EncodeVarint(33<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DisableMirroring); err != nil {
-			return err
-		}
-	case *RouteSimpleAdvancedOptions_MirrorPolicy:
-		_ = b.EncodeVarint(34<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.MirrorPolicy); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("RouteSimpleAdvancedOptions.MirroringChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _RouteSimpleAdvancedOptions_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*RouteSimpleAdvancedOptions)
-	switch tag {
-	case 2: // hash_policy_choice.common_hash_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &RouteSimpleAdvancedOptions_CommonHashPolicy{msg}
-		return true, err
-	case 3: // hash_policy_choice.specific_hash_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(HashPolicyListType)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &RouteSimpleAdvancedOptions_SpecificHashPolicy{msg}
-		return true, err
-	case 7: // rewrite_choice.disable_prefix_rewrite
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.RewriteChoice = &RouteSimpleAdvancedOptions_DisablePrefixRewrite{msg}
-		return true, err
-	case 8: // rewrite_choice.prefix_rewrite
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.RewriteChoice = &RouteSimpleAdvancedOptions_PrefixRewrite{x}
-		return true, err
-	case 15: // waf_choice.disable_waf
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.WafChoice = &RouteSimpleAdvancedOptions_DisableWaf{msg}
-		return true, err
-	case 16: // waf_choice.waf
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.WafChoice = &RouteSimpleAdvancedOptions_Waf{msg}
-		return true, err
-	case 17: // waf_choice.waf_rule
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.WafChoice = &RouteSimpleAdvancedOptions_WafRule{msg}
-		return true, err
-	case 20: // spdy_choice.disable_spdy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.SpdyChoice = &RouteSimpleAdvancedOptions_DisableSpdy{msg}
-		return true, err
-	case 21: // spdy_choice.enable_spdy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.SpdyChoice = &RouteSimpleAdvancedOptions_EnableSpdy{msg}
-		return true, err
-	case 23: // websocket_choice.disable_web_socket_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.WebsocketChoice = &RouteSimpleAdvancedOptions_DisableWebSocketConfig{msg}
-		return true, err
-	case 24: // websocket_choice.web_socket_config
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_route.WebsocketConfigType)
-		err := b.DecodeMessage(msg)
-		m.WebsocketChoice = &RouteSimpleAdvancedOptions_WebSocketConfig{msg}
-		return true, err
-	case 26: // retry_policy_choice.default_retry_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.RetryPolicyChoice = &RouteSimpleAdvancedOptions_DefaultRetryPolicy{msg}
-		return true, err
-	case 27: // retry_policy_choice.retry_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.RetryPolicyType)
-		err := b.DecodeMessage(msg)
-		m.RetryPolicyChoice = &RouteSimpleAdvancedOptions_RetryPolicy{msg}
-		return true, err
-	case 30: // buffer_choice.common_buffering
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.BufferChoice = &RouteSimpleAdvancedOptions_CommonBuffering{msg}
-		return true, err
-	case 31: // buffer_choice.buffer_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.BufferConfigType)
-		err := b.DecodeMessage(msg)
-		m.BufferChoice = &RouteSimpleAdvancedOptions_BufferPolicy{msg}
-		return true, err
-	case 33: // mirroring_choice.disable_mirroring
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.MirroringChoice = &RouteSimpleAdvancedOptions_DisableMirroring{msg}
-		return true, err
-	case 34: // mirroring_choice.mirror_policy
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(MirrorPolicyType)
-		err := b.DecodeMessage(msg)
-		m.MirroringChoice = &RouteSimpleAdvancedOptions_MirrorPolicy{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _RouteSimpleAdvancedOptions_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*RouteSimpleAdvancedOptions)
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *RouteSimpleAdvancedOptions_CommonHashPolicy:
-		s := proto.Size(x.CommonHashPolicy)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *RouteSimpleAdvancedOptions_SpecificHashPolicy:
-		s := proto.Size(x.SpecificHashPolicy)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// rewrite_choice
-	switch x := m.RewriteChoice.(type) {
-	case *RouteSimpleAdvancedOptions_DisablePrefixRewrite:
-		s := proto.Size(x.DisablePrefixRewrite)
-		n += proto.SizeVarint(7<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *RouteSimpleAdvancedOptions_PrefixRewrite:
-		n += proto.SizeVarint(8<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.PrefixRewrite)))
-		n += len(x.PrefixRewrite)
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// waf_choice
-	switch x := m.WafChoice.(type) {
-	case *RouteSimpleAdvancedOptions_DisableWaf:
-		s := proto.Size(x.DisableWaf)
-		n += proto.SizeVarint(15<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *RouteSimpleAdvancedOptions_Waf:
-		s := proto.Size(x.Waf)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *RouteSimpleAdvancedOptions_WafRule:
-		s := proto.Size(x.WafRule)
-		n += proto.SizeVarint(17<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// spdy_choice
-	switch x := m.SpdyChoice.(type) {
-	case *RouteSimpleAdvancedOptions_DisableSpdy:
-		s := proto.Size(x.DisableSpdy)
-		n += proto.SizeVarint(20<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *RouteSimpleAdvancedOptions_EnableSpdy:
-		s := proto.Size(x.EnableSpdy)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// websocket_choice
-	switch x := m.WebsocketChoice.(type) {
-	case *RouteSimpleAdvancedOptions_DisableWebSocketConfig:
-		s := proto.Size(x.DisableWebSocketConfig)
-		n += proto.SizeVarint(23<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *RouteSimpleAdvancedOptions_WebSocketConfig:
-		s := proto.Size(x.WebSocketConfig)
-		n += proto.SizeVarint(24<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// retry_policy_choice
-	switch x := m.RetryPolicyChoice.(type) {
-	case *RouteSimpleAdvancedOptions_DefaultRetryPolicy:
-		s := proto.Size(x.DefaultRetryPolicy)
-		n += proto.SizeVarint(26<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *RouteSimpleAdvancedOptions_RetryPolicy:
-		s := proto.Size(x.RetryPolicy)
-		n += proto.SizeVarint(27<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// buffer_choice
-	switch x := m.BufferChoice.(type) {
-	case *RouteSimpleAdvancedOptions_CommonBuffering:
-		s := proto.Size(x.CommonBuffering)
-		n += proto.SizeVarint(30<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *RouteSimpleAdvancedOptions_BufferPolicy:
-		s := proto.Size(x.BufferPolicy)
-		n += proto.SizeVarint(31<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// mirroring_choice
-	switch x := m.MirroringChoice.(type) {
-	case *RouteSimpleAdvancedOptions_DisableMirroring:
-		s := proto.Size(x.DisableMirroring)
-		n += proto.SizeVarint(33<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *RouteSimpleAdvancedOptions_MirrorPolicy:
-		s := proto.Size(x.MirrorPolicy)
-		n += proto.SizeVarint(34<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
 // RouteTypeSimpleWithDefaultOriginPool
 //
 // x-displayName: "Simple Route"
@@ -1379,7 +345,7 @@ type RouteTypeSimpleWithDefaultOriginPool struct {
 func (m *RouteTypeSimpleWithDefaultOriginPool) Reset()      { *m = RouteTypeSimpleWithDefaultOriginPool{} }
 func (*RouteTypeSimpleWithDefaultOriginPool) ProtoMessage() {}
 func (*RouteTypeSimpleWithDefaultOriginPool) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{7}
+	return fileDescriptorTypes, []int{4}
 }
 
 type isRouteTypeSimpleWithDefaultOriginPool_HostRewriteParams interface {
@@ -1568,16 +534,11 @@ type RouteTypeSimple struct {
 	//	*RouteTypeSimple_HostRewrite
 	//	*RouteTypeSimple_DisableHostRewrite
 	HostRewriteParams isRouteTypeSimple_HostRewriteParams `protobuf_oneof:"HostRewriteParams"`
-	// Advanced Options
-	//
-	// x-displayName: "Advanced Options"
-	// Configure Advanced per route options
-	AdvancedOptions *RouteSimpleAdvancedOptions `protobuf:"bytes,8,opt,name=advanced_options,json=advancedOptions" json:"advanced_options,omitempty"`
 }
 
 func (m *RouteTypeSimple) Reset()                    { *m = RouteTypeSimple{} }
 func (*RouteTypeSimple) ProtoMessage()               {}
-func (*RouteTypeSimple) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
+func (*RouteTypeSimple) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
 
 type isRouteTypeSimple_HostRewriteParams interface {
 	isRouteTypeSimple_HostRewriteParams()
@@ -1645,13 +606,6 @@ func (m *RouteTypeSimple) GetHostRewrite() string {
 func (m *RouteTypeSimple) GetDisableHostRewrite() *ves_io_schema4.Empty {
 	if x, ok := m.GetHostRewriteParams().(*RouteTypeSimple_DisableHostRewrite); ok {
 		return x.DisableHostRewrite
-	}
-	return nil
-}
-
-func (m *RouteTypeSimple) GetAdvancedOptions() *RouteSimpleAdvancedOptions {
-	if m != nil {
-		return m.AdvancedOptions
 	}
 	return nil
 }
@@ -1769,7 +723,7 @@ type RouteTypeRedirect struct {
 
 func (m *RouteTypeRedirect) Reset()                    { *m = RouteTypeRedirect{} }
 func (*RouteTypeRedirect) ProtoMessage()               {}
-func (*RouteTypeRedirect) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
+func (*RouteTypeRedirect) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
 
 func (m *RouteTypeRedirect) GetPath() *ves_io_schema4.PathMatcherType {
 	if m != nil {
@@ -1816,7 +770,7 @@ type RouteTypeDirectResponse struct {
 
 func (m *RouteTypeDirectResponse) Reset()                    { *m = RouteTypeDirectResponse{} }
 func (*RouteTypeDirectResponse) ProtoMessage()               {}
-func (*RouteTypeDirectResponse) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
+func (*RouteTypeDirectResponse) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
 
 func (m *RouteTypeDirectResponse) GetPath() *ves_io_schema4.PathMatcherType {
 	if m != nil {
@@ -1853,7 +807,7 @@ type RouteTypeCustomRoute struct {
 
 func (m *RouteTypeCustomRoute) Reset()                    { *m = RouteTypeCustomRoute{} }
 func (*RouteTypeCustomRoute) ProtoMessage()               {}
-func (*RouteTypeCustomRoute) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
+func (*RouteTypeCustomRoute) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
 
 func (m *RouteTypeCustomRoute) GetRouteRef() *ves_io_schema_views.ObjectRefType {
 	if m != nil {
@@ -1883,7 +837,7 @@ type RouteType struct {
 
 func (m *RouteType) Reset()                    { *m = RouteType{} }
 func (*RouteType) ProtoMessage()               {}
-func (*RouteType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
+func (*RouteType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
 
 type isRouteType_Choice interface {
 	isRouteType_Choice()
@@ -2174,7 +1128,7 @@ type AdvancedOptionsType struct {
 
 func (m *AdvancedOptionsType) Reset()                    { *m = AdvancedOptionsType{} }
 func (*AdvancedOptionsType) ProtoMessage()               {}
-func (*AdvancedOptionsType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{13} }
+func (*AdvancedOptionsType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
 
 func (m *AdvancedOptionsType) GetRequestHeadersToAdd() []*ves_io_schema4.HeaderManipulationOptionType {
 	if m != nil {
@@ -2269,7 +1223,7 @@ type CustomIpAllowedList struct {
 
 func (m *CustomIpAllowedList) Reset()                    { *m = CustomIpAllowedList{} }
 func (*CustomIpAllowedList) ProtoMessage()               {}
-func (*CustomIpAllowedList) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{14} }
+func (*CustomIpAllowedList) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
 
 func (m *CustomIpAllowedList) GetRateLimiterAllowedPrefixes() []*ves_io_schema_views.ObjectRefType {
 	if m != nil {
@@ -2299,7 +1253,7 @@ type RateLimitConfigType struct {
 
 func (m *RateLimitConfigType) Reset()                    { *m = RateLimitConfigType{} }
 func (*RateLimitConfigType) ProtoMessage()               {}
-func (*RateLimitConfigType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{15} }
+func (*RateLimitConfigType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
 
 type isRateLimitConfigType_IpAllowedListChoice interface {
 	isRateLimitConfigType_IpAllowedListChoice()
@@ -2448,30 +1402,6 @@ func _RateLimitConfigType_OneofSizer(msg proto.Message) (n int) {
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
 	return n
-}
-
-// service policy list
-//
-// x-displayName: "Service Policy List"
-// List of service policies.
-type ServicePolicyList struct {
-	// policies
-	//
-	// x-displayName: "Policies"
-	// x-required
-	// An ordered list of references to service_policy objects.
-	Policies []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,rep,name=policies" json:"policies,omitempty"`
-}
-
-func (m *ServicePolicyList) Reset()                    { *m = ServicePolicyList{} }
-func (*ServicePolicyList) ProtoMessage()               {}
-func (*ServicePolicyList) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{16} }
-
-func (m *ServicePolicyList) GetPolicies() []*ves_io_schema_views.ObjectRefType {
-	if m != nil {
-		return m.Policies
-	}
-	return nil
 }
 
 // GlobalSpecType
@@ -2629,31 +1559,6 @@ type GlobalSpecType struct {
 	// x-displayName: "WAF Exclusion Rules"
 	// Rules that specify the match conditions and the corresponding WAF_RULE_IDs which should be excluded from WAF evaluation
 	WafExclusionRules []*ves_io_schema_policy.SimpleWafExclusionRule `protobuf:"bytes,33,rep,name=waf_exclusion_rules,json=wafExclusionRules" json:"waf_exclusion_rules,omitempty"`
-	// Service Policies
-	//
-	// x-displayName: "Service Policies"
-	// x-required
-	// Select service policies to be applied.
-	//
-	// Types that are valid to be assigned to ServicePolicyChoice:
-	//	*GlobalSpecType_ServicePoliciesFromNamespace
-	//	*GlobalSpecType_NoServicePolicies
-	//	*GlobalSpecType_ActiveServicePolicies
-	ServicePolicyChoice isGlobalSpecType_ServicePolicyChoice `protobuf_oneof:"service_policy_choice"`
-	// Load Balancing Control
-	//
-	// x-displayName: "Load Balancing Control"
-	// x-required
-	// Select how the request are Load balanced
-	//
-	// Types that are valid to be assigned to HashPolicyChoice:
-	//	*GlobalSpecType_RoundRobin
-	//	*GlobalSpecType_LeastActive
-	//	*GlobalSpecType_Random
-	//	*GlobalSpecType_SourceIpStickiness
-	//	*GlobalSpecType_CookieStickiness
-	//	*GlobalSpecType_RingHash
-	HashPolicyChoice isGlobalSpecType_HashPolicyChoice `protobuf_oneof:"hash_policy_choice"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
@@ -2689,7 +1594,7 @@ type GlobalSpecType struct {
 
 func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{17} }
+func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{13} }
 
 type isGlobalSpecType_LoadbalancerType interface {
 	isGlobalSpecType_LoadbalancerType()
@@ -2723,18 +1628,6 @@ type isGlobalSpecType_ChallengeType interface {
 }
 type isGlobalSpecType_RateLimitChoice interface {
 	isGlobalSpecType_RateLimitChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isGlobalSpecType_ServicePolicyChoice interface {
-	isGlobalSpecType_ServicePolicyChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isGlobalSpecType_HashPolicyChoice interface {
-	isGlobalSpecType_HashPolicyChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -2794,61 +1687,25 @@ type GlobalSpecType_DisableRateLimit struct {
 type GlobalSpecType_RateLimit struct {
 	RateLimit *RateLimitConfigType `protobuf:"bytes,23,opt,name=rate_limit,json=rateLimit,oneof"`
 }
-type GlobalSpecType_ServicePoliciesFromNamespace struct {
-	ServicePoliciesFromNamespace *ves_io_schema4.Empty `protobuf:"bytes,41,opt,name=service_policies_from_namespace,json=servicePoliciesFromNamespace,oneof"`
-}
-type GlobalSpecType_NoServicePolicies struct {
-	NoServicePolicies *ves_io_schema4.Empty `protobuf:"bytes,42,opt,name=no_service_policies,json=noServicePolicies,oneof"`
-}
-type GlobalSpecType_ActiveServicePolicies struct {
-	ActiveServicePolicies *ServicePolicyList `protobuf:"bytes,43,opt,name=active_service_policies,json=activeServicePolicies,oneof"`
-}
-type GlobalSpecType_RoundRobin struct {
-	RoundRobin *ves_io_schema4.Empty `protobuf:"bytes,45,opt,name=round_robin,json=roundRobin,oneof"`
-}
-type GlobalSpecType_LeastActive struct {
-	LeastActive *ves_io_schema4.Empty `protobuf:"bytes,46,opt,name=least_active,json=leastActive,oneof"`
-}
-type GlobalSpecType_Random struct {
-	Random *ves_io_schema4.Empty `protobuf:"bytes,47,opt,name=random,oneof"`
-}
-type GlobalSpecType_SourceIpStickiness struct {
-	SourceIpStickiness *ves_io_schema4.Empty `protobuf:"bytes,48,opt,name=source_ip_stickiness,json=sourceIpStickiness,oneof"`
-}
-type GlobalSpecType_CookieStickiness struct {
-	CookieStickiness *ves_io_schema_route.CookieForHashing `protobuf:"bytes,49,opt,name=cookie_stickiness,json=cookieStickiness,oneof"`
-}
-type GlobalSpecType_RingHash struct {
-	RingHash *HashPolicyListType `protobuf:"bytes,50,opt,name=ring_hash,json=ringHash,oneof"`
-}
 
-func (*GlobalSpecType_Http) isGlobalSpecType_LoadbalancerType()                            {}
-func (*GlobalSpecType_HttpsAutoCert) isGlobalSpecType_LoadbalancerType()                   {}
-func (*GlobalSpecType_Https) isGlobalSpecType_LoadbalancerType()                           {}
-func (*GlobalSpecType_DoNotAdvertise) isGlobalSpecType_AdvertiseChoice()                   {}
-func (*GlobalSpecType_AdvertiseOnPublicDefaultVip) isGlobalSpecType_AdvertiseChoice()      {}
-func (*GlobalSpecType_AdvertiseOnPublic) isGlobalSpecType_AdvertiseChoice()                {}
-func (*GlobalSpecType_AdvertiseCustom) isGlobalSpecType_AdvertiseChoice()                  {}
-func (*GlobalSpecType_AutoHostRewrite) isGlobalSpecType_HostRewriteParams()                {}
-func (*GlobalSpecType_HostRewrite) isGlobalSpecType_HostRewriteParams()                    {}
-func (*GlobalSpecType_DisableHostRewrite) isGlobalSpecType_HostRewriteParams()             {}
-func (*GlobalSpecType_DisableWaf) isGlobalSpecType_WafChoice()                             {}
-func (*GlobalSpecType_Waf) isGlobalSpecType_WafChoice()                                    {}
-func (*GlobalSpecType_WafRule) isGlobalSpecType_WafChoice()                                {}
-func (*GlobalSpecType_NoChallenge) isGlobalSpecType_ChallengeType()                        {}
-func (*GlobalSpecType_JsChallenge) isGlobalSpecType_ChallengeType()                        {}
-func (*GlobalSpecType_CaptchaChallenge) isGlobalSpecType_ChallengeType()                   {}
-func (*GlobalSpecType_DisableRateLimit) isGlobalSpecType_RateLimitChoice()                 {}
-func (*GlobalSpecType_RateLimit) isGlobalSpecType_RateLimitChoice()                        {}
-func (*GlobalSpecType_ServicePoliciesFromNamespace) isGlobalSpecType_ServicePolicyChoice() {}
-func (*GlobalSpecType_NoServicePolicies) isGlobalSpecType_ServicePolicyChoice()            {}
-func (*GlobalSpecType_ActiveServicePolicies) isGlobalSpecType_ServicePolicyChoice()        {}
-func (*GlobalSpecType_RoundRobin) isGlobalSpecType_HashPolicyChoice()                      {}
-func (*GlobalSpecType_LeastActive) isGlobalSpecType_HashPolicyChoice()                     {}
-func (*GlobalSpecType_Random) isGlobalSpecType_HashPolicyChoice()                          {}
-func (*GlobalSpecType_SourceIpStickiness) isGlobalSpecType_HashPolicyChoice()              {}
-func (*GlobalSpecType_CookieStickiness) isGlobalSpecType_HashPolicyChoice()                {}
-func (*GlobalSpecType_RingHash) isGlobalSpecType_HashPolicyChoice()                        {}
+func (*GlobalSpecType_Http) isGlobalSpecType_LoadbalancerType()                       {}
+func (*GlobalSpecType_HttpsAutoCert) isGlobalSpecType_LoadbalancerType()              {}
+func (*GlobalSpecType_Https) isGlobalSpecType_LoadbalancerType()                      {}
+func (*GlobalSpecType_DoNotAdvertise) isGlobalSpecType_AdvertiseChoice()              {}
+func (*GlobalSpecType_AdvertiseOnPublicDefaultVip) isGlobalSpecType_AdvertiseChoice() {}
+func (*GlobalSpecType_AdvertiseOnPublic) isGlobalSpecType_AdvertiseChoice()           {}
+func (*GlobalSpecType_AdvertiseCustom) isGlobalSpecType_AdvertiseChoice()             {}
+func (*GlobalSpecType_AutoHostRewrite) isGlobalSpecType_HostRewriteParams()           {}
+func (*GlobalSpecType_HostRewrite) isGlobalSpecType_HostRewriteParams()               {}
+func (*GlobalSpecType_DisableHostRewrite) isGlobalSpecType_HostRewriteParams()        {}
+func (*GlobalSpecType_DisableWaf) isGlobalSpecType_WafChoice()                        {}
+func (*GlobalSpecType_Waf) isGlobalSpecType_WafChoice()                               {}
+func (*GlobalSpecType_WafRule) isGlobalSpecType_WafChoice()                           {}
+func (*GlobalSpecType_NoChallenge) isGlobalSpecType_ChallengeType()                   {}
+func (*GlobalSpecType_JsChallenge) isGlobalSpecType_ChallengeType()                   {}
+func (*GlobalSpecType_CaptchaChallenge) isGlobalSpecType_ChallengeType()              {}
+func (*GlobalSpecType_DisableRateLimit) isGlobalSpecType_RateLimitChoice()            {}
+func (*GlobalSpecType_RateLimit) isGlobalSpecType_RateLimitChoice()                   {}
 
 func (m *GlobalSpecType) GetLoadbalancerType() isGlobalSpecType_LoadbalancerType {
 	if m != nil {
@@ -2883,18 +1740,6 @@ func (m *GlobalSpecType) GetChallengeType() isGlobalSpecType_ChallengeType {
 func (m *GlobalSpecType) GetRateLimitChoice() isGlobalSpecType_RateLimitChoice {
 	if m != nil {
 		return m.RateLimitChoice
-	}
-	return nil
-}
-func (m *GlobalSpecType) GetServicePolicyChoice() isGlobalSpecType_ServicePolicyChoice {
-	if m != nil {
-		return m.ServicePolicyChoice
-	}
-	return nil
-}
-func (m *GlobalSpecType) GetHashPolicyChoice() isGlobalSpecType_HashPolicyChoice {
-	if m != nil {
-		return m.HashPolicyChoice
 	}
 	return nil
 }
@@ -3088,69 +1933,6 @@ func (m *GlobalSpecType) GetWafExclusionRules() []*ves_io_schema_policy.SimpleWa
 	return nil
 }
 
-func (m *GlobalSpecType) GetServicePoliciesFromNamespace() *ves_io_schema4.Empty {
-	if x, ok := m.GetServicePolicyChoice().(*GlobalSpecType_ServicePoliciesFromNamespace); ok {
-		return x.ServicePoliciesFromNamespace
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetNoServicePolicies() *ves_io_schema4.Empty {
-	if x, ok := m.GetServicePolicyChoice().(*GlobalSpecType_NoServicePolicies); ok {
-		return x.NoServicePolicies
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetActiveServicePolicies() *ServicePolicyList {
-	if x, ok := m.GetServicePolicyChoice().(*GlobalSpecType_ActiveServicePolicies); ok {
-		return x.ActiveServicePolicies
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetRoundRobin() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*GlobalSpecType_RoundRobin); ok {
-		return x.RoundRobin
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetLeastActive() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*GlobalSpecType_LeastActive); ok {
-		return x.LeastActive
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetRandom() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*GlobalSpecType_Random); ok {
-		return x.Random
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetSourceIpStickiness() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*GlobalSpecType_SourceIpStickiness); ok {
-		return x.SourceIpStickiness
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetCookieStickiness() *ves_io_schema_route.CookieForHashing {
-	if x, ok := m.GetHashPolicyChoice().(*GlobalSpecType_CookieStickiness); ok {
-		return x.CookieStickiness
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetRingHash() *HashPolicyListType {
-	if x, ok := m.GetHashPolicyChoice().(*GlobalSpecType_RingHash); ok {
-		return x.RingHash
-	}
-	return nil
-}
-
 func (m *GlobalSpecType) GetViewInternal() *ves_io_schema_views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
@@ -3214,15 +1996,6 @@ func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 		(*GlobalSpecType_CaptchaChallenge)(nil),
 		(*GlobalSpecType_DisableRateLimit)(nil),
 		(*GlobalSpecType_RateLimit)(nil),
-		(*GlobalSpecType_ServicePoliciesFromNamespace)(nil),
-		(*GlobalSpecType_NoServicePolicies)(nil),
-		(*GlobalSpecType_ActiveServicePolicies)(nil),
-		(*GlobalSpecType_RoundRobin)(nil),
-		(*GlobalSpecType_LeastActive)(nil),
-		(*GlobalSpecType_Random)(nil),
-		(*GlobalSpecType_SourceIpStickiness)(nil),
-		(*GlobalSpecType_CookieStickiness)(nil),
-		(*GlobalSpecType_RingHash)(nil),
 	}
 }
 
@@ -3351,63 +2124,6 @@ func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("GlobalSpecType.RateLimitChoice has unexpected type %T", x)
-	}
-	// service_policy_choice
-	switch x := m.ServicePolicyChoice.(type) {
-	case *GlobalSpecType_ServicePoliciesFromNamespace:
-		_ = b.EncodeVarint(41<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ServicePoliciesFromNamespace); err != nil {
-			return err
-		}
-	case *GlobalSpecType_NoServicePolicies:
-		_ = b.EncodeVarint(42<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoServicePolicies); err != nil {
-			return err
-		}
-	case *GlobalSpecType_ActiveServicePolicies:
-		_ = b.EncodeVarint(43<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveServicePolicies); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.ServicePolicyChoice has unexpected type %T", x)
-	}
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *GlobalSpecType_RoundRobin:
-		_ = b.EncodeVarint(45<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RoundRobin); err != nil {
-			return err
-		}
-	case *GlobalSpecType_LeastActive:
-		_ = b.EncodeVarint(46<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LeastActive); err != nil {
-			return err
-		}
-	case *GlobalSpecType_Random:
-		_ = b.EncodeVarint(47<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Random); err != nil {
-			return err
-		}
-	case *GlobalSpecType_SourceIpStickiness:
-		_ = b.EncodeVarint(48<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SourceIpStickiness); err != nil {
-			return err
-		}
-	case *GlobalSpecType_CookieStickiness:
-		_ = b.EncodeVarint(49<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CookieStickiness); err != nil {
-			return err
-		}
-	case *GlobalSpecType_RingHash:
-		_ = b.EncodeVarint(50<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RingHash); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GlobalSpecType.HashPolicyChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -3558,78 +2274,6 @@ func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto
 		err := b.DecodeMessage(msg)
 		m.RateLimitChoice = &GlobalSpecType_RateLimit{msg}
 		return true, err
-	case 41: // service_policy_choice.service_policies_from_namespace
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServicePolicyChoice = &GlobalSpecType_ServicePoliciesFromNamespace{msg}
-		return true, err
-	case 42: // service_policy_choice.no_service_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServicePolicyChoice = &GlobalSpecType_NoServicePolicies{msg}
-		return true, err
-	case 43: // service_policy_choice.active_service_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ServicePolicyList)
-		err := b.DecodeMessage(msg)
-		m.ServicePolicyChoice = &GlobalSpecType_ActiveServicePolicies{msg}
-		return true, err
-	case 45: // hash_policy_choice.round_robin
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GlobalSpecType_RoundRobin{msg}
-		return true, err
-	case 46: // hash_policy_choice.least_active
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GlobalSpecType_LeastActive{msg}
-		return true, err
-	case 47: // hash_policy_choice.random
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GlobalSpecType_Random{msg}
-		return true, err
-	case 48: // hash_policy_choice.source_ip_stickiness
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GlobalSpecType_SourceIpStickiness{msg}
-		return true, err
-	case 49: // hash_policy_choice.cookie_stickiness
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_route.CookieForHashing)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GlobalSpecType_CookieStickiness{msg}
-		return true, err
-	case 50: // hash_policy_choice.ring_hash
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(HashPolicyListType)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GlobalSpecType_RingHash{msg}
-		return true, err
 	default:
 		return false, nil
 	}
@@ -3762,63 +2406,6 @@ func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
-	// service_policy_choice
-	switch x := m.ServicePolicyChoice.(type) {
-	case *GlobalSpecType_ServicePoliciesFromNamespace:
-		s := proto.Size(x.ServicePoliciesFromNamespace)
-		n += proto.SizeVarint(41<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_NoServicePolicies:
-		s := proto.Size(x.NoServicePolicies)
-		n += proto.SizeVarint(42<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_ActiveServicePolicies:
-		s := proto.Size(x.ActiveServicePolicies)
-		n += proto.SizeVarint(43<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *GlobalSpecType_RoundRobin:
-		s := proto.Size(x.RoundRobin)
-		n += proto.SizeVarint(45<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_LeastActive:
-		s := proto.Size(x.LeastActive)
-		n += proto.SizeVarint(46<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_Random:
-		s := proto.Size(x.Random)
-		n += proto.SizeVarint(47<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_SourceIpStickiness:
-		s := proto.Size(x.SourceIpStickiness)
-		n += proto.SizeVarint(48<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_CookieStickiness:
-		s := proto.Size(x.CookieStickiness)
-		n += proto.SizeVarint(49<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GlobalSpecType_RingHash:
-		s := proto.Size(x.RingHash)
-		n += proto.SizeVarint(50<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
 	return n
 }
 
@@ -3861,24 +2448,11 @@ type CreateSpecType struct {
 	RateLimitChoice         isCreateSpecType_RateLimitChoice               `protobuf_oneof:"rate_limit_choice"`
 	MaliciousUserMitigation *ves_io_schema_views.ObjectRefType             `protobuf:"bytes,32,opt,name=malicious_user_mitigation,json=maliciousUserMitigation" json:"malicious_user_mitigation,omitempty"`
 	WafExclusionRules       []*ves_io_schema_policy.SimpleWafExclusionRule `protobuf:"bytes,33,rep,name=waf_exclusion_rules,json=wafExclusionRules" json:"waf_exclusion_rules,omitempty"`
-	// Types that are valid to be assigned to ServicePolicyChoice:
-	//	*CreateSpecType_ServicePoliciesFromNamespace
-	//	*CreateSpecType_NoServicePolicies
-	//	*CreateSpecType_ActiveServicePolicies
-	ServicePolicyChoice isCreateSpecType_ServicePolicyChoice `protobuf_oneof:"service_policy_choice"`
-	// Types that are valid to be assigned to HashPolicyChoice:
-	//	*CreateSpecType_RoundRobin
-	//	*CreateSpecType_LeastActive
-	//	*CreateSpecType_Random
-	//	*CreateSpecType_SourceIpStickiness
-	//	*CreateSpecType_CookieStickiness
-	//	*CreateSpecType_RingHash
-	HashPolicyChoice isCreateSpecType_HashPolicyChoice `protobuf_oneof:"hash_policy_choice"`
 }
 
 func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{18} }
+func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{14} }
 
 type isCreateSpecType_LoadbalancerType interface {
 	isCreateSpecType_LoadbalancerType()
@@ -3906,18 +2480,6 @@ type isCreateSpecType_ChallengeType interface {
 }
 type isCreateSpecType_RateLimitChoice interface {
 	isCreateSpecType_RateLimitChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isCreateSpecType_ServicePolicyChoice interface {
-	isCreateSpecType_ServicePolicyChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isCreateSpecType_HashPolicyChoice interface {
-	isCreateSpecType_HashPolicyChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -3968,58 +2530,22 @@ type CreateSpecType_DisableRateLimit struct {
 type CreateSpecType_RateLimit struct {
 	RateLimit *RateLimitConfigType `protobuf:"bytes,23,opt,name=rate_limit,json=rateLimit,oneof"`
 }
-type CreateSpecType_ServicePoliciesFromNamespace struct {
-	ServicePoliciesFromNamespace *ves_io_schema4.Empty `protobuf:"bytes,41,opt,name=service_policies_from_namespace,json=servicePoliciesFromNamespace,oneof"`
-}
-type CreateSpecType_NoServicePolicies struct {
-	NoServicePolicies *ves_io_schema4.Empty `protobuf:"bytes,42,opt,name=no_service_policies,json=noServicePolicies,oneof"`
-}
-type CreateSpecType_ActiveServicePolicies struct {
-	ActiveServicePolicies *ServicePolicyList `protobuf:"bytes,43,opt,name=active_service_policies,json=activeServicePolicies,oneof"`
-}
-type CreateSpecType_RoundRobin struct {
-	RoundRobin *ves_io_schema4.Empty `protobuf:"bytes,45,opt,name=round_robin,json=roundRobin,oneof"`
-}
-type CreateSpecType_LeastActive struct {
-	LeastActive *ves_io_schema4.Empty `protobuf:"bytes,46,opt,name=least_active,json=leastActive,oneof"`
-}
-type CreateSpecType_Random struct {
-	Random *ves_io_schema4.Empty `protobuf:"bytes,47,opt,name=random,oneof"`
-}
-type CreateSpecType_SourceIpStickiness struct {
-	SourceIpStickiness *ves_io_schema4.Empty `protobuf:"bytes,48,opt,name=source_ip_stickiness,json=sourceIpStickiness,oneof"`
-}
-type CreateSpecType_CookieStickiness struct {
-	CookieStickiness *ves_io_schema_route.CookieForHashing `protobuf:"bytes,49,opt,name=cookie_stickiness,json=cookieStickiness,oneof"`
-}
-type CreateSpecType_RingHash struct {
-	RingHash *HashPolicyListType `protobuf:"bytes,50,opt,name=ring_hash,json=ringHash,oneof"`
-}
 
-func (*CreateSpecType_Http) isCreateSpecType_LoadbalancerType()                            {}
-func (*CreateSpecType_HttpsAutoCert) isCreateSpecType_LoadbalancerType()                   {}
-func (*CreateSpecType_Https) isCreateSpecType_LoadbalancerType()                           {}
-func (*CreateSpecType_DoNotAdvertise) isCreateSpecType_AdvertiseChoice()                   {}
-func (*CreateSpecType_AdvertiseOnPublicDefaultVip) isCreateSpecType_AdvertiseChoice()      {}
-func (*CreateSpecType_AdvertiseOnPublic) isCreateSpecType_AdvertiseChoice()                {}
-func (*CreateSpecType_AdvertiseCustom) isCreateSpecType_AdvertiseChoice()                  {}
-func (*CreateSpecType_DisableWaf) isCreateSpecType_WafChoice()                             {}
-func (*CreateSpecType_Waf) isCreateSpecType_WafChoice()                                    {}
-func (*CreateSpecType_WafRule) isCreateSpecType_WafChoice()                                {}
-func (*CreateSpecType_NoChallenge) isCreateSpecType_ChallengeType()                        {}
-func (*CreateSpecType_JsChallenge) isCreateSpecType_ChallengeType()                        {}
-func (*CreateSpecType_CaptchaChallenge) isCreateSpecType_ChallengeType()                   {}
-func (*CreateSpecType_DisableRateLimit) isCreateSpecType_RateLimitChoice()                 {}
-func (*CreateSpecType_RateLimit) isCreateSpecType_RateLimitChoice()                        {}
-func (*CreateSpecType_ServicePoliciesFromNamespace) isCreateSpecType_ServicePolicyChoice() {}
-func (*CreateSpecType_NoServicePolicies) isCreateSpecType_ServicePolicyChoice()            {}
-func (*CreateSpecType_ActiveServicePolicies) isCreateSpecType_ServicePolicyChoice()        {}
-func (*CreateSpecType_RoundRobin) isCreateSpecType_HashPolicyChoice()                      {}
-func (*CreateSpecType_LeastActive) isCreateSpecType_HashPolicyChoice()                     {}
-func (*CreateSpecType_Random) isCreateSpecType_HashPolicyChoice()                          {}
-func (*CreateSpecType_SourceIpStickiness) isCreateSpecType_HashPolicyChoice()              {}
-func (*CreateSpecType_CookieStickiness) isCreateSpecType_HashPolicyChoice()                {}
-func (*CreateSpecType_RingHash) isCreateSpecType_HashPolicyChoice()                        {}
+func (*CreateSpecType_Http) isCreateSpecType_LoadbalancerType()                       {}
+func (*CreateSpecType_HttpsAutoCert) isCreateSpecType_LoadbalancerType()              {}
+func (*CreateSpecType_Https) isCreateSpecType_LoadbalancerType()                      {}
+func (*CreateSpecType_DoNotAdvertise) isCreateSpecType_AdvertiseChoice()              {}
+func (*CreateSpecType_AdvertiseOnPublicDefaultVip) isCreateSpecType_AdvertiseChoice() {}
+func (*CreateSpecType_AdvertiseOnPublic) isCreateSpecType_AdvertiseChoice()           {}
+func (*CreateSpecType_AdvertiseCustom) isCreateSpecType_AdvertiseChoice()             {}
+func (*CreateSpecType_DisableWaf) isCreateSpecType_WafChoice()                        {}
+func (*CreateSpecType_Waf) isCreateSpecType_WafChoice()                               {}
+func (*CreateSpecType_WafRule) isCreateSpecType_WafChoice()                           {}
+func (*CreateSpecType_NoChallenge) isCreateSpecType_ChallengeType()                   {}
+func (*CreateSpecType_JsChallenge) isCreateSpecType_ChallengeType()                   {}
+func (*CreateSpecType_CaptchaChallenge) isCreateSpecType_ChallengeType()              {}
+func (*CreateSpecType_DisableRateLimit) isCreateSpecType_RateLimitChoice()            {}
+func (*CreateSpecType_RateLimit) isCreateSpecType_RateLimitChoice()                   {}
 
 func (m *CreateSpecType) GetLoadbalancerType() isCreateSpecType_LoadbalancerType {
 	if m != nil {
@@ -4048,18 +2574,6 @@ func (m *CreateSpecType) GetChallengeType() isCreateSpecType_ChallengeType {
 func (m *CreateSpecType) GetRateLimitChoice() isCreateSpecType_RateLimitChoice {
 	if m != nil {
 		return m.RateLimitChoice
-	}
-	return nil
-}
-func (m *CreateSpecType) GetServicePolicyChoice() isCreateSpecType_ServicePolicyChoice {
-	if m != nil {
-		return m.ServicePolicyChoice
-	}
-	return nil
-}
-func (m *CreateSpecType) GetHashPolicyChoice() isCreateSpecType_HashPolicyChoice {
-	if m != nil {
-		return m.HashPolicyChoice
 	}
 	return nil
 }
@@ -4232,69 +2746,6 @@ func (m *CreateSpecType) GetWafExclusionRules() []*ves_io_schema_policy.SimpleWa
 	return nil
 }
 
-func (m *CreateSpecType) GetServicePoliciesFromNamespace() *ves_io_schema4.Empty {
-	if x, ok := m.GetServicePolicyChoice().(*CreateSpecType_ServicePoliciesFromNamespace); ok {
-		return x.ServicePoliciesFromNamespace
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetNoServicePolicies() *ves_io_schema4.Empty {
-	if x, ok := m.GetServicePolicyChoice().(*CreateSpecType_NoServicePolicies); ok {
-		return x.NoServicePolicies
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetActiveServicePolicies() *ServicePolicyList {
-	if x, ok := m.GetServicePolicyChoice().(*CreateSpecType_ActiveServicePolicies); ok {
-		return x.ActiveServicePolicies
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetRoundRobin() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*CreateSpecType_RoundRobin); ok {
-		return x.RoundRobin
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetLeastActive() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*CreateSpecType_LeastActive); ok {
-		return x.LeastActive
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetRandom() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*CreateSpecType_Random); ok {
-		return x.Random
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetSourceIpStickiness() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*CreateSpecType_SourceIpStickiness); ok {
-		return x.SourceIpStickiness
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetCookieStickiness() *ves_io_schema_route.CookieForHashing {
-	if x, ok := m.GetHashPolicyChoice().(*CreateSpecType_CookieStickiness); ok {
-		return x.CookieStickiness
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetRingHash() *HashPolicyListType {
-	if x, ok := m.GetHashPolicyChoice().(*CreateSpecType_RingHash); ok {
-		return x.RingHash
-	}
-	return nil
-}
-
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
@@ -4313,15 +2764,6 @@ func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 		(*CreateSpecType_CaptchaChallenge)(nil),
 		(*CreateSpecType_DisableRateLimit)(nil),
 		(*CreateSpecType_RateLimit)(nil),
-		(*CreateSpecType_ServicePoliciesFromNamespace)(nil),
-		(*CreateSpecType_NoServicePolicies)(nil),
-		(*CreateSpecType_ActiveServicePolicies)(nil),
-		(*CreateSpecType_RoundRobin)(nil),
-		(*CreateSpecType_LeastActive)(nil),
-		(*CreateSpecType_Random)(nil),
-		(*CreateSpecType_SourceIpStickiness)(nil),
-		(*CreateSpecType_CookieStickiness)(nil),
-		(*CreateSpecType_RingHash)(nil),
 	}
 }
 
@@ -4431,63 +2873,6 @@ func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("CreateSpecType.RateLimitChoice has unexpected type %T", x)
-	}
-	// service_policy_choice
-	switch x := m.ServicePolicyChoice.(type) {
-	case *CreateSpecType_ServicePoliciesFromNamespace:
-		_ = b.EncodeVarint(41<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ServicePoliciesFromNamespace); err != nil {
-			return err
-		}
-	case *CreateSpecType_NoServicePolicies:
-		_ = b.EncodeVarint(42<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoServicePolicies); err != nil {
-			return err
-		}
-	case *CreateSpecType_ActiveServicePolicies:
-		_ = b.EncodeVarint(43<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveServicePolicies); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.ServicePolicyChoice has unexpected type %T", x)
-	}
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *CreateSpecType_RoundRobin:
-		_ = b.EncodeVarint(45<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RoundRobin); err != nil {
-			return err
-		}
-	case *CreateSpecType_LeastActive:
-		_ = b.EncodeVarint(46<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LeastActive); err != nil {
-			return err
-		}
-	case *CreateSpecType_Random:
-		_ = b.EncodeVarint(47<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Random); err != nil {
-			return err
-		}
-	case *CreateSpecType_SourceIpStickiness:
-		_ = b.EncodeVarint(48<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SourceIpStickiness); err != nil {
-			return err
-		}
-	case *CreateSpecType_CookieStickiness:
-		_ = b.EncodeVarint(49<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CookieStickiness); err != nil {
-			return err
-		}
-	case *CreateSpecType_RingHash:
-		_ = b.EncodeVarint(50<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RingHash); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CreateSpecType.HashPolicyChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -4615,78 +3000,6 @@ func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto
 		err := b.DecodeMessage(msg)
 		m.RateLimitChoice = &CreateSpecType_RateLimit{msg}
 		return true, err
-	case 41: // service_policy_choice.service_policies_from_namespace
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServicePolicyChoice = &CreateSpecType_ServicePoliciesFromNamespace{msg}
-		return true, err
-	case 42: // service_policy_choice.no_service_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServicePolicyChoice = &CreateSpecType_NoServicePolicies{msg}
-		return true, err
-	case 43: // service_policy_choice.active_service_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ServicePolicyList)
-		err := b.DecodeMessage(msg)
-		m.ServicePolicyChoice = &CreateSpecType_ActiveServicePolicies{msg}
-		return true, err
-	case 45: // hash_policy_choice.round_robin
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &CreateSpecType_RoundRobin{msg}
-		return true, err
-	case 46: // hash_policy_choice.least_active
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &CreateSpecType_LeastActive{msg}
-		return true, err
-	case 47: // hash_policy_choice.random
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &CreateSpecType_Random{msg}
-		return true, err
-	case 48: // hash_policy_choice.source_ip_stickiness
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &CreateSpecType_SourceIpStickiness{msg}
-		return true, err
-	case 49: // hash_policy_choice.cookie_stickiness
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_route.CookieForHashing)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &CreateSpecType_CookieStickiness{msg}
-		return true, err
-	case 50: // hash_policy_choice.ring_hash
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(HashPolicyListType)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &CreateSpecType_RingHash{msg}
-		return true, err
 	default:
 		return false, nil
 	}
@@ -4799,63 +3112,6 @@ func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
-	// service_policy_choice
-	switch x := m.ServicePolicyChoice.(type) {
-	case *CreateSpecType_ServicePoliciesFromNamespace:
-		s := proto.Size(x.ServicePoliciesFromNamespace)
-		n += proto.SizeVarint(41<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_NoServicePolicies:
-		s := proto.Size(x.NoServicePolicies)
-		n += proto.SizeVarint(42<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_ActiveServicePolicies:
-		s := proto.Size(x.ActiveServicePolicies)
-		n += proto.SizeVarint(43<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *CreateSpecType_RoundRobin:
-		s := proto.Size(x.RoundRobin)
-		n += proto.SizeVarint(45<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_LeastActive:
-		s := proto.Size(x.LeastActive)
-		n += proto.SizeVarint(46<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_Random:
-		s := proto.Size(x.Random)
-		n += proto.SizeVarint(47<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_SourceIpStickiness:
-		s := proto.Size(x.SourceIpStickiness)
-		n += proto.SizeVarint(48<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_CookieStickiness:
-		s := proto.Size(x.CookieStickiness)
-		n += proto.SizeVarint(49<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *CreateSpecType_RingHash:
-		s := proto.Size(x.RingHash)
-		n += proto.SizeVarint(50<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
 	return n
 }
 
@@ -4898,24 +3154,11 @@ type ReplaceSpecType struct {
 	RateLimitChoice         isReplaceSpecType_RateLimitChoice              `protobuf_oneof:"rate_limit_choice"`
 	MaliciousUserMitigation *ves_io_schema_views.ObjectRefType             `protobuf:"bytes,32,opt,name=malicious_user_mitigation,json=maliciousUserMitigation" json:"malicious_user_mitigation,omitempty"`
 	WafExclusionRules       []*ves_io_schema_policy.SimpleWafExclusionRule `protobuf:"bytes,33,rep,name=waf_exclusion_rules,json=wafExclusionRules" json:"waf_exclusion_rules,omitempty"`
-	// Types that are valid to be assigned to ServicePolicyChoice:
-	//	*ReplaceSpecType_ServicePoliciesFromNamespace
-	//	*ReplaceSpecType_NoServicePolicies
-	//	*ReplaceSpecType_ActiveServicePolicies
-	ServicePolicyChoice isReplaceSpecType_ServicePolicyChoice `protobuf_oneof:"service_policy_choice"`
-	// Types that are valid to be assigned to HashPolicyChoice:
-	//	*ReplaceSpecType_RoundRobin
-	//	*ReplaceSpecType_LeastActive
-	//	*ReplaceSpecType_Random
-	//	*ReplaceSpecType_SourceIpStickiness
-	//	*ReplaceSpecType_CookieStickiness
-	//	*ReplaceSpecType_RingHash
-	HashPolicyChoice isReplaceSpecType_HashPolicyChoice `protobuf_oneof:"hash_policy_choice"`
 }
 
 func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{19} }
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{15} }
 
 type isReplaceSpecType_LoadbalancerType interface {
 	isReplaceSpecType_LoadbalancerType()
@@ -4943,18 +3186,6 @@ type isReplaceSpecType_ChallengeType interface {
 }
 type isReplaceSpecType_RateLimitChoice interface {
 	isReplaceSpecType_RateLimitChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isReplaceSpecType_ServicePolicyChoice interface {
-	isReplaceSpecType_ServicePolicyChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isReplaceSpecType_HashPolicyChoice interface {
-	isReplaceSpecType_HashPolicyChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -5005,58 +3236,22 @@ type ReplaceSpecType_DisableRateLimit struct {
 type ReplaceSpecType_RateLimit struct {
 	RateLimit *RateLimitConfigType `protobuf:"bytes,23,opt,name=rate_limit,json=rateLimit,oneof"`
 }
-type ReplaceSpecType_ServicePoliciesFromNamespace struct {
-	ServicePoliciesFromNamespace *ves_io_schema4.Empty `protobuf:"bytes,41,opt,name=service_policies_from_namespace,json=servicePoliciesFromNamespace,oneof"`
-}
-type ReplaceSpecType_NoServicePolicies struct {
-	NoServicePolicies *ves_io_schema4.Empty `protobuf:"bytes,42,opt,name=no_service_policies,json=noServicePolicies,oneof"`
-}
-type ReplaceSpecType_ActiveServicePolicies struct {
-	ActiveServicePolicies *ServicePolicyList `protobuf:"bytes,43,opt,name=active_service_policies,json=activeServicePolicies,oneof"`
-}
-type ReplaceSpecType_RoundRobin struct {
-	RoundRobin *ves_io_schema4.Empty `protobuf:"bytes,45,opt,name=round_robin,json=roundRobin,oneof"`
-}
-type ReplaceSpecType_LeastActive struct {
-	LeastActive *ves_io_schema4.Empty `protobuf:"bytes,46,opt,name=least_active,json=leastActive,oneof"`
-}
-type ReplaceSpecType_Random struct {
-	Random *ves_io_schema4.Empty `protobuf:"bytes,47,opt,name=random,oneof"`
-}
-type ReplaceSpecType_SourceIpStickiness struct {
-	SourceIpStickiness *ves_io_schema4.Empty `protobuf:"bytes,48,opt,name=source_ip_stickiness,json=sourceIpStickiness,oneof"`
-}
-type ReplaceSpecType_CookieStickiness struct {
-	CookieStickiness *ves_io_schema_route.CookieForHashing `protobuf:"bytes,49,opt,name=cookie_stickiness,json=cookieStickiness,oneof"`
-}
-type ReplaceSpecType_RingHash struct {
-	RingHash *HashPolicyListType `protobuf:"bytes,50,opt,name=ring_hash,json=ringHash,oneof"`
-}
 
-func (*ReplaceSpecType_Http) isReplaceSpecType_LoadbalancerType()                            {}
-func (*ReplaceSpecType_HttpsAutoCert) isReplaceSpecType_LoadbalancerType()                   {}
-func (*ReplaceSpecType_Https) isReplaceSpecType_LoadbalancerType()                           {}
-func (*ReplaceSpecType_DoNotAdvertise) isReplaceSpecType_AdvertiseChoice()                   {}
-func (*ReplaceSpecType_AdvertiseOnPublicDefaultVip) isReplaceSpecType_AdvertiseChoice()      {}
-func (*ReplaceSpecType_AdvertiseOnPublic) isReplaceSpecType_AdvertiseChoice()                {}
-func (*ReplaceSpecType_AdvertiseCustom) isReplaceSpecType_AdvertiseChoice()                  {}
-func (*ReplaceSpecType_DisableWaf) isReplaceSpecType_WafChoice()                             {}
-func (*ReplaceSpecType_Waf) isReplaceSpecType_WafChoice()                                    {}
-func (*ReplaceSpecType_WafRule) isReplaceSpecType_WafChoice()                                {}
-func (*ReplaceSpecType_NoChallenge) isReplaceSpecType_ChallengeType()                        {}
-func (*ReplaceSpecType_JsChallenge) isReplaceSpecType_ChallengeType()                        {}
-func (*ReplaceSpecType_CaptchaChallenge) isReplaceSpecType_ChallengeType()                   {}
-func (*ReplaceSpecType_DisableRateLimit) isReplaceSpecType_RateLimitChoice()                 {}
-func (*ReplaceSpecType_RateLimit) isReplaceSpecType_RateLimitChoice()                        {}
-func (*ReplaceSpecType_ServicePoliciesFromNamespace) isReplaceSpecType_ServicePolicyChoice() {}
-func (*ReplaceSpecType_NoServicePolicies) isReplaceSpecType_ServicePolicyChoice()            {}
-func (*ReplaceSpecType_ActiveServicePolicies) isReplaceSpecType_ServicePolicyChoice()        {}
-func (*ReplaceSpecType_RoundRobin) isReplaceSpecType_HashPolicyChoice()                      {}
-func (*ReplaceSpecType_LeastActive) isReplaceSpecType_HashPolicyChoice()                     {}
-func (*ReplaceSpecType_Random) isReplaceSpecType_HashPolicyChoice()                          {}
-func (*ReplaceSpecType_SourceIpStickiness) isReplaceSpecType_HashPolicyChoice()              {}
-func (*ReplaceSpecType_CookieStickiness) isReplaceSpecType_HashPolicyChoice()                {}
-func (*ReplaceSpecType_RingHash) isReplaceSpecType_HashPolicyChoice()                        {}
+func (*ReplaceSpecType_Http) isReplaceSpecType_LoadbalancerType()                       {}
+func (*ReplaceSpecType_HttpsAutoCert) isReplaceSpecType_LoadbalancerType()              {}
+func (*ReplaceSpecType_Https) isReplaceSpecType_LoadbalancerType()                      {}
+func (*ReplaceSpecType_DoNotAdvertise) isReplaceSpecType_AdvertiseChoice()              {}
+func (*ReplaceSpecType_AdvertiseOnPublicDefaultVip) isReplaceSpecType_AdvertiseChoice() {}
+func (*ReplaceSpecType_AdvertiseOnPublic) isReplaceSpecType_AdvertiseChoice()           {}
+func (*ReplaceSpecType_AdvertiseCustom) isReplaceSpecType_AdvertiseChoice()             {}
+func (*ReplaceSpecType_DisableWaf) isReplaceSpecType_WafChoice()                        {}
+func (*ReplaceSpecType_Waf) isReplaceSpecType_WafChoice()                               {}
+func (*ReplaceSpecType_WafRule) isReplaceSpecType_WafChoice()                           {}
+func (*ReplaceSpecType_NoChallenge) isReplaceSpecType_ChallengeType()                   {}
+func (*ReplaceSpecType_JsChallenge) isReplaceSpecType_ChallengeType()                   {}
+func (*ReplaceSpecType_CaptchaChallenge) isReplaceSpecType_ChallengeType()              {}
+func (*ReplaceSpecType_DisableRateLimit) isReplaceSpecType_RateLimitChoice()            {}
+func (*ReplaceSpecType_RateLimit) isReplaceSpecType_RateLimitChoice()                   {}
 
 func (m *ReplaceSpecType) GetLoadbalancerType() isReplaceSpecType_LoadbalancerType {
 	if m != nil {
@@ -5085,18 +3280,6 @@ func (m *ReplaceSpecType) GetChallengeType() isReplaceSpecType_ChallengeType {
 func (m *ReplaceSpecType) GetRateLimitChoice() isReplaceSpecType_RateLimitChoice {
 	if m != nil {
 		return m.RateLimitChoice
-	}
-	return nil
-}
-func (m *ReplaceSpecType) GetServicePolicyChoice() isReplaceSpecType_ServicePolicyChoice {
-	if m != nil {
-		return m.ServicePolicyChoice
-	}
-	return nil
-}
-func (m *ReplaceSpecType) GetHashPolicyChoice() isReplaceSpecType_HashPolicyChoice {
-	if m != nil {
-		return m.HashPolicyChoice
 	}
 	return nil
 }
@@ -5269,69 +3452,6 @@ func (m *ReplaceSpecType) GetWafExclusionRules() []*ves_io_schema_policy.SimpleW
 	return nil
 }
 
-func (m *ReplaceSpecType) GetServicePoliciesFromNamespace() *ves_io_schema4.Empty {
-	if x, ok := m.GetServicePolicyChoice().(*ReplaceSpecType_ServicePoliciesFromNamespace); ok {
-		return x.ServicePoliciesFromNamespace
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetNoServicePolicies() *ves_io_schema4.Empty {
-	if x, ok := m.GetServicePolicyChoice().(*ReplaceSpecType_NoServicePolicies); ok {
-		return x.NoServicePolicies
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetActiveServicePolicies() *ServicePolicyList {
-	if x, ok := m.GetServicePolicyChoice().(*ReplaceSpecType_ActiveServicePolicies); ok {
-		return x.ActiveServicePolicies
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetRoundRobin() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*ReplaceSpecType_RoundRobin); ok {
-		return x.RoundRobin
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetLeastActive() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*ReplaceSpecType_LeastActive); ok {
-		return x.LeastActive
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetRandom() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*ReplaceSpecType_Random); ok {
-		return x.Random
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetSourceIpStickiness() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*ReplaceSpecType_SourceIpStickiness); ok {
-		return x.SourceIpStickiness
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetCookieStickiness() *ves_io_schema_route.CookieForHashing {
-	if x, ok := m.GetHashPolicyChoice().(*ReplaceSpecType_CookieStickiness); ok {
-		return x.CookieStickiness
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetRingHash() *HashPolicyListType {
-	if x, ok := m.GetHashPolicyChoice().(*ReplaceSpecType_RingHash); ok {
-		return x.RingHash
-	}
-	return nil
-}
-
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
@@ -5350,15 +3470,6 @@ func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffe
 		(*ReplaceSpecType_CaptchaChallenge)(nil),
 		(*ReplaceSpecType_DisableRateLimit)(nil),
 		(*ReplaceSpecType_RateLimit)(nil),
-		(*ReplaceSpecType_ServicePoliciesFromNamespace)(nil),
-		(*ReplaceSpecType_NoServicePolicies)(nil),
-		(*ReplaceSpecType_ActiveServicePolicies)(nil),
-		(*ReplaceSpecType_RoundRobin)(nil),
-		(*ReplaceSpecType_LeastActive)(nil),
-		(*ReplaceSpecType_Random)(nil),
-		(*ReplaceSpecType_SourceIpStickiness)(nil),
-		(*ReplaceSpecType_CookieStickiness)(nil),
-		(*ReplaceSpecType_RingHash)(nil),
 	}
 }
 
@@ -5468,63 +3579,6 @@ func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("ReplaceSpecType.RateLimitChoice has unexpected type %T", x)
-	}
-	// service_policy_choice
-	switch x := m.ServicePolicyChoice.(type) {
-	case *ReplaceSpecType_ServicePoliciesFromNamespace:
-		_ = b.EncodeVarint(41<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ServicePoliciesFromNamespace); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_NoServicePolicies:
-		_ = b.EncodeVarint(42<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoServicePolicies); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_ActiveServicePolicies:
-		_ = b.EncodeVarint(43<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveServicePolicies); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.ServicePolicyChoice has unexpected type %T", x)
-	}
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *ReplaceSpecType_RoundRobin:
-		_ = b.EncodeVarint(45<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RoundRobin); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_LeastActive:
-		_ = b.EncodeVarint(46<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LeastActive); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_Random:
-		_ = b.EncodeVarint(47<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Random); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_SourceIpStickiness:
-		_ = b.EncodeVarint(48<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SourceIpStickiness); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_CookieStickiness:
-		_ = b.EncodeVarint(49<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CookieStickiness); err != nil {
-			return err
-		}
-	case *ReplaceSpecType_RingHash:
-		_ = b.EncodeVarint(50<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RingHash); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("ReplaceSpecType.HashPolicyChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -5652,78 +3706,6 @@ func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *prot
 		err := b.DecodeMessage(msg)
 		m.RateLimitChoice = &ReplaceSpecType_RateLimit{msg}
 		return true, err
-	case 41: // service_policy_choice.service_policies_from_namespace
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServicePolicyChoice = &ReplaceSpecType_ServicePoliciesFromNamespace{msg}
-		return true, err
-	case 42: // service_policy_choice.no_service_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServicePolicyChoice = &ReplaceSpecType_NoServicePolicies{msg}
-		return true, err
-	case 43: // service_policy_choice.active_service_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ServicePolicyList)
-		err := b.DecodeMessage(msg)
-		m.ServicePolicyChoice = &ReplaceSpecType_ActiveServicePolicies{msg}
-		return true, err
-	case 45: // hash_policy_choice.round_robin
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &ReplaceSpecType_RoundRobin{msg}
-		return true, err
-	case 46: // hash_policy_choice.least_active
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &ReplaceSpecType_LeastActive{msg}
-		return true, err
-	case 47: // hash_policy_choice.random
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &ReplaceSpecType_Random{msg}
-		return true, err
-	case 48: // hash_policy_choice.source_ip_stickiness
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &ReplaceSpecType_SourceIpStickiness{msg}
-		return true, err
-	case 49: // hash_policy_choice.cookie_stickiness
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_route.CookieForHashing)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &ReplaceSpecType_CookieStickiness{msg}
-		return true, err
-	case 50: // hash_policy_choice.ring_hash
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(HashPolicyListType)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &ReplaceSpecType_RingHash{msg}
-		return true, err
 	default:
 		return false, nil
 	}
@@ -5836,63 +3818,6 @@ func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
-	// service_policy_choice
-	switch x := m.ServicePolicyChoice.(type) {
-	case *ReplaceSpecType_ServicePoliciesFromNamespace:
-		s := proto.Size(x.ServicePoliciesFromNamespace)
-		n += proto.SizeVarint(41<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_NoServicePolicies:
-		s := proto.Size(x.NoServicePolicies)
-		n += proto.SizeVarint(42<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_ActiveServicePolicies:
-		s := proto.Size(x.ActiveServicePolicies)
-		n += proto.SizeVarint(43<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *ReplaceSpecType_RoundRobin:
-		s := proto.Size(x.RoundRobin)
-		n += proto.SizeVarint(45<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_LeastActive:
-		s := proto.Size(x.LeastActive)
-		n += proto.SizeVarint(46<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_Random:
-		s := proto.Size(x.Random)
-		n += proto.SizeVarint(47<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_SourceIpStickiness:
-		s := proto.Size(x.SourceIpStickiness)
-		n += proto.SizeVarint(48<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_CookieStickiness:
-		s := proto.Size(x.CookieStickiness)
-		n += proto.SizeVarint(49<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *ReplaceSpecType_RingHash:
-		s := proto.Size(x.RingHash)
-		n += proto.SizeVarint(50<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
 	return n
 }
 
@@ -5935,29 +3860,16 @@ type GetSpecType struct {
 	RateLimitChoice         isGetSpecType_RateLimitChoice                  `protobuf_oneof:"rate_limit_choice"`
 	MaliciousUserMitigation *ves_io_schema_views.ObjectRefType             `protobuf:"bytes,32,opt,name=malicious_user_mitigation,json=maliciousUserMitigation" json:"malicious_user_mitigation,omitempty"`
 	WafExclusionRules       []*ves_io_schema_policy.SimpleWafExclusionRule `protobuf:"bytes,33,rep,name=waf_exclusion_rules,json=wafExclusionRules" json:"waf_exclusion_rules,omitempty"`
-	// Types that are valid to be assigned to ServicePolicyChoice:
-	//	*GetSpecType_ServicePoliciesFromNamespace
-	//	*GetSpecType_NoServicePolicies
-	//	*GetSpecType_ActiveServicePolicies
-	ServicePolicyChoice isGetSpecType_ServicePolicyChoice `protobuf_oneof:"service_policy_choice"`
-	// Types that are valid to be assigned to HashPolicyChoice:
-	//	*GetSpecType_RoundRobin
-	//	*GetSpecType_LeastActive
-	//	*GetSpecType_Random
-	//	*GetSpecType_SourceIpStickiness
-	//	*GetSpecType_CookieStickiness
-	//	*GetSpecType_RingHash
-	HashPolicyChoice isGetSpecType_HashPolicyChoice                 `protobuf_oneof:"hash_policy_choice"`
-	HostName         string                                         `protobuf:"bytes,1001,opt,name=host_name,json=hostName,proto3" json:"host_name,omitempty"`
-	DnsInfo          []*ves_io_schema_virtual_host_dns_info.DnsInfo `protobuf:"bytes,1002,rep,name=dns_info,json=dnsInfo" json:"dns_info,omitempty"`
-	State            ves_io_schema_virtual_host.VirtualHostState    `protobuf:"varint,1003,opt,name=state,proto3,enum=ves.io.schema.virtual_host.VirtualHostState" json:"state,omitempty"`
-	AutoCertState    ves_io_schema_virtual_host.CertificationState  `protobuf:"varint,1004,opt,name=auto_cert_state,json=autoCertState,proto3,enum=ves.io.schema.virtual_host.CertificationState" json:"auto_cert_state,omitempty"`
-	AutoCertInfo     *ves_io_schema_virtual_host.AutoCertInfoType   `protobuf:"bytes,1010,opt,name=auto_cert_info,json=autoCertInfo" json:"auto_cert_info,omitempty"`
+	HostName                string                                         `protobuf:"bytes,1001,opt,name=host_name,json=hostName,proto3" json:"host_name,omitempty"`
+	DnsInfo                 []*ves_io_schema_virtual_host_dns_info.DnsInfo `protobuf:"bytes,1002,rep,name=dns_info,json=dnsInfo" json:"dns_info,omitempty"`
+	State                   ves_io_schema_virtual_host.VirtualHostState    `protobuf:"varint,1003,opt,name=state,proto3,enum=ves.io.schema.virtual_host.VirtualHostState" json:"state,omitempty"`
+	AutoCertState           ves_io_schema_virtual_host.CertificationState  `protobuf:"varint,1004,opt,name=auto_cert_state,json=autoCertState,proto3,enum=ves.io.schema.virtual_host.CertificationState" json:"auto_cert_state,omitempty"`
+	AutoCertInfo            *ves_io_schema_virtual_host.AutoCertInfoType   `protobuf:"bytes,1010,opt,name=auto_cert_info,json=autoCertInfo" json:"auto_cert_info,omitempty"`
 }
 
 func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{20} }
+func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{16} }
 
 type isGetSpecType_LoadbalancerType interface {
 	isGetSpecType_LoadbalancerType()
@@ -5985,18 +3897,6 @@ type isGetSpecType_ChallengeType interface {
 }
 type isGetSpecType_RateLimitChoice interface {
 	isGetSpecType_RateLimitChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isGetSpecType_ServicePolicyChoice interface {
-	isGetSpecType_ServicePolicyChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isGetSpecType_HashPolicyChoice interface {
-	isGetSpecType_HashPolicyChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -6047,58 +3947,22 @@ type GetSpecType_DisableRateLimit struct {
 type GetSpecType_RateLimit struct {
 	RateLimit *RateLimitConfigType `protobuf:"bytes,23,opt,name=rate_limit,json=rateLimit,oneof"`
 }
-type GetSpecType_ServicePoliciesFromNamespace struct {
-	ServicePoliciesFromNamespace *ves_io_schema4.Empty `protobuf:"bytes,41,opt,name=service_policies_from_namespace,json=servicePoliciesFromNamespace,oneof"`
-}
-type GetSpecType_NoServicePolicies struct {
-	NoServicePolicies *ves_io_schema4.Empty `protobuf:"bytes,42,opt,name=no_service_policies,json=noServicePolicies,oneof"`
-}
-type GetSpecType_ActiveServicePolicies struct {
-	ActiveServicePolicies *ServicePolicyList `protobuf:"bytes,43,opt,name=active_service_policies,json=activeServicePolicies,oneof"`
-}
-type GetSpecType_RoundRobin struct {
-	RoundRobin *ves_io_schema4.Empty `protobuf:"bytes,45,opt,name=round_robin,json=roundRobin,oneof"`
-}
-type GetSpecType_LeastActive struct {
-	LeastActive *ves_io_schema4.Empty `protobuf:"bytes,46,opt,name=least_active,json=leastActive,oneof"`
-}
-type GetSpecType_Random struct {
-	Random *ves_io_schema4.Empty `protobuf:"bytes,47,opt,name=random,oneof"`
-}
-type GetSpecType_SourceIpStickiness struct {
-	SourceIpStickiness *ves_io_schema4.Empty `protobuf:"bytes,48,opt,name=source_ip_stickiness,json=sourceIpStickiness,oneof"`
-}
-type GetSpecType_CookieStickiness struct {
-	CookieStickiness *ves_io_schema_route.CookieForHashing `protobuf:"bytes,49,opt,name=cookie_stickiness,json=cookieStickiness,oneof"`
-}
-type GetSpecType_RingHash struct {
-	RingHash *HashPolicyListType `protobuf:"bytes,50,opt,name=ring_hash,json=ringHash,oneof"`
-}
 
-func (*GetSpecType_Http) isGetSpecType_LoadbalancerType()                            {}
-func (*GetSpecType_HttpsAutoCert) isGetSpecType_LoadbalancerType()                   {}
-func (*GetSpecType_Https) isGetSpecType_LoadbalancerType()                           {}
-func (*GetSpecType_DoNotAdvertise) isGetSpecType_AdvertiseChoice()                   {}
-func (*GetSpecType_AdvertiseOnPublicDefaultVip) isGetSpecType_AdvertiseChoice()      {}
-func (*GetSpecType_AdvertiseOnPublic) isGetSpecType_AdvertiseChoice()                {}
-func (*GetSpecType_AdvertiseCustom) isGetSpecType_AdvertiseChoice()                  {}
-func (*GetSpecType_DisableWaf) isGetSpecType_WafChoice()                             {}
-func (*GetSpecType_Waf) isGetSpecType_WafChoice()                                    {}
-func (*GetSpecType_WafRule) isGetSpecType_WafChoice()                                {}
-func (*GetSpecType_NoChallenge) isGetSpecType_ChallengeType()                        {}
-func (*GetSpecType_JsChallenge) isGetSpecType_ChallengeType()                        {}
-func (*GetSpecType_CaptchaChallenge) isGetSpecType_ChallengeType()                   {}
-func (*GetSpecType_DisableRateLimit) isGetSpecType_RateLimitChoice()                 {}
-func (*GetSpecType_RateLimit) isGetSpecType_RateLimitChoice()                        {}
-func (*GetSpecType_ServicePoliciesFromNamespace) isGetSpecType_ServicePolicyChoice() {}
-func (*GetSpecType_NoServicePolicies) isGetSpecType_ServicePolicyChoice()            {}
-func (*GetSpecType_ActiveServicePolicies) isGetSpecType_ServicePolicyChoice()        {}
-func (*GetSpecType_RoundRobin) isGetSpecType_HashPolicyChoice()                      {}
-func (*GetSpecType_LeastActive) isGetSpecType_HashPolicyChoice()                     {}
-func (*GetSpecType_Random) isGetSpecType_HashPolicyChoice()                          {}
-func (*GetSpecType_SourceIpStickiness) isGetSpecType_HashPolicyChoice()              {}
-func (*GetSpecType_CookieStickiness) isGetSpecType_HashPolicyChoice()                {}
-func (*GetSpecType_RingHash) isGetSpecType_HashPolicyChoice()                        {}
+func (*GetSpecType_Http) isGetSpecType_LoadbalancerType()                       {}
+func (*GetSpecType_HttpsAutoCert) isGetSpecType_LoadbalancerType()              {}
+func (*GetSpecType_Https) isGetSpecType_LoadbalancerType()                      {}
+func (*GetSpecType_DoNotAdvertise) isGetSpecType_AdvertiseChoice()              {}
+func (*GetSpecType_AdvertiseOnPublicDefaultVip) isGetSpecType_AdvertiseChoice() {}
+func (*GetSpecType_AdvertiseOnPublic) isGetSpecType_AdvertiseChoice()           {}
+func (*GetSpecType_AdvertiseCustom) isGetSpecType_AdvertiseChoice()             {}
+func (*GetSpecType_DisableWaf) isGetSpecType_WafChoice()                        {}
+func (*GetSpecType_Waf) isGetSpecType_WafChoice()                               {}
+func (*GetSpecType_WafRule) isGetSpecType_WafChoice()                           {}
+func (*GetSpecType_NoChallenge) isGetSpecType_ChallengeType()                   {}
+func (*GetSpecType_JsChallenge) isGetSpecType_ChallengeType()                   {}
+func (*GetSpecType_CaptchaChallenge) isGetSpecType_ChallengeType()              {}
+func (*GetSpecType_DisableRateLimit) isGetSpecType_RateLimitChoice()            {}
+func (*GetSpecType_RateLimit) isGetSpecType_RateLimitChoice()                   {}
 
 func (m *GetSpecType) GetLoadbalancerType() isGetSpecType_LoadbalancerType {
 	if m != nil {
@@ -6127,18 +3991,6 @@ func (m *GetSpecType) GetChallengeType() isGetSpecType_ChallengeType {
 func (m *GetSpecType) GetRateLimitChoice() isGetSpecType_RateLimitChoice {
 	if m != nil {
 		return m.RateLimitChoice
-	}
-	return nil
-}
-func (m *GetSpecType) GetServicePolicyChoice() isGetSpecType_ServicePolicyChoice {
-	if m != nil {
-		return m.ServicePolicyChoice
-	}
-	return nil
-}
-func (m *GetSpecType) GetHashPolicyChoice() isGetSpecType_HashPolicyChoice {
-	if m != nil {
-		return m.HashPolicyChoice
 	}
 	return nil
 }
@@ -6311,69 +4163,6 @@ func (m *GetSpecType) GetWafExclusionRules() []*ves_io_schema_policy.SimpleWafEx
 	return nil
 }
 
-func (m *GetSpecType) GetServicePoliciesFromNamespace() *ves_io_schema4.Empty {
-	if x, ok := m.GetServicePolicyChoice().(*GetSpecType_ServicePoliciesFromNamespace); ok {
-		return x.ServicePoliciesFromNamespace
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetNoServicePolicies() *ves_io_schema4.Empty {
-	if x, ok := m.GetServicePolicyChoice().(*GetSpecType_NoServicePolicies); ok {
-		return x.NoServicePolicies
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetActiveServicePolicies() *ServicePolicyList {
-	if x, ok := m.GetServicePolicyChoice().(*GetSpecType_ActiveServicePolicies); ok {
-		return x.ActiveServicePolicies
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetRoundRobin() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*GetSpecType_RoundRobin); ok {
-		return x.RoundRobin
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetLeastActive() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*GetSpecType_LeastActive); ok {
-		return x.LeastActive
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetRandom() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*GetSpecType_Random); ok {
-		return x.Random
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetSourceIpStickiness() *ves_io_schema4.Empty {
-	if x, ok := m.GetHashPolicyChoice().(*GetSpecType_SourceIpStickiness); ok {
-		return x.SourceIpStickiness
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetCookieStickiness() *ves_io_schema_route.CookieForHashing {
-	if x, ok := m.GetHashPolicyChoice().(*GetSpecType_CookieStickiness); ok {
-		return x.CookieStickiness
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetRingHash() *HashPolicyListType {
-	if x, ok := m.GetHashPolicyChoice().(*GetSpecType_RingHash); ok {
-		return x.RingHash
-	}
-	return nil
-}
-
 func (m *GetSpecType) GetHostName() string {
 	if m != nil {
 		return m.HostName
@@ -6427,15 +4216,6 @@ func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) e
 		(*GetSpecType_CaptchaChallenge)(nil),
 		(*GetSpecType_DisableRateLimit)(nil),
 		(*GetSpecType_RateLimit)(nil),
-		(*GetSpecType_ServicePoliciesFromNamespace)(nil),
-		(*GetSpecType_NoServicePolicies)(nil),
-		(*GetSpecType_ActiveServicePolicies)(nil),
-		(*GetSpecType_RoundRobin)(nil),
-		(*GetSpecType_LeastActive)(nil),
-		(*GetSpecType_Random)(nil),
-		(*GetSpecType_SourceIpStickiness)(nil),
-		(*GetSpecType_CookieStickiness)(nil),
-		(*GetSpecType_RingHash)(nil),
 	}
 }
 
@@ -6545,63 +4325,6 @@ func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("GetSpecType.RateLimitChoice has unexpected type %T", x)
-	}
-	// service_policy_choice
-	switch x := m.ServicePolicyChoice.(type) {
-	case *GetSpecType_ServicePoliciesFromNamespace:
-		_ = b.EncodeVarint(41<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ServicePoliciesFromNamespace); err != nil {
-			return err
-		}
-	case *GetSpecType_NoServicePolicies:
-		_ = b.EncodeVarint(42<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.NoServicePolicies); err != nil {
-			return err
-		}
-	case *GetSpecType_ActiveServicePolicies:
-		_ = b.EncodeVarint(43<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ActiveServicePolicies); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.ServicePolicyChoice has unexpected type %T", x)
-	}
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *GetSpecType_RoundRobin:
-		_ = b.EncodeVarint(45<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RoundRobin); err != nil {
-			return err
-		}
-	case *GetSpecType_LeastActive:
-		_ = b.EncodeVarint(46<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LeastActive); err != nil {
-			return err
-		}
-	case *GetSpecType_Random:
-		_ = b.EncodeVarint(47<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Random); err != nil {
-			return err
-		}
-	case *GetSpecType_SourceIpStickiness:
-		_ = b.EncodeVarint(48<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.SourceIpStickiness); err != nil {
-			return err
-		}
-	case *GetSpecType_CookieStickiness:
-		_ = b.EncodeVarint(49<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.CookieStickiness); err != nil {
-			return err
-		}
-	case *GetSpecType_RingHash:
-		_ = b.EncodeVarint(50<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.RingHash); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("GetSpecType.HashPolicyChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -6729,78 +4452,6 @@ func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Bu
 		err := b.DecodeMessage(msg)
 		m.RateLimitChoice = &GetSpecType_RateLimit{msg}
 		return true, err
-	case 41: // service_policy_choice.service_policies_from_namespace
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServicePolicyChoice = &GetSpecType_ServicePoliciesFromNamespace{msg}
-		return true, err
-	case 42: // service_policy_choice.no_service_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.ServicePolicyChoice = &GetSpecType_NoServicePolicies{msg}
-		return true, err
-	case 43: // service_policy_choice.active_service_policies
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ServicePolicyList)
-		err := b.DecodeMessage(msg)
-		m.ServicePolicyChoice = &GetSpecType_ActiveServicePolicies{msg}
-		return true, err
-	case 45: // hash_policy_choice.round_robin
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GetSpecType_RoundRobin{msg}
-		return true, err
-	case 46: // hash_policy_choice.least_active
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GetSpecType_LeastActive{msg}
-		return true, err
-	case 47: // hash_policy_choice.random
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GetSpecType_Random{msg}
-		return true, err
-	case 48: // hash_policy_choice.source_ip_stickiness
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GetSpecType_SourceIpStickiness{msg}
-		return true, err
-	case 49: // hash_policy_choice.cookie_stickiness
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_route.CookieForHashing)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GetSpecType_CookieStickiness{msg}
-		return true, err
-	case 50: // hash_policy_choice.ring_hash
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(HashPolicyListType)
-		err := b.DecodeMessage(msg)
-		m.HashPolicyChoice = &GetSpecType_RingHash{msg}
-		return true, err
 	default:
 		return false, nil
 	}
@@ -6913,63 +4564,6 @@ func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
-	// service_policy_choice
-	switch x := m.ServicePolicyChoice.(type) {
-	case *GetSpecType_ServicePoliciesFromNamespace:
-		s := proto.Size(x.ServicePoliciesFromNamespace)
-		n += proto.SizeVarint(41<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_NoServicePolicies:
-		s := proto.Size(x.NoServicePolicies)
-		n += proto.SizeVarint(42<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_ActiveServicePolicies:
-		s := proto.Size(x.ActiveServicePolicies)
-		n += proto.SizeVarint(43<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// hash_policy_choice
-	switch x := m.HashPolicyChoice.(type) {
-	case *GetSpecType_RoundRobin:
-		s := proto.Size(x.RoundRobin)
-		n += proto.SizeVarint(45<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_LeastActive:
-		s := proto.Size(x.LeastActive)
-		n += proto.SizeVarint(46<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_Random:
-		s := proto.Size(x.Random)
-		n += proto.SizeVarint(47<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_SourceIpStickiness:
-		s := proto.Size(x.SourceIpStickiness)
-		n += proto.SizeVarint(48<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_CookieStickiness:
-		s := proto.Size(x.CookieStickiness)
-		n += proto.SizeVarint(49<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *GetSpecType_RingHash:
-		s := proto.Size(x.RingHash)
-		n += proto.SizeVarint(50<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
 	return n
 }
 
@@ -6982,12 +4576,6 @@ func init() {
 	golang_proto.RegisterType((*ProxyTypeHttps)(nil), "ves.io.schema.views.http_loadbalancer.ProxyTypeHttps")
 	proto.RegisterType((*ProxyTypeHttpsAutoCerts)(nil), "ves.io.schema.views.http_loadbalancer.ProxyTypeHttpsAutoCerts")
 	golang_proto.RegisterType((*ProxyTypeHttpsAutoCerts)(nil), "ves.io.schema.views.http_loadbalancer.ProxyTypeHttpsAutoCerts")
-	proto.RegisterType((*HashPolicyListType)(nil), "ves.io.schema.views.http_loadbalancer.HashPolicyListType")
-	golang_proto.RegisterType((*HashPolicyListType)(nil), "ves.io.schema.views.http_loadbalancer.HashPolicyListType")
-	proto.RegisterType((*MirrorPolicyType)(nil), "ves.io.schema.views.http_loadbalancer.MirrorPolicyType")
-	golang_proto.RegisterType((*MirrorPolicyType)(nil), "ves.io.schema.views.http_loadbalancer.MirrorPolicyType")
-	proto.RegisterType((*RouteSimpleAdvancedOptions)(nil), "ves.io.schema.views.http_loadbalancer.RouteSimpleAdvancedOptions")
-	golang_proto.RegisterType((*RouteSimpleAdvancedOptions)(nil), "ves.io.schema.views.http_loadbalancer.RouteSimpleAdvancedOptions")
 	proto.RegisterType((*RouteTypeSimpleWithDefaultOriginPool)(nil), "ves.io.schema.views.http_loadbalancer.RouteTypeSimpleWithDefaultOriginPool")
 	golang_proto.RegisterType((*RouteTypeSimpleWithDefaultOriginPool)(nil), "ves.io.schema.views.http_loadbalancer.RouteTypeSimpleWithDefaultOriginPool")
 	proto.RegisterType((*RouteTypeSimple)(nil), "ves.io.schema.views.http_loadbalancer.RouteTypeSimple")
@@ -7006,8 +4594,6 @@ func init() {
 	golang_proto.RegisterType((*CustomIpAllowedList)(nil), "ves.io.schema.views.http_loadbalancer.CustomIpAllowedList")
 	proto.RegisterType((*RateLimitConfigType)(nil), "ves.io.schema.views.http_loadbalancer.RateLimitConfigType")
 	golang_proto.RegisterType((*RateLimitConfigType)(nil), "ves.io.schema.views.http_loadbalancer.RateLimitConfigType")
-	proto.RegisterType((*ServicePolicyList)(nil), "ves.io.schema.views.http_loadbalancer.ServicePolicyList")
-	golang_proto.RegisterType((*ServicePolicyList)(nil), "ves.io.schema.views.http_loadbalancer.ServicePolicyList")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.http_loadbalancer.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.http_loadbalancer.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.views.http_loadbalancer.CreateSpecType")
@@ -7187,615 +4773,6 @@ func (this *ProxyTypeHttpsAutoCerts) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *HashPolicyListType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*HashPolicyListType)
-	if !ok {
-		that2, ok := that.(HashPolicyListType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.HashPolicy) != len(that1.HashPolicy) {
-		return false
-	}
-	for i := range this.HashPolicy {
-		if !this.HashPolicy[i].Equal(that1.HashPolicy[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *MirrorPolicyType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MirrorPolicyType)
-	if !ok {
-		that2, ok := that.(MirrorPolicyType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OriginPool.Equal(that1.OriginPool) {
-		return false
-	}
-	if !this.Percent.Equal(that1.Percent) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.HashPolicyChoice == nil {
-		if this.HashPolicyChoice != nil {
-			return false
-		}
-	} else if this.HashPolicyChoice == nil {
-		return false
-	} else if !this.HashPolicyChoice.Equal(that1.HashPolicyChoice) {
-		return false
-	}
-	if this.Priority != that1.Priority {
-		return false
-	}
-	if len(this.EndpointSubsets) != len(that1.EndpointSubsets) {
-		return false
-	}
-	for i := range this.EndpointSubsets {
-		if this.EndpointSubsets[i] != that1.EndpointSubsets[i] {
-			return false
-		}
-	}
-	if that1.RewriteChoice == nil {
-		if this.RewriteChoice != nil {
-			return false
-		}
-	} else if this.RewriteChoice == nil {
-		return false
-	} else if !this.RewriteChoice.Equal(that1.RewriteChoice) {
-		return false
-	}
-	if len(this.RequestHeadersToAdd) != len(that1.RequestHeadersToAdd) {
-		return false
-	}
-	for i := range this.RequestHeadersToAdd {
-		if !this.RequestHeadersToAdd[i].Equal(that1.RequestHeadersToAdd[i]) {
-			return false
-		}
-	}
-	if len(this.RequestHeadersToRemove) != len(that1.RequestHeadersToRemove) {
-		return false
-	}
-	for i := range this.RequestHeadersToRemove {
-		if this.RequestHeadersToRemove[i] != that1.RequestHeadersToRemove[i] {
-			return false
-		}
-	}
-	if len(this.ResponseHeadersToAdd) != len(that1.ResponseHeadersToAdd) {
-		return false
-	}
-	for i := range this.ResponseHeadersToAdd {
-		if !this.ResponseHeadersToAdd[i].Equal(that1.ResponseHeadersToAdd[i]) {
-			return false
-		}
-	}
-	if len(this.ResponseHeadersToRemove) != len(that1.ResponseHeadersToRemove) {
-		return false
-	}
-	for i := range this.ResponseHeadersToRemove {
-		if this.ResponseHeadersToRemove[i] != that1.ResponseHeadersToRemove[i] {
-			return false
-		}
-	}
-	if this.DisableLocationAdd != that1.DisableLocationAdd {
-		return false
-	}
-	if that1.WafChoice == nil {
-		if this.WafChoice != nil {
-			return false
-		}
-	} else if this.WafChoice == nil {
-		return false
-	} else if !this.WafChoice.Equal(that1.WafChoice) {
-		return false
-	}
-	if !this.CorsPolicy.Equal(that1.CorsPolicy) {
-		return false
-	}
-	if that1.SpdyChoice == nil {
-		if this.SpdyChoice != nil {
-			return false
-		}
-	} else if this.SpdyChoice == nil {
-		return false
-	} else if !this.SpdyChoice.Equal(that1.SpdyChoice) {
-		return false
-	}
-	if that1.WebsocketChoice == nil {
-		if this.WebsocketChoice != nil {
-			return false
-		}
-	} else if this.WebsocketChoice == nil {
-		return false
-	} else if !this.WebsocketChoice.Equal(that1.WebsocketChoice) {
-		return false
-	}
-	if that1.RetryPolicyChoice == nil {
-		if this.RetryPolicyChoice != nil {
-			return false
-		}
-	} else if this.RetryPolicyChoice == nil {
-		return false
-	} else if !this.RetryPolicyChoice.Equal(that1.RetryPolicyChoice) {
-		return false
-	}
-	if this.Timeout != that1.Timeout {
-		return false
-	}
-	if that1.BufferChoice == nil {
-		if this.BufferChoice != nil {
-			return false
-		}
-	} else if this.BufferChoice == nil {
-		return false
-	} else if !this.BufferChoice.Equal(that1.BufferChoice) {
-		return false
-	}
-	if that1.MirroringChoice == nil {
-		if this.MirroringChoice != nil {
-			return false
-		}
-	} else if this.MirroringChoice == nil {
-		return false
-	} else if !this.MirroringChoice.Equal(that1.MirroringChoice) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_CommonHashPolicy) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_CommonHashPolicy)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_CommonHashPolicy)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.CommonHashPolicy.Equal(that1.CommonHashPolicy) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_SpecificHashPolicy) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_SpecificHashPolicy)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_SpecificHashPolicy)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.SpecificHashPolicy.Equal(that1.SpecificHashPolicy) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_DisablePrefixRewrite) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_DisablePrefixRewrite)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_DisablePrefixRewrite)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisablePrefixRewrite.Equal(that1.DisablePrefixRewrite) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_PrefixRewrite) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_PrefixRewrite)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_PrefixRewrite)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.PrefixRewrite != that1.PrefixRewrite {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_DisableWaf) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_DisableWaf)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_DisableWaf)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableWaf.Equal(that1.DisableWaf) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_Waf) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_Waf)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_Waf)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Waf.Equal(that1.Waf) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_WafRule) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_WafRule)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_WafRule)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.WafRule.Equal(that1.WafRule) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_DisableSpdy) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_DisableSpdy)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_DisableSpdy)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableSpdy.Equal(that1.DisableSpdy) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_EnableSpdy) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_EnableSpdy)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_EnableSpdy)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EnableSpdy.Equal(that1.EnableSpdy) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_DisableWebSocketConfig) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_DisableWebSocketConfig)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_DisableWebSocketConfig)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableWebSocketConfig.Equal(that1.DisableWebSocketConfig) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_WebSocketConfig) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_WebSocketConfig)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_WebSocketConfig)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.WebSocketConfig.Equal(that1.WebSocketConfig) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_DefaultRetryPolicy) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_DefaultRetryPolicy)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_DefaultRetryPolicy)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DefaultRetryPolicy.Equal(that1.DefaultRetryPolicy) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_RetryPolicy) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_RetryPolicy)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_RetryPolicy)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RetryPolicy.Equal(that1.RetryPolicy) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_CommonBuffering) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_CommonBuffering)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_CommonBuffering)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.CommonBuffering.Equal(that1.CommonBuffering) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_BufferPolicy) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_BufferPolicy)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_BufferPolicy)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.BufferPolicy.Equal(that1.BufferPolicy) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_DisableMirroring) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_DisableMirroring)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_DisableMirroring)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableMirroring.Equal(that1.DisableMirroring) {
-		return false
-	}
-	return true
-}
-func (this *RouteSimpleAdvancedOptions_MirrorPolicy) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RouteSimpleAdvancedOptions_MirrorPolicy)
-	if !ok {
-		that2, ok := that.(RouteSimpleAdvancedOptions_MirrorPolicy)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.MirrorPolicy.Equal(that1.MirrorPolicy) {
-		return false
-	}
-	return true
-}
 func (this *RouteTypeSimpleWithDefaultOriginPool) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -7944,9 +4921,6 @@ func (this *RouteTypeSimple) Equal(that interface{}) bool {
 	} else if this.HostRewriteParams == nil {
 		return false
 	} else if !this.HostRewriteParams.Equal(that1.HostRewriteParams) {
-		return false
-	}
-	if !this.AdvancedOptions.Equal(that1.AdvancedOptions) {
 		return false
 	}
 	return true
@@ -8451,35 +5425,6 @@ func (this *RateLimitConfigType_CustomIpAllowedList) Equal(that interface{}) boo
 	}
 	return true
 }
-func (this *ServicePolicyList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ServicePolicyList)
-	if !ok {
-		that2, ok := that.(ServicePolicyList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Policies) != len(that1.Policies) {
-		return false
-	}
-	for i := range this.Policies {
-		if !this.Policies[i].Equal(that1.Policies[i]) {
-			return false
-		}
-	}
-	return true
-}
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -8599,24 +5544,6 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		if !this.WafExclusionRules[i].Equal(that1.WafExclusionRules[i]) {
 			return false
 		}
-	}
-	if that1.ServicePolicyChoice == nil {
-		if this.ServicePolicyChoice != nil {
-			return false
-		}
-	} else if this.ServicePolicyChoice == nil {
-		return false
-	} else if !this.ServicePolicyChoice.Equal(that1.ServicePolicyChoice) {
-		return false
-	}
-	if that1.HashPolicyChoice == nil {
-		if this.HashPolicyChoice != nil {
-			return false
-		}
-	} else if this.HashPolicyChoice == nil {
-		return false
-	} else if !this.HashPolicyChoice.Equal(that1.HashPolicyChoice) {
-		return false
 	}
 	if !this.ViewInternal.Equal(that1.ViewInternal) {
 		return false
@@ -9075,222 +6002,6 @@ func (this *GlobalSpecType_RateLimit) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *GlobalSpecType_ServicePoliciesFromNamespace) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_ServicePoliciesFromNamespace)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_ServicePoliciesFromNamespace)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ServicePoliciesFromNamespace.Equal(that1.ServicePoliciesFromNamespace) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_NoServicePolicies) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_NoServicePolicies)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_NoServicePolicies)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.NoServicePolicies.Equal(that1.NoServicePolicies) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_ActiveServicePolicies) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_ActiveServicePolicies)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_ActiveServicePolicies)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ActiveServicePolicies.Equal(that1.ActiveServicePolicies) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_RoundRobin) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_RoundRobin)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_RoundRobin)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RoundRobin.Equal(that1.RoundRobin) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_LeastActive) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_LeastActive)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_LeastActive)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LeastActive.Equal(that1.LeastActive) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_Random) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_Random)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_Random)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Random.Equal(that1.Random) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_SourceIpStickiness) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_SourceIpStickiness)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_SourceIpStickiness)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.SourceIpStickiness.Equal(that1.SourceIpStickiness) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_CookieStickiness) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_CookieStickiness)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_CookieStickiness)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.CookieStickiness.Equal(that1.CookieStickiness) {
-		return false
-	}
-	return true
-}
-func (this *GlobalSpecType_RingHash) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GlobalSpecType_RingHash)
-	if !ok {
-		that2, ok := that.(GlobalSpecType_RingHash)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RingHash.Equal(that1.RingHash) {
-		return false
-	}
-	return true
-}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -9401,24 +6112,6 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 		if !this.WafExclusionRules[i].Equal(that1.WafExclusionRules[i]) {
 			return false
 		}
-	}
-	if that1.ServicePolicyChoice == nil {
-		if this.ServicePolicyChoice != nil {
-			return false
-		}
-	} else if this.ServicePolicyChoice == nil {
-		return false
-	} else if !this.ServicePolicyChoice.Equal(that1.ServicePolicyChoice) {
-		return false
-	}
-	if that1.HashPolicyChoice == nil {
-		if this.HashPolicyChoice != nil {
-			return false
-		}
-	} else if this.HashPolicyChoice == nil {
-		return false
-	} else if !this.HashPolicyChoice.Equal(that1.HashPolicyChoice) {
-		return false
 	}
 	return true
 }
@@ -9782,222 +6475,6 @@ func (this *CreateSpecType_RateLimit) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *CreateSpecType_ServicePoliciesFromNamespace) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_ServicePoliciesFromNamespace)
-	if !ok {
-		that2, ok := that.(CreateSpecType_ServicePoliciesFromNamespace)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ServicePoliciesFromNamespace.Equal(that1.ServicePoliciesFromNamespace) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_NoServicePolicies) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_NoServicePolicies)
-	if !ok {
-		that2, ok := that.(CreateSpecType_NoServicePolicies)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.NoServicePolicies.Equal(that1.NoServicePolicies) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_ActiveServicePolicies) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_ActiveServicePolicies)
-	if !ok {
-		that2, ok := that.(CreateSpecType_ActiveServicePolicies)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ActiveServicePolicies.Equal(that1.ActiveServicePolicies) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_RoundRobin) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_RoundRobin)
-	if !ok {
-		that2, ok := that.(CreateSpecType_RoundRobin)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RoundRobin.Equal(that1.RoundRobin) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_LeastActive) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_LeastActive)
-	if !ok {
-		that2, ok := that.(CreateSpecType_LeastActive)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LeastActive.Equal(that1.LeastActive) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_Random) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_Random)
-	if !ok {
-		that2, ok := that.(CreateSpecType_Random)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Random.Equal(that1.Random) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_SourceIpStickiness) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_SourceIpStickiness)
-	if !ok {
-		that2, ok := that.(CreateSpecType_SourceIpStickiness)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.SourceIpStickiness.Equal(that1.SourceIpStickiness) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_CookieStickiness) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_CookieStickiness)
-	if !ok {
-		that2, ok := that.(CreateSpecType_CookieStickiness)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.CookieStickiness.Equal(that1.CookieStickiness) {
-		return false
-	}
-	return true
-}
-func (this *CreateSpecType_RingHash) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CreateSpecType_RingHash)
-	if !ok {
-		that2, ok := that.(CreateSpecType_RingHash)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RingHash.Equal(that1.RingHash) {
-		return false
-	}
-	return true
-}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -10108,24 +6585,6 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 		if !this.WafExclusionRules[i].Equal(that1.WafExclusionRules[i]) {
 			return false
 		}
-	}
-	if that1.ServicePolicyChoice == nil {
-		if this.ServicePolicyChoice != nil {
-			return false
-		}
-	} else if this.ServicePolicyChoice == nil {
-		return false
-	} else if !this.ServicePolicyChoice.Equal(that1.ServicePolicyChoice) {
-		return false
-	}
-	if that1.HashPolicyChoice == nil {
-		if this.HashPolicyChoice != nil {
-			return false
-		}
-	} else if this.HashPolicyChoice == nil {
-		return false
-	} else if !this.HashPolicyChoice.Equal(that1.HashPolicyChoice) {
-		return false
 	}
 	return true
 }
@@ -10489,222 +6948,6 @@ func (this *ReplaceSpecType_RateLimit) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *ReplaceSpecType_ServicePoliciesFromNamespace) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_ServicePoliciesFromNamespace)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_ServicePoliciesFromNamespace)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ServicePoliciesFromNamespace.Equal(that1.ServicePoliciesFromNamespace) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_NoServicePolicies) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_NoServicePolicies)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_NoServicePolicies)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.NoServicePolicies.Equal(that1.NoServicePolicies) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_ActiveServicePolicies) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_ActiveServicePolicies)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_ActiveServicePolicies)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ActiveServicePolicies.Equal(that1.ActiveServicePolicies) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_RoundRobin) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_RoundRobin)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_RoundRobin)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RoundRobin.Equal(that1.RoundRobin) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_LeastActive) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_LeastActive)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_LeastActive)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LeastActive.Equal(that1.LeastActive) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_Random) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_Random)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_Random)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Random.Equal(that1.Random) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_SourceIpStickiness) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_SourceIpStickiness)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_SourceIpStickiness)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.SourceIpStickiness.Equal(that1.SourceIpStickiness) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_CookieStickiness) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_CookieStickiness)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_CookieStickiness)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.CookieStickiness.Equal(that1.CookieStickiness) {
-		return false
-	}
-	return true
-}
-func (this *ReplaceSpecType_RingHash) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ReplaceSpecType_RingHash)
-	if !ok {
-		that2, ok := that.(ReplaceSpecType_RingHash)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RingHash.Equal(that1.RingHash) {
-		return false
-	}
-	return true
-}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -10815,24 +7058,6 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 		if !this.WafExclusionRules[i].Equal(that1.WafExclusionRules[i]) {
 			return false
 		}
-	}
-	if that1.ServicePolicyChoice == nil {
-		if this.ServicePolicyChoice != nil {
-			return false
-		}
-	} else if this.ServicePolicyChoice == nil {
-		return false
-	} else if !this.ServicePolicyChoice.Equal(that1.ServicePolicyChoice) {
-		return false
-	}
-	if that1.HashPolicyChoice == nil {
-		if this.HashPolicyChoice != nil {
-			return false
-		}
-	} else if this.HashPolicyChoice == nil {
-		return false
-	} else if !this.HashPolicyChoice.Equal(that1.HashPolicyChoice) {
-		return false
 	}
 	if this.HostName != that1.HostName {
 		return false
@@ -11216,222 +7441,6 @@ func (this *GetSpecType_RateLimit) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *GetSpecType_ServicePoliciesFromNamespace) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_ServicePoliciesFromNamespace)
-	if !ok {
-		that2, ok := that.(GetSpecType_ServicePoliciesFromNamespace)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ServicePoliciesFromNamespace.Equal(that1.ServicePoliciesFromNamespace) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_NoServicePolicies) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_NoServicePolicies)
-	if !ok {
-		that2, ok := that.(GetSpecType_NoServicePolicies)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.NoServicePolicies.Equal(that1.NoServicePolicies) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_ActiveServicePolicies) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_ActiveServicePolicies)
-	if !ok {
-		that2, ok := that.(GetSpecType_ActiveServicePolicies)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ActiveServicePolicies.Equal(that1.ActiveServicePolicies) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_RoundRobin) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_RoundRobin)
-	if !ok {
-		that2, ok := that.(GetSpecType_RoundRobin)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RoundRobin.Equal(that1.RoundRobin) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_LeastActive) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_LeastActive)
-	if !ok {
-		that2, ok := that.(GetSpecType_LeastActive)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LeastActive.Equal(that1.LeastActive) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_Random) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_Random)
-	if !ok {
-		that2, ok := that.(GetSpecType_Random)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Random.Equal(that1.Random) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_SourceIpStickiness) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_SourceIpStickiness)
-	if !ok {
-		that2, ok := that.(GetSpecType_SourceIpStickiness)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.SourceIpStickiness.Equal(that1.SourceIpStickiness) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_CookieStickiness) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_CookieStickiness)
-	if !ok {
-		that2, ok := that.(GetSpecType_CookieStickiness)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.CookieStickiness.Equal(that1.CookieStickiness) {
-		return false
-	}
-	return true
-}
-func (this *GetSpecType_RingHash) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetSpecType_RingHash)
-	if !ok {
-		that2, ok := that.(GetSpecType_RingHash)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.RingHash.Equal(that1.RingHash) {
-		return false
-	}
-	return true
-}
 func (this *DownstreamTlsValidationContext) GoString() string {
 	if this == nil {
 		return "nil"
@@ -11501,229 +7510,6 @@ func (this *ProxyTypeHttpsAutoCerts) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *HashPolicyListType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&http_loadbalancer.HashPolicyListType{")
-	if this.HashPolicy != nil {
-		s = append(s, "HashPolicy: "+fmt.Sprintf("%#v", this.HashPolicy)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *MirrorPolicyType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&http_loadbalancer.MirrorPolicyType{")
-	if this.OriginPool != nil {
-		s = append(s, "OriginPool: "+fmt.Sprintf("%#v", this.OriginPool)+",\n")
-	}
-	if this.Percent != nil {
-		s = append(s, "Percent: "+fmt.Sprintf("%#v", this.Percent)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *RouteSimpleAdvancedOptions) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 30)
-	s = append(s, "&http_loadbalancer.RouteSimpleAdvancedOptions{")
-	if this.HashPolicyChoice != nil {
-		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
-	}
-	s = append(s, "Priority: "+fmt.Sprintf("%#v", this.Priority)+",\n")
-	keysForEndpointSubsets := make([]string, 0, len(this.EndpointSubsets))
-	for k, _ := range this.EndpointSubsets {
-		keysForEndpointSubsets = append(keysForEndpointSubsets, k)
-	}
-	sortkeys.Strings(keysForEndpointSubsets)
-	mapStringForEndpointSubsets := "map[string]string{"
-	for _, k := range keysForEndpointSubsets {
-		mapStringForEndpointSubsets += fmt.Sprintf("%#v: %#v,", k, this.EndpointSubsets[k])
-	}
-	mapStringForEndpointSubsets += "}"
-	if this.EndpointSubsets != nil {
-		s = append(s, "EndpointSubsets: "+mapStringForEndpointSubsets+",\n")
-	}
-	if this.RewriteChoice != nil {
-		s = append(s, "RewriteChoice: "+fmt.Sprintf("%#v", this.RewriteChoice)+",\n")
-	}
-	if this.RequestHeadersToAdd != nil {
-		s = append(s, "RequestHeadersToAdd: "+fmt.Sprintf("%#v", this.RequestHeadersToAdd)+",\n")
-	}
-	s = append(s, "RequestHeadersToRemove: "+fmt.Sprintf("%#v", this.RequestHeadersToRemove)+",\n")
-	if this.ResponseHeadersToAdd != nil {
-		s = append(s, "ResponseHeadersToAdd: "+fmt.Sprintf("%#v", this.ResponseHeadersToAdd)+",\n")
-	}
-	s = append(s, "ResponseHeadersToRemove: "+fmt.Sprintf("%#v", this.ResponseHeadersToRemove)+",\n")
-	s = append(s, "DisableLocationAdd: "+fmt.Sprintf("%#v", this.DisableLocationAdd)+",\n")
-	if this.WafChoice != nil {
-		s = append(s, "WafChoice: "+fmt.Sprintf("%#v", this.WafChoice)+",\n")
-	}
-	if this.CorsPolicy != nil {
-		s = append(s, "CorsPolicy: "+fmt.Sprintf("%#v", this.CorsPolicy)+",\n")
-	}
-	if this.SpdyChoice != nil {
-		s = append(s, "SpdyChoice: "+fmt.Sprintf("%#v", this.SpdyChoice)+",\n")
-	}
-	if this.WebsocketChoice != nil {
-		s = append(s, "WebsocketChoice: "+fmt.Sprintf("%#v", this.WebsocketChoice)+",\n")
-	}
-	if this.RetryPolicyChoice != nil {
-		s = append(s, "RetryPolicyChoice: "+fmt.Sprintf("%#v", this.RetryPolicyChoice)+",\n")
-	}
-	s = append(s, "Timeout: "+fmt.Sprintf("%#v", this.Timeout)+",\n")
-	if this.BufferChoice != nil {
-		s = append(s, "BufferChoice: "+fmt.Sprintf("%#v", this.BufferChoice)+",\n")
-	}
-	if this.MirroringChoice != nil {
-		s = append(s, "MirroringChoice: "+fmt.Sprintf("%#v", this.MirroringChoice)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *RouteSimpleAdvancedOptions_CommonHashPolicy) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_CommonHashPolicy{` +
-		`CommonHashPolicy:` + fmt.Sprintf("%#v", this.CommonHashPolicy) + `}`}, ", ")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_SpecificHashPolicy) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_SpecificHashPolicy{` +
-		`SpecificHashPolicy:` + fmt.Sprintf("%#v", this.SpecificHashPolicy) + `}`}, ", ")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_DisablePrefixRewrite) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_DisablePrefixRewrite{` +
-		`DisablePrefixRewrite:` + fmt.Sprintf("%#v", this.DisablePrefixRewrite) + `}`}, ", ")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_PrefixRewrite) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_PrefixRewrite{` +
-		`PrefixRewrite:` + fmt.Sprintf("%#v", this.PrefixRewrite) + `}`}, ", ")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_DisableWaf) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_DisableWaf{` +
-		`DisableWaf:` + fmt.Sprintf("%#v", this.DisableWaf) + `}`}, ", ")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_Waf) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_Waf{` +
-		`Waf:` + fmt.Sprintf("%#v", this.Waf) + `}`}, ", ")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_WafRule) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_WafRule{` +
-		`WafRule:` + fmt.Sprintf("%#v", this.WafRule) + `}`}, ", ")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_DisableSpdy) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_DisableSpdy{` +
-		`DisableSpdy:` + fmt.Sprintf("%#v", this.DisableSpdy) + `}`}, ", ")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_EnableSpdy) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_EnableSpdy{` +
-		`EnableSpdy:` + fmt.Sprintf("%#v", this.EnableSpdy) + `}`}, ", ")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_DisableWebSocketConfig) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_DisableWebSocketConfig{` +
-		`DisableWebSocketConfig:` + fmt.Sprintf("%#v", this.DisableWebSocketConfig) + `}`}, ", ")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_WebSocketConfig) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_WebSocketConfig{` +
-		`WebSocketConfig:` + fmt.Sprintf("%#v", this.WebSocketConfig) + `}`}, ", ")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_DefaultRetryPolicy) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_DefaultRetryPolicy{` +
-		`DefaultRetryPolicy:` + fmt.Sprintf("%#v", this.DefaultRetryPolicy) + `}`}, ", ")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_RetryPolicy) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_RetryPolicy{` +
-		`RetryPolicy:` + fmt.Sprintf("%#v", this.RetryPolicy) + `}`}, ", ")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_CommonBuffering) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_CommonBuffering{` +
-		`CommonBuffering:` + fmt.Sprintf("%#v", this.CommonBuffering) + `}`}, ", ")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_BufferPolicy) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_BufferPolicy{` +
-		`BufferPolicy:` + fmt.Sprintf("%#v", this.BufferPolicy) + `}`}, ", ")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_DisableMirroring) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_DisableMirroring{` +
-		`DisableMirroring:` + fmt.Sprintf("%#v", this.DisableMirroring) + `}`}, ", ")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_MirrorPolicy) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RouteSimpleAdvancedOptions_MirrorPolicy{` +
-		`MirrorPolicy:` + fmt.Sprintf("%#v", this.MirrorPolicy) + `}`}, ", ")
-	return s
-}
 func (this *RouteTypeSimpleWithDefaultOriginPool) GoString() string {
 	if this == nil {
 		return "nil"
@@ -11768,7 +7554,7 @@ func (this *RouteTypeSimple) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 10)
 	s = append(s, "&http_loadbalancer.RouteTypeSimple{")
 	if this.Path != nil {
 		s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
@@ -11779,9 +7565,6 @@ func (this *RouteTypeSimple) GoString() string {
 	}
 	if this.HostRewriteParams != nil {
 		s = append(s, "HostRewriteParams: "+fmt.Sprintf("%#v", this.HostRewriteParams)+",\n")
-	}
-	if this.AdvancedOptions != nil {
-		s = append(s, "AdvancedOptions: "+fmt.Sprintf("%#v", this.AdvancedOptions)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -11993,23 +7776,11 @@ func (this *RateLimitConfigType_CustomIpAllowedList) GoString() string {
 		`CustomIpAllowedList:` + fmt.Sprintf("%#v", this.CustomIpAllowedList) + `}`}, ", ")
 	return s
 }
-func (this *ServicePolicyList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&http_loadbalancer.ServicePolicyList{")
-	if this.Policies != nil {
-		s = append(s, "Policies: "+fmt.Sprintf("%#v", this.Policies)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 46)
+	s := make([]string, 0, 37)
 	s = append(s, "&http_loadbalancer.GlobalSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.LoadbalancerType != nil {
@@ -12051,12 +7822,6 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	if this.WafExclusionRules != nil {
 		s = append(s, "WafExclusionRules: "+fmt.Sprintf("%#v", this.WafExclusionRules)+",\n")
-	}
-	if this.ServicePolicyChoice != nil {
-		s = append(s, "ServicePolicyChoice: "+fmt.Sprintf("%#v", this.ServicePolicyChoice)+",\n")
-	}
-	if this.HashPolicyChoice != nil {
-		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
 	}
 	if this.ViewInternal != nil {
 		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
@@ -12217,83 +7982,11 @@ func (this *GlobalSpecType_RateLimit) GoString() string {
 		`RateLimit:` + fmt.Sprintf("%#v", this.RateLimit) + `}`}, ", ")
 	return s
 }
-func (this *GlobalSpecType_ServicePoliciesFromNamespace) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_ServicePoliciesFromNamespace{` +
-		`ServicePoliciesFromNamespace:` + fmt.Sprintf("%#v", this.ServicePoliciesFromNamespace) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_NoServicePolicies) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_NoServicePolicies{` +
-		`NoServicePolicies:` + fmt.Sprintf("%#v", this.NoServicePolicies) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_ActiveServicePolicies) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_ActiveServicePolicies{` +
-		`ActiveServicePolicies:` + fmt.Sprintf("%#v", this.ActiveServicePolicies) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_RoundRobin) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_RoundRobin{` +
-		`RoundRobin:` + fmt.Sprintf("%#v", this.RoundRobin) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_LeastActive) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_LeastActive{` +
-		`LeastActive:` + fmt.Sprintf("%#v", this.LeastActive) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_Random) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_Random{` +
-		`Random:` + fmt.Sprintf("%#v", this.Random) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_SourceIpStickiness) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_SourceIpStickiness{` +
-		`SourceIpStickiness:` + fmt.Sprintf("%#v", this.SourceIpStickiness) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_CookieStickiness) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_CookieStickiness{` +
-		`CookieStickiness:` + fmt.Sprintf("%#v", this.CookieStickiness) + `}`}, ", ")
-	return s
-}
-func (this *GlobalSpecType_RingHash) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_RingHash{` +
-		`RingHash:` + fmt.Sprintf("%#v", this.RingHash) + `}`}, ", ")
-	return s
-}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 37)
+	s := make([]string, 0, 28)
 	s = append(s, "&http_loadbalancer.CreateSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.LoadbalancerType != nil {
@@ -12332,12 +8025,6 @@ func (this *CreateSpecType) GoString() string {
 	}
 	if this.WafExclusionRules != nil {
 		s = append(s, "WafExclusionRules: "+fmt.Sprintf("%#v", this.WafExclusionRules)+",\n")
-	}
-	if this.ServicePolicyChoice != nil {
-		s = append(s, "ServicePolicyChoice: "+fmt.Sprintf("%#v", this.ServicePolicyChoice)+",\n")
-	}
-	if this.HashPolicyChoice != nil {
-		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -12462,83 +8149,11 @@ func (this *CreateSpecType_RateLimit) GoString() string {
 		`RateLimit:` + fmt.Sprintf("%#v", this.RateLimit) + `}`}, ", ")
 	return s
 }
-func (this *CreateSpecType_ServicePoliciesFromNamespace) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_ServicePoliciesFromNamespace{` +
-		`ServicePoliciesFromNamespace:` + fmt.Sprintf("%#v", this.ServicePoliciesFromNamespace) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_NoServicePolicies) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_NoServicePolicies{` +
-		`NoServicePolicies:` + fmt.Sprintf("%#v", this.NoServicePolicies) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_ActiveServicePolicies) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_ActiveServicePolicies{` +
-		`ActiveServicePolicies:` + fmt.Sprintf("%#v", this.ActiveServicePolicies) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_RoundRobin) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_RoundRobin{` +
-		`RoundRobin:` + fmt.Sprintf("%#v", this.RoundRobin) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_LeastActive) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_LeastActive{` +
-		`LeastActive:` + fmt.Sprintf("%#v", this.LeastActive) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_Random) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_Random{` +
-		`Random:` + fmt.Sprintf("%#v", this.Random) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_SourceIpStickiness) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_SourceIpStickiness{` +
-		`SourceIpStickiness:` + fmt.Sprintf("%#v", this.SourceIpStickiness) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_CookieStickiness) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_CookieStickiness{` +
-		`CookieStickiness:` + fmt.Sprintf("%#v", this.CookieStickiness) + `}`}, ", ")
-	return s
-}
-func (this *CreateSpecType_RingHash) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_RingHash{` +
-		`RingHash:` + fmt.Sprintf("%#v", this.RingHash) + `}`}, ", ")
-	return s
-}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 37)
+	s := make([]string, 0, 28)
 	s = append(s, "&http_loadbalancer.ReplaceSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.LoadbalancerType != nil {
@@ -12577,12 +8192,6 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	if this.WafExclusionRules != nil {
 		s = append(s, "WafExclusionRules: "+fmt.Sprintf("%#v", this.WafExclusionRules)+",\n")
-	}
-	if this.ServicePolicyChoice != nil {
-		s = append(s, "ServicePolicyChoice: "+fmt.Sprintf("%#v", this.ServicePolicyChoice)+",\n")
-	}
-	if this.HashPolicyChoice != nil {
-		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -12707,83 +8316,11 @@ func (this *ReplaceSpecType_RateLimit) GoString() string {
 		`RateLimit:` + fmt.Sprintf("%#v", this.RateLimit) + `}`}, ", ")
 	return s
 }
-func (this *ReplaceSpecType_ServicePoliciesFromNamespace) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_ServicePoliciesFromNamespace{` +
-		`ServicePoliciesFromNamespace:` + fmt.Sprintf("%#v", this.ServicePoliciesFromNamespace) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_NoServicePolicies) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_NoServicePolicies{` +
-		`NoServicePolicies:` + fmt.Sprintf("%#v", this.NoServicePolicies) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_ActiveServicePolicies) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_ActiveServicePolicies{` +
-		`ActiveServicePolicies:` + fmt.Sprintf("%#v", this.ActiveServicePolicies) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_RoundRobin) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_RoundRobin{` +
-		`RoundRobin:` + fmt.Sprintf("%#v", this.RoundRobin) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_LeastActive) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_LeastActive{` +
-		`LeastActive:` + fmt.Sprintf("%#v", this.LeastActive) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_Random) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_Random{` +
-		`Random:` + fmt.Sprintf("%#v", this.Random) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_SourceIpStickiness) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_SourceIpStickiness{` +
-		`SourceIpStickiness:` + fmt.Sprintf("%#v", this.SourceIpStickiness) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_CookieStickiness) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_CookieStickiness{` +
-		`CookieStickiness:` + fmt.Sprintf("%#v", this.CookieStickiness) + `}`}, ", ")
-	return s
-}
-func (this *ReplaceSpecType_RingHash) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_RingHash{` +
-		`RingHash:` + fmt.Sprintf("%#v", this.RingHash) + `}`}, ", ")
-	return s
-}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 42)
+	s := make([]string, 0, 33)
 	s = append(s, "&http_loadbalancer.GetSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.LoadbalancerType != nil {
@@ -12822,12 +8359,6 @@ func (this *GetSpecType) GoString() string {
 	}
 	if this.WafExclusionRules != nil {
 		s = append(s, "WafExclusionRules: "+fmt.Sprintf("%#v", this.WafExclusionRules)+",\n")
-	}
-	if this.ServicePolicyChoice != nil {
-		s = append(s, "ServicePolicyChoice: "+fmt.Sprintf("%#v", this.ServicePolicyChoice)+",\n")
-	}
-	if this.HashPolicyChoice != nil {
-		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
 	}
 	s = append(s, "HostName: "+fmt.Sprintf("%#v", this.HostName)+",\n")
 	if this.DnsInfo != nil {
@@ -12959,78 +8490,6 @@ func (this *GetSpecType_RateLimit) GoString() string {
 	}
 	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_RateLimit{` +
 		`RateLimit:` + fmt.Sprintf("%#v", this.RateLimit) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_ServicePoliciesFromNamespace) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_ServicePoliciesFromNamespace{` +
-		`ServicePoliciesFromNamespace:` + fmt.Sprintf("%#v", this.ServicePoliciesFromNamespace) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_NoServicePolicies) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_NoServicePolicies{` +
-		`NoServicePolicies:` + fmt.Sprintf("%#v", this.NoServicePolicies) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_ActiveServicePolicies) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_ActiveServicePolicies{` +
-		`ActiveServicePolicies:` + fmt.Sprintf("%#v", this.ActiveServicePolicies) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_RoundRobin) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_RoundRobin{` +
-		`RoundRobin:` + fmt.Sprintf("%#v", this.RoundRobin) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_LeastActive) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_LeastActive{` +
-		`LeastActive:` + fmt.Sprintf("%#v", this.LeastActive) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_Random) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_Random{` +
-		`Random:` + fmt.Sprintf("%#v", this.Random) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_SourceIpStickiness) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_SourceIpStickiness{` +
-		`SourceIpStickiness:` + fmt.Sprintf("%#v", this.SourceIpStickiness) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_CookieStickiness) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_CookieStickiness{` +
-		`CookieStickiness:` + fmt.Sprintf("%#v", this.CookieStickiness) + `}`}, ", ")
-	return s
-}
-func (this *GetSpecType_RingHash) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_RingHash{` +
-		`RingHash:` + fmt.Sprintf("%#v", this.RingHash) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -13226,516 +8685,6 @@ func (m *ProxyTypeHttpsAutoCerts) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *HashPolicyListType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *HashPolicyListType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.HashPolicy) > 0 {
-		for _, msg := range m.HashPolicy {
-			dAtA[i] = 0x82
-			i++
-			dAtA[i] = 0x1
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	return i, nil
-}
-
-func (m *MirrorPolicyType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MirrorPolicyType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.OriginPool != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OriginPool.Size()))
-		n6, err := m.OriginPool.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n6
-	}
-	if m.Percent != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Percent.Size()))
-		n7, err := m.Percent.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n7
-	}
-	return i, nil
-}
-
-func (m *RouteSimpleAdvancedOptions) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *RouteSimpleAdvancedOptions) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.HashPolicyChoice != nil {
-		nn8, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn8
-	}
-	if m.Priority != 0 {
-		dAtA[i] = 0x20
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Priority))
-	}
-	if len(m.EndpointSubsets) > 0 {
-		keysForEndpointSubsets := make([]string, 0, len(m.EndpointSubsets))
-		for k, _ := range m.EndpointSubsets {
-			keysForEndpointSubsets = append(keysForEndpointSubsets, string(k))
-		}
-		sortkeys.Strings(keysForEndpointSubsets)
-		for _, k := range keysForEndpointSubsets {
-			dAtA[i] = 0x2a
-			i++
-			v := m.EndpointSubsets[string(k)]
-			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
-			i += copy(dAtA[i:], k)
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
-			i += copy(dAtA[i:], v)
-		}
-	}
-	if m.RewriteChoice != nil {
-		nn9, err := m.RewriteChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn9
-	}
-	if len(m.RequestHeadersToAdd) > 0 {
-		for _, msg := range m.RequestHeadersToAdd {
-			dAtA[i] = 0x4a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.RequestHeadersToRemove) > 0 {
-		for _, s := range m.RequestHeadersToRemove {
-			dAtA[i] = 0x52
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
-		}
-	}
-	if len(m.ResponseHeadersToAdd) > 0 {
-		for _, msg := range m.ResponseHeadersToAdd {
-			dAtA[i] = 0x5a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.ResponseHeadersToRemove) > 0 {
-		for _, s := range m.ResponseHeadersToRemove {
-			dAtA[i] = 0x62
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
-		}
-	}
-	if m.DisableLocationAdd {
-		dAtA[i] = 0x68
-		i++
-		if m.DisableLocationAdd {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i++
-	}
-	if m.WafChoice != nil {
-		nn10, err := m.WafChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn10
-	}
-	if m.CorsPolicy != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CorsPolicy.Size()))
-		n11, err := m.CorsPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n11
-	}
-	if m.SpdyChoice != nil {
-		nn12, err := m.SpdyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn12
-	}
-	if m.WebsocketChoice != nil {
-		nn13, err := m.WebsocketChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn13
-	}
-	if m.RetryPolicyChoice != nil {
-		nn14, err := m.RetryPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn14
-	}
-	if m.Timeout != 0 {
-		dAtA[i] = 0xe0
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Timeout))
-	}
-	if m.BufferChoice != nil {
-		nn15, err := m.BufferChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn15
-	}
-	if m.MirroringChoice != nil {
-		nn16, err := m.MirroringChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn16
-	}
-	return i, nil
-}
-
-func (m *RouteSimpleAdvancedOptions_CommonHashPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.CommonHashPolicy != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CommonHashPolicy.Size()))
-		n17, err := m.CommonHashPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n17
-	}
-	return i, nil
-}
-func (m *RouteSimpleAdvancedOptions_SpecificHashPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.SpecificHashPolicy != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SpecificHashPolicy.Size()))
-		n18, err := m.SpecificHashPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n18
-	}
-	return i, nil
-}
-func (m *RouteSimpleAdvancedOptions_DisablePrefixRewrite) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DisablePrefixRewrite != nil {
-		dAtA[i] = 0x3a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisablePrefixRewrite.Size()))
-		n19, err := m.DisablePrefixRewrite.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n19
-	}
-	return i, nil
-}
-func (m *RouteSimpleAdvancedOptions_PrefixRewrite) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x42
-	i++
-	i = encodeVarintTypes(dAtA, i, uint64(len(m.PrefixRewrite)))
-	i += copy(dAtA[i:], m.PrefixRewrite)
-	return i, nil
-}
-func (m *RouteSimpleAdvancedOptions_DisableWaf) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DisableWaf != nil {
-		dAtA[i] = 0x7a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableWaf.Size()))
-		n20, err := m.DisableWaf.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n20
-	}
-	return i, nil
-}
-func (m *RouteSimpleAdvancedOptions_Waf) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.Waf != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Waf.Size()))
-		n21, err := m.Waf.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n21
-	}
-	return i, nil
-}
-func (m *RouteSimpleAdvancedOptions_WafRule) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.WafRule != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.WafRule.Size()))
-		n22, err := m.WafRule.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n22
-	}
-	return i, nil
-}
-func (m *RouteSimpleAdvancedOptions_DisableSpdy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DisableSpdy != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableSpdy.Size()))
-		n23, err := m.DisableSpdy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n23
-	}
-	return i, nil
-}
-func (m *RouteSimpleAdvancedOptions_EnableSpdy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.EnableSpdy != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.EnableSpdy.Size()))
-		n24, err := m.EnableSpdy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n24
-	}
-	return i, nil
-}
-func (m *RouteSimpleAdvancedOptions_DisableWebSocketConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DisableWebSocketConfig != nil {
-		dAtA[i] = 0xba
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableWebSocketConfig.Size()))
-		n25, err := m.DisableWebSocketConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n25
-	}
-	return i, nil
-}
-func (m *RouteSimpleAdvancedOptions_WebSocketConfig) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.WebSocketConfig != nil {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.WebSocketConfig.Size()))
-		n26, err := m.WebSocketConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n26
-	}
-	return i, nil
-}
-func (m *RouteSimpleAdvancedOptions_DefaultRetryPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DefaultRetryPolicy != nil {
-		dAtA[i] = 0xd2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultRetryPolicy.Size()))
-		n27, err := m.DefaultRetryPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n27
-	}
-	return i, nil
-}
-func (m *RouteSimpleAdvancedOptions_RetryPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.RetryPolicy != nil {
-		dAtA[i] = 0xda
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RetryPolicy.Size()))
-		n28, err := m.RetryPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n28
-	}
-	return i, nil
-}
-func (m *RouteSimpleAdvancedOptions_CommonBuffering) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.CommonBuffering != nil {
-		dAtA[i] = 0xf2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CommonBuffering.Size()))
-		n29, err := m.CommonBuffering.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n29
-	}
-	return i, nil
-}
-func (m *RouteSimpleAdvancedOptions_BufferPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.BufferPolicy != nil {
-		dAtA[i] = 0xfa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.BufferPolicy.Size()))
-		n30, err := m.BufferPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n30
-	}
-	return i, nil
-}
-func (m *RouteSimpleAdvancedOptions_DisableMirroring) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DisableMirroring != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DisableMirroring.Size()))
-		n31, err := m.DisableMirroring.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n31
-	}
-	return i, nil
-}
-func (m *RouteSimpleAdvancedOptions_MirrorPolicy) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.MirrorPolicy != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.MirrorPolicy.Size()))
-		n32, err := m.MirrorPolicy.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n32
-	}
-	return i, nil
-}
 func (m *RouteTypeSimpleWithDefaultOriginPool) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -13760,18 +8709,18 @@ func (m *RouteTypeSimpleWithDefaultOriginPool) MarshalTo(dAtA []byte) (int, erro
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Path.Size()))
-		n33, err := m.Path.MarshalTo(dAtA[i:])
+		n6, err := m.Path.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n33
+		i += n6
 	}
 	if m.HostRewriteParams != nil {
-		nn34, err := m.HostRewriteParams.MarshalTo(dAtA[i:])
+		nn7, err := m.HostRewriteParams.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn34
+		i += nn7
 	}
 	return i, nil
 }
@@ -13782,11 +8731,11 @@ func (m *RouteTypeSimpleWithDefaultOriginPool_AutoHostRewrite) MarshalTo(dAtA []
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AutoHostRewrite.Size()))
-		n35, err := m.AutoHostRewrite.MarshalTo(dAtA[i:])
+		n8, err := m.AutoHostRewrite.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n35
+		i += n8
 	}
 	return i, nil
 }
@@ -13804,11 +8753,11 @@ func (m *RouteTypeSimpleWithDefaultOriginPool_DisableHostRewrite) MarshalTo(dAtA
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DisableHostRewrite.Size()))
-		n36, err := m.DisableHostRewrite.MarshalTo(dAtA[i:])
+		n9, err := m.DisableHostRewrite.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n36
+		i += n9
 	}
 	return i, nil
 }
@@ -13831,11 +8780,11 @@ func (m *RouteTypeSimple) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Path.Size()))
-		n37, err := m.Path.MarshalTo(dAtA[i:])
+		n10, err := m.Path.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n37
+		i += n10
 	}
 	if m.HttpMethod != 0 {
 		dAtA[i] = 0x10
@@ -13855,21 +8804,11 @@ func (m *RouteTypeSimple) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.HostRewriteParams != nil {
-		nn38, err := m.HostRewriteParams.MarshalTo(dAtA[i:])
+		nn11, err := m.HostRewriteParams.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn38
-	}
-	if m.AdvancedOptions != nil {
-		dAtA[i] = 0x42
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AdvancedOptions.Size()))
-		n39, err := m.AdvancedOptions.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n39
+		i += nn11
 	}
 	return i, nil
 }
@@ -13880,11 +8819,11 @@ func (m *RouteTypeSimple_AutoHostRewrite) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AutoHostRewrite.Size()))
-		n40, err := m.AutoHostRewrite.MarshalTo(dAtA[i:])
+		n12, err := m.AutoHostRewrite.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n40
+		i += n12
 	}
 	return i, nil
 }
@@ -13902,11 +8841,11 @@ func (m *RouteTypeSimple_DisableHostRewrite) MarshalTo(dAtA []byte) (int, error)
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DisableHostRewrite.Size()))
-		n41, err := m.DisableHostRewrite.MarshalTo(dAtA[i:])
+		n13, err := m.DisableHostRewrite.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n41
+		i += n13
 	}
 	return i, nil
 }
@@ -13929,11 +8868,11 @@ func (m *RouteTypeRedirect) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Path.Size()))
-		n42, err := m.Path.MarshalTo(dAtA[i:])
+		n14, err := m.Path.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n42
+		i += n14
 	}
 	if m.HttpMethod != 0 {
 		dAtA[i] = 0x10
@@ -13944,11 +8883,11 @@ func (m *RouteTypeRedirect) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.RouteRedirect.Size()))
-		n43, err := m.RouteRedirect.MarshalTo(dAtA[i:])
+		n15, err := m.RouteRedirect.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n43
+		i += n15
 	}
 	return i, nil
 }
@@ -13972,11 +8911,11 @@ func (m *RouteTypeDirectResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Path.Size()))
-		n44, err := m.Path.MarshalTo(dAtA[i:])
+		n16, err := m.Path.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n44
+		i += n16
 	}
 	if m.HttpMethod != 0 {
 		dAtA[i] = 0x10
@@ -13987,11 +8926,11 @@ func (m *RouteTypeDirectResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.RouteDirectResponse.Size()))
-		n45, err := m.RouteDirectResponse.MarshalTo(dAtA[i:])
+		n17, err := m.RouteDirectResponse.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n45
+		i += n17
 	}
 	return i, nil
 }
@@ -14015,11 +8954,11 @@ func (m *RouteTypeCustomRoute) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.RouteRef.Size()))
-		n46, err := m.RouteRef.MarshalTo(dAtA[i:])
+		n18, err := m.RouteRef.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n46
+		i += n18
 	}
 	return i, nil
 }
@@ -14040,11 +8979,11 @@ func (m *RouteType) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.Choice != nil {
-		nn47, err := m.Choice.MarshalTo(dAtA[i:])
+		nn19, err := m.Choice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn47
+		i += nn19
 	}
 	return i, nil
 }
@@ -14055,11 +8994,11 @@ func (m *RouteType_SimpleRoute) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.SimpleRoute.Size()))
-		n48, err := m.SimpleRoute.MarshalTo(dAtA[i:])
+		n20, err := m.SimpleRoute.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n48
+		i += n20
 	}
 	return i, nil
 }
@@ -14069,11 +9008,11 @@ func (m *RouteType_RedirectRoute) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.RedirectRoute.Size()))
-		n49, err := m.RedirectRoute.MarshalTo(dAtA[i:])
+		n21, err := m.RedirectRoute.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n49
+		i += n21
 	}
 	return i, nil
 }
@@ -14083,11 +9022,11 @@ func (m *RouteType_DirectResponseRoute) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DirectResponseRoute.Size()))
-		n50, err := m.DirectResponseRoute.MarshalTo(dAtA[i:])
+		n22, err := m.DirectResponseRoute.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n50
+		i += n22
 	}
 	return i, nil
 }
@@ -14097,11 +9036,11 @@ func (m *RouteType_CustomRouteObject) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.CustomRouteObject.Size()))
-		n51, err := m.CustomRouteObject.MarshalTo(dAtA[i:])
+		n23, err := m.CustomRouteObject.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n51
+		i += n23
 	}
 	return i, nil
 }
@@ -14183,21 +9122,21 @@ func (m *AdvancedOptionsType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.BufferPolicy.Size()))
-		n52, err := m.BufferPolicy.MarshalTo(dAtA[i:])
+		n24, err := m.BufferPolicy.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n52
+		i += n24
 	}
 	if m.CompressionParams != nil {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.CompressionParams.Size()))
-		n53, err := m.CompressionParams.MarshalTo(dAtA[i:])
+		n25, err := m.CompressionParams.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n53
+		i += n25
 	}
 	if len(m.CustomErrors) > 0 {
 		keysForCustomErrors := make([]uint32, 0, len(m.CustomErrors))
@@ -14224,11 +9163,11 @@ func (m *AdvancedOptionsType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x4a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.JavascriptInfo.Size()))
-		n54, err := m.JavascriptInfo.MarshalTo(dAtA[i:])
+		n26, err := m.JavascriptInfo.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n54
+		i += n26
 	}
 	if len(m.Jwt) > 0 {
 		for _, msg := range m.Jwt {
@@ -14301,18 +9240,18 @@ func (m *RateLimitConfigType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.RateLimiter.Size()))
-		n55, err := m.RateLimiter.MarshalTo(dAtA[i:])
+		n27, err := m.RateLimiter.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n55
+		i += n27
 	}
 	if m.IpAllowedListChoice != nil {
-		nn56, err := m.IpAllowedListChoice.MarshalTo(dAtA[i:])
+		nn28, err := m.IpAllowedListChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn56
+		i += nn28
 	}
 	return i, nil
 }
@@ -14323,11 +9262,11 @@ func (m *RateLimitConfigType_NoIpAllowedList) MarshalTo(dAtA []byte) (int, error
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.NoIpAllowedList.Size()))
-		n57, err := m.NoIpAllowedList.MarshalTo(dAtA[i:])
+		n29, err := m.NoIpAllowedList.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n57
+		i += n29
 	}
 	return i, nil
 }
@@ -14337,11 +9276,11 @@ func (m *RateLimitConfigType_IpAllowedList) MarshalTo(dAtA []byte) (int, error) 
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.IpAllowedList.Size()))
-		n58, err := m.IpAllowedList.MarshalTo(dAtA[i:])
+		n30, err := m.IpAllowedList.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n58
+		i += n30
 	}
 	return i, nil
 }
@@ -14351,44 +9290,14 @@ func (m *RateLimitConfigType_CustomIpAllowedList) MarshalTo(dAtA []byte) (int, e
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.CustomIpAllowedList.Size()))
-		n59, err := m.CustomIpAllowedList.MarshalTo(dAtA[i:])
+		n31, err := m.CustomIpAllowedList.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n59
+		i += n31
 	}
 	return i, nil
 }
-func (m *ServicePolicyList) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ServicePolicyList) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.Policies) > 0 {
-		for _, msg := range m.Policies {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	return i, nil
-}
-
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -14420,18 +9329,18 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.LoadbalancerType != nil {
-		nn60, err := m.LoadbalancerType.MarshalTo(dAtA[i:])
+		nn32, err := m.LoadbalancerType.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn60
+		i += nn32
 	}
 	if m.AdvertiseChoice != nil {
-		nn61, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
+		nn33, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn61
+		i += nn33
 	}
 	if len(m.DefaultRoutePools) > 0 {
 		for _, msg := range m.DefaultRoutePools {
@@ -14461,18 +9370,18 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.CorsPolicy.Size()))
-		n62, err := m.CorsPolicy.MarshalTo(dAtA[i:])
+		n34, err := m.CorsPolicy.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n62
+		i += n34
 	}
 	if m.WafChoice != nil {
-		nn63, err := m.WafChoice.MarshalTo(dAtA[i:])
+		nn35, err := m.WafChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn63
+		i += nn35
 	}
 	if m.AddLocation {
 		dAtA[i] = 0x88
@@ -14487,11 +9396,11 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i++
 	}
 	if m.ChallengeType != nil {
-		nn64, err := m.ChallengeType.MarshalTo(dAtA[i:])
+		nn36, err := m.ChallengeType.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn64
+		i += nn36
 	}
 	if m.MoreOption != nil {
 		dAtA[i] = 0x9a
@@ -14499,11 +9408,11 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.MoreOption.Size()))
-		n65, err := m.MoreOption.MarshalTo(dAtA[i:])
+		n37, err := m.MoreOption.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n65
+		i += n37
 	}
 	if m.UserIdentification != nil {
 		dAtA[i] = 0xa2
@@ -14511,25 +9420,25 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.UserIdentification.Size()))
-		n66, err := m.UserIdentification.MarshalTo(dAtA[i:])
+		n38, err := m.UserIdentification.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n66
+		i += n38
 	}
 	if m.RateLimitChoice != nil {
-		nn67, err := m.RateLimitChoice.MarshalTo(dAtA[i:])
+		nn39, err := m.RateLimitChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn67
+		i += nn39
 	}
 	if m.HostRewriteParams != nil {
-		nn68, err := m.HostRewriteParams.MarshalTo(dAtA[i:])
+		nn40, err := m.HostRewriteParams.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn68
+		i += nn40
 	}
 	if m.MaliciousUserMitigation != nil {
 		dAtA[i] = 0x82
@@ -14537,11 +9446,11 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.MaliciousUserMitigation.Size()))
-		n69, err := m.MaliciousUserMitigation.MarshalTo(dAtA[i:])
+		n41, err := m.MaliciousUserMitigation.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n69
+		i += n41
 	}
 	if len(m.WafExclusionRules) > 0 {
 		for _, msg := range m.WafExclusionRules {
@@ -14557,31 +9466,17 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 			i += n
 		}
 	}
-	if m.ServicePolicyChoice != nil {
-		nn70, err := m.ServicePolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn70
-	}
-	if m.HashPolicyChoice != nil {
-		nn71, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn71
-	}
 	if m.ViewInternal != nil {
 		dAtA[i] = 0xc2
 		i++
 		dAtA[i] = 0x3e
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ViewInternal.Size()))
-		n72, err := m.ViewInternal.MarshalTo(dAtA[i:])
+		n42, err := m.ViewInternal.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n72
+		i += n42
 	}
 	if len(m.HostName) > 0 {
 		dAtA[i] = 0xca
@@ -14625,11 +9520,11 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3f
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AutoCertInfo.Size()))
-		n73, err := m.AutoCertInfo.MarshalTo(dAtA[i:])
+		n43, err := m.AutoCertInfo.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n73
+		i += n43
 	}
 	return i, nil
 }
@@ -14640,11 +9535,11 @@ func (m *GlobalSpecType_Http) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Http.Size()))
-		n74, err := m.Http.MarshalTo(dAtA[i:])
+		n44, err := m.Http.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n74
+		i += n44
 	}
 	return i, nil
 }
@@ -14654,11 +9549,11 @@ func (m *GlobalSpecType_Https) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Https.Size()))
-		n75, err := m.Https.MarshalTo(dAtA[i:])
+		n45, err := m.Https.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n75
+		i += n45
 	}
 	return i, nil
 }
@@ -14668,11 +9563,11 @@ func (m *GlobalSpecType_AdvertiseOnPublic) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublic.Size()))
-		n76, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
+		n46, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n76
+		i += n46
 	}
 	return i, nil
 }
@@ -14682,11 +9577,11 @@ func (m *GlobalSpecType_AdvertiseCustom) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseCustom.Size()))
-		n77, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
+		n47, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n77
+		i += n47
 	}
 	return i, nil
 }
@@ -14696,11 +9591,11 @@ func (m *GlobalSpecType_Waf) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x4a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Waf.Size()))
-		n78, err := m.Waf.MarshalTo(dAtA[i:])
+		n48, err := m.Waf.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n78
+		i += n48
 	}
 	return i, nil
 }
@@ -14710,11 +9605,11 @@ func (m *GlobalSpecType_WafRule) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x52
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.WafRule.Size()))
-		n79, err := m.WafRule.MarshalTo(dAtA[i:])
+		n49, err := m.WafRule.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n79
+		i += n49
 	}
 	return i, nil
 }
@@ -14724,11 +9619,11 @@ func (m *GlobalSpecType_DisableWaf) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x5a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DisableWaf.Size()))
-		n80, err := m.DisableWaf.MarshalTo(dAtA[i:])
+		n50, err := m.DisableWaf.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n80
+		i += n50
 	}
 	return i, nil
 }
@@ -14738,11 +9633,11 @@ func (m *GlobalSpecType_DoNotAdvertise) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x62
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotAdvertise.Size()))
-		n81, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
+		n51, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n81
+		i += n51
 	}
 	return i, nil
 }
@@ -14752,11 +9647,11 @@ func (m *GlobalSpecType_AdvertiseOnPublicDefaultVip) MarshalTo(dAtA []byte) (int
 		dAtA[i] = 0x6a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublicDefaultVip.Size()))
-		n82, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
+		n52, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n82
+		i += n52
 	}
 	return i, nil
 }
@@ -14768,11 +9663,11 @@ func (m *GlobalSpecType_JsChallenge) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.JsChallenge.Size()))
-		n83, err := m.JsChallenge.MarshalTo(dAtA[i:])
+		n53, err := m.JsChallenge.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n83
+		i += n53
 	}
 	return i, nil
 }
@@ -14784,11 +9679,11 @@ func (m *GlobalSpecType_DisableRateLimit) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DisableRateLimit.Size()))
-		n84, err := m.DisableRateLimit.MarshalTo(dAtA[i:])
+		n54, err := m.DisableRateLimit.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n84
+		i += n54
 	}
 	return i, nil
 }
@@ -14800,11 +9695,11 @@ func (m *GlobalSpecType_RateLimit) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.RateLimit.Size()))
-		n85, err := m.RateLimit.MarshalTo(dAtA[i:])
+		n55, err := m.RateLimit.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n85
+		i += n55
 	}
 	return i, nil
 }
@@ -14816,11 +9711,11 @@ func (m *GlobalSpecType_CaptchaChallenge) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.CaptchaChallenge.Size()))
-		n86, err := m.CaptchaChallenge.MarshalTo(dAtA[i:])
+		n56, err := m.CaptchaChallenge.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n86
+		i += n56
 	}
 	return i, nil
 }
@@ -14832,11 +9727,11 @@ func (m *GlobalSpecType_NoChallenge) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.NoChallenge.Size()))
-		n87, err := m.NoChallenge.MarshalTo(dAtA[i:])
+		n57, err := m.NoChallenge.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n87
+		i += n57
 	}
 	return i, nil
 }
@@ -14848,11 +9743,11 @@ func (m *GlobalSpecType_HttpsAutoCert) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HttpsAutoCert.Size()))
-		n88, err := m.HttpsAutoCert.MarshalTo(dAtA[i:])
+		n58, err := m.HttpsAutoCert.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n88
+		i += n58
 	}
 	return i, nil
 }
@@ -14864,11 +9759,11 @@ func (m *GlobalSpecType_AutoHostRewrite) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AutoHostRewrite.Size()))
-		n89, err := m.AutoHostRewrite.MarshalTo(dAtA[i:])
+		n59, err := m.AutoHostRewrite.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n89
+		i += n59
 	}
 	return i, nil
 }
@@ -14890,155 +9785,11 @@ func (m *GlobalSpecType_DisableHostRewrite) MarshalTo(dAtA []byte) (int, error) 
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DisableHostRewrite.Size()))
-		n90, err := m.DisableHostRewrite.MarshalTo(dAtA[i:])
+		n60, err := m.DisableHostRewrite.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n90
-	}
-	return i, nil
-}
-func (m *GlobalSpecType_ServicePoliciesFromNamespace) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.ServicePoliciesFromNamespace != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ServicePoliciesFromNamespace.Size()))
-		n91, err := m.ServicePoliciesFromNamespace.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n91
-	}
-	return i, nil
-}
-func (m *GlobalSpecType_NoServicePolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.NoServicePolicies != nil {
-		dAtA[i] = 0xd2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoServicePolicies.Size()))
-		n92, err := m.NoServicePolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n92
-	}
-	return i, nil
-}
-func (m *GlobalSpecType_ActiveServicePolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.ActiveServicePolicies != nil {
-		dAtA[i] = 0xda
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveServicePolicies.Size()))
-		n93, err := m.ActiveServicePolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n93
-	}
-	return i, nil
-}
-func (m *GlobalSpecType_RoundRobin) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.RoundRobin != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RoundRobin.Size()))
-		n94, err := m.RoundRobin.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n94
-	}
-	return i, nil
-}
-func (m *GlobalSpecType_LeastActive) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.LeastActive != nil {
-		dAtA[i] = 0xf2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LeastActive.Size()))
-		n95, err := m.LeastActive.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n95
-	}
-	return i, nil
-}
-func (m *GlobalSpecType_Random) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.Random != nil {
-		dAtA[i] = 0xfa
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Random.Size()))
-		n96, err := m.Random.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n96
-	}
-	return i, nil
-}
-func (m *GlobalSpecType_SourceIpStickiness) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.SourceIpStickiness != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SourceIpStickiness.Size()))
-		n97, err := m.SourceIpStickiness.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n97
-	}
-	return i, nil
-}
-func (m *GlobalSpecType_CookieStickiness) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.CookieStickiness != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CookieStickiness.Size()))
-		n98, err := m.CookieStickiness.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n98
-	}
-	return i, nil
-}
-func (m *GlobalSpecType_RingHash) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.RingHash != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RingHash.Size()))
-		n99, err := m.RingHash.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n99
+		i += n60
 	}
 	return i, nil
 }
@@ -15073,18 +9824,18 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.LoadbalancerType != nil {
-		nn100, err := m.LoadbalancerType.MarshalTo(dAtA[i:])
+		nn61, err := m.LoadbalancerType.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn100
+		i += nn61
 	}
 	if m.AdvertiseChoice != nil {
-		nn101, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
+		nn62, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn101
+		i += nn62
 	}
 	if len(m.DefaultRoutePools) > 0 {
 		for _, msg := range m.DefaultRoutePools {
@@ -15114,18 +9865,18 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.CorsPolicy.Size()))
-		n102, err := m.CorsPolicy.MarshalTo(dAtA[i:])
+		n63, err := m.CorsPolicy.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n102
+		i += n63
 	}
 	if m.WafChoice != nil {
-		nn103, err := m.WafChoice.MarshalTo(dAtA[i:])
+		nn64, err := m.WafChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn103
+		i += nn64
 	}
 	if m.AddLocation {
 		dAtA[i] = 0x88
@@ -15140,11 +9891,11 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i++
 	}
 	if m.ChallengeType != nil {
-		nn104, err := m.ChallengeType.MarshalTo(dAtA[i:])
+		nn65, err := m.ChallengeType.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn104
+		i += nn65
 	}
 	if m.MoreOption != nil {
 		dAtA[i] = 0x9a
@@ -15152,11 +9903,11 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.MoreOption.Size()))
-		n105, err := m.MoreOption.MarshalTo(dAtA[i:])
+		n66, err := m.MoreOption.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n105
+		i += n66
 	}
 	if m.UserIdentification != nil {
 		dAtA[i] = 0xa2
@@ -15164,18 +9915,18 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.UserIdentification.Size()))
-		n106, err := m.UserIdentification.MarshalTo(dAtA[i:])
+		n67, err := m.UserIdentification.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n106
+		i += n67
 	}
 	if m.RateLimitChoice != nil {
-		nn107, err := m.RateLimitChoice.MarshalTo(dAtA[i:])
+		nn68, err := m.RateLimitChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn107
+		i += nn68
 	}
 	if m.MaliciousUserMitigation != nil {
 		dAtA[i] = 0x82
@@ -15183,11 +9934,11 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.MaliciousUserMitigation.Size()))
-		n108, err := m.MaliciousUserMitigation.MarshalTo(dAtA[i:])
+		n69, err := m.MaliciousUserMitigation.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n108
+		i += n69
 	}
 	if len(m.WafExclusionRules) > 0 {
 		for _, msg := range m.WafExclusionRules {
@@ -15203,20 +9954,6 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 			i += n
 		}
 	}
-	if m.ServicePolicyChoice != nil {
-		nn109, err := m.ServicePolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn109
-	}
-	if m.HashPolicyChoice != nil {
-		nn110, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn110
-	}
 	return i, nil
 }
 
@@ -15226,11 +9963,11 @@ func (m *CreateSpecType_Http) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Http.Size()))
-		n111, err := m.Http.MarshalTo(dAtA[i:])
+		n70, err := m.Http.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n111
+		i += n70
 	}
 	return i, nil
 }
@@ -15240,11 +9977,11 @@ func (m *CreateSpecType_Https) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Https.Size()))
-		n112, err := m.Https.MarshalTo(dAtA[i:])
+		n71, err := m.Https.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n112
+		i += n71
 	}
 	return i, nil
 }
@@ -15254,11 +9991,11 @@ func (m *CreateSpecType_AdvertiseOnPublic) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublic.Size()))
-		n113, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
+		n72, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n113
+		i += n72
 	}
 	return i, nil
 }
@@ -15268,11 +10005,11 @@ func (m *CreateSpecType_AdvertiseCustom) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseCustom.Size()))
-		n114, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
+		n73, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n114
+		i += n73
 	}
 	return i, nil
 }
@@ -15282,11 +10019,11 @@ func (m *CreateSpecType_Waf) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x4a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Waf.Size()))
-		n115, err := m.Waf.MarshalTo(dAtA[i:])
+		n74, err := m.Waf.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n115
+		i += n74
 	}
 	return i, nil
 }
@@ -15296,11 +10033,11 @@ func (m *CreateSpecType_WafRule) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x52
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.WafRule.Size()))
-		n116, err := m.WafRule.MarshalTo(dAtA[i:])
+		n75, err := m.WafRule.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n116
+		i += n75
 	}
 	return i, nil
 }
@@ -15310,11 +10047,11 @@ func (m *CreateSpecType_DisableWaf) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x5a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DisableWaf.Size()))
-		n117, err := m.DisableWaf.MarshalTo(dAtA[i:])
+		n76, err := m.DisableWaf.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n117
+		i += n76
 	}
 	return i, nil
 }
@@ -15324,11 +10061,11 @@ func (m *CreateSpecType_DoNotAdvertise) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x62
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotAdvertise.Size()))
-		n118, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
+		n77, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n118
+		i += n77
 	}
 	return i, nil
 }
@@ -15338,11 +10075,11 @@ func (m *CreateSpecType_AdvertiseOnPublicDefaultVip) MarshalTo(dAtA []byte) (int
 		dAtA[i] = 0x6a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublicDefaultVip.Size()))
-		n119, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
+		n78, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n119
+		i += n78
 	}
 	return i, nil
 }
@@ -15354,11 +10091,11 @@ func (m *CreateSpecType_JsChallenge) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.JsChallenge.Size()))
-		n120, err := m.JsChallenge.MarshalTo(dAtA[i:])
+		n79, err := m.JsChallenge.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n120
+		i += n79
 	}
 	return i, nil
 }
@@ -15370,11 +10107,11 @@ func (m *CreateSpecType_DisableRateLimit) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DisableRateLimit.Size()))
-		n121, err := m.DisableRateLimit.MarshalTo(dAtA[i:])
+		n80, err := m.DisableRateLimit.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n121
+		i += n80
 	}
 	return i, nil
 }
@@ -15386,11 +10123,11 @@ func (m *CreateSpecType_RateLimit) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.RateLimit.Size()))
-		n122, err := m.RateLimit.MarshalTo(dAtA[i:])
+		n81, err := m.RateLimit.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n122
+		i += n81
 	}
 	return i, nil
 }
@@ -15402,11 +10139,11 @@ func (m *CreateSpecType_CaptchaChallenge) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.CaptchaChallenge.Size()))
-		n123, err := m.CaptchaChallenge.MarshalTo(dAtA[i:])
+		n82, err := m.CaptchaChallenge.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n123
+		i += n82
 	}
 	return i, nil
 }
@@ -15418,11 +10155,11 @@ func (m *CreateSpecType_NoChallenge) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.NoChallenge.Size()))
-		n124, err := m.NoChallenge.MarshalTo(dAtA[i:])
+		n83, err := m.NoChallenge.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n124
+		i += n83
 	}
 	return i, nil
 }
@@ -15434,155 +10171,11 @@ func (m *CreateSpecType_HttpsAutoCert) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HttpsAutoCert.Size()))
-		n125, err := m.HttpsAutoCert.MarshalTo(dAtA[i:])
+		n84, err := m.HttpsAutoCert.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n125
-	}
-	return i, nil
-}
-func (m *CreateSpecType_ServicePoliciesFromNamespace) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.ServicePoliciesFromNamespace != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ServicePoliciesFromNamespace.Size()))
-		n126, err := m.ServicePoliciesFromNamespace.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n126
-	}
-	return i, nil
-}
-func (m *CreateSpecType_NoServicePolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.NoServicePolicies != nil {
-		dAtA[i] = 0xd2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoServicePolicies.Size()))
-		n127, err := m.NoServicePolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n127
-	}
-	return i, nil
-}
-func (m *CreateSpecType_ActiveServicePolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.ActiveServicePolicies != nil {
-		dAtA[i] = 0xda
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveServicePolicies.Size()))
-		n128, err := m.ActiveServicePolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n128
-	}
-	return i, nil
-}
-func (m *CreateSpecType_RoundRobin) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.RoundRobin != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RoundRobin.Size()))
-		n129, err := m.RoundRobin.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n129
-	}
-	return i, nil
-}
-func (m *CreateSpecType_LeastActive) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.LeastActive != nil {
-		dAtA[i] = 0xf2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LeastActive.Size()))
-		n130, err := m.LeastActive.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n130
-	}
-	return i, nil
-}
-func (m *CreateSpecType_Random) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.Random != nil {
-		dAtA[i] = 0xfa
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Random.Size()))
-		n131, err := m.Random.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n131
-	}
-	return i, nil
-}
-func (m *CreateSpecType_SourceIpStickiness) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.SourceIpStickiness != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SourceIpStickiness.Size()))
-		n132, err := m.SourceIpStickiness.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n132
-	}
-	return i, nil
-}
-func (m *CreateSpecType_CookieStickiness) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.CookieStickiness != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CookieStickiness.Size()))
-		n133, err := m.CookieStickiness.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n133
-	}
-	return i, nil
-}
-func (m *CreateSpecType_RingHash) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.RingHash != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RingHash.Size()))
-		n134, err := m.RingHash.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n134
+		i += n84
 	}
 	return i, nil
 }
@@ -15617,18 +10210,18 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.LoadbalancerType != nil {
-		nn135, err := m.LoadbalancerType.MarshalTo(dAtA[i:])
+		nn85, err := m.LoadbalancerType.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn135
+		i += nn85
 	}
 	if m.AdvertiseChoice != nil {
-		nn136, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
+		nn86, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn136
+		i += nn86
 	}
 	if len(m.DefaultRoutePools) > 0 {
 		for _, msg := range m.DefaultRoutePools {
@@ -15658,18 +10251,18 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.CorsPolicy.Size()))
-		n137, err := m.CorsPolicy.MarshalTo(dAtA[i:])
+		n87, err := m.CorsPolicy.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n137
+		i += n87
 	}
 	if m.WafChoice != nil {
-		nn138, err := m.WafChoice.MarshalTo(dAtA[i:])
+		nn88, err := m.WafChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn138
+		i += nn88
 	}
 	if m.AddLocation {
 		dAtA[i] = 0x88
@@ -15684,11 +10277,11 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i++
 	}
 	if m.ChallengeType != nil {
-		nn139, err := m.ChallengeType.MarshalTo(dAtA[i:])
+		nn89, err := m.ChallengeType.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn139
+		i += nn89
 	}
 	if m.MoreOption != nil {
 		dAtA[i] = 0x9a
@@ -15696,11 +10289,11 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.MoreOption.Size()))
-		n140, err := m.MoreOption.MarshalTo(dAtA[i:])
+		n90, err := m.MoreOption.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n140
+		i += n90
 	}
 	if m.UserIdentification != nil {
 		dAtA[i] = 0xa2
@@ -15708,18 +10301,18 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.UserIdentification.Size()))
-		n141, err := m.UserIdentification.MarshalTo(dAtA[i:])
+		n91, err := m.UserIdentification.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n141
+		i += n91
 	}
 	if m.RateLimitChoice != nil {
-		nn142, err := m.RateLimitChoice.MarshalTo(dAtA[i:])
+		nn92, err := m.RateLimitChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn142
+		i += nn92
 	}
 	if m.MaliciousUserMitigation != nil {
 		dAtA[i] = 0x82
@@ -15727,11 +10320,11 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.MaliciousUserMitigation.Size()))
-		n143, err := m.MaliciousUserMitigation.MarshalTo(dAtA[i:])
+		n93, err := m.MaliciousUserMitigation.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n143
+		i += n93
 	}
 	if len(m.WafExclusionRules) > 0 {
 		for _, msg := range m.WafExclusionRules {
@@ -15747,20 +10340,6 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 			i += n
 		}
 	}
-	if m.ServicePolicyChoice != nil {
-		nn144, err := m.ServicePolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn144
-	}
-	if m.HashPolicyChoice != nil {
-		nn145, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn145
-	}
 	return i, nil
 }
 
@@ -15770,11 +10349,11 @@ func (m *ReplaceSpecType_Http) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Http.Size()))
-		n146, err := m.Http.MarshalTo(dAtA[i:])
+		n94, err := m.Http.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n146
+		i += n94
 	}
 	return i, nil
 }
@@ -15784,11 +10363,11 @@ func (m *ReplaceSpecType_Https) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Https.Size()))
-		n147, err := m.Https.MarshalTo(dAtA[i:])
+		n95, err := m.Https.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n147
+		i += n95
 	}
 	return i, nil
 }
@@ -15798,11 +10377,11 @@ func (m *ReplaceSpecType_AdvertiseOnPublic) MarshalTo(dAtA []byte) (int, error) 
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublic.Size()))
-		n148, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
+		n96, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n148
+		i += n96
 	}
 	return i, nil
 }
@@ -15812,11 +10391,11 @@ func (m *ReplaceSpecType_AdvertiseCustom) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseCustom.Size()))
-		n149, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
+		n97, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n149
+		i += n97
 	}
 	return i, nil
 }
@@ -15826,11 +10405,11 @@ func (m *ReplaceSpecType_Waf) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x4a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Waf.Size()))
-		n150, err := m.Waf.MarshalTo(dAtA[i:])
+		n98, err := m.Waf.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n150
+		i += n98
 	}
 	return i, nil
 }
@@ -15840,11 +10419,11 @@ func (m *ReplaceSpecType_WafRule) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x52
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.WafRule.Size()))
-		n151, err := m.WafRule.MarshalTo(dAtA[i:])
+		n99, err := m.WafRule.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n151
+		i += n99
 	}
 	return i, nil
 }
@@ -15854,11 +10433,11 @@ func (m *ReplaceSpecType_DisableWaf) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x5a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DisableWaf.Size()))
-		n152, err := m.DisableWaf.MarshalTo(dAtA[i:])
+		n100, err := m.DisableWaf.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n152
+		i += n100
 	}
 	return i, nil
 }
@@ -15868,11 +10447,11 @@ func (m *ReplaceSpecType_DoNotAdvertise) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x62
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotAdvertise.Size()))
-		n153, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
+		n101, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n153
+		i += n101
 	}
 	return i, nil
 }
@@ -15882,11 +10461,11 @@ func (m *ReplaceSpecType_AdvertiseOnPublicDefaultVip) MarshalTo(dAtA []byte) (in
 		dAtA[i] = 0x6a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublicDefaultVip.Size()))
-		n154, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
+		n102, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n154
+		i += n102
 	}
 	return i, nil
 }
@@ -15898,11 +10477,11 @@ func (m *ReplaceSpecType_JsChallenge) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.JsChallenge.Size()))
-		n155, err := m.JsChallenge.MarshalTo(dAtA[i:])
+		n103, err := m.JsChallenge.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n155
+		i += n103
 	}
 	return i, nil
 }
@@ -15914,11 +10493,11 @@ func (m *ReplaceSpecType_DisableRateLimit) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DisableRateLimit.Size()))
-		n156, err := m.DisableRateLimit.MarshalTo(dAtA[i:])
+		n104, err := m.DisableRateLimit.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n156
+		i += n104
 	}
 	return i, nil
 }
@@ -15930,11 +10509,11 @@ func (m *ReplaceSpecType_RateLimit) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.RateLimit.Size()))
-		n157, err := m.RateLimit.MarshalTo(dAtA[i:])
+		n105, err := m.RateLimit.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n157
+		i += n105
 	}
 	return i, nil
 }
@@ -15946,11 +10525,11 @@ func (m *ReplaceSpecType_CaptchaChallenge) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.CaptchaChallenge.Size()))
-		n158, err := m.CaptchaChallenge.MarshalTo(dAtA[i:])
+		n106, err := m.CaptchaChallenge.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n158
+		i += n106
 	}
 	return i, nil
 }
@@ -15962,11 +10541,11 @@ func (m *ReplaceSpecType_NoChallenge) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.NoChallenge.Size()))
-		n159, err := m.NoChallenge.MarshalTo(dAtA[i:])
+		n107, err := m.NoChallenge.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n159
+		i += n107
 	}
 	return i, nil
 }
@@ -15978,155 +10557,11 @@ func (m *ReplaceSpecType_HttpsAutoCert) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HttpsAutoCert.Size()))
-		n160, err := m.HttpsAutoCert.MarshalTo(dAtA[i:])
+		n108, err := m.HttpsAutoCert.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n160
-	}
-	return i, nil
-}
-func (m *ReplaceSpecType_ServicePoliciesFromNamespace) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.ServicePoliciesFromNamespace != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ServicePoliciesFromNamespace.Size()))
-		n161, err := m.ServicePoliciesFromNamespace.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n161
-	}
-	return i, nil
-}
-func (m *ReplaceSpecType_NoServicePolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.NoServicePolicies != nil {
-		dAtA[i] = 0xd2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoServicePolicies.Size()))
-		n162, err := m.NoServicePolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n162
-	}
-	return i, nil
-}
-func (m *ReplaceSpecType_ActiveServicePolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.ActiveServicePolicies != nil {
-		dAtA[i] = 0xda
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveServicePolicies.Size()))
-		n163, err := m.ActiveServicePolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n163
-	}
-	return i, nil
-}
-func (m *ReplaceSpecType_RoundRobin) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.RoundRobin != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RoundRobin.Size()))
-		n164, err := m.RoundRobin.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n164
-	}
-	return i, nil
-}
-func (m *ReplaceSpecType_LeastActive) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.LeastActive != nil {
-		dAtA[i] = 0xf2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LeastActive.Size()))
-		n165, err := m.LeastActive.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n165
-	}
-	return i, nil
-}
-func (m *ReplaceSpecType_Random) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.Random != nil {
-		dAtA[i] = 0xfa
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Random.Size()))
-		n166, err := m.Random.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n166
-	}
-	return i, nil
-}
-func (m *ReplaceSpecType_SourceIpStickiness) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.SourceIpStickiness != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SourceIpStickiness.Size()))
-		n167, err := m.SourceIpStickiness.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n167
-	}
-	return i, nil
-}
-func (m *ReplaceSpecType_CookieStickiness) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.CookieStickiness != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CookieStickiness.Size()))
-		n168, err := m.CookieStickiness.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n168
-	}
-	return i, nil
-}
-func (m *ReplaceSpecType_RingHash) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.RingHash != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RingHash.Size()))
-		n169, err := m.RingHash.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n169
+		i += n108
 	}
 	return i, nil
 }
@@ -16161,18 +10596,18 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.LoadbalancerType != nil {
-		nn170, err := m.LoadbalancerType.MarshalTo(dAtA[i:])
+		nn109, err := m.LoadbalancerType.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn170
+		i += nn109
 	}
 	if m.AdvertiseChoice != nil {
-		nn171, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
+		nn110, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn171
+		i += nn110
 	}
 	if len(m.DefaultRoutePools) > 0 {
 		for _, msg := range m.DefaultRoutePools {
@@ -16202,18 +10637,18 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.CorsPolicy.Size()))
-		n172, err := m.CorsPolicy.MarshalTo(dAtA[i:])
+		n111, err := m.CorsPolicy.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n172
+		i += n111
 	}
 	if m.WafChoice != nil {
-		nn173, err := m.WafChoice.MarshalTo(dAtA[i:])
+		nn112, err := m.WafChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn173
+		i += nn112
 	}
 	if m.AddLocation {
 		dAtA[i] = 0x88
@@ -16228,11 +10663,11 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i++
 	}
 	if m.ChallengeType != nil {
-		nn174, err := m.ChallengeType.MarshalTo(dAtA[i:])
+		nn113, err := m.ChallengeType.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn174
+		i += nn113
 	}
 	if m.MoreOption != nil {
 		dAtA[i] = 0x9a
@@ -16240,11 +10675,11 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.MoreOption.Size()))
-		n175, err := m.MoreOption.MarshalTo(dAtA[i:])
+		n114, err := m.MoreOption.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n175
+		i += n114
 	}
 	if m.UserIdentification != nil {
 		dAtA[i] = 0xa2
@@ -16252,18 +10687,18 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.UserIdentification.Size()))
-		n176, err := m.UserIdentification.MarshalTo(dAtA[i:])
+		n115, err := m.UserIdentification.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n176
+		i += n115
 	}
 	if m.RateLimitChoice != nil {
-		nn177, err := m.RateLimitChoice.MarshalTo(dAtA[i:])
+		nn116, err := m.RateLimitChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn177
+		i += nn116
 	}
 	if m.MaliciousUserMitigation != nil {
 		dAtA[i] = 0x82
@@ -16271,11 +10706,11 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.MaliciousUserMitigation.Size()))
-		n178, err := m.MaliciousUserMitigation.MarshalTo(dAtA[i:])
+		n117, err := m.MaliciousUserMitigation.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n178
+		i += n117
 	}
 	if len(m.WafExclusionRules) > 0 {
 		for _, msg := range m.WafExclusionRules {
@@ -16290,20 +10725,6 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 			}
 			i += n
 		}
-	}
-	if m.ServicePolicyChoice != nil {
-		nn179, err := m.ServicePolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn179
-	}
-	if m.HashPolicyChoice != nil {
-		nn180, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn180
 	}
 	if len(m.HostName) > 0 {
 		dAtA[i] = 0xca
@@ -16347,11 +10768,11 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3f
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AutoCertInfo.Size()))
-		n181, err := m.AutoCertInfo.MarshalTo(dAtA[i:])
+		n118, err := m.AutoCertInfo.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n181
+		i += n118
 	}
 	return i, nil
 }
@@ -16362,11 +10783,11 @@ func (m *GetSpecType_Http) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Http.Size()))
-		n182, err := m.Http.MarshalTo(dAtA[i:])
+		n119, err := m.Http.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n182
+		i += n119
 	}
 	return i, nil
 }
@@ -16376,11 +10797,11 @@ func (m *GetSpecType_Https) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Https.Size()))
-		n183, err := m.Https.MarshalTo(dAtA[i:])
+		n120, err := m.Https.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n183
+		i += n120
 	}
 	return i, nil
 }
@@ -16390,11 +10811,11 @@ func (m *GetSpecType_AdvertiseOnPublic) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublic.Size()))
-		n184, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
+		n121, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n184
+		i += n121
 	}
 	return i, nil
 }
@@ -16404,11 +10825,11 @@ func (m *GetSpecType_AdvertiseCustom) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseCustom.Size()))
-		n185, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
+		n122, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n185
+		i += n122
 	}
 	return i, nil
 }
@@ -16418,11 +10839,11 @@ func (m *GetSpecType_Waf) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x4a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Waf.Size()))
-		n186, err := m.Waf.MarshalTo(dAtA[i:])
+		n123, err := m.Waf.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n186
+		i += n123
 	}
 	return i, nil
 }
@@ -16432,11 +10853,11 @@ func (m *GetSpecType_WafRule) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x52
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.WafRule.Size()))
-		n187, err := m.WafRule.MarshalTo(dAtA[i:])
+		n124, err := m.WafRule.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n187
+		i += n124
 	}
 	return i, nil
 }
@@ -16446,11 +10867,11 @@ func (m *GetSpecType_DisableWaf) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x5a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DisableWaf.Size()))
-		n188, err := m.DisableWaf.MarshalTo(dAtA[i:])
+		n125, err := m.DisableWaf.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n188
+		i += n125
 	}
 	return i, nil
 }
@@ -16460,11 +10881,11 @@ func (m *GetSpecType_DoNotAdvertise) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x62
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotAdvertise.Size()))
-		n189, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
+		n126, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n189
+		i += n126
 	}
 	return i, nil
 }
@@ -16474,11 +10895,11 @@ func (m *GetSpecType_AdvertiseOnPublicDefaultVip) MarshalTo(dAtA []byte) (int, e
 		dAtA[i] = 0x6a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublicDefaultVip.Size()))
-		n190, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
+		n127, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n190
+		i += n127
 	}
 	return i, nil
 }
@@ -16490,11 +10911,11 @@ func (m *GetSpecType_JsChallenge) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.JsChallenge.Size()))
-		n191, err := m.JsChallenge.MarshalTo(dAtA[i:])
+		n128, err := m.JsChallenge.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n191
+		i += n128
 	}
 	return i, nil
 }
@@ -16506,11 +10927,11 @@ func (m *GetSpecType_DisableRateLimit) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DisableRateLimit.Size()))
-		n192, err := m.DisableRateLimit.MarshalTo(dAtA[i:])
+		n129, err := m.DisableRateLimit.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n192
+		i += n129
 	}
 	return i, nil
 }
@@ -16522,11 +10943,11 @@ func (m *GetSpecType_RateLimit) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.RateLimit.Size()))
-		n193, err := m.RateLimit.MarshalTo(dAtA[i:])
+		n130, err := m.RateLimit.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n193
+		i += n130
 	}
 	return i, nil
 }
@@ -16538,11 +10959,11 @@ func (m *GetSpecType_CaptchaChallenge) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.CaptchaChallenge.Size()))
-		n194, err := m.CaptchaChallenge.MarshalTo(dAtA[i:])
+		n131, err := m.CaptchaChallenge.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n194
+		i += n131
 	}
 	return i, nil
 }
@@ -16554,11 +10975,11 @@ func (m *GetSpecType_NoChallenge) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.NoChallenge.Size()))
-		n195, err := m.NoChallenge.MarshalTo(dAtA[i:])
+		n132, err := m.NoChallenge.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n195
+		i += n132
 	}
 	return i, nil
 }
@@ -16570,155 +10991,11 @@ func (m *GetSpecType_HttpsAutoCert) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HttpsAutoCert.Size()))
-		n196, err := m.HttpsAutoCert.MarshalTo(dAtA[i:])
+		n133, err := m.HttpsAutoCert.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n196
-	}
-	return i, nil
-}
-func (m *GetSpecType_ServicePoliciesFromNamespace) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.ServicePoliciesFromNamespace != nil {
-		dAtA[i] = 0xca
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ServicePoliciesFromNamespace.Size()))
-		n197, err := m.ServicePoliciesFromNamespace.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n197
-	}
-	return i, nil
-}
-func (m *GetSpecType_NoServicePolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.NoServicePolicies != nil {
-		dAtA[i] = 0xd2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.NoServicePolicies.Size()))
-		n198, err := m.NoServicePolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n198
-	}
-	return i, nil
-}
-func (m *GetSpecType_ActiveServicePolicies) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.ActiveServicePolicies != nil {
-		dAtA[i] = 0xda
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveServicePolicies.Size()))
-		n199, err := m.ActiveServicePolicies.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n199
-	}
-	return i, nil
-}
-func (m *GetSpecType_RoundRobin) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.RoundRobin != nil {
-		dAtA[i] = 0xea
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RoundRobin.Size()))
-		n200, err := m.RoundRobin.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n200
-	}
-	return i, nil
-}
-func (m *GetSpecType_LeastActive) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.LeastActive != nil {
-		dAtA[i] = 0xf2
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LeastActive.Size()))
-		n201, err := m.LeastActive.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n201
-	}
-	return i, nil
-}
-func (m *GetSpecType_Random) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.Random != nil {
-		dAtA[i] = 0xfa
-		i++
-		dAtA[i] = 0x2
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Random.Size()))
-		n202, err := m.Random.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n202
-	}
-	return i, nil
-}
-func (m *GetSpecType_SourceIpStickiness) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.SourceIpStickiness != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.SourceIpStickiness.Size()))
-		n203, err := m.SourceIpStickiness.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n203
-	}
-	return i, nil
-}
-func (m *GetSpecType_CookieStickiness) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.CookieStickiness != nil {
-		dAtA[i] = 0x8a
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CookieStickiness.Size()))
-		n204, err := m.CookieStickiness.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n204
-	}
-	return i, nil
-}
-func (m *GetSpecType_RingHash) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.RingHash != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x3
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.RingHash.Size()))
-		n205, err := m.RingHash.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n205
+		i += n133
 	}
 	return i, nil
 }
@@ -16794,220 +11071,6 @@ func NewPopulatedProxyTypeHttpsAutoCerts(r randyTypes, easy bool) *ProxyTypeHttp
 	return this
 }
 
-func NewPopulatedHashPolicyListType(r randyTypes, easy bool) *HashPolicyListType {
-	this := &HashPolicyListType{}
-	if r.Intn(10) != 0 {
-		v2 := r.Intn(5)
-		this.HashPolicy = make([]*ves_io_schema_route.HashPolicyType, v2)
-		for i := 0; i < v2; i++ {
-			this.HashPolicy[i] = ves_io_schema_route.NewPopulatedHashPolicyType(r, easy)
-		}
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMirrorPolicyType(r randyTypes, easy bool) *MirrorPolicyType {
-	this := &MirrorPolicyType{}
-	if r.Intn(10) != 0 {
-		this.OriginPool = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Percent = ves_io_schema4.NewPopulatedFractionalPercent(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedRouteSimpleAdvancedOptions(r randyTypes, easy bool) *RouteSimpleAdvancedOptions {
-	this := &RouteSimpleAdvancedOptions{}
-	oneofNumber_HashPolicyChoice := []int32{2, 3}[r.Intn(2)]
-	switch oneofNumber_HashPolicyChoice {
-	case 2:
-		this.HashPolicyChoice = NewPopulatedRouteSimpleAdvancedOptions_CommonHashPolicy(r, easy)
-	case 3:
-		this.HashPolicyChoice = NewPopulatedRouteSimpleAdvancedOptions_SpecificHashPolicy(r, easy)
-	}
-	this.Priority = ves_io_schema4.RoutingPriority([]int32{0, 1}[r.Intn(2)])
-	if r.Intn(10) != 0 {
-		v3 := r.Intn(10)
-		this.EndpointSubsets = make(map[string]string)
-		for i := 0; i < v3; i++ {
-			this.EndpointSubsets[randStringTypes(r)] = randStringTypes(r)
-		}
-	}
-	oneofNumber_RewriteChoice := []int32{7, 8}[r.Intn(2)]
-	switch oneofNumber_RewriteChoice {
-	case 7:
-		this.RewriteChoice = NewPopulatedRouteSimpleAdvancedOptions_DisablePrefixRewrite(r, easy)
-	case 8:
-		this.RewriteChoice = NewPopulatedRouteSimpleAdvancedOptions_PrefixRewrite(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		v4 := r.Intn(5)
-		this.RequestHeadersToAdd = make([]*ves_io_schema4.HeaderManipulationOptionType, v4)
-		for i := 0; i < v4; i++ {
-			this.RequestHeadersToAdd[i] = ves_io_schema4.NewPopulatedHeaderManipulationOptionType(r, easy)
-		}
-	}
-	v5 := r.Intn(10)
-	this.RequestHeadersToRemove = make([]string, v5)
-	for i := 0; i < v5; i++ {
-		this.RequestHeadersToRemove[i] = string(randStringTypes(r))
-	}
-	if r.Intn(10) != 0 {
-		v6 := r.Intn(5)
-		this.ResponseHeadersToAdd = make([]*ves_io_schema4.HeaderManipulationOptionType, v6)
-		for i := 0; i < v6; i++ {
-			this.ResponseHeadersToAdd[i] = ves_io_schema4.NewPopulatedHeaderManipulationOptionType(r, easy)
-		}
-	}
-	v7 := r.Intn(10)
-	this.ResponseHeadersToRemove = make([]string, v7)
-	for i := 0; i < v7; i++ {
-		this.ResponseHeadersToRemove[i] = string(randStringTypes(r))
-	}
-	this.DisableLocationAdd = bool(bool(r.Intn(2) == 0))
-	oneofNumber_WafChoice := []int32{15, 16, 17}[r.Intn(3)]
-	switch oneofNumber_WafChoice {
-	case 15:
-		this.WafChoice = NewPopulatedRouteSimpleAdvancedOptions_DisableWaf(r, easy)
-	case 16:
-		this.WafChoice = NewPopulatedRouteSimpleAdvancedOptions_Waf(r, easy)
-	case 17:
-		this.WafChoice = NewPopulatedRouteSimpleAdvancedOptions_WafRule(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.CorsPolicy = ves_io_schema4.NewPopulatedCorsPolicy(r, easy)
-	}
-	oneofNumber_SpdyChoice := []int32{20, 21}[r.Intn(2)]
-	switch oneofNumber_SpdyChoice {
-	case 20:
-		this.SpdyChoice = NewPopulatedRouteSimpleAdvancedOptions_DisableSpdy(r, easy)
-	case 21:
-		this.SpdyChoice = NewPopulatedRouteSimpleAdvancedOptions_EnableSpdy(r, easy)
-	}
-	oneofNumber_WebsocketChoice := []int32{23, 24}[r.Intn(2)]
-	switch oneofNumber_WebsocketChoice {
-	case 23:
-		this.WebsocketChoice = NewPopulatedRouteSimpleAdvancedOptions_DisableWebSocketConfig(r, easy)
-	case 24:
-		this.WebsocketChoice = NewPopulatedRouteSimpleAdvancedOptions_WebSocketConfig(r, easy)
-	}
-	oneofNumber_RetryPolicyChoice := []int32{26, 27}[r.Intn(2)]
-	switch oneofNumber_RetryPolicyChoice {
-	case 26:
-		this.RetryPolicyChoice = NewPopulatedRouteSimpleAdvancedOptions_DefaultRetryPolicy(r, easy)
-	case 27:
-		this.RetryPolicyChoice = NewPopulatedRouteSimpleAdvancedOptions_RetryPolicy(r, easy)
-	}
-	this.Timeout = uint32(r.Uint32())
-	oneofNumber_BufferChoice := []int32{30, 31}[r.Intn(2)]
-	switch oneofNumber_BufferChoice {
-	case 30:
-		this.BufferChoice = NewPopulatedRouteSimpleAdvancedOptions_CommonBuffering(r, easy)
-	case 31:
-		this.BufferChoice = NewPopulatedRouteSimpleAdvancedOptions_BufferPolicy(r, easy)
-	}
-	oneofNumber_MirroringChoice := []int32{33, 34}[r.Intn(2)]
-	switch oneofNumber_MirroringChoice {
-	case 33:
-		this.MirroringChoice = NewPopulatedRouteSimpleAdvancedOptions_DisableMirroring(r, easy)
-	case 34:
-		this.MirroringChoice = NewPopulatedRouteSimpleAdvancedOptions_MirrorPolicy(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedRouteSimpleAdvancedOptions_CommonHashPolicy(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_CommonHashPolicy {
-	this := &RouteSimpleAdvancedOptions_CommonHashPolicy{}
-	this.CommonHashPolicy = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedRouteSimpleAdvancedOptions_SpecificHashPolicy(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_SpecificHashPolicy {
-	this := &RouteSimpleAdvancedOptions_SpecificHashPolicy{}
-	this.SpecificHashPolicy = NewPopulatedHashPolicyListType(r, easy)
-	return this
-}
-func NewPopulatedRouteSimpleAdvancedOptions_DisablePrefixRewrite(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_DisablePrefixRewrite {
-	this := &RouteSimpleAdvancedOptions_DisablePrefixRewrite{}
-	this.DisablePrefixRewrite = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedRouteSimpleAdvancedOptions_PrefixRewrite(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_PrefixRewrite {
-	this := &RouteSimpleAdvancedOptions_PrefixRewrite{}
-	this.PrefixRewrite = string(randStringTypes(r))
-	return this
-}
-func NewPopulatedRouteSimpleAdvancedOptions_DisableWaf(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_DisableWaf {
-	this := &RouteSimpleAdvancedOptions_DisableWaf{}
-	this.DisableWaf = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedRouteSimpleAdvancedOptions_Waf(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_Waf {
-	this := &RouteSimpleAdvancedOptions_Waf{}
-	this.Waf = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
-	return this
-}
-func NewPopulatedRouteSimpleAdvancedOptions_WafRule(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_WafRule {
-	this := &RouteSimpleAdvancedOptions_WafRule{}
-	this.WafRule = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
-	return this
-}
-func NewPopulatedRouteSimpleAdvancedOptions_DisableSpdy(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_DisableSpdy {
-	this := &RouteSimpleAdvancedOptions_DisableSpdy{}
-	this.DisableSpdy = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedRouteSimpleAdvancedOptions_EnableSpdy(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_EnableSpdy {
-	this := &RouteSimpleAdvancedOptions_EnableSpdy{}
-	this.EnableSpdy = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedRouteSimpleAdvancedOptions_DisableWebSocketConfig(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_DisableWebSocketConfig {
-	this := &RouteSimpleAdvancedOptions_DisableWebSocketConfig{}
-	this.DisableWebSocketConfig = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedRouteSimpleAdvancedOptions_WebSocketConfig(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_WebSocketConfig {
-	this := &RouteSimpleAdvancedOptions_WebSocketConfig{}
-	this.WebSocketConfig = ves_io_schema_route.NewPopulatedWebsocketConfigType(r, easy)
-	return this
-}
-func NewPopulatedRouteSimpleAdvancedOptions_DefaultRetryPolicy(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_DefaultRetryPolicy {
-	this := &RouteSimpleAdvancedOptions_DefaultRetryPolicy{}
-	this.DefaultRetryPolicy = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedRouteSimpleAdvancedOptions_RetryPolicy(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_RetryPolicy {
-	this := &RouteSimpleAdvancedOptions_RetryPolicy{}
-	this.RetryPolicy = ves_io_schema4.NewPopulatedRetryPolicyType(r, easy)
-	return this
-}
-func NewPopulatedRouteSimpleAdvancedOptions_CommonBuffering(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_CommonBuffering {
-	this := &RouteSimpleAdvancedOptions_CommonBuffering{}
-	this.CommonBuffering = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedRouteSimpleAdvancedOptions_BufferPolicy(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_BufferPolicy {
-	this := &RouteSimpleAdvancedOptions_BufferPolicy{}
-	this.BufferPolicy = ves_io_schema4.NewPopulatedBufferConfigType(r, easy)
-	return this
-}
-func NewPopulatedRouteSimpleAdvancedOptions_DisableMirroring(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_DisableMirroring {
-	this := &RouteSimpleAdvancedOptions_DisableMirroring{}
-	this.DisableMirroring = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedRouteSimpleAdvancedOptions_MirrorPolicy(r randyTypes, easy bool) *RouteSimpleAdvancedOptions_MirrorPolicy {
-	this := &RouteSimpleAdvancedOptions_MirrorPolicy{}
-	this.MirrorPolicy = NewPopulatedMirrorPolicyType(r, easy)
-	return this
-}
 func NewPopulatedRouteTypeSimpleWithDefaultOriginPool(r randyTypes, easy bool) *RouteTypeSimpleWithDefaultOriginPool {
 	this := &RouteTypeSimpleWithDefaultOriginPool{}
 	this.HttpMethod = ves_io_schema4.HttpMethod([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}[r.Intn(10)])
@@ -17050,9 +11113,9 @@ func NewPopulatedRouteTypeSimple(r randyTypes, easy bool) *RouteTypeSimple {
 	}
 	this.HttpMethod = ves_io_schema4.HttpMethod([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}[r.Intn(10)])
 	if r.Intn(10) != 0 {
-		v8 := r.Intn(5)
-		this.OriginPools = make([]*ves_io_schema_views.OriginPoolWithWeight, v8)
-		for i := 0; i < v8; i++ {
+		v2 := r.Intn(5)
+		this.OriginPools = make([]*ves_io_schema_views.OriginPoolWithWeight, v2)
+		for i := 0; i < v2; i++ {
 			this.OriginPools[i] = ves_io_schema_views.NewPopulatedOriginPoolWithWeight(r, easy)
 		}
 	}
@@ -17064,9 +11127,6 @@ func NewPopulatedRouteTypeSimple(r randyTypes, easy bool) *RouteTypeSimple {
 		this.HostRewriteParams = NewPopulatedRouteTypeSimple_HostRewrite(r, easy)
 	case 7:
 		this.HostRewriteParams = NewPopulatedRouteTypeSimple_DisableHostRewrite(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.AdvancedOptions = NewPopulatedRouteSimpleAdvancedOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -17167,27 +11227,27 @@ func NewPopulatedRouteType_CustomRouteObject(r randyTypes, easy bool) *RouteType
 func NewPopulatedAdvancedOptionsType(r randyTypes, easy bool) *AdvancedOptionsType {
 	this := &AdvancedOptionsType{}
 	if r.Intn(10) != 0 {
-		v9 := r.Intn(5)
-		this.RequestHeadersToAdd = make([]*ves_io_schema4.HeaderManipulationOptionType, v9)
-		for i := 0; i < v9; i++ {
+		v3 := r.Intn(5)
+		this.RequestHeadersToAdd = make([]*ves_io_schema4.HeaderManipulationOptionType, v3)
+		for i := 0; i < v3; i++ {
 			this.RequestHeadersToAdd[i] = ves_io_schema4.NewPopulatedHeaderManipulationOptionType(r, easy)
 		}
 	}
-	v10 := r.Intn(10)
-	this.RequestHeadersToRemove = make([]string, v10)
-	for i := 0; i < v10; i++ {
+	v4 := r.Intn(10)
+	this.RequestHeadersToRemove = make([]string, v4)
+	for i := 0; i < v4; i++ {
 		this.RequestHeadersToRemove[i] = string(randStringTypes(r))
 	}
 	if r.Intn(10) != 0 {
-		v11 := r.Intn(5)
-		this.ResponseHeadersToAdd = make([]*ves_io_schema4.HeaderManipulationOptionType, v11)
-		for i := 0; i < v11; i++ {
+		v5 := r.Intn(5)
+		this.ResponseHeadersToAdd = make([]*ves_io_schema4.HeaderManipulationOptionType, v5)
+		for i := 0; i < v5; i++ {
 			this.ResponseHeadersToAdd[i] = ves_io_schema4.NewPopulatedHeaderManipulationOptionType(r, easy)
 		}
 	}
-	v12 := r.Intn(10)
-	this.ResponseHeadersToRemove = make([]string, v12)
-	for i := 0; i < v12; i++ {
+	v6 := r.Intn(10)
+	this.ResponseHeadersToRemove = make([]string, v6)
+	for i := 0; i < v6; i++ {
 		this.ResponseHeadersToRemove[i] = string(randStringTypes(r))
 	}
 	this.MaxRequestHeaderSize = uint32(r.Uint32())
@@ -17198,9 +11258,9 @@ func NewPopulatedAdvancedOptionsType(r randyTypes, easy bool) *AdvancedOptionsTy
 		this.CompressionParams = ves_io_schema_virtual_host.NewPopulatedCompressionType(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v13 := r.Intn(10)
+		v7 := r.Intn(10)
 		this.CustomErrors = make(map[uint32]string)
-		for i := 0; i < v13; i++ {
+		for i := 0; i < v7; i++ {
 			this.CustomErrors[uint32(r.Uint32())] = randStringTypes(r)
 		}
 	}
@@ -17208,9 +11268,9 @@ func NewPopulatedAdvancedOptionsType(r randyTypes, easy bool) *AdvancedOptionsTy
 		this.JavascriptInfo = ves_io_schema_virtual_host.NewPopulatedJavaScriptConfigType(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v14 := r.Intn(5)
-		this.Jwt = make([]*ves_io_schema_views.ObjectRefType, v14)
-		for i := 0; i < v14; i++ {
+		v8 := r.Intn(5)
+		this.Jwt = make([]*ves_io_schema_views.ObjectRefType, v8)
+		for i := 0; i < v8; i++ {
 			this.Jwt[i] = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 		}
 	}
@@ -17223,9 +11283,9 @@ func NewPopulatedAdvancedOptionsType(r randyTypes, easy bool) *AdvancedOptionsTy
 func NewPopulatedCustomIpAllowedList(r randyTypes, easy bool) *CustomIpAllowedList {
 	this := &CustomIpAllowedList{}
 	if r.Intn(10) != 0 {
-		v15 := r.Intn(5)
-		this.RateLimiterAllowedPrefixes = make([]*ves_io_schema_views.ObjectRefType, v15)
-		for i := 0; i < v15; i++ {
+		v9 := r.Intn(5)
+		this.RateLimiterAllowedPrefixes = make([]*ves_io_schema_views.ObjectRefType, v9)
+		for i := 0; i < v9; i++ {
 			this.RateLimiterAllowedPrefixes[i] = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 		}
 	}
@@ -17268,25 +11328,11 @@ func NewPopulatedRateLimitConfigType_CustomIpAllowedList(r randyTypes, easy bool
 	this.CustomIpAllowedList = NewPopulatedCustomIpAllowedList(r, easy)
 	return this
 }
-func NewPopulatedServicePolicyList(r randyTypes, easy bool) *ServicePolicyList {
-	this := &ServicePolicyList{}
-	if r.Intn(10) != 0 {
-		v16 := r.Intn(5)
-		this.Policies = make([]*ves_io_schema_views.ObjectRefType, v16)
-		for i := 0; i < v16; i++ {
-			this.Policies[i] = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
-		}
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
 func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 	this := &GlobalSpecType{}
-	v17 := r.Intn(10)
-	this.Domains = make([]string, v17)
-	for i := 0; i < v17; i++ {
+	v10 := r.Intn(10)
+	this.Domains = make([]string, v10)
+	for i := 0; i < v10; i++ {
 		this.Domains[i] = string(randStringTypes(r))
 	}
 	oneofNumber_LoadbalancerType := []int32{2, 3, 27}[r.Intn(3)]
@@ -17310,16 +11356,16 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 		this.AdvertiseChoice = NewPopulatedGlobalSpecType_AdvertiseOnPublicDefaultVip(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v18 := r.Intn(5)
-		this.DefaultRoutePools = make([]*ves_io_schema_views.OriginPoolWithWeight, v18)
-		for i := 0; i < v18; i++ {
+		v11 := r.Intn(5)
+		this.DefaultRoutePools = make([]*ves_io_schema_views.OriginPoolWithWeight, v11)
+		for i := 0; i < v11; i++ {
 			this.DefaultRoutePools[i] = ves_io_schema_views.NewPopulatedOriginPoolWithWeight(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v19 := r.Intn(5)
-		this.Routes = make([]*RouteType, v19)
-		for i := 0; i < v19; i++ {
+		v12 := r.Intn(5)
+		this.Routes = make([]*RouteType, v12)
+		for i := 0; i < v12; i++ {
 			this.Routes[i] = NewPopulatedRouteType(r, easy)
 		}
 	}
@@ -17371,44 +11417,20 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 		this.MaliciousUserMitigation = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v20 := r.Intn(5)
-		this.WafExclusionRules = make([]*ves_io_schema_policy.SimpleWafExclusionRule, v20)
-		for i := 0; i < v20; i++ {
+		v13 := r.Intn(5)
+		this.WafExclusionRules = make([]*ves_io_schema_policy.SimpleWafExclusionRule, v13)
+		for i := 0; i < v13; i++ {
 			this.WafExclusionRules[i] = ves_io_schema_policy.NewPopulatedSimpleWafExclusionRule(r, easy)
 		}
-	}
-	oneofNumber_ServicePolicyChoice := []int32{41, 42, 43}[r.Intn(3)]
-	switch oneofNumber_ServicePolicyChoice {
-	case 41:
-		this.ServicePolicyChoice = NewPopulatedGlobalSpecType_ServicePoliciesFromNamespace(r, easy)
-	case 42:
-		this.ServicePolicyChoice = NewPopulatedGlobalSpecType_NoServicePolicies(r, easy)
-	case 43:
-		this.ServicePolicyChoice = NewPopulatedGlobalSpecType_ActiveServicePolicies(r, easy)
-	}
-	oneofNumber_HashPolicyChoice := []int32{45, 46, 47, 48, 49, 50}[r.Intn(6)]
-	switch oneofNumber_HashPolicyChoice {
-	case 45:
-		this.HashPolicyChoice = NewPopulatedGlobalSpecType_RoundRobin(r, easy)
-	case 46:
-		this.HashPolicyChoice = NewPopulatedGlobalSpecType_LeastActive(r, easy)
-	case 47:
-		this.HashPolicyChoice = NewPopulatedGlobalSpecType_Random(r, easy)
-	case 48:
-		this.HashPolicyChoice = NewPopulatedGlobalSpecType_SourceIpStickiness(r, easy)
-	case 49:
-		this.HashPolicyChoice = NewPopulatedGlobalSpecType_CookieStickiness(r, easy)
-	case 50:
-		this.HashPolicyChoice = NewPopulatedGlobalSpecType_RingHash(r, easy)
 	}
 	if r.Intn(10) != 0 {
 		this.ViewInternal = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 	}
 	this.HostName = string(randStringTypes(r))
 	if r.Intn(10) != 0 {
-		v21 := r.Intn(5)
-		this.DnsInfo = make([]*ves_io_schema_virtual_host_dns_info.DnsInfo, v21)
-		for i := 0; i < v21; i++ {
+		v14 := r.Intn(5)
+		this.DnsInfo = make([]*ves_io_schema_virtual_host_dns_info.DnsInfo, v14)
+		for i := 0; i < v14; i++ {
 			this.DnsInfo[i] = ves_io_schema_virtual_host_dns_info.NewPopulatedDnsInfo(r, easy)
 		}
 	}
@@ -17512,56 +11534,11 @@ func NewPopulatedGlobalSpecType_DisableHostRewrite(r randyTypes, easy bool) *Glo
 	this.DisableHostRewrite = ves_io_schema4.NewPopulatedEmpty(r, easy)
 	return this
 }
-func NewPopulatedGlobalSpecType_ServicePoliciesFromNamespace(r randyTypes, easy bool) *GlobalSpecType_ServicePoliciesFromNamespace {
-	this := &GlobalSpecType_ServicePoliciesFromNamespace{}
-	this.ServicePoliciesFromNamespace = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGlobalSpecType_NoServicePolicies(r randyTypes, easy bool) *GlobalSpecType_NoServicePolicies {
-	this := &GlobalSpecType_NoServicePolicies{}
-	this.NoServicePolicies = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGlobalSpecType_ActiveServicePolicies(r randyTypes, easy bool) *GlobalSpecType_ActiveServicePolicies {
-	this := &GlobalSpecType_ActiveServicePolicies{}
-	this.ActiveServicePolicies = NewPopulatedServicePolicyList(r, easy)
-	return this
-}
-func NewPopulatedGlobalSpecType_RoundRobin(r randyTypes, easy bool) *GlobalSpecType_RoundRobin {
-	this := &GlobalSpecType_RoundRobin{}
-	this.RoundRobin = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGlobalSpecType_LeastActive(r randyTypes, easy bool) *GlobalSpecType_LeastActive {
-	this := &GlobalSpecType_LeastActive{}
-	this.LeastActive = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGlobalSpecType_Random(r randyTypes, easy bool) *GlobalSpecType_Random {
-	this := &GlobalSpecType_Random{}
-	this.Random = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGlobalSpecType_SourceIpStickiness(r randyTypes, easy bool) *GlobalSpecType_SourceIpStickiness {
-	this := &GlobalSpecType_SourceIpStickiness{}
-	this.SourceIpStickiness = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGlobalSpecType_CookieStickiness(r randyTypes, easy bool) *GlobalSpecType_CookieStickiness {
-	this := &GlobalSpecType_CookieStickiness{}
-	this.CookieStickiness = ves_io_schema_route.NewPopulatedCookieForHashing(r, easy)
-	return this
-}
-func NewPopulatedGlobalSpecType_RingHash(r randyTypes, easy bool) *GlobalSpecType_RingHash {
-	this := &GlobalSpecType_RingHash{}
-	this.RingHash = NewPopulatedHashPolicyListType(r, easy)
-	return this
-}
 func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 	this := &CreateSpecType{}
-	v22 := r.Intn(10)
-	this.Domains = make([]string, v22)
-	for i := 0; i < v22; i++ {
+	v15 := r.Intn(10)
+	this.Domains = make([]string, v15)
+	for i := 0; i < v15; i++ {
 		this.Domains[i] = string(randStringTypes(r))
 	}
 	oneofNumber_LoadbalancerType := []int32{2, 3, 27}[r.Intn(3)]
@@ -17585,16 +11562,16 @@ func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 		this.AdvertiseChoice = NewPopulatedCreateSpecType_AdvertiseOnPublicDefaultVip(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v23 := r.Intn(5)
-		this.DefaultRoutePools = make([]*ves_io_schema_views.OriginPoolWithWeight, v23)
-		for i := 0; i < v23; i++ {
+		v16 := r.Intn(5)
+		this.DefaultRoutePools = make([]*ves_io_schema_views.OriginPoolWithWeight, v16)
+		for i := 0; i < v16; i++ {
 			this.DefaultRoutePools[i] = ves_io_schema_views.NewPopulatedOriginPoolWithWeight(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v24 := r.Intn(5)
-		this.Routes = make([]*RouteType, v24)
-		for i := 0; i < v24; i++ {
+		v17 := r.Intn(5)
+		this.Routes = make([]*RouteType, v17)
+		for i := 0; i < v17; i++ {
 			this.Routes[i] = NewPopulatedRouteType(r, easy)
 		}
 	}
@@ -17637,35 +11614,11 @@ func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 		this.MaliciousUserMitigation = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v25 := r.Intn(5)
-		this.WafExclusionRules = make([]*ves_io_schema_policy.SimpleWafExclusionRule, v25)
-		for i := 0; i < v25; i++ {
+		v18 := r.Intn(5)
+		this.WafExclusionRules = make([]*ves_io_schema_policy.SimpleWafExclusionRule, v18)
+		for i := 0; i < v18; i++ {
 			this.WafExclusionRules[i] = ves_io_schema_policy.NewPopulatedSimpleWafExclusionRule(r, easy)
 		}
-	}
-	oneofNumber_ServicePolicyChoice := []int32{41, 42, 43}[r.Intn(3)]
-	switch oneofNumber_ServicePolicyChoice {
-	case 41:
-		this.ServicePolicyChoice = NewPopulatedCreateSpecType_ServicePoliciesFromNamespace(r, easy)
-	case 42:
-		this.ServicePolicyChoice = NewPopulatedCreateSpecType_NoServicePolicies(r, easy)
-	case 43:
-		this.ServicePolicyChoice = NewPopulatedCreateSpecType_ActiveServicePolicies(r, easy)
-	}
-	oneofNumber_HashPolicyChoice := []int32{45, 46, 47, 48, 49, 50}[r.Intn(6)]
-	switch oneofNumber_HashPolicyChoice {
-	case 45:
-		this.HashPolicyChoice = NewPopulatedCreateSpecType_RoundRobin(r, easy)
-	case 46:
-		this.HashPolicyChoice = NewPopulatedCreateSpecType_LeastActive(r, easy)
-	case 47:
-		this.HashPolicyChoice = NewPopulatedCreateSpecType_Random(r, easy)
-	case 48:
-		this.HashPolicyChoice = NewPopulatedCreateSpecType_SourceIpStickiness(r, easy)
-	case 49:
-		this.HashPolicyChoice = NewPopulatedCreateSpecType_CookieStickiness(r, easy)
-	case 50:
-		this.HashPolicyChoice = NewPopulatedCreateSpecType_RingHash(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -17747,56 +11700,11 @@ func NewPopulatedCreateSpecType_HttpsAutoCert(r randyTypes, easy bool) *CreateSp
 	this.HttpsAutoCert = NewPopulatedProxyTypeHttpsAutoCerts(r, easy)
 	return this
 }
-func NewPopulatedCreateSpecType_ServicePoliciesFromNamespace(r randyTypes, easy bool) *CreateSpecType_ServicePoliciesFromNamespace {
-	this := &CreateSpecType_ServicePoliciesFromNamespace{}
-	this.ServicePoliciesFromNamespace = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedCreateSpecType_NoServicePolicies(r randyTypes, easy bool) *CreateSpecType_NoServicePolicies {
-	this := &CreateSpecType_NoServicePolicies{}
-	this.NoServicePolicies = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedCreateSpecType_ActiveServicePolicies(r randyTypes, easy bool) *CreateSpecType_ActiveServicePolicies {
-	this := &CreateSpecType_ActiveServicePolicies{}
-	this.ActiveServicePolicies = NewPopulatedServicePolicyList(r, easy)
-	return this
-}
-func NewPopulatedCreateSpecType_RoundRobin(r randyTypes, easy bool) *CreateSpecType_RoundRobin {
-	this := &CreateSpecType_RoundRobin{}
-	this.RoundRobin = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedCreateSpecType_LeastActive(r randyTypes, easy bool) *CreateSpecType_LeastActive {
-	this := &CreateSpecType_LeastActive{}
-	this.LeastActive = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedCreateSpecType_Random(r randyTypes, easy bool) *CreateSpecType_Random {
-	this := &CreateSpecType_Random{}
-	this.Random = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedCreateSpecType_SourceIpStickiness(r randyTypes, easy bool) *CreateSpecType_SourceIpStickiness {
-	this := &CreateSpecType_SourceIpStickiness{}
-	this.SourceIpStickiness = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedCreateSpecType_CookieStickiness(r randyTypes, easy bool) *CreateSpecType_CookieStickiness {
-	this := &CreateSpecType_CookieStickiness{}
-	this.CookieStickiness = ves_io_schema_route.NewPopulatedCookieForHashing(r, easy)
-	return this
-}
-func NewPopulatedCreateSpecType_RingHash(r randyTypes, easy bool) *CreateSpecType_RingHash {
-	this := &CreateSpecType_RingHash{}
-	this.RingHash = NewPopulatedHashPolicyListType(r, easy)
-	return this
-}
 func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 	this := &ReplaceSpecType{}
-	v26 := r.Intn(10)
-	this.Domains = make([]string, v26)
-	for i := 0; i < v26; i++ {
+	v19 := r.Intn(10)
+	this.Domains = make([]string, v19)
+	for i := 0; i < v19; i++ {
 		this.Domains[i] = string(randStringTypes(r))
 	}
 	oneofNumber_LoadbalancerType := []int32{2, 3, 27}[r.Intn(3)]
@@ -17820,16 +11728,16 @@ func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 		this.AdvertiseChoice = NewPopulatedReplaceSpecType_AdvertiseOnPublicDefaultVip(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v27 := r.Intn(5)
-		this.DefaultRoutePools = make([]*ves_io_schema_views.OriginPoolWithWeight, v27)
-		for i := 0; i < v27; i++ {
+		v20 := r.Intn(5)
+		this.DefaultRoutePools = make([]*ves_io_schema_views.OriginPoolWithWeight, v20)
+		for i := 0; i < v20; i++ {
 			this.DefaultRoutePools[i] = ves_io_schema_views.NewPopulatedOriginPoolWithWeight(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v28 := r.Intn(5)
-		this.Routes = make([]*RouteType, v28)
-		for i := 0; i < v28; i++ {
+		v21 := r.Intn(5)
+		this.Routes = make([]*RouteType, v21)
+		for i := 0; i < v21; i++ {
 			this.Routes[i] = NewPopulatedRouteType(r, easy)
 		}
 	}
@@ -17872,35 +11780,11 @@ func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 		this.MaliciousUserMitigation = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v29 := r.Intn(5)
-		this.WafExclusionRules = make([]*ves_io_schema_policy.SimpleWafExclusionRule, v29)
-		for i := 0; i < v29; i++ {
+		v22 := r.Intn(5)
+		this.WafExclusionRules = make([]*ves_io_schema_policy.SimpleWafExclusionRule, v22)
+		for i := 0; i < v22; i++ {
 			this.WafExclusionRules[i] = ves_io_schema_policy.NewPopulatedSimpleWafExclusionRule(r, easy)
 		}
-	}
-	oneofNumber_ServicePolicyChoice := []int32{41, 42, 43}[r.Intn(3)]
-	switch oneofNumber_ServicePolicyChoice {
-	case 41:
-		this.ServicePolicyChoice = NewPopulatedReplaceSpecType_ServicePoliciesFromNamespace(r, easy)
-	case 42:
-		this.ServicePolicyChoice = NewPopulatedReplaceSpecType_NoServicePolicies(r, easy)
-	case 43:
-		this.ServicePolicyChoice = NewPopulatedReplaceSpecType_ActiveServicePolicies(r, easy)
-	}
-	oneofNumber_HashPolicyChoice := []int32{45, 46, 47, 48, 49, 50}[r.Intn(6)]
-	switch oneofNumber_HashPolicyChoice {
-	case 45:
-		this.HashPolicyChoice = NewPopulatedReplaceSpecType_RoundRobin(r, easy)
-	case 46:
-		this.HashPolicyChoice = NewPopulatedReplaceSpecType_LeastActive(r, easy)
-	case 47:
-		this.HashPolicyChoice = NewPopulatedReplaceSpecType_Random(r, easy)
-	case 48:
-		this.HashPolicyChoice = NewPopulatedReplaceSpecType_SourceIpStickiness(r, easy)
-	case 49:
-		this.HashPolicyChoice = NewPopulatedReplaceSpecType_CookieStickiness(r, easy)
-	case 50:
-		this.HashPolicyChoice = NewPopulatedReplaceSpecType_RingHash(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -17982,56 +11866,11 @@ func NewPopulatedReplaceSpecType_HttpsAutoCert(r randyTypes, easy bool) *Replace
 	this.HttpsAutoCert = NewPopulatedProxyTypeHttpsAutoCerts(r, easy)
 	return this
 }
-func NewPopulatedReplaceSpecType_ServicePoliciesFromNamespace(r randyTypes, easy bool) *ReplaceSpecType_ServicePoliciesFromNamespace {
-	this := &ReplaceSpecType_ServicePoliciesFromNamespace{}
-	this.ServicePoliciesFromNamespace = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedReplaceSpecType_NoServicePolicies(r randyTypes, easy bool) *ReplaceSpecType_NoServicePolicies {
-	this := &ReplaceSpecType_NoServicePolicies{}
-	this.NoServicePolicies = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedReplaceSpecType_ActiveServicePolicies(r randyTypes, easy bool) *ReplaceSpecType_ActiveServicePolicies {
-	this := &ReplaceSpecType_ActiveServicePolicies{}
-	this.ActiveServicePolicies = NewPopulatedServicePolicyList(r, easy)
-	return this
-}
-func NewPopulatedReplaceSpecType_RoundRobin(r randyTypes, easy bool) *ReplaceSpecType_RoundRobin {
-	this := &ReplaceSpecType_RoundRobin{}
-	this.RoundRobin = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedReplaceSpecType_LeastActive(r randyTypes, easy bool) *ReplaceSpecType_LeastActive {
-	this := &ReplaceSpecType_LeastActive{}
-	this.LeastActive = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedReplaceSpecType_Random(r randyTypes, easy bool) *ReplaceSpecType_Random {
-	this := &ReplaceSpecType_Random{}
-	this.Random = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedReplaceSpecType_SourceIpStickiness(r randyTypes, easy bool) *ReplaceSpecType_SourceIpStickiness {
-	this := &ReplaceSpecType_SourceIpStickiness{}
-	this.SourceIpStickiness = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedReplaceSpecType_CookieStickiness(r randyTypes, easy bool) *ReplaceSpecType_CookieStickiness {
-	this := &ReplaceSpecType_CookieStickiness{}
-	this.CookieStickiness = ves_io_schema_route.NewPopulatedCookieForHashing(r, easy)
-	return this
-}
-func NewPopulatedReplaceSpecType_RingHash(r randyTypes, easy bool) *ReplaceSpecType_RingHash {
-	this := &ReplaceSpecType_RingHash{}
-	this.RingHash = NewPopulatedHashPolicyListType(r, easy)
-	return this
-}
 func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 	this := &GetSpecType{}
-	v30 := r.Intn(10)
-	this.Domains = make([]string, v30)
-	for i := 0; i < v30; i++ {
+	v23 := r.Intn(10)
+	this.Domains = make([]string, v23)
+	for i := 0; i < v23; i++ {
 		this.Domains[i] = string(randStringTypes(r))
 	}
 	oneofNumber_LoadbalancerType := []int32{2, 3, 27}[r.Intn(3)]
@@ -18055,16 +11894,16 @@ func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 		this.AdvertiseChoice = NewPopulatedGetSpecType_AdvertiseOnPublicDefaultVip(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v31 := r.Intn(5)
-		this.DefaultRoutePools = make([]*ves_io_schema_views.OriginPoolWithWeight, v31)
-		for i := 0; i < v31; i++ {
+		v24 := r.Intn(5)
+		this.DefaultRoutePools = make([]*ves_io_schema_views.OriginPoolWithWeight, v24)
+		for i := 0; i < v24; i++ {
 			this.DefaultRoutePools[i] = ves_io_schema_views.NewPopulatedOriginPoolWithWeight(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v32 := r.Intn(5)
-		this.Routes = make([]*RouteType, v32)
-		for i := 0; i < v32; i++ {
+		v25 := r.Intn(5)
+		this.Routes = make([]*RouteType, v25)
+		for i := 0; i < v25; i++ {
 			this.Routes[i] = NewPopulatedRouteType(r, easy)
 		}
 	}
@@ -18107,41 +11946,17 @@ func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 		this.MaliciousUserMitigation = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v33 := r.Intn(5)
-		this.WafExclusionRules = make([]*ves_io_schema_policy.SimpleWafExclusionRule, v33)
-		for i := 0; i < v33; i++ {
+		v26 := r.Intn(5)
+		this.WafExclusionRules = make([]*ves_io_schema_policy.SimpleWafExclusionRule, v26)
+		for i := 0; i < v26; i++ {
 			this.WafExclusionRules[i] = ves_io_schema_policy.NewPopulatedSimpleWafExclusionRule(r, easy)
 		}
 	}
-	oneofNumber_ServicePolicyChoice := []int32{41, 42, 43}[r.Intn(3)]
-	switch oneofNumber_ServicePolicyChoice {
-	case 41:
-		this.ServicePolicyChoice = NewPopulatedGetSpecType_ServicePoliciesFromNamespace(r, easy)
-	case 42:
-		this.ServicePolicyChoice = NewPopulatedGetSpecType_NoServicePolicies(r, easy)
-	case 43:
-		this.ServicePolicyChoice = NewPopulatedGetSpecType_ActiveServicePolicies(r, easy)
-	}
-	oneofNumber_HashPolicyChoice := []int32{45, 46, 47, 48, 49, 50}[r.Intn(6)]
-	switch oneofNumber_HashPolicyChoice {
-	case 45:
-		this.HashPolicyChoice = NewPopulatedGetSpecType_RoundRobin(r, easy)
-	case 46:
-		this.HashPolicyChoice = NewPopulatedGetSpecType_LeastActive(r, easy)
-	case 47:
-		this.HashPolicyChoice = NewPopulatedGetSpecType_Random(r, easy)
-	case 48:
-		this.HashPolicyChoice = NewPopulatedGetSpecType_SourceIpStickiness(r, easy)
-	case 49:
-		this.HashPolicyChoice = NewPopulatedGetSpecType_CookieStickiness(r, easy)
-	case 50:
-		this.HashPolicyChoice = NewPopulatedGetSpecType_RingHash(r, easy)
-	}
 	this.HostName = string(randStringTypes(r))
 	if r.Intn(10) != 0 {
-		v34 := r.Intn(5)
-		this.DnsInfo = make([]*ves_io_schema_virtual_host_dns_info.DnsInfo, v34)
-		for i := 0; i < v34; i++ {
+		v27 := r.Intn(5)
+		this.DnsInfo = make([]*ves_io_schema_virtual_host_dns_info.DnsInfo, v27)
+		for i := 0; i < v27; i++ {
 			this.DnsInfo[i] = ves_io_schema_virtual_host_dns_info.NewPopulatedDnsInfo(r, easy)
 		}
 	}
@@ -18230,51 +12045,6 @@ func NewPopulatedGetSpecType_HttpsAutoCert(r randyTypes, easy bool) *GetSpecType
 	this.HttpsAutoCert = NewPopulatedProxyTypeHttpsAutoCerts(r, easy)
 	return this
 }
-func NewPopulatedGetSpecType_ServicePoliciesFromNamespace(r randyTypes, easy bool) *GetSpecType_ServicePoliciesFromNamespace {
-	this := &GetSpecType_ServicePoliciesFromNamespace{}
-	this.ServicePoliciesFromNamespace = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType_NoServicePolicies(r randyTypes, easy bool) *GetSpecType_NoServicePolicies {
-	this := &GetSpecType_NoServicePolicies{}
-	this.NoServicePolicies = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType_ActiveServicePolicies(r randyTypes, easy bool) *GetSpecType_ActiveServicePolicies {
-	this := &GetSpecType_ActiveServicePolicies{}
-	this.ActiveServicePolicies = NewPopulatedServicePolicyList(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType_RoundRobin(r randyTypes, easy bool) *GetSpecType_RoundRobin {
-	this := &GetSpecType_RoundRobin{}
-	this.RoundRobin = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType_LeastActive(r randyTypes, easy bool) *GetSpecType_LeastActive {
-	this := &GetSpecType_LeastActive{}
-	this.LeastActive = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType_Random(r randyTypes, easy bool) *GetSpecType_Random {
-	this := &GetSpecType_Random{}
-	this.Random = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType_SourceIpStickiness(r randyTypes, easy bool) *GetSpecType_SourceIpStickiness {
-	this := &GetSpecType_SourceIpStickiness{}
-	this.SourceIpStickiness = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType_CookieStickiness(r randyTypes, easy bool) *GetSpecType_CookieStickiness {
-	this := &GetSpecType_CookieStickiness{}
-	this.CookieStickiness = ves_io_schema_route.NewPopulatedCookieForHashing(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType_RingHash(r randyTypes, easy bool) *GetSpecType_RingHash {
-	this := &GetSpecType_RingHash{}
-	this.RingHash = NewPopulatedHashPolicyListType(r, easy)
-	return this
-}
 
 type randyTypes interface {
 	Float32() float32
@@ -18295,9 +12065,9 @@ func randUTF8RuneTypes(r randyTypes) rune {
 	return rune(ru + 61)
 }
 func randStringTypes(r randyTypes) string {
-	v35 := r.Intn(100)
-	tmps := make([]rune, v35)
-	for i := 0; i < v35; i++ {
+	v28 := r.Intn(100)
+	tmps := make([]rune, v28)
+	for i := 0; i < v28; i++ {
 		tmps[i] = randUTF8RuneTypes(r)
 	}
 	return string(tmps)
@@ -18319,11 +12089,11 @@ func randFieldTypes(dAtA []byte, r randyTypes, fieldNumber int, wire int) []byte
 	switch wire {
 	case 0:
 		dAtA = encodeVarintPopulateTypes(dAtA, uint64(key))
-		v36 := r.Int63()
+		v29 := r.Int63()
 		if r.Intn(2) == 0 {
-			v36 *= -1
+			v29 *= -1
 		}
-		dAtA = encodeVarintPopulateTypes(dAtA, uint64(v36))
+		dAtA = encodeVarintPopulateTypes(dAtA, uint64(v29))
 	case 1:
 		dAtA = encodeVarintPopulateTypes(dAtA, uint64(key))
 		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -18423,258 +12193,6 @@ func (m *ProxyTypeHttpsAutoCerts) Size() (n int) {
 	return n
 }
 
-func (m *HashPolicyListType) Size() (n int) {
-	var l int
-	_ = l
-	if len(m.HashPolicy) > 0 {
-		for _, e := range m.HashPolicy {
-			l = e.Size()
-			n += 2 + l + sovTypes(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *MirrorPolicyType) Size() (n int) {
-	var l int
-	_ = l
-	if m.OriginPool != nil {
-		l = m.OriginPool.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.Percent != nil {
-		l = m.Percent.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *RouteSimpleAdvancedOptions) Size() (n int) {
-	var l int
-	_ = l
-	if m.HashPolicyChoice != nil {
-		n += m.HashPolicyChoice.Size()
-	}
-	if m.Priority != 0 {
-		n += 1 + sovTypes(uint64(m.Priority))
-	}
-	if len(m.EndpointSubsets) > 0 {
-		for k, v := range m.EndpointSubsets {
-			_ = k
-			_ = v
-			mapEntrySize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
-			n += mapEntrySize + 1 + sovTypes(uint64(mapEntrySize))
-		}
-	}
-	if m.RewriteChoice != nil {
-		n += m.RewriteChoice.Size()
-	}
-	if len(m.RequestHeadersToAdd) > 0 {
-		for _, e := range m.RequestHeadersToAdd {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.RequestHeadersToRemove) > 0 {
-		for _, s := range m.RequestHeadersToRemove {
-			l = len(s)
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.ResponseHeadersToAdd) > 0 {
-		for _, e := range m.ResponseHeadersToAdd {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.ResponseHeadersToRemove) > 0 {
-		for _, s := range m.ResponseHeadersToRemove {
-			l = len(s)
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if m.DisableLocationAdd {
-		n += 2
-	}
-	if m.WafChoice != nil {
-		n += m.WafChoice.Size()
-	}
-	if m.CorsPolicy != nil {
-		l = m.CorsPolicy.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	if m.SpdyChoice != nil {
-		n += m.SpdyChoice.Size()
-	}
-	if m.WebsocketChoice != nil {
-		n += m.WebsocketChoice.Size()
-	}
-	if m.RetryPolicyChoice != nil {
-		n += m.RetryPolicyChoice.Size()
-	}
-	if m.Timeout != 0 {
-		n += 2 + sovTypes(uint64(m.Timeout))
-	}
-	if m.BufferChoice != nil {
-		n += m.BufferChoice.Size()
-	}
-	if m.MirroringChoice != nil {
-		n += m.MirroringChoice.Size()
-	}
-	return n
-}
-
-func (m *RouteSimpleAdvancedOptions_CommonHashPolicy) Size() (n int) {
-	var l int
-	_ = l
-	if m.CommonHashPolicy != nil {
-		l = m.CommonHashPolicy.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *RouteSimpleAdvancedOptions_SpecificHashPolicy) Size() (n int) {
-	var l int
-	_ = l
-	if m.SpecificHashPolicy != nil {
-		l = m.SpecificHashPolicy.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *RouteSimpleAdvancedOptions_DisablePrefixRewrite) Size() (n int) {
-	var l int
-	_ = l
-	if m.DisablePrefixRewrite != nil {
-		l = m.DisablePrefixRewrite.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *RouteSimpleAdvancedOptions_PrefixRewrite) Size() (n int) {
-	var l int
-	_ = l
-	l = len(m.PrefixRewrite)
-	n += 1 + l + sovTypes(uint64(l))
-	return n
-}
-func (m *RouteSimpleAdvancedOptions_DisableWaf) Size() (n int) {
-	var l int
-	_ = l
-	if m.DisableWaf != nil {
-		l = m.DisableWaf.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *RouteSimpleAdvancedOptions_Waf) Size() (n int) {
-	var l int
-	_ = l
-	if m.Waf != nil {
-		l = m.Waf.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *RouteSimpleAdvancedOptions_WafRule) Size() (n int) {
-	var l int
-	_ = l
-	if m.WafRule != nil {
-		l = m.WafRule.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *RouteSimpleAdvancedOptions_DisableSpdy) Size() (n int) {
-	var l int
-	_ = l
-	if m.DisableSpdy != nil {
-		l = m.DisableSpdy.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *RouteSimpleAdvancedOptions_EnableSpdy) Size() (n int) {
-	var l int
-	_ = l
-	if m.EnableSpdy != nil {
-		l = m.EnableSpdy.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *RouteSimpleAdvancedOptions_DisableWebSocketConfig) Size() (n int) {
-	var l int
-	_ = l
-	if m.DisableWebSocketConfig != nil {
-		l = m.DisableWebSocketConfig.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *RouteSimpleAdvancedOptions_WebSocketConfig) Size() (n int) {
-	var l int
-	_ = l
-	if m.WebSocketConfig != nil {
-		l = m.WebSocketConfig.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *RouteSimpleAdvancedOptions_DefaultRetryPolicy) Size() (n int) {
-	var l int
-	_ = l
-	if m.DefaultRetryPolicy != nil {
-		l = m.DefaultRetryPolicy.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *RouteSimpleAdvancedOptions_RetryPolicy) Size() (n int) {
-	var l int
-	_ = l
-	if m.RetryPolicy != nil {
-		l = m.RetryPolicy.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *RouteSimpleAdvancedOptions_CommonBuffering) Size() (n int) {
-	var l int
-	_ = l
-	if m.CommonBuffering != nil {
-		l = m.CommonBuffering.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *RouteSimpleAdvancedOptions_BufferPolicy) Size() (n int) {
-	var l int
-	_ = l
-	if m.BufferPolicy != nil {
-		l = m.BufferPolicy.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *RouteSimpleAdvancedOptions_DisableMirroring) Size() (n int) {
-	var l int
-	_ = l
-	if m.DisableMirroring != nil {
-		l = m.DisableMirroring.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *RouteSimpleAdvancedOptions_MirrorPolicy) Size() (n int) {
-	var l int
-	_ = l
-	if m.MirrorPolicy != nil {
-		l = m.MirrorPolicy.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *RouteTypeSimpleWithDefaultOriginPool) Size() (n int) {
 	var l int
 	_ = l
@@ -18734,10 +12252,6 @@ func (m *RouteTypeSimple) Size() (n int) {
 	}
 	if m.HostRewriteParams != nil {
 		n += m.HostRewriteParams.Size()
-	}
-	if m.AdvancedOptions != nil {
-		l = m.AdvancedOptions.Size()
-		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -18970,18 +12484,6 @@ func (m *RateLimitConfigType_CustomIpAllowedList) Size() (n int) {
 	}
 	return n
 }
-func (m *ServicePolicyList) Size() (n int) {
-	var l int
-	_ = l
-	if len(m.Policies) > 0 {
-		for _, e := range m.Policies {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	return n
-}
-
 func (m *GlobalSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -19045,12 +12547,6 @@ func (m *GlobalSpecType) Size() (n int) {
 			l = e.Size()
 			n += 2 + l + sovTypes(uint64(l))
 		}
-	}
-	if m.ServicePolicyChoice != nil {
-		n += m.ServicePolicyChoice.Size()
-	}
-	if m.HashPolicyChoice != nil {
-		n += m.HashPolicyChoice.Size()
 	}
 	if m.ViewInternal != nil {
 		l = m.ViewInternal.Size()
@@ -19239,87 +12735,6 @@ func (m *GlobalSpecType_DisableHostRewrite) Size() (n int) {
 	}
 	return n
 }
-func (m *GlobalSpecType_ServicePoliciesFromNamespace) Size() (n int) {
-	var l int
-	_ = l
-	if m.ServicePoliciesFromNamespace != nil {
-		l = m.ServicePoliciesFromNamespace.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_NoServicePolicies) Size() (n int) {
-	var l int
-	_ = l
-	if m.NoServicePolicies != nil {
-		l = m.NoServicePolicies.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_ActiveServicePolicies) Size() (n int) {
-	var l int
-	_ = l
-	if m.ActiveServicePolicies != nil {
-		l = m.ActiveServicePolicies.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_RoundRobin) Size() (n int) {
-	var l int
-	_ = l
-	if m.RoundRobin != nil {
-		l = m.RoundRobin.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_LeastActive) Size() (n int) {
-	var l int
-	_ = l
-	if m.LeastActive != nil {
-		l = m.LeastActive.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_Random) Size() (n int) {
-	var l int
-	_ = l
-	if m.Random != nil {
-		l = m.Random.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_SourceIpStickiness) Size() (n int) {
-	var l int
-	_ = l
-	if m.SourceIpStickiness != nil {
-		l = m.SourceIpStickiness.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_CookieStickiness) Size() (n int) {
-	var l int
-	_ = l
-	if m.CookieStickiness != nil {
-		l = m.CookieStickiness.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GlobalSpecType_RingHash) Size() (n int) {
-	var l int
-	_ = l
-	if m.RingHash != nil {
-		l = m.RingHash.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *CreateSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -19380,12 +12795,6 @@ func (m *CreateSpecType) Size() (n int) {
 			l = e.Size()
 			n += 2 + l + sovTypes(uint64(l))
 		}
-	}
-	if m.ServicePolicyChoice != nil {
-		n += m.ServicePolicyChoice.Size()
-	}
-	if m.HashPolicyChoice != nil {
-		n += m.HashPolicyChoice.Size()
 	}
 	return n
 }
@@ -19525,87 +12934,6 @@ func (m *CreateSpecType_HttpsAutoCert) Size() (n int) {
 	}
 	return n
 }
-func (m *CreateSpecType_ServicePoliciesFromNamespace) Size() (n int) {
-	var l int
-	_ = l
-	if m.ServicePoliciesFromNamespace != nil {
-		l = m.ServicePoliciesFromNamespace.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_NoServicePolicies) Size() (n int) {
-	var l int
-	_ = l
-	if m.NoServicePolicies != nil {
-		l = m.NoServicePolicies.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_ActiveServicePolicies) Size() (n int) {
-	var l int
-	_ = l
-	if m.ActiveServicePolicies != nil {
-		l = m.ActiveServicePolicies.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_RoundRobin) Size() (n int) {
-	var l int
-	_ = l
-	if m.RoundRobin != nil {
-		l = m.RoundRobin.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_LeastActive) Size() (n int) {
-	var l int
-	_ = l
-	if m.LeastActive != nil {
-		l = m.LeastActive.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_Random) Size() (n int) {
-	var l int
-	_ = l
-	if m.Random != nil {
-		l = m.Random.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_SourceIpStickiness) Size() (n int) {
-	var l int
-	_ = l
-	if m.SourceIpStickiness != nil {
-		l = m.SourceIpStickiness.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_CookieStickiness) Size() (n int) {
-	var l int
-	_ = l
-	if m.CookieStickiness != nil {
-		l = m.CookieStickiness.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CreateSpecType_RingHash) Size() (n int) {
-	var l int
-	_ = l
-	if m.RingHash != nil {
-		l = m.RingHash.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *ReplaceSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -19666,12 +12994,6 @@ func (m *ReplaceSpecType) Size() (n int) {
 			l = e.Size()
 			n += 2 + l + sovTypes(uint64(l))
 		}
-	}
-	if m.ServicePolicyChoice != nil {
-		n += m.ServicePolicyChoice.Size()
-	}
-	if m.HashPolicyChoice != nil {
-		n += m.HashPolicyChoice.Size()
 	}
 	return n
 }
@@ -19811,87 +13133,6 @@ func (m *ReplaceSpecType_HttpsAutoCert) Size() (n int) {
 	}
 	return n
 }
-func (m *ReplaceSpecType_ServicePoliciesFromNamespace) Size() (n int) {
-	var l int
-	_ = l
-	if m.ServicePoliciesFromNamespace != nil {
-		l = m.ServicePoliciesFromNamespace.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_NoServicePolicies) Size() (n int) {
-	var l int
-	_ = l
-	if m.NoServicePolicies != nil {
-		l = m.NoServicePolicies.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_ActiveServicePolicies) Size() (n int) {
-	var l int
-	_ = l
-	if m.ActiveServicePolicies != nil {
-		l = m.ActiveServicePolicies.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_RoundRobin) Size() (n int) {
-	var l int
-	_ = l
-	if m.RoundRobin != nil {
-		l = m.RoundRobin.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_LeastActive) Size() (n int) {
-	var l int
-	_ = l
-	if m.LeastActive != nil {
-		l = m.LeastActive.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_Random) Size() (n int) {
-	var l int
-	_ = l
-	if m.Random != nil {
-		l = m.Random.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_SourceIpStickiness) Size() (n int) {
-	var l int
-	_ = l
-	if m.SourceIpStickiness != nil {
-		l = m.SourceIpStickiness.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_CookieStickiness) Size() (n int) {
-	var l int
-	_ = l
-	if m.CookieStickiness != nil {
-		l = m.CookieStickiness.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ReplaceSpecType_RingHash) Size() (n int) {
-	var l int
-	_ = l
-	if m.RingHash != nil {
-		l = m.RingHash.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *GetSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -19952,12 +13193,6 @@ func (m *GetSpecType) Size() (n int) {
 			l = e.Size()
 			n += 2 + l + sovTypes(uint64(l))
 		}
-	}
-	if m.ServicePolicyChoice != nil {
-		n += m.ServicePolicyChoice.Size()
-	}
-	if m.HashPolicyChoice != nil {
-		n += m.HashPolicyChoice.Size()
 	}
 	l = len(m.HostName)
 	if l > 0 {
@@ -20117,87 +13352,6 @@ func (m *GetSpecType_HttpsAutoCert) Size() (n int) {
 	}
 	return n
 }
-func (m *GetSpecType_ServicePoliciesFromNamespace) Size() (n int) {
-	var l int
-	_ = l
-	if m.ServicePoliciesFromNamespace != nil {
-		l = m.ServicePoliciesFromNamespace.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_NoServicePolicies) Size() (n int) {
-	var l int
-	_ = l
-	if m.NoServicePolicies != nil {
-		l = m.NoServicePolicies.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_ActiveServicePolicies) Size() (n int) {
-	var l int
-	_ = l
-	if m.ActiveServicePolicies != nil {
-		l = m.ActiveServicePolicies.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_RoundRobin) Size() (n int) {
-	var l int
-	_ = l
-	if m.RoundRobin != nil {
-		l = m.RoundRobin.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_LeastActive) Size() (n int) {
-	var l int
-	_ = l
-	if m.LeastActive != nil {
-		l = m.LeastActive.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_Random) Size() (n int) {
-	var l int
-	_ = l
-	if m.Random != nil {
-		l = m.Random.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_SourceIpStickiness) Size() (n int) {
-	var l int
-	_ = l
-	if m.SourceIpStickiness != nil {
-		l = m.SourceIpStickiness.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_CookieStickiness) Size() (n int) {
-	var l int
-	_ = l
-	if m.CookieStickiness != nil {
-		l = m.CookieStickiness.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *GetSpecType_RingHash) Size() (n int) {
-	var l int
-	_ = l
-	if m.RingHash != nil {
-		l = m.RingHash.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 
 func sovTypes(x uint64) (n int) {
 	for {
@@ -20277,233 +13431,6 @@ func (this *ProxyTypeHttpsAutoCerts) String() string {
 	}, "")
 	return s
 }
-func (this *HashPolicyListType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&HashPolicyListType{`,
-		`HashPolicy:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicy), "HashPolicyType", "ves_io_schema_route.HashPolicyType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MirrorPolicyType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MirrorPolicyType{`,
-		`OriginPool:` + strings.Replace(fmt.Sprintf("%v", this.OriginPool), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
-		`Percent:` + strings.Replace(fmt.Sprintf("%v", this.Percent), "FractionalPercent", "ves_io_schema4.FractionalPercent", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions) String() string {
-	if this == nil {
-		return "nil"
-	}
-	keysForEndpointSubsets := make([]string, 0, len(this.EndpointSubsets))
-	for k, _ := range this.EndpointSubsets {
-		keysForEndpointSubsets = append(keysForEndpointSubsets, k)
-	}
-	sortkeys.Strings(keysForEndpointSubsets)
-	mapStringForEndpointSubsets := "map[string]string{"
-	for _, k := range keysForEndpointSubsets {
-		mapStringForEndpointSubsets += fmt.Sprintf("%v: %v,", k, this.EndpointSubsets[k])
-	}
-	mapStringForEndpointSubsets += "}"
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions{`,
-		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
-		`Priority:` + fmt.Sprintf("%v", this.Priority) + `,`,
-		`EndpointSubsets:` + mapStringForEndpointSubsets + `,`,
-		`RewriteChoice:` + fmt.Sprintf("%v", this.RewriteChoice) + `,`,
-		`RequestHeadersToAdd:` + strings.Replace(fmt.Sprintf("%v", this.RequestHeadersToAdd), "HeaderManipulationOptionType", "ves_io_schema4.HeaderManipulationOptionType", 1) + `,`,
-		`RequestHeadersToRemove:` + fmt.Sprintf("%v", this.RequestHeadersToRemove) + `,`,
-		`ResponseHeadersToAdd:` + strings.Replace(fmt.Sprintf("%v", this.ResponseHeadersToAdd), "HeaderManipulationOptionType", "ves_io_schema4.HeaderManipulationOptionType", 1) + `,`,
-		`ResponseHeadersToRemove:` + fmt.Sprintf("%v", this.ResponseHeadersToRemove) + `,`,
-		`DisableLocationAdd:` + fmt.Sprintf("%v", this.DisableLocationAdd) + `,`,
-		`WafChoice:` + fmt.Sprintf("%v", this.WafChoice) + `,`,
-		`CorsPolicy:` + strings.Replace(fmt.Sprintf("%v", this.CorsPolicy), "CorsPolicy", "ves_io_schema4.CorsPolicy", 1) + `,`,
-		`SpdyChoice:` + fmt.Sprintf("%v", this.SpdyChoice) + `,`,
-		`WebsocketChoice:` + fmt.Sprintf("%v", this.WebsocketChoice) + `,`,
-		`RetryPolicyChoice:` + fmt.Sprintf("%v", this.RetryPolicyChoice) + `,`,
-		`Timeout:` + fmt.Sprintf("%v", this.Timeout) + `,`,
-		`BufferChoice:` + fmt.Sprintf("%v", this.BufferChoice) + `,`,
-		`MirroringChoice:` + fmt.Sprintf("%v", this.MirroringChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_CommonHashPolicy) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_CommonHashPolicy{`,
-		`CommonHashPolicy:` + strings.Replace(fmt.Sprintf("%v", this.CommonHashPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_SpecificHashPolicy) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_SpecificHashPolicy{`,
-		`SpecificHashPolicy:` + strings.Replace(fmt.Sprintf("%v", this.SpecificHashPolicy), "HashPolicyListType", "HashPolicyListType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_DisablePrefixRewrite) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_DisablePrefixRewrite{`,
-		`DisablePrefixRewrite:` + strings.Replace(fmt.Sprintf("%v", this.DisablePrefixRewrite), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_PrefixRewrite) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_PrefixRewrite{`,
-		`PrefixRewrite:` + fmt.Sprintf("%v", this.PrefixRewrite) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_DisableWaf) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_DisableWaf{`,
-		`DisableWaf:` + strings.Replace(fmt.Sprintf("%v", this.DisableWaf), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_Waf) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_Waf{`,
-		`Waf:` + strings.Replace(fmt.Sprintf("%v", this.Waf), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_WafRule) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_WafRule{`,
-		`WafRule:` + strings.Replace(fmt.Sprintf("%v", this.WafRule), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_DisableSpdy) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_DisableSpdy{`,
-		`DisableSpdy:` + strings.Replace(fmt.Sprintf("%v", this.DisableSpdy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_EnableSpdy) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_EnableSpdy{`,
-		`EnableSpdy:` + strings.Replace(fmt.Sprintf("%v", this.EnableSpdy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_DisableWebSocketConfig) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_DisableWebSocketConfig{`,
-		`DisableWebSocketConfig:` + strings.Replace(fmt.Sprintf("%v", this.DisableWebSocketConfig), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_WebSocketConfig) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_WebSocketConfig{`,
-		`WebSocketConfig:` + strings.Replace(fmt.Sprintf("%v", this.WebSocketConfig), "WebsocketConfigType", "ves_io_schema_route.WebsocketConfigType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_DefaultRetryPolicy) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_DefaultRetryPolicy{`,
-		`DefaultRetryPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DefaultRetryPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_RetryPolicy) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_RetryPolicy{`,
-		`RetryPolicy:` + strings.Replace(fmt.Sprintf("%v", this.RetryPolicy), "RetryPolicyType", "ves_io_schema4.RetryPolicyType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_CommonBuffering) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_CommonBuffering{`,
-		`CommonBuffering:` + strings.Replace(fmt.Sprintf("%v", this.CommonBuffering), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_BufferPolicy) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_BufferPolicy{`,
-		`BufferPolicy:` + strings.Replace(fmt.Sprintf("%v", this.BufferPolicy), "BufferConfigType", "ves_io_schema4.BufferConfigType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_DisableMirroring) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_DisableMirroring{`,
-		`DisableMirroring:` + strings.Replace(fmt.Sprintf("%v", this.DisableMirroring), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RouteSimpleAdvancedOptions_MirrorPolicy) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RouteSimpleAdvancedOptions_MirrorPolicy{`,
-		`MirrorPolicy:` + strings.Replace(fmt.Sprintf("%v", this.MirrorPolicy), "MirrorPolicyType", "MirrorPolicyType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *RouteTypeSimpleWithDefaultOriginPool) String() string {
 	if this == nil {
 		return "nil"
@@ -20555,7 +13482,6 @@ func (this *RouteTypeSimple) String() string {
 		`HttpMethod:` + fmt.Sprintf("%v", this.HttpMethod) + `,`,
 		`OriginPools:` + strings.Replace(fmt.Sprintf("%v", this.OriginPools), "OriginPoolWithWeight", "ves_io_schema_views.OriginPoolWithWeight", 1) + `,`,
 		`HostRewriteParams:` + fmt.Sprintf("%v", this.HostRewriteParams) + `,`,
-		`AdvancedOptions:` + strings.Replace(fmt.Sprintf("%v", this.AdvancedOptions), "RouteSimpleAdvancedOptions", "RouteSimpleAdvancedOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -20755,16 +13681,6 @@ func (this *RateLimitConfigType_CustomIpAllowedList) String() string {
 	}, "")
 	return s
 }
-func (this *ServicePolicyList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ServicePolicyList{`,
-		`Policies:` + strings.Replace(fmt.Sprintf("%v", this.Policies), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -20785,8 +13701,6 @@ func (this *GlobalSpecType) String() string {
 		`HostRewriteParams:` + fmt.Sprintf("%v", this.HostRewriteParams) + `,`,
 		`MaliciousUserMitigation:` + strings.Replace(fmt.Sprintf("%v", this.MaliciousUserMitigation), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`WafExclusionRules:` + strings.Replace(fmt.Sprintf("%v", this.WafExclusionRules), "SimpleWafExclusionRule", "ves_io_schema_policy.SimpleWafExclusionRule", 1) + `,`,
-		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
-		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
 		`DnsInfo:` + strings.Replace(fmt.Sprintf("%v", this.DnsInfo), "DnsInfo", "ves_io_schema_virtual_host_dns_info.DnsInfo", 1) + `,`,
@@ -20977,96 +13891,6 @@ func (this *GlobalSpecType_DisableHostRewrite) String() string {
 	}, "")
 	return s
 }
-func (this *GlobalSpecType_ServicePoliciesFromNamespace) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_ServicePoliciesFromNamespace{`,
-		`ServicePoliciesFromNamespace:` + strings.Replace(fmt.Sprintf("%v", this.ServicePoliciesFromNamespace), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_NoServicePolicies) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_NoServicePolicies{`,
-		`NoServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.NoServicePolicies), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_ActiveServicePolicies) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_ActiveServicePolicies{`,
-		`ActiveServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveServicePolicies), "ServicePolicyList", "ServicePolicyList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_RoundRobin) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_RoundRobin{`,
-		`RoundRobin:` + strings.Replace(fmt.Sprintf("%v", this.RoundRobin), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_LeastActive) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_LeastActive{`,
-		`LeastActive:` + strings.Replace(fmt.Sprintf("%v", this.LeastActive), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_Random) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_Random{`,
-		`Random:` + strings.Replace(fmt.Sprintf("%v", this.Random), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_SourceIpStickiness) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_SourceIpStickiness{`,
-		`SourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.SourceIpStickiness), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_CookieStickiness) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_CookieStickiness{`,
-		`CookieStickiness:` + strings.Replace(fmt.Sprintf("%v", this.CookieStickiness), "CookieForHashing", "ves_io_schema_route.CookieForHashing", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GlobalSpecType_RingHash) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GlobalSpecType_RingHash{`,
-		`RingHash:` + strings.Replace(fmt.Sprintf("%v", this.RingHash), "HashPolicyListType", "HashPolicyListType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -21086,8 +13910,6 @@ func (this *CreateSpecType) String() string {
 		`RateLimitChoice:` + fmt.Sprintf("%v", this.RateLimitChoice) + `,`,
 		`MaliciousUserMitigation:` + strings.Replace(fmt.Sprintf("%v", this.MaliciousUserMitigation), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`WafExclusionRules:` + strings.Replace(fmt.Sprintf("%v", this.WafExclusionRules), "SimpleWafExclusionRule", "ves_io_schema_policy.SimpleWafExclusionRule", 1) + `,`,
-		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
-		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -21242,96 +14064,6 @@ func (this *CreateSpecType_HttpsAutoCert) String() string {
 	}, "")
 	return s
 }
-func (this *CreateSpecType_ServicePoliciesFromNamespace) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_ServicePoliciesFromNamespace{`,
-		`ServicePoliciesFromNamespace:` + strings.Replace(fmt.Sprintf("%v", this.ServicePoliciesFromNamespace), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_NoServicePolicies) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_NoServicePolicies{`,
-		`NoServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.NoServicePolicies), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_ActiveServicePolicies) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_ActiveServicePolicies{`,
-		`ActiveServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveServicePolicies), "ServicePolicyList", "ServicePolicyList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_RoundRobin) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_RoundRobin{`,
-		`RoundRobin:` + strings.Replace(fmt.Sprintf("%v", this.RoundRobin), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_LeastActive) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_LeastActive{`,
-		`LeastActive:` + strings.Replace(fmt.Sprintf("%v", this.LeastActive), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_Random) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_Random{`,
-		`Random:` + strings.Replace(fmt.Sprintf("%v", this.Random), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_SourceIpStickiness) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_SourceIpStickiness{`,
-		`SourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.SourceIpStickiness), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_CookieStickiness) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_CookieStickiness{`,
-		`CookieStickiness:` + strings.Replace(fmt.Sprintf("%v", this.CookieStickiness), "CookieForHashing", "ves_io_schema_route.CookieForHashing", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CreateSpecType_RingHash) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CreateSpecType_RingHash{`,
-		`RingHash:` + strings.Replace(fmt.Sprintf("%v", this.RingHash), "HashPolicyListType", "HashPolicyListType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -21351,8 +14083,6 @@ func (this *ReplaceSpecType) String() string {
 		`RateLimitChoice:` + fmt.Sprintf("%v", this.RateLimitChoice) + `,`,
 		`MaliciousUserMitigation:` + strings.Replace(fmt.Sprintf("%v", this.MaliciousUserMitigation), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`WafExclusionRules:` + strings.Replace(fmt.Sprintf("%v", this.WafExclusionRules), "SimpleWafExclusionRule", "ves_io_schema_policy.SimpleWafExclusionRule", 1) + `,`,
-		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
-		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -21507,96 +14237,6 @@ func (this *ReplaceSpecType_HttpsAutoCert) String() string {
 	}, "")
 	return s
 }
-func (this *ReplaceSpecType_ServicePoliciesFromNamespace) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_ServicePoliciesFromNamespace{`,
-		`ServicePoliciesFromNamespace:` + strings.Replace(fmt.Sprintf("%v", this.ServicePoliciesFromNamespace), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_NoServicePolicies) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_NoServicePolicies{`,
-		`NoServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.NoServicePolicies), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_ActiveServicePolicies) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_ActiveServicePolicies{`,
-		`ActiveServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveServicePolicies), "ServicePolicyList", "ServicePolicyList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_RoundRobin) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_RoundRobin{`,
-		`RoundRobin:` + strings.Replace(fmt.Sprintf("%v", this.RoundRobin), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_LeastActive) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_LeastActive{`,
-		`LeastActive:` + strings.Replace(fmt.Sprintf("%v", this.LeastActive), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_Random) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_Random{`,
-		`Random:` + strings.Replace(fmt.Sprintf("%v", this.Random), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_SourceIpStickiness) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_SourceIpStickiness{`,
-		`SourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.SourceIpStickiness), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_CookieStickiness) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_CookieStickiness{`,
-		`CookieStickiness:` + strings.Replace(fmt.Sprintf("%v", this.CookieStickiness), "CookieForHashing", "ves_io_schema_route.CookieForHashing", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ReplaceSpecType_RingHash) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ReplaceSpecType_RingHash{`,
-		`RingHash:` + strings.Replace(fmt.Sprintf("%v", this.RingHash), "HashPolicyListType", "HashPolicyListType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -21616,8 +14256,6 @@ func (this *GetSpecType) String() string {
 		`RateLimitChoice:` + fmt.Sprintf("%v", this.RateLimitChoice) + `,`,
 		`MaliciousUserMitigation:` + strings.Replace(fmt.Sprintf("%v", this.MaliciousUserMitigation), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`WafExclusionRules:` + strings.Replace(fmt.Sprintf("%v", this.WafExclusionRules), "SimpleWafExclusionRule", "ves_io_schema_policy.SimpleWafExclusionRule", 1) + `,`,
-		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
-		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
 		`DnsInfo:` + strings.Replace(fmt.Sprintf("%v", this.DnsInfo), "DnsInfo", "ves_io_schema_virtual_host_dns_info.DnsInfo", 1) + `,`,
 		`State:` + fmt.Sprintf("%v", this.State) + `,`,
@@ -21773,96 +14411,6 @@ func (this *GetSpecType_HttpsAutoCert) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_HttpsAutoCert{`,
 		`HttpsAutoCert:` + strings.Replace(fmt.Sprintf("%v", this.HttpsAutoCert), "ProxyTypeHttpsAutoCerts", "ProxyTypeHttpsAutoCerts", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_ServicePoliciesFromNamespace) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_ServicePoliciesFromNamespace{`,
-		`ServicePoliciesFromNamespace:` + strings.Replace(fmt.Sprintf("%v", this.ServicePoliciesFromNamespace), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_NoServicePolicies) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_NoServicePolicies{`,
-		`NoServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.NoServicePolicies), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_ActiveServicePolicies) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_ActiveServicePolicies{`,
-		`ActiveServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveServicePolicies), "ServicePolicyList", "ServicePolicyList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_RoundRobin) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_RoundRobin{`,
-		`RoundRobin:` + strings.Replace(fmt.Sprintf("%v", this.RoundRobin), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_LeastActive) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_LeastActive{`,
-		`LeastActive:` + strings.Replace(fmt.Sprintf("%v", this.LeastActive), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_Random) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_Random{`,
-		`Random:` + strings.Replace(fmt.Sprintf("%v", this.Random), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_SourceIpStickiness) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_SourceIpStickiness{`,
-		`SourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.SourceIpStickiness), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_CookieStickiness) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_CookieStickiness{`,
-		`CookieStickiness:` + strings.Replace(fmt.Sprintf("%v", this.CookieStickiness), "CookieForHashing", "ves_io_schema_route.CookieForHashing", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetSpecType_RingHash) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetSpecType_RingHash{`,
-		`RingHash:` + strings.Replace(fmt.Sprintf("%v", this.RingHash), "HashPolicyListType", "HashPolicyListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -22345,1123 +14893,6 @@ func (m *ProxyTypeHttpsAutoCerts) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *HashPolicyListType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: HashPolicyListType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: HashPolicyListType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 16:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicy", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.HashPolicy = append(m.HashPolicy, &ves_io_schema_route.HashPolicyType{})
-			if err := m.HashPolicy[len(m.HashPolicy)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MirrorPolicyType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MirrorPolicyType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MirrorPolicyType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OriginPool", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.OriginPool == nil {
-				m.OriginPool = &ves_io_schema_views.ObjectRefType{}
-			}
-			if err := m.OriginPool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Percent", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Percent == nil {
-				m.Percent = &ves_io_schema4.FractionalPercent{}
-			}
-			if err := m.Percent.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *RouteSimpleAdvancedOptions) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: RouteSimpleAdvancedOptions: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: RouteSimpleAdvancedOptions: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CommonHashPolicy", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &RouteSimpleAdvancedOptions_CommonHashPolicy{v}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SpecificHashPolicy", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &HashPolicyListType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &RouteSimpleAdvancedOptions_SpecificHashPolicy{v}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Priority", wireType)
-			}
-			m.Priority = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Priority |= (ves_io_schema4.RoutingPriority(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndpointSubsets", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.EndpointSubsets == nil {
-				m.EndpointSubsets = make(map[string]string)
-			}
-			var mapkey string
-			var mapvalue string
-			for iNdEx < postIndex {
-				entryPreIndex := iNdEx
-				var wire uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					wire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				fieldNum := int32(wire >> 3)
-				if fieldNum == 1 {
-					var stringLenmapkey uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTypes
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapkey |= (uint64(b) & 0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapkey := int(stringLenmapkey)
-					if intStringLenmapkey < 0 {
-						return ErrInvalidLengthTypes
-					}
-					postStringIndexmapkey := iNdEx + intStringLenmapkey
-					if postStringIndexmapkey > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
-					iNdEx = postStringIndexmapkey
-				} else if fieldNum == 2 {
-					var stringLenmapvalue uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTypes
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapvalue := int(stringLenmapvalue)
-					if intStringLenmapvalue < 0 {
-						return ErrInvalidLengthTypes
-					}
-					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
-					if postStringIndexmapvalue > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
-					iNdEx = postStringIndexmapvalue
-				} else {
-					iNdEx = entryPreIndex
-					skippy, err := skipTypes(dAtA[iNdEx:])
-					if err != nil {
-						return err
-					}
-					if skippy < 0 {
-						return ErrInvalidLengthTypes
-					}
-					if (iNdEx + skippy) > postIndex {
-						return io.ErrUnexpectedEOF
-					}
-					iNdEx += skippy
-				}
-			}
-			m.EndpointSubsets[mapkey] = mapvalue
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisablePrefixRewrite", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RewriteChoice = &RouteSimpleAdvancedOptions_DisablePrefixRewrite{v}
-			iNdEx = postIndex
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PrefixRewrite", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.RewriteChoice = &RouteSimpleAdvancedOptions_PrefixRewrite{string(dAtA[iNdEx:postIndex])}
-			iNdEx = postIndex
-		case 9:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RequestHeadersToAdd", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.RequestHeadersToAdd = append(m.RequestHeadersToAdd, &ves_io_schema4.HeaderManipulationOptionType{})
-			if err := m.RequestHeadersToAdd[len(m.RequestHeadersToAdd)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RequestHeadersToRemove", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.RequestHeadersToRemove = append(m.RequestHeadersToRemove, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		case 11:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ResponseHeadersToAdd", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ResponseHeadersToAdd = append(m.ResponseHeadersToAdd, &ves_io_schema4.HeaderManipulationOptionType{})
-			if err := m.ResponseHeadersToAdd[len(m.ResponseHeadersToAdd)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 12:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ResponseHeadersToRemove", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ResponseHeadersToRemove = append(m.ResponseHeadersToRemove, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		case 13:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisableLocationAdd", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.DisableLocationAdd = bool(v != 0)
-		case 15:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisableWaf", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.WafChoice = &RouteSimpleAdvancedOptions_DisableWaf{v}
-			iNdEx = postIndex
-		case 16:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Waf", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema_views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.WafChoice = &RouteSimpleAdvancedOptions_Waf{v}
-			iNdEx = postIndex
-		case 17:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WafRule", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema_views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.WafChoice = &RouteSimpleAdvancedOptions_WafRule{v}
-			iNdEx = postIndex
-		case 18:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CorsPolicy", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.CorsPolicy == nil {
-				m.CorsPolicy = &ves_io_schema4.CorsPolicy{}
-			}
-			if err := m.CorsPolicy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 20:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisableSpdy", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.SpdyChoice = &RouteSimpleAdvancedOptions_DisableSpdy{v}
-			iNdEx = postIndex
-		case 21:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EnableSpdy", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.SpdyChoice = &RouteSimpleAdvancedOptions_EnableSpdy{v}
-			iNdEx = postIndex
-		case 23:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisableWebSocketConfig", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.WebsocketChoice = &RouteSimpleAdvancedOptions_DisableWebSocketConfig{v}
-			iNdEx = postIndex
-		case 24:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WebSocketConfig", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema_route.WebsocketConfigType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.WebsocketChoice = &RouteSimpleAdvancedOptions_WebSocketConfig{v}
-			iNdEx = postIndex
-		case 26:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultRetryPolicy", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RetryPolicyChoice = &RouteSimpleAdvancedOptions_DefaultRetryPolicy{v}
-			iNdEx = postIndex
-		case 27:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RetryPolicy", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.RetryPolicyType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.RetryPolicyChoice = &RouteSimpleAdvancedOptions_RetryPolicy{v}
-			iNdEx = postIndex
-		case 28:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Timeout", wireType)
-			}
-			m.Timeout = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Timeout |= (uint32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 30:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CommonBuffering", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.BufferChoice = &RouteSimpleAdvancedOptions_CommonBuffering{v}
-			iNdEx = postIndex
-		case 31:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BufferPolicy", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.BufferConfigType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.BufferChoice = &RouteSimpleAdvancedOptions_BufferPolicy{v}
-			iNdEx = postIndex
-		case 33:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisableMirroring", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.MirroringChoice = &RouteSimpleAdvancedOptions_DisableMirroring{v}
-			iNdEx = postIndex
-		case 34:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MirrorPolicy", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &MirrorPolicyType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.MirroringChoice = &RouteSimpleAdvancedOptions_MirrorPolicy{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
 func (m *RouteTypeSimpleWithDefaultOriginPool) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -23861,39 +15292,6 @@ func (m *RouteTypeSimple) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.HostRewriteParams = &RouteTypeSimple_DisableHostRewrite{v}
-			iNdEx = postIndex
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AdvancedOptions", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.AdvancedOptions == nil {
-				m.AdvancedOptions = &RouteSimpleAdvancedOptions{}
-			}
-			if err := m.AdvancedOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -25152,87 +16550,6 @@ func (m *RateLimitConfigType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *ServicePolicyList) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ServicePolicyList: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ServicePolicyList: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Policies", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Policies = append(m.Policies, &ves_io_schema_views.ObjectRefType{})
-			if err := m.Policies[len(m.Policies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
 func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -26108,294 +17425,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.WafExclusionRules[len(m.WafExclusionRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			iNdEx = postIndex
-		case 41:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServicePoliciesFromNamespace", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ServicePolicyChoice = &GlobalSpecType_ServicePoliciesFromNamespace{v}
-			iNdEx = postIndex
-		case 42:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NoServicePolicies", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ServicePolicyChoice = &GlobalSpecType_NoServicePolicies{v}
-			iNdEx = postIndex
-		case 43:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ActiveServicePolicies", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ServicePolicyList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ServicePolicyChoice = &GlobalSpecType_ActiveServicePolicies{v}
-			iNdEx = postIndex
-		case 45:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RoundRobin", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &GlobalSpecType_RoundRobin{v}
-			iNdEx = postIndex
-		case 46:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LeastActive", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &GlobalSpecType_LeastActive{v}
-			iNdEx = postIndex
-		case 47:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Random", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &GlobalSpecType_Random{v}
-			iNdEx = postIndex
-		case 48:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SourceIpStickiness", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &GlobalSpecType_SourceIpStickiness{v}
-			iNdEx = postIndex
-		case 49:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CookieStickiness", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema_route.CookieForHashing{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &GlobalSpecType_CookieStickiness{v}
-			iNdEx = postIndex
-		case 50:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RingHash", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &HashPolicyListType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &GlobalSpecType_RingHash{v}
 			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
@@ -27365,294 +18394,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 41:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServicePoliciesFromNamespace", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ServicePolicyChoice = &CreateSpecType_ServicePoliciesFromNamespace{v}
-			iNdEx = postIndex
-		case 42:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NoServicePolicies", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ServicePolicyChoice = &CreateSpecType_NoServicePolicies{v}
-			iNdEx = postIndex
-		case 43:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ActiveServicePolicies", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ServicePolicyList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ServicePolicyChoice = &CreateSpecType_ActiveServicePolicies{v}
-			iNdEx = postIndex
-		case 45:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RoundRobin", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &CreateSpecType_RoundRobin{v}
-			iNdEx = postIndex
-		case 46:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LeastActive", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &CreateSpecType_LeastActive{v}
-			iNdEx = postIndex
-		case 47:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Random", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &CreateSpecType_Random{v}
-			iNdEx = postIndex
-		case 48:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SourceIpStickiness", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &CreateSpecType_SourceIpStickiness{v}
-			iNdEx = postIndex
-		case 49:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CookieStickiness", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema_route.CookieForHashing{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &CreateSpecType_CookieStickiness{v}
-			iNdEx = postIndex
-		case 50:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RingHash", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &HashPolicyListType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &CreateSpecType_RingHash{v}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -28456,294 +19197,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.WafExclusionRules[len(m.WafExclusionRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			iNdEx = postIndex
-		case 41:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServicePoliciesFromNamespace", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ServicePolicyChoice = &ReplaceSpecType_ServicePoliciesFromNamespace{v}
-			iNdEx = postIndex
-		case 42:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NoServicePolicies", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ServicePolicyChoice = &ReplaceSpecType_NoServicePolicies{v}
-			iNdEx = postIndex
-		case 43:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ActiveServicePolicies", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ServicePolicyList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ServicePolicyChoice = &ReplaceSpecType_ActiveServicePolicies{v}
-			iNdEx = postIndex
-		case 45:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RoundRobin", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &ReplaceSpecType_RoundRobin{v}
-			iNdEx = postIndex
-		case 46:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LeastActive", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &ReplaceSpecType_LeastActive{v}
-			iNdEx = postIndex
-		case 47:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Random", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &ReplaceSpecType_Random{v}
-			iNdEx = postIndex
-		case 48:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SourceIpStickiness", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &ReplaceSpecType_SourceIpStickiness{v}
-			iNdEx = postIndex
-		case 49:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CookieStickiness", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema_route.CookieForHashing{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &ReplaceSpecType_CookieStickiness{v}
-			iNdEx = postIndex
-		case 50:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RingHash", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &HashPolicyListType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &ReplaceSpecType_RingHash{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -29549,294 +20002,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 41:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServicePoliciesFromNamespace", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ServicePolicyChoice = &GetSpecType_ServicePoliciesFromNamespace{v}
-			iNdEx = postIndex
-		case 42:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NoServicePolicies", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ServicePolicyChoice = &GetSpecType_NoServicePolicies{v}
-			iNdEx = postIndex
-		case 43:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ActiveServicePolicies", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ServicePolicyList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ServicePolicyChoice = &GetSpecType_ActiveServicePolicies{v}
-			iNdEx = postIndex
-		case 45:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RoundRobin", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &GetSpecType_RoundRobin{v}
-			iNdEx = postIndex
-		case 46:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LeastActive", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &GetSpecType_LeastActive{v}
-			iNdEx = postIndex
-		case 47:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Random", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &GetSpecType_Random{v}
-			iNdEx = postIndex
-		case 48:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SourceIpStickiness", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &GetSpecType_SourceIpStickiness{v}
-			iNdEx = postIndex
-		case 49:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CookieStickiness", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema_route.CookieForHashing{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &GetSpecType_CookieStickiness{v}
-			iNdEx = postIndex
-		case 50:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RingHash", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &HashPolicyListType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.HashPolicyChoice = &GetSpecType_RingHash{v}
-			iNdEx = postIndex
 		case 1001:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field HostName", wireType)
@@ -30102,325 +20267,241 @@ func init() {
 }
 
 var fileDescriptorTypes = []byte{
-	// 5108 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5c, 0x5f, 0x6c, 0x1b, 0x47,
-	0x7a, 0xd7, 0x88, 0x7f, 0x35, 0x94, 0x28, 0x72, 0x25, 0x4b, 0x94, 0x6c, 0x53, 0x6b, 0x5e, 0x7c,
-	0x27, 0x3b, 0x2b, 0x4a, 0xfc, 0x23, 0xc9, 0xd2, 0x21, 0x4e, 0xbc, 0xb2, 0x73, 0xb4, 0x60, 0x27,
-	0xca, 0xca, 0xb1, 0xef, 0xce, 0xd7, 0xec, 0xad, 0x76, 0x47, 0xe2, 0xda, 0xcb, 0x5d, 0xde, 0xee,
-	0x52, 0xb2, 0x82, 0x18, 0x30, 0xdc, 0x3e, 0x1c, 0xfc, 0x14, 0xa4, 0x6f, 0x41, 0x0b, 0x14, 0x28,
-	0x0a, 0x1c, 0x5c, 0x14, 0x38, 0xa0, 0x2f, 0x87, 0xd2, 0x45, 0x05, 0xa3, 0x01, 0x72, 0xed, 0x43,
-	0x05, 0xf4, 0x25, 0x7d, 0x29, 0x12, 0xdd, 0x4b, 0x2e, 0xfd, 0x83, 0x20, 0x0f, 0x45, 0x60, 0xa0,
-	0x40, 0x31, 0x33, 0xbb, 0xcb, 0x25, 0x45, 0x51, 0x92, 0xad, 0x24, 0x6d, 0xa1, 0x27, 0x71, 0x67,
-	0xbe, 0xef, 0x9b, 0x7f, 0xdf, 0xcc, 0xfc, 0x7e, 0xdf, 0x37, 0x10, 0xcc, 0xad, 0x23, 0x2b, 0xab,
-	0x1a, 0x93, 0x96, 0x5c, 0x46, 0x15, 0x69, 0x72, 0x5d, 0x45, 0x1b, 0xd6, 0x64, 0xd9, 0xb6, 0xab,
-	0xa2, 0x66, 0x48, 0xca, 0x8a, 0xa4, 0x49, 0xba, 0x8c, 0xcc, 0x49, 0x7b, 0xb3, 0x8a, 0xac, 0x6c,
-	0xd5, 0x34, 0x6c, 0x83, 0x39, 0x4b, 0x55, 0xb2, 0x54, 0x25, 0x4b, 0x54, 0xb2, 0xbb, 0x54, 0x46,
-	0x27, 0xd6, 0x54, 0xbb, 0x5c, 0x5b, 0xc9, 0xca, 0x46, 0x65, 0x72, 0xcd, 0x58, 0x33, 0x26, 0x89,
-	0xf6, 0x4a, 0x6d, 0x95, 0x7c, 0x91, 0x0f, 0xf2, 0x8b, 0x5a, 0x1d, 0x3d, 0xd9, 0xdc, 0x11, 0xa3,
-	0x6a, 0xab, 0x86, 0xee, 0x34, 0x39, 0xca, 0x36, 0x57, 0x56, 0x0d, 0x4d, 0x95, 0x37, 0xfd, 0x9d,
-	0x1a, 0xfd, 0x7e, 0xb3, 0x84, 0x29, 0xd9, 0x48, 0xd4, 0xd4, 0x8a, 0x6a, 0x37, 0x77, 0x7e, 0x74,
-	0xac, 0x45, 0xce, 0xa8, 0xd9, 0xa8, 0x49, 0x60, 0xa4, 0x59, 0xc0, 0x5f, 0x75, 0xaa, 0x65, 0xae,
-	0x24, 0x4d, 0x55, 0x24, 0x1b, 0xb5, 0xef, 0x23, 0x9e, 0x16, 0xb1, 0x79, 0x14, 0x63, 0xed, 0xe6,
-	0xba, 0xc3, 0x20, 0xd6, 0x55, 0xd3, 0xae, 0x49, 0x9a, 0x58, 0x36, 0x2c, 0xbb, 0x49, 0x6e, 0x6a,
-	0x6f, 0x39, 0x51, 0xd1, 0x2d, 0x51, 0xd5, 0x57, 0x8d, 0x49, 0x63, 0xe5, 0x0e, 0x92, 0x6d, 0xaa,
-	0x91, 0x91, 0x61, 0xfa, 0xb2, 0xb1, 0xa1, 0x5b, 0xb6, 0x89, 0xa4, 0xca, 0x0d, 0xcd, 0xba, 0x49,
-	0xfb, 0xae, 0x1a, 0xfa, 0x82, 0xa1, 0xdb, 0xe8, 0x9e, 0xcd, 0x5c, 0x82, 0x71, 0xdb, 0xac, 0x59,
-	0x36, 0x52, 0x44, 0x59, 0x12, 0x6b, 0xa6, 0x96, 0xea, 0x66, 0xc1, 0x78, 0x0f, 0x7f, 0xf2, 0xeb,
-	0x3a, 0x08, 0xfe, 0xcd, 0xef, 0xb7, 0x02, 0x51, 0x33, 0xcc, 0x82, 0xf1, 0x07, 0x0f, 0xa2, 0xf8,
-	0x23, 0x64, 0x06, 0xde, 0x07, 0x40, 0xe8, 0x75, 0x54, 0x16, 0xa4, 0xb7, 0x4d, 0x2d, 0xf3, 0xeb,
-	0x00, 0x1c, 0x6e, 0x6a, 0x65, 0x49, 0x32, 0xa5, 0x8a, 0x75, 0x63, 0xb3, 0x8a, 0x98, 0x05, 0x08,
-	0x6d, 0xcd, 0x12, 0x65, 0x43, 0x5f, 0x55, 0xd7, 0x52, 0x80, 0x05, 0xe3, 0xb1, 0x7c, 0x3a, 0xdb,
-	0xce, 0x93, 0x6e, 0x68, 0xd6, 0x02, 0x91, 0xe2, 0x83, 0x5f, 0xd6, 0x01, 0x10, 0x7a, 0x6c, 0xb7,
-	0x80, 0x59, 0x85, 0x09, 0x62, 0x04, 0x99, 0xb6, 0xba, 0xaa, 0xca, 0x92, 0x8d, 0xac, 0x54, 0x37,
-	0x1b, 0x18, 0x8f, 0xe5, 0xcf, 0xb4, 0x98, 0xc2, 0x46, 0x1a, 0x52, 0xb8, 0x07, 0x7c, 0x6a, 0xbb,
-	0x0e, 0x00, 0xe9, 0xfb, 0x07, 0xa0, 0x3b, 0x91, 0x70, 0x7f, 0x45, 0x81, 0xd0, 0x6f, 0x37, 0x49,
-	0x5b, 0xcc, 0x34, 0x8c, 0xe8, 0x86, 0x58, 0xb1, 0x35, 0x2b, 0x15, 0x20, 0x3d, 0x1d, 0x6c, 0x31,
-	0x7f, 0xa5, 0x52, 0xb5, 0x37, 0xf9, 0xe0, 0x56, 0x1d, 0x80, 0x52, 0x97, 0x10, 0xd6, 0x8d, 0xeb,
-	0xb6, 0x66, 0x31, 0x65, 0x18, 0xad, 0x59, 0x88, 0xea, 0x05, 0x89, 0xde, 0x95, 0xec, 0x81, 0xf6,
-	0x4a, 0xb6, 0xf3, 0xda, 0x78, 0x0d, 0x45, 0x6a, 0x16, 0xc2, 0x2d, 0xcd, 0x9f, 0x7e, 0x5a, 0x07,
-	0x23, 0x70, 0x18, 0xc6, 0x6f, 0x5c, 0x5b, 0x66, 0xc9, 0x2c, 0x23, 0x1b, 0x99, 0x16, 0x13, 0xca,
-	0x71, 0x79, 0x6e, 0x9a, 0xcf, 0xc0, 0x58, 0x85, 0x4c, 0x54, 0xd9, 0x50, 0x65, 0xc4, 0x0c, 0x6c,
-	0xd5, 0x41, 0xe0, 0xe3, 0x3a, 0x00, 0xdb, 0x75, 0x10, 0xda, 0xa9, 0x83, 0x40, 0x81, 0x2b, 0x2e,
-	0x06, 0xa3, 0xa1, 0x44, 0x38, 0xf3, 0xcf, 0x00, 0xc6, 0x97, 0x4c, 0xe3, 0xde, 0x26, 0x9e, 0xa2,
-	0x92, 0x6d, 0x57, 0x2d, 0xe6, 0x1c, 0xec, 0x23, 0x1d, 0x34, 0x91, 0xa2, 0x9a, 0x48, 0xb6, 0xc9,
-	0x62, 0x45, 0xf9, 0xe0, 0xd7, 0x75, 0xd0, 0x25, 0xf4, 0xe2, 0x2a, 0xc1, 0xa9, 0x61, 0xc6, 0x60,
-	0x54, 0x52, 0x14, 0xb1, 0x6c, 0xd9, 0x16, 0xf1, 0x16, 0x57, 0x2a, 0x22, 0x29, 0x4a, 0xc9, 0xb2,
-	0x2d, 0xe6, 0x2e, 0x8c, 0xe3, 0x7e, 0x54, 0xbd, 0x1e, 0x3a, 0xf3, 0x79, 0xf1, 0x79, 0xe6, 0xa5,
-	0xe1, 0x4d, 0x7c, 0x10, 0xaf, 0xa5, 0xd0, 0x67, 0x3b, 0x85, 0xc4, 0xf4, 0x7c, 0xf4, 0xab, 0x8b,
-	0x64, 0xfc, 0x85, 0x4c, 0x05, 0x0e, 0x37, 0x0f, 0xea, 0x52, 0xcd, 0x36, 0xf0, 0x0a, 0x1f, 0xe9,
-	0xe8, 0xe6, 0xc3, 0x5f, 0x5d, 0x0c, 0xe4, 0xb8, 0x7c, 0xc6, 0x86, 0x4c, 0x49, 0xb2, 0xca, 0x4b,
-	0xe4, 0x54, 0xba, 0xa6, 0x5a, 0x36, 0xf1, 0xf8, 0x77, 0x60, 0xac, 0x2c, 0x59, 0x65, 0x91, 0x1e,
-	0x56, 0xa9, 0x04, 0xf1, 0xd3, 0xef, 0xb5, 0x0c, 0x9c, 0x9c, 0x3f, 0xd9, 0x86, 0x76, 0x1b, 0x4f,
-	0x8d, 0xba, 0xbf, 0x52, 0x40, 0x80, 0x65, 0x4f, 0x32, 0xf3, 0xe7, 0x00, 0x26, 0xae, 0xab, 0xa6,
-	0x69, 0x98, 0x0d, 0x55, 0x66, 0x19, 0xc6, 0x0c, 0x53, 0x5d, 0x53, 0x75, 0xb1, 0x6a, 0x18, 0x9a,
-	0xb3, 0xcf, 0x32, 0x6d, 0x67, 0xfb, 0x4d, 0x72, 0x3e, 0x08, 0x68, 0x95, 0xb4, 0x19, 0x7f, 0x7c,
-	0xdf, 0xaf, 0x29, 0x40, 0xfa, 0xb1, 0x64, 0x18, 0x1a, 0x33, 0x0f, 0x23, 0x55, 0x64, 0xca, 0x48,
-	0xb7, 0xc9, 0x3c, 0xc4, 0xf2, 0x6c, 0x8b, 0xc1, 0xd7, 0x4d, 0x49, 0xc6, 0xfe, 0x2a, 0x69, 0x4b,
-	0x54, 0x4e, 0x70, 0x15, 0x32, 0xbf, 0x3d, 0x01, 0x47, 0x05, 0x3c, 0xc8, 0x65, 0xb5, 0x52, 0xd5,
-	0xd0, 0x25, 0x65, 0x1d, 0xaf, 0xac, 0xf2, 0x26, 0x3d, 0x18, 0x99, 0xcb, 0x90, 0x91, 0x8d, 0x4a,
-	0xc5, 0xd0, 0x45, 0xff, 0x5c, 0x75, 0xef, 0xbd, 0xe9, 0x4a, 0x5d, 0x42, 0x82, 0x6a, 0x34, 0x26,
-	0x8d, 0xa9, 0xc0, 0x41, 0xab, 0x8a, 0x64, 0xbc, 0x7f, 0x9b, 0xec, 0x50, 0x67, 0x9b, 0x3b, 0xa0,
-	0xb3, 0xed, 0x5e, 0xc3, 0x52, 0x97, 0xc0, 0xb8, 0x86, 0x7d, 0xcd, 0xbd, 0x06, 0xa3, 0x55, 0x53,
-	0x35, 0x4c, 0xd5, 0xde, 0x24, 0xfb, 0x3c, 0xbe, 0xeb, 0x24, 0xc3, 0x23, 0x56, 0xf5, 0xb5, 0x25,
-	0x47, 0x8a, 0x6e, 0x60, 0xc1, 0xd3, 0x62, 0xfe, 0x0c, 0xc0, 0x04, 0xd2, 0x95, 0xaa, 0xa1, 0xea,
-	0xb6, 0x68, 0xd5, 0x56, 0x2c, 0x64, 0x5b, 0xa9, 0x10, 0xf1, 0x90, 0x9b, 0x07, 0xec, 0xed, 0xde,
-	0x93, 0x9a, 0xbd, 0xe2, 0x58, 0x5e, 0xa6, 0x86, 0xaf, 0xe8, 0xb6, 0xb9, 0xc9, 0x9f, 0xde, 0xa2,
-	0x07, 0x00, 0x75, 0xac, 0x0f, 0xf1, 0x11, 0xb8, 0xf3, 0xe9, 0x47, 0x81, 0xf0, 0xa3, 0x27, 0xa0,
-	0x3b, 0xda, 0x25, 0xf4, 0xa3, 0x66, 0x25, 0xe6, 0x1a, 0x1c, 0x52, 0x54, 0x4b, 0x5a, 0xd1, 0x90,
-	0x58, 0x35, 0xd1, 0xaa, 0x7a, 0x4f, 0x34, 0xd1, 0x86, 0xa9, 0xda, 0x28, 0x15, 0xe9, 0xb0, 0x3a,
-	0x40, 0x18, 0x74, 0xb4, 0x96, 0x88, 0x92, 0x40, 0x75, 0x98, 0x59, 0x18, 0x6f, 0xb1, 0x12, 0x25,
-	0xb7, 0x4b, 0x1c, 0xef, 0x28, 0xe7, 0x42, 0x49, 0x3d, 0xe8, 0x2e, 0x01, 0xa1, 0xaf, 0xda, 0xa4,
-	0xf8, 0x2e, 0x1c, 0x32, 0xd1, 0x2f, 0x6a, 0xc8, 0xb2, 0xc5, 0x32, 0x92, 0x14, 0x64, 0x5a, 0xa2,
-	0x6d, 0x88, 0x92, 0xa2, 0xa4, 0x7a, 0xc8, 0x74, 0xbd, 0xdc, 0xd2, 0x8d, 0x12, 0x11, 0xba, 0x2e,
-	0xe9, 0x6a, 0xb5, 0xa6, 0x91, 0x43, 0x94, 0xce, 0x4a, 0x9b, 0x8d, 0xc5, 0xfa, 0x36, 0xd6, 0x80,
-	0xd3, 0x08, 0x55, 0xb7, 0x6e, 0x18, 0x97, 0x14, 0x85, 0x29, 0xc3, 0x91, 0x36, 0x6d, 0x9b, 0xa8,
-	0x62, 0xac, 0xa3, 0x14, 0x64, 0x03, 0xe3, 0x3d, 0xfc, 0x04, 0xb6, 0xf8, 0xb5, 0x63, 0xb5, 0xf7,
-	0x03, 0xd0, 0x93, 0x89, 0x98, 0x21, 0x7c, 0x4d, 0x76, 0xb7, 0x6d, 0x66, 0xa8, 0xb5, 0x19, 0x81,
-	0x18, 0x63, 0xde, 0x83, 0xc3, 0x26, 0xb2, 0xaa, 0x86, 0x6e, 0xa1, 0xd6, 0x61, 0xc6, 0x8e, 0x72,
-	0x98, 0x83, 0x6e, 0x2b, 0x4d, 0xe3, 0xbc, 0x03, 0x47, 0xdb, 0xb5, 0xee, 0x0c, 0xb4, 0xf7, 0x79,
-	0x06, 0x3a, 0xbc, 0xab, 0x21, 0x67, 0xa4, 0x33, 0xd0, 0x75, 0x10, 0x51, 0x33, 0x64, 0xd2, 0x73,
-	0x32, 0xcc, 0x3e, 0xdf, 0x01, 0xcb, 0x38, 0x12, 0xd7, 0x1c, 0x01, 0xdc, 0xc7, 0x57, 0x60, 0xcc,
-	0xd5, 0xdb, 0x90, 0x56, 0x53, 0xfd, 0xfb, 0x5e, 0xcb, 0xdd, 0x02, 0x74, 0x14, 0x6e, 0x49, 0xab,
-	0x0c, 0x0f, 0x03, 0x58, 0x2d, 0x71, 0xe0, 0xf3, 0x10, 0x3e, 0xbe, 0x8f, 0x35, 0x1c, 0x53, 0xf8,
-	0x27, 0xb3, 0x04, 0xa3, 0x1b, 0xd2, 0xaa, 0x68, 0xd6, 0x34, 0x94, 0x4a, 0x1e, 0xd8, 0x50, 0xff,
-	0xe3, 0xfb, 0x9e, 0x9a, 0x63, 0x2d, 0xb2, 0x21, 0xad, 0x0a, 0x35, 0x0d, 0x31, 0x97, 0x61, 0x4c,
-	0x36, 0x4c, 0xcb, 0x3d, 0xae, 0x18, 0x62, 0x74, 0xa4, 0xc5, 0xe8, 0x82, 0x61, 0x5a, 0xf4, 0xe0,
-	0xe1, 0xa3, 0xee, 0x1e, 0x16, 0xa0, 0xec, 0x95, 0x32, 0x73, 0xb0, 0xd7, 0x9d, 0x1a, 0xab, 0xaa,
-	0x6c, 0xa6, 0x06, 0x3b, 0xec, 0xcf, 0x80, 0xe0, 0x4e, 0xe3, 0x72, 0x55, 0xd9, 0x64, 0x66, 0x61,
-	0x0c, 0xe9, 0x0d, 0xcd, 0x13, 0x1d, 0x35, 0x21, 0x15, 0x25, 0x8a, 0x6f, 0xc1, 0x11, 0x6f, 0x39,
-	0xd0, 0x8a, 0x68, 0x19, 0xf2, 0x5d, 0x64, 0xbb, 0xe8, 0x6e, 0xb8, 0x83, 0x99, 0xa0, 0xe0, 0x1e,
-	0x2b, 0xb7, 0xd0, 0xca, 0x32, 0x51, 0x73, 0xc0, 0xdd, 0x4d, 0x98, 0xdc, 0x6d, 0x2a, 0x45, 0x4c,
-	0x8d, 0xb7, 0xbd, 0x35, 0x6f, 0xa1, 0x15, 0xcb, 0x67, 0x80, 0x1c, 0xd8, 0x41, 0xa1, 0x7f, 0xa3,
-	0xc5, 0x6e, 0x09, 0x0e, 0x2a, 0x68, 0x55, 0xaa, 0x69, 0xb6, 0x68, 0x22, 0xdb, 0xdc, 0x74, 0x67,
-	0x7b, 0xb4, 0x43, 0x2f, 0x43, 0x02, 0xe3, 0xe8, 0x08, 0x58, 0xc5, 0x99, 0xe8, 0xab, 0xb0, 0xb7,
-	0xc9, 0xc2, 0xc9, 0xb6, 0x28, 0xd6, 0xa7, 0xd1, 0xc0, 0x2a, 0xa5, 0x90, 0x10, 0x33, 0x7d, 0xa6,
-	0x26, 0x60, 0xc4, 0x56, 0x2b, 0xc8, 0xa8, 0xd9, 0xa9, 0x53, 0x2c, 0x18, 0xef, 0xe3, 0x07, 0xb0,
-	0xe7, 0xff, 0xf2, 0x09, 0x3d, 0x0c, 0xc3, 0xe7, 0x83, 0xa9, 0xad, 0x7f, 0x7a, 0x49, 0x70, 0x65,
-	0x98, 0x4b, 0xd0, 0xb9, 0xf4, 0xc4, 0x95, 0xda, 0xea, 0x2a, 0x32, 0x55, 0x7d, 0x2d, 0x95, 0xee,
-	0xd0, 0xff, 0xb0, 0xd0, 0x4f, 0xe5, 0x79, 0x57, 0x9c, 0xb9, 0x06, 0xfb, 0xa8, 0xae, 0xdb, 0xfb,
-	0x31, 0xa2, 0x3f, 0xd6, 0xa2, 0x4f, 0x15, 0x1a, 0x33, 0xea, 0xec, 0xa6, 0xb0, 0xd0, 0x4b, 0xb5,
-	0x9d, 0xfe, 0x2f, 0xc0, 0xa4, 0xbb, 0xfe, 0x15, 0x82, 0x41, 0x70, 0x8f, 0xce, 0x74, 0xe8, 0x51,
-	0x44, 0x48, 0x38, 0x0a, 0xd7, 0x5d, 0x79, 0xe6, 0x1d, 0xd8, 0x47, 0x95, 0xdd, 0x2e, 0x65, 0x88,
-	0x81, 0xd9, 0x03, 0xde, 0x80, 0xad, 0xe0, 0xa7, 0x14, 0x11, 0x7a, 0x2b, 0xbe, 0xb2, 0x51, 0x1e,
-	0x0e, 0xb6, 0xbb, 0x0a, 0x99, 0x04, 0x0c, 0xdc, 0x45, 0x9b, 0x04, 0x1c, 0xf5, 0x08, 0xf8, 0x27,
-	0x33, 0x08, 0x43, 0xeb, 0x92, 0x56, 0x43, 0x94, 0xf3, 0x08, 0xf4, 0x63, 0xbe, 0xfb, 0x02, 0x98,
-	0xff, 0x2b, 0xf0, 0xb4, 0x0e, 0x7e, 0x05, 0xe0, 0x18, 0x1c, 0xba, 0x66, 0x48, 0x0a, 0xcb, 0x93,
-	0xd6, 0x55, 0x7d, 0x8d, 0xc5, 0xe0, 0xdc, 0x34, 0x34, 0x8c, 0xb9, 0x8b, 0xdc, 0x34, 0x9c, 0x82,
-	0xa7, 0x05, 0x7a, 0xb8, 0x4f, 0x0a, 0xce, 0xd9, 0xc7, 0xfa, 0xcf, 0x67, 0xa6, 0x7f, 0x86, 0x9b,
-	0xe3, 0x72, 0x53, 0x5c, 0x2e, 0xc7, 0xe5, 0xf2, 0x5c, 0xae, 0x00, 0x93, 0x30, 0xba, 0x8c, 0xe4,
-	0x1a, 0x01, 0x04, 0xa1, 0x5c, 0x91, 0xcb, 0x5d, 0x80, 0xa3, 0x30, 0xb9, 0x84, 0xf9, 0x9a, 0x6c,
-	0x68, 0xec, 0xdb, 0xd5, 0x35, 0x53, 0x52, 0x10, 0x06, 0xf5, 0x73, 0x5c, 0x3e, 0x0f, 0x5f, 0x82,
-	0x27, 0xae, 0xab, 0x96, 0x8c, 0x34, 0x4d, 0xd2, 0x91, 0x51, 0xb3, 0x58, 0x17, 0x43, 0xc5, 0xf2,
-	0xd3, 0x5c, 0xfe, 0x02, 0x97, 0x9f, 0xe3, 0x0a, 0x79, 0xfe, 0x2c, 0x64, 0x7c, 0x08, 0xc8, 0x65,
-	0x00, 0xfd, 0x5b, 0x75, 0xd0, 0x8d, 0xfd, 0x10, 0xa3, 0xff, 0x3c, 0x57, 0xe0, 0xcf, 0xc0, 0xb8,
-	0x73, 0x11, 0xfb, 0x45, 0x22, 0xdb, 0x75, 0x10, 0xc6, 0x22, 0xb3, 0xdc, 0x05, 0x3e, 0x03, 0x21,
-	0x3e, 0xb7, 0x9c, 0xea, 0xc1, 0xad, 0x3a, 0xe8, 0xdf, 0xae, 0x83, 0xf8, 0x4e, 0x1d, 0x44, 0x73,
-	0xd3, 0x5c, 0x6e, 0x86, 0xcb, 0xcd, 0xf2, 0x2c, 0x8c, 0xe1, 0x83, 0xc3, 0x15, 0x4a, 0x6e, 0xd5,
-	0xc1, 0xe0, 0x76, 0x1d, 0x0c, 0xec, 0xd4, 0x41, 0x28, 0x3f, 0xc5, 0xe5, 0x73, 0xfc, 0x59, 0x98,
-	0xd8, 0x70, 0xf7, 0xa9, 0x5f, 0x6c, 0x78, 0xbb, 0x0e, 0x86, 0x88, 0x58, 0x81, 0xcb, 0x17, 0xf9,
-	0x71, 0x38, 0xe0, 0xdf, 0x5a, 0x7e, 0xc9, 0xd1, 0xed, 0x3a, 0x18, 0x21, 0x92, 0x33, 0x5c, 0x7e,
-	0x96, 0xcf, 0x78, 0x7e, 0xec, 0x93, 0x49, 0x6f, 0xd7, 0xc1, 0x69, 0x2c, 0x53, 0x98, 0xe2, 0x0a,
-	0xa4, 0x51, 0xcf, 0x2b, 0xfd, 0x62, 0x67, 0xb6, 0xeb, 0x80, 0x25, 0x62, 0x05, 0xae, 0x80, 0x29,
-	0x10, 0x48, 0x74, 0x2f, 0x06, 0xa3, 0xe1, 0x44, 0x64, 0x31, 0x18, 0x8d, 0x27, 0xfa, 0x17, 0x83,
-	0xd1, 0x81, 0xc4, 0xe0, 0x62, 0x30, 0x3a, 0x94, 0x18, 0x5e, 0x0c, 0x46, 0x47, 0x12, 0xa3, 0x8b,
-	0xc1, 0xe8, 0xe9, 0x44, 0x7a, 0x31, 0x18, 0x65, 0x13, 0x67, 0x32, 0x7f, 0x12, 0x80, 0x2f, 0x11,
-	0xd8, 0x85, 0xbd, 0x8d, 0x42, 0xaf, 0x5b, 0xaa, 0x5d, 0xbe, 0x4c, 0x4f, 0x8a, 0x37, 0xfd, 0x80,
-	0x39, 0x46, 0xdc, 0xb5, 0x82, 0xec, 0xb2, 0xa1, 0x10, 0x47, 0x8b, 0xef, 0x3a, 0xd7, 0x31, 0x31,
-	0xb9, 0x4e, 0x04, 0x04, 0x58, 0xf6, 0x7e, 0x33, 0x79, 0x18, 0xac, 0x4a, 0x76, 0xd9, 0xc1, 0xc0,
-	0xad, 0x87, 0xcb, 0x92, 0x64, 0x97, 0xaf, 0x4b, 0xb6, 0x5c, 0x46, 0x26, 0xee, 0x84, 0x40, 0x64,
-	0x99, 0xb7, 0x60, 0x52, 0xaa, 0xd9, 0x06, 0x0d, 0x00, 0xb8, 0x00, 0x2b, 0xd8, 0xe1, 0x8a, 0xec,
-	0x73, 0x61, 0x57, 0xd0, 0xec, 0x2e, 0x63, 0x66, 0xd9, 0x8f, 0xf5, 0x4b, 0x86, 0x65, 0xbb, 0xb8,
-	0xeb, 0x1c, 0xec, 0x6d, 0xb2, 0x16, 0x22, 0x70, 0x8d, 0xdc, 0xcf, 0xa5, 0x2e, 0x21, 0x56, 0xf6,
-	0x89, 0xbe, 0xd1, 0xb8, 0xd2, 0x9b, 0x54, 0xc2, 0x9d, 0xee, 0x68, 0xc7, 0x90, 0x7b, 0xd5, 0xfb,
-	0x9a, 0x6e, 0xf0, 0x38, 0xfe, 0xfb, 0x30, 0xe9, 0xab, 0xa0, 0xfc, 0x8f, 0x2c, 0x24, 0x3e, 0x53,
-	0x03, 0x78, 0x21, 0x8b, 0xdc, 0x34, 0x37, 0xb3, 0x18, 0x8c, 0x06, 0x12, 0xc1, 0xcc, 0x7f, 0x04,
-	0x61, 0x7f, 0xcb, 0xf2, 0x30, 0x17, 0x9c, 0xd9, 0x04, 0x07, 0x99, 0x4d, 0x27, 0xe0, 0x40, 0xe7,
-	0xb4, 0x65, 0x0d, 0xbb, 0x0f, 0xb3, 0x86, 0xab, 0xb0, 0xd7, 0xc7, 0xa5, 0x30, 0xe9, 0xc5, 0x18,
-	0xee, 0x5c, 0x7b, 0xb4, 0xe0, 0xb9, 0x0d, 0xf6, 0xa5, 0x5b, 0x48, 0x5d, 0x2b, 0xdb, 0x7b, 0xc5,
-	0x2a, 0x52, 0x40, 0x88, 0x35, 0x78, 0x99, 0xd5, 0x7e, 0xdd, 0x43, 0x47, 0xba, 0xee, 0xe1, 0xc3,
-	0xaf, 0x7b, 0xe4, 0xf9, 0xd6, 0x9d, 0x31, 0x61, 0x42, 0x72, 0x98, 0x8c, 0x1b, 0x38, 0x23, 0x2c,
-	0x21, 0x96, 0xbf, 0xf4, 0xc2, 0x9c, 0xc8, 0x89, 0x18, 0xf4, 0x4b, 0xcd, 0xc5, 0xf3, 0xbd, 0x5f,
-	0x5d, 0xec, 0xc9, 0x73, 0x39, 0xae, 0xc0, 0x15, 0xb9, 0x0b, 0x7b, 0xfb, 0x5b, 0x68, 0xbb, 0x0e,
-	0x82, 0xd8, 0xdf, 0xa6, 0xb9, 0x19, 0x6e, 0x76, 0x31, 0x18, 0x0d, 0x26, 0x42, 0x99, 0x7f, 0x05,
-	0x30, 0xe9, 0xf9, 0x9b, 0x17, 0x35, 0xf8, 0x6e, 0x3c, 0xee, 0x2a, 0x8c, 0x13, 0x50, 0xd4, 0x88,
-	0x6b, 0x04, 0xda, 0x22, 0x54, 0x8a, 0x9c, 0x48, 0xaf, 0xdd, 0x1e, 0x0b, 0x7d, 0xa6, 0xff, 0x93,
-	0x6c, 0x3f, 0x32, 0x25, 0x99, 0xff, 0x06, 0x70, 0xd8, 0x1b, 0xe0, 0x65, 0x2a, 0xec, 0x5c, 0x6d,
-	0xdf, 0xd1, 0x30, 0x57, 0xe0, 0x09, 0x3a, 0x4c, 0xda, 0x57, 0xd1, 0x65, 0x19, 0xce, 0x68, 0xc7,
-	0xf7, 0x1e, 0x6d, 0x73, 0xf7, 0x1d, 0x77, 0x18, 0x30, 0x77, 0x57, 0xf9, 0xc6, 0x8f, 0xe0, 0xa0,
-	0x37, 0xfc, 0x85, 0x9a, 0x65, 0x1b, 0x15, 0xf2, 0xc9, 0x5c, 0x87, 0x3d, 0xee, 0x64, 0xaf, 0x1e,
-	0x22, 0xc4, 0xd2, 0xfb, 0xf8, 0x7e, 0x88, 0xe8, 0x3d, 0x78, 0x02, 0x80, 0x10, 0x75, 0x66, 0x7d,
-	0x35, 0xf3, 0x9f, 0x01, 0xd8, 0xe3, 0xb5, 0xc3, 0xdc, 0x86, 0xbd, 0x16, 0xf1, 0x60, 0x91, 0x08,
-	0x38, 0xf6, 0x67, 0x0e, 0xb3, 0x03, 0x1a, 0xe7, 0x1f, 0xde, 0xb2, 0xd4, 0x1a, 0xed, 0xb9, 0x84,
-	0xaf, 0x7d, 0x77, 0xee, 0x88, 0x79, 0x7a, 0xcd, 0x5c, 0x38, 0xac, 0x79, 0xd7, 0x5b, 0x4a, 0x5d,
-	0x42, 0x9f, 0x6b, 0x91, 0x36, 0x61, 0xc3, 0x13, 0x2d, 0x8b, 0xe3, 0xb4, 0x74, 0xb8, 0xc8, 0xdf,
-	0x1e, 0x7e, 0x57, 0xea, 0x12, 0x06, 0x94, 0xa6, 0x12, 0xda, 0xaa, 0x05, 0x07, 0x64, 0xb2, 0x42,
-	0xb4, 0x31, 0x91, 0x06, 0xbf, 0x9d, 0x3b, 0xf0, 0x87, 0x87, 0x6d, 0xd3, 0xb7, 0xd8, 0x5e, 0xec,
-	0x35, 0x29, 0x37, 0x0a, 0xe9, 0xba, 0xce, 0x27, 0x9f, 0xd6, 0x41, 0x1f, 0x8c, 0xc1, 0x30, 0x29,
-	0xb4, 0x18, 0x30, 0xcd, 0x9f, 0x86, 0x61, 0x5f, 0xd0, 0xd5, 0x0d, 0xb8, 0x46, 0xc8, 0x75, 0xe6,
-	0x05, 0x5d, 0xff, 0xab, 0x17, 0x0e, 0xb4, 0x9c, 0x4f, 0x64, 0xe9, 0xf7, 0x8e, 0x75, 0x80, 0xef,
-	0x36, 0xd6, 0xd1, 0xfd, 0x2d, 0xc5, 0x3a, 0x02, 0xdf, 0x75, 0xac, 0x23, 0x78, 0xa4, 0xb1, 0x8e,
-	0xcb, 0x70, 0xb8, 0x22, 0xdd, 0x13, 0x9b, 0xe7, 0x55, 0xb4, 0xd4, 0x77, 0xe9, 0x25, 0xdd, 0xe7,
-	0xbb, 0x8e, 0xcf, 0x77, 0xa7, 0x7e, 0x2e, 0x0c, 0x56, 0xa4, 0x7b, 0x82, 0x7f, 0xd2, 0x96, 0xd5,
-	0x77, 0xb1, 0x95, 0x16, 0xe2, 0x16, 0x3e, 0x10, 0x71, 0x6b, 0x21, 0x6c, 0x3f, 0x25, 0x81, 0xd6,
-	0xaa, 0x89, 0x2c, 0x4b, 0x35, 0x74, 0x1a, 0x91, 0xb7, 0x9c, 0xab, 0xfa, 0xe5, 0x5d, 0xfb, 0xa3,
-	0x91, 0x4f, 0xca, 0x2e, 0x34, 0xb4, 0x88, 0xd9, 0xa4, 0xcf, 0x8c, 0x73, 0x43, 0xfe, 0x75, 0x10,
-	0xf6, 0x39, 0xbb, 0x0f, 0x61, 0xd4, 0x8d, 0xaf, 0x6d, 0xbc, 0x90, 0xd7, 0x0e, 0xb8, 0xef, 0xda,
-	0xec, 0x85, 0x2c, 0xdd, 0x82, 0x57, 0x88, 0x39, 0x1a, 0xc0, 0xfc, 0xbb, 0x80, 0xbb, 0xd4, 0x43,
-	0x1f, 0x82, 0x81, 0x4c, 0xf2, 0x7c, 0x3f, 0xdf, 0x87, 0xaf, 0xed, 0x69, 0xae, 0x30, 0x35, 0x35,
-	0x31, 0x3d, 0x37, 0xd7, 0x08, 0x6c, 0xe2, 0x5f, 0x7d, 0x1f, 0x02, 0x78, 0x3e, 0x6a, 0x86, 0x53,
-	0x0f, 0x5e, 0x7b, 0x1f, 0x80, 0x9d, 0x4f, 0x3f, 0x0a, 0x7c, 0x04, 0x1e, 0x3d, 0x01, 0x5b, 0x80,
-	0xf9, 0x5b, 0xf0, 0x45, 0x1d, 0xfc, 0x06, 0x94, 0x6e, 0xdc, 0x58, 0x62, 0x49, 0x03, 0xac, 0x6c,
-	0x28, 0x88, 0x25, 0x9c, 0x8f, 0x25, 0x16, 0x59, 0xc3, 0x64, 0x57, 0x90, 0xbd, 0x81, 0x90, 0xce,
-	0x16, 0xa6, 0xa6, 0x58, 0x49, 0x57, 0xd8, 0xe9, 0xb9, 0xb9, 0x2c, 0x7b, 0x65, 0x2d, 0xcb, 0xde,
-	0x24, 0x72, 0x45, 0xf6, 0x15, 0xb6, 0x78, 0xef, 0x1e, 0x96, 0x94, 0x34, 0x8d, 0x2d, 0x4e, 0x4d,
-	0x4d, 0x14, 0xe7, 0xe6, 0x58, 0xe4, 0xd9, 0xb3, 0x38, 0x76, 0x9a, 0x7d, 0x85, 0x9d, 0x6e, 0xc8,
-	0x4c, 0xd3, 0x6e, 0xfa, 0x65, 0xb2, 0xec, 0x4f, 0x8c, 0x1a, 0x2b, 0x4b, 0x3a, 0x2b, 0x69, 0x96,
-	0xc1, 0xd2, 0x58, 0xf3, 0x26, 0x2b, 0xe9, 0x2c, 0xba, 0x27, 0xc9, 0xb6, 0x4f, 0x94, 0xd5, 0xd4,
-	0xbb, 0x88, 0x2d, 0x4e, 0x15, 0xb3, 0x78, 0x28, 0x83, 0x8f, 0x9e, 0x80, 0x04, 0x83, 0xb9, 0x18,
-	0xa4, 0x23, 0x58, 0x30, 0x14, 0x84, 0x2b, 0xe0, 0xa3, 0x27, 0x20, 0xcc, 0x04, 0x3f, 0xae, 0x83,
-	0xae, 0x46, 0x74, 0x97, 0x8c, 0xfe, 0xd2, 0xa3, 0x27, 0xe0, 0x95, 0xd1, 0x1f, 0x7e, 0x51, 0x07,
-	0xb3, 0xcb, 0x36, 0x26, 0x46, 0xac, 0x89, 0xf0, 0x3a, 0x22, 0xdd, 0xc6, 0x1f, 0xb4, 0x25, 0xd7,
-	0x93, 0x39, 0xb6, 0x66, 0xd5, 0x24, 0x4d, 0xdb, 0x64, 0x25, 0xb6, 0x6c, 0x57, 0x34, 0xd2, 0x05,
-	0x6c, 0xe5, 0xf4, 0xa3, 0x27, 0x60, 0x64, 0x74, 0x78, 0xa7, 0x0e, 0x06, 0x68, 0xc3, 0x1e, 0xd7,
-	0xe5, 0x0d, 0x65, 0xd3, 0xeb, 0xc1, 0x28, 0xee, 0x41, 0xd0, 0xf7, 0x49, 0xe2, 0xdf, 0xbd, 0xb2,
-	0x6f, 0x51, 0x19, 0x11, 0xf6, 0xdf, 0x91, 0xd6, 0x25, 0x4b, 0x36, 0xd5, 0xaa, 0x4d, 0x52, 0x96,
-	0xa9, 0x1e, 0xe2, 0x8e, 0x53, 0x9d, 0xdc, 0x71, 0x51, 0x5a, 0x97, 0x96, 0x89, 0x8a, 0x3f, 0x46,
-	0xf1, 0x39, 0x36, 0x1f, 0x6f, 0x98, 0xbb, 0xaa, 0xaf, 0x1a, 0xcc, 0x6b, 0x30, 0x70, 0x67, 0xc3,
-	0x26, 0x81, 0xda, 0x83, 0xc7, 0xfc, 0xee, 0x6c, 0xd8, 0xc4, 0x18, 0xfe, 0xc1, 0xfc, 0x00, 0xf6,
-	0xaa, 0x8a, 0x86, 0x44, 0x37, 0x54, 0x13, 0x23, 0xbb, 0x96, 0x06, 0x29, 0x63, 0xb8, 0xe6, 0x06,
-	0xad, 0x18, 0x7d, 0x15, 0x26, 0x77, 0x39, 0xac, 0x3f, 0xcc, 0xd0, 0xb7, 0x5f, 0x98, 0x41, 0x79,
-	0x5a, 0x07, 0x3f, 0x87, 0x27, 0x61, 0x9c, 0x6e, 0x7c, 0x8f, 0xdb, 0xf7, 0x38, 0x37, 0x07, 0x37,
-	0x0d, 0x4f, 0xc2, 0x21, 0xda, 0x06, 0xdb, 0x3c, 0xf3, 0x16, 0x03, 0x2e, 0x74, 0x08, 0x0e, 0xcc,
-	0x70, 0xb3, 0x6e, 0xdc, 0x21, 0xf3, 0x97, 0x00, 0x0e, 0x50, 0x1b, 0x57, 0xab, 0x97, 0x34, 0xcd,
-	0xd8, 0x40, 0xca, 0x35, 0xd5, 0xb2, 0x99, 0x3f, 0x06, 0xf0, 0xb4, 0x3f, 0x63, 0x2e, 0x4a, 0xb4,
-	0xd2, 0x89, 0xfc, 0x23, 0x2b, 0x35, 0x74, 0xe0, 0x49, 0xe4, 0x1e, 0xdf, 0xef, 0x53, 0xab, 0x6e,
-	0xce, 0xc0, 0x42, 0x36, 0x9e, 0x2d, 0x8c, 0x78, 0xbc, 0xb3, 0x33, 0xe8, 0x4b, 0xbd, 0x8e, 0xe2,
-	0x66, 0xaf, 0xd1, 0x56, 0x9d, 0x1e, 0x2d, 0x39, 0x6d, 0x66, 0xfe, 0x31, 0x00, 0x07, 0x04, 0xb7,
-	0xba, 0xb1, 0xda, 0xcc, 0x75, 0xd8, 0xeb, 0xef, 0xac, 0x83, 0x90, 0xce, 0xb7, 0x62, 0x3f, 0x9f,
-	0x48, 0xd6, 0x33, 0x43, 0x36, 0xaf, 0x10, 0xf3, 0xb5, 0xca, 0x2c, 0x40, 0x46, 0x37, 0x44, 0xb5,
-	0xea, 0x0d, 0x5a, 0x53, 0x2d, 0xbb, 0x53, 0xde, 0x17, 0xd3, 0x26, 0xdd, 0x68, 0x9e, 0xc1, 0x65,
-	0xd8, 0xdf, 0x6a, 0x81, 0x62, 0x8f, 0xf6, 0xa4, 0x8f, 0x8e, 0x91, 0xee, 0x43, 0x5f, 0xb2, 0xa9,
-	0x4f, 0x6d, 0x32, 0xfa, 0x0b, 0x38, 0xe4, 0x1c, 0xab, 0xad, 0xb6, 0x29, 0xc7, 0x9b, 0x3f, 0xe0,
-	0xf9, 0xda, 0x66, 0xc9, 0x31, 0x8e, 0x92, 0x77, 0x17, 0xcf, 0x9f, 0x7d, 0x5a, 0x07, 0x67, 0xe0,
-	0x18, 0x4c, 0xe1, 0x19, 0x63, 0xc9, 0x14, 0xb1, 0x74, 0xea, 0x6b, 0x26, 0x0d, 0x63, 0x05, 0x72,
-	0x5c, 0x9e, 0x7f, 0x19, 0x0e, 0xb5, 0x74, 0xc9, 0x1f, 0x66, 0xc1, 0x07, 0x75, 0x37, 0x09, 0xb3,
-	0x60, 0xc7, 0x5d, 0x0c, 0x46, 0xbb, 0x13, 0x81, 0xcc, 0x1f, 0x01, 0x98, 0x5c, 0x46, 0xe6, 0xba,
-	0x2a, 0xa3, 0x46, 0x92, 0x8d, 0x31, 0x60, 0x94, 0xdc, 0x6a, 0x2a, 0xb2, 0x1c, 0x90, 0x73, 0x10,
-	0x1f, 0x9b, 0x7c, 0x7c, 0x3f, 0x6e, 0x51, 0x5b, 0xce, 0xa5, 0xd8, 0x2e, 0xaf, 0xef, 0xbb, 0xa2,
-	0xbd, 0x46, 0x32, 0x7f, 0xc1, 0xc2, 0xf8, 0x8f, 0x34, 0x63, 0x45, 0xd2, 0x96, 0xab, 0x48, 0x26,
-	0xfe, 0xa4, 0xc0, 0x88, 0x62, 0x54, 0x24, 0x55, 0xa7, 0x5d, 0xe8, 0xe1, 0x17, 0xb1, 0x26, 0xfc,
-	0x00, 0x44, 0x32, 0x34, 0x2b, 0x85, 0x3f, 0x7b, 0x3e, 0x00, 0xe1, 0x4c, 0xd0, 0xec, 0x4e, 0x00,
-	0x7f, 0xe5, 0x2f, 0xbb, 0xc1, 0x3e, 0x2d, 0xbb, 0xa6, 0x99, 0xf3, 0x30, 0x88, 0x57, 0x66, 0x9f,
-	0xdc, 0x26, 0x91, 0x61, 0xae, 0xc3, 0x10, 0xfe, 0xeb, 0x66, 0xcb, 0xa7, 0x0f, 0xb8, 0xce, 0xcd,
-	0x39, 0xef, 0x52, 0x97, 0x40, 0xad, 0x30, 0x3f, 0x83, 0x03, 0x92, 0xb2, 0x8e, 0x4c, 0x5b, 0xb5,
-	0x90, 0x88, 0x2f, 0xff, 0xda, 0x8a, 0xa6, 0xca, 0x8e, 0x83, 0xbe, 0xd4, 0xd6, 0xf8, 0x25, 0x57,
-	0x7e, 0x89, 0xc8, 0x3a, 0x28, 0x18, 0x08, 0x49, 0xcf, 0xd0, 0x9b, 0x3a, 0xad, 0x62, 0x6e, 0x13,
-	0xda, 0xee, 0x58, 0xa7, 0x3e, 0xe5, 0xf8, 0xe7, 0x3e, 0xa6, 0xa9, 0x5b, 0x36, 0x92, 0x1a, 0x25,
-	0xca, 0xcf, 0xfd, 0x95, 0x8c, 0x08, 0x07, 0xbc, 0xe0, 0x3d, 0x01, 0xf6, 0x34, 0xa0, 0x12, 0x3e,
-	0x6c, 0x40, 0x85, 0xf2, 0xbd, 0xa4, 0x1b, 0xd4, 0xc7, 0xa6, 0x68, 0x08, 0xe5, 0x3d, 0x18, 0x26,
-	0x86, 0x31, 0x16, 0x0a, 0xb4, 0xbd, 0x7c, 0xf6, 0xe1, 0x0a, 0x7c, 0xbe, 0x29, 0xb1, 0x8a, 0x3d,
-	0xe1, 0xb5, 0xc6, 0xfa, 0x93, 0x4b, 0xf8, 0x83, 0x27, 0xa0, 0x3b, 0xd1, 0xf8, 0x19, 0x05, 0x82,
-	0xd3, 0x66, 0x6b, 0x02, 0x28, 0xfa, 0x7c, 0x09, 0x20, 0x27, 0xb9, 0xd5, 0xf3, 0x5c, 0xc9, 0xad,
-	0xc0, 0xee, 0xe4, 0x16, 0x7c, 0xfe, 0xe4, 0x56, 0xa0, 0x91, 0xdc, 0x6a, 0xc9, 0xd8, 0xc5, 0xf6,
-	0xcd, 0xd8, 0x05, 0x9a, 0x32, 0x76, 0xaf, 0xc3, 0x84, 0x62, 0x88, 0xba, 0x61, 0x8b, 0x9e, 0x4f,
-	0xa4, 0x7a, 0xf7, 0xb5, 0x01, 0x84, 0xb8, 0x62, 0xbc, 0x61, 0xd8, 0x9e, 0x93, 0x31, 0x3f, 0x83,
-	0x63, 0x6d, 0x9c, 0x5f, 0x74, 0xbd, 0x6a, 0x5d, 0xad, 0x92, 0xdc, 0xe3, 0xde, 0x09, 0xed, 0x93,
-	0xbb, 0x5c, 0xde, 0x09, 0xf8, 0xde, 0x54, 0xab, 0xcc, 0xcb, 0xb0, 0x57, 0x52, 0x14, 0x2f, 0x95,
-	0x49, 0xf2, 0x82, 0x51, 0xba, 0x4c, 0x14, 0x25, 0x48, 0x8a, 0xe2, 0xa6, 0x31, 0x99, 0x15, 0xd8,
-	0x7b, 0xc7, 0x12, 0xe5, 0xb2, 0xa4, 0x69, 0x48, 0x5f, 0x43, 0x4e, 0xbe, 0xaf, 0xb0, 0x1f, 0xdc,
-	0xa1, 0x90, 0x66, 0xc1, 0x55, 0x23, 0x13, 0xdf, 0xd8, 0x34, 0x41, 0x21, 0x76, 0xc7, 0xf2, 0x2a,
-	0x19, 0x04, 0x63, 0x15, 0xc3, 0x44, 0x4e, 0x00, 0x2d, 0x35, 0x70, 0xa8, 0x8b, 0xa2, 0x0d, 0x10,
-	0xf7, 0xbb, 0x1c, 0x36, 0x4c, 0xab, 0x30, 0xdf, 0xae, 0x59, 0xc8, 0x14, 0x55, 0x05, 0xe3, 0x47,
-	0xf2, 0x6e, 0x0a, 0x37, 0x37, 0x78, 0x60, 0xcf, 0x49, 0x3f, 0xbe, 0xdf, 0xce, 0x82, 0x37, 0x71,
-	0x0c, 0xae, 0xbc, 0xda, 0x54, 0xc7, 0x2c, 0x42, 0x37, 0x6c, 0x28, 0x36, 0x6e, 0xf7, 0xd4, 0xd0,
-	0xbe, 0x4e, 0x11, 0xf2, 0x72, 0x4f, 0x1e, 0x0e, 0x60, 0x10, 0x84, 0x3e, 0x1b, 0xc3, 0x87, 0x9a,
-	0xa6, 0x36, 0xa0, 0xc4, 0xb7, 0x20, 0x21, 0xa1, 0xc7, 0x83, 0x17, 0x8c, 0x0a, 0x93, 0xb2, 0x54,
-	0xb5, 0xe5, 0xb2, 0xe4, 0x5b, 0xf7, 0xd4, 0xfe, 0x30, 0x77, 0x81, 0x2a, 0xed, 0xbd, 0xe8, 0x09,
-	0xb9, 0x45, 0x82, 0x79, 0x15, 0xf6, 0xea, 0x86, 0xaf, 0x95, 0xd1, 0x7d, 0xe7, 0x25, 0x28, 0xc4,
-	0x74, 0xa3, 0x61, 0xa0, 0x0c, 0xfb, 0xc9, 0x7d, 0x21, 0x92, 0x98, 0xb2, 0x8c, 0x4c, 0xdb, 0xc9,
-	0x70, 0x5e, 0x7c, 0xae, 0xfb, 0xc7, 0x7b, 0x73, 0x85, 0x81, 0x4d, 0xd9, 0x5f, 0xc2, 0xf0, 0xed,
-	0xe2, 0xd6, 0xa7, 0x3a, 0xec, 0xc2, 0xee, 0xdd, 0x81, 0xea, 0x7c, 0x4b, 0xa0, 0xfa, 0x34, 0x09,
-	0x54, 0xb7, 0x04, 0xb8, 0xbb, 0x9b, 0x23, 0xd6, 0xa5, 0x3d, 0x22, 0xd6, 0xe9, 0x8e, 0x4d, 0xb7,
-	0x8b, 0x55, 0xff, 0x21, 0x80, 0x23, 0x15, 0x09, 0x63, 0x0a, 0xa3, 0x66, 0x89, 0xc4, 0x91, 0x2b,
-	0xaa, 0xad, 0xae, 0xd1, 0x6d, 0xc0, 0x1e, 0x78, 0x1b, 0x7c, 0xef, 0xf1, 0xfd, 0xbd, 0xed, 0x7c,
-	0x72, 0x1f, 0x10, 0x2e, 0x32, 0xec, 0x49, 0xbc, 0x6d, 0x21, 0xf3, 0xba, 0x57, 0xcf, 0x6c, 0xc2,
-	0x01, 0x7c, 0xfa, 0xa2, 0x7b, 0xb2, 0x56, 0x23, 0xb4, 0x1e, 0x9f, 0xc3, 0x56, 0xea, 0x0c, 0xb9,
-	0xc9, 0xb8, 0x96, 0xe6, 0xe9, 0x1d, 0x93, 0x75, 0xf2, 0x56, 0xd2, 0xea, 0x15, 0x57, 0x0b, 0x9f,
-	0xd6, 0xfc, 0x49, 0xa7, 0xb1, 0x76, 0x97, 0x98, 0x90, 0xdc, 0x68, 0x11, 0xb7, 0x98, 0x3f, 0x80,
-	0x63, 0x4d, 0x08, 0x4c, 0x45, 0x96, 0xb8, 0x6a, 0x1a, 0x15, 0x51, 0x97, 0x2a, 0xc8, 0xaa, 0x4a,
-	0x32, 0x4a, 0x9d, 0xeb, 0x98, 0xa0, 0x3e, 0x65, 0xf9, 0xc0, 0xa0, 0x8a, 0xac, 0xd7, 0x4d, 0xa3,
-	0xf2, 0x86, 0xab, 0xcb, 0xbc, 0x0e, 0x07, 0x74, 0x43, 0x6c, 0x6d, 0x21, 0x75, 0xbe, 0xa3, 0xc9,
-	0xa4, 0x6e, 0x2c, 0x37, 0x1b, 0x65, 0xee, 0xc1, 0x61, 0x49, 0xb6, 0xd5, 0x75, 0xb4, 0xdb, 0xd6,
-	0xcb, 0x87, 0x8a, 0x7c, 0xee, 0x82, 0xae, 0x4e, 0x5e, 0x3f, 0x2c, 0x9c, 0xa0, 0x0d, 0xb4, 0xb6,
-	0x3c, 0x0b, 0x63, 0xa6, 0x51, 0xd3, 0x15, 0xd1, 0x34, 0x56, 0x54, 0x3d, 0x35, 0xd1, 0x31, 0x37,
-	0x0e, 0x89, 0xa8, 0x80, 0x25, 0x99, 0x39, 0xd8, 0xab, 0x21, 0xc9, 0xb2, 0x45, 0x6a, 0x37, 0x95,
-	0xed, 0xa8, 0x19, 0x23, 0xb2, 0x97, 0x88, 0x28, 0x93, 0x85, 0x61, 0x53, 0xd2, 0x15, 0xa3, 0x92,
-	0x9a, 0xec, 0xa8, 0xe4, 0x48, 0xe1, 0xfd, 0x60, 0x19, 0x35, 0x53, 0x46, 0x98, 0x60, 0x58, 0xb6,
-	0x2a, 0xdf, 0x55, 0x75, 0x64, 0x59, 0xa9, 0xa9, 0x8e, 0xda, 0x0c, 0xd5, 0xb9, 0x5a, 0x5d, 0xf6,
-	0x34, 0x98, 0x1b, 0x30, 0x29, 0x1b, 0xc6, 0x5d, 0x15, 0xf9, 0xcd, 0xe4, 0x88, 0x99, 0xb3, 0x6d,
-	0x83, 0xf2, 0x0b, 0x44, 0xfa, 0x75, 0xc3, 0x2c, 0x49, 0x56, 0x59, 0xd5, 0xd7, 0x4a, 0x11, 0x21,
-	0x41, 0x2d, 0xf8, 0xac, 0xfe, 0x18, 0xf6, 0x90, 0x14, 0x6e, 0x59, 0xb2, 0xca, 0xa9, 0xfc, 0x8b,
-	0x3e, 0xe6, 0x8b, 0x08, 0x51, 0x6c, 0x0d, 0xd7, 0x30, 0xef, 0xc0, 0x3e, 0xf2, 0x40, 0x5b, 0xd5,
-	0x6d, 0x64, 0xea, 0x92, 0x96, 0xfa, 0x3c, 0x72, 0xe0, 0x3d, 0x3b, 0xf8, 0xf8, 0x7e, 0xb3, 0x32,
-	0xd9, 0xa4, 0xbd, 0xb8, 0xe8, 0xaa, 0x53, 0xc2, 0x9c, 0x82, 0x3d, 0xe4, 0x84, 0xc1, 0xbb, 0x21,
-	0xf5, 0xfb, 0x08, 0xa1, 0xfb, 0x51, 0x5c, 0x82, 0x5d, 0x9c, 0x29, 0xc1, 0xa8, 0xfb, 0x4c, 0x3b,
-	0xf5, 0x45, 0xa4, 0xed, 0x6e, 0x6d, 0xfb, 0xa6, 0x3b, 0x7b, 0x59, 0xb7, 0xae, 0xea, 0xab, 0x86,
-	0x10, 0x51, 0xe8, 0x0f, 0x66, 0x01, 0x86, 0x2c, 0x5b, 0xb2, 0x51, 0xea, 0xdf, 0x22, 0x24, 0x8f,
-	0xd2, 0xc9, 0x4c, 0xf6, 0x26, 0xfd, 0xc0, 0xe7, 0xd8, 0x32, 0x56, 0x12, 0xa8, 0x2e, 0x73, 0x1b,
-	0xf6, 0x7b, 0x47, 0xbe, 0x48, 0xcd, 0xfd, 0x3b, 0x35, 0x97, 0xed, 0x78, 0x47, 0x79, 0x4f, 0xa6,
-	0x55, 0x43, 0x27, 0x06, 0x79, 0x7c, 0x58, 0xf4, 0x49, 0xce, 0x31, 0x4f, 0x8a, 0x98, 0x65, 0x18,
-	0x6f, 0x18, 0x27, 0x23, 0xfe, 0x8a, 0x4e, 0x75, 0xc7, 0xae, 0xba, 0x57, 0x05, 0x1e, 0x24, 0x8d,
-	0x66, 0x4a, 0xbe, 0x92, 0xf9, 0xdf, 0x82, 0xa7, 0x75, 0xf0, 0xf7, 0x00, 0x9e, 0x84, 0x03, 0xbc,
-	0x64, 0xa9, 0x72, 0x0b, 0x47, 0x0d, 0xe6, 0xb8, 0x5c, 0x11, 0xa6, 0xe1, 0x90, 0x83, 0xd4, 0x58,
-	0xca, 0x09, 0x58, 0xbc, 0x47, 0x91, 0x69, 0x31, 0xc1, 0x19, 0xae, 0x90, 0x83, 0x23, 0x4e, 0x7a,
-	0xc7, 0x6a, 0xd1, 0x06, 0xb3, 0x70, 0x18, 0x26, 0x6f, 0x5e, 0x5d, 0x6a, 0x29, 0xef, 0xce, 0x4d,
-	0xc3, 0x29, 0x38, 0xe4, 0xbe, 0xd9, 0x68, 0xa9, 0x1d, 0x2a, 0x4e, 0x71, 0x17, 0xb8, 0xdc, 0x0c,
-	0x57, 0x28, 0x70, 0xf9, 0x69, 0x8e, 0xbc, 0x7e, 0xe0, 0x0a, 0x79, 0x38, 0x06, 0x87, 0x5c, 0x58,
-	0xd5, 0xa2, 0x11, 0xca, 0xcd, 0x72, 0xb9, 0x39, 0xfe, 0x07, 0x30, 0xe9, 0xf7, 0x5c, 0xd1, 0xc6,
-	0x9c, 0x94, 0x71, 0x1e, 0x6c, 0xc4, 0x77, 0xea, 0x20, 0x9c, 0xe7, 0xf2, 0xb3, 0x5c, 0x81, 0x3f,
-	0xd7, 0x44, 0xb4, 0x28, 0xdd, 0x3e, 0xb1, 0x55, 0x07, 0x7d, 0xdb, 0x75, 0xd0, 0xbf, 0x53, 0x07,
-	0x3d, 0x39, 0x1a, 0x0e, 0xcd, 0xe5, 0xf9, 0x89, 0x76, 0x89, 0xcc, 0xd4, 0x56, 0x1d, 0x9c, 0x72,
-	0x9e, 0x81, 0x8f, 0xed, 0xd4, 0x41, 0xd4, 0x79, 0x34, 0x32, 0xc5, 0x9f, 0x6d, 0x7a, 0xea, 0x31,
-	0xbc, 0x55, 0x07, 0x31, 0x47, 0x2e, 0x41, 0xb2, 0x17, 0x39, 0x12, 0x41, 0xe2, 0xcf, 0xc3, 0xb8,
-	0x07, 0x2f, 0x68, 0x37, 0xb1, 0xc9, 0x51, 0x47, 0x74, 0x84, 0x98, 0x9c, 0xe1, 0x72, 0x17, 0xb8,
-	0x7c, 0x91, 0x3f, 0x0f, 0x93, 0x0d, 0x7c, 0xe5, 0xef, 0xed, 0x90, 0x23, 0x7e, 0x82, 0x3c, 0xe9,
-	0xc8, 0x73, 0xf9, 0x02, 0x3f, 0x01, 0x4f, 0x34, 0xb3, 0x79, 0xff, 0xa3, 0x93, 0x73, 0xdb, 0x75,
-	0x30, 0x8e, 0x4d, 0x17, 0x73, 0x5c, 0x31, 0xcf, 0x15, 0x0b, 0x7c, 0xa1, 0xed, 0x13, 0x97, 0xd3,
-	0x5b, 0x75, 0x30, 0xb1, 0x5d, 0x07, 0xdc, 0x4e, 0x1d, 0x24, 0x8b, 0xd3, 0x5c, 0x71, 0x86, 0x2b,
-	0xce, 0x72, 0xc5, 0x0b, 0x5c, 0x71, 0x8e, 0x9b, 0x9e, 0xf2, 0xde, 0x77, 0xf4, 0x27, 0x12, 0x8b,
-	0xc1, 0xe8, 0x58, 0x82, 0x5d, 0x0c, 0x46, 0x13, 0x89, 0xa4, 0xf7, 0xca, 0xe3, 0x44, 0x62, 0x68,
-	0x31, 0x18, 0x1d, 0x4f, 0x9c, 0x5b, 0x0c, 0x46, 0xb9, 0xc4, 0x44, 0xe6, 0x93, 0x21, 0x18, 0x5f,
-	0x30, 0x91, 0x64, 0x23, 0x2f, 0x4e, 0x90, 0x6a, 0x89, 0x13, 0xfc, 0xaf, 0xe0, 0xf6, 0x37, 0x5f,
-	0x98, 0xdb, 0xb7, 0x67, 0xf5, 0x6f, 0xbd, 0x18, 0xab, 0x6f, 0xc7, 0xe5, 0x7f, 0x72, 0x34, 0x5c,
-	0xbe, 0x1d, 0x8b, 0x2f, 0xbd, 0x28, 0x8b, 0xf7, 0x18, 0xf9, 0xfc, 0xe1, 0x18, 0x79, 0x13, 0x0f,
-	0x9f, 0x39, 0x24, 0x0f, 0x77, 0x1f, 0x96, 0xbe, 0xfa, 0x3c, 0xdc, 0xdb, 0xff, 0x8e, 0x74, 0xf6,
-	0xc0, 0x54, 0xbb, 0xe5, 0x59, 0xec, 0x6b, 0x87, 0x23, 0xd9, 0xdf, 0x3a, 0xbd, 0x3e, 0xd3, 0x8e,
-	0x5e, 0x37, 0x93, 0xea, 0x1f, 0x1f, 0x19, 0xa9, 0x2e, 0x05, 0x9a, 0xa9, 0xf4, 0xed, 0x23, 0xa6,
-	0xd2, 0x4d, 0x04, 0x7a, 0xf9, 0x05, 0x09, 0x74, 0x5b, 0x82, 0x7c, 0xf9, 0xb0, 0x04, 0x19, 0x13,
-	0xc9, 0x5d, 0xd4, 0xf8, 0xf6, 0xd1, 0x52, 0xe3, 0x52, 0xd0, 0x4f, 0x88, 0xc5, 0x23, 0x24, 0xc4,
-	0xa5, 0x40, 0x1b, 0x1a, 0x3c, 0x77, 0x70, 0x1a, 0x8c, 0x17, 0xfc, 0xbb, 0x21, 0xc0, 0xef, 0x1d,
-	0x0d, 0x7b, 0x3c, 0xd5, 0x89, 0x3d, 0xee, 0x4d, 0x1b, 0xd1, 0xd1, 0xd1, 0xc6, 0x88, 0xcb, 0x51,
-	0x8f, 0x9e, 0x22, 0x86, 0x8e, 0x9e, 0x22, 0x86, 0xda, 0x51, 0x44, 0xf3, 0x1b, 0xa3, 0x88, 0xa5,
-	0xd0, 0x11, 0x90, 0xc3, 0xf0, 0x73, 0x93, 0xc3, 0xf0, 0xf3, 0x90, 0xc3, 0xf0, 0x0b, 0x91, 0xc3,
-	0xf0, 0x37, 0x44, 0x0e, 0xc3, 0xdf, 0x38, 0x39, 0x0c, 0x37, 0xc8, 0xe1, 0x7c, 0xf2, 0x1f, 0x2e,
-	0xb6, 0xe4, 0x88, 0x30, 0x9c, 0xdd, 0x0d, 0xd2, 0x4f, 0x3c, 0x7c, 0x06, 0x76, 0x17, 0xf3, 0xe3,
-	0x6d, 0x70, 0xfa, 0xe0, 0xc3, 0x67, 0x60, 0x57, 0x29, 0x7f, 0xaa, 0x09, 0x77, 0xc7, 0x1f, 0x3e,
-	0x03, 0xbe, 0x6f, 0xfe, 0xa5, 0x5d, 0x70, 0x9b, 0x79, 0xf8, 0x0c, 0xb4, 0x94, 0xed, 0x01, 0xb4,
-	0x71, 0xcf, 0x76, 0x15, 0xf3, 0xf9, 0xbd, 0x80, 0xf6, 0xc8, 0xc3, 0x67, 0xa0, 0x7d, 0x15, 0xcf,
-	0xb5, 0x45, 0xdb, 0x43, 0x0f, 0x9f, 0x81, 0x36, 0xe5, 0x2d, 0x30, 0x7b, 0x37, 0xc0, 0xc6, 0xd0,
-	0xfa, 0x5f, 0x86, 0x60, 0xbf, 0x80, 0xaa, 0x9a, 0x24, 0x1f, 0x63, 0xeb, 0x63, 0x6c, 0x7d, 0x8c,
-	0xad, 0x8f, 0xb1, 0xf5, 0x31, 0xb6, 0x3e, 0xc6, 0xd6, 0xc7, 0xd8, 0xfa, 0x18, 0x5b, 0x1f, 0x63,
-	0xeb, 0x63, 0x6c, 0x7d, 0x8c, 0xad, 0x5f, 0x04, 0x5b, 0xff, 0x7a, 0x04, 0xc6, 0x7e, 0x84, 0xec,
-	0x63, 0x5c, 0x7d, 0x8c, 0xab, 0x8f, 0x71, 0xf5, 0x31, 0xae, 0x3e, 0xc6, 0xd5, 0xc7, 0xb8, 0xfa,
-	0x18, 0x57, 0x1f, 0xe3, 0xea, 0x63, 0x5c, 0xfd, 0xff, 0x1c, 0x57, 0xff, 0xdf, 0x7a, 0x70, 0x74,
-	0xeb, 0xa8, 0x1e, 0x1c, 0x7d, 0x2b, 0x8f, 0x8d, 0x8e, 0x29, 0xcb, 0x37, 0x49, 0x59, 0xf8, 0x3f,
-	0x05, 0xdb, 0x9f, 0xa5, 0xbb, 0x3e, 0xf9, 0x2c, 0xdd, 0xf5, 0xe5, 0x67, 0x69, 0xf0, 0xf5, 0x67,
-	0x69, 0xf0, 0x60, 0x27, 0x0d, 0x7e, 0xb5, 0x93, 0x06, 0xbf, 0xd9, 0x49, 0x83, 0xad, 0x9d, 0x34,
-	0xf8, 0x78, 0x27, 0x0d, 0xb6, 0x77, 0xd2, 0xe0, 0x93, 0x9d, 0x34, 0xf8, 0x74, 0x27, 0x0d, 0x3e,
-	0xdf, 0x49, 0x77, 0x7d, 0xb9, 0x93, 0x06, 0xef, 0xff, 0x2e, 0xdd, 0xb5, 0xf5, 0xbb, 0x34, 0xf8,
-	0xe9, 0xed, 0x35, 0xa3, 0x7a, 0x77, 0x2d, 0xbb, 0x6e, 0x68, 0x36, 0x32, 0x4d, 0x29, 0x5b, 0xb3,
-	0x26, 0xc9, 0x8f, 0x55, 0xc3, 0xac, 0x4c, 0x54, 0x4d, 0x63, 0x5d, 0x55, 0x90, 0x39, 0xe1, 0x56,
-	0x4f, 0x56, 0x57, 0xd6, 0x8c, 0x49, 0x74, 0xcf, 0x76, 0xfe, 0x7d, 0x6a, 0xe7, 0x7f, 0x7d, 0xbb,
-	0x12, 0x26, 0xff, 0x41, 0xb5, 0xf0, 0x3f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x64, 0x1f, 0x25, 0xdf,
-	0x2a, 0x57, 0x00, 0x00,
+	// 3768 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5b, 0x5d, 0x6c, 0x1b, 0x57,
+	0x76, 0xd6, 0x25, 0x87, 0x12, 0x75, 0xf9, 0x23, 0xf2, 0x4a, 0x96, 0x28, 0xd9, 0xa1, 0x26, 0x6c,
+	0x92, 0x75, 0x9c, 0x31, 0x25, 0x52, 0x92, 0x7f, 0xb4, 0xc8, 0x8f, 0x29, 0xbb, 0x2b, 0x0b, 0x76,
+	0xa2, 0x1d, 0x79, 0x9d, 0xee, 0x7a, 0xd1, 0xe9, 0x68, 0xe6, 0x52, 0x1c, 0x67, 0x38, 0x97, 0x3b,
+	0x73, 0xa9, 0x9f, 0x20, 0x06, 0x8c, 0xf4, 0xa5, 0xf0, 0x4b, 0x03, 0xf7, 0x2d, 0x68, 0xdf, 0x5b,
+	0xf7, 0xa5, 0x2f, 0x45, 0x83, 0xd2, 0x05, 0x54, 0x03, 0x5b, 0x04, 0xed, 0x8b, 0x8b, 0x3e, 0x34,
+	0x4f, 0xc5, 0x86, 0xfb, 0x92, 0x4d, 0xfb, 0x10, 0xa4, 0x28, 0x10, 0x04, 0x28, 0x50, 0xdc, 0x7b,
+	0x87, 0xc3, 0x1f, 0x51, 0xb2, 0x14, 0x0b, 0x9b, 0x16, 0xd5, 0x93, 0x38, 0x73, 0xcf, 0xdf, 0x3d,
+	0xe7, 0xdc, 0x7b, 0xbe, 0x73, 0x06, 0x82, 0x85, 0x4d, 0xec, 0xe5, 0x2d, 0x32, 0xe3, 0x19, 0x15,
+	0x5c, 0xd5, 0x67, 0x36, 0x2d, 0xbc, 0xe5, 0xcd, 0x54, 0x28, 0xad, 0x69, 0x36, 0xd1, 0xcd, 0x75,
+	0xdd, 0xd6, 0x1d, 0x03, 0xbb, 0x33, 0x74, 0xa7, 0x86, 0xbd, 0x7c, 0xcd, 0x25, 0x94, 0xa0, 0x97,
+	0x05, 0x4b, 0x5e, 0xb0, 0xe4, 0x39, 0x4b, 0x7e, 0x0f, 0xcb, 0xd4, 0xf9, 0x0d, 0x8b, 0x56, 0xea,
+	0xeb, 0x79, 0x83, 0x54, 0x67, 0x36, 0xc8, 0x06, 0x99, 0xe1, 0xdc, 0xeb, 0xf5, 0x32, 0x7f, 0xe2,
+	0x0f, 0xfc, 0x97, 0x90, 0x3a, 0x75, 0xba, 0xdb, 0x10, 0x52, 0xa3, 0x16, 0x71, 0x7c, 0x95, 0x53,
+	0x72, 0xf7, 0x62, 0x8d, 0xd8, 0x96, 0xb1, 0xd3, 0x69, 0xd4, 0xd4, 0x2b, 0xdd, 0x14, 0xae, 0x4e,
+	0xb1, 0x66, 0x5b, 0x55, 0x8b, 0x76, 0x1b, 0x3f, 0x35, 0xdd, 0x43, 0x47, 0xea, 0x14, 0x77, 0x11,
+	0x4c, 0x76, 0x13, 0x74, 0x2e, 0x9d, 0xe9, 0xf1, 0x95, 0x6e, 0x5b, 0xa6, 0x4e, 0x71, 0x7f, 0x1b,
+	0x99, 0x5b, 0xb4, 0xee, 0x5d, 0x4c, 0xf7, 0xf3, 0xf5, 0x01, 0x9b, 0xd8, 0xb4, 0x5c, 0x5a, 0xd7,
+	0x6d, 0xad, 0x42, 0x3c, 0xda, 0x45, 0x37, 0xbb, 0x3f, 0x9d, 0x66, 0x3a, 0x9e, 0x66, 0x39, 0x65,
+	0x32, 0x43, 0xd6, 0xef, 0x62, 0x83, 0x0a, 0x8e, 0x9c, 0x01, 0xb3, 0x57, 0xc9, 0x96, 0xe3, 0x51,
+	0x17, 0xeb, 0xd5, 0x5b, 0xb6, 0x77, 0x5b, 0xd8, 0x6e, 0x11, 0x67, 0x89, 0x38, 0x14, 0x6f, 0x53,
+	0x74, 0x05, 0x26, 0xa9, 0x5b, 0xf7, 0x28, 0x36, 0x35, 0x43, 0xd7, 0xea, 0xae, 0x9d, 0x09, 0xc9,
+	0xe0, 0xec, 0x70, 0xe9, 0xf4, 0x37, 0x0d, 0x20, 0xfd, 0xed, 0x6f, 0x76, 0xc3, 0x51, 0x77, 0x50,
+	0x06, 0x67, 0xef, 0xdf, 0x8f, 0xb2, 0x87, 0x88, 0x1b, 0xfe, 0x08, 0x00, 0x35, 0xee, 0xb3, 0x2c,
+	0xe9, 0x3f, 0x71, 0xed, 0xdc, 0x5f, 0x85, 0xe1, 0x44, 0x97, 0x96, 0x55, 0xdd, 0xd5, 0xab, 0xde,
+	0xad, 0x9d, 0x1a, 0x46, 0x4b, 0x10, 0x52, 0xdb, 0xd3, 0x0c, 0xe2, 0x94, 0xad, 0x8d, 0x0c, 0x90,
+	0xc1, 0xd9, 0x58, 0x31, 0x9b, 0xef, 0x97, 0x49, 0xb7, 0x6c, 0x6f, 0x89, 0x53, 0x95, 0xa4, 0xaf,
+	0x1a, 0x00, 0xa8, 0xc3, 0xb4, 0xf5, 0x02, 0x95, 0x61, 0x8a, 0x0b, 0xc1, 0x2e, 0xb5, 0xca, 0x96,
+	0xa1, 0x53, 0xec, 0x65, 0x42, 0x72, 0xf8, 0x6c, 0xac, 0xf8, 0x62, 0x8f, 0x28, 0x26, 0xa4, 0x4d,
+	0xc5, 0x2c, 0x28, 0x65, 0x9e, 0x36, 0x00, 0xe0, 0xb6, 0x3f, 0x04, 0xa1, 0x54, 0xaa, 0xf5, 0x2b,
+	0x0a, 0xd4, 0x11, 0xda, 0x45, 0xed, 0xa1, 0x05, 0x38, 0xe4, 0x10, 0xad, 0x4a, 0x6d, 0x2f, 0x13,
+	0xe6, 0x96, 0x8e, 0xf5, 0x88, 0xbf, 0x56, 0xad, 0xd1, 0x9d, 0x92, 0xb4, 0xdb, 0x00, 0x60, 0x79,
+	0x40, 0x1d, 0x74, 0xc8, 0x4d, 0x6a, 0x7b, 0xa8, 0x02, 0xa3, 0x75, 0x0f, 0x0b, 0x3e, 0x89, 0xf3,
+	0x5d, 0xcb, 0x1f, 0xea, 0xac, 0xe4, 0x0f, 0x8e, 0x4d, 0xa0, 0x68, 0xa8, 0xee, 0x61, 0xa6, 0x69,
+	0xf1, 0x85, 0x27, 0x0d, 0x30, 0x09, 0x27, 0x60, 0xf2, 0xd6, 0x8d, 0x35, 0x99, 0x7b, 0x19, 0x53,
+	0xec, 0x7a, 0x28, 0x52, 0x50, 0x8a, 0xca, 0x42, 0x29, 0x07, 0x63, 0x55, 0xee, 0xa8, 0x0a, 0xb1,
+	0x0c, 0x8c, 0x46, 0x77, 0x1b, 0x20, 0xfc, 0x69, 0x03, 0x80, 0xa7, 0x0d, 0x10, 0x69, 0x36, 0x40,
+	0x78, 0x4e, 0x99, 0x5f, 0x91, 0xa2, 0x91, 0xd4, 0x60, 0xee, 0x5f, 0x00, 0x4c, 0xae, 0xba, 0x64,
+	0x7b, 0x87, 0xb9, 0x68, 0x99, 0xd2, 0x9a, 0x87, 0x5e, 0x85, 0x09, 0x6e, 0xa0, 0x8b, 0x4d, 0xcb,
+	0xc5, 0x06, 0xe5, 0xc1, 0x8a, 0x96, 0xa4, 0x6f, 0x1a, 0x60, 0x40, 0x8d, 0xb3, 0x25, 0xd5, 0x5f,
+	0x41, 0xd3, 0x30, 0xaa, 0x9b, 0xa6, 0x56, 0xf1, 0xa8, 0xc7, 0xb3, 0xa5, 0x45, 0x35, 0xa4, 0x9b,
+	0xe6, 0xb2, 0x47, 0x3d, 0xf4, 0x1e, 0x4c, 0x32, 0x3b, 0x6a, 0x81, 0x85, 0xbe, 0x3f, 0xdf, 0xf8,
+	0x2e, 0x7e, 0x69, 0x67, 0x53, 0x49, 0x62, 0xb1, 0x54, 0x13, 0xd4, 0x7f, 0xc9, 0x45, 0x2f, 0x46,
+	0xbf, 0x7e, 0x83, 0xef, 0x7f, 0x2e, 0x57, 0x85, 0x13, 0xdd, 0x9b, 0xba, 0x52, 0xa7, 0x84, 0x45,
+	0xf8, 0x58, 0x77, 0xb7, 0x38, 0xf8, 0xf5, 0x1b, 0xe1, 0x82, 0x52, 0xcc, 0xfd, 0x69, 0x18, 0xbe,
+	0xa4, 0xb2, 0x8b, 0x84, 0xe9, 0x5b, 0xb3, 0xaa, 0x35, 0x1b, 0xbf, 0x6b, 0xd1, 0xca, 0x55, 0x5c,
+	0xd6, 0xeb, 0x36, 0x7d, 0xc7, 0xb5, 0x36, 0x2c, 0x67, 0x95, 0x10, 0x1b, 0x2d, 0xc2, 0x18, 0x57,
+	0x5e, 0xc5, 0xb4, 0x42, 0x4c, 0xae, 0x3a, 0x59, 0x9c, 0xec, 0xf1, 0x05, 0x33, 0xf8, 0x26, 0x27,
+	0x50, 0x61, 0x25, 0xf8, 0x8d, 0x8a, 0x50, 0xaa, 0xe9, 0xb4, 0xc2, 0x2d, 0xd9, 0x7b, 0x74, 0x56,
+	0x75, 0x5a, 0xb9, 0xa9, 0x53, 0xa3, 0x82, 0x5d, 0x66, 0x84, 0xca, 0x69, 0xd1, 0x8f, 0x61, 0x5a,
+	0xaf, 0x53, 0x22, 0x2e, 0x06, 0x17, 0x6f, 0xb9, 0x16, 0xc5, 0x7e, 0x66, 0xf6, 0xcf, 0xe8, 0x04,
+	0xdb, 0x20, 0x3b, 0x19, 0x92, 0x1b, 0xaa, 0xb0, 0x8c, 0x1b, 0x61, 0xfc, 0xcb, 0xc4, 0xa3, 0xaa,
+	0xe0, 0x46, 0xaf, 0xc2, 0x78, 0x97, 0xb4, 0x08, 0xbf, 0x24, 0xb8, 0x63, 0x96, 0x07, 0xd4, 0x58,
+	0xa5, 0x83, 0xf4, 0x6d, 0x38, 0x66, 0x5a, 0x9e, 0xbe, 0x6e, 0xe3, 0x6e, 0x03, 0x06, 0x0f, 0x3a,
+	0x52, 0xbe, 0x20, 0xe4, 0x73, 0x76, 0xa8, 0x6e, 0xc7, 0xb7, 0xf4, 0x0a, 0x4c, 0x77, 0x2c, 0x88,
+	0xbc, 0x40, 0xe9, 0xdd, 0x06, 0x60, 0x79, 0x11, 0x6e, 0x36, 0x40, 0x64, 0x5e, 0x59, 0x50, 0x2e,
+	0xac, 0x48, 0xd1, 0x70, 0x4a, 0xca, 0xfd, 0x57, 0x18, 0x8e, 0xf4, 0x84, 0x07, 0x5d, 0xf2, 0xbd,
+	0x09, 0x0e, 0xe3, 0x4d, 0xff, 0x22, 0x12, 0x3e, 0xed, 0x89, 0x61, 0xe8, 0x28, 0x31, 0x2c, 0xc3,
+	0x38, 0xe1, 0xd9, 0xa0, 0xd5, 0x08, 0xe1, 0x97, 0x0b, 0xbb, 0xbb, 0x5e, 0xed, 0x7b, 0x18, 0xda,
+	0x69, 0xc3, 0x72, 0xe9, 0x5d, 0x6c, 0x6d, 0x54, 0xe8, 0x7e, 0x77, 0x58, 0x06, 0xa8, 0x31, 0x12,
+	0xd0, 0x7b, 0xfd, 0xe3, 0x1e, 0x39, 0xd6, 0xb8, 0x0f, 0x1e, 0x3d, 0xee, 0x43, 0xcf, 0x11, 0xf7,
+	0xa2, 0x52, 0x38, 0x28, 0xee, 0x91, 0xa7, 0x0d, 0x20, 0xb1, 0xb8, 0x2f, 0x28, 0x17, 0x94, 0x8b,
+	0x2b, 0x52, 0x54, 0x4a, 0x45, 0x72, 0xff, 0x06, 0x60, 0x3a, 0x88, 0x7b, 0x70, 0xaa, 0xbf, 0x9f,
+	0xc8, 0x5f, 0x87, 0x49, 0x0e, 0x35, 0xda, 0xf7, 0x8e, 0xb8, 0x08, 0x73, 0x3d, 0xec, 0x9c, 0x28,
+	0xcf, 0xad, 0x6e, 0x59, 0xac, 0x26, 0xdc, 0xce, 0xc7, 0xb6, 0x3b, 0x72, 0xff, 0x0d, 0xe0, 0x44,
+	0xb0, 0xc1, 0xab, 0x82, 0x18, 0x7b, 0x35, 0xe2, 0x78, 0xdf, 0x57, 0x82, 0xaf, 0xc3, 0x53, 0x62,
+	0x9b, 0xc2, 0x56, 0xcd, 0xf5, 0xcd, 0xf1, 0x77, 0x7b, 0x76, 0xff, 0xdd, 0x76, 0x9b, 0xef, 0x5f,
+	0xf0, 0xa3, 0xee, 0xde, 0xa5, 0x8e, 0xfd, 0x63, 0x38, 0x16, 0x6c, 0x7f, 0xa9, 0xee, 0x51, 0x52,
+	0xe5, 0x8f, 0xe8, 0x26, 0x1c, 0x6e, 0x39, 0xbb, 0xec, 0x3b, 0x20, 0xd7, 0xff, 0x8c, 0x71, 0x88,
+	0xa4, 0xe2, 0x32, 0x77, 0x42, 0xfc, 0xd1, 0xbd, 0x08, 0xe7, 0xbb, 0xff, 0x18, 0x00, 0x35, 0xea,
+	0x7b, 0xbd, 0x9c, 0xfb, 0x2a, 0x0c, 0x87, 0x03, 0x3d, 0xe8, 0x0e, 0x8c, 0x7b, 0xfc, 0x0e, 0xd1,
+	0x38, 0x81, 0x2f, 0xff, 0xc2, 0x21, 0x0b, 0x5a, 0xcf, 0x3d, 0xc4, 0x8e, 0x8e, 0x90, 0x26, 0x2c,
+	0xd7, 0x61, 0xb2, 0x95, 0x20, 0xbe, 0x78, 0x71, 0xdd, 0x5f, 0x3a, 0xaa, 0xf8, 0x56, 0xb6, 0x2c,
+	0x0f, 0xa8, 0x89, 0x96, 0x44, 0xa1, 0x82, 0xc2, 0x53, 0x3d, 0xc1, 0xf1, 0x35, 0x1d, 0xad, 0x32,
+	0xef, 0x93, 0x77, 0xcb, 0x03, 0xea, 0xa8, 0xd9, 0xf5, 0x46, 0x68, 0xf5, 0xe0, 0xa8, 0xc1, 0x23,
+	0x24, 0x94, 0x69, 0x02, 0x9c, 0xfa, 0xb5, 0xe8, 0x87, 0x47, 0xd5, 0xd9, 0x11, 0xec, 0x00, 0x1b,
+	0xa5, 0x8d, 0xf6, 0x4b, 0x11, 0xd7, 0xc5, 0xf4, 0x93, 0x06, 0x48, 0xc0, 0x18, 0x1c, 0xe4, 0x2f,
+	0x3d, 0x04, 0x16, 0x4a, 0xd3, 0x70, 0xd0, 0x07, 0x45, 0xa7, 0x76, 0xdb, 0x80, 0x68, 0x98, 0x97,
+	0x15, 0x65, 0x9e, 0x97, 0x0c, 0x06, 0x8b, 0xfe, 0x39, 0x0e, 0x47, 0xaf, 0x98, 0x9b, 0x4c, 0xad,
+	0xf9, 0x8e, 0xc0, 0xf0, 0x3c, 0xf8, 0xef, 0xc3, 0x71, 0x17, 0xff, 0xa2, 0x8e, 0x3d, 0xaa, 0x55,
+	0xb0, 0x6e, 0x62, 0xd7, 0xd3, 0x28, 0xd1, 0x74, 0x93, 0xd5, 0x72, 0x76, 0x95, 0xbf, 0xd6, 0x7b,
+	0x4c, 0x38, 0xd1, 0x4d, 0xdd, 0xb1, 0x6a, 0x75, 0x9b, 0x43, 0x3a, 0x21, 0xad, 0x0f, 0x20, 0x95,
+	0x3b, 0x2e, 0xf3, 0x51, 0x5f, 0x89, 0x60, 0xf7, 0x6e, 0x91, 0x2b, 0xa6, 0x89, 0x2a, 0x70, 0xb2,
+	0x8f, 0x6e, 0x17, 0x57, 0xc9, 0x26, 0xe6, 0x28, 0x78, 0xb8, 0x74, 0x9e, 0x49, 0xfc, 0xc6, 0x97,
+	0x1a, 0x7f, 0x08, 0x86, 0x73, 0x43, 0x2e, 0xbb, 0xf6, 0xef, 0x87, 0xfa, 0xaa, 0x19, 0xef, 0x55,
+	0xa3, 0x72, 0x61, 0xe8, 0x03, 0x38, 0x11, 0xe4, 0x46, 0xcf, 0x36, 0xc3, 0xc7, 0xb9, 0xcd, 0xb1,
+	0x96, 0x96, 0xae, 0x7d, 0xde, 0x85, 0x53, 0xfd, 0xb4, 0xfb, 0x1b, 0x95, 0xbe, 0xcb, 0x46, 0x27,
+	0xf6, 0x28, 0xf2, 0x77, 0x7a, 0x15, 0x4e, 0x54, 0xf5, 0x6d, 0xad, 0xdb, 0xaf, 0x9a, 0x67, 0xbd,
+	0x2f, 0xca, 0x65, 0xa2, 0xa3, 0x30, 0x9e, 0x0b, 0x65, 0xfe, 0x40, 0x1d, 0xab, 0xea, 0xdb, 0x6a,
+	0xa7, 0xd3, 0xd6, 0xac, 0xf7, 0x99, 0x94, 0xc4, 0x7a, 0xbd, 0x5c, 0xc6, 0xae, 0x26, 0x1a, 0x53,
+	0x1f, 0xe1, 0x4c, 0xf7, 0x78, 0xa9, 0xc4, 0x69, 0x44, 0x2b, 0xc3, 0xcf, 0x68, 0x5c, 0x70, 0xad,
+	0x72, 0x26, 0xf4, 0x33, 0x88, 0x0c, 0x52, 0xad, 0xb9, 0xd8, 0xf3, 0x2c, 0xe2, 0x08, 0xcc, 0xec,
+	0xf9, 0x45, 0xf3, 0xb5, 0x3d, 0x27, 0xa4, 0xdd, 0xf1, 0xe5, 0x97, 0xda, 0x5c, 0x5c, 0x6c, 0xba,
+	0x43, 0x8c, 0x5f, 0x23, 0xff, 0x42, 0x82, 0x09, 0xff, 0xfc, 0x61, 0xd7, 0x25, 0xae, 0x97, 0x89,
+	0xf2, 0x40, 0xde, 0x38, 0xe4, 0xc9, 0xeb, 0x73, 0x16, 0xf2, 0xe2, 0x10, 0x5e, 0xe3, 0xe2, 0xae,
+	0x39, 0xd4, 0xdd, 0x29, 0xfd, 0x75, 0xb8, 0x15, 0xea, 0xf8, 0xc7, 0x2c, 0x24, 0xe7, 0x22, 0x99,
+	0x7f, 0x95, 0xce, 0x86, 0x79, 0x20, 0x3e, 0x6e, 0xe1, 0x95, 0xc4, 0xc7, 0x00, 0x9e, 0x8b, 0xba,
+	0x83, 0x99, 0xfb, 0x6f, 0x7d, 0x04, 0x40, 0xf3, 0x57, 0xbf, 0x0c, 0xff, 0x12, 0x3c, 0x78, 0x0c,
+	0x76, 0x01, 0xfa, 0x3b, 0xf0, 0x65, 0x03, 0x7c, 0x02, 0x96, 0x6f, 0xdd, 0x5a, 0x95, 0xb9, 0x58,
+	0xd9, 0x20, 0x26, 0x96, 0x37, 0x75, 0xbb, 0x8e, 0x65, 0x76, 0x3a, 0x17, 0x64, 0xe2, 0xca, 0xeb,
+	0x98, 0x6e, 0x61, 0xec, 0xc8, 0x73, 0xb3, 0xb3, 0xb2, 0xee, 0x98, 0xf2, 0xc2, 0xe5, 0xcb, 0x79,
+	0xf9, 0xda, 0x46, 0x5e, 0xbe, 0xcd, 0xe9, 0xe6, 0xe5, 0xd7, 0xe5, 0xf9, 0xed, 0x6d, 0x46, 0xa9,
+	0xdb, 0xb6, 0x3c, 0x3f, 0x3b, 0x7b, 0x7e, 0xfe, 0xf2, 0x65, 0x19, 0x07, 0xf2, 0x3c, 0x45, 0x5e,
+	0x90, 0x5f, 0x97, 0x17, 0xda, 0x34, 0x0b, 0xb3, 0xb3, 0xe7, 0x17, 0xba, 0x69, 0xf2, 0xf2, 0x4f,
+	0x49, 0x5d, 0x36, 0x74, 0x47, 0xd6, 0x6d, 0x8f, 0xc8, 0x5e, 0x0d, 0x1b, 0x56, 0x79, 0x47, 0xd6,
+	0x1d, 0x19, 0x6f, 0xeb, 0x06, 0xed, 0x20, 0x95, 0x6d, 0xeb, 0x3d, 0x2c, 0xcf, 0xcf, 0xce, 0xe7,
+	0xd9, 0x56, 0xc6, 0x1e, 0x3c, 0x06, 0x29, 0x94, 0x6c, 0x36, 0x00, 0x14, 0x3b, 0x58, 0x22, 0x26,
+	0x66, 0x0b, 0xf0, 0xc1, 0x63, 0x30, 0x88, 0xa4, 0x4f, 0x1b, 0x60, 0x80, 0x3d, 0x0e, 0x3e, 0x78,
+	0xcc, 0x3a, 0x4f, 0xf6, 0xf3, 0xca, 0x83, 0xc7, 0xe0, 0xf5, 0xa9, 0x1f, 0x7e, 0xd9, 0x00, 0x17,
+	0xd7, 0xa8, 0x6b, 0x39, 0x1b, 0xb2, 0x8b, 0x59, 0xf4, 0xb0, 0x43, 0xd9, 0x83, 0xd0, 0xd4, 0xca,
+	0x5f, 0x45, 0xae, 0x7b, 0x75, 0xdd, 0xb6, 0x77, 0x64, 0x5d, 0xae, 0xd0, 0xaa, 0xcd, 0x4d, 0x60,
+	0x52, 0x5e, 0x78, 0xf0, 0x18, 0x4c, 0x4e, 0x4d, 0x34, 0x1b, 0x60, 0x54, 0x28, 0x6e, 0x5d, 0xbf,
+	0x72, 0x89, 0x98, 0x3b, 0x81, 0x05, 0x53, 0xcc, 0x02, 0xa9, 0xe3, 0x91, 0x5d, 0x82, 0x6a, 0xdc,
+	0xe8, 0x08, 0x25, 0xd2, 0xe0, 0xc8, 0x5d, 0x7d, 0x53, 0xf7, 0x0c, 0xd7, 0xaa, 0x51, 0x3e, 0x4a,
+	0xc8, 0x0c, 0xf3, 0x24, 0x9c, 0x3d, 0x28, 0x09, 0x57, 0xf4, 0x4d, 0x7d, 0x8d, 0xb3, 0xb4, 0x13,
+	0xbc, 0x24, 0x7d, 0xc1, 0xc4, 0x27, 0xdb, 0xe2, 0xae, 0x3b, 0x65, 0x82, 0xde, 0x82, 0xe1, 0xbb,
+	0x5b, 0x34, 0x03, 0x79, 0x06, 0x1e, 0xa6, 0x30, 0xc3, 0x47, 0xf7, 0x18, 0x07, 0x17, 0xc6, 0x7e,
+	0xa0, 0x1f, 0xc0, 0xb8, 0x65, 0xda, 0x58, 0xa3, 0x56, 0x15, 0x93, 0x3a, 0xcd, 0xc4, 0xf8, 0x59,
+	0x15, 0xdd, 0x59, 0x8c, 0xad, 0xdc, 0x12, 0x0b, 0x53, 0x6f, 0xc2, 0xf4, 0x9e, 0x34, 0x45, 0x29,
+	0x18, 0x7e, 0x0f, 0xef, 0xf0, 0xc2, 0x9d, 0x50, 0xd9, 0x4f, 0x34, 0x06, 0x23, 0x3c, 0xcb, 0xc4,
+	0xc8, 0x43, 0x15, 0x0f, 0x8b, 0xa1, 0x4b, 0x60, 0xf1, 0xfa, 0x93, 0x06, 0xb8, 0x06, 0x4f, 0xc3,
+	0xa4, 0x38, 0xee, 0xb2, 0x7f, 0x00, 0x50, 0x50, 0x31, 0x16, 0xe0, 0x2b, 0xf0, 0xd4, 0x4d, 0xcb,
+	0x33, 0xb0, 0x6d, 0xeb, 0x0e, 0x26, 0x75, 0x2f, 0xa0, 0x49, 0x5c, 0x50, 0x2e, 0x2a, 0x97, 0x94,
+	0xcb, 0x4a, 0x61, 0x56, 0x29, 0x14, 0x72, 0x7f, 0x09, 0xe0, 0xa8, 0x30, 0xe6, 0x7a, 0xed, 0x8a,
+	0x6d, 0x93, 0x2d, 0x6c, 0xde, 0xb0, 0x3c, 0x8a, 0xfe, 0x04, 0xc0, 0x17, 0x3a, 0xc7, 0x55, 0x9a,
+	0x2e, 0x16, 0xb5, 0x9a, 0x8b, 0xcb, 0xd6, 0x36, 0xf6, 0x32, 0xe3, 0x87, 0xf6, 0x94, 0xf2, 0xe8,
+	0x5e, 0xc2, 0xaa, 0xf9, 0x9c, 0x9a, 0x87, 0x29, 0x73, 0x09, 0x83, 0x33, 0xc1, 0xb5, 0x28, 0x75,
+	0xcc, 0x3d, 0xa6, 0x98, 0xda, 0x1b, 0x42, 0xab, 0x6f, 0xd1, 0xaa, 0xaf, 0x33, 0xf7, 0x4f, 0x61,
+	0x38, 0xaa, 0xb6, 0x96, 0xdb, 0x21, 0x45, 0x37, 0x61, 0xbc, 0xd3, 0x58, 0x1f, 0xfe, 0x9c, 0xeb,
+	0x05, 0x76, 0x1d, 0x24, 0xf9, 0x40, 0x0c, 0x3f, 0xa1, 0x6a, 0xac, 0x43, 0x2b, 0x5a, 0x82, 0xc8,
+	0x21, 0x9a, 0x55, 0x0b, 0x36, 0x6d, 0x5b, 0x1e, 0x3d, 0x68, 0xe8, 0xc2, 0x7a, 0x13, 0x87, 0x74,
+	0x7b, 0x70, 0x0d, 0x8e, 0xf4, 0x4a, 0x10, 0xc0, 0xa2, 0x7f, 0x67, 0x25, 0xf6, 0x28, 0x0e, 0x1b,
+	0xe3, 0xe7, 0x53, 0x82, 0x01, 0x35, 0x61, 0x75, 0x09, 0xfd, 0x05, 0x1c, 0xf7, 0x6f, 0xcc, 0x5e,
+	0xd9, 0xa2, 0x91, 0x5a, 0x3c, 0xe4, 0xd5, 0xd9, 0x27, 0xe4, 0x0c, 0x24, 0x19, 0x7b, 0x5f, 0x2f,
+	0xbe, 0xfc, 0xa4, 0x01, 0x5e, 0x84, 0xd3, 0x30, 0xc3, 0x3c, 0x26, 0x73, 0x17, 0xc9, 0xc2, 0xf5,
+	0x75, 0x97, 0x57, 0x55, 0x14, 0x2e, 0x28, 0xc5, 0xd2, 0x6b, 0x70, 0xbc, 0xc7, 0xa4, 0xd6, 0xa0,
+	0x87, 0xb5, 0x42, 0xec, 0x0e, 0x0e, 0xb1, 0x56, 0x88, 0x67, 0xe7, 0x8a, 0x14, 0x0d, 0xa5, 0xc2,
+	0xb9, 0xff, 0x9c, 0x84, 0xc9, 0x1f, 0xd9, 0x64, 0x5d, 0xb7, 0xd7, 0x6a, 0xd8, 0xe0, 0x81, 0x34,
+	0xe1, 0x90, 0x49, 0xaa, 0xba, 0xe5, 0x78, 0x1c, 0xbb, 0x0c, 0x97, 0x56, 0x58, 0x66, 0xc0, 0x87,
+	0x60, 0x28, 0x17, 0x71, 0xc3, 0x19, 0x51, 0x49, 0x87, 0x1f, 0x82, 0xc1, 0x9c, 0xe4, 0x86, 0x52,
+	0xa0, 0x73, 0xf1, 0x8f, 0x42, 0x7d, 0xe7, 0x68, 0x1d, 0x05, 0xb7, 0x25, 0x1a, 0x9d, 0x83, 0x12,
+	0x73, 0x89, 0x0f, 0x63, 0xf7, 0x8b, 0x28, 0xa7, 0x41, 0x37, 0x61, 0x84, 0xfd, 0x6d, 0xcd, 0x88,
+	0x16, 0x0e, 0xe9, 0xe0, 0xee, 0x49, 0xcf, 0xf2, 0x80, 0x2a, 0xa4, 0xa0, 0x9f, 0xc3, 0x51, 0xdd,
+	0xdc, 0xc4, 0x2e, 0xb5, 0x3c, 0xac, 0xb1, 0x82, 0x5a, 0x5f, 0xb7, 0x2d, 0xc3, 0xcf, 0x8c, 0x97,
+	0xfa, 0x0a, 0xbf, 0xd2, 0xa2, 0x5f, 0xe5, 0xb4, 0x3e, 0xb6, 0x04, 0x6a, 0x3a, 0x10, 0xf4, 0x8e,
+	0x23, 0x96, 0xd0, 0x1d, 0x98, 0x6a, 0x4b, 0x17, 0xc1, 0xf4, 0x13, 0xe3, 0x19, 0xa2, 0x45, 0x3e,
+	0x94, 0xa2, 0x3e, 0xfc, 0x64, 0xe2, 0x47, 0xf4, 0xee, 0x45, 0xa4, 0xc1, 0x51, 0x53, 0x0c, 0x8f,
+	0x7c, 0xb8, 0x2c, 0xc6, 0x05, 0x83, 0x47, 0x1d, 0x17, 0x88, 0x2e, 0x2a, 0xed, 0xcb, 0xe2, 0x28,
+	0x58, 0x0c, 0x08, 0x3e, 0x80, 0x83, 0x5c, 0x30, 0xc3, 0x17, 0xe1, 0xbe, 0x57, 0xfb, 0x33, 0x10,
+	0x78, 0xa9, 0xd8, 0xb2, 0x3f, 0xc8, 0x84, 0xb7, 0xda, 0xf1, 0xe7, 0x25, 0xee, 0xe1, 0x63, 0x10,
+	0x4a, 0xb5, 0x7f, 0x46, 0x81, 0xea, 0xeb, 0x44, 0x57, 0x61, 0xcc, 0x20, 0xae, 0xd7, 0x42, 0x4b,
+	0x51, 0xee, 0xb6, 0xde, 0x0e, 0x73, 0x89, 0xb8, 0x9e, 0x40, 0x46, 0x6d, 0x5f, 0xa9, 0xd0, 0x08,
+	0xde, 0xa2, 0x12, 0x0c, 0x6f, 0xe9, 0x65, 0xbf, 0x36, 0x1d, 0xb6, 0x8c, 0x6c, 0xe9, 0x65, 0x1e,
+	0xd3, 0xb0, 0xca, 0x7e, 0xa2, 0x55, 0x18, 0xdd, 0xd2, 0xcb, 0x9a, 0x5b, 0xb7, 0x71, 0x06, 0x1e,
+	0x5a, 0xd0, 0xc8, 0xa3, 0x7b, 0x01, 0x9b, 0x2f, 0x6d, 0x68, 0x4b, 0x2f, 0xab, 0x75, 0x1b, 0xa3,
+	0xd7, 0x61, 0xac, 0x35, 0xfc, 0x60, 0xd6, 0xc5, 0x9e, 0x39, 0x3e, 0x0e, 0xab, 0xd0, 0x67, 0x78,
+	0x57, 0x2f, 0xa3, 0xdf, 0x85, 0x29, 0x93, 0x68, 0x0e, 0xa1, 0x5a, 0x90, 0x13, 0x99, 0xf8, 0x33,
+	0x65, 0x00, 0x35, 0x69, 0x92, 0xb7, 0x09, 0x0d, 0x92, 0x0c, 0xfd, 0x1c, 0x4e, 0xf7, 0x49, 0x7e,
+	0xad, 0x95, 0x55, 0x9b, 0x56, 0x2d, 0x93, 0x38, 0xe0, 0x48, 0x02, 0xf5, 0xf4, 0x9e, 0x94, 0xf7,
+	0xc7, 0x99, 0xb7, 0xad, 0x1a, 0x7a, 0x0d, 0xc6, 0x75, 0xd3, 0xd4, 0x6c, 0x62, 0xf0, 0x6b, 0x29,
+	0x93, 0xe6, 0xd3, 0x51, 0x1e, 0x26, 0x51, 0x83, 0x75, 0xd3, 0xbc, 0xe1, 0x2f, 0xa2, 0x75, 0x18,
+	0xbf, 0xeb, 0x69, 0x46, 0x45, 0xb7, 0x6d, 0xec, 0x6c, 0xe0, 0x0c, 0xe2, 0x7a, 0xe7, 0x9e, 0x05,
+	0x26, 0x04, 0x60, 0x58, 0x6a, 0xb1, 0x71, 0xc7, 0xb7, 0x0f, 0x8d, 0xa4, 0xc6, 0xee, 0x7a, 0xc1,
+	0x22, 0xc2, 0x30, 0x56, 0x25, 0x2e, 0xf6, 0xbf, 0xb7, 0x64, 0x46, 0x8f, 0x74, 0x43, 0xf7, 0x01,
+	0xb7, 0x9d, 0x29, 0xc7, 0x04, 0x8b, 0x25, 0xd6, 0xc5, 0xd6, 0x3d, 0xec, 0x6a, 0x96, 0xc9, 0xd0,
+	0x19, 0xff, 0x5a, 0xc0, 0xd4, 0x8d, 0x1d, 0x3a, 0x73, 0xb2, 0x8f, 0xee, 0xf5, 0x93, 0x10, 0x38,
+	0x0e, 0xb1, 0xc5, 0xeb, 0x5d, 0x6b, 0x68, 0x05, 0xb6, 0x86, 0x62, 0x5a, 0xbb, 0xac, 0x66, 0xc6,
+	0x9f, 0x99, 0x14, 0x11, 0x35, 0xe5, 0xf3, 0x05, 0x05, 0x18, 0x61, 0x08, 0x3b, 0x64, 0x4c, 0x1c,
+	0xc9, 0x4d, 0x7d, 0xd0, 0x40, 0x47, 0x40, 0x22, 0xea, 0x70, 0x50, 0xd7, 0x91, 0x05, 0xd3, 0x86,
+	0x5e, 0xa3, 0x46, 0x45, 0xef, 0x88, 0x7b, 0xe6, 0xd9, 0x20, 0x72, 0x49, 0x30, 0xed, 0x1f, 0xf4,
+	0x94, 0xd1, 0x43, 0x81, 0xde, 0x84, 0x71, 0x87, 0x74, 0x68, 0x99, 0x7a, 0xa6, 0x5f, 0x24, 0x35,
+	0xe6, 0x90, 0xb6, 0x80, 0x0a, 0x1c, 0xe1, 0xf5, 0x42, 0xe3, 0x13, 0x53, 0x03, 0xbb, 0x34, 0x73,
+	0xfa, 0x48, 0x93, 0x90, 0x7d, 0xbe, 0x34, 0x30, 0x44, 0x51, 0xe9, 0x7c, 0x83, 0x4a, 0xfd, 0xa6,
+	0xb2, 0x67, 0x0e, 0x38, 0x85, 0xa1, 0xbd, 0x63, 0xd8, 0x62, 0xcf, 0x18, 0xf6, 0x05, 0x3e, 0x86,
+	0xed, 0x19, 0xdf, 0x86, 0xba, 0xe7, 0xb1, 0xcb, 0xfb, 0xcc, 0x63, 0xb3, 0x07, 0xaa, 0xee, 0x33,
+	0x89, 0x45, 0x7f, 0x08, 0xe0, 0x64, 0x55, 0xb7, 0x2d, 0xc3, 0x22, 0x75, 0x4f, 0xe3, 0x89, 0x5c,
+	0xb5, 0xa8, 0xb5, 0x21, 0x8e, 0x81, 0x7c, 0xe8, 0x63, 0xf0, 0x3b, 0x8f, 0xee, 0xed, 0x2f, 0xe7,
+	0xb3, 0x7b, 0x80, 0x23, 0xfd, 0x89, 0x80, 0xe2, 0x27, 0x1e, 0x76, 0x6f, 0x06, 0xeb, 0x68, 0x07,
+	0x8e, 0xb2, 0xdb, 0x17, 0x6f, 0x1b, 0x76, 0x9d, 0xb7, 0xca, 0xec, 0x1e, 0xf6, 0x32, 0x2f, 0xf2,
+	0x4a, 0xa6, 0xf4, 0xa8, 0x17, 0x35, 0x26, 0xef, 0x7f, 0x95, 0xd1, 0xcb, 0xd7, 0x5a, 0x5c, 0xec,
+	0xb6, 0x2e, 0x9d, 0xf6, 0x95, 0xf5, 0x2b, 0x62, 0x6a, 0x7a, 0xab, 0x87, 0xdc, 0x43, 0xbf, 0x0f,
+	0x13, 0xfc, 0xbb, 0xae, 0xe5, 0x50, 0xec, 0x3a, 0xba, 0x9d, 0xf9, 0x62, 0xe8, 0xd0, 0x9b, 0x1e,
+	0x7b, 0x74, 0xaf, 0x9b, 0x99, 0xef, 0x32, 0xce, 0x5e, 0x5d, 0xf7, 0xdf, 0xa0, 0x33, 0x70, 0x98,
+	0x87, 0xc8, 0xd1, 0xab, 0x38, 0xf3, 0x9b, 0x21, 0xde, 0x8d, 0x44, 0xd9, 0x9b, 0xb7, 0xf5, 0x2a,
+	0x0b, 0x64, 0xb4, 0xf5, 0x75, 0x37, 0xf3, 0xe5, 0x50, 0xdf, 0xed, 0xf6, 0xfd, 0x14, 0x9c, 0xbf,
+	0xea, 0x78, 0xac, 0xf3, 0x52, 0x87, 0x4c, 0xf1, 0x03, 0x2d, 0xc1, 0x88, 0x47, 0x75, 0x8a, 0x33,
+	0xff, 0x3e, 0xc4, 0xc7, 0xbb, 0x07, 0x89, 0xc9, 0xdf, 0x16, 0x0f, 0x2c, 0x11, 0xd6, 0x18, 0x93,
+	0x2a, 0x78, 0xd1, 0x1d, 0x38, 0x12, 0x9c, 0x19, 0x4d, 0x88, 0xfb, 0x0f, 0x21, 0x2e, 0x7f, 0xe0,
+	0x21, 0x0f, 0xbe, 0xb4, 0x5a, 0xc4, 0xe1, 0x02, 0x4b, 0xcc, 0xdb, 0x09, 0xdd, 0x3f, 0x27, 0xfc,
+	0x15, 0x5a, 0x83, 0xc9, 0xb6, 0x70, 0xbe, 0xe3, 0xaf, 0x85, 0xab, 0x0f, 0x34, 0xb5, 0x75, 0xd6,
+	0xd8, 0x26, 0xc5, 0x88, 0x45, 0xef, 0x78, 0xb3, 0xf8, 0x0f, 0xe0, 0x49, 0x03, 0xfc, 0x3d, 0x80,
+	0xa7, 0xe1, 0x68, 0x49, 0xf7, 0x2c, 0xa3, 0x07, 0x5d, 0x4b, 0x05, 0xa5, 0x30, 0x0f, 0xb3, 0x70,
+	0xdc, 0x2f, 0x75, 0xb2, 0x00, 0x55, 0xf2, 0x1a, 0x76, 0x37, 0xb1, 0xeb, 0x21, 0xe9, 0x82, 0x32,
+	0x57, 0x80, 0x93, 0xfe, 0xd4, 0xd9, 0xeb, 0xe1, 0x06, 0x17, 0xe1, 0x04, 0x4c, 0xdf, 0xbe, 0xbe,
+	0xda, 0xf3, 0x3e, 0x54, 0x58, 0x80, 0xe7, 0xe1, 0xf8, 0x1a, 0x36, 0xea, 0xae, 0x45, 0x77, 0x7a,
+	0x56, 0x47, 0x2f, 0x29, 0x85, 0x0b, 0xca, 0xdc, 0x9c, 0x52, 0x5c, 0x50, 0x8a, 0xb3, 0x4a, 0xb1,
+	0xa0, 0xcc, 0x15, 0xe1, 0x34, 0x1c, 0x6f, 0x15, 0xa5, 0x1e, 0xf2, 0x48, 0xe1, 0xa2, 0x52, 0xb8,
+	0x5c, 0xfa, 0x01, 0x4c, 0x77, 0xde, 0x41, 0x1a, 0x65, 0x88, 0x1e, 0xed, 0x36, 0x40, 0xe8, 0x69,
+	0x03, 0x24, 0x9b, 0x0d, 0x30, 0x58, 0x54, 0x8a, 0x17, 0x95, 0xb9, 0xd2, 0xab, 0x5d, 0x30, 0xb5,
+	0x3d, 0xf9, 0x4c, 0x3c, 0x6d, 0x80, 0x11, 0x3e, 0xf9, 0xe4, 0x6d, 0x82, 0x52, 0x28, 0x96, 0xce,
+	0xf7, 0xfb, 0xb8, 0x92, 0xd9, 0x6d, 0x80, 0x33, 0xfe, 0xa7, 0xe3, 0xe9, 0x66, 0x03, 0x44, 0x8b,
+	0x97, 0x94, 0xe2, 0x65, 0x65, 0x6e, 0xb6, 0xf4, 0x32, 0x84, 0xec, 0x14, 0xfa, 0x32, 0x27, 0x76,
+	0x1b, 0x20, 0xe6, 0xd3, 0xa5, 0x9a, 0x0d, 0x30, 0x54, 0x28, 0xf0, 0xc6, 0xb7, 0x74, 0x0e, 0x26,
+	0x83, 0xcb, 0x59, 0x98, 0xc9, 0x44, 0x4e, 0xf9, 0xa4, 0x93, 0x5c, 0xe4, 0x05, 0xa5, 0x70, 0x49,
+	0x29, 0xce, 0x97, 0xce, 0xc1, 0x74, 0xbb, 0x3a, 0x75, 0x5a, 0x3b, 0xee, 0x93, 0x9f, 0x62, 0x7d,
+	0x4d, 0xb1, 0xa8, 0x14, 0xe7, 0x56, 0xa4, 0x68, 0x32, 0x35, 0xb2, 0x22, 0x45, 0x47, 0x52, 0xa9,
+	0x15, 0x29, 0x3a, 0x9d, 0x92, 0x57, 0xa4, 0x68, 0x2a, 0x95, 0x5e, 0x91, 0xa2, 0x93, 0xa9, 0xa9,
+	0x15, 0x29, 0x7a, 0x2a, 0x35, 0x9e, 0xfb, 0x9b, 0x14, 0x4c, 0x2e, 0xb9, 0x58, 0xa7, 0x38, 0xe8,
+	0x7a, 0x32, 0x3d, 0x5d, 0xcf, 0xff, 0x8a, 0x4e, 0xe5, 0xf6, 0x73, 0x77, 0x2a, 0xfd, 0x7b, 0x94,
+	0x1f, 0x3f, 0x5f, 0x8f, 0xd2, 0xaf, 0x33, 0xf9, 0xe9, 0xf1, 0x74, 0x26, 0xfd, 0x7a, 0x92, 0xe5,
+	0xe7, 0xed, 0x49, 0x82, 0xfe, 0x62, 0xf1, 0x68, 0xfd, 0x45, 0x57, 0x57, 0x71, 0xe1, 0x88, 0x5d,
+	0xc5, 0x72, 0x48, 0x74, 0x12, 0x6f, 0x7e, 0x97, 0x4e, 0x62, 0x39, 0xd4, 0x6e, 0x1c, 0x2e, 0x1e,
+	0xba, 0x71, 0x58, 0x0e, 0x75, 0xb5, 0x0c, 0x6f, 0x1d, 0xad, 0x65, 0xf8, 0xad, 0x37, 0x0b, 0x2f,
+	0xf6, 0x6b, 0x16, 0xba, 0x5b, 0x84, 0xdf, 0x3b, 0xb6, 0x16, 0x61, 0x39, 0xdc, 0xdd, 0x18, 0xdc,
+	0x39, 0xe6, 0xc6, 0xa0, 0xab, 0x1d, 0x58, 0x7b, 0xce, 0x76, 0xa0, 0x2f, 0xdc, 0xbf, 0x7a, 0x54,
+	0xb8, 0xcf, 0x60, 0xf1, 0x1e, 0xa0, 0x7f, 0xe7, 0x78, 0x81, 0xfe, 0xb2, 0xd4, 0x09, 0xef, 0xb5,
+	0x63, 0x84, 0xf7, 0xcb, 0xe1, 0x3e, 0xa0, 0xfe, 0xf2, 0xe1, 0x41, 0x3d, 0x0b, 0xf8, 0xf7, 0x03,
+	0xe7, 0x3f, 0x38, 0x1e, 0x2c, 0x7c, 0xe6, 0x20, 0x2c, 0xbc, 0x3f, 0x08, 0xc6, 0xc7, 0x07, 0x82,
+	0x87, 0x5a, 0x88, 0x7b, 0x2f, 0xe0, 0x5d, 0x4c, 0xff, 0xe3, 0x1b, 0x3d, 0x83, 0x43, 0x56, 0xa5,
+	0xf7, 0x62, 0x8f, 0x53, 0x1f, 0x7e, 0x0b, 0xf6, 0xbe, 0x2e, 0x9d, 0xed, 0x03, 0x3f, 0xc6, 0x3e,
+	0xfc, 0x16, 0xec, 0x79, 0x5b, 0x3a, 0xd3, 0x05, 0x27, 0x92, 0x1f, 0x7e, 0x0b, 0x3a, 0x9e, 0x4b,
+	0x2f, 0xed, 0x41, 0x11, 0xe8, 0xc3, 0x6f, 0x41, 0xcf, 0xbb, 0x7d, 0xf0, 0x03, 0xb3, 0x6c, 0xcf,
+	0xeb, 0x1e, 0xfc, 0xd0, 0x8b, 0x1c, 0x3e, 0x49, 0xc1, 0x11, 0x15, 0xd7, 0x6c, 0xdd, 0x38, 0x81,
+	0x0e, 0x27, 0xd0, 0xe1, 0x04, 0x3a, 0x9c, 0x40, 0x87, 0x13, 0xe8, 0x70, 0x02, 0x1d, 0x4e, 0xa0,
+	0xc3, 0x09, 0x74, 0x78, 0x26, 0x74, 0xf8, 0xe3, 0x51, 0x18, 0xfb, 0x11, 0xa6, 0x27, 0xb0, 0xe1,
+	0x04, 0x36, 0x9c, 0xc0, 0x86, 0x13, 0xd8, 0x70, 0x02, 0x1b, 0x4e, 0x60, 0xc3, 0x09, 0x6c, 0x38,
+	0x3c, 0x6c, 0xf8, 0xbf, 0xf5, 0x09, 0xec, 0xdd, 0xe3, 0xfa, 0x04, 0xf6, 0x5b, 0xf9, 0xfc, 0xf5,
+	0xff, 0x13, 0x91, 0x95, 0xfe, 0x0c, 0x3c, 0xfd, 0x3c, 0x3b, 0xf0, 0xd9, 0xe7, 0xd9, 0x81, 0xaf,
+	0x3e, 0xcf, 0x82, 0x6f, 0x3e, 0xcf, 0x82, 0xfb, 0xcd, 0x2c, 0xf8, 0xf3, 0x66, 0x16, 0x7c, 0xd2,
+	0xcc, 0x82, 0xdd, 0x66, 0x16, 0x7c, 0xda, 0xcc, 0x82, 0xa7, 0xcd, 0x2c, 0xf8, 0xac, 0x99, 0x05,
+	0xbf, 0x6a, 0x66, 0xc1, 0x17, 0xcd, 0xec, 0xc0, 0x57, 0xcd, 0x2c, 0xf8, 0xe8, 0xd7, 0xd9, 0x81,
+	0xdd, 0x5f, 0x67, 0xc1, 0xcf, 0xee, 0x6c, 0x90, 0xda, 0x7b, 0x1b, 0xf9, 0x4d, 0x62, 0x53, 0xec,
+	0xba, 0x7a, 0xbe, 0xee, 0xcd, 0xf0, 0x1f, 0x65, 0xe2, 0x56, 0xcf, 0xd7, 0x5c, 0xb2, 0x69, 0x99,
+	0xd8, 0x3d, 0xdf, 0x5a, 0x9e, 0xa9, 0xad, 0x6f, 0x90, 0x19, 0xbc, 0x4d, 0xfd, 0xff, 0xcf, 0x3d,
+	0xf8, 0x7f, 0xab, 0xd7, 0x07, 0xf9, 0xbf, 0xe8, 0xce, 0xfd, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff,
+	0x86, 0x99, 0x8d, 0x80, 0x8b, 0x3d, 0x00, 0x00,
 }

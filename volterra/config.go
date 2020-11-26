@@ -22,7 +22,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 	"gopkg.volterra.us/stdlib/server"
 
-	ves_io_schema_combined "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/combined"
+	ves_io_schema_combined "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/combined"
 )
 
 // Config data for volterra provider

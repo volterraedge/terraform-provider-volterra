@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	ves_io_schema_network_firewall "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
+	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 )
 
 // TestAccNetworkFirewall token creation test

@@ -19,7 +19,7 @@ import (
 	"github.com/google/uuid"
 	"gopkg.volterra.us/stdlib/codec"
 
-	ves_io_schema_site "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/site"
+	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 )
 
 const (

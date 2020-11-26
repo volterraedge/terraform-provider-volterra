@@ -28,8 +28,8 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-	object "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	object "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
 )
 
 var (
@@ -994,19 +994,7 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
-func (s *APISrv) validateTransport(ctx context.Context) error {
-	if s.sf.IsTransportNotSupported("ves.io.schema.views.aws_tgw_site.crudapi.API", server.TransportFromContext(ctx)) {
-		userMsg := fmt.Sprintf("ves.io.schema.views.aws_tgw_site.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
-		return server.GRPCStatusFromError(err).Err()
-	}
-	return nil
-}
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_tgw_site.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1031,9 +1019,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1058,9 +1043,6 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_tgw_site.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1083,9 +1065,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_tgw_site.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1137,9 +1116,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_tgw_site.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1518,7 +1494,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-Get"
+                    "url": "http://some-url-here/ves-io-schema-views-aws_tgw_site-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.Get"
             },
@@ -1593,7 +1569,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-Delete"
+                    "url": "http://some-url-here/ves-io-schema-views-aws_tgw_site-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.Delete"
             },
@@ -1676,7 +1652,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-Replace"
+                    "url": "http://some-url-here/ves-io-schema-views-aws_tgw_site-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.Replace"
             },
@@ -1805,7 +1781,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-List"
+                    "url": "http://some-url-here/ves-io-schema-views-aws_tgw_site-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.List"
             },
@@ -1882,7 +1858,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-Create"
+                    "url": "http://some-url-here/ves-io-schema-views-aws_tgw_site-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.Create"
             },
@@ -2011,7 +1987,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-crudapi-API-ListStream"
+                    "url": "http://some-url-here/ves-io-schema-views-aws_tgw_site-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.crudapi.API.ListStream"
             },
@@ -2096,12 +2072,12 @@ var APISwaggerJSON string = `{
             "description": "Security Configuration for transit gateway",
             "title": "TGW Security Configuration",
             "x-displayname": "TGW Security Configuration",
-            "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
+            "x-ves-oneof-field-service_policy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy_policy\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.SecurityConfigType",
             "properties": {
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy_policy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
                     "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
                 },
@@ -2111,11 +2087,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
                 },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy_policy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
                     "$ref": "#/definitions/schemaEmpty"
                 },
-                "no_forward_proxy": {
+                "no_forward_proxy_policy": {
                     "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
                     "$ref": "#/definitions/schemaEmpty"
@@ -2722,7 +2698,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -3393,36 +3369,12 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "siteCoordinates": {
-            "type": "object",
-            "description": "Coordinates of the site which provides the site physical location",
-            "title": "Site Coordinates",
-            "x-displayname": "Site Coordinates",
-            "x-ves-proto-message": "ves.io.schema.site.Coordinates",
-            "properties": {
-                "latitude": {
-                    "type": "number",
-                    "description": " Latitude of the site location",
-                    "title": "latitude",
-                    "format": "float",
-                    "x-displayname": "Latitude"
-                },
-                "longitude": {
-                    "type": "number",
-                    "description": " longitude of site location",
-                    "title": "longitude",
-                    "format": "float",
-                    "x-displayname": "Longitude"
-                }
-            }
-        },
         "viewsAWSVPCParamsType": {
             "type": "object",
             "description": "Parameters to create new AWS VPC",
             "title": "AWS VPC Parameters",
             "x-displayname": "AWS VPC Parameters",
-            "x-ves-displayorder": "7,3,6",
-            "x-ves-oneof-field-name_choice": "[\"autogenerate\",\"name_tag\"]",
+            "x-ves-displayorder": "2,3,6",
             "x-ves-proto-message": "ves.io.schema.views.AWSVPCParamsType",
             "properties": {
                 "allocate_ipv6": {
@@ -3432,15 +3384,12 @@ var APISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Allocate IPv6 CIDR block from AWS"
                 },
-                "autogenerate": {
-                    "description": "Exclusive with [name_tag]\nx-displayName: \"Autogenerate VPC Name\"\nAutogenerate the VPC Name",
-                    "title": "autogenerate",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
                 "name_tag": {
                     "type": "string",
-                    "description": "Exclusive with [autogenerate]\nx-displayName: \"Choose VPC Name\"\nSpecify the VPC Name",
-                    "title": "name_tag"
+                    "description": " x-example \"MyVpc\"\n Optional Name tag for your VPC\nRequired: YES",
+                    "title": "AWS VPC Name Tag",
+                    "x-displayname": "AWS VPC Name Tag",
+                    "x-ves-required": "true"
                 },
                 "primary_ipv4": {
                     "type": "string",
@@ -3644,25 +3593,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Specification",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.GlobalSpecType",
             "properties": {
-                "address": {
-                    "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-",
-                    "title": "address",
-                    "x-displayname": "Geographical Address",
-                    "x-ves-example": "123 Street, city, country, postal code"
-                },
                 "aws_parameters": {
                     "description": " Configure AWS TGW, services VPC and site nodes parameters.\nRequired: YES",
                     "title": "AWS TGW, Services VPC and Nodes",
                     "$ref": "#/definitions/aws_tgw_siteServicesVPCType",
                     "x-displayname": "AWS TGW, Services VPC and Nodes",
                     "x-ves-required": "true"
-                },
-                "coordinates": {
-                    "description": " Site longitude and latitude co-ordinates",
-                    "title": "coordinates",
-                    "$ref": "#/definitions/siteCoordinates",
-                    "x-displayname": "Co-ordinates"
                 },
                 "operating_system_version": {
                     "type": "string",

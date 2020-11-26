@@ -28,8 +28,8 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-	object "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/advertise_policy"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	object "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/advertise_policy"
 )
 
 var (
@@ -994,19 +994,7 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
-func (s *APISrv) validateTransport(ctx context.Context) error {
-	if s.sf.IsTransportNotSupported("ves.io.schema.advertise_policy.crudapi.API", server.TransportFromContext(ctx)) {
-		userMsg := fmt.Sprintf("ves.io.schema.advertise_policy.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
-		return server.GRPCStatusFromError(err).Err()
-	}
-	return nil
-}
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.advertise_policy.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1031,9 +1019,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1058,9 +1043,6 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.advertise_policy.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1083,9 +1065,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.advertise_policy.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1137,9 +1116,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.advertise_policy.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1518,7 +1494,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-Get"
+                    "url": "http://some-url-here/ves-io-schema-advertise_policy-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Get"
             },
@@ -1593,7 +1569,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-Delete"
+                    "url": "http://some-url-here/ves-io-schema-advertise_policy-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Delete"
             },
@@ -1676,7 +1652,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-Replace"
+                    "url": "http://some-url-here/ves-io-schema-advertise_policy-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Replace"
             },
@@ -1805,7 +1781,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-List"
+                    "url": "http://some-url-here/ves-io-schema-advertise_policy-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.List"
             },
@@ -1882,7 +1858,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-Create"
+                    "url": "http://some-url-here/ves-io-schema-advertise_policy-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Create"
             },
@@ -2011,7 +1987,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-API-ListStream"
+                    "url": "http://some-url-here/ves-io-schema-advertise_policy-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.ListStream"
             },
@@ -2423,7 +2399,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -2686,12 +2662,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
-                },
-                "blindfold_secret_info_internal": {
-                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
-                    "title": "Blindfold Secret Internal",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
-                    "x-displayname": "Blindfold Secret Internal"
                 },
                 "clear_secret_info": {
                     "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
@@ -3185,7 +3155,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nVk8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",

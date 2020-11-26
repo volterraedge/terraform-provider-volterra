@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	ves_io_schema_ns "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/namespace"
+	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
 )
 
 func TestAccNamespaceBasic(t *testing.T) {

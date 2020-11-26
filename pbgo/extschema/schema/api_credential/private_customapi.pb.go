@@ -15,7 +15,7 @@ import (
 
 	_ "github.com/gogo/googleapis/google/api"
 
-	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
 	strings "strings"
 

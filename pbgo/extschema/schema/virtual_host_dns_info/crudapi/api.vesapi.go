@@ -28,8 +28,8 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
-	object "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	object "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
 )
 
 var (
@@ -994,19 +994,7 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
-func (s *APISrv) validateTransport(ctx context.Context) error {
-	if s.sf.IsTransportNotSupported("ves.io.schema.virtual_host_dns_info.crudapi.API", server.TransportFromContext(ctx)) {
-		userMsg := fmt.Sprintf("ves.io.schema.virtual_host_dns_info.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
-		return server.GRPCStatusFromError(err).Err()
-	}
-	return nil
-}
-
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host_dns_info.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1031,9 +1019,6 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1058,9 +1043,6 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host_dns_info.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1083,9 +1065,6 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host_dns_info.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1137,9 +1116,6 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host_dns_info.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1509,7 +1485,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-Get"
+                    "url": "http://some-url-here/ves-io-schema-virtual_host_dns_info-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.Get"
             },
@@ -1584,7 +1560,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-Delete"
+                    "url": "http://some-url-here/ves-io-schema-virtual_host_dns_info-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.Delete"
             },
@@ -1667,7 +1643,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-Replace"
+                    "url": "http://some-url-here/ves-io-schema-virtual_host_dns_info-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.Replace"
             },
@@ -1796,7 +1772,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-List"
+                    "url": "http://some-url-here/ves-io-schema-virtual_host_dns_info-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.List"
             },
@@ -1873,7 +1849,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-Create"
+                    "url": "http://some-url-here/ves-io-schema-virtual_host_dns_info-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.Create"
             },
@@ -2002,7 +1978,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host_dns_info-crudapi-API-ListStream"
+                    "url": "http://some-url-here/ves-io-schema-virtual_host_dns_info-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host_dns_info.crudapi.API.ListStream"
             },

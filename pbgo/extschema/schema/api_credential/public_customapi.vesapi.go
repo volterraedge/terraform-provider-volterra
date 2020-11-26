@@ -347,10 +347,7 @@ func (c *CustomAPIRestClient) doRPCCreateServiceCredentials(ctx context.Context,
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("namespace_roles", fmt.Sprintf("%v", req.NamespaceRoles))
-		q.Add("password", fmt.Sprintf("%v", req.Password))
 		q.Add("type", fmt.Sprintf("%v", req.Type))
-		q.Add("virtual_k8s_name", fmt.Sprintf("%v", req.VirtualK8SName))
-		q.Add("virtual_k8s_namespace", fmt.Sprintf("%v", req.VirtualK8SNamespace))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -1098,7 +1095,7 @@ var CustomAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "API/Service credential custom API",
-        "description": "Volterra supports 2 variation of credentials - \n1. My Credentials or API credentials\n2. Service Credentials\n\nCredentials created via My credential or API credential inherits same user that of the creator\nand it gets same RBAC applied to the user. So when this credential is used in APIs, it will \nhave same response/audit as creator of the credential is. Generate this credential if you want to\nautomate or access APIs via CLI as yourself.\n\nservice credential on the other hand will have a separte service user associated and RBAC can be\nmanaged differently per namespace than that of the original user creating it.\n\nFor each these credentials, user can request credential in 3 different formats as required by\ntheir usecase:\n\n* API certificate - a password protected P12 certificate bundle\n* virtual K8s kubeconfig - a kubeconfig to access a cluster with embedded user access with client certificate.\n* API token - an easy to use secret that can be send part of HTTP request header Authorization: APIToken \u003cvalue\u003e",
+        "description": "Volterra supports 2 variation of credentials - \n1. My Credentials or API credentials\n2. Service Credentials\n\nCredentials created via My credential or API credential inherits same user that of the creator\nand it gets same RBAC applied to the user. So when this credential is used in APIs, it will \nhave same response/audit as creator of the credential is. Generate this credential if you want to\nautomate or access APIs via CLI as yourself.\n\nservice credential on the other hand will have a separte service user associated and RBAC can be\nmanaged differently per namespace than that of the original user creating it.\n\nFor each these credentials, user can request credential in 3 different formats as required by\ntheir usecase:\n\n* API certificate - a password protected P12 certificate bundle\n* virtual k8s kubeconfig - a kubeconfig to access a cluster with embedded user access with client certificate.\n* API token - an easy to use secret that can be send part of HTTP request header Authorization: APIToken \u003cvalue\u003e",
         "version": "version not set"
     },
     "schemes": [
@@ -1273,13 +1270,13 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-List"
+                    "url": "http://some-url-here/ves-io-schema-api_credential-CustomAPI-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.List"
             },
             "post": {
                 "summary": "Create API credential",
-                "description": "user can request 3 types of credential for themselves. \nAPI_TOKEN, API_CERTIFICATE and KUBE_CONFIG.\n\nan API_TOKEN is an easy to use secret that can be send part of HTTP request header Authorization: APIToken \u003cvalue\u003e\nin the create request expiry can be set additionally. Volterra also supports renew and revoke of API_TOKENs.\nan API_CERTIFICATE is a password protected P12 certificate bundle document and can be used as client certificate.\nwhen sending create request, user can request with an expiry and password. Volterra Identity Authority (IA)\nmints new certificate with required credentials and is shared in the response as API Certificate. \na virtual K8s kubeconfig can be generate with type KUBE_CONFIG. Create request can specify cluster, namespace and expiry\nwith embedded user access with client certificate.\n\nrequest can specify name, expiry and type of credential required. since this credential inherits the creator's RBAC\nservice will determine the user from request context.",
+                "description": "user can request 3 types of credential for themselves. \nAPI_TOKEN, API_CERTIFICATE and KUBE_CONFIG.\n\nan API_TOKEN is an easy to use secret that can be send part of HTTP request header Authorization: APIToken \u003cvalue\u003e\nin the create request expiry can be set additionally. Volterra also supports renew and revoke of API_TOKENs.\nan API_CERTIFICATE is a password protected P12 certificate bundle document and can be used as client certificate.\nwhen sending create request, user can request with an expiry and password. Volterra Identity Authority (IA)\nmints new certificate with required credentials and is shared in the response as API Certificate. \na virtual k8s kubeconfig can be generate with type KUBE_CONFIG. Create request can specify cluster, namespace and expiry\nwith embedded user access with client certificate.\n\nrequest can specify name, expiry and type of credential required. since this credential inherits the creator's RBAC\nservice will determine the user from request context.",
                 "operationId": "ves.io.schema.api_credential.CustomAPI.Create",
                 "responses": {
                     "200": {
@@ -1358,7 +1355,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-Create"
+                    "url": "http://some-url-here/ves-io-schema-api_credential-CustomAPI-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Create"
             },
@@ -1446,7 +1443,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-Get"
+                    "url": "http://some-url-here/ves-io-schema-api_credential-CustomAPI-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Get"
             },
@@ -1700,7 +1697,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-ListServiceCredentials"
+                    "url": "http://some-url-here/ves-io-schema-api_credential-CustomAPI-ListServiceCredentials"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.ListServiceCredentials"
             },
@@ -1785,7 +1782,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-CreateServiceCredentials"
+                    "url": "http://some-url-here/ves-io-schema-api_credential-CustomAPI-CreateServiceCredentials"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.CreateServiceCredentials"
             },
@@ -1797,15 +1794,13 @@ var CustomAPISwaggerJSON string = `{
     "definitions": {
         "api_credentialAPICredentialType": {
             "type": "string",
-            "description": "Types of API credential given when requesting credentials from volterra\n\n - API_CERTIFICATE: Volterra user certificate to access Volterra public API using mTLS\n - KUBE_CONFIG: Kubernetes config file to access Virtual Kubernetes API in Volterra\n - API_TOKEN: API token to access Volterra public API\n - SERVICE_API_TOKEN: API token for service credentials\n - SERVICE_API_CERTIFICATE: API certificate for service credentials\n - SERVICE_KUBE_CONFIG: API certificate for kube config",
+            "description": "Types of API credential given when requesting credentials from volterra\n\n - API_CERTIFICATE: Volterra user certificate to access Volterra public API using mTLS\n - KUBE_CONFIG: Kubernetes config file to access Virtual Kubernetes API in Volterra\n - API_TOKEN: API token to access Volterra public API\n - SERVICE_API_TOKEN: API token for service credentials",
             "title": "API Credential type",
             "enum": [
                 "API_CERTIFICATE",
                 "KUBE_CONFIG",
                 "API_TOKEN",
-                "SERVICE_API_TOKEN",
-                "SERVICE_API_CERTIFICATE",
-                "SERVICE_KUBE_CONFIG"
+                "SERVICE_API_TOKEN"
             ],
             "default": "API_CERTIFICATE",
             "x-displayname": "Credential Type",
@@ -1858,7 +1853,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "data": {
                     "type": "string",
-                    "description": " data is the response format based on the API credential type.\n In case of API_CERTIFICATES, the response is the base64 encoded value of \n certificate in PKCS12 format.\n In case of KUBE_CONFIG, the response is the base64 encoded value of the K8s kubeconfig file\n with contents as requested - cluster,namespace and base64 encoded certificate, key and CA.\n\nExample: - \"value\"-",
+                    "description": " data is the response format based on the API credential type.\n In case of API_CERTIFICATES, the response is the base64 encoded value of \n certificate in PKCS12 format.\n In case of KUBE_CONFIG, the response is the base64 encoded value of the k8s kubeconfig file\n with contents as requested - cluster,namespace and base64 encoded certificate, key and CA.\n\nExample: - \"value\"-",
                     "title": "Credentials",
                     "x-displayname": "Credentials",
                     "x-ves-example": "value"
@@ -1907,34 +1902,12 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "List of roles",
                     "x-ves-example": "value"
                 },
-                "password": {
-                    "type": "string",
-                    "description": " Password is used for generating an API certificate P12 bundle user can use to protect access to it.\n this password will not be saved/persisted anywhere in the system. Applicable for credential type API_CERTIFICATE\n Users have to use this password when they use the certificate, e.g. in curl or while adding to key chain.\n\nExample: - \"myPassw0rd123\"-\nRequired: YES",
-                    "title": "Password for API certificate",
-                    "x-displayname": "Password",
-                    "x-ves-example": "myPassw0rd123",
-                    "x-ves-required": "true"
-                },
                 "type": {
                     "description": " Type of API credential, API credentials, kubeconfig or token.\nRequired: YES",
                     "title": "Type",
                     "$ref": "#/definitions/api_credentialAPICredentialType",
                     "x-displayname": "Credential Type",
                     "x-ves-required": "true"
-                },
-                "virtual_k8s_name": {
-                    "type": "string",
-                    "description": " Name of virtual_k8s cluster. Applicable for KUBE_CONFIG.\n\nExample: - \"vk8s-product-app1\"-",
-                    "title": "virtual k8s cluster name",
-                    "x-displayname": "vK8s Cluster",
-                    "x-ves-example": "vk8s-product-app1"
-                },
-                "virtual_k8s_namespace": {
-                    "type": "string",
-                    "description": " Namespace of virtual_k8s cluster. Applicable for KUBE_CONFIG.\n\nExample: - \"app-ns1\"-",
-                    "title": "Virtual k8s namespace",
-                    "x-displayname": "vK8s Namespace",
-                    "x-ves-example": "app-ns1"
                 }
             }
         },
@@ -1963,15 +1936,15 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "virtual_k8s_name": {
                     "type": "string",
-                    "description": " Name of virtual K8s cluster. Applicable for KUBE_CONFIG.\n\nExample: - \"vk8s-product-app1\"-",
+                    "description": " Name of virtual_k8s cluster. Applicable for KUBE_CONFIG.\n\nExample: - \"vk8s-product-app1\"-",
                     "title": "virtual k8s cluster name",
                     "x-displayname": "vK8s Cluster",
                     "x-ves-example": "vk8s-product-app1"
                 },
                 "virtual_k8s_namespace": {
                     "type": "string",
-                    "description": " Namespace of virtual K8s cluster. Applicable for KUBE_CONFIG.\n\nExample: - \"app-ns1\"-",
-                    "title": "Virtual K8s namespace",
+                    "description": " Namespace of virtual_k8s cluster. Applicable for KUBE_CONFIG.\n\nExample: - \"app-ns1\"-",
+                    "title": "Virtual k8s namespace",
                     "x-displayname": "vK8s Namespace",
                     "x-ves-example": "app-ns1"
                 }
@@ -2522,14 +2495,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "virtual_k8s_name": {
                     "type": "string",
-                    "description": " Name of virtual K8s cluster",
-                    "title": "Virtual K8s",
+                    "description": " Name of virtual k8s cluster",
+                    "title": "Virtual k8s",
                     "x-displayname": "Virtual K8s"
                 },
                 "virtual_k8s_namespace": {
                     "type": "string",
                     "description": " Namespace of virtual_k8s",
-                    "title": "Virtual K8s namespace",
+                    "title": "Virtual k8s namespace",
                     "x-displayname": "Namespace"
                 }
             }
