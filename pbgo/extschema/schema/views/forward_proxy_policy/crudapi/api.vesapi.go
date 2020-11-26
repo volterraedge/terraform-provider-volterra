@@ -994,7 +994,19 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
+func (s *APISrv) validateTransport(ctx context.Context) error {
+	if s.sf.IsTransportNotSupported("ves.io.schema.views.forward_proxy_policy.crudapi.API", server.TransportFromContext(ctx)) {
+		userMsg := fmt.Sprintf("ves.io.schema.views.forward_proxy_policy.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		return server.GRPCStatusFromError(err).Err()
+	}
+	return nil
+}
+
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.forward_proxy_policy.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1019,6 +1031,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1043,6 +1058,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.forward_proxy_policy.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1065,6 +1083,9 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.forward_proxy_policy.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1116,6 +1137,9 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.forward_proxy_policy.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1494,7 +1518,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-forward_proxy_policy-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.Get"
             },
@@ -1569,7 +1593,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-forward_proxy_policy-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.Delete"
             },
@@ -1652,7 +1676,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-forward_proxy_policy-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.Replace"
             },
@@ -1781,7 +1805,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-forward_proxy_policy-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.List"
             },
@@ -1858,7 +1882,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-forward_proxy_policy-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.Create"
             },
@@ -1987,7 +2011,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-forward_proxy_policy-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-forward_proxy_policy-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.forward_proxy_policy.crudapi.API.ListStream"
             },
@@ -2206,7 +2230,7 @@ var APISwaggerJSON string = `{
             "description": "URL(s) and domains policy for forward proxy for a connection type (TLS or HTTP)",
             "title": "Forward Proxy Rule",
             "x-displayname": "Forward Proxy Rule",
-            "x-ves-oneof-field-destination_choice": "[\"all_destinations\",\"dest_list\",\"http_list\",\"tls_list\"]",
+            "x-ves-oneof-field-destination_choice": "[\"all_destinations\",\"dst_asn_list\",\"dst_asn_set\",\"dst_ip_prefix_set\",\"dst_label_selector\",\"dst_prefix_list\",\"http_list\",\"tls_list\"]",
             "x-ves-oneof-field-http_connect_choice": "[\"no_http_connect_port\",\"port_matcher\"]",
             "x-ves-oneof-field-source_choice": "[\"all_sources\",\"inside_sources\",\"interface\",\"ip_prefix_set\",\"label_selector\",\"namespace\",\"prefix_list\"]",
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.ForwardProxyAdvancedRuleType",
@@ -2219,22 +2243,42 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "all_destinations": {
-                    "description": "Exclusive with [dest_list http_list tls_list]\nx-displayName: \"All Destinations\"\nMatch on all destinations",
+                    "description": "Exclusive with [dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list]\nx-displayName: \"All Destinations\"\nMatch on all destinations",
                     "title": "All Destinations",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "all_sources": {
-                    "description": "Exclusive with [inside_sources interface ip_prefix_set label_selector namespace prefix_list]\nx-displayName: \"All Source\"\nAny source that matches 0/0 ip prefix",
+                    "description": "Exclusive with [inside_sources interface ip_prefix_set label_selector namespace prefix_list]\nx-displayName: \"All Sources\"\nAny source that matches 0/0 ip prefix",
                     "title": "All Sources",
                     "$ref": "#/definitions/schemaEmpty"
                 },
-                "dest_list": {
-                    "description": "Exclusive with [all_destinations http_list tls_list]\nx-displayName: \"L4 Destinations\"\nL4 destinations for non-HTTP and non-TLS connections and TLS connections without SNI",
-                    "title": "L4 Destinations",
-                    "$ref": "#/definitions/forward_proxy_policyL4DestListType"
+                "dst_asn_list": {
+                    "description": "Exclusive with [all_destinations dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list]\nx-displayName: \"BGP ASN List\"\nAddresses that belong to the ASNs in the given list\nThe ASN is obtained by performing a lookup for the destination IPv4 Address in a GeoIP DB.",
+                    "title": "Dst ASN List",
+                    "$ref": "#/definitions/policyAsnMatchList"
+                },
+                "dst_asn_set": {
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_ip_prefix_set dst_label_selector dst_prefix_list http_list tls_list]\nx-displayName: \"BGP ASN Set\"\nAddresses that belong to the ASNs in the given bgp_asn_set\nThe ASN is obtained by performing a lookup for the destination IPv4 Address in a GeoIP DB.",
+                    "title": "Dst ASN Set",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "dst_ip_prefix_set": {
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_label_selector dst_prefix_list http_list tls_list]\nx-displayName: \"IP Prefix Set\"\nAddresses that are covered by the prefixes in the given ip_prefix_set",
+                    "title": "Dst IP Prefix Set",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "dst_label_selector": {
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_prefix_list http_list tls_list]\nx-displayName: \"Label Selector\"\nx-example: \"geoip.ves.io/country == KY\"\nDestination is the set of prefixes determined by the label selector expression",
+                    "title": "Dst Label Selector",
+                    "$ref": "#/definitions/schemaLabelSelectorType"
+                },
+                "dst_prefix_list": {
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector http_list tls_list]\nx-displayName: \"IPv4 Prefix List\"\nAddresses that are covered by the given list of IPv4 prefixes",
+                    "title": "Dst IP Prefix List",
+                    "$ref": "#/definitions/viewsPrefixStringListType"
                 },
                 "http_list": {
-                    "description": "Exclusive with [all_destinations dest_list tls_list]\nx-displayName: \"HTTP URLs\"\nURLs for HTTP connections",
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list tls_list]\nx-displayName: \"HTTP URLs\"\nURLs for HTTP connections",
                     "title": "HTTP URLs",
                     "$ref": "#/definitions/forward_proxy_policyURLListType"
                 },
@@ -2264,12 +2308,12 @@ var APISwaggerJSON string = `{
                     "title": "All sources of a Namespace"
                 },
                 "no_http_connect_port": {
-                    "description": "Exclusive with [port_matcher]\nx-displayName: \"Do Not Match\"\nIgnore destination ports inside HTTP connect proxy connections",
+                    "description": "Exclusive with [port_matcher]\nx-displayName: \"Do Not Match\"\nIgnore destination ports for connections",
                     "title": "Do not Match",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "port_matcher": {
-                    "description": "Exclusive with [no_http_connect_port]\nx-displayName: \"HTTP CONNECT Port Matcher\"\nThe list of port ranges to which the input port should belong. The input port is extracted from the target of an HTTP Connect. The predicate evaluates to\ntrue if the input port belongs to any of the specified port ranges.",
+                    "description": "Exclusive with [no_http_connect_port]\nx-displayName: \"Port Matcher\"\nThe list of port ranges to which the destination port should belong.\nIn case of an HTTP Connect, the destination port is extracted from the connect destination.",
                     "title": "port matcher",
                     "$ref": "#/definitions/policyPortMatcherType"
                 },
@@ -2294,7 +2338,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "tls_list": {
-                    "description": "Exclusive with [all_destinations dest_list http_list]\nx-displayName: \"TLS Domains\"\nDomains in SNI for TLS connections",
+                    "description": "Exclusive with [all_destinations dst_asn_list dst_asn_set dst_ip_prefix_set dst_label_selector dst_prefix_list http_list]\nx-displayName: \"TLS Domains\"\nDomains in SNI for TLS connections",
                     "title": "TLS Domains",
                     "$ref": "#/definitions/forward_proxy_policyDomainListType"
                 }
@@ -2380,21 +2424,6 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaDomainType"
                     },
                     "x-displayname": "TLS Domains"
-                }
-            }
-        },
-        "forward_proxy_policyL4DestListType": {
-            "type": "object",
-            "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.L4DestListType",
-            "properties": {
-                "dest_list": {
-                    "type": "array",
-                    "description": " L4 destinations for non-HTTP and non-TLS connections and TLS connections without SNI",
-                    "title": "L4 Destinations",
-                    "items": {
-                        "$ref": "#/definitions/schemaL4DestType"
-                    },
-                    "x-displayname": "L4 Destinations"
                 }
             }
         },
@@ -2545,6 +2574,27 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyAsnMatchList": {
+            "type": "object",
+            "description": "An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.",
+            "title": "Asn Match List",
+            "x-displayname": "ASN Match List",
+            "x-ves-proto-message": "ves.io.schema.policy.AsnMatchList",
+            "properties": {
+                "as_numbers": {
+                    "type": "array",
+                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\nRequired: YES",
+                    "title": "as numbers",
+                    "items": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "x-displayname": "AS Numbers",
+                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "policyPortMatcherType": {
             "type": "object",
             "description": "A port matcher specifies a list of port ranges as match criteria. The match is considered successful if the input port falls within any of the port ranges.\nThe result of the match is inverted if invert_matcher is true.",
@@ -2636,7 +2686,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -2728,12 +2778,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "L4 Destination",
             "x-ves-proto-message": "ves.io.schema.L4DestType",
             "properties": {
-                "ports": {
+                "port_ranges": {
                     "type": "string",
-                    "description": " Destination port range.\n\nExample: - \"100-200\"-",
-                    "title": "ports",
-                    "x-displayname": "Port Range",
-                    "x-ves-example": "100-200"
+                    "description": " A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-",
+                    "title": "port_ranges",
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "80,443,8080-8191,9080"
                 },
                 "prefixes": {
                     "type": "array",
@@ -3154,7 +3204,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/forward_proxy_policyForwardProxySimpleRuleType"
                 },
                 "any_proxy": {
-                    "description": "Exclusive with [drp_http_connect network_connector proxy_label_selector]\nx-displayName: \"All Proxies on Site\"\nThis policy is applied to all proxies on this site",
+                    "description": "Exclusive with [drp_http_connect network_connector proxy_label_selector]\nx-displayName: \"All Forward Proxies on Site\"\nThis policy is applied to all forward proxies on this site, and not drp/http-connect proxies",
                     "title": "All Proxies on this site",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -3164,7 +3214,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/forward_proxy_policyForwardProxySimpleRuleType"
                 },
                 "drp_http_connect": {
-                    "description": "Exclusive with [any_proxy network_connector proxy_label_selector]\nx-displayName: \"DRP/HTTP-Connect Proxy\"\nThis policy is applied to attached DRP/HTTP-Connect Proxy",
+                    "description": "Exclusive with [any_proxy network_connector proxy_label_selector]\nx-displayName: \"DRP/HTTP-Connect Proxy\"\nThis policy is applied to attached DRP/HTTP-Connect Proxy (applicable only in App namespace)",
                     "title": "DRP or HTTP Connect Proxy",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -3174,7 +3224,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "proxy_label_selector": {
-                    "description": "Exclusive with [any_proxy drp_http_connect network_connector]\nx-displayName: \"Network Connector Label Selector\"\nx-example: \"app != web\"\nProxy for Network Connector or HTTP connect proxy  selected by Label selector",
+                    "description": "Exclusive with [any_proxy drp_http_connect network_connector]\nx-displayName: \"Network Connector Label Selector\"\nx-example: \"app != web\"\nProxy for Network Connector or HTTP connect proxy selected by Label selector",
                     "title": "Network Connector Label selector",
                     "$ref": "#/definitions/schemaLabelSelectorType"
                 },

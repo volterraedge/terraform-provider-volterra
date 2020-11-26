@@ -84,7 +84,7 @@ func testAWSTGWSiteConfig(resourceName, name string) string {
 			}
 			tgw_security {
 			  no_network_policy = true
-			  no_forward_proxy_policy = true
+			  no_forward_proxy = true
 			}
 			vn_config {
 			  no_global_network = true

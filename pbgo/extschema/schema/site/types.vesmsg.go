@@ -5243,6 +5243,15 @@ func (v *ValidateTunnelConnectionStatus) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["tunnelName"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tunnelName"))
+		if err := fv(ctx, m.GetTunnelName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["url"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("url"))

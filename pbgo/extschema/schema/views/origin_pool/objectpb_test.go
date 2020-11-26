@@ -33,6 +33,9 @@ It has these top-level messages:
 	UpstreamTlsValidationContext
 	TlsCertificatesType
 	UpstreamTlsParameters
+	OriginPoolDefaultSubset
+	OriginPoolSubsets
+	OriginPoolAdvancedOptions
 	GlobalSpecType
 	CreateSpecType
 	ReplaceSpecType
@@ -65,6 +68,8 @@ import (
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 

@@ -50,6 +50,7 @@
 		ObjectGetMetaType
 		ObjectCreateMetaType
 		ObjectReplaceMetaType
+		MessageMetaType
 		ViewRefType
 		KubeRefType
 		SystemObjectMetaType
@@ -109,6 +110,7 @@
 		ForwardProxyConfigType
 		HostIdentifier
 		InterfaceIdentifier
+		InterfaceOrNetwork
 		FieldRules
 		FloatRules
 		DoubleRules
@@ -133,6 +135,9 @@
 		DurationRules
 		TimestampRules
 		Choices
+		ChoiceItem
+		ChoiceItemList
+		LabelKeyClassList
 		FieldViewOptions
 		MapOptions
 		RepeatedOptions

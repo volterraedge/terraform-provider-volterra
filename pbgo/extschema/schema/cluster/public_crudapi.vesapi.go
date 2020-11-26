@@ -1100,7 +1100,19 @@ type APISrv struct {
 	// resource handler function pointers
 }
 
+func (s *APISrv) validateTransport(ctx context.Context) error {
+	if s.sf.IsTransportNotSupported("ves.io.schema.cluster.API", server.TransportFromContext(ctx)) {
+		userMsg := fmt.Sprintf("ves.io.schema.cluster.API not allowed in transport '%s'", server.TransportFromContext(ctx))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		return server.GRPCStatusFromError(err).Err()
+	}
+	return nil
+}
+
 func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateResponse, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.cluster.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1147,6 +1159,9 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResponse, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
@@ -1182,6 +1197,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 }
 
 func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.cluster.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1227,6 +1245,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 }
 
 func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.cluster.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1260,6 +1281,9 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protobuf.Empty, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.cluster.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1496,6 +1520,11 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				)
 			}
 
+			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
+			item.Metadata.FromObjectMetaType(o.Metadata)
+			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
+			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
+
 			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.cluster.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1644,7 +1673,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-cluster-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.API.Create"
             },
@@ -1740,7 +1769,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-cluster-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.API.Replace"
             },
@@ -1852,7 +1881,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-cluster-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.API.List"
             },
@@ -1956,7 +1985,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-cluster-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.API.Get"
             },
@@ -2039,7 +2068,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-cluster-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.API.Delete"
             },
@@ -2148,6 +2177,7 @@ var APISwaggerJSON string = `{
             "title": "Create cluster",
             "x-displayname": "Create Configuration Specification",
             "x-ves-displayorder": "1,2,3,8,13,9,10,4,5,6,7,12",
+            "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.CreateSpecType",
             "properties": {
                 "circuit_breaker": {
@@ -2219,10 +2249,19 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/clusterLoadbalancerAlgorithm",
                     "x-displayname": "LoadBalancer Algorithm"
                 },
+                "no_panic_threshold": {
+                    "description": "Exclusive with [panic_threshold]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "outlier_detection": {
                     "description": " Outlier detection and ejection is the process of dynamically determining whether some number\n of hosts in an upstream cluster are performing unlike the others and removing them from the\n healthy load balancing set. Outlier detection is a form of passive health checking.",
                     "$ref": "#/definitions/clusterOutlierDetectionType",
                     "x-displayname": "Outlier Detection"
+                },
+                "panic_threshold": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_panic_threshold]\n",
+                    "format": "int64"
                 },
                 "tls_parameters": {
                     "description": " TLS parameters to access upstream endpoints for this cluster",
@@ -2367,6 +2406,7 @@ var APISwaggerJSON string = `{
             "title": "Get cluster",
             "x-displayname": "Get Configuration Specification",
             "x-ves-displayorder": "1,2,3,8,13,9,10,4,5,6,7,12",
+            "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.GetSpecType",
             "properties": {
                 "circuit_breaker": {
@@ -2438,10 +2478,19 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/clusterLoadbalancerAlgorithm",
                     "x-displayname": "LoadBalancer Algorithm"
                 },
+                "no_panic_threshold": {
+                    "description": "Exclusive with [panic_threshold]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "outlier_detection": {
                     "description": " Outlier detection and ejection is the process of dynamically determining whether some number\n of hosts in an upstream cluster are performing unlike the others and removing them from the\n healthy load balancing set. Outlier detection is a form of passive health checking.",
                     "$ref": "#/definitions/clusterOutlierDetectionType",
                     "x-displayname": "Outlier Detection"
+                },
+                "panic_threshold": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_panic_threshold]\n",
+                    "format": "int64"
                 },
                 "tls_parameters": {
                     "description": " TLS parameters to access upstream endpoints for this cluster",
@@ -2455,6 +2504,7 @@ var APISwaggerJSON string = `{
             "description": "Configuration specification for Cluster",
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
+            "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.GlobalSpecType",
             "properties": {
                 "circuit_breaker": {
@@ -2549,11 +2599,22 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/clusterLoadbalancerAlgorithm",
                     "x-displayname": "LoadBalancer Algorithm"
                 },
+                "no_panic_threshold": {
+                    "description": "Exclusive with [panic_threshold]\nx-displayName: \"No Panic threshold\"\n\nDisable panic threshold. Only healthy endpoints are considered for loadbalancing.",
+                    "title": "Disable panic threshold",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "outlier_detection": {
                     "description": " Outlier detection and ejection is the process of dynamically determining whether some number\n of hosts in an upstream cluster are performing unlike the others and removing them from the\n healthy load balancing set. Outlier detection is a form of passive health checking.",
                     "title": "outlier_detection",
                     "$ref": "#/definitions/clusterOutlierDetectionType",
                     "x-displayname": "Outlier Detection"
+                },
+                "panic_threshold": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_panic_threshold]\nx-displayName: \"Panic threshold\"\n\nConfigure a threshold (percentage of unhealthy endpoints) below which\nall endpoints will be considered for loadbalancing ignoring its health status.",
+                    "title": "Panic threshold",
+                    "format": "int64"
                 },
                 "tls_parameters": {
                     "description": " TLS parameters to access upstream endpoints for this cluster",
@@ -2635,6 +2696,12 @@ var APISwaggerJSON string = `{
                     "title": "labels",
                     "x-displayname": "Labels"
                 },
+                "metadata": {
+                    "description": " If list request has report_fields set then metadata will\n contain all the metadata associated with the object.",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectGetMetaType",
+                    "x-displayname": "Metadata"
+                },
                 "name": {
                     "type": "string",
                     "description": " The name of this cluster\n\nExample: - \"name\"-",
@@ -2650,7 +2717,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "ns1"
                 },
                 "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec",
+                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
                     "title": "object",
                     "$ref": "#/definitions/clusterObject",
                     "x-displayname": "Object"
@@ -2670,6 +2737,12 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Status"
                 },
+                "system_metadata": {
+                    "description": " If list request has report_fields set then system_metadata will\n contain all the system generated details of this object.",
+                    "title": "system_metadata",
+                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
+                    "x-displayname": "System Metadata"
+                },
                 "tenant": {
                     "type": "string",
                     "description": " The tenant this item belongs to\n\nExample: - \"acmecorp\"-",
@@ -2688,13 +2761,14 @@ var APISwaggerJSON string = `{
         },
         "clusterLoadbalancerAlgorithm": {
             "type": "string",
-            "description": "Different load balancing algorithms supported\nWhen a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm\nto determine which host is selected.\n\n - ROUND_ROBIN: ROUND_ROBIN\n\nPolicy in which each healthy/available upstream endpoint is selected in round robin order.\n - LEAST_REQUEST: LEAST_REQUEST\n\nPolicy in which loadbalancer picks the upstream endpoint which has the fewest active requests\n - RING_HASH: RING_HASH\n\nPolicy implements consistent hashing to upstream endpoints using ring hash of endpoint names\nHash of the incoming request is calculated using request hash policy.\nThe ring/modulo hash load balancer implements consistent hashing to upstream hosts.\nThe algorithm is based on mapping all hosts onto a circle such that the addition or\nremoval of a host from the host set changes only affect 1/N requests. This technique\nis also commonly known as “ketama” hashing. A consistent hashing load balancer is only\neffective when protocol routing is used that specifies a value to hash on. The minimum\nring size governs the replication factor for each host in the ring. For example, if the\nminimum ring size is 1024 and there are 16 hosts, each host will be replicated 64 times.\n - RANDOM: RANDOM\n\npolicy in which each available upstream endpoint is selected in random order.\nThe random load balancer selects a random healthy host. The random load balancer generally\nperforms better than round robin if no health checking policy is configured. Random selection\navoids bias towards the host in the set that comes after a failed host.",
+            "description": "Different load balancing algorithms supported\nWhen a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm\nto determine which host is selected.\n\n - ROUND_ROBIN: ROUND_ROBIN\n\nPolicy in which each healthy/available upstream endpoint is selected in round robin order.\n - LEAST_REQUEST: LEAST_REQUEST\n\nPolicy in which loadbalancer picks the upstream endpoint which has the fewest active requests\n - RING_HASH: RING_HASH\n\nPolicy implements consistent hashing to upstream endpoints using ring hash of endpoint names\nHash of the incoming request is calculated using request hash policy.\nThe ring/modulo hash load balancer implements consistent hashing to upstream hosts.\nThe algorithm is based on mapping all hosts onto a circle such that the addition or\nremoval of a host from the host set changes only affect 1/N requests. This technique\nis also commonly known as “ketama” hashing. A consistent hashing load balancer is only\neffective when protocol routing is used that specifies a value to hash on. The minimum\nring size governs the replication factor for each host in the ring. For example, if the\nminimum ring size is 1024 and there are 16 hosts, each host will be replicated 64 times.\n - RANDOM: RANDOM\n\npolicy in which each available upstream endpoint is selected in random order.\nThe random load balancer selects a random healthy host. The random load balancer generally\nperforms better than round robin if no health checking policy is configured. Random selection\navoids bias towards the host in the set that comes after a failed host.\n - LB_OVERRIDE: Load Balancer Override\n\nHash policy is taken from from the load balancer which is using this origin pool",
             "title": "LoadbalancerAlgorithm",
             "enum": [
                 "ROUND_ROBIN",
                 "LEAST_REQUEST",
                 "RING_HASH",
-                "RANDOM"
+                "RANDOM",
+                "LB_OVERRIDE"
             ],
             "default": "ROUND_ROBIN",
             "x-displayname": "Load Balancer Algorithm",
@@ -2815,6 +2889,7 @@ var APISwaggerJSON string = `{
             "title": "Replace cluster",
             "x-displayname": "Replace Configuration Specification",
             "x-ves-displayorder": "1,2,3,8,13,9,10,4,5,6,7,12",
+            "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.ReplaceSpecType",
             "properties": {
                 "circuit_breaker": {
@@ -2886,10 +2961,19 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/clusterLoadbalancerAlgorithm",
                     "x-displayname": "LoadBalancer Algorithm"
                 },
+                "no_panic_threshold": {
+                    "description": "Exclusive with [panic_threshold]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "outlier_detection": {
                     "description": " Outlier detection and ejection is the process of dynamically determining whether some number\n of hosts in an upstream cluster are performing unlike the others and removing them from the\n healthy load balancing set. Outlier detection is a form of passive health checking.",
                     "$ref": "#/definitions/clusterOutlierDetectionType",
                     "x-displayname": "Outlier Detection"
+                },
+                "panic_threshold": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_panic_threshold]\n",
+                    "format": "int64"
                 },
                 "tls_parameters": {
                     "description": " TLS parameters to access upstream endpoints for this cluster",
@@ -2962,6 +3046,13 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "service Foo {\n      rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n    }\n\nThe JSON representation for -Empty- is empty JSON object -{}-.",
             "title": "A generic empty message that you can re-use to avoid defining duplicated\nempty messages in your APIs. A typical example is to use it as the request\nor the response type of an API method. For instance:"
+        },
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
@@ -3053,7 +3144,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -3398,6 +3489,12 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                },
+                "blindfold_secret_info_internal": {
+                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
+                    "title": "Blindfold Secret Internal",
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret Internal"
                 },
                 "clear_secret_info": {
                     "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",

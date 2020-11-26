@@ -43,6 +43,8 @@ func testConfigHTTPLB(resourceName, name, namespace string) string {
 		  http = true
 		  disable_rate_limit = true
 		  disable_waf = true
+		  no_service_policies = true
+		  round_robin = true
 		  domains = ["http.helloclouds.app"]
 		}
 		`, resourceName, name, namespace)

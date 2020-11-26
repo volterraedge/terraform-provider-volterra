@@ -1491,6 +1491,32 @@ func (v *ValidateDedicatedInterfaceType) Validate(ctx context.Context, pm interf
 
 	}
 
+	switch m.GetMonitoringChoice().(type) {
+	case *DedicatedInterfaceType_MonitorDisabled:
+		if fv, exists := v.FldValidators["monitoring_choice.monitor_disabled"]; exists {
+			val := m.GetMonitoringChoice().(*DedicatedInterfaceType_MonitorDisabled).MonitorDisabled
+			vOpts := append(opts,
+				db.WithValidateField("monitoring_choice"),
+				db.WithValidateField("monitor_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DedicatedInterfaceType_Monitor:
+		if fv, exists := v.FldValidators["monitoring_choice.monitor"]; exists {
+			val := m.GetMonitoringChoice().(*DedicatedInterfaceType_Monitor).Monitor
+			vOpts := append(opts,
+				db.WithValidateField("monitoring_choice"),
+				db.WithValidateField("monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["mtu"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("mtu"))
@@ -2213,6 +2239,32 @@ func (v *ValidateEthernetInterfaceType) Validate(ctx context.Context, pm interfa
 		vOpts := append(opts, db.WithValidateField("device"))
 		if err := fv(ctx, m.GetDevice(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetMonitoringChoice().(type) {
+	case *EthernetInterfaceType_MonitorDisabled:
+		if fv, exists := v.FldValidators["monitoring_choice.monitor_disabled"]; exists {
+			val := m.GetMonitoringChoice().(*EthernetInterfaceType_MonitorDisabled).MonitorDisabled
+			vOpts := append(opts,
+				db.WithValidateField("monitoring_choice"),
+				db.WithValidateField("monitor_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *EthernetInterfaceType_Monitor:
+		if fv, exists := v.FldValidators["monitoring_choice.monitor"]; exists {
+			val := m.GetMonitoringChoice().(*EthernetInterfaceType_Monitor).Monitor
+			vOpts := append(opts,
+				db.WithValidateField("monitoring_choice"),
+				db.WithValidateField("monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3488,6 +3540,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetMonitoringChoice().(type) {
+	case *GlobalSpecType_MonitorDisabled:
+		if fv, exists := v.FldValidators["monitoring_choice.monitor_disabled"]; exists {
+			val := m.GetMonitoringChoice().(*GlobalSpecType_MonitorDisabled).MonitorDisabled
+			vOpts := append(opts,
+				db.WithValidateField("monitoring_choice"),
+				db.WithValidateField("monitor_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_Monitor:
+		if fv, exists := v.FldValidators["monitoring_choice.monitor"]; exists {
+			val := m.GetMonitoringChoice().(*GlobalSpecType_Monitor).Monitor
+			vOpts := append(opts,
+				db.WithValidateField("monitoring_choice"),
+				db.WithValidateField("monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["mtu"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("mtu"))
@@ -4158,6 +4236,32 @@ func (v *ValidateLegacyInterfaceType) Validate(ctx context.Context, pm interface
 
 	}
 
+	switch m.GetMonitoringChoice().(type) {
+	case *LegacyInterfaceType_MonitorDisabled:
+		if fv, exists := v.FldValidators["monitoring_choice.monitor_disabled"]; exists {
+			val := m.GetMonitoringChoice().(*LegacyInterfaceType_MonitorDisabled).MonitorDisabled
+			vOpts := append(opts,
+				db.WithValidateField("monitoring_choice"),
+				db.WithValidateField("monitor_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *LegacyInterfaceType_Monitor:
+		if fv, exists := v.FldValidators["monitoring_choice.monitor"]; exists {
+			val := m.GetMonitoringChoice().(*LegacyInterfaceType_Monitor).Monitor
+			vOpts := append(opts,
+				db.WithValidateField("monitoring_choice"),
+				db.WithValidateField("monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["mtu"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("mtu"))
@@ -4362,6 +4466,75 @@ var DefaultLegacyInterfaceTypeValidator = func() *ValidateLegacyInterfaceType {
 
 func LegacyInterfaceTypeValidator() db.Validator {
 	return DefaultLegacyInterfaceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *LinkQualityMonitorConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LinkQualityMonitorConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LinkQualityMonitorConfig) DeepCopy() *LinkQualityMonitorConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LinkQualityMonitorConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LinkQualityMonitorConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LinkQualityMonitorConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LinkQualityMonitorConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateLinkQualityMonitorConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLinkQualityMonitorConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LinkQualityMonitorConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LinkQualityMonitorConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLinkQualityMonitorConfigValidator = func() *ValidateLinkQualityMonitorConfig {
+	v := &ValidateLinkQualityMonitorConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func LinkQualityMonitorConfigValidator() db.Validator {
+	return DefaultLinkQualityMonitorConfigValidator
 }
 
 // augmented methods on protoc/std generated struct

@@ -13,6 +13,12 @@ import (
 
 	_ "github.com/gogo/protobuf/gogoproto"
 
+	_ "github.com/gogo/protobuf/types"
+
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certified_hardware"
+
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
@@ -20,6 +26,8 @@ import (
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
 	ves_io_schema_views1 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
 	strings "strings"
 
@@ -74,16 +82,21 @@ type GCPInstanceType struct {
 	// x-displayName: "Image ID"
 	// Amazon Machine Image ID
 	ImageId string `protobuf:"bytes,8,opt,name=image_id,json=imageId,proto3" json:"image_id,omitempty"`
-	// Volterra Node count
+	// Volterra Worker Node count
 	//
 	// x-displayName: "Volterra Node count"
-	// Desired number of node count used for worker node scaling
-	NodeCount int32 `protobuf:"varint,9,opt,name=node_count,json=nodeCount,proto3" json:"node_count,omitempty"`
-	// Zone
+	// Desired number of node count used for worker nodes
+	WorkerNodeCount uint32 `protobuf:"varint,9,opt,name=worker_node_count,json=workerNodeCount,proto3" json:"worker_node_count,omitempty"`
+	// Volterra Master Node count
+	//
+	// x-displayName: "Volterra Node count"
+	// Desired number of node count used for master nodes
+	MasterNodeCount uint32 `protobuf:"varint,11,opt,name=master_node_count,json=masterNodeCount,proto3" json:"master_node_count,omitempty"`
+	// List of Zones
 	//
 	// x-displayName: "Zone"
-	// Zone in which Cloud Instance site will be created
-	Zone string `protobuf:"bytes,10,opt,name=zone,proto3" json:"zone,omitempty"`
+	// Zones in which Cloud Instance site will be created
+	Zones []string `protobuf:"bytes,10,rep,name=zones" json:"zones,omitempty"`
 }
 
 func (m *GCPInstanceType) Reset()                    { *m = GCPInstanceType{} }
@@ -139,18 +152,25 @@ func (m *GCPInstanceType) GetImageId() string {
 	return ""
 }
 
-func (m *GCPInstanceType) GetNodeCount() int32 {
+func (m *GCPInstanceType) GetWorkerNodeCount() uint32 {
 	if m != nil {
-		return m.NodeCount
+		return m.WorkerNodeCount
 	}
 	return 0
 }
 
-func (m *GCPInstanceType) GetZone() string {
+func (m *GCPInstanceType) GetMasterNodeCount() uint32 {
 	if m != nil {
-		return m.Zone
+		return m.MasterNodeCount
 	}
-	return ""
+	return 0
+}
+
+func (m *GCPInstanceType) GetZones() []string {
+	if m != nil {
+		return m.Zones
+	}
+	return nil
 }
 
 // GCP subnet Parameters
@@ -304,11 +324,21 @@ type GCPVpcSiteType struct {
 	// x-displayName: "Site Name"
 	// Name of the site object to be created
 	SiteName string `protobuf:"bytes,1,opt,name=site_name,json=siteName,proto3" json:"site_name,omitempty"`
-	// List of GCP networks
+	// GCP Unique Name
 	//
-	// x-displayName: "GCP Region"
-	// List of GCP network
-	GcpVpcNetworks []*GCPVPCNetworkChoice `protobuf:"bytes,2,rep,name=gcp_vpc_networks,json=gcpVpcNetworks" json:"gcp_vpc_networks,omitempty"`
+	// x-displayName: "GCP Unique Name"
+	// GCP unique name which will be used to create the cloud resource objects on gcp"
+	GcpName string `protobuf:"bytes,15,opt,name=gcp_name,json=gcpName,proto3" json:"gcp_name,omitempty"`
+	// Outside GCP network
+	//
+	// x-displayName: "GCP outside network"
+	// Outside GCP network
+	GcpVpcNetworkOutside *GCPVPCNetworkChoice `protobuf:"bytes,2,opt,name=gcp_vpc_network_outside,json=gcpVpcNetworkOutside" json:"gcp_vpc_network_outside,omitempty"`
+	// Inside GCP network
+	//
+	// x-displayName: "GCP inside network"
+	// Inside GCP network
+	GcpVpcNetworkInside *GCPVPCNetworkChoice `protobuf:"bytes,17,opt,name=gcp_vpc_network_inside,json=gcpVpcNetworkInside" json:"gcp_vpc_network_inside,omitempty"`
 	// Fleet Label
 	//
 	// x-displayName: "Fleet Label"
@@ -324,16 +354,21 @@ type GCPVpcSiteType struct {
 	// x-displayName: "GCP Region"
 	// GCP region
 	GcpRegion string `protobuf:"bytes,5,opt,name=gcp_region,json=gcpRegion,proto3" json:"gcp_region,omitempty"`
-	// // List of Subnets
-	// //
-	// // x-displayName: "List of Subnets"
-	// // List of Subnets that TF script needs
-	Subnets []*GCPSubnetChoice `protobuf:"bytes,8,rep,name=subnets" json:"subnets,omitempty"`
-	// List of Master Nodes
+	// Outside Subnet
 	//
-	// x-displayName: "List of Master Nodes"
-	// List of Master Nodes in this Site that TF script needs to instantiate
-	MasterNodes []*GCPInstanceType `protobuf:"bytes,9,rep,name=master_nodes,json=masterNodes" json:"master_nodes,omitempty"`
+	// x-displayName: "Outside Subnet"
+	// Outside Subnet
+	SubnetOutside *GCPSubnetChoice `protobuf:"bytes,8,opt,name=subnet_outside,json=subnetOutside" json:"subnet_outside,omitempty"`
+	// Inside Subnet
+	//
+	// x-displayName: "Inside Subnet"
+	// Inside Subnet
+	SubnetInside *GCPSubnetChoice `protobuf:"bytes,16,opt,name=subnet_inside,json=subnetInside" json:"subnet_inside,omitempty"`
+	// Master Node Parameters
+	//
+	// x-displayName: "Master Node Parameters"
+	// Master Node Parameters in this Site that TF script needs to instantiate
+	Node *GCPInstanceType `protobuf:"bytes,9,opt,name=node" json:"node,omitempty"`
 	// Worker Node Scaling
 	//
 	// x-displayName: "Worker Node Scaling"
@@ -362,9 +397,23 @@ func (m *GCPVpcSiteType) GetSiteName() string {
 	return ""
 }
 
-func (m *GCPVpcSiteType) GetGcpVpcNetworks() []*GCPVPCNetworkChoice {
+func (m *GCPVpcSiteType) GetGcpName() string {
 	if m != nil {
-		return m.GcpVpcNetworks
+		return m.GcpName
+	}
+	return ""
+}
+
+func (m *GCPVpcSiteType) GetGcpVpcNetworkOutside() *GCPVPCNetworkChoice {
+	if m != nil {
+		return m.GcpVpcNetworkOutside
+	}
+	return nil
+}
+
+func (m *GCPVpcSiteType) GetGcpVpcNetworkInside() *GCPVPCNetworkChoice {
+	if m != nil {
+		return m.GcpVpcNetworkInside
 	}
 	return nil
 }
@@ -390,16 +439,23 @@ func (m *GCPVpcSiteType) GetGcpRegion() string {
 	return ""
 }
 
-func (m *GCPVpcSiteType) GetSubnets() []*GCPSubnetChoice {
+func (m *GCPVpcSiteType) GetSubnetOutside() *GCPSubnetChoice {
 	if m != nil {
-		return m.Subnets
+		return m.SubnetOutside
 	}
 	return nil
 }
 
-func (m *GCPVpcSiteType) GetMasterNodes() []*GCPInstanceType {
+func (m *GCPVpcSiteType) GetSubnetInside() *GCPSubnetChoice {
 	if m != nil {
-		return m.MasterNodes
+		return m.SubnetInside
+	}
+	return nil
+}
+
+func (m *GCPVpcSiteType) GetNode() *GCPInstanceType {
+	if m != nil {
+		return m.Node
 	}
 	return nil
 }
@@ -477,11 +533,19 @@ func (this *GCPInstanceType) Equal(that interface{}) bool {
 	if this.ImageId != that1.ImageId {
 		return false
 	}
-	if this.NodeCount != that1.NodeCount {
+	if this.WorkerNodeCount != that1.WorkerNodeCount {
 		return false
 	}
-	if this.Zone != that1.Zone {
+	if this.MasterNodeCount != that1.MasterNodeCount {
 		return false
+	}
+	if len(this.Zones) != len(that1.Zones) {
+		return false
+	}
+	for i := range this.Zones {
+		if this.Zones[i] != that1.Zones[i] {
+			return false
+		}
 	}
 	return true
 }
@@ -597,13 +661,14 @@ func (this *GCPVpcSiteType) Equal(that interface{}) bool {
 	if this.SiteName != that1.SiteName {
 		return false
 	}
-	if len(this.GcpVpcNetworks) != len(that1.GcpVpcNetworks) {
+	if this.GcpName != that1.GcpName {
 		return false
 	}
-	for i := range this.GcpVpcNetworks {
-		if !this.GcpVpcNetworks[i].Equal(that1.GcpVpcNetworks[i]) {
-			return false
-		}
+	if !this.GcpVpcNetworkOutside.Equal(that1.GcpVpcNetworkOutside) {
+		return false
+	}
+	if !this.GcpVpcNetworkInside.Equal(that1.GcpVpcNetworkInside) {
+		return false
 	}
 	if this.FleetLabel != that1.FleetLabel {
 		return false
@@ -614,21 +679,14 @@ func (this *GCPVpcSiteType) Equal(that interface{}) bool {
 	if this.GcpRegion != that1.GcpRegion {
 		return false
 	}
-	if len(this.Subnets) != len(that1.Subnets) {
+	if !this.SubnetOutside.Equal(that1.SubnetOutside) {
 		return false
 	}
-	for i := range this.Subnets {
-		if !this.Subnets[i].Equal(that1.Subnets[i]) {
-			return false
-		}
-	}
-	if len(this.MasterNodes) != len(that1.MasterNodes) {
+	if !this.SubnetInside.Equal(that1.SubnetInside) {
 		return false
 	}
-	for i := range this.MasterNodes {
-		if !this.MasterNodes[i].Equal(that1.MasterNodes[i]) {
-			return false
-		}
+	if !this.Node.Equal(that1.Node) {
+		return false
 	}
 	if this.WorkerNodes != that1.WorkerNodes {
 		return false
@@ -645,7 +703,7 @@ func (this *GCPInstanceType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 13)
+	s := make([]string, 0, 14)
 	s = append(s, "&terraform_parameters.GCPInstanceType{")
 	s = append(s, "VoltNodeId: "+fmt.Sprintf("%#v", this.VoltNodeId)+",\n")
 	s = append(s, "VoltRegionId: "+fmt.Sprintf("%#v", this.VoltRegionId)+",\n")
@@ -658,8 +716,9 @@ func (this *GCPInstanceType) GoString() string {
 	s = append(s, "InstanceType: "+fmt.Sprintf("%#v", this.InstanceType)+",\n")
 	s = append(s, "DiskSize: "+fmt.Sprintf("%#v", this.DiskSize)+",\n")
 	s = append(s, "ImageId: "+fmt.Sprintf("%#v", this.ImageId)+",\n")
-	s = append(s, "NodeCount: "+fmt.Sprintf("%#v", this.NodeCount)+",\n")
-	s = append(s, "Zone: "+fmt.Sprintf("%#v", this.Zone)+",\n")
+	s = append(s, "WorkerNodeCount: "+fmt.Sprintf("%#v", this.WorkerNodeCount)+",\n")
+	s = append(s, "MasterNodeCount: "+fmt.Sprintf("%#v", this.MasterNodeCount)+",\n")
+	s = append(s, "Zones: "+fmt.Sprintf("%#v", this.Zones)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -713,20 +772,27 @@ func (this *GCPVpcSiteType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 14)
+	s := make([]string, 0, 17)
 	s = append(s, "&terraform_parameters.GCPVpcSiteType{")
 	s = append(s, "SiteName: "+fmt.Sprintf("%#v", this.SiteName)+",\n")
-	if this.GcpVpcNetworks != nil {
-		s = append(s, "GcpVpcNetworks: "+fmt.Sprintf("%#v", this.GcpVpcNetworks)+",\n")
+	s = append(s, "GcpName: "+fmt.Sprintf("%#v", this.GcpName)+",\n")
+	if this.GcpVpcNetworkOutside != nil {
+		s = append(s, "GcpVpcNetworkOutside: "+fmt.Sprintf("%#v", this.GcpVpcNetworkOutside)+",\n")
+	}
+	if this.GcpVpcNetworkInside != nil {
+		s = append(s, "GcpVpcNetworkInside: "+fmt.Sprintf("%#v", this.GcpVpcNetworkInside)+",\n")
 	}
 	s = append(s, "FleetLabel: "+fmt.Sprintf("%#v", this.FleetLabel)+",\n")
 	s = append(s, "CertifiedHw: "+fmt.Sprintf("%#v", this.CertifiedHw)+",\n")
 	s = append(s, "GcpRegion: "+fmt.Sprintf("%#v", this.GcpRegion)+",\n")
-	if this.Subnets != nil {
-		s = append(s, "Subnets: "+fmt.Sprintf("%#v", this.Subnets)+",\n")
+	if this.SubnetOutside != nil {
+		s = append(s, "SubnetOutside: "+fmt.Sprintf("%#v", this.SubnetOutside)+",\n")
 	}
-	if this.MasterNodes != nil {
-		s = append(s, "MasterNodes: "+fmt.Sprintf("%#v", this.MasterNodes)+",\n")
+	if this.SubnetInside != nil {
+		s = append(s, "SubnetInside: "+fmt.Sprintf("%#v", this.SubnetInside)+",\n")
+	}
+	if this.Node != nil {
+		s = append(s, "Node: "+fmt.Sprintf("%#v", this.Node)+",\n")
 	}
 	s = append(s, "WorkerNodes: "+fmt.Sprintf("%#v", this.WorkerNodes)+",\n")
 	s = append(s, "GatewayType: "+fmt.Sprintf("%#v", this.GatewayType)+",\n")
@@ -807,16 +873,30 @@ func (m *GCPInstanceType) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintGcpTypes(dAtA, i, uint64(len(m.ImageId)))
 		i += copy(dAtA[i:], m.ImageId)
 	}
-	if m.NodeCount != 0 {
+	if m.WorkerNodeCount != 0 {
 		dAtA[i] = 0x48
 		i++
-		i = encodeVarintGcpTypes(dAtA, i, uint64(m.NodeCount))
+		i = encodeVarintGcpTypes(dAtA, i, uint64(m.WorkerNodeCount))
 	}
-	if len(m.Zone) > 0 {
-		dAtA[i] = 0x52
+	if len(m.Zones) > 0 {
+		for _, s := range m.Zones {
+			dAtA[i] = 0x52
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	if m.MasterNodeCount != 0 {
+		dAtA[i] = 0x58
 		i++
-		i = encodeVarintGcpTypes(dAtA, i, uint64(len(m.Zone)))
-		i += copy(dAtA[i:], m.Zone)
+		i = encodeVarintGcpTypes(dAtA, i, uint64(m.MasterNodeCount))
 	}
 	return i, nil
 }
@@ -968,17 +1048,15 @@ func (m *GCPVpcSiteType) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintGcpTypes(dAtA, i, uint64(len(m.SiteName)))
 		i += copy(dAtA[i:], m.SiteName)
 	}
-	if len(m.GcpVpcNetworks) > 0 {
-		for _, msg := range m.GcpVpcNetworks {
-			dAtA[i] = 0x12
-			i++
-			i = encodeVarintGcpTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
+	if m.GcpVpcNetworkOutside != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintGcpTypes(dAtA, i, uint64(m.GcpVpcNetworkOutside.Size()))
+		n8, err := m.GcpVpcNetworkOutside.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
+		i += n8
 	}
 	if len(m.FleetLabel) > 0 {
 		dAtA[i] = 0x1a
@@ -998,29 +1076,25 @@ func (m *GCPVpcSiteType) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintGcpTypes(dAtA, i, uint64(len(m.GcpRegion)))
 		i += copy(dAtA[i:], m.GcpRegion)
 	}
-	if len(m.Subnets) > 0 {
-		for _, msg := range m.Subnets {
-			dAtA[i] = 0x42
-			i++
-			i = encodeVarintGcpTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
+	if m.SubnetOutside != nil {
+		dAtA[i] = 0x42
+		i++
+		i = encodeVarintGcpTypes(dAtA, i, uint64(m.SubnetOutside.Size()))
+		n9, err := m.SubnetOutside.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
+		i += n9
 	}
-	if len(m.MasterNodes) > 0 {
-		for _, msg := range m.MasterNodes {
-			dAtA[i] = 0x4a
-			i++
-			i = encodeVarintGcpTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
+	if m.Node != nil {
+		dAtA[i] = 0x4a
+		i++
+		i = encodeVarintGcpTypes(dAtA, i, uint64(m.Node.Size()))
+		n10, err := m.Node.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
 		}
+		i += n10
 	}
 	if m.GatewayType != 0 {
 		dAtA[i] = 0x58
@@ -1037,6 +1111,36 @@ func (m *GCPVpcSiteType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x70
 		i++
 		i = encodeVarintGcpTypes(dAtA, i, uint64(m.WorkerNodes))
+	}
+	if len(m.GcpName) > 0 {
+		dAtA[i] = 0x7a
+		i++
+		i = encodeVarintGcpTypes(dAtA, i, uint64(len(m.GcpName)))
+		i += copy(dAtA[i:], m.GcpName)
+	}
+	if m.SubnetInside != nil {
+		dAtA[i] = 0x82
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintGcpTypes(dAtA, i, uint64(m.SubnetInside.Size()))
+		n11, err := m.SubnetInside.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n11
+	}
+	if m.GcpVpcNetworkInside != nil {
+		dAtA[i] = 0x8a
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintGcpTypes(dAtA, i, uint64(m.GcpVpcNetworkInside.Size()))
+		n12, err := m.GcpVpcNetworkInside.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n12
 	}
 	return i, nil
 }
@@ -1063,11 +1167,13 @@ func NewPopulatedGCPInstanceType(r randyGcpTypes, easy bool) *GCPInstanceType {
 	this.InstanceType = string(randStringGcpTypes(r))
 	this.DiskSize = string(randStringGcpTypes(r))
 	this.ImageId = string(randStringGcpTypes(r))
-	this.NodeCount = int32(r.Int31())
-	if r.Intn(2) == 0 {
-		this.NodeCount *= -1
+	this.WorkerNodeCount = uint32(r.Uint32())
+	v1 := r.Intn(10)
+	this.Zones = make([]string, v1)
+	for i := 0; i < v1; i++ {
+		this.Zones[i] = string(randStringGcpTypes(r))
 	}
-	this.Zone = string(randStringGcpTypes(r))
+	this.MasterNodeCount = uint32(r.Uint32())
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -1117,32 +1223,27 @@ func NewPopulatedGCPVpcSiteType(r randyGcpTypes, easy bool) *GCPVpcSiteType {
 	this := &GCPVpcSiteType{}
 	this.SiteName = string(randStringGcpTypes(r))
 	if r.Intn(10) != 0 {
-		v1 := r.Intn(5)
-		this.GcpVpcNetworks = make([]*GCPVPCNetworkChoice, v1)
-		for i := 0; i < v1; i++ {
-			this.GcpVpcNetworks[i] = NewPopulatedGCPVPCNetworkChoice(r, easy)
-		}
+		this.GcpVpcNetworkOutside = NewPopulatedGCPVPCNetworkChoice(r, easy)
 	}
 	this.FleetLabel = string(randStringGcpTypes(r))
 	this.CertifiedHw = string(randStringGcpTypes(r))
 	this.GcpRegion = string(randStringGcpTypes(r))
 	if r.Intn(10) != 0 {
-		v2 := r.Intn(5)
-		this.Subnets = make([]*GCPSubnetChoice, v2)
-		for i := 0; i < v2; i++ {
-			this.Subnets[i] = NewPopulatedGCPSubnetChoice(r, easy)
-		}
+		this.SubnetOutside = NewPopulatedGCPSubnetChoice(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v3 := r.Intn(5)
-		this.MasterNodes = make([]*GCPInstanceType, v3)
-		for i := 0; i < v3; i++ {
-			this.MasterNodes[i] = NewPopulatedGCPInstanceType(r, easy)
-		}
+		this.Node = NewPopulatedGCPInstanceType(r, easy)
 	}
 	this.GatewayType = CloudGatewayType([]int32{0, 1}[r.Intn(2)])
 	this.SshKey = string(randStringGcpTypes(r))
 	this.WorkerNodes = uint32(r.Uint32())
+	this.GcpName = string(randStringGcpTypes(r))
+	if r.Intn(10) != 0 {
+		this.SubnetInside = NewPopulatedGCPSubnetChoice(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.GcpVpcNetworkInside = NewPopulatedGCPVPCNetworkChoice(r, easy)
+	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -1167,9 +1268,9 @@ func randUTF8RuneGcpTypes(r randyGcpTypes) rune {
 	return rune(ru + 61)
 }
 func randStringGcpTypes(r randyGcpTypes) string {
-	v4 := r.Intn(100)
-	tmps := make([]rune, v4)
-	for i := 0; i < v4; i++ {
+	v2 := r.Intn(100)
+	tmps := make([]rune, v2)
+	for i := 0; i < v2; i++ {
 		tmps[i] = randUTF8RuneGcpTypes(r)
 	}
 	return string(tmps)
@@ -1191,11 +1292,11 @@ func randFieldGcpTypes(dAtA []byte, r randyGcpTypes, fieldNumber int, wire int) 
 	switch wire {
 	case 0:
 		dAtA = encodeVarintPopulateGcpTypes(dAtA, uint64(key))
-		v5 := r.Int63()
+		v3 := r.Int63()
 		if r.Intn(2) == 0 {
-			v5 *= -1
+			v3 *= -1
 		}
-		dAtA = encodeVarintPopulateGcpTypes(dAtA, uint64(v5))
+		dAtA = encodeVarintPopulateGcpTypes(dAtA, uint64(v3))
 	case 1:
 		dAtA = encodeVarintPopulateGcpTypes(dAtA, uint64(key))
 		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -1251,12 +1352,17 @@ func (m *GCPInstanceType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovGcpTypes(uint64(l))
 	}
-	if m.NodeCount != 0 {
-		n += 1 + sovGcpTypes(uint64(m.NodeCount))
+	if m.WorkerNodeCount != 0 {
+		n += 1 + sovGcpTypes(uint64(m.WorkerNodeCount))
 	}
-	l = len(m.Zone)
-	if l > 0 {
-		n += 1 + l + sovGcpTypes(uint64(l))
+	if len(m.Zones) > 0 {
+		for _, s := range m.Zones {
+			l = len(s)
+			n += 1 + l + sovGcpTypes(uint64(l))
+		}
+	}
+	if m.MasterNodeCount != 0 {
+		n += 1 + sovGcpTypes(uint64(m.MasterNodeCount))
 	}
 	return n
 }
@@ -1320,11 +1426,9 @@ func (m *GCPVpcSiteType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovGcpTypes(uint64(l))
 	}
-	if len(m.GcpVpcNetworks) > 0 {
-		for _, e := range m.GcpVpcNetworks {
-			l = e.Size()
-			n += 1 + l + sovGcpTypes(uint64(l))
-		}
+	if m.GcpVpcNetworkOutside != nil {
+		l = m.GcpVpcNetworkOutside.Size()
+		n += 1 + l + sovGcpTypes(uint64(l))
 	}
 	l = len(m.FleetLabel)
 	if l > 0 {
@@ -1338,17 +1442,13 @@ func (m *GCPVpcSiteType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovGcpTypes(uint64(l))
 	}
-	if len(m.Subnets) > 0 {
-		for _, e := range m.Subnets {
-			l = e.Size()
-			n += 1 + l + sovGcpTypes(uint64(l))
-		}
+	if m.SubnetOutside != nil {
+		l = m.SubnetOutside.Size()
+		n += 1 + l + sovGcpTypes(uint64(l))
 	}
-	if len(m.MasterNodes) > 0 {
-		for _, e := range m.MasterNodes {
-			l = e.Size()
-			n += 1 + l + sovGcpTypes(uint64(l))
-		}
+	if m.Node != nil {
+		l = m.Node.Size()
+		n += 1 + l + sovGcpTypes(uint64(l))
 	}
 	if m.GatewayType != 0 {
 		n += 1 + sovGcpTypes(uint64(m.GatewayType))
@@ -1359,6 +1459,18 @@ func (m *GCPVpcSiteType) Size() (n int) {
 	}
 	if m.WorkerNodes != 0 {
 		n += 1 + sovGcpTypes(uint64(m.WorkerNodes))
+	}
+	l = len(m.GcpName)
+	if l > 0 {
+		n += 1 + l + sovGcpTypes(uint64(l))
+	}
+	if m.SubnetInside != nil {
+		l = m.SubnetInside.Size()
+		n += 2 + l + sovGcpTypes(uint64(l))
+	}
+	if m.GcpVpcNetworkInside != nil {
+		l = m.GcpVpcNetworkInside.Size()
+		n += 2 + l + sovGcpTypes(uint64(l))
 	}
 	return n
 }
@@ -1388,8 +1500,9 @@ func (this *GCPInstanceType) String() string {
 		`InstanceType:` + fmt.Sprintf("%v", this.InstanceType) + `,`,
 		`DiskSize:` + fmt.Sprintf("%v", this.DiskSize) + `,`,
 		`ImageId:` + fmt.Sprintf("%v", this.ImageId) + `,`,
-		`NodeCount:` + fmt.Sprintf("%v", this.NodeCount) + `,`,
-		`Zone:` + fmt.Sprintf("%v", this.Zone) + `,`,
+		`WorkerNodeCount:` + fmt.Sprintf("%v", this.WorkerNodeCount) + `,`,
+		`Zones:` + fmt.Sprintf("%v", this.Zones) + `,`,
+		`MasterNodeCount:` + fmt.Sprintf("%v", this.MasterNodeCount) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1436,15 +1549,18 @@ func (this *GCPVpcSiteType) String() string {
 	}
 	s := strings.Join([]string{`&GCPVpcSiteType{`,
 		`SiteName:` + fmt.Sprintf("%v", this.SiteName) + `,`,
-		`GcpVpcNetworks:` + strings.Replace(fmt.Sprintf("%v", this.GcpVpcNetworks), "GCPVPCNetworkChoice", "GCPVPCNetworkChoice", 1) + `,`,
+		`GcpVpcNetworkOutside:` + strings.Replace(fmt.Sprintf("%v", this.GcpVpcNetworkOutside), "GCPVPCNetworkChoice", "GCPVPCNetworkChoice", 1) + `,`,
 		`FleetLabel:` + fmt.Sprintf("%v", this.FleetLabel) + `,`,
 		`CertifiedHw:` + fmt.Sprintf("%v", this.CertifiedHw) + `,`,
 		`GcpRegion:` + fmt.Sprintf("%v", this.GcpRegion) + `,`,
-		`Subnets:` + strings.Replace(fmt.Sprintf("%v", this.Subnets), "GCPSubnetChoice", "GCPSubnetChoice", 1) + `,`,
-		`MasterNodes:` + strings.Replace(fmt.Sprintf("%v", this.MasterNodes), "GCPInstanceType", "GCPInstanceType", 1) + `,`,
+		`SubnetOutside:` + strings.Replace(fmt.Sprintf("%v", this.SubnetOutside), "GCPSubnetChoice", "GCPSubnetChoice", 1) + `,`,
+		`Node:` + strings.Replace(fmt.Sprintf("%v", this.Node), "GCPInstanceType", "GCPInstanceType", 1) + `,`,
 		`GatewayType:` + fmt.Sprintf("%v", this.GatewayType) + `,`,
 		`SshKey:` + fmt.Sprintf("%v", this.SshKey) + `,`,
 		`WorkerNodes:` + fmt.Sprintf("%v", this.WorkerNodes) + `,`,
+		`GcpName:` + fmt.Sprintf("%v", this.GcpName) + `,`,
+		`SubnetInside:` + strings.Replace(fmt.Sprintf("%v", this.SubnetInside), "GCPSubnetChoice", "GCPSubnetChoice", 1) + `,`,
+		`GcpVpcNetworkInside:` + strings.Replace(fmt.Sprintf("%v", this.GcpVpcNetworkInside), "GCPVPCNetworkChoice", "GCPVPCNetworkChoice", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1699,9 +1815,9 @@ func (m *GCPInstanceType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 9:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NodeCount", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field WorkerNodeCount", wireType)
 			}
-			m.NodeCount = 0
+			m.WorkerNodeCount = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowGcpTypes
@@ -1711,14 +1827,14 @@ func (m *GCPInstanceType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.NodeCount |= (int32(b) & 0x7F) << shift
+				m.WorkerNodeCount |= (uint32(b) & 0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
 		case 10:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Zone", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Zones", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1743,8 +1859,27 @@ func (m *GCPInstanceType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Zone = string(dAtA[iNdEx:postIndex])
+			m.Zones = append(m.Zones, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
+		case 11:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MasterNodeCount", wireType)
+			}
+			m.MasterNodeCount = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGcpTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MasterNodeCount |= (uint32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGcpTypes(dAtA[iNdEx:])
@@ -2237,7 +2372,7 @@ func (m *GCPVpcSiteType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GcpVpcNetworks", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field GcpVpcNetworkOutside", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2261,8 +2396,10 @@ func (m *GCPVpcSiteType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.GcpVpcNetworks = append(m.GcpVpcNetworks, &GCPVPCNetworkChoice{})
-			if err := m.GcpVpcNetworks[len(m.GcpVpcNetworks)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if m.GcpVpcNetworkOutside == nil {
+				m.GcpVpcNetworkOutside = &GCPVPCNetworkChoice{}
+			}
+			if err := m.GcpVpcNetworkOutside.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2355,7 +2492,7 @@ func (m *GCPVpcSiteType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 8:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Subnets", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field SubnetOutside", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2379,14 +2516,16 @@ func (m *GCPVpcSiteType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Subnets = append(m.Subnets, &GCPSubnetChoice{})
-			if err := m.Subnets[len(m.Subnets)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if m.SubnetOutside == nil {
+				m.SubnetOutside = &GCPSubnetChoice{}
+			}
+			if err := m.SubnetOutside.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
 		case 9:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MasterNodes", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Node", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2410,8 +2549,10 @@ func (m *GCPVpcSiteType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.MasterNodes = append(m.MasterNodes, &GCPInstanceType{})
-			if err := m.MasterNodes[len(m.MasterNodes)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if m.Node == nil {
+				m.Node = &GCPInstanceType{}
+			}
+			if err := m.Node.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2482,6 +2623,101 @@ func (m *GCPVpcSiteType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GcpName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGcpTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGcpTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GcpName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubnetInside", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGcpTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGcpTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.SubnetInside == nil {
+				m.SubnetInside = &GCPSubnetChoice{}
+			}
+			if err := m.SubnetInside.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GcpVpcNetworkInside", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGcpTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGcpTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.GcpVpcNetworkInside == nil {
+				m.GcpVpcNetworkInside = &GCPVPCNetworkChoice{}
+			}
+			if err := m.GcpVpcNetworkInside.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGcpTypes(dAtA[iNdEx:])
@@ -2616,64 +2852,70 @@ func init() {
 }
 
 var fileDescriptorGcpTypes = []byte{
-	// 936 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x55, 0xcf, 0x6f, 0xe3, 0x44,
-	0x14, 0xae, 0xd3, 0xb4, 0x4d, 0xc6, 0x49, 0x1a, 0x06, 0x09, 0xbc, 0x59, 0x30, 0x21, 0xac, 0x50,
-	0x0e, 0xd4, 0x91, 0x02, 0x12, 0x3f, 0x04, 0x12, 0x22, 0x87, 0x92, 0x2e, 0xaa, 0xb2, 0x2e, 0xda,
-	0x03, 0x82, 0xb5, 0x1c, 0xfb, 0xc5, 0x19, 0x35, 0xf1, 0x58, 0x9e, 0x49, 0xb2, 0xe9, 0x89, 0x3f,
-	0x01, 0x6e, 0x48, 0x1c, 0xb8, 0xf2, 0x3f, 0x70, 0xe1, 0xc8, 0x71, 0x25, 0x2e, 0x7b, 0xa4, 0xd9,
-	0x0b, 0xc7, 0x3d, 0x72, 0x44, 0xf3, 0xc6, 0x49, 0xdd, 0x55, 0x61, 0xcb, 0x56, 0xdc, 0x3c, 0x9f,
-	0xe7, 0xfb, 0xe6, 0xbd, 0xef, 0xbd, 0x79, 0x43, 0x3e, 0x98, 0x83, 0x70, 0x18, 0xef, 0x88, 0x60,
-	0x0c, 0x53, 0xbf, 0x33, 0x67, 0xb0, 0x10, 0x1d, 0x09, 0x69, 0xea, 0x8f, 0x78, 0x3a, 0xf5, 0x12,
-	0x3f, 0xf5, 0xa7, 0x20, 0x21, 0x15, 0x9d, 0x28, 0x48, 0x3c, 0xb9, 0x4c, 0x40, 0x38, 0x49, 0xca,
-	0x25, 0xa7, 0x6d, 0xcd, 0x74, 0x34, 0xd3, 0x41, 0xa6, 0x73, 0x15, 0xb3, 0x71, 0x10, 0x31, 0x39,
-	0x9e, 0x0d, 0x9d, 0x80, 0x4f, 0x3b, 0x11, 0x8f, 0x78, 0x07, 0x05, 0x86, 0xb3, 0x11, 0xae, 0x70,
-	0x81, 0x5f, 0x5a, 0xb8, 0x71, 0xfb, 0x72, 0x48, 0x3c, 0x91, 0x8c, 0xc7, 0xd9, 0xa9, 0x8d, 0x5b,
-	0x97, 0x7f, 0xe6, 0x02, 0x6a, 0xbc, 0xf6, 0x4c, 0x2a, 0xfe, 0x84, 0x85, 0xbe, 0x84, 0xec, 0xef,
-	0x9d, 0xab, 0x12, 0x15, 0x4c, 0x42, 0x3e, 0xa9, 0xc6, 0x7b, 0xd7, 0xb6, 0x23, 0xc7, 0x6a, 0xfd,
-	0xb2, 0x4d, 0xf6, 0x0f, 0x7b, 0x83, 0x7e, 0x2c, 0xa4, 0x1f, 0x07, 0xf0, 0xe5, 0x32, 0x01, 0xda,
-	0x24, 0x95, 0x39, 0x9f, 0x48, 0x2f, 0xe6, 0x21, 0x78, 0x2c, 0xb4, 0x8c, 0xa6, 0xd1, 0x2e, 0xbb,
-	0x44, 0x61, 0xc7, 0x3c, 0x84, 0x7e, 0x48, 0xef, 0x90, 0x1a, 0xee, 0x48, 0x21, 0x62, 0x3c, 0x56,
-	0x7b, 0xb6, 0x71, 0x0f, 0xf2, 0x5c, 0x04, 0xfb, 0x21, 0x0d, 0x48, 0x3d, 0x99, 0x0d, 0x27, 0x2c,
-	0xf0, 0xc4, 0x6c, 0x18, 0x83, 0x54, 0xfb, 0x8a, 0x4d, 0xa3, 0x6d, 0x76, 0x3f, 0x74, 0xae, 0x5b,
-	0x01, 0xe7, 0xb0, 0x37, 0x38, 0x41, 0x76, 0x6f, 0xcc, 0x59, 0x00, 0x6e, 0x4d, 0x4b, 0x6a, 0xac,
-	0x1f, 0x52, 0x20, 0x2f, 0x25, 0x29, 0x9b, 0xfb, 0x12, 0x72, 0xa7, 0xec, 0xdc, 0xf4, 0x94, 0xfd,
-	0x4c, 0x73, 0x73, 0xcc, 0x5b, 0xa4, 0xca, 0x32, 0x8f, 0xd0, 0x75, 0x6b, 0x57, 0x27, 0xcc, 0xf2,
-	0xc6, 0xdd, 0x26, 0xe5, 0x90, 0x89, 0x53, 0x4f, 0xb0, 0x33, 0xb0, 0xf6, 0x70, 0x43, 0x49, 0x01,
-	0x27, 0xec, 0x0c, 0xe8, 0x2d, 0x52, 0x62, 0x53, 0x3f, 0x42, 0x47, 0x4b, 0xf8, 0x6f, 0x0f, 0xd7,
-	0xfd, 0x90, 0xbe, 0x4e, 0x08, 0x7a, 0x1d, 0xf0, 0x59, 0x2c, 0xad, 0x72, 0xd3, 0x68, 0xef, 0xb8,
-	0x65, 0x85, 0xf4, 0x14, 0x40, 0x29, 0x29, 0x9e, 0xf1, 0x18, 0x2c, 0x82, 0x2c, 0xfc, 0x3e, 0x2a,
-	0x96, 0x0a, 0xf5, 0xed, 0xd6, 0xf7, 0x06, 0xa1, 0x9b, 0xd0, 0x07, 0x2a, 0x1d, 0x8c, 0xe3, 0x53,
-	0xb2, 0xab, 0xbd, 0xc0, 0xd2, 0x99, 0xdd, 0xf6, 0x95, 0x46, 0x5c, 0x26, 0x0a, 0xc5, 0x74, 0x33,
-	0x1e, 0x7d, 0x93, 0x54, 0x62, 0x90, 0x0b, 0x9e, 0x9e, 0x7a, 0xb1, 0x3f, 0x05, 0xab, 0x80, 0x47,
-	0x9b, 0x19, 0x76, 0xec, 0x4f, 0x81, 0xbe, 0x42, 0x76, 0x75, 0xf9, 0xb3, 0xda, 0x67, 0xab, 0xd6,
-	0x8f, 0x05, 0xf2, 0xf2, 0x61, 0x6f, 0x70, 0x7f, 0xd0, 0x3b, 0xd6, 0xbb, 0xb5, 0xa5, 0xf4, 0x1e,
-	0xa9, 0xae, 0x25, 0xd1, 0xf8, 0x2c, 0xb6, 0x77, 0xfe, 0x29, 0xb6, 0x0b, 0x81, 0x5c, 0x7c, 0xeb,
-	0xa8, 0x10, 0xa2, 0xf7, 0x48, 0x1d, 0x1e, 0x32, 0x21, 0x59, 0x1c, 0x79, 0xd9, 0x0f, 0x8c, 0xd4,
-	0xec, 0xbe, 0xfd, 0x7c, 0x55, 0xd4, 0xdb, 0x5f, 0xf3, 0x33, 0x90, 0x3e, 0x20, 0x35, 0x16, 0x4b,
-	0x48, 0x47, 0xfe, 0xba, 0xd0, 0x2a, 0xbb, 0x5a, 0xf7, 0xfd, 0xeb, 0xf7, 0x52, 0x7f, 0xcd, 0xc7,
-	0x13, 0xaa, 0x2c, 0xbf, 0x6c, 0xfd, 0x54, 0xc0, 0xfb, 0x96, 0x6f, 0x36, 0xea, 0x91, 0x4a, 0xd6,
-	0xba, 0x79, 0x63, 0x3e, 0x7e, 0x81, 0xee, 0xdd, 0xb4, 0x80, 0x6b, 0x8a, 0x0b, 0x80, 0xde, 0x25,
-	0x9b, 0x3c, 0xb3, 0x4b, 0x92, 0xd9, 0xd4, 0xfa, 0xf7, 0xc6, 0x40, 0xa5, 0xda, 0x9a, 0xaa, 0xb1,
-	0xff, 0xdd, 0xa1, 0xdf, 0x8b, 0xa4, 0xa6, 0x0a, 0x95, 0x04, 0x27, 0x4c, 0x6e, 0xee, 0x15, 0x8e,
-	0x3b, 0x6c, 0x45, 0x3d, 0x8d, 0x4a, 0x0a, 0xc0, 0x3e, 0x8c, 0x48, 0x5d, 0xcd, 0xf7, 0x79, 0x12,
-	0xac, 0x7b, 0x40, 0x58, 0x85, 0xe6, 0x76, 0xdb, 0xec, 0x7e, 0xf2, 0x9f, 0x1c, 0x7c, 0xb6, 0x61,
-	0xdd, 0x5a, 0x14, 0x24, 0xf7, 0x93, 0x20, 0x03, 0x05, 0x7d, 0x83, 0x98, 0xa3, 0x09, 0x80, 0xf4,
-	0x26, 0xfe, 0x10, 0x26, 0x59, 0xd7, 0x13, 0x84, 0xbe, 0x50, 0x88, 0xba, 0x34, 0x01, 0xa4, 0x92,
-	0x8d, 0x18, 0x84, 0xde, 0x78, 0x81, 0xb3, 0xae, 0xec, 0x9a, 0x1b, 0xec, 0xf3, 0x85, 0xba, 0xe9,
-	0x2a, 0xd8, 0xec, 0xe2, 0xec, 0xe0, 0x86, 0x72, 0x14, 0x24, 0x7a, 0x66, 0xd2, 0x13, 0xb2, 0xa7,
-	0xeb, 0x23, 0xac, 0x12, 0xa6, 0x70, 0x83, 0x11, 0xb6, 0x56, 0xa2, 0x5f, 0x93, 0xca, 0xd4, 0x17,
-	0x12, 0x52, 0x1c, 0xe8, 0xc2, 0x2a, 0xbf, 0x80, 0x72, 0xfe, 0x7d, 0x70, 0x4d, 0x2d, 0xa7, 0xde,
-	0x02, 0x41, 0xbf, 0x21, 0x95, 0xc8, 0x97, 0xb0, 0xf0, 0x97, 0xba, 0x19, 0x4c, 0x6c, 0x86, 0x8f,
-	0xae, 0xaf, 0xde, 0x9b, 0xf0, 0x59, 0x78, 0xa8, 0x25, 0xb4, 0x7c, 0x74, 0xb1, 0xa0, 0xaf, 0x92,
-	0x3d, 0x21, 0xc6, 0xde, 0x29, 0x2c, 0xad, 0xaa, 0x1e, 0x33, 0x42, 0x8c, 0xef, 0xc2, 0x52, 0x99,
-	0xad, 0xca, 0xb2, 0xc9, 0xaa, 0xd6, 0x34, 0xda, 0x55, 0xd7, 0xd4, 0x18, 0x86, 0x76, 0x54, 0x2c,
-	0x91, 0xba, 0x79, 0x54, 0x2c, 0x55, 0xea, 0xd5, 0xcf, 0x7e, 0x30, 0x1e, 0x9d, 0xdb, 0x5b, 0x8f,
-	0xcf, 0xed, 0xad, 0xa7, 0xe7, 0xb6, 0xf1, 0xd7, 0xb9, 0x6d, 0x7c, 0xbb, 0xb2, 0x8d, 0x9f, 0x57,
-	0xb6, 0xf1, 0xdb, 0xca, 0x36, 0x1e, 0xad, 0x6c, 0xe3, 0xf1, 0xca, 0x36, 0xfe, 0x58, 0xd9, 0xc6,
-	0x9f, 0x2b, 0x7b, 0xeb, 0xe9, 0xca, 0x36, 0xbe, 0x7b, 0x62, 0x6f, 0xfd, 0xfa, 0xc4, 0x36, 0xbe,
-	0x7a, 0x10, 0xf1, 0xe4, 0x34, 0x72, 0xd4, 0xd3, 0xa6, 0xe2, 0x77, 0x66, 0xb9, 0x67, 0xf5, 0x20,
-	0x49, 0xf9, 0x9c, 0x85, 0x90, 0x1e, 0xac, 0x7f, 0x77, 0x92, 0x61, 0xc4, 0x3b, 0xf0, 0x50, 0x66,
-	0xef, 0xf0, 0x73, 0x9f, 0xe3, 0xe1, 0x2e, 0xbe, 0xc4, 0xef, 0xfe, 0x1d, 0x00, 0x00, 0xff, 0xff,
-	0xb9, 0xac, 0x8c, 0x07, 0xd0, 0x08, 0x00, 0x00,
+	// 1040 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0xcf, 0x6f, 0x1b, 0xc5,
+	0x17, 0xcf, 0xe6, 0xa7, 0x3d, 0x1b, 0x3b, 0xce, 0xb4, 0x6a, 0x9d, 0xf4, 0xfb, 0xdd, 0x9a, 0x50,
+	0x21, 0x0b, 0x35, 0xb6, 0x14, 0x90, 0xf8, 0x21, 0x90, 0x10, 0x3e, 0x04, 0xa7, 0x10, 0x52, 0x07,
+	0xf5, 0x80, 0x44, 0x96, 0xf5, 0xee, 0xf3, 0x7a, 0x14, 0x7b, 0x67, 0xb5, 0x33, 0xb6, 0xeb, 0x9c,
+	0xf8, 0x13, 0xe0, 0x86, 0xc4, 0x81, 0x2b, 0x7f, 0x06, 0x47, 0x2e, 0x48, 0x3d, 0xf6, 0x48, 0xdc,
+	0x0b, 0xc7, 0x9e, 0x10, 0x47, 0x34, 0x6f, 0x66, 0xed, 0x75, 0x08, 0x34, 0x25, 0x70, 0xdb, 0x79,
+	0x3f, 0x3e, 0xf3, 0xde, 0x67, 0x3e, 0xf3, 0x76, 0xc8, 0xdb, 0x43, 0x10, 0x35, 0xc6, 0xeb, 0xc2,
+	0xef, 0x42, 0xdf, 0xab, 0x0f, 0x19, 0x8c, 0x44, 0x5d, 0x42, 0x92, 0x78, 0x1d, 0x9e, 0xf4, 0xdd,
+	0xd8, 0x4b, 0xbc, 0x3e, 0x48, 0x48, 0x44, 0x3d, 0xf4, 0x63, 0x57, 0x8e, 0x63, 0x10, 0xb5, 0x38,
+	0xe1, 0x92, 0xd3, 0xaa, 0xce, 0xac, 0xe9, 0xcc, 0x1a, 0x66, 0xd6, 0x2e, 0xcb, 0xdc, 0xde, 0x0d,
+	0x99, 0xec, 0x0e, 0xda, 0x35, 0x9f, 0xf7, 0xeb, 0x21, 0x0f, 0x79, 0x1d, 0x01, 0xda, 0x83, 0x0e,
+	0xae, 0x70, 0x81, 0x5f, 0x1a, 0x78, 0x7b, 0x2b, 0xe4, 0x3c, 0xec, 0xc1, 0x2c, 0xca, 0x8b, 0xc6,
+	0xc6, 0x75, 0x7f, 0xbe, 0x5a, 0x1f, 0x12, 0xc9, 0x3a, 0x0c, 0x02, 0xb7, 0xeb, 0x25, 0xc1, 0xc8,
+	0x4b, 0xa0, 0x9e, 0xa9, 0x70, 0xfb, 0xce, 0x7c, 0x34, 0x8f, 0x25, 0xe3, 0x51, 0xea, 0xdc, 0x9a,
+	0x77, 0x66, 0xf3, 0xfe, 0x77, 0x81, 0x13, 0xaf, 0xc7, 0x02, 0x4f, 0x82, 0xf1, 0x56, 0xfe, 0xcc,
+	0x98, 0x3b, 0x0f, 0x7d, 0xef, 0x32, 0x4e, 0x05, 0x93, 0x90, 0xe5, 0x6f, 0xfb, 0xcd, 0x2b, 0x33,
+	0x9f, 0xcd, 0xba, 0x7b, 0x69, 0xd6, 0x2c, 0x60, 0xe7, 0xb7, 0x25, 0xb2, 0xb1, 0xdf, 0x38, 0x6a,
+	0x46, 0x42, 0x7a, 0x91, 0x0f, 0x9f, 0x8d, 0x63, 0xa0, 0x15, 0xb2, 0x3e, 0xe4, 0x3d, 0xe9, 0x46,
+	0x3c, 0x00, 0x97, 0x05, 0x65, 0xab, 0x62, 0x55, 0xf3, 0x2d, 0xa2, 0x6c, 0x87, 0x3c, 0x80, 0x66,
+	0x40, 0xef, 0x91, 0x22, 0x46, 0x24, 0x10, 0x32, 0x1e, 0xa9, 0x98, 0x25, 0x8c, 0xc1, 0xbc, 0x16,
+	0x1a, 0x9b, 0x01, 0xf5, 0x49, 0x29, 0x1e, 0xb4, 0x7b, 0xcc, 0x77, 0xc5, 0xa0, 0x1d, 0x81, 0x54,
+	0x71, 0xcb, 0x15, 0xab, 0x6a, 0xef, 0xbd, 0x53, 0xbb, 0xaa, 0x1a, 0x6a, 0xfb, 0x8d, 0xa3, 0x63,
+	0xcc, 0x6e, 0x74, 0x39, 0xf3, 0xa1, 0x55, 0xd4, 0x90, 0xda, 0xd6, 0x0c, 0x28, 0x90, 0xcd, 0x38,
+	0x61, 0x43, 0x4f, 0x42, 0x66, 0x97, 0x95, 0xeb, 0xee, 0xb2, 0x61, 0x30, 0xa7, 0xdb, 0xbc, 0x4a,
+	0x0a, 0xcc, 0x70, 0x84, 0xc7, 0x52, 0x5e, 0xd5, 0x0d, 0xb3, 0x2c, 0x71, 0x77, 0x48, 0x3e, 0x60,
+	0xe2, 0xd4, 0x15, 0xec, 0x0c, 0xca, 0x6b, 0x18, 0x90, 0x53, 0x86, 0x63, 0x76, 0x06, 0x74, 0x8b,
+	0xe4, 0x58, 0xdf, 0x0b, 0x91, 0xd1, 0x1c, 0xfa, 0xd6, 0x70, 0xdd, 0x0c, 0xe8, 0xeb, 0x64, 0x73,
+	0xc4, 0x93, 0x53, 0x48, 0x34, 0xe5, 0x3e, 0x1f, 0x44, 0xb2, 0x9c, 0xaf, 0x58, 0xd5, 0x42, 0x6b,
+	0x43, 0x3b, 0x14, 0xef, 0x0d, 0x65, 0xa6, 0x37, 0xc9, 0xca, 0x19, 0x8f, 0x40, 0x94, 0x49, 0x65,
+	0xa9, 0x9a, 0x6f, 0xe9, 0x85, 0x42, 0xe8, 0x7b, 0x42, 0xce, 0x23, 0xd8, 0x1a, 0x41, 0x3b, 0xa6,
+	0x08, 0x07, 0xcb, 0xb9, 0xc5, 0xd2, 0xd2, 0xce, 0x37, 0x16, 0xa1, 0xd3, 0xae, 0x8f, 0x14, 0x13,
+	0xd8, 0xc2, 0x07, 0x64, 0x55, 0xd3, 0x88, 0xa7, 0x6e, 0xef, 0x55, 0x2f, 0xe5, 0x70, 0x3e, 0x51,
+	0xa8, 0xcc, 0x96, 0xc9, 0xa3, 0xaf, 0x90, 0xf5, 0x08, 0xa4, 0x2a, 0xdb, 0x8d, 0xbc, 0x3e, 0x94,
+	0x17, 0xb1, 0x57, 0xdb, 0xd8, 0x0e, 0xbd, 0x3e, 0xd0, 0x5b, 0x64, 0x55, 0x2b, 0xc7, 0xc8, 0xc6,
+	0xac, 0x76, 0xbe, 0x5b, 0x24, 0x37, 0xf6, 0x1b, 0x47, 0x8f, 0x8e, 0x1a, 0x87, 0x3a, 0x5a, 0x9f,
+	0x06, 0x7d, 0x48, 0x0a, 0x29, 0x24, 0x9e, 0x99, 0xa9, 0xed, 0xfe, 0x5f, 0xd5, 0x36, 0x03, 0xc8,
+	0xd4, 0x97, 0x56, 0x85, 0x26, 0xfa, 0x90, 0x94, 0xe0, 0x31, 0x13, 0x92, 0x45, 0xa1, 0x6b, 0x1c,
+	0x58, 0xa9, 0xbd, 0xf7, 0xda, 0x8b, 0x51, 0x11, 0x6f, 0x23, 0xcd, 0x37, 0x46, 0x7a, 0x42, 0x8a,
+	0x2c, 0x92, 0x90, 0x74, 0xbc, 0x54, 0x23, 0xaa, 0xbb, 0xe2, 0xde, 0x5b, 0x57, 0x97, 0x61, 0x33,
+	0xcd, 0xc7, 0x1d, 0x0a, 0x2c, 0xbb, 0xdc, 0xf9, 0x7e, 0x11, 0xaf, 0x6a, 0x56, 0xa7, 0xd4, 0x25,
+	0xeb, 0x46, 0xf5, 0x59, 0x62, 0xde, 0xfb, 0x07, 0xc2, 0x9f, 0x4a, 0xa0, 0x65, 0x8b, 0x99, 0x81,
+	0x3e, 0x20, 0xd3, 0x3e, 0xcd, 0xfd, 0x32, 0x34, 0xed, 0xfc, 0xbd, 0x30, 0x10, 0xa9, 0x98, 0xa6,
+	0x6a, 0xdb, 0x7f, 0xce, 0xd0, 0xcf, 0xab, 0xa4, 0xa8, 0x0e, 0x2a, 0xf6, 0x8f, 0x99, 0x9c, 0x5e,
+	0x49, 0x1c, 0xa5, 0x28, 0x45, 0x3d, 0xc8, 0x72, 0xca, 0x80, 0x3a, 0x94, 0xe4, 0xb6, 0xfa, 0x4d,
+	0x0d, 0x63, 0x3f, 0xd5, 0x80, 0xcb, 0x07, 0x52, 0xb0, 0x00, 0x4c, 0x93, 0xef, 0xbf, 0x14, 0x91,
+	0x17, 0x75, 0xdb, 0xba, 0x19, 0xfa, 0xf1, 0xa3, 0xd8, 0x37, 0xc6, 0x4f, 0x35, 0x34, 0xbd, 0x4b,
+	0xec, 0x4e, 0x0f, 0x40, 0xba, 0x3d, 0xaf, 0x0d, 0x3d, 0x73, 0x05, 0x08, 0x9a, 0x3e, 0x56, 0x16,
+	0x75, 0x83, 0x32, 0xbf, 0xaa, 0x11, 0xce, 0xcc, 0x7c, 0xcb, 0x9e, 0xda, 0x3e, 0x1a, 0xd1, 0xff,
+	0x13, 0xa2, 0x2a, 0x37, 0xb7, 0x68, 0x05, 0x03, 0xf2, 0xa1, 0x1f, 0xeb, 0xd9, 0x4b, 0xbf, 0x24,
+	0x45, 0x23, 0x8b, 0xb4, 0x9f, 0xdc, 0x75, 0x27, 0x62, 0x41, 0x03, 0xa6, 0x4d, 0x7c, 0x42, 0x96,
+	0xd5, 0xa4, 0xc1, 0x29, 0xf5, 0xb2, 0xb8, 0xd9, 0x9f, 0x4d, 0x0b, 0x61, 0xe8, 0x17, 0x64, 0x3d,
+	0xf4, 0x24, 0x8c, 0xbc, 0xb1, 0xd6, 0x85, 0x8d, 0xba, 0x78, 0xf7, 0xea, 0xb0, 0x8d, 0x1e, 0x1f,
+	0x04, 0xfb, 0x1a, 0x42, 0xab, 0x38, 0x9c, 0x2d, 0xe8, 0x6d, 0xb2, 0x26, 0x44, 0xd7, 0x3d, 0x85,
+	0x71, 0xb9, 0xa0, 0x27, 0x8e, 0x10, 0xdd, 0x07, 0x30, 0x56, 0x54, 0x67, 0x26, 0xaf, 0x28, 0x17,
+	0x71, 0x64, 0xda, 0xb3, 0xa1, 0x2b, 0xd4, 0xdc, 0x56, 0x54, 0xa3, 0x80, 0x36, 0xf4, 0xdc, 0x0e,
+	0xfd, 0x18, 0xf5, 0x73, 0x42, 0x0a, 0xe9, 0x3f, 0x27, 0x42, 0x96, 0x4b, 0xd7, 0x65, 0xd9, 0xdc,
+	0xe6, 0x26, 0xc2, 0xd1, 0x84, 0xdc, 0xba, 0xa8, 0x4f, 0xb3, 0xd1, 0xe6, 0xbf, 0x21, 0xcf, 0x1b,
+	0x73, 0xf2, 0xd4, 0x7b, 0x1e, 0x2c, 0xe7, 0x48, 0xc9, 0x3e, 0x58, 0xce, 0xad, 0x97, 0x0a, 0x1f,
+	0x7e, 0x6b, 0x3d, 0x39, 0x77, 0x16, 0x9e, 0x9e, 0x3b, 0x0b, 0xcf, 0xcf, 0x1d, 0xeb, 0xf7, 0x73,
+	0xc7, 0xfa, 0x6a, 0xe2, 0x58, 0x3f, 0x4c, 0x1c, 0xeb, 0xa7, 0x89, 0x63, 0x3d, 0x99, 0x38, 0xd6,
+	0xd3, 0x89, 0x63, 0xfd, 0x32, 0x71, 0xac, 0x5f, 0x27, 0xce, 0xc2, 0xf3, 0x89, 0x63, 0x7d, 0xfd,
+	0xcc, 0x59, 0xf8, 0xf1, 0x99, 0x63, 0x7d, 0x7e, 0x12, 0xf2, 0xf8, 0x34, 0xac, 0xa9, 0xf7, 0x80,
+	0x2a, 0xa7, 0x36, 0xc8, 0x3c, 0x56, 0x76, 0xe3, 0x84, 0x0f, 0x59, 0x00, 0xc9, 0x6e, 0xea, 0xae,
+	0xc7, 0xed, 0x90, 0xd7, 0xe1, 0xb1, 0x34, 0xef, 0x94, 0x17, 0x3e, 0x72, 0xda, 0xab, 0xf8, 0x7c,
+	0x79, 0xe3, 0x8f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x3f, 0x3e, 0xf3, 0xec, 0x91, 0x0a, 0x00, 0x00,
 }

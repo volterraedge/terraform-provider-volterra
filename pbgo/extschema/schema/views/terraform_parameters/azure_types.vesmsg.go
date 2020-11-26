@@ -853,6 +853,15 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["azure_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("azure_name"))
+		if err := fv(ctx, m.GetAzureName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["azure_region"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("azure_region"))

@@ -1006,7 +1006,19 @@ type APISrv struct {
 	// resource handler function pointers
 }
 
+func (s *APISrv) validateTransport(ctx context.Context) error {
+	if s.sf.IsTransportNotSupported("ves.io.schema.user.API", server.TransportFromContext(ctx)) {
+		userMsg := fmt.Sprintf("ves.io.schema.user.API not allowed in transport '%s'", server.TransportFromContext(ctx))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		return server.GRPCStatusFromError(err).Err()
+	}
+	return nil
+}
+
 func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateResponse, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.user.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1053,6 +1065,9 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResponse, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
@@ -1088,6 +1103,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 }
 
 func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.user.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1133,6 +1151,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 }
 
 func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.user.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1375,6 +1396,11 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				)
 			}
 
+			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
+			item.Metadata.FromObjectMetaType(o.Metadata)
+			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
+			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
+
 			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.user.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1522,7 +1548,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-user-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.API.Create"
             },
@@ -1617,7 +1643,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-user-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.API.Replace"
             },
@@ -1729,7 +1755,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-user-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.API.List"
             },
@@ -1832,7 +1858,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-user-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.API.Get"
             },
@@ -1877,7 +1903,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -2861,6 +2887,12 @@ var APISwaggerJSON string = `{
                     "title": "labels",
                     "x-displayname": "Labels"
                 },
+                "metadata": {
+                    "description": " If list request has report_fields set then metadata will\n contain all the metadata associated with the object.",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectGetMetaType",
+                    "x-displayname": "Metadata"
+                },
                 "name": {
                     "type": "string",
                     "description": " The name of this user\n\nExample: - \"name\"-",
@@ -2876,7 +2908,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "ns1"
                 },
                 "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec",
+                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
                     "title": "object",
                     "$ref": "#/definitions/userObject",
                     "x-displayname": "Object"
@@ -2895,6 +2927,12 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/userStatusObject"
                     },
                     "x-displayname": "Status"
+                },
+                "system_metadata": {
+                    "description": " If list request has report_fields set then system_metadata will\n contain all the system generated details of this object.",
+                    "title": "system_metadata",
+                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
+                    "x-displayname": "System Metadata"
                 },
                 "tenant": {
                     "type": "string",

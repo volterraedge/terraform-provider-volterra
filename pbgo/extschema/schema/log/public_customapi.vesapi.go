@@ -2159,7 +2159,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-log-CustomAPI-AccessLogAggregationQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-AccessLogAggregationQuery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AccessLogAggregationQuery"
             },
@@ -2593,7 +2593,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-log-CustomAPI-FirewallLogQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-FirewallLogQuery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.FirewallLogQuery"
             },
@@ -2683,7 +2683,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-log-CustomAPI-FirewallLogAggregationQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-FirewallLogAggregationQuery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.FirewallLogAggregationQuery"
             },
@@ -2773,7 +2773,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-log-CustomAPI-FirewallLogScrollQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-FirewallLogScrollQuery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.FirewallLogScrollQuery"
             },
@@ -2783,7 +2783,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/vk8s_audit_logs": {
             "post": {
-                "summary": "VK8s Audit Log Query",
+                "summary": "vK8s Audit Log Query",
                 "description": "Request to get Virtual K8s audit logs that matches the criteria in request for a given namespace.\nIf no match conditions are specified in the request, then the response contains all\nCRUD operations performed in the namespace. User with access to the -system- namespace\nmay query for audit logs across all namespaces for a given tenant.",
                 "operationId": "ves.io.schema.log.CustomAPI.VK8SAuditLogQuery",
                 "responses": {
@@ -2869,8 +2869,8 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/vk8s_audit_logs/aggregation": {
             "post": {
-                "summary": "VK8s Audit Log Aggregation Query",
-                "description": "Request to get summary/analytics data for the VK8s audit logs that matches the criteria in request for a given namespace.\nUser with access to the -system- namespace may query aggregated data for audit logs across all namespaces for a given tenant.",
+                "summary": "vK8s Audit Log Aggregation Query",
+                "description": "Request to get summary/analytics data for the vK8s audit logs that matches the criteria in request for a given namespace.\nUser with access to the -system- namespace may query aggregated data for audit logs across all namespaces for a given tenant.",
                 "operationId": "ves.io.schema.log.CustomAPI.VK8SAuditLogAggregationQuery",
                 "responses": {
                     "200": {
@@ -2955,8 +2955,8 @@ var CustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/vk8s_audit_logs/scroll": {
             "get": {
-                "summary": "VK8s Audit Log Scroll Query",
-                "description": "The response for VK8s audit log query contain no more than 500 messages.\nOne can use scroll request to scroll through more than 500 messages or all messages\nin multiple batches. empty scroll_id in the response indicates no more messages to fetch (EOF).",
+                "summary": "vK8s Audit Log Scroll Query",
+                "description": "The response for vK8s audit log query contain no more than 500 messages.\nOne can use scroll request to scroll through more than 500 messages or all messages\nin multiple batches. empty scroll_id in the response indicates no more messages to fetch (EOF).",
                 "operationId": "ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQuery",
                 "responses": {
                     "200": {
@@ -3121,7 +3121,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-log-CustomAPI-VK8SEventsQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-VK8SEventsQuery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SEventsQuery"
             },
@@ -3211,7 +3211,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-log-CustomAPI-VK8SEventsAggregationQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-VK8SEventsAggregationQuery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SEventsAggregationQuery"
             },
@@ -3301,7 +3301,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-log-CustomAPI-VK8SEventsScrollQuery"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-VK8SEventsScrollQuery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SEventsScrollQuery"
             },
@@ -3819,7 +3819,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "logVK8SAuditLogAggregationRequest": {
             "type": "object",
-            "description": "Request to get only aggregation data for Vk8s audit logs",
+            "description": "Request to get only aggregation data for vK8s audit logs",
             "title": "VK8SAuditLogAggregationRequest",
             "x-displayname": "vK8s Audit Log Aggregation Request",
             "x-ves-proto-message": "ves.io.schema.log.VK8SAuditLogAggregationRequest",
@@ -3846,7 +3846,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "query": {
                     "type": "string",
-                    "description": " query is used to specify the list of matchers\n syntax for query := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n \u003cfield_name\u003e := string\n  One or more of the following fields in audit log may be specified in the query.\n   user.username - user name\n   sourceIPs - source ip\n   verb - method\n   objectRef.resource - K8s resource\n   requestURI - request URI\n \u003cvalue\u003e := string\n \u003coperator\u003e := [\"=\"|\"!=\"]\n   = : equal to\n   != : not equal to\n When more than one matcher is specified in the query, then audit logs matching ALL the matchers will be returned in the response.\n Example: query={objectRef.resource=\"deployments\"} will return all vk8s audit logs for all deployment objects in the given namespace\n\n Optional: If not specified, all the audit logs matching the given tenant and namespace will be considered for aggregation\n\nExample: - \"query={objectRef.resource=\"deployments\"}\"-",
+                    "description": " query is used to specify the list of matchers\n syntax for query := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n \u003cfield_name\u003e := string\n  One or more of the following fields in audit log may be specified in the query.\n   user.username - user name\n   sourceIPs - source ip\n   verb - method\n   objectRef.resource - K8s resource\n   requestURI - request URI\n \u003cvalue\u003e := string\n \u003coperator\u003e := [\"=\"|\"!=\"]\n   = : equal to\n   != : not equal to\n When more than one matcher is specified in the query, then audit logs matching ALL the matchers will be returned in the response.\n Example: query={objectRef.resource=\"deployments\"} will return all vK8s audit logs for all deployment objects in the given namespace\n\n Optional: If not specified, all the audit logs matching the given tenant and namespace will be considered for aggregation\n\nExample: - \"query={objectRef.resource=\"deployments\"}\"-",
                     "title": "query",
                     "x-displayname": "Query",
                     "x-ves-example": "query={objectRef.resource=\"deployments\"}"
@@ -3890,14 +3890,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " fetch vk8s audit logs for a given namespace\n\nExample: - \"value\"-",
+                    "description": " fetch vK8s audit logs for a given namespace\n\nExample: - \"value\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "value"
                 },
                 "query": {
                     "type": "string",
-                    "description": " query is used to specify the list of matchers\n syntax for query := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n \u003cfield_name\u003e := string\n  One or more of the following fields in audit log may be specified in the query.\n   user.username - user name\n   sourceIPs - source ip\n   verb - method\n   objectRef.resource - K8s resource\n   requestURI - request URI\n \u003cvalue\u003e := string\n \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n   = : equal to\n   != : not equal to\n   =~ : regex match\n   !~ : not regex match\n When more than one matcher is specified in the query, then audit logs matching ALL the matchers will be returned in the response.\n Example: query={objectRef.resource=\"deployments\"} will return all vk8s audit logs for all deployment objects in the given namespace\n\n Optional: If not specified, all the audit logs matching the given tenant and namespace are returned\n\nExample: - \"query={objectRef.resource=\"deployments\"}\"-",
+                    "description": " query is used to specify the list of matchers\n syntax for query := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n \u003cfield_name\u003e := string\n  One or more of the following fields in audit log may be specified in the query.\n   user.username - user name\n   sourceIPs - source ip\n   verb - method\n   objectRef.resource - K8s resource\n   requestURI - request URI\n \u003cvalue\u003e := string\n \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n   = : equal to\n   != : not equal to\n   =~ : regex match\n   !~ : not regex match\n When more than one matcher is specified in the query, then audit logs matching ALL the matchers will be returned in the response.\n Example: query={objectRef.resource=\"deployments\"} will return all vK8s audit logs for all deployment objects in the given namespace\n\n Optional: If not specified, all the audit logs matching the given tenant and namespace are returned\n\nExample: - \"query={objectRef.resource=\"deployments\"}\"-",
                     "title": "query",
                     "x-displayname": "Query",
                     "x-ves-example": "query={objectRef.resource=\"deployments\"}"
@@ -3927,7 +3927,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "logVK8SEventsAggregationRequest": {
             "type": "object",
-            "description": "Request to get only aggregation data for vk8s events",
+            "description": "Request to get only aggregation data for vK8s events",
             "title": "vK8s Events Aggregation Request",
             "x-displayname": "Virtual K8s Events Aggregation Request",
             "x-ves-proto-message": "ves.io.schema.log.VK8SEventsAggregationRequest",
@@ -3954,7 +3954,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "query": {
                     "type": "string",
-                    "description": " query is used to specify the list of matchers\n syntax for query := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n \u003cfield_name\u003e := string\n  One or more of the following fields in the event may be specified in the query.\n   involvedObject.kind - The object that this event is about, like Pod, Deployment, Node, etc.\n   involvedObject.name - Name of the object\n   type - Type of event such as Warning or Normal\n   reason - A one-word description for an event. For example Pending, Running, Succeeded, Failed are some of values for reason that indicate the phase of a Pod lifecycle.\n   source.component - The k8s component reporting the event such as kubelet, kube-scheduler, etc.,\n \u003cvalue\u003e := string\n \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n   = : equal to\n   != : not equal to\n   =~ : regex match\n   !~ : not regex match\n\n Optional: If not specified, all the vk8s events for the given tenant and namespace are returned\n\nExample: - \"query={involvedObject.kind=\"Pod\"}\"-",
+                    "description": " query is used to specify the list of matchers\n syntax for query := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n \u003cfield_name\u003e := string\n  One or more of the following fields in the event may be specified in the query.\n   involvedObject.kind - The object that this event is about, like Pod, Deployment, Node, etc.\n   involvedObject.name - Name of the object\n   type - Type of event such as Warning or Normal\n   reason - A one-word description for an event. For example Pending, Running, Succeeded, Failed are some of values for reason that indicate the phase of a Pod lifecycle.\n   source.component - The K8s component reporting the event such as kubelet, kube-scheduler, etc.,\n \u003cvalue\u003e := string\n \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n   = : equal to\n   != : not equal to\n   =~ : regex match\n   !~ : not regex match\n\n Optional: If not specified, all the vK8s events for the given tenant and namespace are returned\n\nExample: - \"query={involvedObject.kind=\"Pod\"}\"-",
                     "title": "query",
                     "x-displayname": "Query",
                     "x-ves-example": "query={involvedObject.kind=\"Pod\"}"
@@ -3998,14 +3998,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " fetch vk8s events for the given namespace\n\nExample: - \"value\"-",
+                    "description": " fetch vK8s events for the given namespace\n\nExample: - \"value\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "value"
                 },
                 "query": {
                     "type": "string",
-                    "description": " query is used to specify the list of matchers\n syntax for query := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n \u003cfield_name\u003e := string\n  One or more of the following fields in the event may be specified in the query.\n   involvedObject.kind - The object that this event is about, like Pod, Deployment, Node, etc.\n   involvedObject.name - Name of the object\n   type - Type of event such as Warning or Normal\n   reason - A one-word description for an event. For example Pending, Running, Succeeded, Failed are some of values for reason that indicate the phase of a Pod lifecycle.\n   source.component - The k8s component reporting the event such as kubelet, kube-scheduler, etc.,\n   site - Name of the site\n \u003cvalue\u003e := string\n \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n   = : equal to\n   != : not equal to\n   =~ : regex match\n   !~ : not regex match\n\n Optional: If not specified, all the vk8s events for the given tenant and namespace are returned\n\nExample: - \"query={involvedObject.kind=\"Pod\"}\"-",
+                    "description": " query is used to specify the list of matchers\n syntax for query := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n \u003cfield_name\u003e := string\n  One or more of the following fields in the event may be specified in the query.\n   involvedObject.kind - The object that this event is about, like Pod, Deployment, Node, etc.\n   involvedObject.name - Name of the object\n   type - Type of event such as Warning or Normal\n   reason - A one-word description for an event. For example Pending, Running, Succeeded, Failed are some of values for reason that indicate the phase of a Pod lifecycle.\n   source.component - The K8s component reporting the event such as kubelet, kube-scheduler, etc.,\n   site - Name of the site\n \u003cvalue\u003e := string\n \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n   = : equal to\n   != : not equal to\n   =~ : regex match\n   !~ : not regex match\n\n Optional: If not specified, all the vK8s events for the given tenant and namespace are returned\n\nExample: - \"query={involvedObject.kind=\"Pod\"}\"-",
                     "title": "query",
                     "x-displayname": "Query",
                     "x-ves-example": "query={involvedObject.kind=\"Pod\"}"

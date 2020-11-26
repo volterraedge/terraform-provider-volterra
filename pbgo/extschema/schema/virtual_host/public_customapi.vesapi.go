@@ -352,7 +352,7 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "schemaObjectRefType": {
+        "ioschemaObjectRefType": {
             "type": "object",
             "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
             "title": "ObjectRefType",
@@ -424,7 +424,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": " Reference to virtual host object to which this information applies",
                     "title": "virtual host",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Virtual Host"
                 }

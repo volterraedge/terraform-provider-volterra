@@ -288,6 +288,16 @@ func (v *ValidateCreateSpecType) ProtocolValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) HealthCheckPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_port")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -346,6 +356,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["health_check_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("health_check_port"))
+		if err := fv(ctx, m.GetHealthCheckPort(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -436,6 +455,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["protocol"] = vFn
+
+	vrhHealthCheckPort := v.HealthCheckPortValidationRuleHandler
+	rulesHealthCheckPort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhHealthCheckPort(rulesHealthCheckPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.health_check_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["health_check_port"] = vFn
 
 	v.FldValidators["endpoint_address.service_info"] = ServiceInfoTypeValidator().Validate
 	v.FldValidators["endpoint_address.dns_name_advance"] = DnsNameAdvanceTypeValidator().Validate
@@ -904,6 +934,16 @@ func (v *ValidateGetSpecType) ProtocolValidationRuleHandler(rules map[string]str
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) HealthCheckPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_port")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -962,6 +1002,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["health_check_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("health_check_port"))
+		if err := fv(ctx, m.GetHealthCheckPort(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1052,6 +1101,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["protocol"] = vFn
+
+	vrhHealthCheckPort := v.HealthCheckPortValidationRuleHandler
+	rulesHealthCheckPort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhHealthCheckPort(rulesHealthCheckPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.health_check_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["health_check_port"] = vFn
 
 	v.FldValidators["endpoint_address.service_info"] = ServiceInfoTypeValidator().Validate
 	v.FldValidators["endpoint_address.dns_name_advance"] = DnsNameAdvanceTypeValidator().Validate
@@ -1182,6 +1242,16 @@ func (v *ValidateGlobalSpecType) ProtocolValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) HealthCheckPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_port")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -1251,6 +1321,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["health_check_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("health_check_port"))
+		if err := fv(ctx, m.GetHealthCheckPort(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1351,6 +1430,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["protocol"] = vFn
+
+	vrhHealthCheckPort := v.HealthCheckPortValidationRuleHandler
+	rulesHealthCheckPort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhHealthCheckPort(rulesHealthCheckPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.health_check_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["health_check_port"] = vFn
 
 	v.FldValidators["endpoint_address.service_info"] = ServiceInfoTypeValidator().Validate
 	v.FldValidators["endpoint_address.dns_name_advance"] = DnsNameAdvanceTypeValidator().Validate
@@ -1636,6 +1726,16 @@ func (v *ValidateReplaceSpecType) ProtocolValidationRuleHandler(rules map[string
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) HealthCheckPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_port")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -1694,6 +1794,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["health_check_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("health_check_port"))
+		if err := fv(ctx, m.GetHealthCheckPort(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1784,6 +1893,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["protocol"] = vFn
+
+	vrhHealthCheckPort := v.HealthCheckPortValidationRuleHandler
+	rulesHealthCheckPort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhHealthCheckPort(rulesHealthCheckPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.health_check_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["health_check_port"] = vFn
 
 	v.FldValidators["endpoint_address.service_info"] = ServiceInfoTypeValidator().Validate
 	v.FldValidators["endpoint_address.dns_name_advance"] = DnsNameAdvanceTypeValidator().Validate
@@ -2152,6 +2272,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m.GetEndpointAddressFromGlobalSpecType(f)
+	m.HealthCheckPort = f.GetHealthCheckPort()
 	m.Port = f.GetPort()
 	m.Protocol = f.GetProtocol()
 	m.Where = f.GetWhere()
@@ -2164,6 +2285,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m1.SetEndpointAddressToGlobalSpecType(f)
+	f.HealthCheckPort = m1.HealthCheckPort
 	f.Port = m1.Port
 	f.Protocol = m1.Protocol
 	f.Where = m1.Where
@@ -2221,6 +2343,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m.GetEndpointAddressFromGlobalSpecType(f)
+	m.HealthCheckPort = f.GetHealthCheckPort()
 	m.Port = f.GetPort()
 	m.Protocol = f.GetProtocol()
 	m.Where = f.GetWhere()
@@ -2233,6 +2356,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m1.SetEndpointAddressToGlobalSpecType(f)
+	f.HealthCheckPort = m1.HealthCheckPort
 	f.Port = m1.Port
 	f.Protocol = m1.Protocol
 	f.Where = m1.Where
@@ -2290,6 +2414,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m.GetEndpointAddressFromGlobalSpecType(f)
+	m.HealthCheckPort = f.GetHealthCheckPort()
 	m.Port = f.GetPort()
 	m.Protocol = f.GetProtocol()
 	m.Where = f.GetWhere()
@@ -2302,6 +2427,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m1.SetEndpointAddressToGlobalSpecType(f)
+	f.HealthCheckPort = m1.HealthCheckPort
 	f.Port = m1.Port
 	f.Protocol = m1.Protocol
 	f.Where = m1.Where

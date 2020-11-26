@@ -1021,6 +1021,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["server_selector"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("server_selector"))
+		if err := fv(ctx, m.GetServerSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
@@ -1247,6 +1256,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
 
 	v.FldValidators["l4_dest_matcher"] = ves_io_schema_policy.L4DestMatcherTypeValidator().Validate
+
+	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
 	return v
 }()
@@ -2249,6 +2260,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["server_selector"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("server_selector"))
+		if err := fv(ctx, m.GetServerSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
@@ -2475,6 +2495,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
 
 	v.FldValidators["l4_dest_matcher"] = ves_io_schema_policy.L4DestMatcherTypeValidator().Validate
+
+	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
 	return v
 }()
@@ -3572,6 +3594,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["server_selector"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("server_selector"))
+		if err := fv(ctx, m.GetServerSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
@@ -3809,6 +3840,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
 
 	v.FldValidators["l4_dest_matcher"] = ves_io_schema_policy.L4DestMatcherTypeValidator().Validate
+
+	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
 	return v
 }()
@@ -4811,6 +4844,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["server_selector"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("server_selector"))
+		if err := fv(ctx, m.GetServerSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
@@ -5037,6 +5079,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
 
 	v.FldValidators["l4_dest_matcher"] = ves_io_schema_policy.L4DestMatcherTypeValidator().Validate
+
+	v.FldValidators["server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
 	return v
 }()
@@ -5298,6 +5342,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.QueryParams = f.GetQueryParams()
 	m.RateLimiter = f.GetRateLimiter()
 	m.Scheme = f.GetScheme()
+	m.ServerSelector = f.GetServerSelector()
 	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
 	m.UrlMatcher = f.GetUrlMatcher()
 
@@ -5347,6 +5392,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.QueryParams = m1.QueryParams
 	f.RateLimiter = m1.RateLimiter
 	f.Scheme = m1.Scheme
+	f.ServerSelector = m1.ServerSelector
 	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
 	f.UrlMatcher = m1.UrlMatcher
 
@@ -5614,6 +5660,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.QueryParams = f.GetQueryParams()
 	m.RateLimiter = f.GetRateLimiter()
 	m.Scheme = f.GetScheme()
+	m.ServerSelector = f.GetServerSelector()
 	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
 	m.UrlMatcher = f.GetUrlMatcher()
 
@@ -5663,6 +5710,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.QueryParams = m1.QueryParams
 	f.RateLimiter = m1.RateLimiter
 	f.Scheme = m1.Scheme
+	f.ServerSelector = m1.ServerSelector
 	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
 	f.UrlMatcher = m1.UrlMatcher
 
@@ -5930,6 +5978,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.QueryParams = f.GetQueryParams()
 	m.RateLimiter = f.GetRateLimiter()
 	m.Scheme = f.GetScheme()
+	m.ServerSelector = f.GetServerSelector()
 	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
 	m.UrlMatcher = f.GetUrlMatcher()
 
@@ -5979,6 +6028,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.QueryParams = m1.QueryParams
 	f.RateLimiter = m1.RateLimiter
 	f.Scheme = m1.Scheme
+	f.ServerSelector = m1.ServerSelector
 	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
 	f.UrlMatcher = m1.UrlMatcher
 

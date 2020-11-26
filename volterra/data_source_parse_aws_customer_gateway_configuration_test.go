@@ -21,6 +21,7 @@ func TestAccParseCGWData(t *testing.T) {
 	testURL, stopFunc := createTestCustomAPIServer(t, []string{ves_io_schema_ns.ObjectType})
 	defer stopFunc()
 	os.Setenv("VOLT_API_TEST", "true")
+	//os.Setenv("TF_LOG", "TRACE")
 	os.Setenv("VOLT_API_URL", testURL)
 	os.Setenv("TF_ACC", "true")
 	os.Setenv("VOLT_VESENV", "true")

@@ -994,7 +994,19 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
+func (s *APISrv) validateTransport(ctx context.Context) error {
+	if s.sf.IsTransportNotSupported("ves.io.schema.endpoint.crudapi.API", server.TransportFromContext(ctx)) {
+		userMsg := fmt.Sprintf("ves.io.schema.endpoint.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		return server.GRPCStatusFromError(err).Err()
+	}
+	return nil
+}
+
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.endpoint.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1019,6 +1031,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1043,6 +1058,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.endpoint.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1065,6 +1083,9 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.endpoint.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1116,6 +1137,9 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.endpoint.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1494,7 +1518,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-endpoint-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-endpoint-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.endpoint.crudapi.API.Get"
             },
@@ -1569,7 +1593,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-endpoint-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-endpoint-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.endpoint.crudapi.API.Delete"
             },
@@ -1652,7 +1676,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-endpoint-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-endpoint-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.endpoint.crudapi.API.Replace"
             },
@@ -1781,7 +1805,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-endpoint-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-endpoint-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.endpoint.crudapi.API.List"
             },
@@ -1858,7 +1882,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-endpoint-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-endpoint-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.endpoint.crudapi.API.Create"
             },
@@ -1987,7 +2011,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-endpoint-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-endpoint-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.endpoint.crudapi.API.ListStream"
             },
@@ -2301,6 +2325,14 @@ var APISwaggerJSON string = `{
                     "title": "dns_name_advance",
                     "$ref": "#/definitions/endpointDnsNameAdvanceType"
                 },
+                "health_check_port": {
+                    "type": "integer",
+                    "description": " By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port.\n Setting this with a non-zero value allows an endpoint to have different health check port.\n\nExample: - \"9080\"-",
+                    "title": "Health check Port",
+                    "format": "int64",
+                    "x-displayname": "Port used for health check",
+                    "x-ves-example": "9080"
+                },
                 "ip": {
                     "type": "string",
                     "description": "Exclusive with [dns_name dns_name_advance serverless_service_name service_info]\nx-displayName: \"Endpoint IP Address\"\nx-example: \"10.5.2.4\"\nEndpoint is reachable at the given ip address",
@@ -2327,7 +2359,7 @@ var APISwaggerJSON string = `{
                     "title": "serverless_service_name"
                 },
                 "service_info": {
-                    "description": "Exclusive with [dns_name dns_name_advance ip serverless_service_name]\nx-displayName: \"Service Selector Info\"\nIt contains information about how the service is selected (either by service name or\nlabel selector) and where the service is discovered (either in k8s or Consul)\n\n  Service Name.\n\n    String represent name of the service. System will perform discovery based on the\n    discovery method.\n\n    In case of K8S, System will watch k8s API server and automatically discover services and\n    endpoints of interest.\n    In case Virtual k8s cluster, system already has access to it.\n    In case k8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n    In case of Consul, System will watch the consul server and automatically discover the\n    services and endpoints of interest.\n\n  Label selector for selecting the services\n\n    Label selector expression for selecting services or serverless functions\n    to automatically discover services and endpoint of interest.\n\n    discovery_type specifies where endpoint will be discovered\n\n    Endpoint can be discovered in K8S or Consul\n    In case of K8S, labels on the service is matched against service_selector\n    In case of Consul, tags on the service is matched against service_selector",
+                    "description": "Exclusive with [dns_name dns_name_advance ip serverless_service_name]\nx-displayName: \"Service Selector Info\"\nIt contains information about how the service is selected (either by service name or\nlabel selector) and where the service is discovered (either in K8s or Consul)\n\n  Service Name.\n\n    String represent name of the service. System will perform discovery based on the\n    discovery method.\n\n    In case of K8S, System will watch K8s API server and automatically discover services and\n    endpoints of interest.\n    In case Virtual K8s cluster, system already has access to it.\n    In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n    In case of Consul, System will watch the consul server and automatically discover the\n    services and endpoints of interest.\n\n  Label selector for selecting the services\n\n    Label selector expression for selecting services or serverless functions\n    to automatically discover services and endpoint of interest.\n\n    discovery_type specifies where endpoint will be discovered\n\n    Endpoint can be discovered in K8S or Consul\n    In case of K8S, labels on the service is matched against service_selector\n    In case of Consul, tags on the service is matched against service_selector",
                     "title": "Service Selector Info",
                     "$ref": "#/definitions/endpointServiceInfoType"
                 },
@@ -2572,7 +2604,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -3172,7 +3204,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nVk8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",

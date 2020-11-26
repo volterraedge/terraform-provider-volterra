@@ -28,6 +28,8 @@ It has these top-level messages:
 	DeviceInstanceType
 	FleetInterfaceListType
 	FleetDeviceListType
+	StorageDeviceOpenebsEnterpriseType
+	OpenebsMayastorPoolType
 	StorageDeviceDellIsilonF800Type
 	StorageDeviceHPENimbusStorageAf40Type
 	StorageDevicePureStorageServiceOrchestratorType
@@ -46,6 +48,7 @@ It has these top-level messages:
 	FleetStorageDeviceListType
 	StorageClassDellIsilonF800Type
 	StorageClassHPENimbusStorageAf40Type
+	StorageClassOpenebsEnterpriseType
 	StorageClassNetappTridentType
 	StorageClassPureServiceOrchestratorType
 	FleetStorageClassType
@@ -85,6 +88,8 @@ import (
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.

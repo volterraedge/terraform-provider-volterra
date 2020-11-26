@@ -385,6 +385,14 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) PanicThresholdTypePanicThresholdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PanicThreshold, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for panic_threshold")
+	}
+	return oValidatorFn_PanicThreshold, nil
+}
+
 func (v *ValidateCreateSpecType) EndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
@@ -688,6 +696,32 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetPanicThresholdType().(type) {
+	case *CreateSpecType_NoPanicThreshold:
+		if fv, exists := v.FldValidators["panic_threshold_type.no_panic_threshold"]; exists {
+			val := m.GetPanicThresholdType().(*CreateSpecType_NoPanicThreshold).NoPanicThreshold
+			vOpts := append(opts,
+				db.WithValidateField("panic_threshold_type"),
+				db.WithValidateField("no_panic_threshold"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_PanicThreshold:
+		if fv, exists := v.FldValidators["panic_threshold_type.panic_threshold"]; exists {
+			val := m.GetPanicThresholdType().(*CreateSpecType_PanicThreshold).PanicThreshold
+			vOpts := append(opts,
+				db.WithValidateField("panic_threshold_type"),
+				db.WithValidateField("panic_threshold"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
@@ -711,6 +745,18 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhPanicThresholdTypePanicThreshold := v.PanicThresholdTypePanicThresholdValidationRuleHandler
+	rulesPanicThresholdTypePanicThreshold := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "100",
+	}
+	vFnMap["panic_threshold_type.panic_threshold"], err = vrhPanicThresholdTypePanicThreshold(rulesPanicThresholdTypePanicThreshold)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.panic_threshold_type_panic_threshold: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["panic_threshold_type.panic_threshold"] = vFnMap["panic_threshold_type.panic_threshold"]
 
 	vrhEndpoints := v.EndpointsValidationRuleHandler
 	rulesEndpoints := map[string]string{
@@ -1083,6 +1129,14 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) PanicThresholdTypePanicThresholdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PanicThreshold, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for panic_threshold")
+	}
+	return oValidatorFn_PanicThreshold, nil
+}
+
 func (v *ValidateGetSpecType) EndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
@@ -1386,6 +1440,32 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	switch m.GetPanicThresholdType().(type) {
+	case *GetSpecType_NoPanicThreshold:
+		if fv, exists := v.FldValidators["panic_threshold_type.no_panic_threshold"]; exists {
+			val := m.GetPanicThresholdType().(*GetSpecType_NoPanicThreshold).NoPanicThreshold
+			vOpts := append(opts,
+				db.WithValidateField("panic_threshold_type"),
+				db.WithValidateField("no_panic_threshold"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_PanicThreshold:
+		if fv, exists := v.FldValidators["panic_threshold_type.panic_threshold"]; exists {
+			val := m.GetPanicThresholdType().(*GetSpecType_PanicThreshold).PanicThreshold
+			vOpts := append(opts,
+				db.WithValidateField("panic_threshold_type"),
+				db.WithValidateField("panic_threshold"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
@@ -1409,6 +1489,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhPanicThresholdTypePanicThreshold := v.PanicThresholdTypePanicThresholdValidationRuleHandler
+	rulesPanicThresholdTypePanicThreshold := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "100",
+	}
+	vFnMap["panic_threshold_type.panic_threshold"], err = vrhPanicThresholdTypePanicThreshold(rulesPanicThresholdTypePanicThreshold)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.panic_threshold_type_panic_threshold: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["panic_threshold_type.panic_threshold"] = vFnMap["panic_threshold_type.panic_threshold"]
 
 	vrhEndpoints := v.EndpointsValidationRuleHandler
 	rulesEndpoints := map[string]string{
@@ -1641,6 +1733,14 @@ func (m *GlobalSpecType) GetHealthChecksDBEntries(ctx context.Context, d db.Inte
 
 type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGlobalSpecType) PanicThresholdTypePanicThresholdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PanicThreshold, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for panic_threshold")
+	}
+	return oValidatorFn_PanicThreshold, nil
 }
 
 func (v *ValidateGlobalSpecType) EndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -1964,6 +2064,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetPanicThresholdType().(type) {
+	case *GlobalSpecType_NoPanicThreshold:
+		if fv, exists := v.FldValidators["panic_threshold_type.no_panic_threshold"]; exists {
+			val := m.GetPanicThresholdType().(*GlobalSpecType_NoPanicThreshold).NoPanicThreshold
+			vOpts := append(opts,
+				db.WithValidateField("panic_threshold_type"),
+				db.WithValidateField("no_panic_threshold"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_PanicThreshold:
+		if fv, exists := v.FldValidators["panic_threshold_type.panic_threshold"]; exists {
+			val := m.GetPanicThresholdType().(*GlobalSpecType_PanicThreshold).PanicThreshold
+			vOpts := append(opts,
+				db.WithValidateField("panic_threshold_type"),
+				db.WithValidateField("panic_threshold"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
@@ -1987,6 +2113,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhPanicThresholdTypePanicThreshold := v.PanicThresholdTypePanicThresholdValidationRuleHandler
+	rulesPanicThresholdTypePanicThreshold := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "100",
+	}
+	vFnMap["panic_threshold_type.panic_threshold"], err = vrhPanicThresholdTypePanicThreshold(rulesPanicThresholdTypePanicThreshold)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.panic_threshold_type_panic_threshold: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["panic_threshold_type.panic_threshold"] = vFnMap["panic_threshold_type.panic_threshold"]
 
 	vrhEndpoints := v.EndpointsValidationRuleHandler
 	rulesEndpoints := map[string]string{
@@ -2526,6 +2664,14 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) PanicThresholdTypePanicThresholdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PanicThreshold, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for panic_threshold")
+	}
+	return oValidatorFn_PanicThreshold, nil
+}
+
 func (v *ValidateReplaceSpecType) EndpointsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
@@ -2829,6 +2975,32 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	switch m.GetPanicThresholdType().(type) {
+	case *ReplaceSpecType_NoPanicThreshold:
+		if fv, exists := v.FldValidators["panic_threshold_type.no_panic_threshold"]; exists {
+			val := m.GetPanicThresholdType().(*ReplaceSpecType_NoPanicThreshold).NoPanicThreshold
+			vOpts := append(opts,
+				db.WithValidateField("panic_threshold_type"),
+				db.WithValidateField("no_panic_threshold"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_PanicThreshold:
+		if fv, exists := v.FldValidators["panic_threshold_type.panic_threshold"]; exists {
+			val := m.GetPanicThresholdType().(*ReplaceSpecType_PanicThreshold).PanicThreshold
+			vOpts := append(opts,
+				db.WithValidateField("panic_threshold_type"),
+				db.WithValidateField("panic_threshold"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
@@ -2852,6 +3024,18 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhPanicThresholdTypePanicThreshold := v.PanicThresholdTypePanicThresholdValidationRuleHandler
+	rulesPanicThresholdTypePanicThreshold := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "100",
+	}
+	vFnMap["panic_threshold_type.panic_threshold"], err = vrhPanicThresholdTypePanicThreshold(rulesPanicThresholdTypePanicThreshold)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.panic_threshold_type_panic_threshold: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["panic_threshold_type.panic_threshold"] = vFnMap["panic_threshold_type.panic_threshold"]
 
 	vrhEndpoints := v.EndpointsValidationRuleHandler
 	rulesEndpoints := map[string]string{
@@ -2932,6 +3116,41 @@ func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetPanicThresholdTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PanicThresholdType.(type) {
+	case nil:
+		o.PanicThresholdType = nil
+
+	case *CreateSpecType_NoPanicThreshold:
+		o.PanicThresholdType = &GlobalSpecType_NoPanicThreshold{NoPanicThreshold: of.NoPanicThreshold}
+
+	case *CreateSpecType_PanicThreshold:
+		o.PanicThresholdType = &GlobalSpecType_PanicThreshold{PanicThreshold: of.PanicThreshold}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetPanicThresholdTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PanicThresholdType.(type) {
+	case nil:
+		r.PanicThresholdType = nil
+
+	case *GlobalSpecType_NoPanicThreshold:
+		r.PanicThresholdType = &CreateSpecType_NoPanicThreshold{NoPanicThreshold: of.NoPanicThreshold}
+
+	case *GlobalSpecType_PanicThreshold:
+		r.PanicThresholdType = &CreateSpecType_PanicThreshold{PanicThreshold: of.PanicThreshold}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -2948,6 +3167,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.HttpIdleTimeout = f.GetHttpIdleTimeout()
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
 	m.OutlierDetection = f.GetOutlierDetection()
+	m.GetPanicThresholdTypeFromGlobalSpecType(f)
 	m.TlsParameters = f.GetTlsParameters()
 }
 
@@ -2969,7 +3189,43 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.HttpIdleTimeout = m1.HttpIdleTimeout
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
 	f.OutlierDetection = m1.OutlierDetection
+	m1.SetPanicThresholdTypeToGlobalSpecType(f)
 	f.TlsParameters = m1.TlsParameters
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetPanicThresholdTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PanicThresholdType.(type) {
+	case nil:
+		o.PanicThresholdType = nil
+
+	case *GetSpecType_NoPanicThreshold:
+		o.PanicThresholdType = &GlobalSpecType_NoPanicThreshold{NoPanicThreshold: of.NoPanicThreshold}
+
+	case *GetSpecType_PanicThreshold:
+		o.PanicThresholdType = &GlobalSpecType_PanicThreshold{PanicThreshold: of.PanicThreshold}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetPanicThresholdTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PanicThresholdType.(type) {
+	case nil:
+		r.PanicThresholdType = nil
+
+	case *GlobalSpecType_NoPanicThreshold:
+		r.PanicThresholdType = &GetSpecType_NoPanicThreshold{NoPanicThreshold: of.NoPanicThreshold}
+
+	case *GlobalSpecType_PanicThreshold:
+		r.PanicThresholdType = &GetSpecType_PanicThreshold{PanicThreshold: of.PanicThreshold}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -2988,6 +3244,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.HttpIdleTimeout = f.GetHttpIdleTimeout()
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
 	m.OutlierDetection = f.GetOutlierDetection()
+	m.GetPanicThresholdTypeFromGlobalSpecType(f)
 	m.TlsParameters = f.GetTlsParameters()
 }
 
@@ -3009,7 +3266,43 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.HttpIdleTimeout = m1.HttpIdleTimeout
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
 	f.OutlierDetection = m1.OutlierDetection
+	m1.SetPanicThresholdTypeToGlobalSpecType(f)
 	f.TlsParameters = m1.TlsParameters
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetPanicThresholdTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PanicThresholdType.(type) {
+	case nil:
+		o.PanicThresholdType = nil
+
+	case *ReplaceSpecType_NoPanicThreshold:
+		o.PanicThresholdType = &GlobalSpecType_NoPanicThreshold{NoPanicThreshold: of.NoPanicThreshold}
+
+	case *ReplaceSpecType_PanicThreshold:
+		o.PanicThresholdType = &GlobalSpecType_PanicThreshold{PanicThreshold: of.PanicThreshold}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetPanicThresholdTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PanicThresholdType.(type) {
+	case nil:
+		r.PanicThresholdType = nil
+
+	case *GlobalSpecType_NoPanicThreshold:
+		r.PanicThresholdType = &ReplaceSpecType_NoPanicThreshold{NoPanicThreshold: of.NoPanicThreshold}
+
+	case *GlobalSpecType_PanicThreshold:
+		r.PanicThresholdType = &ReplaceSpecType_PanicThreshold{PanicThreshold: of.PanicThreshold}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -3028,6 +3321,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.HttpIdleTimeout = f.GetHttpIdleTimeout()
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
 	m.OutlierDetection = f.GetOutlierDetection()
+	m.GetPanicThresholdTypeFromGlobalSpecType(f)
 	m.TlsParameters = f.GetTlsParameters()
 }
 
@@ -3049,5 +3343,6 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.HttpIdleTimeout = m1.HttpIdleTimeout
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
 	f.OutlierDetection = m1.OutlierDetection
+	m1.SetPanicThresholdTypeToGlobalSpecType(f)
 	f.TlsParameters = m1.TlsParameters
 }

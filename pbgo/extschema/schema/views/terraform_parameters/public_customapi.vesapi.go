@@ -482,7 +482,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-terraform_parameters-CustomActionAPI-ForceDelete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-CustomActionAPI-ForceDelete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.CustomActionAPI.ForceDelete"
             },
@@ -1673,7 +1673,7 @@ var CustomActionAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-terraform_parameters-CustomActionAPI-ForceDelete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-CustomActionAPI-ForceDelete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.CustomActionAPI.ForceDelete"
             },

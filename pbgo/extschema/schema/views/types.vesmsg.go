@@ -1245,6 +1245,51 @@ func (v *ValidateOriginPoolWithWeight) PoolChoiceClusterValidationRuleHandler(ru
 	return ObjectRefTypeValidator().Validate, nil
 }
 
+func (v *ValidateOriginPoolWithWeight) EndpointSubsetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for endpoint_subsets")
+	}
+	itemValRules := db.GetMapStringValueRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemValRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item value ValidationRuleHandler for endpoint_subsets")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]string, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := itemValFn(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for endpoint_subsets")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]string)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]string, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map endpoint_subsets")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items endpoint_subsets")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateOriginPoolWithWeight) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*OriginPoolWithWeight)
 	if !ok {
@@ -1257,6 +1302,14 @@ func (v *ValidateOriginPoolWithWeight) Validate(ctx context.Context, pm interfac
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["endpoint_subsets"]; exists {
+		vOpts := append(opts, db.WithValidateField("endpoint_subsets"))
+		if err := fv(ctx, m.GetEndpointSubsets(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["pool_choice"]; exists {
@@ -1351,6 +1404,17 @@ var DefaultOriginPoolWithWeightValidator = func() *ValidateOriginPoolWithWeight 
 
 	v.FldValidators["pool_choice.pool"] = vFnMap["pool_choice.pool"]
 	v.FldValidators["pool_choice.cluster"] = vFnMap["pool_choice.cluster"]
+
+	vrhEndpointSubsets := v.EndpointSubsetsValidationRuleHandler
+	rulesEndpointSubsets := map[string]string{
+		"ves.io.schema.rules.map.max_pairs": "16",
+	}
+	vFn, err = vrhEndpointSubsets(rulesEndpointSubsets)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginPoolWithWeight.endpoint_subsets: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["endpoint_subsets"] = vFn
 
 	return v
 }()

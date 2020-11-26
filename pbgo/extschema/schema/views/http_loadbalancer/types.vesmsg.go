@@ -544,8 +544,7 @@ var DefaultAdvancedOptionsTypeValidator = func() *ValidateAdvancedOptionsType {
 
 	vrhCustomErrors := v.CustomErrorsValidationRuleHandler
 	rulesCustomErrors := map[string]string{
-		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
-		"ves.io.schema.rules.map.keys.uint32.lte":       "599",
+		"ves.io.schema.rules.map.keys.uint32.ranges":    "3,4,5,300-599",
 		"ves.io.schema.rules.map.max_pairs":             "16",
 		"ves.io.schema.rules.map.values.string.max_len": "8192",
 		"ves.io.schema.rules.map.values.string.uri_ref": "true",
@@ -654,6 +653,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	if fdrInfos, err := m.GetRoutesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -871,6 +876,39 @@ func (m *CreateSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.ServicePolicyChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *CreateSpecType_ServicePoliciesFromNamespace:
+
+	case *CreateSpecType_NoServicePolicies:
+
+	case *CreateSpecType_ActiveServicePolicies:
+		odrInfos, err = m.GetActiveServicePolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_service_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
 func (m *CreateSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
 	drInfos := []db.DRefInfo{}
 
@@ -1048,6 +1086,14 @@ func (v *ValidateCreateSpecType) ChallengeTypeValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) HashPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for hash_policy_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1060,6 +1106,14 @@ func (v *ValidateCreateSpecType) RateLimitChoiceValidationRuleHandler(rules map[
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for rate_limit_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
 	}
 	return validatorFn, nil
 }
@@ -1351,6 +1405,86 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["hash_policy_choice"]; exists {
+		val := m.GetHashPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("hash_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHashPolicyChoice().(type) {
+	case *CreateSpecType_RoundRobin:
+		if fv, exists := v.FldValidators["hash_policy_choice.round_robin"]; exists {
+			val := m.GetHashPolicyChoice().(*CreateSpecType_RoundRobin).RoundRobin
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("round_robin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_LeastActive:
+		if fv, exists := v.FldValidators["hash_policy_choice.least_active"]; exists {
+			val := m.GetHashPolicyChoice().(*CreateSpecType_LeastActive).LeastActive
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("least_active"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_Random:
+		if fv, exists := v.FldValidators["hash_policy_choice.random"]; exists {
+			val := m.GetHashPolicyChoice().(*CreateSpecType_Random).Random
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("random"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_SourceIpStickiness:
+		if fv, exists := v.FldValidators["hash_policy_choice.source_ip_stickiness"]; exists {
+			val := m.GetHashPolicyChoice().(*CreateSpecType_SourceIpStickiness).SourceIpStickiness
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("source_ip_stickiness"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_CookieStickiness:
+		if fv, exists := v.FldValidators["hash_policy_choice.cookie_stickiness"]; exists {
+			val := m.GetHashPolicyChoice().(*CreateSpecType_CookieStickiness).CookieStickiness
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("cookie_stickiness"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_RingHash:
+		if fv, exists := v.FldValidators["hash_policy_choice.ring_hash"]; exists {
+			val := m.GetHashPolicyChoice().(*CreateSpecType_RingHash).RingHash
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("ring_hash"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
 		val := m.GetLoadbalancerType()
 		vOpts := append(opts,
@@ -1460,6 +1594,53 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
+		val := m.GetServicePolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("service_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *CreateSpecType_ServicePoliciesFromNamespace:
+		if fv, exists := v.FldValidators["service_policy_choice.service_policies_from_namespace"]; exists {
+			val := m.GetServicePolicyChoice().(*CreateSpecType_ServicePoliciesFromNamespace).ServicePoliciesFromNamespace
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("service_policies_from_namespace"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_NoServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.no_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*CreateSpecType_NoServicePolicies).NoServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("no_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ActiveServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.active_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*CreateSpecType_ActiveServicePolicies).ActiveServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("active_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["user_identification"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("user_identification"))
@@ -1561,6 +1742,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["challenge_type"] = vFn
 
+	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
+	rulesHashPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.hash_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hash_policy_choice"] = vFn
+
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -1582,6 +1774,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rate_limit_choice"] = vFn
+
+	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
+	rulesServicePolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.service_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_policy_choice"] = vFn
 
 	vrhWafChoice := v.WafChoiceValidationRuleHandler
 	rulesWafChoice := map[string]string{
@@ -1641,9 +1844,13 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
 
+	v.FldValidators["hash_policy_choice.ring_hash"] = HashPolicyListTypeValidator().Validate
+
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
 
 	v.FldValidators["rate_limit_choice.rate_limit"] = RateLimitConfigTypeValidator().Validate
+
+	v.FldValidators["service_policy_choice.active_service_policies"] = ServicePolicyListValidator().Validate
 
 	v.FldValidators["waf_choice.waf"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["waf_choice.waf_rule"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -2286,6 +2493,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetUserIdentificationDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -2498,6 +2711,39 @@ func (m *GetSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.ServicePolicyChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *GetSpecType_ServicePoliciesFromNamespace:
+
+	case *GetSpecType_NoServicePolicies:
+
+	case *GetSpecType_ActiveServicePolicies:
+		odrInfos, err = m.GetActiveServicePolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_service_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
 func (m *GetSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
 	drInfos := []db.DRefInfo{}
 
@@ -2675,6 +2921,14 @@ func (v *ValidateGetSpecType) ChallengeTypeValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) HashPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for hash_policy_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2687,6 +2941,14 @@ func (v *ValidateGetSpecType) RateLimitChoiceValidationRuleHandler(rules map[str
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for rate_limit_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
 	}
 	return validatorFn, nil
 }
@@ -3008,6 +3270,86 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["hash_policy_choice"]; exists {
+		val := m.GetHashPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("hash_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHashPolicyChoice().(type) {
+	case *GetSpecType_RoundRobin:
+		if fv, exists := v.FldValidators["hash_policy_choice.round_robin"]; exists {
+			val := m.GetHashPolicyChoice().(*GetSpecType_RoundRobin).RoundRobin
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("round_robin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_LeastActive:
+		if fv, exists := v.FldValidators["hash_policy_choice.least_active"]; exists {
+			val := m.GetHashPolicyChoice().(*GetSpecType_LeastActive).LeastActive
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("least_active"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_Random:
+		if fv, exists := v.FldValidators["hash_policy_choice.random"]; exists {
+			val := m.GetHashPolicyChoice().(*GetSpecType_Random).Random
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("random"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_SourceIpStickiness:
+		if fv, exists := v.FldValidators["hash_policy_choice.source_ip_stickiness"]; exists {
+			val := m.GetHashPolicyChoice().(*GetSpecType_SourceIpStickiness).SourceIpStickiness
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("source_ip_stickiness"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_CookieStickiness:
+		if fv, exists := v.FldValidators["hash_policy_choice.cookie_stickiness"]; exists {
+			val := m.GetHashPolicyChoice().(*GetSpecType_CookieStickiness).CookieStickiness
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("cookie_stickiness"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_RingHash:
+		if fv, exists := v.FldValidators["hash_policy_choice.ring_hash"]; exists {
+			val := m.GetHashPolicyChoice().(*GetSpecType_RingHash).RingHash
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("ring_hash"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["host_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("host_name"))
@@ -3126,6 +3468,53 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
+		val := m.GetServicePolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("service_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *GetSpecType_ServicePoliciesFromNamespace:
+		if fv, exists := v.FldValidators["service_policy_choice.service_policies_from_namespace"]; exists {
+			val := m.GetServicePolicyChoice().(*GetSpecType_ServicePoliciesFromNamespace).ServicePoliciesFromNamespace
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("service_policies_from_namespace"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_NoServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.no_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*GetSpecType_NoServicePolicies).NoServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("no_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ActiveServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.active_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*GetSpecType_ActiveServicePolicies).ActiveServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("active_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("state"))
@@ -3236,6 +3625,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["challenge_type"] = vFn
 
+	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
+	rulesHashPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.hash_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hash_policy_choice"] = vFn
+
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -3257,6 +3657,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rate_limit_choice"] = vFn
+
+	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
+	rulesServicePolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.service_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_policy_choice"] = vFn
 
 	vrhWafChoice := v.WafChoiceValidationRuleHandler
 	rulesWafChoice := map[string]string{
@@ -3316,9 +3727,13 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
 
+	v.FldValidators["hash_policy_choice.ring_hash"] = HashPolicyListTypeValidator().Validate
+
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
 
 	v.FldValidators["rate_limit_choice.rate_limit"] = RateLimitConfigTypeValidator().Validate
+
+	v.FldValidators["service_policy_choice.active_service_policies"] = ServicePolicyListValidator().Validate
 
 	v.FldValidators["waf_choice.waf"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["waf_choice.waf_rule"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -3426,6 +3841,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	if fdrInfos, err := m.GetRoutesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -3644,6 +4065,39 @@ func (m *GlobalSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = fmt.Sprintf("routes[%v].%s", idx, dri.DRField)
 			drInfos = append(drInfos, dri)
 		}
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.ServicePolicyChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *GlobalSpecType_ServicePoliciesFromNamespace:
+
+	case *GlobalSpecType_NoServicePolicies:
+
+	case *GlobalSpecType_ActiveServicePolicies:
+		odrInfos, err = m.GetActiveServicePolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_service_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
 	}
 
 	return drInfos, err
@@ -3884,6 +4338,14 @@ func (v *ValidateGlobalSpecType) ChallengeTypeValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) HashPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for hash_policy_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3896,6 +4358,14 @@ func (v *ValidateGlobalSpecType) RateLimitChoiceValidationRuleHandler(rules map[
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for rate_limit_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
 	}
 	return validatorFn, nil
 }
@@ -4254,6 +4724,86 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["hash_policy_choice"]; exists {
+		val := m.GetHashPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("hash_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHashPolicyChoice().(type) {
+	case *GlobalSpecType_RoundRobin:
+		if fv, exists := v.FldValidators["hash_policy_choice.round_robin"]; exists {
+			val := m.GetHashPolicyChoice().(*GlobalSpecType_RoundRobin).RoundRobin
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("round_robin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_LeastActive:
+		if fv, exists := v.FldValidators["hash_policy_choice.least_active"]; exists {
+			val := m.GetHashPolicyChoice().(*GlobalSpecType_LeastActive).LeastActive
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("least_active"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_Random:
+		if fv, exists := v.FldValidators["hash_policy_choice.random"]; exists {
+			val := m.GetHashPolicyChoice().(*GlobalSpecType_Random).Random
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("random"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_SourceIpStickiness:
+		if fv, exists := v.FldValidators["hash_policy_choice.source_ip_stickiness"]; exists {
+			val := m.GetHashPolicyChoice().(*GlobalSpecType_SourceIpStickiness).SourceIpStickiness
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("source_ip_stickiness"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_CookieStickiness:
+		if fv, exists := v.FldValidators["hash_policy_choice.cookie_stickiness"]; exists {
+			val := m.GetHashPolicyChoice().(*GlobalSpecType_CookieStickiness).CookieStickiness
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("cookie_stickiness"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_RingHash:
+		if fv, exists := v.FldValidators["hash_policy_choice.ring_hash"]; exists {
+			val := m.GetHashPolicyChoice().(*GlobalSpecType_RingHash).RingHash
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("ring_hash"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["host_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("host_name"))
@@ -4368,6 +4918,53 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("routes"))
 		if err := fv(ctx, m.GetRoutes(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
+		val := m.GetServicePolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("service_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *GlobalSpecType_ServicePoliciesFromNamespace:
+		if fv, exists := v.FldValidators["service_policy_choice.service_policies_from_namespace"]; exists {
+			val := m.GetServicePolicyChoice().(*GlobalSpecType_ServicePoliciesFromNamespace).ServicePoliciesFromNamespace
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("service_policies_from_namespace"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_NoServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.no_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*GlobalSpecType_NoServicePolicies).NoServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("no_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ActiveServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.active_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*GlobalSpecType_ActiveServicePolicies).ActiveServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("active_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -4503,6 +5100,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["challenge_type"] = vFn
 
+	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
+	rulesHashPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.hash_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hash_policy_choice"] = vFn
+
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -4524,6 +5132,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rate_limit_choice"] = vFn
+
+	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
+	rulesServicePolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.service_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_policy_choice"] = vFn
 
 	vrhWafChoice := v.WafChoiceValidationRuleHandler
 	rulesWafChoice := map[string]string{
@@ -4583,9 +5202,13 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
 
+	v.FldValidators["hash_policy_choice.ring_hash"] = HashPolicyListTypeValidator().Validate
+
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
 
 	v.FldValidators["rate_limit_choice.rate_limit"] = RateLimitConfigTypeValidator().Validate
+
+	v.FldValidators["service_policy_choice.active_service_policies"] = ServicePolicyListValidator().Validate
 
 	v.FldValidators["waf_choice.waf"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["waf_choice.waf_rule"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -4609,6 +5232,364 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *HashPolicyListType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HashPolicyListType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HashPolicyListType) DeepCopy() *HashPolicyListType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HashPolicyListType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HashPolicyListType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HashPolicyListType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HashPolicyListTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHashPolicyListType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHashPolicyListType) HashPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_route.HashPolicyType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_route.HashPolicyTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for hash_policy")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_route.HashPolicyType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_route.HashPolicyType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated hash_policy")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items hash_policy")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHashPolicyListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HashPolicyListType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HashPolicyListType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["hash_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("hash_policy"))
+		if err := fv(ctx, m.GetHashPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHashPolicyListTypeValidator = func() *ValidateHashPolicyListType {
+	v := &ValidateHashPolicyListType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhHashPolicy := v.HashPolicyValidationRuleHandler
+	rulesHashPolicy := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhHashPolicy(rulesHashPolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HashPolicyListType.hash_policy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hash_policy"] = vFn
+
+	return v
+}()
+
+func HashPolicyListTypeValidator() db.Validator {
+	return DefaultHashPolicyListTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MirrorPolicyType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MirrorPolicyType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MirrorPolicyType) DeepCopy() *MirrorPolicyType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MirrorPolicyType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MirrorPolicyType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MirrorPolicyType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MirrorPolicyTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *MirrorPolicyType) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetOriginPoolDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *MirrorPolicyType) GetOriginPoolDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+
+	vref := m.GetOriginPool()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("origin_pool.Object")
+	drInfos = append(drInfos, db.DRefInfo{
+		RefdType:   "origin_pool.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "origin_pool",
+		Ref:        vdRef,
+	})
+
+	return drInfos, nil
+}
+
+// GetOriginPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *MirrorPolicyType) GetOriginPoolDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "origin_pool.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: origin_pool")
+	}
+
+	vref := m.GetOriginPool()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "origin_pool.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateMirrorPolicyType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMirrorPolicyType) OriginPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for origin_pool")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMirrorPolicyType) PercentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for percent")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.FractionalPercentValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMirrorPolicyType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MirrorPolicyType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MirrorPolicyType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["origin_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("origin_pool"))
+		if err := fv(ctx, m.GetOriginPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["percent"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("percent"))
+		if err := fv(ctx, m.GetPercent(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMirrorPolicyTypeValidator = func() *ValidateMirrorPolicyType {
+	v := &ValidateMirrorPolicyType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhOriginPool := v.OriginPoolValidationRuleHandler
+	rulesOriginPool := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhOriginPool(rulesOriginPool)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MirrorPolicyType.origin_pool: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["origin_pool"] = vFn
+
+	vrhPercent := v.PercentValidationRuleHandler
+	rulesPercent := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPercent(rulesPercent)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MirrorPolicyType.percent: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["percent"] = vFn
+
+	return v
+}()
+
+func MirrorPolicyTypeValidator() db.Validator {
+	return DefaultMirrorPolicyTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -5100,6 +6081,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetUserIdentificationDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -5312,6 +6299,39 @@ func (m *ReplaceSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.ServicePolicyChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *ReplaceSpecType_ServicePoliciesFromNamespace:
+
+	case *ReplaceSpecType_NoServicePolicies:
+
+	case *ReplaceSpecType_ActiveServicePolicies:
+		odrInfos, err = m.GetActiveServicePolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_service_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
 func (m *ReplaceSpecType) GetUserIdentificationDRefInfo() ([]db.DRefInfo, error) {
 	drInfos := []db.DRefInfo{}
 
@@ -5489,6 +6509,14 @@ func (v *ValidateReplaceSpecType) ChallengeTypeValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) HashPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for hash_policy_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5501,6 +6529,14 @@ func (v *ValidateReplaceSpecType) RateLimitChoiceValidationRuleHandler(rules map
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for rate_limit_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
 	}
 	return validatorFn, nil
 }
@@ -5792,6 +6828,86 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["hash_policy_choice"]; exists {
+		val := m.GetHashPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("hash_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHashPolicyChoice().(type) {
+	case *ReplaceSpecType_RoundRobin:
+		if fv, exists := v.FldValidators["hash_policy_choice.round_robin"]; exists {
+			val := m.GetHashPolicyChoice().(*ReplaceSpecType_RoundRobin).RoundRobin
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("round_robin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_LeastActive:
+		if fv, exists := v.FldValidators["hash_policy_choice.least_active"]; exists {
+			val := m.GetHashPolicyChoice().(*ReplaceSpecType_LeastActive).LeastActive
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("least_active"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_Random:
+		if fv, exists := v.FldValidators["hash_policy_choice.random"]; exists {
+			val := m.GetHashPolicyChoice().(*ReplaceSpecType_Random).Random
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("random"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_SourceIpStickiness:
+		if fv, exists := v.FldValidators["hash_policy_choice.source_ip_stickiness"]; exists {
+			val := m.GetHashPolicyChoice().(*ReplaceSpecType_SourceIpStickiness).SourceIpStickiness
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("source_ip_stickiness"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_CookieStickiness:
+		if fv, exists := v.FldValidators["hash_policy_choice.cookie_stickiness"]; exists {
+			val := m.GetHashPolicyChoice().(*ReplaceSpecType_CookieStickiness).CookieStickiness
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("cookie_stickiness"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_RingHash:
+		if fv, exists := v.FldValidators["hash_policy_choice.ring_hash"]; exists {
+			val := m.GetHashPolicyChoice().(*ReplaceSpecType_RingHash).RingHash
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("ring_hash"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
 		val := m.GetLoadbalancerType()
 		vOpts := append(opts,
@@ -5901,6 +7017,53 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
+		val := m.GetServicePolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("service_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *ReplaceSpecType_ServicePoliciesFromNamespace:
+		if fv, exists := v.FldValidators["service_policy_choice.service_policies_from_namespace"]; exists {
+			val := m.GetServicePolicyChoice().(*ReplaceSpecType_ServicePoliciesFromNamespace).ServicePoliciesFromNamespace
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("service_policies_from_namespace"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_NoServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.no_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*ReplaceSpecType_NoServicePolicies).NoServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("no_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ActiveServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.active_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*ReplaceSpecType_ActiveServicePolicies).ActiveServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("active_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["user_identification"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("user_identification"))
@@ -6002,6 +7165,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["challenge_type"] = vFn
 
+	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
+	rulesHashPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.hash_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hash_policy_choice"] = vFn
+
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -6023,6 +7197,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["rate_limit_choice"] = vFn
+
+	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
+	rulesServicePolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.service_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_policy_choice"] = vFn
 
 	vrhWafChoice := v.WafChoiceValidationRuleHandler
 	rulesWafChoice := map[string]string{
@@ -6082,9 +7267,13 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
 
+	v.FldValidators["hash_policy_choice.ring_hash"] = HashPolicyListTypeValidator().Validate
+
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
 
 	v.FldValidators["rate_limit_choice.rate_limit"] = RateLimitConfigTypeValidator().Validate
+
+	v.FldValidators["service_policy_choice.active_service_policies"] = ServicePolicyListValidator().Validate
 
 	v.FldValidators["waf_choice.waf"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["waf_choice.waf_rule"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -6104,6 +7293,1092 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RouteSimpleAdvancedOptions) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RouteSimpleAdvancedOptions) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RouteSimpleAdvancedOptions) DeepCopy() *RouteSimpleAdvancedOptions {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RouteSimpleAdvancedOptions{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RouteSimpleAdvancedOptions) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RouteSimpleAdvancedOptions) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RouteSimpleAdvancedOptionsValidator().Validate(ctx, m, opts...)
+}
+
+func (m *RouteSimpleAdvancedOptions) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetMirroringChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetWafChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *RouteSimpleAdvancedOptions) GetMirroringChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.MirroringChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetMirroringChoice().(type) {
+	case *RouteSimpleAdvancedOptions_DisableMirroring:
+
+	case *RouteSimpleAdvancedOptions_MirrorPolicy:
+		odrInfos, err = m.GetMirrorPolicy().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "mirror_policy." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+func (m *RouteSimpleAdvancedOptions) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var odrInfos []db.DRefInfo
+
+	switch m.GetWafChoice().(type) {
+	case *RouteSimpleAdvancedOptions_DisableWaf:
+
+	case *RouteSimpleAdvancedOptions_Waf:
+
+		vref := m.GetWaf()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("waf.Object")
+		odri := db.DRefInfo{
+			RefdType:   "waf.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "waf",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
+	case *RouteSimpleAdvancedOptions_WafRule:
+
+		vref := m.GetWafRule()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("waf_rule.Object")
+		odri := db.DRefInfo{
+			RefdType:   "waf_rule.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "waf_rule",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
+	}
+
+	return odrInfos, nil
+}
+
+// GetWafChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *RouteSimpleAdvancedOptions) GetWafChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetWafChoice().(type) {
+	case *RouteSimpleAdvancedOptions_DisableWaf:
+
+	case *RouteSimpleAdvancedOptions_Waf:
+		refdType, err := d.TypeForEntryKind("", "", "waf.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: waf")
+		}
+
+		vref := m.GetWaf()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "waf.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	case *RouteSimpleAdvancedOptions_WafRule:
+		refdType, err := d.TypeForEntryKind("", "", "waf_rule.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: waf_rule")
+		}
+
+		vref := m.GetWafRule()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "waf_rule.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
+type ValidateRouteSimpleAdvancedOptions struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) BufferChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for buffer_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) HashPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for hash_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) MirroringChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for mirroring_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) RetryPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for retry_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) RewriteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for rewrite_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) RewriteChoicePrefixRewriteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PrefixRewrite, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for prefix_rewrite")
+	}
+	return oValidatorFn_PrefixRewrite, nil
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) SpdyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for spdy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) WafChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for waf_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) WebsocketChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for websocket_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) EndpointSubsetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for endpoint_subsets")
+	}
+	itemValRules := db.GetMapStringValueRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemValRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item value ValidationRuleHandler for endpoint_subsets")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]string, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := itemValFn(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for endpoint_subsets")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]string)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]string, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map endpoint_subsets")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items endpoint_subsets")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) RequestHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_headers_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.HeaderManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.HeaderManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_headers_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_headers_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) RequestHeadersToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for request_headers_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_headers_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_headers_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_headers_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) ResponseHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_headers_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.HeaderManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.HeaderManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_headers_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_headers_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) ResponseHeadersToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for response_headers_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_headers_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_headers_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_headers_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) TimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for timeout")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RouteSimpleAdvancedOptions)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RouteSimpleAdvancedOptions got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["buffer_choice"]; exists {
+		val := m.GetBufferChoice()
+		vOpts := append(opts,
+			db.WithValidateField("buffer_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBufferChoice().(type) {
+	case *RouteSimpleAdvancedOptions_CommonBuffering:
+		if fv, exists := v.FldValidators["buffer_choice.common_buffering"]; exists {
+			val := m.GetBufferChoice().(*RouteSimpleAdvancedOptions_CommonBuffering).CommonBuffering
+			vOpts := append(opts,
+				db.WithValidateField("buffer_choice"),
+				db.WithValidateField("common_buffering"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteSimpleAdvancedOptions_BufferPolicy:
+		if fv, exists := v.FldValidators["buffer_choice.buffer_policy"]; exists {
+			val := m.GetBufferChoice().(*RouteSimpleAdvancedOptions_BufferPolicy).BufferPolicy
+			vOpts := append(opts,
+				db.WithValidateField("buffer_choice"),
+				db.WithValidateField("buffer_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cors_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cors_policy"))
+		if err := fv(ctx, m.GetCorsPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["disable_location_add"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("disable_location_add"))
+		if err := fv(ctx, m.GetDisableLocationAdd(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["endpoint_subsets"]; exists {
+		vOpts := append(opts, db.WithValidateField("endpoint_subsets"))
+		if err := fv(ctx, m.GetEndpointSubsets(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["hash_policy_choice"]; exists {
+		val := m.GetHashPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("hash_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHashPolicyChoice().(type) {
+	case *RouteSimpleAdvancedOptions_CommonHashPolicy:
+		if fv, exists := v.FldValidators["hash_policy_choice.common_hash_policy"]; exists {
+			val := m.GetHashPolicyChoice().(*RouteSimpleAdvancedOptions_CommonHashPolicy).CommonHashPolicy
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("common_hash_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteSimpleAdvancedOptions_SpecificHashPolicy:
+		if fv, exists := v.FldValidators["hash_policy_choice.specific_hash_policy"]; exists {
+			val := m.GetHashPolicyChoice().(*RouteSimpleAdvancedOptions_SpecificHashPolicy).SpecificHashPolicy
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("specific_hash_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mirroring_choice"]; exists {
+		val := m.GetMirroringChoice()
+		vOpts := append(opts,
+			db.WithValidateField("mirroring_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMirroringChoice().(type) {
+	case *RouteSimpleAdvancedOptions_DisableMirroring:
+		if fv, exists := v.FldValidators["mirroring_choice.disable_mirroring"]; exists {
+			val := m.GetMirroringChoice().(*RouteSimpleAdvancedOptions_DisableMirroring).DisableMirroring
+			vOpts := append(opts,
+				db.WithValidateField("mirroring_choice"),
+				db.WithValidateField("disable_mirroring"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteSimpleAdvancedOptions_MirrorPolicy:
+		if fv, exists := v.FldValidators["mirroring_choice.mirror_policy"]; exists {
+			val := m.GetMirroringChoice().(*RouteSimpleAdvancedOptions_MirrorPolicy).MirrorPolicy
+			vOpts := append(opts,
+				db.WithValidateField("mirroring_choice"),
+				db.WithValidateField("mirror_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["priority"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("priority"))
+		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_headers_to_add"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_headers_to_add"))
+		if err := fv(ctx, m.GetRequestHeadersToAdd(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_headers_to_remove"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_headers_to_remove"))
+		if err := fv(ctx, m.GetRequestHeadersToRemove(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_headers_to_add"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_headers_to_add"))
+		if err := fv(ctx, m.GetResponseHeadersToAdd(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_headers_to_remove"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_headers_to_remove"))
+		if err := fv(ctx, m.GetResponseHeadersToRemove(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["retry_policy_choice"]; exists {
+		val := m.GetRetryPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("retry_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRetryPolicyChoice().(type) {
+	case *RouteSimpleAdvancedOptions_DefaultRetryPolicy:
+		if fv, exists := v.FldValidators["retry_policy_choice.default_retry_policy"]; exists {
+			val := m.GetRetryPolicyChoice().(*RouteSimpleAdvancedOptions_DefaultRetryPolicy).DefaultRetryPolicy
+			vOpts := append(opts,
+				db.WithValidateField("retry_policy_choice"),
+				db.WithValidateField("default_retry_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteSimpleAdvancedOptions_RetryPolicy:
+		if fv, exists := v.FldValidators["retry_policy_choice.retry_policy"]; exists {
+			val := m.GetRetryPolicyChoice().(*RouteSimpleAdvancedOptions_RetryPolicy).RetryPolicy
+			vOpts := append(opts,
+				db.WithValidateField("retry_policy_choice"),
+				db.WithValidateField("retry_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rewrite_choice"]; exists {
+		val := m.GetRewriteChoice()
+		vOpts := append(opts,
+			db.WithValidateField("rewrite_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRewriteChoice().(type) {
+	case *RouteSimpleAdvancedOptions_DisablePrefixRewrite:
+		if fv, exists := v.FldValidators["rewrite_choice.disable_prefix_rewrite"]; exists {
+			val := m.GetRewriteChoice().(*RouteSimpleAdvancedOptions_DisablePrefixRewrite).DisablePrefixRewrite
+			vOpts := append(opts,
+				db.WithValidateField("rewrite_choice"),
+				db.WithValidateField("disable_prefix_rewrite"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteSimpleAdvancedOptions_PrefixRewrite:
+		if fv, exists := v.FldValidators["rewrite_choice.prefix_rewrite"]; exists {
+			val := m.GetRewriteChoice().(*RouteSimpleAdvancedOptions_PrefixRewrite).PrefixRewrite
+			vOpts := append(opts,
+				db.WithValidateField("rewrite_choice"),
+				db.WithValidateField("prefix_rewrite"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["spdy_choice"]; exists {
+		val := m.GetSpdyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("spdy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSpdyChoice().(type) {
+	case *RouteSimpleAdvancedOptions_DisableSpdy:
+		if fv, exists := v.FldValidators["spdy_choice.disable_spdy"]; exists {
+			val := m.GetSpdyChoice().(*RouteSimpleAdvancedOptions_DisableSpdy).DisableSpdy
+			vOpts := append(opts,
+				db.WithValidateField("spdy_choice"),
+				db.WithValidateField("disable_spdy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteSimpleAdvancedOptions_EnableSpdy:
+		if fv, exists := v.FldValidators["spdy_choice.enable_spdy"]; exists {
+			val := m.GetSpdyChoice().(*RouteSimpleAdvancedOptions_EnableSpdy).EnableSpdy
+			vOpts := append(opts,
+				db.WithValidateField("spdy_choice"),
+				db.WithValidateField("enable_spdy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("timeout"))
+		if err := fv(ctx, m.GetTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_choice"]; exists {
+		val := m.GetWafChoice()
+		vOpts := append(opts,
+			db.WithValidateField("waf_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetWafChoice().(type) {
+	case *RouteSimpleAdvancedOptions_DisableWaf:
+		if fv, exists := v.FldValidators["waf_choice.disable_waf"]; exists {
+			val := m.GetWafChoice().(*RouteSimpleAdvancedOptions_DisableWaf).DisableWaf
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("disable_waf"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteSimpleAdvancedOptions_Waf:
+		if fv, exists := v.FldValidators["waf_choice.waf"]; exists {
+			val := m.GetWafChoice().(*RouteSimpleAdvancedOptions_Waf).Waf
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("waf"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteSimpleAdvancedOptions_WafRule:
+		if fv, exists := v.FldValidators["waf_choice.waf_rule"]; exists {
+			val := m.GetWafChoice().(*RouteSimpleAdvancedOptions_WafRule).WafRule
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("waf_rule"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["websocket_choice"]; exists {
+		val := m.GetWebsocketChoice()
+		vOpts := append(opts,
+			db.WithValidateField("websocket_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetWebsocketChoice().(type) {
+	case *RouteSimpleAdvancedOptions_DisableWebSocketConfig:
+		if fv, exists := v.FldValidators["websocket_choice.disable_web_socket_config"]; exists {
+			val := m.GetWebsocketChoice().(*RouteSimpleAdvancedOptions_DisableWebSocketConfig).DisableWebSocketConfig
+			vOpts := append(opts,
+				db.WithValidateField("websocket_choice"),
+				db.WithValidateField("disable_web_socket_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteSimpleAdvancedOptions_WebSocketConfig:
+		if fv, exists := v.FldValidators["websocket_choice.web_socket_config"]; exists {
+			val := m.GetWebsocketChoice().(*RouteSimpleAdvancedOptions_WebSocketConfig).WebSocketConfig
+			vOpts := append(opts,
+				db.WithValidateField("websocket_choice"),
+				db.WithValidateField("web_socket_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRouteSimpleAdvancedOptionsValidator = func() *ValidateRouteSimpleAdvancedOptions {
+	v := &ValidateRouteSimpleAdvancedOptions{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhBufferChoice := v.BufferChoiceValidationRuleHandler
+	rulesBufferChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhBufferChoice(rulesBufferChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteSimpleAdvancedOptions.buffer_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["buffer_choice"] = vFn
+
+	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
+	rulesHashPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteSimpleAdvancedOptions.hash_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hash_policy_choice"] = vFn
+
+	vrhMirroringChoice := v.MirroringChoiceValidationRuleHandler
+	rulesMirroringChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMirroringChoice(rulesMirroringChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteSimpleAdvancedOptions.mirroring_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["mirroring_choice"] = vFn
+
+	vrhRetryPolicyChoice := v.RetryPolicyChoiceValidationRuleHandler
+	rulesRetryPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhRetryPolicyChoice(rulesRetryPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteSimpleAdvancedOptions.retry_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["retry_policy_choice"] = vFn
+
+	vrhRewriteChoice := v.RewriteChoiceValidationRuleHandler
+	rulesRewriteChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhRewriteChoice(rulesRewriteChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteSimpleAdvancedOptions.rewrite_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rewrite_choice"] = vFn
+
+	vrhRewriteChoicePrefixRewrite := v.RewriteChoicePrefixRewriteValidationRuleHandler
+	rulesRewriteChoicePrefixRewrite := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFnMap["rewrite_choice.prefix_rewrite"], err = vrhRewriteChoicePrefixRewrite(rulesRewriteChoicePrefixRewrite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RouteSimpleAdvancedOptions.rewrite_choice_prefix_rewrite: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["rewrite_choice.prefix_rewrite"] = vFnMap["rewrite_choice.prefix_rewrite"]
+
+	vrhSpdyChoice := v.SpdyChoiceValidationRuleHandler
+	rulesSpdyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSpdyChoice(rulesSpdyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteSimpleAdvancedOptions.spdy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["spdy_choice"] = vFn
+
+	vrhWafChoice := v.WafChoiceValidationRuleHandler
+	rulesWafChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhWafChoice(rulesWafChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteSimpleAdvancedOptions.waf_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_choice"] = vFn
+
+	vrhWebsocketChoice := v.WebsocketChoiceValidationRuleHandler
+	rulesWebsocketChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhWebsocketChoice(rulesWebsocketChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteSimpleAdvancedOptions.websocket_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["websocket_choice"] = vFn
+
+	vrhEndpointSubsets := v.EndpointSubsetsValidationRuleHandler
+	rulesEndpointSubsets := map[string]string{
+		"ves.io.schema.rules.map.max_pairs": "16",
+	}
+	vFn, err = vrhEndpointSubsets(rulesEndpointSubsets)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteSimpleAdvancedOptions.endpoint_subsets: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["endpoint_subsets"] = vFn
+
+	vrhRequestHeadersToAdd := v.RequestHeadersToAddValidationRuleHandler
+	rulesRequestHeadersToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRequestHeadersToAdd(rulesRequestHeadersToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteSimpleAdvancedOptions.request_headers_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_headers_to_add"] = vFn
+
+	vrhRequestHeadersToRemove := v.RequestHeadersToRemoveValidationRuleHandler
+	rulesRequestHeadersToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhRequestHeadersToRemove(rulesRequestHeadersToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteSimpleAdvancedOptions.request_headers_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_headers_to_remove"] = vFn
+
+	vrhResponseHeadersToAdd := v.ResponseHeadersToAddValidationRuleHandler
+	rulesResponseHeadersToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhResponseHeadersToAdd(rulesResponseHeadersToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteSimpleAdvancedOptions.response_headers_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_headers_to_add"] = vFn
+
+	vrhResponseHeadersToRemove := v.ResponseHeadersToRemoveValidationRuleHandler
+	rulesResponseHeadersToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhResponseHeadersToRemove(rulesResponseHeadersToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteSimpleAdvancedOptions.response_headers_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_headers_to_remove"] = vFn
+
+	vrhTimeout := v.TimeoutValidationRuleHandler
+	rulesTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "600000",
+	}
+	vFn, err = vrhTimeout(rulesTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteSimpleAdvancedOptions.timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["timeout"] = vFn
+
+	v.FldValidators["buffer_choice.buffer_policy"] = ves_io_schema.BufferConfigTypeValidator().Validate
+
+	v.FldValidators["hash_policy_choice.specific_hash_policy"] = HashPolicyListTypeValidator().Validate
+
+	v.FldValidators["mirroring_choice.mirror_policy"] = MirrorPolicyTypeValidator().Validate
+
+	v.FldValidators["retry_policy_choice.retry_policy"] = ves_io_schema.RetryPolicyTypeValidator().Validate
+
+	v.FldValidators["waf_choice.waf"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["waf_choice.waf_rule"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
+
+	return v
+}()
+
+func RouteSimpleAdvancedOptionsValidator() db.Validator {
+	return DefaultRouteSimpleAdvancedOptionsValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -6699,6 +8974,12 @@ func (m *RouteTypeSimple) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 
 func (m *RouteTypeSimple) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAdvancedOptionsDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetOriginPoolsDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -6706,6 +8987,29 @@ func (m *RouteTypeSimple) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *RouteTypeSimple) GetAdvancedOptionsDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.AdvancedOptions == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	driSet, err = m.AdvancedOptions.GetDRefInfo()
+	if err != nil {
+		return nil, err
+	}
+	for _, dri := range driSet {
+		dri.DRField = "advanced_options." + dri.DRField
+		drInfos = append(drInfos, dri)
+	}
+
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -6850,6 +9154,15 @@ func (v *ValidateRouteTypeSimple) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["advanced_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("advanced_options"))
+		if err := fv(ctx, m.GetAdvancedOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["http_method"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("http_method"))
@@ -6927,6 +9240,8 @@ var DefaultRouteTypeSimpleValidator = func() *ValidateRouteTypeSimple {
 	v.FldValidators["origin_pools"] = vFn
 
 	v.FldValidators["path"] = ves_io_schema.PathMatcherTypeValidator().Validate
+
+	v.FldValidators["advanced_options"] = RouteSimpleAdvancedOptionsValidator().Validate
 
 	return v
 }()
@@ -7114,6 +9429,207 @@ func RouteTypeSimpleWithDefaultOriginPoolValidator() db.Validator {
 	return DefaultRouteTypeSimpleWithDefaultOriginPoolValidator
 }
 
+// augmented methods on protoc/std generated struct
+
+func (m *ServicePolicyList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ServicePolicyList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ServicePolicyList) DeepCopy() *ServicePolicyList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ServicePolicyList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ServicePolicyList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ServicePolicyList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ServicePolicyListValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ServicePolicyList) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetPoliciesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *ServicePolicyList) GetPoliciesDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, vref := range m.GetPolicies() {
+		if vref == nil {
+			return nil, fmt.Errorf("ServicePolicyList.policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("service_policy.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "policies",
+			Ref:        vdRef,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ServicePolicyList) GetPoliciesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "service_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: service_policy")
+	}
+	for i, vref := range m.GetPolicies() {
+		if vref == nil {
+			return nil, fmt.Errorf("ServicePolicyList.policies[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "service_policy.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateServicePolicyList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateServicePolicyList) PoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for policies")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated policies")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items policies")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateServicePolicyList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ServicePolicyList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ServicePolicyList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["policies"]; exists {
+		vOpts := append(opts, db.WithValidateField("policies"))
+		if err := fv(ctx, m.GetPolicies(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultServicePolicyListValidator = func() *ValidateServicePolicyList {
+	v := &ValidateServicePolicyList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPolicies := v.PoliciesValidationRuleHandler
+	rulesPolicies := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhPolicies(rulesPolicies)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicePolicyList.policies: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["policies"] = vFn
+
+	return v
+}()
+
+func ServicePolicyListValidator() db.Validator {
+	return DefaultServicePolicyListValidator
+}
+
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetAdvertiseChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.AdvertiseChoice.(type) {
@@ -7203,6 +9719,65 @@ func (r *CreateSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) e
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetHashPolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.HashPolicyChoice.(type) {
+	case nil:
+		o.HashPolicyChoice = nil
+
+	case *CreateSpecType_CookieStickiness:
+		o.HashPolicyChoice = &GlobalSpecType_CookieStickiness{CookieStickiness: of.CookieStickiness}
+
+	case *CreateSpecType_LeastActive:
+		o.HashPolicyChoice = &GlobalSpecType_LeastActive{LeastActive: of.LeastActive}
+
+	case *CreateSpecType_Random:
+		o.HashPolicyChoice = &GlobalSpecType_Random{Random: of.Random}
+
+	case *CreateSpecType_RingHash:
+		o.HashPolicyChoice = &GlobalSpecType_RingHash{RingHash: of.RingHash}
+
+	case *CreateSpecType_RoundRobin:
+		o.HashPolicyChoice = &GlobalSpecType_RoundRobin{RoundRobin: of.RoundRobin}
+
+	case *CreateSpecType_SourceIpStickiness:
+		o.HashPolicyChoice = &GlobalSpecType_SourceIpStickiness{SourceIpStickiness: of.SourceIpStickiness}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetHashPolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.HashPolicyChoice.(type) {
+	case nil:
+		r.HashPolicyChoice = nil
+
+	case *GlobalSpecType_CookieStickiness:
+		r.HashPolicyChoice = &CreateSpecType_CookieStickiness{CookieStickiness: of.CookieStickiness}
+
+	case *GlobalSpecType_LeastActive:
+		r.HashPolicyChoice = &CreateSpecType_LeastActive{LeastActive: of.LeastActive}
+
+	case *GlobalSpecType_Random:
+		r.HashPolicyChoice = &CreateSpecType_Random{Random: of.Random}
+
+	case *GlobalSpecType_RingHash:
+		r.HashPolicyChoice = &CreateSpecType_RingHash{RingHash: of.RingHash}
+
+	case *GlobalSpecType_RoundRobin:
+		r.HashPolicyChoice = &CreateSpecType_RoundRobin{RoundRobin: of.RoundRobin}
+
+	case *GlobalSpecType_SourceIpStickiness:
+		r.HashPolicyChoice = &CreateSpecType_SourceIpStickiness{SourceIpStickiness: of.SourceIpStickiness}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetLoadbalancerTypeToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.LoadbalancerType.(type) {
 	case nil:
@@ -7279,6 +9854,47 @@ func (r *CreateSpecType) GetRateLimitChoiceFromGlobalSpecType(o *GlobalSpecType)
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetServicePolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ServicePolicyChoice.(type) {
+	case nil:
+		o.ServicePolicyChoice = nil
+
+	case *CreateSpecType_ActiveServicePolicies:
+		o.ServicePolicyChoice = &GlobalSpecType_ActiveServicePolicies{ActiveServicePolicies: of.ActiveServicePolicies}
+
+	case *CreateSpecType_NoServicePolicies:
+		o.ServicePolicyChoice = &GlobalSpecType_NoServicePolicies{NoServicePolicies: of.NoServicePolicies}
+
+	case *CreateSpecType_ServicePoliciesFromNamespace:
+		o.ServicePolicyChoice = &GlobalSpecType_ServicePoliciesFromNamespace{ServicePoliciesFromNamespace: of.ServicePoliciesFromNamespace}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetServicePolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ServicePolicyChoice.(type) {
+	case nil:
+		r.ServicePolicyChoice = nil
+
+	case *GlobalSpecType_ActiveServicePolicies:
+		r.ServicePolicyChoice = &CreateSpecType_ActiveServicePolicies{ActiveServicePolicies: of.ActiveServicePolicies}
+
+	case *GlobalSpecType_NoServicePolicies:
+		r.ServicePolicyChoice = &CreateSpecType_NoServicePolicies{NoServicePolicies: of.NoServicePolicies}
+
+	case *GlobalSpecType_ServicePoliciesFromNamespace:
+		r.ServicePolicyChoice = &CreateSpecType_ServicePoliciesFromNamespace{ServicePoliciesFromNamespace: of.ServicePoliciesFromNamespace}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetWafChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.WafChoice.(type) {
 	case nil:
@@ -7329,11 +9945,13 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.CorsPolicy = f.GetCorsPolicy()
 	m.DefaultRoutePools = f.GetDefaultRoutePools()
 	m.Domains = f.GetDomains()
+	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
 	m.MaliciousUserMitigation = f.GetMaliciousUserMitigation()
 	m.MoreOption = f.GetMoreOption()
 	m.GetRateLimitChoiceFromGlobalSpecType(f)
 	m.Routes = f.GetRoutes()
+	m.GetServicePolicyChoiceFromGlobalSpecType(f)
 	m.UserIdentification = f.GetUserIdentification()
 	m.GetWafChoiceFromGlobalSpecType(f)
 	m.WafExclusionRules = f.GetWafExclusionRules()
@@ -7351,11 +9969,13 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.CorsPolicy = m1.CorsPolicy
 	f.DefaultRoutePools = m1.DefaultRoutePools
 	f.Domains = m1.Domains
+	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
 	f.MaliciousUserMitigation = m1.MaliciousUserMitigation
 	f.MoreOption = m1.MoreOption
 	m1.SetRateLimitChoiceToGlobalSpecType(f)
 	f.Routes = m1.Routes
+	m1.SetServicePolicyChoiceToGlobalSpecType(f)
 	f.UserIdentification = m1.UserIdentification
 	m1.SetWafChoiceToGlobalSpecType(f)
 	f.WafExclusionRules = m1.WafExclusionRules
@@ -7450,6 +10070,65 @@ func (r *GetSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) erro
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetHashPolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.HashPolicyChoice.(type) {
+	case nil:
+		o.HashPolicyChoice = nil
+
+	case *GetSpecType_CookieStickiness:
+		o.HashPolicyChoice = &GlobalSpecType_CookieStickiness{CookieStickiness: of.CookieStickiness}
+
+	case *GetSpecType_LeastActive:
+		o.HashPolicyChoice = &GlobalSpecType_LeastActive{LeastActive: of.LeastActive}
+
+	case *GetSpecType_Random:
+		o.HashPolicyChoice = &GlobalSpecType_Random{Random: of.Random}
+
+	case *GetSpecType_RingHash:
+		o.HashPolicyChoice = &GlobalSpecType_RingHash{RingHash: of.RingHash}
+
+	case *GetSpecType_RoundRobin:
+		o.HashPolicyChoice = &GlobalSpecType_RoundRobin{RoundRobin: of.RoundRobin}
+
+	case *GetSpecType_SourceIpStickiness:
+		o.HashPolicyChoice = &GlobalSpecType_SourceIpStickiness{SourceIpStickiness: of.SourceIpStickiness}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetHashPolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.HashPolicyChoice.(type) {
+	case nil:
+		r.HashPolicyChoice = nil
+
+	case *GlobalSpecType_CookieStickiness:
+		r.HashPolicyChoice = &GetSpecType_CookieStickiness{CookieStickiness: of.CookieStickiness}
+
+	case *GlobalSpecType_LeastActive:
+		r.HashPolicyChoice = &GetSpecType_LeastActive{LeastActive: of.LeastActive}
+
+	case *GlobalSpecType_Random:
+		r.HashPolicyChoice = &GetSpecType_Random{Random: of.Random}
+
+	case *GlobalSpecType_RingHash:
+		r.HashPolicyChoice = &GetSpecType_RingHash{RingHash: of.RingHash}
+
+	case *GlobalSpecType_RoundRobin:
+		r.HashPolicyChoice = &GetSpecType_RoundRobin{RoundRobin: of.RoundRobin}
+
+	case *GlobalSpecType_SourceIpStickiness:
+		r.HashPolicyChoice = &GetSpecType_SourceIpStickiness{SourceIpStickiness: of.SourceIpStickiness}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetLoadbalancerTypeToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.LoadbalancerType.(type) {
 	case nil:
@@ -7526,6 +10205,47 @@ func (r *GetSpecType) GetRateLimitChoiceFromGlobalSpecType(o *GlobalSpecType) er
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetServicePolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ServicePolicyChoice.(type) {
+	case nil:
+		o.ServicePolicyChoice = nil
+
+	case *GetSpecType_ActiveServicePolicies:
+		o.ServicePolicyChoice = &GlobalSpecType_ActiveServicePolicies{ActiveServicePolicies: of.ActiveServicePolicies}
+
+	case *GetSpecType_NoServicePolicies:
+		o.ServicePolicyChoice = &GlobalSpecType_NoServicePolicies{NoServicePolicies: of.NoServicePolicies}
+
+	case *GetSpecType_ServicePoliciesFromNamespace:
+		o.ServicePolicyChoice = &GlobalSpecType_ServicePoliciesFromNamespace{ServicePoliciesFromNamespace: of.ServicePoliciesFromNamespace}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetServicePolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ServicePolicyChoice.(type) {
+	case nil:
+		r.ServicePolicyChoice = nil
+
+	case *GlobalSpecType_ActiveServicePolicies:
+		r.ServicePolicyChoice = &GetSpecType_ActiveServicePolicies{ActiveServicePolicies: of.ActiveServicePolicies}
+
+	case *GlobalSpecType_NoServicePolicies:
+		r.ServicePolicyChoice = &GetSpecType_NoServicePolicies{NoServicePolicies: of.NoServicePolicies}
+
+	case *GlobalSpecType_ServicePoliciesFromNamespace:
+		r.ServicePolicyChoice = &GetSpecType_ServicePoliciesFromNamespace{ServicePoliciesFromNamespace: of.ServicePoliciesFromNamespace}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetWafChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.WafChoice.(type) {
 	case nil:
@@ -7579,12 +10299,14 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.DefaultRoutePools = f.GetDefaultRoutePools()
 	m.DnsInfo = f.GetDnsInfo()
 	m.Domains = f.GetDomains()
+	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.HostName = f.GetHostName()
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
 	m.MaliciousUserMitigation = f.GetMaliciousUserMitigation()
 	m.MoreOption = f.GetMoreOption()
 	m.GetRateLimitChoiceFromGlobalSpecType(f)
 	m.Routes = f.GetRoutes()
+	m.GetServicePolicyChoiceFromGlobalSpecType(f)
 	m.State = f.GetState()
 	m.UserIdentification = f.GetUserIdentification()
 	m.GetWafChoiceFromGlobalSpecType(f)
@@ -7606,12 +10328,14 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.DefaultRoutePools = m1.DefaultRoutePools
 	f.DnsInfo = m1.DnsInfo
 	f.Domains = m1.Domains
+	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	f.HostName = m1.HostName
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
 	f.MaliciousUserMitigation = m1.MaliciousUserMitigation
 	f.MoreOption = m1.MoreOption
 	m1.SetRateLimitChoiceToGlobalSpecType(f)
 	f.Routes = m1.Routes
+	m1.SetServicePolicyChoiceToGlobalSpecType(f)
 	f.State = m1.State
 	f.UserIdentification = m1.UserIdentification
 	m1.SetWafChoiceToGlobalSpecType(f)
@@ -7707,6 +10431,65 @@ func (r *ReplaceSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) 
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetHashPolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.HashPolicyChoice.(type) {
+	case nil:
+		o.HashPolicyChoice = nil
+
+	case *ReplaceSpecType_CookieStickiness:
+		o.HashPolicyChoice = &GlobalSpecType_CookieStickiness{CookieStickiness: of.CookieStickiness}
+
+	case *ReplaceSpecType_LeastActive:
+		o.HashPolicyChoice = &GlobalSpecType_LeastActive{LeastActive: of.LeastActive}
+
+	case *ReplaceSpecType_Random:
+		o.HashPolicyChoice = &GlobalSpecType_Random{Random: of.Random}
+
+	case *ReplaceSpecType_RingHash:
+		o.HashPolicyChoice = &GlobalSpecType_RingHash{RingHash: of.RingHash}
+
+	case *ReplaceSpecType_RoundRobin:
+		o.HashPolicyChoice = &GlobalSpecType_RoundRobin{RoundRobin: of.RoundRobin}
+
+	case *ReplaceSpecType_SourceIpStickiness:
+		o.HashPolicyChoice = &GlobalSpecType_SourceIpStickiness{SourceIpStickiness: of.SourceIpStickiness}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetHashPolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.HashPolicyChoice.(type) {
+	case nil:
+		r.HashPolicyChoice = nil
+
+	case *GlobalSpecType_CookieStickiness:
+		r.HashPolicyChoice = &ReplaceSpecType_CookieStickiness{CookieStickiness: of.CookieStickiness}
+
+	case *GlobalSpecType_LeastActive:
+		r.HashPolicyChoice = &ReplaceSpecType_LeastActive{LeastActive: of.LeastActive}
+
+	case *GlobalSpecType_Random:
+		r.HashPolicyChoice = &ReplaceSpecType_Random{Random: of.Random}
+
+	case *GlobalSpecType_RingHash:
+		r.HashPolicyChoice = &ReplaceSpecType_RingHash{RingHash: of.RingHash}
+
+	case *GlobalSpecType_RoundRobin:
+		r.HashPolicyChoice = &ReplaceSpecType_RoundRobin{RoundRobin: of.RoundRobin}
+
+	case *GlobalSpecType_SourceIpStickiness:
+		r.HashPolicyChoice = &ReplaceSpecType_SourceIpStickiness{SourceIpStickiness: of.SourceIpStickiness}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
 func (r *ReplaceSpecType) SetLoadbalancerTypeToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.LoadbalancerType.(type) {
 	case nil:
@@ -7783,6 +10566,47 @@ func (r *ReplaceSpecType) GetRateLimitChoiceFromGlobalSpecType(o *GlobalSpecType
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetServicePolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ServicePolicyChoice.(type) {
+	case nil:
+		o.ServicePolicyChoice = nil
+
+	case *ReplaceSpecType_ActiveServicePolicies:
+		o.ServicePolicyChoice = &GlobalSpecType_ActiveServicePolicies{ActiveServicePolicies: of.ActiveServicePolicies}
+
+	case *ReplaceSpecType_NoServicePolicies:
+		o.ServicePolicyChoice = &GlobalSpecType_NoServicePolicies{NoServicePolicies: of.NoServicePolicies}
+
+	case *ReplaceSpecType_ServicePoliciesFromNamespace:
+		o.ServicePolicyChoice = &GlobalSpecType_ServicePoliciesFromNamespace{ServicePoliciesFromNamespace: of.ServicePoliciesFromNamespace}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetServicePolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ServicePolicyChoice.(type) {
+	case nil:
+		r.ServicePolicyChoice = nil
+
+	case *GlobalSpecType_ActiveServicePolicies:
+		r.ServicePolicyChoice = &ReplaceSpecType_ActiveServicePolicies{ActiveServicePolicies: of.ActiveServicePolicies}
+
+	case *GlobalSpecType_NoServicePolicies:
+		r.ServicePolicyChoice = &ReplaceSpecType_NoServicePolicies{NoServicePolicies: of.NoServicePolicies}
+
+	case *GlobalSpecType_ServicePoliciesFromNamespace:
+		r.ServicePolicyChoice = &ReplaceSpecType_ServicePoliciesFromNamespace{ServicePoliciesFromNamespace: of.ServicePoliciesFromNamespace}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
 func (r *ReplaceSpecType) SetWafChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.WafChoice.(type) {
 	case nil:
@@ -7833,11 +10657,13 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.CorsPolicy = f.GetCorsPolicy()
 	m.DefaultRoutePools = f.GetDefaultRoutePools()
 	m.Domains = f.GetDomains()
+	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
 	m.MaliciousUserMitigation = f.GetMaliciousUserMitigation()
 	m.MoreOption = f.GetMoreOption()
 	m.GetRateLimitChoiceFromGlobalSpecType(f)
 	m.Routes = f.GetRoutes()
+	m.GetServicePolicyChoiceFromGlobalSpecType(f)
 	m.UserIdentification = f.GetUserIdentification()
 	m.GetWafChoiceFromGlobalSpecType(f)
 	m.WafExclusionRules = f.GetWafExclusionRules()
@@ -7855,11 +10681,13 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.CorsPolicy = m1.CorsPolicy
 	f.DefaultRoutePools = m1.DefaultRoutePools
 	f.Domains = m1.Domains
+	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
 	f.MaliciousUserMitigation = m1.MaliciousUserMitigation
 	f.MoreOption = m1.MoreOption
 	m1.SetRateLimitChoiceToGlobalSpecType(f)
 	f.Routes = m1.Routes
+	m1.SetServicePolicyChoiceToGlobalSpecType(f)
 	f.UserIdentification = m1.UserIdentification
 	m1.SetWafChoiceToGlobalSpecType(f)
 	f.WafExclusionRules = m1.WafExclusionRules
