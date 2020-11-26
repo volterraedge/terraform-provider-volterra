@@ -28,8 +28,8 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	object "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	object "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 )
 
 var (
@@ -994,7 +994,19 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
+func (s *APISrv) validateTransport(ctx context.Context) error {
+	if s.sf.IsTransportNotSupported("ves.io.schema.views.origin_pool.crudapi.API", server.TransportFromContext(ctx)) {
+		userMsg := fmt.Sprintf("ves.io.schema.views.origin_pool.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		return server.GRPCStatusFromError(err).Err()
+	}
+	return nil
+}
+
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.origin_pool.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1019,6 +1031,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1043,6 +1058,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.origin_pool.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1065,6 +1083,9 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.origin_pool.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1116,6 +1137,9 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.origin_pool.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1485,7 +1509,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-origin_pool-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-origin_pool-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.origin_pool.crudapi.API.Get"
             },
@@ -1560,7 +1584,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-origin_pool-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-origin_pool-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.origin_pool.crudapi.API.Delete"
             },
@@ -1643,7 +1667,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-origin_pool-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-origin_pool-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.origin_pool.crudapi.API.Replace"
             },
@@ -1772,7 +1796,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-origin_pool-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-origin_pool-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.origin_pool.crudapi.API.List"
             },
@@ -1849,7 +1873,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-origin_pool-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-origin_pool-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.origin_pool.crudapi.API.Create"
             },
@@ -1978,7 +2002,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-origin_pool-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-origin_pool-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.origin_pool.crudapi.API.ListStream"
             },
@@ -1990,6 +2014,54 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "clusterCircuitBreaker": {
+            "type": "object",
+            "description": "CircuitBreaker provides a mechanism for watching failures in upstream connections or requests\nand if the failures reach a certain threshold, automatically fail subsequent requests which\nallows to apply back pressure on downstream quickly.",
+            "title": "CircuitBreaker",
+            "x-displayname": "Circuit Breaker",
+            "x-ves-displayorder": "1,2,3,4,5",
+            "x-ves-proto-message": "ves.io.schema.cluster.CircuitBreaker",
+            "properties": {
+                "connection_limit": {
+                    "type": "integer",
+                    "description": " The maximum number of connections that loadbalancer will establish to all hosts in an upstream cluster.\n In practice this is only applicable to TCP and HTTP/1.1 clusters since HTTP/2 uses a single connection to each host.\n Remove endpoint out of load balancing decision, if number of connections reach connection limit.\n\nExample: - \"100\"-",
+                    "title": "connection_limit",
+                    "format": "int64",
+                    "x-displayname": "Connection Limit",
+                    "x-ves-example": "100"
+                },
+                "max_requests": {
+                    "type": "integer",
+                    "description": " The maximum number of requests that can be outstanding to all hosts in a cluster at any given time.\n In practice this is applicable to HTTP/2 clusters since HTTP/1.1 clusters are governed by the\n maximum connections (connection_limit).\n Remove endpoint out of load balancing decision, if requests exceed this count.\n\nExample: - \"10\"-",
+                    "title": "max_requests",
+                    "format": "int64",
+                    "x-displayname": "Maximum Request Count",
+                    "x-ves-example": "10"
+                },
+                "pending_requests": {
+                    "type": "integer",
+                    "description": " The maximum number of requests that will be queued while waiting for a ready connection pool connection.\n Since HTTP/2 requests are sent over a single connection, this circuit breaker only comes into play as the\n initial connection is created, as requests will be multiplexed immediately afterwards. For HTTP/1.1, requests\n are added to the list of pending requests whenever there aren’t enough upstream connections available to\n immediately dispatch the request, so this circuit breaker will remain in play for the lifetime of the process.\n Remove endpoint out of load balancing decision, if pending request reach  pending_request.\n\nExample: - \"20\"-",
+                    "title": "pending_requests",
+                    "format": "int64",
+                    "x-displayname": "Pending Requests",
+                    "x-ves-example": "20"
+                },
+                "priority": {
+                    "description": " Priority for the CircuitBreaker which can be either DEFAULT or HIGH. This implies that\n we can have maximum of two CircuitBreakers per cluster. The priority of the route is\n matched with priority of CircuitBreaker to select the CircuitBreaker",
+                    "title": "priority",
+                    "$ref": "#/definitions/schemaRoutingPriority",
+                    "x-displayname": "Priority"
+                },
+                "retries": {
+                    "type": "integer",
+                    "description": " The maximum number of retries that can be outstanding to all hosts in a cluster at any given time.\n Remove endpoint out of load balancing decision, if retries for request exceed this count.\n\nExample: - \"10\"-",
+                    "title": "retries",
+                    "format": "int64",
+                    "x-displayname": "Retry Count",
+                    "x-ves-example": "10"
+                }
+            }
+        },
         "clusterEndpointSelectionPolicy": {
             "type": "string",
             "description": "Policy for selection of endpoints from local site/remote site/both\n\nConsider both remote and local endpoints for load balancing\nLOCAL_ONLY: Consider only local endpoints for load balancing\nEnable this policy to load balance ONLY among locally discovered endpoints\nPrefer the local endpoints for load balancing. If local endpoints are not present\nremote endpoints will be considered.",
@@ -2003,19 +2075,105 @@ var APISwaggerJSON string = `{
             "x-displayname": "Endpoint Selection Policy",
             "x-ves-proto-enum": "ves.io.schema.cluster.EndpointSelectionPolicy"
         },
+        "clusterEndpointSubsetSelectorType": {
+            "type": "object",
+            "description": "Upstream cluster may be configured to divide its endpoints into subsets based on metadata\nattached to the endpoints. Routes may then specify the metadata that a endpoint must match in\norder to be selected by the load balancer.\nList of keys that define a cluster subset. Each endpoint that has a metadata value for all of\nthe keys in the definition is added to that subset. If no endpoint has all the keys, no subsets\nresult from the definition. A single endpoint may appear in multiple subsets if it matches\nmultiple definitions.",
+            "title": "EndpointSubsetSelectorType",
+            "x-displayname": "Endpoint Subset Selector",
+            "x-ves-proto-message": "ves.io.schema.cluster.EndpointSubsetSelectorType",
+            "properties": {
+                "keys": {
+                    "type": "array",
+                    "description": " List of keys that define a cluster subset.\n\nExample: - \"production\"-",
+                    "title": "keys",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Keys",
+                    "x-ves-example": "production"
+                }
+            }
+        },
+        "clusterHttp2ProtocolOptions": {
+            "type": "object",
+            "description": "Http2 Protocol options for upstream connections",
+            "title": "Http2ProtocolOptions",
+            "x-displayname": "Http2 Protocol Options",
+            "x-ves-proto-message": "ves.io.schema.cluster.Http2ProtocolOptions",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": " Enable/disable Http2 Protocol for upstream connections. It is disabled by default.",
+                    "title": "enabled",
+                    "format": "boolean",
+                    "x-displayname": "HTTP2 Enabled"
+                }
+            }
+        },
         "clusterLoadbalancerAlgorithm": {
             "type": "string",
-            "description": "Different load balancing algorithms supported\nWhen a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm\nto determine which host is selected.\n\n - ROUND_ROBIN: ROUND_ROBIN\n\nPolicy in which each healthy/available upstream endpoint is selected in round robin order.\n - LEAST_REQUEST: LEAST_REQUEST\n\nPolicy in which loadbalancer picks the upstream endpoint which has the fewest active requests\n - RING_HASH: RING_HASH\n\nPolicy implements consistent hashing to upstream endpoints using ring hash of endpoint names\nHash of the incoming request is calculated using request hash policy.\nThe ring/modulo hash load balancer implements consistent hashing to upstream hosts.\nThe algorithm is based on mapping all hosts onto a circle such that the addition or\nremoval of a host from the host set changes only affect 1/N requests. This technique\nis also commonly known as “ketama” hashing. A consistent hashing load balancer is only\neffective when protocol routing is used that specifies a value to hash on. The minimum\nring size governs the replication factor for each host in the ring. For example, if the\nminimum ring size is 1024 and there are 16 hosts, each host will be replicated 64 times.\n - RANDOM: RANDOM\n\npolicy in which each available upstream endpoint is selected in random order.\nThe random load balancer selects a random healthy host. The random load balancer generally\nperforms better than round robin if no health checking policy is configured. Random selection\navoids bias towards the host in the set that comes after a failed host.",
+            "description": "Different load balancing algorithms supported\nWhen a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm\nto determine which host is selected.\n\n - ROUND_ROBIN: ROUND_ROBIN\n\nPolicy in which each healthy/available upstream endpoint is selected in round robin order.\n - LEAST_REQUEST: LEAST_REQUEST\n\nPolicy in which loadbalancer picks the upstream endpoint which has the fewest active requests\n - RING_HASH: RING_HASH\n\nPolicy implements consistent hashing to upstream endpoints using ring hash of endpoint names\nHash of the incoming request is calculated using request hash policy.\nThe ring/modulo hash load balancer implements consistent hashing to upstream hosts.\nThe algorithm is based on mapping all hosts onto a circle such that the addition or\nremoval of a host from the host set changes only affect 1/N requests. This technique\nis also commonly known as “ketama” hashing. A consistent hashing load balancer is only\neffective when protocol routing is used that specifies a value to hash on. The minimum\nring size governs the replication factor for each host in the ring. For example, if the\nminimum ring size is 1024 and there are 16 hosts, each host will be replicated 64 times.\n - RANDOM: RANDOM\n\npolicy in which each available upstream endpoint is selected in random order.\nThe random load balancer selects a random healthy host. The random load balancer generally\nperforms better than round robin if no health checking policy is configured. Random selection\navoids bias towards the host in the set that comes after a failed host.\n - LB_OVERRIDE: Load Balancer Override\n\nHash policy is taken from from the load balancer which is using this origin pool",
             "title": "LoadbalancerAlgorithm",
             "enum": [
                 "ROUND_ROBIN",
                 "LEAST_REQUEST",
                 "RING_HASH",
-                "RANDOM"
+                "RANDOM",
+                "LB_OVERRIDE"
             ],
             "default": "ROUND_ROBIN",
             "x-displayname": "Load Balancer Algorithm",
             "x-ves-proto-enum": "ves.io.schema.cluster.LoadbalancerAlgorithm"
+        },
+        "clusterOutlierDetectionType": {
+            "type": "object",
+            "description": "Outlier detection and ejection is the process of dynamically determining whether some number\nof hosts in an upstream cluster are performing unlike the others and removing them from the\nhealthy load balancing set. Outlier detection is a form of passive health checking.\n\nAlgorithm\n\n1. A endpoint is determined to be an outlier (based on configured number of consecutive_5xx\n   or consecutive_gateway_failures) .\n2. If no endpoints have been ejected, loadbalancer will eject the host immediately.\n   Otherwise, it checks to make sure the number of ejected hosts is below the allowed threshold\n   (specified via max_ejection_percent setting). If the number of ejected hosts is above the\n   threshold, the host is not ejected.\n3. The endpoint is ejected for some number of milliseconds. Ejection means that the endpoint is marked\n   unhealthy and will not be used during load balancing. The number of milliseconds is equal to the\n   base_ejection_time value multiplied by the number of times the host has been ejected.\n4. An ejected endpoint will automatically be brought back into service after the ejection time\n   has been satisfied",
+            "title": "OutlierDetectionType",
+            "x-displayname": "Outlier Detection",
+            "x-ves-displayorder": "1,2,3,4,5",
+            "x-ves-proto-message": "ves.io.schema.cluster.OutlierDetectionType",
+            "properties": {
+                "base_ejection_time": {
+                    "type": "integer",
+                    "description": " The base time that a host is ejected for. The real time is equal to the\n base time multiplied by the number of times the host has been ejected.\n This causes hosts to get ejected for longer periods if they continue to fail.\n Defaults to 30000ms or 30s. Specified in milliseconds.\n\nExample: - \"20000\"-",
+                    "title": "base_ejection_time",
+                    "format": "int64",
+                    "x-displayname": "Base Ejection Time",
+                    "x-ves-example": "20000"
+                },
+                "consecutive_5xx": {
+                    "type": "integer",
+                    "description": " If an upstream endpoint returns some number of consecutive 5xx, it will be ejected.\n Note that in this case a 5xx means an actual 5xx respond code, or an event that would\n cause the HTTP router to return one on the upstream’s behalf(reset, connection failure, etc.)\n consecutive_5xx indicates the number of consecutive 5xx responses required before\n a consecutive 5xx ejection occurs. Defaults to 5.\n\nExample: - \"3\"-",
+                    "title": "consecutive_5xx",
+                    "format": "int64",
+                    "x-displayname": "Consecutive 5xx Count",
+                    "x-ves-example": "3"
+                },
+                "consecutive_gateway_failure": {
+                    "type": "integer",
+                    "description": " If an upstream endpoint returns some number of consecutive “gateway errors”\n (502, 503 or 504 status code), it will be ejected. Note that this includes events\n that would cause the HTTP router to return one of these status codes on the\n upstream’s behalf (reset, connection failure, etc.).\n consecutive_gateway_failure indicates the number of consecutive gateway failures\n before a consecutive gateway failure ejection occurs. Defaults to 5.\n\nExample: - \"5\"-",
+                    "title": "consecutive_gateway_failure",
+                    "format": "int64",
+                    "x-displayname": "Consecutive Gateway Failure",
+                    "x-ves-example": "5"
+                },
+                "interval": {
+                    "type": "integer",
+                    "description": " The time interval between ejection analysis sweeps. This can result in\n both new ejections as well as endpoints being returned to service. Defaults\n to 10000ms or 10s. Specified in milliseconds.\n\nExample: - \"5000\"-",
+                    "title": "interval",
+                    "format": "int64",
+                    "x-displayname": "Interval",
+                    "x-ves-example": "5000"
+                },
+                "max_ejection_percent": {
+                    "type": "integer",
+                    "description": " The maximum % of an upstream cluster that can be ejected due to outlier\n detection. Defaults to 10% but will eject at least one host regardless of the value.\n\nExample: - \"20\"-",
+                    "title": "max_ejection_percent",
+                    "format": "int64",
+                    "x-displayname": "Max Ejection Percentage",
+                    "x-ves-example": "20"
+                }
+            }
         },
         "crudapiErrorCode": {
             "type": "string",
@@ -2236,6 +2394,132 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "origin_poolOriginPoolAdvancedOptions": {
+            "type": "object",
+            "description": "Configure Advance options for origin pool",
+            "title": "Origin Pool Advanced Options",
+            "x-displayname": "Origin Pool Advanced Options",
+            "x-ves-oneof-field-circuit_breaker_choice": "[\"circuit_breaker\",\"disable_circuit_breaker\"]",
+            "x-ves-oneof-field-outlier_detection_choice": "[\"disable_outlier_detection\",\"outlier_detection\"]",
+            "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
+            "x-ves-oneof-field-subset_choice": "[\"disable_subsets\",\"enable_subsets\"]",
+            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginPoolAdvancedOptions",
+            "properties": {
+                "circuit_breaker": {
+                    "description": "Exclusive with [disable_circuit_breaker]\nx-displayName: \"Enable Circuit Breaker\"\nCircuitBreaker provides a mechanism for watching failures in upstream connections or requests\nand if the failures reach a certain threshold, automatically fail subsequent requests which\nallows to apply back pressure on downstream quickly.",
+                    "title": "circuit_breaker",
+                    "$ref": "#/definitions/clusterCircuitBreaker"
+                },
+                "connection_timeout": {
+                    "type": "integer",
+                    "description": " The timeout for new network connections to endpoints in the cluster.\n This is specified in milliseconds. The default value is 2 seconds\n\nExample: - \"4000\"-",
+                    "title": "connection_timeout",
+                    "format": "int64",
+                    "x-displayname": "Connection Timeout",
+                    "x-ves-example": "4000"
+                },
+                "disable_circuit_breaker": {
+                    "description": "Exclusive with [circuit_breaker]\nx-displayName: \"Disable Circuit Breaker\"\nCircuit Breaker is disabled",
+                    "title": "Disable Circuit Breaker",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "disable_outlier_detection": {
+                    "description": "Exclusive with [outlier_detection]\nx-displayName: \"Disable Outlier Detection\"\nOutlier detection is disabled",
+                    "title": "Disable Outlier Detection",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "disable_subsets": {
+                    "description": "Exclusive with [enable_subsets]\nx-displayName: \"Disable Subset Load Balancing\"\nSubset load balancing is disabled. All eligible origin servers will be considered for load balancing.",
+                    "title": "Subset Load Balancing is Disabled",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable_subsets": {
+                    "description": "Exclusive with [disable_subsets]\nx-displayName: \"Enable Subset Load Balancing\"\nSubset load balancing is enabled. Based on route, subset of origin servers will be considered for load balancing.",
+                    "title": "Subset Load Balancing is Enable",
+                    "$ref": "#/definitions/origin_poolOriginPoolSubsets"
+                },
+                "http2_options": {
+                    "description": " Http2 Protocol options for upstream connections",
+                    "title": "http2_options",
+                    "$ref": "#/definitions/clusterHttp2ProtocolOptions",
+                    "x-displayname": "Http2 Protocol Configuration"
+                },
+                "http_idle_timeout": {
+                    "type": "integer",
+                    "description": " The idle timeout for upstream connection pool connections. The idle timeout is defined as the\n period in which there are no active requests. When the idle timeout is reached the connection\n will be closed. Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive.\n This is specified in milliseconds. The default value is 5 minutes.\n\nExample: - \"60000\"-",
+                    "title": "http_idle_timeout",
+                    "format": "int64",
+                    "x-displayname": "HTTP Idle Timeout",
+                    "x-ves-example": "60000"
+                },
+                "no_panic_threshold": {
+                    "description": "Exclusive with [panic_threshold]\nx-displayName: \"No Panic threshold\"\n\nDisable panic threshold. Only healthy endpoints are considered for load balancing.",
+                    "title": "Disable panic threshold",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "outlier_detection": {
+                    "description": "Exclusive with [disable_outlier_detection]\nx-displayName: \"Enable Outlier Detection\"\nOutlier detection and ejection is the process of dynamically determining whether some number\nof hosts in an upstream cluster are performing unlike the others and removing them from the\nhealthy load balancing set. Outlier detection is a form of passive health checking.",
+                    "title": "Enable Outlier Detection",
+                    "$ref": "#/definitions/clusterOutlierDetectionType"
+                },
+                "panic_threshold": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_panic_threshold]\nx-displayName: \"Panic threshold\"\nx-example:\"25\"\nConfigure a threshold (percentage of unhealthy endpoints) below which\nall endpoints will be considered for load balancing ignoring its health status.",
+                    "title": "Panic threshold",
+                    "format": "int64"
+                }
+            }
+        },
+        "origin_poolOriginPoolDefaultSubset": {
+            "type": "object",
+            "description": "Default Subset definition",
+            "title": "Origin Pool Default Subset",
+            "x-displayname": "Origin Pool Default Subset",
+            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginPoolDefaultSubset",
+            "properties": {
+                "default_subset": {
+                    "type": "object",
+                    "description": " List of key-value pairs that define default subset. \n which gets used when route specifies no metadata or no subset matching the metadata exists.\n\nExample: - \"key:value\"-",
+                    "title": "default_subset",
+                    "x-displayname": "Default Subset for Origin Pool",
+                    "x-ves-example": "key:value"
+                }
+            }
+        },
+        "origin_poolOriginPoolSubsets": {
+            "type": "object",
+            "description": "Configure subset options for origin pool",
+            "title": "Origin Pool Subset Options",
+            "x-displayname": "Origin Pool Subset Options",
+            "x-ves-oneof-field-fallback_policy_choice": "[\"any_endpoint\",\"default_subset\",\"fail_request\"]",
+            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginPoolSubsets",
+            "properties": {
+                "any_endpoint": {
+                    "description": "Exclusive with [default_subset fail_request]\nx-displayName: \"Select Any Origin Server\"\nSelect any origin server from available healthy origin servers in this pool",
+                    "title": "Select Any Origin Server",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "default_subset": {
+                    "description": "Exclusive with [any_endpoint fail_request]\nx-displayName: \"Use Default Subset\"\nUse the default subset provided here. Select endpoints matching default subset.",
+                    "title": "Use Default Subset",
+                    "$ref": "#/definitions/origin_poolOriginPoolDefaultSubset"
+                },
+                "endpoint_subsets": {
+                    "type": "array",
+                    "description": " List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class.",
+                    "title": "Origin Server Subsets Classes",
+                    "items": {
+                        "$ref": "#/definitions/clusterEndpointSubsetSelectorType"
+                    },
+                    "x-displayname": "Origin Server Subsets Classes"
+                },
+                "fail_request": {
+                    "description": "Exclusive with [any_endpoint default_subset]\nx-displayName: \"Fail the Request\"\nRequest will be failed and error returned, as if cluster has no origin servers.",
+                    "title": "Fail the Request",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
         "origin_poolOriginServerConsulService": {
             "type": "object",
             "description": "Specify origin server with Hashi Corp Consul service name and site information",
@@ -2290,7 +2574,7 @@ var APISwaggerJSON string = `{
         },
         "origin_poolOriginServerK8SService": {
             "type": "object",
-            "description": "Specify origin server with k8s service name and site information",
+            "description": "Specify origin server with K8s service name and site information",
             "title": "OriginServerK8SService",
             "x-displayname": "K8s Service Name on given Sites",
             "x-ves-displayorder": "1,2,3",
@@ -2322,8 +2606,8 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "vk8s_networks": {
-                    "description": "Exclusive with [inside_network outside_network]\nx-displayName: \"vK8s Networks on Site\"\norigin server are on vk8s network on the site",
-                    "title": "vk8s Networks on site",
+                    "description": "Exclusive with [inside_network outside_network]\nx-displayName: \"vK8s Networks on Site\"\norigin server are on vK8s network on the site",
+                    "title": "vK8s Networks on site",
                     "$ref": "#/definitions/schemaEmpty"
                 }
             }
@@ -2437,7 +2721,7 @@ var APISwaggerJSON string = `{
             "description": "Various options to specify origin server",
             "title": "OriginServerType",
             "x-displayname": "Origin Server",
-            "x-ves-displayorder": "8",
+            "x-ves-displayorder": "9,8",
             "x-ves-oneof-field-choice": "[\"consul_service\",\"custom_endpoint_object\",\"k8s_service\",\"private_ip\",\"private_name\",\"public_ip\",\"public_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerType",
             "properties": {
@@ -2452,9 +2736,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/origin_poolOriginServerCustomEndpoint"
                 },
                 "k8s_service": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object private_ip private_name public_ip public_name]\nx-displayName: \"K8s Service Name of Origin Server on given Sites\"\nSpecify origin server with k8s service name and site information",
+                    "description": "Exclusive with [consul_service custom_endpoint_object private_ip private_name public_ip public_name]\nx-displayName: \"K8s Service Name of Origin Server on given Sites\"\nSpecify origin server with K8s service name and site information",
                     "title": "OriginServerK8SService",
                     "$ref": "#/definitions/origin_poolOriginServerK8SService"
+                },
+                "labels": {
+                    "type": "object",
+                    "description": " Add Labels for this origin server, these labels can be used to form subset.",
+                    "title": "Origin Server Labels",
+                    "x-displayname": "Origin Server Labels"
                 },
                 "private_ip": {
                     "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_name public_ip public_name]\nx-displayName: \"IP address of Origin Server on given Sites\"\nSpecify origin server with private or public IP address and site information",
@@ -2772,6 +3062,18 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaRoutingPriority": {
+            "type": "string",
+            "description": "Priority routing for each request.\nDifferent connection pools are used based on the priority selected for the request.\nAlso, circuit-breaker configuration at destination cluster is chosen based on selected priority.\n\n - DEFAULT: Default routing mechanism\n - HIGH: High-Priority routing mechanism",
+            "title": "RoutingPriority",
+            "enum": [
+                "DEFAULT",
+                "HIGH"
+            ],
+            "default": "DEFAULT",
+            "x-displayname": "Routing Priority",
+            "x-ves-proto-enum": "ves.io.schema.RoutingPriority"
+        },
         "schemaSecretEncodingType": {
             "type": "string",
             "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: No Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
@@ -2796,6 +3098,12 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                },
+                "blindfold_secret_info_internal": {
+                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
+                    "title": "Blindfold Secret Internal",
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret Internal"
                 },
                 "clear_secret_info": {
                     "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
@@ -3227,15 +3535,28 @@ var APISwaggerJSON string = `{
             "description": "Shape of the origin pool specification",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
+            "x-ves-oneof-field-health_check_port_choice": "[\"health_check_port\",\"same_as_endpoint_port\"]",
             "x-ves-oneof-field-tls_choice": "[\"no_tls\",\"use_tls\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.GlobalSpecType",
             "properties": {
+                "advanced_options": {
+                    "description": " Advance options configuration like timeouts, circuit breaker, subset load balancing",
+                    "title": "Advance Options",
+                    "$ref": "#/definitions/origin_poolOriginPoolAdvancedOptions",
+                    "x-displayname": "Advance Options"
+                },
                 "endpoint_selection": {
                     "description": " Policy for selection of endpoints from local site or remote site or both\nRequired: YES",
                     "title": "endpoint_selection",
                     "$ref": "#/definitions/clusterEndpointSelectionPolicy",
                     "x-displayname": "Endpoint Selection",
                     "x-ves-required": "true"
+                },
+                "health_check_port": {
+                    "type": "integer",
+                    "description": "Exclusive with [same_as_endpoint_port]\n",
+                    "title": "Health check port\nx-displayName: \"Health check port\"\nPort used for performing health check",
+                    "format": "int64"
                 },
                 "healthcheck": {
                     "type": "array",
@@ -3276,6 +3597,11 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Port",
                     "x-ves-example": "9080",
                     "x-ves-required": "true"
+                },
+                "same_as_endpoint_port": {
+                    "description": "Exclusive with [health_check_port]\nx-displayName: \"Endpoint port\"\nHealth check is performed on endpoint port itself",
+                    "title": "Same as endpoint port",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "use_tls": {
                     "description": "Exclusive with [no_tls]\nx-displayName: \"TLS\"\nOrigin servers use TLS",

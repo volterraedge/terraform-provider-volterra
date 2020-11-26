@@ -12,7 +12,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
-	ves_io_schema_namespace "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
+	ves_io_schema_namespace "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/namespace"
 )
 
 // dataSourceVolterraNamespace is implementation of Volterra's Namespace resource read

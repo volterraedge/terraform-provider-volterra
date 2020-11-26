@@ -9,8 +9,8 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	ves_io_schema_cloud_cred "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials"
-	ves_io_schema_gcp_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
+	ves_io_schema_cloud_cred "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials"
+	ves_io_schema_gcp_vpc_site "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
 )
 
 func TestGCPVPCSiteState(t *testing.T) {
@@ -61,26 +61,34 @@ func testGCPVPCSiteConfig(resourceName, name string) string {
 
 		  ingress_egress_gw {
 			gcp_certified_hw = "gcp-byol-multi-nic-voltmesh"
-			az_nodes {
-				gcp_zone_name = "us-east1-b"
-				inside_subnet {
-					new_subnet {
-						primary_ipv4 = "192.168.0.0/24"
-						subnet_name = "inside-subnet"
-					}
+			gcp_zone_names = ["us-east1-b"]
+			inside_network {
+				new_network {
+					name = "inside-network"
 				}
-				outside_subnet {
-					new_subnet {
-						primary_ipv4 = "192.168.1.0/24"
-						subnet_name = "outside-subnet"
-					}
+			}
+			inside_subnet{
+				new_subnet {
+					primary_ipv4 = "192.168.0.0/24"
+					subnet_name = "inside-subnet"
+				}
+			}
+			outside_network {
+				new_network {
+					name = "outside-network"
+				}
+			}
+			outside_subnet{
+				new_subnet {
+					primary_ipv4 = "192.168.1.0/24"
+					subnet_name = "outside-subnet"
 				}
 			}
 			no_global_network = true
 			no_inside_static_routes = true
 			no_network_policy = true
 			no_outside_static_routes = true
-			no_forward_proxy_policy = true
+			no_forward_proxy = true
 		  }
 		  ssh_key = "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAD5sRjpKVBvf5afxhysXd4GyvEFaiDOnPhKQcK8SHNUxkGkjhRV6xMFpBBApNctQ73yaHweV//OhBHurwzUodKOWAEyH+ay0V2BAOpx2aiQHxiMh7b0CGYVxv4lRZ4IPZ1Da9Siz1Sz19RYBjVM7v6Dvo2UlYftUyauKPIDPnd19iN10g=="
 

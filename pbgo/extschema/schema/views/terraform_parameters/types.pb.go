@@ -17,15 +17,15 @@ import (
 
 	google_protobuf1 "github.com/gogo/protobuf/types"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
 
 	strconv "strconv"
 

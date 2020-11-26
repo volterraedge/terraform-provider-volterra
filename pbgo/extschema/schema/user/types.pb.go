@@ -14,9 +14,9 @@ import (
 
 	_ "github.com/gogo/protobuf/types"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema4 "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
 	strconv "strconv"
 

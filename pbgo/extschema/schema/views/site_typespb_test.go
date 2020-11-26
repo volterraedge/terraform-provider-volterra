@@ -23,13 +23,12 @@ It has these top-level messages:
 	AzureVnetOneInterfaceNodeType
 	AzureVnetTwoInterfaceNodeType
 	GCPVPCNetworkParamsType
+	GCPVPCNetworkAutogenerateParamsType
 	GCPVPCNetworkType
 	GCPSubnetType
 	GCPSubnetParamsType
 	GCPVPCNetworkChoiceType
 	GCPVPCSubnetChoiceType
-	GCPVPCOneInterfaceNodeType
-	GCPVPCTwoInterfaceNodeType
 	SiteStaticRoutesType
 	SiteStaticRoutesListType
 	GlobalNetworkConnectionType
@@ -72,15 +71,15 @@ import (
 
 	_ "github.com/gogo/protobuf/gogoproto"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1433,6 +1432,102 @@ func BenchmarkGCPVPCNetworkParamsTypeProtoUnmarshal(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
+func TestGCPVPCNetworkAutogenerateParamsTypeProto(t *testing.T) {
+	seed := time.Now().UnixNano()
+	popr := rand.New(rand.NewSource(seed))
+	p := NewPopulatedGCPVPCNetworkAutogenerateParamsType(popr, false)
+	dAtA, err := proto.Marshal(p)
+	if err != nil {
+		t.Fatalf("seed = %d, err = %v", seed, err)
+	}
+	msg := &GCPVPCNetworkAutogenerateParamsType{}
+	if err := proto.Unmarshal(dAtA, msg); err != nil {
+		t.Fatalf("seed = %d, err = %v", seed, err)
+	}
+	littlefuzz := make([]byte, len(dAtA))
+	copy(littlefuzz, dAtA)
+	for i := range dAtA {
+		dAtA[i] = byte(popr.Intn(256))
+	}
+	if !p.Equal(msg) {
+		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
+	}
+	if len(littlefuzz) > 0 {
+		fuzzamount := 100
+		for i := 0; i < fuzzamount; i++ {
+			littlefuzz[popr.Intn(len(littlefuzz))] = byte(popr.Intn(256))
+			littlefuzz = append(littlefuzz, byte(popr.Intn(256)))
+		}
+		// shouldn't panic
+		_ = proto.Unmarshal(littlefuzz, msg)
+	}
+}
+
+func TestGCPVPCNetworkAutogenerateParamsTypeMarshalTo(t *testing.T) {
+	seed := time.Now().UnixNano()
+	popr := rand.New(rand.NewSource(seed))
+	p := NewPopulatedGCPVPCNetworkAutogenerateParamsType(popr, false)
+	size := p.Size()
+	dAtA := make([]byte, size)
+	for i := range dAtA {
+		dAtA[i] = byte(popr.Intn(256))
+	}
+	_, err := p.MarshalTo(dAtA)
+	if err != nil {
+		t.Fatalf("seed = %d, err = %v", seed, err)
+	}
+	msg := &GCPVPCNetworkAutogenerateParamsType{}
+	if err := proto.Unmarshal(dAtA, msg); err != nil {
+		t.Fatalf("seed = %d, err = %v", seed, err)
+	}
+	for i := range dAtA {
+		dAtA[i] = byte(popr.Intn(256))
+	}
+	if !p.Equal(msg) {
+		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
+	}
+}
+
+func BenchmarkGCPVPCNetworkAutogenerateParamsTypeProtoMarshal(b *testing.B) {
+	popr := rand.New(rand.NewSource(616))
+	total := 0
+	pops := make([]*GCPVPCNetworkAutogenerateParamsType, 10000)
+	for i := 0; i < 10000; i++ {
+		pops[i] = NewPopulatedGCPVPCNetworkAutogenerateParamsType(popr, false)
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		dAtA, err := proto.Marshal(pops[i%10000])
+		if err != nil {
+			panic(err)
+		}
+		total += len(dAtA)
+	}
+	b.SetBytes(int64(total / b.N))
+}
+
+func BenchmarkGCPVPCNetworkAutogenerateParamsTypeProtoUnmarshal(b *testing.B) {
+	popr := rand.New(rand.NewSource(616))
+	total := 0
+	datas := make([][]byte, 10000)
+	for i := 0; i < 10000; i++ {
+		dAtA, err := proto.Marshal(NewPopulatedGCPVPCNetworkAutogenerateParamsType(popr, false))
+		if err != nil {
+			panic(err)
+		}
+		datas[i] = dAtA
+	}
+	msg := &GCPVPCNetworkAutogenerateParamsType{}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		total += len(datas[i%10000])
+		if err := proto.Unmarshal(datas[i%10000], msg); err != nil {
+			panic(err)
+		}
+	}
+	b.SetBytes(int64(total / b.N))
+}
+
 func TestGCPVPCNetworkTypeProto(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
@@ -1903,198 +1998,6 @@ func BenchmarkGCPVPCSubnetChoiceTypeProtoUnmarshal(b *testing.B) {
 		datas[i] = dAtA
 	}
 	msg := &GCPVPCSubnetChoiceType{}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		total += len(datas[i%10000])
-		if err := proto.Unmarshal(datas[i%10000], msg); err != nil {
-			panic(err)
-		}
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func TestGCPVPCOneInterfaceNodeTypeProto(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGCPVPCOneInterfaceNodeType(popr, false)
-	dAtA, err := proto.Marshal(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &GCPVPCOneInterfaceNodeType{}
-	if err := proto.Unmarshal(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	littlefuzz := make([]byte, len(dAtA))
-	copy(littlefuzz, dAtA)
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-	if len(littlefuzz) > 0 {
-		fuzzamount := 100
-		for i := 0; i < fuzzamount; i++ {
-			littlefuzz[popr.Intn(len(littlefuzz))] = byte(popr.Intn(256))
-			littlefuzz = append(littlefuzz, byte(popr.Intn(256)))
-		}
-		// shouldn't panic
-		_ = proto.Unmarshal(littlefuzz, msg)
-	}
-}
-
-func TestGCPVPCOneInterfaceNodeTypeMarshalTo(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGCPVPCOneInterfaceNodeType(popr, false)
-	size := p.Size()
-	dAtA := make([]byte, size)
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	_, err := p.MarshalTo(dAtA)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &GCPVPCOneInterfaceNodeType{}
-	if err := proto.Unmarshal(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func BenchmarkGCPVPCOneInterfaceNodeTypeProtoMarshal(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	pops := make([]*GCPVPCOneInterfaceNodeType, 10000)
-	for i := 0; i < 10000; i++ {
-		pops[i] = NewPopulatedGCPVPCOneInterfaceNodeType(popr, false)
-	}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		dAtA, err := proto.Marshal(pops[i%10000])
-		if err != nil {
-			panic(err)
-		}
-		total += len(dAtA)
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func BenchmarkGCPVPCOneInterfaceNodeTypeProtoUnmarshal(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	datas := make([][]byte, 10000)
-	for i := 0; i < 10000; i++ {
-		dAtA, err := proto.Marshal(NewPopulatedGCPVPCOneInterfaceNodeType(popr, false))
-		if err != nil {
-			panic(err)
-		}
-		datas[i] = dAtA
-	}
-	msg := &GCPVPCOneInterfaceNodeType{}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		total += len(datas[i%10000])
-		if err := proto.Unmarshal(datas[i%10000], msg); err != nil {
-			panic(err)
-		}
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func TestGCPVPCTwoInterfaceNodeTypeProto(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGCPVPCTwoInterfaceNodeType(popr, false)
-	dAtA, err := proto.Marshal(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &GCPVPCTwoInterfaceNodeType{}
-	if err := proto.Unmarshal(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	littlefuzz := make([]byte, len(dAtA))
-	copy(littlefuzz, dAtA)
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-	if len(littlefuzz) > 0 {
-		fuzzamount := 100
-		for i := 0; i < fuzzamount; i++ {
-			littlefuzz[popr.Intn(len(littlefuzz))] = byte(popr.Intn(256))
-			littlefuzz = append(littlefuzz, byte(popr.Intn(256)))
-		}
-		// shouldn't panic
-		_ = proto.Unmarshal(littlefuzz, msg)
-	}
-}
-
-func TestGCPVPCTwoInterfaceNodeTypeMarshalTo(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGCPVPCTwoInterfaceNodeType(popr, false)
-	size := p.Size()
-	dAtA := make([]byte, size)
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	_, err := p.MarshalTo(dAtA)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &GCPVPCTwoInterfaceNodeType{}
-	if err := proto.Unmarshal(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	for i := range dAtA {
-		dAtA[i] = byte(popr.Intn(256))
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func BenchmarkGCPVPCTwoInterfaceNodeTypeProtoMarshal(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	pops := make([]*GCPVPCTwoInterfaceNodeType, 10000)
-	for i := 0; i < 10000; i++ {
-		pops[i] = NewPopulatedGCPVPCTwoInterfaceNodeType(popr, false)
-	}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		dAtA, err := proto.Marshal(pops[i%10000])
-		if err != nil {
-			panic(err)
-		}
-		total += len(dAtA)
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func BenchmarkGCPVPCTwoInterfaceNodeTypeProtoUnmarshal(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	datas := make([][]byte, 10000)
-	for i := 0; i < 10000; i++ {
-		dAtA, err := proto.Marshal(NewPopulatedGCPVPCTwoInterfaceNodeType(popr, false))
-		if err != nil {
-			panic(err)
-		}
-		datas[i] = dAtA
-	}
-	msg := &GCPVPCTwoInterfaceNodeType{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		total += len(datas[i%10000])
@@ -2741,6 +2644,24 @@ func TestGCPVPCNetworkParamsTypeJSON(t *testing.T) {
 		t.Fatalf("seed = %d, %#v !Json Equal %#v", seed, msg, p)
 	}
 }
+func TestGCPVPCNetworkAutogenerateParamsTypeJSON(t *testing.T) {
+	seed := time.Now().UnixNano()
+	popr := rand.New(rand.NewSource(seed))
+	p := NewPopulatedGCPVPCNetworkAutogenerateParamsType(popr, true)
+	marshaler := jsonpb.Marshaler{}
+	jsondata, err := marshaler.MarshalToString(p)
+	if err != nil {
+		t.Fatalf("seed = %d, err = %v", seed, err)
+	}
+	msg := &GCPVPCNetworkAutogenerateParamsType{}
+	err = jsonpb.UnmarshalString(jsondata, msg)
+	if err != nil {
+		t.Fatalf("seed = %d, err = %v", seed, err)
+	}
+	if !p.Equal(msg) {
+		t.Fatalf("seed = %d, %#v !Json Equal %#v", seed, msg, p)
+	}
+}
 func TestGCPVPCNetworkTypeJSON(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
@@ -2823,42 +2744,6 @@ func TestGCPVPCSubnetChoiceTypeJSON(t *testing.T) {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
 	msg := &GCPVPCSubnetChoiceType{}
-	err = jsonpb.UnmarshalString(jsondata, msg)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Json Equal %#v", seed, msg, p)
-	}
-}
-func TestGCPVPCOneInterfaceNodeTypeJSON(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGCPVPCOneInterfaceNodeType(popr, true)
-	marshaler := jsonpb.Marshaler{}
-	jsondata, err := marshaler.MarshalToString(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &GCPVPCOneInterfaceNodeType{}
-	err = jsonpb.UnmarshalString(jsondata, msg)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Json Equal %#v", seed, msg, p)
-	}
-}
-func TestGCPVPCTwoInterfaceNodeTypeJSON(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGCPVPCTwoInterfaceNodeType(popr, true)
-	marshaler := jsonpb.Marshaler{}
-	jsondata, err := marshaler.MarshalToString(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	msg := &GCPVPCTwoInterfaceNodeType{}
 	err = jsonpb.UnmarshalString(jsondata, msg)
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
@@ -3331,6 +3216,34 @@ func TestGCPVPCNetworkParamsTypeProtoCompactText(t *testing.T) {
 	}
 }
 
+func TestGCPVPCNetworkAutogenerateParamsTypeProtoText(t *testing.T) {
+	seed := time.Now().UnixNano()
+	popr := rand.New(rand.NewSource(seed))
+	p := NewPopulatedGCPVPCNetworkAutogenerateParamsType(popr, true)
+	dAtA := proto.MarshalTextString(p)
+	msg := &GCPVPCNetworkAutogenerateParamsType{}
+	if err := proto.UnmarshalText(dAtA, msg); err != nil {
+		t.Fatalf("seed = %d, err = %v", seed, err)
+	}
+	if !p.Equal(msg) {
+		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
+	}
+}
+
+func TestGCPVPCNetworkAutogenerateParamsTypeProtoCompactText(t *testing.T) {
+	seed := time.Now().UnixNano()
+	popr := rand.New(rand.NewSource(seed))
+	p := NewPopulatedGCPVPCNetworkAutogenerateParamsType(popr, true)
+	dAtA := proto.CompactTextString(p)
+	msg := &GCPVPCNetworkAutogenerateParamsType{}
+	if err := proto.UnmarshalText(dAtA, msg); err != nil {
+		t.Fatalf("seed = %d, err = %v", seed, err)
+	}
+	if !p.Equal(msg) {
+		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
+	}
+}
+
 func TestGCPVPCNetworkTypeProtoText(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
@@ -3463,62 +3376,6 @@ func TestGCPVPCSubnetChoiceTypeProtoCompactText(t *testing.T) {
 	p := NewPopulatedGCPVPCSubnetChoiceType(popr, true)
 	dAtA := proto.CompactTextString(p)
 	msg := &GCPVPCSubnetChoiceType{}
-	if err := proto.UnmarshalText(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func TestGCPVPCOneInterfaceNodeTypeProtoText(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGCPVPCOneInterfaceNodeType(popr, true)
-	dAtA := proto.MarshalTextString(p)
-	msg := &GCPVPCOneInterfaceNodeType{}
-	if err := proto.UnmarshalText(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func TestGCPVPCOneInterfaceNodeTypeProtoCompactText(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGCPVPCOneInterfaceNodeType(popr, true)
-	dAtA := proto.CompactTextString(p)
-	msg := &GCPVPCOneInterfaceNodeType{}
-	if err := proto.UnmarshalText(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func TestGCPVPCTwoInterfaceNodeTypeProtoText(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGCPVPCTwoInterfaceNodeType(popr, true)
-	dAtA := proto.MarshalTextString(p)
-	msg := &GCPVPCTwoInterfaceNodeType{}
-	if err := proto.UnmarshalText(dAtA, msg); err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	if !p.Equal(msg) {
-		t.Fatalf("seed = %d, %#v !Proto %#v", seed, msg, p)
-	}
-}
-
-func TestGCPVPCTwoInterfaceNodeTypeProtoCompactText(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGCPVPCTwoInterfaceNodeType(popr, true)
-	dAtA := proto.CompactTextString(p)
-	msg := &GCPVPCTwoInterfaceNodeType{}
 	if err := proto.UnmarshalText(dAtA, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -3821,6 +3678,19 @@ func TestGCPVPCNetworkParamsTypeGoString(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+func TestGCPVPCNetworkAutogenerateParamsTypeGoString(t *testing.T) {
+	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
+	p := NewPopulatedGCPVPCNetworkAutogenerateParamsType(popr, false)
+	s1 := p.GoString()
+	s2 := fmt.Sprintf("%#v", p)
+	if s1 != s2 {
+		t.Fatalf("GoString want %v got %v", s1, s2)
+	}
+	_, err := parser.ParseExpr(s1)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
 func TestGCPVPCNetworkTypeGoString(t *testing.T) {
 	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
 	p := NewPopulatedGCPVPCNetworkType(popr, false)
@@ -3876,32 +3746,6 @@ func TestGCPVPCNetworkChoiceTypeGoString(t *testing.T) {
 func TestGCPVPCSubnetChoiceTypeGoString(t *testing.T) {
 	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
 	p := NewPopulatedGCPVPCSubnetChoiceType(popr, false)
-	s1 := p.GoString()
-	s2 := fmt.Sprintf("%#v", p)
-	if s1 != s2 {
-		t.Fatalf("GoString want %v got %v", s1, s2)
-	}
-	_, err := parser.ParseExpr(s1)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
-func TestGCPVPCOneInterfaceNodeTypeGoString(t *testing.T) {
-	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedGCPVPCOneInterfaceNodeType(popr, false)
-	s1 := p.GoString()
-	s2 := fmt.Sprintf("%#v", p)
-	if s1 != s2 {
-		t.Fatalf("GoString want %v got %v", s1, s2)
-	}
-	_, err := parser.ParseExpr(s1)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
-func TestGCPVPCTwoInterfaceNodeTypeGoString(t *testing.T) {
-	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedGCPVPCTwoInterfaceNodeType(popr, false)
 	s1 := p.GoString()
 	s2 := fmt.Sprintf("%#v", p)
 	if s1 != s2 {
@@ -4468,6 +4312,42 @@ func BenchmarkGCPVPCNetworkParamsTypeSize(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
+func TestGCPVPCNetworkAutogenerateParamsTypeSize(t *testing.T) {
+	seed := time.Now().UnixNano()
+	popr := rand.New(rand.NewSource(seed))
+	p := NewPopulatedGCPVPCNetworkAutogenerateParamsType(popr, true)
+	size2 := proto.Size(p)
+	dAtA, err := proto.Marshal(p)
+	if err != nil {
+		t.Fatalf("seed = %d, err = %v", seed, err)
+	}
+	size := p.Size()
+	if len(dAtA) != size {
+		t.Errorf("seed = %d, size %v != marshalled size %v", seed, size, len(dAtA))
+	}
+	if size2 != size {
+		t.Errorf("seed = %d, size %v != before marshal proto.Size %v", seed, size, size2)
+	}
+	size3 := proto.Size(p)
+	if size3 != size {
+		t.Errorf("seed = %d, size %v != after marshal proto.Size %v", seed, size, size3)
+	}
+}
+
+func BenchmarkGCPVPCNetworkAutogenerateParamsTypeSize(b *testing.B) {
+	popr := rand.New(rand.NewSource(616))
+	total := 0
+	pops := make([]*GCPVPCNetworkAutogenerateParamsType, 1000)
+	for i := 0; i < 1000; i++ {
+		pops[i] = NewPopulatedGCPVPCNetworkAutogenerateParamsType(popr, false)
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		total += pops[i%1000].Size()
+	}
+	b.SetBytes(int64(total / b.N))
+}
+
 func TestGCPVPCNetworkTypeSize(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
@@ -4640,78 +4520,6 @@ func BenchmarkGCPVPCSubnetChoiceTypeSize(b *testing.B) {
 	pops := make([]*GCPVPCSubnetChoiceType, 1000)
 	for i := 0; i < 1000; i++ {
 		pops[i] = NewPopulatedGCPVPCSubnetChoiceType(popr, false)
-	}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		total += pops[i%1000].Size()
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func TestGCPVPCOneInterfaceNodeTypeSize(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGCPVPCOneInterfaceNodeType(popr, true)
-	size2 := proto.Size(p)
-	dAtA, err := proto.Marshal(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	size := p.Size()
-	if len(dAtA) != size {
-		t.Errorf("seed = %d, size %v != marshalled size %v", seed, size, len(dAtA))
-	}
-	if size2 != size {
-		t.Errorf("seed = %d, size %v != before marshal proto.Size %v", seed, size, size2)
-	}
-	size3 := proto.Size(p)
-	if size3 != size {
-		t.Errorf("seed = %d, size %v != after marshal proto.Size %v", seed, size, size3)
-	}
-}
-
-func BenchmarkGCPVPCOneInterfaceNodeTypeSize(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	pops := make([]*GCPVPCOneInterfaceNodeType, 1000)
-	for i := 0; i < 1000; i++ {
-		pops[i] = NewPopulatedGCPVPCOneInterfaceNodeType(popr, false)
-	}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		total += pops[i%1000].Size()
-	}
-	b.SetBytes(int64(total / b.N))
-}
-
-func TestGCPVPCTwoInterfaceNodeTypeSize(t *testing.T) {
-	seed := time.Now().UnixNano()
-	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGCPVPCTwoInterfaceNodeType(popr, true)
-	size2 := proto.Size(p)
-	dAtA, err := proto.Marshal(p)
-	if err != nil {
-		t.Fatalf("seed = %d, err = %v", seed, err)
-	}
-	size := p.Size()
-	if len(dAtA) != size {
-		t.Errorf("seed = %d, size %v != marshalled size %v", seed, size, len(dAtA))
-	}
-	if size2 != size {
-		t.Errorf("seed = %d, size %v != before marshal proto.Size %v", seed, size, size2)
-	}
-	size3 := proto.Size(p)
-	if size3 != size {
-		t.Errorf("seed = %d, size %v != after marshal proto.Size %v", seed, size, size3)
-	}
-}
-
-func BenchmarkGCPVPCTwoInterfaceNodeTypeSize(b *testing.B) {
-	popr := rand.New(rand.NewSource(616))
-	total := 0
-	pops := make([]*GCPVPCTwoInterfaceNodeType, 1000)
-	for i := 0; i < 1000; i++ {
-		pops[i] = NewPopulatedGCPVPCTwoInterfaceNodeType(popr, false)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -4990,6 +4798,15 @@ func TestGCPVPCNetworkParamsTypeStringer(t *testing.T) {
 		t.Fatalf("String want %v got %v", s1, s2)
 	}
 }
+func TestGCPVPCNetworkAutogenerateParamsTypeStringer(t *testing.T) {
+	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
+	p := NewPopulatedGCPVPCNetworkAutogenerateParamsType(popr, false)
+	s1 := p.String()
+	s2 := fmt.Sprintf("%v", p)
+	if s1 != s2 {
+		t.Fatalf("String want %v got %v", s1, s2)
+	}
+}
 func TestGCPVPCNetworkTypeStringer(t *testing.T) {
 	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
 	p := NewPopulatedGCPVPCNetworkType(popr, false)
@@ -5029,24 +4846,6 @@ func TestGCPVPCNetworkChoiceTypeStringer(t *testing.T) {
 func TestGCPVPCSubnetChoiceTypeStringer(t *testing.T) {
 	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
 	p := NewPopulatedGCPVPCSubnetChoiceType(popr, false)
-	s1 := p.String()
-	s2 := fmt.Sprintf("%v", p)
-	if s1 != s2 {
-		t.Fatalf("String want %v got %v", s1, s2)
-	}
-}
-func TestGCPVPCOneInterfaceNodeTypeStringer(t *testing.T) {
-	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedGCPVPCOneInterfaceNodeType(popr, false)
-	s1 := p.String()
-	s2 := fmt.Sprintf("%v", p)
-	if s1 != s2 {
-		t.Fatalf("String want %v got %v", s1, s2)
-	}
-}
-func TestGCPVPCTwoInterfaceNodeTypeStringer(t *testing.T) {
-	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedGCPVPCTwoInterfaceNodeType(popr, false)
 	s1 := p.String()
 	s2 := fmt.Sprintf("%v", p)
 	if s1 != s2 {

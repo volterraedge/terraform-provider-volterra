@@ -15,9 +15,9 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_cluster "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cluster"
+	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -175,6 +175,14 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) HealthCheckPortChoiceHealthCheckPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_HealthCheckPort, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_port")
+	}
+	return oValidatorFn_HealthCheckPort, nil
+}
+
 func (v *ValidateCreateSpecType) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -319,11 +327,46 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["advanced_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("advanced_options"))
+		if err := fv(ctx, m.GetAdvancedOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["endpoint_selection"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("endpoint_selection"))
 		if err := fv(ctx, m.GetEndpointSelection(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetHealthCheckPortChoice().(type) {
+	case *CreateSpecType_SameAsEndpointPort:
+		if fv, exists := v.FldValidators["health_check_port_choice.same_as_endpoint_port"]; exists {
+			val := m.GetHealthCheckPortChoice().(*CreateSpecType_SameAsEndpointPort).SameAsEndpointPort
+			vOpts := append(opts,
+				db.WithValidateField("health_check_port_choice"),
+				db.WithValidateField("same_as_endpoint_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_HealthCheckPort:
+		if fv, exists := v.FldValidators["health_check_port_choice.health_check_port"]; exists {
+			val := m.GetHealthCheckPortChoice().(*CreateSpecType_HealthCheckPort).HealthCheckPort
+			vOpts := append(opts,
+				db.WithValidateField("health_check_port_choice"),
+				db.WithValidateField("health_check_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -413,6 +456,18 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhHealthCheckPortChoiceHealthCheckPort := v.HealthCheckPortChoiceHealthCheckPortValidationRuleHandler
+	rulesHealthCheckPortChoiceHealthCheckPort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFnMap["health_check_port_choice.health_check_port"], err = vrhHealthCheckPortChoiceHealthCheckPort(rulesHealthCheckPortChoiceHealthCheckPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.health_check_port_choice_health_check_port: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["health_check_port_choice.health_check_port"] = vFnMap["health_check_port_choice.health_check_port"]
+
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -485,6 +540,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["endpoint_selection"] = vFn
 
 	v.FldValidators["tls_choice.use_tls"] = UpstreamTlsParametersValidator().Validate
+
+	v.FldValidators["advanced_options"] = OriginPoolAdvancedOptionsValidator().Validate
 
 	return v
 }()
@@ -641,6 +698,14 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) HealthCheckPortChoiceHealthCheckPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_HealthCheckPort, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_port")
+	}
+	return oValidatorFn_HealthCheckPort, nil
+}
+
 func (v *ValidateGetSpecType) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -785,11 +850,46 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["advanced_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("advanced_options"))
+		if err := fv(ctx, m.GetAdvancedOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["endpoint_selection"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("endpoint_selection"))
 		if err := fv(ctx, m.GetEndpointSelection(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetHealthCheckPortChoice().(type) {
+	case *GetSpecType_SameAsEndpointPort:
+		if fv, exists := v.FldValidators["health_check_port_choice.same_as_endpoint_port"]; exists {
+			val := m.GetHealthCheckPortChoice().(*GetSpecType_SameAsEndpointPort).SameAsEndpointPort
+			vOpts := append(opts,
+				db.WithValidateField("health_check_port_choice"),
+				db.WithValidateField("same_as_endpoint_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_HealthCheckPort:
+		if fv, exists := v.FldValidators["health_check_port_choice.health_check_port"]; exists {
+			val := m.GetHealthCheckPortChoice().(*GetSpecType_HealthCheckPort).HealthCheckPort
+			vOpts := append(opts,
+				db.WithValidateField("health_check_port_choice"),
+				db.WithValidateField("health_check_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -879,6 +979,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhHealthCheckPortChoiceHealthCheckPort := v.HealthCheckPortChoiceHealthCheckPortValidationRuleHandler
+	rulesHealthCheckPortChoiceHealthCheckPort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFnMap["health_check_port_choice.health_check_port"], err = vrhHealthCheckPortChoiceHealthCheckPort(rulesHealthCheckPortChoiceHealthCheckPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.health_check_port_choice_health_check_port: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["health_check_port_choice.health_check_port"] = vFnMap["health_check_port_choice.health_check_port"]
+
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -951,6 +1063,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["endpoint_selection"] = vFn
 
 	v.FldValidators["tls_choice.use_tls"] = UpstreamTlsParametersValidator().Validate
+
+	v.FldValidators["advanced_options"] = OriginPoolAdvancedOptionsValidator().Validate
 
 	return v
 }()
@@ -1163,6 +1277,14 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) HealthCheckPortChoiceHealthCheckPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_HealthCheckPort, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_port")
+	}
+	return oValidatorFn_HealthCheckPort, nil
+}
+
 func (v *ValidateGlobalSpecType) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1307,11 +1429,46 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["advanced_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("advanced_options"))
+		if err := fv(ctx, m.GetAdvancedOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["endpoint_selection"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("endpoint_selection"))
 		if err := fv(ctx, m.GetEndpointSelection(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetHealthCheckPortChoice().(type) {
+	case *GlobalSpecType_SameAsEndpointPort:
+		if fv, exists := v.FldValidators["health_check_port_choice.same_as_endpoint_port"]; exists {
+			val := m.GetHealthCheckPortChoice().(*GlobalSpecType_SameAsEndpointPort).SameAsEndpointPort
+			vOpts := append(opts,
+				db.WithValidateField("health_check_port_choice"),
+				db.WithValidateField("same_as_endpoint_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_HealthCheckPort:
+		if fv, exists := v.FldValidators["health_check_port_choice.health_check_port"]; exists {
+			val := m.GetHealthCheckPortChoice().(*GlobalSpecType_HealthCheckPort).HealthCheckPort
+			vOpts := append(opts,
+				db.WithValidateField("health_check_port_choice"),
+				db.WithValidateField("health_check_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1410,6 +1567,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhHealthCheckPortChoiceHealthCheckPort := v.HealthCheckPortChoiceHealthCheckPortValidationRuleHandler
+	rulesHealthCheckPortChoiceHealthCheckPort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFnMap["health_check_port_choice.health_check_port"], err = vrhHealthCheckPortChoiceHealthCheckPort(rulesHealthCheckPortChoiceHealthCheckPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.health_check_port_choice_health_check_port: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["health_check_port_choice.health_check_port"] = vFnMap["health_check_port_choice.health_check_port"]
+
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -1483,6 +1652,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["tls_choice.use_tls"] = UpstreamTlsParametersValidator().Validate
 
+	v.FldValidators["advanced_options"] = OriginPoolAdvancedOptionsValidator().Validate
+
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1490,6 +1661,743 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *OriginPoolAdvancedOptions) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OriginPoolAdvancedOptions) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OriginPoolAdvancedOptions) DeepCopy() *OriginPoolAdvancedOptions {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OriginPoolAdvancedOptions{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OriginPoolAdvancedOptions) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OriginPoolAdvancedOptions) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OriginPoolAdvancedOptionsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateOriginPoolAdvancedOptions struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOriginPoolAdvancedOptions) CircuitBreakerChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for circuit_breaker_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginPoolAdvancedOptions) OutlierDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outlier_detection_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginPoolAdvancedOptions) PanicThresholdTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for panic_threshold_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginPoolAdvancedOptions) PanicThresholdTypePanicThresholdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PanicThreshold, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for panic_threshold")
+	}
+	return oValidatorFn_PanicThreshold, nil
+}
+
+func (v *ValidateOriginPoolAdvancedOptions) SubsetChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for subset_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginPoolAdvancedOptions) ConnectionTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_timeout")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginPoolAdvancedOptions) HttpIdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for http_idle_timeout")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginPoolAdvancedOptions) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OriginPoolAdvancedOptions)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OriginPoolAdvancedOptions got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["circuit_breaker_choice"]; exists {
+		val := m.GetCircuitBreakerChoice()
+		vOpts := append(opts,
+			db.WithValidateField("circuit_breaker_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetCircuitBreakerChoice().(type) {
+	case *OriginPoolAdvancedOptions_DisableCircuitBreaker:
+		if fv, exists := v.FldValidators["circuit_breaker_choice.disable_circuit_breaker"]; exists {
+			val := m.GetCircuitBreakerChoice().(*OriginPoolAdvancedOptions_DisableCircuitBreaker).DisableCircuitBreaker
+			vOpts := append(opts,
+				db.WithValidateField("circuit_breaker_choice"),
+				db.WithValidateField("disable_circuit_breaker"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OriginPoolAdvancedOptions_CircuitBreaker:
+		if fv, exists := v.FldValidators["circuit_breaker_choice.circuit_breaker"]; exists {
+			val := m.GetCircuitBreakerChoice().(*OriginPoolAdvancedOptions_CircuitBreaker).CircuitBreaker
+			vOpts := append(opts,
+				db.WithValidateField("circuit_breaker_choice"),
+				db.WithValidateField("circuit_breaker"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["connection_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("connection_timeout"))
+		if err := fv(ctx, m.GetConnectionTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["http2_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http2_options"))
+		if err := fv(ctx, m.GetHttp2Options(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["http_idle_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_idle_timeout"))
+		if err := fv(ctx, m.GetHttpIdleTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outlier_detection_choice"]; exists {
+		val := m.GetOutlierDetectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("outlier_detection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetOutlierDetectionChoice().(type) {
+	case *OriginPoolAdvancedOptions_DisableOutlierDetection:
+		if fv, exists := v.FldValidators["outlier_detection_choice.disable_outlier_detection"]; exists {
+			val := m.GetOutlierDetectionChoice().(*OriginPoolAdvancedOptions_DisableOutlierDetection).DisableOutlierDetection
+			vOpts := append(opts,
+				db.WithValidateField("outlier_detection_choice"),
+				db.WithValidateField("disable_outlier_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OriginPoolAdvancedOptions_OutlierDetection:
+		if fv, exists := v.FldValidators["outlier_detection_choice.outlier_detection"]; exists {
+			val := m.GetOutlierDetectionChoice().(*OriginPoolAdvancedOptions_OutlierDetection).OutlierDetection
+			vOpts := append(opts,
+				db.WithValidateField("outlier_detection_choice"),
+				db.WithValidateField("outlier_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["panic_threshold_type"]; exists {
+		val := m.GetPanicThresholdType()
+		vOpts := append(opts,
+			db.WithValidateField("panic_threshold_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPanicThresholdType().(type) {
+	case *OriginPoolAdvancedOptions_NoPanicThreshold:
+		if fv, exists := v.FldValidators["panic_threshold_type.no_panic_threshold"]; exists {
+			val := m.GetPanicThresholdType().(*OriginPoolAdvancedOptions_NoPanicThreshold).NoPanicThreshold
+			vOpts := append(opts,
+				db.WithValidateField("panic_threshold_type"),
+				db.WithValidateField("no_panic_threshold"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OriginPoolAdvancedOptions_PanicThreshold:
+		if fv, exists := v.FldValidators["panic_threshold_type.panic_threshold"]; exists {
+			val := m.GetPanicThresholdType().(*OriginPoolAdvancedOptions_PanicThreshold).PanicThreshold
+			vOpts := append(opts,
+				db.WithValidateField("panic_threshold_type"),
+				db.WithValidateField("panic_threshold"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["subset_choice"]; exists {
+		val := m.GetSubsetChoice()
+		vOpts := append(opts,
+			db.WithValidateField("subset_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSubsetChoice().(type) {
+	case *OriginPoolAdvancedOptions_DisableSubsets:
+		if fv, exists := v.FldValidators["subset_choice.disable_subsets"]; exists {
+			val := m.GetSubsetChoice().(*OriginPoolAdvancedOptions_DisableSubsets).DisableSubsets
+			vOpts := append(opts,
+				db.WithValidateField("subset_choice"),
+				db.WithValidateField("disable_subsets"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OriginPoolAdvancedOptions_EnableSubsets:
+		if fv, exists := v.FldValidators["subset_choice.enable_subsets"]; exists {
+			val := m.GetSubsetChoice().(*OriginPoolAdvancedOptions_EnableSubsets).EnableSubsets
+			vOpts := append(opts,
+				db.WithValidateField("subset_choice"),
+				db.WithValidateField("enable_subsets"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOriginPoolAdvancedOptionsValidator = func() *ValidateOriginPoolAdvancedOptions {
+	v := &ValidateOriginPoolAdvancedOptions{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCircuitBreakerChoice := v.CircuitBreakerChoiceValidationRuleHandler
+	rulesCircuitBreakerChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhCircuitBreakerChoice(rulesCircuitBreakerChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginPoolAdvancedOptions.circuit_breaker_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["circuit_breaker_choice"] = vFn
+
+	vrhOutlierDetectionChoice := v.OutlierDetectionChoiceValidationRuleHandler
+	rulesOutlierDetectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhOutlierDetectionChoice(rulesOutlierDetectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginPoolAdvancedOptions.outlier_detection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outlier_detection_choice"] = vFn
+
+	vrhPanicThresholdType := v.PanicThresholdTypeValidationRuleHandler
+	rulesPanicThresholdType := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPanicThresholdType(rulesPanicThresholdType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginPoolAdvancedOptions.panic_threshold_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["panic_threshold_type"] = vFn
+
+	vrhPanicThresholdTypePanicThreshold := v.PanicThresholdTypePanicThresholdValidationRuleHandler
+	rulesPanicThresholdTypePanicThreshold := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "100",
+	}
+	vFnMap["panic_threshold_type.panic_threshold"], err = vrhPanicThresholdTypePanicThreshold(rulesPanicThresholdTypePanicThreshold)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OriginPoolAdvancedOptions.panic_threshold_type_panic_threshold: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["panic_threshold_type.panic_threshold"] = vFnMap["panic_threshold_type.panic_threshold"]
+
+	vrhSubsetChoice := v.SubsetChoiceValidationRuleHandler
+	rulesSubsetChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSubsetChoice(rulesSubsetChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginPoolAdvancedOptions.subset_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["subset_choice"] = vFn
+
+	vrhConnectionTimeout := v.ConnectionTimeoutValidationRuleHandler
+	rulesConnectionTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "600000",
+	}
+	vFn, err = vrhConnectionTimeout(rulesConnectionTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginPoolAdvancedOptions.connection_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["connection_timeout"] = vFn
+
+	vrhHttpIdleTimeout := v.HttpIdleTimeoutValidationRuleHandler
+	rulesHttpIdleTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "600000",
+	}
+	vFn, err = vrhHttpIdleTimeout(rulesHttpIdleTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginPoolAdvancedOptions.http_idle_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["http_idle_timeout"] = vFn
+
+	v.FldValidators["circuit_breaker_choice.circuit_breaker"] = ves_io_schema_cluster.CircuitBreakerValidator().Validate
+
+	v.FldValidators["outlier_detection_choice.outlier_detection"] = ves_io_schema_cluster.OutlierDetectionTypeValidator().Validate
+
+	v.FldValidators["subset_choice.enable_subsets"] = OriginPoolSubsetsValidator().Validate
+
+	return v
+}()
+
+func OriginPoolAdvancedOptionsValidator() db.Validator {
+	return DefaultOriginPoolAdvancedOptionsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *OriginPoolDefaultSubset) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OriginPoolDefaultSubset) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OriginPoolDefaultSubset) DeepCopy() *OriginPoolDefaultSubset {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OriginPoolDefaultSubset{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OriginPoolDefaultSubset) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OriginPoolDefaultSubset) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OriginPoolDefaultSubsetValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateOriginPoolDefaultSubset struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOriginPoolDefaultSubset) DefaultSubsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for default_subset")
+	}
+	itemValRules := db.GetMapStringValueRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemValRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item value ValidationRuleHandler for default_subset")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]string, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := itemValFn(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for default_subset")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]string)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]string, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map default_subset")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items default_subset")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginPoolDefaultSubset) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OriginPoolDefaultSubset)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OriginPoolDefaultSubset got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["default_subset"]; exists {
+		vOpts := append(opts, db.WithValidateField("default_subset"))
+		if err := fv(ctx, m.GetDefaultSubset(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOriginPoolDefaultSubsetValidator = func() *ValidateOriginPoolDefaultSubset {
+	v := &ValidateOriginPoolDefaultSubset{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDefaultSubset := v.DefaultSubsetValidationRuleHandler
+	rulesDefaultSubset := map[string]string{
+		"ves.io.schema.rules.map.max_pairs": "32",
+	}
+	vFn, err = vrhDefaultSubset(rulesDefaultSubset)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginPoolDefaultSubset.default_subset: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["default_subset"] = vFn
+
+	return v
+}()
+
+func OriginPoolDefaultSubsetValidator() db.Validator {
+	return DefaultOriginPoolDefaultSubsetValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *OriginPoolSubsets) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OriginPoolSubsets) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OriginPoolSubsets) DeepCopy() *OriginPoolSubsets {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OriginPoolSubsets{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OriginPoolSubsets) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OriginPoolSubsets) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OriginPoolSubsetsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateOriginPoolSubsets struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOriginPoolSubsets) FallbackPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for fallback_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginPoolSubsets) EndpointSubsetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_cluster.EndpointSubsetSelectorType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_cluster.EndpointSubsetSelectorTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for endpoint_subsets")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_cluster.EndpointSubsetSelectorType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_cluster.EndpointSubsetSelectorType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated endpoint_subsets")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items endpoint_subsets")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginPoolSubsets) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OriginPoolSubsets)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OriginPoolSubsets got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["endpoint_subsets"]; exists {
+		vOpts := append(opts, db.WithValidateField("endpoint_subsets"))
+		if err := fv(ctx, m.GetEndpointSubsets(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["fallback_policy_choice"]; exists {
+		val := m.GetFallbackPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("fallback_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetFallbackPolicyChoice().(type) {
+	case *OriginPoolSubsets_AnyEndpoint:
+		if fv, exists := v.FldValidators["fallback_policy_choice.any_endpoint"]; exists {
+			val := m.GetFallbackPolicyChoice().(*OriginPoolSubsets_AnyEndpoint).AnyEndpoint
+			vOpts := append(opts,
+				db.WithValidateField("fallback_policy_choice"),
+				db.WithValidateField("any_endpoint"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OriginPoolSubsets_DefaultSubset:
+		if fv, exists := v.FldValidators["fallback_policy_choice.default_subset"]; exists {
+			val := m.GetFallbackPolicyChoice().(*OriginPoolSubsets_DefaultSubset).DefaultSubset
+			vOpts := append(opts,
+				db.WithValidateField("fallback_policy_choice"),
+				db.WithValidateField("default_subset"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OriginPoolSubsets_FailRequest:
+		if fv, exists := v.FldValidators["fallback_policy_choice.fail_request"]; exists {
+			val := m.GetFallbackPolicyChoice().(*OriginPoolSubsets_FailRequest).FailRequest
+			vOpts := append(opts,
+				db.WithValidateField("fallback_policy_choice"),
+				db.WithValidateField("fail_request"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOriginPoolSubsetsValidator = func() *ValidateOriginPoolSubsets {
+	v := &ValidateOriginPoolSubsets{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhFallbackPolicyChoice := v.FallbackPolicyChoiceValidationRuleHandler
+	rulesFallbackPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhFallbackPolicyChoice(rulesFallbackPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginPoolSubsets.fallback_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["fallback_policy_choice"] = vFn
+
+	vrhEndpointSubsets := v.EndpointSubsetsValidationRuleHandler
+	rulesEndpointSubsets := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+	}
+	vFn, err = vrhEndpointSubsets(rulesEndpointSubsets)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginPoolSubsets.endpoint_subsets: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["endpoint_subsets"] = vFn
+
+	v.FldValidators["fallback_policy_choice.default_subset"] = OriginPoolDefaultSubsetValidator().Validate
+
+	return v
+}()
+
+func OriginPoolSubsetsValidator() db.Validator {
+	return DefaultOriginPoolSubsetsValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3087,6 +3995,18 @@ func (v *ValidateOriginServerType) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	if fv, exists := v.FldValidators["labels"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("labels"))
+		for key, value := range m.GetLabels() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -3276,6 +4196,14 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) HealthCheckPortChoiceHealthCheckPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_HealthCheckPort, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_port")
+	}
+	return oValidatorFn_HealthCheckPort, nil
+}
+
 func (v *ValidateReplaceSpecType) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3420,11 +4348,46 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["advanced_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("advanced_options"))
+		if err := fv(ctx, m.GetAdvancedOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["endpoint_selection"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("endpoint_selection"))
 		if err := fv(ctx, m.GetEndpointSelection(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetHealthCheckPortChoice().(type) {
+	case *ReplaceSpecType_SameAsEndpointPort:
+		if fv, exists := v.FldValidators["health_check_port_choice.same_as_endpoint_port"]; exists {
+			val := m.GetHealthCheckPortChoice().(*ReplaceSpecType_SameAsEndpointPort).SameAsEndpointPort
+			vOpts := append(opts,
+				db.WithValidateField("health_check_port_choice"),
+				db.WithValidateField("same_as_endpoint_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_HealthCheckPort:
+		if fv, exists := v.FldValidators["health_check_port_choice.health_check_port"]; exists {
+			val := m.GetHealthCheckPortChoice().(*ReplaceSpecType_HealthCheckPort).HealthCheckPort
+			vOpts := append(opts,
+				db.WithValidateField("health_check_port_choice"),
+				db.WithValidateField("health_check_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3514,6 +4477,18 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhHealthCheckPortChoiceHealthCheckPort := v.HealthCheckPortChoiceHealthCheckPortValidationRuleHandler
+	rulesHealthCheckPortChoiceHealthCheckPort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFnMap["health_check_port_choice.health_check_port"], err = vrhHealthCheckPortChoiceHealthCheckPort(rulesHealthCheckPortChoiceHealthCheckPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.health_check_port_choice_health_check_port: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["health_check_port_choice.health_check_port"] = vFnMap["health_check_port_choice.health_check_port"]
+
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -3586,6 +4561,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["endpoint_selection"] = vFn
 
 	v.FldValidators["tls_choice.use_tls"] = UpstreamTlsParametersValidator().Validate
+
+	v.FldValidators["advanced_options"] = OriginPoolAdvancedOptionsValidator().Validate
 
 	return v
 }()
@@ -4148,6 +5125,41 @@ func UpstreamTlsValidationContextValidator() db.Validator {
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetHealthCheckPortChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.HealthCheckPortChoice.(type) {
+	case nil:
+		o.HealthCheckPortChoice = nil
+
+	case *CreateSpecType_HealthCheckPort:
+		o.HealthCheckPortChoice = &GlobalSpecType_HealthCheckPort{HealthCheckPort: of.HealthCheckPort}
+
+	case *CreateSpecType_SameAsEndpointPort:
+		o.HealthCheckPortChoice = &GlobalSpecType_SameAsEndpointPort{SameAsEndpointPort: of.SameAsEndpointPort}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetHealthCheckPortChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.HealthCheckPortChoice.(type) {
+	case nil:
+		r.HealthCheckPortChoice = nil
+
+	case *GlobalSpecType_HealthCheckPort:
+		r.HealthCheckPortChoice = &CreateSpecType_HealthCheckPort{HealthCheckPort: of.HealthCheckPort}
+
+	case *GlobalSpecType_SameAsEndpointPort:
+		r.HealthCheckPortChoice = &CreateSpecType_SameAsEndpointPort{SameAsEndpointPort: of.SameAsEndpointPort}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetTlsChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.TlsChoice.(type) {
 	case nil:
@@ -4186,7 +5198,9 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.AdvancedOptions = f.GetAdvancedOptions()
 	m.EndpointSelection = f.GetEndpointSelection()
+	m.GetHealthCheckPortChoiceFromGlobalSpecType(f)
 	m.Healthcheck = f.GetHealthcheck()
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
 	m.OriginServers = f.GetOriginServers()
@@ -4200,12 +5214,49 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	f.AdvancedOptions = m1.AdvancedOptions
 	f.EndpointSelection = m1.EndpointSelection
+	m1.SetHealthCheckPortChoiceToGlobalSpecType(f)
 	f.Healthcheck = m1.Healthcheck
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
 	f.OriginServers = m1.OriginServers
 	f.Port = m1.Port
 	m1.SetTlsChoiceToGlobalSpecType(f)
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetHealthCheckPortChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.HealthCheckPortChoice.(type) {
+	case nil:
+		o.HealthCheckPortChoice = nil
+
+	case *GetSpecType_HealthCheckPort:
+		o.HealthCheckPortChoice = &GlobalSpecType_HealthCheckPort{HealthCheckPort: of.HealthCheckPort}
+
+	case *GetSpecType_SameAsEndpointPort:
+		o.HealthCheckPortChoice = &GlobalSpecType_SameAsEndpointPort{SameAsEndpointPort: of.SameAsEndpointPort}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetHealthCheckPortChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.HealthCheckPortChoice.(type) {
+	case nil:
+		r.HealthCheckPortChoice = nil
+
+	case *GlobalSpecType_HealthCheckPort:
+		r.HealthCheckPortChoice = &GetSpecType_HealthCheckPort{HealthCheckPort: of.HealthCheckPort}
+
+	case *GlobalSpecType_SameAsEndpointPort:
+		r.HealthCheckPortChoice = &GetSpecType_SameAsEndpointPort{SameAsEndpointPort: of.SameAsEndpointPort}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -4247,7 +5298,9 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.AdvancedOptions = f.GetAdvancedOptions()
 	m.EndpointSelection = f.GetEndpointSelection()
+	m.GetHealthCheckPortChoiceFromGlobalSpecType(f)
 	m.Healthcheck = f.GetHealthcheck()
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
 	m.OriginServers = f.GetOriginServers()
@@ -4261,12 +5314,49 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	f.AdvancedOptions = m1.AdvancedOptions
 	f.EndpointSelection = m1.EndpointSelection
+	m1.SetHealthCheckPortChoiceToGlobalSpecType(f)
 	f.Healthcheck = m1.Healthcheck
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
 	f.OriginServers = m1.OriginServers
 	f.Port = m1.Port
 	m1.SetTlsChoiceToGlobalSpecType(f)
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetHealthCheckPortChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.HealthCheckPortChoice.(type) {
+	case nil:
+		o.HealthCheckPortChoice = nil
+
+	case *ReplaceSpecType_HealthCheckPort:
+		o.HealthCheckPortChoice = &GlobalSpecType_HealthCheckPort{HealthCheckPort: of.HealthCheckPort}
+
+	case *ReplaceSpecType_SameAsEndpointPort:
+		o.HealthCheckPortChoice = &GlobalSpecType_SameAsEndpointPort{SameAsEndpointPort: of.SameAsEndpointPort}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetHealthCheckPortChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.HealthCheckPortChoice.(type) {
+	case nil:
+		r.HealthCheckPortChoice = nil
+
+	case *GlobalSpecType_HealthCheckPort:
+		r.HealthCheckPortChoice = &ReplaceSpecType_HealthCheckPort{HealthCheckPort: of.HealthCheckPort}
+
+	case *GlobalSpecType_SameAsEndpointPort:
+		r.HealthCheckPortChoice = &ReplaceSpecType_SameAsEndpointPort{SameAsEndpointPort: of.SameAsEndpointPort}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -4308,7 +5398,9 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.AdvancedOptions = f.GetAdvancedOptions()
 	m.EndpointSelection = f.GetEndpointSelection()
+	m.GetHealthCheckPortChoiceFromGlobalSpecType(f)
 	m.Healthcheck = f.GetHealthcheck()
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
 	m.OriginServers = f.GetOriginServers()
@@ -4322,7 +5414,9 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	f.AdvancedOptions = m1.AdvancedOptions
 	f.EndpointSelection = m1.EndpointSelection
+	m1.SetHealthCheckPortChoiceToGlobalSpecType(f)
 	f.Healthcheck = m1.Healthcheck
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
 	f.OriginServers = m1.OriginServers

@@ -25,6 +25,174 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *ChoiceItem) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ChoiceItem) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ChoiceItem) DeepCopy() *ChoiceItem {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ChoiceItem{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ChoiceItem) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ChoiceItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ChoiceItemValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateChoiceItem struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateChoiceItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ChoiceItem)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ChoiceItem got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultChoiceItemValidator = func() *ValidateChoiceItem {
+	v := &ValidateChoiceItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ChoiceItemValidator() db.Validator {
+	return DefaultChoiceItemValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ChoiceItemList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ChoiceItemList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ChoiceItemList) DeepCopy() *ChoiceItemList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ChoiceItemList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ChoiceItemList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ChoiceItemList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ChoiceItemListValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateChoiceItemList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateChoiceItemList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ChoiceItemList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ChoiceItemList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["choice_items"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("choice_items"))
+		for idx, item := range m.GetChoiceItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultChoiceItemListValidator = func() *ValidateChoiceItemList {
+	v := &ValidateChoiceItemList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ChoiceItemListValidator() db.Validator {
+	return DefaultChoiceItemListValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *Choices) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -263,6 +431,87 @@ var DefaultFieldViewOptionsValidator = func() *ValidateFieldViewOptions {
 
 func FieldViewOptionsValidator() db.Validator {
 	return DefaultFieldViewOptionsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *LabelKeyClassList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LabelKeyClassList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LabelKeyClassList) DeepCopy() *LabelKeyClassList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LabelKeyClassList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LabelKeyClassList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LabelKeyClassList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LabelKeyClassListValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateLabelKeyClassList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLabelKeyClassList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LabelKeyClassList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LabelKeyClassList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["key_classes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("key_classes"))
+		for idx, item := range m.GetKeyClasses() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLabelKeyClassListValidator = func() *ValidateLabelKeyClassList {
+	v := &ValidateLabelKeyClassList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func LabelKeyClassListValidator() db.Validator {
+	return DefaultLabelKeyClassListValidator
 }
 
 // augmented methods on protoc/std generated struct

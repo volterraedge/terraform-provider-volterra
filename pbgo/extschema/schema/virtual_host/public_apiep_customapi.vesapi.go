@@ -607,7 +607,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-virtual_host-ApiepCustomAPI-GetAPIEndpointLearntSchema"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-ApiepCustomAPI-GetAPIEndpointLearntSchema"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointLearntSchema"
             },
@@ -1020,10 +1020,17 @@ var ApiepCustomAPISwaggerJSON string = `{
             "properties": {
                 "learnt_schema": {
                     "type": "string",
-                    "description": "Learnt Schema for request API endpoint.\n\nExample: - \"value\"-",
+                    "description": "Learnt Schema for request API endpoint.\n\nExample: - \"{\\\"example\\\":\\\"{\\\\\\\"country\\\\\\\"\\\\\\\"dummy\\\\\\\", \\\\\\\"fullName\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"mobileNum\\\\\\\": 1234567890, \\\\\\\"zipCode\\\\\\\": \\\\\\\"121\\\\\\\", \\\\\\\"streetAddress\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"city\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"state\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"test\\\\\\\": \\\\\\\"Hello, \\\\\\\\u4e16\\\\\\\\u754c\\\\\\\"}\\\",\\\"properties\\\":{\\\"city\\\":{\\\"description\\\":\\\"Word\\\",\\\"pattern\\\":\\\"[a-z0-9-]+\\\",\\\"type\\\":\\\"string\\\"},\\\"country\\\":{\\\"description\\\":\\\"Word\\\",\\\"pattern\\\":\\\"[a-z0-9-]+\\\",\\\"type\\\":\\\"string\\\"},\\\"fullName\\\":{\\\"description\\\":\\\"Word\\\",\\\"pattern\\\":\\\"[a-z0-9-]+\\\",\\\"type\\\":\\\"string\\\"},\\\"mobileNum\\\":{\\\"type\\\":\\\"integer\\\"},\\\"state\\\":{\\\"description\\\":\\\"Word\\\",\\\"pattern\\\":\\\"[a-z0-9-]+\\\",\\\"type\\\":\\\"string\\\"},\\\"streetAddress\\\":{\\\"description\\\":\\\"Word\\\",\\\"pattern\\\":\\\"[a-z0-9-]+\\\",\\\"type\\\":\\\"string\\\"},\\\"test\\\":{\\\"type\\\":\\\"string\\\"},\\\"zipCode\\\":{\\\"description\\\":\\\"Integer\\\",\\\"pattern\\\":\\\"-?\\\\\\\\d+\\\",\\\"type\\\":\\\"string\\\"}},\\\"required\\\":[\\\"fullName\\\",\\\"mobileNum\\\",\\\"city\\\",\\\"test\\\",\\\"zipCode\\\",\\\"state\\\",\\\"streetAddress\\\",\\\"country\\\"],\\\"type\\\":\\\"object\\\"}\"-",
                     "title": "Learnt Schema",
                     "x-displayname": "Learnt Schema",
-                    "x-ves-example": "value"
+                    "x-ves-example": "{\\\"example\\\":\\\"{\\\\\\\"country\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"fullName\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"mobileNum\\\\\\\": 1234567890, \\\\\\\"zipCode\\\\\\\": \\\\\\\"121\\\\\\\", \\\\\\\"streetAddress\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"city\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"state\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"test\\\\\\\": \\\\\\\"Hello, \\\\\\\\u4e16\\\\\\\\u754c\\\\\\\"}\\\",\\\"properties\\\":{\\\"city\\\":{\\\"description\\\":\\\"Word\\\",\\\"pattern\\\":\\\"[a-z0-9-]+\\\",\\\"type\\\":\\\"string\\\"},\\\"country\\\":{\\\"description\\\":\\\"Word\\\",\\\"pattern\\\":\\\"[a-z0-9-]+\\\",\\\"type\\\":\\\"string\\\"},\\\"fullName\\\":{\\\"description\\\":\\\"Word\\\",\\\"pattern\\\":\\\"[a-z0-9-]+\\\",\\\"type\\\":\\\"string\\\"},\\\"mobileNum\\\":{\\\"type\\\":\\\"integer\\\"},\\\"state\\\":{\\\"description\\\":\\\"Word\\\",\\\"pattern\\\":\\\"[a-z0-9-]+\\\",\\\"type\\\":\\\"string\\\"},\\\"streetAddress\\\":{\\\"description\\\":\\\"Word\\\",\\\"pattern\\\":\\\"[a-z0-9-]+\\\",\\\"type\\\":\\\"string\\\"},\\\"test\\\":{\\\"type\\\":\\\"string\\\"},\\\"zipCode\\\":{\\\"description\\\":\\\"Integer\\\",\\\"pattern\\\":\\\"-?\\\\\\\\d+\\\",\\\"type\\\":\\\"string\\\"}},\\\"required\\\":[\\\"fullName\\\",\\\"mobileNum\\\",\\\"city\\\",\\\"test\\\",\\\"zipCode\\\",\\\"state\\\",\\\"streetAddress\\\",\\\"country\\\"],\\\"type\\\":\\\"object\\\"}"
+                },
+                "swagger_spec": {
+                    "type": "string",
+                    "description": "Swagger spec for request API endpoint.\n\nExample: - \"{\\\"info\\\":{\\\"description\\\":\\\"\\\",\\\"title\\\":\\\"\\\",\\\"version\\\":\\\"\\\"},\\\"paths\\\":{\\\"\\/api\\/Addresss\\\":{\\\"get\\\":{\\\"consumes\\\":[\\\"application\\/json\\\"],\\\"description\\\":\\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\":[{\\\"description\\\":\\\"\\\",\\\"in\\\":\\\"query\\\",\\\"name\\\":\\\"test\\\",\\\"type\\\":\\\"string\\\"},{\\\"description\\\":\\\"\\\",\\\"in\\\":\\\"query\\\",\\\"name\\\":\\\"test1\\\",\\\"type\\\":\\\"string\\\"}],\\\"responses\\\":{\\\"200\\\":{\\\"description\\\":\\\"\\\"}}}}},\\\"schemes\\\":[\\\"https\\\",\\\"http\\\"],\\\"swagger\\\":\\\"2.0\\\"}\"-",
+                    "title": "Swagger Spec",
+                    "x-displayname": "Swagger Spec",
+                    "x-ves-example": "{\\\"info\\\":{\\\"description\\\":\\\"\\\",\\\"title\\\":\\\"\\\",\\\"version\\\":\\\"\\\"},\\\"paths\\\":{\\\"\\/api\\/Addresss\\\":{\\\"get\\\":{\\\"consumes\\\":[\\\"application\\/json\\\"],\\\"description\\\":\\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\":[{\\\"description\\\":\\\"\\\",\\\"in\\\":\\\"query\\\",\\\"name\\\":\\\"test\\\",\\\"type\\\":\\\"string\\\"},{\\\"description\\\":\\\"\\\",\\\"in\\\":\\\"query\\\",\\\"name\\\":\\\"test1\\\",\\\"type\\\":\\\"string\\\"}],\\\"responses\\\":{\\\"200\\\":{\\\"description\\\":\\\"\\\"}}}}},\\\"schemes\\\":[\\\"https\\\",\\\"http\\\"],\\\"swagger\\\":\\\"2.0\\\"}"
                 }
             }
         },

@@ -23,13 +23,12 @@
 		AzureVnetOneInterfaceNodeType
 		AzureVnetTwoInterfaceNodeType
 		GCPVPCNetworkParamsType
+		GCPVPCNetworkAutogenerateParamsType
 		GCPVPCNetworkType
 		GCPSubnetType
 		GCPSubnetParamsType
 		GCPVPCNetworkChoiceType
 		GCPVPCSubnetChoiceType
-		GCPVPCOneInterfaceNodeType
-		GCPVPCTwoInterfaceNodeType
 		SiteStaticRoutesType
 		SiteStaticRoutesListType
 		GlobalNetworkConnectionType
@@ -62,15 +61,15 @@ import (
 
 	_ "github.com/gogo/protobuf/gogoproto"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema4 "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
 	strings "strings"
 
@@ -96,13 +95,17 @@ const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 // x-displayName: "AWS VPC Parameters"
 // Parameters to create new AWS VPC
 type AWSVPCParamsType struct {
-	// AWS VPC Name Tag
+	// AWS VPC Name
 	//
-	// x-displayName: "AWS VPC Name Tag"
+	// x-displayName: "AWS VPC Name"
 	// x-required
 	// x-example "MyVpc"
-	// Optional Name tag for your VPC
-	NameTag string `protobuf:"bytes,2,opt,name=name_tag,json=nameTag,proto3" json:"name_tag,omitempty"`
+	// Name for your AWS VPC
+	//
+	// Types that are valid to be assigned to NameChoice:
+	//	*AWSVPCParamsType_NameTag
+	//	*AWSVPCParamsType_Autogenerate
+	NameChoice isAWSVPCParamsType_NameChoice `protobuf_oneof:"name_choice"`
 	// Primary IPv4 CIDR block
 	//
 	// x-displayName: "Primary IPv4 CIDR block"
@@ -122,11 +125,42 @@ func (m *AWSVPCParamsType) Reset()                    { *m = AWSVPCParamsType{} 
 func (*AWSVPCParamsType) ProtoMessage()               {}
 func (*AWSVPCParamsType) Descriptor() ([]byte, []int) { return fileDescriptorSiteTypes, []int{0} }
 
-func (m *AWSVPCParamsType) GetNameTag() string {
+type isAWSVPCParamsType_NameChoice interface {
+	isAWSVPCParamsType_NameChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type AWSVPCParamsType_NameTag struct {
+	NameTag string `protobuf:"bytes,2,opt,name=name_tag,json=nameTag,proto3,oneof"`
+}
+type AWSVPCParamsType_Autogenerate struct {
+	Autogenerate *ves_io_schema4.Empty `protobuf:"bytes,8,opt,name=autogenerate,oneof"`
+}
+
+func (*AWSVPCParamsType_NameTag) isAWSVPCParamsType_NameChoice()      {}
+func (*AWSVPCParamsType_Autogenerate) isAWSVPCParamsType_NameChoice() {}
+
+func (m *AWSVPCParamsType) GetNameChoice() isAWSVPCParamsType_NameChoice {
 	if m != nil {
-		return m.NameTag
+		return m.NameChoice
+	}
+	return nil
+}
+
+func (m *AWSVPCParamsType) GetNameTag() string {
+	if x, ok := m.GetNameChoice().(*AWSVPCParamsType_NameTag); ok {
+		return x.NameTag
 	}
 	return ""
+}
+
+func (m *AWSVPCParamsType) GetAutogenerate() *ves_io_schema4.Empty {
+	if x, ok := m.GetNameChoice().(*AWSVPCParamsType_Autogenerate); ok {
+		return x.Autogenerate
+	}
+	return nil
 }
 
 func (m *AWSVPCParamsType) GetPrimaryIpv4() string {
@@ -141,6 +175,76 @@ func (m *AWSVPCParamsType) GetAllocateIpv6() bool {
 		return m.AllocateIpv6
 	}
 	return false
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*AWSVPCParamsType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _AWSVPCParamsType_OneofMarshaler, _AWSVPCParamsType_OneofUnmarshaler, _AWSVPCParamsType_OneofSizer, []interface{}{
+		(*AWSVPCParamsType_NameTag)(nil),
+		(*AWSVPCParamsType_Autogenerate)(nil),
+	}
+}
+
+func _AWSVPCParamsType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*AWSVPCParamsType)
+	// name_choice
+	switch x := m.NameChoice.(type) {
+	case *AWSVPCParamsType_NameTag:
+		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
+		_ = b.EncodeStringBytes(x.NameTag)
+	case *AWSVPCParamsType_Autogenerate:
+		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Autogenerate); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("AWSVPCParamsType.NameChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _AWSVPCParamsType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*AWSVPCParamsType)
+	switch tag {
+	case 2: // name_choice.name_tag
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.NameChoice = &AWSVPCParamsType_NameTag{x}
+		return true, err
+	case 8: // name_choice.autogenerate
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.NameChoice = &AWSVPCParamsType_Autogenerate{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _AWSVPCParamsType_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*AWSVPCParamsType)
+	// name_choice
+	switch x := m.NameChoice.(type) {
+	case *AWSVPCParamsType_NameTag:
+		n += proto.SizeVarint(2<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(len(x.NameTag)))
+		n += len(x.NameTag)
+	case *AWSVPCParamsType_Autogenerate:
+		s := proto.Size(x.Autogenerate)
+		n += proto.SizeVarint(8<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
 }
 
 // AWS VPC choice
@@ -568,7 +672,11 @@ type AzureVnetParamsType struct {
 	// x-required
 	// x-example: "MyVnet"
 	// Name for your Azure Vnet
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	//
+	// Types that are valid to be assigned to NameChoice:
+	//	*AzureVnetParamsType_Name
+	//	*AzureVnetParamsType_Autogenerate
+	NameChoice isAzureVnetParamsType_NameChoice `protobuf_oneof:"name_choice"`
 	// IPv4 CIDR block
 	//
 	// x-displayName: "IPv4 CIDR block"
@@ -582,11 +690,42 @@ func (m *AzureVnetParamsType) Reset()                    { *m = AzureVnetParamsT
 func (*AzureVnetParamsType) ProtoMessage()               {}
 func (*AzureVnetParamsType) Descriptor() ([]byte, []int) { return fileDescriptorSiteTypes, []int{6} }
 
-func (m *AzureVnetParamsType) GetName() string {
+type isAzureVnetParamsType_NameChoice interface {
+	isAzureVnetParamsType_NameChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type AzureVnetParamsType_Name struct {
+	Name string `protobuf:"bytes,1,opt,name=name,proto3,oneof"`
+}
+type AzureVnetParamsType_Autogenerate struct {
+	Autogenerate *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=autogenerate,oneof"`
+}
+
+func (*AzureVnetParamsType_Name) isAzureVnetParamsType_NameChoice()         {}
+func (*AzureVnetParamsType_Autogenerate) isAzureVnetParamsType_NameChoice() {}
+
+func (m *AzureVnetParamsType) GetNameChoice() isAzureVnetParamsType_NameChoice {
 	if m != nil {
-		return m.Name
+		return m.NameChoice
+	}
+	return nil
+}
+
+func (m *AzureVnetParamsType) GetName() string {
+	if x, ok := m.GetNameChoice().(*AzureVnetParamsType_Name); ok {
+		return x.Name
 	}
 	return ""
+}
+
+func (m *AzureVnetParamsType) GetAutogenerate() *ves_io_schema4.Empty {
+	if x, ok := m.GetNameChoice().(*AzureVnetParamsType_Autogenerate); ok {
+		return x.Autogenerate
+	}
+	return nil
 }
 
 func (m *AzureVnetParamsType) GetPrimaryIpv4() string {
@@ -594,6 +733,76 @@ func (m *AzureVnetParamsType) GetPrimaryIpv4() string {
 		return m.PrimaryIpv4
 	}
 	return ""
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*AzureVnetParamsType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _AzureVnetParamsType_OneofMarshaler, _AzureVnetParamsType_OneofUnmarshaler, _AzureVnetParamsType_OneofSizer, []interface{}{
+		(*AzureVnetParamsType_Name)(nil),
+		(*AzureVnetParamsType_Autogenerate)(nil),
+	}
+}
+
+func _AzureVnetParamsType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*AzureVnetParamsType)
+	// name_choice
+	switch x := m.NameChoice.(type) {
+	case *AzureVnetParamsType_Name:
+		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
+		_ = b.EncodeStringBytes(x.Name)
+	case *AzureVnetParamsType_Autogenerate:
+		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Autogenerate); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("AzureVnetParamsType.NameChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _AzureVnetParamsType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*AzureVnetParamsType)
+	switch tag {
+	case 1: // name_choice.name
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.NameChoice = &AzureVnetParamsType_Name{x}
+		return true, err
+	case 4: // name_choice.autogenerate
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.NameChoice = &AzureVnetParamsType_Autogenerate{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _AzureVnetParamsType_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*AzureVnetParamsType)
+	// name_choice
+	switch x := m.NameChoice.(type) {
+	case *AzureVnetParamsType_Name:
+		n += proto.SizeVarint(1<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(len(x.Name)))
+		n += len(x.Name)
+	case *AzureVnetParamsType_Autogenerate:
+		s := proto.Size(x.Autogenerate)
+		n += proto.SizeVarint(4<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
 }
 
 // Azure Existing Vnet Type
@@ -775,22 +984,50 @@ func _AzureVnetChoiceType_OneofSizer(msg proto.Message) (n int) {
 type AzureSubnetType struct {
 	// Existing Subnet Name
 	//
-	// x-displayName: "Existing Subnet Name"
-	// x-example:"MySubnet"
+	// x-displayName: "Subnet Name"
+	// x-example: "MySubnet"
 	// x-required
 	// Name of existing subnet.
 	SubnetName string `protobuf:"bytes,1,opt,name=subnet_name,json=subnetName,proto3" json:"subnet_name,omitempty"`
 	// Existing Subnet Resource Group
 	//
-	// x-displayName: "Existing Subnet Resource Group"
-	// x-example:"MySubnet"
-	// Resource group for this subnet. Resource group is taken from Vnet, if left blank.
-	SubnetResourceGrp string `protobuf:"bytes,2,opt,name=subnet_resource_grp,json=subnetResourceGrp,proto3" json:"subnet_resource_grp,omitempty"`
+	// x-displayName: "Subnet Resource Group"
+	// x-example: "MySubnet"
+	// Resource group for this subnet.
+	//
+	// Types that are valid to be assigned to ResourceGroupChoice:
+	//	*AzureSubnetType_SubnetResourceGrp
+	//	*AzureSubnetType_VnetResourceGroup
+	ResourceGroupChoice isAzureSubnetType_ResourceGroupChoice `protobuf_oneof:"resource_group_choice"`
 }
 
 func (m *AzureSubnetType) Reset()                    { *m = AzureSubnetType{} }
 func (*AzureSubnetType) ProtoMessage()               {}
 func (*AzureSubnetType) Descriptor() ([]byte, []int) { return fileDescriptorSiteTypes, []int{9} }
+
+type isAzureSubnetType_ResourceGroupChoice interface {
+	isAzureSubnetType_ResourceGroupChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type AzureSubnetType_SubnetResourceGrp struct {
+	SubnetResourceGrp string `protobuf:"bytes,2,opt,name=subnet_resource_grp,json=subnetResourceGrp,proto3,oneof"`
+}
+type AzureSubnetType_VnetResourceGroup struct {
+	VnetResourceGroup *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=vnet_resource_group,json=vnetResourceGroup,oneof"`
+}
+
+func (*AzureSubnetType_SubnetResourceGrp) isAzureSubnetType_ResourceGroupChoice() {}
+func (*AzureSubnetType_VnetResourceGroup) isAzureSubnetType_ResourceGroupChoice() {}
+
+func (m *AzureSubnetType) GetResourceGroupChoice() isAzureSubnetType_ResourceGroupChoice {
+	if m != nil {
+		return m.ResourceGroupChoice
+	}
+	return nil
+}
 
 func (m *AzureSubnetType) GetSubnetName() string {
 	if m != nil {
@@ -800,10 +1037,87 @@ func (m *AzureSubnetType) GetSubnetName() string {
 }
 
 func (m *AzureSubnetType) GetSubnetResourceGrp() string {
-	if m != nil {
-		return m.SubnetResourceGrp
+	if x, ok := m.GetResourceGroupChoice().(*AzureSubnetType_SubnetResourceGrp); ok {
+		return x.SubnetResourceGrp
 	}
 	return ""
+}
+
+func (m *AzureSubnetType) GetVnetResourceGroup() *ves_io_schema4.Empty {
+	if x, ok := m.GetResourceGroupChoice().(*AzureSubnetType_VnetResourceGroup); ok {
+		return x.VnetResourceGroup
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*AzureSubnetType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _AzureSubnetType_OneofMarshaler, _AzureSubnetType_OneofUnmarshaler, _AzureSubnetType_OneofSizer, []interface{}{
+		(*AzureSubnetType_SubnetResourceGrp)(nil),
+		(*AzureSubnetType_VnetResourceGroup)(nil),
+	}
+}
+
+func _AzureSubnetType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*AzureSubnetType)
+	// resource_group_choice
+	switch x := m.ResourceGroupChoice.(type) {
+	case *AzureSubnetType_SubnetResourceGrp:
+		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
+		_ = b.EncodeStringBytes(x.SubnetResourceGrp)
+	case *AzureSubnetType_VnetResourceGroup:
+		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.VnetResourceGroup); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("AzureSubnetType.ResourceGroupChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _AzureSubnetType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*AzureSubnetType)
+	switch tag {
+	case 2: // resource_group_choice.subnet_resource_grp
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.ResourceGroupChoice = &AzureSubnetType_SubnetResourceGrp{x}
+		return true, err
+	case 4: // resource_group_choice.vnet_resource_group
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ResourceGroupChoice = &AzureSubnetType_VnetResourceGroup{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _AzureSubnetType_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*AzureSubnetType)
+	// resource_group_choice
+	switch x := m.ResourceGroupChoice.(type) {
+	case *AzureSubnetType_SubnetResourceGrp:
+		n += proto.SizeVarint(2<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(len(x.SubnetResourceGrp)))
+		n += len(x.SubnetResourceGrp)
+	case *AzureSubnetType_VnetResourceGroup:
+		s := proto.Size(x.VnetResourceGroup)
+		n += proto.SizeVarint(4<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
 }
 
 // Azure Cloud Subnet
@@ -1057,7 +1371,7 @@ func (m *AzureVnetTwoInterfaceNodeType) GetDiskSize() string {
 
 // GCP VPC Network Parameters
 //
-// x-displayName: "GCP VPC Network Parameters"
+// x-displayName: "GCP VPC Network Manual Parameters"
 // Parameters to create a new GCP VPC Network
 type GCPVPCNetworkParamsType struct {
 	// GCP VPC Network Name
@@ -1082,6 +1396,31 @@ func (m *GCPVPCNetworkParamsType) GetName() string {
 	return ""
 }
 
+// GCP VPC Network Parameters Autogenerate
+//
+// x-displayName: "GCP VPC Network Autogenerated Parameters"
+// Create a new GCP VPC Network with autogenerated name
+type GCPVPCNetworkAutogenerateParamsType struct {
+	// Autogenerate GCP VPC Network Name
+	//
+	// x-displayName: "Autogenerate GCP VPC Network Name"
+	// Name for your GCP VPC Network will be autogenerated
+	Autogenerate bool `protobuf:"varint,1,opt,name=autogenerate,proto3" json:"autogenerate,omitempty"`
+}
+
+func (m *GCPVPCNetworkAutogenerateParamsType) Reset()      { *m = GCPVPCNetworkAutogenerateParamsType{} }
+func (*GCPVPCNetworkAutogenerateParamsType) ProtoMessage() {}
+func (*GCPVPCNetworkAutogenerateParamsType) Descriptor() ([]byte, []int) {
+	return fileDescriptorSiteTypes, []int{14}
+}
+
+func (m *GCPVPCNetworkAutogenerateParamsType) GetAutogenerate() bool {
+	if m != nil {
+		return m.Autogenerate
+	}
+	return false
+}
+
 // GCP existing VPC network Type
 //
 // x-displayName: "GCP existing VPC network Type"
@@ -1098,7 +1437,7 @@ type GCPVPCNetworkType struct {
 
 func (m *GCPVPCNetworkType) Reset()                    { *m = GCPVPCNetworkType{} }
 func (*GCPVPCNetworkType) ProtoMessage()               {}
-func (*GCPVPCNetworkType) Descriptor() ([]byte, []int) { return fileDescriptorSiteTypes, []int{14} }
+func (*GCPVPCNetworkType) Descriptor() ([]byte, []int) { return fileDescriptorSiteTypes, []int{15} }
 
 func (m *GCPVPCNetworkType) GetName() string {
 	if m != nil {
@@ -1123,7 +1462,7 @@ type GCPSubnetType struct {
 
 func (m *GCPSubnetType) Reset()                    { *m = GCPSubnetType{} }
 func (*GCPSubnetType) ProtoMessage()               {}
-func (*GCPSubnetType) Descriptor() ([]byte, []int) { return fileDescriptorSiteTypes, []int{15} }
+func (*GCPSubnetType) Descriptor() ([]byte, []int) { return fileDescriptorSiteTypes, []int{16} }
 
 func (m *GCPSubnetType) GetSubnetName() string {
 	if m != nil {
@@ -1140,9 +1479,8 @@ type GCPSubnetParamsType struct {
 	// GCP VPC Subnet Name
 	//
 	// x-displayName: "VPC Subnet Name"
-	// x-required
 	// x-example: "subnet1-in-network1"
-	// Name of new VPC Subnet
+	// Name of new VPC Subnet, will be autogenerated if empty
 	SubnetName string `protobuf:"bytes,1,opt,name=subnet_name,json=subnetName,proto3" json:"subnet_name,omitempty"`
 	// IPv4 CIDR block
 	//
@@ -1155,7 +1493,7 @@ type GCPSubnetParamsType struct {
 
 func (m *GCPSubnetParamsType) Reset()                    { *m = GCPSubnetParamsType{} }
 func (*GCPSubnetParamsType) ProtoMessage()               {}
-func (*GCPSubnetParamsType) Descriptor() ([]byte, []int) { return fileDescriptorSiteTypes, []int{16} }
+func (*GCPSubnetParamsType) Descriptor() ([]byte, []int) { return fileDescriptorSiteTypes, []int{17} }
 
 func (m *GCPSubnetParamsType) GetSubnetName() string {
 	if m != nil {
@@ -1183,6 +1521,7 @@ type GCPVPCNetworkChoiceType struct {
 	// This is choice of existing VPC network or new VPC network
 	//
 	// Types that are valid to be assigned to Choice:
+	//	*GCPVPCNetworkChoiceType_NewNetworkAutogenerate
 	//	*GCPVPCNetworkChoiceType_NewNetwork
 	//	*GCPVPCNetworkChoiceType_ExistingNetwork
 	Choice isGCPVPCNetworkChoiceType_Choice `protobuf_oneof:"choice"`
@@ -1191,7 +1530,7 @@ type GCPVPCNetworkChoiceType struct {
 func (m *GCPVPCNetworkChoiceType) Reset()      { *m = GCPVPCNetworkChoiceType{} }
 func (*GCPVPCNetworkChoiceType) ProtoMessage() {}
 func (*GCPVPCNetworkChoiceType) Descriptor() ([]byte, []int) {
-	return fileDescriptorSiteTypes, []int{17}
+	return fileDescriptorSiteTypes, []int{18}
 }
 
 type isGCPVPCNetworkChoiceType_Choice interface {
@@ -1201,6 +1540,9 @@ type isGCPVPCNetworkChoiceType_Choice interface {
 	Size() int
 }
 
+type GCPVPCNetworkChoiceType_NewNetworkAutogenerate struct {
+	NewNetworkAutogenerate *GCPVPCNetworkAutogenerateParamsType `protobuf:"bytes,4,opt,name=new_network_autogenerate,json=newNetworkAutogenerate,oneof"`
+}
 type GCPVPCNetworkChoiceType_NewNetwork struct {
 	NewNetwork *GCPVPCNetworkParamsType `protobuf:"bytes,2,opt,name=new_network,json=newNetwork,oneof"`
 }
@@ -1208,12 +1550,20 @@ type GCPVPCNetworkChoiceType_ExistingNetwork struct {
 	ExistingNetwork *GCPVPCNetworkType `protobuf:"bytes,3,opt,name=existing_network,json=existingNetwork,oneof"`
 }
 
-func (*GCPVPCNetworkChoiceType_NewNetwork) isGCPVPCNetworkChoiceType_Choice()      {}
-func (*GCPVPCNetworkChoiceType_ExistingNetwork) isGCPVPCNetworkChoiceType_Choice() {}
+func (*GCPVPCNetworkChoiceType_NewNetworkAutogenerate) isGCPVPCNetworkChoiceType_Choice() {}
+func (*GCPVPCNetworkChoiceType_NewNetwork) isGCPVPCNetworkChoiceType_Choice()             {}
+func (*GCPVPCNetworkChoiceType_ExistingNetwork) isGCPVPCNetworkChoiceType_Choice()        {}
 
 func (m *GCPVPCNetworkChoiceType) GetChoice() isGCPVPCNetworkChoiceType_Choice {
 	if m != nil {
 		return m.Choice
+	}
+	return nil
+}
+
+func (m *GCPVPCNetworkChoiceType) GetNewNetworkAutogenerate() *GCPVPCNetworkAutogenerateParamsType {
+	if x, ok := m.GetChoice().(*GCPVPCNetworkChoiceType_NewNetworkAutogenerate); ok {
+		return x.NewNetworkAutogenerate
 	}
 	return nil
 }
@@ -1235,6 +1585,7 @@ func (m *GCPVPCNetworkChoiceType) GetExistingNetwork() *GCPVPCNetworkType {
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*GCPVPCNetworkChoiceType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _GCPVPCNetworkChoiceType_OneofMarshaler, _GCPVPCNetworkChoiceType_OneofUnmarshaler, _GCPVPCNetworkChoiceType_OneofSizer, []interface{}{
+		(*GCPVPCNetworkChoiceType_NewNetworkAutogenerate)(nil),
 		(*GCPVPCNetworkChoiceType_NewNetwork)(nil),
 		(*GCPVPCNetworkChoiceType_ExistingNetwork)(nil),
 	}
@@ -1244,6 +1595,11 @@ func _GCPVPCNetworkChoiceType_OneofMarshaler(msg proto.Message, b *proto.Buffer)
 	m := msg.(*GCPVPCNetworkChoiceType)
 	// choice
 	switch x := m.Choice.(type) {
+	case *GCPVPCNetworkChoiceType_NewNetworkAutogenerate:
+		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.NewNetworkAutogenerate); err != nil {
+			return err
+		}
 	case *GCPVPCNetworkChoiceType_NewNetwork:
 		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.NewNetwork); err != nil {
@@ -1264,6 +1620,14 @@ func _GCPVPCNetworkChoiceType_OneofMarshaler(msg proto.Message, b *proto.Buffer)
 func _GCPVPCNetworkChoiceType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
 	m := msg.(*GCPVPCNetworkChoiceType)
 	switch tag {
+	case 4: // choice.new_network_autogenerate
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(GCPVPCNetworkAutogenerateParamsType)
+		err := b.DecodeMessage(msg)
+		m.Choice = &GCPVPCNetworkChoiceType_NewNetworkAutogenerate{msg}
+		return true, err
 	case 2: // choice.new_network
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
@@ -1289,6 +1653,11 @@ func _GCPVPCNetworkChoiceType_OneofSizer(msg proto.Message) (n int) {
 	m := msg.(*GCPVPCNetworkChoiceType)
 	// choice
 	switch x := m.Choice.(type) {
+	case *GCPVPCNetworkChoiceType_NewNetworkAutogenerate:
+		s := proto.Size(x.NewNetworkAutogenerate)
+		n += proto.SizeVarint(4<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
 	case *GCPVPCNetworkChoiceType_NewNetwork:
 		s := proto.Size(x.NewNetwork)
 		n += proto.SizeVarint(2<<3 | proto.WireBytes)
@@ -1326,7 +1695,7 @@ type GCPVPCSubnetChoiceType struct {
 func (m *GCPVPCSubnetChoiceType) Reset()      { *m = GCPVPCSubnetChoiceType{} }
 func (*GCPVPCSubnetChoiceType) ProtoMessage() {}
 func (*GCPVPCSubnetChoiceType) Descriptor() ([]byte, []int) {
-	return fileDescriptorSiteTypes, []int{18}
+	return fileDescriptorSiteTypes, []int{19}
 }
 
 type isGCPVPCSubnetChoiceType_Choice interface {
@@ -1441,98 +1810,6 @@ func _GCPVPCSubnetChoiceType_OneofSizer(msg proto.Message) (n int) {
 	return n
 }
 
-// Single Interface Node
-//
-// x-displayName: "Single Interface Node"
-// Parameters for creating Single interface Node
-type GCPVPCOneInterfaceNodeType struct {
-	// GCP zone
-	//
-	// x-required
-	// x-displayName: "GCP zone name"
-	// x-required
-	// x-example: "us-west1-a"
-	// Name for GCP zone, should match with region selected.
-	GcpZoneName string `protobuf:"bytes,1,opt,name=gcp_zone_name,json=gcpZoneName,proto3" json:"gcp_zone_name,omitempty"`
-	// Subnet
-	//
-	// x-displayName: "Subnet for local Interface"
-	// Subnets for the local interface of the node, should be in local network
-	LocalSubnet *GCPVPCSubnetChoiceType `protobuf:"bytes,2,opt,name=local_subnet,json=localSubnet" json:"local_subnet,omitempty"`
-}
-
-func (m *GCPVPCOneInterfaceNodeType) Reset()      { *m = GCPVPCOneInterfaceNodeType{} }
-func (*GCPVPCOneInterfaceNodeType) ProtoMessage() {}
-func (*GCPVPCOneInterfaceNodeType) Descriptor() ([]byte, []int) {
-	return fileDescriptorSiteTypes, []int{19}
-}
-
-func (m *GCPVPCOneInterfaceNodeType) GetGcpZoneName() string {
-	if m != nil {
-		return m.GcpZoneName
-	}
-	return ""
-}
-
-func (m *GCPVPCOneInterfaceNodeType) GetLocalSubnet() *GCPVPCSubnetChoiceType {
-	if m != nil {
-		return m.LocalSubnet
-	}
-	return nil
-}
-
-// Two Interface Node
-//
-// x-displayName: "Two Interface Node"
-// Parameters for creating two interface Node in different vpc networks
-type GCPVPCTwoInterfaceNodeType struct {
-	// GCP AZ
-	//
-	// x-required
-	// x-displayName: "GCP AZ name"
-	// x-required
-	// x-example: "us-west-2a"
-	// Name for GCP zone, should match with region selected.
-	GcpZoneName string `protobuf:"bytes,1,opt,name=gcp_zone_name,json=gcpZoneName,proto3" json:"gcp_zone_name,omitempty"`
-	// Subnet
-	//
-	// x-displayName: "Subnet for Inside Interface"
-	// Subnets for the inside interface of the node, should be in inside network
-	InsideSubnet *GCPVPCSubnetChoiceType `protobuf:"bytes,2,opt,name=inside_subnet,json=insideSubnet" json:"inside_subnet,omitempty"`
-	// Subnet
-	//
-	// x-displayName: "Subnet for Outside Interface"
-	// Subnets for the outside interface of the node, should be in outside network
-	OutsideSubnet *GCPVPCSubnetChoiceType `protobuf:"bytes,3,opt,name=outside_subnet,json=outsideSubnet" json:"outside_subnet,omitempty"`
-}
-
-func (m *GCPVPCTwoInterfaceNodeType) Reset()      { *m = GCPVPCTwoInterfaceNodeType{} }
-func (*GCPVPCTwoInterfaceNodeType) ProtoMessage() {}
-func (*GCPVPCTwoInterfaceNodeType) Descriptor() ([]byte, []int) {
-	return fileDescriptorSiteTypes, []int{20}
-}
-
-func (m *GCPVPCTwoInterfaceNodeType) GetGcpZoneName() string {
-	if m != nil {
-		return m.GcpZoneName
-	}
-	return ""
-}
-
-func (m *GCPVPCTwoInterfaceNodeType) GetInsideSubnet() *GCPVPCSubnetChoiceType {
-	if m != nil {
-		return m.InsideSubnet
-	}
-	return nil
-}
-
-func (m *GCPVPCTwoInterfaceNodeType) GetOutsideSubnet() *GCPVPCSubnetChoiceType {
-	if m != nil {
-		return m.OutsideSubnet
-	}
-	return nil
-}
-
 // Site Static Route Config Modes
 //
 // x-displayName: "Site Static Route Config Modes"
@@ -1552,7 +1829,7 @@ type SiteStaticRoutesType struct {
 
 func (m *SiteStaticRoutesType) Reset()                    { *m = SiteStaticRoutesType{} }
 func (*SiteStaticRoutesType) ProtoMessage()               {}
-func (*SiteStaticRoutesType) Descriptor() ([]byte, []int) { return fileDescriptorSiteTypes, []int{21} }
+func (*SiteStaticRoutesType) Descriptor() ([]byte, []int) { return fileDescriptorSiteTypes, []int{20} }
 
 type isSiteStaticRoutesType_ConfigModeChoice interface {
 	isSiteStaticRoutesType_ConfigModeChoice()
@@ -1678,7 +1955,7 @@ type SiteStaticRoutesListType struct {
 func (m *SiteStaticRoutesListType) Reset()      { *m = SiteStaticRoutesListType{} }
 func (*SiteStaticRoutesListType) ProtoMessage() {}
 func (*SiteStaticRoutesListType) Descriptor() ([]byte, []int) {
-	return fileDescriptorSiteTypes, []int{22}
+	return fileDescriptorSiteTypes, []int{21}
 }
 
 func (m *SiteStaticRoutesListType) GetStaticRouteList() []*SiteStaticRoutesType {
@@ -1717,7 +1994,7 @@ type GlobalNetworkConnectionType struct {
 func (m *GlobalNetworkConnectionType) Reset()      { *m = GlobalNetworkConnectionType{} }
 func (*GlobalNetworkConnectionType) ProtoMessage() {}
 func (*GlobalNetworkConnectionType) Descriptor() ([]byte, []int) {
-	return fileDescriptorSiteTypes, []int{23}
+	return fileDescriptorSiteTypes, []int{22}
 }
 
 type isGlobalNetworkConnectionType_ConnectionChoice interface {
@@ -1934,7 +2211,7 @@ type GlobalNetworkConnectionListType struct {
 func (m *GlobalNetworkConnectionListType) Reset()      { *m = GlobalNetworkConnectionListType{} }
 func (*GlobalNetworkConnectionListType) ProtoMessage() {}
 func (*GlobalNetworkConnectionListType) Descriptor() ([]byte, []int) {
-	return fileDescriptorSiteTypes, []int{24}
+	return fileDescriptorSiteTypes, []int{23}
 }
 
 func (m *GlobalNetworkConnectionListType) GetGlobalNetworkConnections() []*GlobalNetworkConnectionType {
@@ -1973,6 +2250,8 @@ func init() {
 	golang_proto.RegisterType((*AzureVnetTwoInterfaceNodeType)(nil), "ves.io.schema.views.AzureVnetTwoInterfaceNodeType")
 	proto.RegisterType((*GCPVPCNetworkParamsType)(nil), "ves.io.schema.views.GCPVPCNetworkParamsType")
 	golang_proto.RegisterType((*GCPVPCNetworkParamsType)(nil), "ves.io.schema.views.GCPVPCNetworkParamsType")
+	proto.RegisterType((*GCPVPCNetworkAutogenerateParamsType)(nil), "ves.io.schema.views.GCPVPCNetworkAutogenerateParamsType")
+	golang_proto.RegisterType((*GCPVPCNetworkAutogenerateParamsType)(nil), "ves.io.schema.views.GCPVPCNetworkAutogenerateParamsType")
 	proto.RegisterType((*GCPVPCNetworkType)(nil), "ves.io.schema.views.GCPVPCNetworkType")
 	golang_proto.RegisterType((*GCPVPCNetworkType)(nil), "ves.io.schema.views.GCPVPCNetworkType")
 	proto.RegisterType((*GCPSubnetType)(nil), "ves.io.schema.views.GCPSubnetType")
@@ -1983,10 +2262,6 @@ func init() {
 	golang_proto.RegisterType((*GCPVPCNetworkChoiceType)(nil), "ves.io.schema.views.GCPVPCNetworkChoiceType")
 	proto.RegisterType((*GCPVPCSubnetChoiceType)(nil), "ves.io.schema.views.GCPVPCSubnetChoiceType")
 	golang_proto.RegisterType((*GCPVPCSubnetChoiceType)(nil), "ves.io.schema.views.GCPVPCSubnetChoiceType")
-	proto.RegisterType((*GCPVPCOneInterfaceNodeType)(nil), "ves.io.schema.views.GCPVPCOneInterfaceNodeType")
-	golang_proto.RegisterType((*GCPVPCOneInterfaceNodeType)(nil), "ves.io.schema.views.GCPVPCOneInterfaceNodeType")
-	proto.RegisterType((*GCPVPCTwoInterfaceNodeType)(nil), "ves.io.schema.views.GCPVPCTwoInterfaceNodeType")
-	golang_proto.RegisterType((*GCPVPCTwoInterfaceNodeType)(nil), "ves.io.schema.views.GCPVPCTwoInterfaceNodeType")
 	proto.RegisterType((*SiteStaticRoutesType)(nil), "ves.io.schema.views.SiteStaticRoutesType")
 	golang_proto.RegisterType((*SiteStaticRoutesType)(nil), "ves.io.schema.views.SiteStaticRoutesType")
 	proto.RegisterType((*SiteStaticRoutesListType)(nil), "ves.io.schema.views.SiteStaticRoutesListType")
@@ -2015,13 +2290,67 @@ func (this *AWSVPCParamsType) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.NameTag != that1.NameTag {
+	if that1.NameChoice == nil {
+		if this.NameChoice != nil {
+			return false
+		}
+	} else if this.NameChoice == nil {
+		return false
+	} else if !this.NameChoice.Equal(that1.NameChoice) {
 		return false
 	}
 	if this.PrimaryIpv4 != that1.PrimaryIpv4 {
 		return false
 	}
 	if this.AllocateIpv6 != that1.AllocateIpv6 {
+		return false
+	}
+	return true
+}
+func (this *AWSVPCParamsType_NameTag) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSVPCParamsType_NameTag)
+	if !ok {
+		that2, ok := that.(AWSVPCParamsType_NameTag)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.NameTag != that1.NameTag {
+		return false
+	}
+	return true
+}
+func (this *AWSVPCParamsType_Autogenerate) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSVPCParamsType_Autogenerate)
+	if !ok {
+		that2, ok := that.(AWSVPCParamsType_Autogenerate)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Autogenerate.Equal(that1.Autogenerate) {
 		return false
 	}
 	return true
@@ -2291,10 +2620,64 @@ func (this *AzureVnetParamsType) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.Name != that1.Name {
+	if that1.NameChoice == nil {
+		if this.NameChoice != nil {
+			return false
+		}
+	} else if this.NameChoice == nil {
+		return false
+	} else if !this.NameChoice.Equal(that1.NameChoice) {
 		return false
 	}
 	if this.PrimaryIpv4 != that1.PrimaryIpv4 {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetParamsType_Name) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetParamsType_Name)
+	if !ok {
+		that2, ok := that.(AzureVnetParamsType_Name)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	return true
+}
+func (this *AzureVnetParamsType_Autogenerate) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetParamsType_Autogenerate)
+	if !ok {
+		that2, ok := that.(AzureVnetParamsType_Autogenerate)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Autogenerate.Equal(that1.Autogenerate) {
 		return false
 	}
 	return true
@@ -2426,7 +2809,61 @@ func (this *AzureSubnetType) Equal(that interface{}) bool {
 	if this.SubnetName != that1.SubnetName {
 		return false
 	}
+	if that1.ResourceGroupChoice == nil {
+		if this.ResourceGroupChoice != nil {
+			return false
+		}
+	} else if this.ResourceGroupChoice == nil {
+		return false
+	} else if !this.ResourceGroupChoice.Equal(that1.ResourceGroupChoice) {
+		return false
+	}
+	return true
+}
+func (this *AzureSubnetType_SubnetResourceGrp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureSubnetType_SubnetResourceGrp)
+	if !ok {
+		that2, ok := that.(AzureSubnetType_SubnetResourceGrp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
 	if this.SubnetResourceGrp != that1.SubnetResourceGrp {
+		return false
+	}
+	return true
+}
+func (this *AzureSubnetType_VnetResourceGroup) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureSubnetType_VnetResourceGroup)
+	if !ok {
+		that2, ok := that.(AzureSubnetType_VnetResourceGroup)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.VnetResourceGroup.Equal(that1.VnetResourceGroup) {
 		return false
 	}
 	return true
@@ -2596,6 +3033,30 @@ func (this *GCPVPCNetworkParamsType) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GCPVPCNetworkAutogenerateParamsType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GCPVPCNetworkAutogenerateParamsType)
+	if !ok {
+		that2, ok := that.(GCPVPCNetworkAutogenerateParamsType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Autogenerate != that1.Autogenerate {
+		return false
+	}
+	return true
+}
 func (this *GCPVPCNetworkType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2697,6 +3158,30 @@ func (this *GCPVPCNetworkChoiceType) Equal(that interface{}) bool {
 	} else if this.Choice == nil {
 		return false
 	} else if !this.Choice.Equal(that1.Choice) {
+		return false
+	}
+	return true
+}
+func (this *GCPVPCNetworkChoiceType_NewNetworkAutogenerate) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GCPVPCNetworkChoiceType_NewNetworkAutogenerate)
+	if !ok {
+		that2, ok := that.(GCPVPCNetworkChoiceType_NewNetworkAutogenerate)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NewNetworkAutogenerate.Equal(that1.NewNetworkAutogenerate) {
 		return false
 	}
 	return true
@@ -2823,63 +3308,6 @@ func (this *GCPVPCSubnetChoiceType_ExistingSubnet) Equal(that interface{}) bool 
 		return false
 	}
 	if !this.ExistingSubnet.Equal(that1.ExistingSubnet) {
-		return false
-	}
-	return true
-}
-func (this *GCPVPCOneInterfaceNodeType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GCPVPCOneInterfaceNodeType)
-	if !ok {
-		that2, ok := that.(GCPVPCOneInterfaceNodeType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.GcpZoneName != that1.GcpZoneName {
-		return false
-	}
-	if !this.LocalSubnet.Equal(that1.LocalSubnet) {
-		return false
-	}
-	return true
-}
-func (this *GCPVPCTwoInterfaceNodeType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GCPVPCTwoInterfaceNodeType)
-	if !ok {
-		that2, ok := that.(GCPVPCTwoInterfaceNodeType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.GcpZoneName != that1.GcpZoneName {
-		return false
-	}
-	if !this.InsideSubnet.Equal(that1.InsideSubnet) {
-		return false
-	}
-	if !this.OutsideSubnet.Equal(that1.OutsideSubnet) {
 		return false
 	}
 	return true
@@ -3159,13 +3587,31 @@ func (this *AWSVPCParamsType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 8)
 	s = append(s, "&views.AWSVPCParamsType{")
-	s = append(s, "NameTag: "+fmt.Sprintf("%#v", this.NameTag)+",\n")
+	if this.NameChoice != nil {
+		s = append(s, "NameChoice: "+fmt.Sprintf("%#v", this.NameChoice)+",\n")
+	}
 	s = append(s, "PrimaryIpv4: "+fmt.Sprintf("%#v", this.PrimaryIpv4)+",\n")
 	s = append(s, "AllocateIpv6: "+fmt.Sprintf("%#v", this.AllocateIpv6)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *AWSVPCParamsType_NameTag) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&views.AWSVPCParamsType_NameTag{` +
+		`NameTag:` + fmt.Sprintf("%#v", this.NameTag) + `}`}, ", ")
+	return s
+}
+func (this *AWSVPCParamsType_Autogenerate) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&views.AWSVPCParamsType_Autogenerate{` +
+		`Autogenerate:` + fmt.Sprintf("%#v", this.Autogenerate) + `}`}, ", ")
+	return s
 }
 func (this *AWSVPCchoiceType) GoString() string {
 	if this == nil {
@@ -3269,12 +3715,30 @@ func (this *AzureVnetParamsType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 7)
 	s = append(s, "&views.AzureVnetParamsType{")
-	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	if this.NameChoice != nil {
+		s = append(s, "NameChoice: "+fmt.Sprintf("%#v", this.NameChoice)+",\n")
+	}
 	s = append(s, "PrimaryIpv4: "+fmt.Sprintf("%#v", this.PrimaryIpv4)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *AzureVnetParamsType_Name) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&views.AzureVnetParamsType_Name{` +
+		`Name:` + fmt.Sprintf("%#v", this.Name) + `}`}, ", ")
+	return s
+}
+func (this *AzureVnetParamsType_Autogenerate) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&views.AzureVnetParamsType_Autogenerate{` +
+		`Autogenerate:` + fmt.Sprintf("%#v", this.Autogenerate) + `}`}, ", ")
+	return s
 }
 func (this *AzureVnetType) GoString() string {
 	if this == nil {
@@ -3319,12 +3783,30 @@ func (this *AzureSubnetType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 7)
 	s = append(s, "&views.AzureSubnetType{")
 	s = append(s, "SubnetName: "+fmt.Sprintf("%#v", this.SubnetName)+",\n")
-	s = append(s, "SubnetResourceGrp: "+fmt.Sprintf("%#v", this.SubnetResourceGrp)+",\n")
+	if this.ResourceGroupChoice != nil {
+		s = append(s, "ResourceGroupChoice: "+fmt.Sprintf("%#v", this.ResourceGroupChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *AzureSubnetType_SubnetResourceGrp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&views.AzureSubnetType_SubnetResourceGrp{` +
+		`SubnetResourceGrp:` + fmt.Sprintf("%#v", this.SubnetResourceGrp) + `}`}, ", ")
+	return s
+}
+func (this *AzureSubnetType_VnetResourceGroup) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&views.AzureSubnetType_VnetResourceGroup{` +
+		`VnetResourceGroup:` + fmt.Sprintf("%#v", this.VnetResourceGroup) + `}`}, ", ")
+	return s
 }
 func (this *AzureSubnetChoiceType) GoString() string {
 	if this == nil {
@@ -3395,6 +3877,16 @@ func (this *GCPVPCNetworkParamsType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *GCPVPCNetworkAutogenerateParamsType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&views.GCPVPCNetworkAutogenerateParamsType{")
+	s = append(s, "Autogenerate: "+fmt.Sprintf("%#v", this.Autogenerate)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *GCPVPCNetworkType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -3430,13 +3922,21 @@ func (this *GCPVPCNetworkChoiceType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 7)
 	s = append(s, "&views.GCPVPCNetworkChoiceType{")
 	if this.Choice != nil {
 		s = append(s, "Choice: "+fmt.Sprintf("%#v", this.Choice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *GCPVPCNetworkChoiceType_NewNetworkAutogenerate) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&views.GCPVPCNetworkChoiceType_NewNetworkAutogenerate{` +
+		`NewNetworkAutogenerate:` + fmt.Sprintf("%#v", this.NewNetworkAutogenerate) + `}`}, ", ")
+	return s
 }
 func (this *GCPVPCNetworkChoiceType_NewNetwork) GoString() string {
 	if this == nil {
@@ -3481,35 +3981,6 @@ func (this *GCPVPCSubnetChoiceType_ExistingSubnet) GoString() string {
 	s := strings.Join([]string{`&views.GCPVPCSubnetChoiceType_ExistingSubnet{` +
 		`ExistingSubnet:` + fmt.Sprintf("%#v", this.ExistingSubnet) + `}`}, ", ")
 	return s
-}
-func (this *GCPVPCOneInterfaceNodeType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&views.GCPVPCOneInterfaceNodeType{")
-	s = append(s, "GcpZoneName: "+fmt.Sprintf("%#v", this.GcpZoneName)+",\n")
-	if this.LocalSubnet != nil {
-		s = append(s, "LocalSubnet: "+fmt.Sprintf("%#v", this.LocalSubnet)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *GCPVPCTwoInterfaceNodeType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 7)
-	s = append(s, "&views.GCPVPCTwoInterfaceNodeType{")
-	s = append(s, "GcpZoneName: "+fmt.Sprintf("%#v", this.GcpZoneName)+",\n")
-	if this.InsideSubnet != nil {
-		s = append(s, "InsideSubnet: "+fmt.Sprintf("%#v", this.InsideSubnet)+",\n")
-	}
-	if this.OutsideSubnet != nil {
-		s = append(s, "OutsideSubnet: "+fmt.Sprintf("%#v", this.OutsideSubnet)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
 }
 func (this *SiteStaticRoutesType) GoString() string {
 	if this == nil {
@@ -3633,11 +4104,12 @@ func (m *AWSVPCParamsType) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.NameTag) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintSiteTypes(dAtA, i, uint64(len(m.NameTag)))
-		i += copy(dAtA[i:], m.NameTag)
+	if m.NameChoice != nil {
+		nn1, err := m.NameChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn1
 	}
 	if len(m.PrimaryIpv4) > 0 {
 		dAtA[i] = 0x1a
@@ -3658,6 +4130,28 @@ func (m *AWSVPCParamsType) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *AWSVPCParamsType_NameTag) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x12
+	i++
+	i = encodeVarintSiteTypes(dAtA, i, uint64(len(m.NameTag)))
+	i += copy(dAtA[i:], m.NameTag)
+	return i, nil
+}
+func (m *AWSVPCParamsType_Autogenerate) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Autogenerate != nil {
+		dAtA[i] = 0x42
+		i++
+		i = encodeVarintSiteTypes(dAtA, i, uint64(m.Autogenerate.Size()))
+		n2, err := m.Autogenerate.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
+	}
+	return i, nil
+}
 func (m *AWSVPCchoiceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3674,11 +4168,11 @@ func (m *AWSVPCchoiceType) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.Choice != nil {
-		nn1, err := m.Choice.MarshalTo(dAtA[i:])
+		nn3, err := m.Choice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn1
+		i += nn3
 	}
 	return i, nil
 }
@@ -3689,11 +4183,11 @@ func (m *AWSVPCchoiceType_NewVpc) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.NewVpc.Size()))
-		n2, err := m.NewVpc.MarshalTo(dAtA[i:])
+		n4, err := m.NewVpc.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n2
+		i += n4
 	}
 	return i, nil
 }
@@ -3751,11 +4245,11 @@ func (m *CloudSubnetType) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.Choice != nil {
-		nn3, err := m.Choice.MarshalTo(dAtA[i:])
+		nn5, err := m.Choice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn3
+		i += nn5
 	}
 	return i, nil
 }
@@ -3766,11 +4260,11 @@ func (m *CloudSubnetType_SubnetParam) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.SubnetParam.Size()))
-		n4, err := m.SubnetParam.MarshalTo(dAtA[i:])
+		n6, err := m.SubnetParam.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n4
+		i += n6
 	}
 	return i, nil
 }
@@ -3807,11 +4301,11 @@ func (m *AWSVPCOneInterfaceNodeType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.LocalSubnet.Size()))
-		n5, err := m.LocalSubnet.MarshalTo(dAtA[i:])
+		n7, err := m.LocalSubnet.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n5
+		i += n7
 	}
 	if m.DiskSize != 0 {
 		dAtA[i] = 0x20
@@ -3846,21 +4340,21 @@ func (m *AWSVPCTwoInterfaceNodeType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.InsideSubnet.Size()))
-		n6, err := m.InsideSubnet.MarshalTo(dAtA[i:])
+		n8, err := m.InsideSubnet.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n6
+		i += n8
 	}
 	if m.OutsideSubnet != nil {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.OutsideSubnet.Size()))
-		n7, err := m.OutsideSubnet.MarshalTo(dAtA[i:])
+		n9, err := m.OutsideSubnet.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n7
+		i += n9
 	}
 	if len(m.DiskSize) > 0 {
 		dAtA[i] = 0x22
@@ -3886,11 +4380,12 @@ func (m *AzureVnetParamsType) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Name) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintSiteTypes(dAtA, i, uint64(len(m.Name)))
-		i += copy(dAtA[i:], m.Name)
+	if m.NameChoice != nil {
+		nn10, err := m.NameChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn10
 	}
 	if len(m.PrimaryIpv4) > 0 {
 		dAtA[i] = 0x12
@@ -3901,6 +4396,28 @@ func (m *AzureVnetParamsType) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *AzureVnetParamsType_Name) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0xa
+	i++
+	i = encodeVarintSiteTypes(dAtA, i, uint64(len(m.Name)))
+	i += copy(dAtA[i:], m.Name)
+	return i, nil
+}
+func (m *AzureVnetParamsType_Autogenerate) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Autogenerate != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintSiteTypes(dAtA, i, uint64(m.Autogenerate.Size()))
+		n11, err := m.Autogenerate.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n11
+	}
+	return i, nil
+}
 func (m *AzureVnetType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3947,11 +4464,11 @@ func (m *AzureVnetChoiceType) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.Choice != nil {
-		nn8, err := m.Choice.MarshalTo(dAtA[i:])
+		nn12, err := m.Choice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn8
+		i += nn12
 	}
 	return i, nil
 }
@@ -3962,11 +4479,11 @@ func (m *AzureVnetChoiceType_NewVnet) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.NewVnet.Size()))
-		n9, err := m.NewVnet.MarshalTo(dAtA[i:])
+		n13, err := m.NewVnet.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n9
+		i += n13
 	}
 	return i, nil
 }
@@ -3976,11 +4493,11 @@ func (m *AzureVnetChoiceType_ExistingVnet) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.ExistingVnet.Size()))
-		n10, err := m.ExistingVnet.MarshalTo(dAtA[i:])
+		n14, err := m.ExistingVnet.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n10
+		i += n14
 	}
 	return i, nil
 }
@@ -4005,15 +4522,38 @@ func (m *AzureSubnetType) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintSiteTypes(dAtA, i, uint64(len(m.SubnetName)))
 		i += copy(dAtA[i:], m.SubnetName)
 	}
-	if len(m.SubnetResourceGrp) > 0 {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintSiteTypes(dAtA, i, uint64(len(m.SubnetResourceGrp)))
-		i += copy(dAtA[i:], m.SubnetResourceGrp)
+	if m.ResourceGroupChoice != nil {
+		nn15, err := m.ResourceGroupChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn15
 	}
 	return i, nil
 }
 
+func (m *AzureSubnetType_SubnetResourceGrp) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x12
+	i++
+	i = encodeVarintSiteTypes(dAtA, i, uint64(len(m.SubnetResourceGrp)))
+	i += copy(dAtA[i:], m.SubnetResourceGrp)
+	return i, nil
+}
+func (m *AzureSubnetType_VnetResourceGroup) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.VnetResourceGroup != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintSiteTypes(dAtA, i, uint64(m.VnetResourceGroup.Size()))
+		n16, err := m.VnetResourceGroup.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n16
+	}
+	return i, nil
+}
 func (m *AzureSubnetChoiceType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4030,11 +4570,11 @@ func (m *AzureSubnetChoiceType) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.Choice != nil {
-		nn11, err := m.Choice.MarshalTo(dAtA[i:])
+		nn17, err := m.Choice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn11
+		i += nn17
 	}
 	return i, nil
 }
@@ -4045,11 +4585,11 @@ func (m *AzureSubnetChoiceType_SubnetParam) MarshalTo(dAtA []byte) (int, error) 
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.SubnetParam.Size()))
-		n12, err := m.SubnetParam.MarshalTo(dAtA[i:])
+		n18, err := m.SubnetParam.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n12
+		i += n18
 	}
 	return i, nil
 }
@@ -4059,11 +4599,11 @@ func (m *AzureSubnetChoiceType_Subnet) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.Subnet.Size()))
-		n13, err := m.Subnet.MarshalTo(dAtA[i:])
+		n19, err := m.Subnet.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n13
+		i += n19
 	}
 	return i, nil
 }
@@ -4092,11 +4632,11 @@ func (m *AzureVnetOneInterfaceNodeType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.LocalSubnet.Size()))
-		n14, err := m.LocalSubnet.MarshalTo(dAtA[i:])
+		n20, err := m.LocalSubnet.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n14
+		i += n20
 	}
 	if len(m.DiskSize) > 0 {
 		dAtA[i] = 0x1a
@@ -4132,21 +4672,21 @@ func (m *AzureVnetTwoInterfaceNodeType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.InsideSubnet.Size()))
-		n15, err := m.InsideSubnet.MarshalTo(dAtA[i:])
+		n21, err := m.InsideSubnet.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n15
+		i += n21
 	}
 	if m.OutsideSubnet != nil {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.OutsideSubnet.Size()))
-		n16, err := m.OutsideSubnet.MarshalTo(dAtA[i:])
+		n22, err := m.OutsideSubnet.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n16
+		i += n22
 	}
 	if len(m.DiskSize) > 0 {
 		dAtA[i] = 0x22
@@ -4177,6 +4717,34 @@ func (m *GCPVPCNetworkParamsType) MarshalTo(dAtA []byte) (int, error) {
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(len(m.Name)))
 		i += copy(dAtA[i:], m.Name)
+	}
+	return i, nil
+}
+
+func (m *GCPVPCNetworkAutogenerateParamsType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GCPVPCNetworkAutogenerateParamsType) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Autogenerate {
+		dAtA[i] = 0x8
+		i++
+		if m.Autogenerate {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
 	}
 	return i, nil
 }
@@ -4275,11 +4843,11 @@ func (m *GCPVPCNetworkChoiceType) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.Choice != nil {
-		nn17, err := m.Choice.MarshalTo(dAtA[i:])
+		nn23, err := m.Choice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn17
+		i += nn23
 	}
 	return i, nil
 }
@@ -4290,11 +4858,11 @@ func (m *GCPVPCNetworkChoiceType_NewNetwork) MarshalTo(dAtA []byte) (int, error)
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.NewNetwork.Size()))
-		n18, err := m.NewNetwork.MarshalTo(dAtA[i:])
+		n24, err := m.NewNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n18
+		i += n24
 	}
 	return i, nil
 }
@@ -4304,11 +4872,25 @@ func (m *GCPVPCNetworkChoiceType_ExistingNetwork) MarshalTo(dAtA []byte) (int, e
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.ExistingNetwork.Size()))
-		n19, err := m.ExistingNetwork.MarshalTo(dAtA[i:])
+		n25, err := m.ExistingNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n19
+		i += n25
+	}
+	return i, nil
+}
+func (m *GCPVPCNetworkChoiceType_NewNetworkAutogenerate) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.NewNetworkAutogenerate != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintSiteTypes(dAtA, i, uint64(m.NewNetworkAutogenerate.Size()))
+		n26, err := m.NewNetworkAutogenerate.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n26
 	}
 	return i, nil
 }
@@ -4328,11 +4910,11 @@ func (m *GCPVPCSubnetChoiceType) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.Choice != nil {
-		nn20, err := m.Choice.MarshalTo(dAtA[i:])
+		nn27, err := m.Choice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn20
+		i += nn27
 	}
 	return i, nil
 }
@@ -4343,11 +4925,11 @@ func (m *GCPVPCSubnetChoiceType_NewSubnet) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.NewSubnet.Size()))
-		n21, err := m.NewSubnet.MarshalTo(dAtA[i:])
+		n28, err := m.NewSubnet.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n21
+		i += n28
 	}
 	return i, nil
 }
@@ -4357,92 +4939,14 @@ func (m *GCPVPCSubnetChoiceType_ExistingSubnet) MarshalTo(dAtA []byte) (int, err
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.ExistingSubnet.Size()))
-		n22, err := m.ExistingSubnet.MarshalTo(dAtA[i:])
+		n29, err := m.ExistingSubnet.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n22
+		i += n29
 	}
 	return i, nil
 }
-func (m *GCPVPCOneInterfaceNodeType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GCPVPCOneInterfaceNodeType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.GcpZoneName) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintSiteTypes(dAtA, i, uint64(len(m.GcpZoneName)))
-		i += copy(dAtA[i:], m.GcpZoneName)
-	}
-	if m.LocalSubnet != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintSiteTypes(dAtA, i, uint64(m.LocalSubnet.Size()))
-		n23, err := m.LocalSubnet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n23
-	}
-	return i, nil
-}
-
-func (m *GCPVPCTwoInterfaceNodeType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GCPVPCTwoInterfaceNodeType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.GcpZoneName) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintSiteTypes(dAtA, i, uint64(len(m.GcpZoneName)))
-		i += copy(dAtA[i:], m.GcpZoneName)
-	}
-	if m.InsideSubnet != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintSiteTypes(dAtA, i, uint64(m.InsideSubnet.Size()))
-		n24, err := m.InsideSubnet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n24
-	}
-	if m.OutsideSubnet != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintSiteTypes(dAtA, i, uint64(m.OutsideSubnet.Size()))
-		n25, err := m.OutsideSubnet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n25
-	}
-	return i, nil
-}
-
 func (m *SiteStaticRoutesType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4459,11 +4963,11 @@ func (m *SiteStaticRoutesType) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.ConfigModeChoice != nil {
-		nn26, err := m.ConfigModeChoice.MarshalTo(dAtA[i:])
+		nn30, err := m.ConfigModeChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn26
+		i += nn30
 	}
 	return i, nil
 }
@@ -4482,11 +4986,11 @@ func (m *SiteStaticRoutesType_CustomStaticRoute) MarshalTo(dAtA []byte) (int, er
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.CustomStaticRoute.Size()))
-		n27, err := m.CustomStaticRoute.MarshalTo(dAtA[i:])
+		n31, err := m.CustomStaticRoute.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n27
+		i += n31
 	}
 	return i, nil
 }
@@ -4536,18 +5040,18 @@ func (m *GlobalNetworkConnectionType) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.ConnectionChoice != nil {
-		nn28, err := m.ConnectionChoice.MarshalTo(dAtA[i:])
+		nn32, err := m.ConnectionChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn28
+		i += nn32
 	}
 	if m.ForwardProxyChoice != nil {
-		nn29, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:])
+		nn33, err := m.ForwardProxyChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn29
+		i += nn33
 	}
 	return i, nil
 }
@@ -4558,11 +5062,11 @@ func (m *GlobalNetworkConnectionType_SliToGlobalDr) MarshalTo(dAtA []byte) (int,
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.SliToGlobalDr.Size()))
-		n30, err := m.SliToGlobalDr.MarshalTo(dAtA[i:])
+		n34, err := m.SliToGlobalDr.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n30
+		i += n34
 	}
 	return i, nil
 }
@@ -4572,11 +5076,11 @@ func (m *GlobalNetworkConnectionType_SloToGlobalDr) MarshalTo(dAtA []byte) (int,
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.SloToGlobalDr.Size()))
-		n31, err := m.SloToGlobalDr.MarshalTo(dAtA[i:])
+		n35, err := m.SloToGlobalDr.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n31
+		i += n35
 	}
 	return i, nil
 }
@@ -4586,11 +5090,11 @@ func (m *GlobalNetworkConnectionType_DisableForwardProxy) MarshalTo(dAtA []byte)
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.DisableForwardProxy.Size()))
-		n32, err := m.DisableForwardProxy.MarshalTo(dAtA[i:])
+		n36, err := m.DisableForwardProxy.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n32
+		i += n36
 	}
 	return i, nil
 }
@@ -4600,11 +5104,11 @@ func (m *GlobalNetworkConnectionType_EnableForwardProxy) MarshalTo(dAtA []byte) 
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintSiteTypes(dAtA, i, uint64(m.EnableForwardProxy.Size()))
-		n33, err := m.EnableForwardProxy.MarshalTo(dAtA[i:])
+		n37, err := m.EnableForwardProxy.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n33
+		i += n37
 	}
 	return i, nil
 }
@@ -4649,7 +5153,13 @@ func encodeVarintSiteTypes(dAtA []byte, offset int, v uint64) int {
 }
 func NewPopulatedAWSVPCParamsType(r randySiteTypes, easy bool) *AWSVPCParamsType {
 	this := &AWSVPCParamsType{}
-	this.NameTag = string(randStringSiteTypes(r))
+	oneofNumber_NameChoice := []int32{2, 8}[r.Intn(2)]
+	switch oneofNumber_NameChoice {
+	case 2:
+		this.NameChoice = NewPopulatedAWSVPCParamsType_NameTag(r, easy)
+	case 8:
+		this.NameChoice = NewPopulatedAWSVPCParamsType_Autogenerate(r, easy)
+	}
 	this.PrimaryIpv4 = string(randStringSiteTypes(r))
 	this.AllocateIpv6 = bool(bool(r.Intn(2) == 0))
 	if !easy && r.Intn(10) != 0 {
@@ -4657,6 +5167,16 @@ func NewPopulatedAWSVPCParamsType(r randySiteTypes, easy bool) *AWSVPCParamsType
 	return this
 }
 
+func NewPopulatedAWSVPCParamsType_NameTag(r randySiteTypes, easy bool) *AWSVPCParamsType_NameTag {
+	this := &AWSVPCParamsType_NameTag{}
+	this.NameTag = string(randStringSiteTypes(r))
+	return this
+}
+func NewPopulatedAWSVPCParamsType_Autogenerate(r randySiteTypes, easy bool) *AWSVPCParamsType_Autogenerate {
+	this := &AWSVPCParamsType_Autogenerate{}
+	this.Autogenerate = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
 func NewPopulatedAWSVPCchoiceType(r randySiteTypes, easy bool) *AWSVPCchoiceType {
 	this := &AWSVPCchoiceType{}
 	oneofNumber_Choice := []int32{1, 2}[r.Intn(2)]
@@ -4743,13 +5263,29 @@ func NewPopulatedAWSVPCTwoInterfaceNodeType(r randySiteTypes, easy bool) *AWSVPC
 
 func NewPopulatedAzureVnetParamsType(r randySiteTypes, easy bool) *AzureVnetParamsType {
 	this := &AzureVnetParamsType{}
-	this.Name = string(randStringSiteTypes(r))
+	oneofNumber_NameChoice := []int32{1, 4}[r.Intn(2)]
+	switch oneofNumber_NameChoice {
+	case 1:
+		this.NameChoice = NewPopulatedAzureVnetParamsType_Name(r, easy)
+	case 4:
+		this.NameChoice = NewPopulatedAzureVnetParamsType_Autogenerate(r, easy)
+	}
 	this.PrimaryIpv4 = string(randStringSiteTypes(r))
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
+func NewPopulatedAzureVnetParamsType_Name(r randySiteTypes, easy bool) *AzureVnetParamsType_Name {
+	this := &AzureVnetParamsType_Name{}
+	this.Name = string(randStringSiteTypes(r))
+	return this
+}
+func NewPopulatedAzureVnetParamsType_Autogenerate(r randySiteTypes, easy bool) *AzureVnetParamsType_Autogenerate {
+	this := &AzureVnetParamsType_Autogenerate{}
+	this.Autogenerate = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
 func NewPopulatedAzureVnetType(r randySiteTypes, easy bool) *AzureVnetType {
 	this := &AzureVnetType{}
 	this.ResourceGroup = string(randStringSiteTypes(r))
@@ -4786,12 +5322,28 @@ func NewPopulatedAzureVnetChoiceType_ExistingVnet(r randySiteTypes, easy bool) *
 func NewPopulatedAzureSubnetType(r randySiteTypes, easy bool) *AzureSubnetType {
 	this := &AzureSubnetType{}
 	this.SubnetName = string(randStringSiteTypes(r))
-	this.SubnetResourceGrp = string(randStringSiteTypes(r))
+	oneofNumber_ResourceGroupChoice := []int32{2, 4}[r.Intn(2)]
+	switch oneofNumber_ResourceGroupChoice {
+	case 2:
+		this.ResourceGroupChoice = NewPopulatedAzureSubnetType_SubnetResourceGrp(r, easy)
+	case 4:
+		this.ResourceGroupChoice = NewPopulatedAzureSubnetType_VnetResourceGroup(r, easy)
+	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
+func NewPopulatedAzureSubnetType_SubnetResourceGrp(r randySiteTypes, easy bool) *AzureSubnetType_SubnetResourceGrp {
+	this := &AzureSubnetType_SubnetResourceGrp{}
+	this.SubnetResourceGrp = string(randStringSiteTypes(r))
+	return this
+}
+func NewPopulatedAzureSubnetType_VnetResourceGroup(r randySiteTypes, easy bool) *AzureSubnetType_VnetResourceGroup {
+	this := &AzureSubnetType_VnetResourceGroup{}
+	this.VnetResourceGroup = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
 func NewPopulatedAzureSubnetChoiceType(r randySiteTypes, easy bool) *AzureSubnetChoiceType {
 	this := &AzureSubnetChoiceType{}
 	oneofNumber_Choice := []int32{2, 3}[r.Intn(2)]
@@ -4851,6 +5403,14 @@ func NewPopulatedGCPVPCNetworkParamsType(r randySiteTypes, easy bool) *GCPVPCNet
 	return this
 }
 
+func NewPopulatedGCPVPCNetworkAutogenerateParamsType(r randySiteTypes, easy bool) *GCPVPCNetworkAutogenerateParamsType {
+	this := &GCPVPCNetworkAutogenerateParamsType{}
+	this.Autogenerate = bool(bool(r.Intn(2) == 0))
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
 func NewPopulatedGCPVPCNetworkType(r randySiteTypes, easy bool) *GCPVPCNetworkType {
 	this := &GCPVPCNetworkType{}
 	this.Name = string(randStringSiteTypes(r))
@@ -4878,12 +5438,14 @@ func NewPopulatedGCPSubnetParamsType(r randySiteTypes, easy bool) *GCPSubnetPara
 
 func NewPopulatedGCPVPCNetworkChoiceType(r randySiteTypes, easy bool) *GCPVPCNetworkChoiceType {
 	this := &GCPVPCNetworkChoiceType{}
-	oneofNumber_Choice := []int32{2, 3}[r.Intn(2)]
+	oneofNumber_Choice := []int32{2, 3, 4}[r.Intn(3)]
 	switch oneofNumber_Choice {
 	case 2:
 		this.Choice = NewPopulatedGCPVPCNetworkChoiceType_NewNetwork(r, easy)
 	case 3:
 		this.Choice = NewPopulatedGCPVPCNetworkChoiceType_ExistingNetwork(r, easy)
+	case 4:
+		this.Choice = NewPopulatedGCPVPCNetworkChoiceType_NewNetworkAutogenerate(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -4898,6 +5460,11 @@ func NewPopulatedGCPVPCNetworkChoiceType_NewNetwork(r randySiteTypes, easy bool)
 func NewPopulatedGCPVPCNetworkChoiceType_ExistingNetwork(r randySiteTypes, easy bool) *GCPVPCNetworkChoiceType_ExistingNetwork {
 	this := &GCPVPCNetworkChoiceType_ExistingNetwork{}
 	this.ExistingNetwork = NewPopulatedGCPVPCNetworkType(r, easy)
+	return this
+}
+func NewPopulatedGCPVPCNetworkChoiceType_NewNetworkAutogenerate(r randySiteTypes, easy bool) *GCPVPCNetworkChoiceType_NewNetworkAutogenerate {
+	this := &GCPVPCNetworkChoiceType_NewNetworkAutogenerate{}
+	this.NewNetworkAutogenerate = NewPopulatedGCPVPCNetworkAutogenerateParamsType(r, easy)
 	return this
 }
 func NewPopulatedGCPVPCSubnetChoiceType(r randySiteTypes, easy bool) *GCPVPCSubnetChoiceType {
@@ -4924,31 +5491,6 @@ func NewPopulatedGCPVPCSubnetChoiceType_ExistingSubnet(r randySiteTypes, easy bo
 	this.ExistingSubnet = NewPopulatedGCPSubnetType(r, easy)
 	return this
 }
-func NewPopulatedGCPVPCOneInterfaceNodeType(r randySiteTypes, easy bool) *GCPVPCOneInterfaceNodeType {
-	this := &GCPVPCOneInterfaceNodeType{}
-	this.GcpZoneName = string(randStringSiteTypes(r))
-	if r.Intn(10) != 0 {
-		this.LocalSubnet = NewPopulatedGCPVPCSubnetChoiceType(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedGCPVPCTwoInterfaceNodeType(r randySiteTypes, easy bool) *GCPVPCTwoInterfaceNodeType {
-	this := &GCPVPCTwoInterfaceNodeType{}
-	this.GcpZoneName = string(randStringSiteTypes(r))
-	if r.Intn(10) != 0 {
-		this.InsideSubnet = NewPopulatedGCPVPCSubnetChoiceType(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.OutsideSubnet = NewPopulatedGCPVPCSubnetChoiceType(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
 func NewPopulatedSiteStaticRoutesType(r randySiteTypes, easy bool) *SiteStaticRoutesType {
 	this := &SiteStaticRoutesType{}
 	oneofNumber_ConfigModeChoice := []int32{2, 3}[r.Intn(2)]
@@ -5117,9 +5659,8 @@ func encodeVarintPopulateSiteTypes(dAtA []byte, v uint64) []byte {
 func (m *AWSVPCParamsType) Size() (n int) {
 	var l int
 	_ = l
-	l = len(m.NameTag)
-	if l > 0 {
-		n += 1 + l + sovSiteTypes(uint64(l))
+	if m.NameChoice != nil {
+		n += m.NameChoice.Size()
 	}
 	l = len(m.PrimaryIpv4)
 	if l > 0 {
@@ -5131,6 +5672,22 @@ func (m *AWSVPCParamsType) Size() (n int) {
 	return n
 }
 
+func (m *AWSVPCParamsType_NameTag) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.NameTag)
+	n += 1 + l + sovSiteTypes(uint64(l))
+	return n
+}
+func (m *AWSVPCParamsType_Autogenerate) Size() (n int) {
+	var l int
+	_ = l
+	if m.Autogenerate != nil {
+		l = m.Autogenerate.Size()
+		n += 1 + l + sovSiteTypes(uint64(l))
+	}
+	return n
+}
 func (m *AWSVPCchoiceType) Size() (n int) {
 	var l int
 	_ = l
@@ -5237,9 +5794,8 @@ func (m *AWSVPCTwoInterfaceNodeType) Size() (n int) {
 func (m *AzureVnetParamsType) Size() (n int) {
 	var l int
 	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovSiteTypes(uint64(l))
+	if m.NameChoice != nil {
+		n += m.NameChoice.Size()
 	}
 	l = len(m.PrimaryIpv4)
 	if l > 0 {
@@ -5248,6 +5804,22 @@ func (m *AzureVnetParamsType) Size() (n int) {
 	return n
 }
 
+func (m *AzureVnetParamsType_Name) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Name)
+	n += 1 + l + sovSiteTypes(uint64(l))
+	return n
+}
+func (m *AzureVnetParamsType_Autogenerate) Size() (n int) {
+	var l int
+	_ = l
+	if m.Autogenerate != nil {
+		l = m.Autogenerate.Size()
+		n += 1 + l + sovSiteTypes(uint64(l))
+	}
+	return n
+}
 func (m *AzureVnetType) Size() (n int) {
 	var l int
 	_ = l
@@ -5296,13 +5868,28 @@ func (m *AzureSubnetType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovSiteTypes(uint64(l))
 	}
-	l = len(m.SubnetResourceGrp)
-	if l > 0 {
-		n += 1 + l + sovSiteTypes(uint64(l))
+	if m.ResourceGroupChoice != nil {
+		n += m.ResourceGroupChoice.Size()
 	}
 	return n
 }
 
+func (m *AzureSubnetType_SubnetResourceGrp) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.SubnetResourceGrp)
+	n += 1 + l + sovSiteTypes(uint64(l))
+	return n
+}
+func (m *AzureSubnetType_VnetResourceGroup) Size() (n int) {
+	var l int
+	_ = l
+	if m.VnetResourceGroup != nil {
+		l = m.VnetResourceGroup.Size()
+		n += 1 + l + sovSiteTypes(uint64(l))
+	}
+	return n
+}
 func (m *AzureSubnetChoiceType) Size() (n int) {
 	var l int
 	_ = l
@@ -5380,6 +5967,15 @@ func (m *GCPVPCNetworkParamsType) Size() (n int) {
 	return n
 }
 
+func (m *GCPVPCNetworkAutogenerateParamsType) Size() (n int) {
+	var l int
+	_ = l
+	if m.Autogenerate {
+		n += 2
+	}
+	return n
+}
+
 func (m *GCPVPCNetworkType) Size() (n int) {
 	var l int
 	_ = l
@@ -5441,6 +6037,15 @@ func (m *GCPVPCNetworkChoiceType_ExistingNetwork) Size() (n int) {
 	}
 	return n
 }
+func (m *GCPVPCNetworkChoiceType_NewNetworkAutogenerate) Size() (n int) {
+	var l int
+	_ = l
+	if m.NewNetworkAutogenerate != nil {
+		l = m.NewNetworkAutogenerate.Size()
+		n += 1 + l + sovSiteTypes(uint64(l))
+	}
+	return n
+}
 func (m *GCPVPCSubnetChoiceType) Size() (n int) {
 	var l int
 	_ = l
@@ -5468,38 +6073,6 @@ func (m *GCPVPCSubnetChoiceType_ExistingSubnet) Size() (n int) {
 	}
 	return n
 }
-func (m *GCPVPCOneInterfaceNodeType) Size() (n int) {
-	var l int
-	_ = l
-	l = len(m.GcpZoneName)
-	if l > 0 {
-		n += 1 + l + sovSiteTypes(uint64(l))
-	}
-	if m.LocalSubnet != nil {
-		l = m.LocalSubnet.Size()
-		n += 1 + l + sovSiteTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *GCPVPCTwoInterfaceNodeType) Size() (n int) {
-	var l int
-	_ = l
-	l = len(m.GcpZoneName)
-	if l > 0 {
-		n += 1 + l + sovSiteTypes(uint64(l))
-	}
-	if m.InsideSubnet != nil {
-		l = m.InsideSubnet.Size()
-		n += 1 + l + sovSiteTypes(uint64(l))
-	}
-	if m.OutsideSubnet != nil {
-		l = m.OutsideSubnet.Size()
-		n += 1 + l + sovSiteTypes(uint64(l))
-	}
-	return n
-}
-
 func (m *SiteStaticRoutesType) Size() (n int) {
 	var l int
 	_ = l
@@ -5615,9 +6188,29 @@ func (this *AWSVPCParamsType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&AWSVPCParamsType{`,
-		`NameTag:` + fmt.Sprintf("%v", this.NameTag) + `,`,
+		`NameChoice:` + fmt.Sprintf("%v", this.NameChoice) + `,`,
 		`PrimaryIpv4:` + fmt.Sprintf("%v", this.PrimaryIpv4) + `,`,
 		`AllocateIpv6:` + fmt.Sprintf("%v", this.AllocateIpv6) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSVPCParamsType_NameTag) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSVPCParamsType_NameTag{`,
+		`NameTag:` + fmt.Sprintf("%v", this.NameTag) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSVPCParamsType_Autogenerate) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSVPCParamsType_Autogenerate{`,
+		`Autogenerate:` + strings.Replace(fmt.Sprintf("%v", this.Autogenerate), "Empty", "ves_io_schema4.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5723,8 +6316,28 @@ func (this *AzureVnetParamsType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&AzureVnetParamsType{`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`NameChoice:` + fmt.Sprintf("%v", this.NameChoice) + `,`,
 		`PrimaryIpv4:` + fmt.Sprintf("%v", this.PrimaryIpv4) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetParamsType_Name) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetParamsType_Name{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVnetParamsType_Autogenerate) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVnetParamsType_Autogenerate{`,
+		`Autogenerate:` + strings.Replace(fmt.Sprintf("%v", this.Autogenerate), "Empty", "ves_io_schema4.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5776,7 +6389,27 @@ func (this *AzureSubnetType) String() string {
 	}
 	s := strings.Join([]string{`&AzureSubnetType{`,
 		`SubnetName:` + fmt.Sprintf("%v", this.SubnetName) + `,`,
+		`ResourceGroupChoice:` + fmt.Sprintf("%v", this.ResourceGroupChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureSubnetType_SubnetResourceGrp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureSubnetType_SubnetResourceGrp{`,
 		`SubnetResourceGrp:` + fmt.Sprintf("%v", this.SubnetResourceGrp) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureSubnetType_VnetResourceGroup) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureSubnetType_VnetResourceGroup{`,
+		`VnetResourceGroup:` + strings.Replace(fmt.Sprintf("%v", this.VnetResourceGroup), "Empty", "ves_io_schema4.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5846,6 +6479,16 @@ func (this *GCPVPCNetworkParamsType) String() string {
 	}, "")
 	return s
 }
+func (this *GCPVPCNetworkAutogenerateParamsType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GCPVPCNetworkAutogenerateParamsType{`,
+		`Autogenerate:` + fmt.Sprintf("%v", this.Autogenerate) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GCPVPCNetworkType) String() string {
 	if this == nil {
 		return "nil"
@@ -5907,6 +6550,16 @@ func (this *GCPVPCNetworkChoiceType_ExistingNetwork) String() string {
 	}, "")
 	return s
 }
+func (this *GCPVPCNetworkChoiceType_NewNetworkAutogenerate) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GCPVPCNetworkChoiceType_NewNetworkAutogenerate{`,
+		`NewNetworkAutogenerate:` + strings.Replace(fmt.Sprintf("%v", this.NewNetworkAutogenerate), "GCPVPCNetworkAutogenerateParamsType", "GCPVPCNetworkAutogenerateParamsType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GCPVPCSubnetChoiceType) String() string {
 	if this == nil {
 		return "nil"
@@ -5933,29 +6586,6 @@ func (this *GCPVPCSubnetChoiceType_ExistingSubnet) String() string {
 	}
 	s := strings.Join([]string{`&GCPVPCSubnetChoiceType_ExistingSubnet{`,
 		`ExistingSubnet:` + strings.Replace(fmt.Sprintf("%v", this.ExistingSubnet), "GCPSubnetType", "GCPSubnetType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GCPVPCOneInterfaceNodeType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GCPVPCOneInterfaceNodeType{`,
-		`GcpZoneName:` + fmt.Sprintf("%v", this.GcpZoneName) + `,`,
-		`LocalSubnet:` + strings.Replace(fmt.Sprintf("%v", this.LocalSubnet), "GCPVPCSubnetChoiceType", "GCPVPCSubnetChoiceType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GCPVPCTwoInterfaceNodeType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GCPVPCTwoInterfaceNodeType{`,
-		`GcpZoneName:` + fmt.Sprintf("%v", this.GcpZoneName) + `,`,
-		`InsideSubnet:` + strings.Replace(fmt.Sprintf("%v", this.InsideSubnet), "GCPVPCSubnetChoiceType", "GCPVPCSubnetChoiceType", 1) + `,`,
-		`OutsideSubnet:` + strings.Replace(fmt.Sprintf("%v", this.OutsideSubnet), "GCPVPCSubnetChoiceType", "GCPVPCSubnetChoiceType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6125,7 +6755,7 @@ func (m *AWSVPCParamsType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NameTag = string(dAtA[iNdEx:postIndex])
+			m.NameChoice = &AWSVPCParamsType_NameTag{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
@@ -6176,6 +6806,38 @@ func (m *AWSVPCParamsType) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.AllocateIpv6 = bool(v != 0)
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Autogenerate", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSiteTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSiteTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.NameChoice = &AWSVPCParamsType_Autogenerate{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipSiteTypes(dAtA[iNdEx:])
@@ -6888,7 +7550,7 @@ func (m *AzureVnetParamsType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Name = string(dAtA[iNdEx:postIndex])
+			m.NameChoice = &AzureVnetParamsType_Name{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
@@ -6918,6 +7580,38 @@ func (m *AzureVnetParamsType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.PrimaryIpv4 = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Autogenerate", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSiteTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSiteTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.NameChoice = &AzureVnetParamsType_Autogenerate{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -7247,7 +7941,39 @@ func (m *AzureSubnetType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.SubnetResourceGrp = string(dAtA[iNdEx:postIndex])
+			m.ResourceGroupChoice = &AzureSubnetType_SubnetResourceGrp{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VnetResourceGroup", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSiteTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSiteTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ResourceGroupChoice = &AzureSubnetType_VnetResourceGroup{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -7778,6 +8504,76 @@ func (m *GCPVPCNetworkParamsType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *GCPVPCNetworkAutogenerateParamsType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowSiteTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GCPVPCNetworkAutogenerateParamsType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GCPVPCNetworkAutogenerateParamsType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Autogenerate", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSiteTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Autogenerate = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipSiteTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthSiteTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *GCPVPCNetworkType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -8137,6 +8933,38 @@ func (m *GCPVPCNetworkChoiceType) Unmarshal(dAtA []byte) error {
 			}
 			m.Choice = &GCPVPCNetworkChoiceType_ExistingNetwork{v}
 			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NewNetworkAutogenerate", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSiteTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthSiteTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &GCPVPCNetworkAutogenerateParamsType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Choice = &GCPVPCNetworkChoiceType_NewNetworkAutogenerate{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipSiteTypes(dAtA[iNdEx:])
@@ -8250,263 +9078,6 @@ func (m *GCPVPCSubnetChoiceType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Choice = &GCPVPCSubnetChoiceType_ExistingSubnet{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipSiteTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthSiteTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GCPVPCOneInterfaceNodeType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowSiteTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GCPVPCOneInterfaceNodeType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GCPVPCOneInterfaceNodeType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GcpZoneName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowSiteTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthSiteTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.GcpZoneName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LocalSubnet", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowSiteTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthSiteTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.LocalSubnet == nil {
-				m.LocalSubnet = &GCPVPCSubnetChoiceType{}
-			}
-			if err := m.LocalSubnet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipSiteTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthSiteTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GCPVPCTwoInterfaceNodeType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowSiteTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GCPVPCTwoInterfaceNodeType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GCPVPCTwoInterfaceNodeType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GcpZoneName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowSiteTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthSiteTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.GcpZoneName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field InsideSubnet", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowSiteTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthSiteTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.InsideSubnet == nil {
-				m.InsideSubnet = &GCPVPCSubnetChoiceType{}
-			}
-			if err := m.InsideSubnet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OutsideSubnet", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowSiteTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthSiteTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.OutsideSubnet == nil {
-				m.OutsideSubnet = &GCPVPCSubnetChoiceType{}
-			}
-			if err := m.OutsideSubnet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -9091,146 +9662,133 @@ func init() {
 }
 
 var fileDescriptorSiteTypes = []byte{
-	// 2243 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0x4d, 0x6c, 0x1b, 0xc7,
-	0xf5, 0xe7, 0x90, 0x14, 0x4d, 0x0e, 0x45, 0x8b, 0x5a, 0x29, 0x09, 0xad, 0xe4, 0xcf, 0xe8, 0xcf,
-	0xd8, 0x0e, 0x9d, 0xf0, 0xc3, 0x5c, 0xaa, 0xaa, 0xeb, 0xb6, 0x86, 0x4d, 0xc5, 0xb5, 0xe4, 0x36,
-	0xb6, 0xb2, 0x32, 0x5c, 0xc0, 0x45, 0xb3, 0xd8, 0x5d, 0x8e, 0xe8, 0x85, 0xc9, 0x9d, 0xc5, 0xee,
-	0x92, 0xb4, 0xd5, 0x1a, 0x30, 0x7a, 0xe9, 0x17, 0x50, 0x04, 0x3d, 0x15, 0x28, 0xd0, 0x73, 0x0e,
-	0x05, 0xda, 0xa2, 0x97, 0xa2, 0x42, 0x01, 0xa3, 0x27, 0xf7, 0x52, 0x08, 0xe8, 0xc5, 0xb9, 0xc5,
-	0xcc, 0xc5, 0x3d, 0x35, 0x10, 0x7a, 0xf0, 0xb1, 0x98, 0xd9, 0x59, 0xee, 0xec, 0x72, 0x29, 0x59,
-	0x41, 0x4e, 0x81, 0x6e, 0x6f, 0xde, 0xfc, 0xde, 0x6f, 0xde, 0xbc, 0x79, 0xfb, 0xe6, 0x8d, 0x44,
-	0x78, 0x7a, 0x80, 0xec, 0x9a, 0x8e, 0xeb, 0xb6, 0x76, 0x17, 0xf5, 0x94, 0xfa, 0x40, 0x47, 0x43,
-	0xbb, 0x6e, 0xeb, 0x0e, 0x92, 0x9d, 0x07, 0x26, 0xb2, 0x6b, 0xa6, 0x85, 0x1d, 0x2c, 0x2c, 0xb8,
-	0xa8, 0x9a, 0x8b, 0xaa, 0x51, 0xd4, 0x52, 0xb5, 0xa3, 0x3b, 0x77, 0xfb, 0x6a, 0x4d, 0xc3, 0xbd,
-	0x7a, 0x07, 0x77, 0x70, 0x9d, 0x62, 0xd5, 0xfe, 0x36, 0x1d, 0xd1, 0x01, 0x95, 0x5c, 0x8e, 0xa5,
-	0xd7, 0x82, 0x2b, 0x19, 0xc8, 0x61, 0x13, 0xaf, 0x07, 0x27, 0xb0, 0xe9, 0xe8, 0xd8, 0x60, 0x2b,
-	0x2f, 0x9d, 0x0a, 0x4e, 0x72, 0x4e, 0x2d, 0xbd, 0x11, 0x72, 0x5d, 0xe9, 0xea, 0x6d, 0xc5, 0x41,
-	0x6c, 0x76, 0x79, 0x72, 0x63, 0x72, 0x90, 0xfa, 0xcd, 0xa8, 0xad, 0x73, 0x0b, 0x94, 0xfe, 0x09,
-	0x60, 0xfe, 0xca, 0xf7, 0xb7, 0x6e, 0x6f, 0xae, 0x6d, 0x2a, 0x96, 0xd2, 0xb3, 0x6f, 0x3d, 0x30,
-	0x91, 0x50, 0x86, 0x69, 0x43, 0xe9, 0x21, 0xd9, 0x51, 0x3a, 0x85, 0xf8, 0x32, 0x28, 0x67, 0x5a,
-	0xb9, 0x17, 0xbb, 0x20, 0xf6, 0xd7, 0x7f, 0x3f, 0x4e, 0x24, 0xad, 0x78, 0xe1, 0xb2, 0x74, 0x82,
-	0x4c, 0xdf, 0x52, 0x3a, 0xc2, 0x55, 0x38, 0x6b, 0x5a, 0x7a, 0x4f, 0xb1, 0x1e, 0xc8, 0xba, 0x39,
-	0x58, 0x29, 0x24, 0x28, 0xba, 0xe4, 0xa1, 0x67, 0xac, 0xc4, 0x0b, 0x00, 0x98, 0xf4, 0x9b, 0xf8,
-	0x1b, 0x4c, 0xfa, 0x28, 0x9e, 0x97, 0xb2, 0xcc, 0x6e, 0xc3, 0x1c, 0xac, 0x08, 0x55, 0x98, 0x53,
-	0xba, 0x5d, 0xac, 0x29, 0x0e, 0x22, 0x3c, 0xab, 0x85, 0xd4, 0x32, 0x28, 0xa7, 0x5b, 0xe9, 0xe7,
-	0xbb, 0x00, 0x10, 0x2e, 0x69, 0xd6, 0x9b, 0xde, 0x30, 0x07, 0xab, 0x17, 0xd3, 0xfb, 0x97, 0x66,
-	0xc4, 0x4a, 0xb3, 0xb2, 0x7a, 0x3d, 0x99, 0x06, 0xf9, 0xf8, 0xf5, 0x64, 0x3a, 0x99, 0x9f, 0xb9,
-	0x9e, 0x4c, 0xcf, 0xe4, 0x53, 0xa5, 0x27, 0xe3, 0x0d, 0x69, 0x77, 0xb1, 0xae, 0x21, 0xba, 0xa1,
-	0xcb, 0xf0, 0x84, 0x81, 0x86, 0xf2, 0xc0, 0xd4, 0x0a, 0x60, 0x19, 0x94, 0xb3, 0xe2, 0x99, 0x5a,
-	0xc4, 0x69, 0xd7, 0xc2, 0x81, 0x58, 0x8f, 0x49, 0x29, 0x03, 0x0d, 0x6f, 0x9b, 0x9a, 0xf0, 0x01,
-	0x4c, 0x0d, 0x4c, 0x4d, 0xd6, 0xdb, 0x2c, 0x20, 0x17, 0x02, 0x01, 0x21, 0xc2, 0x59, 0xeb, 0xb4,
-	0x58, 0xfa, 0xb0, 0x3c, 0x30, 0xb5, 0xea, 0xb9, 0xf2, 0x0f, 0x94, 0xea, 0xce, 0xf9, 0xea, 0x37,
-	0x7e, 0xf8, 0xa3, 0x0b, 0x0f, 0x7f, 0x3c, 0x96, 0x1b, 0x5f, 0x7f, 0x78, 0xee, 0xf4, 0x7a, 0x4c,
-	0x9a, 0x19, 0x98, 0xda, 0x46, 0xbb, 0x75, 0x0a, 0xa6, 0x5c, 0x17, 0x85, 0xb9, 0xc7, 0xbb, 0x00,
-	0xec, 0xed, 0x82, 0xc4, 0x68, 0x17, 0x24, 0x1a, 0x15, 0xf1, 0x7a, 0x32, 0x9d, 0xc8, 0x27, 0x4b,
-	0x0e, 0x5c, 0x5c, 0xeb, 0xe2, 0x7e, 0x7b, 0xab, 0xaf, 0x1a, 0xc8, 0xa1, 0x6e, 0xd1, 0xdd, 0x54,
-	0x60, 0x92, 0x06, 0x1b, 0x50, 0x4f, 0x0a, 0xd3, 0x82, 0x2d, 0x51, 0x94, 0x70, 0x96, 0xa2, 0x57,
-	0x99, 0xdf, 0x82, 0x17, 0x52, 0x86, 0x7b, 0x14, 0x07, 0x14, 0xb7, 0x7a, 0x31, 0xb5, 0x7f, 0x89,
-	0xac, 0x5d, 0xfa, 0x0f, 0x80, 0x73, 0xdc, 0xb2, 0x74, 0xc5, 0x1b, 0x70, 0xd6, 0xa6, 0x23, 0xd9,
-	0x24, 0x5e, 0xb0, 0x20, 0x9e, 0x8b, 0x0c, 0x62, 0x94, 0xcb, 0xeb, 0x31, 0x29, 0x6b, 0xfb, 0x2a,
-	0xe1, 0x1e, 0x14, 0xd0, 0x7d, 0xdd, 0x76, 0x74, 0xa3, 0x23, 0x33, 0xe2, 0x71, 0x64, 0xbf, 0x39,
-	0x11, 0xd9, 0x73, 0xd6, 0xdb, 0xe2, 0x99, 0x0f, 0xcb, 0x2e, 0xf0, 0xb0, 0xe0, 0xe6, 0x3d, 0x62,
-	0xd7, 0x85, 0x97, 0x89, 0xf3, 0x7e, 0x12, 0x2e, 0xb9, 0x47, 0x7f, 0xd3, 0x40, 0x1b, 0x86, 0x83,
-	0xac, 0x6d, 0x45, 0x43, 0x37, 0x70, 0xdb, 0x4d, 0x9e, 0x7f, 0x24, 0x60, 0x56, 0x19, 0xda, 0xb2,
-	0xb2, 0x23, 0x93, 0xb4, 0x67, 0x61, 0xff, 0x38, 0xe1, 0xf9, 0xf9, 0xbb, 0x84, 0xf5, 0xdb, 0x84,
-	0x34, 0xa7, 0x98, 0x55, 0x03, 0x5b, 0xce, 0x5d, 0xa4, 0xd8, 0x4e, 0xb5, 0xa1, 0x84, 0x15, 0x5a,
-	0x58, 0xd1, 0xa6, 0x0a, 0x1b, 0xf7, 0x83, 0x26, 0x9c, 0x42, 0x0d, 0x2b, 0x34, 0x29, 0x87, 0xfa,
-	0x55, 0x0d, 0x19, 0x8e, 0xa5, 0x74, 0x89, 0x41, 0x60, 0xa8, 0x06, 0x87, 0x9a, 0x04, 0x51, 0xbf,
-	0x3a, 0x44, 0x2e, 0xb5, 0x2f, 0xab, 0x9c, 0xcc, 0x61, 0x9a, 0x1c, 0xa6, 0xc9, 0x61, 0x9a, 0x9a,
-	0x04, 0x6d, 0xa5, 0xea, 0xb9, 0xe8, 0xcb, 0x2a, 0x27, 0x6b, 0x12, 0xec, 0xdb, 0x3e, 0x66, 0x2c,
-	0xab, 0x9c, 0xcc, 0x63, 0xda, 0x9c, 0x8c, 0x38, 0x79, 0xdb, 0x97, 0x45, 0x8e, 0x47, 0xe4, 0x78,
-	0x44, 0x97, 0x87, 0xfa, 0xc6, 0x30, 0xae, 0xac, 0x72, 0x32, 0x8f, 0x69, 0x4b, 0x19, 0x65, 0x68,
-	0x5f, 0xd9, 0xb9, 0xa1, 0xf4, 0x90, 0x70, 0x0d, 0xce, 0x92, 0x3a, 0xd2, 0x65, 0x59, 0x47, 0x53,
-	0x2e, 0x2b, 0x9e, 0x3e, 0x2c, 0x91, 0x49, 0x1e, 0x48, 0x59, 0x6a, 0xe9, 0x2a, 0x84, 0x3a, 0xcc,
-	0xb4, 0x75, 0xfb, 0x9e, 0x6c, 0xeb, 0x3b, 0xa8, 0x90, 0x5c, 0x06, 0xe5, 0x5c, 0x4b, 0x78, 0xfa,
-	0x10, 0x90, 0xaf, 0x8b, 0xe4, 0x44, 0xea, 0x9d, 0x64, 0xe1, 0xd1, 0x7f, 0x13, 0x52, 0x9a, 0x80,
-	0xb6, 0xf4, 0x1d, 0x44, 0x6b, 0x56, 0xa3, 0xd2, 0x1c, 0x27, 0xdd, 0xee, 0x8c, 0x97, 0x74, 0xb7,
-	0x86, 0xf8, 0x38, 0xe9, 0xbe, 0xca, 0x49, 0xb7, 0x01, 0x73, 0xba, 0x61, 0xeb, 0x6d, 0xf4, 0x45,
-	0xb2, 0x6e, 0xd6, 0x35, 0x65, 0x69, 0xf7, 0x5d, 0x78, 0x12, 0xf7, 0x1d, 0x9e, 0x2b, 0x71, 0x04,
-	0xae, 0x1c, 0xb3, 0x65, 0x64, 0xd5, 0x70, 0x0e, 0x67, 0x5a, 0x79, 0x2e, 0x87, 0x49, 0xfd, 0x5d,
-	0xe6, 0x32, 0x18, 0xee, 0x5f, 0x3a, 0xd1, 0xa8, 0x88, 0x95, 0x95, 0x4a, 0xb3, 0xf4, 0x73, 0x00,
-	0x17, 0xae, 0xec, 0xf4, 0x2d, 0x74, 0xdb, 0xab, 0xe9, 0x6e, 0xe7, 0xf0, 0x16, 0x4c, 0x72, 0xe9,
-	0x3a, 0xe7, 0x65, 0x6b, 0xca, 0x4a, 0xe6, 0x41, 0xe1, 0xb2, 0x44, 0x27, 0x27, 0x9a, 0x86, 0xf8,
-	0x4b, 0x36, 0x0d, 0xe9, 0x40, 0xd3, 0x30, 0xbe, 0xb0, 0xfa, 0x30, 0x37, 0x76, 0x85, 0x3a, 0xb1,
-	0x0a, 0x4f, 0x5a, 0xc8, 0xc6, 0x7d, 0x4b, 0x43, 0x72, 0xc7, 0xc2, 0x7d, 0x73, 0x9a, 0x3b, 0x39,
-	0x0f, 0x76, 0x8d, 0xa0, 0x84, 0x0a, 0xcc, 0x0c, 0xc8, 0x55, 0x44, 0x77, 0x10, 0x8f, 0x36, 0x49,
-	0x13, 0x04, 0x39, 0x55, 0xd2, 0x68, 0xf8, 0x21, 0x58, 0xf3, 0x7b, 0x8d, 0xab, 0x30, 0x4d, 0x7b,
-	0x0d, 0xff, 0xa0, 0xcb, 0xd1, 0xcd, 0xc6, 0x64, 0xf8, 0xd6, 0x63, 0x12, 0xe9, 0x53, 0x88, 0x92,
-	0x24, 0xcd, 0xf8, 0x8a, 0x1c, 0xf8, 0x07, 0x5d, 0x3a, 0x98, 0x8b, 0xb1, 0xcc, 0x7a, 0xa6, 0x44,
-	0x17, 0xba, 0x00, 0xe3, 0x7b, 0xbb, 0x00, 0x90, 0x0b, 0x50, 0xac, 0x34, 0xdd, 0xfe, 0xa9, 0xf4,
-	0x08, 0xc0, 0x39, 0x4a, 0xc1, 0x5d, 0xf9, 0x35, 0xc8, 0x6e, 0x6c, 0xbe, 0xfe, 0x84, 0xda, 0x40,
-	0xe8, 0x22, 0x68, 0x92, 0x7f, 0x1b, 0x2e, 0x30, 0x3c, 0x17, 0x7b, 0x33, 0xba, 0x7d, 0x9c, 0x77,
-	0x91, 0xd2, 0x38, 0xfa, 0x66, 0xe9, 0x53, 0x00, 0x5f, 0xe1, 0x5c, 0xe0, 0xe2, 0x79, 0x27, 0xd4,
-	0x7b, 0xc4, 0x8f, 0xd8, 0x7b, 0xb4, 0x20, 0x4d, 0xa0, 0x5f, 0x80, 0x78, 0x1e, 0x84, 0xfb, 0x90,
-	0xeb, 0x30, 0xf5, 0x12, 0x9f, 0x51, 0x28, 0x34, 0x21, 0x42, 0xc6, 0x70, 0x78, 0x94, 0x9f, 0x02,
-	0xf8, 0x7f, 0xe3, 0x83, 0x8a, 0xec, 0x34, 0xea, 0x30, 0xad, 0x10, 0x80, 0xac, 0xec, 0xb0, 0x80,
-	0x2f, 0x7a, 0x81, 0xcb, 0x5a, 0x19, 0x09, 0x34, 0x24, 0x20, 0x4a, 0xa0, 0x29, 0x9d, 0xa0, 0xa8,
-	0x2b, 0x3b, 0xc2, 0xfb, 0x91, 0xd7, 0xd9, 0x3b, 0x87, 0xed, 0xc2, 0x8f, 0x6e, 0xf0, 0x52, 0x0b,
-	0x14, 0x84, 0xc4, 0xa1, 0x05, 0x61, 0x7c, 0xa5, 0x95, 0xfe, 0x10, 0xe7, 0xb6, 0x16, 0x79, 0x9f,
-	0x1d, 0x79, 0x6b, 0x37, 0xa3, 0x8b, 0xe6, 0x51, 0xf6, 0x16, 0x2c, 0x9d, 0x1f, 0x4c, 0x29, 0x9d,
-	0x47, 0x61, 0xfc, 0xf2, 0x0a, 0xe8, 0x7b, 0xf0, 0xb5, 0x6b, 0x6b, 0x9b, 0xb7, 0x37, 0xd7, 0x6e,
-	0x20, 0x67, 0x88, 0xad, 0x7b, 0x47, 0xac, 0xa1, 0x17, 0x93, 0xfb, 0x97, 0x40, 0xa3, 0x74, 0x01,
-	0xce, 0x07, 0x58, 0x5e, 0xda, 0xbe, 0x74, 0x05, 0xe6, 0xae, 0xad, 0x6d, 0x72, 0xdf, 0xfb, 0xf9,
-	0xa8, 0xef, 0x7d, 0xc2, 0x98, 0xfb, 0xe2, 0x4b, 0xbf, 0x02, 0x70, 0x61, 0xcc, 0xc1, 0xf9, 0x7f,
-	0x64, 0xa6, 0x2f, 0xe9, 0x42, 0x20, 0x35, 0x24, 0x18, 0x54, 0xae, 0x8a, 0xdc, 0x84, 0x59, 0x52,
-	0x95, 0x0d, 0x77, 0x82, 0x25, 0x53, 0x25, 0xf2, 0xe8, 0xa7, 0x9c, 0xcb, 0x7a, 0x4c, 0x82, 0x06,
-	0x1a, 0x32, 0xbd, 0xb0, 0x05, 0xc7, 0x2f, 0x8d, 0x31, 0xab, 0x9b, 0x50, 0x67, 0x0f, 0x67, 0x65,
-	0x7c, 0x73, 0x1e, 0x03, 0x53, 0x1f, 0x5e, 0x43, 0xfe, 0x05, 0xe0, 0xab, 0x2e, 0xd3, 0x44, 0x9d,
-	0xdc, 0x80, 0xc4, 0xbd, 0xe0, 0xd7, 0x52, 0x9e, 0xe6, 0x4a, 0xf8, 0xd0, 0xd6, 0x63, 0x52, 0xc6,
-	0x40, 0x43, 0x96, 0xd7, 0xef, 0xc3, 0xb9, 0xd0, 0xf3, 0xec, 0xc0, 0xdb, 0x27, 0x90, 0x48, 0xeb,
-	0x31, 0xe9, 0x64, 0xf0, 0x09, 0x76, 0xf8, 0xae, 0x3e, 0x81, 0x70, 0xc9, 0xdd, 0x55, 0x64, 0x59,
-	0x1c, 0x65, 0x60, 0xae, 0xa3, 0x99, 0xf2, 0x0e, 0x36, 0x10, 0x9f, 0x53, 0x7f, 0xcb, 0x78, 0x19,
-	0xf2, 0xe7, 0x8c, 0xf5, 0xc7, 0x8c, 0x34, 0xab, 0xd8, 0xba, 0xdb, 0x1c, 0x36, 0xaa, 0x4a, 0x60,
-	0xa4, 0x06, 0x46, 0x1a, 0x37, 0x12, 0x03, 0x48, 0x31, 0x80, 0x14, 0xab, 0x9a, 0x34, 0x4f, 0x47,
-	0xe3, 0x0e, 0x9a, 0x10, 0x4f, 0xa8, 0xd4, 0x49, 0xd5, 0x84, 0xa1, 0x38, 0x69, 0x28, 0x4e, 0x1a,
-	0x46, 0xac, 0xd8, 0x9c, 0x34, 0x6c, 0x4e, 0x1a, 0x36, 0xab, 0x9a, 0x94, 0xa3, 0x2a, 0xda, 0xb9,
-	0x13, 0x37, 0x03, 0x43, 0x35, 0x38, 0xf4, 0x56, 0x19, 0xb7, 0xf9, 0xfe, 0xbe, 0x38, 0x95, 0x3a,
-	0xa9, 0x9a, 0x30, 0x14, 0x27, 0x0d, 0xc5, 0x49, 0x43, 0xb2, 0xaf, 0x57, 0x95, 0xbe, 0x4d, 0x1e,
-	0x09, 0xe1, 0x65, 0xa3, 0xf5, 0xea, 0x14, 0xbd, 0x26, 0xcd, 0xa1, 0xbe, 0x85, 0x4d, 0xe4, 0xee,
-	0x9d, 0x10, 0x84, 0x14, 0x6a, 0x58, 0xa1, 0x49, 0x27, 0x99, 0x82, 0xf4, 0xe6, 0x04, 0x10, 0x1c,
-	0x87, 0xe7, 0xdb, 0x81, 0x31, 0xd9, 0x60, 0x70, 0xac, 0x86, 0xc6, 0x41, 0xfb, 0x66, 0x08, 0xdf,
-	0x0c, 0xe1, 0x9b, 0x21, 0xfc, 0x4a, 0x08, 0xbf, 0x12, 0xc2, 0xaf, 0x84, 0xf0, 0xab, 0x21, 0xfc,
-	0x6a, 0x08, 0xbf, 0x5a, 0xd5, 0xa4, 0x53, 0x74, 0xe7, 0x4a, 0x0f, 0x59, 0xba, 0x16, 0x4a, 0xde,
-	0xa9, 0x53, 0xea, 0xf4, 0x29, 0x4d, 0x5a, 0xa4, 0x27, 0xe0, 0x4d, 0x79, 0x5c, 0x51, 0x5a, 0x35,
-	0x52, 0xab, 0x49, 0xb9, 0xbe, 0xed, 0xbd, 0x12, 0x69, 0x72, 0xf2, 0x43, 0x35, 0x38, 0x0c, 0x81,
-	0xfd, 0xe7, 0x19, 0x41, 0xfa, 0xb2, 0xc6, 0xc9, 0xfe, 0xd3, 0x8e, 0x84, 0xd3, 0x97, 0x55, 0x4e,
-	0xf6, 0x9f, 0x67, 0x8d, 0xaa, 0xc2, 0xc9, 0x2a, 0x27, 0xfb, 0x18, 0x91, 0xc3, 0x88, 0x1c, 0x46,
-	0xe4, 0x30, 0x4d, 0x0e, 0xd3, 0xe4, 0x30, 0x4d, 0x0e, 0xb3, 0xc2, 0x61, 0x56, 0x38, 0x0c, 0xf1,
-	0x27, 0xdb, 0xd1, 0xcc, 0x3b, 0xd8, 0x40, 0xf4, 0x0e, 0xbc, 0x11, 0xd9, 0xca, 0xbd, 0x7b, 0xc0,
-	0x5d, 0x72, 0x60, 0x2f, 0x37, 0x7e, 0x1d, 0xfd, 0x29, 0xeb, 0xd5, 0xd6, 0xc8, 0xbe, 0xec, 0xb8,
-	0xb6, 0x1e, 0xd7, 0xd6, 0xe3, 0xda, 0x7a, 0x5c, 0x5b, 0xbf, 0xd2, 0xb5, 0x75, 0x33, 0xfa, 0x2d,
-	0x79, 0xa4, 0xe2, 0x1a, 0x7c, 0x4c, 0x4a, 0x53, 0x1e, 0x93, 0x47, 0xa2, 0x0c, 0xbe, 0x26, 0xd9,
-	0x73, 0x5a, 0xac, 0x34, 0x4b, 0x9f, 0x00, 0xb8, 0xb8, 0xa5, 0x3b, 0x68, 0xcb, 0x51, 0x1c, 0x5d,
-	0x93, 0x70, 0xdf, 0x41, 0xee, 0xd3, 0xea, 0x5b, 0x70, 0xc1, 0xd6, 0x7b, 0x66, 0x17, 0xc9, 0x36,
-	0x9d, 0x92, 0x2d, 0x32, 0xc7, 0xde, 0x4b, 0xd0, 0x7f, 0x2b, 0xad, 0xc7, 0xa4, 0x79, 0x17, 0xc8,
-	0x51, 0x08, 0xb7, 0xe1, 0x82, 0xd6, 0xb7, 0x1d, 0xdc, 0x0b, 0x5a, 0xbb, 0x9e, 0x17, 0x43, 0x9e,
-	0x73, 0x86, 0xf4, 0x8f, 0x1e, 0x49, 0xd2, 0xb6, 0x13, 0x5e, 0x97, 0x82, 0x9b, 0x6e, 0x9d, 0x81,
-	0x82, 0x86, 0x8d, 0x6d, 0xbd, 0x23, 0xf7, 0x70, 0x1b, 0xc9, 0x07, 0xf7, 0xfa, 0x3f, 0x05, 0xb0,
-	0x10, 0xde, 0xdb, 0xf7, 0x74, 0xdb, 0x7d, 0x84, 0xde, 0x83, 0xf3, 0xbc, 0x6b, 0x72, 0x57, 0xb7,
-	0x9d, 0x02, 0x58, 0x4e, 0x4c, 0xfd, 0x83, 0x4f, 0x54, 0x94, 0x5a, 0x8b, 0x34, 0x10, 0xbf, 0x06,
-	0xf1, 0xfc, 0x65, 0x4f, 0x4a, 0x03, 0x69, 0xce, 0xf6, 0x71, 0x64, 0xc1, 0xd2, 0x4f, 0x92, 0xf0,
-	0xf5, 0x6b, 0x5d, 0xac, 0x2a, 0x5d, 0xef, 0xb9, 0x88, 0x0d, 0x03, 0x69, 0x8e, 0x8e, 0x0d, 0xea,
-	0xcc, 0x16, 0xcc, 0xdb, 0x5d, 0x5d, 0x76, 0xb0, 0xdc, 0xa1, 0x28, 0xb9, 0x6d, 0x1d, 0xfc, 0xac,
-	0xa2, 0x28, 0x46, 0x82, 0x2d, 0xf6, 0x18, 0xca, 0xd9, 0x5d, 0xfd, 0x16, 0x76, 0xe7, 0xde, 0xb3,
-	0x5c, 0x52, 0x1c, 0x24, 0x4d, 0x7c, 0x11, 0x52, 0xcc, 0x91, 0x6e, 0xc2, 0x57, 0xda, 0xba, 0xad,
-	0xa8, 0x5d, 0x24, 0x6f, 0x63, 0x6b, 0xa8, 0x58, 0x6d, 0xd9, 0xb4, 0xf0, 0xfd, 0x07, 0x85, 0x19,
-	0xca, 0xbc, 0x18, 0x62, 0xbe, 0xda, 0x33, 0x9d, 0x07, 0xad, 0xe4, 0x73, 0x72, 0xa0, 0x40, 0x5a,
-	0x60, 0xa6, 0xdf, 0x71, 0x2d, 0x37, 0x89, 0xa1, 0x20, 0xc3, 0x45, 0x64, 0x44, 0x10, 0xa6, 0x22,
-	0xff, 0x7b, 0xca, 0x9b, 0xae, 0xd1, 0x4c, 0x70, 0x53, 0x86, 0xad, 0x20, 0xb8, 0x54, 0x3c, 0xea,
-	0xe2, 0xdb, 0x7f, 0xdf, 0x05, 0x6f, 0xc1, 0xff, 0x87, 0x4b, 0xee, 0x26, 0x96, 0xd9, 0x11, 0x2c,
-	0xfb, 0x67, 0x60, 0x0b, 0x89, 0x46, 0x65, 0xa5, 0x75, 0x1a, 0xce, 0x6b, 0x63, 0xdd, 0xb4, 0xdc,
-	0x6a, 0xbd, 0x0b, 0x17, 0x03, 0x8e, 0x7a, 0xc0, 0x85, 0xc7, 0xbb, 0x60, 0xe6, 0x89, 0xfb, 0x5f,
-	0xbf, 0x24, 0x01, 0x7f, 0x2d, 0xf8, 0x4f, 0xe3, 0xd2, 0xef, 0x01, 0x7c, 0x73, 0x4a, 0x12, 0x8c,
-	0xb3, 0xf2, 0x67, 0x00, 0x2e, 0xb1, 0xd3, 0x62, 0x2f, 0x7d, 0xd9, 0x77, 0xc9, 0x66, 0xf9, 0x79,
-	0xfe, 0x80, 0xe3, 0x8b, 0xcc, 0xaf, 0x56, 0x61, 0x8f, 0xfd, 0x9d, 0x88, 0xa6, 0x6a, 0x9a, 0x4b,
-	0xd5, 0x42, 0x27, 0xda, 0xcc, 0x6e, 0xfd, 0x12, 0xec, 0x3d, 0x2b, 0xc6, 0x9e, 0x3e, 0x2b, 0xc6,
-	0x3e, 0x7f, 0x56, 0x04, 0x2f, 0x9e, 0x15, 0xc1, 0xa3, 0x51, 0x11, 0x7c, 0x3c, 0x2a, 0x82, 0xbf,
-	0x8c, 0x8a, 0xe0, 0xf1, 0xa8, 0x08, 0x9e, 0x8c, 0x8a, 0x60, 0x6f, 0x54, 0x04, 0x4f, 0x47, 0x45,
-	0xf0, 0xe9, 0xa8, 0x08, 0x9e, 0x8f, 0x8a, 0xb1, 0xcf, 0x47, 0x45, 0xf0, 0xd1, 0x67, 0xc5, 0xd8,
-	0xe3, 0xcf, 0x8a, 0xe0, 0xce, 0x46, 0x07, 0x9b, 0xf7, 0x3a, 0xb5, 0x01, 0xee, 0x3a, 0xc8, 0xb2,
-	0x94, 0x5a, 0xdf, 0xae, 0x53, 0x61, 0x1b, 0x5b, 0xbd, 0xaa, 0x69, 0xe1, 0x81, 0xde, 0x46, 0x56,
-	0xd5, 0x9b, 0xae, 0x9b, 0x6a, 0x07, 0xd7, 0xd1, 0x7d, 0x87, 0xfd, 0x82, 0x80, 0xff, 0x21, 0x81,
-	0x9a, 0xa2, 0xbf, 0x21, 0x68, 0xfe, 0x2f, 0x00, 0x00, 0xff, 0xff, 0x00, 0x2a, 0x13, 0x90, 0x61,
-	0x21, 0x00, 0x00,
+	// 2041 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x4f, 0x6c, 0x1b, 0x59,
+	0x19, 0xf7, 0xb3, 0x27, 0x8e, 0xf3, 0x12, 0x37, 0xce, 0x24, 0xdd, 0x7a, 0xd3, 0xc5, 0x1b, 0xdc,
+	0x3f, 0xeb, 0x56, 0xfe, 0x53, 0xdb, 0x21, 0x1b, 0x02, 0x2a, 0x8d, 0xb3, 0xdd, 0x38, 0x81, 0x6d,
+	0xb3, 0x93, 0x12, 0xa4, 0x45, 0xec, 0x68, 0x3c, 0x7e, 0x71, 0x47, 0xb1, 0xe7, 0x8d, 0x66, 0xc6,
+	0x76, 0x13, 0xa8, 0x54, 0x71, 0x00, 0x04, 0x1c, 0x56, 0x9c, 0x90, 0x90, 0x38, 0xef, 0x01, 0x09,
+	0x89, 0x13, 0xc2, 0x97, 0x88, 0x53, 0xb9, 0x45, 0xe2, 0x12, 0x6e, 0x5b, 0xef, 0x65, 0x39, 0x20,
+	0xaa, 0x88, 0x43, 0x8f, 0xe8, 0xbd, 0x79, 0x63, 0xbf, 0x99, 0x8c, 0x93, 0x66, 0xb5, 0x27, 0xc4,
+	0xed, 0xf9, 0xbd, 0xdf, 0xfb, 0xcd, 0xf7, 0xe7, 0x37, 0xdf, 0xf7, 0x79, 0xe0, 0xf5, 0x0e, 0xb2,
+	0xf2, 0x1a, 0x2e, 0x58, 0xea, 0x63, 0xd4, 0x52, 0x0a, 0x1d, 0x0d, 0x75, 0xad, 0x82, 0xa5, 0xd9,
+	0x48, 0xb6, 0xf7, 0x0d, 0x64, 0xe5, 0x0d, 0x13, 0xdb, 0x58, 0x9c, 0x75, 0x50, 0x79, 0x07, 0x95,
+	0xa7, 0xa8, 0xf9, 0x5c, 0x43, 0xb3, 0x1f, 0xb7, 0x6b, 0x79, 0x15, 0xb7, 0x0a, 0x0d, 0xdc, 0xc0,
+	0x05, 0x8a, 0xad, 0xb5, 0x77, 0xe9, 0x2f, 0xfa, 0x83, 0xae, 0x1c, 0x8e, 0xf9, 0x2b, 0xde, 0x27,
+	0xe9, 0xc8, 0x66, 0x07, 0x57, 0xbd, 0x07, 0xd8, 0xb0, 0x35, 0xac, 0xb3, 0x27, 0xcf, 0xbf, 0xe9,
+	0x3d, 0xe4, 0x8c, 0x9a, 0x7f, 0xcb, 0x67, 0xba, 0xd2, 0xd4, 0xea, 0x8a, 0x8d, 0xd8, 0xe9, 0xc2,
+	0x69, 0xc7, 0x64, 0x2f, 0xf5, 0xdb, 0x41, 0xae, 0x73, 0x0f, 0x48, 0xff, 0x29, 0x0c, 0x13, 0xab,
+	0x3f, 0xd8, 0xde, 0xd9, 0x5a, 0xdb, 0x52, 0x4c, 0xa5, 0x65, 0x3d, 0xda, 0x37, 0x90, 0x78, 0x1b,
+	0xc6, 0x74, 0xa5, 0x85, 0x64, 0x5b, 0x69, 0x24, 0xc3, 0x0b, 0x20, 0x33, 0x51, 0x89, 0xbf, 0xea,
+	0x81, 0xd0, 0x5f, 0xfe, 0x79, 0x18, 0x11, 0xcc, 0x70, 0xf2, 0x5e, 0x35, 0x24, 0x8d, 0x13, 0xc0,
+	0x23, 0xa5, 0x21, 0xde, 0x87, 0x53, 0x86, 0xa9, 0xb5, 0x14, 0x73, 0x5f, 0xd6, 0x8c, 0xce, 0x62,
+	0x32, 0x42, 0xf1, 0x69, 0x17, 0x3f, 0x66, 0x46, 0x5e, 0x01, 0xc0, 0x56, 0xbf, 0x0d, 0xbf, 0xc5,
+	0x56, 0x9f, 0x84, 0x13, 0xd2, 0x24, 0xbb, 0xb7, 0x61, 0x74, 0x16, 0xc5, 0x1c, 0x8c, 0x2b, 0xcd,
+	0x26, 0x56, 0x15, 0x1b, 0x11, 0x9e, 0xa5, 0x64, 0x74, 0x01, 0x64, 0x62, 0x95, 0xd8, 0x17, 0x3d,
+	0x00, 0x08, 0x97, 0x34, 0xe5, 0x1e, 0x6f, 0x18, 0x9d, 0x25, 0x71, 0x05, 0x4e, 0x29, 0x6d, 0x1b,
+	0x37, 0x90, 0x8e, 0x4c, 0xc5, 0x46, 0xc9, 0xd8, 0x02, 0xc8, 0x4c, 0x96, 0xe6, 0xf2, 0xde, 0x1c,
+	0xde, 0x6f, 0x19, 0xf6, 0x7e, 0x95, 0xdc, 0xe5, 0xb0, 0x2b, 0xb1, 0x93, 0xbb, 0x63, 0xef, 0x66,
+	0xcb, 0xd9, 0xa5, 0x4a, 0x0a, 0x4e, 0x52, 0x3f, 0xd5, 0xc7, 0x58, 0x53, 0x91, 0x38, 0x7d, 0xd8,
+	0x03, 0xb1, 0xa3, 0x1e, 0x18, 0xef, 0xf7, 0x40, 0x64, 0x39, 0x5b, 0xda, 0x14, 0x62, 0x20, 0x11,
+	0xde, 0x14, 0x62, 0x42, 0x62, 0x6c, 0x53, 0x88, 0x8d, 0x25, 0xa2, 0x9b, 0x42, 0x6c, 0x3c, 0x11,
+	0x4b, 0x3f, 0x07, 0x6e, 0xd0, 0x9c, 0x9b, 0x34, 0x68, 0xf7, 0xe0, 0xb8, 0x8e, 0xba, 0x72, 0xc7,
+	0x50, 0x93, 0x80, 0x5a, 0x73, 0x23, 0x1f, 0xa0, 0xa8, 0xbc, 0x3f, 0xd8, 0xd5, 0x90, 0x14, 0xd5,
+	0x51, 0x77, 0xc7, 0x50, 0xc5, 0x0f, 0x61, 0xb4, 0x63, 0xa8, 0xb2, 0x56, 0x67, 0x41, 0x5f, 0xf6,
+	0x04, 0x9d, 0x2c, 0x6e, 0x9a, 0xd7, 0x4b, 0xe9, 0x8f, 0x33, 0x1d, 0x43, 0xcd, 0xdd, 0xca, 0xfc,
+	0x50, 0xc9, 0x1d, 0xdc, 0xc9, 0x7d, 0xf3, 0x47, 0x3f, 0x5e, 0x7e, 0xfa, 0x93, 0xc1, 0xba, 0xf8,
+	0xee, 0xd3, 0x5b, 0xd7, 0xab, 0x21, 0x69, 0xac, 0x63, 0xa8, 0x1b, 0xf5, 0xca, 0x9b, 0x30, 0xca,
+	0x39, 0x07, 0x8e, 0x7a, 0x20, 0x42, 0x9c, 0x2b, 0x52, 0xe7, 0x22, 0x09, 0x21, 0x6d, 0xc3, 0xb9,
+	0xb5, 0x26, 0x6e, 0xd7, 0xb7, 0xdb, 0x35, 0x1d, 0xd9, 0xd4, 0x2c, 0xea, 0x4d, 0x16, 0x0a, 0x34,
+	0x9d, 0x80, 0x5a, 0x92, 0x1c, 0x95, 0x4e, 0x89, 0xa2, 0xc4, 0x9b, 0x14, 0xbd, 0xc4, 0xec, 0x16,
+	0xdd, 0xa4, 0x31, 0xdc, 0xb3, 0x30, 0xa0, 0xb8, 0xa5, 0x95, 0xe8, 0xc9, 0x5d, 0xf2, 0xec, 0xf4,
+	0xbf, 0x01, 0x9c, 0xe6, 0x1e, 0x4b, 0x9f, 0xf8, 0x00, 0x4e, 0x59, 0xf4, 0x97, 0x6c, 0x10, 0x2b,
+	0x58, 0x10, 0x6f, 0x05, 0x06, 0x31, 0xc8, 0xe4, 0x6a, 0x48, 0x9a, 0xb4, 0x86, 0x5b, 0xe2, 0x1e,
+	0x14, 0xd1, 0x13, 0xcd, 0xb2, 0x35, 0xbd, 0x21, 0x33, 0xe2, 0x41, 0x64, 0xbf, 0x75, 0x2a, 0xb2,
+	0xb7, 0xcc, 0x77, 0x4a, 0x37, 0x3e, 0xce, 0x38, 0xc0, 0xf3, 0x82, 0x9b, 0x70, 0x89, 0x1d, 0x13,
+	0x5e, 0x27, 0xce, 0x27, 0x02, 0x9c, 0x77, 0x52, 0xff, 0x50, 0x47, 0x1b, 0xba, 0x8d, 0xcc, 0x5d,
+	0x45, 0x45, 0x0f, 0x70, 0xdd, 0x11, 0xcf, 0xdf, 0x22, 0x70, 0x52, 0xe9, 0x5a, 0xb2, 0x72, 0x20,
+	0x13, 0x45, 0xb2, 0xb0, 0x7f, 0x1a, 0x71, 0xed, 0xfc, 0x7d, 0xc4, 0xfc, 0x5d, 0x44, 0x9a, 0x56,
+	0x8c, 0x9c, 0x8e, 0x4d, 0xfb, 0x31, 0x52, 0x2c, 0x3b, 0x57, 0x54, 0xfc, 0x1b, 0xaa, 0x7f, 0xa3,
+	0x4e, 0x37, 0x2c, 0xdc, 0xf6, 0x5e, 0xe1, 0x36, 0x6a, 0xfe, 0x0d, 0x55, 0x8a, 0xa3, 0x76, 0x4e,
+	0x45, 0xba, 0x6d, 0x2a, 0x4d, 0x72, 0xc1, 0xf3, 0xb3, 0xe6, 0xfd, 0xa9, 0x4a, 0x10, 0xb5, 0x73,
+	0x5d, 0xe4, 0x50, 0x0f, 0xd7, 0x35, 0x6e, 0xcd, 0x61, 0xca, 0x1c, 0xa6, 0xcc, 0x61, 0xca, 0xaa,
+	0x04, 0x2d, 0x25, 0xe7, 0x9a, 0x38, 0x5c, 0xd7, 0xb8, 0xb5, 0x2a, 0xc1, 0xb6, 0x35, 0xc4, 0x0c,
+	0xd6, 0x35, 0x6e, 0xcd, 0x63, 0xea, 0xdc, 0x1a, 0x71, 0xeb, 0xdd, 0xe1, 0xba, 0xc4, 0xf1, 0x94,
+	0x38, 0x9e, 0x92, 0xc3, 0x43, 0x6d, 0x63, 0x18, 0x67, 0x5d, 0xe3, 0xd6, 0x3c, 0xa6, 0x2e, 0x4d,
+	0x28, 0x5d, 0x6b, 0xf5, 0xe0, 0x81, 0xd2, 0x42, 0xe2, 0x3a, 0x9c, 0x22, 0x95, 0xaa, 0xc9, 0x54,
+	0x47, 0x25, 0x37, 0x59, 0xba, 0x7e, 0x9e, 0x90, 0x89, 0x0e, 0xa4, 0x49, 0x7a, 0xd3, 0xd9, 0x10,
+	0x0b, 0x70, 0xa2, 0xae, 0x59, 0x7b, 0xb2, 0xa5, 0x1d, 0xa0, 0xa4, 0xb0, 0x00, 0x32, 0xf1, 0x8a,
+	0x78, 0xfc, 0x14, 0x90, 0xb7, 0x8b, 0x68, 0x22, 0x7a, 0x5b, 0x48, 0x3e, 0xfb, 0x4f, 0x44, 0x8a,
+	0x11, 0xd0, 0xb6, 0x76, 0xe0, 0x54, 0xb6, 0x62, 0xb6, 0x3c, 0x10, 0x5d, 0x6f, 0xcc, 0x15, 0xdd,
+	0xa3, 0x2e, 0xfe, 0xbf, 0xe8, 0xfe, 0x97, 0x45, 0xb7, 0x01, 0xe3, 0x9a, 0x6e, 0x69, 0x75, 0xf4,
+	0x65, 0x54, 0x37, 0xe5, 0x5c, 0x65, 0xb2, 0xfb, 0x2e, 0xbc, 0x84, 0xdb, 0x36, 0xcf, 0x15, 0xb9,
+	0x00, 0x57, 0x9c, 0xdd, 0x65, 0x64, 0x39, 0xbf, 0x86, 0x27, 0x2a, 0x09, 0x4e, 0xc3, 0xa4, 0xfe,
+	0x2e, 0x70, 0x0a, 0x86, 0x27, 0x77, 0xc7, 0x8b, 0xd9, 0x52, 0x76, 0x31, 0x5b, 0x4e, 0xff, 0x0b,
+	0xc0, 0xd9, 0xd5, 0x83, 0xb6, 0x89, 0x76, 0xdc, 0x9a, 0xee, 0x4c, 0x27, 0x37, 0xa0, 0xc0, 0xc9,
+	0x75, 0xda, 0x55, 0x6b, 0xd4, 0x14, 0x12, 0x80, 0xce, 0x26, 0xf4, 0xf8, 0xd4, 0x60, 0x12, 0x7e,
+	0xcd, 0xc1, 0x24, 0xe6, 0x1d, 0x4c, 0xfc, 0x93, 0x86, 0x70, 0x81, 0x49, 0x83, 0xb4, 0xbb, 0x72,
+	0xb6, 0x14, 0x34, 0x67, 0x08, 0x6e, 0x8b, 0x58, 0xcc, 0x16, 0xd9, 0xdb, 0xda, 0x86, 0xf1, 0x81,
+	0xbb, 0xd4, 0xd1, 0x25, 0x78, 0xc9, 0x44, 0x16, 0x6e, 0x9b, 0x2a, 0x92, 0x1b, 0x26, 0x6e, 0x1b,
+	0x23, 0x5c, 0x96, 0xe2, 0x2e, 0x6c, 0x9d, 0xa0, 0xc4, 0x2c, 0x9c, 0xe8, 0x90, 0x76, 0x47, 0xa3,
+	0x14, 0x0e, 0xbe, 0x12, 0x23, 0x08, 0xa2, 0x1c, 0x32, 0xcc, 0x0c, 0xc3, 0xbc, 0x36, 0x9c, 0x67,
+	0xee, 0xc3, 0x18, 0x9d, 0x67, 0x86, 0x62, 0xca, 0x04, 0x0f, 0x34, 0xa7, 0x53, 0x44, 0xe7, 0x43,
+	0xd4, 0x25, 0x9b, 0x44, 0x98, 0x83, 0x36, 0xdc, 0x19, 0x8a, 0x29, 0x7d, 0x36, 0x17, 0x63, 0x99,
+	0x72, 0xaf, 0x92, 0x3d, 0x5f, 0x93, 0x0d, 0x1f, 0xf5, 0x00, 0x20, 0x11, 0x2c, 0x65, 0xcb, 0xce,
+	0xa4, 0x96, 0xfe, 0x69, 0x18, 0x4e, 0x53, 0x0a, 0x6e, 0xac, 0xc8, 0x43, 0x36, 0x15, 0xf0, 0x35,
+	0xce, 0x3b, 0xce, 0x4a, 0xd0, 0x41, 0xd0, 0x17, 0xe9, 0x3b, 0x70, 0x96, 0xe1, 0xb9, 0xd8, 0x1b,
+	0xa3, 0xc6, 0xe0, 0x19, 0x07, 0x2b, 0x0d, 0xe2, 0x6f, 0x88, 0xef, 0xc3, 0xd9, 0x8e, 0xef, 0x3a,
+	0x49, 0xdd, 0xd9, 0xba, 0x99, 0xe9, 0x78, 0x58, 0x70, 0xdb, 0x60, 0xe2, 0x29, 0x56, 0x32, 0xf0,
+	0xb2, 0x97, 0x6a, 0x84, 0x8c, 0xdc, 0xa2, 0xff, 0x19, 0x80, 0x97, 0xb9, 0x20, 0x70, 0x19, 0xfd,
+	0xc8, 0x37, 0x61, 0x85, 0x2f, 0x38, 0x61, 0x55, 0x20, 0x7d, 0x49, 0x7e, 0x09, 0xc2, 0x09, 0xe0,
+	0x9f, 0xb6, 0x36, 0x61, 0xf4, 0x35, 0x8a, 0x85, 0x2f, 0x39, 0x3e, 0x42, 0xc6, 0x70, 0x7e, 0x9e,
+	0x8f, 0x01, 0xfc, 0xda, 0x40, 0x2a, 0x81, 0xf3, 0x54, 0x01, 0xc6, 0x14, 0x02, 0x90, 0x95, 0x03,
+	0x96, 0xf2, 0x39, 0x37, 0x75, 0x93, 0xe6, 0x84, 0x04, 0x8a, 0x12, 0x28, 0x49, 0xa0, 0x2c, 0x8d,
+	0x53, 0xd4, 0xea, 0x81, 0xf8, 0x41, 0x60, 0xd3, 0xbe, 0x7d, 0x9e, 0x17, 0xc3, 0xe8, 0x7a, 0x5b,
+	0xb7, 0xa7, 0xec, 0x45, 0xce, 0x2d, 0x7b, 0x83, 0xc6, 0x9d, 0xfe, 0x63, 0x98, 0x73, 0x2d, 0xb0,
+	0x6b, 0x5f, 0xd8, 0xb5, 0x87, 0xc1, 0xad, 0xe1, 0x22, 0xbe, 0x79, 0x1b, 0xc4, 0x87, 0x23, 0x1a,
+	0xc4, 0x45, 0x18, 0xbf, 0xba, 0x36, 0xf1, 0x1e, 0xbc, 0xb2, 0xbe, 0xb6, 0xb5, 0xb3, 0xb5, 0xf6,
+	0x00, 0xd9, 0x5d, 0x6c, 0xee, 0x71, 0x9d, 0xe2, 0xda, 0x99, 0x9d, 0xc2, 0xe9, 0x13, 0x2b, 0xc2,
+	0xc9, 0x5d, 0x50, 0x4c, 0x7f, 0x1f, 0x5e, 0xf3, 0xb0, 0xac, 0x72, 0x75, 0x9c, 0x63, 0xcc, 0xf8,
+	0xba, 0x01, 0xa0, 0xff, 0x52, 0x05, 0x62, 0xa7, 0xaf, 0xf6, 0x3b, 0xb4, 0xcb, 0x70, 0xc6, 0x43,
+	0xfb, 0xda, 0x66, 0xa5, 0x57, 0x61, 0x7c, 0x7d, 0x6d, 0x8b, 0x2b, 0x64, 0x77, 0x82, 0x0a, 0xd9,
+	0xa9, 0xcb, 0x5c, 0x29, 0x4b, 0xff, 0x1a, 0xc0, 0xd9, 0x01, 0x07, 0xe7, 0xc4, 0x45, 0x4b, 0xe2,
+	0x57, 0xd3, 0x49, 0xd3, 0xc7, 0x61, 0x5f, 0xa6, 0xb8, 0xd2, 0xf4, 0x10, 0x4e, 0x92, 0x66, 0xa3,
+	0x3b, 0x07, 0x4c, 0xa1, 0xd9, 0x40, 0x3d, 0x8d, 0x48, 0x76, 0x35, 0x24, 0x41, 0x1d, 0x75, 0xd9,
+	0xbe, 0xb8, 0x0d, 0x07, 0x7f, 0xd2, 0x06, 0xac, 0x8e, 0x4a, 0x6f, 0x9e, 0xcf, 0xca, 0xf8, 0xa6,
+	0x5d, 0x06, 0x97, 0xd4, 0x86, 0x49, 0xce, 0x4a, 0x39, 0x60, 0x2e, 0x58, 0x3e, 0x9f, 0x3c, 0x58,
+	0x59, 0xd5, 0x90, 0xf4, 0xc6, 0xd0, 0x7c, 0x1e, 0x53, 0xb9, 0x3a, 0x28, 0x87, 0x33, 0xac, 0xe2,
+	0x93, 0x72, 0x38, 0xb6, 0x98, 0x1d, 0x16, 0xc4, 0xbf, 0x03, 0xf8, 0x86, 0xf3, 0x90, 0x53, 0x45,
+	0x7f, 0x03, 0x92, 0xb0, 0x78, 0x5f, 0xfd, 0xcc, 0x28, 0x2b, 0xfd, 0x52, 0xa9, 0x86, 0xa4, 0x09,
+	0x1d, 0x75, 0xd9, 0x4b, 0xfa, 0x01, 0x9c, 0xf6, 0xfd, 0xa3, 0x3e, 0xb3, 0x99, 0x7b, 0xe4, 0x5b,
+	0x0d, 0x49, 0x97, 0xbc, 0xff, 0x9a, 0xcf, 0x2f, 0xf3, 0xff, 0x00, 0x70, 0x6e, 0x5b, 0xb3, 0xd1,
+	0xb6, 0xad, 0xd8, 0x9a, 0x2a, 0xe1, 0xb6, 0x8d, 0x1c, 0x01, 0x7f, 0x1b, 0xce, 0x5a, 0x5a, 0xcb,
+	0x68, 0x22, 0xd9, 0xa2, 0x47, 0xb2, 0x49, 0xce, 0x98, 0x2e, 0xe1, 0x50, 0x93, 0xb4, 0x41, 0x53,
+	0x20, 0x47, 0x21, 0xee, 0xc0, 0x59, 0xb5, 0x6d, 0xd9, 0xb8, 0xe5, 0xbd, 0xed, 0xb8, 0x92, 0xf2,
+	0xb9, 0xc2, 0x5d, 0xa4, 0x1d, 0x8b, 0x86, 0x9f, 0xf0, 0x3a, 0x14, 0xdc, 0x71, 0xe5, 0x06, 0x14,
+	0x55, 0xac, 0xef, 0x6a, 0x0d, 0xb9, 0x85, 0xeb, 0x9e, 0x61, 0x2f, 0xc0, 0xb7, 0x9f, 0x03, 0x98,
+	0xf4, 0xfb, 0xf6, 0x3d, 0xcd, 0x72, 0x5e, 0xf5, 0x3d, 0x38, 0xc3, 0x9b, 0x26, 0x37, 0x35, 0xcb,
+	0x4e, 0x82, 0x85, 0xc8, 0xc8, 0x6e, 0x1d, 0x14, 0xa5, 0xca, 0x1c, 0x0d, 0xc4, 0x6f, 0x40, 0x38,
+	0x71, 0xcf, 0x5d, 0xc5, 0x80, 0x34, 0x6d, 0x0d, 0x71, 0xe4, 0x81, 0xe9, 0x9f, 0x09, 0xf0, 0xea,
+	0x7a, 0x13, 0xd7, 0x94, 0xa6, 0xfb, 0x5a, 0x62, 0x5d, 0x47, 0xaa, 0xad, 0x61, 0x9d, 0x1a, 0xb3,
+	0x0d, 0x13, 0x56, 0x53, 0x93, 0x6d, 0x2c, 0x37, 0x28, 0x4a, 0xae, 0x9b, 0x67, 0xcb, 0x88, 0xa2,
+	0x18, 0x09, 0x36, 0x59, 0xf2, 0xe3, 0x56, 0x53, 0x7b, 0x84, 0x9d, 0xb3, 0xf7, 0x4c, 0x87, 0x14,
+	0x7b, 0x49, 0x23, 0x5f, 0x86, 0x14, 0x73, 0xa4, 0x5b, 0xf0, 0x72, 0x5d, 0xb3, 0x94, 0x5a, 0x13,
+	0xc9, 0xbb, 0xd8, 0xec, 0x2a, 0x66, 0x5d, 0x36, 0x4c, 0xfc, 0x64, 0x3f, 0x39, 0x36, 0x7a, 0xf6,
+	0x72, 0x6a, 0x77, 0x15, 0x48, 0xb3, 0xec, 0xea, 0xfb, 0xce, 0xcd, 0x2d, 0x72, 0x51, 0x94, 0xe1,
+	0x1c, 0xd2, 0x03, 0x08, 0xa3, 0x81, 0x1f, 0xf8, 0xf8, 0xab, 0x6b, 0x54, 0x09, 0x8e, 0x64, 0xd8,
+	0x13, 0x44, 0x87, 0x8a, 0x47, 0xad, 0xbc, 0xf3, 0xd7, 0x1e, 0xb8, 0x06, 0xbf, 0x0e, 0xe7, 0x1d,
+	0x27, 0x16, 0x58, 0x0a, 0x16, 0x86, 0x39, 0xb0, 0xc4, 0x48, 0x31, 0xbb, 0x58, 0xb9, 0x0e, 0x67,
+	0xd4, 0xc1, 0xde, 0x28, 0x6d, 0x55, 0x0a, 0x70, 0xce, 0x63, 0xa8, 0x0b, 0xbc, 0x72, 0xd8, 0x03,
+	0x63, 0xcf, 0x9d, 0x0f, 0x53, 0x02, 0x01, 0x7f, 0x23, 0xbb, 0xf4, 0xb2, 0x07, 0x00, 0xff, 0x85,
+	0x33, 0xfd, 0x07, 0x00, 0xdf, 0x1e, 0x21, 0x84, 0x81, 0x32, 0x7f, 0x01, 0xe0, 0x3c, 0xcb, 0x98,
+	0x5b, 0x05, 0x87, 0x66, 0x59, 0x4c, 0xa3, 0x77, 0xce, 0x48, 0x61, 0xa0, 0xc6, 0x2a, 0xc9, 0x23,
+	0xd6, 0xe8, 0xa9, 0x5c, 0x63, 0x9c, 0x5c, 0x93, 0x8d, 0xe0, 0x6b, 0x56, 0xe5, 0x57, 0xe0, 0xe8,
+	0x45, 0x2a, 0x74, 0xfc, 0x22, 0x15, 0x7a, 0xf9, 0x22, 0x05, 0x5e, 0xbd, 0x48, 0x81, 0x67, 0xfd,
+	0x14, 0xf8, 0xb4, 0x9f, 0x02, 0x7f, 0xee, 0xa7, 0xc0, 0x61, 0x3f, 0x05, 0x9e, 0xf7, 0x53, 0xe0,
+	0xa8, 0x9f, 0x02, 0xc7, 0xfd, 0x14, 0xf8, 0xac, 0x9f, 0x02, 0x5f, 0xf4, 0x53, 0xa1, 0x97, 0xfd,
+	0x14, 0xf8, 0xe4, 0xf3, 0x54, 0xe8, 0xf0, 0xf3, 0x14, 0xf8, 0x68, 0xa3, 0x81, 0x8d, 0xbd, 0x46,
+	0xbe, 0x83, 0x9b, 0x36, 0x32, 0x4d, 0x25, 0xdf, 0xb6, 0x0a, 0x74, 0xb1, 0x8b, 0xcd, 0x56, 0xce,
+	0x30, 0x71, 0x47, 0xab, 0x23, 0x33, 0xe7, 0x1e, 0x17, 0x8c, 0x5a, 0x03, 0x17, 0xd0, 0x13, 0x9b,
+	0x7d, 0x4c, 0xe7, 0xbf, 0xa9, 0xd7, 0xa2, 0xf4, 0x73, 0x7a, 0xf9, 0xbf, 0x01, 0x00, 0x00, 0xff,
+	0xff, 0xcb, 0x68, 0xfa, 0x47, 0x6c, 0x18, 0x00, 0x00,
 }

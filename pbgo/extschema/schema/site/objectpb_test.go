@@ -88,9 +88,11 @@ import (
 
 	_ "github.com/gogo/protobuf/gogoproto"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.

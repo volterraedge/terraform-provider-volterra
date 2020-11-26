@@ -28,8 +28,8 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	object "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_interface"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	object "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_interface"
 )
 
 var (
@@ -994,7 +994,19 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
+func (s *APISrv) validateTransport(ctx context.Context) error {
+	if s.sf.IsTransportNotSupported("ves.io.schema.network_interface.crudapi.API", server.TransportFromContext(ctx)) {
+		userMsg := fmt.Sprintf("ves.io.schema.network_interface.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		return server.GRPCStatusFromError(err).Err()
+	}
+	return nil
+}
+
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_interface.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1019,6 +1031,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1043,6 +1058,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_interface.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1065,6 +1083,9 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_interface.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1116,6 +1137,9 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_interface.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1494,7 +1518,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-network_interface-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Get"
             },
@@ -1569,7 +1593,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-network_interface-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Delete"
             },
@@ -1652,7 +1676,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-network_interface-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Replace"
             },
@@ -1781,7 +1805,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-network_interface-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.List"
             },
@@ -1858,7 +1882,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-network_interface-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Create"
             },
@@ -1987,7 +2011,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-network_interface-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.ListStream"
             },
@@ -2402,6 +2426,7 @@ var APISwaggerJSON string = `{
             "title": "Global Specification",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"legacy\",\"tunnel_interface\"]",
+            "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.GlobalSpecType",
             "properties": {
                 "DHCP_server": {
@@ -2484,6 +2509,16 @@ var APISwaggerJSON string = `{
                 "legacy": {
                     "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface tunnel_interface]\nx-displayName: \"Internal\"\nInternal helps in conversion",
                     "title": "Internal",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "monitor": {
+                    "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
+                    "title": "Monitoring enabled",
+                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig"
+                },
+                "monitor_disabled": {
+                    "description": "Exclusive with [monitor]\nx-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
+                    "title": "Monitoring disabled",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "mtu": {
@@ -2584,6 +2619,13 @@ var APISwaggerJSON string = `{
             "default": "NETWORK_INTERFACE_NETWORK_REF",
             "x-displayname": "Interface Network Type",
             "x-ves-proto-enum": "ves.io.schema.network_interface.InterfaceNetworkType"
+        },
+        "network_interfaceLinkQualityMonitorConfig": {
+            "type": "object",
+            "description": "Link Quality Monitoring configuration for a network interface.",
+            "title": "Link Quality Monitoring Configuration",
+            "x-displayname": "Link Quality Monitoring Configuration",
+            "x-ves-proto-message": "ves.io.schema.network_interface.LinkQualityMonitorConfig"
         },
         "network_interfaceNetworkInterfaceDFGW": {
             "type": "object",
@@ -2858,7 +2900,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"

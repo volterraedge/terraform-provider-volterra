@@ -12,15 +12,15 @@ import (
 
 	_ "github.com/gogo/protobuf/gogoproto"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	ves_io_schema_policy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/policy"
 
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema4 "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
 	strings "strings"
 
@@ -58,7 +58,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Allow Volterra"
 	// x-example: "true"
-	// if allow_volterra is set to true, it allows relevent volterra infrastructure services to decrypt the secret encrypted using this policy.
+	// if allow_volterra is set to true, it allows relevant volterra infrastructure services to decrypt the secret encrypted using this policy.
 	AllowVolterra bool `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
 }
 

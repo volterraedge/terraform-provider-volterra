@@ -28,8 +28,8 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	object "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	object "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site"
 )
 
 var (
@@ -994,7 +994,19 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
+func (s *APISrv) validateTransport(ctx context.Context) error {
+	if s.sf.IsTransportNotSupported("ves.io.schema.views.azure_vnet_site.crudapi.API", server.TransportFromContext(ctx)) {
+		userMsg := fmt.Sprintf("ves.io.schema.views.azure_vnet_site.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		return server.GRPCStatusFromError(err).Err()
+	}
+	return nil
+}
+
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.azure_vnet_site.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1019,6 +1031,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1043,6 +1058,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.azure_vnet_site.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1065,6 +1083,9 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.azure_vnet_site.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1116,6 +1137,9 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.azure_vnet_site.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1494,7 +1518,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-azure_vnet_site-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-azure_vnet_site-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.azure_vnet_site.crudapi.API.Get"
             },
@@ -1569,7 +1593,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-azure_vnet_site-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-azure_vnet_site-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.azure_vnet_site.crudapi.API.Delete"
             },
@@ -1652,7 +1676,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-azure_vnet_site-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-azure_vnet_site-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.azure_vnet_site.crudapi.API.Replace"
             },
@@ -1781,7 +1805,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-azure_vnet_site-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-azure_vnet_site-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.azure_vnet_site.crudapi.API.List"
             },
@@ -1858,7 +1882,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-azure_vnet_site-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-azure_vnet_site-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.azure_vnet_site.crudapi.API.Create"
             },
@@ -1987,7 +2011,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-azure_vnet_site-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-azure_vnet_site-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.azure_vnet_site.crudapi.API.ListStream"
             },
@@ -2004,15 +2028,15 @@ var APISwaggerJSON string = `{
             "description": "Two interface Azure ingress/egress site",
             "title": "Azure Ingress Egress Gateway",
             "x-displayname": "Azure Ingress/Egress Gateway",
+            "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
-            "x-ves-oneof-field-service_policy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy_policy\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwType",
             "properties": {
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy_policy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
                     "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
                 },
@@ -2039,7 +2063,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy_policy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2053,7 +2077,7 @@ var APISwaggerJSON string = `{
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType"
                 },
-                "no_forward_proxy_policy": {
+                "no_forward_proxy": {
                     "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
                     "$ref": "#/definitions/schemaEmpty"
@@ -2117,14 +2141,14 @@ var APISwaggerJSON string = `{
             "description": "Voltstack Cluster of single interface Azure nodes",
             "title": "Azure Voltstack Cluster",
             "x-displayname": "Azure Voltstack Cluster",
+            "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
-            "x-ves-oneof-field-service_policy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy_policy\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterType",
             "properties": {
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy_policy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
                     "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
                 },
@@ -2151,7 +2175,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy_policy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2160,7 +2184,7 @@ var APISwaggerJSON string = `{
                     "title": "Connect Global Networks",
                     "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
                 },
-                "no_forward_proxy_policy": {
+                "no_forward_proxy": {
                     "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
                     "$ref": "#/definitions/schemaEmpty"
@@ -2548,7 +2572,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -3219,6 +3243,29 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteCoordinates": {
+            "type": "object",
+            "description": "Coordinates of the site which provides the site physical location",
+            "title": "Site Coordinates",
+            "x-displayname": "Site Coordinates",
+            "x-ves-proto-message": "ves.io.schema.site.Coordinates",
+            "properties": {
+                "latitude": {
+                    "type": "number",
+                    "description": " Latitude of the site location",
+                    "title": "latitude",
+                    "format": "float",
+                    "x-displayname": "Latitude"
+                },
+                "longitude": {
+                    "type": "number",
+                    "description": " longitude of site location",
+                    "title": "longitude",
+                    "format": "float",
+                    "x-displayname": "Longitude"
+                }
+            }
+        },
         "viewsAzureSubnetChoiceType": {
             "type": "object",
             "description": "Parameters for Azure subnet",
@@ -3228,7 +3275,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.AzureSubnetChoiceType",
             "properties": {
                 "subnet": {
-                    "description": "Exclusive with [subnet_param]\nx-displayName: \"Name of Existing Subnet\"\nx-example:\"MySubnet\"\nName about existing subnet. Resource group is taken from Vnet",
+                    "description": "Exclusive with [subnet_param]\nx-displayName: Existing Subnet\"\nInformation about existing subnet.",
                     "title": "Existing Subnet",
                     "$ref": "#/definitions/viewsAzureSubnetType"
                 },
@@ -3244,20 +3291,27 @@ var APISwaggerJSON string = `{
             "description": "Parameters for Azure subnet",
             "title": "Azure Cloud Subnet",
             "x-displayname": "Azure Subnet",
+            "x-ves-displayorder": "3,1",
+            "x-ves-oneof-field-resource_group_choice": "[\"subnet_resource_grp\",\"vnet_resource_group\"]",
             "x-ves-proto-message": "ves.io.schema.views.AzureSubnetType",
             "properties": {
                 "subnet_name": {
                     "type": "string",
-                    "description": " x-example:\"MySubnet\"\n Name of existing subnet.\nRequired: YES",
+                    "description": " Name of existing subnet.\n\nExample: - \"MySubnet\"-\nRequired: YES",
                     "title": "Existing Subnet Name",
-                    "x-displayname": "Existing Subnet Name",
+                    "x-displayname": "Subnet Name",
+                    "x-ves-example": "MySubnet",
                     "x-ves-required": "true"
                 },
                 "subnet_resource_grp": {
                     "type": "string",
-                    "description": " x-example:\"MySubnet\"\n Resource group for this subnet. Resource group is taken from Vnet, if left blank.",
-                    "title": "Existing Subnet Resource Group",
-                    "x-displayname": "Existing Subnet Resource Group"
+                    "description": "Exclusive with [vnet_resource_group]\nx-displayName: \"Resource Group Name\"\nSpecify name of Resource Group",
+                    "title": "subnet_resource_grp"
+                },
+                "vnet_resource_group": {
+                    "description": "Exclusive with [subnet_resource_grp]\nx-displayName: \"Vnet Resource Group\"\nUse the same Resource Group as the Vnet",
+                    "title": "vnet_resource_group",
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },
@@ -3316,16 +3370,19 @@ var APISwaggerJSON string = `{
             "description": "Parameters to create a new Azure Vnet",
             "title": "Azure Vnet Parameters",
             "x-displayname": "Azure Vnet Parameters",
-            "x-ves-displayorder": "1,2",
+            "x-ves-displayorder": "3,2",
+            "x-ves-oneof-field-name_choice": "[\"autogenerate\",\"name\"]",
             "x-ves-proto-message": "ves.io.schema.views.AzureVnetParamsType",
             "properties": {
+                "autogenerate": {
+                    "description": "Exclusive with [name]\nx-displayName: \"Autogenerate Vnet Name\"\nAutogenerate the Vnet Name",
+                    "title": "autogenerate",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "name": {
                     "type": "string",
-                    "description": " Name for your Azure Vnet\n\nExample: - \"MyVnet\"-\nRequired: YES",
-                    "title": "Azure Vnet Name",
-                    "x-displayname": "Azure Vnet Name",
-                    "x-ves-example": "MyVnet",
-                    "x-ves-required": "true"
+                    "description": "Exclusive with [autogenerate]\nx-displayName: \"Choose Vnet Name\"\nSpecify the Vnet Name",
+                    "title": "name"
                 },
                 "primary_ipv4": {
                     "type": "string",
@@ -3534,6 +3591,13 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.GlobalSpecType",
             "properties": {
+                "address": {
+                    "type": "string",
+                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-",
+                    "title": "address",
+                    "x-displayname": "Geographical Address",
+                    "x-ves-example": "123 Street, city, country, postal code"
+                },
                 "assisted": {
                     "description": "Exclusive with [azure_cred]\nx-displayName: \"Assisted Deployment\"\nIn assisted deployment get Azure parameters generated in status of this objects and run volterra provided terraform script.",
                     "title": "Assisted Deployment",
@@ -3551,6 +3615,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Azure Region",
                     "x-ves-example": "East US",
                     "x-ves-required": "true"
+                },
+                "coordinates": {
+                    "description": " Site longitude and latitude co-ordinates",
+                    "title": "coordinates",
+                    "$ref": "#/definitions/siteCoordinates",
+                    "x-displayname": "Co-ordinates"
                 },
                 "disk_size": {
                     "type": "integer",
@@ -3634,7 +3704,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\nx-displayName: \"Voltstack Cluster (One Interface)\"\nVoltstack Cluster using single interface, useful for deploying k8s cluster.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\nx-displayName: \"Voltstack Cluster (One Interface)\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",
                     "title": "Voltstack Cluster",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetVoltstackClusterType"
                 }
