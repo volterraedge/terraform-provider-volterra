@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	ves_io_schema_views_http_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
+	ves_io_schema_views_http_loadbalancer "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
 )
 
 // TestAccHTTPLB token creation test
@@ -43,6 +43,8 @@ func testConfigHTTPLB(resourceName, name, namespace string) string {
 		  http = true
 		  disable_rate_limit = true
 		  disable_waf = true
+		  no_service_policies = true
+		  round_robin = true
 		  domains = ["http.helloclouds.app"]
 		}
 		`, resourceName, name, namespace)

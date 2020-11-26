@@ -15,8 +15,9 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_virtual_host_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_authentication "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/authentication"
+	ves_io_schema_virtual_host_dns_info "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
 )
 
 var (
@@ -25,6 +26,321 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *AuthenticationDetails) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AuthenticationDetails) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *AuthenticationDetails) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetCookieParams().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AuthenticationDetails.cookie_params")
+	}
+
+	return nil
+}
+
+func (m *AuthenticationDetails) DeepCopy() *AuthenticationDetails {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AuthenticationDetails{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AuthenticationDetails) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AuthenticationDetails) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AuthenticationDetailsValidator().Validate(ctx, m, opts...)
+}
+
+func (m *AuthenticationDetails) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAuthConfigDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetCookieParamsChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *AuthenticationDetails) GetAuthConfigDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, ref := range m.GetAuthConfig() {
+		if ref == nil {
+			return nil, fmt.Errorf("AuthenticationDetails.auth_config[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "authentication.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "auth_config",
+			Ref:        ref,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetAuthConfigDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *AuthenticationDetails) GetAuthConfigDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "authentication.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: authentication")
+	}
+	for _, ref := range m.GetAuthConfig() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *AuthenticationDetails) GetCookieParamsChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.CookieParamsChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetCookieParamsChoice().(type) {
+	case *AuthenticationDetails_UseAuthObjectConfig:
+
+	case *AuthenticationDetails_CookieParams:
+		odrInfos, err = m.GetCookieParams().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "cookie_params." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+type ValidateAuthenticationDetails struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAuthenticationDetails) RedirectUrlChoiceRedirectUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_RedirectUrl, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for redirect_url")
+	}
+	return oValidatorFn_RedirectUrl, nil
+}
+
+func (v *ValidateAuthenticationDetails) AuthConfigValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for auth_config")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated auth_config")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items auth_config")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAuthenticationDetails) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AuthenticationDetails)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AuthenticationDetails got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["auth_config"]; exists {
+		vOpts := append(opts, db.WithValidateField("auth_config"))
+		if err := fv(ctx, m.GetAuthConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetCookieParamsChoice().(type) {
+	case *AuthenticationDetails_UseAuthObjectConfig:
+		if fv, exists := v.FldValidators["cookie_params_choice.use_auth_object_config"]; exists {
+			val := m.GetCookieParamsChoice().(*AuthenticationDetails_UseAuthObjectConfig).UseAuthObjectConfig
+			vOpts := append(opts,
+				db.WithValidateField("cookie_params_choice"),
+				db.WithValidateField("use_auth_object_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AuthenticationDetails_CookieParams:
+		if fv, exists := v.FldValidators["cookie_params_choice.cookie_params"]; exists {
+			val := m.GetCookieParamsChoice().(*AuthenticationDetails_CookieParams).CookieParams
+			vOpts := append(opts,
+				db.WithValidateField("cookie_params_choice"),
+				db.WithValidateField("cookie_params"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetRedirectUrlChoice().(type) {
+	case *AuthenticationDetails_RedirectUrl:
+		if fv, exists := v.FldValidators["redirect_url_choice.redirect_url"]; exists {
+			val := m.GetRedirectUrlChoice().(*AuthenticationDetails_RedirectUrl).RedirectUrl
+			vOpts := append(opts,
+				db.WithValidateField("redirect_url_choice"),
+				db.WithValidateField("redirect_url"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AuthenticationDetails_RedirectDynamic:
+		if fv, exists := v.FldValidators["redirect_url_choice.redirect_dynamic"]; exists {
+			val := m.GetRedirectUrlChoice().(*AuthenticationDetails_RedirectDynamic).RedirectDynamic
+			vOpts := append(opts,
+				db.WithValidateField("redirect_url_choice"),
+				db.WithValidateField("redirect_dynamic"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAuthenticationDetailsValidator = func() *ValidateAuthenticationDetails {
+	v := &ValidateAuthenticationDetails{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRedirectUrlChoiceRedirectUrl := v.RedirectUrlChoiceRedirectUrlValidationRuleHandler
+	rulesRedirectUrlChoiceRedirectUrl := map[string]string{
+		"ves.io.schema.rules.string.max_len": "128",
+		"ves.io.schema.rules.string.min_len": "1",
+		"ves.io.schema.rules.string.uri_ref": "true",
+	}
+	vFnMap["redirect_url_choice.redirect_url"], err = vrhRedirectUrlChoiceRedirectUrl(rulesRedirectUrlChoiceRedirectUrl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AuthenticationDetails.redirect_url_choice_redirect_url: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["redirect_url_choice.redirect_url"] = vFnMap["redirect_url_choice.redirect_url"]
+
+	vrhAuthConfig := v.AuthConfigValidationRuleHandler
+	rulesAuthConfig := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhAuthConfig(rulesAuthConfig)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AuthenticationDetails.auth_config: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["auth_config"] = vFn
+
+	v.FldValidators["cookie_params_choice.cookie_params"] = ves_io_schema_authentication.CookieParamsValidator().Validate
+
+	return v
+}()
+
+func AuthenticationDetailsValidator() db.Validator {
+	return DefaultAuthenticationDetailsValidator
+}
 
 // augmented methods on protoc/std generated struct
 
@@ -488,6 +804,10 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting CreateSpecType.tls_parameters")
 	}
 
+	if err := m.GetAuthentication().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.authentication")
+	}
+
 	return nil
 }
 
@@ -521,6 +841,12 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertisePoliciesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetAuthenticationChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -604,6 +930,37 @@ func (m *CreateSpecType) GetAdvertisePoliciesDBEntries(ctx context.Context, d db
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.AuthenticationChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetAuthenticationChoice().(type) {
+	case *CreateSpecType_NoAuthentication:
+
+	case *CreateSpecType_Authentication:
+		odrInfos, err = m.GetAuthentication().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "authentication." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -1120,6 +1477,32 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetAuthenticationChoice().(type) {
+	case *CreateSpecType_NoAuthentication:
+		if fv, exists := v.FldValidators["authentication_choice.no_authentication"]; exists {
+			val := m.GetAuthenticationChoice().(*CreateSpecType_NoAuthentication).NoAuthentication
+			vOpts := append(opts,
+				db.WithValidateField("authentication_choice"),
+				db.WithValidateField("no_authentication"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_Authentication:
+		if fv, exists := v.FldValidators["authentication_choice.authentication"]; exists {
+			val := m.GetAuthenticationChoice().(*CreateSpecType_Authentication).Authentication
+			vOpts := append(opts,
+				db.WithValidateField("authentication_choice"),
+				db.WithValidateField("authentication"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["buffer_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("buffer_policy"))
@@ -1489,6 +1872,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["rate_limiter_allowed_prefixes"] = vFn
 
+	v.FldValidators["authentication_choice.authentication"] = AuthenticationDetailsValidator().Validate
+
 	v.FldValidators["challenge_type.js_challenge"] = JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
 
@@ -1689,6 +2074,10 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting GetSpecType.tls_parameters")
 	}
 
+	if err := m.GetAuthentication().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.authentication")
+	}
+
 	return nil
 }
 
@@ -1722,6 +2111,12 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertisePoliciesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetAuthenticationChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -1805,6 +2200,37 @@ func (m *GetSpecType) GetAdvertisePoliciesDBEntries(ctx context.Context, d db.In
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.AuthenticationChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetAuthenticationChoice().(type) {
+	case *GetSpecType_NoAuthentication:
+
+	case *GetSpecType_Authentication:
+		odrInfos, err = m.GetAuthentication().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "authentication." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -2321,6 +2747,32 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	switch m.GetAuthenticationChoice().(type) {
+	case *GetSpecType_NoAuthentication:
+		if fv, exists := v.FldValidators["authentication_choice.no_authentication"]; exists {
+			val := m.GetAuthenticationChoice().(*GetSpecType_NoAuthentication).NoAuthentication
+			vOpts := append(opts,
+				db.WithValidateField("authentication_choice"),
+				db.WithValidateField("no_authentication"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_Authentication:
+		if fv, exists := v.FldValidators["authentication_choice.authentication"]; exists {
+			val := m.GetAuthenticationChoice().(*GetSpecType_Authentication).Authentication
+			vOpts := append(opts,
+				db.WithValidateField("authentication_choice"),
+				db.WithValidateField("authentication"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["auto_cert_info"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("auto_cert_info"))
@@ -2747,6 +3199,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["rate_limiter_allowed_prefixes"] = vFn
 
+	v.FldValidators["authentication_choice.authentication"] = AuthenticationDetailsValidator().Validate
+
 	v.FldValidators["challenge_type.js_challenge"] = JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
 
@@ -2802,6 +3256,10 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.tls_intercept")
 	}
 
+	if err := m.GetAuthentication().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.authentication")
+	}
+
 	return nil
 }
 
@@ -2835,6 +3293,12 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertisePoliciesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetAuthenticationChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -2882,7 +3346,7 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetServicePolicySetDRefInfo(); err != nil {
+	if fdrInfos, err := m.GetServicePolicySetsDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -2942,6 +3406,37 @@ func (m *GlobalSpecType) GetAdvertisePoliciesDBEntries(ctx context.Context, d db
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.AuthenticationChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetAuthenticationChoice().(type) {
+	case *GlobalSpecType_NoAuthentication:
+
+	case *GlobalSpecType_Authentication:
+		odrInfos, err = m.GetAuthentication().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "authentication." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetDnsDomainsDRefInfo() ([]db.DRefInfo, error) {
@@ -3213,11 +3708,11 @@ func (m *GlobalSpecType) GetRoutesDBEntries(ctx context.Context, d db.Interface)
 	return entries, nil
 }
 
-func (m *GlobalSpecType) GetServicePolicySetDRefInfo() ([]db.DRefInfo, error) {
+func (m *GlobalSpecType) GetServicePolicySetsDRefInfo() ([]db.DRefInfo, error) {
 	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetServicePolicySet() {
+	for i, ref := range m.GetServicePolicySets() {
 		if ref == nil {
-			return nil, fmt.Errorf("GlobalSpecType.service_policy_set[%d] has a nil value", i)
+			return nil, fmt.Errorf("GlobalSpecType.service_policy_sets[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
 		drInfos = append(drInfos, db.DRefInfo{
@@ -3226,7 +3721,7 @@ func (m *GlobalSpecType) GetServicePolicySetDRefInfo() ([]db.DRefInfo, error) {
 			RefdTenant: ref.Tenant,
 			RefdNS:     ref.Namespace,
 			RefdName:   ref.Name,
-			DRField:    "service_policy_set",
+			DRField:    "service_policy_sets",
 			Ref:        ref,
 		})
 	}
@@ -3234,14 +3729,14 @@ func (m *GlobalSpecType) GetServicePolicySetDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
-// GetServicePolicySetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GlobalSpecType) GetServicePolicySetDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+// GetServicePolicySetsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetServicePolicySetsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
 	refdType, err := d.TypeForEntryKind("", "", "service_policy_set.Object")
 	if err != nil {
 		return nil, errors.Wrap(err, "Cannot find type for kind: service_policy_set")
 	}
-	for _, ref := range m.GetServicePolicySet() {
+	for _, ref := range m.GetServicePolicySets() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -3709,7 +4204,7 @@ func (v *ValidateGlobalSpecType) UserDomainsValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) ServicePolicySetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGlobalSpecType) ServicePolicySetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
@@ -3721,7 +4216,7 @@ func (v *ValidateGlobalSpecType) ServicePolicySetValidationRuleHandler(rules map
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for service_policy_set")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for service_policy_sets")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
@@ -3738,10 +4233,10 @@ func (v *ValidateGlobalSpecType) ServicePolicySetValidationRuleHandler(rules map
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated service_policy_set")
+			return errors.Wrap(err, "repeated service_policy_sets")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items service_policy_set")
+			return errors.Wrap(err, "items service_policy_sets")
 		}
 		return nil
 	}
@@ -3778,6 +4273,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		for idx, item := range m.GetAdvertisePolicies() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx))
 			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetAuthenticationChoice().(type) {
+	case *GlobalSpecType_NoAuthentication:
+		if fv, exists := v.FldValidators["authentication_choice.no_authentication"]; exists {
+			val := m.GetAuthenticationChoice().(*GlobalSpecType_NoAuthentication).NoAuthentication
+			vOpts := append(opts,
+				db.WithValidateField("authentication_choice"),
+				db.WithValidateField("no_authentication"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_Authentication:
+		if fv, exists := v.FldValidators["authentication_choice.authentication"]; exists {
+			val := m.GetAuthenticationChoice().(*GlobalSpecType_Authentication).Authentication
+			vOpts := append(opts,
+				db.WithValidateField("authentication_choice"),
+				db.WithValidateField("authentication"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
@@ -3987,6 +4508,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["loadbalancer_algorithm"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("loadbalancer_algorithm"))
+		if err := fv(ctx, m.GetLoadbalancerAlgorithm(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["malicious_user_mitigation"]; exists {
 		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation"))
 		if err := fv(ctx, m.GetMaliciousUserMitigation(), vOpts...); err != nil {
@@ -4094,9 +4624,9 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["service_policy_set"]; exists {
-		vOpts := append(opts, db.WithValidateField("service_policy_set"))
-		if err := fv(ctx, m.GetServicePolicySet(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["service_policy_sets"]; exists {
+		vOpts := append(opts, db.WithValidateField("service_policy_sets"))
+		if err := fv(ctx, m.GetServicePolicySets(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4316,16 +4846,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["user_domains"] = vFn
 
-	vrhServicePolicySet := v.ServicePolicySetValidationRuleHandler
-	rulesServicePolicySet := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1",
+	vrhServicePolicySets := v.ServicePolicySetsValidationRuleHandler
+	rulesServicePolicySets := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "4",
 	}
-	vFn, err = vrhServicePolicySet(rulesServicePolicySet)
+	vFn, err = vrhServicePolicySets(rulesServicePolicySets)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.service_policy_set: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.service_policy_sets: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["service_policy_set"] = vFn
+	v.FldValidators["service_policy_sets"] = vFn
+
+	v.FldValidators["authentication_choice.authentication"] = AuthenticationDetailsValidator().Validate
 
 	v.FldValidators["challenge_type.js_challenge"] = JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
@@ -4653,6 +5185,10 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.tls_parameters")
 	}
 
+	if err := m.GetAuthentication().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.authentication")
+	}
+
 	return nil
 }
 
@@ -4686,6 +5222,12 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetAdvertisePoliciesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetAuthenticationChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -4769,6 +5311,37 @@ func (m *ReplaceSpecType) GetAdvertisePoliciesDBEntries(ctx context.Context, d d
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.AuthenticationChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetAuthenticationChoice().(type) {
+	case *ReplaceSpecType_NoAuthentication:
+
+	case *ReplaceSpecType_Authentication:
+		odrInfos, err = m.GetAuthentication().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "authentication." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -5285,6 +5858,32 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	switch m.GetAuthenticationChoice().(type) {
+	case *ReplaceSpecType_NoAuthentication:
+		if fv, exists := v.FldValidators["authentication_choice.no_authentication"]; exists {
+			val := m.GetAuthenticationChoice().(*ReplaceSpecType_NoAuthentication).NoAuthentication
+			vOpts := append(opts,
+				db.WithValidateField("authentication_choice"),
+				db.WithValidateField("no_authentication"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_Authentication:
+		if fv, exists := v.FldValidators["authentication_choice.authentication"]; exists {
+			val := m.GetAuthenticationChoice().(*ReplaceSpecType_Authentication).Authentication
+			vOpts := append(opts,
+				db.WithValidateField("authentication_choice"),
+				db.WithValidateField("authentication"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["buffer_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("buffer_policy"))
@@ -5654,6 +6253,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["rate_limiter_allowed_prefixes"] = vFn
 
+	v.FldValidators["authentication_choice.authentication"] = AuthenticationDetailsValidator().Validate
+
 	v.FldValidators["challenge_type.js_challenge"] = JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
 
@@ -5791,6 +6392,41 @@ func TemporaryUserBlockingTypeValidator() db.Validator {
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetAuthenticationChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.AuthenticationChoice.(type) {
+	case nil:
+		o.AuthenticationChoice = nil
+
+	case *CreateSpecType_Authentication:
+		o.AuthenticationChoice = &GlobalSpecType_Authentication{Authentication: of.Authentication}
+
+	case *CreateSpecType_NoAuthentication:
+		o.AuthenticationChoice = &GlobalSpecType_NoAuthentication{NoAuthentication: of.NoAuthentication}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetAuthenticationChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.AuthenticationChoice.(type) {
+	case nil:
+		r.AuthenticationChoice = nil
+
+	case *GlobalSpecType_Authentication:
+		r.AuthenticationChoice = &CreateSpecType_Authentication{Authentication: of.Authentication}
+
+	case *GlobalSpecType_NoAuthentication:
+		r.AuthenticationChoice = &CreateSpecType_NoAuthentication{NoAuthentication: of.NoAuthentication}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetChallengeTypeToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.ChallengeType.(type) {
 	case nil:
@@ -5837,6 +6473,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	}
 	m.AddLocation = f.GetAddLocation()
 	m.AdvertisePolicies = f.GetAdvertisePolicies()
+	m.GetAuthenticationChoiceFromGlobalSpecType(f)
 	m.BufferPolicy = f.GetBufferPolicy()
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.CompressionParams = f.GetCompressionParams()
@@ -5871,6 +6508,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 	f.AddLocation = m1.AddLocation
 	f.AdvertisePolicies = m1.AdvertisePolicies
+	m1.SetAuthenticationChoiceToGlobalSpecType(f)
 	f.BufferPolicy = m1.BufferPolicy
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	f.CompressionParams = m1.CompressionParams
@@ -5895,6 +6533,41 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.TlsParameters = m1.TlsParameters
 	f.UserIdentification = m1.UserIdentification
 	f.WafType = m1.WafType
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetAuthenticationChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.AuthenticationChoice.(type) {
+	case nil:
+		o.AuthenticationChoice = nil
+
+	case *GetSpecType_Authentication:
+		o.AuthenticationChoice = &GlobalSpecType_Authentication{Authentication: of.Authentication}
+
+	case *GetSpecType_NoAuthentication:
+		o.AuthenticationChoice = &GlobalSpecType_NoAuthentication{NoAuthentication: of.NoAuthentication}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetAuthenticationChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.AuthenticationChoice.(type) {
+	case nil:
+		r.AuthenticationChoice = nil
+
+	case *GlobalSpecType_Authentication:
+		r.AuthenticationChoice = &GetSpecType_Authentication{Authentication: of.Authentication}
+
+	case *GlobalSpecType_NoAuthentication:
+		r.AuthenticationChoice = &GetSpecType_NoAuthentication{NoAuthentication: of.NoAuthentication}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -5944,6 +6617,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	}
 	m.AddLocation = f.GetAddLocation()
 	m.AdvertisePolicies = f.GetAdvertisePolicies()
+	m.GetAuthenticationChoiceFromGlobalSpecType(f)
 	m.AutoCertInfo = f.GetAutoCertInfo()
 	m.AutoCertState = f.GetAutoCertState()
 	m.BufferPolicy = f.GetBufferPolicy()
@@ -5984,6 +6658,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 	f.AddLocation = m1.AddLocation
 	f.AdvertisePolicies = m1.AdvertisePolicies
+	m1.SetAuthenticationChoiceToGlobalSpecType(f)
 	f.AutoCertInfo = m1.AutoCertInfo
 	f.AutoCertState = m1.AutoCertState
 	f.BufferPolicy = m1.BufferPolicy
@@ -6014,6 +6689,41 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Type = m1.Type
 	f.UserIdentification = m1.UserIdentification
 	f.WafType = m1.WafType
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetAuthenticationChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.AuthenticationChoice.(type) {
+	case nil:
+		o.AuthenticationChoice = nil
+
+	case *ReplaceSpecType_Authentication:
+		o.AuthenticationChoice = &GlobalSpecType_Authentication{Authentication: of.Authentication}
+
+	case *ReplaceSpecType_NoAuthentication:
+		o.AuthenticationChoice = &GlobalSpecType_NoAuthentication{NoAuthentication: of.NoAuthentication}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetAuthenticationChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.AuthenticationChoice.(type) {
+	case nil:
+		r.AuthenticationChoice = nil
+
+	case *GlobalSpecType_Authentication:
+		r.AuthenticationChoice = &ReplaceSpecType_Authentication{Authentication: of.Authentication}
+
+	case *GlobalSpecType_NoAuthentication:
+		r.AuthenticationChoice = &ReplaceSpecType_NoAuthentication{NoAuthentication: of.NoAuthentication}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -6063,6 +6773,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	}
 	m.AddLocation = f.GetAddLocation()
 	m.AdvertisePolicies = f.GetAdvertisePolicies()
+	m.GetAuthenticationChoiceFromGlobalSpecType(f)
 	m.BufferPolicy = f.GetBufferPolicy()
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.CompressionParams = f.GetCompressionParams()
@@ -6097,6 +6808,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 	f.AddLocation = m1.AddLocation
 	f.AdvertisePolicies = m1.AdvertisePolicies
+	m1.SetAuthenticationChoiceToGlobalSpecType(f)
 	f.BufferPolicy = m1.BufferPolicy
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	f.CompressionParams = m1.CompressionParams

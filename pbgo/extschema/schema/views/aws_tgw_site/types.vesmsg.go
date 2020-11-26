@@ -15,9 +15,10 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_network_firewall "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
+	ves_io_schema_site "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/site"
+	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -406,6 +407,16 @@ func (v *ValidateCreateSpecType) OperatingSystemVersionValidationRuleHandler(rul
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -420,10 +431,28 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("address"))
+		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["aws_parameters"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("aws_parameters"))
 		if err := fv(ctx, m.GetAwsParameters(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["coordinates"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coordinates"))
+		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
 
@@ -522,11 +551,24 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["operating_system_version"] = vFn
 
+	vrhAddress := v.AddressValidationRuleHandler
+	rulesAddress := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhAddress(rulesAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["address"] = vFn
+
 	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
 
 	v.FldValidators["tgw_security"] = SecurityConfigTypeValidator().Validate
 
 	v.FldValidators["vn_config"] = VnConfigurationValidator().Validate
+
+	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	return v
 }()
@@ -879,6 +921,16 @@ func (v *ValidateGetSpecType) OperatingSystemVersionValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -893,10 +945,28 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("address"))
+		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["aws_parameters"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("aws_parameters"))
 		if err := fv(ctx, m.GetAwsParameters(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["coordinates"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coordinates"))
+		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1019,6 +1089,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["operating_system_version"] = vFn
 
+	vrhAddress := v.AddressValidationRuleHandler
+	rulesAddress := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhAddress(rulesAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["address"] = vFn
+
 	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
 
 	v.FldValidators["tgw_security"] = SecurityConfigTypeValidator().Validate
@@ -1026,6 +1107,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["vpc_ip_prefixes"] = VPCIpPrefixesTypeValidator().Validate
 
 	v.FldValidators["vn_config"] = VnConfigurationValidator().Validate
+
+	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	v.FldValidators["tunnels"] = AWSVPNTunnelConfigTypeValidator().Validate
 
@@ -1322,6 +1405,16 @@ func (v *ValidateGlobalSpecType) OperatingSystemVersionValidationRuleHandler(rul
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -1336,10 +1429,28 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("address"))
+		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["aws_parameters"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("aws_parameters"))
 		if err := fv(ctx, m.GetAwsParameters(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["coordinates"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coordinates"))
+		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1480,6 +1591,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["operating_system_version"] = vFn
 
+	vrhAddress := v.AddressValidationRuleHandler
+	rulesAddress := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhAddress(rulesAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["address"] = vFn
+
 	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
 
 	v.FldValidators["tgw_security"] = SecurityConfigTypeValidator().Validate
@@ -1487,6 +1609,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["vpc_ip_prefixes"] = VPCIpPrefixesTypeValidator().Validate
 
 	v.FldValidators["vn_config"] = VnConfigurationValidator().Validate
+
+	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	v.FldValidators["tunnels"] = AWSVPNTunnelConfigTypeValidator().Validate
 
@@ -1625,6 +1749,16 @@ func (v *ValidateReplaceSpecType) OperatingSystemVersionValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -1637,6 +1771,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("address"))
+		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["coordinates"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coordinates"))
+		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
@@ -1721,11 +1873,24 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["operating_system_version"] = vFn
 
+	vrhAddress := v.AddressValidationRuleHandler
+	rulesAddress := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhAddress(rulesAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["address"] = vFn
+
 	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
 
 	v.FldValidators["tgw_security"] = SecurityConfigTypeValidator().Validate
 
 	v.FldValidators["vn_config"] = VnConfigurationValidator().Validate
+
+	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	return v
 }()
@@ -1773,19 +1938,52 @@ func (m *SecurityConfigType) Validate(ctx context.Context, opts ...db.ValidateOp
 
 func (m *SecurityConfigType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *SecurityConfigType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.ForwardProxyChoice == nil {
+		return []db.DRefInfo{}, nil
 	}
 
-	return drInfos, nil
+	var odrInfos []db.DRefInfo
+
+	switch m.GetForwardProxyChoice().(type) {
+	case *SecurityConfigType_NoForwardProxy:
+
+	case *SecurityConfigType_ActiveForwardProxyPolicies:
+		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_forward_proxy_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *SecurityConfigType_ForwardProxyAllowAll:
+
+	}
+
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -1819,55 +2017,22 @@ func (m *SecurityConfigType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, er
 	return drInfos, err
 }
 
-// GetDRefInfo for the field's type
-func (m *SecurityConfigType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
-	if m.ServicePolicyChoice == nil {
-		return []db.DRefInfo{}, nil
-	}
-
-	var odrInfos []db.DRefInfo
-
-	switch m.GetServicePolicyChoice().(type) {
-	case *SecurityConfigType_NoForwardProxyPolicy:
-
-	case *SecurityConfigType_ActiveForwardProxyPolicies:
-		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_forward_proxy_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
-
-	case *SecurityConfigType_ForwardProxyAllowAll:
-
-	}
-
-	return drInfos, err
-}
-
 type ValidateSecurityConfigType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSecurityConfigType) ForwardProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for forward_proxy_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateSecurityConfigType) NetworkPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for network_policy_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateSecurityConfigType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
 	}
 	return validatorFn, nil
 }
@@ -1884,6 +2049,53 @@ func (v *ValidateSecurityConfigType) Validate(ctx context.Context, pm interface{
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
+		val := m.GetForwardProxyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("forward_proxy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetForwardProxyChoice().(type) {
+	case *SecurityConfigType_NoForwardProxy:
+		if fv, exists := v.FldValidators["forward_proxy_choice.no_forward_proxy"]; exists {
+			val := m.GetForwardProxyChoice().(*SecurityConfigType_NoForwardProxy).NoForwardProxy
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("no_forward_proxy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SecurityConfigType_ActiveForwardProxyPolicies:
+		if fv, exists := v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"]; exists {
+			val := m.GetForwardProxyChoice().(*SecurityConfigType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("active_forward_proxy_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SecurityConfigType_ForwardProxyAllowAll:
+		if fv, exists := v.FldValidators["forward_proxy_choice.forward_proxy_allow_all"]; exists {
+			val := m.GetForwardProxyChoice().(*SecurityConfigType_ForwardProxyAllowAll).ForwardProxyAllowAll
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("forward_proxy_allow_all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
@@ -1922,53 +2134,6 @@ func (v *ValidateSecurityConfigType) Validate(ctx context.Context, pm interface{
 
 	}
 
-	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
-		val := m.GetServicePolicyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("service_policy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetServicePolicyChoice().(type) {
-	case *SecurityConfigType_NoForwardProxyPolicy:
-		if fv, exists := v.FldValidators["service_policy_choice.no_forward_proxy_policy"]; exists {
-			val := m.GetServicePolicyChoice().(*SecurityConfigType_NoForwardProxyPolicy).NoForwardProxyPolicy
-			vOpts := append(opts,
-				db.WithValidateField("service_policy_choice"),
-				db.WithValidateField("no_forward_proxy_policy"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *SecurityConfigType_ActiveForwardProxyPolicies:
-		if fv, exists := v.FldValidators["service_policy_choice.active_forward_proxy_policies"]; exists {
-			val := m.GetServicePolicyChoice().(*SecurityConfigType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
-			vOpts := append(opts,
-				db.WithValidateField("service_policy_choice"),
-				db.WithValidateField("active_forward_proxy_policies"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *SecurityConfigType_ForwardProxyAllowAll:
-		if fv, exists := v.FldValidators["service_policy_choice.forward_proxy_allow_all"]; exists {
-			val := m.GetServicePolicyChoice().(*SecurityConfigType_ForwardProxyAllowAll).ForwardProxyAllowAll
-			vOpts := append(opts,
-				db.WithValidateField("service_policy_choice"),
-				db.WithValidateField("forward_proxy_allow_all"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	return nil
 }
 
@@ -1984,6 +2149,17 @@ var DefaultSecurityConfigTypeValidator = func() *ValidateSecurityConfigType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
+	rulesForwardProxyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SecurityConfigType.forward_proxy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["forward_proxy_choice"] = vFn
+
 	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
 	rulesNetworkPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -1995,20 +2171,9 @@ var DefaultSecurityConfigTypeValidator = func() *ValidateSecurityConfigType {
 	}
 	v.FldValidators["network_policy_choice"] = vFn
 
-	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
-	rulesServicePolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SecurityConfigType.service_policy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["service_policy_choice"] = vFn
+	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
-
-	v.FldValidators["service_policy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	return v
 }()
@@ -3646,7 +3811,9 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.Address = f.GetAddress()
 	m.AwsParameters = f.GetAwsParameters()
+	m.Coordinates = f.GetCoordinates()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.VnConfig = f.GetVnConfig()
@@ -3660,7 +3827,9 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	f.Address = m1.Address
 	f.AwsParameters = m1.AwsParameters
+	f.Coordinates = m1.Coordinates
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.TgwSecurity = m1.TgwSecurity
 	f.VnConfig = m1.VnConfig
@@ -3672,7 +3841,9 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.Address = f.GetAddress()
 	m.AwsParameters = f.GetAwsParameters()
+	m.Coordinates = f.GetCoordinates()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.Tunnels = f.GetTunnels()
@@ -3688,7 +3859,9 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	f.Address = m1.Address
 	f.AwsParameters = m1.AwsParameters
+	f.Coordinates = m1.Coordinates
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.TgwSecurity = m1.TgwSecurity
 	f.Tunnels = m1.Tunnels
@@ -3702,6 +3875,8 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.Address = f.GetAddress()
+	m.Coordinates = f.GetCoordinates()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.VnConfig = f.GetVnConfig()
@@ -3715,6 +3890,8 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	f.Address = m1.Address
+	f.Coordinates = m1.Coordinates
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.TgwSecurity = m1.TgwSecurity
 	f.VnConfig = m1.VnConfig

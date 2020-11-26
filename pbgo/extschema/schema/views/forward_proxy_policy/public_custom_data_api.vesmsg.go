@@ -213,6 +213,15 @@ func (v *ValidateForwardProxyPolicyHitsId) Validate(ctx context.Context, pm inte
 
 	}
 
+	if fv, exists := v.FldValidators["virtual_host"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("virtual_host"))
+		if err := fv(ctx, m.GetVirtualHost(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 

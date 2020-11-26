@@ -15,8 +15,10 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_policy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	ves_io_schema_service_policy_rule "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
+	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -65,6 +67,12 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -72,6 +80,55 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.RuleChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetRuleChoice().(type) {
+	case *CreateSpecType_AllowList:
+		odrInfos, err = m.GetAllowList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "allow_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *CreateSpecType_DenyList:
+		odrInfos, err = m.GetDenyList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "deny_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *CreateSpecType_RuleList:
+		odrInfos, err = m.GetRuleList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "rule_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
 }
 
 func (m *CreateSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -223,6 +280,43 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetRuleChoice().(type) {
+	case *CreateSpecType_AllowList:
+		if fv, exists := v.FldValidators["rule_choice.allow_list"]; exists {
+			val := m.GetRuleChoice().(*CreateSpecType_AllowList).AllowList
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("allow_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DenyList:
+		if fv, exists := v.FldValidators["rule_choice.deny_list"]; exists {
+			val := m.GetRuleChoice().(*CreateSpecType_DenyList).DenyList
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("deny_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_RuleList:
+		if fv, exists := v.FldValidators["rule_choice.rule_list"]; exists {
+			val := m.GetRuleChoice().(*CreateSpecType_RuleList).RuleList
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("rule_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
@@ -349,6 +443,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["rules"] = vFn
 
+	v.FldValidators["rule_choice.allow_list"] = SourceListValidator().Validate
+	v.FldValidators["rule_choice.deny_list"] = SourceListValidator().Validate
+	v.FldValidators["rule_choice.rule_list"] = RuleListValidator().Validate
+
 	v.FldValidators["server_choice.server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["server_choice.server_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 
@@ -400,6 +498,12 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -413,6 +517,55 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.RuleChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetRuleChoice().(type) {
+	case *GetSpecType_AllowList:
+		odrInfos, err = m.GetAllowList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "allow_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *GetSpecType_DenyList:
+		odrInfos, err = m.GetDenyList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "deny_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *GetSpecType_RuleList:
+		odrInfos, err = m.GetRuleList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "rule_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
 }
 
 func (m *GetSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -629,6 +782,43 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	switch m.GetRuleChoice().(type) {
+	case *GetSpecType_AllowList:
+		if fv, exists := v.FldValidators["rule_choice.allow_list"]; exists {
+			val := m.GetRuleChoice().(*GetSpecType_AllowList).AllowList
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("allow_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DenyList:
+		if fv, exists := v.FldValidators["rule_choice.deny_list"]; exists {
+			val := m.GetRuleChoice().(*GetSpecType_DenyList).DenyList
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("deny_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_RuleList:
+		if fv, exists := v.FldValidators["rule_choice.rule_list"]; exists {
+			val := m.GetRuleChoice().(*GetSpecType_RuleList).RuleList
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("rule_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
@@ -774,6 +964,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["simple_rules"] = vFn
 
+	v.FldValidators["rule_choice.allow_list"] = SourceListValidator().Validate
+	v.FldValidators["rule_choice.deny_list"] = SourceListValidator().Validate
+	v.FldValidators["rule_choice.rule_list"] = RuleListValidator().Validate
+
 	v.FldValidators["server_choice.server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["server_choice.server_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 
@@ -831,6 +1025,18 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetOriginalRulesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -838,6 +1044,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	if fdrInfos, err := m.GetSimpleRulesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -885,6 +1097,96 @@ func (m *GlobalSpecType) GetDefaultForwardingClassesDBEntries(ctx context.Contex
 	}
 
 	return entries, nil
+}
+
+func (m *GlobalSpecType) GetOriginalRulesDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, ref := range m.GetOriginalRules() {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.original_rules[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy_rule.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "original_rules",
+			Ref:        ref,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetOriginalRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetOriginalRulesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "service_policy_rule.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: service_policy_rule")
+	}
+	for _, ref := range m.GetOriginalRules() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.RuleChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetRuleChoice().(type) {
+	case *GlobalSpecType_AllowList:
+		odrInfos, err = m.GetAllowList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "allow_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *GlobalSpecType_DenyList:
+		odrInfos, err = m.GetDenyList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "deny_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *GlobalSpecType_RuleList:
+		odrInfos, err = m.GetRuleList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "rule_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -951,6 +1253,56 @@ func (m *GlobalSpecType) GetSimpleRulesDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, err
+}
+
+func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	drInfos = append(drInfos, db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	})
+
+	return drInfos, nil
+}
+
+// GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "view_internal.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
+	}
+
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "view_internal.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
 }
 
 type ValidateGlobalSpecType struct {
@@ -1109,6 +1461,46 @@ func (v *ValidateGlobalSpecType) SimpleRulesValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) OriginalRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for original_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated original_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items original_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -1149,6 +1541,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["original_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("original_rules"))
+		if err := fv(ctx, m.GetOriginalRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["port_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("port_matcher"))
@@ -1163,6 +1563,43 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("role"))
 		if err := fv(ctx, m.GetRole(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetRuleChoice().(type) {
+	case *GlobalSpecType_AllowList:
+		if fv, exists := v.FldValidators["rule_choice.allow_list"]; exists {
+			val := m.GetRuleChoice().(*GlobalSpecType_AllowList).AllowList
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("allow_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DenyList:
+		if fv, exists := v.FldValidators["rule_choice.deny_list"]; exists {
+			val := m.GetRuleChoice().(*GlobalSpecType_DenyList).DenyList
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("deny_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_RuleList:
+		if fv, exists := v.FldValidators["rule_choice.rule_list"]; exists {
+			val := m.GetRuleChoice().(*GlobalSpecType_RuleList).RuleList
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("rule_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1236,6 +1673,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["simple_rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("simple_rules"))
 		if err := fv(ctx, m.GetSimpleRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["view_internal"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("view_internal"))
+		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1323,6 +1769,21 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["simple_rules"] = vFn
 
+	vrhOriginalRules := v.OriginalRulesValidationRuleHandler
+	rulesOriginalRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "256",
+	}
+	vFn, err = vrhOriginalRules(rulesOriginalRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.original_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["original_rules"] = vFn
+
+	v.FldValidators["rule_choice.allow_list"] = SourceListValidator().Validate
+	v.FldValidators["rule_choice.deny_list"] = SourceListValidator().Validate
+	v.FldValidators["rule_choice.rule_list"] = RuleListValidator().Validate
+
 	v.FldValidators["server_choice.server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["server_choice.server_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 
@@ -1331,6 +1792,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["role"] = ves_io_schema_policy.RoleMatcherTypeValidator().Validate
 
 	v.FldValidators["deny_info"] = ves_io_schema_policy.DenyInformationValidator().Validate
+
+	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -1378,6 +1841,12 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -1385,6 +1854,55 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.RuleChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetRuleChoice().(type) {
+	case *ReplaceSpecType_AllowList:
+		odrInfos, err = m.GetAllowList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "allow_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *ReplaceSpecType_DenyList:
+		odrInfos, err = m.GetDenyList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "deny_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *ReplaceSpecType_RuleList:
+		odrInfos, err = m.GetRuleList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "rule_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
 }
 
 func (m *ReplaceSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
@@ -1536,6 +2054,43 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	switch m.GetRuleChoice().(type) {
+	case *ReplaceSpecType_AllowList:
+		if fv, exists := v.FldValidators["rule_choice.allow_list"]; exists {
+			val := m.GetRuleChoice().(*ReplaceSpecType_AllowList).AllowList
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("allow_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DenyList:
+		if fv, exists := v.FldValidators["rule_choice.deny_list"]; exists {
+			val := m.GetRuleChoice().(*ReplaceSpecType_DenyList).DenyList
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("deny_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_RuleList:
+		if fv, exists := v.FldValidators["rule_choice.rule_list"]; exists {
+			val := m.GetRuleChoice().(*ReplaceSpecType_RuleList).RuleList
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("rule_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["rules"]; exists {
 		vOpts := append(opts, db.WithValidateField("rules"))
 		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
@@ -1662,6 +2217,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["rules"] = vFn
 
+	v.FldValidators["rule_choice.allow_list"] = SourceListValidator().Validate
+	v.FldValidators["rule_choice.deny_list"] = SourceListValidator().Validate
+	v.FldValidators["rule_choice.rule_list"] = RuleListValidator().Validate
+
 	v.FldValidators["server_choice.server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["server_choice.server_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 
@@ -1672,6 +2231,372 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *Rule) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Rule) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Rule) DeepCopy() *Rule {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Rule{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Rule) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Rule) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RuleValidator().Validate(ctx, m, opts...)
+}
+
+func (m *Rule) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSpecDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *Rule) GetSpecDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.Spec == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	driSet, err = m.Spec.GetDRefInfo()
+	if err != nil {
+		return nil, err
+	}
+	for _, dri := range driSet {
+		dri.DRField = "spec." + dri.DRField
+		drInfos = append(drInfos, dri)
+	}
+
+	return drInfos, err
+}
+
+type ValidateRule struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRule) SpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for spec")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_service_policy_rule.GlobalSpecTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Rule)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Rule got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["spec"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("spec"))
+		if err := fv(ctx, m.GetSpec(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRuleValidator = func() *ValidateRule {
+	v := &ValidateRule{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMetadata(rulesMetadata)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Rule.metadata: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metadata"] = vFn
+
+	vrhSpec := v.SpecValidationRuleHandler
+	rulesSpec := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSpec(rulesSpec)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Rule.spec: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["spec"] = vFn
+
+	return v
+}()
+
+func RuleValidator() db.Validator {
+	return DefaultRuleValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RuleList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RuleList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RuleList) DeepCopy() *RuleList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RuleList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RuleList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RuleList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RuleListValidator().Validate(ctx, m, opts...)
+}
+
+func (m *RuleList) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *RuleList) GetRulesDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.Rules == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	for idx, e := range m.Rules {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, dri := range driSet {
+			dri.DRField = fmt.Sprintf("rules[%v].%s", idx, dri.DRField)
+			drInfos = append(drInfos, dri)
+		}
+	}
+
+	return drInfos, err
+}
+
+type ValidateRuleList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRuleList) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*Rule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := RuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*Rule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*Rule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRuleList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RuleList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RuleList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("rules"))
+		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRuleListValidator = func() *ValidateRuleList {
+	v := &ValidateRuleList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRules := v.RulesValidationRuleHandler
+	rulesRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "256",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRules(rulesRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RuleList.rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rules"] = vFn
+
+	return v
+}()
+
+func RuleListValidator() db.Validator {
+	return DefaultRuleListValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1982,6 +2907,15 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["metric_name_label"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metric_name_label"))
+		if err := fv(ctx, m.GetMetricNameLabel(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))
@@ -2012,6 +2946,15 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 	if fv, exists := v.FldValidators["scheme"]; exists {
 		vOpts := append(opts, db.WithValidateField("scheme"))
 		if err := fv(ctx, m.GetScheme(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
+		if err := fv(ctx, m.GetTlsFingerprintMatcher(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2134,11 +3077,657 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 
 	v.FldValidators["dst_ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
 
+	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
+
 	return v
 }()
 
 func SimpleRuleValidator() db.Validator {
 	return DefaultSimpleRuleValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SourceList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SourceList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SourceList) DeepCopy() *SourceList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SourceList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SourceList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SourceList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SourceListValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SourceList) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAsnSetDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetIpPrefixSetDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *SourceList) GetAsnSetDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, vref := range m.GetAsnSet() {
+		if vref == nil {
+			return nil, fmt.Errorf("SourceList.asn_set[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("bgp_asn_set.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "bgp_asn_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "asn_set",
+			Ref:        vdRef,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetAsnSetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SourceList) GetAsnSetDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "bgp_asn_set.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: bgp_asn_set")
+	}
+	for i, vref := range m.GetAsnSet() {
+		if vref == nil {
+			return nil, fmt.Errorf("SourceList.asn_set[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "bgp_asn_set.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *SourceList) GetIpPrefixSetDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, vref := range m.GetIpPrefixSet() {
+		if vref == nil {
+			return nil, fmt.Errorf("SourceList.ip_prefix_set[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("ip_prefix_set.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ip_prefix_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "ip_prefix_set",
+			Ref:        vdRef,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetIpPrefixSetDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SourceList) GetIpPrefixSetDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "ip_prefix_set.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: ip_prefix_set")
+	}
+	for i, vref := range m.GetIpPrefixSet() {
+		if vref == nil {
+			return nil, fmt.Errorf("SourceList.ip_prefix_set[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "ip_prefix_set.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateSourceList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSourceList) DefaultActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for default_action_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateSourceList) IpPrefixSetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ip_prefix_set")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ip_prefix_set")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ip_prefix_set")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSourceList) AsnSetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for asn_set")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated asn_set")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items asn_set")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSourceList) CountryListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema_policy.CountryCode)
+		return int32(i)
+	}
+	// ves_io_schema_policy.CountryCode_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema_policy.CountryCode_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for country_list")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema_policy.CountryCode, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for country_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ves_io_schema_policy.CountryCode)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ves_io_schema_policy.CountryCode, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated country_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items country_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSourceList) TlsFingerprintClassesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema_policy.KnownTlsFingerprintClass)
+		return int32(i)
+	}
+	// ves_io_schema_policy.KnownTlsFingerprintClass_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema_policy.KnownTlsFingerprintClass_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tls_fingerprint_classes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema_policy.KnownTlsFingerprintClass, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for tls_fingerprint_classes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ves_io_schema_policy.KnownTlsFingerprintClass)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ves_io_schema_policy.KnownTlsFingerprintClass, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated tls_fingerprint_classes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items tls_fingerprint_classes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSourceList) TlsFingerprintValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for tls_fingerprint_values")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for tls_fingerprint_values")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated tls_fingerprint_values")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items tls_fingerprint_values")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSourceList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SourceList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SourceList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["asn_list"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("asn_list"))
+		if err := fv(ctx, m.GetAsnList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["asn_set"]; exists {
+		vOpts := append(opts, db.WithValidateField("asn_set"))
+		if err := fv(ctx, m.GetAsnSet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["country_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("country_list"))
+		if err := fv(ctx, m.GetCountryList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["default_action_choice"]; exists {
+		val := m.GetDefaultActionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("default_action_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDefaultActionChoice().(type) {
+	case *SourceList_DefaultActionNextPolicy:
+		if fv, exists := v.FldValidators["default_action_choice.default_action_next_policy"]; exists {
+			val := m.GetDefaultActionChoice().(*SourceList_DefaultActionNextPolicy).DefaultActionNextPolicy
+			vOpts := append(opts,
+				db.WithValidateField("default_action_choice"),
+				db.WithValidateField("default_action_next_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SourceList_DefaultActionDeny:
+		if fv, exists := v.FldValidators["default_action_choice.default_action_deny"]; exists {
+			val := m.GetDefaultActionChoice().(*SourceList_DefaultActionDeny).DefaultActionDeny
+			vOpts := append(opts,
+				db.WithValidateField("default_action_choice"),
+				db.WithValidateField("default_action_deny"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SourceList_DefaultActionAllow:
+		if fv, exists := v.FldValidators["default_action_choice.default_action_allow"]; exists {
+			val := m.GetDefaultActionChoice().(*SourceList_DefaultActionAllow).DefaultActionAllow
+			vOpts := append(opts,
+				db.WithValidateField("default_action_choice"),
+				db.WithValidateField("default_action_allow"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ip_prefix_set"]; exists {
+		vOpts := append(opts, db.WithValidateField("ip_prefix_set"))
+		if err := fv(ctx, m.GetIpPrefixSet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["prefix_list"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("prefix_list"))
+		if err := fv(ctx, m.GetPrefixList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_fingerprint_classes"]; exists {
+		vOpts := append(opts, db.WithValidateField("tls_fingerprint_classes"))
+		if err := fv(ctx, m.GetTlsFingerprintClasses(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_fingerprint_values"]; exists {
+		vOpts := append(opts, db.WithValidateField("tls_fingerprint_values"))
+		if err := fv(ctx, m.GetTlsFingerprintValues(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSourceListValidator = func() *ValidateSourceList {
+	v := &ValidateSourceList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDefaultActionChoice := v.DefaultActionChoiceValidationRuleHandler
+	rulesDefaultActionChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDefaultActionChoice(rulesDefaultActionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SourceList.default_action_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["default_action_choice"] = vFn
+
+	vrhIpPrefixSet := v.IpPrefixSetValidationRuleHandler
+	rulesIpPrefixSet := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhIpPrefixSet(rulesIpPrefixSet)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SourceList.ip_prefix_set: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip_prefix_set"] = vFn
+
+	vrhAsnSet := v.AsnSetValidationRuleHandler
+	rulesAsnSet := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhAsnSet(rulesAsnSet)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SourceList.asn_set: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["asn_set"] = vFn
+
+	vrhCountryList := v.CountryListValidationRuleHandler
+	rulesCountryList := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhCountryList(rulesCountryList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SourceList.country_list: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["country_list"] = vFn
+
+	vrhTlsFingerprintClasses := v.TlsFingerprintClassesValidationRuleHandler
+	rulesTlsFingerprintClasses := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhTlsFingerprintClasses(rulesTlsFingerprintClasses)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SourceList.tls_fingerprint_classes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tls_fingerprint_classes"] = vFn
+
+	vrhTlsFingerprintValues := v.TlsFingerprintValuesValidationRuleHandler
+	rulesTlsFingerprintValues := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.len": "32",
+		"ves.io.schema.rules.repeated.max_items":        "16",
+		"ves.io.schema.rules.repeated.unique":           "true",
+	}
+	vFn, err = vrhTlsFingerprintValues(rulesTlsFingerprintValues)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SourceList.tls_fingerprint_values: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tls_fingerprint_values"] = vFn
+
+	v.FldValidators["prefix_list"] = ves_io_schema_views.PrefixStringListTypeValidator().Validate
+
+	v.FldValidators["asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
+
+	return v
+}()
+
+func SourceListValidator() db.Validator {
+	return DefaultSourceListValidator
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetRuleChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.RuleChoice.(type) {
+	case nil:
+		o.RuleChoice = nil
+
+	case *CreateSpecType_AllowList:
+		o.RuleChoice = &GlobalSpecType_AllowList{AllowList: of.AllowList}
+
+	case *CreateSpecType_DenyList:
+		o.RuleChoice = &GlobalSpecType_DenyList{DenyList: of.DenyList}
+
+	case *CreateSpecType_RuleList:
+		o.RuleChoice = &GlobalSpecType_RuleList{RuleList: of.RuleList}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetRuleChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.RuleChoice.(type) {
+	case nil:
+		r.RuleChoice = nil
+
+	case *GlobalSpecType_AllowList:
+		r.RuleChoice = &CreateSpecType_AllowList{AllowList: of.AllowList}
+
+	case *GlobalSpecType_DenyList:
+		r.RuleChoice = &CreateSpecType_DenyList{DenyList: of.DenyList}
+
+	case *GlobalSpecType_RuleList:
+		r.RuleChoice = &CreateSpecType_RuleList{RuleList: of.RuleList}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
@@ -2194,6 +3783,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	}
 	m.Algo = f.GetAlgo()
 	m.PortMatcher = f.GetPortMatcher()
+	m.GetRuleChoiceFromGlobalSpecType(f)
 	m.Rules = f.GetRules()
 	m.GetServerChoiceFromGlobalSpecType(f)
 }
@@ -2206,8 +3796,50 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 	f.Algo = m1.Algo
 	f.PortMatcher = m1.PortMatcher
+	m1.SetRuleChoiceToGlobalSpecType(f)
 	f.Rules = m1.Rules
 	m1.SetServerChoiceToGlobalSpecType(f)
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetRuleChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.RuleChoice.(type) {
+	case nil:
+		o.RuleChoice = nil
+
+	case *GetSpecType_AllowList:
+		o.RuleChoice = &GlobalSpecType_AllowList{AllowList: of.AllowList}
+
+	case *GetSpecType_DenyList:
+		o.RuleChoice = &GlobalSpecType_DenyList{DenyList: of.DenyList}
+
+	case *GetSpecType_RuleList:
+		o.RuleChoice = &GlobalSpecType_RuleList{RuleList: of.RuleList}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetRuleChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.RuleChoice.(type) {
+	case nil:
+		r.RuleChoice = nil
+
+	case *GlobalSpecType_AllowList:
+		r.RuleChoice = &GetSpecType_AllowList{AllowList: of.AllowList}
+
+	case *GlobalSpecType_DenyList:
+		r.RuleChoice = &GetSpecType_DenyList{DenyList: of.DenyList}
+
+	case *GlobalSpecType_RuleList:
+		r.RuleChoice = &GetSpecType_RuleList{RuleList: of.RuleList}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -2263,6 +3895,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	}
 	m.Algo = f.GetAlgo()
 	m.PortMatcher = f.GetPortMatcher()
+	m.GetRuleChoiceFromGlobalSpecType(f)
 	m.Rules = f.GetRules()
 	m.GetServerChoiceFromGlobalSpecType(f)
 	m.SimpleRules = f.GetSimpleRules()
@@ -2276,9 +3909,51 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 	f.Algo = m1.Algo
 	f.PortMatcher = m1.PortMatcher
+	m1.SetRuleChoiceToGlobalSpecType(f)
 	f.Rules = m1.Rules
 	m1.SetServerChoiceToGlobalSpecType(f)
 	f.SimpleRules = m1.SimpleRules
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetRuleChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.RuleChoice.(type) {
+	case nil:
+		o.RuleChoice = nil
+
+	case *ReplaceSpecType_AllowList:
+		o.RuleChoice = &GlobalSpecType_AllowList{AllowList: of.AllowList}
+
+	case *ReplaceSpecType_DenyList:
+		o.RuleChoice = &GlobalSpecType_DenyList{DenyList: of.DenyList}
+
+	case *ReplaceSpecType_RuleList:
+		o.RuleChoice = &GlobalSpecType_RuleList{RuleList: of.RuleList}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetRuleChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.RuleChoice.(type) {
+	case nil:
+		r.RuleChoice = nil
+
+	case *GlobalSpecType_AllowList:
+		r.RuleChoice = &ReplaceSpecType_AllowList{AllowList: of.AllowList}
+
+	case *GlobalSpecType_DenyList:
+		r.RuleChoice = &ReplaceSpecType_DenyList{DenyList: of.DenyList}
+
+	case *GlobalSpecType_RuleList:
+		r.RuleChoice = &ReplaceSpecType_RuleList{RuleList: of.RuleList}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -2334,6 +4009,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	}
 	m.Algo = f.GetAlgo()
 	m.PortMatcher = f.GetPortMatcher()
+	m.GetRuleChoiceFromGlobalSpecType(f)
 	m.Rules = f.GetRules()
 	m.GetServerChoiceFromGlobalSpecType(f)
 }
@@ -2346,6 +4022,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 	f.Algo = m1.Algo
 	f.PortMatcher = m1.PortMatcher
+	m1.SetRuleChoiceToGlobalSpecType(f)
 	f.Rules = m1.Rules
 	m1.SetServerChoiceToGlobalSpecType(f)
 }

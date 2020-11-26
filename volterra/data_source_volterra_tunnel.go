@@ -15,8 +15,8 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 	"gopkg.volterra.us/stdlib/server"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_tunnel "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tunnel"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_tunnel "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/tunnel"
 )
 
 // dataSourceTunnel is implementation of Volterra's Namespace resource read

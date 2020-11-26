@@ -23,11 +23,11 @@ import (
 
 	google_protobuf1 "github.com/gogo/protobuf/types"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	ves_io_schema5 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema5 "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
 	strings "strings"
 

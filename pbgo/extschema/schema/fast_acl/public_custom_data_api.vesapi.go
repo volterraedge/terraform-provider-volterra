@@ -352,7 +352,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-fast_acl-CustomDataAPI-FastACLHits"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fast_acl-CustomDataAPI-FastACLHits"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fast_acl.CustomDataAPI.FastACLHits"
             },

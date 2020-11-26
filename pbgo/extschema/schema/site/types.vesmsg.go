@@ -15,7 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -5238,6 +5238,15 @@ func (v *ValidateTunnelConnectionStatus) Validate(ctx context.Context, pm interf
 
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tunnelName"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tunnelName"))
+		if err := fv(ctx, m.GetTunnelName(), vOpts...); err != nil {
 			return err
 		}
 

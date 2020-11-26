@@ -9,8 +9,8 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	ves_io_schema_cloud_cred "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials"
-	ves_io_schema_aws_tgw_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
+	ves_io_schema_cloud_cred "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials"
+	ves_io_schema_aws_tgw_site "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
 )
 
 func TestAWSTGWSiteState(t *testing.T) {
@@ -84,7 +84,7 @@ func testAWSTGWSiteConfig(resourceName, name string) string {
 			}
 			tgw_security {
 			  no_network_policy = true
-			  no_forward_proxy_policy = true
+			  no_forward_proxy = true
 			}
 			vn_config {
 			  no_global_network = true

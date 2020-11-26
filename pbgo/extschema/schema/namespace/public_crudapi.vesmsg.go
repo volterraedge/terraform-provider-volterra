@@ -15,7 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -802,6 +802,15 @@ func (v *ValidateListResponseItem) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))
@@ -838,6 +847,15 @@ func (v *ValidateListResponseItem) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	if fv, exists := v.FldValidators["system_metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("system_metadata"))
+		if err := fv(ctx, m.GetSystemMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tenant"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tenant"))
@@ -866,6 +884,8 @@ var DefaultListResponseItemValidator = func() *ValidateListResponseItem {
 	v.FldValidators["object"] = ObjectValidator().Validate
 
 	v.FldValidators["get_spec"] = GetSpecTypeValidator().Validate
+
+	v.FldValidators["metadata"] = ves_io_schema.ObjectGetMetaTypeValidator().Validate
 
 	return v
 }()

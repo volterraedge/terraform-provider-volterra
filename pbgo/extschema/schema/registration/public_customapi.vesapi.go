@@ -835,7 +835,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-registration-CustomAPI-ListRegistrationsByState"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-CustomAPI-ListRegistrationsByState"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.ListRegistrationsByState"
             },
@@ -1095,7 +1095,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-registration-CustomAPI-RegistrationCreate"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-CustomAPI-RegistrationCreate"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.RegistrationCreate"
             },
@@ -1179,7 +1179,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-registration-CustomAPI-RegistrationConfig"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-CustomAPI-RegistrationConfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.RegistrationConfig"
             },
@@ -1533,6 +1533,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "labels",
                     "x-displayname": "Labels"
                 },
+                "metadata": {
+                    "description": " If list request has report_fields set then metadata will\n contain all the metadata associated with the object.",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectGetMetaType",
+                    "x-displayname": "Metadata"
+                },
                 "name": {
                     "type": "string",
                     "description": " The name of this registration\n\nExample: - \"name\"-",
@@ -1548,7 +1554,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-example": "ns1"
                 },
                 "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec",
+                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
                     "title": "object",
                     "$ref": "#/definitions/registrationObject",
                     "x-displayname": "Object"
@@ -1558,6 +1564,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "system_metadata": {
+                    "description": " If list request has report_fields set then system_metadata will\n contain all the system generated details of this object.",
+                    "title": "system_metadata",
+                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
+                    "x-displayname": "System Metadata"
                 },
                 "tenant": {
                     "type": "string",
@@ -1900,6 +1912,59 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "schemaObjectGetMetaType": {
+            "type": "object",
+            "description": "ObjectGetMetaType is metadata that can be specified in Get/Create response of an object.",
+            "title": "ObjectGetMetaType",
+            "x-displayname": "Get Metadata",
+            "x-ves-proto-message": "ves.io.schema.ObjectGetMetaType",
+            "properties": {
+                "annotations": {
+                    "type": "object",
+                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
+                    "title": "annotations",
+                    "x-displayname": "Annotation",
+                    "x-ves-example": "value"
+                },
+                "description": {
+                    "type": "string",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "title": "description",
+                    "x-displayname": "Description",
+                    "x-ves-example": "Virtual Host for acmecorp website"
+                },
+                "disable": {
+                    "type": "boolean",
+                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
+                    "title": "disable",
+                    "format": "boolean",
+                    "x-displayname": "Disable",
+                    "x-ves-example": "true"
+                },
+                "labels": {
+                    "type": "object",
+                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
+                    "title": "labels",
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-required": "true"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "staging"
+                }
+            }
+        },
         "schemaObjectMetaType": {
             "type": "object",
             "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
@@ -2017,6 +2082,94 @@ var CustomAPISwaggerJSON string = `{
             "default": "SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL",
             "x-displayname": "Tunnel type",
             "x-ves-proto-enum": "ves.io.schema.SiteToSiteTunnelType"
+        },
+        "schemaSystemObjectGetMetaType": {
+            "type": "object",
+            "description": "SystemObjectGetMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
+            "title": "SystemObjectGetMetaType",
+            "x-displayname": "System Metadata",
+            "x-ves-proto-message": "ves.io.schema.SystemObjectGetMetaType",
+            "properties": {
+                "creation_timestamp": {
+                    "type": "string",
+                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
+                    "title": "creation_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Creation Timestamp"
+                },
+                "creator_class": {
+                    "type": "string",
+                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
+                    "title": "creator_class",
+                    "x-displayname": "Creator Class",
+                    "x-ves-example": "prism"
+                },
+                "creator_id": {
+                    "type": "string",
+                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
+                    "title": "creator_id",
+                    "x-displayname": "Creator ID",
+                    "x-ves-example": "admin@acmecorp.com"
+                },
+                "deletion_timestamp": {
+                    "type": "string",
+                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n \n Populated by the system when a graceful deletion is requested.\n Read-only.",
+                    "title": "deletion_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Deletion Timestamp"
+                },
+                "finalizers": {
+                    "type": "array",
+                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
+                    "title": "finalizers",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Finalizers",
+                    "x-ves-example": "value"
+                },
+                "initializers": {
+                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n \n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
+                    "title": "initializers",
+                    "$ref": "#/definitions/schemaInitializersType",
+                    "x-displayname": "Initializers"
+                },
+                "modification_timestamp": {
+                    "type": "string",
+                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
+                    "title": "modification_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Modification Timestamp"
+                },
+                "object_index": {
+                    "type": "integer",
+                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
+                    "title": "object_index",
+                    "format": "int64",
+                    "x-displayname": "Object Index",
+                    "x-ves-example": "0"
+                },
+                "owner_view": {
+                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
+                    "title": "owner_view",
+                    "$ref": "#/definitions/schemaViewRefType",
+                    "x-displayname": "Owner View"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
         },
         "schemaSystemObjectMetaType": {
             "type": "object",
@@ -2492,12 +2645,13 @@ var CustomAPISwaggerJSON string = `{
         },
         "siteLinkQuality": {
             "type": "string",
-            "description": "Link quality determined by VER using different probes\n\nUnknown quality\nLink quality is good\nLink quality is poor",
+            "description": "Link quality determined by VER using different probes\n\nUnknown quality\nLink quality is good\nLink quality is poor\n - QUALITY_DISABLED: Quality disabled",
             "title": "Link quality",
             "enum": [
                 "QUALITY_UNKNOWN",
                 "QUALITY_GOOD",
-                "QUALITY_POOR"
+                "QUALITY_POOR",
+                "QUALITY_DISABLED"
             ],
             "default": "QUALITY_UNKNOWN",
             "x-displayname": "Link quality",

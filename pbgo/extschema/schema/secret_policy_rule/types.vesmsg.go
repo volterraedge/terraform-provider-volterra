@@ -15,8 +15,8 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_policy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/policy"
 )
 
 var (
@@ -218,6 +218,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhAction := v.ActionValidationRuleHandler
 	rulesAction := map[string]string{
+		"ves.io.schema.rules.enum.in":          "[0,1]",
 		"ves.io.schema.rules.message.required": "true",
 	}
 	vFn, err = vrhAction(rulesAction)
@@ -431,6 +432,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhAction := v.ActionValidationRuleHandler
 	rulesAction := map[string]string{
+		"ves.io.schema.rules.enum.in":          "[0,1]",
 		"ves.io.schema.rules.message.required": "true",
 	}
 	vFn, err = vrhAction(rulesAction)
@@ -644,6 +646,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhAction := v.ActionValidationRuleHandler
 	rulesAction := map[string]string{
+		"ves.io.schema.rules.enum.in":          "[0,1]",
 		"ves.io.schema.rules.message.required": "true",
 	}
 	vFn, err = vrhAction(rulesAction)
@@ -857,6 +860,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhAction := v.ActionValidationRuleHandler
 	rulesAction := map[string]string{
+		"ves.io.schema.rules.enum.in":          "[0,1]",
 		"ves.io.schema.rules.message.required": "true",
 	}
 	vFn, err = vrhAction(rulesAction)

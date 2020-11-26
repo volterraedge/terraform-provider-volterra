@@ -13,13 +13,13 @@ import (
 
 	_ "github.com/gogo/protobuf/gogoproto"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema4 "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
 	strconv "strconv"
 
@@ -67,8 +67,8 @@ func (SchemeType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes,
 // x-displayName: "Virtual IP Discovery"
 // How is the Virtual IP discovery done
 // Two modes are possible
-//   DNS_DELEGATION: Program DNS delegation for a sub-domain in external k8s cluster
-//   PUBLISH_SERVICE: Create/Register a service in external k8s/consul cluster
+//   DNS_DELEGATION: Program DNS delegation for a sub-domain in external K8s cluster
+//   PUBLISH_SERVICE: Create/Register a service in external K8s/consul cluster
 type VirtualIPDiscoveryType int32
 
 const (
@@ -99,10 +99,10 @@ type K8SDNSMode int32
 
 const (
 	// x-displayName: "Core DNS"
-	// CoreDNS: Whether external k8s cluster is running core-dns
+	// CoreDNS: Whether external K8s cluster is running core-dns
 	CORE_DNS K8SDNSMode = 0
 	// x-displayName: "K8s DNS"
-	// KubeDNS: External k8s cluster is running kube-dns
+	// KubeDNS: External K8s cluster is running kube-dns
 	KUBE_DNS K8SDNSMode = 1
 )
 
@@ -444,7 +444,7 @@ func (m *RestConfigType) GetTlsInfo() *TLSClientConfigType {
 // x-displayName: "K8s API Server"
 // K8S API server access
 type K8SAccessInfo struct {
-	// Oneof for k8s config
+	// Oneof for K8s config
 	//
 	// x-displayName: "Select Kubernetes Credentials"
 	// x-required
@@ -798,7 +798,7 @@ type VipDiscoveryInfoType struct {
 	// How is Virtual IP discovery performed
 	// Two modes are possible
 	//   DNS_DELEGATION: Program DNS delegation for a sub-domain in external cluster
-	//   PUBLISH_SERVICE: Create/Register a service in external k8s/consul cluster
+	//   PUBLISH_SERVICE: Create/Register a service in external K8s/consul cluster
 	Type VirtualIPDiscoveryType `protobuf:"varint,2,opt,name=type,proto3,enum=ves.io.schema.discovery.VirtualIPDiscoveryType" json:"type,omitempty"`
 	// DNS delegation sub-domain
 	//
@@ -812,14 +812,14 @@ type VipDiscoveryInfoType struct {
 	//
 	// x-displayName: "DNS Mode"
 	// When virtual IP is published with DNS delegation, this field indicates whether
-	// external k8s is running core DNS or kube DNS
+	// external K8s is running core DNS or kube DNS
 	DnsMode K8SDNSMode `protobuf:"varint,4,opt,name=dns_mode,json=dnsMode,proto3,enum=ves.io.schema.discovery.K8SDNSMode" json:"dns_mode,omitempty"`
 	// default namespace
 	//
 	// x-displayName: "Default Namespace"
 	// When virtual IP is published with "PUBLISH_SERVICE" mode, this field indicates the namespace
 	// where the service/endpoints needs to be created if the domain name doesn't specify it
-	// explicitly. K8S administrator of the external k8s should ensure this namespace is created
+	// explicitly. K8S administrator of the external K8s should ensure this namespace is created
 	Namespace string `protobuf:"bytes,5,opt,name=namespace,proto3" json:"namespace,omitempty"`
 }
 
@@ -1246,7 +1246,7 @@ func _ConsulVipDiscoveryInfoType_OneofSizer(msg proto.Message) (n int) {
 	return n
 }
 
-// k8s discovery type
+// K8s discovery type
 //
 // x-displayName: "K8S Discovery Configuration"
 // Discovery configuration for K8s.
@@ -1345,7 +1345,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Type of Discovery"
 	// x-required
-	// Type of discovery k8s or consul
+	// Type of discovery K8s or consul
 	Type ves_io_schema4.DiscoveryType `protobuf:"varint,2,opt,name=type,proto3,enum=ves.io.schema.DiscoveryType" json:"type,omitempty"`
 	// VIP publish
 	//

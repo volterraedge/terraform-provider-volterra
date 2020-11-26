@@ -28,8 +28,8 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	object "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	object "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
 )
 
 var (
@@ -994,7 +994,19 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
+func (s *APISrv) validateTransport(ctx context.Context) error {
+	if s.sf.IsTransportNotSupported("ves.io.schema.views.gcp_vpc_site.crudapi.API", server.TransportFromContext(ctx)) {
+		userMsg := fmt.Sprintf("ves.io.schema.views.gcp_vpc_site.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		return server.GRPCStatusFromError(err).Err()
+	}
+	return nil
+}
+
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.gcp_vpc_site.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1019,6 +1031,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1043,6 +1058,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.gcp_vpc_site.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1065,6 +1083,9 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.gcp_vpc_site.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1116,6 +1137,9 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.gcp_vpc_site.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1494,7 +1518,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-gcp_vpc_site-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-gcp_vpc_site-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.gcp_vpc_site.crudapi.API.Get"
             },
@@ -1569,7 +1593,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-gcp_vpc_site-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-gcp_vpc_site-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.gcp_vpc_site.crudapi.API.Delete"
             },
@@ -1652,7 +1676,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-gcp_vpc_site-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-gcp_vpc_site-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.gcp_vpc_site.crudapi.API.Replace"
             },
@@ -1781,7 +1805,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-gcp_vpc_site-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-gcp_vpc_site-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.gcp_vpc_site.crudapi.API.List"
             },
@@ -1858,7 +1882,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-gcp_vpc_site-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-gcp_vpc_site-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.gcp_vpc_site.crudapi.API.Create"
             },
@@ -1987,7 +2011,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-gcp_vpc_site-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-gcp_vpc_site-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.gcp_vpc_site.crudapi.API.ListStream"
             },
@@ -2191,15 +2215,15 @@ var APISwaggerJSON string = `{
             "description": "Two interface GCP ingress/egress site",
             "title": "GCP Ingress Egress Gateway",
             "x-displayname": "GCP Ingress/Egress Gateway",
+            "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
-            "x-ves-oneof-field-service_policy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy_policy\"]",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GCPVPCIngressEgressGwType",
             "properties": {
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy_policy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
                     "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
                 },
@@ -2208,17 +2232,8 @@ var APISwaggerJSON string = `{
                     "title": "Manage Network Policy",
                     "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
                 },
-                "az_nodes": {
-                    "type": "array",
-                    "description": " Only Single zone or Three nodes are supported currently.",
-                    "title": "Nodes",
-                    "items": {
-                        "$ref": "#/definitions/viewsGCPVPCTwoInterfaceNodeType"
-                    },
-                    "x-displayname": "Ingress/Egress Gateway (two Interface) Nodes"
-                },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy_policy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2228,6 +2243,17 @@ var APISwaggerJSON string = `{
                     "title": "GCP Certified Hardware",
                     "x-displayname": "GCP Certified Hardware",
                     "x-ves-example": "gcp-byol-multi-nic-voltmesh",
+                    "x-ves-required": "true"
+                },
+                "gcp_zone_names": {
+                    "type": "array",
+                    "description": " x-required\n List of zones when instances will be created, needs to match with region selected.\n\nExample: - \"us-west1-a, us-west1-b, us-west1-c\"-\nRequired: YES",
+                    "title": "GCP zones",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "GCP zone names",
+                    "x-ves-example": "us-west1-a, us-west1-b, us-west1-c",
                     "x-ves-required": "true"
                 },
                 "global_network_list": {
@@ -2246,7 +2272,13 @@ var APISwaggerJSON string = `{
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType"
                 },
-                "no_forward_proxy_policy": {
+                "inside_subnet": {
+                    "description": " Subnets for the inside interface of the node, should be in inside network",
+                    "title": "Subnet",
+                    "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
+                    "x-displayname": "Subnet for Inside Interface"
+                },
+                "no_forward_proxy": {
                     "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
                     "$ref": "#/definitions/schemaEmpty"
@@ -2271,6 +2303,13 @@ var APISwaggerJSON string = `{
                     "title": "Do Not Manage Static Routes",
                     "$ref": "#/definitions/schemaEmpty"
                 },
+                "node_number": {
+                    "type": "integer",
+                    "description": " Number of nodes to created, 1 or 3 supported",
+                    "title": "Number of nodes",
+                    "format": "int64",
+                    "x-displayname": "Number of nodes"
+                },
                 "outside_network": {
                     "description": " Network Subnets for the outside interface of the node",
                     "title": "Network",
@@ -2281,6 +2320,12 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                },
+                "outside_subnet": {
+                    "description": " Subnets for the outside interface of the node, should be in outside network",
+                    "title": "Subnet",
+                    "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
+                    "x-displayname": "Subnet for Outside Interface"
                 }
             }
         },
@@ -2289,19 +2334,9 @@ var APISwaggerJSON string = `{
             "description": "Single interface GCP ingress site",
             "title": "GCP Ingress Gateway",
             "x-displayname": "GCP Ingress Gateway",
-            "x-ves-displayorder": "1,2",
+            "x-ves-displayorder": "1,4,6,2,5",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GCPVPCIngressGwType",
             "properties": {
-                "az_nodes": {
-                    "type": "array",
-                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.\nRequired: YES",
-                    "title": "Nodes",
-                    "items": {
-                        "$ref": "#/definitions/viewsGCPVPCOneInterfaceNodeType"
-                    },
-                    "x-displayname": "Ingress Gateway (One Interface) Nodes in AZ",
-                    "x-ves-required": "true"
-                },
                 "gcp_certified_hw": {
                     "type": "string",
                     "description": " Name for GCP certified hardware.\n\nExample: - \"gcp-byol-voltmesh\"-\nRequired: YES",
@@ -2310,11 +2345,35 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "gcp-byol-voltmesh",
                     "x-ves-required": "true"
                 },
+                "gcp_zone_names": {
+                    "type": "array",
+                    "description": " x-required\n List of zones when instances will be created, needs to match with region selected.\n\nExample: - \"us-west1-a, us-west1-b, us-west1-c\"-\nRequired: YES",
+                    "title": "GCP zones",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "GCP zone names",
+                    "x-ves-example": "us-west1-a, us-west1-b, us-west1-c",
+                    "x-ves-required": "true"
+                },
                 "local_network": {
                     "description": " Network Subnets for the local interface of the node",
                     "title": "Network",
                     "$ref": "#/definitions/viewsGCPVPCNetworkChoiceType",
                     "x-displayname": "GCP VPC Network for Local Interface"
+                },
+                "local_subnet": {
+                    "description": " Subnets for the local interface of the node, should be in local network",
+                    "title": "Subnet",
+                    "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
+                    "x-displayname": "Subnet for local Interface"
+                },
+                "node_number": {
+                    "type": "integer",
+                    "description": " Number of nodes to created, 1 or 3 supported",
+                    "title": "Number of nodes",
+                    "format": "int64",
+                    "x-displayname": "Number of nodes"
                 }
             }
         },
@@ -2323,14 +2382,14 @@ var APISwaggerJSON string = `{
             "description": "Voltstack cluster of single interface GCP site",
             "title": "GCP Voltstack Cluster",
             "x-displayname": "GCP Voltstack Cluster",
+            "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
-            "x-ves-oneof-field-service_policy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy_policy\"]",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GCPVPCVoltstackClusterType",
             "properties": {
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy_policy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
                     "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
                 },
@@ -2339,17 +2398,8 @@ var APISwaggerJSON string = `{
                     "title": "Manage Network Policy",
                     "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
                 },
-                "az_nodes": {
-                    "type": "array",
-                    "description": " Only Single zone or Three nodes are supported currently.",
-                    "title": "Nodes",
-                    "items": {
-                        "$ref": "#/definitions/viewsGCPVPCOneInterfaceNodeType"
-                    },
-                    "x-displayname": "Voltstack Cluster (one Interface) Nodes"
-                },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy_policy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2361,12 +2411,23 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "gcp-byol-voltstack-combo",
                     "x-ves-required": "true"
                 },
+                "gcp_zone_names": {
+                    "type": "array",
+                    "description": " x-required\n List of zones when instances will be created, needs to match with region selected.\n\nExample: - \"us-west1-a, us-west1-b, us-west1-c\"-\nRequired: YES",
+                    "title": "GCP zones",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "GCP zone names",
+                    "x-ves-example": "us-west1-a, us-west1-b, us-west1-c",
+                    "x-ves-required": "true"
+                },
                 "global_network_list": {
                     "description": "Exclusive with [no_global_network]\nx-displayName: \"Connect Global Networks\"\nList of global network connections",
                     "title": "Connect Global Networks",
                     "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
                 },
-                "no_forward_proxy_policy": {
+                "no_forward_proxy": {
                     "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
                     "$ref": "#/definitions/schemaEmpty"
@@ -2386,16 +2447,29 @@ var APISwaggerJSON string = `{
                     "title": "Do Not Manage Static Routes",
                     "$ref": "#/definitions/schemaEmpty"
                 },
+                "node_number": {
+                    "type": "integer",
+                    "description": " Number of nodes to created, 1 or 3 supported",
+                    "title": "Number of nodes",
+                    "format": "int64",
+                    "x-displayname": "Number of nodes"
+                },
                 "outside_static_routes": {
                     "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType"
                 },
                 "site_local_network": {
-                    "description": " Network Subnets for the site local interface of the node",
+                    "description": " Network for the site local interface of the node",
                     "title": "Network",
                     "$ref": "#/definitions/viewsGCPVPCNetworkChoiceType",
                     "x-displayname": "GCP VPC Network for Site Local Interface"
+                },
+                "site_local_subnet": {
+                    "description": " Subnet for the site local interface of the node.",
+                    "title": "Subnet",
+                    "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
+                    "x-displayname": "GCP subnet for Site Local Interface"
                 }
             }
         },
@@ -2573,7 +2647,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -3244,6 +3318,29 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteCoordinates": {
+            "type": "object",
+            "description": "Coordinates of the site which provides the site physical location",
+            "title": "Site Coordinates",
+            "x-displayname": "Site Coordinates",
+            "x-ves-proto-message": "ves.io.schema.site.Coordinates",
+            "properties": {
+                "latitude": {
+                    "type": "number",
+                    "description": " Latitude of the site location",
+                    "title": "latitude",
+                    "format": "float",
+                    "x-displayname": "Latitude"
+                },
+                "longitude": {
+                    "type": "number",
+                    "description": " longitude of site location",
+                    "title": "longitude",
+                    "format": "float",
+                    "x-displayname": "Longitude"
+                }
+            }
+        },
         "viewsGCPSubnetParamsType": {
             "type": "object",
             "description": "Parameters for gcp subnet",
@@ -3261,11 +3358,10 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_name": {
                     "type": "string",
-                    "description": " Name of new VPC Subnet\n\nExample: - \"subnet1-in-network1\"-\nRequired: YES",
+                    "description": " Name of new VPC Subnet, will be autogenerated if empty\n\nExample: - \"subnet1-in-network1\"-",
                     "title": "GCP VPC Subnet Name",
                     "x-displayname": "VPC Subnet Name",
-                    "x-ves-example": "subnet1-in-network1",
-                    "x-ves-required": "true"
+                    "x-ves-example": "subnet1-in-network1"
                 }
             }
         },
@@ -3286,23 +3382,45 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsGCPVPCNetworkAutogenerateParamsType": {
+            "type": "object",
+            "description": "Create a new GCP VPC Network with autogenerated name",
+            "title": "GCP VPC Network Parameters Autogenerate",
+            "x-displayname": "GCP VPC Network Autogenerated Parameters",
+            "x-ves-displayorder": "1",
+            "x-ves-proto-message": "ves.io.schema.views.GCPVPCNetworkAutogenerateParamsType",
+            "properties": {
+                "autogenerate": {
+                    "type": "boolean",
+                    "description": " Name for your GCP VPC Network will be autogenerated",
+                    "title": "Autogenerate GCP VPC Network Name",
+                    "format": "boolean",
+                    "x-displayname": "Autogenerate GCP VPC Network Name"
+                }
+            }
+        },
         "viewsGCPVPCNetworkChoiceType": {
             "type": "object",
             "description": "This defines choice about GCP VPC network for a view",
             "title": "GCP VPC network choice",
             "x-displayname": "GCP VPC network choice",
-            "x-ves-oneof-field-choice": "[\"existing_network\",\"new_network\"]",
+            "x-ves-oneof-field-choice": "[\"existing_network\",\"new_network\",\"new_network_autogenerate\"]",
             "x-ves-proto-message": "ves.io.schema.views.GCPVPCNetworkChoiceType",
             "properties": {
                 "existing_network": {
-                    "description": "Exclusive with [new_network]\nx-displayName: \"Existing VPC Network\"\nInformation about existing VPC network",
+                    "description": "Exclusive with [new_network new_network_autogenerate]\nx-displayName: \"Existing VPC Network\"\nInformation about existing VPC network",
                     "title": "Existing VPC",
                     "$ref": "#/definitions/viewsGCPVPCNetworkType"
                 },
                 "new_network": {
-                    "description": "Exclusive with [existing_network]\nx-displayName: \"New VPC Network Parameters\"\nParameters for creating new VPC network",
+                    "description": "Exclusive with [existing_network new_network_autogenerate]\nx-displayName: \"New VPC Network Parameters\"\nParameters for creating new VPC network",
                     "title": "New VPC",
                     "$ref": "#/definitions/viewsGCPVPCNetworkParamsType"
+                },
+                "new_network_autogenerate": {
+                    "description": "Exclusive with [existing_network new_network]\nx-displayName: \"New VPC Network autogenerate name\"\nAutogenerate parameters for creating new VPC network",
+                    "title": "New VPC Autogenerate",
+                    "$ref": "#/definitions/viewsGCPVPCNetworkAutogenerateParamsType"
                 }
             }
         },
@@ -3310,7 +3428,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Parameters to create a new GCP VPC Network",
             "title": "GCP VPC Network Parameters",
-            "x-displayname": "GCP VPC Network Parameters",
+            "x-displayname": "GCP VPC Network Manual Parameters",
             "x-ves-displayorder": "1",
             "x-ves-proto-message": "ves.io.schema.views.GCPVPCNetworkParamsType",
             "properties": {
@@ -3341,30 +3459,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "viewsGCPVPCOneInterfaceNodeType": {
-            "type": "object",
-            "description": "Parameters for creating Single interface Node",
-            "title": "Single Interface Node",
-            "x-displayname": "Single Interface Node",
-            "x-ves-displayorder": "1,2",
-            "x-ves-proto-message": "ves.io.schema.views.GCPVPCOneInterfaceNodeType",
-            "properties": {
-                "gcp_zone_name": {
-                    "type": "string",
-                    "description": " x-required\n Name for GCP zone, should match with region selected.\n\nExample: - \"us-west1-a\"-\nRequired: YES",
-                    "title": "GCP zone",
-                    "x-displayname": "GCP zone name",
-                    "x-ves-example": "us-west1-a",
-                    "x-ves-required": "true"
-                },
-                "local_subnet": {
-                    "description": " Subnets for the local interface of the node, should be in local network",
-                    "title": "Subnet",
-                    "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
-                    "x-displayname": "Subnet for local Interface"
-                }
-            }
-        },
         "viewsGCPVPCSubnetChoiceType": {
             "type": "object",
             "description": "This defines choice about GCP VPC network for a view",
@@ -3382,36 +3476,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [existing_subnet]\nx-displayName: \"New Subnet Parameters\"\nParameters for creating new subnet",
                     "title": "New VPC",
                     "$ref": "#/definitions/viewsGCPSubnetParamsType"
-                }
-            }
-        },
-        "viewsGCPVPCTwoInterfaceNodeType": {
-            "type": "object",
-            "description": "Parameters for creating two interface Node in different vpc networks",
-            "title": "Two Interface Node",
-            "x-displayname": "Two Interface Node",
-            "x-ves-displayorder": "1,2,3",
-            "x-ves-proto-message": "ves.io.schema.views.GCPVPCTwoInterfaceNodeType",
-            "properties": {
-                "gcp_zone_name": {
-                    "type": "string",
-                    "description": " x-required\n Name for GCP zone, should match with region selected.\n\nExample: - \"us-west-2a\"-\nRequired: YES",
-                    "title": "GCP AZ",
-                    "x-displayname": "GCP AZ name",
-                    "x-ves-example": "us-west-2a",
-                    "x-ves-required": "true"
-                },
-                "inside_subnet": {
-                    "description": " Subnets for the inside interface of the node, should be in inside network",
-                    "title": "Subnet",
-                    "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
-                    "x-displayname": "Subnet for Inside Interface"
-                },
-                "outside_subnet": {
-                    "description": " Subnets for the outside interface of the node, should be in outside network",
-                    "title": "Subnet",
-                    "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
-                    "x-displayname": "Subnet for Outside Interface"
                 }
             }
         },
@@ -3528,6 +3592,13 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GlobalSpecType",
             "properties": {
+                "address": {
+                    "type": "string",
+                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-",
+                    "title": "address",
+                    "x-displayname": "Geographical Address",
+                    "x-ves-example": "123 Street, city, country, postal code"
+                },
                 "assisted": {
                     "description": "Exclusive with [cloud_credentials]\nx-displayName: \"Assisted Deployment\"\nIn assisted deployment get GCP parameters generated in status of this objects and run volterra provided terraform script.",
                     "title": "Assisted Deployment",
@@ -3537,6 +3608,12 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [assisted]\nx-displayName: \"Automatic Deployment\"\nReference to GCP credentials for automatic deployment",
                     "title": "Automatic Deployment",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "coordinates": {
+                    "description": " Site longitude and latitude co-ordinates",
+                    "title": "coordinates",
+                    "$ref": "#/definitions/siteCoordinates",
+                    "x-displayname": "Co-ordinates"
                 },
                 "disk_size": {
                     "type": "integer",
@@ -3614,7 +3691,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\nx-displayName: \"Voltstack Cluster (One Interface)\"\nVoltstack Cluster using single interface, useful for deploying k8s cluster.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\nx-displayName: \"Voltstack Cluster (One Interface)\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",
                     "title": "Voltstack Cluster",
                     "$ref": "#/definitions/gcp_vpc_siteGCPVPCVoltstackClusterType"
                 }
