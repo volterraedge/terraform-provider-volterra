@@ -194,6 +194,15 @@ func (v *ValidateAPIEndpointLearntSchemaRsp) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["swagger_spec"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("swagger_spec"))
+		if err := fv(ctx, m.GetSwaggerSpec(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 

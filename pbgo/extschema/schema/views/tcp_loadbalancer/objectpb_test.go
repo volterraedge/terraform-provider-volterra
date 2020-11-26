@@ -57,6 +57,8 @@ import (
 
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
+
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"

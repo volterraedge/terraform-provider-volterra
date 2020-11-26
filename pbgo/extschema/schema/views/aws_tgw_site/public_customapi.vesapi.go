@@ -476,7 +476,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-aws_tgw_site-CustomAPI-SetVPCIpPrefixes"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-CustomAPI-SetVPCIpPrefixes"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPCIpPrefixes"
             },
@@ -572,7 +572,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-aws_tgw_site-CustomAPI-SetVPNTunnels"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-CustomAPI-SetVPNTunnels"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPNTunnels"
             },

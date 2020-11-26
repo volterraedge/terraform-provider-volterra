@@ -17,6 +17,7 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
+	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
@@ -277,6 +278,16 @@ func (v *ValidateCreateSpecType) SshKeyValidationRuleHandler(rules map[string]st
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -289,6 +300,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("address"))
+		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["coordinates"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coordinates"))
+		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["deployment"]; exists {
@@ -553,11 +582,24 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["ssh_key"] = vFn
 
+	vrhAddress := v.AddressValidationRuleHandler
+	rulesAddress := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhAddress(rulesAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["address"] = vFn
+
 	v.FldValidators["deployment.cloud_credentials"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["site_type.ingress_gw"] = GCPVPCIngressGwTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = GCPVPCIngressEgressGwTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = GCPVPCVoltstackClusterTypeValidator().Validate
+
+	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	return v
 }()
@@ -605,6 +647,12 @@ func (m *GCPVPCIngressEgressGwReplaceType) Validate(ctx context.Context, opts ..
 
 func (m *GCPVPCIngressEgressGwReplaceType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -629,13 +677,40 @@ func (m *GCPVPCIngressEgressGwReplaceType) GetDRefInfo() ([]db.DRefInfo, error) 
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GCPVPCIngressEgressGwReplaceType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.ForwardProxyChoice == nil {
+		return []db.DRefInfo{}, nil
 	}
 
-	return drInfos, nil
+	var odrInfos []db.DRefInfo
+
+	switch m.GetForwardProxyChoice().(type) {
+	case *GCPVPCIngressEgressGwReplaceType_NoForwardProxy:
+
+	case *GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
+		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_forward_proxy_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll:
+
+	}
+
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -762,41 +837,16 @@ func (m *GCPVPCIngressEgressGwReplaceType) GetOutsideStaticRouteChoiceDRefInfo()
 	return drInfos, err
 }
 
-// GetDRefInfo for the field's type
-func (m *GCPVPCIngressEgressGwReplaceType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
-	if m.ServicePolicyChoice == nil {
-		return []db.DRefInfo{}, nil
-	}
-
-	var odrInfos []db.DRefInfo
-
-	switch m.GetServicePolicyChoice().(type) {
-	case *GCPVPCIngressEgressGwReplaceType_NoForwardProxyPolicy:
-
-	case *GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
-		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_forward_proxy_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
-
-	case *GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll:
-
-	}
-
-	return drInfos, err
-}
-
 type ValidateGCPVPCIngressEgressGwReplaceType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGCPVPCIngressEgressGwReplaceType) ForwardProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for forward_proxy_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateGCPVPCIngressEgressGwReplaceType) GlobalNetworkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -831,14 +881,6 @@ func (v *ValidateGCPVPCIngressEgressGwReplaceType) OutsideStaticRouteChoiceValid
 	return validatorFn, nil
 }
 
-func (v *ValidateGCPVPCIngressEgressGwReplaceType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateGCPVPCIngressEgressGwReplaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GCPVPCIngressEgressGwReplaceType)
 	if !ok {
@@ -851,6 +893,53 @@ func (v *ValidateGCPVPCIngressEgressGwReplaceType) Validate(ctx context.Context,
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
+		val := m.GetForwardProxyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("forward_proxy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetForwardProxyChoice().(type) {
+	case *GCPVPCIngressEgressGwReplaceType_NoForwardProxy:
+		if fv, exists := v.FldValidators["forward_proxy_choice.no_forward_proxy"]; exists {
+			val := m.GetForwardProxyChoice().(*GCPVPCIngressEgressGwReplaceType_NoForwardProxy).NoForwardProxy
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("no_forward_proxy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
+		if fv, exists := v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"]; exists {
+			val := m.GetForwardProxyChoice().(*GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("active_forward_proxy_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll:
+		if fv, exists := v.FldValidators["forward_proxy_choice.forward_proxy_allow_all"]; exists {
+			val := m.GetForwardProxyChoice().(*GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll).ForwardProxyAllowAll
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("forward_proxy_allow_all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["global_network_choice"]; exists {
@@ -997,53 +1086,6 @@ func (v *ValidateGCPVPCIngressEgressGwReplaceType) Validate(ctx context.Context,
 
 	}
 
-	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
-		val := m.GetServicePolicyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("service_policy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetServicePolicyChoice().(type) {
-	case *GCPVPCIngressEgressGwReplaceType_NoForwardProxyPolicy:
-		if fv, exists := v.FldValidators["service_policy_choice.no_forward_proxy_policy"]; exists {
-			val := m.GetServicePolicyChoice().(*GCPVPCIngressEgressGwReplaceType_NoForwardProxyPolicy).NoForwardProxyPolicy
-			vOpts := append(opts,
-				db.WithValidateField("service_policy_choice"),
-				db.WithValidateField("no_forward_proxy_policy"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
-		if fv, exists := v.FldValidators["service_policy_choice.active_forward_proxy_policies"]; exists {
-			val := m.GetServicePolicyChoice().(*GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
-			vOpts := append(opts,
-				db.WithValidateField("service_policy_choice"),
-				db.WithValidateField("active_forward_proxy_policies"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll:
-		if fv, exists := v.FldValidators["service_policy_choice.forward_proxy_allow_all"]; exists {
-			val := m.GetServicePolicyChoice().(*GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll).ForwardProxyAllowAll
-			vOpts := append(opts,
-				db.WithValidateField("service_policy_choice"),
-				db.WithValidateField("forward_proxy_allow_all"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	return nil
 }
 
@@ -1058,6 +1100,17 @@ var DefaultGCPVPCIngressEgressGwReplaceTypeValidator = func() *ValidateGCPVPCIng
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
+	rulesForwardProxyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCIngressEgressGwReplaceType.forward_proxy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["forward_proxy_choice"] = vFn
 
 	vrhGlobalNetworkChoice := v.GlobalNetworkChoiceValidationRuleHandler
 	rulesGlobalNetworkChoice := map[string]string{
@@ -1103,16 +1156,7 @@ var DefaultGCPVPCIngressEgressGwReplaceTypeValidator = func() *ValidateGCPVPCIng
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
-	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
-	rulesServicePolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCIngressEgressGwReplaceType.service_policy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["service_policy_choice"] = vFn
+	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
 
@@ -1121,8 +1165,6 @@ var DefaultGCPVPCIngressEgressGwReplaceTypeValidator = func() *ValidateGCPVPCIng
 	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
-
-	v.FldValidators["service_policy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	return v
 }()
@@ -1170,6 +1212,12 @@ func (m *GCPVPCIngressEgressGwType) Validate(ctx context.Context, opts ...db.Val
 
 func (m *GCPVPCIngressEgressGwType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -1194,13 +1242,40 @@ func (m *GCPVPCIngressEgressGwType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GCPVPCIngressEgressGwType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.ForwardProxyChoice == nil {
+		return []db.DRefInfo{}, nil
 	}
 
-	return drInfos, nil
+	var odrInfos []db.DRefInfo
+
+	switch m.GetForwardProxyChoice().(type) {
+	case *GCPVPCIngressEgressGwType_NoForwardProxy:
+
+	case *GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies:
+		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_forward_proxy_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *GCPVPCIngressEgressGwType_ForwardProxyAllowAll:
+
+	}
+
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -1327,41 +1402,16 @@ func (m *GCPVPCIngressEgressGwType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.
 	return drInfos, err
 }
 
-// GetDRefInfo for the field's type
-func (m *GCPVPCIngressEgressGwType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
-	if m.ServicePolicyChoice == nil {
-		return []db.DRefInfo{}, nil
-	}
-
-	var odrInfos []db.DRefInfo
-
-	switch m.GetServicePolicyChoice().(type) {
-	case *GCPVPCIngressEgressGwType_NoForwardProxyPolicy:
-
-	case *GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies:
-		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_forward_proxy_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
-
-	case *GCPVPCIngressEgressGwType_ForwardProxyAllowAll:
-
-	}
-
-	return drInfos, err
-}
-
 type ValidateGCPVPCIngressEgressGwType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGCPVPCIngressEgressGwType) ForwardProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for forward_proxy_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateGCPVPCIngressEgressGwType) GlobalNetworkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -1396,14 +1446,6 @@ func (v *ValidateGCPVPCIngressEgressGwType) OutsideStaticRouteChoiceValidationRu
 	return validatorFn, nil
 }
 
-func (v *ValidateGCPVPCIngressEgressGwType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateGCPVPCIngressEgressGwType) GcpCertifiedHwValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -1414,11 +1456,16 @@ func (v *ValidateGCPVPCIngressEgressGwType) GcpCertifiedHwValidationRuleHandler(
 	return validatorFn, nil
 }
 
-func (v *ValidateGCPVPCIngressEgressGwType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGCPVPCIngressEgressGwType) GcpZoneNamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.GCPVPCTwoInterfaceNodeType, opts ...db.ValidateOpt) error {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for gcp_zone_names")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
-			if err := ves_io_schema_views.GCPVPCTwoInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
+			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -1426,27 +1473,24 @@ func (v *ValidateGCPVPCIngressEgressGwType) AzNodesValidationRuleHandler(rules m
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for az_nodes")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for gcp_zone_names")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema_views.GCPVPCTwoInterfaceNodeType)
+		elems, ok := val.([]string)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.GCPVPCTwoInterfaceNodeType, got %T", val)
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
+			strVal := fmt.Sprintf("%v", elem)
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated az_nodes")
+			return errors.Wrap(err, "repeated gcp_zone_names")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items az_nodes")
+			return errors.Wrap(err, "items gcp_zone_names")
 		}
 		return nil
 	}
@@ -1468,10 +1512,49 @@ func (v *ValidateGCPVPCIngressEgressGwType) Validate(ctx context.Context, pm int
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["az_nodes"]; exists {
-		vOpts := append(opts, db.WithValidateField("az_nodes"))
-		if err := fv(ctx, m.GetAzNodes(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
+		val := m.GetForwardProxyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("forward_proxy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetForwardProxyChoice().(type) {
+	case *GCPVPCIngressEgressGwType_NoForwardProxy:
+		if fv, exists := v.FldValidators["forward_proxy_choice.no_forward_proxy"]; exists {
+			val := m.GetForwardProxyChoice().(*GCPVPCIngressEgressGwType_NoForwardProxy).NoForwardProxy
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("no_forward_proxy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies:
+		if fv, exists := v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"]; exists {
+			val := m.GetForwardProxyChoice().(*GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("active_forward_proxy_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GCPVPCIngressEgressGwType_ForwardProxyAllowAll:
+		if fv, exists := v.FldValidators["forward_proxy_choice.forward_proxy_allow_all"]; exists {
+			val := m.GetForwardProxyChoice().(*GCPVPCIngressEgressGwType_ForwardProxyAllowAll).ForwardProxyAllowAll
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("forward_proxy_allow_all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1480,6 +1563,14 @@ func (v *ValidateGCPVPCIngressEgressGwType) Validate(ctx context.Context, pm int
 
 		vOpts := append(opts, db.WithValidateField("gcp_certified_hw"))
 		if err := fv(ctx, m.GetGcpCertifiedHw(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["gcp_zone_names"]; exists {
+		vOpts := append(opts, db.WithValidateField("gcp_zone_names"))
+		if err := fv(ctx, m.GetGcpZoneNames(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1566,6 +1657,15 @@ func (v *ValidateGCPVPCIngressEgressGwType) Validate(ctx context.Context, pm int
 
 	}
 
+	if fv, exists := v.FldValidators["inside_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_subnet"))
+		if err := fv(ctx, m.GetInsideSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
 		val := m.GetNetworkPolicyChoice()
 		vOpts := append(opts,
@@ -1598,6 +1698,15 @@ func (v *ValidateGCPVPCIngressEgressGwType) Validate(ctx context.Context, pm int
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node_number"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_number"))
+		if err := fv(ctx, m.GetNodeNumber(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1647,49 +1756,11 @@ func (v *ValidateGCPVPCIngressEgressGwType) Validate(ctx context.Context, pm int
 
 	}
 
-	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
-		val := m.GetServicePolicyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("service_policy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
+	if fv, exists := v.FldValidators["outside_subnet"]; exists {
 
-	switch m.GetServicePolicyChoice().(type) {
-	case *GCPVPCIngressEgressGwType_NoForwardProxyPolicy:
-		if fv, exists := v.FldValidators["service_policy_choice.no_forward_proxy_policy"]; exists {
-			val := m.GetServicePolicyChoice().(*GCPVPCIngressEgressGwType_NoForwardProxyPolicy).NoForwardProxyPolicy
-			vOpts := append(opts,
-				db.WithValidateField("service_policy_choice"),
-				db.WithValidateField("no_forward_proxy_policy"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies:
-		if fv, exists := v.FldValidators["service_policy_choice.active_forward_proxy_policies"]; exists {
-			val := m.GetServicePolicyChoice().(*GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
-			vOpts := append(opts,
-				db.WithValidateField("service_policy_choice"),
-				db.WithValidateField("active_forward_proxy_policies"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GCPVPCIngressEgressGwType_ForwardProxyAllowAll:
-		if fv, exists := v.FldValidators["service_policy_choice.forward_proxy_allow_all"]; exists {
-			val := m.GetServicePolicyChoice().(*GCPVPCIngressEgressGwType_ForwardProxyAllowAll).ForwardProxyAllowAll
-			vOpts := append(opts,
-				db.WithValidateField("service_policy_choice"),
-				db.WithValidateField("forward_proxy_allow_all"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+		vOpts := append(opts, db.WithValidateField("outside_subnet"))
+		if err := fv(ctx, m.GetOutsideSubnet(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1708,6 +1779,17 @@ var DefaultGCPVPCIngressEgressGwTypeValidator = func() *ValidateGCPVPCIngressEgr
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
+	rulesForwardProxyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCIngressEgressGwType.forward_proxy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["forward_proxy_choice"] = vFn
 
 	vrhGlobalNetworkChoice := v.GlobalNetworkChoiceValidationRuleHandler
 	rulesGlobalNetworkChoice := map[string]string{
@@ -1753,17 +1835,6 @@ var DefaultGCPVPCIngressEgressGwTypeValidator = func() *ValidateGCPVPCIngressEgr
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
-	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
-	rulesServicePolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCIngressEgressGwType.service_policy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["service_policy_choice"] = vFn
-
 	vrhGcpCertifiedHw := v.GcpCertifiedHwValidationRuleHandler
 	rulesGcpCertifiedHw := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -1777,16 +1848,20 @@ var DefaultGCPVPCIngressEgressGwTypeValidator = func() *ValidateGCPVPCIngressEgr
 	}
 	v.FldValidators["gcp_certified_hw"] = vFn
 
-	vrhAzNodes := v.AzNodesValidationRuleHandler
-	rulesAzNodes := map[string]string{
-		"ves.io.schema.rules.repeated.num_items": "1,3",
+	vrhGcpZoneNames := v.GcpZoneNamesValidationRuleHandler
+	rulesGcpZoneNames := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.repeated.unique":  "true",
+		"ves.io.schema.rules.string.in":        "[\"asia-east1-a\",\"asia-east1-b\",\"asia-east1-c\",\"asia-east2-a\",\"asia-east2-b\",\"asia-east2-c\",\"asia-northeast1-a\",\"asia-northeast1-b\",\"asia-northeast1-c\",\"asia-northeast2-a\",\"asia-northeast2-b\",\"asia-northeast2-c\",\"asia-northeast3-a\",\"asia-northeast3-b\",\"asia-northeast3-c\",\"asia-south1-a\",\"asia-south1-b\",\"asia-south1-c\",\"asia-southeast1-a\",\"asia-southeast1-b\",\"asia-southeast1-c\",\"asia-southeast2-a\",\"asia-southeast2-b\",\"asia-southeast2-c\",\"australia-southeast1-a\",\"australia-southeast1-b\",\"australia-southeast1-c\",\"europe-north1-a\",\"europe-north1-b\",\"europe-north1-c\",\"europe-west1-b\",\"europe-west1-c\",\"europe-west1-d\",\"europe-west2-a\",\"europe-west2-b\",\"europe-west2-c\",\"europe-west3-a\",\"europe-west3-b\",\"europe-west3-c\",\"europe-west4-a\",\"europe-west4-b\",\"europe-west4-c\",\"europe-west6-a\",\"europe-west6-b\",\"europe-west6-c\",\"northamerica-northeast1-a\",\"northamerica-northeast1-b\",\"northamerica-northeast1-c\",\"southamerica-east1-a\",\"southamerica-east1-b\",\"southamerica-east1-c\",\"us-central1-a\",\"us-central1-b\",\"us-central1-c\",\"us-central1-f\",\"us-east1-b\",\"us-east1-c\",\"us-east1-d\",\"us-east4-a\",\"us-east4-b\",\"us-east4-c\",\"us-west1-a\",\"us-west1-b\",\"us-west1-c\",\"us-west2-a\",\"us-west2-b\",\"us-west2-c\",\"us-west3-a\",\"us-west3-b\",\"us-west3-c\",\"us-west4-a\",\"us-west4-b\",\"us-west4-c\"]",
 	}
-	vFn, err = vrhAzNodes(rulesAzNodes)
+	vFn, err = vrhGcpZoneNames(rulesGcpZoneNames)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCIngressEgressGwType.az_nodes: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCIngressEgressGwType.gcp_zone_names: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["az_nodes"] = vFn
+	v.FldValidators["gcp_zone_names"] = vFn
+
+	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
 
@@ -1796,11 +1871,13 @@ var DefaultGCPVPCIngressEgressGwTypeValidator = func() *ValidateGCPVPCIngressEgr
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
 
-	v.FldValidators["service_policy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["inside_network"] = ves_io_schema_views.GCPVPCNetworkChoiceTypeValidator().Validate
 
 	v.FldValidators["outside_network"] = ves_io_schema_views.GCPVPCNetworkChoiceTypeValidator().Validate
+
+	v.FldValidators["inside_subnet"] = ves_io_schema_views.GCPVPCSubnetChoiceTypeValidator().Validate
+
+	v.FldValidators["outside_subnet"] = ves_io_schema_views.GCPVPCSubnetChoiceTypeValidator().Validate
 
 	return v
 }()
@@ -1929,11 +2006,16 @@ func (v *ValidateGCPVPCIngressGwType) GcpCertifiedHwValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
-func (v *ValidateGCPVPCIngressGwType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGCPVPCIngressGwType) GcpZoneNamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.GCPVPCOneInterfaceNodeType, opts ...db.ValidateOpt) error {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for gcp_zone_names")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
-			if err := ves_io_schema_views.GCPVPCOneInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
+			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -1941,27 +2023,24 @@ func (v *ValidateGCPVPCIngressGwType) AzNodesValidationRuleHandler(rules map[str
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for az_nodes")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for gcp_zone_names")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema_views.GCPVPCOneInterfaceNodeType)
+		elems, ok := val.([]string)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.GCPVPCOneInterfaceNodeType, got %T", val)
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
+			strVal := fmt.Sprintf("%v", elem)
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated az_nodes")
+			return errors.Wrap(err, "repeated gcp_zone_names")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items az_nodes")
+			return errors.Wrap(err, "items gcp_zone_names")
 		}
 		return nil
 	}
@@ -1983,14 +2062,6 @@ func (v *ValidateGCPVPCIngressGwType) Validate(ctx context.Context, pm interface
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["az_nodes"]; exists {
-		vOpts := append(opts, db.WithValidateField("az_nodes"))
-		if err := fv(ctx, m.GetAzNodes(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["gcp_certified_hw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("gcp_certified_hw"))
@@ -2000,10 +2071,36 @@ func (v *ValidateGCPVPCIngressGwType) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["gcp_zone_names"]; exists {
+		vOpts := append(opts, db.WithValidateField("gcp_zone_names"))
+		if err := fv(ctx, m.GetGcpZoneNames(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["local_network"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("local_network"))
 		if err := fv(ctx, m.GetLocalNetwork(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["local_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_subnet"))
+		if err := fv(ctx, m.GetLocalSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node_number"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_number"))
+		if err := fv(ctx, m.GetNodeNumber(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2037,19 +2134,22 @@ var DefaultGCPVPCIngressGwTypeValidator = func() *ValidateGCPVPCIngressGwType {
 	}
 	v.FldValidators["gcp_certified_hw"] = vFn
 
-	vrhAzNodes := v.AzNodesValidationRuleHandler
-	rulesAzNodes := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.num_items": "1,3",
+	vrhGcpZoneNames := v.GcpZoneNamesValidationRuleHandler
+	rulesGcpZoneNames := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.repeated.unique":  "true",
+		"ves.io.schema.rules.string.in":        "[\"asia-east1-a\",\"asia-east1-b\",\"asia-east1-c\",\"asia-east2-a\",\"asia-east2-b\",\"asia-east2-c\",\"asia-northeast1-a\",\"asia-northeast1-b\",\"asia-northeast1-c\",\"asia-northeast2-a\",\"asia-northeast2-b\",\"asia-northeast2-c\",\"asia-northeast3-a\",\"asia-northeast3-b\",\"asia-northeast3-c\",\"asia-south1-a\",\"asia-south1-b\",\"asia-south1-c\",\"asia-southeast1-a\",\"asia-southeast1-b\",\"asia-southeast1-c\",\"asia-southeast2-a\",\"asia-southeast2-b\",\"asia-southeast2-c\",\"australia-southeast1-a\",\"australia-southeast1-b\",\"australia-southeast1-c\",\"europe-north1-a\",\"europe-north1-b\",\"europe-north1-c\",\"europe-west1-b\",\"europe-west1-c\",\"europe-west1-d\",\"europe-west2-a\",\"europe-west2-b\",\"europe-west2-c\",\"europe-west3-a\",\"europe-west3-b\",\"europe-west3-c\",\"europe-west4-a\",\"europe-west4-b\",\"europe-west4-c\",\"europe-west6-a\",\"europe-west6-b\",\"europe-west6-c\",\"northamerica-northeast1-a\",\"northamerica-northeast1-b\",\"northamerica-northeast1-c\",\"southamerica-east1-a\",\"southamerica-east1-b\",\"southamerica-east1-c\",\"us-central1-a\",\"us-central1-b\",\"us-central1-c\",\"us-central1-f\",\"us-east1-b\",\"us-east1-c\",\"us-east1-d\",\"us-east4-a\",\"us-east4-b\",\"us-east4-c\",\"us-west1-a\",\"us-west1-b\",\"us-west1-c\",\"us-west2-a\",\"us-west2-b\",\"us-west2-c\",\"us-west3-a\",\"us-west3-b\",\"us-west3-c\",\"us-west4-a\",\"us-west4-b\",\"us-west4-c\"]",
 	}
-	vFn, err = vrhAzNodes(rulesAzNodes)
+	vFn, err = vrhGcpZoneNames(rulesGcpZoneNames)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCIngressGwType.az_nodes: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCIngressGwType.gcp_zone_names: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["az_nodes"] = vFn
+	v.FldValidators["gcp_zone_names"] = vFn
 
 	v.FldValidators["local_network"] = ves_io_schema_views.GCPVPCNetworkChoiceTypeValidator().Validate
+
+	v.FldValidators["local_subnet"] = ves_io_schema_views.GCPVPCSubnetChoiceTypeValidator().Validate
 
 	return v
 }()
@@ -2097,6 +2197,12 @@ func (m *GCPVPCVoltstackClusterReplaceType) Validate(ctx context.Context, opts .
 
 func (m *GCPVPCVoltstackClusterReplaceType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -2115,13 +2221,40 @@ func (m *GCPVPCVoltstackClusterReplaceType) GetDRefInfo() ([]db.DRefInfo, error)
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GCPVPCVoltstackClusterReplaceType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.ForwardProxyChoice == nil {
+		return []db.DRefInfo{}, nil
 	}
 
-	return drInfos, nil
+	var odrInfos []db.DRefInfo
+
+	switch m.GetForwardProxyChoice().(type) {
+	case *GCPVPCVoltstackClusterReplaceType_NoForwardProxy:
+
+	case *GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
+		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_forward_proxy_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll:
+
+	}
+
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -2217,41 +2350,16 @@ func (m *GCPVPCVoltstackClusterReplaceType) GetOutsideStaticRouteChoiceDRefInfo(
 	return drInfos, err
 }
 
-// GetDRefInfo for the field's type
-func (m *GCPVPCVoltstackClusterReplaceType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
-	if m.ServicePolicyChoice == nil {
-		return []db.DRefInfo{}, nil
-	}
-
-	var odrInfos []db.DRefInfo
-
-	switch m.GetServicePolicyChoice().(type) {
-	case *GCPVPCVoltstackClusterReplaceType_NoForwardProxyPolicy:
-
-	case *GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
-		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_forward_proxy_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
-
-	case *GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll:
-
-	}
-
-	return drInfos, err
-}
-
 type ValidateGCPVPCVoltstackClusterReplaceType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGCPVPCVoltstackClusterReplaceType) ForwardProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for forward_proxy_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateGCPVPCVoltstackClusterReplaceType) GlobalNetworkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -2278,14 +2386,6 @@ func (v *ValidateGCPVPCVoltstackClusterReplaceType) OutsideStaticRouteChoiceVali
 	return validatorFn, nil
 }
 
-func (v *ValidateGCPVPCVoltstackClusterReplaceType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateGCPVPCVoltstackClusterReplaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GCPVPCVoltstackClusterReplaceType)
 	if !ok {
@@ -2298,6 +2398,53 @@ func (v *ValidateGCPVPCVoltstackClusterReplaceType) Validate(ctx context.Context
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
+		val := m.GetForwardProxyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("forward_proxy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetForwardProxyChoice().(type) {
+	case *GCPVPCVoltstackClusterReplaceType_NoForwardProxy:
+		if fv, exists := v.FldValidators["forward_proxy_choice.no_forward_proxy"]; exists {
+			val := m.GetForwardProxyChoice().(*GCPVPCVoltstackClusterReplaceType_NoForwardProxy).NoForwardProxy
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("no_forward_proxy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
+		if fv, exists := v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"]; exists {
+			val := m.GetForwardProxyChoice().(*GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("active_forward_proxy_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll:
+		if fv, exists := v.FldValidators["forward_proxy_choice.forward_proxy_allow_all"]; exists {
+			val := m.GetForwardProxyChoice().(*GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll).ForwardProxyAllowAll
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("forward_proxy_allow_all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["global_network_choice"]; exists {
@@ -2408,53 +2555,6 @@ func (v *ValidateGCPVPCVoltstackClusterReplaceType) Validate(ctx context.Context
 
 	}
 
-	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
-		val := m.GetServicePolicyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("service_policy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetServicePolicyChoice().(type) {
-	case *GCPVPCVoltstackClusterReplaceType_NoForwardProxyPolicy:
-		if fv, exists := v.FldValidators["service_policy_choice.no_forward_proxy_policy"]; exists {
-			val := m.GetServicePolicyChoice().(*GCPVPCVoltstackClusterReplaceType_NoForwardProxyPolicy).NoForwardProxyPolicy
-			vOpts := append(opts,
-				db.WithValidateField("service_policy_choice"),
-				db.WithValidateField("no_forward_proxy_policy"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
-		if fv, exists := v.FldValidators["service_policy_choice.active_forward_proxy_policies"]; exists {
-			val := m.GetServicePolicyChoice().(*GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
-			vOpts := append(opts,
-				db.WithValidateField("service_policy_choice"),
-				db.WithValidateField("active_forward_proxy_policies"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll:
-		if fv, exists := v.FldValidators["service_policy_choice.forward_proxy_allow_all"]; exists {
-			val := m.GetServicePolicyChoice().(*GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll).ForwardProxyAllowAll
-			vOpts := append(opts,
-				db.WithValidateField("service_policy_choice"),
-				db.WithValidateField("forward_proxy_allow_all"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	return nil
 }
 
@@ -2469,6 +2569,17 @@ var DefaultGCPVPCVoltstackClusterReplaceTypeValidator = func() *ValidateGCPVPCVo
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
+	rulesForwardProxyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCVoltstackClusterReplaceType.forward_proxy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["forward_proxy_choice"] = vFn
 
 	vrhGlobalNetworkChoice := v.GlobalNetworkChoiceValidationRuleHandler
 	rulesGlobalNetworkChoice := map[string]string{
@@ -2503,24 +2614,13 @@ var DefaultGCPVPCVoltstackClusterReplaceTypeValidator = func() *ValidateGCPVPCVo
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
-	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
-	rulesServicePolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCVoltstackClusterReplaceType.service_policy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["service_policy_choice"] = vFn
+	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
 
 	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
-
-	v.FldValidators["service_policy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	return v
 }()
@@ -2568,6 +2668,12 @@ func (m *GCPVPCVoltstackClusterType) Validate(ctx context.Context, opts ...db.Va
 
 func (m *GCPVPCVoltstackClusterType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetGlobalNetworkChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -2586,13 +2692,40 @@ func (m *GCPVPCVoltstackClusterType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GCPVPCVoltstackClusterType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.ForwardProxyChoice == nil {
+		return []db.DRefInfo{}, nil
 	}
 
-	return drInfos, nil
+	var odrInfos []db.DRefInfo
+
+	switch m.GetForwardProxyChoice().(type) {
+	case *GCPVPCVoltstackClusterType_NoForwardProxy:
+
+	case *GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies:
+		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_forward_proxy_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *GCPVPCVoltstackClusterType_ForwardProxyAllowAll:
+
+	}
+
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -2688,41 +2821,16 @@ func (m *GCPVPCVoltstackClusterType) GetOutsideStaticRouteChoiceDRefInfo() ([]db
 	return drInfos, err
 }
 
-// GetDRefInfo for the field's type
-func (m *GCPVPCVoltstackClusterType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
-	if m.ServicePolicyChoice == nil {
-		return []db.DRefInfo{}, nil
-	}
-
-	var odrInfos []db.DRefInfo
-
-	switch m.GetServicePolicyChoice().(type) {
-	case *GCPVPCVoltstackClusterType_NoForwardProxyPolicy:
-
-	case *GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies:
-		odrInfos, err = m.GetActiveForwardProxyPolicies().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "active_forward_proxy_policies." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
-
-	case *GCPVPCVoltstackClusterType_ForwardProxyAllowAll:
-
-	}
-
-	return drInfos, err
-}
-
 type ValidateGCPVPCVoltstackClusterType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGCPVPCVoltstackClusterType) ForwardProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for forward_proxy_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateGCPVPCVoltstackClusterType) GlobalNetworkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -2749,14 +2857,6 @@ func (v *ValidateGCPVPCVoltstackClusterType) OutsideStaticRouteChoiceValidationR
 	return validatorFn, nil
 }
 
-func (v *ValidateGCPVPCVoltstackClusterType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateGCPVPCVoltstackClusterType) GcpCertifiedHwValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -2767,11 +2867,16 @@ func (v *ValidateGCPVPCVoltstackClusterType) GcpCertifiedHwValidationRuleHandler
 	return validatorFn, nil
 }
 
-func (v *ValidateGCPVPCVoltstackClusterType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGCPVPCVoltstackClusterType) GcpZoneNamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.GCPVPCOneInterfaceNodeType, opts ...db.ValidateOpt) error {
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for gcp_zone_names")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
-			if err := ves_io_schema_views.GCPVPCOneInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
+			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -2779,27 +2884,24 @@ func (v *ValidateGCPVPCVoltstackClusterType) AzNodesValidationRuleHandler(rules 
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for az_nodes")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for gcp_zone_names")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema_views.GCPVPCOneInterfaceNodeType)
+		elems, ok := val.([]string)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.GCPVPCOneInterfaceNodeType, got %T", val)
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
+			strVal := fmt.Sprintf("%v", elem)
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated az_nodes")
+			return errors.Wrap(err, "repeated gcp_zone_names")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items az_nodes")
+			return errors.Wrap(err, "items gcp_zone_names")
 		}
 		return nil
 	}
@@ -2821,10 +2923,49 @@ func (v *ValidateGCPVPCVoltstackClusterType) Validate(ctx context.Context, pm in
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["az_nodes"]; exists {
-		vOpts := append(opts, db.WithValidateField("az_nodes"))
-		if err := fv(ctx, m.GetAzNodes(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
+		val := m.GetForwardProxyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("forward_proxy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetForwardProxyChoice().(type) {
+	case *GCPVPCVoltstackClusterType_NoForwardProxy:
+		if fv, exists := v.FldValidators["forward_proxy_choice.no_forward_proxy"]; exists {
+			val := m.GetForwardProxyChoice().(*GCPVPCVoltstackClusterType_NoForwardProxy).NoForwardProxy
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("no_forward_proxy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies:
+		if fv, exists := v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"]; exists {
+			val := m.GetForwardProxyChoice().(*GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("active_forward_proxy_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GCPVPCVoltstackClusterType_ForwardProxyAllowAll:
+		if fv, exists := v.FldValidators["forward_proxy_choice.forward_proxy_allow_all"]; exists {
+			val := m.GetForwardProxyChoice().(*GCPVPCVoltstackClusterType_ForwardProxyAllowAll).ForwardProxyAllowAll
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("forward_proxy_allow_all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2833,6 +2974,14 @@ func (v *ValidateGCPVPCVoltstackClusterType) Validate(ctx context.Context, pm in
 
 		vOpts := append(opts, db.WithValidateField("gcp_certified_hw"))
 		if err := fv(ctx, m.GetGcpCertifiedHw(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["gcp_zone_names"]; exists {
+		vOpts := append(opts, db.WithValidateField("gcp_zone_names"))
+		if err := fv(ctx, m.GetGcpZoneNames(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2910,6 +3059,15 @@ func (v *ValidateGCPVPCVoltstackClusterType) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["node_number"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_number"))
+		if err := fv(ctx, m.GetNodeNumber(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["outside_static_route_choice"]; exists {
 		val := m.GetOutsideStaticRouteChoice()
 		vOpts := append(opts,
@@ -2946,57 +3104,19 @@ func (v *ValidateGCPVPCVoltstackClusterType) Validate(ctx context.Context, pm in
 
 	}
 
-	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
-		val := m.GetServicePolicyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("service_policy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetServicePolicyChoice().(type) {
-	case *GCPVPCVoltstackClusterType_NoForwardProxyPolicy:
-		if fv, exists := v.FldValidators["service_policy_choice.no_forward_proxy_policy"]; exists {
-			val := m.GetServicePolicyChoice().(*GCPVPCVoltstackClusterType_NoForwardProxyPolicy).NoForwardProxyPolicy
-			vOpts := append(opts,
-				db.WithValidateField("service_policy_choice"),
-				db.WithValidateField("no_forward_proxy_policy"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies:
-		if fv, exists := v.FldValidators["service_policy_choice.active_forward_proxy_policies"]; exists {
-			val := m.GetServicePolicyChoice().(*GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
-			vOpts := append(opts,
-				db.WithValidateField("service_policy_choice"),
-				db.WithValidateField("active_forward_proxy_policies"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GCPVPCVoltstackClusterType_ForwardProxyAllowAll:
-		if fv, exists := v.FldValidators["service_policy_choice.forward_proxy_allow_all"]; exists {
-			val := m.GetServicePolicyChoice().(*GCPVPCVoltstackClusterType_ForwardProxyAllowAll).ForwardProxyAllowAll
-			vOpts := append(opts,
-				db.WithValidateField("service_policy_choice"),
-				db.WithValidateField("forward_proxy_allow_all"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["site_local_network"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("site_local_network"))
 		if err := fv(ctx, m.GetSiteLocalNetwork(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_local_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_local_subnet"))
+		if err := fv(ctx, m.GetSiteLocalSubnet(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3016,6 +3136,17 @@ var DefaultGCPVPCVoltstackClusterTypeValidator = func() *ValidateGCPVPCVoltstack
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
+	rulesForwardProxyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCVoltstackClusterType.forward_proxy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["forward_proxy_choice"] = vFn
 
 	vrhGlobalNetworkChoice := v.GlobalNetworkChoiceValidationRuleHandler
 	rulesGlobalNetworkChoice := map[string]string{
@@ -3050,17 +3181,6 @@ var DefaultGCPVPCVoltstackClusterTypeValidator = func() *ValidateGCPVPCVoltstack
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
-	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
-	rulesServicePolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCVoltstackClusterType.service_policy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["service_policy_choice"] = vFn
-
 	vrhGcpCertifiedHw := v.GcpCertifiedHwValidationRuleHandler
 	rulesGcpCertifiedHw := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -3074,16 +3194,20 @@ var DefaultGCPVPCVoltstackClusterTypeValidator = func() *ValidateGCPVPCVoltstack
 	}
 	v.FldValidators["gcp_certified_hw"] = vFn
 
-	vrhAzNodes := v.AzNodesValidationRuleHandler
-	rulesAzNodes := map[string]string{
-		"ves.io.schema.rules.repeated.num_items": "1,3",
+	vrhGcpZoneNames := v.GcpZoneNamesValidationRuleHandler
+	rulesGcpZoneNames := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.repeated.unique":  "true",
+		"ves.io.schema.rules.string.in":        "[\"asia-east1-a\",\"asia-east1-b\",\"asia-east1-c\",\"asia-east2-a\",\"asia-east2-b\",\"asia-east2-c\",\"asia-northeast1-a\",\"asia-northeast1-b\",\"asia-northeast1-c\",\"asia-northeast2-a\",\"asia-northeast2-b\",\"asia-northeast2-c\",\"asia-northeast3-a\",\"asia-northeast3-b\",\"asia-northeast3-c\",\"asia-south1-a\",\"asia-south1-b\",\"asia-south1-c\",\"asia-southeast1-a\",\"asia-southeast1-b\",\"asia-southeast1-c\",\"asia-southeast2-a\",\"asia-southeast2-b\",\"asia-southeast2-c\",\"australia-southeast1-a\",\"australia-southeast1-b\",\"australia-southeast1-c\",\"europe-north1-a\",\"europe-north1-b\",\"europe-north1-c\",\"europe-west1-b\",\"europe-west1-c\",\"europe-west1-d\",\"europe-west2-a\",\"europe-west2-b\",\"europe-west2-c\",\"europe-west3-a\",\"europe-west3-b\",\"europe-west3-c\",\"europe-west4-a\",\"europe-west4-b\",\"europe-west4-c\",\"europe-west6-a\",\"europe-west6-b\",\"europe-west6-c\",\"northamerica-northeast1-a\",\"northamerica-northeast1-b\",\"northamerica-northeast1-c\",\"southamerica-east1-a\",\"southamerica-east1-b\",\"southamerica-east1-c\",\"us-central1-a\",\"us-central1-b\",\"us-central1-c\",\"us-central1-f\",\"us-east1-b\",\"us-east1-c\",\"us-east1-d\",\"us-east4-a\",\"us-east4-b\",\"us-east4-c\",\"us-west1-a\",\"us-west1-b\",\"us-west1-c\",\"us-west2-a\",\"us-west2-b\",\"us-west2-c\",\"us-west3-a\",\"us-west3-b\",\"us-west3-c\",\"us-west4-a\",\"us-west4-b\",\"us-west4-c\"]",
 	}
-	vFn, err = vrhAzNodes(rulesAzNodes)
+	vFn, err = vrhGcpZoneNames(rulesGcpZoneNames)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCVoltstackClusterType.az_nodes: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCVoltstackClusterType.gcp_zone_names: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["az_nodes"] = vFn
+	v.FldValidators["gcp_zone_names"] = vFn
+
+	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
 
@@ -3091,9 +3215,9 @@ var DefaultGCPVPCVoltstackClusterTypeValidator = func() *ValidateGCPVPCVoltstack
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
 
-	v.FldValidators["service_policy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
-
 	v.FldValidators["site_local_network"] = ves_io_schema_views.GCPVPCNetworkChoiceTypeValidator().Validate
+
+	v.FldValidators["site_local_subnet"] = ves_io_schema_views.GCPVPCSubnetChoiceTypeValidator().Validate
 
 	return v
 }()
@@ -3352,6 +3476,16 @@ func (v *ValidateGetSpecType) SshKeyValidationRuleHandler(rules map[string]strin
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -3364,6 +3498,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("address"))
+		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["coordinates"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coordinates"))
+		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["deployment"]; exists {
@@ -3628,11 +3780,24 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["ssh_key"] = vFn
 
+	vrhAddress := v.AddressValidationRuleHandler
+	rulesAddress := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhAddress(rulesAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["address"] = vFn
+
 	v.FldValidators["deployment.cloud_credentials"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["site_type.ingress_gw"] = GCPVPCIngressGwTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = GCPVPCIngressEgressGwTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = GCPVPCVoltstackClusterTypeValidator().Validate
+
+	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	return v
 }()
@@ -4003,6 +4168,16 @@ func (v *ValidateGlobalSpecType) SshKeyValidationRuleHandler(rules map[string]st
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -4015,6 +4190,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("address"))
+		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["coordinates"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coordinates"))
+		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["deployment"]; exists {
@@ -4297,11 +4490,24 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["ssh_key"] = vFn
 
+	vrhAddress := v.AddressValidationRuleHandler
+	rulesAddress := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhAddress(rulesAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["address"] = vFn
+
 	v.FldValidators["deployment.cloud_credentials"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["site_type.ingress_gw"] = GCPVPCIngressGwTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = GCPVPCIngressEgressGwTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = GCPVPCVoltstackClusterTypeValidator().Validate
+
+	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -4445,6 +4651,16 @@ func (v *ValidateReplaceSpecType) OperatingSystemVersionValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -4457,6 +4673,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("address"))
+		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["coordinates"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coordinates"))
+		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["nodes_per_az"]; exists {
@@ -4592,8 +4826,21 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["operating_system_version"] = vFn
 
+	vrhAddress := v.AddressValidationRuleHandler
+	rulesAddress := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhAddress(rulesAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["address"] = vFn
+
 	v.FldValidators["site_type.ingress_egress_gw"] = GCPVPCIngressEgressGwReplaceTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = GCPVPCVoltstackClusterReplaceTypeValidator().Validate
+
+	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	return v
 }()
@@ -4682,6 +4929,8 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.Address = f.GetAddress()
+	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
 	m.GcpRegion = f.GetGcpRegion()
@@ -4699,6 +4948,8 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	f.Address = m1.Address
+	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
 	f.GcpRegion = m1.GcpRegion
@@ -4708,6 +4959,47 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
+}
+
+// create setters in GCPVPCIngressEgressGwReplaceType from GCPVPCIngressEgressGwType for oneof fields
+func (r *GCPVPCIngressEgressGwReplaceType) SetForwardProxyChoiceToGCPVPCIngressEgressGwType(o *GCPVPCIngressEgressGwType) error {
+	switch of := r.ForwardProxyChoice.(type) {
+	case nil:
+		o.ForwardProxyChoice = nil
+
+	case *GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
+		o.ForwardProxyChoice = &GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies{ActiveForwardProxyPolicies: of.ActiveForwardProxyPolicies}
+
+	case *GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll:
+		o.ForwardProxyChoice = &GCPVPCIngressEgressGwType_ForwardProxyAllowAll{ForwardProxyAllowAll: of.ForwardProxyAllowAll}
+
+	case *GCPVPCIngressEgressGwReplaceType_NoForwardProxy:
+		o.ForwardProxyChoice = &GCPVPCIngressEgressGwType_NoForwardProxy{NoForwardProxy: of.NoForwardProxy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GCPVPCIngressEgressGwReplaceType) GetForwardProxyChoiceFromGCPVPCIngressEgressGwType(o *GCPVPCIngressEgressGwType) error {
+	switch of := o.ForwardProxyChoice.(type) {
+	case nil:
+		r.ForwardProxyChoice = nil
+
+	case *GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies:
+		r.ForwardProxyChoice = &GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies{ActiveForwardProxyPolicies: of.ActiveForwardProxyPolicies}
+
+	case *GCPVPCIngressEgressGwType_ForwardProxyAllowAll:
+		r.ForwardProxyChoice = &GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll{ForwardProxyAllowAll: of.ForwardProxyAllowAll}
+
+	case *GCPVPCIngressEgressGwType_NoForwardProxy:
+		r.ForwardProxyChoice = &GCPVPCIngressEgressGwReplaceType_NoForwardProxy{NoForwardProxy: of.NoForwardProxy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in GCPVPCIngressEgressGwReplaceType from GCPVPCIngressEgressGwType for oneof fields
@@ -4850,56 +5142,15 @@ func (r *GCPVPCIngressEgressGwReplaceType) GetOutsideStaticRouteChoiceFromGCPVPC
 	return nil
 }
 
-// create setters in GCPVPCIngressEgressGwReplaceType from GCPVPCIngressEgressGwType for oneof fields
-func (r *GCPVPCIngressEgressGwReplaceType) SetServicePolicyChoiceToGCPVPCIngressEgressGwType(o *GCPVPCIngressEgressGwType) error {
-	switch of := r.ServicePolicyChoice.(type) {
-	case nil:
-		o.ServicePolicyChoice = nil
-
-	case *GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
-		o.ServicePolicyChoice = &GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies{ActiveForwardProxyPolicies: of.ActiveForwardProxyPolicies}
-
-	case *GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll:
-		o.ServicePolicyChoice = &GCPVPCIngressEgressGwType_ForwardProxyAllowAll{ForwardProxyAllowAll: of.ForwardProxyAllowAll}
-
-	case *GCPVPCIngressEgressGwReplaceType_NoForwardProxyPolicy:
-		o.ServicePolicyChoice = &GCPVPCIngressEgressGwType_NoForwardProxyPolicy{NoForwardProxyPolicy: of.NoForwardProxyPolicy}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *GCPVPCIngressEgressGwReplaceType) GetServicePolicyChoiceFromGCPVPCIngressEgressGwType(o *GCPVPCIngressEgressGwType) error {
-	switch of := o.ServicePolicyChoice.(type) {
-	case nil:
-		r.ServicePolicyChoice = nil
-
-	case *GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies:
-		r.ServicePolicyChoice = &GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies{ActiveForwardProxyPolicies: of.ActiveForwardProxyPolicies}
-
-	case *GCPVPCIngressEgressGwType_ForwardProxyAllowAll:
-		r.ServicePolicyChoice = &GCPVPCIngressEgressGwReplaceType_ForwardProxyAllowAll{ForwardProxyAllowAll: of.ForwardProxyAllowAll}
-
-	case *GCPVPCIngressEgressGwType_NoForwardProxyPolicy:
-		r.ServicePolicyChoice = &GCPVPCIngressEgressGwReplaceType_NoForwardProxyPolicy{NoForwardProxyPolicy: of.NoForwardProxyPolicy}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
 func (m *GCPVPCIngressEgressGwReplaceType) FromGCPVPCIngressEgressGwType(f *GCPVPCIngressEgressGwType) {
 	if f == nil {
 		return
 	}
+	m.GetForwardProxyChoiceFromGCPVPCIngressEgressGwType(f)
 	m.GetGlobalNetworkChoiceFromGCPVPCIngressEgressGwType(f)
 	m.GetInsideStaticRouteChoiceFromGCPVPCIngressEgressGwType(f)
 	m.GetNetworkPolicyChoiceFromGCPVPCIngressEgressGwType(f)
 	m.GetOutsideStaticRouteChoiceFromGCPVPCIngressEgressGwType(f)
-	m.GetServicePolicyChoiceFromGCPVPCIngressEgressGwType(f)
 }
 
 func (m *GCPVPCIngressEgressGwReplaceType) ToGCPVPCIngressEgressGwType(f *GCPVPCIngressEgressGwType) {
@@ -4908,11 +5159,11 @@ func (m *GCPVPCIngressEgressGwReplaceType) ToGCPVPCIngressEgressGwType(f *GCPVPC
 	if f == nil {
 		return
 	}
+	m1.SetForwardProxyChoiceToGCPVPCIngressEgressGwType(f)
 	m1.SetGlobalNetworkChoiceToGCPVPCIngressEgressGwType(f)
 	m1.SetInsideStaticRouteChoiceToGCPVPCIngressEgressGwType(f)
 	m1.SetNetworkPolicyChoiceToGCPVPCIngressEgressGwType(f)
 	m1.SetOutsideStaticRouteChoiceToGCPVPCIngressEgressGwType(f)
-	m1.SetServicePolicyChoiceToGCPVPCIngressEgressGwType(f)
 }
 
 func (m *GCPVPCIngressGwReplaceType) FromGCPVPCIngressGwType(f *GCPVPCIngressGwType) {
@@ -4927,6 +5178,47 @@ func (m *GCPVPCIngressGwReplaceType) ToGCPVPCIngressGwType(f *GCPVPCIngressGwTyp
 	if f == nil {
 		return
 	}
+}
+
+// create setters in GCPVPCVoltstackClusterReplaceType from GCPVPCVoltstackClusterType for oneof fields
+func (r *GCPVPCVoltstackClusterReplaceType) SetForwardProxyChoiceToGCPVPCVoltstackClusterType(o *GCPVPCVoltstackClusterType) error {
+	switch of := r.ForwardProxyChoice.(type) {
+	case nil:
+		o.ForwardProxyChoice = nil
+
+	case *GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
+		o.ForwardProxyChoice = &GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies{ActiveForwardProxyPolicies: of.ActiveForwardProxyPolicies}
+
+	case *GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll:
+		o.ForwardProxyChoice = &GCPVPCVoltstackClusterType_ForwardProxyAllowAll{ForwardProxyAllowAll: of.ForwardProxyAllowAll}
+
+	case *GCPVPCVoltstackClusterReplaceType_NoForwardProxy:
+		o.ForwardProxyChoice = &GCPVPCVoltstackClusterType_NoForwardProxy{NoForwardProxy: of.NoForwardProxy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GCPVPCVoltstackClusterReplaceType) GetForwardProxyChoiceFromGCPVPCVoltstackClusterType(o *GCPVPCVoltstackClusterType) error {
+	switch of := o.ForwardProxyChoice.(type) {
+	case nil:
+		r.ForwardProxyChoice = nil
+
+	case *GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies:
+		r.ForwardProxyChoice = &GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies{ActiveForwardProxyPolicies: of.ActiveForwardProxyPolicies}
+
+	case *GCPVPCVoltstackClusterType_ForwardProxyAllowAll:
+		r.ForwardProxyChoice = &GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll{ForwardProxyAllowAll: of.ForwardProxyAllowAll}
+
+	case *GCPVPCVoltstackClusterType_NoForwardProxy:
+		r.ForwardProxyChoice = &GCPVPCVoltstackClusterReplaceType_NoForwardProxy{NoForwardProxy: of.NoForwardProxy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in GCPVPCVoltstackClusterReplaceType from GCPVPCVoltstackClusterType for oneof fields
@@ -5034,55 +5326,14 @@ func (r *GCPVPCVoltstackClusterReplaceType) GetOutsideStaticRouteChoiceFromGCPVP
 	return nil
 }
 
-// create setters in GCPVPCVoltstackClusterReplaceType from GCPVPCVoltstackClusterType for oneof fields
-func (r *GCPVPCVoltstackClusterReplaceType) SetServicePolicyChoiceToGCPVPCVoltstackClusterType(o *GCPVPCVoltstackClusterType) error {
-	switch of := r.ServicePolicyChoice.(type) {
-	case nil:
-		o.ServicePolicyChoice = nil
-
-	case *GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
-		o.ServicePolicyChoice = &GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies{ActiveForwardProxyPolicies: of.ActiveForwardProxyPolicies}
-
-	case *GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll:
-		o.ServicePolicyChoice = &GCPVPCVoltstackClusterType_ForwardProxyAllowAll{ForwardProxyAllowAll: of.ForwardProxyAllowAll}
-
-	case *GCPVPCVoltstackClusterReplaceType_NoForwardProxyPolicy:
-		o.ServicePolicyChoice = &GCPVPCVoltstackClusterType_NoForwardProxyPolicy{NoForwardProxyPolicy: of.NoForwardProxyPolicy}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *GCPVPCVoltstackClusterReplaceType) GetServicePolicyChoiceFromGCPVPCVoltstackClusterType(o *GCPVPCVoltstackClusterType) error {
-	switch of := o.ServicePolicyChoice.(type) {
-	case nil:
-		r.ServicePolicyChoice = nil
-
-	case *GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies:
-		r.ServicePolicyChoice = &GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies{ActiveForwardProxyPolicies: of.ActiveForwardProxyPolicies}
-
-	case *GCPVPCVoltstackClusterType_ForwardProxyAllowAll:
-		r.ServicePolicyChoice = &GCPVPCVoltstackClusterReplaceType_ForwardProxyAllowAll{ForwardProxyAllowAll: of.ForwardProxyAllowAll}
-
-	case *GCPVPCVoltstackClusterType_NoForwardProxyPolicy:
-		r.ServicePolicyChoice = &GCPVPCVoltstackClusterReplaceType_NoForwardProxyPolicy{NoForwardProxyPolicy: of.NoForwardProxyPolicy}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
 func (m *GCPVPCVoltstackClusterReplaceType) FromGCPVPCVoltstackClusterType(f *GCPVPCVoltstackClusterType) {
 	if f == nil {
 		return
 	}
+	m.GetForwardProxyChoiceFromGCPVPCVoltstackClusterType(f)
 	m.GetGlobalNetworkChoiceFromGCPVPCVoltstackClusterType(f)
 	m.GetNetworkPolicyChoiceFromGCPVPCVoltstackClusterType(f)
 	m.GetOutsideStaticRouteChoiceFromGCPVPCVoltstackClusterType(f)
-	m.GetServicePolicyChoiceFromGCPVPCVoltstackClusterType(f)
 }
 
 func (m *GCPVPCVoltstackClusterReplaceType) ToGCPVPCVoltstackClusterType(f *GCPVPCVoltstackClusterType) {
@@ -5091,10 +5342,10 @@ func (m *GCPVPCVoltstackClusterReplaceType) ToGCPVPCVoltstackClusterType(f *GCPV
 	if f == nil {
 		return
 	}
+	m1.SetForwardProxyChoiceToGCPVPCVoltstackClusterType(f)
 	m1.SetGlobalNetworkChoiceToGCPVPCVoltstackClusterType(f)
 	m1.SetNetworkPolicyChoiceToGCPVPCVoltstackClusterType(f)
 	m1.SetOutsideStaticRouteChoiceToGCPVPCVoltstackClusterType(f)
-	m1.SetServicePolicyChoiceToGCPVPCVoltstackClusterType(f)
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -5177,6 +5428,8 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.Address = f.GetAddress()
+	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
 	m.GcpRegion = f.GetGcpRegion()
@@ -5194,6 +5447,8 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	f.Address = m1.Address
+	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
 	f.GcpRegion = m1.GcpRegion
@@ -5277,6 +5532,8 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.Address = f.GetAddress()
+	m.Coordinates = f.GetCoordinates()
 	m.NodesPerAz = f.GetNodesPerAz()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.GetSiteTypeFromGlobalSpecType(f)
@@ -5289,6 +5546,8 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	f.Address = m1.Address
+	f.Coordinates = m1.Coordinates
 	f.NodesPerAz = m1.NodesPerAz
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	m1.SetSiteTypeToGlobalSpecType(f)

@@ -571,6 +571,15 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["aws_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aws_name"))
+		if err := fv(ctx, m.GetAwsName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["aws_region"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("aws_region"))
@@ -879,6 +888,15 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["aws_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aws_name"))
+		if err := fv(ctx, m.GetAwsName(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["aws_region"]; exists {

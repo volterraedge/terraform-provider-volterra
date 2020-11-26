@@ -1100,7 +1100,19 @@ type APISrv struct {
 	// resource handler function pointers
 }
 
+func (s *APISrv) validateTransport(ctx context.Context) error {
+	if s.sf.IsTransportNotSupported("ves.io.schema.fleet.API", server.TransportFromContext(ctx)) {
+		userMsg := fmt.Sprintf("ves.io.schema.fleet.API not allowed in transport '%s'", server.TransportFromContext(ctx))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		return server.GRPCStatusFromError(err).Err()
+	}
+	return nil
+}
+
 func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateResponse, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.fleet.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1147,6 +1159,9 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResponse, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if req.Spec == nil {
 		err := fmt.Errorf("Nil spec in Replace Request")
 		return nil, svcfw.NewInvalidInputError(err.Error(), err)
@@ -1182,6 +1197,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 }
 
 func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.fleet.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1227,6 +1245,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 }
 
 func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.fleet.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1260,6 +1281,9 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protobuf.Empty, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.fleet.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1496,6 +1520,11 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				)
 			}
 
+			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
+			item.Metadata.FromObjectMetaType(o.Metadata)
+			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
+			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
+
 			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.fleet.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
@@ -1644,7 +1673,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-fleet-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fleet-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fleet.API.Create"
             },
@@ -1740,7 +1769,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-fleet-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fleet-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fleet.API.Replace"
             },
@@ -1852,7 +1881,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-fleet-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fleet-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fleet.API.List"
             },
@@ -1956,7 +1985,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-fleet-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fleet-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fleet.API.Get"
             },
@@ -2039,7 +2068,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-fleet-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-fleet-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.fleet.API.Delete"
             },
@@ -2060,7 +2089,7 @@ var APISwaggerJSON string = `{
                     "description": " Interval in seconds to transmit LACP packets\n\nExample: - \"30\"-",
                     "title": "Interval",
                     "format": "int64",
-                    "x-displayname": "Interval",
+                    "x-displayname": "LACP Packet Interval",
                     "x-ves-example": "30"
                 }
             }
@@ -2322,7 +2351,7 @@ var APISwaggerJSON string = `{
         },
         "fleetDeviceOwnerType": {
             "type": "string",
-            "description": "Defines ownership for a device.\n\nDevice owner is invalid\nDevice is owned by VER pod. usually it will be network interface device or accelerator like crypto engine.\nDevice is available to be owned by vk8s workload on the site, like camera GPU etc.\nDevice is not available to be owned by vk8s or VER. Can be exposed via some other service. Like TPM.",
+            "description": "Defines ownership for a device.\n\nDevice owner is invalid\nDevice is owned by VER pod. usually it will be network interface device or accelerator like crypto engine.\nDevice is available to be owned by vK8s workload on the site, like camera GPU etc.\nDevice is not available to be owned by vK8s or VER. Can be exposed via some other service. Like TPM.",
             "title": "Device Owner Type",
             "enum": [
                 "DEVICE_OWNER_INVALID",
@@ -2674,7 +2703,7 @@ var APISwaggerJSON string = `{
             "description": "Configuration of custom storage class",
             "title": "Custom Storage Class",
             "x-displayname": "Custom Storage Class",
-            "x-ves-oneof-field-device_choice": "[\"dell_emc_isilon_f800\",\"hpe_nimbus_storage_af40\",\"netapp_trident\",\"pure_service_orchestrator\"]",
+            "x-ves-oneof-field-device_choice": "[\"netapp_trident\",\"openebs_enterprise\",\"pure_service_orchestrator\"]",
             "x-ves-proto-message": "ves.io.schema.fleet.FleetStorageClassType",
             "properties": {
                 "advanced_storage_parameters": {
@@ -2685,15 +2714,10 @@ var APISwaggerJSON string = `{
                 },
                 "default_storage_class": {
                     "type": "boolean",
-                    "description": " Make this storage class default storage class for the k8s cluster",
+                    "description": " Make this storage class default storage class for the K8s cluster",
                     "title": "Default Storage Class",
                     "format": "boolean",
                     "x-displayname": "Default Storage Class"
-                },
-                "dell_emc_isilon_f800": {
-                    "description": "Exclusive with [hpe_nimbus_storage_af40 netapp_trident pure_service_orchestrator]\nx-displayName: \"Dell EMC isilon F800\"\nStorage class Device configuration for Dell EMC isilon F800",
-                    "title": "Dell EMC isilon F800",
-                    "$ref": "#/definitions/fleetStorageClassDellIsilonF800Type"
                 },
                 "description": {
                     "type": "string",
@@ -2701,24 +2725,24 @@ var APISwaggerJSON string = `{
                     "title": "Storage Class Description",
                     "x-displayname": "Storage Class Description"
                 },
-                "hpe_nimbus_storage_af40": {
-                    "description": "Exclusive with [dell_emc_isilon_f800 netapp_trident pure_service_orchestrator]\nx-displayName: \"HPE Nimbus Storage AF40\"\nStorage class Device configuration for HPE Nimbus Storage AF40",
-                    "title": "HPE Nimbus Storage AF40",
-                    "$ref": "#/definitions/fleetStorageClassHPENimbusStorageAf40Type"
-                },
                 "netapp_trident": {
-                    "description": "Exclusive with [dell_emc_isilon_f800 hpe_nimbus_storage_af40 pure_service_orchestrator]\nx-displayName: \"NetApp Trident\"\nStorage class Device configuration for NetApp Trident",
+                    "description": "Exclusive with [openebs_enterprise pure_service_orchestrator]\nx-displayName: \"NetApp Trident\"\nStorage class Device configuration for NetApp Trident",
                     "title": "NetApp Trident",
                     "$ref": "#/definitions/fleetStorageClassNetappTridentType"
                 },
+                "openebs_enterprise": {
+                    "description": "Exclusive with [netapp_trident pure_service_orchestrator]\nx-displayName: \"OpenEBS Enterprise\"\nStorage class Device configuration for OpenEBS Enterprise",
+                    "title": "OpenEBS Enterprise",
+                    "$ref": "#/definitions/fleetStorageClassOpenebsEnterpriseType"
+                },
                 "pure_service_orchestrator": {
-                    "description": "Exclusive with [dell_emc_isilon_f800 hpe_nimbus_storage_af40 netapp_trident]\nx-displayName: \"Pure Storage Service Orchestrator\"\nStorage class Device configuration for Pure Service Orchestrator",
+                    "description": "Exclusive with [netapp_trident openebs_enterprise]\nx-displayName: \"Pure Storage Service Orchestrator\"\nStorage class Device configuration for Pure Service Orchestrator",
                     "title": "Pure Storage Service Orchestrator",
                     "$ref": "#/definitions/fleetStorageClassPureServiceOrchestratorType"
                 },
                 "storage_class_name": {
                     "type": "string",
-                    "description": " x-displayName: \"Storage Class Name:\n Name of the storage class as it will appear in k8s.\n\nExample: - \"premium\"-\nRequired: YES",
+                    "description": " x-displayName: \"Storage Class Name:\n Name of the storage class as it will appear in K8s.\n\nExample: - \"premium\"-\nRequired: YES",
                     "title": "Storage Class Name",
                     "x-ves-example": "premium",
                     "x-ves-required": "true"
@@ -2755,7 +2779,7 @@ var APISwaggerJSON string = `{
             "description": "Configuration of storage device",
             "title": "Storage Device",
             "x-displayname": "Storage Device",
-            "x-ves-oneof-field-device_choice": "[\"dell_emc_isilon_f800\",\"hpe_nimbus_storage_af40\",\"netapp_trident\",\"pure_service_orchestrator\"]",
+            "x-ves-oneof-field-device_choice": "[\"netapp_trident\",\"openebs_enterprise\",\"pure_service_orchestrator\"]",
             "x-ves-proto-message": "ves.io.schema.fleet.FleetStorageDeviceType",
             "properties": {
                 "advanced_advanced_parameters": {
@@ -2764,23 +2788,18 @@ var APISwaggerJSON string = `{
                     "title": "Advanced Parameters",
                     "x-displayname": "Advanced Parameters"
                 },
-                "dell_emc_isilon_f800": {
-                    "description": "Exclusive with [hpe_nimbus_storage_af40 netapp_trident pure_service_orchestrator]\nx-displayName: \"Dell EMC isilon F800\"\nDevice configuration for Dell EMC isilon F800",
-                    "title": "Dell EMC isilon F800",
-                    "$ref": "#/definitions/fleetStorageDeviceDellIsilonF800Type"
-                },
-                "hpe_nimbus_storage_af40": {
-                    "description": "Exclusive with [dell_emc_isilon_f800 netapp_trident pure_service_orchestrator]\nx-displayName: \"HPE Nimbus Storage AF40\"\nDevice configuration for HPE Nimbus Storage AF40",
-                    "title": "HPE Nimbus Storage AF40",
-                    "$ref": "#/definitions/fleetStorageDeviceHPENimbusStorageAf40Type"
-                },
                 "netapp_trident": {
-                    "description": "Exclusive with [dell_emc_isilon_f800 hpe_nimbus_storage_af40 pure_service_orchestrator]\nx-displayName: \"NetApp Trident\"\nDevice configuration for NetApp Trident",
+                    "description": "Exclusive with [openebs_enterprise pure_service_orchestrator]\nx-displayName: \"NetApp Trident\"\nDevice configuration for NetApp Trident",
                     "title": "NetApp Trident",
                     "$ref": "#/definitions/fleetStorageDeviceNetappTridentType"
                 },
+                "openebs_enterprise": {
+                    "description": "Exclusive with [netapp_trident pure_service_orchestrator]\nx-displayName: \"OpenEBS Enterprise\"\nDevice configuration for Pure Storage Service Orchestrator",
+                    "title": "OpenEBS Enterprise",
+                    "$ref": "#/definitions/fleetStorageDeviceOpenebsEnterpriseType"
+                },
                 "pure_service_orchestrator": {
-                    "description": "Exclusive with [dell_emc_isilon_f800 hpe_nimbus_storage_af40 netapp_trident]\nx-displayName: \"Pure Storage Service Orchestrator\"\nDevice configuration for Pure Storage Service Orchestrator",
+                    "description": "Exclusive with [netapp_trident openebs_enterprise]\nx-displayName: \"Pure Storage Service Orchestrator\"\nDevice configuration for Pure Storage Service Orchestrator",
                     "title": "Pure Storage Service Orchestrator",
                     "$ref": "#/definitions/fleetStorageDevicePureStorageServiceOrchestratorType"
                 },
@@ -2811,6 +2830,18 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 }
             }
+        },
+        "fleetFleetType": {
+            "type": "string",
+            "description": "Defines fleet type. We have different constraints per each type.\n\nDefault fleet type.\nInternally created site by single fleet such as AWS/Azure/GCP etc.",
+            "title": "Fleet Type",
+            "enum": [
+                "MULTIPLE_SITE",
+                "SINGLE_SITE"
+            ],
+            "default": "MULTIPLE_SITE",
+            "x-displayname": "Fleet Type",
+            "x-ves-proto-enum": "ves.io.schema.fleet.FleetType"
         },
         "fleetGetResponse": {
             "type": "object",
@@ -3114,6 +3145,11 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "sfo",
                     "x-ves-required": "true"
                 },
+                "fleet_type": {
+                    "description": " Fleet Type can be fleet of single site or multiple sites. Corresponding virtual site is not created\n for single site fleet.",
+                    "title": "Fleet type",
+                    "$ref": "#/definitions/fleetFleetType"
+                },
                 "inside_virtual_network": {
                     "type": "array",
                     "description": " Default inside (site local) virtual network for the fleet",
@@ -3191,13 +3227,6 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Outside (Site Local) Virtual Network"
-                },
-                "single_site_fleet": {
-                    "type": "boolean",
-                    "description": " If true, then this is a single site fleet, for e.g. created for site view objects",
-                    "title": "Flag to indicate if this is a single-site fleet",
-                    "format": "boolean",
-                    "x-displayname": "Single Site Fleet"
                 },
                 "storage_class_list": {
                     "description": "Exclusive with [default_storage_class]\nx-displayName: \"Add Custom Storage Class\"\nAdd additional custom storage classes in kubernetes for this fleet",
@@ -3284,6 +3313,12 @@ var APISwaggerJSON string = `{
                     "title": "labels",
                     "x-displayname": "Labels"
                 },
+                "metadata": {
+                    "description": " If list request has report_fields set then metadata will\n contain all the metadata associated with the object.",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectGetMetaType",
+                    "x-displayname": "Metadata"
+                },
                 "name": {
                     "type": "string",
                     "description": " The name of this fleet\n\nExample: - \"name\"-",
@@ -3299,7 +3334,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "ns1"
                 },
                 "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec",
+                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
                     "title": "object",
                     "$ref": "#/definitions/fleetObject",
                     "x-displayname": "Object"
@@ -3318,6 +3353,12 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/fleetStatusObject"
                     },
                     "x-displayname": "Status"
+                },
+                "system_metadata": {
+                    "description": " If list request has report_fields set then system_metadata will\n contain all the system generated details of this object.",
+                    "title": "system_metadata",
+                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
+                    "x-displayname": "System Metadata"
                 },
                 "tenant": {
                     "type": "string",
@@ -3508,6 +3549,39 @@ var APISwaggerJSON string = `{
                     "format": "int32",
                     "x-displayname": "Unix Mode Permissions",
                     "x-ves-example": "777"
+                }
+            }
+        },
+        "fleetOpenebsMayastorPoolType": {
+            "type": "object",
+            "description": "Configuration for OpenEBS Mayastor Pool. When a Mayastor Node (MSN) allocates storage capacity for a Persistent Volume (PV) it does so from a construct named a Mayastor Pool (MSP).\nEach MSN may have zero, one, or more such pools associated with it.  The ownership of a pool by a MSN is exclusive.\nIn the current version of Mayastor, a pool may have only a single block device member, which constitutes the entire data persistence layer for that pool.\nEach MSP include a unique name for the pool, the host name of the MSN on which it is hosted and a reference to a disk device which is accessible from that node (for inclusion within the pool).\nThe pool definition allows the reference to its member disk to adhere to one of a number of possible schemes, each associated with a specific access\nmechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.",
+            "title": "OpenEBS Mayastor Pool",
+            "x-displayname": "OpenEBS Mayastor Pool",
+            "x-ves-proto-message": "ves.io.schema.fleet.OpenebsMayastorPoolType",
+            "properties": {
+                "node": {
+                    "type": "string",
+                    "description": " Enter node name of Mayastor Node (MSN) where this pool is located.\n\nExample: - \"master-0\"-\nRequired: YES",
+                    "x-displayname": "Node Name",
+                    "x-ves-example": "master-0",
+                    "x-ves-required": "true"
+                },
+                "pool_disk_devices": {
+                    "type": "array",
+                    "description": " List of Disk Devices on Mayastore Node (MSN). Once Mayastor has created a pool it is assumed that it henceforth has exclusive use of the associated\n disk device; it should not be partitioned, formatted, or shared with another application or process.  Any existing data on the device will be destroyed.\n It supports various types such as \"/dev/sdb\", \"nvme://nqn.2014-08.com.vendor:nvme:nvm-subsystem-sn-d78432\" or \"iscsi://iqn.2000-08.com.datacore.com:cloudvm41-2\".\n\nExample: - \"/dev/sdb\"-\nRequired: YES",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "List of  Disk Devices",
+                    "x-ves-example": "/dev/sdb",
+                    "x-ves-required": "true"
+                },
+                "pool_name": {
+                    "type": "string",
+                    "description": " Enter Mayastor Pool Name\nRequired: YES",
+                    "title": "Mayastor Pool Name",
+                    "x-displayname": "Mayastor Pool Name",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -3759,78 +3833,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "fleetStorageClassDellIsilonF800Type": {
-            "type": "object",
-            "description": "Storage class configuration for Dell EMC isilon F800",
-            "title": "Dell EMC isilon F800",
-            "x-displayname": "Dell EMC isilon F800",
-            "x-ves-oneof-field-https_choice": "[\"az_service_ip_address\",\"az_service_name\"]",
-            "x-ves-proto-message": "ves.io.schema.fleet.StorageClassDellIsilonF800Type",
-            "properties": {
-                "az_service_ip_address": {
-                    "type": "string",
-                    "description": "Exclusive with [az_service_name]\nx-displayName: \"Storage Server IP address\"\nEnter storage server IP address",
-                    "title": "Storage Server IP address"
-                },
-                "az_service_name": {
-                    "type": "string",
-                    "description": "Exclusive with [az_service_ip_address]\nx-displayName: \"Storage Server Name\"\nEnter storage server Name",
-                    "title": "Storage Server Name"
-                },
-                "base_path": {
-                    "type": "string",
-                    "description": " x-displayName: \"Base Path\n Base path for the volume to be created, Ensure that this path exists on Isilon.\n\nExample: - \"/ifs/data/csi\"-",
-                    "title": "Base Path",
-                    "x-ves-example": "/ifs/data/csi"
-                },
-                "iscsi_access_zone": {
-                    "type": "string",
-                    "description": " The name of the access zone, a volume can be created in\n\nExample: - \"System\"-",
-                    "title": "iSCSI Access Zone",
-                    "x-displayname": "iSCSI Access Zone",
-                    "x-ves-example": "System"
-                },
-                "root_client_enable": {
-                    "type": "boolean",
-                    "description": " Determines, when a node mounts the PVC, in NodeStageVolume, whether to add the k8s node to \n the \"Root clients\" field (when true) or \"Clients\" field (when false) of the NFS export ",
-                    "title": "title",
-                    "format": "boolean",
-                    "x-displayname": "Enable Root Client"
-                }
-            }
-        },
-        "fleetStorageClassHPENimbusStorageAf40Type": {
-            "type": "object",
-            "description": "Storage class Device configuration for HPE Nimbus Storage AF40",
-            "title": "HPE Nimbus Storage AF40",
-            "x-displayname": "HPE Nimbus Storage AF40",
-            "x-ves-proto-message": "ves.io.schema.fleet.StorageClassHPENimbusStorageAf40Type",
-            "properties": {
-                "limit_iops": {
-                    "type": "integer",
-                    "description": " I/O operations per second limit for this storage class\n\nExample: - \"76800\"-",
-                    "title": "IOP Limit",
-                    "format": "int64",
-                    "x-displayname": "IOP Limit",
-                    "x-ves-example": "76800"
-                },
-                "limit_mbps": {
-                    "type": "integer",
-                    "description": " Mega Byte per second data thruput limit.\n\nExample: - \"10000\"-",
-                    "title": "MBPS Limit",
-                    "format": "int64",
-                    "x-displayname": "MBPS Limit",
-                    "x-ves-example": "10000"
-                },
-                "perf_policy": {
-                    "type": "string",
-                    "description": " Performance Policy for this storage Class\n\nExample: - \"Other\"-",
-                    "title": "Performance Policy",
-                    "x-displayname": "Performance Policy",
-                    "x-ves-example": "Other"
-                }
-            }
-        },
         "fleetStorageClassNetappTridentType": {
             "type": "object",
             "description": "Storage class Device configuration for NetApp Trident",
@@ -3847,6 +3849,30 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "fleetStorageClassOpenebsEnterpriseType": {
+            "type": "object",
+            "description": "Storage class Device configuration for OpenEBS Enterprise",
+            "title": "OpenEBS Enterprise",
+            "x-displayname": "OpenEBS Enterprise",
+            "x-ves-proto-message": "ves.io.schema.fleet.StorageClassOpenebsEnterpriseType",
+            "properties": {
+                "protocol": {
+                    "type": "string",
+                    "description": " Defines type of transport protocol used to mount the PV to the worker node hosting the associated application pod (iSCSI, or NVMe-oF)\n\nExample: - \"nvmf\"-",
+                    "title": "Protocol",
+                    "x-displayname": "Protocol",
+                    "x-ves-example": "nvmf"
+                },
+                "replication": {
+                    "type": "integer",
+                    "description": " Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3.\n\nExample: - \"1\"-",
+                    "title": "Replication",
+                    "format": "int32",
+                    "x-displayname": "Replication",
+                    "x-ves-example": "1"
+                }
+            }
+        },
         "fleetStorageClassPureServiceOrchestratorType": {
             "type": "object",
             "description": "Storage class Device configuration for Pure Service Orchestrator",
@@ -3860,145 +3886,6 @@ var APISwaggerJSON string = `{
                     "title": "Backend",
                     "x-displayname": "Backend",
                     "x-ves-example": "block"
-                }
-            }
-        },
-        "fleetStorageDeviceDellIsilonF800Type": {
-            "type": "object",
-            "description": "Device configuration for Dell EMC isilon F800",
-            "title": "Dell EMC isilon F800",
-            "x-displayname": "Dell EMC isilon F800",
-            "x-ves-oneof-field-address_choice": "[\"api_server_ip_address\",\"api_server_name\"]",
-            "x-ves-oneof-field-https_choice": "[\"secure_network\",\"trusted_ca_url\"]",
-            "x-ves-proto-message": "ves.io.schema.fleet.StorageDeviceDellIsilonF800Type",
-            "properties": {
-                "api_server_ip_address": {
-                    "type": "string",
-                    "description": "Exclusive with [api_server_name]\nx-displayName: \"Storage Server IP address\"\nEnter storage server IP address",
-                    "title": "Storage Server IP address"
-                },
-                "api_server_name": {
-                    "type": "string",
-                    "description": "Exclusive with [api_server_ip_address]\nx-displayName: \"Storage Server Name\"\nEnter storage server Name",
-                    "title": "Storage Server Name"
-                },
-                "api_server_port": {
-                    "type": "integer",
-                    "description": " Enter Storage Server Port\n\nExample: - \"8080\"-",
-                    "title": "Storage server Port",
-                    "format": "int64",
-                    "x-displayname": "Storage server Port",
-                    "x-ves-example": "8080"
-                },
-                "base_path": {
-                    "type": "string",
-                    "description": " x-displayName: \"Base Path\nThe default base path for the volumes to be created, this will be used if a storage class does not have the IsiPath parameter specified Ensure that this path exists on Isilon.\n\nExample: - \"/ifs/data/csi\"-",
-                    "title": "Base Path",
-                    "x-ves-example": "/ifs/data/csi"
-                },
-                "iscsi_access_zone": {
-                    "type": "string",
-                    "description": " The name of the access zone, a volume can be created in\n\nExample: - \"System\"-",
-                    "title": "iSCSI Access Zone",
-                    "x-displayname": "iSCSI Access Zone",
-                    "x-ves-example": "System"
-                },
-                "password": {
-                    "description": " Please Enter you password.",
-                    "title": "Password",
-                    "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "Password"
-                },
-                "secure_network": {
-                    "description": "Exclusive with [trusted_ca_url]\nx-displayName: \"Secure Network, use HTTP\"\nNetwork is secure, use http",
-                    "title": "Secure Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "trusted_ca_url": {
-                    "type": "string",
-                    "description": "Exclusive with [secure_network]\nx-displayName: \"Use HTTPS, Server CA Certificates\"\nIn case of https, enter server  CA certificate  or certificate-chain.",
-                    "title": "Use HTTPS, Server CA certificates"
-                },
-                "username": {
-                    "type": "string",
-                    "description": " Base64 encoded username\n\nExample: - \"string:///YWRtaW4=\"-\nRequired: YES",
-                    "title": "Username",
-                    "x-displayname": "Username",
-                    "x-ves-example": "string:///YWRtaW4=",
-                    "x-ves-required": "true"
-                },
-                "volume_prefix": {
-                    "type": "string",
-                    "description": " Volume prefix is a string prepended to each volume created by the CSI driver\n\nExample: - \"k8s\"-",
-                    "title": "Volume Prefix",
-                    "x-displayname": "Volume Prefix",
-                    "x-ves-example": "k8s"
-                }
-            }
-        },
-        "fleetStorageDeviceHPENimbusStorageAf40Type": {
-            "type": "object",
-            "description": "Device configuration for HPE Nimbus Storage AF40",
-            "title": "HPE Nimbus Storage AF40",
-            "x-displayname": "HPE Nimbus Storage AF40",
-            "x-ves-proto-message": "ves.io.schema.fleet.StorageDeviceHPENimbusStorageAf40Type",
-            "properties": {
-                "api_server_port": {
-                    "type": "integer",
-                    "description": " Enter Storage Server Port\n\nExample: - \"8080\"-",
-                    "title": "Storage server Port",
-                    "format": "int64",
-                    "x-displayname": "Storage server Port",
-                    "x-ves-example": "8080"
-                },
-                "limit_iops": {
-                    "type": "integer",
-                    "description": " I/O operations per second limit for this storage class\n\nExample: - \"76800\"-",
-                    "title": "IOP Limit",
-                    "format": "int64",
-                    "x-displayname": "IOP Limit",
-                    "x-ves-example": "76800"
-                },
-                "limit_mbps": {
-                    "type": "integer",
-                    "description": " Mega Byte per second data thruput limit.\n\nExample: - \"10000\"-",
-                    "title": "MBPS Limit",
-                    "format": "int64",
-                    "x-displayname": "MBPS Limit",
-                    "x-ves-example": "10000"
-                },
-                "password": {
-                    "description": " Please Enter you password.",
-                    "title": "Password",
-                    "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "Password"
-                },
-                "perf_policy": {
-                    "type": "string",
-                    "description": " Performance Policy for this storage Class\n\nExample: - \"Other\"-",
-                    "title": "Performance Policy",
-                    "x-displayname": "Performance Policy",
-                    "x-ves-example": "Other"
-                },
-                "storage_server_ip_address": {
-                    "type": "string",
-                    "description": " Enter storage server IP address",
-                    "title": "Storage Server IP address",
-                    "x-displayname": "Storage Server IP address"
-                },
-                "storage_server_name": {
-                    "type": "string",
-                    "description": " Enter storage server Name",
-                    "title": "Storage Server Name",
-                    "x-displayname": "Storage Server Name"
-                },
-                "username": {
-                    "type": "string",
-                    "description": " Base64 encoded username\n\nExample: - \"string:///YWRtaW4=\"-\nRequired: YES",
-                    "title": "Username",
-                    "x-displayname": "Username",
-                    "x-ves-example": "string:///YWRtaW4=",
-                    "x-ves-required": "true"
                 }
             }
         },
@@ -4288,6 +4175,24 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "fleetStorageDeviceOpenebsEnterpriseType": {
+            "type": "object",
+            "description": "Device configuration for OpenEBS Enterprise",
+            "title": "OpenEBS Enterprise",
+            "x-displayname": "OpenEBS Enterprise",
+            "x-ves-proto-message": "ves.io.schema.fleet.StorageDeviceOpenebsEnterpriseType",
+            "properties": {
+                "mayastor_pools": {
+                    "type": "array",
+                    "description": " List of  Mayastor Pools. When a Mayastor Node (MSN) allocates storage capacity for a Persistent Volume (PV) it does so from a construct named a Mayastor Pool (MSP).\n Each MSN may have zero, one, or more such pools associated with it.  The ownership of a pool by a MSN is exclusive.\n In the current version of Mayastor, a pool may have only a single block device member, which constitutes the entire data persistence layer for that pool.\n Each MSP include a unique name for the pool, the host name of the MSN on which it is hosted and a reference to a disk device which is accessible from that node (for inclusion within the pool).\n The pool definition allows the reference to its member disk to adhere to one of a number of possible schemes, each associated with a specific access\n mechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.",
+                    "title": "List of  Mayastor Pools",
+                    "items": {
+                        "$ref": "#/definitions/fleetOpenebsMayastorPoolType"
+                    },
+                    "x-displayname": "List of  Mayastor Pools"
+                }
+            }
+        },
         "fleetStorageDevicePureStorageServiceOrchestratorType": {
             "type": "object",
             "description": "Device configuration for Pure Storage Service Orchestrator",
@@ -4304,7 +4209,7 @@ var APISwaggerJSON string = `{
                 },
                 "cluster_id": {
                     "type": "string",
-                    "description": " clusterID is added as a prefix for all volumes created by this PSO installation.\n clusterID is also used to identify the volumes used by the datastore, pso-db.\n clusterID MUST BE UNIQUE for multiple k8s clusters running on top of the same storage arrays.\n characters allowed: alphanumeric and underscores\n\nExample: - \"cluster1\"-\nRequired: YES",
+                    "description": " clusterID is added as a prefix for all volumes created by this PSO installation.\n clusterID is also used to identify the volumes used by the datastore, pso-db.\n clusterID MUST BE UNIQUE for multiple K8s clusters running on top of the same storage arrays.\n characters allowed: alphanumeric and underscores\n\nExample: - \"cluster1\"-\nRequired: YES",
                     "title": "Cluster ID",
                     "x-displayname": "Cluster ID",
                     "x-ves-example": "cluster1",
@@ -4472,7 +4377,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -4941,6 +4846,12 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
                     "title": "Blindfold Secret",
                     "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                },
+                "blindfold_secret_info_internal": {
+                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
+                    "title": "Blindfold Secret Internal",
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret Internal"
                 },
                 "clear_secret_info": {
                     "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",

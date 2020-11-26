@@ -255,7 +255,7 @@ var CustomSiteStatusAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Site Status Info",
-        "description": "APIs to get status of a site or individual nodes in a multi-node site.\nSome of the status metrics for a site are listed below:\n- Cpu, Memory and Disk usage\n- In/Out throughput\n- Number of active flows and flow setup rate\n- Number active system and vk8s pods\n- Throughput to Regional Edges (REs)",
+        "description": "APIs to get status of a site or individual nodes in a multi-node site.\nSome of the status metrics for a site are listed below:\n- Cpu, Memory and Disk usage\n- In/Out throughput\n- Number of active flows and flow setup rate\n- Number active system and vK8s pods\n- Throughput to Regional Edges (REs)",
         "version": "version not set"
     },
     "schemes": [

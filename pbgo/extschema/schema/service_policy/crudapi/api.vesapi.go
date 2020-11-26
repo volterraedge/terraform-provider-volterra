@@ -994,7 +994,19 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
+func (s *APISrv) validateTransport(ctx context.Context) error {
+	if s.sf.IsTransportNotSupported("ves.io.schema.service_policy.crudapi.API", server.TransportFromContext(ctx)) {
+		userMsg := fmt.Sprintf("ves.io.schema.service_policy.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		return server.GRPCStatusFromError(err).Err()
+	}
+	return nil
+}
+
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.service_policy.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1019,6 +1031,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1043,6 +1058,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.service_policy.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1065,6 +1083,9 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.service_policy.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1116,6 +1137,9 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.service_policy.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1494,7 +1518,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-service_policy-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.Get"
             },
@@ -1569,7 +1593,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-service_policy-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.Delete"
             },
@@ -1652,7 +1676,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-service_policy-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.Replace"
             },
@@ -1781,7 +1805,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-service_policy-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.List"
             },
@@ -1858,7 +1882,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-service_policy-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.Create"
             },
@@ -1987,7 +2011,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-service_policy-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.ListStream"
             },
@@ -2186,6 +2210,299 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "ioschemaObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
+        "malicious_user_mitigationMaliciousUserMitigationAction": {
+            "type": "object",
+            "description": "Supported actions that can be taken to mitigate malicious activity from a user",
+            "title": "MaliciousUserMitigationAction",
+            "x-displayname": "Malicious User Mitigation Action",
+            "x-ves-oneof-field-mitigation_action": "[\"alert_only\",\"block_temporarily\",\"captcha_challenge\",\"javascript_challenge\",\"none\"]",
+            "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationAction",
+            "properties": {
+                "alert_only": {
+                    "description": "Exclusive with [block_temporarily captcha_challenge javascript_challenge none]\nx-displayName: \"Alert Only\"\nGenerate alert while not taking any invasive actions",
+                    "title": "Alert Only",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "block_temporarily": {
+                    "description": "Exclusive with [alert_only captcha_challenge javascript_challenge none]\nx-displayName: \"Block Temporarily\"\nBlock user temporarily. The blocking duration is determined by user activity.\nSettings for temporary blocking are derived from the virtual host that the request is sent to\nIf temporary blocking is not configured for the virtual host, a software default configuration is used",
+                    "title": "Block User Temporarily",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "captcha_challenge": {
+                    "description": "Exclusive with [alert_only block_temporarily javascript_challenge none]\nx-displayName: \"Captcha Challenge\"\nSend a Captcha Challenge\nSettings for Captcha Challenge are derived from the virtual host that the request is sent to\nIf Captcha Challenge is not configured for the virtual host, a software default configuration is used",
+                    "title": "Captcha Challenge",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "javascript_challenge": {
+                    "description": "Exclusive with [alert_only block_temporarily captcha_challenge none]\nx-displayName: \"Javascript Challenge\"\nSend a Javascript Challenge. \nSettings for Javascript Challenge are derived from the virtual host that the request is sent to\nIf Javascript Challenge is not configured for the virtual host, a software default configuration is used",
+                    "title": "Javascript Challenge",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "none": {
+                    "description": "Exclusive with [alert_only block_temporarily captcha_challenge javascript_challenge]\nx-displayName: \"No Action\"\nNo mitigation actions",
+                    "title": "None",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "malicious_user_mitigationMaliciousUserMitigationRule": {
+            "type": "object",
+            "description": "Specifies the mitigation action that will be taken for users detected to be at the specified threat level",
+            "title": "MaliciousUserMitigationRule",
+            "x-displayname": "Malicious User Mitigation Rule",
+            "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationRule",
+            "properties": {
+                "mitigation_action": {
+                    "description": " The action to be taken at the specified threat level\nRequired: YES",
+                    "title": "mitigation action",
+                    "$ref": "#/definitions/malicious_user_mitigationMaliciousUserMitigationAction",
+                    "x-displayname": "Mitigation Action",
+                    "x-ves-required": "true"
+                },
+                "threat_level": {
+                    "description": " The threat level at which mitigation actions will be taken\nRequired: YES",
+                    "title": "threat level",
+                    "$ref": "#/definitions/malicious_user_mitigationMaliciousUserThreatLevel",
+                    "x-displayname": "Threat Level",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "malicious_user_mitigationMaliciousUserMitigationType": {
+            "type": "object",
+            "description": "Malicious user mitigation type specifies the malicious user mitigation rules that define the actions to be taken for users mapped to different threat levels.\nA threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.",
+            "title": "MaliciousUserMitigationType",
+            "x-displayname": "Malicious User Mitigation Type",
+            "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationType",
+            "properties": {
+                "rules": {
+                    "type": "array",
+                    "description": " Malicious user mitigation rules specify the actions to be taken for users mapped to different threat levels.\n A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.\nRequired: YES",
+                    "title": "malicious user mitigation rules",
+                    "items": {
+                        "$ref": "#/definitions/malicious_user_mitigationMaliciousUserMitigationRule"
+                    },
+                    "x-displayname": "Malicious User Mitigation Rules",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "malicious_user_mitigationMaliciousUserThreatLevel": {
+            "type": "object",
+            "description": "Threat level estimated for each user based on the user's activity and reputation",
+            "title": "MaliciousUserThreatLevel",
+            "x-displayname": "Malicious User Threat Level",
+            "x-ves-oneof-field-threat_level": "[\"high\",\"low\",\"medium\"]",
+            "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.MaliciousUserThreatLevel",
+            "properties": {
+                "high": {
+                    "description": "Exclusive with [low medium]\nx-displayName: \"Threat Level High\"\nUser estimated to be high threat",
+                    "title": "High",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "low": {
+                    "description": "Exclusive with [high medium]\nx-displayName: \"Threat Level Low\"\nUser estimated to be low threat",
+                    "title": "Low",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "medium": {
+                    "description": "Exclusive with [high low]\nx-displayName: \"Threat Level Medium\"\nUser estimated to be medium threat",
+                    "title": "Medium",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "policyArgMatcherType": {
+            "type": "object",
+            "description": "A argument matcher specifies the name of a single argument in the body and the criteria to match it.\nA argument matcher can check for one of the following:\n* Presence or absence of the argument\n* At least one of the values for the argument in the request satisfies the MatcherType item",
+            "title": "ArgMatcherType",
+            "x-displayname": "Argument Matcher",
+            "x-ves-displayorder": "1,6,4",
+            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\",\"presence\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.ArgMatcherType",
+            "properties": {
+                "check_not_present": {
+                    "description": "Exclusive with [check_present item presence]\nx-displayName: \"Not Present\"\nCheck that the argument is not present.",
+                    "title": "check_not_present",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "check_present": {
+                    "description": "Exclusive with [check_not_present item presence]\nx-displayName: \"Present\"\nCheck that the argument is present.",
+                    "title": "check_present",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert Match of the expression defined",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert Matcher"
+                },
+                "item": {
+                    "description": "Exclusive with [check_not_present check_present presence]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the Arg. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
+                    "title": "item",
+                    "$ref": "#/definitions/policyMatcherType"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " x-example: \"phones[_]\"\n x-example: \"cars.make.toyota.models[1]\"\n x-example: \"cars.make.honda.models[_]\"\n x-example: \"cars.make[_].models[_]\"\n A case-sensitive JSON path in the HTTP request body.\n\nExample: - \"name\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Argument Name",
+                    "x-ves-example": "name",
+                    "x-ves-required": "true"
+                },
+                "presence": {
+                    "type": "boolean",
+                    "description": "Exclusive with [check_not_present check_present item]\nx-displayName: \"Present Or Absent\"\nCheck if the arg is present or absent.",
+                    "title": "presence",
+                    "format": "boolean"
+                }
+            }
+        },
+        "policyAsnMatchList": {
+            "type": "object",
+            "description": "An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.",
+            "title": "Asn Match List",
+            "x-displayname": "ASN Match List",
+            "x-ves-proto-message": "ves.io.schema.policy.AsnMatchList",
+            "properties": {
+                "as_numbers": {
+                    "type": "array",
+                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\nRequired: YES",
+                    "title": "as numbers",
+                    "items": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "x-displayname": "AS Numbers",
+                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "policyAsnMatcherType": {
+            "type": "object",
+            "description": "Match any AS number contained in the list of bgp_asn_sets.",
+            "title": "asn matcher type",
+            "x-displayname": "ASN Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.AsnMatcherType",
+            "properties": {
+                "asn_sets": {
+                    "type": "array",
+                    "description": " A list of references to bgp_asn_set objects.\nRequired: YES",
+                    "title": "asn_sets",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "BGP ASN Sets",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "policyCookieMatcherType": {
+            "type": "object",
+            "description": "A cookie matcher specifies the name of a single cookie and the criteria to match it. The input has a list of values for each\ncookie in the request.\nA cookie matcher can check for one of the following:\n* Presence or absence of the cookie\n* At least one of the values for the cookie in the request satisfies the MatcherType item",
+            "title": "CookieMatcherType",
+            "x-displayname": "Cookie Matcher",
+            "x-ves-displayorder": "1,6,4",
+            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\",\"presence\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.CookieMatcherType",
+            "properties": {
+                "check_not_present": {
+                    "description": "Exclusive with [check_present item presence]\nx-displayName: \"Not Present\"\nCheck that the cookie is not present.",
+                    "title": "check_not_present",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "check_present": {
+                    "description": "Exclusive with [check_not_present item presence]\nx-displayName: \"Present\"\nCheck that the cookie is present.",
+                    "title": "check_present",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert Match of the expression defined",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert Matcher"
+                },
+                "item": {
+                    "description": "Exclusive with [check_not_present check_present presence]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the cookie. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
+                    "title": "item",
+                    "$ref": "#/definitions/policyMatcherType"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " A case-sensitive cookie name.\n\nExample: - \"Session\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Cookie Name",
+                    "x-ves-example": "Session",
+                    "x-ves-required": "true"
+                },
+                "presence": {
+                    "type": "boolean",
+                    "description": "Exclusive with [check_not_present check_present item]\nx-displayName: \"Present Or Absent\"\nCheck if the cookie is present or absent.",
+                    "title": "presence",
+                    "format": "boolean"
+                }
+            }
+        },
+        "policyCountryCode": {
+            "type": "string",
+            "description": "ISO 3166 Aplpha-2 country codes\nNote that we use the numeric code from ISO 3166 as the value\nTBD enumerate all country codes here\n\nNone\nAfghanistan\nAlbania",
+            "title": "CountryCode",
+            "enum": [
+                "COUNTRY_NONE",
+                "COUNTRY_AF",
+                "COUNTRY_AL"
+            ],
+            "default": "COUNTRY_NONE",
+            "x-displayname": "Country Code",
+            "x-ves-proto-enum": "ves.io.schema.policy.CountryCode"
+        },
         "policyDenyInformation": {
             "type": "object",
             "description": "Detailed information including HTTP response code and error message to be sent when the policy or policy set action is DENY.",
@@ -2234,6 +2551,56 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "['GET', 'POST', 'DELETE']"
                 }
             }
+        },
+        "policyIpMatcherType": {
+            "type": "object",
+            "description": "Match any ip prefix contained in the list of ip_prefix_sets.\nThe result of the match is inverted if invert_matcher is true.",
+            "title": "ip matcher type",
+            "x-displayname": "IP Prefix Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.IpMatcherType",
+            "properties": {
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert the match result.",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert IP Matcher"
+                },
+                "prefix_sets": {
+                    "type": "array",
+                    "description": " A list of references to ip_prefix_set objects.\nRequired: YES",
+                    "title": "prefix_sets",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "IP Prefix Sets",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "policyKnownTlsFingerprintClass": {
+            "type": "string",
+            "description": "Specifies known TLS fingerprint classes\n\n - TLS_FINGERPRINT_NONE: TLS_FINGERPRINT_NONE\n\nNo TLS fingerprint\n - ANY_MALICIOUS_FINGERPRINT: ANY_MALICIOUS_FINGERPRINT\n\nTLS fingerprints known to be associated with malicious clients\n - ADWARE: ADWARE\n\nTLS fingerprints known to be associated with adware\n - ADWIND: ADWIND\n\nTLS fingerprints known to be associated with adwind\n - DRIDEX: DRIDEX\n\nTLS fingerprints known to be associated with dridex\n - GOOTKIT: GOOTKIT\n\nTLS fingerprints known to be associated with gootkit\n - GOZI: GOZI\n\nTLS fingerprints known to be associated with gozi\n - JBIFROST: JBIFROST\n\nTLS fingerprints known to be associated with jbifrost\n - QUAKBOT: QUAKBOT\n\nTLS fingerprints known to be associated with quakbot\n - RANSOMWARE: RANSOMWARE\n\nTLS fingerprints known to be associated with ransomware\n - TROLDESH: TROLDESH\n\nTLS fingerprints known to be associated with troldesh\n - TOFSEE: TOFSEE\n\nTLS fingerprints known to be associated with tofsee\n - TORRENTLOCKER: TORRENTLOCKER\n\nTLS fingerprints known to be associated with torrentlocker\n - TRICKBOT: TRICKBOT\n\nTLS fingerprints known to be associated with trickbot",
+            "title": "TLS known fingerprint class",
+            "enum": [
+                "TLS_FINGERPRINT_NONE",
+                "ANY_MALICIOUS_FINGERPRINT",
+                "ADWARE",
+                "ADWIND",
+                "DRIDEX",
+                "GOOTKIT",
+                "GOZI",
+                "JBIFROST",
+                "QUAKBOT",
+                "RANSOMWARE",
+                "TROLDESH",
+                "TOFSEE",
+                "TORRENTLOCKER",
+                "TRICKBOT"
+            ],
+            "default": "TLS_FINGERPRINT_NONE",
+            "x-displayname": "TLS known fingerprint class",
+            "x-ves-proto-enum": "ves.io.schema.policy.KnownTlsFingerprintClass"
         },
         "policyL4DestMatcherType": {
             "type": "object",
@@ -2426,6 +2793,69 @@ var APISwaggerJSON string = `{
             "x-displayname": "Rule Combining Algorithm",
             "x-ves-proto-enum": "ves.io.schema.policy.RuleCombiningAlgorithm"
         },
+        "policyStringMatcherType": {
+            "type": "object",
+            "description": "A matcher specifies a list of values for matching an input string. The match is considered successful if the input value is present in the list. The result of\nthe match is inverted if invert_matcher is true.",
+            "title": "StringMatcherType",
+            "x-displayname": "String Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.StringMatcherType",
+            "properties": {
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert the match result.",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert String Matcher"
+                },
+                "match": {
+                    "type": "array",
+                    "description": " A list of exact values to match the input against.\n\nExample: - \"['new york', 'london', 'sydney', 'tokyo', 'cairo']\"-\nRequired: YES",
+                    "title": "match",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Exact Values",
+                    "x-ves-example": "['new york', 'london', 'sydney', 'tokyo', 'cairo']",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "policyTlsFingerprintMatcherType": {
+            "type": "object",
+            "description": "A TLS fingerprint matcher specifies multiple criteria for matching a TLS fingerprint. The set of supported positve match criteria includes a list of known\nclasses of TLS fingerprints and a list of exact values. The match is considered successful if either of these positive criteria are satisfied and the input\nfingerprint is not one of the excluded values.",
+            "title": "TlsFingerprintMatcherType",
+            "x-displayname": "TLS Fingerprint Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.TlsFingerprintMatcherType",
+            "properties": {
+                "classes": {
+                    "type": "array",
+                    "description": " A list of known classes of TLS fingerprints to match the input TLS JA3 fingerprint against.\n\nExample: - \"['ADWARE', 'TRICKBOT']-",
+                    "title": "classes",
+                    "items": {
+                        "$ref": "#/definitions/policyKnownTlsFingerprintClass"
+                    },
+                    "x-displayname": "TLS fingerprint classes"
+                },
+                "exact_values": {
+                    "type": "array",
+                    "description": " A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against.\n\nExample: - \"['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']-",
+                    "title": "exact values",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Exact Values"
+                },
+                "excluded_values": {
+                    "type": "array",
+                    "description": " A list of TLS JA3 fingerprints to be excluded when matching the input TLS JA3 fingerprint. This can be used to skip known false positives when using one\n or more known TLS fingerprint classes in the enclosing matcher.\n\nExample: - \"['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']-",
+                    "title": "excluded values",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Excluded Values"
+                }
+            }
+        },
         "policyTransformer": {
             "type": "string",
             "description": "Transformers to be applied on the part of the request before matching.\n\n - TRANSFORMER_NONE: transformer none\n\nNo transformers enabled\n - LOWER_CASE: lower case\n\nConvert string to lower case\n - UPPER_CASE: upper case\n\nConvert string to upper case\n - BASE64_DECODE: base64 decode\n\nDecode string assuming base64 encoding\n - NORMALIZE_PATH: normalize path\n\nNormalize URL path so that /a/b/../c will be transformed to /a/c\n - REMOVE_WHITESPACE: remove whitespace\n\nRemove whitespaces\n - URL_DECODE: URL decode\n\nDecode string assuming URL encoding as per rfc1738\n - TRIM_LEFT: trim left\n\nRemove whitespace from the left side of the input string\n - TRIM_RIGHT: trim right\n\nRemove whitespace from the right side of the input string\n - TRIM: trim\n\nRemove whitespace from the both sides of the input string",
@@ -2569,7 +2999,7 @@ var APISwaggerJSON string = `{
                     "description": " App Firewall Rule List specifying the rule IDs to be excluded for this request",
                     "title": "Exclude Rule IDs",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Exclude App Firewall Rule List"
                 }
@@ -2625,7 +3055,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -2712,12 +3142,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "L4 Destination",
             "x-ves-proto-message": "ves.io.schema.L4DestType",
             "properties": {
-                "ports": {
+                "port_ranges": {
                     "type": "string",
-                    "description": " Destination port range.\n\nExample: - \"100-200\"-",
-                    "title": "ports",
-                    "x-displayname": "Port Range",
-                    "x-ves-example": "100-200"
+                    "description": " A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-",
+                    "title": "port_ranges",
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "80,443,8080-8191,9080"
                 },
                 "prefixes": {
                     "type": "array",
@@ -2728,6 +3158,25 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "IPv4 Prefixes",
                     "x-ves-required": "true"
+                }
+            }
+        },
+        "schemaLabelMatcherType": {
+            "type": "object",
+            "description": "A label matcher specifies a list of label keys whose values need to match for\nsource/client and destination/server. Note that the actual label values are not\nspecified and do not matter. This allows an ability to scope grouping by the \nlabel key name.",
+            "title": "LabelMatcherType",
+            "x-displayname": "Label Matcher",
+            "x-ves-proto-message": "ves.io.schema.LabelMatcherType",
+            "properties": {
+                "keys": {
+                    "type": "array",
+                    "description": " The list of label key names that have to match\n\nExample: - \"['environment', 'location', 'deployment']\"-",
+                    "title": "keys",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Keys",
+                    "x-ves-example": "['environment', 'location', 'deployment']"
                 }
             }
         },
@@ -2764,6 +3213,37 @@ var APISwaggerJSON string = `{
                     "title": "resource_version",
                     "x-displayname": "Resource Version",
                     "x-ves-example": "181255"
+                }
+            }
+        },
+        "schemaMessageMetaType": {
+            "type": "object",
+            "description": "MessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
+            "title": "MessageMetaType",
+            "x-displayname": "Message Metadata",
+            "x-ves-proto-message": "ves.io.schema.MessageMetaType",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " Human readable description for the object that corresponds to the containing message.\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "x-displayname": "Description",
+                    "x-ves-example": "Virtual Host for acmecorp website"
+                },
+                "disable": {
+                    "type": "boolean",
+                    "description": " A value of true will administratively disable the object that corresponds to the containing message.\n\nExample: - \"true\"-",
+                    "title": "disable",
+                    "format": "boolean",
+                    "x-displayname": "Disable",
+                    "x-ves-example": "true"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " This is the name of the message.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -2821,50 +3301,6 @@ var APISwaggerJSON string = `{
                 "uid": {
                     "type": "string",
                     "description": " uid is the unique in time and space value for this object. Object create will fail if \n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
-        "schemaObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
-            "properties": {
-                "kind": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
-                    "title": "kind",
-                    "x-displayname": "Kind",
-                    "x-ves-example": "virtual_site"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contactus-route"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
@@ -3033,7 +3469,7 @@ var APISwaggerJSON string = `{
                     "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
                     "title": "namespace",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Namespace Reference"
                 },
@@ -3206,11 +3642,59 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemapolicyQueryParameterMatcherType": {
+            "type": "object",
+            "description": "A query parameter matcher specifies the name of a single query parameter and the criteria for the input request to match it. The input has a list of actual\nvalues for each query parameter name in the original HTTP request.\nA query parameter matcher can check for one of the following:\n* Presence or absence of the query parameter in the input\n* At least one of the values for the query parameter in the input satisfies the MatcherType item",
+            "title": "QueryParameterMatcherType",
+            "x-displayname": "Query Parameter Matcher",
+            "x-ves-displayorder": "1,6,4",
+            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\",\"presence\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.QueryParameterMatcherType",
+            "properties": {
+                "check_not_present": {
+                    "description": "Exclusive with [check_present item presence]\nx-displayName: \"Not Present\"\nCheck that the query parameter is not present.",
+                    "title": "check_not_present",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "check_present": {
+                    "description": "Exclusive with [check_not_present item presence]\nx-displayName: \"Present\"\nCheck that the query parameter is present.",
+                    "title": "check_present",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert the match result.",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert Query Parameter Matcher"
+                },
+                "item": {
+                    "description": "Exclusive with [check_not_present check_present presence]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the given query parameter. The match is successful if any of the values for the query parameter satisfies the\ncriteria in the matcher.",
+                    "title": "item",
+                    "$ref": "#/definitions/policyMatcherType"
+                },
+                "key": {
+                    "type": "string",
+                    "description": " A case-sensitive HTTP query parameter name.\n\nExample: - \"sourceid\"-\nRequired: YES",
+                    "title": "key",
+                    "x-displayname": "Query Parameter Name",
+                    "x-ves-example": "sourceid",
+                    "x-ves-required": "true"
+                },
+                "presence": {
+                    "type": "boolean",
+                    "description": "Exclusive with [check_not_present check_present item]\nx-displayName: \"Present Or Absent\"\nCheck if the query parameter is present or absent.",
+                    "title": "presence",
+                    "format": "boolean"
+                }
+            }
+        },
         "schemaservice_policyGlobalSpecType": {
             "type": "object",
             "description": "Shape of service_policy in the storage backend.",
             "title": "GlobalSpecType",
             "x-displayname": "Specification",
+            "x-ves-oneof-field-rule_choice": "[\"allow_list\",\"deny_list\",\"rule_list\"]",
             "x-ves-oneof-field-server_choice": "[\"any_server\",\"server_name\",\"server_name_matcher\",\"server_selector\"]",
             "x-ves-proto-message": "ves.io.schema.service_policy.GlobalSpecType",
             "properties": {
@@ -3220,6 +3704,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyRuleCombiningAlgorithm",
                     "x-displayname": "Rule Combining Algorithm",
                     "x-ves-required": "true"
+                },
+                "allow_list": {
+                    "description": "Exclusive with [deny_list rule_list]\nx-displayName: \"Allowed Sources\"\nList of allowed sources for requests\nTBD unhide after implementation is ready",
+                    "title": "allow_list",
+                    "$ref": "#/definitions/service_policySourceList"
                 },
                 "any_server": {
                     "description": "Exclusive with [server_name server_name_matcher server_selector]\nx-displayName: \"Any Server\"\nAny Server",
@@ -3231,7 +3720,7 @@ var APISwaggerJSON string = `{
                     "description": " Ordered list of forwarding class to use for traffic that match the enclosing rule\n Action valid only when the policy is used PBR",
                     "title": "Default Forwarding Classes",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Default Forwarding Classes"
                 },
@@ -3240,6 +3729,20 @@ var APISwaggerJSON string = `{
                     "title": "deny_info",
                     "$ref": "#/definitions/policyDenyInformation",
                     "x-displayname": "Deny Information"
+                },
+                "deny_list": {
+                    "description": "Exclusive with [allow_list rule_list]\nx-displayName: \"Denied Sources\"\nList of denied sources for requests\nTBD unhide after implementation is ready",
+                    "title": "deny_list",
+                    "$ref": "#/definitions/service_policySourceList"
+                },
+                "original_rules": {
+                    "type": "array",
+                    "description": " A list of references to the original user configured service_policy_rule objects.\n This is used to save the original user configuration so that we can recover from bugs introduced during the conversion of referred service_policy_rule\n objects to Rule messages. Note that the rules field will be used to store the list of child service_policy_rule objects generated from the list of Rule\n messages during view processing.",
+                    "title": "original_rules",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Original Rules"
                 },
                 "port_matcher": {
                     "description": " The list of port ranges to which the destination port should belong. In case of an HTTP Connect, the port is extracted from the desired destination.",
@@ -3253,38 +3756,392 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyRoleMatcherType",
                     "x-displayname": "Role"
                 },
+                "rule_list": {
+                    "description": "Exclusive with [allow_list deny_list]\nx-displayName: \"Custom Rule List\"\nList of custom rules\nTBD unhide after implementation is ready",
+                    "title": "rule_list",
+                    "$ref": "#/definitions/service_policyRuleList"
+                },
                 "rules": {
                     "type": "array",
                     "description": " A list of references to service_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.",
                     "title": "rules",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Rules"
                 },
                 "server_name": {
                     "type": "string",
-                    "description": "Exclusive with [any_server server_name_matcher server_selector]\nx-displayName: \"Server Name\"\nx-example: \"database.production.customer.volterra.us\"\nThe expected name of the server to which the request API is directed. The actual names for the server are extracted from the HTTP Host header and the name\nof the virtual_host to which the request is directed. If the request is directed to a virtual k8s service, the actual names also contain the name of that\nservice.\nThe predicate evaluates to true if any of the actual names is the same as the expected server name.",
+                    "description": "Exclusive with [any_server server_name_matcher server_selector]\nx-displayName: \"Server Name\"\nx-example: \"database.production.customer.volterra.us\"\nThe expected name of the server to which the request API is directed. The actual names for the server are extracted from the HTTP Host header and the name\nof the virtual_host to which the request is directed. If the request is directed to a virtual K8s service, the actual names also contain the name of that\nservice.\nThe predicate evaluates to true if any of the actual names is the same as the expected server name.",
                     "title": "server name"
                 },
                 "server_name_matcher": {
-                    "description": "Exclusive with [any_server server_name server_selector]\nx-displayName: \"Group of Servers by Name\"\nA list of exact values and/or regular expressions for the expected name of the server. The actual names of server are extracted from the HTTP Host header\nand the name of the virtual_host to which the request is directed. If the request is directed to a virtual k8s service, the actual names also contain the\nname of that service.\nThis is a generalized version of the server name predicate that allows the same rule to be applicable to a set of server rather than a single server.\nThe predicate evaluates to true if any of the server's actual names match any of the exact values or regular expressions in the server name matcher.",
+                    "description": "Exclusive with [any_server server_name server_selector]\nx-displayName: \"Group of Servers by Name\"\nA list of exact values and/or regular expressions for the expected name of the server. The actual names of server are extracted from the HTTP Host header\nand the name of the virtual_host to which the request is directed. If the request is directed to a virtual K8s service, the actual names also contain the\nname of that service.\nThis is a generalized version of the server name predicate that allows the same rule to be applicable to a set of server rather than a single server.\nThe predicate evaluates to true if any of the server's actual names match any of the exact values or regular expressions in the server name matcher.",
                     "title": "server name matcher",
                     "$ref": "#/definitions/policyMatcherTypeBasic"
                 },
                 "server_selector": {
-                    "description": "Exclusive with [any_server server_name server_name_matcher]\nx-displayName: \"Group of Servers by Label Selector\"\nA label selector that describes the expected set of servers. The labels associated with the server to which the API request is directed are used to evaluate\nthe label expressions in the selector. These labels are derived from the server TLS certificate and the virtual host object for the server. If the request is\ndirected to a virtual k8s service, the k8s labels for the service are also included in the set of server labels.\nThis is a more flexible and powerful version of the server name matcher predicate that allows a given policy to be applicable to a set of servers based on the\nserver labels rather than being limited to relying on patterns in the server name.\nThe predicate evaluates to true if the expressions in the label selector are true for the server labels.",
+                    "description": "Exclusive with [any_server server_name server_name_matcher]\nx-displayName: \"Group of Servers by Label Selector\"\nA label selector that describes the expected set of servers. The labels associated with the server to which the API request is directed are used to evaluate\nthe label expressions in the selector. These labels are derived from the server TLS certificate and the virtual host object for the server. If the request is\ndirected to a virtual K8s service, the K8s labels for the service are also included in the set of server labels.\nThis is a more flexible and powerful version of the server name matcher predicate that allows a given policy to be applicable to a set of servers based on the\nserver labels rather than being limited to relying on patterns in the server name.\nThe predicate evaluates to true if the expressions in the label selector are true for the server labels.",
                     "title": "server selector",
                     "$ref": "#/definitions/schemaLabelSelectorType"
                 },
                 "simple_rules": {
                     "type": "array",
-                    "description": " A list of SimpleRules.\n The order of evaluation of the simple rules depends on the rule combining algorithm.\n\n This is mutually exclusive with the rules field and is for internal use only.",
+                    "description": " A list of SimpleRules.\n The order of evaluation of the simple rules depends on the rule combining algorithm.\n This is mutually exclusive with the rules field and is for internal use only.",
                     "title": "simple_rules",
                     "items": {
                         "$ref": "#/definitions/service_policySimpleRule"
                     },
                     "x-displayname": "Simple Rules"
+                },
+                "view_internal": {
+                    "description": " Reference to view internal object",
+                    "title": "view_internal",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "View Internal"
+                }
+            }
+        },
+        "schemaservice_policy_ruleGlobalSpecType": {
+            "type": "object",
+            "description": "Shape of service_policy_rule in the storage backend.",
+            "title": "GlobalSpecType",
+            "x-displayname": "Specification",
+            "x-ves-oneof-field-asn_choice": "[\"any_asn\",\"asn_list\",\"asn_matcher\"]",
+            "x-ves-oneof-field-client_choice": "[\"any_client\",\"client_name\",\"client_name_matcher\",\"client_selector\"]",
+            "x-ves-oneof-field-dst_asn_choice": "[\"any_dst_asn\",\"dst_asn_list\",\"dst_asn_matcher\"]",
+            "x-ves-oneof-field-dst_ip_choice": "[\"any_dst_ip\",\"dst_ip_matcher\",\"dst_ip_prefix_list\"]",
+            "x-ves-oneof-field-ip_choice": "[\"any_ip\",\"ip_matcher\",\"ip_prefix_list\"]",
+            "x-ves-proto-message": "ves.io.schema.service_policy_rule.GlobalSpecType",
+            "properties": {
+                "action": {
+                    "description": " Action to be enforced if the input request matches the rule.\nRequired: YES",
+                    "title": "action",
+                    "$ref": "#/definitions/policyRuleAction",
+                    "x-displayname": "Action",
+                    "x-ves-required": "true"
+                },
+                "any_asn": {
+                    "description": "Exclusive with [asn_list asn_matcher]\nx-displayName: \"Any Source ASN\"\nAny origin ASN.",
+                    "title": "any asn",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "any_client": {
+                    "description": "Exclusive with [client_name client_name_matcher client_selector]\nx-displayName: \"Any Client\"\nAny Client",
+                    "title": "any ip",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "any_dst_asn": {
+                    "description": "Exclusive with [dst_asn_list dst_asn_matcher]\nx-displayName: \"Any Destination ASN\"\nAny origin ASN.",
+                    "title": "any dst asn",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "any_dst_ip": {
+                    "description": "Exclusive with [dst_ip_matcher dst_ip_prefix_list]\nx-displayName: \"Any Destination IP\"\nAny Destination IP",
+                    "title": "any dst ip",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "any_ip": {
+                    "description": "Exclusive with [ip_matcher ip_prefix_list]\nx-displayName: \"Any Source IP\"\nAny Source IP",
+                    "title": "any ip",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "api_group_matcher": {
+                    "description": " The list of expected API group names to which the request API belongs. The actual list of API group names for the request API is determined from the api\n group and api group element configuration objects using the HTTP method and the HTTP path as inputs.\n The predicate evaluates to true if any of the actual API group names for the request is equal to any of the values in the api group matcher.",
+                    "title": "api group matcher",
+                    "$ref": "#/definitions/policyStringMatcherType",
+                    "x-displayname": "API Group Matcher"
+                },
+                "arg_matchers": {
+                    "type": "array",
+                    "description": " A list of predicates for all POST args that need to be matched. The criteria for matching each arg are described in individual instances\n of ArgMatcherType. The actual arg values are extracted from the request API as a list of strings for each arg selector name.\n Note that all specified arg matcher predicates must evaluate to true.",
+                    "title": "arg matchers",
+                    "items": {
+                        "$ref": "#/definitions/policyArgMatcherType"
+                    },
+                    "x-displayname": "Argument Matchers"
+                },
+                "asn_list": {
+                    "description": "Exclusive with [any_asn asn_matcher]\nx-displayName: \"ASN List\"\nList of 4-byte ASN values.\nThe predicate evaluates to true if the origin ASN is present in the ASN list.",
+                    "title": "asn list",
+                    "$ref": "#/definitions/policyAsnMatchList"
+                },
+                "asn_matcher": {
+                    "description": "Exclusive with [any_asn asn_list]\nx-displayName: \"BGP ASN Sets\"\nList of references to BGP ASN Set objects.\nThe predicate evaluates to true if the origin ASN is present in one of the BGP ASN Set objects.",
+                    "title": "asn matcher",
+                    "$ref": "#/definitions/policyAsnMatcherType"
+                },
+                "body_matcher": {
+                    "description": " Predicate for matching the request body string. The criteria for matching the request body is described in MatcherType.\n The actual request body value is extracted from the request API as a string.",
+                    "title": "request body matcher",
+                    "$ref": "#/definitions/policyMatcherType",
+                    "x-displayname": "Request Body Matcher"
+                },
+                "client_name": {
+                    "type": "string",
+                    "description": "Exclusive with [any_client client_name_matcher client_selector]\nx-displayName: \"Client Name\"\nx-example: \"backend.production.customer.volterra.us\"\nThe expected name of the client invoking the request API.\nThe predicate evaluates to true if any of the actual names is the same as the expected client name.",
+                    "title": "client name"
+                },
+                "client_name_matcher": {
+                    "description": "Exclusive with [any_client client_name client_selector]\nx-displayName: \"Group of Clients by Name\"\nA list of exact values and/or regular expressions for the expected name of the client.\nThis is a generalized version of the client name predicate that allows the same rule to be applicable to a set of clients rather than a single client.\nThe predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher.",
+                    "title": "client name matcher",
+                    "$ref": "#/definitions/policyMatcherType"
+                },
+                "client_role": {
+                    "description": " The expected role(s) of the client invoking the request API. The actual roles for the client are derived from the user and namespace information in the\n API request.\n The predicate evaluates to true if any of the client's roles match the value(s) specified in client role.",
+                    "title": "client role",
+                    "$ref": "#/definitions/policyRoleMatcherType",
+                    "x-displayname": "Client Role"
+                },
+                "client_selector": {
+                    "description": "Exclusive with [any_client client_name client_name_matcher]\nx-displayName: \"Group of Clients by Label Selector\"\nA label selector that describes the expected set of clients. The labels associated with the client making the API request are used to evaluate the label\nexpressions in the selector. These labels can be derived from the client TLS certificate or from the volterra internal control plane.\nThis is a more flexible and powerful version of the client name matcher predicate that allows a given rule to be applicable to a set of clients based on the\nclient labels rather than being limited to relying on patterns in the client name.\nThe predicate evaluates to true if the expressions in the label selector are true for the client labels.",
+                    "title": "client selector",
+                    "$ref": "#/definitions/schemaLabelSelectorType"
+                },
+                "cookie_matchers": {
+                    "type": "array",
+                    "description": " A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances\n of CookieMatcherType. The actual cookie values are extracted from the request API as a list of strings for each cookie name.\n Note that all specified cookie matcher predicates must evaluate to true.",
+                    "title": "cookie matchers",
+                    "items": {
+                        "$ref": "#/definitions/policyCookieMatcherType"
+                    },
+                    "x-displayname": "Cookie Matchers"
+                },
+                "domain_matcher": {
+                    "description": " A list of exact values and/or regular expressions for the expected name of the domain. The actual value of domain is the host component\n from the URL. The predicate evaluates to true if the domain value matches any of the exact values or regular expressions in the domain\n matcher.",
+                    "title": "domain matcher",
+                    "$ref": "#/definitions/policyMatcherType",
+                    "x-displayname": "Domain Matcher"
+                },
+                "dst_asn_list": {
+                    "description": "Exclusive with [any_dst_asn dst_asn_matcher]\nx-displayName: \"Destination ASN List\"\nList of 4-byte ASN values.\nThe predicate evaluates to true if the destination ASN is present in the ASN list.",
+                    "title": "dst asn list",
+                    "$ref": "#/definitions/policyAsnMatchList"
+                },
+                "dst_asn_matcher": {
+                    "description": "Exclusive with [any_dst_asn dst_asn_list]\nx-displayName: \"Destination BGP ASN Sets\"\nList of references to BGP ASN Set objects.\nThe predicate evaluates to true if the destination ASN is present in one of the BGP ASN Set objects.",
+                    "title": "dst asn matcher",
+                    "$ref": "#/definitions/policyAsnMatcherType"
+                },
+                "dst_ip_matcher": {
+                    "description": "Exclusive with [any_dst_ip dst_ip_prefix_list]\nx-displayName: \"Destination IP Prefix Sets\"\nList of references to IP Prefix Set objects.\nThe predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets.",
+                    "title": "ip matcher",
+                    "$ref": "#/definitions/policyIpMatcherType"
+                },
+                "dst_ip_prefix_list": {
+                    "description": "Exclusive with [any_dst_ip dst_ip_matcher]\nx-displayName: \"Destination IPv4 Prefix List\"\nList of IPv4 Prefixes values.\nThe predicate evaluates to true if the destination address is covered by one or more of the IPv4 Prefixes from the list.",
+                    "title": "ip prefix list",
+                    "$ref": "#/definitions/policyPrefixMatchList"
+                },
+                "expiration_timestamp": {
+                    "type": "string",
+                    "description": " The expiration_timestamp is the RFC 3339 format timestamp at which the containing rule is considered to be logically expired. The rule continues to exist in\n the configuration but is not applied anymore.\n\nExample: - \"2019-12-31:44:34.171543432Z\"-",
+                    "title": "expiration timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Expiration Timestamp",
+                    "x-ves-example": "2019-12-31:44:34.171543432Z"
+                },
+                "forwarding_class": {
+                    "type": "array",
+                    "description": " Ordered list of forwarding class to use for traffic that match the enclosing rule\n Action valid only when the policy is used PBR",
+                    "title": "Forwarding Classes",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Forwarding Classes"
+                },
+                "headers": {
+                    "type": "array",
+                    "description": " A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType\n instances. The actual HTTP header values are extracted from the request API as a list of strings for each HTTP header type.\n Note that all specified header predicates must evaluate to true.",
+                    "title": "headers",
+                    "items": {
+                        "$ref": "#/definitions/schemapolicyHeaderMatcherType"
+                    },
+                    "x-displayname": "HTTP Headers"
+                },
+                "http_method": {
+                    "description": " The list of expected values for the HTTP method in the request API. The actual value of the HTTP method is extracted from the HTTP request.\n The predicate evaluates to true if the actual HTTP method belongs is present in the list of expected values.",
+                    "title": "method",
+                    "$ref": "#/definitions/policyHttpMethodMatcherType",
+                    "x-displayname": "HTTP Method"
+                },
+                "ip_matcher": {
+                    "description": "Exclusive with [any_ip ip_prefix_list]\nx-displayName: \"IP Prefix Sets\"\nList of references to IP Prefix Set objects.\nThe predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets.",
+                    "title": "ip matcher",
+                    "$ref": "#/definitions/policyIpMatcherType"
+                },
+                "ip_prefix_list": {
+                    "description": "Exclusive with [any_ip ip_matcher]\nx-displayName: \"IPv4 Prefix List\"\nList of IPv4 Prefixes values.\nThe predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list.",
+                    "title": "ip prefix list",
+                    "$ref": "#/definitions/policyPrefixMatchList"
+                },
+                "l4_dest_matcher": {
+                    "description": " A L4 Destination matcher specifies a list of IPv4 prefixes and a TCP port range as match criteria. The match is considered successful if the destination\n IP matches one of the prefixes and the destination port belongs to the port range.",
+                    "title": "l4 dest matcher",
+                    "$ref": "#/definitions/policyL4DestMatcherType",
+                    "x-displayname": "L4 Destination Matcher"
+                },
+                "label_matcher": {
+                    "description": " A list of label keys that identify the label values that need to be the same for the client and server. Note that the actual label values are not specified\n here, just the label keys. This predicate facilitates reuse of rules and policies across multiple dimensions such as deployment, environment, and location.\n The predicate evaluates to true if the values of the client and server labels for all the keys specified in the label matcher are equal. The values of any\n other labels do not matter.\n\nExample: - \"label_matcher.keys = ['environment', 'location', 'deployment']\"-",
+                    "title": "label matcher",
+                    "$ref": "#/definitions/schemaLabelMatcherType",
+                    "x-displayname": "Label Matcher",
+                    "x-ves-example": "label_matcher.keys = ['environment', 'location', 'deployment']"
+                },
+                "malicious_user_mitigation": {
+                    "description": " When user behavior analyses is enabled, all requests in the application namespace are subjected to user-activity based threat level checks and the specified\n actions are taken for mitigation at different threat levels.",
+                    "title": "malicious user mitigation",
+                    "$ref": "#/definitions/malicious_user_mitigationMaliciousUserMitigationType",
+                    "x-displayname": "Malicious User Mitigation"
+                },
+                "malicious_user_mitigation_bypass": {
+                    "description": " When user behavior analyses is enabled, all requests in the application namespace\n are subjected to user behavior analyses and mitigation actions are taken as configured in MaliciousUserMitigationRule.\n If required, the behavior checks can be disabled for certain requests by configuring\n the appropriate match conditions in the enclosing policy rule and setting malicious user mitigation bypass flag.",
+                    "title": "malicious user mitigation bypass",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Malicious User Mitigation Bypass"
+                },
+                "path": {
+                    "description": " A list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\n value extracted from the HTTP URL Resource, excluding any query and fragment information.\n The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",
+                    "title": "path",
+                    "$ref": "#/definitions/schemapolicyPathMatcherType",
+                    "x-displayname": "HTTP Path"
+                },
+                "port_matcher": {
+                    "description": " The list of port ranges to which the destination port should belong. In case of an HTTP Connect, the port is extracted from the desired destination.",
+                    "title": "port matcher",
+                    "$ref": "#/definitions/policyPortMatcherType",
+                    "x-displayname": "Port Matcher"
+                },
+                "query_params": {
+                    "type": "array",
+                    "description": " A list of predicates for all query parameters that need to be matched. The criteria for matching each query parameter are described in individual instances\n of QueryParameterMatcherType. The actual query parameter values are extracted from the request API as a list of strings for each query parameter name.\n Note that all specified query parameter predicates must evaluate to true.",
+                    "title": "query params",
+                    "items": {
+                        "$ref": "#/definitions/schemapolicyQueryParameterMatcherType"
+                    },
+                    "x-displayname": "HTTP Query Parameters"
+                },
+                "rate_limiter": {
+                    "type": "array",
+                    "description": " A reference to rate_limiter object.\n Requests matching this the enclosing rule are subjected to the specified rate_limiter.",
+                    "title": "rate_limiter",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Rate Limiter"
+                },
+                "scheme": {
+                    "type": "array",
+                    "description": " The scheme in the request.\n\nExample: - \"HTTPS\"-",
+                    "title": "scheme",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Scheme",
+                    "x-ves-example": "HTTPS"
+                },
+                "server_selector": {
+                    "description": " A label selector that describes the expected set of servers.\n The predicate evaluates to true if the expressions in the label selector are true for the server labels.",
+                    "title": "server selector",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Group of Servers by Label Selector"
+                },
+                "tls_fingerprint_matcher": {
+                    "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
+                    "title": "TLS JA3 fingerprint matcher",
+                    "$ref": "#/definitions/policyTlsFingerprintMatcherType",
+                    "x-displayname": "TLS Fingerprint Matcher"
+                },
+                "url_matcher": {
+                    "description": " A URL matcher specifies a list of URL items as match criteria. The match is considered successful if the domain and path match any of the URL items.",
+                    "title": "url matcher",
+                    "$ref": "#/definitions/policyURLMatcherType",
+                    "x-displayname": "URL Matcher"
+                },
+                "virtual_host_matcher": {
+                    "description": " A list of exact values and/or regular expressions for the expected name of the virtual_host. The name of the virtual_host is is part of the context in\n which a service_policy_set is evaluated. The predicate evaluates to true if the virtual_host name matches any of the exact values or regular expressions\n in the virtual_host matcher.\n Hidden because this will be used only in system generated rate limiting service_policy_sets.",
+                    "title": "virtual_host matcher",
+                    "$ref": "#/definitions/policyMatcherType",
+                    "x-displayname": "Virtual Host Matcher"
+                },
+                "waf_action": {
+                    "description": " App Firewall action to be enforced if the input request matches the rule.\nRequired: YES",
+                    "title": "App Firewall Action",
+                    "$ref": "#/definitions/policyWafAction",
+                    "x-displayname": "App Firewall Action",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                }
+            }
+        },
+        "service_policyRule": {
+            "type": "object",
+            "description": "A Rule consists of an unordered list of predicates and an action. The predicates are evaluated against a set of input fields that are extracted from\nor derived from an L7 request API. A request API is considered to match the simple rule if all predicates in the rule evaluate to true for that request. Any\npredicates that are not specified in a rule are implicitly considered to be true. If a request API matches a simple rule, the action for the simple rule is\nenforced.",
+            "title": "rule",
+            "x-displayname": "Rule",
+            "x-ves-proto-message": "ves.io.schema.service_policy.Rule",
+            "properties": {
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\nRequired: YES",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true"
+                },
+                "spec": {
+                    "description": " Specification for the rule including match preicates and actions.\nRequired: YES",
+                    "title": "spec",
+                    "$ref": "#/definitions/schemaservice_policy_ruleGlobalSpecType",
+                    "x-displayname": "Rule Specification",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "service_policyRuleList": {
+            "type": "object",
+            "description": "A list of rules.\nThe order of evaluation of the rules depends on the rule combining algorithm.",
+            "title": "rule list",
+            "x-displayname": "Rule List",
+            "x-ves-proto-message": "ves.io.schema.service_policy.RuleList",
+            "properties": {
+                "rules": {
+                    "type": "array",
+                    "description": " A list of rules.\n The order of evaluation of the rules depends on the rule combining algorithm.",
+                    "title": "rules",
+                    "items": {
+                        "$ref": "#/definitions/service_policyRule"
+                    },
+                    "x-displayname": "Rules"
                 }
             }
         },
@@ -3356,6 +4213,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyL4DestMatcherType",
                     "x-displayname": "L4 Destination Matcher"
                 },
+                "metric_name_label": {
+                    "type": "string",
+                    "description": " Name label to use in service policy rule metrics generated for this simple rule.",
+                    "title": "metric_name_label",
+                    "x-displayname": "Metric Name Label"
+                },
                 "name": {
                     "type": "string",
                     "description": " Name of the rule.\nRequired: YES",
@@ -3385,6 +4248,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Scheme",
                     "x-ves-example": "HTTPS"
                 },
+                "tls_fingerprint_matcher": {
+                    "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
+                    "title": "TLS JA3 fingerprint matcher",
+                    "$ref": "#/definitions/policyTlsFingerprintMatcherType",
+                    "x-displayname": "TLS Fingerprint Matcher"
+                },
                 "url_matcher": {
                     "description": " A URL matcher specifies a list of URL items as match criteria. The match is considered successful if the domain and path match any of the URL items.",
                     "title": "url matcher",
@@ -3397,6 +4266,89 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyWafAction",
                     "x-displayname": "App Firewall Action",
                     "x-ves-required": "true"
+                }
+            }
+        },
+        "service_policySourceList": {
+            "type": "object",
+            "description": "List of sources. A request belongs to this list if it satifies any of the match criteria.",
+            "title": "source_list",
+            "x-displayname": "Source List",
+            "x-ves-displayorder": "2,3,4,5,6,7",
+            "x-ves-oneof-field-default_action_choice": "[\"default_action_allow\",\"default_action_deny\",\"default_action_next_policy\"]",
+            "x-ves-proto-message": "ves.io.schema.service_policy.SourceList",
+            "properties": {
+                "asn_list": {
+                    "description": " Addresses that belong to the ASNs in the given list\n The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB.",
+                    "title": "asn_list",
+                    "$ref": "#/definitions/policyAsnMatchList",
+                    "x-displayname": "BGP ASN List"
+                },
+                "asn_set": {
+                    "type": "array",
+                    "description": " Addresses that belong to the ASNs in the given bgp_asn_set\n The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB.",
+                    "title": "asn_set",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "BGP ASN Set"
+                },
+                "country_list": {
+                    "type": "array",
+                    "description": " Addresses that belong to one of the countries in the given list\n The country is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB.",
+                    "title": "country_list",
+                    "items": {
+                        "$ref": "#/definitions/policyCountryCode"
+                    },
+                    "x-displayname": "Country List"
+                },
+                "default_action_allow": {
+                    "description": "Exclusive with [default_action_deny default_action_next_policy]\nx-displayName: \"Allow\"\nAllow all requests",
+                    "title": "Allow",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "default_action_deny": {
+                    "description": "Exclusive with [default_action_allow default_action_next_policy]\nx-displayName: \"Deny\"\nDeny all requests",
+                    "title": "Deny",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "default_action_next_policy": {
+                    "description": "Exclusive with [default_action_allow default_action_deny]\nx-displayName: \"Next Policy\"\nEvaluate the next service policy",
+                    "title": "Next Policy",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "ip_prefix_set": {
+                    "type": "array",
+                    "description": " Addresses that are covered by the prefixes in the given ip_prefix_set",
+                    "title": "ip_prefix_set",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "IP Prefix Set"
+                },
+                "prefix_list": {
+                    "description": "\n Addresses that are covered by the given list of IPv4 prefixes",
+                    "title": "prefix_list",
+                    "$ref": "#/definitions/viewsPrefixStringListType",
+                    "x-displayname": "IPv4 Prefix List"
+                },
+                "tls_fingerprint_classes": {
+                    "type": "array",
+                    "description": " A list of known classes of TLS fingerprints to match the input TLS JA3 fingerprint against.",
+                    "title": "tls_fingerprint_classes",
+                    "items": {
+                        "$ref": "#/definitions/policyKnownTlsFingerprintClass"
+                    },
+                    "x-displayname": "TLS Fingerprint Classes"
+                },
+                "tls_fingerprint_values": {
+                    "type": "array",
+                    "description": " A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against.",
+                    "title": "tls_fingerprint_classes",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "TLS Fingerprint Values"
                 }
             }
         },
@@ -3441,9 +4393,29 @@ var APISwaggerJSON string = `{
                     "description": " Object reference",
                     "title": "object_refs",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                }
+            }
+        },
+        "viewsPrefixStringListType": {
+            "type": "object",
+            "description": "x-example: \"192.168.20.0/24\"\nList of IPv4 prefixes that represent an endpoint",
+            "title": "ipv4 prefix list",
+            "x-displayname": "IPv4 Prefix List",
+            "x-ves-proto-message": "ves.io.schema.views.PrefixStringListType",
+            "properties": {
+                "prefixes": {
+                    "type": "array",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\nRequired: YES",
+                    "title": "ipv4 prefix list",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv4 Prefix List",
+                    "x-ves-example": "192.168.20.0/24",
+                    "x-ves-required": "true"
                 }
             }
         },

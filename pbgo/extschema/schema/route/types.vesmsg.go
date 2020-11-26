@@ -946,6 +946,8 @@ var DefaultMirrorPolicyTypeValidator = func() *ValidateMirrorPolicyType {
 	}
 	v.FldValidators["cluster"] = vFn
 
+	v.FldValidators["percent"] = ves_io_schema.FractionalPercentValidator().Validate
+
 	return v
 }()
 

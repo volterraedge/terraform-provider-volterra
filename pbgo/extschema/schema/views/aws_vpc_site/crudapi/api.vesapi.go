@@ -994,7 +994,19 @@ type APISrv struct {
 	apiWrapper *server.DBAPIWrapper
 }
 
+func (s *APISrv) validateTransport(ctx context.Context) error {
+	if s.sf.IsTransportNotSupported("ves.io.schema.views.aws_vpc_site.crudapi.API", server.TransportFromContext(ctx)) {
+		userMsg := fmt.Sprintf("ves.io.schema.views.aws_vpc_site.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		return server.GRPCStatusFromError(err).Err()
+	}
+	return nil
+}
+
 func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreateRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_vpc_site.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1019,6 +1031,9 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectReplaceRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if req.Spec == nil {
 		return nil, fmt.Errorf("Nil spec in Replace Request")
 	}
@@ -1043,6 +1058,9 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 }
 
 func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_vpc_site.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1065,6 +1083,9 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 }
 
 func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_vpc_site.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1116,6 +1137,9 @@ func (s *APISrv) ListStream(req *ObjectListReq, stream API_ListStreamServer) err
 }
 
 func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDeleteRsp, error) {
+	if err := s.validateTransport(ctx); err != nil {
+		return nil, err
+	}
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_vpc_site.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
@@ -1494,7 +1518,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-aws_vpc_site-crudapi-API-Get"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-crudapi-API-Get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.crudapi.API.Get"
             },
@@ -1569,7 +1593,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-aws_vpc_site-crudapi-API-Delete"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-crudapi-API-Delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.crudapi.API.Delete"
             },
@@ -1652,7 +1676,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-aws_vpc_site-crudapi-API-Replace"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-crudapi-API-Replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.crudapi.API.Replace"
             },
@@ -1781,7 +1805,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-aws_vpc_site-crudapi-API-List"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-crudapi-API-List"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.crudapi.API.List"
             },
@@ -1858,7 +1882,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-aws_vpc_site-crudapi-API-Create"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-crudapi-API-Create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.crudapi.API.Create"
             },
@@ -1987,7 +2011,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "http://some-url-here/ves-io-schema-views-aws_vpc_site-crudapi-API-ListStream"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-crudapi-API-ListStream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.crudapi.API.ListStream"
             },
@@ -2004,15 +2028,15 @@ var APISwaggerJSON string = `{
             "description": "Two interface AWS ingress/egress site",
             "title": "AWS Ingress Egress Gateway",
             "x-displayname": "AWS Ingress/Egress Gateway",
+            "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
-            "x-ves-oneof-field-service_policy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy_policy\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.AWSVPCIngressEgressGwType",
             "properties": {
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy_policy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
                     "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
                 },
@@ -2039,7 +2063,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Ingress/Egress Gateway (two Interface) Nodes in AZ"
                 },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy_policy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2053,7 +2077,7 @@ var APISwaggerJSON string = `{
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType"
                 },
-                "no_forward_proxy_policy": {
+                "no_forward_proxy": {
                     "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
                     "$ref": "#/definitions/schemaEmpty"
@@ -2118,14 +2142,14 @@ var APISwaggerJSON string = `{
             "description": "Voltstack cluster of single interface AWS nodes",
             "title": "AWS Voltstack Cluster",
             "x-displayname": "AWS  Voltstack Cluster",
+            "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
-            "x-ves-oneof-field-service_policy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy_policy\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.AWSVPCVoltstackClusterType",
             "properties": {
                 "active_forward_proxy_policies": {
-                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy_policy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
+                    "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
                     "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType"
                 },
@@ -2152,7 +2176,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "VoltStack Cluster (One Interface) Nodes in AZ"
                 },
                 "forward_proxy_allow_all": {
-                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy_policy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
+                    "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2161,7 +2185,7 @@ var APISwaggerJSON string = `{
                     "title": "Connect Global Networks",
                     "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
                 },
-                "no_forward_proxy_policy": {
+                "no_forward_proxy": {
                     "description": "Exclusive with [active_forward_proxy_policies forward_proxy_allow_all]\nx-displayName: \"Disable Forward Proxy\"\nDisable Forward Proxy for this site",
                     "title": "Disable Forward Proxy",
                     "$ref": "#/definitions/schemaEmpty"
@@ -2549,7 +2573,7 @@ var APISwaggerJSON string = `{
                 },
                 "status": {
                     "type": "string",
-                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or k8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed. \n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-",
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "Failed"
@@ -3220,6 +3244,29 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteCoordinates": {
+            "type": "object",
+            "description": "Coordinates of the site which provides the site physical location",
+            "title": "Site Coordinates",
+            "x-displayname": "Site Coordinates",
+            "x-ves-proto-message": "ves.io.schema.site.Coordinates",
+            "properties": {
+                "latitude": {
+                    "type": "number",
+                    "description": " Latitude of the site location",
+                    "title": "latitude",
+                    "format": "float",
+                    "x-displayname": "Latitude"
+                },
+                "longitude": {
+                    "type": "number",
+                    "description": " longitude of site location",
+                    "title": "longitude",
+                    "format": "float",
+                    "x-displayname": "Longitude"
+                }
+            }
+        },
         "viewsAWSVPCOneInterfaceNodeType": {
             "type": "object",
             "description": "Parameters for creating Single interface Node in one AZ",
@@ -3256,7 +3303,8 @@ var APISwaggerJSON string = `{
             "description": "Parameters to create new AWS VPC",
             "title": "AWS VPC Parameters",
             "x-displayname": "AWS VPC Parameters",
-            "x-ves-displayorder": "2,3,6",
+            "x-ves-displayorder": "7,3,6",
+            "x-ves-oneof-field-name_choice": "[\"autogenerate\",\"name_tag\"]",
             "x-ves-proto-message": "ves.io.schema.views.AWSVPCParamsType",
             "properties": {
                 "allocate_ipv6": {
@@ -3266,12 +3314,15 @@ var APISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Allocate IPv6 CIDR block from AWS"
                 },
+                "autogenerate": {
+                    "description": "Exclusive with [name_tag]\nx-displayName: \"Autogenerate VPC Name\"\nAutogenerate the VPC Name",
+                    "title": "autogenerate",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "name_tag": {
                     "type": "string",
-                    "description": " x-example \"MyVpc\"\n Optional Name tag for your VPC\nRequired: YES",
-                    "title": "AWS VPC Name Tag",
-                    "x-displayname": "AWS VPC Name Tag",
-                    "x-ves-required": "true"
+                    "description": "Exclusive with [autogenerate]\nx-displayName: \"Choose VPC Name\"\nSpecify the VPC Name",
+                    "title": "name_tag"
                 },
                 "primary_ipv4": {
                     "type": "string",
@@ -3497,6 +3548,13 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.GlobalSpecType",
             "properties": {
+                "address": {
+                    "type": "string",
+                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-",
+                    "title": "address",
+                    "x-displayname": "Geographical Address",
+                    "x-ves-example": "123 Street, city, country, postal code"
+                },
                 "assisted": {
                     "description": "Exclusive with [aws_cred]\nx-displayName: \"Assisted Deployment\"\nIn assisted deployment get AWS parameters generated in status of this objects and run volterra provided terraform script.",
                     "title": "Assisted Deployment",
@@ -3514,6 +3572,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "AWS Region",
                     "x-ves-example": "us-east-1",
                     "x-ves-required": "true"
+                },
+                "coordinates": {
+                    "description": " Site longitude and latitude co-ordinates",
+                    "title": "coordinates",
+                    "$ref": "#/definitions/siteCoordinates",
+                    "x-displayname": "Co-ordinates"
                 },
                 "disk_size": {
                     "type": "integer",
@@ -3583,7 +3647,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "voltstack_cluster": {
-                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\nx-displayName: \"Voltstack Cluster (One Interface)\"\nVoltstack Cluster using single interface, useful for deploying k8s cluster.",
+                    "description": "Exclusive with [ingress_egress_gw ingress_gw]\nx-displayName: \"Voltstack Cluster (One Interface)\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",
                     "title": "Voltstack Cluster",
                     "$ref": "#/definitions/aws_vpc_siteAWSVPCVoltstackClusterType"
                 },

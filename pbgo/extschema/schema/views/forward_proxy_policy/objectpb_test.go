@@ -33,7 +33,6 @@ It has these top-level messages:
 	ForwardProxySimpleRuleType
 	DomainListType
 	URLListType
-	L4DestListType
 	ForwardProxyAdvancedRuleType
 	ForwardProxyRuleListType
 	GlobalSpecType
@@ -66,6 +65,8 @@ import (
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 

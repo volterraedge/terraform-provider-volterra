@@ -58,7 +58,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Allow Volterra"
 	// x-example: "true"
-	// if allow_volterra is set to true, it allows relevent volterra infrastructure services to decrypt the secret encrypted using this policy.
+	// if allow_volterra is set to true, it allows relevant volterra infrastructure services to decrypt the secret encrypted using this policy.
 	AllowVolterra bool `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
 }
 
