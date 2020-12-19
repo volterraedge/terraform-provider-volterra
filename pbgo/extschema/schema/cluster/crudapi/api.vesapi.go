@@ -2118,7 +2118,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "keys": {
                     "type": "array",
-                    "description": " List of keys that define a cluster subset.\n\nExample: - \"production\"-",
+                    "description": " List of keys that define a cluster subset class.\n\nExample: - \"production\"-",
                     "title": "keys",
                     "items": {
                         "type": "string"
@@ -2868,7 +2868,7 @@ var APISwaggerJSON string = `{
         },
         "schemaRoutingPriority": {
             "type": "string",
-            "description": "Priority routing for each request.\nDifferent connection pools are used based on the priority selected for the request.\nAlso, circuit-breaker configuration at destination cluster is chosen based on selected priority.\n\n - DEFAULT: Default routing mechanism\n - HIGH: High-Priority routing mechanism",
+            "description": "Priority routing for each request.\nDifferent connection pools are used based on the priority selected for the request.\nAlso, circuit-breaker configuration at destination cluster is chosen based on selected priority.\n\nDefault routing mechanism\nHigh-Priority routing mechanism",
             "title": "RoutingPriority",
             "enum": [
                 "DEFAULT",
@@ -2880,7 +2880,7 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretEncodingType": {
             "type": "string",
-            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: No Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
             "title": "SecretEncodingType",
             "enum": [
                 "EncodingNone",
@@ -3175,9 +3175,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cipher_suites": {
                     "type": "array",
+                    "description": " The following list specifies the supported cipher suite\n   TLS_AES_128_GCM_SHA256\n   TLS_AES_256_GCM_SHA384\n   TLS_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\n   TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\n   TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\n   TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\n   TLS_RSA_WITH_AES_128_CBC_SHA\n   TLS_RSA_WITH_AES_128_GCM_SHA256\n   TLS_RSA_WITH_AES_256_CBC_SHA\n   TLS_RSA_WITH_AES_256_GCM_SHA384\n\n If not specified, the default list:\n   TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\n will be used.",
+                    "title": "cipher_suites",
                     "items": {
                         "type": "string"
-                    }
+                    },
+                    "x-displayname": "Cipher Suites"
                 },
                 "maximum_protocol_version": {
                     "description": " Maximum TLS protocol version.",
@@ -3216,7 +3219,7 @@ var APISwaggerJSON string = `{
         },
         "schemaTlsProtocol": {
             "type": "string",
-            "description": "TlsProtocol is enumeration of supported TLS versions\n\n - TLS_AUTO: Volterra will choose the optimal TLS version.\n - TLSv1_0: TLS 1.0\n - TLSv1_1: TLS 1.1\n - TLSv1_2: TLS 1.2\n - TLSv1_3: TLS 1.3",
+            "description": "TlsProtocol is enumeration of supported TLS versions\n\nVolterra will choose the optimal TLS version.\nTLS 1.0\nTLS 1.1\nTLS 1.2\nTLS 1.3",
             "title": "TlsProtocol",
             "enum": [
                 "TLS_AUTO",
@@ -3272,7 +3275,8 @@ var APISwaggerJSON string = `{
             "description": "TLS configuration for upstream connections",
             "title": "UpstreamTlsParamsType",
             "x-displayname": "Upstream TLS Parameters",
-            "x-ves-displayorder": "2,1",
+            "x-ves-displayorder": "5,1",
+            "x-ves-oneof-field-sni_choice": "[\"disable_sni\",\"sni\",\"use_host_header_as_sni\"]",
             "x-ves-proto-message": "ves.io.schema.UpstreamTlsParamsType",
             "properties": {
                 "common_params": {
@@ -3281,11 +3285,20 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaTlsParamsType",
                     "x-displayname": "Common Parameters"
                 },
+                "disable_sni": {
+                    "description": "Exclusive with [sni use_host_header_as_sni]\nx-displayName: \"No SNI\"\nDo not use SNI.",
+                    "title": "disable_sni",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "sni": {
                     "type": "string",
-                    "description": " SNI to be used while connecting to upstream service.",
-                    "title": "sni",
-                    "x-displayname": "SNI"
+                    "description": "Exclusive with [disable_sni use_host_header_as_sni]\nx-displayName: \"SNI Value\"\nSNI value to be used.",
+                    "title": "sni"
+                },
+                "use_host_header_as_sni": {
+                    "description": "Exclusive with [disable_sni sni]\nx-displayName: \"Host Header\"\nUse the host header as SNI",
+                    "title": "use_host_headers_as_sni",
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },

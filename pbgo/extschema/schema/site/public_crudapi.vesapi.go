@@ -1965,7 +1965,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1977,7 +1977,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2497,14 +2497,14 @@ var APISwaggerJSON string = `{
         },
         "schemaServiceConnectionType": {
             "type": "string",
-            "description": "x-displayName \"displayname\"\nOnly added so codegeneration does not break\n\n - TLS: x-displayName \"displayname\"\nOnly added so codegeneration does not break\n - NoTLS: x-displayName \"displayname\"\nOnly added so codegeneration does not break",
+            "description": "Only added so codegeneration does not break\n\nOnly added so codegeneration does not break\nOnly added so codegeneration does not break",
             "title": "Title",
             "enum": [
                 "TLS",
                 "NoTLS"
             ],
             "default": "TLS",
-            "x-displayname": "",
+            "x-displayname": "displayname",
             "x-ves-proto-enum": "ves.io.schema.ServiceConnectionType"
         },
         "schemaServiceParameters": {
@@ -2514,14 +2514,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.ServiceParameters",
             "properties": {
                 "ctype": {
-                    "description": " x-displayName \"displayname\"\n Only added so codegeneration does not break",
+                    "description": " Only added so codegeneration does not break",
                     "title": "Title",
-                    "$ref": "#/definitions/schemaServiceConnectionType"
+                    "$ref": "#/definitions/schemaServiceConnectionType",
+                    "x-displayname": "displayname"
                 },
                 "url": {
                     "type": "string",
-                    "description": " x-displayName \"displayname\"\n Only added so codegeneration does not break",
-                    "title": "Title"
+                    "description": " Only added so codegeneration does not break",
+                    "title": "Title",
+                    "x-displayname": "displayname"
                 }
             }
         },
@@ -3208,7 +3210,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Sites are created automatically once user approves addition of sites in the system.",
             "title": "Create Site",
-            "x-displayname": "Create Specification",
+            "x-displayname": "Create Site",
             "x-ves-proto-message": "ves.io.schema.site.CreateSpecType",
             "properties": {
                 "address": {
@@ -3424,7 +3426,7 @@ var APISwaggerJSON string = `{
         },
         "siteGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -3439,7 +3441,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Get of site",
             "title": "Get Site",
-            "x-displayname": "Get Specification",
+            "x-displayname": "Get Site",
             "x-ves-proto-message": "ves.io.schema.site.GetSpecType",
             "properties": {
                 "address": {
@@ -4033,7 +4035,7 @@ var APISwaggerJSON string = `{
         },
         "siteLinkQuality": {
             "type": "string",
-            "description": "Link quality determined by VER using different probes\n\nUnknown quality\nLink quality is good\nLink quality is poor\n - QUALITY_DISABLED: Quality disabled",
+            "description": "Link quality determined by VER using different probes\n\nUnknown quality\nLink quality is good\nLink quality is poor\nQuality disabled",
             "title": "Link quality",
             "enum": [
                 "QUALITY_UNKNOWN",
@@ -4232,13 +4234,13 @@ var APISwaggerJSON string = `{
                 },
                 "link_quality": {
                     "description": " Link quality for the interface",
-                    "title": "Link quality status\nx-displayName: \"Link Quality\"\nLink quality for the interface",
+                    "title": "Link quality status",
                     "$ref": "#/definitions/siteLinkQuality",
                     "x-displayname": "Link Quality"
                 },
                 "link_type": {
                     "description": " Link type for the interface",
-                    "title": "Link type\nx-displayName: \"Link type\"\nLink type for the interface",
+                    "title": "Link type",
                     "$ref": "#/definitions/siteLinkType",
                     "x-displayname": "Link type"
                 },
@@ -4536,7 +4538,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Replace Site will replace address, coordinates of site",
             "title": "Replace Site",
-            "x-displayname": "Replace Specification",
+            "x-displayname": "Replace Site",
             "x-ves-displayorder": "4,127,2,3,125,114,120,121,117,118,123,124,122,126,115",
             "x-ves-proto-message": "ves.io.schema.site.ReplaceSpecType",
             "properties": {

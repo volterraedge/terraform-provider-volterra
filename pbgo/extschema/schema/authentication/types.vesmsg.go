@@ -371,6 +371,14 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) AuthTypeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for auth_type_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) CookieParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -404,6 +412,16 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["auth_type_choice"]; exists {
+		val := m.GetAuthTypeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("auth_type_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetAuthTypeChoice().(type) {
@@ -444,6 +462,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhAuthTypeChoice := v.AuthTypeChoiceValidationRuleHandler
+	rulesAuthTypeChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAuthTypeChoice(rulesAuthTypeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.auth_type_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["auth_type_choice"] = vFn
 
 	vrhCookieParams := v.CookieParamsValidationRuleHandler
 	rulesCookieParams := map[string]string{
@@ -558,6 +587,14 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) AuthTypeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for auth_type_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) CookieParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -591,6 +628,16 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["auth_type_choice"]; exists {
+		val := m.GetAuthTypeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("auth_type_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetAuthTypeChoice().(type) {
@@ -631,6 +678,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhAuthTypeChoice := v.AuthTypeChoiceValidationRuleHandler
+	rulesAuthTypeChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAuthTypeChoice(rulesAuthTypeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.auth_type_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["auth_type_choice"] = vFn
 
 	vrhCookieParams := v.CookieParamsValidationRuleHandler
 	rulesCookieParams := map[string]string{
@@ -745,6 +803,14 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) AuthTypeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for auth_type_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) CookieParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -778,6 +844,16 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["auth_type_choice"]; exists {
+		val := m.GetAuthTypeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("auth_type_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetAuthTypeChoice().(type) {
@@ -818,6 +894,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhAuthTypeChoice := v.AuthTypeChoiceValidationRuleHandler
+	rulesAuthTypeChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAuthTypeChoice(rulesAuthTypeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.auth_type_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["auth_type_choice"] = vFn
 
 	vrhCookieParams := v.CookieParamsValidationRuleHandler
 	rulesCookieParams := map[string]string{
@@ -1460,6 +1547,14 @@ type ValidateOIDCAuthType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateOIDCAuthType) AuthParamsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for auth_params_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateOIDCAuthType) AuthParamsChoiceOidcWellKnownConfigUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_OidcWellKnownConfigUrl, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -1511,6 +1606,16 @@ func (v *ValidateOIDCAuthType) Validate(ctx context.Context, pm interface{}, opt
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["auth_params_choice"]; exists {
+		val := m.GetAuthParamsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("auth_params_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetAuthParamsChoice().(type) {
@@ -1571,6 +1676,17 @@ var DefaultOIDCAuthTypeValidator = func() *ValidateOIDCAuthType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhAuthParamsChoice := v.AuthParamsChoiceValidationRuleHandler
+	rulesAuthParamsChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAuthParamsChoice(rulesAuthParamsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OIDCAuthType.auth_params_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["auth_params_choice"] = vFn
 
 	vrhAuthParamsChoiceOidcWellKnownConfigUrl := v.AuthParamsChoiceOidcWellKnownConfigUrlValidationRuleHandler
 	rulesAuthParamsChoiceOidcWellKnownConfigUrl := map[string]string{
@@ -1712,6 +1828,14 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) AuthTypeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for auth_type_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) CookieParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -1745,6 +1869,16 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["auth_type_choice"]; exists {
+		val := m.GetAuthTypeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("auth_type_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetAuthTypeChoice().(type) {
@@ -1785,6 +1919,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhAuthTypeChoice := v.AuthTypeChoiceValidationRuleHandler
+	rulesAuthTypeChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAuthTypeChoice(rulesAuthTypeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.auth_type_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["auth_type_choice"] = vFn
 
 	vrhCookieParams := v.CookieParamsValidationRuleHandler
 	rulesCookieParams := map[string]string{

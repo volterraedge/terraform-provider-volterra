@@ -380,6 +380,44 @@ func resourceVolterraServicePolicy() *schema.Resource {
 				},
 			},
 
+			"legacy_rule_list": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"rules": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"kind": {
+										Type:     schema.TypeString,
+										Computed: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"rule_list": {
 
 				Type:     schema.TypeSet,
@@ -2223,6 +2261,53 @@ func resourceVolterraServicePolicyCreate(d *schema.ResourceData, meta interface{
 					ls[i] = v.(string)
 				}
 				ruleChoiceInt.DenyList.TlsFingerprintValues = ls
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("legacy_rule_list"); ok && !ruleChoiceTypeFound {
+
+		ruleChoiceTypeFound = true
+		ruleChoiceInt := &ves_io_schema_service_policy.CreateSpecType_LegacyRuleList{}
+		ruleChoiceInt.LegacyRuleList = &ves_io_schema_service_policy.LegacyRuleList{}
+		createSpec.RuleChoice = ruleChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				rulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+				ruleChoiceInt.LegacyRuleList.Rules = rulesInt
+				for i, ps := range sl {
+
+					rMapToStrVal := ps.(map[string]interface{})
+					rulesInt[i] = &ves_io_schema.ObjectRefType{}
+
+					rulesInt[i].Kind = "service_policy_rule"
+
+					if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+						rulesInt[i].Name = v.(string)
+					}
+
+					if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						rulesInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						rulesInt[i].Tenant = v.(string)
+					}
+
+					if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+						rulesInt[i].Uid = v.(string)
+					}
+
+				}
 
 			}
 
@@ -4448,6 +4533,53 @@ func resourceVolterraServicePolicyUpdate(d *schema.ResourceData, meta interface{
 					ls[i] = v.(string)
 				}
 				ruleChoiceInt.DenyList.TlsFingerprintValues = ls
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("legacy_rule_list"); ok && !ruleChoiceTypeFound {
+
+		ruleChoiceTypeFound = true
+		ruleChoiceInt := &ves_io_schema_service_policy.ReplaceSpecType_LegacyRuleList{}
+		ruleChoiceInt.LegacyRuleList = &ves_io_schema_service_policy.LegacyRuleList{}
+		updateSpec.RuleChoice = ruleChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["rules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				rulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+				ruleChoiceInt.LegacyRuleList.Rules = rulesInt
+				for i, ps := range sl {
+
+					rMapToStrVal := ps.(map[string]interface{})
+					rulesInt[i] = &ves_io_schema.ObjectRefType{}
+
+					rulesInt[i].Kind = "service_policy_rule"
+
+					if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+						rulesInt[i].Name = v.(string)
+					}
+
+					if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						rulesInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						rulesInt[i].Tenant = v.(string)
+					}
+
+					if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+						rulesInt[i].Uid = v.(string)
+					}
+
+				}
 
 			}
 

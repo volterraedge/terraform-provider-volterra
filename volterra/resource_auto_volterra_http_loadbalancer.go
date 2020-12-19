@@ -635,8 +635,17 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 			"http": {
 
-				Type:     schema.TypeBool,
+				Type:     schema.TypeSet,
 				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"dns_volterra_managed": {
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
 			},
 
 			"https": {
@@ -918,6 +927,64 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						"http_redirect": {
 							Type:     schema.TypeBool,
 							Optional: true,
+						},
+
+						"tls_config": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"custom_security": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"cipher_suites": {
+
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+
+												"max_version": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"min_version": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"default_security": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"low_security": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"medium_security": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
 						},
 					},
 				},
@@ -3037,11 +3104,19 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 	if v, ok := d.GetOk("http"); ok && !loadbalancerTypeTypeFound {
 
 		loadbalancerTypeTypeFound = true
+		loadbalancerTypeInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_Http{}
+		loadbalancerTypeInt.Http = &ves_io_schema_views_http_loadbalancer.ProxyTypeHttp{}
+		createSpec.LoadbalancerType = loadbalancerTypeInt
 
-		if v.(bool) {
-			loadbalancerTypeInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_Http{}
-			loadbalancerTypeInt.Http = &ves_io_schema.Empty{}
-			createSpec.LoadbalancerType = loadbalancerTypeInt
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["dns_volterra_managed"]; ok && !isIntfNil(v) {
+
+				loadbalancerTypeInt.Http.DnsVolterraManaged = v.(bool)
+			}
+
 		}
 
 	}
@@ -3409,6 +3484,94 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["http_redirect"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.HttpsAutoCert.HttpRedirect = v.(bool)
+			}
+
+			if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				tlsConfig := &ves_io_schema_views.TlsConfig{}
+				loadbalancerTypeInt.HttpsAutoCert.TlsConfig = tlsConfig
+				for _, set := range sl {
+
+					tlsConfigMapStrToI := set.(map[string]interface{})
+
+					choiceTypeFound := false
+
+					if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
+						choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
+						tlsConfig.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								choiceInt.CustomSecurity.CipherSuites = ls
+
+							}
+
+							if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+
+								choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+							}
+
+							if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+
+								choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+					if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+
+						if v.(bool) {
+							choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
+							choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
+							tlsConfig.Choice = choiceInt
+						}
+
+					}
+
+					if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+
+						if v.(bool) {
+							choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
+							choiceInt.LowSecurity = &ves_io_schema.Empty{}
+							tlsConfig.Choice = choiceInt
+						}
+
+					}
+
+					if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+
+						if v.(bool) {
+							choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
+							choiceInt.MediumSecurity = &ves_io_schema.Empty{}
+							tlsConfig.Choice = choiceInt
+						}
+
+					}
+
+				}
+
 			}
 
 		}
@@ -5945,11 +6108,19 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 	if v, ok := d.GetOk("http"); ok && !loadbalancerTypeTypeFound {
 
 		loadbalancerTypeTypeFound = true
+		loadbalancerTypeInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_Http{}
+		loadbalancerTypeInt.Http = &ves_io_schema_views_http_loadbalancer.ProxyTypeHttp{}
+		updateSpec.LoadbalancerType = loadbalancerTypeInt
 
-		if v.(bool) {
-			loadbalancerTypeInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_Http{}
-			loadbalancerTypeInt.Http = &ves_io_schema.Empty{}
-			updateSpec.LoadbalancerType = loadbalancerTypeInt
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["dns_volterra_managed"]; ok && !isIntfNil(v) {
+
+				loadbalancerTypeInt.Http.DnsVolterraManaged = v.(bool)
+			}
+
 		}
 
 	}
@@ -6317,6 +6488,94 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["http_redirect"]; ok && !isIntfNil(v) {
 
 				loadbalancerTypeInt.HttpsAutoCert.HttpRedirect = v.(bool)
+			}
+
+			if v, ok := cs["tls_config"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				tlsConfig := &ves_io_schema_views.TlsConfig{}
+				loadbalancerTypeInt.HttpsAutoCert.TlsConfig = tlsConfig
+				for _, set := range sl {
+
+					tlsConfigMapStrToI := set.(map[string]interface{})
+
+					choiceTypeFound := false
+
+					if v, ok := tlsConfigMapStrToI["custom_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.TlsConfig_CustomSecurity{}
+						choiceInt.CustomSecurity = &ves_io_schema_views.CustomCiphers{}
+						tlsConfig.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								choiceInt.CustomSecurity.CipherSuites = ls
+
+							}
+
+							if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+
+								choiceInt.CustomSecurity.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+							}
+
+							if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+
+								choiceInt.CustomSecurity.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
+					if v, ok := tlsConfigMapStrToI["default_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+
+						if v.(bool) {
+							choiceInt := &ves_io_schema_views.TlsConfig_DefaultSecurity{}
+							choiceInt.DefaultSecurity = &ves_io_schema.Empty{}
+							tlsConfig.Choice = choiceInt
+						}
+
+					}
+
+					if v, ok := tlsConfigMapStrToI["low_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+
+						if v.(bool) {
+							choiceInt := &ves_io_schema_views.TlsConfig_LowSecurity{}
+							choiceInt.LowSecurity = &ves_io_schema.Empty{}
+							tlsConfig.Choice = choiceInt
+						}
+
+					}
+
+					if v, ok := tlsConfigMapStrToI["medium_security"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+
+						if v.(bool) {
+							choiceInt := &ves_io_schema_views.TlsConfig_MediumSecurity{}
+							choiceInt.MediumSecurity = &ves_io_schema.Empty{}
+							tlsConfig.Choice = choiceInt
+						}
+
+					}
+
+				}
+
 			}
 
 		}

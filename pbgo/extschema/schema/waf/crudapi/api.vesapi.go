@@ -2675,7 +2675,7 @@ var APISwaggerJSON string = `{
         },
         "schemaWafModeType": {
             "type": "string",
-            "description": "The mode of operation for Web Application Firewall\n\n - BLOCK: Block on detection\n - ALERT_ONLY: Only raise alert on detection",
+            "description": "The mode of operation for Web Application Firewall\n\nBlock on detection\nOnly raise alert on detection",
             "title": "WafModeType",
             "enum": [
                 "BLOCK",

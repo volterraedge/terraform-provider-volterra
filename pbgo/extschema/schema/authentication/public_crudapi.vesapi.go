@@ -1962,7 +1962,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1974,7 +1974,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2090,11 +2090,17 @@ var APISwaggerJSON string = `{
                 },
                 "cookie_expiry": {
                     "type": "integer",
-                    "format": "int64"
+                    "description": " specifies in seconds max duration of the allocated cookie. This maps to “Max-Age” attribute in the session cookie.\n This will act as an expiry duration on the client side after which client will not  be setting the\n cookie as part of the request.\n Default cookie expiry is 3600 seconds\n\nExample: - 5000-",
+                    "title": "cookie expiry",
+                    "format": "int64",
+                    "x-displayname": "Cookie Expiry duration"
                 },
                 "cookie_refresh_interval": {
                     "type": "integer",
-                    "format": "int64"
+                    "description": " Specifies in seconds refresh interval for session cookie.\n This is used to keep the active user active and reduce re-login.\n When an incoming cookie's session expiry is still valid, and time to expire falls behind this interval,\n re-issue a cookie with new expiry and with the same original session expiry.\n Default refresh interval is 3000 seconds\n\nExample: - 3600-",
+                    "title": "cookie refresh interval",
+                    "format": "int64",
+                    "x-displayname": "Cookie Refresh Interval"
                 },
                 "kms_key_hmac": {
                     "description": "Exclusive with [auth_hmac]\nx-displayName: \"HMAC kms key\"\nHMAC configured using KMS_KEY",
@@ -2103,7 +2109,10 @@ var APISwaggerJSON string = `{
                 },
                 "session_expiry": {
                     "type": "integer",
-                    "format": "int64"
+                    "description": " specifies in seconds max lifetime of an authenticated session after which the user will be forced to login again.\n Default session expiry is 86400 seconds(24 hours).\n\nExample: - 36000-",
+                    "title": "session expiry",
+                    "format": "int64",
+                    "x-displayname": "Session Expiry duration"
                 }
             }
         },
@@ -2155,7 +2164,7 @@ var APISwaggerJSON string = `{
         "authenticationCreateSpecType": {
             "type": "object",
             "title": "Create Authentication Object",
-            "x-displayname": "Authentication Specification",
+            "x-displayname": "Create Authentication",
             "x-ves-oneof-field-auth_type_choice": "[\"oidc_auth\"]",
             "x-ves-proto-message": "ves.io.schema.authentication.CreateSpecType",
             "properties": {
@@ -2233,7 +2242,7 @@ var APISwaggerJSON string = `{
         },
         "authenticationGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2247,7 +2256,7 @@ var APISwaggerJSON string = `{
         "authenticationGetSpecType": {
             "type": "object",
             "title": "Get Authentication",
-            "x-displayname": "Authentication Specification",
+            "x-displayname": "Get Authentication",
             "x-ves-oneof-field-auth_type_choice": "[\"oidc_auth\"]",
             "x-ves-proto-message": "ves.io.schema.authentication.GetSpecType",
             "properties": {
@@ -2279,8 +2288,8 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "oidc_auth": {
-                    "description": "Exclusive with []\n",
-                    "title": "OIDC Auth\nx-displayName: \"OIDC Authentication\"\nOIDC Authentication Type",
+                    "description": "Exclusive with []\nx-displayName: \"OIDC Authentication\"\nOIDC Authentication Type",
+                    "title": "OIDC Auth",
                     "$ref": "#/definitions/authenticationOIDCAuthType"
                 }
             }
@@ -2498,8 +2507,8 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "oidc_auth_params": {
-                    "description": "Exclusive with [oidc_well_known_config_url]\n",
-                    "title": "OIDC endpoint configuration\nx-displayName: \"OIDC endpoint configuration URLs\"\nEndpoint configuration details for OIDC",
+                    "description": "Exclusive with [oidc_well_known_config_url]\nx-displayName: \"Endpoint configuration URLs\"\nEndpoint configuration details for OIDC",
+                    "title": "OIDC endpoint configuration",
                     "$ref": "#/definitions/authenticationOIDCAuthParams"
                 },
                 "oidc_client_id": {
@@ -2511,7 +2520,7 @@ var APISwaggerJSON string = `{
                 },
                 "oidc_well_known_config_url": {
                     "type": "string",
-                    "description": "Exclusive with [oidc_auth_params]\nx-displayName: \"oidc well_known config URL\"\nx-example: \"https://login.microsoftonline.com/some-client-id/v2.0/.well-known/openid-configuration\"\nUser can configure an OIDC well known config URL which will fetch necessary authentication related endpoints",
+                    "description": "Exclusive with [oidc_auth_params]\nx-displayName: \"Well-known Configuration URL\"\nx-example: \"https://login.microsoftonline.com/some-client-id/v2.0/.well-known/openid-configuration\"\nAn OIDC well-known configuration URL that will be used to fetch authentication related endpoints",
                     "title": "OIDC Config URL"
                 }
             }
@@ -2578,7 +2587,7 @@ var APISwaggerJSON string = `{
         "authenticationReplaceSpecType": {
             "type": "object",
             "title": "Replace Authentication",
-            "x-displayname": "Authentication Specification",
+            "x-displayname": "Replace Authentication",
             "x-ves-oneof-field-auth_type_choice": "[\"oidc_auth\"]",
             "x-ves-proto-message": "ves.io.schema.authentication.ReplaceSpecType",
             "properties": {
@@ -3047,7 +3056,7 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretEncodingType": {
             "type": "string",
-            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: No Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
             "title": "SecretEncodingType",
             "enum": [
                 "EncodingNone",

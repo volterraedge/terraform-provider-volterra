@@ -1965,7 +1965,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1977,7 +1977,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2127,7 +2127,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "advertise_policy object controls how and where a service represented by a given virtual_host object is advertised to consumers.",
             "title": "Create advertise policy",
-            "x-displayname": "Specification",
+            "x-displayname": "Create Advertise Policy",
             "x-ves-displayorder": "1,2,7,3,4,5,6",
             "x-ves-proto-message": "ves.io.schema.advertise_policy.CreateSpecType",
             "properties": {
@@ -2239,7 +2239,7 @@ var APISwaggerJSON string = `{
         },
         "advertise_policyGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2254,7 +2254,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Get advertise_policy read a given object from storage backend for metadata.namespace",
             "title": "Get advertise policy",
-            "x-displayname": "Specification",
+            "x-displayname": "Get Advertise Policy",
             "x-ves-displayorder": "1,2,7,3,4,5,6",
             "x-ves-proto-message": "ves.io.schema.advertise_policy.GetSpecType",
             "properties": {
@@ -2546,7 +2546,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "advertise_policy object controls how and where a service represented by a given virtual_host object is advertised to consumers.",
             "title": "Replace advertise policy",
-            "x-displayname": "Specification",
+            "x-displayname": "Replace Advertise Policy",
             "x-ves-displayorder": "1,2,7,3,4,5,6",
             "x-ves-proto-message": "ves.io.schema.advertise_policy.ReplaceSpecType",
             "properties": {
@@ -2838,7 +2838,6 @@ var APISwaggerJSON string = `{
             "description": "NetworkSiteRefSelector defines a union of reference to site or reference to virtual_network  or reference to virtual_site\nIt is used to determine virtual network using following rules\n * Direct reference to virtual_network object\n * Site local network when refering to site object\n * All site local networks for sites selected by refering to virtual_site object",
             "title": "NetworkSiteRefSelector",
             "x-displayname": "Network or Site Reference",
-            "x-ves-displayorder": "3,2,1",
             "x-ves-oneof-field-reforselector": "[\"site\",\"virtual_network\",\"virtual_site\"]",
             "x-ves-proto-message": "ves.io.schema.NetworkSiteRefSelector",
             "properties": {
@@ -3117,7 +3116,7 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretEncodingType": {
             "type": "string",
-            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: No Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
             "title": "SecretEncodingType",
             "enum": [
                 "EncodingNone",
@@ -3524,9 +3523,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cipher_suites": {
                     "type": "array",
+                    "description": " The following list specifies the supported cipher suite\n   TLS_AES_128_GCM_SHA256\n   TLS_AES_256_GCM_SHA384\n   TLS_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\n   TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\n   TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\n   TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\n   TLS_RSA_WITH_AES_128_CBC_SHA\n   TLS_RSA_WITH_AES_128_GCM_SHA256\n   TLS_RSA_WITH_AES_256_CBC_SHA\n   TLS_RSA_WITH_AES_256_GCM_SHA384\n\n If not specified, the default list:\n   TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\n will be used.",
+                    "title": "cipher_suites",
                     "items": {
                         "type": "string"
-                    }
+                    },
+                    "x-displayname": "Cipher Suites"
                 },
                 "maximum_protocol_version": {
                     "description": " Maximum TLS protocol version.",
@@ -3565,7 +3567,7 @@ var APISwaggerJSON string = `{
         },
         "schemaTlsProtocol": {
             "type": "string",
-            "description": "TlsProtocol is enumeration of supported TLS versions\n\n - TLS_AUTO: Volterra will choose the optimal TLS version.\n - TLSv1_0: TLS 1.0\n - TLSv1_1: TLS 1.1\n - TLSv1_2: TLS 1.2\n - TLSv1_3: TLS 1.3",
+            "description": "TlsProtocol is enumeration of supported TLS versions\n\nVolterra will choose the optimal TLS version.\nTLS 1.0\nTLS 1.1\nTLS 1.2\nTLS 1.3",
             "title": "TlsProtocol",
             "enum": [
                 "TLS_AUTO",

@@ -2234,10 +2234,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " The name of the cookie that will be used to obtain the hash key. If the\n cookie is not present and TTL below is not set, no hash will be\n produced\n\nExample: - \"userid\"-",
+                    "description": " The name of the cookie that will be used to obtain the hash key. If the\n cookie is not present and TTL below is not set, no hash will be\n produced\n\nExample: - \"userid\"-\nRequired: YES",
                     "title": "name",
                     "x-displayname": "Name",
-                    "x-ves-example": "userid"
+                    "x-ves-example": "userid",
+                    "x-ves-required": "true"
                 },
                 "path": {
                     "type": "string",
@@ -2279,7 +2280,7 @@ var APISwaggerJSON string = `{
             "description": "HashPolicyType specifies the field of the incoming request that will be used for\ngenerating hash key. When multiple hash policies are configured, this can also specify\nif the current hash policy is terminal policy or not.",
             "title": "HashPolicyType",
             "x-displayname": "Hash Policy",
-            "x-ves-oneof-field-policyspecifier": "[\"cookie\",\"header_name\",\"source_ip\"]",
+            "x-ves-oneof-field-policy_specifier": "[\"cookie\",\"header_name\",\"source_ip\"]",
             "x-ves-proto-message": "ves.io.schema.route.HashPolicyType",
             "properties": {
                 "cookie": {
@@ -2370,7 +2371,7 @@ var APISwaggerJSON string = `{
             "description": "List of destination to choose if the route is match.",
             "title": "RouteDestinationList",
             "x-displayname": "Destination List",
-            "x-ves-displayorder": "1,8,9,5,6,7,10,11,13,14,15,16,18,19",
+            "x-ves-displayorder": "1,8,9,5,20,10,11,13,14,15,16,18,19",
             "x-ves-oneof-field-hostrewriteparams": "[\"auto_host_rewrite\",\"host_rewrite\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteDestinationList",
             "properties": {
@@ -2575,7 +2576,7 @@ var APISwaggerJSON string = `{
             "description": "Each RouteType is a rule which has match condition and action. When the condition is\nmatched for incoming request, the specified action is taken.",
             "title": "RouteType",
             "x-displayname": "Route",
-            "x-ves-displayorder": "1,2,3,4,13,12,11,7,9,8,10,5",
+            "x-ves-displayorder": "1,14,13,12,11,7,9,8,10,5",
             "x-ves-oneof-field-routeaction": "[\"route_destination\",\"route_direct_response\",\"route_redirect\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteType",
             "properties": {
@@ -2935,7 +2936,7 @@ var APISwaggerJSON string = `{
         },
         "schemaDenominatorType": {
             "type": "string",
-            "description": "Denominator used in fraction where sampling percentages are needed. example sampled requests\n\n - HUNDRED: x-displayName \"100\"\nUse hundred as denominator\n - TEN_THOUSAND: x-displayName \"10000\"\nUse ten thousand as denominator\n - MILLION: x-displayName \"1000000\"\nUse million as denominator",
+            "description": "Denominator used in fraction where sampling percentages are needed. example sampled requests\n\nUse hundred as denominator\nUse ten thousand as denominator\nUse million as denominator",
             "title": "DenominatorType",
             "enum": [
                 "HUNDRED",
@@ -3394,7 +3395,7 @@ var APISwaggerJSON string = `{
         },
         "schemaRoutingPriority": {
             "type": "string",
-            "description": "Priority routing for each request.\nDifferent connection pools are used based on the priority selected for the request.\nAlso, circuit-breaker configuration at destination cluster is chosen based on selected priority.\n\n - DEFAULT: Default routing mechanism\n - HIGH: High-Priority routing mechanism",
+            "description": "Priority routing for each request.\nDifferent connection pools are used based on the priority selected for the request.\nAlso, circuit-breaker configuration at destination cluster is chosen based on selected priority.\n\nDefault routing mechanism\nHigh-Priority routing mechanism",
             "title": "RoutingPriority",
             "enum": [
                 "DEFAULT",

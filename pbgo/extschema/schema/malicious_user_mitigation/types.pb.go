@@ -694,7 +694,7 @@ func (m *GlobalSpecType) GetTemporaryBlockingSettings() *TemporaryBlockingSettin
 
 // Create malicious user mitigation
 //
-// x-displayName: "Specification"
+// x-displayName: "Create Malicious User Mitigation"
 // Create malicious_user_mitigation creates a new object in the storage backend for metadata.namespace.
 type CreateSpecType struct {
 	MitigationType              *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType" json:"mitigation_type,omitempty"`
@@ -737,7 +737,7 @@ func (m *CreateSpecType) GetTemporaryBlockingSettings() *TemporaryBlockingSettin
 
 // Replace malicious user mitigation
 //
-// x-displayName: "Specification"
+// x-displayName: "Replace Malicious User Mitigation"
 // Replace malicious_user_mitigation replaces an existing object in the storage backend for metadata.namespace.
 type ReplaceSpecType struct {
 	MitigationType              *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType" json:"mitigation_type,omitempty"`
@@ -780,7 +780,7 @@ func (m *ReplaceSpecType) GetTemporaryBlockingSettings() *TemporaryBlockingSetti
 
 // Get malicious user mitigation
 //
-// x-displayName: "Specification"
+// x-displayName: "Get Malicious User Mitigation"
 // Get malicious_user_mitigation reads a given object from storage backend for metadata.namespace.
 type GetSpecType struct {
 	MitigationType              *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType" json:"mitigation_type,omitempty"`

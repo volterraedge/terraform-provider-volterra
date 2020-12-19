@@ -51,13 +51,19 @@ var _ = math.Inf
 type GetResponseFormatCode int32
 
 const (
+	// x-displayName: "Default Format"
+	// Default format of returned resource
 	GET_RSP_FORMAT_DEFAULT GetResponseFormatCode = 0
+	// x-displayName: "Create request Format"
 	// Response should be in CreateRequest format
 	GET_RSP_FORMAT_FOR_CREATE GetResponseFormatCode = 1
+	// x-displayName: "Replace request format"
 	// Response should be in ReplaceRequest format
 	GET_RSP_FORMAT_FOR_REPLACE GetResponseFormatCode = 2
+	// x-displayName: "Status format"
 	// Response should be in StatusObject(s) format
 	GET_RSP_FORMAT_STATUS GetResponseFormatCode = 3
+	// x-displayName: "GetSpecType format"
 	// Response should be in format of GetSpecType
 	GET_RSP_FORMAT_READ GetResponseFormatCode = 4
 )
@@ -1302,30 +1308,30 @@ const _ = grpc.SupportPackageIsVersion4
 type APIClient interface {
 	// Create healthcheck
 	//
-	// x-displayName: "Create Configuration Specification"
+	// x-displayName: "Create Health Check"
 	// Healthcheck object defines method to determine if the given Endpoint is healthy.
 	// Single Healthcheck object can be referred to by one or many Cluster objects.
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Get healthcheck
 	//
-	// x-displayName: "Get Configuration Specification"
+	// x-displayName: "Get Health Check"
 	// Healthcheck object defines method to determine if the given Endpoint is healthy.
 	// Single Healthcheck object can be referred to by one or many Cluster objects.
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Health Check"
 	// List the set of healthcheck in a namespace
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// replace healthcheck
 	//
-	// x-displayName: "Replace Configuration Specification"
+	// x-displayName: "Replace Health Check"
 	// Healthcheck object defines method to determine if the given Endpoint is healthy.
 	// Single Healthcheck object can be referred to by one or many Cluster objects.
 	Replace(ctx context.Context, in *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete Health Check"
 	// Delete the specified healthcheck
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf3.Empty, error)
 }
@@ -1388,30 +1394,30 @@ func (c *aPIClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.
 type APIServer interface {
 	// Create healthcheck
 	//
-	// x-displayName: "Create Configuration Specification"
+	// x-displayName: "Create Health Check"
 	// Healthcheck object defines method to determine if the given Endpoint is healthy.
 	// Single Healthcheck object can be referred to by one or many Cluster objects.
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// Get healthcheck
 	//
-	// x-displayName: "Get Configuration Specification"
+	// x-displayName: "Get Health Check"
 	// Healthcheck object defines method to determine if the given Endpoint is healthy.
 	// Single Healthcheck object can be referred to by one or many Cluster objects.
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Health Check"
 	// List the set of healthcheck in a namespace
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	// replace healthcheck
 	//
-	// x-displayName: "Replace Configuration Specification"
+	// x-displayName: "Replace Health Check"
 	// Healthcheck object defines method to determine if the given Endpoint is healthy.
 	// Single Healthcheck object can be referred to by one or many Cluster objects.
 	Replace(context.Context, *ReplaceRequest) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete Health Check"
 	// Delete the specified healthcheck
 	Delete(context.Context, *DeleteRequest) (*google_protobuf3.Empty, error)
 }

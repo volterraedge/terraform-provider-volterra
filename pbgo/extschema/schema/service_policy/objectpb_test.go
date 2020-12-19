@@ -33,6 +33,7 @@ It has these top-level messages:
 	SourceList
 	Rule
 	RuleList
+	LegacyRuleList
 	GlobalSpecType
 	CreateSpecType
 	ReplaceSpecType

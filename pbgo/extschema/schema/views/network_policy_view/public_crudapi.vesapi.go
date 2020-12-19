@@ -1953,7 +1953,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1965,7 +1965,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2128,6 +2128,8 @@ var APISwaggerJSON string = `{
         },
         "network_policy_viewApplicationEnumType": {
             "type": "string",
+            "description": "Application protocols like HTTP, SNMP\n",
+            "title": "Applications",
             "enum": [
                 "APPLICATION_HTTP",
                 "APPLICATION_HTTPS",
@@ -2135,7 +2137,7 @@ var APISwaggerJSON string = `{
                 "APPLICATION_DNS"
             ],
             "default": "APPLICATION_HTTP",
-            "x-displayname": "",
+            "x-displayname": "Applications",
             "x-ves-proto-enum": "ves.io.schema.views.network_policy_view.ApplicationEnumType"
         },
         "network_policy_viewApplicationsType": {
@@ -2310,7 +2312,7 @@ var APISwaggerJSON string = `{
         },
         "network_policy_viewGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2579,12 +2581,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "port_ranges": {
                     "type": "array",
-                    "description": " ist of port ranges as match criteria\n Range is expressed as start port and end port\n\nExample: - \"100-200\"-",
+                    "description": " List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192\n\nExample: - \"100-200\"-",
                     "title": "ports",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "List Port of Ranges",
+                    "x-displayname": "List of Port Ranges",
                     "x-ves-example": "100-200"
                 },
                 "protocol": {
@@ -2632,7 +2634,9 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.network_policy_view.SpecType",
             "properties": {
                 "gc_spec": {
-                    "$ref": "#/definitions/viewsnetwork_policy_viewGlobalSpecType"
+                    "title": "gc_spec",
+                    "$ref": "#/definitions/viewsnetwork_policy_viewGlobalSpecType",
+                    "x-displayname": "GC Spec"
                 }
             }
         },
@@ -3390,7 +3394,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Shape of the Network policy view specification",
             "title": "CreateSpecType",
-            "x-displayname": "Create Specification",
+            "x-displayname": "Create Network policy View",
             "x-ves-proto-message": "ves.io.schema.views.network_policy_view.CreateSpecType",
             "properties": {
                 "egress_rules": {
@@ -3420,7 +3424,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Shape of the Network policy view specification",
             "title": "GetSpecType",
-            "x-displayname": "Specification",
+            "x-displayname": "Get Network policy View",
             "x-ves-proto-message": "ves.io.schema.views.network_policy_view.GetSpecType",
             "properties": {
                 "egress_rules": {
@@ -3489,7 +3493,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Shape of the Network policy view replace specification",
             "title": "ReplaceSpecType",
-            "x-displayname": "Specification",
+            "x-displayname": "Replace Network policy View",
             "x-ves-proto-message": "ves.io.schema.views.network_policy_view.ReplaceSpecType",
             "properties": {
                 "egress_rules": {

@@ -164,11 +164,6 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 										Optional: true,
 									},
 
-									"disk_size": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
 									"inside_subnet": {
 
 										Type:     schema.TypeSet,
@@ -205,7 +200,54 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 										},
 									},
 
+									"reserved_inside_subnet": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"disk_size": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
 									"outside_subnet": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"existing_subnet_id": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"subnet_param": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ipv4": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"ipv6": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"workload_subnet": {
 
 										Type:     schema.TypeSet,
 										Optional: true,
@@ -400,6 +442,261 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 															"max_connect_attempts": {
 																Type:     schema.TypeInt,
 																Optional: true,
+															},
+
+															"no_interception": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"tls_intercept": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"enable_for_all_domains": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"policy": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interception_rules": {
+
+																						Type:     schema.TypeList,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"domain_match": {
+
+																									Type:     schema.TypeSet,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"exact_value": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"regex_value": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"suffix_value": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+
+																								"disable_interception": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"enable_interception": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"custom_certificate": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"certificate_url": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"description": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"private_key": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"blindfold_secret_info_internal": {
+
+																									Type:     schema.TypeSet,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"decryption_provider": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"location": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"store_provider": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+
+																								"secret_encoding_type": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"blindfold_secret_info": {
+
+																									Type:     schema.TypeSet,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"decryption_provider": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"location": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"store_provider": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+
+																								"clear_secret_info": {
+
+																									Type:     schema.TypeSet,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"provider": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"url": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+
+																								"vault_secret_info": {
+
+																									Type:     schema.TypeSet,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"key": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"location": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"provider": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"secret_encoding": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"version": {
+																												Type:     schema.TypeInt,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+
+																								"wingman_secret_info": {
+
+																									Type:     schema.TypeSet,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"name": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"volterra_certificate": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"trusted_ca_url": {
+
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"volterra_trusted_ca": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
 															},
 
 															"white_listed_ports": {
@@ -1156,6 +1453,261 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 																Optional: true,
 															},
 
+															"no_interception": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"tls_intercept": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"enable_for_all_domains": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"policy": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interception_rules": {
+
+																						Type:     schema.TypeList,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"domain_match": {
+
+																									Type:     schema.TypeSet,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"exact_value": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"regex_value": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"suffix_value": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+
+																								"disable_interception": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"enable_interception": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"custom_certificate": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"certificate_url": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"description": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"private_key": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"blindfold_secret_info_internal": {
+
+																									Type:     schema.TypeSet,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"decryption_provider": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"location": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"store_provider": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+
+																								"secret_encoding_type": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"blindfold_secret_info": {
+
+																									Type:     schema.TypeSet,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"decryption_provider": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"location": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"store_provider": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+
+																								"clear_secret_info": {
+
+																									Type:     schema.TypeSet,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"provider": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"url": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+
+																								"vault_secret_info": {
+
+																									Type:     schema.TypeSet,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"key": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"location": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"provider": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"secret_encoding": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"version": {
+																												Type:     schema.TypeInt,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+
+																								"wingman_secret_info": {
+
+																									Type:     schema.TypeSet,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"name": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"volterra_certificate": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"trusted_ca_url": {
+
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"volterra_trusted_ca": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
 															"white_listed_ports": {
 
 																Type: schema.TypeList,
@@ -1670,38 +2222,38 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 						azNodes[i].AwsAzName = w.(string)
 					}
 
-					if w, ok := azNodesMapStrToI["disk_size"]; ok && !isIntfNil(w) {
-						azNodes[i].DiskSize = w.(string)
-					}
+					choiceTypeFound := false
 
-					if v, ok := azNodesMapStrToI["inside_subnet"]; ok && !isIntfNil(v) {
+					if v, ok := azNodesMapStrToI["inside_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.AWSVPCTwoInterfaceNodeType_InsideSubnet{}
+						choiceInt.InsideSubnet = &ves_io_schema_views.CloudSubnetType{}
+						azNodes[i].Choice = choiceInt
 
 						sl := v.(*schema.Set).List()
-						insideSubnet := &ves_io_schema_views.CloudSubnetType{}
-						azNodes[i].InsideSubnet = insideSubnet
 						for _, set := range sl {
-
-							insideSubnetMapStrToI := set.(map[string]interface{})
+							cs := set.(map[string]interface{})
 
 							choiceTypeFound := false
 
-							if v, ok := insideSubnetMapStrToI["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
+							if v, ok := cs["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
+								choiceIntNew := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
 
-								insideSubnet.Choice = choiceInt
+								choiceInt.InsideSubnet.Choice = choiceIntNew
 
-								choiceInt.ExistingSubnetId = v.(string)
+								choiceIntNew.ExistingSubnetId = v.(string)
 
 							}
 
-							if v, ok := insideSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+							if v, ok := cs["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
-								choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
-								insideSubnet.Choice = choiceInt
+								choiceIntNew := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
+								choiceIntNew.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+								choiceInt.InsideSubnet.Choice = choiceIntNew
 
 								sl := v.(*schema.Set).List()
 								for _, set := range sl {
@@ -1709,12 +2261,12 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
 
-										choiceInt.SubnetParam.Ipv4 = v.(string)
+										choiceIntNew.SubnetParam.Ipv4 = v.(string)
 									}
 
 									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
 
-										choiceInt.SubnetParam.Ipv6 = v.(string)
+										choiceIntNew.SubnetParam.Ipv6 = v.(string)
 									}
 
 								}
@@ -1723,6 +2275,22 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 						}
 
+					}
+
+					if v, ok := azNodesMapStrToI["reserved_inside_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+
+						if v.(bool) {
+							choiceInt := &ves_io_schema_views.AWSVPCTwoInterfaceNodeType_ReservedInsideSubnet{}
+							choiceInt.ReservedInsideSubnet = &ves_io_schema.Empty{}
+							azNodes[i].Choice = choiceInt
+						}
+
+					}
+
+					if w, ok := azNodesMapStrToI["disk_size"]; ok && !isIntfNil(w) {
+						azNodes[i].DiskSize = w.(string)
 					}
 
 					if v, ok := azNodesMapStrToI["outside_subnet"]; ok && !isIntfNil(v) {
@@ -1753,6 +2321,57 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 								choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
 								choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
 								outsideSubnet.Choice = choiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+										choiceInt.SubnetParam.Ipv4 = v.(string)
+									}
+
+									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+										choiceInt.SubnetParam.Ipv6 = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := azNodesMapStrToI["workload_subnet"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						workloadSubnet := &ves_io_schema_views.CloudSubnetType{}
+						azNodes[i].WorkloadSubnet = workloadSubnet
+						for _, set := range sl {
+
+							workloadSubnetMapStrToI := set.(map[string]interface{})
+
+							choiceTypeFound := false
+
+							if v, ok := workloadSubnetMapStrToI["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
+
+								workloadSubnet.Choice = choiceInt
+
+								choiceInt.ExistingSubnetId = v.(string)
+
+							}
+
+							if v, ok := workloadSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
+								choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+								workloadSubnet.Choice = choiceInt
 
 								sl := v.(*schema.Set).List()
 								for _, set := range sl {
@@ -1985,6 +2604,378 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+									}
+
+									tlsInterceptionChoiceTypeFound := false
+
+									if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+
+										tlsInterceptionChoiceTypeFound = true
+
+										if v.(bool) {
+											tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
+											tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
+											forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+										}
+
+									}
+
+									if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+
+										tlsInterceptionChoiceTypeFound = true
+										tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
+										tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
+										forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											interceptionPolicyChoiceTypeFound := false
+
+											if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+
+												interceptionPolicyChoiceTypeFound = true
+
+												if v.(bool) {
+													interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
+													interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
+													tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+
+												interceptionPolicyChoiceTypeFound = true
+												interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
+												interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
+												tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
+														interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
+														for i, set := range sl {
+															interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
+
+															interceptionRulesMapStrToI := set.(map[string]interface{})
+
+															if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
+
+																sl := v.(*schema.Set).List()
+																domainMatch := &ves_io_schema.DomainType{}
+																interceptionRules[i].DomainMatch = domainMatch
+																for _, set := range sl {
+
+																	domainMatchMapStrToI := set.(map[string]interface{})
+
+																	domainChoiceTypeFound := false
+
+																	if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																		domainChoiceTypeFound = true
+																		domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+
+																		domainMatch.DomainChoice = domainChoiceInt
+
+																		domainChoiceInt.ExactValue = v.(string)
+
+																	}
+
+																	if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																		domainChoiceTypeFound = true
+																		domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+
+																		domainMatch.DomainChoice = domainChoiceInt
+
+																		domainChoiceInt.RegexValue = v.(string)
+
+																	}
+
+																	if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																		domainChoiceTypeFound = true
+																		domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+
+																		domainMatch.DomainChoice = domainChoiceInt
+
+																		domainChoiceInt.SuffixValue = v.(string)
+
+																	}
+
+																}
+
+															}
+
+															enableDisableChoiceTypeFound := false
+
+															if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
+
+																enableDisableChoiceTypeFound = true
+
+																if v.(bool) {
+																	enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
+																	enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
+																	interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
+																}
+
+															}
+
+															if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
+
+																enableDisableChoiceTypeFound = true
+
+																if v.(bool) {
+																	enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
+																	enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
+																	interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
+																}
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+											signingCertChoiceTypeFound := false
+
+											if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+
+												signingCertChoiceTypeFound = true
+												signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
+												signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
+												tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
+
+														signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+													}
+
+													if v, ok := cs["description"]; ok && !isIntfNil(v) {
+
+														signingCertChoiceInt.CustomCertificate.Description = v.(string)
+													}
+
+													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														privateKey := &ves_io_schema.SecretType{}
+														signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
+														for _, set := range sl {
+
+															privateKeyMapStrToI := set.(map[string]interface{})
+
+															if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																sl := v.(*schema.Set).List()
+																blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																for _, set := range sl {
+
+																	blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																	if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																		blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																	}
+
+																	if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																		blindfoldSecretInfoInternal.Location = w.(string)
+																	}
+
+																	if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																		blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																	}
+
+																}
+
+															}
+
+															if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+															}
+
+															secretInfoOneofTypeFound := false
+
+															if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																secretInfoOneofTypeFound = true
+																secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+																secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+																	}
+
+																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+																	}
+
+																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+																	}
+
+																}
+
+															}
+
+															if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																secretInfoOneofTypeFound = true
+																secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+																secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+																	}
+
+																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+																	}
+
+																}
+
+															}
+
+															if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																secretInfoOneofTypeFound = true
+																secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+																	}
+
+																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+																	}
+
+																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+																	}
+
+																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																	}
+
+																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+																	}
+
+																}
+
+															}
+
+															if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																secretInfoOneofTypeFound = true
+																secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+																	}
+
+																}
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+
+												signingCertChoiceTypeFound = true
+
+												if v.(bool) {
+													signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
+													signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
+													tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+												}
+
+											}
+
+											trustedCaChoiceTypeFound := false
+
+											if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+												trustedCaChoiceTypeFound = true
+												trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
+
+												tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
+
+												trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+											}
+
+											if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+												trustedCaChoiceTypeFound = true
+
+												if v.(bool) {
+													trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
+													trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
+													tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
+												}
+
+											}
+
+										}
+
 									}
 
 									if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
@@ -3004,6 +3995,378 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 										forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
 									}
 
+									tlsInterceptionChoiceTypeFound := false
+
+									if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+
+										tlsInterceptionChoiceTypeFound = true
+
+										if v.(bool) {
+											tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
+											tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
+											forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+										}
+
+									}
+
+									if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+
+										tlsInterceptionChoiceTypeFound = true
+										tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
+										tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
+										forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											interceptionPolicyChoiceTypeFound := false
+
+											if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+
+												interceptionPolicyChoiceTypeFound = true
+
+												if v.(bool) {
+													interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
+													interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
+													tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+
+												interceptionPolicyChoiceTypeFound = true
+												interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
+												interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
+												tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
+														interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
+														for i, set := range sl {
+															interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
+
+															interceptionRulesMapStrToI := set.(map[string]interface{})
+
+															if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
+
+																sl := v.(*schema.Set).List()
+																domainMatch := &ves_io_schema.DomainType{}
+																interceptionRules[i].DomainMatch = domainMatch
+																for _, set := range sl {
+
+																	domainMatchMapStrToI := set.(map[string]interface{})
+
+																	domainChoiceTypeFound := false
+
+																	if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																		domainChoiceTypeFound = true
+																		domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+
+																		domainMatch.DomainChoice = domainChoiceInt
+
+																		domainChoiceInt.ExactValue = v.(string)
+
+																	}
+
+																	if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																		domainChoiceTypeFound = true
+																		domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+
+																		domainMatch.DomainChoice = domainChoiceInt
+
+																		domainChoiceInt.RegexValue = v.(string)
+
+																	}
+
+																	if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																		domainChoiceTypeFound = true
+																		domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+
+																		domainMatch.DomainChoice = domainChoiceInt
+
+																		domainChoiceInt.SuffixValue = v.(string)
+
+																	}
+
+																}
+
+															}
+
+															enableDisableChoiceTypeFound := false
+
+															if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
+
+																enableDisableChoiceTypeFound = true
+
+																if v.(bool) {
+																	enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
+																	enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
+																	interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
+																}
+
+															}
+
+															if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
+
+																enableDisableChoiceTypeFound = true
+
+																if v.(bool) {
+																	enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
+																	enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
+																	interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
+																}
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+											signingCertChoiceTypeFound := false
+
+											if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+
+												signingCertChoiceTypeFound = true
+												signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
+												signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
+												tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
+
+														signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+													}
+
+													if v, ok := cs["description"]; ok && !isIntfNil(v) {
+
+														signingCertChoiceInt.CustomCertificate.Description = v.(string)
+													}
+
+													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														privateKey := &ves_io_schema.SecretType{}
+														signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
+														for _, set := range sl {
+
+															privateKeyMapStrToI := set.(map[string]interface{})
+
+															if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																sl := v.(*schema.Set).List()
+																blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																for _, set := range sl {
+
+																	blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																	if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																		blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																	}
+
+																	if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																		blindfoldSecretInfoInternal.Location = w.(string)
+																	}
+
+																	if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																		blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																	}
+
+																}
+
+															}
+
+															if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+															}
+
+															secretInfoOneofTypeFound := false
+
+															if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																secretInfoOneofTypeFound = true
+																secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+																secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+																	}
+
+																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+																	}
+
+																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+																	}
+
+																}
+
+															}
+
+															if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																secretInfoOneofTypeFound = true
+																secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+																secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+																	}
+
+																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+																	}
+
+																}
+
+															}
+
+															if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																secretInfoOneofTypeFound = true
+																secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+																	}
+
+																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+																	}
+
+																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+																	}
+
+																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																	}
+
+																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+																	}
+
+																}
+
+															}
+
+															if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																secretInfoOneofTypeFound = true
+																secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+																	}
+
+																}
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+
+												signingCertChoiceTypeFound = true
+
+												if v.(bool) {
+													signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
+													signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
+													tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+												}
+
+											}
+
+											trustedCaChoiceTypeFound := false
+
+											if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+												trustedCaChoiceTypeFound = true
+												trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
+
+												tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
+
+												trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+											}
+
+											if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+												trustedCaChoiceTypeFound = true
+
+												if v.(bool) {
+													trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
+													trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
+													tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
 									if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
 
 										ls := make([]uint32, len(v.([]interface{})))
@@ -3813,6 +5176,378 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+									}
+
+									tlsInterceptionChoiceTypeFound := false
+
+									if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+
+										tlsInterceptionChoiceTypeFound = true
+
+										if v.(bool) {
+											tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
+											tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
+											forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+										}
+
+									}
+
+									if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+
+										tlsInterceptionChoiceTypeFound = true
+										tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
+										tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
+										forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											interceptionPolicyChoiceTypeFound := false
+
+											if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+
+												interceptionPolicyChoiceTypeFound = true
+
+												if v.(bool) {
+													interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
+													interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
+													tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+
+												interceptionPolicyChoiceTypeFound = true
+												interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
+												interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
+												tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
+														interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
+														for i, set := range sl {
+															interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
+
+															interceptionRulesMapStrToI := set.(map[string]interface{})
+
+															if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
+
+																sl := v.(*schema.Set).List()
+																domainMatch := &ves_io_schema.DomainType{}
+																interceptionRules[i].DomainMatch = domainMatch
+																for _, set := range sl {
+
+																	domainMatchMapStrToI := set.(map[string]interface{})
+
+																	domainChoiceTypeFound := false
+
+																	if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																		domainChoiceTypeFound = true
+																		domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+
+																		domainMatch.DomainChoice = domainChoiceInt
+
+																		domainChoiceInt.ExactValue = v.(string)
+
+																	}
+
+																	if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																		domainChoiceTypeFound = true
+																		domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+
+																		domainMatch.DomainChoice = domainChoiceInt
+
+																		domainChoiceInt.RegexValue = v.(string)
+
+																	}
+
+																	if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																		domainChoiceTypeFound = true
+																		domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+
+																		domainMatch.DomainChoice = domainChoiceInt
+
+																		domainChoiceInt.SuffixValue = v.(string)
+
+																	}
+
+																}
+
+															}
+
+															enableDisableChoiceTypeFound := false
+
+															if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
+
+																enableDisableChoiceTypeFound = true
+
+																if v.(bool) {
+																	enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
+																	enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
+																	interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
+																}
+
+															}
+
+															if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
+
+																enableDisableChoiceTypeFound = true
+
+																if v.(bool) {
+																	enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
+																	enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
+																	interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
+																}
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+											signingCertChoiceTypeFound := false
+
+											if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+
+												signingCertChoiceTypeFound = true
+												signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
+												signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
+												tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
+
+														signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+													}
+
+													if v, ok := cs["description"]; ok && !isIntfNil(v) {
+
+														signingCertChoiceInt.CustomCertificate.Description = v.(string)
+													}
+
+													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														privateKey := &ves_io_schema.SecretType{}
+														signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
+														for _, set := range sl {
+
+															privateKeyMapStrToI := set.(map[string]interface{})
+
+															if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																sl := v.(*schema.Set).List()
+																blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																for _, set := range sl {
+
+																	blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																	if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																		blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																	}
+
+																	if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																		blindfoldSecretInfoInternal.Location = w.(string)
+																	}
+
+																	if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																		blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																	}
+
+																}
+
+															}
+
+															if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+															}
+
+															secretInfoOneofTypeFound := false
+
+															if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																secretInfoOneofTypeFound = true
+																secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+																secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+																	}
+
+																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+																	}
+
+																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+																	}
+
+																}
+
+															}
+
+															if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																secretInfoOneofTypeFound = true
+																secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+																secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+																	}
+
+																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+																	}
+
+																}
+
+															}
+
+															if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																secretInfoOneofTypeFound = true
+																secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+																	}
+
+																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+																	}
+
+																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+																	}
+
+																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																	}
+
+																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+																	}
+
+																}
+
+															}
+
+															if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																secretInfoOneofTypeFound = true
+																secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+																	}
+
+																}
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+
+												signingCertChoiceTypeFound = true
+
+												if v.(bool) {
+													signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
+													signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
+													tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+												}
+
+											}
+
+											trustedCaChoiceTypeFound := false
+
+											if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+												trustedCaChoiceTypeFound = true
+												trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
+
+												tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
+
+												trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+											}
+
+											if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+												trustedCaChoiceTypeFound = true
+
+												if v.(bool) {
+													trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
+													trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
+													tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
+												}
+
+											}
+
+										}
+
 									}
 
 									if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
@@ -4665,6 +6400,378 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 									if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
 
 										forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+									}
+
+									tlsInterceptionChoiceTypeFound := false
+
+									if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+
+										tlsInterceptionChoiceTypeFound = true
+
+										if v.(bool) {
+											tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
+											tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
+											forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+										}
+
+									}
+
+									if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+
+										tlsInterceptionChoiceTypeFound = true
+										tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
+										tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
+										forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											interceptionPolicyChoiceTypeFound := false
+
+											if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+
+												interceptionPolicyChoiceTypeFound = true
+
+												if v.(bool) {
+													interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
+													interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
+													tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+												}
+
+											}
+
+											if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+
+												interceptionPolicyChoiceTypeFound = true
+												interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
+												interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
+												tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
+														interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
+														for i, set := range sl {
+															interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
+
+															interceptionRulesMapStrToI := set.(map[string]interface{})
+
+															if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
+
+																sl := v.(*schema.Set).List()
+																domainMatch := &ves_io_schema.DomainType{}
+																interceptionRules[i].DomainMatch = domainMatch
+																for _, set := range sl {
+
+																	domainMatchMapStrToI := set.(map[string]interface{})
+
+																	domainChoiceTypeFound := false
+
+																	if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																		domainChoiceTypeFound = true
+																		domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+
+																		domainMatch.DomainChoice = domainChoiceInt
+
+																		domainChoiceInt.ExactValue = v.(string)
+
+																	}
+
+																	if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																		domainChoiceTypeFound = true
+																		domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+
+																		domainMatch.DomainChoice = domainChoiceInt
+
+																		domainChoiceInt.RegexValue = v.(string)
+
+																	}
+
+																	if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																		domainChoiceTypeFound = true
+																		domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+
+																		domainMatch.DomainChoice = domainChoiceInt
+
+																		domainChoiceInt.SuffixValue = v.(string)
+
+																	}
+
+																}
+
+															}
+
+															enableDisableChoiceTypeFound := false
+
+															if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
+
+																enableDisableChoiceTypeFound = true
+
+																if v.(bool) {
+																	enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
+																	enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
+																	interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
+																}
+
+															}
+
+															if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
+
+																enableDisableChoiceTypeFound = true
+
+																if v.(bool) {
+																	enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
+																	enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
+																	interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
+																}
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+											signingCertChoiceTypeFound := false
+
+											if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+
+												signingCertChoiceTypeFound = true
+												signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
+												signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
+												tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
+
+														signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+													}
+
+													if v, ok := cs["description"]; ok && !isIntfNil(v) {
+
+														signingCertChoiceInt.CustomCertificate.Description = v.(string)
+													}
+
+													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														privateKey := &ves_io_schema.SecretType{}
+														signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
+														for _, set := range sl {
+
+															privateKeyMapStrToI := set.(map[string]interface{})
+
+															if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																sl := v.(*schema.Set).List()
+																blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																for _, set := range sl {
+
+																	blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																	if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																		blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																	}
+
+																	if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																		blindfoldSecretInfoInternal.Location = w.(string)
+																	}
+
+																	if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																		blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																	}
+
+																}
+
+															}
+
+															if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+															}
+
+															secretInfoOneofTypeFound := false
+
+															if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																secretInfoOneofTypeFound = true
+																secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+																secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+																	}
+
+																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+																	}
+
+																	if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+																	}
+
+																}
+
+															}
+
+															if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																secretInfoOneofTypeFound = true
+																secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+																secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+																	}
+
+																	if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+																	}
+
+																}
+
+															}
+
+															if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																secretInfoOneofTypeFound = true
+																secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+																	}
+
+																	if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+																	}
+
+																	if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+																	}
+
+																	if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																	}
+
+																	if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+																	}
+
+																}
+
+															}
+
+															if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																secretInfoOneofTypeFound = true
+																secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																sl := v.(*schema.Set).List()
+																for _, set := range sl {
+																	cs := set.(map[string]interface{})
+
+																	if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																		secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+																	}
+
+																}
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+
+												signingCertChoiceTypeFound = true
+
+												if v.(bool) {
+													signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
+													signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
+													tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+												}
+
+											}
+
+											trustedCaChoiceTypeFound := false
+
+											if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+												trustedCaChoiceTypeFound = true
+												trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
+
+												tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
+
+												trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+											}
+
+											if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+												trustedCaChoiceTypeFound = true
+
+												if v.(bool) {
+													trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
+													trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
+													tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
+												}
+
+											}
+
+										}
+
 									}
 
 									if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {

@@ -394,7 +394,7 @@ func (m *GlobalSpecType) GetNetworkInterface() []*ves_io_schema4.ObjectRefType {
 
 // Create bgp
 //
-// x-displayName: "Specification"
+// x-displayName: "Create BGP"
 // BGP object is the configuration for peering with external BGP servers.
 // It is created by users in system namespace.
 type CreateSpecType struct {
@@ -438,7 +438,7 @@ func (m *CreateSpecType) GetNetworkInterface() []*ves_io_schema4.ObjectRefType {
 
 // Replace bgp
 //
-// x-displayName: "Specification"
+// x-displayName: "Replace BGP"
 // BGP object is the configuration for peering with external BGP servers.
 // Replace bgp will replace the contents of given BGP object.
 type ReplaceSpecType struct {
@@ -482,7 +482,7 @@ func (m *ReplaceSpecType) GetNetworkInterface() []*ves_io_schema4.ObjectRefType 
 
 // Get bgp
 //
-// x-displayName: "Specification"
+// x-displayName: "Get BGP"
 // BGP object is the configuration for peering with external BGP servers.
 // Get bgp reads from system namespace.
 type GetSpecType struct {

@@ -1965,7 +1965,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1977,7 +1977,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2183,7 +2183,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Network interface represents configuration of a network device.\nIt is created by users in system namespace.",
             "title": "Create network interface",
-            "x-displayname": "Specification",
+            "x-displayname": "Create Network Interface",
             "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"legacy_interface\",\"tunnel_interface\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.CreateSpecType",
             "properties": {
@@ -2234,7 +2234,7 @@ var APISwaggerJSON string = `{
             "description": "DHCP network configuration",
             "title": "DHCP Network",
             "x-displayname": "DHCP Network",
-            "x-ves-displayorder": "1,2,3,12,4,5,6,7,8,9,10,11",
+            "x-ves-displayorder": "1,12,4,5,9",
             "x-ves-oneof-field-dns_choice": "[\"dns_address\",\"same_as_dgw\"]",
             "x-ves-oneof-field-gateway_choice": "[\"dgw_address\",\"first_address\",\"last_address\"]",
             "x-ves-oneof-field-network_prefix_choice": "[\"network_prefix\",\"network_prefix_allocator\"]",
@@ -2509,7 +2509,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "dhcp_client": {
-                    "description": "Exclusive with [dhcp_server static_ip]\nx-displayName: \"DHCP Client\nInterface gets it IP address from external DHCP server",
+                    "description": "Exclusive with [dhcp_server static_ip]\nx-displayName: \"DHCP Client\"\nInterface gets it IP address from external DHCP server",
                     "title": "DHCP Client",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
@@ -2659,7 +2659,7 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2674,7 +2674,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Get network interface from system namespace",
             "title": "Get network interface",
-            "x-displayname": "Specification",
+            "x-displayname": "Get Network Interface",
             "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"legacy_interface\",\"tunnel_interface\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.GetSpecType",
             "properties": {
@@ -3389,7 +3389,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Network interface represents configuration of a network device.\nReplace network interface will replace the contents of given network interface object.",
             "title": "Replace network interface",
-            "x-displayname": "Specification",
+            "x-displayname": "Replace Network Interface",
             "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"legacy_interface\",\"tunnel_interface\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.ReplaceSpecType",
             "properties": {

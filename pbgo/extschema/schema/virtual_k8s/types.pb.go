@@ -19,6 +19,8 @@ import (
 
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+
 	strings "strings"
 
 	reflect "reflect"
@@ -45,11 +47,44 @@ type GlobalSpecType struct {
 	// annotations via ves.io/virtual-sites, then this virtual-site is used select sites on which to instantiate the
 	// Kubernetes API resource object
 	VsiteRefs []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=vsite_refs,json=vsiteRefs" json:"vsite_refs,omitempty"`
+	// service_isolation_choice
+	//
+	// x-displayName: "Choose Service Isolation"
+	// Service isolation choice
+	//
+	// Types that are valid to be assigned to ServiceIsolationChoice:
+	//	*GlobalSpecType_Isolated
+	//	*GlobalSpecType_Disabled
+	ServiceIsolationChoice isGlobalSpecType_ServiceIsolationChoice `protobuf_oneof:"service_isolation_choice"`
 }
 
 func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage()               {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
+
+type isGlobalSpecType_ServiceIsolationChoice interface {
+	isGlobalSpecType_ServiceIsolationChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GlobalSpecType_Isolated struct {
+	Isolated *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=isolated,oneof"`
+}
+type GlobalSpecType_Disabled struct {
+	Disabled *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=disabled,oneof"`
+}
+
+func (*GlobalSpecType_Isolated) isGlobalSpecType_ServiceIsolationChoice() {}
+func (*GlobalSpecType_Disabled) isGlobalSpecType_ServiceIsolationChoice() {}
+
+func (m *GlobalSpecType) GetServiceIsolationChoice() isGlobalSpecType_ServiceIsolationChoice {
+	if m != nil {
+		return m.ServiceIsolationChoice
+	}
+	return nil
+}
 
 func (m *GlobalSpecType) GetVsiteRefs() []*ves_io_schema4.ObjectRefType {
 	if m != nil {
@@ -58,17 +93,133 @@ func (m *GlobalSpecType) GetVsiteRefs() []*ves_io_schema4.ObjectRefType {
 	return nil
 }
 
+func (m *GlobalSpecType) GetIsolated() *ves_io_schema4.Empty {
+	if x, ok := m.GetServiceIsolationChoice().(*GlobalSpecType_Isolated); ok {
+		return x.Isolated
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDisabled() *ves_io_schema4.Empty {
+	if x, ok := m.GetServiceIsolationChoice().(*GlobalSpecType_Disabled); ok {
+		return x.Disabled
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+		(*GlobalSpecType_Isolated)(nil),
+		(*GlobalSpecType_Disabled)(nil),
+	}
+}
+
+func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*GlobalSpecType)
+	// service_isolation_choice
+	switch x := m.ServiceIsolationChoice.(type) {
+	case *GlobalSpecType_Isolated:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Isolated); err != nil {
+			return err
+		}
+	case *GlobalSpecType_Disabled:
+		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Disabled); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("GlobalSpecType.ServiceIsolationChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*GlobalSpecType)
+	switch tag {
+	case 3: // service_isolation_choice.isolated
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ServiceIsolationChoice = &GlobalSpecType_Isolated{msg}
+		return true, err
+	case 4: // service_isolation_choice.disabled
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ServiceIsolationChoice = &GlobalSpecType_Disabled{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*GlobalSpecType)
+	// service_isolation_choice
+	switch x := m.ServiceIsolationChoice.(type) {
+	case *GlobalSpecType_Isolated:
+		s := proto.Size(x.Isolated)
+		n += proto.SizeVarint(3<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GlobalSpecType_Disabled:
+		s := proto.Size(x.Disabled)
+		n += proto.SizeVarint(4<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
 // Create Virtual K8s
 //
-// x-displayName: "Create Configuration Specification"
+// x-displayName: "Create Virtual Kubernetes"
 // Create virtual_k8s will create the object in the storage backend for namespace metadata.namespace
 type CreateSpecType struct {
 	VsiteRefs []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=vsite_refs,json=vsiteRefs" json:"vsite_refs,omitempty"`
+	// Types that are valid to be assigned to ServiceIsolationChoice:
+	//	*CreateSpecType_Isolated
+	//	*CreateSpecType_Disabled
+	ServiceIsolationChoice isCreateSpecType_ServiceIsolationChoice `protobuf_oneof:"service_isolation_choice"`
 }
 
 func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage()               {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+
+type isCreateSpecType_ServiceIsolationChoice interface {
+	isCreateSpecType_ServiceIsolationChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CreateSpecType_Isolated struct {
+	Isolated *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=isolated,oneof"`
+}
+type CreateSpecType_Disabled struct {
+	Disabled *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=disabled,oneof"`
+}
+
+func (*CreateSpecType_Isolated) isCreateSpecType_ServiceIsolationChoice() {}
+func (*CreateSpecType_Disabled) isCreateSpecType_ServiceIsolationChoice() {}
+
+func (m *CreateSpecType) GetServiceIsolationChoice() isCreateSpecType_ServiceIsolationChoice {
+	if m != nil {
+		return m.ServiceIsolationChoice
+	}
+	return nil
+}
 
 func (m *CreateSpecType) GetVsiteRefs() []*ves_io_schema4.ObjectRefType {
 	if m != nil {
@@ -77,18 +228,134 @@ func (m *CreateSpecType) GetVsiteRefs() []*ves_io_schema4.ObjectRefType {
 	return nil
 }
 
+func (m *CreateSpecType) GetIsolated() *ves_io_schema4.Empty {
+	if x, ok := m.GetServiceIsolationChoice().(*CreateSpecType_Isolated); ok {
+		return x.Isolated
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDisabled() *ves_io_schema4.Empty {
+	if x, ok := m.GetServiceIsolationChoice().(*CreateSpecType_Disabled); ok {
+		return x.Disabled
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+		(*CreateSpecType_Isolated)(nil),
+		(*CreateSpecType_Disabled)(nil),
+	}
+}
+
+func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*CreateSpecType)
+	// service_isolation_choice
+	switch x := m.ServiceIsolationChoice.(type) {
+	case *CreateSpecType_Isolated:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Isolated); err != nil {
+			return err
+		}
+	case *CreateSpecType_Disabled:
+		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Disabled); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("CreateSpecType.ServiceIsolationChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*CreateSpecType)
+	switch tag {
+	case 3: // service_isolation_choice.isolated
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ServiceIsolationChoice = &CreateSpecType_Isolated{msg}
+		return true, err
+	case 4: // service_isolation_choice.disabled
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ServiceIsolationChoice = &CreateSpecType_Disabled{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*CreateSpecType)
+	// service_isolation_choice
+	switch x := m.ServiceIsolationChoice.(type) {
+	case *CreateSpecType_Isolated:
+		s := proto.Size(x.Isolated)
+		n += proto.SizeVarint(3<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *CreateSpecType_Disabled:
+		s := proto.Size(x.Disabled)
+		n += proto.SizeVarint(4<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
 // Replace Virtual K8s
 //
-// x-displayName: "Replace configuration specification"
+// x-displayName: "Replace Virtual Kubernetes"
 // Replacing an endpoint object will update the object by replacing the existing spec with the provided one.
 // For read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write.
 type ReplaceSpecType struct {
 	VsiteRefs []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=vsite_refs,json=vsiteRefs" json:"vsite_refs,omitempty"`
+	// Types that are valid to be assigned to ServiceIsolationChoice:
+	//	*ReplaceSpecType_Isolated
+	//	*ReplaceSpecType_Disabled
+	ServiceIsolationChoice isReplaceSpecType_ServiceIsolationChoice `protobuf_oneof:"service_isolation_choice"`
 }
 
 func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage()               {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+
+type isReplaceSpecType_ServiceIsolationChoice interface {
+	isReplaceSpecType_ServiceIsolationChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ReplaceSpecType_Isolated struct {
+	Isolated *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=isolated,oneof"`
+}
+type ReplaceSpecType_Disabled struct {
+	Disabled *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=disabled,oneof"`
+}
+
+func (*ReplaceSpecType_Isolated) isReplaceSpecType_ServiceIsolationChoice() {}
+func (*ReplaceSpecType_Disabled) isReplaceSpecType_ServiceIsolationChoice() {}
+
+func (m *ReplaceSpecType) GetServiceIsolationChoice() isReplaceSpecType_ServiceIsolationChoice {
+	if m != nil {
+		return m.ServiceIsolationChoice
+	}
+	return nil
+}
 
 func (m *ReplaceSpecType) GetVsiteRefs() []*ves_io_schema4.ObjectRefType {
 	if m != nil {
@@ -97,23 +364,227 @@ func (m *ReplaceSpecType) GetVsiteRefs() []*ves_io_schema4.ObjectRefType {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetIsolated() *ves_io_schema4.Empty {
+	if x, ok := m.GetServiceIsolationChoice().(*ReplaceSpecType_Isolated); ok {
+		return x.Isolated
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetDisabled() *ves_io_schema4.Empty {
+	if x, ok := m.GetServiceIsolationChoice().(*ReplaceSpecType_Disabled); ok {
+		return x.Disabled
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+		(*ReplaceSpecType_Isolated)(nil),
+		(*ReplaceSpecType_Disabled)(nil),
+	}
+}
+
+func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*ReplaceSpecType)
+	// service_isolation_choice
+	switch x := m.ServiceIsolationChoice.(type) {
+	case *ReplaceSpecType_Isolated:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Isolated); err != nil {
+			return err
+		}
+	case *ReplaceSpecType_Disabled:
+		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Disabled); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("ReplaceSpecType.ServiceIsolationChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*ReplaceSpecType)
+	switch tag {
+	case 3: // service_isolation_choice.isolated
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ServiceIsolationChoice = &ReplaceSpecType_Isolated{msg}
+		return true, err
+	case 4: // service_isolation_choice.disabled
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ServiceIsolationChoice = &ReplaceSpecType_Disabled{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*ReplaceSpecType)
+	// service_isolation_choice
+	switch x := m.ServiceIsolationChoice.(type) {
+	case *ReplaceSpecType_Isolated:
+		s := proto.Size(x.Isolated)
+		n += proto.SizeVarint(3<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *ReplaceSpecType_Disabled:
+		s := proto.Size(x.Disabled)
+		n += proto.SizeVarint(4<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
 // Get Virtual K8s
 //
-// x-displayName: "Get Configuration Specification"
+// x-displayName: "Get Virtual Kubernetes"
 // Get virtual_k8s will get the object from the storage backend for namesapce metadata.namespace
 type GetSpecType struct {
 	VsiteRefs []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=vsite_refs,json=vsiteRefs" json:"vsite_refs,omitempty"`
+	// Types that are valid to be assigned to ServiceIsolationChoice:
+	//	*GetSpecType_Isolated
+	//	*GetSpecType_Disabled
+	ServiceIsolationChoice isGetSpecType_ServiceIsolationChoice `protobuf_oneof:"service_isolation_choice"`
 }
 
 func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage()               {}
 func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
 
+type isGetSpecType_ServiceIsolationChoice interface {
+	isGetSpecType_ServiceIsolationChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GetSpecType_Isolated struct {
+	Isolated *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=isolated,oneof"`
+}
+type GetSpecType_Disabled struct {
+	Disabled *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=disabled,oneof"`
+}
+
+func (*GetSpecType_Isolated) isGetSpecType_ServiceIsolationChoice() {}
+func (*GetSpecType_Disabled) isGetSpecType_ServiceIsolationChoice() {}
+
+func (m *GetSpecType) GetServiceIsolationChoice() isGetSpecType_ServiceIsolationChoice {
+	if m != nil {
+		return m.ServiceIsolationChoice
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetVsiteRefs() []*ves_io_schema4.ObjectRefType {
 	if m != nil {
 		return m.VsiteRefs
 	}
 	return nil
+}
+
+func (m *GetSpecType) GetIsolated() *ves_io_schema4.Empty {
+	if x, ok := m.GetServiceIsolationChoice().(*GetSpecType_Isolated); ok {
+		return x.Isolated
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDisabled() *ves_io_schema4.Empty {
+	if x, ok := m.GetServiceIsolationChoice().(*GetSpecType_Disabled); ok {
+		return x.Disabled
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+		(*GetSpecType_Isolated)(nil),
+		(*GetSpecType_Disabled)(nil),
+	}
+}
+
+func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*GetSpecType)
+	// service_isolation_choice
+	switch x := m.ServiceIsolationChoice.(type) {
+	case *GetSpecType_Isolated:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Isolated); err != nil {
+			return err
+		}
+	case *GetSpecType_Disabled:
+		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Disabled); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("GetSpecType.ServiceIsolationChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*GetSpecType)
+	switch tag {
+	case 3: // service_isolation_choice.isolated
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ServiceIsolationChoice = &GetSpecType_Isolated{msg}
+		return true, err
+	case 4: // service_isolation_choice.disabled
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ServiceIsolationChoice = &GetSpecType_Disabled{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*GetSpecType)
+	// service_isolation_choice
+	switch x := m.ServiceIsolationChoice.(type) {
+	case *GetSpecType_Isolated:
+		s := proto.Size(x.Isolated)
+		n += proto.SizeVarint(3<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GetSpecType_Disabled:
+		s := proto.Size(x.Disabled)
+		n += proto.SizeVarint(4<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
 }
 
 func init() {
@@ -153,6 +624,63 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if that1.ServiceIsolationChoice == nil {
+		if this.ServiceIsolationChoice != nil {
+			return false
+		}
+	} else if this.ServiceIsolationChoice == nil {
+		return false
+	} else if !this.ServiceIsolationChoice.Equal(that1.ServiceIsolationChoice) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_Isolated) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_Isolated)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_Isolated)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Isolated.Equal(that1.Isolated) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_Disabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_Disabled)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_Disabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Disabled.Equal(that1.Disabled) {
+		return false
+	}
 	return true
 }
 func (this *CreateSpecType) Equal(that interface{}) bool {
@@ -181,6 +709,63 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 		if !this.VsiteRefs[i].Equal(that1.VsiteRefs[i]) {
 			return false
 		}
+	}
+	if that1.ServiceIsolationChoice == nil {
+		if this.ServiceIsolationChoice != nil {
+			return false
+		}
+	} else if this.ServiceIsolationChoice == nil {
+		return false
+	} else if !this.ServiceIsolationChoice.Equal(that1.ServiceIsolationChoice) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_Isolated) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_Isolated)
+	if !ok {
+		that2, ok := that.(CreateSpecType_Isolated)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Isolated.Equal(that1.Isolated) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_Disabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_Disabled)
+	if !ok {
+		that2, ok := that.(CreateSpecType_Disabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Disabled.Equal(that1.Disabled) {
+		return false
 	}
 	return true
 }
@@ -211,6 +796,63 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if that1.ServiceIsolationChoice == nil {
+		if this.ServiceIsolationChoice != nil {
+			return false
+		}
+	} else if this.ServiceIsolationChoice == nil {
+		return false
+	} else if !this.ServiceIsolationChoice.Equal(that1.ServiceIsolationChoice) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_Isolated) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_Isolated)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_Isolated)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Isolated.Equal(that1.Isolated) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_Disabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_Disabled)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_Disabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Disabled.Equal(that1.Disabled) {
+		return false
+	}
 	return true
 }
 func (this *GetSpecType) Equal(that interface{}) bool {
@@ -240,55 +882,188 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if that1.ServiceIsolationChoice == nil {
+		if this.ServiceIsolationChoice != nil {
+			return false
+		}
+	} else if this.ServiceIsolationChoice == nil {
+		return false
+	} else if !this.ServiceIsolationChoice.Equal(that1.ServiceIsolationChoice) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_Isolated) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_Isolated)
+	if !ok {
+		that2, ok := that.(GetSpecType_Isolated)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Isolated.Equal(that1.Isolated) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_Disabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_Disabled)
+	if !ok {
+		that2, ok := that.(GetSpecType_Disabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Disabled.Equal(that1.Disabled) {
+		return false
+	}
 	return true
 }
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 7)
 	s = append(s, "&virtual_k8s.GlobalSpecType{")
 	if this.VsiteRefs != nil {
 		s = append(s, "VsiteRefs: "+fmt.Sprintf("%#v", this.VsiteRefs)+",\n")
 	}
+	if this.ServiceIsolationChoice != nil {
+		s = append(s, "ServiceIsolationChoice: "+fmt.Sprintf("%#v", this.ServiceIsolationChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *GlobalSpecType_Isolated) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_k8s.GlobalSpecType_Isolated{` +
+		`Isolated:` + fmt.Sprintf("%#v", this.Isolated) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_Disabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_k8s.GlobalSpecType_Disabled{` +
+		`Disabled:` + fmt.Sprintf("%#v", this.Disabled) + `}`}, ", ")
+	return s
 }
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 7)
 	s = append(s, "&virtual_k8s.CreateSpecType{")
 	if this.VsiteRefs != nil {
 		s = append(s, "VsiteRefs: "+fmt.Sprintf("%#v", this.VsiteRefs)+",\n")
 	}
+	if this.ServiceIsolationChoice != nil {
+		s = append(s, "ServiceIsolationChoice: "+fmt.Sprintf("%#v", this.ServiceIsolationChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *CreateSpecType_Isolated) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_k8s.CreateSpecType_Isolated{` +
+		`Isolated:` + fmt.Sprintf("%#v", this.Isolated) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_Disabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_k8s.CreateSpecType_Disabled{` +
+		`Disabled:` + fmt.Sprintf("%#v", this.Disabled) + `}`}, ", ")
+	return s
 }
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 7)
 	s = append(s, "&virtual_k8s.ReplaceSpecType{")
 	if this.VsiteRefs != nil {
 		s = append(s, "VsiteRefs: "+fmt.Sprintf("%#v", this.VsiteRefs)+",\n")
 	}
+	if this.ServiceIsolationChoice != nil {
+		s = append(s, "ServiceIsolationChoice: "+fmt.Sprintf("%#v", this.ServiceIsolationChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *ReplaceSpecType_Isolated) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_k8s.ReplaceSpecType_Isolated{` +
+		`Isolated:` + fmt.Sprintf("%#v", this.Isolated) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_Disabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_k8s.ReplaceSpecType_Disabled{` +
+		`Disabled:` + fmt.Sprintf("%#v", this.Disabled) + `}`}, ", ")
+	return s
 }
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 7)
 	s = append(s, "&virtual_k8s.GetSpecType{")
 	if this.VsiteRefs != nil {
 		s = append(s, "VsiteRefs: "+fmt.Sprintf("%#v", this.VsiteRefs)+",\n")
 	}
+	if this.ServiceIsolationChoice != nil {
+		s = append(s, "ServiceIsolationChoice: "+fmt.Sprintf("%#v", this.ServiceIsolationChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *GetSpecType_Isolated) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_k8s.GetSpecType_Isolated{` +
+		`Isolated:` + fmt.Sprintf("%#v", this.Isolated) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_Disabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_k8s.GetSpecType_Disabled{` +
+		`Disabled:` + fmt.Sprintf("%#v", this.Disabled) + `}`}, ", ")
+	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
@@ -325,9 +1100,44 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 			i += n
 		}
 	}
+	if m.ServiceIsolationChoice != nil {
+		nn1, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn1
+	}
 	return i, nil
 }
 
+func (m *GlobalSpecType_Isolated) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Isolated != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Isolated.Size()))
+		n2, err := m.Isolated.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
+	}
+	return i, nil
+}
+func (m *GlobalSpecType_Disabled) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Disabled != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Disabled.Size()))
+		n3, err := m.Disabled.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	return i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -355,9 +1165,44 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 			i += n
 		}
 	}
+	if m.ServiceIsolationChoice != nil {
+		nn4, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn4
+	}
 	return i, nil
 }
 
+func (m *CreateSpecType_Isolated) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Isolated != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Isolated.Size()))
+		n5, err := m.Isolated.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n5
+	}
+	return i, nil
+}
+func (m *CreateSpecType_Disabled) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Disabled != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Disabled.Size()))
+		n6, err := m.Disabled.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n6
+	}
+	return i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -385,9 +1230,44 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 			i += n
 		}
 	}
+	if m.ServiceIsolationChoice != nil {
+		nn7, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn7
+	}
 	return i, nil
 }
 
+func (m *ReplaceSpecType_Isolated) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Isolated != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Isolated.Size()))
+		n8, err := m.Isolated.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n8
+	}
+	return i, nil
+}
+func (m *ReplaceSpecType_Disabled) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Disabled != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Disabled.Size()))
+		n9, err := m.Disabled.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n9
+	}
+	return i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -415,9 +1295,44 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 			i += n
 		}
 	}
+	if m.ServiceIsolationChoice != nil {
+		nn10, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn10
+	}
 	return i, nil
 }
 
+func (m *GetSpecType_Isolated) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Isolated != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Isolated.Size()))
+		n11, err := m.Isolated.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n11
+	}
+	return i, nil
+}
+func (m *GetSpecType_Disabled) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Disabled != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Disabled.Size()))
+		n12, err := m.Disabled.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n12
+	}
+	return i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
@@ -436,11 +1351,28 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 			this.VsiteRefs[i] = ves_io_schema4.NewPopulatedObjectRefType(r, easy)
 		}
 	}
+	oneofNumber_ServiceIsolationChoice := []int32{3, 4}[r.Intn(2)]
+	switch oneofNumber_ServiceIsolationChoice {
+	case 3:
+		this.ServiceIsolationChoice = NewPopulatedGlobalSpecType_Isolated(r, easy)
+	case 4:
+		this.ServiceIsolationChoice = NewPopulatedGlobalSpecType_Disabled(r, easy)
+	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
+func NewPopulatedGlobalSpecType_Isolated(r randyTypes, easy bool) *GlobalSpecType_Isolated {
+	this := &GlobalSpecType_Isolated{}
+	this.Isolated = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedGlobalSpecType_Disabled(r randyTypes, easy bool) *GlobalSpecType_Disabled {
+	this := &GlobalSpecType_Disabled{}
+	this.Disabled = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
 func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 	this := &CreateSpecType{}
 	if r.Intn(10) != 0 {
@@ -450,11 +1382,28 @@ func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 			this.VsiteRefs[i] = ves_io_schema4.NewPopulatedObjectRefType(r, easy)
 		}
 	}
+	oneofNumber_ServiceIsolationChoice := []int32{3, 4}[r.Intn(2)]
+	switch oneofNumber_ServiceIsolationChoice {
+	case 3:
+		this.ServiceIsolationChoice = NewPopulatedCreateSpecType_Isolated(r, easy)
+	case 4:
+		this.ServiceIsolationChoice = NewPopulatedCreateSpecType_Disabled(r, easy)
+	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
+func NewPopulatedCreateSpecType_Isolated(r randyTypes, easy bool) *CreateSpecType_Isolated {
+	this := &CreateSpecType_Isolated{}
+	this.Isolated = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedCreateSpecType_Disabled(r randyTypes, easy bool) *CreateSpecType_Disabled {
+	this := &CreateSpecType_Disabled{}
+	this.Disabled = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
 func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 	this := &ReplaceSpecType{}
 	if r.Intn(10) != 0 {
@@ -464,11 +1413,28 @@ func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 			this.VsiteRefs[i] = ves_io_schema4.NewPopulatedObjectRefType(r, easy)
 		}
 	}
+	oneofNumber_ServiceIsolationChoice := []int32{3, 4}[r.Intn(2)]
+	switch oneofNumber_ServiceIsolationChoice {
+	case 3:
+		this.ServiceIsolationChoice = NewPopulatedReplaceSpecType_Isolated(r, easy)
+	case 4:
+		this.ServiceIsolationChoice = NewPopulatedReplaceSpecType_Disabled(r, easy)
+	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
+func NewPopulatedReplaceSpecType_Isolated(r randyTypes, easy bool) *ReplaceSpecType_Isolated {
+	this := &ReplaceSpecType_Isolated{}
+	this.Isolated = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedReplaceSpecType_Disabled(r randyTypes, easy bool) *ReplaceSpecType_Disabled {
+	this := &ReplaceSpecType_Disabled{}
+	this.Disabled = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
 func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 	this := &GetSpecType{}
 	if r.Intn(10) != 0 {
@@ -478,8 +1444,26 @@ func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 			this.VsiteRefs[i] = ves_io_schema4.NewPopulatedObjectRefType(r, easy)
 		}
 	}
+	oneofNumber_ServiceIsolationChoice := []int32{3, 4}[r.Intn(2)]
+	switch oneofNumber_ServiceIsolationChoice {
+	case 3:
+		this.ServiceIsolationChoice = NewPopulatedGetSpecType_Isolated(r, easy)
+	case 4:
+		this.ServiceIsolationChoice = NewPopulatedGetSpecType_Disabled(r, easy)
+	}
 	if !easy && r.Intn(10) != 0 {
 	}
+	return this
+}
+
+func NewPopulatedGetSpecType_Isolated(r randyTypes, easy bool) *GetSpecType_Isolated {
+	this := &GetSpecType_Isolated{}
+	this.Isolated = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedGetSpecType_Disabled(r randyTypes, easy bool) *GetSpecType_Disabled {
+	this := &GetSpecType_Disabled{}
+	this.Disabled = ves_io_schema4.NewPopulatedEmpty(r, easy)
 	return this
 }
 
@@ -564,9 +1548,30 @@ func (m *GlobalSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if m.ServiceIsolationChoice != nil {
+		n += m.ServiceIsolationChoice.Size()
+	}
 	return n
 }
 
+func (m *GlobalSpecType_Isolated) Size() (n int) {
+	var l int
+	_ = l
+	if m.Isolated != nil {
+		l = m.Isolated.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_Disabled) Size() (n int) {
+	var l int
+	_ = l
+	if m.Disabled != nil {
+		l = m.Disabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -576,9 +1581,30 @@ func (m *CreateSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if m.ServiceIsolationChoice != nil {
+		n += m.ServiceIsolationChoice.Size()
+	}
 	return n
 }
 
+func (m *CreateSpecType_Isolated) Size() (n int) {
+	var l int
+	_ = l
+	if m.Isolated != nil {
+		l = m.Isolated.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_Disabled) Size() (n int) {
+	var l int
+	_ = l
+	if m.Disabled != nil {
+		l = m.Disabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -588,9 +1614,30 @@ func (m *ReplaceSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if m.ServiceIsolationChoice != nil {
+		n += m.ServiceIsolationChoice.Size()
+	}
 	return n
 }
 
+func (m *ReplaceSpecType_Isolated) Size() (n int) {
+	var l int
+	_ = l
+	if m.Isolated != nil {
+		l = m.Isolated.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_Disabled) Size() (n int) {
+	var l int
+	_ = l
+	if m.Disabled != nil {
+		l = m.Disabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -599,6 +1646,28 @@ func (m *GetSpecType) Size() (n int) {
 			l = e.Size()
 			n += 1 + l + sovTypes(uint64(l))
 		}
+	}
+	if m.ServiceIsolationChoice != nil {
+		n += m.ServiceIsolationChoice.Size()
+	}
+	return n
+}
+
+func (m *GetSpecType_Isolated) Size() (n int) {
+	var l int
+	_ = l
+	if m.Isolated != nil {
+		l = m.Isolated.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_Disabled) Size() (n int) {
+	var l int
+	_ = l
+	if m.Disabled != nil {
+		l = m.Disabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -622,6 +1691,27 @@ func (this *GlobalSpecType) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`VsiteRefs:` + strings.Replace(fmt.Sprintf("%v", this.VsiteRefs), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`ServiceIsolationChoice:` + fmt.Sprintf("%v", this.ServiceIsolationChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_Isolated) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_Isolated{`,
+		`Isolated:` + strings.Replace(fmt.Sprintf("%v", this.Isolated), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_Disabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_Disabled{`,
+		`Disabled:` + strings.Replace(fmt.Sprintf("%v", this.Disabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -632,6 +1722,27 @@ func (this *CreateSpecType) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`VsiteRefs:` + strings.Replace(fmt.Sprintf("%v", this.VsiteRefs), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`ServiceIsolationChoice:` + fmt.Sprintf("%v", this.ServiceIsolationChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_Isolated) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_Isolated{`,
+		`Isolated:` + strings.Replace(fmt.Sprintf("%v", this.Isolated), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_Disabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_Disabled{`,
+		`Disabled:` + strings.Replace(fmt.Sprintf("%v", this.Disabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -642,6 +1753,27 @@ func (this *ReplaceSpecType) String() string {
 	}
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`VsiteRefs:` + strings.Replace(fmt.Sprintf("%v", this.VsiteRefs), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`ServiceIsolationChoice:` + fmt.Sprintf("%v", this.ServiceIsolationChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_Isolated) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_Isolated{`,
+		`Isolated:` + strings.Replace(fmt.Sprintf("%v", this.Isolated), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_Disabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_Disabled{`,
+		`Disabled:` + strings.Replace(fmt.Sprintf("%v", this.Disabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -652,6 +1784,27 @@ func (this *GetSpecType) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType{`,
 		`VsiteRefs:` + strings.Replace(fmt.Sprintf("%v", this.VsiteRefs), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`ServiceIsolationChoice:` + fmt.Sprintf("%v", this.ServiceIsolationChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_Isolated) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_Isolated{`,
+		`Isolated:` + strings.Replace(fmt.Sprintf("%v", this.Isolated), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_Disabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_Disabled{`,
+		`Disabled:` + strings.Replace(fmt.Sprintf("%v", this.Disabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -723,6 +1876,70 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.VsiteRefs[len(m.VsiteRefs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Isolated", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceIsolationChoice = &GlobalSpecType_Isolated{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Disabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceIsolationChoice = &GlobalSpecType_Disabled{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -805,6 +2022,70 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Isolated", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceIsolationChoice = &CreateSpecType_Isolated{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Disabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceIsolationChoice = &CreateSpecType_Disabled{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -886,6 +2167,70 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Isolated", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceIsolationChoice = &ReplaceSpecType_Isolated{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Disabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceIsolationChoice = &ReplaceSpecType_Disabled{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -966,6 +2311,70 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.VsiteRefs[len(m.VsiteRefs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Isolated", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceIsolationChoice = &GetSpecType_Isolated{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Disabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceIsolationChoice = &GetSpecType_Disabled{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1097,30 +2506,37 @@ func init() { proto.RegisterFile("ves.io/schema/virtual_k8s/types.proto", fileDe
 func init() { golang_proto.RegisterFile("ves.io/schema/virtual_k8s/types.proto", fileDescriptorTypes) }
 
 var fileDescriptorTypes = []byte{
-	// 386 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x52, 0x2d, 0x4b, 0x2d, 0xd6,
-	0xcb, 0xcc, 0xd7, 0x2f, 0x4e, 0xce, 0x48, 0xcd, 0x4d, 0xd4, 0x2f, 0xcb, 0x2c, 0x2a, 0x29, 0x4d,
-	0xcc, 0x89, 0xcf, 0xb6, 0x28, 0xd6, 0x2f, 0xa9, 0x2c, 0x48, 0x2d, 0xd6, 0x2b, 0x28, 0xca, 0x2f,
-	0xc9, 0x17, 0x92, 0x84, 0x28, 0xd3, 0x83, 0x28, 0xd3, 0x43, 0x52, 0x26, 0xa5, 0x9b, 0x9e, 0x59,
-	0x92, 0x51, 0x9a, 0xa4, 0x97, 0x9c, 0x9f, 0xab, 0x9f, 0x9e, 0x9f, 0x9e, 0xaf, 0x0f, 0xd6, 0x91,
-	0x54, 0x9a, 0x06, 0xe6, 0x81, 0x39, 0x60, 0x16, 0xc4, 0x24, 0x29, 0x69, 0x54, 0x0b, 0xf3, 0x0b,
-	0x4a, 0x32, 0xf3, 0xf3, 0xa0, 0xd6, 0x48, 0x49, 0xa2, 0x4a, 0x22, 0xb9, 0x40, 0x4a, 0x06, 0xcd,
-	0xa1, 0x89, 0x39, 0x99, 0x29, 0x89, 0x25, 0xa9, 0x10, 0x59, 0xa5, 0x0c, 0x2e, 0x3e, 0xf7, 0x9c,
-	0xfc, 0xa4, 0xc4, 0x9c, 0xe0, 0x82, 0xd4, 0xe4, 0x90, 0xca, 0x82, 0x54, 0xa1, 0x30, 0x2e, 0xae,
-	0xb2, 0xe2, 0xcc, 0x92, 0xd4, 0xf8, 0xa2, 0xd4, 0xb4, 0x62, 0x09, 0x46, 0x05, 0x66, 0x0d, 0x6e,
-	0x23, 0x19, 0x3d, 0x54, 0x6f, 0xf8, 0x27, 0x65, 0xa5, 0x26, 0x97, 0x04, 0xa5, 0xa6, 0x81, 0x74,
-	0x38, 0x49, 0xae, 0xaa, 0xe5, 0x81, 0x79, 0x0c, 0xa4, 0x73, 0xd7, 0xcb, 0x03, 0xcc, 0xac, 0x93,
-	0x18, 0x99, 0x04, 0x14, 0x82, 0x38, 0xc1, 0x46, 0x05, 0xa5, 0xa6, 0x15, 0x2b, 0x15, 0x72, 0xf1,
-	0x39, 0x17, 0xa5, 0x26, 0x96, 0xa4, 0xc2, 0x6d, 0xf2, 0x21, 0xd9, 0x26, 0x7e, 0x34, 0x9b, 0x90,
-	0xcc, 0xb7, 0x12, 0x3c, 0x65, 0x87, 0xe6, 0x15, 0xa5, 0x22, 0x2e, 0xfe, 0xa0, 0xd4, 0x82, 0x9c,
-	0xc4, 0x64, 0x3a, 0xda, 0x99, 0xc7, 0xc5, 0xed, 0x9e, 0x5a, 0x42, 0x37, 0xfb, 0x9c, 0x3a, 0x19,
-	0x2f, 0x3c, 0x94, 0x63, 0xb8, 0xf1, 0x50, 0x8e, 0xe1, 0xc3, 0x43, 0x39, 0xc6, 0x1f, 0x0f, 0xe5,
-	0x18, 0x1b, 0x1e, 0xc9, 0x31, 0xae, 0x78, 0x24, 0xc7, 0x78, 0xe2, 0x91, 0x1c, 0xe3, 0x85, 0x47,
-	0x72, 0x8c, 0x37, 0x1e, 0xc9, 0x31, 0x3e, 0x78, 0x24, 0xc7, 0xf8, 0xe2, 0x91, 0x1c, 0xc3, 0x87,
-	0x47, 0x72, 0x8c, 0x13, 0x1e, 0xcb, 0x31, 0x1c, 0x78, 0x2c, 0xc7, 0x18, 0xe5, 0x9f, 0x9e, 0x5f,
-	0x90, 0x9d, 0xae, 0x57, 0x96, 0x9f, 0x53, 0x92, 0x5a, 0x54, 0x94, 0xa8, 0x57, 0x5a, 0xac, 0x0f,
-	0x66, 0xa4, 0xe5, 0x17, 0xe5, 0xea, 0x16, 0x14, 0xe5, 0x97, 0x65, 0xa6, 0xa4, 0x16, 0xe9, 0xc2,
-	0xa4, 0xf5, 0x0b, 0x92, 0xd2, 0xf3, 0xf5, 0x53, 0x2b, 0x4a, 0xa0, 0x09, 0x09, 0x33, 0xe1, 0x27,
-	0xb1, 0x81, 0xd3, 0x94, 0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0xc6, 0xa7, 0x20, 0x2c, 0x1c, 0x03,
-	0x00, 0x00,
+	// 507 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x94, 0xb1, 0x8b, 0x13, 0x41,
+	0x14, 0xc6, 0x33, 0xbb, 0x51, 0xce, 0x8d, 0x5c, 0xce, 0x60, 0x91, 0xc4, 0x30, 0x84, 0x03, 0xe1,
+	0x40, 0xb3, 0x0b, 0x39, 0x8b, 0xc3, 0xc2, 0x22, 0x22, 0x27, 0x22, 0x1c, 0xac, 0x62, 0x61, 0xb3,
+	0xcc, 0xee, 0xbe, 0xdd, 0x8c, 0xb7, 0xb9, 0x19, 0x66, 0x26, 0xab, 0x29, 0x04, 0xd1, 0xca, 0x4e,
+	0x2c, 0x04, 0xfd, 0x0b, 0xc4, 0x3f, 0xc1, 0x34, 0x29, 0xc5, 0x2a, 0xe5, 0x95, 0x66, 0xae, 0xd1,
+	0xee, 0x4a, 0xb1, 0x92, 0x6c, 0x92, 0xe3, 0xb2, 0x87, 0x07, 0x56, 0xd7, 0x5c, 0x37, 0xc3, 0xfb,
+	0xbe, 0x6f, 0xde, 0xfb, 0x0d, 0x3c, 0xeb, 0x7a, 0x0a, 0xd2, 0xa6, 0xcc, 0x91, 0x41, 0x17, 0x7a,
+	0xc4, 0x49, 0xa9, 0x50, 0x7d, 0x92, 0x78, 0xbb, 0x5b, 0xd2, 0x51, 0x03, 0x0e, 0xd2, 0xe6, 0x82,
+	0x29, 0x56, 0xa9, 0xcd, 0x64, 0xf6, 0x4c, 0x66, 0x1f, 0x93, 0xd5, 0x5b, 0x31, 0x55, 0xdd, 0xbe,
+	0x6f, 0x07, 0xac, 0xe7, 0xc4, 0x2c, 0x66, 0x4e, 0xe6, 0xf0, 0xfb, 0x51, 0x76, 0xcb, 0x2e, 0xd9,
+	0x69, 0x96, 0x54, 0xbf, 0xb6, 0xfc, 0x20, 0xe3, 0x8a, 0xb2, 0xbd, 0xf9, 0x33, 0xf5, 0xda, 0x72,
+	0xf1, 0x58, 0x07, 0xf5, 0x46, 0xae, 0x51, 0x92, 0xd0, 0x90, 0x28, 0x98, 0x57, 0x9b, 0xf9, 0x31,
+	0xe0, 0xb9, 0xb7, 0x14, 0xbd, 0xfe, 0xc6, 0xb0, 0x56, 0xb7, 0x13, 0xe6, 0x93, 0xe4, 0x11, 0x87,
+	0xe0, 0xf1, 0x80, 0x43, 0xe5, 0x89, 0x65, 0xa5, 0x92, 0x2a, 0xf0, 0x04, 0x44, 0xb2, 0x8a, 0x9a,
+	0xe6, 0x46, 0xa9, 0xdd, 0xb0, 0x97, 0x27, 0xdd, 0xf1, 0x9f, 0x41, 0xa0, 0x5c, 0x88, 0xa6, 0x8e,
+	0x4e, 0xed, 0xcb, 0xcb, 0xcb, 0x8b, 0xd9, 0xa7, 0xce, 0xaf, 0xbf, 0x46, 0xe6, 0x85, 0xf7, 0xc8,
+	0x58, 0x6b, 0xba, 0x97, 0xb2, 0x28, 0x17, 0x22, 0x59, 0x69, 0x5b, 0x2b, 0x54, 0xb2, 0x84, 0x28,
+	0x08, 0xab, 0x66, 0x13, 0x6d, 0x94, 0xda, 0x57, 0x73, 0xa9, 0xf7, 0x7a, 0x5c, 0x0d, 0xee, 0x17,
+	0xdc, 0x23, 0xdd, 0xd4, 0x13, 0x52, 0x49, 0xfc, 0x04, 0xc2, 0x6a, 0xf1, 0x74, 0xcf, 0x42, 0xd7,
+	0xb9, 0x61, 0x55, 0x25, 0x88, 0x94, 0x06, 0xe0, 0xcd, 0x72, 0x28, 0xdb, 0xf3, 0x82, 0x2e, 0xa3,
+	0x01, 0x54, 0xca, 0xa3, 0x21, 0x2a, 0x8e, 0x87, 0xc8, 0xd0, 0x43, 0x64, 0x6e, 0xde, 0xbc, 0xf5,
+	0xa0, 0xb8, 0x62, 0xac, 0x99, 0xeb, 0x1f, 0x0d, 0x6b, 0xf5, 0xae, 0x00, 0xa2, 0xe0, 0x88, 0xc2,
+	0xc3, 0xff, 0xa6, 0x50, 0xce, 0x51, 0x38, 0x83, 0xd9, 0x6f, 0x5f, 0xf9, 0x7e, 0x27, 0xf7, 0x9d,
+	0x9d, 0xad, 0x53, 0x70, 0x34, 0x5e, 0xff, 0x41, 0xff, 0xac, 0xce, 0xd9, 0x7c, 0x32, 0xac, 0xb2,
+	0x0b, 0x3c, 0x21, 0xc1, 0x39, 0x9c, 0x13, 0x70, 0x3e, 0x18, 0x56, 0x69, 0x1b, 0xd4, 0x39, 0x98,
+	0x1c, 0x98, 0xce, 0x5b, 0x34, 0x9e, 0xe0, 0xc2, 0xfe, 0x04, 0x17, 0x0e, 0x27, 0x18, 0xfd, 0x9e,
+	0x60, 0xf4, 0x4a, 0x63, 0xf4, 0x59, 0x63, 0xf4, 0x4d, 0x63, 0x34, 0xd6, 0x18, 0xed, 0x6b, 0x8c,
+	0x7e, 0x68, 0x8c, 0x7e, 0x6a, 0x5c, 0x38, 0xd4, 0x18, 0xbd, 0x3b, 0xc0, 0x85, 0xd1, 0x01, 0x46,
+	0x4f, 0x77, 0x62, 0xc6, 0x77, 0x63, 0x3b, 0x65, 0x89, 0x02, 0x21, 0x88, 0xdd, 0x97, 0x4e, 0x76,
+	0x88, 0x98, 0xe8, 0xb5, 0xb8, 0x60, 0x29, 0x0d, 0x41, 0xb4, 0x16, 0x65, 0x87, 0xfb, 0x31, 0x73,
+	0xe0, 0x85, 0x9a, 0xef, 0xb8, 0x93, 0x1b, 0xdb, 0xbf, 0x98, 0xad, 0xba, 0xcd, 0xbf, 0x01, 0x00,
+	0x00, 0xff, 0xff, 0x93, 0x3e, 0xc7, 0x61, 0xd5, 0x05, 0x00, 0x00,
 }

@@ -310,6 +310,15 @@ func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ..
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.terraform_parameters.CustomAPI.Get"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.Get(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -344,6 +353,15 @@ func (c *CustomAPIInprocClient) GetStatus(ctx context.Context, in *GetRequest, o
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.terraform_parameters.CustomAPI.GetStatus"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.GetStatus(ctx, in)
 	if err != nil {
@@ -1105,7 +1123,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "terraform_parametersRunAction": {
             "type": "string",
-            "description": "Terraform action to be performed for a given view e.g. plan, apply\n\n - APPLY: Apply action used to apply the changes required to reach the desired state of the configuration\n - PLAN: Plan action is a convenient way to check whether the execution plan for a set of changes matches your expectations without making any changes to real resources or to the state\n - DESTROY: DESTROY action is used to destroy the Terraform-managed infrastructure",
+            "description": "Terraform action to be performed for a given view e.g. plan, apply\n\nApply action used to apply the changes required to reach the desired state of the configuration\nPlan action is a convenient way to check whether the execution plan for a set of changes matches your expectations without making any changes to real resources or to the state\nDESTROY action is used to destroy the Terraform-managed infrastructure",
             "title": "Terraform Action",
             "enum": [
                 "APPLY",
@@ -1501,6 +1519,15 @@ func (c *CustomActionAPIInprocClient) ForceDelete(ctx context.Context, in *Force
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.terraform_parameters.CustomActionAPI.ForceDelete"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.ForceDelete(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -1535,6 +1562,15 @@ func (c *CustomActionAPIInprocClient) Run(ctx context.Context, in *RunRequest, o
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.terraform_parameters.CustomActionAPI.Run"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.Run(ctx, in)
 	if err != nil {
@@ -2296,7 +2332,7 @@ var CustomActionAPISwaggerJSON string = `{
         },
         "terraform_parametersRunAction": {
             "type": "string",
-            "description": "Terraform action to be performed for a given view e.g. plan, apply\n\n - APPLY: Apply action used to apply the changes required to reach the desired state of the configuration\n - PLAN: Plan action is a convenient way to check whether the execution plan for a set of changes matches your expectations without making any changes to real resources or to the state\n - DESTROY: DESTROY action is used to destroy the Terraform-managed infrastructure",
+            "description": "Terraform action to be performed for a given view e.g. plan, apply\n\nApply action used to apply the changes required to reach the desired state of the configuration\nPlan action is a convenient way to check whether the execution plan for a set of changes matches your expectations without making any changes to real resources or to the state\nDESTROY action is used to destroy the Terraform-managed infrastructure",
             "title": "Terraform Action",
             "enum": [
                 "APPLY",

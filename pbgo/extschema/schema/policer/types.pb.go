@@ -197,7 +197,7 @@ func (m *GlobalSpecType) GetPolicerMode() PolicerMode {
 
 // Create a policer
 //
-// x-displayName: "Create a Policer"
+// x-displayName: "Create Policer"
 // Create a new policer with traffic rate limits
 type CreateSpecType struct {
 	PolicerType              PolicerType `protobuf:"varint,1,opt,name=policer_type,json=policerType,proto3,enum=ves.io.schema.policer.PolicerType" json:"policer_type,omitempty"`
@@ -240,7 +240,7 @@ func (m *CreateSpecType) GetPolicerMode() PolicerMode {
 
 // Replace a policer
 //
-// x-displayName: "Replace a Policer"
+// x-displayName: "Replace Policer"
 // Replace a given policer with changed traffic rate limits
 type ReplaceSpecType struct {
 	PolicerType              PolicerType `protobuf:"varint,1,opt,name=policer_type,json=policerType,proto3,enum=ves.io.schema.policer.PolicerType" json:"policer_type,omitempty"`
@@ -283,7 +283,7 @@ func (m *ReplaceSpecType) GetPolicerMode() PolicerMode {
 
 // Get a policer
 //
-// x-displayName: "Get a Policer"
+// x-displayName: "Get Policer"
 // Get specification of policer object
 type GetSpecType struct {
 	PolicerType              PolicerType `protobuf:"varint,1,opt,name=policer_type,json=policerType,proto3,enum=ves.io.schema.policer.PolicerType" json:"policer_type,omitempty"`

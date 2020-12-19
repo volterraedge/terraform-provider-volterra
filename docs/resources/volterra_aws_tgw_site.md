@@ -26,9 +26,12 @@ resource "volterra_aws_tgw_site" "example" {
 
     az_nodes {
       aws_az_name = "us-west-2a"
-      disk_size   = "disk_size"
 
-      inside_subnet {
+      // One of the arguments from this list "inside_subnet reserved_inside_subnet" must be set
+      reserved_inside_subnet = true
+      disk_size              = "disk_size"
+
+      outside_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
         subnet_param {
@@ -37,7 +40,7 @@ resource "volterra_aws_tgw_site" "example" {
         }
       }
 
-      outside_subnet {
+      workload_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
         subnet_param {
@@ -73,7 +76,7 @@ resource "volterra_aws_tgw_site" "example" {
     // One of the arguments from this list "new_tgw existing_tgw" must be set
 
     new_tgw {
-      // One of the arguments from this list "user_assigned system_generated" must be set
+      // One of the arguments from this list "system_generated user_assigned" must be set
       system_generated = true
     }
   }
@@ -172,11 +175,43 @@ Only Single AZ or Three AZ(s) nodes are supported currently..
 
 `aws_az_name` - (Required) Name for AWS availability Zone, should match with AWS region selected. (`String`).
 
-`disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`String`).
-
 `inside_subnet` - (Optional) Subnets for the inside interface of the node. See [Inside Subnet ](#inside-subnet) below for details.
 
-`outside_subnet` - (Optional) Subnets for the outside interface of the node. See [Outside Subnet ](#outside-subnet) below for details.
+`reserved_inside_subnet` - (Optional) Use Reserved Subnet from Primary CIDR (bool).
+
+`disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`String`).
+
+`outside_subnet` - (Required) Subnets for the outside interface of the node. See [Outside Subnet ](#outside-subnet) below for details.
+
+`workload_subnet` - (Optional) Workload Subnet where workloads should be running. See [Workload Subnet ](#workload-subnet) below for details.
+
+### Blindfold Secret Info
+
+Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Clear Secret Info
+
+Clear Secret is used for the secrets that are not encrypted .
+
+`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
 ### Coordinates
 
@@ -185,6 +220,16 @@ Site longitude and latitude co-ordinates.
 `latitude` - (Optional) Latitude of the site location (`Float`).
 
 `longitude` - (Optional) longitude of site location (`Float`).
+
+### Custom Certificate
+
+Certificates for generating intermediate certificate for TLS interception..
+
+`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
+
+`description` - (Optional) Description for the certificate (`String`).
+
+`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
 ### Custom Static Route
 
@@ -202,6 +247,24 @@ Use Custom static route to configure all advanced options.
 
 Forward Proxy is disabled for this connector.
 
+### Disable Interception
+
+Disable Interception.
+
+### Domain Match
+
+Domain value or regular expression to match.
+
+`exact_value` - (Optional) Exact domain name. (`String`).
+
+`regex_value` - (Optional) Regular Expression value for the domain name (`String`).
+
+`suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
+
+### Enable For All Domains
+
+Enable interception for all domains.
+
 ### Enable Forward Proxy
 
 Forward Proxy is enabled for this connector.
@@ -210,9 +273,17 @@ Forward Proxy is enabled for this connector.
 
 `max_connect_attempts` - (Optional) Specifies the allowed number of retries on connect failure to upstream server. Defaults to 1. (`Int`).
 
+`no_interception` - (Optional) No TLS interception is enabled for this network connector (bool).
+
+`tls_intercept` - (Optional) Specify TLS interception configuration for the network connector. See [Tls Intercept ](#tls-intercept) below for details.
+
 `white_listed_ports` - (Optional) Example "tmate" server port (`Int`).
 
 `white_listed_prefixes` - (Optional) Example "tmate" server ip (`String`).
+
+### Enable Interception
+
+Enable Interception.
 
 ### Existing Tgw
 
@@ -259,6 +330,16 @@ Subnets for the inside interface of the node.
 `existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
 
 `subnet_param` - (Optional) Parameters for creating new subnet. See [Subnet Param ](#subnet-param) below for details.
+
+### Interception Rules
+
+List of ordered rules to enable or disable for TLS interception.
+
+`domain_match` - (Required) Domain value or regular expression to match. See [Domain Match ](#domain-match) below for details.
+
+`disable_interception` - (Optional) Disable Interception (bool).
+
+`enable_interception` - (Optional) Enable Interception (bool).
 
 ### Ipv4
 
@@ -322,6 +403,10 @@ No global network to connect.
 
 Static Routes disabled for inside network..
 
+### No Interception
+
+No TLS interception is enabled for this network connector.
+
 ### No Network Policy
 
 Network Policy is disabled for this site..
@@ -344,6 +429,28 @@ Subnets for the outside interface of the node.
 
 `subnet_param` - (Optional) Parameters for creating new subnet. See [Subnet Param ](#subnet-param) below for details.
 
+### Policy
+
+Policy to enable/disable specific domains, with implicit enable all domains.
+
+`interception_rules` - (Required) List of ordered rules to enable or disable for TLS interception. See [Interception Rules ](#interception-rules) below for details.
+
+### Private Key
+
+TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+
 ### Ref
 
 Reference to another volterra object is shown like below
@@ -353,6 +460,10 @@ name - (Required) then name will hold the referred object's(e.g. route's) name. 
 namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
+
+### Reserved Inside Subnet
+
+Use Reserved Subnet from Primary CIDR.
 
 ### Sli To Global Dr
 
@@ -408,6 +519,22 @@ Security Configuration for transit gateway.
 
 `no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
 
+### Tls Intercept
+
+Specify TLS interception configuration for the network connector.
+
+`enable_for_all_domains` - (Optional) Enable interception for all domains (bool).
+
+`policy` - (Optional) Policy to enable/disable specific domains, with implicit enable all domains. See [Policy ](#policy) below for details.
+
+`custom_certificate` - (Optional) Certificates for generating intermediate certificate for TLS interception.. See [Custom Certificate ](#custom-certificate) below for details.
+
+`volterra_certificate` - (Optional) Volterra certificates for generating intermediate certificate for TLS interception. (bool).
+
+`trusted_ca_url` - (Optional) Custom trusted CA certificates for validating upstream server certificate (`String`).
+
+`volterra_trusted_ca` - (Optional) Default volterra trusted CA list for validating upstream server certificate (bool).
+
 ### User Assigned
 
 User is managing the ASN for TGW and Volterra Site..
@@ -415,6 +542,20 @@ User is managing the ASN for TGW and Volterra Site..
 `tgw_asn` - (Optional) TGW ASN. Allowed range for 16-bit private ASNs include 64512 to 65534. (`Int`).
 
 `volterra_site_asn` - (Optional) Volterra Site ASN. (`Int`).
+
+### Vault Secret Info
+
+Vault Secret is used for the secrets managed by Hashicorp Vault.
+
+`key` - (Optional) If not provided entire secret will be returned. (`String`).
+
+`location` - (Required) Path to secret in Vault. (`String`).
+
+`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
+
+`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
+
+`version` - (Optional) If not provided latest version will be returned. (`Int`).
 
 ### Vn Config
 
@@ -432,6 +573,14 @@ Virtual Network Configuration for transit gateway.
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
 
+### Volterra Certificate
+
+Volterra certificates for generating intermediate certificate for TLS interception..
+
+### Volterra Trusted Ca
+
+Default volterra trusted CA list for validating upstream server certificate.
+
 ### Vpc Attachments
 
 VPC attachments to transit gateway.
@@ -445,6 +594,20 @@ vpc_list.
 `labels` - (Optional) Add Labels for each of the VPC ID, these labels can be used in network policy (`String`).
 
 `vpc_id` - (Optional) Information about existing VPC (`String`).
+
+### Wingman Secret Info
+
+Secret is given as bootstrap secret in Volterra Security Sidecar.
+
+`name` - (Required) Name of the secret. (`String`).
+
+### Workload Subnet
+
+Workload Subnet where workloads should be running.
+
+`existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
+
+`subnet_param` - (Optional) Parameters for creating new subnet. See [Subnet Param ](#subnet-param) below for details.
 
 Attribute Reference
 -------------------

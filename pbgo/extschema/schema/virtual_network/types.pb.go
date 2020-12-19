@@ -543,7 +543,7 @@ func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
 
 // Create virtual network
 //
-// x-displayName: "Specification"
+// x-displayName: "Create Virtual Network"
 // Create virtual network in given namespace
 type CreateSpecType struct {
 	// Types that are valid to be assigned to NetworkChoice:
@@ -739,7 +739,7 @@ func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
 
 // Replace virtual network
 //
-// x-displayName: "Specification"
+// x-displayName: "Replace Virtual Network"
 // Replace given virtual network in given namespace
 type ReplaceSpecType struct {
 	// Types that are valid to be assigned to NetworkChoice:
@@ -935,7 +935,7 @@ func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
 
 // Get virtual network
 //
-// x-displayName: "Specification"
+// x-displayName: "Get Virtual Network"
 // Gets virtual network in given namespace
 type GetSpecType struct {
 	// Types that are valid to be assigned to NetworkChoice:

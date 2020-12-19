@@ -142,7 +142,7 @@ func (m *GlobalSpecType) GetSkipXffAppend() bool {
 
 // Create advertise policy
 //
-// x-displayName: "Specification"
+// x-displayName: "Create Advertise Policy"
 // advertise_policy object controls how and where a service represented by a given virtual_host object is advertised to consumers.
 type CreateSpecType struct {
 	Where         *ves_io_schema4.NetworkSiteRefSelector  `protobuf:"bytes,1,opt,name=where" json:"where,omitempty"`
@@ -209,7 +209,7 @@ func (m *CreateSpecType) GetSkipXffAppend() bool {
 
 // Replace advertise policy
 //
-// x-displayName: "Specification"
+// x-displayName: "Replace Advertise Policy"
 // advertise_policy object controls how and where a service represented by a given virtual_host object is advertised to consumers.
 type ReplaceSpecType struct {
 	Where         *ves_io_schema4.NetworkSiteRefSelector  `protobuf:"bytes,1,opt,name=where" json:"where,omitempty"`
@@ -276,7 +276,7 @@ func (m *ReplaceSpecType) GetSkipXffAppend() bool {
 
 // Get advertise policy
 //
-// x-displayName: "Specification"
+// x-displayName: "Get Advertise Policy"
 // Get advertise_policy read a given object from storage backend for metadata.namespace
 type GetSpecType struct {
 	Where         *ves_io_schema4.NetworkSiteRefSelector  `protobuf:"bytes,1,opt,name=where" json:"where,omitempty"`

@@ -51,11 +51,16 @@ var _ = math.Inf
 type GetResponseFormatCode int32
 
 const (
+	// x-displayName: "Default Format"
+	// Default format of returned resource
 	GET_RSP_FORMAT_DEFAULT GetResponseFormatCode = 0
+	// x-displayName: "Replace request format"
 	// Response should be in ReplaceRequest format
 	GET_RSP_FORMAT_FOR_REPLACE GetResponseFormatCode = 2
+	// x-displayName: "Status format"
 	// Response should be in StatusObject(s) format
 	GET_RSP_FORMAT_STATUS GetResponseFormatCode = 3
+	// x-displayName: "GetSpecType format"
 	// Response should be in format of GetSpecType
 	GET_RSP_FORMAT_READ GetResponseFormatCode = 4
 )
@@ -1031,17 +1036,17 @@ const _ = grpc.SupportPackageIsVersion4
 type APIClient interface {
 	// Get public_ip
 	//
-	// x-displayName: "Get Configuration Specification"
+	// x-displayName: "Get Public IP"
 	// Get public_ip will get the object from the storage backend for namespace metadata.namespace
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Public IP"
 	// List the set of public_ip in a namespace
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// Replace public_ip
 	//
-	// x-displayName: "Replace Configuration Specification"
+	// x-displayName: "Replace Public IP"
 	// Replacing an public_ip object will update the object by replacing the existing spec with the provided one.
 	// For read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write
 	Replace(ctx context.Context, in *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error)
@@ -1087,17 +1092,17 @@ func (c *aPIClient) Replace(ctx context.Context, in *ReplaceRequest, opts ...grp
 type APIServer interface {
 	// Get public_ip
 	//
-	// x-displayName: "Get Configuration Specification"
+	// x-displayName: "Get Public IP"
 	// Get public_ip will get the object from the storage backend for namespace metadata.namespace
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Public IP"
 	// List the set of public_ip in a namespace
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	// Replace public_ip
 	//
-	// x-displayName: "Replace Configuration Specification"
+	// x-displayName: "Replace Public IP"
 	// Replacing an public_ip object will update the object by replacing the existing spec with the provided one.
 	// For read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write
 	Replace(context.Context, *ReplaceRequest) (*ReplaceResponse, error)

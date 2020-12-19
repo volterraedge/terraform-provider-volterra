@@ -85,6 +85,7 @@ func testConfigFleet(resourceName, name, namespace string) string {
 		  no_storage_device = true
 		  no_storage_static_routes = true
 		  no_storage_interfaces = true
+		  logs_streaming_disabled = true
 		  inside_virtual_network {
 			name = volterra_virtual_network.sli_%[1]s.name
 			namespace = volterra_namespace.system.name

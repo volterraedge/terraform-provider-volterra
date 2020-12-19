@@ -41,643 +41,643 @@ var _ = math.Inf
 type WafRuleID int32
 
 const (
-	// x-displayName: Skip All Rules (internal use only)
+	// x-displayName: "Skip All Rules (internal use only)"
 	// Used internally to instruct the modsec code in envoy to skip all rules
 	WAF_RULE_ALL WafRuleID = 0
-	// x-displayName: 910000
+	// x-displayName: "910000"
 	// Request from Known Malicious Client (Based on previous traffic violations).
 	WAF_RULE_910000 WafRuleID = 910000
-	// x-displayName: 910100
+	// x-displayName: "910100"
 	// Client IP is from a HIGH Risk Country Location.
 	WAF_RULE_910100 WafRuleID = 910100
-	// x-displayName: 910150
+	// x-displayName: "910150"
 	// HTTP Blacklist match for search engine IP
 	WAF_RULE_910150 WafRuleID = 910150
-	// x-displayName: 910160
+	// x-displayName: "910160"
 	// HTTP Blacklist match for spammer IP
 	WAF_RULE_910160 WafRuleID = 910160
-	// x-displayName: 910170
+	// x-displayName: "910170"
 	// HTTP Blacklist match for suspicious IP
 	WAF_RULE_910170 WafRuleID = 910170
-	// x-displayName: 910180
+	// x-displayName: "910180"
 	// HTTP Blacklist match for harvester IP
 	WAF_RULE_910180 WafRuleID = 910180
-	// x-displayName: 911100
+	// x-displayName: "911100"
 	// Method is not allowed by policy
 	WAF_RULE_911100 WafRuleID = 911100
-	// x-displayName: 912120
+	// x-displayName: "912120"
 	// Denial of Service (DoS) attack identified from %{tx.real_ip} (%{tx.dos_block_counter} hits since last alert)
 	WAF_RULE_912120 WafRuleID = 912120
-	// x-displayName: 913100
+	// x-displayName: "913100"
 	// Found User-Agent associated with security scanner
 	WAF_RULE_913100 WafRuleID = 913100
-	// x-displayName: 913101
+	// x-displayName: "913101"
 	// Found User-Agent associated with scripting/generic HTTP client
 	WAF_RULE_913101 WafRuleID = 913101
-	// x-displayName: 913102
+	// x-displayName: "913102"
 	// Found User-Agent associated with web crawler/bot
 	WAF_RULE_913102 WafRuleID = 913102
-	// x-displayName: 913110
+	// x-displayName: "913110"
 	// Found request header associated with security scanner
 	WAF_RULE_913110 WafRuleID = 913110
-	// x-displayName: 913120
+	// x-displayName: "913120"
 	// Found request filename/argument associated with security scanner
 	WAF_RULE_913120 WafRuleID = 913120
-	// x-displayName: 920100
+	// x-displayName: "920100"
 	// Invalid HTTP Request Line
 	WAF_RULE_920100 WafRuleID = 920100
-	// x-displayName: 920120
+	// x-displayName: "920120"
 	// Attempted multipart/form-data bypass
 	WAF_RULE_920120 WafRuleID = 920120
-	// x-displayName: 920121
+	// x-displayName: "920121"
 	// Attempted multipart/form-data bypass
 	WAF_RULE_920121 WafRuleID = 920121
-	// x-displayName: 920130
+	// x-displayName: "920130"
 	// Failed to parse request body.
 	WAF_RULE_920130 WafRuleID = 920130
-	// x-displayName: 920140
+	// x-displayName: "920140"
 	// Multipart request body failed strict validation:PE %{REQBODY_PROCESSOR_ERROR},BQ %{MULTIPART_BOUNDARY_QUOTED},BW %{MULTIPART_BOUNDARY_WHITESPACE},DB %{MULTIPART_DATA_BEFORE},DA %{MULTIPART_DATA_AFTER},HF %{MULTIPART_HEADER_FOLDING},LF %{MULTIPART_LF_LINE},SM %{MULTIPART_MISSING_SEMICOLON},IQ %{MULTIPART_INVALID_QUOTING},IH %{MULTIPART_INVALID_HEADER_FOLDING},FLE %{MULTIPART_FILE_LIMIT_EXCEEDED}
 	WAF_RULE_920140 WafRuleID = 920140
-	// x-displayName: 920160
+	// x-displayName: "920160"
 	// Content-Length HTTP header is not numeric.
 	WAF_RULE_920160 WafRuleID = 920160
-	// x-displayName: 920170
+	// x-displayName: "920170"
 	// GET or HEAD Request with Body Content.
 	WAF_RULE_920170 WafRuleID = 920170
-	// x-displayName: 920171
+	// x-displayName: "920171"
 	// GET or HEAD Request with Transfer-Encoding.
 	WAF_RULE_920171 WafRuleID = 920171
-	// x-displayName: 920180
+	// x-displayName: "920180"
 	// POST without Content-Length or Transfer-Encoding headers.
 	WAF_RULE_920180 WafRuleID = 920180
-	// x-displayName: 920190
+	// x-displayName: "920190"
 	// Range: Invalid Last Byte Value.
 	WAF_RULE_920190 WafRuleID = 920190
-	// x-displayName: 920200
+	// x-displayName: "920200"
 	// Range: Too many fields (6 or more)
 	WAF_RULE_920200 WafRuleID = 920200
-	// x-displayName: 920201
+	// x-displayName: "920201"
 	// Range: Too many fields for pdf request (63 or more)
 	WAF_RULE_920201 WafRuleID = 920201
-	// x-displayName: 920202
+	// x-displayName: "920202"
 	// Range: Too many fields for pdf request (6 or more)
 	WAF_RULE_920202 WafRuleID = 920202
-	// x-displayName: 920210
+	// x-displayName: "920210"
 	// Multiple/Conflicting Connection Header Data Found.
 	WAF_RULE_920210 WafRuleID = 920210
-	// x-displayName: 920220
+	// x-displayName: "920220"
 	// URL Encoding Abuse Attack Attempt
 	WAF_RULE_920220 WafRuleID = 920220
-	// x-displayName: 920230
+	// x-displayName: "920230"
 	// Multiple URL Encoding Detected
 	WAF_RULE_920230 WafRuleID = 920230
-	// x-displayName: 920240
+	// x-displayName: "920240"
 	// URL Encoding Abuse Attack Attempt
 	WAF_RULE_920240 WafRuleID = 920240
-	// x-displayName: 920250
+	// x-displayName: "920250"
 	// UTF8 Encoding Abuse Attack Attempt
 	WAF_RULE_920250 WafRuleID = 920250
-	// x-displayName: 920260
+	// x-displayName: "920260"
 	// Unicode Full/Half Width Abuse Attack Attempt
 	WAF_RULE_920260 WafRuleID = 920260
-	// x-displayName: 920270
+	// x-displayName: "920270"
 	// Invalid character in request (null character)
 	WAF_RULE_920270 WafRuleID = 920270
-	// x-displayName: 920271
+	// x-displayName: "920271"
 	// Invalid character in request (non printable characters)
 	WAF_RULE_920271 WafRuleID = 920271
-	// x-displayName: 920272
+	// x-displayName: "920272"
 	// Invalid character in request (outside of printable chars below ascii 127)
 	WAF_RULE_920272 WafRuleID = 920272
-	// x-displayName: 920273
+	// x-displayName: "920273"
 	// Invalid character in request (outside of very strict set)
 	WAF_RULE_920273 WafRuleID = 920273
-	// x-displayName: 920274
+	// x-displayName: "920274"
 	// Invalid character in request headers (outside of very strict set)
 	WAF_RULE_920274 WafRuleID = 920274
-	// x-displayName: 920341
+	// x-displayName: "920341"
 	// Request Containing Content Requires Content-Type header
 	WAF_RULE_920341 WafRuleID = 920341
-	// x-displayName: 920350
+	// x-displayName: "920350"
 	// Host header is a numeric IP address
 	WAF_RULE_920350 WafRuleID = 920350
-	// x-displayName: 920360
+	// x-displayName: "920360"
 	// Argument name too long
 	WAF_RULE_920360 WafRuleID = 920360
-	// x-displayName: 920370
+	// x-displayName: "920370"
 	// Argument value too long
 	WAF_RULE_920370 WafRuleID = 920370
-	// x-displayName: 920380
+	// x-displayName: "920380"
 	// Too many arguments in request
 	WAF_RULE_920380 WafRuleID = 920380
-	// x-displayName: 920390
+	// x-displayName: "920390"
 	// Total arguments size exceeded
 	WAF_RULE_920390 WafRuleID = 920390
-	// x-displayName: 920400
+	// x-displayName: "920400"
 	// Uploaded file size too large
 	WAF_RULE_920400 WafRuleID = 920400
-	// x-displayName: 920410
+	// x-displayName: "920410"
 	// Total uploaded files size too large
 	WAF_RULE_920410 WafRuleID = 920410
-	// x-displayName: 920420
+	// x-displayName: "920420"
 	// Request content type is not allowed by policy
 	WAF_RULE_920420 WafRuleID = 920420
-	// x-displayName: 920430
+	// x-displayName: "920430"
 	// HTTP protocol version is not allowed by policy
 	WAF_RULE_920430 WafRuleID = 920430
-	// x-displayName: 920440
+	// x-displayName: "920440"
 	// URL file extension is restricted by policy
 	WAF_RULE_920440 WafRuleID = 920440
-	// x-displayName: 920450
+	// x-displayName: "920450"
 	// HTTP header is restricted by policy (%{MATCHED_VAR})
 	WAF_RULE_920450 WafRuleID = 920450
-	// x-displayName: 920460
+	// x-displayName: "920460"
 	// Abnormal character escapes in request
 	WAF_RULE_920460 WafRuleID = 920460
-	// x-displayName: 920470
+	// x-displayName: "920470"
 	// Illegal Content-Type header
 	WAF_RULE_920470 WafRuleID = 920470
-	// x-displayName: 920480
+	// x-displayName: "920480"
 	// Request content type charset is not allowed by policy
 	WAF_RULE_920480 WafRuleID = 920480
-	// x-displayName: 921110
+	// x-displayName: "921110"
 	// HTTP Request Smuggling Attack
 	WAF_RULE_921110 WafRuleID = 921110
-	// x-displayName: 921120
+	// x-displayName: "921120"
 	// HTTP Response Splitting Attack
 	WAF_RULE_921120 WafRuleID = 921120
-	// x-displayName: 921130
+	// x-displayName: "921130"
 	// HTTP Response Splitting Attack
 	WAF_RULE_921130 WafRuleID = 921130
-	// x-displayName: 921140
+	// x-displayName: "921140"
 	// HTTP Header Injection Attack via headers
 	WAF_RULE_921140 WafRuleID = 921140
-	// x-displayName: 921150
+	// x-displayName: "921150"
 	// HTTP Header Injection Attack via payload (CR/LF detected)
 	WAF_RULE_921150 WafRuleID = 921150
-	// x-displayName: 921151
+	// x-displayName: "921151"
 	// HTTP Header Injection Attack via payload (CR/LF detected)
 	WAF_RULE_921151 WafRuleID = 921151
-	// x-displayName: 921160
+	// x-displayName: "921160"
 	// HTTP Header Injection Attack via payload (CR/LF and header-name detected)
 	WAF_RULE_921160 WafRuleID = 921160
-	// x-displayName: 930100
+	// x-displayName: "930100"
 	// Path Traversal Attack (/../)
 	WAF_RULE_930100 WafRuleID = 930100
-	// x-displayName: 930110
+	// x-displayName: "930110"
 	// Path Traversal Attack (/../)
 	WAF_RULE_930110 WafRuleID = 930110
-	// x-displayName: 930120
+	// x-displayName: "930120"
 	// OS File Access Attempt
 	WAF_RULE_930120 WafRuleID = 930120
-	// x-displayName: 930130
+	// x-displayName: "930130"
 	// Restricted File Access Attempt
 	WAF_RULE_930130 WafRuleID = 930130
-	// x-displayName: 931100
+	// x-displayName: "931100"
 	// Possible Remote File Inclusion (RFI) Attack: URL Parameter using IP Address
 	WAF_RULE_931100 WafRuleID = 931100
-	// x-displayName: 931110
+	// x-displayName: "931110"
 	// Possible Remote File Inclusion (RFI) Attack: Common RFI Vulnerable Parameter Name used w/URL Payload
 	WAF_RULE_931110 WafRuleID = 931110
-	// x-displayName: 931120
+	// x-displayName: "931120"
 	// Possible Remote File Inclusion (RFI) Attack: URL Payload Used w/Trailing Question Mark Character (?)
 	WAF_RULE_931120 WafRuleID = 931120
-	// x-displayName: 931130
+	// x-displayName: "931130"
 	// Possible Remote File Inclusion (RFI) Attack: Off-Domain Reference/Link
 	WAF_RULE_931130 WafRuleID = 931130
-	// x-displayName: 932100
+	// x-displayName: "932100"
 	// Remote Command Execution: Unix Command Injection
 	WAF_RULE_932100 WafRuleID = 932100
-	// x-displayName: 932105
+	// x-displayName: "932105"
 	// Remote Command Execution: Unix Command Injection
 	WAF_RULE_932105 WafRuleID = 932105
-	// x-displayName: 932106
+	// x-displayName: "932106"
 	// Remote Command Execution: Unix Command Injection
 	WAF_RULE_932106 WafRuleID = 932106
-	// x-displayName: 932110
+	// x-displayName: "932110"
 	// Remote Command Execution: Windows Command Injection
 	WAF_RULE_932110 WafRuleID = 932110
-	// x-displayName: 932115
+	// x-displayName: "932115"
 	// Remote Command Execution: Windows Command Injection
 	WAF_RULE_932115 WafRuleID = 932115
-	// x-displayName: 932120
+	// x-displayName: "932120"
 	// Remote Command Execution: Windows PowerShell Command Found
 	WAF_RULE_932120 WafRuleID = 932120
-	// x-displayName: 932130
+	// x-displayName: "932130"
 	// Remote Command Execution: Unix Shell Expression Found
 	WAF_RULE_932130 WafRuleID = 932130
-	// x-displayName: 932140
+	// x-displayName: "932140"
 	// Remote Command Execution: Windows FOR/IF Command Found
 	WAF_RULE_932140 WafRuleID = 932140
-	// x-displayName: 932150
+	// x-displayName: "932150"
 	// Remote Command Execution: Direct Unix Command Execution
 	WAF_RULE_932150 WafRuleID = 932150
-	// x-displayName: 932160
+	// x-displayName: "932160"
 	// Remote Command Execution: Unix Shell Code Found
 	WAF_RULE_932160 WafRuleID = 932160
-	// x-displayName: 932170
+	// x-displayName: "932170"
 	// Remote Command Execution: Shellshock (CVE-2014-6271)
 	WAF_RULE_932170 WafRuleID = 932170
-	// x-displayName: 932171
+	// x-displayName: "932171"
 	// Remote Command Execution: Shellshock (CVE-2014-6271)
 	WAF_RULE_932171 WafRuleID = 932171
-	// x-displayName: 932180
+	// x-displayName: "932180"
 	// Restricted File Upload Attempt
 	WAF_RULE_932180 WafRuleID = 932180
-	// x-displayName: 932190
+	// x-displayName: "932190"
 	// Remote Command Execution: Wildcard bypass technique attempt
 	WAF_RULE_932190 WafRuleID = 932190
-	// x-displayName: 933100
+	// x-displayName: "933100"
 	// PHP Injection Attack: PHP Open Tag Found
 	WAF_RULE_933100 WafRuleID = 933100
-	// x-displayName: 933110
+	// x-displayName: "933110"
 	// PHP Injection Attack: PHP Script File Upload Found
 	WAF_RULE_933110 WafRuleID = 933110
-	// x-displayName: 933111
+	// x-displayName: "933111"
 	// PHP Injection Attack: PHP Script File Upload Found
 	WAF_RULE_933111 WafRuleID = 933111
-	// x-displayName: 933120
+	// x-displayName: "933120"
 	// PHP Injection Attack: Configuration Directive Found
 	WAF_RULE_933120 WafRuleID = 933120
-	// x-displayName: 933130
+	// x-displayName: "933130"
 	// PHP Injection Attack: Variables Found
 	WAF_RULE_933130 WafRuleID = 933130
-	// x-displayName: 933131
+	// x-displayName: "933131"
 	// PHP Injection Attack: Variables Found
 	WAF_RULE_933131 WafRuleID = 933131
-	// x-displayName: 933140
+	// x-displayName: "933140"
 	// PHP Injection Attack: I/O Stream Found
 	WAF_RULE_933140 WafRuleID = 933140
-	// x-displayName: 933150
+	// x-displayName: "933150"
 	// PHP Injection Attack: High-Risk PHP Function Name Found
 	WAF_RULE_933150 WafRuleID = 933150
-	// x-displayName: 933151
+	// x-displayName: "933151"
 	// PHP Injection Attack: Medium-Risk PHP Function Name Found
 	WAF_RULE_933151 WafRuleID = 933151
-	// x-displayName: 933160
+	// x-displayName: "933160"
 	// PHP Injection Attack: High-Risk PHP Function Call Found
 	WAF_RULE_933160 WafRuleID = 933160
-	// x-displayName: 933161
+	// x-displayName: "933161"
 	// PHP Injection Attack: Low-Value PHP Function Call Found
 	WAF_RULE_933161 WafRuleID = 933161
-	// x-displayName: 933170
+	// x-displayName: "933170"
 	// PHP Injection Attack: Serialized Object Injection
 	WAF_RULE_933170 WafRuleID = 933170
-	// x-displayName: 933180
+	// x-displayName: "933180"
 	// PHP Injection Attack: Variable Function Call Found
 	WAF_RULE_933180 WafRuleID = 933180
-	// x-displayName: 933190
+	// x-displayName: "933190"
 	// PHP Injection Attack: PHP Closing Tag Found
 	WAF_RULE_933190 WafRuleID = 933190
-	// x-displayName: 941100
+	// x-displayName: "941100"
 	// XSS Attack Detected via libinjection
 	WAF_RULE_941100 WafRuleID = 941100
-	// x-displayName: 941101
+	// x-displayName: "941101"
 	// XSS Attack Detected via libinjection
 	WAF_RULE_941101 WafRuleID = 941101
-	// x-displayName: 941110
+	// x-displayName: "941110"
 	// XSS Filter - Category 1: Script Tag Vector
 	WAF_RULE_941110 WafRuleID = 941110
-	// x-displayName: 941120
+	// x-displayName: "941120"
 	// XSS Filter - Category 2: Event Handler Vector
 	WAF_RULE_941120 WafRuleID = 941120
-	// x-displayName: 941130
+	// x-displayName: "941130"
 	// XSS Filter - Category 3: Attribute Vector
 	WAF_RULE_941130 WafRuleID = 941130
-	// x-displayName: 941140
+	// x-displayName: "941140"
 	// XSS Filter - Category 4: Javascript URI Vector
 	WAF_RULE_941140 WafRuleID = 941140
-	// x-displayName: 941150
+	// x-displayName: "941150"
 	// XSS Filter - Category 5: Disallowed HTML Attributes
 	WAF_RULE_941150 WafRuleID = 941150
-	// x-displayName: 941160
+	// x-displayName: "941160"
 	// NoScript XSS InjectionChecker: HTML Injection
 	WAF_RULE_941160 WafRuleID = 941160
-	// x-displayName: 941170
+	// x-displayName: "941170"
 	// NoScript XSS InjectionChecker: Attribute Injection
 	WAF_RULE_941170 WafRuleID = 941170
-	// x-displayName: 941180
+	// x-displayName: "941180"
 	// Node-Validator Blacklist Keywords
 	WAF_RULE_941180 WafRuleID = 941180
-	// x-displayName: 941190
+	// x-displayName: "941190"
 	// IE XSS Filters - Attack Detected.
 	WAF_RULE_941190 WafRuleID = 941190
-	// x-displayName: 941200
+	// x-displayName: "941200"
 	// IE XSS Filters - Attack Detected.
 	WAF_RULE_941200 WafRuleID = 941200
-	// x-displayName: 941210
+	// x-displayName: "941210"
 	// IE XSS Filters - Attack Detected.
 	WAF_RULE_941210 WafRuleID = 941210
-	// x-displayName: 941220
+	// x-displayName: "941220"
 	// IE XSS Filters - Attack Detected.
 	WAF_RULE_941220 WafRuleID = 941220
-	// x-displayName: 941230
+	// x-displayName: "941230"
 	// IE XSS Filters - Attack Detected.
 	WAF_RULE_941230 WafRuleID = 941230
-	// x-displayName: 941240
+	// x-displayName: "941240"
 	// IE XSS Filters - Attack Detected.
 	WAF_RULE_941240 WafRuleID = 941240
-	// x-displayName: 941250
+	// x-displayName: "941250"
 	// IE XSS Filters - Attack Detected.
 	WAF_RULE_941250 WafRuleID = 941250
-	// x-displayName: 941260
+	// x-displayName: "941260"
 	// IE XSS Filters - Attack Detected.
 	WAF_RULE_941260 WafRuleID = 941260
-	// x-displayName: 941270
+	// x-displayName: "941270"
 	// IE XSS Filters - Attack Detected.
 	WAF_RULE_941270 WafRuleID = 941270
-	// x-displayName: 941280
+	// x-displayName: "941280"
 	// IE XSS Filters - Attack Detected.
 	WAF_RULE_941280 WafRuleID = 941280
-	// x-displayName: 941290
+	// x-displayName: "941290"
 	// IE XSS Filters - Attack Detected.
 	WAF_RULE_941290 WafRuleID = 941290
-	// x-displayName: 941300
+	// x-displayName: "941300"
 	// IE XSS Filters - Attack Detected.
 	WAF_RULE_941300 WafRuleID = 941300
-	// x-displayName: 941310
+	// x-displayName: "941310"
 	// US-ASCII Malformed Encoding XSS Filter - Attack Detected.
 	WAF_RULE_941310 WafRuleID = 941310
-	// x-displayName: 941320
+	// x-displayName: "941320"
 	// Possible XSS Attack Detected - HTML Tag Handler
 	WAF_RULE_941320 WafRuleID = 941320
-	// x-displayName: 941330
+	// x-displayName: "941330"
 	// IE XSS Filters - Attack Detected.
 	WAF_RULE_941330 WafRuleID = 941330
-	// x-displayName: 941340
+	// x-displayName: "941340"
 	// IE XSS Filters - Attack Detected.
 	WAF_RULE_941340 WafRuleID = 941340
-	// x-displayName: 941350
+	// x-displayName: "941350"
 	// UTF-7 Encoding IE XSS - Attack Detected.
 	WAF_RULE_941350 WafRuleID = 941350
-	// x-displayName: 942100
+	// x-displayName: "942100"
 	// SQL Injection Attack Detected via libinjection
 	WAF_RULE_942100 WafRuleID = 942100
-	// x-displayName: 942110
+	// x-displayName: "942110"
 	// SQL Injection Attack: Common Injection Testing Detected
 	WAF_RULE_942110 WafRuleID = 942110
-	// x-displayName: 942120
+	// x-displayName: "942120"
 	// SQL Injection Attack: SQL Operator Detected
 	WAF_RULE_942120 WafRuleID = 942120
-	// x-displayName: 942130
+	// x-displayName: "942130"
 	// SQL Injection Attack: SQL Tautology Detected.
 	WAF_RULE_942130 WafRuleID = 942130
-	// x-displayName: 942140
+	// x-displayName: "942140"
 	// SQL Injection Attack: Common DB Names Detected
 	WAF_RULE_942140 WafRuleID = 942140
-	// x-displayName: 942150
+	// x-displayName: "942150"
 	// SQL Injection Attack
 	WAF_RULE_942150 WafRuleID = 942150
-	// x-displayName: 942160
+	// x-displayName: "942160"
 	// Detects blind sqli tests using sleep() or benchmark().
 	WAF_RULE_942160 WafRuleID = 942160
-	// x-displayName: 942170
+	// x-displayName: "942170"
 	// Detects SQL benchmark and sleep injection attempts including conditional queries
 	WAF_RULE_942170 WafRuleID = 942170
-	// x-displayName: 942180
+	// x-displayName: "942180"
 	// Detects basic SQL authentication bypass attempts 1/3
 	WAF_RULE_942180 WafRuleID = 942180
-	// x-displayName: 942190
+	// x-displayName: "942190"
 	// Detects MSSQL code execution and information gathering attempts
 	WAF_RULE_942190 WafRuleID = 942190
-	// x-displayName: 942200
+	// x-displayName: "942200"
 	// Detects MySQL comment-/space-obfuscated injections and backtick termination
 	WAF_RULE_942200 WafRuleID = 942200
-	// x-displayName: 942210
+	// x-displayName: "942210"
 	// Detects chained SQL injection attempts 1/2
 	WAF_RULE_942210 WafRuleID = 942210
-	// x-displayName: 942220
+	// x-displayName: "942220"
 	// Looking for integer overflow attacks, these are taken from skipfish, except 3.0.00738585072007e-308 is the \
 	WAF_RULE_942220 WafRuleID = 942220
-	// x-displayName: 942230
+	// x-displayName: "942230"
 	// Detects conditional SQL injection attempts
 	WAF_RULE_942230 WafRuleID = 942230
-	// x-displayName: 942240
+	// x-displayName: "942240"
 	// Detects MySQL charset switch and MSSQL DoS attempts
 	WAF_RULE_942240 WafRuleID = 942240
-	// x-displayName: 942250
+	// x-displayName: "942250"
 	// Detects MATCH AGAINST, MERGE and EXECUTE IMMEDIATE injections
 	WAF_RULE_942250 WafRuleID = 942250
-	// x-displayName: 942251
+	// x-displayName: "942251"
 	// Detects HAVING injections
 	WAF_RULE_942251 WafRuleID = 942251
-	// x-displayName: 942260
+	// x-displayName: "942260"
 	// Detects basic SQL authentication bypass attempts 2/3
 	WAF_RULE_942260 WafRuleID = 942260
-	// x-displayName: 942270
+	// x-displayName: "942270"
 	// Looking for basic sql injection. Common attack string for mysql, oracle and others.
 	WAF_RULE_942270 WafRuleID = 942270
-	// x-displayName: 942280
+	// x-displayName: "942280"
 	// Detects Postgres pg_sleep injection, waitfor delay attacks and database shutdown attempts
 	WAF_RULE_942280 WafRuleID = 942280
-	// x-displayName: 942290
+	// x-displayName: "942290"
 	// Finds basic MongoDB SQL injection attempts
 	WAF_RULE_942290 WafRuleID = 942290
-	// x-displayName: 942300
+	// x-displayName: "942300"
 	// Detects MySQL comments, conditions and ch(a)r injections
 	WAF_RULE_942300 WafRuleID = 942300
-	// x-displayName: 942310
+	// x-displayName: "942310"
 	// Detects chained SQL injection attempts 2/2
 	WAF_RULE_942310 WafRuleID = 942310
-	// x-displayName: 942320
+	// x-displayName: "942320"
 	// Detects MySQL and PostgreSQL stored procedure/function injections
 	WAF_RULE_942320 WafRuleID = 942320
-	// x-displayName: 942330
+	// x-displayName: "942330"
 	// Detects classic SQL injection probings 1/3
 	WAF_RULE_942330 WafRuleID = 942330
-	// x-displayName: 942340
+	// x-displayName: "942340"
 	// Detects basic SQL authentication bypass attempts 3/3
 	WAF_RULE_942340 WafRuleID = 942340
-	// x-displayName: 942350
+	// x-displayName: "942350"
 	// Detects MySQL UDF injection and other data/structure manipulation attempts
 	WAF_RULE_942350 WafRuleID = 942350
-	// x-displayName: 942360
+	// x-displayName: "942360"
 	// Detects concatenated basic SQL injection and SQLLFI attempts
 	WAF_RULE_942360 WafRuleID = 942360
-	// x-displayName: 942361
+	// x-displayName: "942361"
 	// Detects basic SQL injection based on keyword alter or union
 	WAF_RULE_942361 WafRuleID = 942361
-	// x-displayName: 942370
+	// x-displayName: "942370"
 	// Detects classic SQL injection probings 2/3
 	WAF_RULE_942370 WafRuleID = 942370
-	// x-displayName: 942380
+	// x-displayName: "942380"
 	// SQL Injection Attack
 	WAF_RULE_942380 WafRuleID = 942380
-	// x-displayName: 942390
+	// x-displayName: "942390"
 	// SQL Injection Attack
 	WAF_RULE_942390 WafRuleID = 942390
-	// x-displayName: 942400
+	// x-displayName: "942400"
 	// SQL Injection Attack
 	WAF_RULE_942400 WafRuleID = 942400
-	// x-displayName: 942410
+	// x-displayName: "942410"
 	// SQL Injection Attack
 	WAF_RULE_942410 WafRuleID = 942410
-	// x-displayName: 942420
+	// x-displayName: "942420"
 	// Restricted SQL Character Anomaly Detection (cookies): # of special characters exceeded (8)
 	WAF_RULE_942420 WafRuleID = 942420
-	// x-displayName: 942421
+	// x-displayName: "942421"
 	// Restricted SQL Character Anomaly Detection (cookies): # of special characters exceeded (3)
 	WAF_RULE_942421 WafRuleID = 942421
-	// x-displayName: 942430
+	// x-displayName: "942430"
 	// Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (12)
 	WAF_RULE_942430 WafRuleID = 942430
-	// x-displayName: 942431
+	// x-displayName: "942431"
 	// Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (6)
 	WAF_RULE_942431 WafRuleID = 942431
-	// x-displayName: 942432
+	// x-displayName: "942432"
 	// Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (2)
 	WAF_RULE_942432 WafRuleID = 942432
-	// x-displayName: 942440
+	// x-displayName: "942440"
 	// SQL Comment Sequence Detected.
 	WAF_RULE_942440 WafRuleID = 942440
-	// x-displayName: 942450
+	// x-displayName: "942450"
 	// SQL Hex Encoding Identified
 	WAF_RULE_942450 WafRuleID = 942450
-	// x-displayName: 942460
+	// x-displayName: "942460"
 	// Meta-Character Anomaly Detection Alert - Repetitive Non-Word Characters
 	WAF_RULE_942460 WafRuleID = 942460
-	// x-displayName: 942470
+	// x-displayName: "942470"
 	// SQL Injection Attack
 	WAF_RULE_942470 WafRuleID = 942470
-	// x-displayName: 942480
+	// x-displayName: "942480"
 	// SQL Injection Attack
 	WAF_RULE_942480 WafRuleID = 942480
-	// x-displayName: 942490
+	// x-displayName: "942490"
 	// Detects classic SQL injection probings 3/3
 	WAF_RULE_942490 WafRuleID = 942490
-	// x-displayName: 943100
+	// x-displayName: "943100"
 	// Possible Session Fixation Attack: Setting Cookie Values in HTML
 	WAF_RULE_943100 WafRuleID = 943100
-	// x-displayName: 943110
+	// x-displayName: "943110"
 	// Possible Session Fixation Attack: SessionID Parameter Name with Off-Domain Referer
 	WAF_RULE_943110 WafRuleID = 943110
-	// x-displayName: 943120
+	// x-displayName: "943120"
 	// Possible Session Fixation Attack: SessionID Parameter Name with No Referer
 	WAF_RULE_943120 WafRuleID = 943120
-	// x-displayName: 944100
+	// x-displayName: "944100"
 	// Remote Command Execution: Suspicious Java class detected
 	WAF_RULE_944100 WafRuleID = 944100
-	// x-displayName: 944110
+	// x-displayName: "944110"
 	// Remote Command Execution: Java process spawn (CVE-2017-9805)
 	WAF_RULE_944110 WafRuleID = 944110
-	// x-displayName: 944120
+	// x-displayName: "944120"
 	// Remote Command Execution: Java serialization (CVE-2015-5842)
 	WAF_RULE_944120 WafRuleID = 944120
-	// x-displayName: 944130
+	// x-displayName: "944130"
 	// Suspicious Java class detected
 	WAF_RULE_944130 WafRuleID = 944130
-	// x-displayName: 944200
+	// x-displayName: "944200"
 	// Magic bytes Detected, probable java serialization in use
 	WAF_RULE_944200 WafRuleID = 944200
-	// x-displayName: 944210
+	// x-displayName: "944210"
 	// Magic bytes Detected Base64 Encoded, probable java serialization in use
 	WAF_RULE_944210 WafRuleID = 944210
-	// x-displayName: 944240
+	// x-displayName: "944240"
 	// Remote Command Execution: Java serialization (CVE-2015-5842)
 	WAF_RULE_944240 WafRuleID = 944240
-	// x-displayName: 944250
+	// x-displayName: "944250"
 	// Remote Command Execution: Suspicious Java method detected
 	WAF_RULE_944250 WafRuleID = 944250
-	// x-displayName: 944300
+	// x-displayName: "944300"
 	// Base64 encoded string matched suspicious keyword
 	WAF_RULE_944300 WafRuleID = 944300
-	// x-displayName: 950100
+	// x-displayName: "950100"
 	// The Application Returned a 500-Level Status Code
 	WAF_RULE_950100 WafRuleID = 950100
-	// x-displayName: 950130
+	// x-displayName: "950130"
 	// Directory Listing
 	WAF_RULE_950130 WafRuleID = 950130
-	// x-displayName: 951110
+	// x-displayName: "951110"
 	// Microsoft Access SQL Information Leakage
 	WAF_RULE_951110 WafRuleID = 951110
-	// x-displayName: 951120
+	// x-displayName: "951120"
 	// Oracle SQL Information Leakage
 	WAF_RULE_951120 WafRuleID = 951120
-	// x-displayName: 951130
+	// x-displayName: "951130"
 	// DB2 SQL Information Leakage
 	WAF_RULE_951130 WafRuleID = 951130
-	// x-displayName: 951140
+	// x-displayName: "951140"
 	// EMC SQL Information Leakage
 	WAF_RULE_951140 WafRuleID = 951140
-	// x-displayName: 951150
+	// x-displayName: "951150"
 	// firebird SQL Information Leakage
 	WAF_RULE_951150 WafRuleID = 951150
-	// x-displayName: 951160
+	// x-displayName: "951160"
 	// Frontbase SQL Information Leakage
 	WAF_RULE_951160 WafRuleID = 951160
-	// x-displayName: 951170
+	// x-displayName: "951170"
 	// hsqldb SQL Information Leakage
 	WAF_RULE_951170 WafRuleID = 951170
-	// x-displayName: 951180
+	// x-displayName: "951180"
 	// informix SQL Information Leakage
 	WAF_RULE_951180 WafRuleID = 951180
-	// x-displayName: 951190
+	// x-displayName: "951190"
 	// ingres SQL Information Leakage
 	WAF_RULE_951190 WafRuleID = 951190
-	// x-displayName: 951200
+	// x-displayName: "951200"
 	// interbase SQL Information Leakage
 	WAF_RULE_951200 WafRuleID = 951200
-	// x-displayName: 951210
+	// x-displayName: "951210"
 	// maxDB SQL Information Leakage
 	WAF_RULE_951210 WafRuleID = 951210
-	// x-displayName: 951220
+	// x-displayName: "951220"
 	// mssql SQL Information Leakage
 	WAF_RULE_951220 WafRuleID = 951220
-	// x-displayName: 951230
+	// x-displayName: "951230"
 	// mysql SQL Information Leakage
 	WAF_RULE_951230 WafRuleID = 951230
-	// x-displayName: 951240
+	// x-displayName: "951240"
 	// postgres SQL Information Leakage
 	WAF_RULE_951240 WafRuleID = 951240
-	// x-displayName: 951250
+	// x-displayName: "951250"
 	// sqlite SQL Information Leakage
 	WAF_RULE_951250 WafRuleID = 951250
-	// x-displayName: 951260
+	// x-displayName: "951260"
 	// Sybase SQL Information Leakage
 	WAF_RULE_951260 WafRuleID = 951260
-	// x-displayName: 952100
+	// x-displayName: "952100"
 	// Java Source Code Leakage
 	WAF_RULE_952100 WafRuleID = 952100
-	// x-displayName: 952110
+	// x-displayName: "952110"
 	// Java Errors
 	WAF_RULE_952110 WafRuleID = 952110
-	// x-displayName: 953100
+	// x-displayName: "953100"
 	// PHP Information Leakage
 	WAF_RULE_953100 WafRuleID = 953100
-	// x-displayName: 953110
+	// x-displayName: "953110"
 	// PHP source code leakage
 	WAF_RULE_953110 WafRuleID = 953110
-	// x-displayName: 953120
+	// x-displayName: "953120"
 	// PHP source code leakage
 	WAF_RULE_953120 WafRuleID = 953120
-	// x-displayName: 954100
+	// x-displayName: "954100"
 	// Disclosure of IIS install location
 	WAF_RULE_954100 WafRuleID = 954100
-	// x-displayName: 954110
+	// x-displayName: "954110"
 	// Application Availability Error
 	WAF_RULE_954110 WafRuleID = 954110
-	// x-displayName: 954120
+	// x-displayName: "954120"
 	// IIS Information Leakage
 	WAF_RULE_954120 WafRuleID = 954120
-	// x-displayName: 954130
+	// x-displayName: "954130"
 	// IIS Information Leakage
 	WAF_RULE_954130 WafRuleID = 954130
-	// x-displayName: 4295001
+	// x-displayName: "4295001"
 	// Enable Drupal specific CRS exclusions
 	WAF_RULE_4295001 WafRuleID = 4295001
-	// x-displayName: 4295002
+	// x-displayName: "4295002"
 	// Enable Wordpress specific CRS exclusions
 	WAF_RULE_4295002 WafRuleID = 4295002
-	// x-displayName: 4295003
+	// x-displayName: "4295003"
 	// Enable Cpanel specific CRS exclusions
 	WAF_RULE_4295003 WafRuleID = 4295003
-	// x-displayName: 4295004
+	// x-displayName: "4295004"
 	// Enable Dokuwiki specific CRS exclusions
 	WAF_RULE_4295004 WafRuleID = 4295004
-	// x-displayName: 4295005
+	// x-displayName: "4295005"
 	// Enable Nextcloud specific CRS exclusions
 	WAF_RULE_4295005 WafRuleID = 4295005
-	// x-displayName: 4295006
+	// x-displayName: "4295006"
 	// Enable Xenforo specific CRS exclusions
 	WAF_RULE_4295006 WafRuleID = 4295006
 )
@@ -1139,7 +1139,7 @@ func (m *GlobalSpecType) GetRuleIds() []WafRuleID {
 
 // Create WAF Rule List
 //
-// x-displayName: "Specification"
+// x-displayName: "Create WAF Rule List"
 // WAF object is used to create a WAF instance associated with a VHOST or ROUTE
 // A WAF instance can be shared by multiple "virtual_host" or "route"
 // A "virtual_host" or "route" shall refer to one WAF instance

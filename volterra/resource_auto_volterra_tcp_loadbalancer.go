@@ -298,6 +298,11 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 				Optional: true,
 			},
 
+			"dns_volterra_managed": {
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"domains": {
 
 				Type: schema.TypeList,
@@ -745,6 +750,12 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 			createSpec.AdvertiseChoice = advertiseChoiceInt
 		}
 
+	}
+
+	if v, ok := d.GetOk("dns_volterra_managed"); ok && !isIntfNil(v) {
+
+		createSpec.DnsVolterraManaged =
+			v.(bool)
 	}
 
 	if v, ok := d.GetOk("domains"); ok && !isIntfNil(v) {
@@ -1250,6 +1261,12 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 			updateSpec.AdvertiseChoice = advertiseChoiceInt
 		}
 
+	}
+
+	if v, ok := d.GetOk("dns_volterra_managed"); ok && !isIntfNil(v) {
+
+		updateSpec.DnsVolterraManaged =
+			v.(bool)
 	}
 
 	if v, ok := d.GetOk("domains"); ok && !isIntfNil(v) {

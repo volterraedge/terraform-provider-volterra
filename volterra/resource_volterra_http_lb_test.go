@@ -40,7 +40,9 @@ func testConfigHTTPLB(resourceName, name, namespace string) string {
 		  namespace = "%[3]s"
 		  advertise_on_public_default_vip = true
 		  no_challenge = true
-		  http = true
+		  http {
+			dns_volterra_managed = false
+		  }
 		  disable_rate_limit = true
 		  disable_waf = true
 		  no_service_policies = true

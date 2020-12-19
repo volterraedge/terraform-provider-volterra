@@ -321,6 +321,15 @@ func (v *ValidateAPIEPPDFInfo) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["error_rate_stat"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error_rate_stat"))
+		if err := fv(ctx, m.GetErrorRateStat(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["latency_no_data"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("latency_no_data"))
@@ -329,6 +338,15 @@ func (v *ValidateAPIEPPDFInfo) Validate(ctx context.Context, pm interface{}, opt
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["latency_no_data_stat"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("latency_no_data_stat"))
+		if err := fv(ctx, m.GetLatencyNoDataStat(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -345,6 +363,15 @@ func (v *ValidateAPIEPPDFInfo) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["latency_with_data_stat"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("latency_with_data_stat"))
+		if err := fv(ctx, m.GetLatencyWithDataStat(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["request_rate"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("request_rate"))
@@ -353,6 +380,15 @@ func (v *ValidateAPIEPPDFInfo) Validate(ctx context.Context, pm interface{}, opt
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_rate_stat"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_rate_stat"))
+		if err := fv(ctx, m.GetRequestRateStat(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -369,6 +405,15 @@ func (v *ValidateAPIEPPDFInfo) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["request_size_stat"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_size_stat"))
+		if err := fv(ctx, m.GetRequestSizeStat(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["response_size"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("response_size"))
@@ -381,6 +426,15 @@ func (v *ValidateAPIEPPDFInfo) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["response_size_stat"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("response_size_stat"))
+		if err := fv(ctx, m.GetResponseSizeStat(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["response_throughput"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("response_throughput"))
@@ -389,6 +443,15 @@ func (v *ValidateAPIEPPDFInfo) Validate(ctx context.Context, pm interface{}, opt
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_throughput_stat"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("response_throughput_stat"))
+		if err := fv(ctx, m.GetResponseThroughputStat(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1187,6 +1250,93 @@ var DefaultPDFSpecValidator = func() *ValidatePDFSpec {
 
 func PDFSpecValidator() db.Validator {
 	return DefaultPDFSpecValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PDFStat) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PDFStat) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PDFStat) DeepCopy() *PDFStat {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PDFStat{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PDFStat) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PDFStat) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PDFStatValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePDFStat struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePDFStat) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PDFStat)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PDFStat got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["pdf_95"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("pdf_95"))
+		if err := fv(ctx, m.GetPdf_95(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["pdf_mean"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("pdf_mean"))
+		if err := fv(ctx, m.GetPdfMean(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPDFStatValidator = func() *ValidatePDFStat {
+	v := &ValidatePDFStat{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func PDFStatValidator() db.Validator {
+	return DefaultPDFStatValidator
 }
 
 // augmented methods on protoc/std generated struct

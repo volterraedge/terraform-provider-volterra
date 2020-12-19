@@ -89,7 +89,7 @@ func (m *GlobalSpecType) GetAllowVolterra() bool {
 
 // Create Secret Policy
 //
-// x-displayName: "Specification"
+// x-displayName: "Create Secret Policy"
 // Create secret_policy creates a new object in the storage backend for metadata.namespace.
 type CreateSpecType struct {
 	Algo          ves_io_schema_policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
@@ -124,7 +124,7 @@ func (m *CreateSpecType) GetAllowVolterra() bool {
 
 // Replace Secret Policy
 //
-// x-displayName: "Specification"
+// x-displayName: "Replace Secret Policy"
 // Replace secret_policy replaces an existing object in the storage backend for metadata.namespace.
 type ReplaceSpecType struct {
 	Algo          ves_io_schema_policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
@@ -159,7 +159,7 @@ func (m *ReplaceSpecType) GetAllowVolterra() bool {
 
 // Get Secret Policy
 //
-// x-displayName: "Specification"
+// x-displayName: "Get Secret Policy"
 // Get secret_policy reads a given object from storage backend for metadata.namespace.
 type GetSpecType struct {
 	Algo          ves_io_schema_policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`

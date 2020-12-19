@@ -5322,10 +5322,12 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.ClientRole = f.GetClientRole()
 	m.CookieMatchers = f.GetCookieMatchers()
 
-	if m.DomainMatcher == nil {
-		m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+	if f.GetDomainMatcher() != nil {
+		if m.DomainMatcher == nil {
+			m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+		}
+		m.DomainMatcher.FromMatcherType(f.GetDomainMatcher())
 	}
-	m.DomainMatcher.FromMatcherType(f.GetDomainMatcher())
 
 	m.GetDstAsnChoiceFromGlobalSpecType(f)
 	m.GetDstIpChoiceFromGlobalSpecType(f)
@@ -5346,10 +5348,12 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
 	m.UrlMatcher = f.GetUrlMatcher()
 
-	if m.VirtualHostMatcher == nil {
-		m.VirtualHostMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+	if f.GetVirtualHostMatcher() != nil {
+		if m.VirtualHostMatcher == nil {
+			m.VirtualHostMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+		}
+		m.VirtualHostMatcher.FromMatcherType(f.GetVirtualHostMatcher())
 	}
-	m.VirtualHostMatcher.FromMatcherType(f.GetVirtualHostMatcher())
 
 	m.WafAction = f.GetWafAction()
 }
@@ -5369,8 +5373,10 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.ClientRole = m1.ClientRole
 	f.CookieMatchers = m1.CookieMatchers
 
-	if f.DomainMatcher == nil {
-		f.DomainMatcher = &ves_io_schema_policy.MatcherType{}
+	if m1.DomainMatcher != nil {
+		if f.DomainMatcher == nil {
+			f.DomainMatcher = &ves_io_schema_policy.MatcherType{}
+		}
 	}
 
 	if m1.DomainMatcher != nil {
@@ -5396,8 +5402,10 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
 	f.UrlMatcher = m1.UrlMatcher
 
-	if f.VirtualHostMatcher == nil {
-		f.VirtualHostMatcher = &ves_io_schema_policy.MatcherType{}
+	if m1.VirtualHostMatcher != nil {
+		if f.VirtualHostMatcher == nil {
+			f.VirtualHostMatcher = &ves_io_schema_policy.MatcherType{}
+		}
 	}
 
 	if m1.VirtualHostMatcher != nil {
@@ -5640,10 +5648,12 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.ClientRole = f.GetClientRole()
 	m.CookieMatchers = f.GetCookieMatchers()
 
-	if m.DomainMatcher == nil {
-		m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+	if f.GetDomainMatcher() != nil {
+		if m.DomainMatcher == nil {
+			m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+		}
+		m.DomainMatcher.FromMatcherType(f.GetDomainMatcher())
 	}
-	m.DomainMatcher.FromMatcherType(f.GetDomainMatcher())
 
 	m.GetDstAsnChoiceFromGlobalSpecType(f)
 	m.GetDstIpChoiceFromGlobalSpecType(f)
@@ -5664,10 +5674,12 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
 	m.UrlMatcher = f.GetUrlMatcher()
 
-	if m.VirtualHostMatcher == nil {
-		m.VirtualHostMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+	if f.GetVirtualHostMatcher() != nil {
+		if m.VirtualHostMatcher == nil {
+			m.VirtualHostMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+		}
+		m.VirtualHostMatcher.FromMatcherType(f.GetVirtualHostMatcher())
 	}
-	m.VirtualHostMatcher.FromMatcherType(f.GetVirtualHostMatcher())
 
 	m.WafAction = f.GetWafAction()
 }
@@ -5687,8 +5699,10 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.ClientRole = m1.ClientRole
 	f.CookieMatchers = m1.CookieMatchers
 
-	if f.DomainMatcher == nil {
-		f.DomainMatcher = &ves_io_schema_policy.MatcherType{}
+	if m1.DomainMatcher != nil {
+		if f.DomainMatcher == nil {
+			f.DomainMatcher = &ves_io_schema_policy.MatcherType{}
+		}
 	}
 
 	if m1.DomainMatcher != nil {
@@ -5714,8 +5728,10 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
 	f.UrlMatcher = m1.UrlMatcher
 
-	if f.VirtualHostMatcher == nil {
-		f.VirtualHostMatcher = &ves_io_schema_policy.MatcherType{}
+	if m1.VirtualHostMatcher != nil {
+		if f.VirtualHostMatcher == nil {
+			f.VirtualHostMatcher = &ves_io_schema_policy.MatcherType{}
+		}
 	}
 
 	if m1.VirtualHostMatcher != nil {
@@ -5958,10 +5974,12 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.ClientRole = f.GetClientRole()
 	m.CookieMatchers = f.GetCookieMatchers()
 
-	if m.DomainMatcher == nil {
-		m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+	if f.GetDomainMatcher() != nil {
+		if m.DomainMatcher == nil {
+			m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+		}
+		m.DomainMatcher.FromMatcherType(f.GetDomainMatcher())
 	}
-	m.DomainMatcher.FromMatcherType(f.GetDomainMatcher())
 
 	m.GetDstAsnChoiceFromGlobalSpecType(f)
 	m.GetDstIpChoiceFromGlobalSpecType(f)
@@ -5982,10 +6000,12 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
 	m.UrlMatcher = f.GetUrlMatcher()
 
-	if m.VirtualHostMatcher == nil {
-		m.VirtualHostMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+	if f.GetVirtualHostMatcher() != nil {
+		if m.VirtualHostMatcher == nil {
+			m.VirtualHostMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+		}
+		m.VirtualHostMatcher.FromMatcherType(f.GetVirtualHostMatcher())
 	}
-	m.VirtualHostMatcher.FromMatcherType(f.GetVirtualHostMatcher())
 
 	m.WafAction = f.GetWafAction()
 }
@@ -6005,8 +6025,10 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.ClientRole = m1.ClientRole
 	f.CookieMatchers = m1.CookieMatchers
 
-	if f.DomainMatcher == nil {
-		f.DomainMatcher = &ves_io_schema_policy.MatcherType{}
+	if m1.DomainMatcher != nil {
+		if f.DomainMatcher == nil {
+			f.DomainMatcher = &ves_io_schema_policy.MatcherType{}
+		}
 	}
 
 	if m1.DomainMatcher != nil {
@@ -6032,8 +6054,10 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
 	f.UrlMatcher = m1.UrlMatcher
 
-	if f.VirtualHostMatcher == nil {
-		f.VirtualHostMatcher = &ves_io_schema_policy.MatcherType{}
+	if m1.VirtualHostMatcher != nil {
+		if f.VirtualHostMatcher == nil {
+			f.VirtualHostMatcher = &ves_io_schema_policy.MatcherType{}
+		}
 	}
 
 	if m1.VirtualHostMatcher != nil {

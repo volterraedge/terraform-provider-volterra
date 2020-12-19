@@ -32,15 +32,15 @@ var _ = math.Inf
 
 // Title
 //
-// x-displayName "displayname"
+// x-displayName: "displayname"
 // Only added so codegeneration does not break
 type ServiceConnectionType int32
 
 const (
-	// x-displayName "displayname"
+	// x-displayName: "displayname"
 	// Only added so codegeneration does not break
 	TLS ServiceConnectionType = 0
-	// x-displayName "displayname"
+	// x-displayName: "displayname"
 	// Only added so codegeneration does not break
 	NoTLS ServiceConnectionType = 1
 )
@@ -287,12 +287,12 @@ func (m *UseragentType) GetSiteName() string {
 type ServiceParameters struct {
 	// Title
 	//
-	// x-displayName "displayname"
+	// x-displayName: "displayname"
 	// Only added so codegeneration does not break
 	Url string `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
 	// Title
 	//
-	// x-displayName "displayname"
+	// x-displayName: "displayname"
 	// Only added so codegeneration does not break
 	Ctype ServiceConnectionType `protobuf:"varint,2,opt,name=ctype,proto3,enum=ves.io.schema.ServiceConnectionType" json:"ctype,omitempty"`
 }

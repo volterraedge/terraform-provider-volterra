@@ -2084,7 +2084,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "keys": {
                     "type": "array",
-                    "description": " List of keys that define a cluster subset.\n\nExample: - \"production\"-",
+                    "description": " List of keys that define a cluster subset class.\n\nExample: - \"production\"-",
                     "title": "keys",
                     "items": {
                         "type": "string"
@@ -2773,7 +2773,9 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.SpecType",
             "properties": {
                 "gc_spec": {
-                    "$ref": "#/definitions/viewsorigin_poolGlobalSpecType"
+                    "title": "gc_spec",
+                    "$ref": "#/definitions/viewsorigin_poolGlobalSpecType",
+                    "x-displayname": "GC Spec"
                 }
             }
         },
@@ -2809,6 +2811,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "disable_sni": {
                     "description": "Exclusive with [sni use_host_header_as_sni]\nx-displayName: \"No SNI\"\nDo not use SNI.",
+                    "title": "disable_sni",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "no_mtls": {
@@ -2817,13 +2820,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "skip_server_verification": {
-                    "description": "Exclusive with [use_server_verification volterra_trusted_ca]\n",
-                    "title": "Skip Server Verification\nx-displayName: \"Skip Origin Server Verification\"\nSkip Server Verification",
+                    "description": "Exclusive with [use_server_verification volterra_trusted_ca]\nx-displayName: \"Skip Verification\"\nSkip origin server verification",
+                    "title": "Skip Server Verification",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "sni": {
                     "type": "string",
-                    "description": "Exclusive with [disable_sni use_host_header_as_sni]\nx-displayName: \"SNI Value\"\nSNI value to be used."
+                    "description": "Exclusive with [disable_sni use_host_header_as_sni]\nx-displayName: \"SNI Value\"\nSNI value to be used.",
+                    "title": "sni"
                 },
                 "tls_config": {
                     "description": " TLS parameters such as min/max TLS version and ciphers\nRequired: YES",
@@ -2833,21 +2837,22 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "use_host_header_as_sni": {
-                    "description": "Exclusive with [disable_sni sni]\nx-displayName: \"Host Header\"\nUse the host header as SNI - not supported.",
+                    "description": "Exclusive with [disable_sni sni]\nx-displayName: \"Host Header\"\nUse the host header as SNI. The host header value is extracted after any configured rewrites have been applied.",
+                    "title": "use_host_header_as_sni",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "use_mtls": {
-                    "description": "Exclusive with [no_mtls]\n",
-                    "title": "Use MTLS\nx-displayName: \"MTLS\"\nUse MTLS for this pool using provided certificates",
+                    "description": "Exclusive with [no_mtls]\nx-displayName: \"MTLS\"\nUse MTLS for this pool using provided certificates",
+                    "title": "Use MTLS",
                     "$ref": "#/definitions/origin_poolTlsCertificatesType"
                 },
                 "use_server_verification": {
-                    "description": "Exclusive with [skip_server_verification volterra_trusted_ca]\nx-displayName: \"Origin Server Verification using Custom CA List\"\nVerify server identity using provided information",
+                    "description": "Exclusive with [skip_server_verification volterra_trusted_ca]\nx-displayName: \"Use Custom CA List\"\nPerform origin server verification using the provided trusted CA list",
                     "title": "Use Server Verification",
                     "$ref": "#/definitions/origin_poolUpstreamTlsValidationContext"
                 },
                 "volterra_trusted_ca": {
-                    "description": "Exclusive with [skip_server_verification use_server_verification]\nx-displayName: \"Origin Server Verification using Default Trusted CA List\"\nPerform origin server verification using Volterra default trusted CA list",
+                    "description": "Exclusive with [skip_server_verification use_server_verification]\nx-displayName: \"Use Default Trusted CA List\"\nPerform origin server verification using Volterra default trusted CA list",
                     "title": "Volterra Trusted CA",
                     "$ref": "#/definitions/schemaEmpty"
                 }
@@ -3064,7 +3069,7 @@ var APISwaggerJSON string = `{
         },
         "schemaRoutingPriority": {
             "type": "string",
-            "description": "Priority routing for each request.\nDifferent connection pools are used based on the priority selected for the request.\nAlso, circuit-breaker configuration at destination cluster is chosen based on selected priority.\n\n - DEFAULT: Default routing mechanism\n - HIGH: High-Priority routing mechanism",
+            "description": "Priority routing for each request.\nDifferent connection pools are used based on the priority selected for the request.\nAlso, circuit-breaker configuration at destination cluster is chosen based on selected priority.\n\nDefault routing mechanism\nHigh-Priority routing mechanism",
             "title": "RoutingPriority",
             "enum": [
                 "DEFAULT",
@@ -3076,7 +3081,7 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretEncodingType": {
             "type": "string",
-            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: No Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
             "title": "SecretEncodingType",
             "enum": [
                 "EncodingNone",
@@ -3302,7 +3307,7 @@ var APISwaggerJSON string = `{
         },
         "schemaTlsProtocol": {
             "type": "string",
-            "description": "TlsProtocol is enumeration of supported TLS versions\n\n - TLS_AUTO: Volterra will choose the optimal TLS version.\n - TLSv1_0: TLS 1.0\n - TLSv1_1: TLS 1.1\n - TLSv1_2: TLS 1.2\n - TLSv1_3: TLS 1.3",
+            "description": "TlsProtocol is enumeration of supported TLS versions\n\nVolterra will choose the optimal TLS version.\nTLS 1.0\nTLS 1.1\nTLS 1.2\nTLS 1.3",
             "title": "TlsProtocol",
             "enum": [
                 "TLS_AUTO",
@@ -3554,8 +3559,8 @@ var APISwaggerJSON string = `{
                 },
                 "health_check_port": {
                     "type": "integer",
-                    "description": "Exclusive with [same_as_endpoint_port]\n",
-                    "title": "Health check port\nx-displayName: \"Health check port\"\nPort used for performing health check",
+                    "description": "Exclusive with [same_as_endpoint_port]\nx-displayName: \"Health check port\"\nPort used for performing health check",
+                    "title": "Health check port",
                     "format": "int64"
                 },
                 "healthcheck": {

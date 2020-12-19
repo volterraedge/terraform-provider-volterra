@@ -172,6 +172,32 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	switch m.GetServiceIsolationChoice().(type) {
+	case *CreateSpecType_Isolated:
+		if fv, exists := v.FldValidators["service_isolation_choice.isolated"]; exists {
+			val := m.GetServiceIsolationChoice().(*CreateSpecType_Isolated).Isolated
+			vOpts := append(opts,
+				db.WithValidateField("service_isolation_choice"),
+				db.WithValidateField("isolated"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_Disabled:
+		if fv, exists := v.FldValidators["service_isolation_choice.disabled"]; exists {
+			val := m.GetServiceIsolationChoice().(*CreateSpecType_Disabled).Disabled
+			vOpts := append(opts,
+				db.WithValidateField("service_isolation_choice"),
+				db.WithValidateField("disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["vsite_refs"]; exists {
 		vOpts := append(opts, db.WithValidateField("vsite_refs"))
 		if err := fv(ctx, m.GetVsiteRefs(), vOpts...); err != nil {
@@ -358,6 +384,32 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 	if m == nil {
 		return nil
+	}
+
+	switch m.GetServiceIsolationChoice().(type) {
+	case *GetSpecType_Isolated:
+		if fv, exists := v.FldValidators["service_isolation_choice.isolated"]; exists {
+			val := m.GetServiceIsolationChoice().(*GetSpecType_Isolated).Isolated
+			vOpts := append(opts,
+				db.WithValidateField("service_isolation_choice"),
+				db.WithValidateField("isolated"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_Disabled:
+		if fv, exists := v.FldValidators["service_isolation_choice.disabled"]; exists {
+			val := m.GetServiceIsolationChoice().(*GetSpecType_Disabled).Disabled
+			vOpts := append(opts,
+				db.WithValidateField("service_isolation_choice"),
+				db.WithValidateField("disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["vsite_refs"]; exists {
@@ -548,6 +600,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	switch m.GetServiceIsolationChoice().(type) {
+	case *GlobalSpecType_Isolated:
+		if fv, exists := v.FldValidators["service_isolation_choice.isolated"]; exists {
+			val := m.GetServiceIsolationChoice().(*GlobalSpecType_Isolated).Isolated
+			vOpts := append(opts,
+				db.WithValidateField("service_isolation_choice"),
+				db.WithValidateField("isolated"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_Disabled:
+		if fv, exists := v.FldValidators["service_isolation_choice.disabled"]; exists {
+			val := m.GetServiceIsolationChoice().(*GlobalSpecType_Disabled).Disabled
+			vOpts := append(opts,
+				db.WithValidateField("service_isolation_choice"),
+				db.WithValidateField("disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["vsite_refs"]; exists {
 		vOpts := append(opts, db.WithValidateField("vsite_refs"))
 		if err := fv(ctx, m.GetVsiteRefs(), vOpts...); err != nil {
@@ -736,6 +814,32 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
+	switch m.GetServiceIsolationChoice().(type) {
+	case *ReplaceSpecType_Isolated:
+		if fv, exists := v.FldValidators["service_isolation_choice.isolated"]; exists {
+			val := m.GetServiceIsolationChoice().(*ReplaceSpecType_Isolated).Isolated
+			vOpts := append(opts,
+				db.WithValidateField("service_isolation_choice"),
+				db.WithValidateField("isolated"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_Disabled:
+		if fv, exists := v.FldValidators["service_isolation_choice.disabled"]; exists {
+			val := m.GetServiceIsolationChoice().(*ReplaceSpecType_Disabled).Disabled
+			vOpts := append(opts,
+				db.WithValidateField("service_isolation_choice"),
+				db.WithValidateField("disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["vsite_refs"]; exists {
 		vOpts := append(opts, db.WithValidateField("vsite_refs"))
 		if err := fv(ctx, m.GetVsiteRefs(), vOpts...); err != nil {
@@ -777,10 +881,46 @@ func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetServiceIsolationChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ServiceIsolationChoice.(type) {
+	case nil:
+		o.ServiceIsolationChoice = nil
+
+	case *CreateSpecType_Disabled:
+		o.ServiceIsolationChoice = &GlobalSpecType_Disabled{Disabled: of.Disabled}
+
+	case *CreateSpecType_Isolated:
+		o.ServiceIsolationChoice = &GlobalSpecType_Isolated{Isolated: of.Isolated}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetServiceIsolationChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ServiceIsolationChoice.(type) {
+	case nil:
+		r.ServiceIsolationChoice = nil
+
+	case *GlobalSpecType_Disabled:
+		r.ServiceIsolationChoice = &CreateSpecType_Disabled{Disabled: of.Disabled}
+
+	case *GlobalSpecType_Isolated:
+		r.ServiceIsolationChoice = &CreateSpecType_Isolated{Isolated: of.Isolated}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.GetServiceIsolationChoiceFromGlobalSpecType(f)
 	m.VsiteRefs = f.GetVsiteRefs()
 }
 
@@ -790,13 +930,50 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m1.SetServiceIsolationChoiceToGlobalSpecType(f)
 	f.VsiteRefs = m1.VsiteRefs
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetServiceIsolationChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ServiceIsolationChoice.(type) {
+	case nil:
+		o.ServiceIsolationChoice = nil
+
+	case *GetSpecType_Disabled:
+		o.ServiceIsolationChoice = &GlobalSpecType_Disabled{Disabled: of.Disabled}
+
+	case *GetSpecType_Isolated:
+		o.ServiceIsolationChoice = &GlobalSpecType_Isolated{Isolated: of.Isolated}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetServiceIsolationChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ServiceIsolationChoice.(type) {
+	case nil:
+		r.ServiceIsolationChoice = nil
+
+	case *GlobalSpecType_Disabled:
+		r.ServiceIsolationChoice = &GetSpecType_Disabled{Disabled: of.Disabled}
+
+	case *GlobalSpecType_Isolated:
+		r.ServiceIsolationChoice = &GetSpecType_Isolated{Isolated: of.Isolated}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.GetServiceIsolationChoiceFromGlobalSpecType(f)
 	m.VsiteRefs = f.GetVsiteRefs()
 }
 
@@ -806,13 +983,50 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m1.SetServiceIsolationChoiceToGlobalSpecType(f)
 	f.VsiteRefs = m1.VsiteRefs
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetServiceIsolationChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ServiceIsolationChoice.(type) {
+	case nil:
+		o.ServiceIsolationChoice = nil
+
+	case *ReplaceSpecType_Disabled:
+		o.ServiceIsolationChoice = &GlobalSpecType_Disabled{Disabled: of.Disabled}
+
+	case *ReplaceSpecType_Isolated:
+		o.ServiceIsolationChoice = &GlobalSpecType_Isolated{Isolated: of.Isolated}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetServiceIsolationChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ServiceIsolationChoice.(type) {
+	case nil:
+		r.ServiceIsolationChoice = nil
+
+	case *GlobalSpecType_Disabled:
+		r.ServiceIsolationChoice = &ReplaceSpecType_Disabled{Disabled: of.Disabled}
+
+	case *GlobalSpecType_Isolated:
+		r.ServiceIsolationChoice = &ReplaceSpecType_Isolated{Isolated: of.Isolated}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.GetServiceIsolationChoiceFromGlobalSpecType(f)
 	m.VsiteRefs = f.GetVsiteRefs()
 }
 
@@ -822,5 +1036,6 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m1.SetServiceIsolationChoiceToGlobalSpecType(f)
 	f.VsiteRefs = m1.VsiteRefs
 }

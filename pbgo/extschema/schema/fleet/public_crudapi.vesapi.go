@@ -1965,7 +1965,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1977,7 +1977,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2143,17 +2143,22 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Create fleet will create a fleet object in 'system' namespace of the user",
             "title": "Create Fleet",
-            "x-displayname": "Create Fleet Specification",
+            "x-displayname": "Create Fleet",
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
             "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group\",\"dc_cluster_group_inside\",\"no_dc_cluster_group\"]",
             "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
-            "x-ves-oneof-field-interface_choice": "[\"default_config\",\"device_list\",\"interface_list\"]",
+            "x-ves-oneof-field-interface_choice": "[\"bar\",\"default_config\",\"device_list\",\"interface_list\"]",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-storage_class_choice": "[\"default_storage_class\",\"storage_class_list\"]",
             "x-ves-oneof-field-storage_device_choice": "[\"no_storage_device\",\"storage_device_list\"]",
             "x-ves-oneof-field-storage_interface_choice": "[\"no_storage_interfaces\",\"storage_interface_list\"]",
             "x-ves-oneof-field-storage_static_routes_choice": "[\"no_storage_static_routes\",\"storage_static_routes\"]",
             "x-ves-proto-message": "ves.io.schema.fleet.CreateSpecType",
             "properties": {
+                "bar": {
+                    "type": "string",
+                    "description": "Exclusive with [default_config device_list interface_list]\n"
+                },
                 "bond_device_list": {
                     "description": "Exclusive with [no_bond_devices]\n",
                     "$ref": "#/definitions/fleetFleetBondDevicesListType"
@@ -2167,7 +2172,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "default_config": {
-                    "description": "Exclusive with [device_list interface_list]\nx-displayName: \"Default Interface Config\"\nUse default configuration for interfaces belonging to this fleet",
+                    "description": "Exclusive with [bar device_list interface_list]\nx-displayName: \"Default Interface Config\"\nUse default configuration for interfaces belonging to this fleet",
                     "title": "No Interfaces",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
@@ -2176,7 +2181,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "device_list": {
-                    "description": "Exclusive with [default_config interface_list]\nx-displayName: \"Legacy Device List\"\nAdd device for all interfaces belonging to this fleet",
+                    "description": "Exclusive with [bar default_config interface_list]\nx-displayName: \"Legacy Device List\"\nAdd device for all interfaces belonging to this fleet",
                     "title": "Legacy Device Config",
                     "$ref": "#/definitions/fleetFleetDeviceListType"
                 },
@@ -2210,9 +2215,17 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Site Local Inside Virtual Network"
                 },
                 "interface_list": {
-                    "description": "Exclusive with [default_config device_list]\nx-displayName: \"List of Interfaces\"\nAdd all interfaces belonging to this fleet",
+                    "description": "Exclusive with [bar default_config device_list]\nx-displayName: \"List of Interfaces\"\nAdd all interfaces belonging to this fleet",
                     "title": "List of Interfaces",
                     "$ref": "#/definitions/fleetFleetInterfaceListType"
+                },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "network_connectors": {
                     "type": "array",
@@ -2451,7 +2464,7 @@ var APISwaggerJSON string = `{
                 "flash_arrays": {
                     "type": "array",
                     "description": " For FlashArrays you must set the \"mgmt_endpoint\" and \"api_token\"\nRequired: YES",
-                    "title": "Flash Arrays\nx-displayName: \"Flash Arrays\"\nx-required\nFor FlashArrays you must set the \"mgmt_endpoint\" and \"api_token\"",
+                    "title": "Flash Arrays",
                     "items": {
                         "$ref": "#/definitions/fleetFlashArrayEndpoint"
                     },
@@ -2544,7 +2557,7 @@ var APISwaggerJSON string = `{
                 "flash_blades": {
                     "type": "array",
                     "description": " For FlashBlades you must set the \"mgmt_endpoint\", \"api_token\" and nfs_endpoint\nRequired: YES",
-                    "title": "Flash Blades\nx-displayName: \"Flash Blades\"\nx-required\nFor FlashBlades you must set the \"mgmt_endpoint\", \"api_token\" and nfs_endpoint",
+                    "title": "Flash Blades",
                     "items": {
                         "$ref": "#/definitions/fleetFlashBladeEndpoint"
                     },
@@ -2742,8 +2755,9 @@ var APISwaggerJSON string = `{
                 },
                 "storage_class_name": {
                     "type": "string",
-                    "description": " x-displayName: \"Storage Class Name:\n Name of the storage class as it will appear in K8s.\n\nExample: - \"premium\"-\nRequired: YES",
+                    "description": " Name of the storage class as it will appear in K8s.\n\nExample: - \"premium\"-\nRequired: YES",
                     "title": "Storage Class Name",
+                    "x-displayname": "Storage Class Name",
                     "x-ves-example": "premium",
                     "x-ves-required": "true"
                 },
@@ -2905,7 +2919,7 @@ var APISwaggerJSON string = `{
         },
         "fleetGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2920,11 +2934,12 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Get fleet will get fleet object from system namespace",
             "title": "Get fleet",
-            "x-displayname": "Get Fleet Specification",
+            "x-displayname": "Get Fleet",
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
             "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group\",\"dc_cluster_group_inside\",\"no_dc_cluster_group\"]",
             "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
             "x-ves-oneof-field-interface_choice": "[\"default_config\",\"device_list\",\"interface_list\"]",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-storage_class_choice": "[\"default_storage_class\",\"storage_class_list\"]",
             "x-ves-oneof-field-storage_device_choice": "[\"no_storage_device\",\"storage_device_list\"]",
             "x-ves-oneof-field-storage_interface_choice": "[\"no_storage_interfaces\",\"storage_interface_list\"]",
@@ -2990,6 +3005,14 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [default_config device_list]\nx-displayName: \"List of Interface\"\nAdd all interfaces belonging to this fleet",
                     "title": "List of Interfaces",
                     "$ref": "#/definitions/fleetFleetInterfaceListType"
+                },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "network_connectors": {
                     "type": "array",
@@ -3074,6 +3097,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group\",\"dc_cluster_group_inside\",\"no_dc_cluster_group\"]",
             "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
             "x-ves-oneof-field-interface_choice": "[\"default_interfaces\",\"interface_list\",\"legacy_devices\"]",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-storage_class_choice": "[\"default_storage_class\",\"storage_class_list\"]",
             "x-ves-oneof-field-storage_device_choice": "[\"no_storage_device\",\"storage_device_list\"]",
             "x-ves-oneof-field-storage_interface_choice": "[\"no_storage_interfaces\",\"storage_interface_list\"]",
@@ -3148,7 +3172,8 @@ var APISwaggerJSON string = `{
                 "fleet_type": {
                     "description": " Fleet Type can be fleet of single site or multiple sites. Corresponding virtual site is not created\n for single site fleet.",
                     "title": "Fleet type",
-                    "$ref": "#/definitions/fleetFleetType"
+                    "$ref": "#/definitions/fleetFleetType",
+                    "x-displayname": "Fleet Type"
                 },
                 "inside_virtual_network": {
                     "type": "array",
@@ -3167,6 +3192,16 @@ var APISwaggerJSON string = `{
                 "legacy_devices": {
                     "description": "Exclusive with [default_interfaces interface_list]\nx-displayName: \"Legacy Device List\"\nAdd device for all interfaces belonging to this fleet",
                     "title": "Legacy Device Config",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\nx-displayName: \"Enable Logs Streaming\"\nSelect log receiver for logs streaming",
+                    "title": "Disable Logs Streaming",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\nx-displayName: \"Disable Logs Streaming\"\nLogs Streaming is disabled",
+                    "title": "Disable Logs Receiver",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "network_connectors": {
@@ -3227,6 +3262,15 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Outside (Site Local) Virtual Network"
+                },
+                "single_site": {
+                    "type": "array",
+                    "description": " Vega should use this ref when when fleet type is single site fleet",
+                    "title": "Single Site Fleet Site",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Single Site Fleet Site"
                 },
                 "storage_class_list": {
                     "description": "Exclusive with [default_storage_class]\nx-displayName: \"Add Custom Storage Class\"\nAdd additional custom storage classes in kubernetes for this fleet",
@@ -3523,8 +3567,9 @@ var APISwaggerJSON string = `{
                 },
                 "space_reserve": {
                     "type": "string",
-                    "description": " x-displayName: Space Reservation Mode\n Space reservation mode; “none” (thin) or “volume” (thick)\n\nExample: - \"thick\"-",
+                    "description": " Space reservation mode; “none” (thin) or “volume” (thick)\n\nExample: - \"thick\"-",
                     "title": "Space Reservation Mode",
+                    "x-displayname": "Space Reservation Mode",
                     "x-ves-example": "thick"
                 },
                 "split_on_clone": {
@@ -3562,6 +3607,7 @@ var APISwaggerJSON string = `{
                 "node": {
                     "type": "string",
                     "description": " Enter node name of Mayastor Node (MSN) where this pool is located.\n\nExample: - \"master-0\"-\nRequired: YES",
+                    "title": "Node Name",
                     "x-displayname": "Node Name",
                     "x-ves-example": "master-0",
                     "x-ves-required": "true"
@@ -3569,6 +3615,7 @@ var APISwaggerJSON string = `{
                 "pool_disk_devices": {
                     "type": "array",
                     "description": " List of Disk Devices on Mayastore Node (MSN). Once Mayastor has created a pool it is assumed that it henceforth has exclusive use of the associated\n disk device; it should not be partitioned, formatted, or shared with another application or process.  Any existing data on the device will be destroyed.\n It supports various types such as \"/dev/sdb\", \"nvme://nqn.2014-08.com.vendor:nvme:nvm-subsystem-sn-d78432\" or \"iscsi://iqn.2000-08.com.datacore.com:cloudvm41-2\".\n\nExample: - \"/dev/sdb\"-\nRequired: YES",
+                    "title": "List of Disk Devices",
                     "items": {
                         "type": "string"
                     },
@@ -3642,11 +3689,12 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Replace fleet will replace the contents of given fleet object",
             "title": "Replace fleet",
-            "x-displayname": "Replace Fleet Specification",
+            "x-displayname": "Replace Fleet",
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
             "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group\",\"dc_cluster_group_inside\",\"no_dc_cluster_group\"]",
             "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
             "x-ves-oneof-field-interface_choice": "[\"default_config\",\"device_list\",\"interface_list\"]",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-storage_class_choice": "[\"default_storage_class\",\"storage_class_list\"]",
             "x-ves-oneof-field-storage_device_choice": "[\"no_storage_device\",\"storage_device_list\"]",
             "x-ves-oneof-field-storage_interface_choice": "[\"no_storage_interfaces\",\"storage_interface_list\"]",
@@ -3705,6 +3753,14 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [default_config device_list]\nx-displayName: \"List of Interface\"\nAdd all interfaces belonging to this fleet",
                     "title": "List of Interfaces",
                     "$ref": "#/definitions/fleetFleetInterfaceListType"
+                },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "network_connectors": {
                     "type": "array",
@@ -3981,7 +4037,7 @@ var APISwaggerJSON string = `{
                 },
                 "storage": {
                     "type": "array",
-                    "description": " LIst of Virtual Storage Pool definitions which are refered back by Storage Class label match selection.",
+                    "description": " List of Virtual Storage Pool definitions which are referred back by Storage Class label match selection.",
                     "title": "Virtual Storage Pools",
                     "items": {
                         "$ref": "#/definitions/fleetOntapVirtualStoragePoolType"
@@ -4105,7 +4161,7 @@ var APISwaggerJSON string = `{
                 },
                 "storage": {
                     "type": "array",
-                    "description": " LIst of Virtual Storage Pool definitions which are refered back by Storage Class label match selection.",
+                    "description": " List of Virtual Storage Pool definitions which are referred back by Storage Class label match selection.",
                     "title": "Virtual Storage Pools",
                     "items": {
                         "$ref": "#/definitions/fleetOntapVirtualStoragePoolType"
@@ -4197,7 +4253,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Device configuration for Pure Storage Service Orchestrator",
             "title": "Pure Storage Service Orchestrator",
-            "x-displayname": "Pure Storage Service Orchestrator ",
+            "x-displayname": "Pure Storage Service Orchestrator",
             "x-ves-proto-message": "ves.io.schema.fleet.StorageDevicePureStorageServiceOrchestratorType",
             "properties": {
                 "arrays": {
@@ -4824,7 +4880,7 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretEncodingType": {
             "type": "string",
-            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: No Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
             "title": "SecretEncodingType",
             "enum": [
                 "EncodingNone",

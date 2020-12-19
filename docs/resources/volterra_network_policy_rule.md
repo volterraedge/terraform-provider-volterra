@@ -48,7 +48,7 @@ Argument Reference
 
 `label_matcher` - (Optional) List of label keys to be matched in prefix_selector configured in remote_endpoint. See [Label Matcher ](#label-matcher) below for details.
 
-`ports` - (Optional) Ports is list of port ranges as match criteria. Range is expressed as start port and end port (`List of String`).
+`ports` - (Optional) List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192 (`List of String`).
 
 `protocol` - (Optional) Values are tcp, udp, and icmp (`String`).
 

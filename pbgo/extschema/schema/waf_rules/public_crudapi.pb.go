@@ -53,13 +53,19 @@ var _ = math.Inf
 type GetResponseFormatCode int32
 
 const (
+	// x-displayName: "Default Format"
+	// Default format of returned resource
 	GET_RSP_FORMAT_DEFAULT GetResponseFormatCode = 0
+	// x-displayName: "Create request Format"
 	// Response should be in CreateRequest format
 	GET_RSP_FORMAT_FOR_CREATE GetResponseFormatCode = 1
+	// x-displayName: "Replace request format"
 	// Response should be in ReplaceRequest format
 	GET_RSP_FORMAT_FOR_REPLACE GetResponseFormatCode = 2
+	// x-displayName: "Status format"
 	// Response should be in StatusObject(s) format
 	GET_RSP_FORMAT_STATUS GetResponseFormatCode = 3
+	// x-displayName: "GetSpecType format"
 	// Response should be in format of GetSpecType
 	GET_RSP_FORMAT_READ GetResponseFormatCode = 4
 )
@@ -1304,7 +1310,7 @@ const _ = grpc.SupportPackageIsVersion4
 type APIClient interface {
 	// Create WAF Rules
 	//
-	// x-displayName: "Create WAF Rules Object"
+	// x-displayName: "Create WAF Rules"
 	// Create App type will create the configuration in namespace metadata.namespace
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Get WAF Rules
@@ -1314,18 +1320,18 @@ type APIClient interface {
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List WAF Rules"
 	// List the set of waf_rules in a namespace
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// Replace WAF Rules
 	//
-	// x-displayName: "Replace WAF Rules Object"
+	// x-displayName: "Replace WAF Rules"
 	// Update the configuration by replacing the existing spec with the provided one.
 	// For read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write.
 	Replace(ctx context.Context, in *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete WAF Rules"
 	// Delete the specified waf_rules
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf3.Empty, error)
 }
@@ -1388,7 +1394,7 @@ func (c *aPIClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.
 type APIServer interface {
 	// Create WAF Rules
 	//
-	// x-displayName: "Create WAF Rules Object"
+	// x-displayName: "Create WAF Rules"
 	// Create App type will create the configuration in namespace metadata.namespace
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// Get WAF Rules
@@ -1398,18 +1404,18 @@ type APIServer interface {
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List WAF Rules"
 	// List the set of waf_rules in a namespace
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	// Replace WAF Rules
 	//
-	// x-displayName: "Replace WAF Rules Object"
+	// x-displayName: "Replace WAF Rules"
 	// Update the configuration by replacing the existing spec with the provided one.
 	// For read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write.
 	Replace(context.Context, *ReplaceRequest) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete WAF Rules"
 	// Delete the specified waf_rules
 	Delete(context.Context, *DeleteRequest) (*google_protobuf3.Empty, error)
 }

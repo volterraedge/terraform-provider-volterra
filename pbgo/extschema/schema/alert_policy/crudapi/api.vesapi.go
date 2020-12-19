@@ -2052,9 +2052,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "labels": {
                     "type": "array",
+                    "description": " Name of labels to group/aggregate the alerts",
+                    "title": "labels",
                     "items": {
                         "type": "string"
-                    }
+                    },
+                    "x-displayname": "Labels"
                 }
             }
         },
@@ -2148,9 +2151,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "groups": {
                     "type": "array",
+                    "description": " Name of groups to match the alert",
+                    "title": "groups",
                     "items": {
                         "$ref": "#/definitions/alert_policyGroup"
-                    }
+                    },
+                    "x-displayname": "Groups"
                 }
             }
         },

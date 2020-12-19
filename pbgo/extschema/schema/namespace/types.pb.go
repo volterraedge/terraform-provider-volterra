@@ -43,7 +43,7 @@ func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes
 
 // Create namespace
 //
-// x-displayName: "Create Specification"
+// x-displayName: "Create Namespace"
 // Creates a new namespace. Name of the object is name of the name space.
 type CreateSpecType struct {
 }
@@ -54,7 +54,7 @@ func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes
 
 // Replace namespace
 //
-// x-displayName: "Replace Specification"
+// x-displayName: "Replace Namespace"
 // Replaces attributes of a namespace including its metadata like labels, description etc.
 type ReplaceSpecType struct {
 }
@@ -65,7 +65,7 @@ func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorType
 
 // Get namespace
 //
-// x-displayName: "Get Specification"
+// x-displayName: "Get Namespace"
 // This is the read representation of the namespace object.
 type GetSpecType struct {
 }

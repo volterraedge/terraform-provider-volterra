@@ -2418,7 +2418,7 @@ var APISwaggerJSON string = `{
             "description": "Specifies whether endpoint service is discovered by name or labels",
             "title": "ServiceInfoType",
             "x-displayname": "Service Info Type",
-            "x-ves-displayorder": "1,2,3",
+            "x-ves-displayorder": "1,4",
             "x-ves-oneof-field-service_info": "[\"service_name\",\"service_selector\"]",
             "x-ves-proto-message": "ves.io.schema.endpoint.ServiceInfoType",
             "properties": {
@@ -2789,7 +2789,6 @@ var APISwaggerJSON string = `{
             "description": "NetworkSiteRefSelector defines a union of reference to site or reference to virtual_network  or reference to virtual_site\nIt is used to determine virtual network using following rules\n * Direct reference to virtual_network object\n * Site local network when refering to site object\n * All site local networks for sites selected by refering to virtual_site object",
             "title": "NetworkSiteRefSelector",
             "x-displayname": "Network or Site Reference",
-            "x-ves-displayorder": "3,2,1",
             "x-ves-oneof-field-reforselector": "[\"site\",\"virtual_network\",\"virtual_site\"]",
             "x-ves-proto-message": "ves.io.schema.NetworkSiteRefSelector",
             "properties": {

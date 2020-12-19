@@ -684,7 +684,7 @@ func (m *WorkloadContext) GetParams() map[string]string {
 
 // Create registration
 //
-// x-displayName: "Specification"
+// x-displayName: "Create Registration"
 // VPM creates registration using this message, never used by users.
 type CreateSpecType struct {
 	Infra    *Infra    `protobuf:"bytes,1,opt,name=infra" json:"infra,omitempty"`
@@ -719,7 +719,7 @@ func (m *CreateSpecType) GetPassport() *Passport {
 
 // Replace registration
 //
-// x-displayName: "Specification"
+// x-displayName: "Replace Registration"
 // NO fields are allowed to be replaced
 type ReplaceSpecType struct {
 }
@@ -730,7 +730,7 @@ func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorType
 
 // Get registration
 //
-// x-displayName: "Specification"
+// x-displayName: "Get Registration"
 // Get registration specification
 type GetSpecType struct {
 	Infra    *Infra    `protobuf:"bytes,1,opt,name=infra" json:"infra,omitempty"`

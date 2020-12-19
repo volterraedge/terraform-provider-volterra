@@ -2025,7 +2025,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "api_credentialAPICredentialType": {
             "type": "string",
-            "description": "Types of API credential given when requesting credentials from volterra\n\n - API_CERTIFICATE: Volterra user certificate to access Volterra public API using mTLS\n - KUBE_CONFIG: Kubernetes config file to access Virtual Kubernetes API in Volterra\n - API_TOKEN: API token to access Volterra public API\n - SERVICE_API_TOKEN: API token for service credentials\n - SERVICE_API_CERTIFICATE: API certificate for service credentials\n - SERVICE_KUBE_CONFIG: API certificate for kube config",
+            "description": "Types of API credential given when requesting credentials from volterra\n\nVolterra user certificate to access Volterra public API using mTLS\nKubernetes config file to access Virtual Kubernetes API in Volterra\nAPI token to access Volterra public API\nAPI token for service credentials\nAPI certificate for service credentials\nAPI certificate for kube config",
             "title": "API Credential type",
             "enum": [
                 "API_CERTIFICATE",

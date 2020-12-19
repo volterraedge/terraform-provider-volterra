@@ -197,7 +197,7 @@ func (m *GlobalSpecType) GetMode() RateLimiterMode {
 
 // Create rate limiter
 //
-// x-displayName: "Specification"
+// x-displayName: "Create Rate Limiter"
 // Create rate_limiter creates a new object in the storage backend for metadata.namespace.
 type CreateSpecType struct {
 	Limits             []*RateLimitValue               `protobuf:"bytes,1,rep,name=limits" json:"limits,omitempty"`
@@ -224,7 +224,7 @@ func (m *CreateSpecType) GetUserIdentification() []*ves_io_schema4.ObjectRefType
 
 // Replace rate limiter
 //
-// x-displayName: "Specification"
+// x-displayName: "Replace Rate Limiter"
 // Replace rate_limiter replaces an existing object in the storage backend for metadata.namespace.
 type ReplaceSpecType struct {
 	Limits             []*RateLimitValue               `protobuf:"bytes,1,rep,name=limits" json:"limits,omitempty"`
@@ -251,7 +251,7 @@ func (m *ReplaceSpecType) GetUserIdentification() []*ves_io_schema4.ObjectRefTyp
 
 // Get rate limiter
 //
-// x-displayName: "Specification"
+// x-displayName: "Get Rate Limiter"
 // Get rate_limiter reads a given object from storage backend for metadata.namespace.
 type GetSpecType struct {
 	Limits             []*RateLimitValue               `protobuf:"bytes,1,rep,name=limits" json:"limits,omitempty"`

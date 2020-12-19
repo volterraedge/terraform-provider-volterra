@@ -409,11 +409,40 @@ type ValidateAWSVPCTwoInterfaceNodeType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateAWSVPCTwoInterfaceNodeType) ChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSVPCTwoInterfaceNodeType) AwsAzNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_az_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSVPCTwoInterfaceNodeType) OutsideSubnetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for outside_subnet")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := CloudSubnetTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
 	}
 
 	return validatorFn, nil
@@ -452,6 +481,42 @@ func (v *ValidateAWSVPCTwoInterfaceNodeType) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["choice"]; exists {
+		val := m.GetChoice()
+		vOpts := append(opts,
+			db.WithValidateField("choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetChoice().(type) {
+	case *AWSVPCTwoInterfaceNodeType_InsideSubnet:
+		if fv, exists := v.FldValidators["choice.inside_subnet"]; exists {
+			val := m.GetChoice().(*AWSVPCTwoInterfaceNodeType_InsideSubnet).InsideSubnet
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("inside_subnet"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSVPCTwoInterfaceNodeType_ReservedInsideSubnet:
+		if fv, exists := v.FldValidators["choice.reserved_inside_subnet"]; exists {
+			val := m.GetChoice().(*AWSVPCTwoInterfaceNodeType_ReservedInsideSubnet).ReservedInsideSubnet
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("reserved_inside_subnet"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["disk_size"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("disk_size"))
@@ -461,19 +526,19 @@ func (v *ValidateAWSVPCTwoInterfaceNodeType) Validate(ctx context.Context, pm in
 
 	}
 
-	if fv, exists := v.FldValidators["inside_subnet"]; exists {
+	if fv, exists := v.FldValidators["outside_subnet"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("inside_subnet"))
-		if err := fv(ctx, m.GetInsideSubnet(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("outside_subnet"))
+		if err := fv(ctx, m.GetOutsideSubnet(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["outside_subnet"]; exists {
+	if fv, exists := v.FldValidators["workload_subnet"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("outside_subnet"))
-		if err := fv(ctx, m.GetOutsideSubnet(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("workload_subnet"))
+		if err := fv(ctx, m.GetWorkloadSubnet(), vOpts...); err != nil {
 			return err
 		}
 
@@ -494,6 +559,17 @@ var DefaultAWSVPCTwoInterfaceNodeTypeValidator = func() *ValidateAWSVPCTwoInterf
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhChoice := v.ChoiceValidationRuleHandler
+	rulesChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhChoice(rulesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSVPCTwoInterfaceNodeType.choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["choice"] = vFn
+
 	vrhAwsAzName := v.AwsAzNameValidationRuleHandler
 	rulesAwsAzName := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -506,6 +582,17 @@ var DefaultAWSVPCTwoInterfaceNodeTypeValidator = func() *ValidateAWSVPCTwoInterf
 	}
 	v.FldValidators["aws_az_name"] = vFn
 
+	vrhOutsideSubnet := v.OutsideSubnetValidationRuleHandler
+	rulesOutsideSubnet := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhOutsideSubnet(rulesOutsideSubnet)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSVPCTwoInterfaceNodeType.outside_subnet: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_subnet"] = vFn
+
 	vrhDiskSize := v.DiskSizeValidationRuleHandler
 	rulesDiskSize := map[string]string{
 		"ves.io.schema.rules.string.max_len": "32",
@@ -517,9 +604,9 @@ var DefaultAWSVPCTwoInterfaceNodeTypeValidator = func() *ValidateAWSVPCTwoInterf
 	}
 	v.FldValidators["disk_size"] = vFn
 
-	v.FldValidators["inside_subnet"] = CloudSubnetTypeValidator().Validate
+	v.FldValidators["choice.inside_subnet"] = CloudSubnetTypeValidator().Validate
 
-	v.FldValidators["outside_subnet"] = CloudSubnetTypeValidator().Validate
+	v.FldValidators["workload_subnet"] = CloudSubnetTypeValidator().Validate
 
 	return v
 }()
@@ -2899,6 +2986,22 @@ func (m *GlobalNetworkConnectionListType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *GlobalNetworkConnectionListType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetGlobalNetworkConnections() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting GlobalNetworkConnectionListType.global_network_connections idx %v", idx)
+		}
+	}
+
+	return nil
+}
+
 func (m *GlobalNetworkConnectionListType) DeepCopy() *GlobalNetworkConnectionListType {
 	if m == nil {
 		return nil
@@ -3071,6 +3174,20 @@ func (m *GlobalNetworkConnectionType) ToJSON() (string, error) {
 
 func (m *GlobalNetworkConnectionType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GlobalNetworkConnectionType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetEnableForwardProxy().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalNetworkConnectionType.enable_forward_proxy")
+	}
+
+	return nil
 }
 
 func (m *GlobalNetworkConnectionType) DeepCopy() *GlobalNetworkConnectionType {

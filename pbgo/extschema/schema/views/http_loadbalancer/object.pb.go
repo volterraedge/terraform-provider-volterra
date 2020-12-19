@@ -29,6 +29,7 @@
 		DownstreamTlsValidationContext
 		DownstreamTlsParamsType
 		ProxyTypeHttps
+		ProxyTypeHttp
 		ProxyTypeHttpsAutoCerts
 		HashPolicyListType
 		MirrorPolicyType
@@ -40,6 +41,7 @@
 		RouteTypeCustomRoute
 		RouteType
 		AdvancedOptionsType
+		SimpleClientSrcRule
 		CustomIpAllowedList
 		RateLimitConfigType
 		ServicePolicyList
@@ -139,6 +141,9 @@ func (m *Object) GetSpec() *SpecType {
 }
 
 type SpecType struct {
+	// gc_spec
+	//
+	// x-displayName: "GC Spec"
 	GcSpec *GlobalSpecType `protobuf:"bytes,1,opt,name=gc_spec,json=gcSpec" json:"gc_spec,omitempty"`
 }
 

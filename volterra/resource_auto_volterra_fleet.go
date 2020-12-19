@@ -233,6 +233,12 @@ func resourceVolterraFleet() *schema.Resource {
 				},
 			},
 
+			"bar": {
+
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+
 			"default_config": {
 
 				Type:     schema.TypeBool,
@@ -343,6 +349,35 @@ func resourceVolterraFleet() *schema.Resource {
 						},
 					},
 				},
+			},
+
+			"log_receiver": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"namespace": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"tenant": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
+			"logs_streaming_disabled": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
 			},
 
 			"network_connectors": {
@@ -2608,6 +2643,17 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 	interfaceChoiceTypeFound := false
 
+	if v, ok := d.GetOk("bar"); ok && !interfaceChoiceTypeFound {
+
+		interfaceChoiceTypeFound = true
+		interfaceChoiceInt := &ves_io_schema_fleet.CreateSpecType_Bar{}
+
+		createSpec.InterfaceChoice = interfaceChoiceInt
+
+		interfaceChoiceInt.Bar = v.(string)
+
+	}
+
 	if v, ok := d.GetOk("default_config"); ok && !interfaceChoiceTypeFound {
 
 		interfaceChoiceTypeFound = true
@@ -2751,6 +2797,50 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 			}
 
+		}
+
+	}
+
+	logsReceiverChoiceTypeFound := false
+
+	if v, ok := d.GetOk("log_receiver"); ok && !logsReceiverChoiceTypeFound {
+
+		logsReceiverChoiceTypeFound = true
+		logsReceiverChoiceInt := &ves_io_schema_fleet.CreateSpecType_LogReceiver{}
+		logsReceiverChoiceInt.LogReceiver = &ves_io_schema_views.ObjectRefType{}
+		createSpec.LogsReceiverChoice = logsReceiverChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Name = v.(string)
+			}
+
+			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Namespace = v.(string)
+			}
+
+			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Tenant = v.(string)
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("logs_streaming_disabled"); ok && !logsReceiverChoiceTypeFound {
+
+		logsReceiverChoiceTypeFound = true
+
+		if v.(bool) {
+			logsReceiverChoiceInt := &ves_io_schema_fleet.CreateSpecType_LogsStreamingDisabled{}
+			logsReceiverChoiceInt.LogsStreamingDisabled = &ves_io_schema.Empty{}
+			createSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
 
 	}
@@ -5637,6 +5727,50 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 
 			}
 
+		}
+
+	}
+
+	logsReceiverChoiceTypeFound := false
+
+	if v, ok := d.GetOk("log_receiver"); ok && !logsReceiverChoiceTypeFound {
+
+		logsReceiverChoiceTypeFound = true
+		logsReceiverChoiceInt := &ves_io_schema_fleet.ReplaceSpecType_LogReceiver{}
+		logsReceiverChoiceInt.LogReceiver = &ves_io_schema_views.ObjectRefType{}
+		updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Name = v.(string)
+			}
+
+			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Namespace = v.(string)
+			}
+
+			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Tenant = v.(string)
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("logs_streaming_disabled"); ok && !logsReceiverChoiceTypeFound {
+
+		logsReceiverChoiceTypeFound = true
+
+		if v.(bool) {
+			logsReceiverChoiceInt := &ves_io_schema_fleet.ReplaceSpecType_LogsStreamingDisabled{}
+			logsReceiverChoiceInt.LogsStreamingDisabled = &ves_io_schema.Empty{}
+			updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
 
 	}

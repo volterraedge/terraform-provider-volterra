@@ -39,7 +39,6 @@ func TestAccDataSourceVHDNSInfoBasic(t *testing.T) {
 				Config: testConfigDataSourceVHDNSInfo(name, ns),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(fmt.Sprintf("volterra_namespace.%s", ns), "name", ns),
-					resource.TestCheckResourceAttr("volterra_virtual_network.public", "name", "public"),
 					resource.TestCheckResourceAttr(fmt.Sprintf("volterra_advertise_policy.%s", name), "name", name),
 				),
 			},
@@ -61,18 +60,11 @@ func testConfigDataSourceVHDNSInfo(name, ns string) string {
 		name = "%[2]s"
 	}
 
-	resource "volterra_virtual_network" "public" {
-		name = "public"
-		namespace = "shared"
-		global_network = true
-	}
-
 	resource "volterra_advertise_policy" "%[1]s" {
 		name = "%[1]s"
 		namespace = "%[2]s"
-		depends_on = ["volterra_virtual_network.public"]
 		where {
-			virtual_network {
+			virtual_site {
 				ref {
 					name = "public"
 					namespace = "shared"

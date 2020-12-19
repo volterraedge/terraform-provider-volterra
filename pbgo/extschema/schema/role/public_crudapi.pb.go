@@ -51,13 +51,19 @@ var _ = math.Inf
 type GetResponseFormatCode int32
 
 const (
+	// x-displayName: "Default Format"
+	// Default format of returned resource
 	GET_RSP_FORMAT_DEFAULT GetResponseFormatCode = 0
+	// x-displayName: "Create request Format"
 	// Response should be in CreateRequest format
 	GET_RSP_FORMAT_FOR_CREATE GetResponseFormatCode = 1
+	// x-displayName: "Replace request format"
 	// Response should be in ReplaceRequest format
 	GET_RSP_FORMAT_FOR_REPLACE GetResponseFormatCode = 2
+	// x-displayName: "Status format"
 	// Response should be in StatusObject(s) format
 	GET_RSP_FORMAT_STATUS GetResponseFormatCode = 3
+	// x-displayName: "GetSpecType format"
 	// Response should be in format of GetSpecType
 	GET_RSP_FORMAT_READ GetResponseFormatCode = 4
 )
@@ -1302,27 +1308,27 @@ const _ = grpc.SupportPackageIsVersion4
 type APIClient interface {
 	// Role
 	//
-	// x-displayName: "Role"
+	// x-displayName: "Create Role"
 	// Creates a role
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Role
 	//
-	// x-displayName: "Role"
+	// x-displayName: "Get Role"
 	// Reads a role
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Role"
 	// List the set of role in a namespace
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// Role
 	//
-	// x-displayName: "Role"
+	// x-displayName: "Replace Role"
 	// Amends a role
 	Replace(ctx context.Context, in *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete Role"
 	// Delete the specified role
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf4.Empty, error)
 }
@@ -1385,27 +1391,27 @@ func (c *aPIClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.
 type APIServer interface {
 	// Role
 	//
-	// x-displayName: "Role"
+	// x-displayName: "Create Role"
 	// Creates a role
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// Role
 	//
-	// x-displayName: "Role"
+	// x-displayName: "Get Role"
 	// Reads a role
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Role"
 	// List the set of role in a namespace
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	// Role
 	//
-	// x-displayName: "Role"
+	// x-displayName: "Replace Role"
 	// Amends a role
 	Replace(context.Context, *ReplaceRequest) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete Role"
 	// Delete the specified role
 	Delete(context.Context, *DeleteRequest) (*google_protobuf4.Empty, error)
 }

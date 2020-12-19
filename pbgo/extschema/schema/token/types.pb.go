@@ -90,7 +90,7 @@ func (m *GlobalSpecType) GetState() State {
 
 // Create token
 //
-// x-displayName: "Specification"
+// x-displayName: "Create Token"
 // Creates new token. token object is used to manage site admission. User must generate token before provisioning and pass this
 // token to site during it's registration.
 type CreateSpecType struct {
@@ -102,7 +102,7 @@ func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes
 
 // Replace token
 //
-// x-displayName: "Specification"
+// x-displayName: "Replace Token"
 // Replaces token. token object is used to manage site admission. User must generate token before provisioning and pass this
 // token to site during it's registration.
 type ReplaceSpecType struct {
@@ -114,7 +114,7 @@ func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorType
 
 // Get token
 //
-// x-displayName: "Specification"
+// x-displayName: "Get Token"
 // Get token. token object is used to manage site admission. User must generate token before provisioning and pass this
 // token to site during it's registration.
 type GetSpecType struct {

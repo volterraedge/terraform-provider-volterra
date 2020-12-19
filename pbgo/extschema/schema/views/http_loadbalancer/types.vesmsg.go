@@ -1844,9 +1844,11 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
 
+	v.FldValidators["hash_policy_choice.cookie_stickiness"] = ves_io_schema_route.CookieForHashingValidator().Validate
 	v.FldValidators["hash_policy_choice.ring_hash"] = HashPolicyListTypeValidator().Validate
 
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
+	v.FldValidators["loadbalancer_type.https_auto_cert"] = ProxyTypeHttpsAutoCertsValidator().Validate
 
 	v.FldValidators["rate_limit_choice.rate_limit"] = RateLimitConfigTypeValidator().Validate
 
@@ -3727,9 +3729,11 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
 
+	v.FldValidators["hash_policy_choice.cookie_stickiness"] = ves_io_schema_route.CookieForHashingValidator().Validate
 	v.FldValidators["hash_policy_choice.ring_hash"] = HashPolicyListTypeValidator().Validate
 
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
+	v.FldValidators["loadbalancer_type.https_auto_cert"] = ProxyTypeHttpsAutoCertsValidator().Validate
 
 	v.FldValidators["rate_limit_choice.rate_limit"] = RateLimitConfigTypeValidator().Validate
 
@@ -4500,6 +4504,86 @@ func (v *ValidateGlobalSpecType) WafExclusionRulesValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) BlockedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*SimpleClientSrcRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for blocked_clients")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*SimpleClientSrcRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*SimpleClientSrcRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated blocked_clients")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items blocked_clients")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) TrustedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*SimpleClientSrcRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for trusted_clients")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*SimpleClientSrcRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*SimpleClientSrcRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated trusted_clients")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items trusted_clients")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -4631,6 +4715,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("auto_cert_state"))
 		if err := fv(ctx, m.GetAutoCertState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["blocked_clients"]; exists {
+		vOpts := append(opts, db.WithValidateField("blocked_clients"))
+		if err := fv(ctx, m.GetBlockedClients(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4978,6 +5070,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["trusted_clients"]; exists {
+		vOpts := append(opts, db.WithValidateField("trusted_clients"))
+		if err := fv(ctx, m.GetTrustedClients(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["user_identification"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("user_identification"))
@@ -5196,15 +5296,41 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["waf_exclusion_rules"] = vFn
 
+	vrhBlockedClients := v.BlockedClientsValidationRuleHandler
+	rulesBlockedClients := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "256",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhBlockedClients(rulesBlockedClients)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.blocked_clients: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_clients"] = vFn
+
+	vrhTrustedClients := v.TrustedClientsValidationRuleHandler
+	rulesTrustedClients := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "256",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhTrustedClients(rulesTrustedClients)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.trusted_clients: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["trusted_clients"] = vFn
+
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
 
 	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
 
+	v.FldValidators["hash_policy_choice.cookie_stickiness"] = ves_io_schema_route.CookieForHashingValidator().Validate
 	v.FldValidators["hash_policy_choice.ring_hash"] = HashPolicyListTypeValidator().Validate
 
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
+	v.FldValidators["loadbalancer_type.https_auto_cert"] = ProxyTypeHttpsAutoCertsValidator().Validate
 
 	v.FldValidators["rate_limit_choice.rate_limit"] = RateLimitConfigTypeValidator().Validate
 
@@ -5594,6 +5720,84 @@ func MirrorPolicyTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ProxyTypeHttp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ProxyTypeHttp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ProxyTypeHttp) DeepCopy() *ProxyTypeHttp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ProxyTypeHttp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ProxyTypeHttp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ProxyTypeHttp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ProxyTypeHttpValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateProxyTypeHttp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateProxyTypeHttp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ProxyTypeHttp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ProxyTypeHttp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_volterra_managed"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_volterra_managed"))
+		if err := fv(ctx, m.GetDnsVolterraManaged(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultProxyTypeHttpValidator = func() *ValidateProxyTypeHttp {
+	v := &ValidateProxyTypeHttp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ProxyTypeHttpValidator() db.Validator {
+	return DefaultProxyTypeHttpValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ProxyTypeHttps) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -5777,12 +5981,23 @@ func (v *ValidateProxyTypeHttpsAutoCerts) Validate(ctx context.Context, pm inter
 
 	}
 
+	if fv, exists := v.FldValidators["tls_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tls_config"))
+		if err := fv(ctx, m.GetTlsConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultProxyTypeHttpsAutoCertsValidator = func() *ValidateProxyTypeHttpsAutoCerts {
 	v := &ValidateProxyTypeHttpsAutoCerts{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["tls_config"] = ves_io_schema_views.TlsConfigValidator().Validate
 
 	return v
 }()
@@ -7267,9 +7482,11 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
 
+	v.FldValidators["hash_policy_choice.cookie_stickiness"] = ves_io_schema_route.CookieForHashingValidator().Validate
 	v.FldValidators["hash_policy_choice.ring_hash"] = HashPolicyListTypeValidator().Validate
 
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
+	v.FldValidators["loadbalancer_type.https_auto_cert"] = ProxyTypeHttpsAutoCertsValidator().Validate
 
 	v.FldValidators["rate_limit_choice.rate_limit"] = RateLimitConfigTypeValidator().Validate
 
@@ -9628,6 +9845,248 @@ var DefaultServicePolicyListValidator = func() *ValidateServicePolicyList {
 
 func ServicePolicyListValidator() db.Validator {
 	return DefaultServicePolicyListValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SimpleClientSrcRule) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SimpleClientSrcRule) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SimpleClientSrcRule) DeepCopy() *SimpleClientSrcRule {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SimpleClientSrcRule{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SimpleClientSrcRule) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SimpleClientSrcRule) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SimpleClientSrcRuleValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSimpleClientSrcRule struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSimpleClientSrcRule) ClientSourceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for client_source_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateSimpleClientSrcRule) ClientSourceChoiceIpPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_IpPrefix, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_prefix")
+	}
+	return oValidatorFn_IpPrefix, nil
+}
+func (v *ValidateSimpleClientSrcRule) ClientSourceChoiceAsNumberValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AsNumber, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for as_number")
+	}
+	return oValidatorFn_AsNumber, nil
+}
+
+func (v *ValidateSimpleClientSrcRule) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSimpleClientSrcRule) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSimpleClientSrcRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SimpleClientSrcRule)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SimpleClientSrcRule got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["client_source_choice"]; exists {
+		val := m.GetClientSourceChoice()
+		vOpts := append(opts,
+			db.WithValidateField("client_source_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClientSourceChoice().(type) {
+	case *SimpleClientSrcRule_IpPrefix:
+		if fv, exists := v.FldValidators["client_source_choice.ip_prefix"]; exists {
+			val := m.GetClientSourceChoice().(*SimpleClientSrcRule_IpPrefix).IpPrefix
+			vOpts := append(opts,
+				db.WithValidateField("client_source_choice"),
+				db.WithValidateField("ip_prefix"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SimpleClientSrcRule_AsNumber:
+		if fv, exists := v.FldValidators["client_source_choice.as_number"]; exists {
+			val := m.GetClientSourceChoice().(*SimpleClientSrcRule_AsNumber).AsNumber
+			vOpts := append(opts,
+				db.WithValidateField("client_source_choice"),
+				db.WithValidateField("as_number"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
+		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSimpleClientSrcRuleValidator = func() *ValidateSimpleClientSrcRule {
+	v := &ValidateSimpleClientSrcRule{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhClientSourceChoice := v.ClientSourceChoiceValidationRuleHandler
+	rulesClientSourceChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhClientSourceChoice(rulesClientSourceChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleClientSrcRule.client_source_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["client_source_choice"] = vFn
+
+	vrhClientSourceChoiceIpPrefix := v.ClientSourceChoiceIpPrefixValidationRuleHandler
+	rulesClientSourceChoiceIpPrefix := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.string.ipv4_prefix": "true",
+	}
+	vFnMap["client_source_choice.ip_prefix"], err = vrhClientSourceChoiceIpPrefix(rulesClientSourceChoiceIpPrefix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleClientSrcRule.client_source_choice_ip_prefix: %s", err)
+		panic(errMsg)
+	}
+	vrhClientSourceChoiceAsNumber := v.ClientSourceChoiceAsNumberValidationRuleHandler
+	rulesClientSourceChoiceAsNumber := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.lte":       "401308",
+	}
+	vFnMap["client_source_choice.as_number"], err = vrhClientSourceChoiceAsNumber(rulesClientSourceChoiceAsNumber)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleClientSrcRule.client_source_choice_as_number: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["client_source_choice.ip_prefix"] = vFnMap["client_source_choice.ip_prefix"]
+	v.FldValidators["client_source_choice.as_number"] = vFnMap["client_source_choice.as_number"]
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleClientSrcRule.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhDescription := v.DescriptionValidationRuleHandler
+	rulesDescription := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhDescription(rulesDescription)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleClientSrcRule.description: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["description"] = vFn
+
+	return v
+}()
+
+func SimpleClientSrcRuleValidator() db.Validator {
+	return DefaultSimpleClientSrcRuleValidator
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields

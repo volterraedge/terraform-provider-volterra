@@ -58,6 +58,18 @@ func resourceVolterraVirtualK8S() *schema.Resource {
 				Required: true,
 			},
 
+			"disabled": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"isolated": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"vsite_refs": {
 
 				Type:     schema.TypeList,
@@ -140,6 +152,32 @@ func resourceVolterraVirtualK8SCreate(d *schema.ResourceData, meta interface{}) 
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		createMeta.Namespace =
 			v.(string)
+	}
+
+	serviceIsolationChoiceTypeFound := false
+
+	if v, ok := d.GetOk("disabled"); ok && !serviceIsolationChoiceTypeFound {
+
+		serviceIsolationChoiceTypeFound = true
+
+		if v.(bool) {
+			serviceIsolationChoiceInt := &ves_io_schema_virtual_k8s.CreateSpecType_Disabled{}
+			serviceIsolationChoiceInt.Disabled = &ves_io_schema.Empty{}
+			createSpec.ServiceIsolationChoice = serviceIsolationChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("isolated"); ok && !serviceIsolationChoiceTypeFound {
+
+		serviceIsolationChoiceTypeFound = true
+
+		if v.(bool) {
+			serviceIsolationChoiceInt := &ves_io_schema_virtual_k8s.CreateSpecType_Isolated{}
+			serviceIsolationChoiceInt.Isolated = &ves_io_schema.Empty{}
+			createSpec.ServiceIsolationChoice = serviceIsolationChoiceInt
+		}
+
 	}
 
 	if v, ok := d.GetOk("vsite_refs"); ok && !isIntfNil(v) {
@@ -270,6 +308,32 @@ func resourceVolterraVirtualK8SUpdate(d *schema.ResourceData, meta interface{}) 
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		updateMeta.Namespace =
 			v.(string)
+	}
+
+	serviceIsolationChoiceTypeFound := false
+
+	if v, ok := d.GetOk("disabled"); ok && !serviceIsolationChoiceTypeFound {
+
+		serviceIsolationChoiceTypeFound = true
+
+		if v.(bool) {
+			serviceIsolationChoiceInt := &ves_io_schema_virtual_k8s.ReplaceSpecType_Disabled{}
+			serviceIsolationChoiceInt.Disabled = &ves_io_schema.Empty{}
+			updateSpec.ServiceIsolationChoice = serviceIsolationChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("isolated"); ok && !serviceIsolationChoiceTypeFound {
+
+		serviceIsolationChoiceTypeFound = true
+
+		if v.(bool) {
+			serviceIsolationChoiceInt := &ves_io_schema_virtual_k8s.ReplaceSpecType_Isolated{}
+			serviceIsolationChoiceInt.Isolated = &ves_io_schema.Empty{}
+			updateSpec.ServiceIsolationChoice = serviceIsolationChoiceInt
+		}
+
 	}
 
 	if v, ok := d.GetOk("vsite_refs"); ok && !isIntfNil(v) {

@@ -51,13 +51,19 @@ var _ = math.Inf
 type GetResponseFormatCode int32
 
 const (
+	// x-displayName: "Default Format"
+	// Default format of returned resource
 	GET_RSP_FORMAT_DEFAULT GetResponseFormatCode = 0
+	// x-displayName: "Create request Format"
 	// Response should be in CreateRequest format
 	GET_RSP_FORMAT_FOR_CREATE GetResponseFormatCode = 1
+	// x-displayName: "Replace request format"
 	// Response should be in ReplaceRequest format
 	GET_RSP_FORMAT_FOR_REPLACE GetResponseFormatCode = 2
+	// x-displayName: "Status format"
 	// Response should be in StatusObject(s) format
 	GET_RSP_FORMAT_STATUS GetResponseFormatCode = 3
+	// x-displayName: "GetSpecType format"
 	// Response should be in format of GetSpecType
 	GET_RSP_FORMAT_READ GetResponseFormatCode = 4
 )
@@ -1302,30 +1308,30 @@ const _ = grpc.SupportPackageIsVersion4
 type APIClient interface {
 	// Create a Protocol policer object
 	//
-	// x-displayName: "Create a Protocol Policer Object"
+	// x-displayName: "Create Protocol Policer"
 	// Create a protocol_policer object, protocol_policer object contains list
 	// of L4 protocol match condition and corresponding traffic rate limits
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Get a Protocol policer object
 	//
-	// x-displayName: "Get a Protocol Policer Object"
+	// x-displayName: "Get Protocol Policer"
 	// Get specification of a protocol_policer object with L4 protocol match condition and
 	// corresponding traffic rate limits
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Protocol Policer"
 	// List the set of protocol_policer in a namespace
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// Replace a Protocol policer object
 	//
-	// x-displayName: "Replace a Protocol Policer Object"
+	// x-displayName: "Replace Protocol Policer"
 	// Replace a protocol_policer object with new L4 protocol match condition and
 	// corresponding traffic rate limits
 	Replace(ctx context.Context, in *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete Protocol Policer"
 	// Delete the specified protocol_policer
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf3.Empty, error)
 }
@@ -1388,30 +1394,30 @@ func (c *aPIClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.
 type APIServer interface {
 	// Create a Protocol policer object
 	//
-	// x-displayName: "Create a Protocol Policer Object"
+	// x-displayName: "Create Protocol Policer"
 	// Create a protocol_policer object, protocol_policer object contains list
 	// of L4 protocol match condition and corresponding traffic rate limits
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// Get a Protocol policer object
 	//
-	// x-displayName: "Get a Protocol Policer Object"
+	// x-displayName: "Get Protocol Policer"
 	// Get specification of a protocol_policer object with L4 protocol match condition and
 	// corresponding traffic rate limits
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Protocol Policer"
 	// List the set of protocol_policer in a namespace
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	// Replace a Protocol policer object
 	//
-	// x-displayName: "Replace a Protocol Policer Object"
+	// x-displayName: "Replace Protocol Policer"
 	// Replace a protocol_policer object with new L4 protocol match condition and
 	// corresponding traffic rate limits
 	Replace(context.Context, *ReplaceRequest) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete Protocol Policer"
 	// Delete the specified protocol_policer
 	Delete(context.Context, *DeleteRequest) (*google_protobuf3.Empty, error)
 }

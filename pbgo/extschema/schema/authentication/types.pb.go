@@ -87,6 +87,12 @@ func (m *OIDCAuthParams) GetEndSessionEndpointUrl() string {
 }
 
 type OIDCAuthType struct {
+	// OIDC Endpoint Configuration
+	//
+	// x-displayName: "OIDC Endpoint Configuration"
+	// x-required
+	// Configure OIDC Endpoints
+	//
 	// Types that are valid to be assigned to AuthParamsChoice:
 	//	*OIDCAuthType_OidcWellKnownConfigUrl
 	//	*OIDCAuthType_OidcAuthParams
@@ -323,9 +329,32 @@ func (m *KMSKeyRefType) GetAuthHmacKms() *ves_io_schema_views.ObjectRefType {
 // x-displayName: "Cookie Parameters"
 // Specifies different cookie related config parameters for authentication
 type CookieParams struct {
+	// cookie refresh interval
+	//
+	// x-displayName: "Cookie Refresh Interval"
+	// x-example: 3600
+	// Specifies in seconds refresh interval for session cookie.
+	// This is used to keep the active user active and reduce re-login.
+	// When an incoming cookie's session expiry is still valid, and time to expire falls behind this interval,
+	// re-issue a cookie with new expiry and with the same original session expiry.
+	// Default refresh interval is 3000 seconds
 	CookieRefreshInterval uint32 `protobuf:"varint,1,opt,name=cookie_refresh_interval,json=cookieRefreshInterval,proto3" json:"cookie_refresh_interval,omitempty"`
-	CookieExpiry          uint32 `protobuf:"varint,2,opt,name=cookie_expiry,json=cookieExpiry,proto3" json:"cookie_expiry,omitempty"`
-	SessionExpiry         uint32 `protobuf:"varint,3,opt,name=session_expiry,json=sessionExpiry,proto3" json:"session_expiry,omitempty"`
+	// cookie expiry
+	//
+	// x-displayName: "Cookie Expiry duration"
+	// x-example: 5000
+	// specifies in seconds max duration of the allocated cookie. This maps to “Max-Age” attribute in the session cookie.
+	// This will act as an expiry duration on the client side after which client will not  be setting the
+	// cookie as part of the request.
+	// Default cookie expiry is 3600 seconds
+	CookieExpiry uint32 `protobuf:"varint,2,opt,name=cookie_expiry,json=cookieExpiry,proto3" json:"cookie_expiry,omitempty"`
+	// session expiry
+	//
+	// x-displayName: "Session Expiry duration"
+	// x-example: 36000
+	// specifies in seconds max lifetime of an authenticated session after which the user will be forced to login again.
+	// Default session expiry is 86400 seconds(24 hours).
+	SessionExpiry uint32 `protobuf:"varint,3,opt,name=session_expiry,json=sessionExpiry,proto3" json:"session_expiry,omitempty"`
 	// HMAC Choice
 	//
 	// x-displayName: "Select HMAC Type"
@@ -482,6 +511,7 @@ type GlobalSpecType struct {
 	// Authentication Type
 	//
 	// x-displayName: "Authentication Type"
+	// x-required
 	// Select Authentication Type
 	//
 	// Types that are valid to be assigned to AuthTypeChoice:
@@ -590,7 +620,7 @@ func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
 
 // Create Authentication Object
 //
-// x-displayName: "Authentication Specification"
+// x-displayName: "Create Authentication"
 type CreateSpecType struct {
 	// Types that are valid to be assigned to AuthTypeChoice:
 	//	*CreateSpecType_OidcAuth
@@ -693,7 +723,7 @@ func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
 
 // Replace Authentication
 //
-// x-displayName: "Authentication Specification"
+// x-displayName: "Replace Authentication"
 type ReplaceSpecType struct {
 	// Types that are valid to be assigned to AuthTypeChoice:
 	//	*ReplaceSpecType_OidcAuth
@@ -796,7 +826,7 @@ func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
 
 // Get Authentication
 //
-// x-displayName: "Authentication Specification"
+// x-displayName: "Get Authentication"
 type GetSpecType struct {
 	// Types that are valid to be assigned to AuthTypeChoice:
 	//	*GetSpecType_OidcAuth

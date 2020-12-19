@@ -2268,6 +2268,8 @@ var APISwaggerJSON string = `{
         },
         "network_policy_viewApplicationEnumType": {
             "type": "string",
+            "description": "Application protocols like HTTP, SNMP\n",
+            "title": "Applications",
             "enum": [
                 "APPLICATION_HTTP",
                 "APPLICATION_HTTPS",
@@ -2275,7 +2277,7 @@ var APISwaggerJSON string = `{
                 "APPLICATION_DNS"
             ],
             "default": "APPLICATION_HTTP",
-            "x-displayname": "",
+            "x-displayname": "Applications",
             "x-ves-proto-enum": "ves.io.schema.views.network_policy_view.ApplicationEnumType"
         },
         "network_policy_viewApplicationsType": {
@@ -2455,12 +2457,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "port_ranges": {
                     "type": "array",
-                    "description": " ist of port ranges as match criteria\n Range is expressed as start port and end port\n\nExample: - \"100-200\"-",
+                    "description": " List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192\n\nExample: - \"100-200\"-",
                     "title": "ports",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "List Port of Ranges",
+                    "x-displayname": "List of Port Ranges",
                     "x-ves-example": "100-200"
                 },
                 "protocol": {
@@ -2476,7 +2478,9 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.network_policy_view.SpecType",
             "properties": {
                 "gc_spec": {
-                    "$ref": "#/definitions/viewsnetwork_policy_viewGlobalSpecType"
+                    "title": "gc_spec",
+                    "$ref": "#/definitions/viewsnetwork_policy_viewGlobalSpecType",
+                    "x-displayname": "GC Spec"
                 }
             }
         },

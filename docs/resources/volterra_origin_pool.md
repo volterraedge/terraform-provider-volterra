@@ -23,14 +23,10 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "public_ip public_name private_ip private_name k8s_service consul_service custom_endpoint_object" must be set
+    // One of the arguments from this list "consul_service custom_endpoint_object public_ip public_name private_ip private_name k8s_service" must be set
 
-    custom_endpoint_object {
-      endpoint {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
+    public_ip {
+      ip = "ip"
     }
 
     labels = {
@@ -227,7 +223,7 @@ Subset load balancing is enabled. Based on route, subset of origin servers will 
 
 List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class..
 
-`keys` - (Optional) List of keys that define a cluster subset. (`String`).
+`keys` - (Optional) List of keys that define a cluster subset class. (`String`).
 
 ### Fail Request
 
@@ -383,7 +379,7 @@ Site or Virtual site where this origin server is located.
 
 ### Skip Server Verification
 
-Skip Server Verification.
+Skip origin server verification.
 
 ### Tls Certificates
 
@@ -409,7 +405,7 @@ TLS parameters such as min/max TLS version and ciphers.
 
 ### Use Host Header As Sni
 
-Use the host header as SNI - not supported..
+Use the host header as SNI. The host header value is extracted after any configured rewrites have been applied..
 
 ### Use Mtls
 
@@ -419,7 +415,7 @@ Use MTLS for this pool using provided certificates.
 
 ### Use Server Verification
 
-Verify server identity using provided information.
+Perform origin server verification using the provided trusted CA list.
 
 `trusted_ca_url` - (Required) Trusted CA certificates for verification of Server's certificate (`String`).
 
@@ -431,9 +427,9 @@ Origin servers use TLS.
 
 `use_mtls` - (Optional) Use MTLS for this pool using provided certificates. See [Use Mtls ](#use-mtls) below for details.
 
-`skip_server_verification` - (Optional) Skip Server Verification (bool).
+`skip_server_verification` - (Optional) Skip origin server verification (bool).
 
-`use_server_verification` - (Optional) Verify server identity using provided information. See [Use Server Verification ](#use-server-verification) below for details.
+`use_server_verification` - (Optional) Perform origin server verification using the provided trusted CA list. See [Use Server Verification ](#use-server-verification) below for details.
 
 `volterra_trusted_ca` - (Optional) Perform origin server verification using Volterra default trusted CA list (bool).
 
@@ -441,7 +437,7 @@ Origin servers use TLS.
 
 `sni` - (Optional) SNI value to be used. (`String`).
 
-`use_host_header_as_sni` - (Optional) Use the host header as SNI - not supported. (bool).
+`use_host_header_as_sni` - (Optional) Use the host header as SNI. The host header value is extracted after any configured rewrites have been applied. (bool).
 
 `tls_config` - (Required) TLS parameters such as min/max TLS version and ciphers. See [Tls Config ](#tls-config) below for details.
 

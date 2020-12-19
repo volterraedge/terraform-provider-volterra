@@ -337,23 +337,45 @@ func (v *ValidateBFSecretChoice) Validate(ctx context.Context, pm interface{}, o
 	}
 
 	switch m.GetChoice().(type) {
-	case *BFSecretChoice_VesAllowVolterraAll:
-		if fv, exists := v.FldValidators["choice.ves_allow_volterra_all"]; exists {
-			val := m.GetChoice().(*BFSecretChoice_VesAllowVolterraAll).VesAllowVolterraAll
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("ves_allow_volterra_all"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *BFSecretChoice_VesContainerRegistryPassword:
 		if fv, exists := v.FldValidators["choice.ves_container_registry_password"]; exists {
 			val := m.GetChoice().(*BFSecretChoice_VesContainerRegistryPassword).VesContainerRegistryPassword
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("ves_container_registry_password"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BFSecretChoice_VesAlertReceiverSlackUrl:
+		if fv, exists := v.FldValidators["choice.ves_alert_receiver_slack_url"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesAlertReceiverSlackUrl).VesAlertReceiverSlackUrl
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_alert_receiver_slack_url"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BFSecretChoice_VesAlertReceiverPagerdutyRoutingKey:
+		if fv, exists := v.FldValidators["choice.ves_alert_receiver_pagerduty_routing_key"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesAlertReceiverPagerdutyRoutingKey).VesAlertReceiverPagerdutyRoutingKey
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_alert_receiver_pagerduty_routing_key"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BFSecretChoice_VesAlertReceiverOpsgenieApiKey:
+		if fv, exists := v.FldValidators["choice.ves_alert_receiver_opsgenie_api_key"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesAlertReceiverOpsgenieApiKey).VesAlertReceiverOpsgenieApiKey
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_alert_receiver_opsgenie_api_key"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -429,6 +451,30 @@ func (v *ValidateBFSecretInfo) Validate(ctx context.Context, pm interface{}, opt
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["gc_services"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gc_services"))
+		for idx, item := range m.GetGcServices() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["non_gc_services"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("non_gc_services"))
+		for idx, item := range m.GetNonGcServices() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["policy_id"]; exists {
@@ -716,6 +762,96 @@ var DefaultReEncryptSecretsTypeValidator = func() *ValidateReEncryptSecretsType 
 
 func ReEncryptSecretsTypeValidator() db.Validator {
 	return DefaultReEncryptSecretsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ServiceInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ServiceInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ServiceInfo) DeepCopy() *ServiceInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ServiceInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ServiceInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ServiceInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ServiceInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateServiceInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateServiceInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ServiceInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ServiceInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["daemon"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("daemon"))
+		if err := fv(ctx, m.GetDaemon(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["locations"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("locations"))
+		for idx, item := range m.GetLocations() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultServiceInfoValidator = func() *ValidateServiceInfo {
+	v := &ValidateServiceInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ServiceInfoValidator() db.Validator {
+	return DefaultServiceInfoValidator
 }
 
 // augmented methods on protoc/std generated struct

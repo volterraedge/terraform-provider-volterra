@@ -61,7 +61,7 @@ func (m *GlobalSpecType) GetAsNumbers() []uint32 {
 
 // Create bgp asn set
 //
-// x-displayName: "Specification"
+// x-displayName: "Create BGP ASN Set"
 // Create bgp_asn_set creates a new object in the storage backend for metadata.namespace.
 type CreateSpecType struct {
 	AsNumbers []uint32 `protobuf:"varint,1,rep,packed,name=as_numbers,json=asNumbers" json:"as_numbers,omitempty"`
@@ -80,7 +80,7 @@ func (m *CreateSpecType) GetAsNumbers() []uint32 {
 
 // Replace bgp asn set
 //
-// x-displayName: "Specification"
+// x-displayName: "Replace BGP ASN Set"
 // Replace bgp_asn_set replaces an existing object in the storage backend for metadata.namespace.
 type ReplaceSpecType struct {
 	AsNumbers []uint32 `protobuf:"varint,1,rep,packed,name=as_numbers,json=asNumbers" json:"as_numbers,omitempty"`
@@ -99,7 +99,7 @@ func (m *ReplaceSpecType) GetAsNumbers() []uint32 {
 
 // Get bgp asn set
 //
-// x-displayName: "Specification"
+// x-displayName: "Get BGP ASN Set"
 // Get bgp_asn_set reads a given object from storage backend for metadata.namespace.
 type GetSpecType struct {
 	AsNumbers []uint32 `protobuf:"varint,1,rep,packed,name=as_numbers,json=asNumbers" json:"as_numbers,omitempty"`

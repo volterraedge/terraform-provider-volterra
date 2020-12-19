@@ -481,6 +481,15 @@ func (c *CustomAPIInprocClient) CustomCreate(ctx context.Context, in *CustomCrea
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.role.CustomAPI.CustomCreate"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.CustomCreate(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -515,6 +524,15 @@ func (c *CustomAPIInprocClient) CustomGet(ctx context.Context, in *CustomGetRequ
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.role.CustomAPI.CustomGet"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.CustomGet(ctx, in)
 	if err != nil {
@@ -551,6 +569,15 @@ func (c *CustomAPIInprocClient) CustomList(ctx context.Context, in *CustomListRe
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.role.CustomAPI.CustomList"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.CustomList(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -585,6 +612,15 @@ func (c *CustomAPIInprocClient) CustomReplace(ctx context.Context, in *CustomRep
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.role.CustomAPI.CustomReplace"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.CustomReplace(ctx, in)
 	if err != nil {
@@ -965,7 +1001,7 @@ var CustomAPISwaggerJSON string = `{
             "type": "object",
             "description": "Creates a role",
             "title": "Role",
-            "x-displayname": "Role",
+            "x-displayname": "Create Role",
             "x-ves-proto-message": "ves.io.schema.role.CreateSpecType"
         },
         "roleCustomCreateRequest": {
@@ -1093,7 +1129,7 @@ var CustomAPISwaggerJSON string = `{
             "type": "object",
             "description": "Reads a role",
             "title": "Role",
-            "x-displayname": "Role",
+            "x-displayname": "Get Role",
             "x-ves-proto-message": "ves.io.schema.role.GetSpecType",
             "properties": {
                 "rbac_policy": {
@@ -1158,7 +1194,7 @@ var CustomAPISwaggerJSON string = `{
             "type": "object",
             "description": "Amends a role",
             "title": "Role",
-            "x-displayname": "Role",
+            "x-displayname": "Replace Role",
             "x-ves-proto-message": "ves.io.schema.role.ReplaceSpecType"
         },
         "roleRole": {

@@ -1965,7 +1965,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1977,7 +1977,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2235,7 +2235,6 @@ var APISwaggerJSON string = `{
             "description": "API to create cloud_credentials object",
             "title": "Create cloud_credentials",
             "x-displayname": "Create Cloud Credentials",
-            "x-ves-displayorder": "1,2,3,4",
             "x-ves-oneof-field-cloud": "[\"aws_secret_key\",\"azure_client_secret\",\"azure_pfx_certificate\",\"gcp_cred_file\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_credentials.CreateSpecType",
             "properties": {
@@ -2335,7 +2334,7 @@ var APISwaggerJSON string = `{
         },
         "cloud_credentialsGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2351,7 +2350,6 @@ var APISwaggerJSON string = `{
             "description": "API to Get cloud_credentials object",
             "title": "Get cloud_credentials",
             "x-displayname": "Get Cloud Credentials",
-            "x-ves-displayorder": "1,2,3,4",
             "x-ves-oneof-field-cloud": "[\"aws_secret_key\",\"azure_client_secret\",\"azure_pfx_certificate\",\"gcp_cred_file\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_credentials.GetSpecType",
             "properties": {
@@ -2586,7 +2584,6 @@ var APISwaggerJSON string = `{
             "description": "API to replace cloud_credentials object",
             "title": "Replace cloud_credentials",
             "x-displayname": "Replace Cloud Credentials",
-            "x-ves-displayorder": "1,2,3,4",
             "x-ves-oneof-field-cloud": "[\"aws_secret_key\",\"azure_client_secret\",\"azure_pfx_certificate\",\"gcp_cred_file\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_credentials.ReplaceSpecType",
             "properties": {
@@ -3062,7 +3059,7 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretEncodingType": {
             "type": "string",
-            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: No Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
             "title": "SecretEncodingType",
             "enum": [
                 "EncodingNone",

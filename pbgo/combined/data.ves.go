@@ -1064,24 +1064,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.address_allocator.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.address_allocator.StatusObject"] = oInfo
@@ -1508,24 +1512,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.advertise_policy.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.advertise_policy.StatusObject"] = oInfo
@@ -1965,24 +1973,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.alert_policy.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.alert_policy.StatusObject"] = oInfo
@@ -2471,24 +2483,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.alert_policy_set.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.alert_policy_set.StatusObject"] = oInfo
@@ -2928,24 +2944,32 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
+	oInfo.ReEncryptSecrets["ves.io.schema.alert_receiver.Object.spec.gc_spec.receiver.slack.url"] = uint64(1000002)
+	oInfo.ReEncryptSecrets["ves.io.schema.alert_receiver.Object.spec.gc_spec.receiver.pagerduty.routing_key"] = uint64(1000003)
+	oInfo.ReEncryptSecrets["ves.io.schema.alert_receiver.Object.spec.gc_spec.receiver.opsgenie.api_key"] = uint64(1000004)
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.alert_receiver.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.alert_receiver.StatusObject"] = oInfo
@@ -3529,12 +3553,14 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.api_credential.Object"] = oInfo
@@ -3549,12 +3575,14 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.api_credential.StatusObject"] = oInfo
@@ -3697,7 +3725,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.api_credential.GetResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/api_credentials/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -3710,7 +3738,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.api_credential.ListResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/api_credentials"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -3723,7 +3751,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.api_credential.ListResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/service_credentials"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListServiceCredentials")] = rpcInfo
@@ -4094,7 +4122,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.app_type.APIEndpointPDFRsp",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_types/{app_type_name}/api_endpoint/pdf"}}
 	aInfo.RPCsInfo[svcfw.RPCName("APIEndpointPDF")] = rpcInfo
@@ -4107,7 +4135,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.app_type.APIEndpointsRsp",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_types/{app_type_name}/api_endpoints"}}
 	aInfo.RPCsInfo[svcfw.RPCName("APIEndpoints")] = rpcInfo
@@ -4120,7 +4148,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.app_type.APIEndpointLearntSchemaRsp",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_types/{app_type_name}/api_endpoint/learnt_schema"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetAPIEndpointLearntSchema")] = rpcInfo
@@ -4133,7 +4161,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.app_type.APIEndpointPDFRsp",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_types/{app_type_name}/services/{service_name}/api_endpoint/pdf"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetServiceAPIEndpointPDF")] = rpcInfo
@@ -4146,7 +4174,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.app_type.APIEndpointsRsp",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_types/{app_type_name}/services/{service_name}/api_endpoints"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetServiceAPIEndpoints")] = rpcInfo
@@ -4185,7 +4213,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.app_type.OverridesRsp",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_types/{app_type_name}/overrides"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Overrides")] = rpcInfo
@@ -4311,24 +4339,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.app_type.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.app_type.StatusObject"] = oInfo
@@ -4597,6 +4629,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.app_type.PDFSpec"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "PDFStat",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.app_type.PDFStat"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "ReplaceSpecType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -4817,24 +4856,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.authentication.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.authentication.StatusObject"] = oInfo
@@ -5309,24 +5352,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.bgp.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.bgp.StatusObject"] = oInfo
@@ -5794,24 +5841,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.bgp_asn_set.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.bgp_asn_set.StatusObject"] = oInfo
@@ -6251,24 +6302,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.certified_hardware.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.certified_hardware.StatusObject"] = oInfo
@@ -6704,24 +6759,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.cloud_credentials.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.cloud_credentials.StatusObject"] = oInfo
@@ -7189,24 +7248,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.cluster.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.cluster.StatusObject"] = oInfo
@@ -7674,24 +7737,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.discovery.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.discovery.StatusObject"] = oInfo
@@ -8236,24 +8303,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.endpoint.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.endpoint.StatusObject"] = oInfo
@@ -8742,24 +8813,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.fast_acl.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.fast_acl.StatusObject"] = oInfo
@@ -8971,7 +9046,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.fast_acl.FastACLHitsResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/fast_acl/hits"}}
 	aInfo.RPCsInfo[svcfw.RPCName("FastACLHits")] = rpcInfo
@@ -9331,24 +9406,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.fast_acl_rule.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.fast_acl_rule.StatusObject"] = oInfo
@@ -9795,24 +9874,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.fast_acl_set.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.fast_acl_set.StatusObject"] = oInfo
@@ -10252,24 +10335,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.fleet.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.fleet.StatusObject"] = oInfo
@@ -10954,24 +11041,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.healthcheck.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.healthcheck.StatusObject"] = oInfo
@@ -11425,24 +11516,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.ip_prefix_set.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.ip_prefix_set.StatusObject"] = oInfo
@@ -11895,7 +11990,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.log.LogAggregationResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/access_logs/aggregation"}}
 	aInfo.RPCsInfo[svcfw.RPCName("AccessLogAggregationQuery")] = rpcInfo
@@ -11908,7 +12003,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/access_logs"}}
 	aInfo.RPCsInfo[svcfw.RPCName("AccessLogQueryV2")] = rpcInfo
@@ -11921,7 +12016,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/access_logs/scroll"}}
 	aInfo.RPCsInfo[svcfw.RPCName("AccessLogScrollQuery")] = rpcInfo
@@ -11934,7 +12029,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.log.LogAggregationResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/audit_logs/aggregation"}}
 	aInfo.RPCsInfo[svcfw.RPCName("AuditLogAggregationQuery")] = rpcInfo
@@ -11947,7 +12042,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/audit_logs"}}
 	aInfo.RPCsInfo[svcfw.RPCName("AuditLogQueryV2")] = rpcInfo
@@ -11960,7 +12055,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/audit_logs/scroll"}}
 	aInfo.RPCsInfo[svcfw.RPCName("AuditLogScrollQuery")] = rpcInfo
@@ -11973,7 +12068,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.log.LogAggregationResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/firewall_logs/aggregation"}}
 	aInfo.RPCsInfo[svcfw.RPCName("FirewallLogAggregationQuery")] = rpcInfo
@@ -11986,7 +12081,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/firewall_logs"}}
 	aInfo.RPCsInfo[svcfw.RPCName("FirewallLogQuery")] = rpcInfo
@@ -11999,7 +12094,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/firewall_logs/scroll"}}
 	aInfo.RPCsInfo[svcfw.RPCName("FirewallLogScrollQuery")] = rpcInfo
@@ -12012,7 +12107,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.log.LogAggregationResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/vk8s_audit_logs/aggregation"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VK8SAuditLogAggregationQuery")] = rpcInfo
@@ -12025,7 +12120,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/vk8s_audit_logs"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VK8SAuditLogQuery")] = rpcInfo
@@ -12038,7 +12133,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/vk8s_audit_logs/scroll"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VK8SAuditLogScrollQuery")] = rpcInfo
@@ -12051,7 +12146,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.log.LogAggregationResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/vk8s_events/aggregation"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VK8SEventsAggregationQuery")] = rpcInfo
@@ -12064,7 +12159,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/vk8s_events"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VK8SEventsQuery")] = rpcInfo
@@ -12077,7 +12172,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.log.LogResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/vk8s_events/scroll"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VK8SEventsScrollQuery")] = rpcInfo
@@ -12503,24 +12598,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.malicious_user_mitigation.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.malicious_user_mitigation.StatusObject"] = oInfo
@@ -13009,12 +13108,14 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.namespace.Object"] = oInfo
@@ -13255,12 +13356,25 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetActiveNetworkPolicies",
+		InMsgType:    "ves.io.schema.namespace.GetActiveNetworkPoliciesRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.namespace.GetActiveNetworkPoliciesResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/active_network_policies"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetActiveNetworkPolicies")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.namespace.NamespaceCustomAPI.GetActiveNetworkPolicies"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
 		Name:         "GetActiveServicePolicies",
 		InMsgType:    "ves.io.schema.namespace.GetActiveServicePoliciesRequest",
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.namespace.GetActiveServicePoliciesResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/active_service_policies"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetActiveServicePolicies")] = rpcInfo
@@ -13273,12 +13387,25 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.namespace.GetFastACLsForInternetVIPsResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/fast_acls_for_internet_vips"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetFastACLsForInternetVIPs")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.namespace.NamespaceCustomAPI.GetFastACLsForInternetVIPs"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "SetActiveNetworkPolicies",
+		InMsgType:    "ves.io.schema.namespace.SetActiveNetworkPoliciesRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.namespace.SetActiveNetworkPoliciesResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/active_network_policies"}}
+	aInfo.RPCsInfo[svcfw.RPCName("SetActiveNetworkPolicies")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.namespace.NamespaceCustomAPI.SetActiveNetworkPolicies"] = rpcInfo
 	}
 	rpcInfo = &svcfw.RPCInfo{
 		Name:         "SetActiveServicePolicies",
@@ -13313,6 +13440,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
+		Name:     "GetActiveNetworkPoliciesRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.GetActiveNetworkPoliciesRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetActiveNetworkPoliciesResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.GetActiveNetworkPoliciesResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "GetActiveServicePoliciesRequest",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -13339,6 +13480,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.namespace.GetFastACLsForInternetVIPsResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SetActiveNetworkPoliciesRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.SetActiveNetworkPoliciesRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SetActiveNetworkPoliciesResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.SetActiveNetworkPoliciesResponse"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "SetActiveServicePoliciesRequest",
@@ -13624,24 +13779,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.network_connector.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.network_connector.StatusObject"] = oInfo
@@ -14109,24 +14268,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.network_firewall.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.network_firewall.StatusObject"] = oInfo
@@ -14594,24 +14757,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.network_interface.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.network_interface.StatusObject"] = oInfo
@@ -15177,24 +15344,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.network_policy.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.network_policy.StatusObject"] = oInfo
@@ -15710,24 +15881,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.network_policy_rule.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.network_policy_rule.StatusObject"] = oInfo
@@ -16181,24 +16356,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.network_policy_set.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.network_policy_set.StatusObject"] = oInfo
@@ -16638,24 +16817,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.policer.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.policer.StatusObject"] = oInfo
@@ -17292,24 +17475,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.protocol_policer.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.protocol_policer.StatusObject"] = oInfo
@@ -17791,12 +17978,14 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.public_ip.Object"] = oInfo
@@ -17811,12 +18000,14 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.public_ip.StatusObject"] = oInfo
@@ -18202,24 +18393,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.rate_limiter.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.rate_limiter.StatusObject"] = oInfo
@@ -18666,12 +18861,14 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.registration.Object"] = oInfo
@@ -18882,7 +19079,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.registration.ListResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/registrations_by_site/{site_name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListRegistrationsBySite")] = rpcInfo
@@ -18895,7 +19092,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.registration.ListResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/listregistrationsbystate"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListRegistrationsByState")] = rpcInfo
@@ -19287,24 +19484,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.role.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.role.StatusObject"] = oInfo
@@ -19529,7 +19730,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.role.CustomGetResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/custom/namespaces/{namespace}/roles/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("CustomGet")] = rpcInfo
@@ -19542,7 +19743,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.role.CustomListResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/custom/namespaces/{namespace}/roles"}}
 	aInfo.RPCsInfo[svcfw.RPCName("CustomList")] = rpcInfo
@@ -19873,24 +20074,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.route.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.route.StatusObject"] = oInfo
@@ -20414,24 +20619,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.secret_policy.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.secret_policy.StatusObject"] = oInfo
@@ -20871,24 +21080,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.secret_policy_rule.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.secret_policy_rule.StatusObject"] = oInfo
@@ -21328,24 +21541,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.service_policy.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.service_policy.StatusObject"] = oInfo
@@ -21557,7 +21774,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.service_policy.ServicePolicyHitsResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/service_policy/hits"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ServicePolicyHits")] = rpcInfo
@@ -21570,7 +21787,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.service_policy.ServicePolicyHitsResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/service_policy/latency"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ServicePolicyHitsLatency")] = rpcInfo
@@ -21652,6 +21869,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.service_policy.GlobalSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "LegacyRuleList",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.service_policy.LegacyRuleList"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "ReplaceSpecType",
@@ -21902,24 +22126,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.service_policy_rule.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.service_policy_rule.StatusObject"] = oInfo
@@ -22359,24 +22587,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.service_policy_set.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.service_policy_set.StatusObject"] = oInfo
@@ -22816,24 +23048,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.site.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.site.StatusObject"] = oInfo
@@ -23654,24 +23890,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.token.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.token.StatusObject"] = oInfo
@@ -24166,24 +24406,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.tunnel.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.tunnel.StatusObject"] = oInfo
@@ -24679,12 +24923,14 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.user.Object"] = oInfo
@@ -24713,12 +24959,14 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.user.StatusObject"] = oInfo
@@ -24962,7 +25210,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.user.GetUserRoleResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/custom/namespaces/{namespace}/whoami"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -24975,7 +25223,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.user.GetTOSResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/custom/namespaces/{namespace}/tos"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetTOS")] = rpcInfo
@@ -24988,7 +25236,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.user.ListUserRoleResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/custom/namespaces/{namespace}/user_roles"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
@@ -25424,6 +25672,27 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	mdr.PkgsInfo["ves.io.schema.vesenv"] = pInfo
 
 	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/vesenv/all_services.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/vesenv/all_services.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/vesenv/all_services.proto"] = fInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ServiceChoice",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.vesenv.ServiceChoice"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
 		Name:        "ves.io/schema/vesenv/options.proto",
 		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
 		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
@@ -25491,6 +25760,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.vesenv.ReEncryptSecretsType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ServiceInfo",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.vesenv.ServiceInfo"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "ServiceSlugChoice",
@@ -25859,24 +26135,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.aws_tgw_site.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.aws_tgw_site.StatusObject"] = oInfo
@@ -26468,24 +26748,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.aws_vpc_site.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.aws_vpc_site.StatusObject"] = oInfo
@@ -26967,24 +27251,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.azure_vnet_site.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.azure_vnet_site.StatusObject"] = oInfo
@@ -27466,24 +27754,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.forward_proxy_policy.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.forward_proxy_policy.StatusObject"] = oInfo
@@ -27695,7 +27987,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.views.forward_proxy_policy.ForwardProxyPolicyHitsResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/forward_proxy_policy/hits"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ForwardProxyPolicyHits")] = rpcInfo
@@ -28041,24 +28333,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.gcp_vpc_site.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.gcp_vpc_site.StatusObject"] = oInfo
@@ -28540,24 +28836,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.http_loadbalancer.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.http_loadbalancer.StatusObject"] = oInfo
@@ -28769,7 +29069,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.views.http_loadbalancer.GetDnsInfoResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/get-dns-info"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetDnsInfo")] = rpcInfo
@@ -28874,6 +29174,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.MirrorPolicyType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "ProxyTypeHttp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.ProxyTypeHttp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "ProxyTypeHttps",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -28956,6 +29263,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.ServicePolicyList"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SimpleClientSrcRule",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.SimpleClientSrcRule"] = mInfo
 	}
 
 	pInfo = &svcfw.PkgInfo{
@@ -29171,24 +29485,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.network_policy_view.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.network_policy_view.StatusObject"] = oInfo
@@ -29400,7 +29718,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.views.network_policy_view.NetworkPolicyHitsResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/network_policy_view/hits"}}
 	aInfo.RPCsInfo[svcfw.RPCName("NetworkPolicyHits")] = rpcInfo
@@ -29732,12 +30050,14 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.origin_pool.Object"] = oInfo
@@ -30267,24 +30587,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.tcp_loadbalancer.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.tcp_loadbalancer.StatusObject"] = oInfo
@@ -30496,7 +30820,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.views.tcp_loadbalancer.GetDnsInfoResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/tcp_loadbalancers/{name}/get-dns-info"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetDnsInfo")] = rpcInfo
@@ -30961,24 +31285,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.terraform_parameters.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.views.terraform_parameters.StatusObject"] = oInfo
@@ -31027,7 +31355,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.views.terraform_parameters.GetResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/terraform_parameters/{view_kind}/{view_name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
@@ -31040,7 +31368,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.views.terraform_parameters.GetStatusResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/terraform_parameters/{view_kind}/{view_name}/status"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetStatus")] = rpcInfo
@@ -31390,24 +31718,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.virtual_host.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.virtual_host.StatusObject"] = oInfo
@@ -31456,7 +31788,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.virtual_host.APIEndpointLearntSchemaRsp",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoint/learnt_schema"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetAPIEndpointLearntSchema")] = rpcInfo
@@ -31469,7 +31801,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.virtual_host.APIEndpointPDFRsp",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoint/pdf"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetAPIEndpointPDF")] = rpcInfo
@@ -31482,7 +31814,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.virtual_host.APIEndpointsRsp",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoints"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetAPIEndpoints")] = rpcInfo
@@ -31728,7 +32060,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.virtual_host.GetDnsInfoResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}/get-dns-info"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetDnsInfo")] = rpcInfo
@@ -32067,12 +32399,14 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.virtual_host_dns_info.Object"] = oInfo
@@ -32313,24 +32647,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.virtual_k8s.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.virtual_k8s.StatusObject"] = oInfo
@@ -32770,24 +33108,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.virtual_network.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.virtual_network.StatusObject"] = oInfo
@@ -33248,24 +33590,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.virtual_site.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.virtual_site.StatusObject"] = oInfo
@@ -33477,7 +33823,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.virtual_site.SelecteeResponse",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_sites/{name}/selectees"}}
 	aInfo.RPCsInfo[svcfw.RPCName("GetSelectees")] = rpcInfo
@@ -33767,24 +34113,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.waf.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.waf.StatusObject"] = oInfo
@@ -33996,7 +34346,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.waf.VirtualHostWafStatusRsp",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/waf/virtual_host/status/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VirtualHostWafStatus")] = rpcInfo
@@ -34457,24 +34807,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.waf_rule_list.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.waf_rule_list.StatusObject"] = oInfo
@@ -34914,24 +35268,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("Object"),
-		IsSDRO:       true,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("Object"),
+		IsSDRO:           true,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.waf_rules.Object"] = oInfo
 	}
 
 	oInfo = &svcfw.ObjInfo{
-		Name:         svcfw.ObjType("StatusObject"),
-		IsSDRO:       false,
-		FldsInfo:     make(map[svcfw.FldName]*svcfw.FldInfo),
-		FldTypesInfo: make(map[svcfw.FldType][]*svcfw.FldInfo),
-		KeysInfo:     make(map[svcfw.FldName]*svcfw.KeyInfo),
+		Name:             svcfw.ObjType("StatusObject"),
+		IsSDRO:           false,
+		FldsInfo:         make(map[svcfw.FldName]*svcfw.FldInfo),
+		FldTypesInfo:     make(map[svcfw.FldType][]*svcfw.FldInfo),
+		KeysInfo:         make(map[svcfw.FldName]*svcfw.KeyInfo),
+		ReEncryptSecrets: make(map[string]uint64),
 	}
+
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.waf_rules.StatusObject"] = oInfo
@@ -35143,7 +35501,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.waf_rules.RulesRsp",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/waf_rules/rules"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Rules")] = rpcInfo
@@ -35156,7 +35514,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.waf_rules.VirtualHostWafRulesStatusRsp",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/waf_rules/virtual_host/status/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("VirtualHostWafRulesStatus")] = rpcInfo
@@ -35169,7 +35527,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		InStreaming:  false,
 		OutMsgType:   "ves.io.schema.waf_rules.WafRulesStatusRsp",
 		OutStreaming: false,
-		IsImmutable:  false,
+		IsImmutable:  true,
 	}
 	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/waf_rules/status/{name}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("WafRulesStatus")] = rpcInfo

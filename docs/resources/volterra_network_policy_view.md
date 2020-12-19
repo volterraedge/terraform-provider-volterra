@@ -190,7 +190,7 @@ For Ingress rules: To these endpoints from remote endpoints these ip prefixes ar
 
 Select specific protocol and port ranges traffic to match.
 
-`port_ranges` - (Optional) Range is expressed as start port and end port (`String`).
+`port_ranges` - (Optional) List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192 (`String`).
 
 `protocol` - (Optional) Values are tcp, udp, and icmp (`String`).
 

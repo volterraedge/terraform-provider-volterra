@@ -51,13 +51,19 @@ var _ = math.Inf
 type GetResponseFormatCode int32
 
 const (
+	// x-displayName: "Default Format"
+	// Default format of returned resource
 	GET_RSP_FORMAT_DEFAULT GetResponseFormatCode = 0
+	// x-displayName: "Create request Format"
 	// Response should be in CreateRequest format
 	GET_RSP_FORMAT_FOR_CREATE GetResponseFormatCode = 1
+	// x-displayName: "Replace request format"
 	// Response should be in ReplaceRequest format
 	GET_RSP_FORMAT_FOR_REPLACE GetResponseFormatCode = 2
+	// x-displayName: "Status format"
 	// Response should be in StatusObject(s) format
 	GET_RSP_FORMAT_STATUS GetResponseFormatCode = 3
+	// x-displayName: "GetSpecType format"
 	// Response should be in format of GetSpecType
 	GET_RSP_FORMAT_READ GetResponseFormatCode = 4
 )
@@ -1302,27 +1308,27 @@ const _ = grpc.SupportPackageIsVersion4
 type APIClient interface {
 	// Create ip prefix set
 	//
-	// x-displayName: "Specification"
+	// x-displayName: "Create IP Prefix Set"
 	// Create ip_prefix_set creates a new object in the storage backend for metadata.namespace.
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Get ip prefix set
 	//
-	// x-displayName: "Specification"
+	// x-displayName: "Get IP Prefix Set"
 	// Get ip_prefix_set reads a given object from storage backend for metadata.namespace.
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List IP Prefix Set"
 	// List the set of ip_prefix_set in a namespace
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// Replace ip prefix set
 	//
-	// x-displayName: "Specification"
+	// x-displayName: "Replace IP Prefix Set"
 	// Replace ip_prefix_set replaces an existing object in the storage backend for metadata.namespace.
 	Replace(ctx context.Context, in *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete IP Prefix Set"
 	// Delete the specified ip_prefix_set
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf3.Empty, error)
 }
@@ -1385,27 +1391,27 @@ func (c *aPIClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.
 type APIServer interface {
 	// Create ip prefix set
 	//
-	// x-displayName: "Specification"
+	// x-displayName: "Create IP Prefix Set"
 	// Create ip_prefix_set creates a new object in the storage backend for metadata.namespace.
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// Get ip prefix set
 	//
-	// x-displayName: "Specification"
+	// x-displayName: "Get IP Prefix Set"
 	// Get ip_prefix_set reads a given object from storage backend for metadata.namespace.
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List IP Prefix Set"
 	// List the set of ip_prefix_set in a namespace
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	// Replace ip prefix set
 	//
-	// x-displayName: "Specification"
+	// x-displayName: "Replace IP Prefix Set"
 	// Replace ip_prefix_set replaces an existing object in the storage backend for metadata.namespace.
 	Replace(context.Context, *ReplaceRequest) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete IP Prefix Set"
 	// Delete the specified ip_prefix_set
 	Delete(context.Context, *DeleteRequest) (*google_protobuf3.Empty, error)
 }

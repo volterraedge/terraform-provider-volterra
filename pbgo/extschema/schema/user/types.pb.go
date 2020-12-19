@@ -171,6 +171,7 @@ type GlobalSpecType struct {
 	// Few restrictions apply to this user w.r.t role update and deletion.
 	DomainOwner bool `protobuf:"varint,8,opt,name=domain_owner,json=domainOwner,proto3" json:"domain_owner,omitempty"`
 	// IDM Type
+	//
 	// x-displayName: "Identity Management Type"
 	// Type of the identity management who is managing this user.
 	IdmType IdmType `protobuf:"varint,9,opt,name=idm_type,json=idmType,proto3,enum=ves.io.schema.user.IdmType" json:"idm_type,omitempty"`
@@ -245,7 +246,7 @@ func (m *GlobalSpecType) GetIdmType() IdmType {
 
 // CreateSpecType
 //
-// x-displayName: "Create Specification"
+// x-displayName: "Create User"
 type CreateSpecType struct {
 	Type      UserType                        `protobuf:"varint,1,opt,name=type,proto3,enum=ves.io.schema.user.UserType" json:"type,omitempty"`
 	Locale    string                          `protobuf:"bytes,2,opt,name=locale,proto3" json:"locale,omitempty"`
@@ -303,7 +304,7 @@ func (m *CreateSpecType) GetContacts() []*ves_io_schema4.ObjectRefType {
 
 // ReplaceSpecType
 //
-// x-displayName: "Replace Specification"
+// x-displayName: "Replace User"
 type ReplaceSpecType struct {
 	Locale    string                          `protobuf:"bytes,2,opt,name=locale,proto3" json:"locale,omitempty"`
 	FirstName string                          `protobuf:"bytes,3,opt,name=first_name,json=firstName,proto3" json:"first_name,omitempty"`
@@ -345,7 +346,7 @@ func (m *ReplaceSpecType) GetContacts() []*ves_io_schema4.ObjectRefType {
 
 // GetSpecType
 //
-// x-displayName: "Get Specification"
+// x-displayName: "Get User"
 type GetSpecType struct {
 	Type      UserType                        `protobuf:"varint,1,opt,name=type,proto3,enum=ves.io.schema.user.UserType" json:"type,omitempty"`
 	Locale    string                          `protobuf:"bytes,2,opt,name=locale,proto3" json:"locale,omitempty"`

@@ -1965,7 +1965,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1977,7 +1977,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2132,7 +2132,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Healthcheck object defines method to determine if the given Endpoint is healthy.\nSingle Healthcheck object can be referred to by one or many Cluster objects.",
             "title": "Create healthcheck",
-            "x-displayname": "Create Configuration Specification",
+            "x-displayname": "Create Health Check",
             "x-ves-oneof-field-health_check": "[\"http_health_check\",\"tcp_health_check\"]",
             "x-ves-proto-message": "ves.io.schema.healthcheck.CreateSpecType",
             "properties": {
@@ -2247,7 +2247,7 @@ var APISwaggerJSON string = `{
         },
         "healthcheckGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2262,7 +2262,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Healthcheck object defines method to determine if the given Endpoint is healthy.\nSingle Healthcheck object can be referred to by one or many Cluster objects.",
             "title": "Get healthcheck",
-            "x-displayname": "Get Configuration Specification",
+            "x-displayname": "Get Health Check",
             "x-ves-oneof-field-health_check": "[\"http_health_check\",\"tcp_health_check\"]",
             "x-ves-proto-message": "ves.io.schema.healthcheck.GetSpecType",
             "properties": {
@@ -2399,7 +2399,7 @@ var APISwaggerJSON string = `{
             "description": "Healthy if \"get\" method on URL \"http(s)://\u003chost\u003e/\u003cpath\u003e\" with optional \"\u003cheader\u003e\" returns success.\n\"host\" is not used for DNS resolution. It is used as HTTP Header in the request.",
             "title": "HttpHealthCheck",
             "x-displayname": "HTTP Health Check",
-            "x-ves-displayorder": "1,2,5,3,4",
+            "x-ves-displayorder": "6,2,5,3,4",
             "x-ves-oneof-field-host_header_choice": "[\"host_header\",\"use_origin_server_name\"]",
             "x-ves-proto-message": "ves.io.schema.healthcheck.HttpHealthCheck",
             "properties": {
@@ -2628,7 +2628,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Healthcheck object defines method to determine if the given Endpoint is healthy.\nSingle Healthcheck object can be referred to by one or many Cluster objects.",
             "title": "replace healthcheck",
-            "x-displayname": "Replace Configuration Specification",
+            "x-displayname": "Replace Health Check",
             "x-ves-oneof-field-health_check": "[\"http_health_check\",\"tcp_health_check\"]",
             "x-ves-proto-message": "ves.io.schema.healthcheck.ReplaceSpecType",
             "properties": {

@@ -21,11 +21,16 @@ resource "volterra_gcp_vpc_site" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "cloud_credentials assisted" must be set
-  assisted      = true
+
+  cloud_credentials {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
   gcp_region    = ["us-west1"]
   instance_type = ["n1-standard-4"]
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
+  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
 
   ingress_gw {
     gcp_certified_hw = "gcp-byol-voltmesh"
@@ -35,8 +40,8 @@ resource "volterra_gcp_vpc_site" "example" {
     local_network {
       // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
 
-      new_network_autogenerate {
-        autogenerate = true
+      existing_network {
+        name = "network1"
       }
     }
 
@@ -114,6 +119,34 @@ Network Policies active for this site..
 
 `network_policies` - (Required) Ordered List of Network Policies active for this network firewall. See [ref](#ref) below for details.
 
+### Blindfold Secret Info
+
+Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Clear Secret Info
+
+Clear Secret is used for the secrets that are not encrypted .
+
+`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+
 ### Coordinates
 
 Site longitude and latitude co-ordinates.
@@ -121,6 +154,16 @@ Site longitude and latitude co-ordinates.
 `latitude` - (Optional) Latitude of the site location (`Float`).
 
 `longitude` - (Optional) longitude of site location (`Float`).
+
+### Custom Certificate
+
+Certificates for generating intermediate certificate for TLS interception..
+
+`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
+
+`description` - (Optional) Description for the certificate (`String`).
+
+`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
 ### Custom Static Route
 
@@ -138,6 +181,24 @@ Use Custom static route to configure all advanced options.
 
 Forward Proxy is disabled for this connector.
 
+### Disable Interception
+
+Disable Interception.
+
+### Domain Match
+
+Domain value or regular expression to match.
+
+`exact_value` - (Optional) Exact domain name. (`String`).
+
+`regex_value` - (Optional) Regular Expression value for the domain name (`String`).
+
+`suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
+
+### Enable For All Domains
+
+Enable interception for all domains.
+
 ### Enable Forward Proxy
 
 Forward Proxy is enabled for this connector.
@@ -146,9 +207,17 @@ Forward Proxy is enabled for this connector.
 
 `max_connect_attempts` - (Optional) Specifies the allowed number of retries on connect failure to upstream server. Defaults to 1. (`Int`).
 
+`no_interception` - (Optional) No TLS interception is enabled for this network connector (bool).
+
+`tls_intercept` - (Optional) Specify TLS interception configuration for the network connector. See [Tls Intercept ](#tls-intercept) below for details.
+
 `white_listed_ports` - (Optional) Example "tmate" server port (`Int`).
 
 `white_listed_prefixes` - (Optional) Example "tmate" server ip (`String`).
+
+### Enable Interception
+
+Enable Interception.
 
 ### Existing Network
 
@@ -262,6 +331,16 @@ Subnets for the inside interface of the node, should be in inside network.
 
 `new_subnet` - (Optional) Parameters for creating new subnet. See [New Subnet ](#new-subnet) below for details.
 
+### Interception Rules
+
+List of ordered rules to enable or disable for TLS interception.
+
+`domain_match` - (Required) Domain value or regular expression to match. See [Domain Match ](#domain-match) below for details.
+
+`disable_interception` - (Optional) Disable Interception (bool).
+
+`enable_interception` - (Optional) Enable Interception (bool).
+
 ### Ipv4
 
 IPv4 Address.
@@ -342,6 +421,10 @@ No global network to connect.
 
 Static Routes disabled for inside network..
 
+### No Interception
+
+No TLS interception is enabled for this network connector.
+
 ### No Network Policy
 
 Network Policy is disabled for this site..
@@ -373,6 +456,28 @@ Subnets for the outside interface of the node, should be in outside network.
 `existing_subnet` - (Optional) Information about existing subnet. See [Existing Subnet ](#existing-subnet) below for details.
 
 `new_subnet` - (Optional) Parameters for creating new subnet. See [New Subnet ](#new-subnet) below for details.
+
+### Policy
+
+Policy to enable/disable specific domains, with implicit enable all domains.
+
+`interception_rules` - (Required) List of ordered rules to enable or disable for TLS interception. See [Interception Rules ](#interception-rules) below for details.
+
+### Private Key
+
+TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted . See [Clear Secret Info ](#clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Ref
 
@@ -430,6 +535,44 @@ List of route prefixes.
 
 `ipv6` - (Optional) IPv6 Subnet Address. See [Ipv6 ](#ipv6) below for details.
 
+### Tls Intercept
+
+Specify TLS interception configuration for the network connector.
+
+`enable_for_all_domains` - (Optional) Enable interception for all domains (bool).
+
+`policy` - (Optional) Policy to enable/disable specific domains, with implicit enable all domains. See [Policy ](#policy) below for details.
+
+`custom_certificate` - (Optional) Certificates for generating intermediate certificate for TLS interception.. See [Custom Certificate ](#custom-certificate) below for details.
+
+`volterra_certificate` - (Optional) Volterra certificates for generating intermediate certificate for TLS interception. (bool).
+
+`trusted_ca_url` - (Optional) Custom trusted CA certificates for validating upstream server certificate (`String`).
+
+`volterra_trusted_ca` - (Optional) Default volterra trusted CA list for validating upstream server certificate (bool).
+
+### Vault Secret Info
+
+Vault Secret is used for the secrets managed by Hashicorp Vault.
+
+`key` - (Optional) If not provided entire secret will be returned. (`String`).
+
+`location` - (Required) Path to secret in Vault. (`String`).
+
+`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
+
+`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
+
+`version` - (Optional) If not provided latest version will be returned. (`Int`).
+
+### Volterra Certificate
+
+Volterra certificates for generating intermediate certificate for TLS interception..
+
+### Volterra Trusted Ca
+
+Default volterra trusted CA list for validating upstream server certificate.
+
 ### Voltstack Cluster
 
 Voltstack Cluster using single interface, useful for deploying K8s cluster..
@@ -461,6 +604,12 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 `site_local_network` - (Optional) Network for the site local interface of the node. See [Site Local Network ](#site-local-network) below for details.
 
 `site_local_subnet` - (Optional) Subnet for the site local interface of the node.. See [Site Local Subnet ](#site-local-subnet) below for details.
+
+### Wingman Secret Info
+
+Secret is given as bootstrap secret in Volterra Security Sidecar.
+
+`name` - (Required) Name of the secret. (`String`).
 
 Attribute Reference
 -------------------

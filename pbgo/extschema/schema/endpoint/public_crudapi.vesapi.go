@@ -1965,7 +1965,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1977,7 +1977,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2153,7 +2153,6 @@ var APISwaggerJSON string = `{
             "description": "Create endpoint will create the object in the storage backend for namespace metadata.namespace",
             "title": "Create Endpoint",
             "x-displayname": "Create Endpoint",
-            "x-ves-displayorder": "1,3,4,8,11,9,2",
             "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advance\",\"ip\",\"service_info\"]",
             "x-ves-proto-message": "ves.io.schema.endpoint.CreateSpecType",
             "properties": {
@@ -2334,7 +2333,7 @@ var APISwaggerJSON string = `{
         },
         "endpointGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2688,7 +2687,6 @@ var APISwaggerJSON string = `{
             "description": "Replacing an endpoint object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write.",
             "title": "Replace Endpoint",
             "x-displayname": "Replace Endpoint",
-            "x-ves-displayorder": "1,3,4,8,11,9,2",
             "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advance\",\"ip\",\"service_info\"]",
             "x-ves-proto-message": "ves.io.schema.endpoint.ReplaceSpecType",
             "properties": {
@@ -2740,7 +2738,7 @@ var APISwaggerJSON string = `{
             "description": "Specifies whether endpoint service is discovered by name or labels",
             "title": "ServiceInfoType",
             "x-displayname": "Service Info Type",
-            "x-ves-displayorder": "1,2,3",
+            "x-ves-displayorder": "1,4",
             "x-ves-oneof-field-service_info": "[\"service_name\",\"service_selector\"]",
             "x-ves-proto-message": "ves.io.schema.endpoint.ServiceInfoType",
             "properties": {
@@ -3085,7 +3083,6 @@ var APISwaggerJSON string = `{
             "description": "NetworkSiteRefSelector defines a union of reference to site or reference to virtual_network  or reference to virtual_site\nIt is used to determine virtual network using following rules\n * Direct reference to virtual_network object\n * Site local network when refering to site object\n * All site local networks for sites selected by refering to virtual_site object",
             "title": "NetworkSiteRefSelector",
             "x-displayname": "Network or Site Reference",
-            "x-ves-displayorder": "3,2,1",
             "x-ves-oneof-field-reforselector": "[\"site\",\"virtual_network\",\"virtual_site\"]",
             "x-ves-proto-message": "ves.io.schema.NetworkSiteRefSelector",
             "properties": {

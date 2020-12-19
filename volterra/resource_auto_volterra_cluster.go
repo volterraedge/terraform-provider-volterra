@@ -493,8 +493,21 @@ func resourceVolterraCluster() *schema.Resource {
 							},
 						},
 
+						"disable_sni": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"sni": {
+
 							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"use_host_header_as_sni": {
+
+							Type:     schema.TypeBool,
 							Optional: true,
 						},
 					},
@@ -1056,8 +1069,41 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 			}
 
-			if w, ok := tlsParametersMapStrToI["sni"]; ok && !isIntfNil(w) {
-				tlsParameters.Sni = w.(string)
+			sniChoiceTypeFound := false
+
+			if v, ok := tlsParametersMapStrToI["disable_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+				sniChoiceTypeFound = true
+
+				if v.(bool) {
+					sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_DisableSni{}
+					sniChoiceInt.DisableSni = &ves_io_schema.Empty{}
+					tlsParameters.SniChoice = sniChoiceInt
+				}
+
+			}
+
+			if v, ok := tlsParametersMapStrToI["sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+				sniChoiceTypeFound = true
+				sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_Sni{}
+
+				tlsParameters.SniChoice = sniChoiceInt
+
+				sniChoiceInt.Sni = v.(string)
+
+			}
+
+			if v, ok := tlsParametersMapStrToI["use_host_header_as_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+				sniChoiceTypeFound = true
+
+				if v.(bool) {
+					sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_UseHostHeaderAsSni{}
+					sniChoiceInt.UseHostHeaderAsSni = &ves_io_schema.Empty{}
+					tlsParameters.SniChoice = sniChoiceInt
+				}
+
 			}
 
 		}
@@ -1661,8 +1707,41 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 			}
 
-			if w, ok := tlsParametersMapStrToI["sni"]; ok && !isIntfNil(w) {
-				tlsParameters.Sni = w.(string)
+			sniChoiceTypeFound := false
+
+			if v, ok := tlsParametersMapStrToI["disable_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+				sniChoiceTypeFound = true
+
+				if v.(bool) {
+					sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_DisableSni{}
+					sniChoiceInt.DisableSni = &ves_io_schema.Empty{}
+					tlsParameters.SniChoice = sniChoiceInt
+				}
+
+			}
+
+			if v, ok := tlsParametersMapStrToI["sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+				sniChoiceTypeFound = true
+				sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_Sni{}
+
+				tlsParameters.SniChoice = sniChoiceInt
+
+				sniChoiceInt.Sni = v.(string)
+
+			}
+
+			if v, ok := tlsParametersMapStrToI["use_host_header_as_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+				sniChoiceTypeFound = true
+
+				if v.(bool) {
+					sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_UseHostHeaderAsSni{}
+					sniChoiceInt.UseHostHeaderAsSni = &ves_io_schema.Empty{}
+					tlsParameters.SniChoice = sniChoiceInt
+				}
+
 			}
 
 		}

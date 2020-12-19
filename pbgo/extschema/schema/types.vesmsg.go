@@ -1774,6 +1774,20 @@ func (m *ForwardProxyConfigType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *ForwardProxyConfigType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetTlsIntercept().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ForwardProxyConfigType.tls_intercept")
+	}
+
+	return nil
+}
+
 func (m *ForwardProxyConfigType) DeepCopy() *ForwardProxyConfigType {
 	if m == nil {
 		return nil
@@ -1941,6 +1955,32 @@ func (v *ValidateForwardProxyConfigType) Validate(ctx context.Context, pm interf
 
 	}
 
+	switch m.GetTlsInterceptionChoice().(type) {
+	case *ForwardProxyConfigType_NoInterception:
+		if fv, exists := v.FldValidators["tls_interception_choice.no_interception"]; exists {
+			val := m.GetTlsInterceptionChoice().(*ForwardProxyConfigType_NoInterception).NoInterception
+			vOpts := append(opts,
+				db.WithValidateField("tls_interception_choice"),
+				db.WithValidateField("no_interception"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ForwardProxyConfigType_TlsIntercept:
+		if fv, exists := v.FldValidators["tls_interception_choice.tls_intercept"]; exists {
+			val := m.GetTlsInterceptionChoice().(*ForwardProxyConfigType_TlsIntercept).TlsIntercept
+			vOpts := append(opts,
+				db.WithValidateField("tls_interception_choice"),
+				db.WithValidateField("tls_intercept"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["white_listed_ports"]; exists {
 		vOpts := append(opts, db.WithValidateField("white_listed_ports"))
 		if err := fv(ctx, m.GetWhiteListedPorts(), vOpts...); err != nil {
@@ -2018,6 +2058,8 @@ var DefaultForwardProxyConfigTypeValidator = func() *ValidateForwardProxyConfigT
 		panic(errMsg)
 	}
 	v.FldValidators["connection_timeout"] = vFn
+
+	v.FldValidators["tls_interception_choice.tls_intercept"] = TlsInterceptionTypeValidator().Validate
 
 	return v
 }()
@@ -9995,6 +10037,22 @@ type ValidateUpstreamTlsParamsType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateUpstreamTlsParamsType) SniChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sni_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateUpstreamTlsParamsType) SniChoiceSniValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Sni, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sni")
+	}
+	return oValidatorFn_Sni, nil
+}
+
 func (v *ValidateUpstreamTlsParamsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*UpstreamTlsParamsType)
 	if !ok {
@@ -10018,11 +10076,49 @@ func (v *ValidateUpstreamTlsParamsType) Validate(ctx context.Context, pm interfa
 
 	}
 
-	if fv, exists := v.FldValidators["sni"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("sni"))
-		if err := fv(ctx, m.GetSni(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["sni_choice"]; exists {
+		val := m.GetSniChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sni_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetSniChoice().(type) {
+	case *UpstreamTlsParamsType_Sni:
+		if fv, exists := v.FldValidators["sni_choice.sni"]; exists {
+			val := m.GetSniChoice().(*UpstreamTlsParamsType_Sni).Sni
+			vOpts := append(opts,
+				db.WithValidateField("sni_choice"),
+				db.WithValidateField("sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpstreamTlsParamsType_UseHostHeaderAsSni:
+		if fv, exists := v.FldValidators["sni_choice.use_host_header_as_sni"]; exists {
+			val := m.GetSniChoice().(*UpstreamTlsParamsType_UseHostHeaderAsSni).UseHostHeaderAsSni
+			vOpts := append(opts,
+				db.WithValidateField("sni_choice"),
+				db.WithValidateField("use_host_header_as_sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpstreamTlsParamsType_DisableSni:
+		if fv, exists := v.FldValidators["sni_choice.disable_sni"]; exists {
+			val := m.GetSniChoice().(*UpstreamTlsParamsType_DisableSni).DisableSni
+			vOpts := append(opts,
+				db.WithValidateField("sni_choice"),
+				db.WithValidateField("disable_sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -10033,6 +10129,38 @@ func (v *ValidateUpstreamTlsParamsType) Validate(ctx context.Context, pm interfa
 // Well-known symbol for default validator implementation
 var DefaultUpstreamTlsParamsTypeValidator = func() *ValidateUpstreamTlsParamsType {
 	v := &ValidateUpstreamTlsParamsType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSniChoice := v.SniChoiceValidationRuleHandler
+	rulesSniChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSniChoice(rulesSniChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpstreamTlsParamsType.sni_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sni_choice"] = vFn
+
+	vrhSniChoiceSni := v.SniChoiceSniValidationRuleHandler
+	rulesSniChoiceSni := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+		"ves.io.schema.rules.string.max_len":  "256",
+	}
+	vFnMap["sni_choice.sni"], err = vrhSniChoiceSni(rulesSniChoiceSni)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field UpstreamTlsParamsType.sni_choice_sni: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["sni_choice.sni"] = vFnMap["sni_choice.sni"]
 
 	v.FldValidators["common_params"] = TlsParamsTypeValidator().Validate
 

@@ -126,6 +126,16 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 			drInfos = append(drInfos, odri)
 		}
 
+	case *CreateSpecType_LegacyRuleList:
+		odrInfos, err = m.GetLegacyRuleList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "legacy_rule_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
 	}
 
 	return drInfos, err
@@ -314,6 +324,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_LegacyRuleList:
+		if fv, exists := v.FldValidators["rule_choice.legacy_rule_list"]; exists {
+			val := m.GetRuleChoice().(*CreateSpecType_LegacyRuleList).LegacyRuleList
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("legacy_rule_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -446,6 +467,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["rule_choice.allow_list"] = SourceListValidator().Validate
 	v.FldValidators["rule_choice.deny_list"] = SourceListValidator().Validate
 	v.FldValidators["rule_choice.rule_list"] = RuleListValidator().Validate
+	v.FldValidators["rule_choice.legacy_rule_list"] = LegacyRuleListValidator().Validate
 
 	v.FldValidators["server_choice.server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["server_choice.server_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
@@ -560,6 +582,16 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		for _, odri := range odrInfos {
 			odri.DRField = "rule_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *GetSpecType_LegacyRuleList:
+		odrInfos, err = m.GetLegacyRuleList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "legacy_rule_list." + odri.DRField
 			drInfos = append(drInfos, odri)
 		}
 
@@ -816,6 +848,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_LegacyRuleList:
+		if fv, exists := v.FldValidators["rule_choice.legacy_rule_list"]; exists {
+			val := m.GetRuleChoice().(*GetSpecType_LegacyRuleList).LegacyRuleList
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("legacy_rule_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -967,6 +1010,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["rule_choice.allow_list"] = SourceListValidator().Validate
 	v.FldValidators["rule_choice.deny_list"] = SourceListValidator().Validate
 	v.FldValidators["rule_choice.rule_list"] = RuleListValidator().Validate
+	v.FldValidators["rule_choice.legacy_rule_list"] = LegacyRuleListValidator().Validate
 
 	v.FldValidators["server_choice.server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["server_choice.server_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
@@ -1020,12 +1064,6 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDefaultForwardingClassesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
-	if fdrInfos, err := m.GetOriginalRulesDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -1099,47 +1137,6 @@ func (m *GlobalSpecType) GetDefaultForwardingClassesDBEntries(ctx context.Contex
 	return entries, nil
 }
 
-func (m *GlobalSpecType) GetOriginalRulesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetOriginalRules() {
-		if ref == nil {
-			return nil, fmt.Errorf("GlobalSpecType.original_rules[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "service_policy_rule.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "original_rules",
-			Ref:        ref,
-		})
-	}
-
-	return drInfos, nil
-}
-
-// GetOriginalRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GlobalSpecType) GetOriginalRulesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "service_policy_rule.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: service_policy_rule")
-	}
-	for _, ref := range m.GetOriginalRules() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
-}
-
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	var (
@@ -1181,6 +1178,16 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		for _, odri := range odrInfos {
 			odri.DRField = "rule_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *GlobalSpecType_LegacyRuleList:
+		odrInfos, err = m.GetLegacyRuleList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "legacy_rule_list." + odri.DRField
 			drInfos = append(drInfos, odri)
 		}
 
@@ -1461,46 +1468,6 @@ func (v *ValidateGlobalSpecType) SimpleRulesValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) OriginalRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for original_rules")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated original_rules")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items original_rules")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -1536,14 +1503,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("deny_info"))
 		if err := fv(ctx, m.GetDenyInfo(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["original_rules"]; exists {
-		vOpts := append(opts, db.WithValidateField("original_rules"))
-		if err := fv(ctx, m.GetOriginalRules(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1596,6 +1555,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("rule_choice"),
 				db.WithValidateField("rule_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_LegacyRuleList:
+		if fv, exists := v.FldValidators["rule_choice.legacy_rule_list"]; exists {
+			val := m.GetRuleChoice().(*GlobalSpecType_LegacyRuleList).LegacyRuleList
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("legacy_rule_list"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1769,20 +1739,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["simple_rules"] = vFn
 
-	vrhOriginalRules := v.OriginalRulesValidationRuleHandler
-	rulesOriginalRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "256",
-	}
-	vFn, err = vrhOriginalRules(rulesOriginalRules)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.original_rules: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["original_rules"] = vFn
-
 	v.FldValidators["rule_choice.allow_list"] = SourceListValidator().Validate
 	v.FldValidators["rule_choice.deny_list"] = SourceListValidator().Validate
 	v.FldValidators["rule_choice.rule_list"] = RuleListValidator().Validate
+	v.FldValidators["rule_choice.legacy_rule_list"] = LegacyRuleListValidator().Validate
 
 	v.FldValidators["server_choice.server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["server_choice.server_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
@@ -1800,6 +1760,195 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *LegacyRuleList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LegacyRuleList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LegacyRuleList) DeepCopy() *LegacyRuleList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LegacyRuleList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LegacyRuleList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LegacyRuleList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LegacyRuleListValidator().Validate(ctx, m, opts...)
+}
+
+func (m *LegacyRuleList) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *LegacyRuleList) GetRulesDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, ref := range m.GetRules() {
+		if ref == nil {
+			return nil, fmt.Errorf("LegacyRuleList.rules[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy_rule.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "rules",
+			Ref:        ref,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *LegacyRuleList) GetRulesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "service_policy_rule.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: service_policy_rule")
+	}
+	for _, ref := range m.GetRules() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateLegacyRuleList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLegacyRuleList) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLegacyRuleList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LegacyRuleList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LegacyRuleList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("rules"))
+		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLegacyRuleListValidator = func() *ValidateLegacyRuleList {
+	v := &ValidateLegacyRuleList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRules := v.RulesValidationRuleHandler
+	rulesRules := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "256",
+	}
+	vFn, err = vrhRules(rulesRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LegacyRuleList.rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rules"] = vFn
+
+	return v
+}()
+
+func LegacyRuleListValidator() db.Validator {
+	return DefaultLegacyRuleListValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1897,6 +2046,16 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		for _, odri := range odrInfos {
 			odri.DRField = "rule_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *ReplaceSpecType_LegacyRuleList:
+		odrInfos, err = m.GetLegacyRuleList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "legacy_rule_list." + odri.DRField
 			drInfos = append(drInfos, odri)
 		}
 
@@ -2088,6 +2247,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_LegacyRuleList:
+		if fv, exists := v.FldValidators["rule_choice.legacy_rule_list"]; exists {
+			val := m.GetRuleChoice().(*ReplaceSpecType_LegacyRuleList).LegacyRuleList
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("legacy_rule_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2220,6 +2390,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["rule_choice.allow_list"] = SourceListValidator().Validate
 	v.FldValidators["rule_choice.deny_list"] = SourceListValidator().Validate
 	v.FldValidators["rule_choice.rule_list"] = RuleListValidator().Validate
+	v.FldValidators["rule_choice.legacy_rule_list"] = LegacyRuleListValidator().Validate
 
 	v.FldValidators["server_choice.server_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["server_choice.server_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
@@ -3701,6 +3872,9 @@ func (r *CreateSpecType) SetRuleChoiceToGlobalSpecType(o *GlobalSpecType) error 
 	case *CreateSpecType_DenyList:
 		o.RuleChoice = &GlobalSpecType_DenyList{DenyList: of.DenyList}
 
+	case *CreateSpecType_LegacyRuleList:
+		o.RuleChoice = &GlobalSpecType_LegacyRuleList{LegacyRuleList: of.LegacyRuleList}
+
 	case *CreateSpecType_RuleList:
 		o.RuleChoice = &GlobalSpecType_RuleList{RuleList: of.RuleList}
 
@@ -3720,6 +3894,9 @@ func (r *CreateSpecType) GetRuleChoiceFromGlobalSpecType(o *GlobalSpecType) erro
 
 	case *GlobalSpecType_DenyList:
 		r.RuleChoice = &CreateSpecType_DenyList{DenyList: of.DenyList}
+
+	case *GlobalSpecType_LegacyRuleList:
+		r.RuleChoice = &CreateSpecType_LegacyRuleList{LegacyRuleList: of.LegacyRuleList}
 
 	case *GlobalSpecType_RuleList:
 		r.RuleChoice = &CreateSpecType_RuleList{RuleList: of.RuleList}
@@ -3813,6 +3990,9 @@ func (r *GetSpecType) SetRuleChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	case *GetSpecType_DenyList:
 		o.RuleChoice = &GlobalSpecType_DenyList{DenyList: of.DenyList}
 
+	case *GetSpecType_LegacyRuleList:
+		o.RuleChoice = &GlobalSpecType_LegacyRuleList{LegacyRuleList: of.LegacyRuleList}
+
 	case *GetSpecType_RuleList:
 		o.RuleChoice = &GlobalSpecType_RuleList{RuleList: of.RuleList}
 
@@ -3832,6 +4012,9 @@ func (r *GetSpecType) GetRuleChoiceFromGlobalSpecType(o *GlobalSpecType) error {
 
 	case *GlobalSpecType_DenyList:
 		r.RuleChoice = &GetSpecType_DenyList{DenyList: of.DenyList}
+
+	case *GlobalSpecType_LegacyRuleList:
+		r.RuleChoice = &GetSpecType_LegacyRuleList{LegacyRuleList: of.LegacyRuleList}
 
 	case *GlobalSpecType_RuleList:
 		r.RuleChoice = &GetSpecType_RuleList{RuleList: of.RuleList}
@@ -3927,6 +4110,9 @@ func (r *ReplaceSpecType) SetRuleChoiceToGlobalSpecType(o *GlobalSpecType) error
 	case *ReplaceSpecType_DenyList:
 		o.RuleChoice = &GlobalSpecType_DenyList{DenyList: of.DenyList}
 
+	case *ReplaceSpecType_LegacyRuleList:
+		o.RuleChoice = &GlobalSpecType_LegacyRuleList{LegacyRuleList: of.LegacyRuleList}
+
 	case *ReplaceSpecType_RuleList:
 		o.RuleChoice = &GlobalSpecType_RuleList{RuleList: of.RuleList}
 
@@ -3946,6 +4132,9 @@ func (r *ReplaceSpecType) GetRuleChoiceFromGlobalSpecType(o *GlobalSpecType) err
 
 	case *GlobalSpecType_DenyList:
 		r.RuleChoice = &ReplaceSpecType_DenyList{DenyList: of.DenyList}
+
+	case *GlobalSpecType_LegacyRuleList:
+		r.RuleChoice = &ReplaceSpecType_LegacyRuleList{LegacyRuleList: of.LegacyRuleList}
 
 	case *GlobalSpecType_RuleList:
 		r.RuleChoice = &ReplaceSpecType_RuleList{RuleList: of.RuleList}

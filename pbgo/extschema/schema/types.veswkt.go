@@ -198,3 +198,31 @@ func (m *SecretType) GetWingmanType() *secret.WingmanType {
 func (m *SecretType) GetEncodingType() string {
 	return m.GetSecretEncodingType().String()
 }
+
+// GetReEncryptedBlindfoldSecret() gets the re-encrypted blindfold secret in the blindfold_secret_info_internal field
+func (m *SecretType) GetReEncryptedBlindfoldSecret() *secret.BlindfoldType {
+	bfInfoInt := m.GetBlindfoldSecretInfoInternal()
+	if bfInfoInt == nil {
+		return nil
+	}
+	return &secret.BlindfoldType{
+		DecryptionProvider: bfInfoInt.DecryptionProvider,
+		StoreProvider:      bfInfoInt.StoreProvider,
+		Location:           bfInfoInt.Location,
+	}
+}
+
+// SetReEncryptedBlindfoldSecret() sets the re-encrypted blindfold secret with different
+// policy-id into blindfold_secret_info_internal field.
+func (m *SecretType) SetReEncryptedBlindfoldSecret(reEnc *secret.BlindfoldType) error {
+	if reEnc == nil {
+		m.BlindfoldSecretInfoInternal = nil
+	} else {
+		m.BlindfoldSecretInfoInternal = &BlindfoldSecretInfoType{
+			DecryptionProvider: reEnc.DecryptionProvider,
+			StoreProvider:      reEnc.StoreProvider,
+			Location:           reEnc.Location,
+		}
+	}
+	return nil
+}

@@ -1155,7 +1155,7 @@ func (m *GlobalSpecType) GetCertifiedHardwareType() HardwareType {
 
 // Get certified hardware
 //
-// x-displayName: "Get Certified Hardware Specification"
+// x-displayName: "Get Certified Hardware"
 // Get Certified Hardware object
 type GetSpecType struct {
 	VendorModelList       []*HardwareVendorModel `protobuf:"bytes,1,rep,name=vendor_model_list,json=vendorModelList" json:"vendor_model_list,omitempty"`

@@ -392,6 +392,15 @@ func (c *CustomAPIInprocClient) Rules(ctx context.Context, in *RulesReq, opts ..
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.waf_rules.CustomAPI.Rules"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.Rules(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -427,6 +436,15 @@ func (c *CustomAPIInprocClient) VirtualHostWafRulesStatus(ctx context.Context, i
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.waf_rules.CustomAPI.VirtualHostWafRulesStatus"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.VirtualHostWafRulesStatus(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -461,6 +479,15 @@ func (c *CustomAPIInprocClient) WafRulesStatus(ctx context.Context, in *WafRules
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.waf_rules.CustomAPI.WafRulesStatus"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.WafRulesStatus(ctx, in)
 	if err != nil {
@@ -755,7 +782,7 @@ var CustomAPISwaggerJSON string = `{
     "definitions": {
         "schemaWafModeType": {
             "type": "string",
-            "description": "The mode of operation for Web Application Firewall\n\n - BLOCK: Block on detection\n - ALERT_ONLY: Only raise alert on detection",
+            "description": "The mode of operation for Web Application Firewall\n\nBlock on detection\nOnly raise alert on detection",
             "title": "WafModeType",
             "enum": [
                 "BLOCK",

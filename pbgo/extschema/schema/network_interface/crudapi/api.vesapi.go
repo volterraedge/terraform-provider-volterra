@@ -2274,7 +2274,7 @@ var APISwaggerJSON string = `{
             "description": "DHCP network configuration",
             "title": "DHCP Network",
             "x-displayname": "DHCP Network",
-            "x-ves-displayorder": "1,2,3,12,4,5,6,7,8,9,10,11",
+            "x-ves-displayorder": "1,12,4,5,9",
             "x-ves-oneof-field-dns_choice": "[\"dns_address\",\"same_as_dgw\"]",
             "x-ves-oneof-field-gateway_choice": "[\"dgw_address\",\"first_address\",\"last_address\"]",
             "x-ves-oneof-field-network_prefix_choice": "[\"network_prefix\",\"network_prefix_allocator\"]",

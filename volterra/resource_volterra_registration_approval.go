@@ -192,7 +192,20 @@ func resourceVolterraRegistrationApprovalUpdate(d *schema.ResourceData, meta int
 func resourceVolterraRegistrationApprovalDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*APIClient)
 	regName := d.Get("registration_name").(string)
-	approvalReq := &ves_io_schema_registration.ApprovalReq{Name: regName, Namespace: svcfw.SystemNSVal, State: ves_io_schema_registration.RETIRED, Passport: &ves_io_schema_registration.Passport{}}
+	aParams := &approvalParams{}
+	// validation
+	if v, ok := d.GetOk("cluster_name"); ok {
+		aParams.clusterName = v.(string)
+	}
+	if v, ok := d.GetOk("cluster_size"); ok {
+		aParams.clusterSize = int32(v.(int))
+	}
+	approvalReq := &ves_io_schema_registration.ApprovalReq{Name: regName, Namespace: svcfw.SystemNSVal, State: ves_io_schema_registration.RETIRED,
+		Passport: &ves_io_schema_registration.Passport{
+			ClusterName: aParams.clusterName,
+			ClusterSize: aParams.clusterSize,
+		},
+	}
 
 	log.Printf("[DEBUG] Deleting Volterra Registration obj with name %+v in namespace %+v", approvalReq.Name, approvalReq.Namespace)
 	yamlReq, err := codec.ToYAML(approvalReq)

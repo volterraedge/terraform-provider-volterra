@@ -23,7 +23,7 @@ resource "volterra_http_loadbalancer" "example" {
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
   advertise_on_public_default_vip = true
 
-  // One of the arguments from this list "captcha_challenge no_challenge js_challenge" must be set
+  // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
 
   js_challenge {
     cookie_expiry       = "cookie_expiry"
@@ -32,15 +32,36 @@ resource "volterra_http_loadbalancer" "example" {
     js_script_delay     = "js_script_delay"
   }
   domains = ["www.foo.com"]
-  // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
-  source_ip_stickiness = true
+
+  // One of the arguments from this list "source_ip_stickiness cookie_stickiness ring_hash round_robin least_active random" must be set
+
+  ring_hash {
+    hash_policy {
+      // One of the arguments from this list "header_name cookie source_ip" must be set
+      source_ip = true
+
+      terminal = true
+    }
+  }
+
   // One of the arguments from this list "http https_auto_cert https" must be set
-  http = true
+
+  http {
+    dns_volterra_managed = true
+  }
   // One of the arguments from this list "disable_rate_limit rate_limit" must be set
   disable_rate_limit = true
-  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-  no_service_policies = true
-  // One of the arguments from this list "waf waf_rule disable_waf" must be set
+
+  // One of the arguments from this list "active_service_policies service_policies_from_namespace no_service_policies" must be set
+
+  active_service_policies {
+    policies {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
+  // One of the arguments from this list "disable_waf waf waf_rule" must be set
   disable_waf = true
 }
 
@@ -99,7 +120,7 @@ Argument Reference
 
 `source_ip_stickiness` - (Optional) Request are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server (bool).
 
-`http` - (Optional) HTTP Load balancer. User is responsible for managing DNS to this Load Balancer. (bool).
+`http` - (Optional) HTTP Load balancer.. See [Http ](#http) below for details.
 
 `https` - (Optional) User is responsible for managing DNS to this Load Balancer.. See [Https ](#https) below for details.
 
@@ -151,7 +172,7 @@ Configure Advanced per route options.
 
 `endpoint_subsets` - (Optional) upstream origin pool which match this metadata will be selected for load balancing (`String`).
 
-`common_hash_policy` - (Optional) Use common hash policy for all routes (bool).
+`common_hash_policy` - (Optional) Use Load balancer hash policy for this route (bool).
 
 `specific_hash_policy` - (Optional) Configure hash policy specific for this route. See [Specific Hash Policy ](#specific-hash-policy) below for details.
 
@@ -289,7 +310,7 @@ Use common buffering configuration.
 
 ### Common Hash Policy
 
-Use common hash policy for all routes.
+Use Load balancer hash policy for this route.
 
 ### Compression Params
 
@@ -307,7 +328,7 @@ Only GZIP compression is supported.
 
 Hash based on cookie.
 
-`name` - (Optional) produced (`String`).
+`name` - (Required) produced (`String`).
 
 `path` - (Optional) will be set for the cookie (`String`).
 
@@ -317,7 +338,7 @@ Hash based on cookie.
 
 Request are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server.
 
-`name` - (Optional) produced (`String`).
+`name` - (Required) produced (`String`).
 
 `path` - (Optional) will be set for the cookie (`String`).
 
@@ -437,6 +458,12 @@ route the request.
 
 `terminal` - (Optional) Specify if its a terminal policy (`Bool`).
 
+### Http
+
+HTTP Load balancer..
+
+`dns_volterra_managed` - (Optional) This requires the domain to be delegated to Volterra using the Delegated Domain feature. (`Bool`).
+
 ### Https
 
 User is responsible for managing DNS to this Load Balancer..
@@ -454,6 +481,8 @@ DNS records will be managed by Volterra..
 `add_hsts` - (Optional) Add HTTP Strict-Transport-Security response header (`Bool`).
 
 `http_redirect` - (Optional) Redirect HTTP traffic to corresponding HTTPS (`Bool`).
+
+`tls_config` - (Optional) Configuration for TLS parameters such as min/max TLS version and ciphers. See [Tls Config ](#tls-config) below for details.
 
 ### Ip Allowed List
 

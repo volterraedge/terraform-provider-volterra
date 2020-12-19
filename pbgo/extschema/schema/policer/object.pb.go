@@ -118,6 +118,9 @@ func (m *Object) GetSpec() *SpecType {
 // x-displayName: "Specification"
 // Shape of policer object
 type SpecType struct {
+	// gc_spec
+	//
+	// x-displayName: "GC Spec"
 	GcSpec *GlobalSpecType `protobuf:"bytes,2,opt,name=gc_spec,json=gcSpec" json:"gc_spec,omitempty"`
 }
 

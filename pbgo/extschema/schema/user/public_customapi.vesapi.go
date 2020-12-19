@@ -913,6 +913,15 @@ func (c *CustomAPIInprocClient) AcceptTOS(ctx context.Context, in *AcceptTOSRequ
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.AcceptTOS"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.AcceptTOS(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -947,6 +956,15 @@ func (c *CustomAPIInprocClient) AssignRole(ctx context.Context, in *AssignRoleRe
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.AssignRole"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.AssignRole(ctx, in)
 	if err != nil {
@@ -983,6 +1001,15 @@ func (c *CustomAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDe
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.CascadeDelete"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.CascadeDelete(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -1017,6 +1044,15 @@ func (c *CustomAPIInprocClient) Create(ctx context.Context, in *UserRoleRequest,
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.Create"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.Create(ctx, in)
 	if err != nil {
@@ -1053,6 +1089,15 @@ func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetUserRoleRequest,
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.Get"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.Get(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -1087,6 +1132,15 @@ func (c *CustomAPIInprocClient) GetTOS(ctx context.Context, in *GetTOSRequest, o
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.GetTOS"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.GetTOS(ctx, in)
 	if err != nil {
@@ -1123,6 +1177,15 @@ func (c *CustomAPIInprocClient) List(ctx context.Context, in *ListUserRoleReques
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.List"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.List(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -1158,6 +1221,15 @@ func (c *CustomAPIInprocClient) Replace(ctx context.Context, in *UserRoleRequest
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.Replace"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.Replace(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -1192,6 +1264,15 @@ func (c *CustomAPIInprocClient) SendPasswordEmail(ctx context.Context, in *SendP
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.user.CustomAPI.SendPasswordEmail"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.SendPasswordEmail(ctx, in)
 	if err != nil {
@@ -2243,7 +2324,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "schemaPlanType": {
             "type": "string",
-            "description": "PlanType is the type of billing plan for the customer",
+            "description": "PlanType is the type of billing plan for the customer\n",
             "title": "PlanType",
             "enum": [
                 "FREE",
@@ -2400,15 +2481,15 @@ var CustomAPISwaggerJSON string = `{
         },
         "schemaTenantType": {
             "type": "string",
-            "description": "- UNKNOWN: UNKNOWN indicates the field not being set\n - FREEMIUM: FREEMIUM are customer that don't have their domain\n - ENTERPRISE: ENTERPRiISE customer have their domain",
-            "title": "TenantType is the type of the customer",
+            "description": "TenantType is the type of the customer\n\nUNKNOWN indicates the field not being set\nFREEMIUM are customer that don't have their domain\nENTERPRiISE customer have their domain",
+            "title": "TenantType",
             "enum": [
                 "UNKNOWN",
                 "FREEMIUM",
                 "ENTERPRISE"
             ],
             "default": "UNKNOWN",
-            "x-displayname": "",
+            "x-displayname": "Tenant type",
             "x-ves-proto-enum": "ves.io.schema.TenantType"
         },
         "schemaViewRefType": {
@@ -2914,6 +2995,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "idm_type": {
                     "description": " Type of the identity management who is managing this user.",
+                    "title": "IDM Type",
                     "$ref": "#/definitions/userIdmType",
                     "x-displayname": "Identity Management Type"
                 },
