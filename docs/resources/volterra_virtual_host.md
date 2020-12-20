@@ -21,7 +21,13 @@ resource "volterra_virtual_host" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
-  no_challenge = true
+
+  js_challenge {
+    cookie_expiry       = "cookie_expiry"
+    custom_page         = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+    enable_js_challenge = true
+    js_script_delay     = "js_script_delay"
+  }
 }
 
 ```
@@ -121,11 +127,11 @@ HMAC pair provided as primary and secondary key.
 
 Configure authentication details.
 
-`auth_config` - (Optional) Reference to Authentication Config Object. See [ref](#ref) below for details.
+`auth_config` - (Required) Reference to Authentication Config Object. See [ref](#ref) below for details.
 
-`cookie_params` - (Optional) x-displayName: "Cookie Params". See [Cookie Params ](#cookie-params) below for details.
+`cookie_params` - (Optional) Configure all Cookie params. See [Cookie Params ](#cookie-params) below for details.
 
-`use_auth_object_config` - (Optional) x-displayName: "Use the cookie parameters from Authentication Object" (bool).
+`use_auth_object_config` - (Optional) Use the Cookie Params configured in Authentication Object (bool).
 
 `redirect_dynamic` - (Optional) This URL must match with the redirect URL configured with the OIDC provider (bool).
 
@@ -217,7 +223,7 @@ Only GZIP compression is supported.
 
 ### Cookie Params
 
-x-displayName: "Cookie Params".
+Configure all Cookie params.
 
 `cookie_expiry` - (Optional)cookie_expiry (`Int`).
 
@@ -401,7 +407,7 @@ in advertise policy.
 
 ### Use Auth Object Config
 
-x-displayName: "Use the cookie parameters from Authentication Object".
+Use the Cookie Params configured in Authentication Object.
 
 ### Validation Params
 

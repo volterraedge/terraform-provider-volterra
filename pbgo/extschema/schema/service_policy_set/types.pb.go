@@ -117,7 +117,7 @@ func (m *GlobalSpecType) GetScope() ves_io_schema_policy.PolicySetScope {
 
 // Create service policy
 //
-// x-displayName: "Specification"
+// x-displayName: "Create Service Policy Set"
 // Create service_policy_set creates a new object in the storage backend for metadata.namespace.
 type CreateSpecType struct {
 	Policies      []*ves_io_schema4.ObjectRefType       `protobuf:"bytes,1,rep,name=policies" json:"policies,omitempty"`
@@ -168,7 +168,7 @@ func (m *CreateSpecType) GetScope() ves_io_schema_policy.PolicySetScope {
 
 // Replace service policy
 //
-// x-displayName: "Specification"
+// x-displayName: "Replace Service Policy Set"
 // Replace service_policy_set replaces an existing object in the storage backend for metadata.namespace.
 type ReplaceSpecType struct {
 	Policies      []*ves_io_schema4.ObjectRefType       `protobuf:"bytes,1,rep,name=policies" json:"policies,omitempty"`
@@ -219,7 +219,7 @@ func (m *ReplaceSpecType) GetScope() ves_io_schema_policy.PolicySetScope {
 
 // Get service policy
 //
-// x-displayName: "Specification"
+// x-displayName: "Get Service Policy Set"
 // Get service_policy_set reads a given object from storage backend for metadata.namespace.
 type GetSpecType struct {
 	Policies      []*ves_io_schema4.ObjectRefType       `protobuf:"bytes,1,rep,name=policies" json:"policies,omitempty"`

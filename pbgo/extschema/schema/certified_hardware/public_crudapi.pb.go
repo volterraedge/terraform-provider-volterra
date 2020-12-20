@@ -51,9 +51,13 @@ var _ = math.Inf
 type GetResponseFormatCode int32
 
 const (
+	// x-displayName: "Default Format"
+	// Default format of returned resource
 	GET_RSP_FORMAT_DEFAULT GetResponseFormatCode = 0
+	// x-displayName: "Status format"
 	// Response should be in StatusObject(s) format
 	GET_RSP_FORMAT_STATUS GetResponseFormatCode = 3
+	// x-displayName: "GetSpecType format"
 	// Response should be in format of GetSpecType
 	GET_RSP_FORMAT_READ GetResponseFormatCode = 4
 )
@@ -874,12 +878,12 @@ const _ = grpc.SupportPackageIsVersion4
 type APIClient interface {
 	// Get certified hardware
 	//
-	// x-displayName: "Get Certified Hardware Specification"
+	// x-displayName: "Get Certified Hardware"
 	// Get Certified Hardware object
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Certified Hardware"
 	// List the set of certified_hardware in a namespace
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 }
@@ -915,12 +919,12 @@ func (c *aPIClient) List(ctx context.Context, in *ListRequest, opts ...grpc.Call
 type APIServer interface {
 	// Get certified hardware
 	//
-	// x-displayName: "Get Certified Hardware Specification"
+	// x-displayName: "Get Certified Hardware"
 	// Get Certified Hardware object
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Certified Hardware"
 	// List the set of certified_hardware in a namespace
 	List(context.Context, *ListRequest) (*ListResponse, error)
 }

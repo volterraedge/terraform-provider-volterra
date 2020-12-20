@@ -2503,14 +2503,14 @@ var APISwaggerJSON string = `{
         },
         "schemaServiceConnectionType": {
             "type": "string",
-            "description": "x-displayName \"displayname\"\nOnly added so codegeneration does not break\n\n - TLS: x-displayName \"displayname\"\nOnly added so codegeneration does not break\n - NoTLS: x-displayName \"displayname\"\nOnly added so codegeneration does not break",
+            "description": "Only added so codegeneration does not break\n\nOnly added so codegeneration does not break\nOnly added so codegeneration does not break",
             "title": "Title",
             "enum": [
                 "TLS",
                 "NoTLS"
             ],
             "default": "TLS",
-            "x-displayname": "",
+            "x-displayname": "displayname",
             "x-ves-proto-enum": "ves.io.schema.ServiceConnectionType"
         },
         "schemaServiceParameters": {
@@ -2520,14 +2520,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.ServiceParameters",
             "properties": {
                 "ctype": {
-                    "description": " x-displayName \"displayname\"\n Only added so codegeneration does not break",
+                    "description": " Only added so codegeneration does not break",
                     "title": "Title",
-                    "$ref": "#/definitions/schemaServiceConnectionType"
+                    "$ref": "#/definitions/schemaServiceConnectionType",
+                    "x-displayname": "displayname"
                 },
                 "url": {
                     "type": "string",
-                    "description": " x-displayName \"displayname\"\n Only added so codegeneration does not break",
-                    "title": "Title"
+                    "description": " Only added so codegeneration does not break",
+                    "title": "Title",
+                    "x-displayname": "displayname"
                 }
             }
         },
@@ -3568,7 +3570,7 @@ var APISwaggerJSON string = `{
         },
         "siteLinkQuality": {
             "type": "string",
-            "description": "Link quality determined by VER using different probes\n\nUnknown quality\nLink quality is good\nLink quality is poor\n - QUALITY_DISABLED: Quality disabled",
+            "description": "Link quality determined by VER using different probes\n\nUnknown quality\nLink quality is good\nLink quality is poor\nQuality disabled",
             "title": "Link quality",
             "enum": [
                 "QUALITY_UNKNOWN",
@@ -3648,13 +3650,13 @@ var APISwaggerJSON string = `{
                 },
                 "link_quality": {
                     "description": " Link quality for the interface",
-                    "title": "Link quality status\nx-displayName: \"Link Quality\"\nLink quality for the interface",
+                    "title": "Link quality status",
                     "$ref": "#/definitions/siteLinkQuality",
                     "x-displayname": "Link Quality"
                 },
                 "link_type": {
                     "description": " Link type for the interface",
-                    "title": "Link type\nx-displayName: \"Link type\"\nLink type for the interface",
+                    "title": "Link type",
                     "$ref": "#/definitions/siteLinkType",
                     "x-displayname": "Link type"
                 },

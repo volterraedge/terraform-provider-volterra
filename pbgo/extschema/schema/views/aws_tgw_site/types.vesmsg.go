@@ -243,6 +243,20 @@ func (m *CreateSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *CreateSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetVnConfig().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.vn_config")
+	}
+
+	return nil
+}
+
 func (m *CreateSpecType) DeepCopy() *CreateSpecType {
 	if m == nil {
 		return nil
@@ -757,6 +771,20 @@ func (m *GetSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *GetSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetVnConfig().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.vn_config")
+	}
+
+	return nil
+}
+
 func (m *GetSpecType) DeepCopy() *GetSpecType {
 	if m == nil {
 		return nil
@@ -1002,6 +1030,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["user_modification_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_modification_timestamp"))
+		if err := fv(ctx, m.GetUserModificationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["vn_config"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("vn_config"))
@@ -1127,6 +1164,20 @@ func (m *GlobalSpecType) ToJSON() (string, error) {
 
 func (m *GlobalSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GlobalSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetVnConfig().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.vn_config")
+	}
+
+	return nil
 }
 
 func (m *GlobalSpecType) DeepCopy() *GlobalSpecType {
@@ -1495,6 +1546,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["user_modification_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_modification_timestamp"))
+		if err := fv(ctx, m.GetUserModificationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["view_internal"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("view_internal"))
@@ -1633,6 +1693,20 @@ func (m *ReplaceSpecType) ToJSON() (string, error) {
 
 func (m *ReplaceSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ReplaceSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetVnConfig().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.vn_config")
+	}
+
+	return nil
 }
 
 func (m *ReplaceSpecType) DeepCopy() *ReplaceSpecType {
@@ -3453,6 +3527,20 @@ func (m *VnConfiguration) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *VnConfiguration) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetGlobalNetworkList().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting VnConfiguration.global_network_list")
+	}
+
+	return nil
+}
+
 func (m *VnConfiguration) DeepCopy() *VnConfiguration {
 	if m == nil {
 		return nil
@@ -3847,6 +3935,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.Tunnels = f.GetTunnels()
+	m.UserModificationTimestamp = f.GetUserModificationTimestamp()
 	m.VnConfig = f.GetVnConfig()
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 	m.VpcAttachments = f.GetVpcAttachments()
@@ -3865,6 +3954,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.TgwSecurity = m1.TgwSecurity
 	f.Tunnels = m1.Tunnels
+	f.UserModificationTimestamp = m1.UserModificationTimestamp
 	f.VnConfig = m1.VnConfig
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 	f.VpcAttachments = m1.VpcAttachments

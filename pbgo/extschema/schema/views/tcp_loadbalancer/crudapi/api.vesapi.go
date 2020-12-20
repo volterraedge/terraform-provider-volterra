@@ -2754,7 +2754,7 @@ var APISwaggerJSON string = `{
                 "advertise_where": {
                     "type": "array",
                     "description": " Where should this load balancer be available\nRequired: YES",
-                    "title": "Advertise Where\nx-displayName: \"List of Sites to Advertise\"\nx-required\nWhere should this load balancer be available",
+                    "title": "Advertise Where",
                     "items": {
                         "$ref": "#/definitions/viewsWhereType"
                     },
@@ -2970,6 +2970,13 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "DNS Information"
                 },
+                "dns_volterra_managed": {
+                    "type": "boolean",
+                    "description": " DNS records for domains will be managed automatically by Volterra.\n This requires the domain to be delegated to Volterra using the Delegated Domain feature.",
+                    "title": "Manage DNS Domain",
+                    "format": "boolean",
+                    "x-displayname": "Automatically Manage DNS Records"
+                },
                 "do_not_advertise": {
                     "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\nx-displayName: \"Do Not Advertise\"\nDo not advertise this loadbalancer",
                     "title": "Do Not Advertise",
@@ -3039,7 +3046,9 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.SpecType",
             "properties": {
                 "gc_spec": {
-                    "$ref": "#/definitions/viewstcp_loadbalancerGlobalSpecType"
+                    "title": "gc_spec",
+                    "$ref": "#/definitions/viewstcp_loadbalancerGlobalSpecType",
+                    "x-displayname": "GC Spec"
                 }
             }
         },

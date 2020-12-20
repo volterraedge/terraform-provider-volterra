@@ -23,63 +23,63 @@ resource "volterra_fleet" "example" {
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
 
-  // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
+  // One of the arguments from this list "dc_cluster_group dc_cluster_group_inside no_dc_cluster_group" must be set
+  no_dc_cluster_group = true
+  fleet_label         = ["sfo"]
 
-  dc_cluster_group_inside {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
-  fleet_label = ["sfo"]
   // One of the arguments from this list "disable_gpu enable_gpu" must be set
   disable_gpu = true
+
   // One of the arguments from this list "interface_list default_config device_list" must be set
-  default_config = true
-  // One of the arguments from this list "default_storage_class storage_class_list" must be set
-  default_storage_class = true
-  // One of the arguments from this list "no_storage_device storage_device_list" must be set
-  no_storage_device = true
-  // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
-  no_storage_interfaces = true
 
-  // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
+  device_list {
+    devices {
+      // One of the arguments from this list "network_device" must be set
 
-  storage_static_routes {
-    storage_routes {
-      attrs = ["attrs"]
-
-      labels = {
-        "key1" = "value1"
-      }
-
-      nexthop {
+      network_device {
         interface {
           name      = "test1"
           namespace = "staging"
           tenant    = "acmecorp"
         }
 
-        nexthop_address {
-          // One of the arguments from this list "ipv4 ipv6" must be set
-
-          ipv6 {
-            addr = "2001:db8:0:0:0:0:2:1"
-          }
-        }
-
-        type = "type"
+        use = "use"
       }
 
-      subnets {
-        // One of the arguments from this list "ipv4 ipv6" must be set
-
-        ipv4 {
-          plen   = "plen"
-          prefix = "192.168.1.0"
-        }
-      }
+      name  = "name"
+      owner = "owner"
     }
   }
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  logs_streaming_disabled = true
+  // One of the arguments from this list "storage_class_list default_storage_class" must be set
+  default_storage_class = true
+
+  // One of the arguments from this list "no_storage_device storage_device_list" must be set
+
+  storage_device_list {
+    storage_devices {
+      advanced_advanced_parameters = {
+        "key1" = "value1"
+      }
+
+      // One of the arguments from this list "netapp_trident pure_service_orchestrator openebs_enterprise" must be set
+
+      openebs_enterprise {
+        mayastor_pools {
+          node = "master-0"
+
+          pool_disk_devices = ["/dev/sdb"]
+          pool_name         = "pool_name"
+        }
+      }
+      storage_device = "storage_device"
+    }
+  }
+  // One of the arguments from this list "storage_interface_list no_storage_interfaces" must be set
+  no_storage_interfaces = true
+  // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
+  no_storage_static_routes = true
 }
 
 ```
@@ -128,6 +128,10 @@ Argument Reference
 `device_list` - (Optional) Add device for all interfaces belonging to this fleet. See [Device List ](#device-list) below for details.
 
 `interface_list` - (Optional) Add all interfaces belonging to this fleet. See [Interface List ](#interface-list) below for details.
+
+`log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
+
+`logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
 `network_connectors` - (Optional) The network connectors configuration is applied on all sites that are member of the fleet.. See [ref](#ref) below for details.
 

@@ -2353,9 +2353,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "rules": {
                     "type": "array",
+                    "description": " List of custom rules",
+                    "title": "rules",
                     "items": {
                         "$ref": "#/definitions/forward_proxy_policyForwardProxyAdvancedRuleType"
-                    }
+                    },
+                    "x-displayname": "Custom Rule List"
                 }
             }
         },
@@ -2432,7 +2435,9 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.SpecType",
             "properties": {
                 "gc_spec": {
-                    "$ref": "#/definitions/viewsforward_proxy_policyGlobalSpecType"
+                    "title": "gc_spec",
+                    "$ref": "#/definitions/viewsforward_proxy_policyGlobalSpecType",
+                    "x-displayname": "GC Spec"
                 }
             }
         },

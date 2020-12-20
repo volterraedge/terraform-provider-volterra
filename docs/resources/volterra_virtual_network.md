@@ -20,7 +20,7 @@ resource "volterra_virtual_network" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "global_network site_local_network site_local_inside_network legacy_type" must be set
+  // One of the arguments from this list "site_local_inside_network legacy_type global_network site_local_network" must be set
   global_network = true
 }
 

@@ -51,13 +51,19 @@ var _ = math.Inf
 type GetResponseFormatCode int32
 
 const (
+	// x-displayName: "Default Format"
+	// Default format of returned resource
 	GET_RSP_FORMAT_DEFAULT GetResponseFormatCode = 0
+	// x-displayName: "Create request Format"
 	// Response should be in CreateRequest format
 	GET_RSP_FORMAT_FOR_CREATE GetResponseFormatCode = 1
+	// x-displayName: "Replace request format"
 	// Response should be in ReplaceRequest format
 	GET_RSP_FORMAT_FOR_REPLACE GetResponseFormatCode = 2
+	// x-displayName: "Status format"
 	// Response should be in StatusObject(s) format
 	GET_RSP_FORMAT_STATUS GetResponseFormatCode = 3
+	// x-displayName: "GetSpecType format"
 	// Response should be in format of GetSpecType
 	GET_RSP_FORMAT_READ GetResponseFormatCode = 4
 )
@@ -1312,7 +1318,7 @@ type APIClient interface {
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Alert Policy"
 	// List the set of alert_policy in a namespace
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// Replace Alert Policy
@@ -1322,7 +1328,7 @@ type APIClient interface {
 	Replace(ctx context.Context, in *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete Alert Policy"
 	// Delete the specified alert_policy
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf3.Empty, error)
 }
@@ -1395,7 +1401,7 @@ type APIServer interface {
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Alert Policy"
 	// List the set of alert_policy in a namespace
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	// Replace Alert Policy
@@ -1405,7 +1411,7 @@ type APIServer interface {
 	Replace(context.Context, *ReplaceRequest) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete Alert Policy"
 	// Delete the specified alert_policy
 	Delete(context.Context, *DeleteRequest) (*google_protobuf3.Empty, error)
 }

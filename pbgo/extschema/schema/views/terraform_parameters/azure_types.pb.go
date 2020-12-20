@@ -1399,7 +1399,7 @@ func NewPopulatedAzureSubnetType(r randyAzureTypes, easy bool) *AzureSubnetType 
 	if r.Intn(10) != 0 {
 		this.Subnet = NewPopulatedAzureSubnetChoice(r, easy)
 	}
-	this.InterfaceType = InterfaceType([]int32{0, 1}[r.Intn(2)])
+	this.InterfaceType = InterfaceType([]int32{0, 1, 2}[r.Intn(3)])
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this

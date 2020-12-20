@@ -1965,7 +1965,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1977,7 +1977,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2132,7 +2132,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Create a protocol_policer object, protocol_policer object contains list\nof L4 protocol match condition and corresponding traffic rate limits",
             "title": "Create a Protocol policer object",
-            "x-displayname": "Create a Protocol Policer Object",
+            "x-displayname": "Create Protocol Policer",
             "x-ves-displayorder": "1",
             "x-ves-proto-message": "ves.io.schema.protocol_policer.CreateSpecType",
             "properties": {
@@ -2215,7 +2215,7 @@ var APISwaggerJSON string = `{
         },
         "protocol_policerGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2230,7 +2230,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Get specification of a protocol_policer object with L4 protocol match condition and\ncorresponding traffic rate limits",
             "title": "Get a Protocol policer object",
-            "x-displayname": "Get a Protocol Policer Object",
+            "x-displayname": "Get Protocol Policer",
             "x-ves-displayorder": "1",
             "x-ves-proto-message": "ves.io.schema.protocol_policer.GetSpecType",
             "properties": {
@@ -2264,7 +2264,7 @@ var APISwaggerJSON string = `{
         },
         "protocol_policerIcmpMsgType": {
             "type": "string",
-            "description": "\n - ECHO_REPLY: ICMP echo request packet which is sent by originator of Ping packet\n - ECHO_REQUEST: ICMP echo reply packet which is sent in responce to ICMP echo request packet\n - ALL_ICMP_MSG: All ICMP packet types including TTL exceeded, destination\nunreachable and source quench etc",
+            "description": "\nICMP echo request packet which is sent by originator of Ping packet\nICMP echo reply packet which is sent in responce to ICMP echo request packet\nAll ICMP packet types including TTL exceeded, destination\nunreachable and source quench etc",
             "title": "ICMP Message types",
             "enum": [
                 "ECHO_REPLY",
@@ -2284,9 +2284,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "type": {
                     "type": "array",
+                    "description": " ICMP message type to be matched in packet",
+                    "title": "type",
                     "items": {
                         "$ref": "#/definitions/protocol_policerIcmpMsgType"
-                    }
+                    },
+                    "x-displayname": "ICMP type"
                 }
             }
         },
@@ -2529,7 +2532,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Replace a protocol_policer object with new L4 protocol match condition and\ncorresponding traffic rate limits",
             "title": "Replace a Protocol policer object",
-            "x-displayname": "Replace a Protocol Policer Object",
+            "x-displayname": "Replace Protocol Policer",
             "x-ves-displayorder": "1",
             "x-ves-proto-message": "ves.io.schema.protocol_policer.ReplaceSpecType",
             "properties": {
@@ -2594,7 +2597,7 @@ var APISwaggerJSON string = `{
         },
         "protocol_policerTcpFlags": {
             "type": "string",
-            "description": "TCP flags indicate a particular connection state\n\n - FIN: \"Finished\" flag indicates there will be no more data from the sender\n - SYN: \"Synchronisation\" flag, is first step in establishing in TCP connection\n - RST: \"Reset\" flag gets sent from the server to the client upon receiving unexpected\ndata\n - PSH: \"Push\" flag indicates receiver to not buffer data\n - ACK: \"Acknowledgment\" to the successful receipt of data\n - URG: \"Urgent\" flag is used to notify the receiver to process the urgent packets before\nprocessing all other packets.\n - ALL_TCP_FLAGS: All of the above flags in union",
+            "description": "TCP flags indicate a particular connection state\n\n\"Finished\" flag indicates there will be no more data from the sender\n\"Synchronisation\" flag, is first step in establishing in TCP connection\n\"Reset\" flag gets sent from the server to the client upon receiving unexpected\ndata\n\"Push\" flag indicates receiver to not buffer data\n\"Acknowledgment\" to the successful receipt of data\n\"Urgent\" flag is used to notify the receiver to process the urgent packets before\nprocessing all other packets.\nAll of the above flags in union",
             "title": "TCP Flags",
             "enum": [
                 "FIN",
@@ -2618,9 +2621,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "flags": {
                     "type": "array",
+                    "description": " TCP flag to be matched in a TCP packet",
+                    "title": "flags",
                     "items": {
                         "$ref": "#/definitions/protocol_policerTcpFlags"
-                    }
+                    },
+                    "x-displayname": "TCP flags"
                 }
             }
         },

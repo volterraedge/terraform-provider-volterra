@@ -171,6 +171,14 @@ type ValidateAuthenticationDetails struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateAuthenticationDetails) RedirectUrlChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for redirect_url_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAuthenticationDetails) RedirectUrlChoiceRedirectUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_RedirectUrl, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -267,6 +275,16 @@ func (v *ValidateAuthenticationDetails) Validate(ctx context.Context, pm interfa
 
 	}
 
+	if fv, exists := v.FldValidators["redirect_url_choice"]; exists {
+		val := m.GetRedirectUrlChoice()
+		vOpts := append(opts,
+			db.WithValidateField("redirect_url_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
 	switch m.GetRedirectUrlChoice().(type) {
 	case *AuthenticationDetails_RedirectUrl:
 		if fv, exists := v.FldValidators["redirect_url_choice.redirect_url"]; exists {
@@ -308,6 +326,17 @@ var DefaultAuthenticationDetailsValidator = func() *ValidateAuthenticationDetail
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhRedirectUrlChoice := v.RedirectUrlChoiceValidationRuleHandler
+	rulesRedirectUrlChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhRedirectUrlChoice(rulesRedirectUrlChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AuthenticationDetails.redirect_url_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["redirect_url_choice"] = vFn
+
 	vrhRedirectUrlChoiceRedirectUrl := v.RedirectUrlChoiceRedirectUrlValidationRuleHandler
 	rulesRedirectUrlChoiceRedirectUrl := map[string]string{
 		"ves.io.schema.rules.string.max_len": "128",
@@ -324,6 +353,7 @@ var DefaultAuthenticationDetailsValidator = func() *ValidateAuthenticationDetail
 
 	vrhAuthConfig := v.AuthConfigValidationRuleHandler
 	rulesAuthConfig := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "1",
 	}
 	vFn, err = vrhAuthConfig(rulesAuthConfig)
@@ -4448,6 +4478,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_volterra_managed"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_volterra_managed"))
+		if err := fv(ctx, m.GetDnsVolterraManaged(), vOpts...); err != nil {
+			return err
 		}
 
 	}

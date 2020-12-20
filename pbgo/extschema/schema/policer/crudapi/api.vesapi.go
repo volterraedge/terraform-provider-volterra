@@ -2281,7 +2281,9 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.policer.SpecType",
             "properties": {
                 "gc_spec": {
-                    "$ref": "#/definitions/policerGlobalSpecType"
+                    "title": "gc_spec",
+                    "$ref": "#/definitions/policerGlobalSpecType",
+                    "x-displayname": "GC Spec"
                 }
             }
         },

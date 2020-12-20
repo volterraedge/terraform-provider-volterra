@@ -21,16 +21,11 @@ resource "volterra_network_firewall" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "disable_fast_acl active_fast_acls fast_acl_set" must be set
+  disable_fast_acl = true
 
-  active_fast_acls {
-    fast_acls {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
   // One of the arguments from this list "disable_forward_proxy_policy active_forward_proxy_policies forward_proxy_policy_set" must be set
   disable_forward_proxy_policy = true
+
   // One of the arguments from this list "disable_network_policy active_network_policies network_policy_set" must be set
   disable_network_policy = true
 }

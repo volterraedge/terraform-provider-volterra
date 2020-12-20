@@ -398,6 +398,15 @@ func (c *ApiepCustomAPIInprocClient) GetAPIEndpointLearntSchema(ctx context.Cont
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointLearntSchema"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.GetAPIEndpointLearntSchema(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -433,6 +442,15 @@ func (c *ApiepCustomAPIInprocClient) GetAPIEndpointPDF(ctx context.Context, in *
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointPDF"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.GetAPIEndpointPDF(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -467,6 +485,15 @@ func (c *ApiepCustomAPIInprocClient) GetAPIEndpoints(ctx context.Context, in *AP
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoints"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.GetAPIEndpoints(ctx, in)
 	if err != nil {
@@ -920,6 +947,12 @@ var ApiepCustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "PDF(Error Rate)"
                 },
+                "error_rate_stat": {
+                    "description": " Mean and 95th percentile for PDF for error rate",
+                    "title": "PDFStat(error rate)",
+                    "$ref": "#/definitions/app_typePDFStat",
+                    "x-displayname": "PDFStat(Error Rate)"
+                },
                 "latency_no_data": {
                     "type": "array",
                     "description": " List of Probability density points for PDF for latency of response begin",
@@ -928,6 +961,12 @@ var ApiepCustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/app_typePDFSpec"
                     },
                     "x-displayname": "PDF(Latency Begin)"
+                },
+                "latency_no_data_stat": {
+                    "description": " Mean and 95th percentile for PDF for latency of response begin",
+                    "title": "PDFStat(response latency to first byte)",
+                    "$ref": "#/definitions/app_typePDFStat",
+                    "x-displayname": "PDFStat(Latency Begin)"
                 },
                 "latency_with_data": {
                     "type": "array",
@@ -938,6 +977,12 @@ var ApiepCustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "PDF(Latency End)"
                 },
+                "latency_with_data_stat": {
+                    "description": " Mean and 95th percentile for PDF for latency of response end",
+                    "title": "PDFStat(response latency)",
+                    "$ref": "#/definitions/app_typePDFStat",
+                    "x-displayname": "PDFStat(Latency End)"
+                },
                 "request_rate": {
                     "type": "array",
                     "description": " List of Probability density points for PDF for request rate",
@@ -946,6 +991,12 @@ var ApiepCustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/app_typePDFSpec"
                     },
                     "x-displayname": "PDF(Request Rate)"
+                },
+                "request_rate_stat": {
+                    "description": " Mean and 95th percentile for PDF for request rate",
+                    "title": "PDFStat(request rate)",
+                    "$ref": "#/definitions/app_typePDFStat",
+                    "x-displayname": "PDFStat(Request Rate)"
                 },
                 "request_size": {
                     "type": "array",
@@ -956,6 +1007,12 @@ var ApiepCustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "PDF(Request)"
                 },
+                "request_size_stat": {
+                    "description": " Mean and 95th percentile for PDF for request size",
+                    "title": "PDFStat(request_size)",
+                    "$ref": "#/definitions/app_typePDFStat",
+                    "x-displayname": "PDFStat(Request)"
+                },
                 "response_size": {
                     "type": "array",
                     "description": " List of Probability density points for PDF for response size",
@@ -965,6 +1022,12 @@ var ApiepCustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "PDF(Response)"
                 },
+                "response_size_stat": {
+                    "description": " Mean and 95th percentile for PDF for response size",
+                    "title": "PDFStat(response_size)",
+                    "$ref": "#/definitions/app_typePDFStat",
+                    "x-displayname": "PDFStat(Response)"
+                },
                 "response_throughput": {
                     "type": "array",
                     "description": " List of Probability density points for PDF for response throughput",
@@ -972,6 +1035,12 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/app_typePDFSpec"
                     },
+                    "x-displayname": "PDF(Response Throughput)"
+                },
+                "response_throughput_stat": {
+                    "description": " Mean and 95th percentile for PDF for response throughput",
+                    "title": "PDFStat(response throughput)",
+                    "$ref": "#/definitions/app_typePDFStat",
                     "x-displayname": "PDF(Response Throughput)"
                 }
             }
@@ -1008,6 +1077,30 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "format": "float",
                     "x-displayname": "Value",
                     "x-ves-example": "121.316"
+                }
+            }
+        },
+        "app_typePDFStat": {
+            "type": "object",
+            "description": "Probability Density Function statistics of the metric.\npdf_mean is the mean PDF of the metric, pdf_95 is the 95th percentile PDF of the metric.\nIn the univariate case PDFStat for each metric consists of pdf_mean and pdf_95.",
+            "title": "Probability Density Function Statistics",
+            "x-displayname": "PDF(Statistics)",
+            "x-ves-proto-message": "ves.io.schema.app_type.PDFStat",
+            "properties": {
+                "pdf_95": {
+                    "type": "number",
+                    "description": " pdf_95 represents the 95th percentile of PDF\n\nExample: - \"0.078\"-",
+                    "title": "PDF 95th Percentile",
+                    "format": "float",
+                    "x-displayname": "PDF(95th Percentile)",
+                    "x-ves-example": "0.078"
+                },
+                "pdf_mean": {
+                    "type": "number",
+                    "description": " pdf_mean represents the mean of PDF",
+                    "title": "PDF Mean",
+                    "format": "float",
+                    "x-displayname": "PDF(Mean)"
                 }
             }
         },

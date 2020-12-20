@@ -316,6 +316,15 @@ func (c *CustomDataAPIInprocClient) ServicePolicyHits(ctx context.Context, in *S
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.service_policy.CustomDataAPI.ServicePolicyHits"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.ServicePolicyHits(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -350,6 +359,15 @@ func (c *CustomDataAPIInprocClient) ServicePolicyHitsLatency(ctx context.Context
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.service_policy.CustomDataAPI.ServicePolicyHitsLatency"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.ServicePolicyHitsLatency(ctx, in)
 	if err != nil {

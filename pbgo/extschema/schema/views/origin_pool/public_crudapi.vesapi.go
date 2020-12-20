@@ -1917,7 +1917,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1928,7 +1928,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2091,7 +2091,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "keys": {
                     "type": "array",
-                    "description": " List of keys that define a cluster subset.\n\nExample: - \"production\"-",
+                    "description": " List of keys that define a cluster subset class.\n\nExample: - \"production\"-",
                     "title": "keys",
                     "items": {
                         "type": "string"
@@ -2336,7 +2336,7 @@ var APISwaggerJSON string = `{
         },
         "origin_poolGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2894,7 +2894,9 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.SpecType",
             "properties": {
                 "gc_spec": {
-                    "$ref": "#/definitions/viewsorigin_poolGlobalSpecType"
+                    "title": "gc_spec",
+                    "$ref": "#/definitions/viewsorigin_poolGlobalSpecType",
+                    "x-displayname": "GC Spec"
                 }
             }
         },
@@ -2930,6 +2932,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "disable_sni": {
                     "description": "Exclusive with [sni use_host_header_as_sni]\nx-displayName: \"No SNI\"\nDo not use SNI.",
+                    "title": "disable_sni",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "no_mtls": {
@@ -2938,13 +2941,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "skip_server_verification": {
-                    "description": "Exclusive with [use_server_verification volterra_trusted_ca]\n",
-                    "title": "Skip Server Verification\nx-displayName: \"Skip Origin Server Verification\"\nSkip Server Verification",
+                    "description": "Exclusive with [use_server_verification volterra_trusted_ca]\nx-displayName: \"Skip Verification\"\nSkip origin server verification",
+                    "title": "Skip Server Verification",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "sni": {
                     "type": "string",
-                    "description": "Exclusive with [disable_sni use_host_header_as_sni]\nx-displayName: \"SNI Value\"\nSNI value to be used."
+                    "description": "Exclusive with [disable_sni use_host_header_as_sni]\nx-displayName: \"SNI Value\"\nSNI value to be used.",
+                    "title": "sni"
                 },
                 "tls_config": {
                     "description": " TLS parameters such as min/max TLS version and ciphers\nRequired: YES",
@@ -2954,21 +2958,22 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "use_host_header_as_sni": {
-                    "description": "Exclusive with [disable_sni sni]\nx-displayName: \"Host Header\"\nUse the host header as SNI - not supported.",
+                    "description": "Exclusive with [disable_sni sni]\nx-displayName: \"Host Header\"\nUse the host header as SNI. The host header value is extracted after any configured rewrites have been applied.",
+                    "title": "use_host_header_as_sni",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "use_mtls": {
-                    "description": "Exclusive with [no_mtls]\n",
-                    "title": "Use MTLS\nx-displayName: \"MTLS\"\nUse MTLS for this pool using provided certificates",
+                    "description": "Exclusive with [no_mtls]\nx-displayName: \"MTLS\"\nUse MTLS for this pool using provided certificates",
+                    "title": "Use MTLS",
                     "$ref": "#/definitions/origin_poolTlsCertificatesType"
                 },
                 "use_server_verification": {
-                    "description": "Exclusive with [skip_server_verification volterra_trusted_ca]\nx-displayName: \"Origin Server Verification using Custom CA List\"\nVerify server identity using provided information",
+                    "description": "Exclusive with [skip_server_verification volterra_trusted_ca]\nx-displayName: \"Use Custom CA List\"\nPerform origin server verification using the provided trusted CA list",
                     "title": "Use Server Verification",
                     "$ref": "#/definitions/origin_poolUpstreamTlsValidationContext"
                 },
                 "volterra_trusted_ca": {
-                    "description": "Exclusive with [skip_server_verification use_server_verification]\nx-displayName: \"Origin Server Verification using Default Trusted CA List\"\nPerform origin server verification using Volterra default trusted CA list",
+                    "description": "Exclusive with [skip_server_verification use_server_verification]\nx-displayName: \"Use Default Trusted CA List\"\nPerform origin server verification using Volterra default trusted CA list",
                     "title": "Volterra Trusted CA",
                     "$ref": "#/definitions/ioschemaEmpty"
                 }
@@ -3299,7 +3304,7 @@ var APISwaggerJSON string = `{
         },
         "schemaRoutingPriority": {
             "type": "string",
-            "description": "Priority routing for each request.\nDifferent connection pools are used based on the priority selected for the request.\nAlso, circuit-breaker configuration at destination cluster is chosen based on selected priority.\n\n - DEFAULT: Default routing mechanism\n - HIGH: High-Priority routing mechanism",
+            "description": "Priority routing for each request.\nDifferent connection pools are used based on the priority selected for the request.\nAlso, circuit-breaker configuration at destination cluster is chosen based on selected priority.\n\nDefault routing mechanism\nHigh-Priority routing mechanism",
             "title": "RoutingPriority",
             "enum": [
                 "DEFAULT",
@@ -3311,7 +3316,7 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretEncodingType": {
             "type": "string",
-            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: No Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
             "title": "SecretEncodingType",
             "enum": [
                 "EncodingNone",
@@ -3625,7 +3630,7 @@ var APISwaggerJSON string = `{
         },
         "schemaTlsProtocol": {
             "type": "string",
-            "description": "TlsProtocol is enumeration of supported TLS versions\n\n - TLS_AUTO: Volterra will choose the optimal TLS version.\n - TLSv1_0: TLS 1.0\n - TLSv1_1: TLS 1.1\n - TLSv1_2: TLS 1.2\n - TLSv1_3: TLS 1.3",
+            "description": "TlsProtocol is enumeration of supported TLS versions\n\nVolterra will choose the optimal TLS version.\nTLS 1.0\nTLS 1.1\nTLS 1.2\nTLS 1.3",
             "title": "TlsProtocol",
             "enum": [
                 "TLS_AUTO",
@@ -3857,7 +3862,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Shape of the origin pool create specification",
             "title": "CreateSpecType",
-            "x-displayname": "Create Specification",
+            "x-displayname": "Create Origin Pool",
             "x-ves-oneof-field-health_check_port_choice": "[\"health_check_port\",\"same_as_endpoint_port\"]",
             "x-ves-oneof-field-tls_choice": "[\"no_tls\",\"use_tls\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.CreateSpecType",
@@ -3927,7 +3932,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Shape of the origin pool get specification",
             "title": "GetSpecType",
-            "x-displayname": "Get Specification",
+            "x-displayname": "Get Origin Pool",
             "x-ves-oneof-field-health_check_port_choice": "[\"health_check_port\",\"same_as_endpoint_port\"]",
             "x-ves-oneof-field-tls_choice": "[\"no_tls\",\"use_tls\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.GetSpecType",
@@ -4017,8 +4022,8 @@ var APISwaggerJSON string = `{
                 },
                 "health_check_port": {
                     "type": "integer",
-                    "description": "Exclusive with [same_as_endpoint_port]\n",
-                    "title": "Health check port\nx-displayName: \"Health check port\"\nPort used for performing health check",
+                    "description": "Exclusive with [same_as_endpoint_port]\nx-displayName: \"Health check port\"\nPort used for performing health check",
+                    "title": "Health check port",
                     "format": "int64"
                 },
                 "healthcheck": {
@@ -4083,7 +4088,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Shape of the origin pool create specification",
             "title": "ReplaceSpecType",
-            "x-displayname": "Replace Specification",
+            "x-displayname": "Replace Origin Pool",
             "x-ves-oneof-field-health_check_port_choice": "[\"health_check_port\",\"same_as_endpoint_port\"]",
             "x-ves-oneof-field-tls_choice": "[\"no_tls\",\"use_tls\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.ReplaceSpecType",

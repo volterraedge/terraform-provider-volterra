@@ -29,6 +29,7 @@ It has these top-level messages:
 	DownstreamTlsValidationContext
 	DownstreamTlsParamsType
 	ProxyTypeHttps
+	ProxyTypeHttp
 	ProxyTypeHttpsAutoCerts
 	HashPolicyListType
 	MirrorPolicyType
@@ -40,6 +41,7 @@ It has these top-level messages:
 	RouteTypeCustomRoute
 	RouteType
 	AdvancedOptionsType
+	SimpleClientSrcRule
 	CustomIpAllowedList
 	RateLimitConfigType
 	ServicePolicyList

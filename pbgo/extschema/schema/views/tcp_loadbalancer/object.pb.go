@@ -120,6 +120,9 @@ func (m *Object) GetSpec() *SpecType {
 }
 
 type SpecType struct {
+	// gc_spec
+	//
+	// x-displayName: "GC Spec"
 	GcSpec *GlobalSpecType `protobuf:"bytes,1,opt,name=gc_spec,json=gcSpec" json:"gc_spec,omitempty"`
 }
 

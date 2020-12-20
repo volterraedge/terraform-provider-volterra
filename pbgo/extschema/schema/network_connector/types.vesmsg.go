@@ -36,6 +36,20 @@ func (m *CreateSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *CreateSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetEnableForwardProxy().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.enable_forward_proxy")
+	}
+
+	return nil
+}
+
 func (m *CreateSpecType) DeepCopy() *CreateSpecType {
 	if m == nil {
 		return nil
@@ -554,6 +568,20 @@ func (m *GetSpecType) ToJSON() (string, error) {
 
 func (m *GetSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GetSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetEnableForwardProxy().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.enable_forward_proxy")
+	}
+
+	return nil
 }
 
 func (m *GetSpecType) DeepCopy() *GetSpecType {
@@ -1094,6 +1122,20 @@ func (m *GlobalSpecType) ToJSON() (string, error) {
 
 func (m *GlobalSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GlobalSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetForwardProxy().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.forward_proxy")
+	}
+
+	return nil
 }
 
 func (m *GlobalSpecType) DeepCopy() *GlobalSpecType {
@@ -1753,6 +1795,20 @@ func (m *ReplaceSpecType) ToJSON() (string, error) {
 
 func (m *ReplaceSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ReplaceSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetEnableForwardProxy().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.enable_forward_proxy")
+	}
+
+	return nil
 }
 
 func (m *ReplaceSpecType) DeepCopy() *ReplaceSpecType {

@@ -75,7 +75,7 @@ func (m *GlobalSpecType) GetSiteType() ves_io_schema_site.SiteType {
 
 // CreateSpecType
 //
-// x-displayName: "Create Specification"
+// x-displayName: "Create Virtual Site"
 // Create a virtual site object in given namespace
 type CreateSpecType struct {
 	SiteSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,1,opt,name=site_selector,json=siteSelector" json:"site_selector,omitempty"`
@@ -102,7 +102,7 @@ func (m *CreateSpecType) GetSiteType() ves_io_schema_site.SiteType {
 
 // Replace virtual site
 //
-// x-displayName: "Replace Specification"
+// x-displayName: "Replace Virtual Site"
 // Replace a given virtual site object in a given namespace
 type ReplaceSpecType struct {
 }
@@ -113,7 +113,7 @@ func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorType
 
 // Get virtual site
 //
-// x-displayName: "Get Specification"
+// x-displayName: "Get Virtual Site"
 // Get a virtual site object in given namespace
 type GetSpecType struct {
 	SiteSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,1,opt,name=site_selector,json=siteSelector" json:"site_selector,omitempty"`

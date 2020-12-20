@@ -441,7 +441,7 @@ func (m *GlobalSpecType) GetDisabledDetectionTags() *DisabledDetectionTags {
 
 // Create WAF
 //
-// x-displayName: "Specification"
+// x-displayName: "Create WAF"
 // WAF object is used to create a WAF instance associated with a VHOST or ROUTE
 // A WAF instance can be shared by multiple "virtual_host" or "route"
 // A "virtual_host" or "route" shall refer to one WAF instance

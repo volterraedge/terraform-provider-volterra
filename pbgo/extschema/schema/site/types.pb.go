@@ -371,6 +371,7 @@ const (
 	// x-displayName: "Poor"
 	// Link quality is poor
 	QUALITY_POOR LinkQuality = 2
+	// x-displayName: "Disabled"
 	// Quality disabled
 	QUALITY_DISABLED LinkQuality = 3
 )
@@ -1272,7 +1273,7 @@ func (m *GlobalSpecType) GetCeSiteMode() CeSiteMode {
 
 // Create Site
 //
-// x-displayName: "Create Specification"
+// x-displayName: "Create Site"
 // Sites are created automatically once user approves addition of sites in the system.
 type CreateSpecType struct {
 	SiteType                SiteType                            `protobuf:"varint,1,opt,name=site_type,json=siteType,proto3,enum=ves.io.schema.site.SiteType" json:"site_type,omitempty"`
@@ -1435,7 +1436,7 @@ func (m *CreateSpecType) GetCeSiteMode() CeSiteMode {
 
 // Replace Site
 //
-// x-displayName: "Replace Specification"
+// x-displayName: "Replace Site"
 // Replace Site will replace address, coordinates of site
 type ReplaceSpecType struct {
 	Address                 string                              `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
@@ -1590,7 +1591,7 @@ func (m *ReplaceSpecType) GetRegion() string {
 
 // Get Site
 //
-// x-displayName: "Get Specification"
+// x-displayName: "Get Site"
 // Get of site
 type GetSpecType struct {
 	SiteType                SiteType                            `protobuf:"varint,1,opt,name=site_type,json=siteType,proto3,enum=ves.io.schema.site.SiteType" json:"site_type,omitempty"`
@@ -3286,10 +3287,12 @@ type NetworkDevice struct {
 	// device max supported speed in Mbps
 	Speed uint32 `protobuf:"varint,6,opt,name=speed,proto3" json:"speed,omitempty"`
 	// Link quality status
+	//
 	// x-displayName: "Link Quality"
 	// Link quality for the interface
 	LinkQuality LinkQuality `protobuf:"varint,7,opt,name=link_quality,json=linkQuality,proto3,enum=ves.io.schema.site.LinkQuality" json:"link_quality,omitempty"`
 	// Link type
+	//
 	// x-displayName: "Link type"
 	// Link type for the interface
 	LinkType LinkType `protobuf:"varint,8,opt,name=link_type,json=linkType,proto3,enum=ves.io.schema.site.LinkType" json:"link_type,omitempty"`

@@ -287,7 +287,7 @@ func (m *GlobalSpecType) GetWaf() []*ves_io_schema4.ObjectRefType {
 
 // Create WAF Rules
 //
-// x-displayName: "Create WAF Rules Object"
+// x-displayName: "Create WAF Rules"
 // Create App type will create the configuration in namespace metadata.namespace
 type CreateSpecType struct {
 	Mode                  ves_io_schema4.WafModeType              `protobuf:"varint,1,opt,name=mode,proto3,enum=ves.io.schema.WafModeType" json:"mode,omitempty"`
@@ -338,7 +338,7 @@ func (m *CreateSpecType) GetRuleListType() RuleModeType {
 
 // Replace WAF Rules
 //
-// x-displayName: "Replace WAF Rules Object"
+// x-displayName: "Replace WAF Rules"
 // Update the configuration by replacing the existing spec with the provided one.
 // For read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write.
 type ReplaceSpecType struct {

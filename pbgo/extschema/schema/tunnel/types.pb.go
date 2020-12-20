@@ -738,7 +738,7 @@ func (m *GlobalSpecType) GetParams() *TunnelParams {
 
 // Create tunnel
 //
-// x-displayName: "Create tunnel"
+// x-displayName: "Create Tunnel"
 // Create tunnel in a given namespace. If one already exist it will give a error.
 type CreateSpecType struct {
 	TunnelType TunnelType               `protobuf:"varint,1,opt,name=tunnel_type,json=tunnelType,proto3,enum=ves.io.schema.tunnel.TunnelType" json:"tunnel_type,omitempty"`
@@ -781,7 +781,7 @@ func (m *CreateSpecType) GetParams() *TunnelParams {
 
 // Replace tunnel
 //
-// x-displayName: "Replace tunnel"
+// x-displayName: "Replace Tunnel"
 // Replace tunnel in a given namespace.
 type ReplaceSpecType struct {
 	TunnelType TunnelType               `protobuf:"varint,1,opt,name=tunnel_type,json=tunnelType,proto3,enum=ves.io.schema.tunnel.TunnelType" json:"tunnel_type,omitempty"`
@@ -824,7 +824,7 @@ func (m *ReplaceSpecType) GetParams() *TunnelParams {
 
 // Get tunnel
 //
-// x-displayName: "Get tunnel"
+// x-displayName: "Get Tunnel"
 // Get Tunnel in a given namespace.
 type GetSpecType struct {
 	TunnelType TunnelType               `protobuf:"varint,1,opt,name=tunnel_type,json=tunnelType,proto3,enum=ves.io.schema.tunnel.TunnelType" json:"tunnel_type,omitempty"`

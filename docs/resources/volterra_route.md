@@ -67,12 +67,7 @@ resource "volterra_route" "example" {
 
       hash_policy {
         // One of the arguments from this list "header_name cookie source_ip" must be set
-
-        cookie {
-          name = "userid"
-          path = "/Users/userid/browser/cookies"
-          ttl  = "ttl"
-        }
+        header_name = "host"
 
         terminal = true
       }
@@ -134,7 +129,7 @@ resource "volterra_route" "example" {
       http_method = "http_method"
 
       path {
-        // One of the arguments from this list "regex prefix path" must be set
+        // One of the arguments from this list "prefix path regex" must be set
         prefix = "prefix"
       }
 
@@ -142,7 +137,7 @@ resource "volterra_route" "example" {
         key = "assignee_username"
 
         // One of the arguments from this list "exact regex" must be set
-        regex = "regex"
+        exact = "exact"
       }
     }
 
@@ -167,7 +162,7 @@ resource "volterra_route" "example" {
     }
 
     waf_type {
-      // One of the arguments from this list "waf waf_rules" must be set
+      // One of the arguments from this list "waf_rules waf" must be set
 
       waf {
         waf {
@@ -225,7 +220,7 @@ Route level buffer configuration overrides any configuration at VirtualHost leve
 
 Hash based on cookie.
 
-`name` - (Optional) produced (`String`).
+`name` - (Required) produced (`String`).
 
 `path` - (Optional) will be set for the cookie (`String`).
 

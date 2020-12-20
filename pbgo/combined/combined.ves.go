@@ -545,6 +545,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.app_type.GlobalSpecType"] = ves_io_schema_app_type.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_type.OverrideInfo"] = ves_io_schema_app_type.OverrideInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_type.PDFSpec"] = ves_io_schema_app_type.PDFSpecValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_type.PDFStat"] = ves_io_schema_app_type.PDFStatValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_type.ReplaceSpecType"] = ves_io_schema_app_type.ReplaceSpecTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.app_type.crudapi.ObjectCreateReq"] = ves_io_schema_app_type_crudapi.ObjectCreateReqValidator()
@@ -1173,10 +1174,14 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteRequest"] = ves_io_schema_namespace.CascadeDeleteRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteResponse"] = ves_io_schema_namespace.CascadeDeleteResponseValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveNetworkPoliciesRequest"] = ves_io_schema_namespace.GetActiveNetworkPoliciesRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveNetworkPoliciesResponse"] = ves_io_schema_namespace.GetActiveNetworkPoliciesResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveServicePoliciesRequest"] = ves_io_schema_namespace.GetActiveServicePoliciesRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveServicePoliciesResponse"] = ves_io_schema_namespace.GetActiveServicePoliciesResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetFastACLsForInternetVIPsRequest"] = ves_io_schema_namespace.GetFastACLsForInternetVIPsRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetFastACLsForInternetVIPsResponse"] = ves_io_schema_namespace.GetFastACLsForInternetVIPsResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.SetActiveNetworkPoliciesRequest"] = ves_io_schema_namespace.SetActiveNetworkPoliciesRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.SetActiveNetworkPoliciesResponse"] = ves_io_schema_namespace.SetActiveNetworkPoliciesResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.SetActiveServicePoliciesRequest"] = ves_io_schema_namespace.SetActiveServicePoliciesRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.SetActiveServicePoliciesResponse"] = ves_io_schema_namespace.SetActiveServicePoliciesResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.SetFastACLsForInternetVIPsRequest"] = ves_io_schema_namespace.SetFastACLsForInternetVIPsRequestValidator()
@@ -1768,6 +1773,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.service_policy.CreateSpecType"] = ves_io_schema_service_policy.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy.GetSpecType"] = ves_io_schema_service_policy.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy.GlobalSpecType"] = ves_io_schema_service_policy.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.service_policy.LegacyRuleList"] = ves_io_schema_service_policy.LegacyRuleListValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy.ReplaceSpecType"] = ves_io_schema_service_policy.ReplaceSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy.Rule"] = ves_io_schema_service_policy.RuleValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy.RuleList"] = ves_io_schema_service_policy.RuleListValidator()
@@ -2037,6 +2043,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.user.crudapi.ObjectReplaceReq"] = ves_io_schema_user_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.crudapi.ObjectReplaceRsp"] = ves_io_schema_user_crudapi.ObjectReplaceRspValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.vesenv.ServiceChoice"] = ves_io_schema_vesenv.ServiceChoiceValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupElementInfo"] = ves_io_schema_vesenv.APIGroupElementInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupElementItem"] = ves_io_schema_vesenv.APIGroupElementItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupNameMap"] = ves_io_schema_vesenv.APIGroupNameMapValidator()
@@ -2045,6 +2053,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.QuotaResourceKeyInfo"] = ves_io_schema_vesenv.QuotaResourceKeyInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ReEncryptSecretItemType"] = ves_io_schema_vesenv.ReEncryptSecretItemTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ReEncryptSecretsType"] = ves_io_schema_vesenv.ReEncryptSecretsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.vesenv.ServiceInfo"] = ves_io_schema_vesenv.ServiceInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ServiceSlugChoice"] = ves_io_schema_vesenv.ServiceSlugChoiceValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ServiceSlugInfo"] = ves_io_schema_vesenv.ServiceSlugInfoValidator()
 
@@ -2311,6 +2320,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.GlobalSpecType"] = ves_io_schema_views_http_loadbalancer.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.HashPolicyListType"] = ves_io_schema_views_http_loadbalancer.HashPolicyListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.MirrorPolicyType"] = ves_io_schema_views_http_loadbalancer.MirrorPolicyTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ProxyTypeHttp"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ProxyTypeHttps"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ProxyTypeHttpsAutoCerts"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCertsValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.RateLimitConfigType"] = ves_io_schema_views_http_loadbalancer.RateLimitConfigTypeValidator()
@@ -2323,6 +2333,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.RouteTypeSimple"] = ves_io_schema_views_http_loadbalancer.RouteTypeSimpleValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.RouteTypeSimpleWithDefaultOriginPool"] = ves_io_schema_views_http_loadbalancer.RouteTypeSimpleWithDefaultOriginPoolValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ServicePolicyList"] = ves_io_schema_views_http_loadbalancer.ServicePolicyListValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.SimpleClientSrcRule"] = ves_io_schema_views_http_loadbalancer.SimpleClientSrcRuleValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq"] = ves_io_schema_views_http_loadbalancer_crudapi.ObjectCreateReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateRsp"] = ves_io_schema_views_http_loadbalancer_crudapi.ObjectCreateRspValidator()

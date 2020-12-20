@@ -51,11 +51,16 @@ var _ = math.Inf
 type GetResponseFormatCode int32
 
 const (
+	// x-displayName: "Default Format"
+	// Default format of returned resource
 	GET_RSP_FORMAT_DEFAULT GetResponseFormatCode = 0
+	// x-displayName: "Create request Format"
 	// Response should be in CreateRequest format
 	GET_RSP_FORMAT_FOR_CREATE GetResponseFormatCode = 1
+	// x-displayName: "Replace request format"
 	// Response should be in ReplaceRequest format
 	GET_RSP_FORMAT_FOR_REPLACE GetResponseFormatCode = 2
+	// x-displayName: "GetSpecType format"
 	// Response should be in format of GetSpecType
 	GET_RSP_FORMAT_READ GetResponseFormatCode = 4
 )
@@ -1175,22 +1180,22 @@ const _ = grpc.SupportPackageIsVersion4
 type APIClient interface {
 	// Create namespace
 	//
-	// x-displayName: "Create Specification"
+	// x-displayName: "Create Namespace"
 	// Creates a new namespace. Name of the object is name of the name space.
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Get namespace
 	//
-	// x-displayName: "Get Specification"
+	// x-displayName: "Get Namespace"
 	// This is the read representation of the namespace object.
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Namespace"
 	// List the set of namespace in a namespace
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// Replace namespace
 	//
-	// x-displayName: "Replace Specification"
+	// x-displayName: "Replace Namespace"
 	// Replaces attributes of a namespace including its metadata like labels, description etc.
 	Replace(ctx context.Context, in *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error)
 }
@@ -1244,22 +1249,22 @@ func (c *aPIClient) Replace(ctx context.Context, in *ReplaceRequest, opts ...grp
 type APIServer interface {
 	// Create namespace
 	//
-	// x-displayName: "Create Specification"
+	// x-displayName: "Create Namespace"
 	// Creates a new namespace. Name of the object is name of the name space.
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// Get namespace
 	//
-	// x-displayName: "Get Specification"
+	// x-displayName: "Get Namespace"
 	// This is the read representation of the namespace object.
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Namespace"
 	// List the set of namespace in a namespace
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	// Replace namespace
 	//
-	// x-displayName: "Replace Specification"
+	// x-displayName: "Replace Namespace"
 	// Replaces attributes of a namespace including its metadata like labels, description etc.
 	Replace(context.Context, *ReplaceRequest) (*ReplaceResponse, error)
 }

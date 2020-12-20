@@ -51,11 +51,16 @@ var _ = math.Inf
 type GetResponseFormatCode int32
 
 const (
+	// x-displayName: "Default Format"
+	// Default format of returned resource
 	GET_RSP_FORMAT_DEFAULT GetResponseFormatCode = 0
+	// x-displayName: "Create request Format"
 	// Response should be in CreateRequest format
 	GET_RSP_FORMAT_FOR_CREATE GetResponseFormatCode = 1
+	// x-displayName: "Status format"
 	// Response should be in StatusObject(s) format
 	GET_RSP_FORMAT_STATUS GetResponseFormatCode = 3
+	// x-displayName: "GetSpecType format"
 	// Response should be in format of GetSpecType
 	GET_RSP_FORMAT_READ GetResponseFormatCode = 4
 )
@@ -1145,22 +1150,22 @@ const _ = grpc.SupportPackageIsVersion4
 type APIClient interface {
 	// Create Address Allocator
 	//
-	// x-displayName: "Create Address Allocator Specification"
+	// x-displayName: "Create Address Allocator"
 	// Create Address Allocator will create an address allocator object in 'system' namespace of the user
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Get Address Allocator
 	//
-	// x-displayName: "Get Address Allocator Specification"
+	// x-displayName: "Get Address Allocator"
 	// Get Address Allocator will get address allocator object from system namespace
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Address Allocator"
 	// List the set of address_allocator in a namespace
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete Address Allocator"
 	// Delete the specified address_allocator
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf3.Empty, error)
 }
@@ -1214,22 +1219,22 @@ func (c *aPIClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.
 type APIServer interface {
 	// Create Address Allocator
 	//
-	// x-displayName: "Create Address Allocator Specification"
+	// x-displayName: "Create Address Allocator"
 	// Create Address Allocator will create an address allocator object in 'system' namespace of the user
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// Get Address Allocator
 	//
-	// x-displayName: "Get Address Allocator Specification"
+	// x-displayName: "Get Address Allocator"
 	// Get Address Allocator will get address allocator object from system namespace
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Address Allocator"
 	// List the set of address_allocator in a namespace
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete Address Allocator"
 	// Delete the specified address_allocator
 	Delete(context.Context, *DeleteRequest) (*google_protobuf3.Empty, error)
 }

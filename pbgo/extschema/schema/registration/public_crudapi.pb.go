@@ -51,11 +51,16 @@ var _ = math.Inf
 type GetResponseFormatCode int32
 
 const (
+	// x-displayName: "Default Format"
+	// Default format of returned resource
 	GET_RSP_FORMAT_DEFAULT GetResponseFormatCode = 0
+	// x-displayName: "Create request Format"
 	// Response should be in CreateRequest format
 	GET_RSP_FORMAT_FOR_CREATE GetResponseFormatCode = 1
+	// x-displayName: "Replace request format"
 	// Response should be in ReplaceRequest format
 	GET_RSP_FORMAT_FOR_REPLACE GetResponseFormatCode = 2
+	// x-displayName: "GetSpecType format"
 	// Response should be in format of GetSpecType
 	GET_RSP_FORMAT_READ GetResponseFormatCode = 4
 )
@@ -1252,27 +1257,27 @@ const _ = grpc.SupportPackageIsVersion4
 type APIClient interface {
 	// Create registration
 	//
-	// x-displayName: "Specification"
+	// x-displayName: "Create Registration"
 	// VPM creates registration using this message, never used by users.
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Get registration
 	//
-	// x-displayName: "Specification"
+	// x-displayName: "Get Registration"
 	// Get registration specification
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Registration"
 	// List the set of registration in a namespace
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// Replace registration
 	//
-	// x-displayName: "Specification"
+	// x-displayName: "Replace Registration"
 	// NO fields are allowed to be replaced
 	Replace(ctx context.Context, in *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete Registration"
 	// Delete the specified registration
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf3.Empty, error)
 }
@@ -1335,27 +1340,27 @@ func (c *aPIClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.
 type APIServer interface {
 	// Create registration
 	//
-	// x-displayName: "Specification"
+	// x-displayName: "Create Registration"
 	// VPM creates registration using this message, never used by users.
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// Get registration
 	//
-	// x-displayName: "Specification"
+	// x-displayName: "Get Registration"
 	// Get registration specification
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Registration"
 	// List the set of registration in a namespace
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	// Replace registration
 	//
-	// x-displayName: "Specification"
+	// x-displayName: "Replace Registration"
 	// NO fields are allowed to be replaced
 	Replace(context.Context, *ReplaceRequest) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete Registration"
 	// Delete the specified registration
 	Delete(context.Context, *DeleteRequest) (*google_protobuf3.Empty, error)
 }

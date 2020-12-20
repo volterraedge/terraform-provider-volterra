@@ -544,6 +544,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.app_type.GlobalSpecType"] = ves_io_schema_app_type.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_type.OverrideInfo"] = ves_io_schema_app_type.OverrideInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_type.PDFSpec"] = ves_io_schema_app_type.PDFSpecValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_type.PDFStat"] = ves_io_schema_app_type.PDFStatValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_type.ReplaceSpecType"] = ves_io_schema_app_type.ReplaceSpecTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.app_type.crudapi.ObjectCreateReq"] = ves_io_schema_app_type_crudapi.ObjectCreateReqValidator()
@@ -1172,10 +1173,14 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteRequest"] = ves_io_schema_namespace.CascadeDeleteRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteResponse"] = ves_io_schema_namespace.CascadeDeleteResponseValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveNetworkPoliciesRequest"] = ves_io_schema_namespace.GetActiveNetworkPoliciesRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveNetworkPoliciesResponse"] = ves_io_schema_namespace.GetActiveNetworkPoliciesResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveServicePoliciesRequest"] = ves_io_schema_namespace.GetActiveServicePoliciesRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveServicePoliciesResponse"] = ves_io_schema_namespace.GetActiveServicePoliciesResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetFastACLsForInternetVIPsRequest"] = ves_io_schema_namespace.GetFastACLsForInternetVIPsRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetFastACLsForInternetVIPsResponse"] = ves_io_schema_namespace.GetFastACLsForInternetVIPsResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.SetActiveNetworkPoliciesRequest"] = ves_io_schema_namespace.SetActiveNetworkPoliciesRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.SetActiveNetworkPoliciesResponse"] = ves_io_schema_namespace.SetActiveNetworkPoliciesResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.SetActiveServicePoliciesRequest"] = ves_io_schema_namespace.SetActiveServicePoliciesRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.SetActiveServicePoliciesResponse"] = ves_io_schema_namespace.SetActiveServicePoliciesResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.SetFastACLsForInternetVIPsRequest"] = ves_io_schema_namespace.SetFastACLsForInternetVIPsRequestValidator()
@@ -1767,6 +1772,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.service_policy.CreateSpecType"] = ves_io_schema_service_policy.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy.GetSpecType"] = ves_io_schema_service_policy.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy.GlobalSpecType"] = ves_io_schema_service_policy.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.service_policy.LegacyRuleList"] = ves_io_schema_service_policy.LegacyRuleListValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy.ReplaceSpecType"] = ves_io_schema_service_policy.ReplaceSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy.Rule"] = ves_io_schema_service_policy.RuleValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy.RuleList"] = ves_io_schema_service_policy.RuleListValidator()
@@ -2036,6 +2042,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.user.crudapi.ObjectReplaceReq"] = ves_io_schema_user_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.user.crudapi.ObjectReplaceRsp"] = ves_io_schema_user_crudapi.ObjectReplaceRspValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.vesenv.ServiceChoice"] = ves_io_schema_vesenv.ServiceChoiceValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupElementInfo"] = ves_io_schema_vesenv.APIGroupElementInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupElementItem"] = ves_io_schema_vesenv.APIGroupElementItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.APIGroupNameMap"] = ves_io_schema_vesenv.APIGroupNameMapValidator()
@@ -2044,6 +2052,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.QuotaResourceKeyInfo"] = ves_io_schema_vesenv.QuotaResourceKeyInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ReEncryptSecretItemType"] = ves_io_schema_vesenv.ReEncryptSecretItemTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ReEncryptSecretsType"] = ves_io_schema_vesenv.ReEncryptSecretsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.vesenv.ServiceInfo"] = ves_io_schema_vesenv.ServiceInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ServiceSlugChoice"] = ves_io_schema_vesenv.ServiceSlugChoiceValidator()
 	MDR.ValidatorRegistry["ves.io.schema.vesenv.ServiceSlugInfo"] = ves_io_schema_vesenv.ServiceSlugInfoValidator()
 
@@ -2310,6 +2319,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.GlobalSpecType"] = ves_io_schema_views_http_loadbalancer.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.HashPolicyListType"] = ves_io_schema_views_http_loadbalancer.HashPolicyListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.MirrorPolicyType"] = ves_io_schema_views_http_loadbalancer.MirrorPolicyTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ProxyTypeHttp"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ProxyTypeHttps"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ProxyTypeHttpsAutoCerts"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCertsValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.RateLimitConfigType"] = ves_io_schema_views_http_loadbalancer.RateLimitConfigTypeValidator()
@@ -2322,6 +2332,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.RouteTypeSimple"] = ves_io_schema_views_http_loadbalancer.RouteTypeSimpleValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.RouteTypeSimpleWithDefaultOriginPool"] = ves_io_schema_views_http_loadbalancer.RouteTypeSimpleWithDefaultOriginPoolValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ServicePolicyList"] = ves_io_schema_views_http_loadbalancer.ServicePolicyListValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.SimpleClientSrcRule"] = ves_io_schema_views_http_loadbalancer.SimpleClientSrcRuleValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq"] = ves_io_schema_views_http_loadbalancer_crudapi.ObjectCreateReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateRsp"] = ves_io_schema_views_http_loadbalancer_crudapi.ObjectCreateRspValidator()
@@ -2802,7 +2813,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.address_allocator.Object"] = ves_io_schema_address_allocator.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.address_allocator.Object"] = ves_io_schema_address_allocator.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.address_allocator.Object"] = ves_io_schema_address_allocator.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.address_allocator.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.address_allocator.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.address_allocator.Object"] = ves_io_schema_address_allocator.APISwaggerJSON
 
@@ -2816,7 +2827,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.address_allocator.Object"] = ves_io_schema_address_allocator_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.address_allocator.Object"] = ves_io_schema_address_allocator_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.address_allocator.Object"] = ves_io_schema_address_allocator_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.address_allocator.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.address_allocator.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.address_allocator.Object"] = ves_io_schema_address_allocator_crudapi.APISwaggerJSON
 
@@ -2925,7 +2936,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.alert_policy_set.Object"] = ves_io_schema_alert_policy_set.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.alert_policy_set.Object"] = ves_io_schema_alert_policy_set.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.alert_policy_set.Object"] = ves_io_schema_alert_policy_set.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.alert_policy_set.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.alert_policy_set.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType, svcfw.UserNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.alert_policy_set.Object"] = ves_io_schema_alert_policy_set.APISwaggerJSON
 
@@ -2939,7 +2950,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.alert_policy_set.Object"] = ves_io_schema_alert_policy_set_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.alert_policy_set.Object"] = ves_io_schema_alert_policy_set_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.alert_policy_set.Object"] = ves_io_schema_alert_policy_set_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.alert_policy_set.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.alert_policy_set.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType, svcfw.UserNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.alert_policy_set.Object"] = ves_io_schema_alert_policy_set_crudapi.APISwaggerJSON
 
@@ -3037,7 +3048,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.api_credential.Object"] = ves_io_schema_api_credential_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.api_credential.Object"] = ves_io_schema_api_credential_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.api_credential.Object"] = ves_io_schema_api_credential_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.api_credential.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.api_credential.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.api_credential.Object"] = ves_io_schema_api_credential_crudapi.APISwaggerJSON
 
@@ -3074,7 +3085,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.app_type.Object"] = ves_io_schema_app_type.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.app_type.Object"] = ves_io_schema_app_type.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.app_type.Object"] = ves_io_schema_app_type.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.app_type.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.app_type.Object"] = []svcfw.NamespaceType{svcfw.SharedNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.app_type.Object"] = ves_io_schema_app_type.APISwaggerJSON
 
@@ -3088,7 +3099,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.app_type.Object"] = ves_io_schema_app_type_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.app_type.Object"] = ves_io_schema_app_type_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.app_type.Object"] = ves_io_schema_app_type_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.app_type.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.app_type.Object"] = []svcfw.NamespaceType{svcfw.SharedNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.app_type.Object"] = ves_io_schema_app_type_crudapi.APISwaggerJSON
 
@@ -3156,7 +3167,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.bgp.Object"] = ves_io_schema_bgp.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.bgp.Object"] = ves_io_schema_bgp.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.bgp.Object"] = ves_io_schema_bgp.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.bgp.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.bgp.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.bgp.Object"] = ves_io_schema_bgp.APISwaggerJSON
 
@@ -3170,7 +3181,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.bgp.Object"] = ves_io_schema_bgp_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.bgp.Object"] = ves_io_schema_bgp_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.bgp.Object"] = ves_io_schema_bgp_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.bgp.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.bgp.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.bgp.Object"] = ves_io_schema_bgp_crudapi.APISwaggerJSON
 
@@ -3238,7 +3249,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.certified_hardware.Object"] = ves_io_schema_certified_hardware.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.certified_hardware.Object"] = ves_io_schema_certified_hardware.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.certified_hardware.Object"] = ves_io_schema_certified_hardware.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.certified_hardware.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.certified_hardware.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.certified_hardware.Object"] = ves_io_schema_certified_hardware.APISwaggerJSON
 
@@ -3252,7 +3263,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.certified_hardware.Object"] = ves_io_schema_certified_hardware_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.certified_hardware.Object"] = ves_io_schema_certified_hardware_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.certified_hardware.Object"] = ves_io_schema_certified_hardware_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.certified_hardware.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.certified_hardware.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.certified_hardware.Object"] = ves_io_schema_certified_hardware_crudapi.APISwaggerJSON
 
@@ -3279,7 +3290,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.cloud_credentials.Object"] = ves_io_schema_cloud_credentials.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.cloud_credentials.Object"] = ves_io_schema_cloud_credentials.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.cloud_credentials.Object"] = ves_io_schema_cloud_credentials.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.cloud_credentials.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.cloud_credentials.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.cloud_credentials.Object"] = ves_io_schema_cloud_credentials.APISwaggerJSON
 
@@ -3293,7 +3304,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.cloud_credentials.Object"] = ves_io_schema_cloud_credentials_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.cloud_credentials.Object"] = ves_io_schema_cloud_credentials_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.cloud_credentials.Object"] = ves_io_schema_cloud_credentials_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.cloud_credentials.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.cloud_credentials.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.cloud_credentials.Object"] = ves_io_schema_cloud_credentials_crudapi.APISwaggerJSON
 
@@ -3361,7 +3372,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.discovery.Object"] = ves_io_schema_discovery.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.discovery.Object"] = ves_io_schema_discovery.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.discovery.Object"] = ves_io_schema_discovery.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.discovery.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.discovery.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.discovery.Object"] = ves_io_schema_discovery.APISwaggerJSON
 
@@ -3375,7 +3386,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.discovery.Object"] = ves_io_schema_discovery_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.discovery.Object"] = ves_io_schema_discovery_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.discovery.Object"] = ves_io_schema_discovery_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.discovery.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.discovery.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.discovery.Object"] = ves_io_schema_discovery_crudapi.APISwaggerJSON
 
@@ -3443,7 +3454,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.fast_acl.Object"] = ves_io_schema_fast_acl.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.fast_acl.Object"] = ves_io_schema_fast_acl.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.fast_acl.Object"] = ves_io_schema_fast_acl.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.fast_acl.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.fast_acl.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.fast_acl.Object"] = ves_io_schema_fast_acl.APISwaggerJSON
 
@@ -3467,7 +3478,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.fast_acl.Object"] = ves_io_schema_fast_acl_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.fast_acl.Object"] = ves_io_schema_fast_acl_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.fast_acl.Object"] = ves_io_schema_fast_acl_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.fast_acl.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.fast_acl.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.fast_acl.Object"] = ves_io_schema_fast_acl_crudapi.APISwaggerJSON
 
@@ -3535,7 +3546,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.fast_acl_set.Object"] = ves_io_schema_fast_acl_set.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.fast_acl_set.Object"] = ves_io_schema_fast_acl_set.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.fast_acl_set.Object"] = ves_io_schema_fast_acl_set.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.fast_acl_set.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.fast_acl_set.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.fast_acl_set.Object"] = ves_io_schema_fast_acl_set.APISwaggerJSON
 
@@ -3549,7 +3560,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.fast_acl_set.Object"] = ves_io_schema_fast_acl_set_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.fast_acl_set.Object"] = ves_io_schema_fast_acl_set_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.fast_acl_set.Object"] = ves_io_schema_fast_acl_set_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.fast_acl_set.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.fast_acl_set.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.fast_acl_set.Object"] = ves_io_schema_fast_acl_set_crudapi.APISwaggerJSON
 
@@ -3576,7 +3587,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.fleet.Object"] = ves_io_schema_fleet.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.fleet.Object"] = ves_io_schema_fleet.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.fleet.Object"] = ves_io_schema_fleet.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.fleet.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.fleet.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.fleet.Object"] = ves_io_schema_fleet.APISwaggerJSON
 
@@ -3590,7 +3601,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.fleet.Object"] = ves_io_schema_fleet_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.fleet.Object"] = ves_io_schema_fleet_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.fleet.Object"] = ves_io_schema_fleet_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.fleet.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.fleet.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.fleet.Object"] = ves_io_schema_fleet_crudapi.APISwaggerJSON
 
@@ -3887,7 +3898,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.network_interface.Object"] = ves_io_schema_network_interface.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.network_interface.Object"] = ves_io_schema_network_interface.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.network_interface.Object"] = ves_io_schema_network_interface.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.network_interface.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.network_interface.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.network_interface.Object"] = ves_io_schema_network_interface.APISwaggerJSON
 
@@ -3901,7 +3912,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.network_interface.Object"] = ves_io_schema_network_interface_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.network_interface.Object"] = ves_io_schema_network_interface_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.network_interface.Object"] = ves_io_schema_network_interface_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.network_interface.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.network_interface.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.network_interface.Object"] = ves_io_schema_network_interface_crudapi.APISwaggerJSON
 
@@ -4102,7 +4113,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.protocol_policer.Object"] = ves_io_schema_protocol_policer.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.protocol_policer.Object"] = ves_io_schema_protocol_policer.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.protocol_policer.Object"] = ves_io_schema_protocol_policer.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.protocol_policer.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.protocol_policer.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.protocol_policer.Object"] = ves_io_schema_protocol_policer.APISwaggerJSON
 
@@ -4116,7 +4127,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.protocol_policer.Object"] = ves_io_schema_protocol_policer_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.protocol_policer.Object"] = ves_io_schema_protocol_policer_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.protocol_policer.Object"] = ves_io_schema_protocol_policer_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.protocol_policer.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.protocol_policer.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.protocol_policer.Object"] = ves_io_schema_protocol_policer_crudapi.APISwaggerJSON
 
@@ -4143,7 +4154,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.public_ip.Object"] = ves_io_schema_public_ip.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.public_ip.Object"] = ves_io_schema_public_ip.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.public_ip.Object"] = ves_io_schema_public_ip.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.public_ip.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.public_ip.Object"] = []svcfw.NamespaceType{svcfw.SharedNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.public_ip.Object"] = ves_io_schema_public_ip.APISwaggerJSON
 
@@ -4157,7 +4168,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.public_ip.Object"] = ves_io_schema_public_ip_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.public_ip.Object"] = ves_io_schema_public_ip_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.public_ip.Object"] = ves_io_schema_public_ip_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.public_ip.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.public_ip.Object"] = []svcfw.NamespaceType{svcfw.SharedNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.public_ip.Object"] = ves_io_schema_public_ip_crudapi.APISwaggerJSON
 
@@ -4219,7 +4230,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.registration.Object"] = ves_io_schema_registration.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.registration.Object"] = ves_io_schema_registration.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.registration.Object"] = ves_io_schema_registration.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.registration.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.registration.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.registration.Object"] = ves_io_schema_registration.APISwaggerJSON
 
@@ -4243,7 +4254,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.registration.Object"] = ves_io_schema_registration_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.registration.Object"] = ves_io_schema_registration_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.registration.Object"] = ves_io_schema_registration_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.registration.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.registration.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.registration.Object"] = ves_io_schema_registration_crudapi.APISwaggerJSON
 
@@ -4536,7 +4547,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.service_policy_set.Object"] = ves_io_schema_service_policy_set.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.service_policy_set.Object"] = ves_io_schema_service_policy_set.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.service_policy_set.Object"] = ves_io_schema_service_policy_set.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.service_policy_set.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.service_policy_set.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType, svcfw.UserNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.service_policy_set.Object"] = ves_io_schema_service_policy_set.APISwaggerJSON
 
@@ -4550,7 +4561,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.service_policy_set.Object"] = ves_io_schema_service_policy_set_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.service_policy_set.Object"] = ves_io_schema_service_policy_set_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.service_policy_set.Object"] = ves_io_schema_service_policy_set_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.service_policy_set.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.service_policy_set.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType, svcfw.UserNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.service_policy_set.Object"] = ves_io_schema_service_policy_set_crudapi.APISwaggerJSON
 
@@ -4648,7 +4659,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.token.Object"] = ves_io_schema_token.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.token.Object"] = ves_io_schema_token.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.token.Object"] = ves_io_schema_token.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.token.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.token.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.token.Object"] = ves_io_schema_token.APISwaggerJSON
 
@@ -4672,7 +4683,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.token.Object"] = ves_io_schema_token_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.token.Object"] = ves_io_schema_token_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.token.Object"] = ves_io_schema_token_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.token.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.token.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.token.Object"] = ves_io_schema_token_crudapi.APISwaggerJSON
 
@@ -4699,7 +4710,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.tunnel.Object"] = ves_io_schema_tunnel.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.tunnel.Object"] = ves_io_schema_tunnel.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.tunnel.Object"] = ves_io_schema_tunnel.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.tunnel.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.tunnel.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.tunnel.Object"] = ves_io_schema_tunnel.APISwaggerJSON
 
@@ -4713,7 +4724,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.tunnel.Object"] = ves_io_schema_tunnel_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.tunnel.Object"] = ves_io_schema_tunnel_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.tunnel.Object"] = ves_io_schema_tunnel_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.tunnel.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.tunnel.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.tunnel.Object"] = ves_io_schema_tunnel_crudapi.APISwaggerJSON
 
@@ -4791,7 +4802,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.views.aws_tgw_site.Object"] = ves_io_schema_views_aws_tgw_site.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.views.aws_tgw_site.Object"] = ves_io_schema_views_aws_tgw_site.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.views.aws_tgw_site.Object"] = ves_io_schema_views_aws_tgw_site.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.views.aws_tgw_site.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.views.aws_tgw_site.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.views.aws_tgw_site.Object"] = ves_io_schema_views_aws_tgw_site.APISwaggerJSON
 
@@ -4815,7 +4826,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.views.aws_tgw_site.Object"] = ves_io_schema_views_aws_tgw_site_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.views.aws_tgw_site.Object"] = ves_io_schema_views_aws_tgw_site_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.views.aws_tgw_site.Object"] = ves_io_schema_views_aws_tgw_site_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.views.aws_tgw_site.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.views.aws_tgw_site.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.views.aws_tgw_site.Object"] = ves_io_schema_views_aws_tgw_site_crudapi.APISwaggerJSON
 
@@ -4842,7 +4853,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.views.aws_vpc_site.Object"] = ves_io_schema_views_aws_vpc_site.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.views.aws_vpc_site.Object"] = ves_io_schema_views_aws_vpc_site.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.views.aws_vpc_site.Object"] = ves_io_schema_views_aws_vpc_site.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.views.aws_vpc_site.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.views.aws_vpc_site.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.views.aws_vpc_site.Object"] = ves_io_schema_views_aws_vpc_site.APISwaggerJSON
 
@@ -4856,7 +4867,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.views.aws_vpc_site.Object"] = ves_io_schema_views_aws_vpc_site_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.views.aws_vpc_site.Object"] = ves_io_schema_views_aws_vpc_site_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.views.aws_vpc_site.Object"] = ves_io_schema_views_aws_vpc_site_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.views.aws_vpc_site.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.views.aws_vpc_site.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.views.aws_vpc_site.Object"] = ves_io_schema_views_aws_vpc_site_crudapi.APISwaggerJSON
 
@@ -4883,7 +4894,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.views.azure_vnet_site.Object"] = ves_io_schema_views_azure_vnet_site.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.views.azure_vnet_site.Object"] = ves_io_schema_views_azure_vnet_site.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.views.azure_vnet_site.Object"] = ves_io_schema_views_azure_vnet_site.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.views.azure_vnet_site.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.views.azure_vnet_site.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.views.azure_vnet_site.Object"] = ves_io_schema_views_azure_vnet_site.APISwaggerJSON
 
@@ -4897,7 +4908,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.views.azure_vnet_site.Object"] = ves_io_schema_views_azure_vnet_site_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.views.azure_vnet_site.Object"] = ves_io_schema_views_azure_vnet_site_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.views.azure_vnet_site.Object"] = ves_io_schema_views_azure_vnet_site_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.views.azure_vnet_site.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.views.azure_vnet_site.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.views.azure_vnet_site.Object"] = ves_io_schema_views_azure_vnet_site_crudapi.APISwaggerJSON
 
@@ -4975,7 +4986,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.views.gcp_vpc_site.Object"] = ves_io_schema_views_gcp_vpc_site.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.views.gcp_vpc_site.Object"] = ves_io_schema_views_gcp_vpc_site.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.views.gcp_vpc_site.Object"] = ves_io_schema_views_gcp_vpc_site.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.views.gcp_vpc_site.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.views.gcp_vpc_site.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.views.gcp_vpc_site.Object"] = ves_io_schema_views_gcp_vpc_site.APISwaggerJSON
 
@@ -4989,7 +5000,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.views.gcp_vpc_site.Object"] = ves_io_schema_views_gcp_vpc_site_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.views.gcp_vpc_site.Object"] = ves_io_schema_views_gcp_vpc_site_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.views.gcp_vpc_site.Object"] = ves_io_schema_views_gcp_vpc_site_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.views.gcp_vpc_site.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.views.gcp_vpc_site.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.views.gcp_vpc_site.Object"] = ves_io_schema_views_gcp_vpc_site_crudapi.APISwaggerJSON
 
@@ -5224,7 +5235,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.views.terraform_parameters.Object"] = ves_io_schema_views_terraform_parameters_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.views.terraform_parameters.Object"] = ves_io_schema_views_terraform_parameters_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.views.terraform_parameters.Object"] = ves_io_schema_views_terraform_parameters_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.views.terraform_parameters.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.views.terraform_parameters.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.views.terraform_parameters.Object"] = ves_io_schema_views_terraform_parameters_crudapi.APISwaggerJSON
 
@@ -5374,7 +5385,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.virtual_network.Object"] = ves_io_schema_virtual_network.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.virtual_network.Object"] = ves_io_schema_virtual_network.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.virtual_network.Object"] = ves_io_schema_virtual_network.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.virtual_network.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.virtual_network.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.virtual_network.Object"] = ves_io_schema_virtual_network.APISwaggerJSON
 
@@ -5388,7 +5399,7 @@ func init() {
 	csr.CRUDRestClientRegistry["ves.io.schema.virtual_network.Object"] = ves_io_schema_virtual_network_crudapi.NewCRUDAPIRestClient
 	csr.CRUDInprocClientRegistry["ves.io.schema.virtual_network.Object"] = ves_io_schema_virtual_network_crudapi.NewCRUDAPIInprocClient
 	csr.CRUDServerRegistry["ves.io.schema.virtual_network.Object"] = ves_io_schema_virtual_network_crudapi.NewCRUDAPIServer
-	csr.AllowedInNSTypes["ves.io.schema.virtual_network.Object"] = nil
+	csr.AllowedInNSTypes["ves.io.schema.virtual_network.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.virtual_network.Object"] = ves_io_schema_virtual_network_crudapi.APISwaggerJSON
 

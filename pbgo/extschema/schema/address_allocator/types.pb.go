@@ -279,7 +279,7 @@ func (m *GlobalSpecType) GetAllocationMap() *NodePrefixMapType {
 
 // Create Address Allocator
 //
-// x-displayName: "Create Address Allocator Specification"
+// x-displayName: "Create Address Allocator"
 // Create Address Allocator will create an address allocator object in 'system' namespace of the user
 type CreateSpecType struct {
 	Mode                    AllocatorMode     `protobuf:"varint,1,opt,name=mode,proto3,enum=ves.io.schema.address_allocator.AllocatorMode" json:"mode,omitempty"`
@@ -314,7 +314,7 @@ func (m *CreateSpecType) GetAddressAllocationScheme() *AllocationScheme {
 
 // Get Address Allocator
 //
-// x-displayName: "Get Address Allocator Specification"
+// x-displayName: "Get Address Allocator"
 // Get Address Allocator will get address allocator object from system namespace
 type GetSpecType struct {
 	Mode                    AllocatorMode     `protobuf:"varint,1,opt,name=mode,proto3,enum=ves.io.schema.address_allocator.AllocatorMode" json:"mode,omitempty"`

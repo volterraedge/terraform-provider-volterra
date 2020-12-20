@@ -2293,12 +2293,12 @@ var APISwaggerJSON string = `{
                 },
                 "ports": {
                     "type": "array",
-                    "description": " Ports is list of port ranges as match criteria. Range is expressed as start port and end port\n\nExample: - \"100-200\"-",
+                    "description": " List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192\n\nExample: - \"100-200\"-",
                     "title": "ports",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Port Ranges",
+                    "x-displayname": "List of Port Ranges",
                     "x-ves-example": "100-200"
                 },
                 "prefix": {
@@ -2370,8 +2370,8 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_policy_rule.NetworkPolicyRuleAdvancedAction",
             "properties": {
                 "action": {
-                    "description": "\n Advanced action applied along with selection in NetworkPolicyRuleAction",
-                    "title": "Action\nx-displayName: \"Action\"",
+                    "description": " Advanced action applied along with selection in NetworkPolicyRuleAction",
+                    "title": "Action",
                     "$ref": "#/definitions/network_policy_ruleLogAction",
                     "x-displayname": "Action"
                 }

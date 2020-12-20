@@ -3298,28 +3298,6 @@ func (v *ValidateSiteACLType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-	case *SiteACLType_DestinationIpAddress:
-		if fv, exists := v.FldValidators["vip_choice.destination_ip_address"]; exists {
-			val := m.GetVipChoice().(*SiteACLType_DestinationIpAddress).DestinationIpAddress
-			vOpts := append(opts,
-				db.WithValidateField("vip_choice"),
-				db.WithValidateField("destination_ip_address"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *SiteACLType_SharedVipServices:
-		if fv, exists := v.FldValidators["vip_choice.shared_vip_services"]; exists {
-			val := m.GetVipChoice().(*SiteACLType_SharedVipServices).SharedVipServices
-			vOpts := append(opts,
-				db.WithValidateField("vip_choice"),
-				db.WithValidateField("shared_vip_services"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 
 	}
 
@@ -3370,8 +3348,6 @@ var DefaultSiteACLTypeValidator = func() *ValidateSiteACLType {
 		panic(errMsg)
 	}
 	v.FldValidators["fast_acl_rules"] = vFn
-
-	v.FldValidators["vip_choice.destination_ip_address"] = DestinationIPAddressTypeValidator().Validate
 
 	return v
 }()

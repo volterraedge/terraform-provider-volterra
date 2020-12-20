@@ -310,6 +310,15 @@ func (c *UpgradeAPIInprocClient) UpgradeOS(ctx context.Context, in *UpgradeOSReq
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.UpgradeAPI.UpgradeOS"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.UpgradeOS(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -344,6 +353,15 @@ func (c *UpgradeAPIInprocClient) UpgradeSW(ctx context.Context, in *UpgradeSWReq
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.UpgradeAPI.UpgradeSW"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.UpgradeSW(ctx, in)
 	if err != nil {

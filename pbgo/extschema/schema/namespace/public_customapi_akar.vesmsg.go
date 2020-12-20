@@ -28,6 +28,229 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *GetActiveNetworkPoliciesRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetActiveNetworkPoliciesRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetActiveNetworkPoliciesRequest) DeepCopy() *GetActiveNetworkPoliciesRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetActiveNetworkPoliciesRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetActiveNetworkPoliciesRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetActiveNetworkPoliciesRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetActiveNetworkPoliciesRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetActiveNetworkPoliciesRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetActiveNetworkPoliciesRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetActiveNetworkPoliciesRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetActiveNetworkPoliciesRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetActiveNetworkPoliciesRequestValidator = func() *ValidateGetActiveNetworkPoliciesRequest {
+	v := &ValidateGetActiveNetworkPoliciesRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GetActiveNetworkPoliciesRequestValidator() db.Validator {
+	return DefaultGetActiveNetworkPoliciesRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetActiveNetworkPoliciesResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetActiveNetworkPoliciesResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetActiveNetworkPoliciesResponse) DeepCopy() *GetActiveNetworkPoliciesResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetActiveNetworkPoliciesResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetActiveNetworkPoliciesResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetActiveNetworkPoliciesResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetActiveNetworkPoliciesResponseValidator().Validate(ctx, m, opts...)
+}
+
+func (m *GetActiveNetworkPoliciesResponse) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetNetworkPoliciesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *GetActiveNetworkPoliciesResponse) GetNetworkPoliciesDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, vref := range m.GetNetworkPolicies() {
+		if vref == nil {
+			return nil, fmt.Errorf("GetActiveNetworkPoliciesResponse.network_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_policy.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_policies",
+			Ref:        vdRef,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetNetworkPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetActiveNetworkPoliciesResponse) GetNetworkPoliciesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "network_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: network_policy")
+	}
+	for i, vref := range m.GetNetworkPolicies() {
+		if vref == nil {
+			return nil, fmt.Errorf("GetActiveNetworkPoliciesResponse.network_policies[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "network_policy.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateGetActiveNetworkPoliciesResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetActiveNetworkPoliciesResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetActiveNetworkPoliciesResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetActiveNetworkPoliciesResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["network_policies"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("network_policies"))
+		for idx, item := range m.GetNetworkPolicies() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetActiveNetworkPoliciesResponseValidator = func() *ValidateGetActiveNetworkPoliciesResponse {
+	v := &ValidateGetActiveNetworkPoliciesResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["network_policies"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func GetActiveNetworkPoliciesResponseValidator() db.Validator {
+	return DefaultGetActiveNetworkPoliciesResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetActiveServicePoliciesRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -470,6 +693,282 @@ var DefaultGetFastACLsForInternetVIPsResponseValidator = func() *ValidateGetFast
 
 func GetFastACLsForInternetVIPsResponseValidator() db.Validator {
 	return DefaultGetFastACLsForInternetVIPsResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SetActiveNetworkPoliciesRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SetActiveNetworkPoliciesRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SetActiveNetworkPoliciesRequest) DeepCopy() *SetActiveNetworkPoliciesRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SetActiveNetworkPoliciesRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SetActiveNetworkPoliciesRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SetActiveNetworkPoliciesRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SetActiveNetworkPoliciesRequestValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SetActiveNetworkPoliciesRequest) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetNetworkPoliciesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *SetActiveNetworkPoliciesRequest) GetNetworkPoliciesDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, vref := range m.GetNetworkPolicies() {
+		if vref == nil {
+			return nil, fmt.Errorf("SetActiveNetworkPoliciesRequest.network_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_policy.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_policies",
+			Ref:        vdRef,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetNetworkPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SetActiveNetworkPoliciesRequest) GetNetworkPoliciesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "network_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: network_policy")
+	}
+	for i, vref := range m.GetNetworkPolicies() {
+		if vref == nil {
+			return nil, fmt.Errorf("SetActiveNetworkPoliciesRequest.network_policies[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "network_policy.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateSetActiveNetworkPoliciesRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSetActiveNetworkPoliciesRequest) NetworkPoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for network_policies")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated network_policies")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items network_policies")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSetActiveNetworkPoliciesRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SetActiveNetworkPoliciesRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SetActiveNetworkPoliciesRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["network_policies"]; exists {
+		vOpts := append(opts, db.WithValidateField("network_policies"))
+		if err := fv(ctx, m.GetNetworkPolicies(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSetActiveNetworkPoliciesRequestValidator = func() *ValidateSetActiveNetworkPoliciesRequest {
+	v := &ValidateSetActiveNetworkPoliciesRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNetworkPolicies := v.NetworkPoliciesValidationRuleHandler
+	rulesNetworkPolicies := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+	}
+	vFn, err = vrhNetworkPolicies(rulesNetworkPolicies)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SetActiveNetworkPoliciesRequest.network_policies: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["network_policies"] = vFn
+
+	return v
+}()
+
+func SetActiveNetworkPoliciesRequestValidator() db.Validator {
+	return DefaultSetActiveNetworkPoliciesRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SetActiveNetworkPoliciesResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SetActiveNetworkPoliciesResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SetActiveNetworkPoliciesResponse) DeepCopy() *SetActiveNetworkPoliciesResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SetActiveNetworkPoliciesResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SetActiveNetworkPoliciesResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SetActiveNetworkPoliciesResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SetActiveNetworkPoliciesResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSetActiveNetworkPoliciesResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSetActiveNetworkPoliciesResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SetActiveNetworkPoliciesResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SetActiveNetworkPoliciesResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSetActiveNetworkPoliciesResponseValidator = func() *ValidateSetActiveNetworkPoliciesResponse {
+	v := &ValidateSetActiveNetworkPoliciesResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SetActiveNetworkPoliciesResponseValidator() db.Validator {
+	return DefaultSetActiveNetworkPoliciesResponseValidator
 }
 
 // augmented methods on protoc/std generated struct

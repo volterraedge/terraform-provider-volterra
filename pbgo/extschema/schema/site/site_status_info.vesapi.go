@@ -227,6 +227,15 @@ func (c *CustomSiteStatusAPIInprocClient) SiteStatusMetrics(ctx context.Context,
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomSiteStatusAPI.SiteStatusMetrics"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.SiteStatusMetrics(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()

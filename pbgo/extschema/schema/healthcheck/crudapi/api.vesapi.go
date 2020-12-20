@@ -2287,7 +2287,7 @@ var APISwaggerJSON string = `{
             "description": "Healthy if \"get\" method on URL \"http(s)://\u003chost\u003e/\u003cpath\u003e\" with optional \"\u003cheader\u003e\" returns success.\n\"host\" is not used for DNS resolution. It is used as HTTP Header in the request.",
             "title": "HttpHealthCheck",
             "x-displayname": "HTTP Health Check",
-            "x-ves-displayorder": "1,2,5,3,4",
+            "x-ves-displayorder": "6,2,5,3,4",
             "x-ves-oneof-field-host_header_choice": "[\"host_header\",\"use_origin_server_name\"]",
             "x-ves-proto-message": "ves.io.schema.healthcheck.HttpHealthCheck",
             "properties": {

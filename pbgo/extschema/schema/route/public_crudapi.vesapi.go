@@ -1965,7 +1965,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1977,7 +1977,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2099,10 +2099,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " The name of the cookie that will be used to obtain the hash key. If the\n cookie is not present and TTL below is not set, no hash will be\n produced\n\nExample: - \"userid\"-",
+                    "description": " The name of the cookie that will be used to obtain the hash key. If the\n cookie is not present and TTL below is not set, no hash will be\n produced\n\nExample: - \"userid\"-\nRequired: YES",
                     "title": "name",
                     "x-displayname": "Name",
-                    "x-ves-example": "userid"
+                    "x-ves-example": "userid",
+                    "x-ves-required": "true"
                 },
                 "path": {
                     "type": "string",
@@ -2169,7 +2170,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Create route object in a given namespace. Route object is list of route rules.\nEach rule has match condition to match incoming requests and actions to take on matching requests.\nVirtual host object has reference to route object",
             "title": "CreateSpecType",
-            "x-displayname": "Create Configuration Specification",
+            "x-displayname": "Create Route",
             "x-ves-proto-message": "ves.io.schema.route.CreateSpecType",
             "properties": {
                 "routes": {
@@ -2245,7 +2246,7 @@ var APISwaggerJSON string = `{
         },
         "routeGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2260,7 +2261,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Get route object in a given namespace. Route object is list of route rules.\nEach rule has match condition to match incoming requests and actions to take on matching requests.\nVirtual host object has reference to route object",
             "title": "GetSpecType",
-            "x-displayname": "Get Configuration Specification",
+            "x-displayname": "Get Route",
             "x-ves-proto-message": "ves.io.schema.route.GetSpecType",
             "properties": {
                 "routes": {
@@ -2298,7 +2299,7 @@ var APISwaggerJSON string = `{
             "description": "HashPolicyType specifies the field of the incoming request that will be used for\ngenerating hash key. When multiple hash policies are configured, this can also specify\nif the current hash policy is terminal policy or not.",
             "title": "HashPolicyType",
             "x-displayname": "Hash Policy",
-            "x-ves-oneof-field-policyspecifier": "[\"cookie\",\"header_name\",\"source_ip\"]",
+            "x-ves-oneof-field-policy_specifier": "[\"cookie\",\"header_name\",\"source_ip\"]",
             "x-ves-proto-message": "ves.io.schema.route.HashPolicyType",
             "properties": {
                 "cookie": {
@@ -2533,7 +2534,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Replace route object in a given namespace. Route object is list of route rules.\nEach rule has match condition to match incoming requests and actions to take on matching requests.\nVirtual host object has reference to route object",
             "title": "ReplaceSpecType",
-            "x-displayname": "Replace Configuration Specification",
+            "x-displayname": "Replace Route",
             "x-ves-proto-message": "ves.io.schema.route.ReplaceSpecType",
             "properties": {
                 "routes": {
@@ -2585,7 +2586,7 @@ var APISwaggerJSON string = `{
             "description": "List of destination to choose if the route is match.",
             "title": "RouteDestinationList",
             "x-displayname": "Destination List",
-            "x-ves-displayorder": "1,8,9,5,6,7,10,11,13,14,15,16,18,19",
+            "x-ves-displayorder": "1,8,9,5,20,10,11,13,14,15,16,18,19",
             "x-ves-oneof-field-hostrewriteparams": "[\"auto_host_rewrite\",\"host_rewrite\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteDestinationList",
             "properties": {
@@ -2790,7 +2791,7 @@ var APISwaggerJSON string = `{
             "description": "Each RouteType is a rule which has match condition and action. When the condition is\nmatched for incoming request, the specified action is taken.",
             "title": "RouteType",
             "x-displayname": "Route",
-            "x-ves-displayorder": "1,2,3,4,13,12,11,7,9,8,10,5",
+            "x-ves-displayorder": "1,14,13,12,11,7,9,8,10,5",
             "x-ves-oneof-field-routeaction": "[\"route_destination\",\"route_direct_response\",\"route_redirect\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteType",
             "properties": {
@@ -3150,7 +3151,7 @@ var APISwaggerJSON string = `{
         },
         "schemaDenominatorType": {
             "type": "string",
-            "description": "Denominator used in fraction where sampling percentages are needed. example sampled requests\n\n - HUNDRED: x-displayName \"100\"\nUse hundred as denominator\n - TEN_THOUSAND: x-displayName \"10000\"\nUse ten thousand as denominator\n - MILLION: x-displayName \"1000000\"\nUse million as denominator",
+            "description": "Denominator used in fraction where sampling percentages are needed. example sampled requests\n\nUse hundred as denominator\nUse ten thousand as denominator\nUse million as denominator",
             "title": "DenominatorType",
             "enum": [
                 "HUNDRED",
@@ -3738,7 +3739,7 @@ var APISwaggerJSON string = `{
         },
         "schemaRoutingPriority": {
             "type": "string",
-            "description": "Priority routing for each request.\nDifferent connection pools are used based on the priority selected for the request.\nAlso, circuit-breaker configuration at destination cluster is chosen based on selected priority.\n\n - DEFAULT: Default routing mechanism\n - HIGH: High-Priority routing mechanism",
+            "description": "Priority routing for each request.\nDifferent connection pools are used based on the priority selected for the request.\nAlso, circuit-breaker configuration at destination cluster is chosen based on selected priority.\n\nDefault routing mechanism\nHigh-Priority routing mechanism",
             "title": "RoutingPriority",
             "enum": [
                 "DEFAULT",

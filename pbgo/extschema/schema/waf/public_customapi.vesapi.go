@@ -223,6 +223,15 @@ func (c *CustomAPIInprocClient) VirtualHostWafStatus(ctx context.Context, in *Vi
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.waf.CustomAPI.VirtualHostWafStatus"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.VirtualHostWafStatus(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -398,7 +407,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "schemaWafModeType": {
             "type": "string",
-            "description": "The mode of operation for Web Application Firewall\n\n - BLOCK: Block on detection\n - ALERT_ONLY: Only raise alert on detection",
+            "description": "The mode of operation for Web Application Firewall\n\nBlock on detection\nOnly raise alert on detection",
             "title": "WafModeType",
             "enum": [
                 "BLOCK",

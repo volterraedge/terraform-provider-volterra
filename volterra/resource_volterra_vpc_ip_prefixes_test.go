@@ -39,7 +39,7 @@ func testVPCIPPrefixes(name string) string {
 		  namespace = "system"
 		  vpc_ip_prefixes {
 			  name = "vpc-12345"
-			  value = ["192.168.0.0"]
+			  value = ["192.168.0.0/22"]
 		  }
 		}
 		`, setVPCIPPrefixes, name, name)

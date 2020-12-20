@@ -38,6 +38,20 @@ func (m *AWSVPCIngressEgressGwReplaceType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *AWSVPCIngressEgressGwReplaceType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetGlobalNetworkList().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AWSVPCIngressEgressGwReplaceType.global_network_list")
+	}
+
+	return nil
+}
+
 func (m *AWSVPCIngressEgressGwReplaceType) DeepCopy() *AWSVPCIngressEgressGwReplaceType {
 	if m == nil {
 		return nil
@@ -601,6 +615,20 @@ func (m *AWSVPCIngressEgressGwType) ToJSON() (string, error) {
 
 func (m *AWSVPCIngressEgressGwType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *AWSVPCIngressEgressGwType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetGlobalNetworkList().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AWSVPCIngressEgressGwType.global_network_list")
+	}
+
+	return nil
 }
 
 func (m *AWSVPCIngressEgressGwType) DeepCopy() *AWSVPCIngressEgressGwType {
@@ -1497,6 +1525,20 @@ func (m *AWSVPCVoltstackClusterReplaceType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *AWSVPCVoltstackClusterReplaceType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetGlobalNetworkList().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AWSVPCVoltstackClusterReplaceType.global_network_list")
+	}
+
+	return nil
+}
+
 func (m *AWSVPCVoltstackClusterReplaceType) DeepCopy() *AWSVPCVoltstackClusterReplaceType {
 	if m == nil {
 		return nil
@@ -1966,6 +2008,20 @@ func (m *AWSVPCVoltstackClusterType) ToJSON() (string, error) {
 
 func (m *AWSVPCVoltstackClusterType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *AWSVPCVoltstackClusterType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetGlobalNetworkList().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AWSVPCVoltstackClusterType.global_network_list")
+	}
+
+	return nil
 }
 
 func (m *AWSVPCVoltstackClusterType) DeepCopy() *AWSVPCVoltstackClusterType {
@@ -2528,6 +2584,24 @@ func (m *CreateSpecType) ToJSON() (string, error) {
 
 func (m *CreateSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *CreateSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetIngressEgressGw().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.ingress_egress_gw")
+	}
+
+	if err := m.GetVoltstackCluster().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.voltstack_cluster")
+	}
+
+	return nil
 }
 
 func (m *CreateSpecType) DeepCopy() *CreateSpecType {
@@ -3121,6 +3195,24 @@ func (m *GetSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *GetSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetIngressEgressGw().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.ingress_egress_gw")
+	}
+
+	if err := m.GetVoltstackCluster().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.voltstack_cluster")
+	}
+
+	return nil
+}
+
 func (m *GetSpecType) DeepCopy() *GetSpecType {
 	if m == nil {
 		return nil
@@ -3710,6 +3802,24 @@ func (m *GlobalSpecType) ToJSON() (string, error) {
 
 func (m *GlobalSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GlobalSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetIngressEgressGw().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.ingress_egress_gw")
+	}
+
+	if err := m.GetVoltstackCluster().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.voltstack_cluster")
+	}
+
+	return nil
 }
 
 func (m *GlobalSpecType) DeepCopy() *GlobalSpecType {
@@ -4435,6 +4545,24 @@ func (m *ReplaceSpecType) ToJSON() (string, error) {
 
 func (m *ReplaceSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ReplaceSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetIngressEgressGw().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.ingress_egress_gw")
+	}
+
+	if err := m.GetVoltstackCluster().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.voltstack_cluster")
+	}
+
+	return nil
 }
 
 func (m *ReplaceSpecType) DeepCopy() *ReplaceSpecType {

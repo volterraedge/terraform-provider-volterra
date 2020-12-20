@@ -2251,6 +2251,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of -fast_acl_rule-",
             "title": "GlobalSpecType",
             "x-displayname": "Specification",
+            "x-ves-displayorder": "6,3,1",
             "x-ves-oneof-field-source": "[\"ip_prefix_set\",\"prefix\"]",
             "x-ves-proto-message": "ves.io.schema.fast_acl_rule.GlobalSpecType",
             "properties": {

@@ -32,22 +32,22 @@ resource "volterra_fast_acl" "example" {
       name = "name"
 
       port {
-        // One of the arguments from this list "all user_defined dns" must be set
+        // One of the arguments from this list "user_defined dns all" must be set
         all = true
       }
 
-      // One of the arguments from this list "prefix ip_prefix_set" must be set
+      // One of the arguments from this list "ip_prefix_set prefix" must be set
 
       prefix {
         prefix = ["[192.168.1.0/24, 192.168.2.0/24]\" or \"[2001:db8::1::/112, 2001::db8::2::/112]"]
       }
     }
 
-    // One of the arguments from this list "inside_network outside_network" must be set
+    // One of the arguments from this list "outside_network inside_network" must be set
     outside_network = true
 
-    // One of the arguments from this list "interface_services vip_services all_services destination_ip_address shared_vip_services" must be set
-    interface_services = true
+    // One of the arguments from this list "all_services interface_services vip_services" must be set
+    vip_services = true
   }
 }
 
@@ -302,11 +302,7 @@ ACL will be applied at customer edge sites.
 
 `all_services` - (Optional) Port and protocol is picked up from advertise policies (bool).
 
-`destination_ip_address` - (Optional) Destination is configured (ip, protocol, port). See [Destination Ip Address ](#destination-ip-address) below for details.
-
 `interface_services` - (Optional) Port and protocol is picked up from advertise policies (bool).
-
-`shared_vip_services` - (Optional) Regional Edge: Applies configuration on all shared VIPs used for services (bool).
 
 `vip_services` - (Optional) Port and protocol is picked up from advertise policies (bool).
 

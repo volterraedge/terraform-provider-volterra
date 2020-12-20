@@ -394,6 +394,15 @@ func (c *CustomAPIInprocClient) ConfirmAlertReceiver(ctx context.Context, in *Co
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.alert_receiver.CustomAPI.ConfirmAlertReceiver"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.ConfirmAlertReceiver(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -429,6 +438,15 @@ func (c *CustomAPIInprocClient) TestAlertReceiver(ctx context.Context, in *TestA
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.alert_receiver.CustomAPI.TestAlertReceiver"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.TestAlertReceiver(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -463,6 +481,15 @@ func (c *CustomAPIInprocClient) VerifyAlertReceiver(ctx context.Context, in *Ver
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.alert_receiver.CustomAPI.VerifyAlertReceiver"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.VerifyAlertReceiver(ctx, in)
 	if err != nil {

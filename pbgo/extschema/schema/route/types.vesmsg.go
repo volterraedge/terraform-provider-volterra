@@ -66,6 +66,16 @@ type ValidateCookieForHashing struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCookieForHashing) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCookieForHashing) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CookieForHashing)
 	if !ok {
@@ -113,6 +123,27 @@ func (v *ValidateCookieForHashing) Validate(ctx context.Context, pm interface{},
 // Well-known symbol for default validator implementation
 var DefaultCookieForHashingValidator = func() *ValidateCookieForHashing {
 	v := &ValidateCookieForHashing{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CookieForHashing.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
 
 	return v
 }()
@@ -681,6 +712,22 @@ type ValidateHashPolicyType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateHashPolicyType) PolicySpecifierValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for policy_specifier")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateHashPolicyType) PolicySpecifierHeaderNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_HeaderName, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for header_name")
+	}
+	return oValidatorFn_HeaderName, nil
+}
+
 func (v *ValidateHashPolicyType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*HashPolicyType)
 	if !ok {
@@ -695,12 +742,22 @@ func (v *ValidateHashPolicyType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["policy_specifier"]; exists {
+		val := m.GetPolicySpecifier()
+		vOpts := append(opts,
+			db.WithValidateField("policy_specifier"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
 	switch m.GetPolicySpecifier().(type) {
 	case *HashPolicyType_HeaderName:
-		if fv, exists := v.FldValidators["PolicySpecifier.header_name"]; exists {
+		if fv, exists := v.FldValidators["policy_specifier.header_name"]; exists {
 			val := m.GetPolicySpecifier().(*HashPolicyType_HeaderName).HeaderName
 			vOpts := append(opts,
-				db.WithValidateField("PolicySpecifier"),
+				db.WithValidateField("policy_specifier"),
 				db.WithValidateField("header_name"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -708,10 +765,10 @@ func (v *ValidateHashPolicyType) Validate(ctx context.Context, pm interface{}, o
 			}
 		}
 	case *HashPolicyType_Cookie:
-		if fv, exists := v.FldValidators["PolicySpecifier.cookie"]; exists {
+		if fv, exists := v.FldValidators["policy_specifier.cookie"]; exists {
 			val := m.GetPolicySpecifier().(*HashPolicyType_Cookie).Cookie
 			vOpts := append(opts,
-				db.WithValidateField("PolicySpecifier"),
+				db.WithValidateField("policy_specifier"),
 				db.WithValidateField("cookie"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -719,10 +776,10 @@ func (v *ValidateHashPolicyType) Validate(ctx context.Context, pm interface{}, o
 			}
 		}
 	case *HashPolicyType_SourceIp:
-		if fv, exists := v.FldValidators["PolicySpecifier.source_ip"]; exists {
+		if fv, exists := v.FldValidators["policy_specifier.source_ip"]; exists {
 			val := m.GetPolicySpecifier().(*HashPolicyType_SourceIp).SourceIp
 			vOpts := append(opts,
-				db.WithValidateField("PolicySpecifier"),
+				db.WithValidateField("policy_specifier"),
 				db.WithValidateField("source_ip"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -747,6 +804,40 @@ func (v *ValidateHashPolicyType) Validate(ctx context.Context, pm interface{}, o
 // Well-known symbol for default validator implementation
 var DefaultHashPolicyTypeValidator = func() *ValidateHashPolicyType {
 	v := &ValidateHashPolicyType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPolicySpecifier := v.PolicySpecifierValidationRuleHandler
+	rulesPolicySpecifier := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPolicySpecifier(rulesPolicySpecifier)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HashPolicyType.policy_specifier: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["policy_specifier"] = vFn
+
+	vrhPolicySpecifierHeaderName := v.PolicySpecifierHeaderNameValidationRuleHandler
+	rulesPolicySpecifierHeaderName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFnMap["policy_specifier.header_name"], err = vrhPolicySpecifierHeaderName(rulesPolicySpecifierHeaderName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field HashPolicyType.policy_specifier_header_name: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["policy_specifier.header_name"] = vFnMap["policy_specifier.header_name"]
+
+	v.FldValidators["policy_specifier.cookie"] = CookieForHashingValidator().Validate
 
 	return v
 }()
@@ -1804,6 +1895,8 @@ var DefaultRouteDestinationListValidator = func() *ValidateRouteDestinationList 
 	v.FldValidators["buffer_policy"] = ves_io_schema.BufferConfigTypeValidator().Validate
 
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
+
+	v.FldValidators["hash_policy"] = HashPolicyTypeValidator().Validate
 
 	return v
 }()

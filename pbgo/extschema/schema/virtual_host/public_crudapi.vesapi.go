@@ -1965,7 +1965,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1977,7 +1977,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2093,11 +2093,17 @@ var APISwaggerJSON string = `{
                 },
                 "cookie_expiry": {
                     "type": "integer",
-                    "format": "int64"
+                    "description": " specifies in seconds max duration of the allocated cookie. This maps to “Max-Age” attribute in the session cookie.\n This will act as an expiry duration on the client side after which client will not  be setting the\n cookie as part of the request.\n Default cookie expiry is 3600 seconds\n\nExample: - 5000-",
+                    "title": "cookie expiry",
+                    "format": "int64",
+                    "x-displayname": "Cookie Expiry duration"
                 },
                 "cookie_refresh_interval": {
                     "type": "integer",
-                    "format": "int64"
+                    "description": " Specifies in seconds refresh interval for session cookie.\n This is used to keep the active user active and reduce re-login.\n When an incoming cookie's session expiry is still valid, and time to expire falls behind this interval,\n re-issue a cookie with new expiry and with the same original session expiry.\n Default refresh interval is 3000 seconds\n\nExample: - 3600-",
+                    "title": "cookie refresh interval",
+                    "format": "int64",
+                    "x-displayname": "Cookie Refresh Interval"
                 },
                 "kms_key_hmac": {
                     "description": "Exclusive with [auth_hmac]\nx-displayName: \"HMAC kms key\"\nHMAC configured using KMS_KEY",
@@ -2106,7 +2112,10 @@ var APISwaggerJSON string = `{
                 },
                 "session_expiry": {
                     "type": "integer",
-                    "format": "int64"
+                    "description": " specifies in seconds max lifetime of an authenticated session after which the user will be forced to login again.\n Default session expiry is 86400 seconds(24 hours).\n\nExample: - 36000-",
+                    "title": "session expiry",
+                    "format": "int64",
+                    "x-displayname": "Session Expiry duration"
                 }
             }
         },
@@ -2909,7 +2918,7 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretEncodingType": {
             "type": "string",
-            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: No Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
             "title": "SecretEncodingType",
             "enum": [
                 "EncodingNone",
@@ -3380,9 +3389,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cipher_suites": {
                     "type": "array",
+                    "description": " The following list specifies the supported cipher suite\n   TLS_AES_128_GCM_SHA256\n   TLS_AES_256_GCM_SHA384\n   TLS_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\n   TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\n   TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\n   TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\n   TLS_RSA_WITH_AES_128_CBC_SHA\n   TLS_RSA_WITH_AES_128_GCM_SHA256\n   TLS_RSA_WITH_AES_256_CBC_SHA\n   TLS_RSA_WITH_AES_256_GCM_SHA384\n\n If not specified, the default list:\n   TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n   TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\n   TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n   TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\n will be used.",
+                    "title": "cipher_suites",
                     "items": {
                         "type": "string"
-                    }
+                    },
+                    "x-displayname": "Cipher Suites"
                 },
                 "maximum_protocol_version": {
                     "description": " Maximum TLS protocol version.",
@@ -3421,7 +3433,7 @@ var APISwaggerJSON string = `{
         },
         "schemaTlsProtocol": {
             "type": "string",
-            "description": "TlsProtocol is enumeration of supported TLS versions\n\n - TLS_AUTO: Volterra will choose the optimal TLS version.\n - TLSv1_0: TLS 1.0\n - TLSv1_1: TLS 1.1\n - TLSv1_2: TLS 1.2\n - TLSv1_3: TLS 1.3",
+            "description": "TlsProtocol is enumeration of supported TLS versions\n\nVolterra will choose the optimal TLS version.\nTLS 1.0\nTLS 1.1\nTLS 1.2\nTLS 1.3",
             "title": "TlsProtocol",
             "enum": [
                 "TLS_AUTO",
@@ -3683,8 +3695,8 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Creates virtual host in a given namespace.",
             "title": "Create virtual host",
-            "x-displayname": "Create Configuration Specification",
-            "x-ves-displayorder": "15,2,3,5,9,18,19,39,6,17,7,8,12,13,20,28,21,22,33,23,24,29,35,26,27,25,32,34",
+            "x-displayname": "Create Virtual Host",
+            "x-ves-displayorder": "15,2,3,5,9,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.CreateSpecType",
@@ -3884,8 +3896,8 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Get virtual host from a given namespace.",
             "title": "Get virtual host",
-            "x-displayname": "Get Configuration Specification",
-            "x-ves-displayorder": "10,15,2,3,5,9,18,19,39,6,17,7,8,12,13,20,28,21,22,33,23,24,29,35,26,27,25,32,34",
+            "x-displayname": "Get Virtual Host",
+            "x-ves-displayorder": "10,15,2,3,5,9,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.GetSpecType",
@@ -4142,7 +4154,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Advertise Policies"
                 },
                 "authentication": {
-                    "description": "Exclusive with [no_authentication]\nx-displayName: \"Specify Athentication Object\"\nConfigure authentication details",
+                    "description": "Exclusive with [no_authentication]\nx-displayName: \"Enable Authentication\"\nConfigure authentication details",
                     "title": "Authentication Enabled",
                     "$ref": "#/definitions/virtual_hostAuthenticationDetails"
                 },
@@ -4228,6 +4240,13 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/virtual_host_dns_infoDnsInfo"
                     },
                     "x-displayname": "DNS Information"
+                },
+                "dns_volterra_managed": {
+                    "type": "boolean",
+                    "description": " Is DNS for the specified domain managed by volterra. If this field is set, DNS record will be automatically added to the DNS domain.",
+                    "title": "DNS Volterra Managed",
+                    "format": "boolean",
+                    "x-displayname": "DNS Volterra Managed"
                 },
                 "domains": {
                     "type": "array",
@@ -4485,8 +4504,8 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Replace a given virtual host in a given namespace.",
             "title": "Replace virtual host",
-            "x-displayname": "Replace Configuration Specification",
-            "x-ves-displayorder": "15,2,3,5,9,18,19,39,6,17,7,8,12,13,20,28,21,22,33,23,24,29,35,26,27,25,32,34",
+            "x-displayname": "Replace Virtual Host",
+            "x-ves-displayorder": "15,2,3,5,9,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.ReplaceSpecType",
@@ -4707,31 +4726,32 @@ var APISwaggerJSON string = `{
             "properties": {
                 "auth_config": {
                     "type": "array",
-                    "description": " Reference to Authentication Config Object",
-                    "title": "Authentication Reference",
+                    "description": " Reference to Authentication Config Object\nRequired: YES",
+                    "title": "Authentication Object",
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Authentication Config Reference"
+                    "x-displayname": "Reference to Authentication Object",
+                    "x-ves-required": "true"
                 },
                 "cookie_params": {
-                    "description": "Exclusive with [use_auth_object_config]\nx-displayName: \"Cookie Params\"",
+                    "description": "Exclusive with [use_auth_object_config]\nx-displayName: \"Configure Cookie Params\"\nConfigure all Cookie params",
                     "title": "Cookie param configuration details",
                     "$ref": "#/definitions/authenticationCookieParams"
                 },
                 "redirect_dynamic": {
-                    "description": "Exclusive with [redirect_url]\nx-displayName: \"Set the redirect URL dynamically\"\nIf redirect URL is set to dynamic , then the redirect URL will be obtained from the incoming request\nThis URL must match with the redirect URL configured with the OIDC provider",
+                    "description": "Exclusive with [redirect_url]\nx-displayName: \"Set the Redirect URL dynamically\"\nIf redirect URL is set to dynamic , then the redirect URL will be obtained from the incoming request\nThis URL must match with the redirect URL configured with the OIDC provider",
                     "title": "set the redirect URL dynamically",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "redirect_url": {
                     "type": "string",
-                    "description": "Exclusive with [redirect_dynamic]\nx-displayName: \"Redirect URL is the URL where user gets redirected once authentication is successful\"\nx-example: https://abc.xyz.com\n\nuser can provide a url for e.g https://abc.xyz.com where user gets redirected. This URL configured here\nmust match with the redirect URL configured with the OIDC provider",
+                    "description": "Exclusive with [redirect_dynamic]\nx-displayName: \"Configure Redirect URL\"\nx-example: https://abc.xyz.com\n\nuser can provide a url for e.g https://abc.xyz.com where user gets redirected. This URL configured here\nmust match with the redirect URL configured with the OIDC provider",
                     "title": "Redirect URL"
                 },
                 "use_auth_object_config": {
-                    "description": "Exclusive with [cookie_params]\nx-displayName: \"Use the cookie parameters from Authentication Object\"",
-                    "title": "Use the Cookie params config from Authentication Config Object",
+                    "description": "Exclusive with [cookie_params]\nx-displayName: \"Use from Authentication Object\"\nUse the Cookie Params configured in Authentication Object",
+                    "title": "Use the Cookie params configured in Authentication Config Object",
                     "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
@@ -5003,7 +5023,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",

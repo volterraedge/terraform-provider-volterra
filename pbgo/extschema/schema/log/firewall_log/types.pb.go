@@ -248,7 +248,7 @@ type FieldAggregation struct {
 	Field KeyField `protobuf:"varint,1,opt,name=field,proto3,enum=ves.io.schema.log.firewall_log.KeyField" json:"field,omitempty"`
 	// topk
 	//
-	// x-displayName "TopK"
+	// x-displayName: "TopK"
 	//
 	// Number of top field values to be returned in the response.
 	// Optional: If not specified, top 5 values will be returned in the response.

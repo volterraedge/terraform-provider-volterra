@@ -21,17 +21,17 @@ resource "volterra_service_policy_rule" "example" {
   namespace = "staging"
   action    = ["action"]
 
-  // One of the arguments from this list "asn_matcher any_asn asn_list" must be set
+  // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
+  any_asn = true
 
-  asn_list {
-    as_numbers = ["[713, 7932, 847325, 4683, 15269, 1000001]"]
-  }
   // One of the arguments from this list "any_client client_name client_selector client_name_matcher" must be set
   any_client = true
-  // One of the arguments from this list "ip_prefix_list ip_matcher any_ip" must be set
+
+  // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
   any_ip = true
+
   waf_action {
-    // One of the arguments from this list "waf_skip_processing waf_rule_control waf_inline_rule_control none" must be set
+    // One of the arguments from this list "none waf_skip_processing waf_rule_control waf_inline_rule_control" must be set
     none = true
   }
 }

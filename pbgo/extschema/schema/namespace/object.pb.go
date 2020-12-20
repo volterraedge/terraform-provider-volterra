@@ -34,6 +34,10 @@
 		SetActiveServicePoliciesResponse
 		GetActiveServicePoliciesRequest
 		GetActiveServicePoliciesResponse
+		SetActiveNetworkPoliciesRequest
+		SetActiveNetworkPoliciesResponse
+		GetActiveNetworkPoliciesRequest
+		GetActiveNetworkPoliciesResponse
 		GlobalSpecType
 		CreateSpecType
 		ReplaceSpecType

@@ -381,6 +381,10 @@ func (m *SeverityMatcher) GetSeverities() []Severity {
 // x-displayName: "Group Matcher"
 // Select one or more known group names to match the incoming alert
 type GroupMatcher struct {
+	// groups
+	//
+	// x-displayName: "Groups"
+	// Name of groups to match the alert
 	Groups []Group `protobuf:"varint,1,rep,packed,name=groups,enum=ves.io.schema.alert_policy.Group" json:"groups,omitempty"`
 }
 
@@ -400,6 +404,10 @@ func (m *GroupMatcher) GetGroups() []Group {
 // x-displayName: "Custom Group By"
 // Specify list of custom labels to group/aggregate the alerts
 type CustomGroupBy struct {
+	// labels
+	//
+	// x-displayName: "Labels"
+	// Name of labels to group/aggregate the alerts
 	Labels []string `protobuf:"bytes,1,rep,name=labels" json:"labels,omitempty"`
 }
 

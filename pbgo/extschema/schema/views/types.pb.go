@@ -984,6 +984,7 @@ func (m *AdvertisePublic) GetPublicIp() *ObjectRefType {
 // This defines a way to advertise a VIP on specific sites
 type AdvertiseCustom struct {
 	// Advertise Where
+	//
 	// x-displayName: "List of Sites to Advertise"
 	// x-required
 	// Where should this load balancer be available
@@ -1007,6 +1008,7 @@ func (m *AdvertiseCustom) GetAdvertiseWhere() []*WhereType {
 // This defines a way to advertise a VIP on specific sites
 type AdvertiseSiteVsite struct {
 	// Advertise Where
+	//
 	// x-displayName: "List of Sites to Advertise"
 	// x-required
 	// Where should this load balancer be available

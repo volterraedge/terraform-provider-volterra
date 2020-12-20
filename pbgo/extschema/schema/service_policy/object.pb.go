@@ -33,6 +33,7 @@
 		SourceList
 		Rule
 		RuleList
+		LegacyRuleList
 		GlobalSpecType
 		CreateSpecType
 		ReplaceSpecType

@@ -825,6 +825,15 @@ func (c *CustomAPIInprocClient) Activate(ctx context.Context, in *GetRequest, op
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Activate"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.Activate(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -859,6 +868,15 @@ func (c *CustomAPIInprocClient) Create(ctx context.Context, in *CreateRequest, o
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Create"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.Create(ctx, in)
 	if err != nil {
@@ -895,6 +913,15 @@ func (c *CustomAPIInprocClient) CreateServiceCredentials(ctx context.Context, in
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.CreateServiceCredentials"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.CreateServiceCredentials(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -929,6 +956,15 @@ func (c *CustomAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ..
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Get"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.Get(ctx, in)
 	if err != nil {
@@ -965,6 +1001,15 @@ func (c *CustomAPIInprocClient) List(ctx context.Context, in *ListRequest, opts 
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.List"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.List(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -999,6 +1044,15 @@ func (c *CustomAPIInprocClient) ListServiceCredentials(ctx context.Context, in *
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.ListServiceCredentials"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.ListServiceCredentials(ctx, in)
 	if err != nil {
@@ -1035,6 +1089,15 @@ func (c *CustomAPIInprocClient) Renew(ctx context.Context, in *RenewRequest, opt
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Renew"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.Renew(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -1069,6 +1132,15 @@ func (c *CustomAPIInprocClient) Revoke(ctx context.Context, in *GetRequest, opts
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.Revoke"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.Revoke(ctx, in)
 	if err != nil {
@@ -1797,7 +1869,7 @@ var CustomAPISwaggerJSON string = `{
     "definitions": {
         "api_credentialAPICredentialType": {
             "type": "string",
-            "description": "Types of API credential given when requesting credentials from volterra\n\n - API_CERTIFICATE: Volterra user certificate to access Volterra public API using mTLS\n - KUBE_CONFIG: Kubernetes config file to access Virtual Kubernetes API in Volterra\n - API_TOKEN: API token to access Volterra public API\n - SERVICE_API_TOKEN: API token for service credentials\n - SERVICE_API_CERTIFICATE: API certificate for service credentials\n - SERVICE_KUBE_CONFIG: API certificate for kube config",
+            "description": "Types of API credential given when requesting credentials from volterra\n\nVolterra user certificate to access Volterra public API using mTLS\nKubernetes config file to access Virtual Kubernetes API in Volterra\nAPI token to access Volterra public API\nAPI token for service credentials\nAPI certificate for service credentials\nAPI certificate for kube config",
             "title": "API Credential type",
             "enum": [
                 "API_CERTIFICATE",
@@ -1942,7 +2014,7 @@ var CustomAPISwaggerJSON string = `{
             "type": "object",
             "description": "Create request specification.",
             "title": "Create Spec Type",
-            "x-displayname": "Spec",
+            "x-displayname": "Create API Credential",
             "x-ves-displayorder": "1,2,5,3,4",
             "x-ves-proto-message": "ves.io.schema.api_credential.CustomCreateSpecType",
             "properties": {

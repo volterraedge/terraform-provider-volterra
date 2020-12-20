@@ -39,16 +39,22 @@ var _ = math.Inf
 type APICredentialType int32
 
 const (
+	// x-displayName: "User Certificate"
 	// Volterra user certificate to access Volterra public API using mTLS
 	API_CERTIFICATE APICredentialType = 0
+	// x-displayName: "Kubernetes Config File"
 	// Kubernetes config file to access Virtual Kubernetes API in Volterra
 	KUBE_CONFIG APICredentialType = 1
+	// x-displayName: "API Token"
 	// API token to access Volterra public API
 	API_TOKEN APICredentialType = 2
+	// x-displayName: "Service API Token"
 	// API token for service credentials
 	SERVICE_API_TOKEN APICredentialType = 3
+	// x-displayName: "Service API Certificate"
 	// API certificate for service credentials
 	SERVICE_API_CERTIFICATE APICredentialType = 4
+	// x-displayName: "API Certificate for Kubernetes Config File"
 	// API certificate for kube config
 	SERVICE_KUBE_CONFIG APICredentialType = 5
 )

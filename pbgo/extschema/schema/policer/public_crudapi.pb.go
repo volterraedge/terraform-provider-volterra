@@ -51,13 +51,19 @@ var _ = math.Inf
 type GetResponseFormatCode int32
 
 const (
+	// x-displayName: "Default Format"
+	// Default format of returned resource
 	GET_RSP_FORMAT_DEFAULT GetResponseFormatCode = 0
+	// x-displayName: "Create request Format"
 	// Response should be in CreateRequest format
 	GET_RSP_FORMAT_FOR_CREATE GetResponseFormatCode = 1
+	// x-displayName: "Replace request format"
 	// Response should be in ReplaceRequest format
 	GET_RSP_FORMAT_FOR_REPLACE GetResponseFormatCode = 2
+	// x-displayName: "Status format"
 	// Response should be in StatusObject(s) format
 	GET_RSP_FORMAT_STATUS GetResponseFormatCode = 3
+	// x-displayName: "GetSpecType format"
 	// Response should be in format of GetSpecType
 	GET_RSP_FORMAT_READ GetResponseFormatCode = 4
 )
@@ -1302,27 +1308,27 @@ const _ = grpc.SupportPackageIsVersion4
 type APIClient interface {
 	// Create a policer
 	//
-	// x-displayName: "Create a Policer"
+	// x-displayName: "Create Policer"
 	// Create a new policer with traffic rate limits
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Get a policer
 	//
-	// x-displayName: "Get a Policer"
+	// x-displayName: "Get Policer"
 	// Get specification of policer object
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Policer"
 	// List the set of policer in a namespace
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// Replace a policer
 	//
-	// x-displayName: "Replace a Policer"
+	// x-displayName: "Replace Policer"
 	// Replace a given policer with changed traffic rate limits
 	Replace(ctx context.Context, in *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete Policer"
 	// Delete the specified policer
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf3.Empty, error)
 }
@@ -1385,27 +1391,27 @@ func (c *aPIClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.
 type APIServer interface {
 	// Create a policer
 	//
-	// x-displayName: "Create a Policer"
+	// x-displayName: "Create Policer"
 	// Create a new policer with traffic rate limits
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// Get a policer
 	//
-	// x-displayName: "Get a Policer"
+	// x-displayName: "Get Policer"
 	// Get specification of policer object
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List
 	//
-	// x-displayName: "List"
+	// x-displayName: "List Policer"
 	// List the set of policer in a namespace
 	List(context.Context, *ListRequest) (*ListResponse, error)
 	// Replace a policer
 	//
-	// x-displayName: "Replace a Policer"
+	// x-displayName: "Replace Policer"
 	// Replace a given policer with changed traffic rate limits
 	Replace(context.Context, *ReplaceRequest) (*ReplaceResponse, error)
 	// Delete
 	//
-	// x-displayName: "Delete"
+	// x-displayName: "Delete Policer"
 	// Delete the specified policer
 	Delete(context.Context, *DeleteRequest) (*google_protobuf3.Empty, error)
 }

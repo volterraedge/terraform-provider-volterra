@@ -570,6 +570,15 @@ func (c *CustomAPIInprocClient) ListRegistrationsBySite(ctx context.Context, in 
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.registration.CustomAPI.ListRegistrationsBySite"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.ListRegistrationsBySite(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -604,6 +613,15 @@ func (c *CustomAPIInprocClient) ListRegistrationsByState(ctx context.Context, in
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.registration.CustomAPI.ListRegistrationsByState"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.ListRegistrationsByState(ctx, in)
 	if err != nil {
@@ -640,6 +658,15 @@ func (c *CustomAPIInprocClient) RegistrationApprove(ctx context.Context, in *App
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.registration.CustomAPI.RegistrationApprove"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.RegistrationApprove(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -675,6 +702,15 @@ func (c *CustomAPIInprocClient) RegistrationConfig(ctx context.Context, in *Conf
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.registration.CustomAPI.RegistrationConfig"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.RegistrationConfig(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -709,6 +745,15 @@ func (c *CustomAPIInprocClient) RegistrationCreate(ctx context.Context, in *Regi
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.registration.CustomAPI.RegistrationCreate"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.RegistrationCreate(ctx, in)
 	if err != nil {
@@ -2323,7 +2368,7 @@ var CustomAPISwaggerJSON string = `{
             "type": "object",
             "description": "VPM creates registration using this message, never used by users.",
             "title": "Create registration",
-            "x-displayname": "Specification",
+            "x-displayname": "Create Registration",
             "x-ves-displayorder": "1,2,3",
             "x-ves-proto-message": "ves.io.schema.registration.CreateSpecType",
             "properties": {
@@ -2352,7 +2397,7 @@ var CustomAPISwaggerJSON string = `{
             "type": "object",
             "description": "Get registration specification",
             "title": "Get registration",
-            "x-displayname": "Specification",
+            "x-displayname": "Get Registration",
             "x-ves-displayorder": "1,2,3",
             "x-ves-proto-message": "ves.io.schema.registration.GetSpecType",
             "properties": {
@@ -2645,7 +2690,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "siteLinkQuality": {
             "type": "string",
-            "description": "Link quality determined by VER using different probes\n\nUnknown quality\nLink quality is good\nLink quality is poor\n - QUALITY_DISABLED: Quality disabled",
+            "description": "Link quality determined by VER using different probes\n\nUnknown quality\nLink quality is good\nLink quality is poor\nQuality disabled",
             "title": "Link quality",
             "enum": [
                 "QUALITY_UNKNOWN",
@@ -2725,13 +2770,13 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "link_quality": {
                     "description": " Link quality for the interface",
-                    "title": "Link quality status\nx-displayName: \"Link Quality\"\nLink quality for the interface",
+                    "title": "Link quality status",
                     "$ref": "#/definitions/siteLinkQuality",
                     "x-displayname": "Link Quality"
                 },
                 "link_type": {
                     "description": " Link type for the interface",
-                    "title": "Link type\nx-displayName: \"Link type\"\nLink type for the interface",
+                    "title": "Link type",
                     "$ref": "#/definitions/siteLinkType",
                     "x-displayname": "Link type"
                 },

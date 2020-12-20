@@ -1199,7 +1199,7 @@ func NewPopulatedGCPVPCNetworkChoice(r randyGcpTypes, easy bool) *GCPVPCNetworkC
 	if r.Intn(10) != 0 {
 		this.ExistingNetwork = ves_io_schema_views1.NewPopulatedGCPVPCNetworkType(r, easy)
 	}
-	this.InterfaceType = InterfaceType([]int32{0, 1}[r.Intn(2)])
+	this.InterfaceType = InterfaceType([]int32{0, 1, 2}[r.Intn(3)])
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -1213,7 +1213,7 @@ func NewPopulatedGCPSubnetChoice(r randyGcpTypes, easy bool) *GCPSubnetChoice {
 	if r.Intn(10) != 0 {
 		this.ExistingSubnet = ves_io_schema_views1.NewPopulatedGCPSubnetType(r, easy)
 	}
-	this.InterfaceType = InterfaceType([]int32{0, 1}[r.Intn(2)])
+	this.InterfaceType = InterfaceType([]int32{0, 1, 2}[r.Intn(3)])
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this

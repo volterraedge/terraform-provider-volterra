@@ -2712,6 +2712,7 @@ var APISwaggerJSON string = `{
                 },
                 "idm_type": {
                     "description": " Type of the identity management who is managing this user.",
+                    "title": "IDM Type",
                     "$ref": "#/definitions/userIdmType",
                     "x-displayname": "Identity Management Type"
                 },

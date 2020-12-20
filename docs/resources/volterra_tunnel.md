@@ -21,7 +21,7 @@ resource "volterra_tunnel" "example" {
   namespace = "staging"
 
   local_ip {
-    // One of the arguments from this list "ip_address intf" must be set
+    // One of the arguments from this list "intf ip_address" must be set
 
     intf {
       local_intf {
@@ -36,7 +36,7 @@ resource "volterra_tunnel" "example" {
     // One of the arguments from this list "ip endpoints" must be set
 
     ip {
-      // One of the arguments from this list "ipv6 ipv4" must be set
+      // One of the arguments from this list "ipv4 ipv6" must be set
 
       ipv4 {
         addr = "192.168.1.1"

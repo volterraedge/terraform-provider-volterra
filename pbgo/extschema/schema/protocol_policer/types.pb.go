@@ -43,20 +43,27 @@ var _ = math.Inf
 type TcpFlags int32
 
 const (
+	// x-displayName: "Finished"
 	// "Finished" flag indicates there will be no more data from the sender
 	FIN TcpFlags = 0
+	// x-displayName: "Synchronisation"
 	// "Synchronisation" flag, is first step in establishing in TCP connection
 	SYN TcpFlags = 1
+	// x-displayName: "Reset"
 	// "Reset" flag gets sent from the server to the client upon receiving unexpected
 	// data
 	RST TcpFlags = 2
+	// x-displayName: "Push"
 	// "Push" flag indicates receiver to not buffer data
 	PSH TcpFlags = 3
+	// x-displayName: "Acknowledgment"
 	// "Acknowledgment" to the successful receipt of data
 	ACK TcpFlags = 4
+	// x-displayName: "Urgent"
 	// "Urgent" flag is used to notify the receiver to process the urgent packets before
 	// processing all other packets.
 	URG TcpFlags = 5
+	// x-displayName: "All"
 	// All of the above flags in union
 	ALL_TCP_FLAGS TcpFlags = 6
 )
@@ -88,10 +95,13 @@ func (TcpFlags) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, [
 type IcmpMsgType int32
 
 const (
+	// x-displayName: "Echo Reply"
 	// ICMP echo request packet which is sent by originator of Ping packet
 	ECHO_REPLY IcmpMsgType = 0
+	// x-displayName: "Echo Request"
 	// ICMP echo reply packet which is sent in responce to ICMP echo request packet
 	ECHO_REQUEST IcmpMsgType = 1
+	// x-displayName: "All ICMP packets"
 	// All ICMP packet types including TTL exceeded, destination
 	// unreachable and source quench etc
 	ALL_ICMP_MSG IcmpMsgType = 2
@@ -115,6 +125,10 @@ func (IcmpMsgType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes
 // x-displayName: "TCP Packet Type"
 // Specification of TCP flag to be matched in a TCP packet
 type TcpType struct {
+	// flags
+	//
+	// x-displayName: "TCP flags"
+	// TCP flag to be matched in a TCP packet
 	Flags []TcpFlags `protobuf:"varint,1,rep,packed,name=flags,enum=ves.io.schema.protocol_policer.TcpFlags" json:"flags,omitempty"`
 }
 
@@ -145,6 +159,10 @@ func (*UdpType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int
 // x-displayName: "ICMP Packet Type"
 // ICMP message type to match in packet
 type IcmpType struct {
+	// type
+	//
+	// x-displayName: "ICMP type"
+	// ICMP message type to be matched in packet
 	Type []IcmpMsgType `protobuf:"varint,1,rep,packed,name=type,enum=ves.io.schema.protocol_policer.IcmpMsgType" json:"type,omitempty"`
 }
 
@@ -432,7 +450,7 @@ func (m *GlobalSpecType) GetProtocolPolicer() []*ProtocolPolicerType {
 
 // Create a Protocol policer object
 //
-// x-displayName: "Create a Protocol Policer Object"
+// x-displayName: "Create Protocol Policer"
 // Create a protocol_policer object, protocol_policer object contains list
 // of L4 protocol match condition and corresponding traffic rate limits
 type CreateSpecType struct {
@@ -452,7 +470,7 @@ func (m *CreateSpecType) GetProtocolPolicer() []*ProtocolPolicerType {
 
 // Replace a Protocol policer object
 //
-// x-displayName: "Replace a Protocol Policer Object"
+// x-displayName: "Replace Protocol Policer"
 // Replace a protocol_policer object with new L4 protocol match condition and
 // corresponding traffic rate limits
 type ReplaceSpecType struct {
@@ -472,7 +490,7 @@ func (m *ReplaceSpecType) GetProtocolPolicer() []*ProtocolPolicerType {
 
 // Get a Protocol policer object
 //
-// x-displayName: "Get a Protocol Policer Object"
+// x-displayName: "Get Protocol Policer"
 // Get specification of a protocol_policer object with L4 protocol match condition and
 // corresponding traffic rate limits
 type GetSpecType struct {

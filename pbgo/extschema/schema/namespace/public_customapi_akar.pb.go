@@ -249,6 +249,108 @@ func (m *GetActiveServicePoliciesResponse) GetServicePolicies() []*ves_io_schema
 	return nil
 }
 
+// SetActiveNetworkPoliciesRequest
+//
+// x-displayName: "Request for SetActiveNetworkPolicies"
+// SetActiveNetworkPoliciesRequest is the shape of the request for SetActiveNetworkPolicies.
+type SetActiveNetworkPoliciesRequest struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "ns1"
+	// The name of the namespace
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// network_policies
+	//
+	// x-displayName: "Network Policies"
+	// A list of references to network_policy objects.
+	NetworkPolicies []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,2,rep,name=network_policies,json=networkPolicies" json:"network_policies,omitempty"`
+}
+
+func (m *SetActiveNetworkPoliciesRequest) Reset()      { *m = SetActiveNetworkPoliciesRequest{} }
+func (*SetActiveNetworkPoliciesRequest) ProtoMessage() {}
+func (*SetActiveNetworkPoliciesRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapiAkar, []int{8}
+}
+
+func (m *SetActiveNetworkPoliciesRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *SetActiveNetworkPoliciesRequest) GetNetworkPolicies() []*ves_io_schema_views.ObjectRefType {
+	if m != nil {
+		return m.NetworkPolicies
+	}
+	return nil
+}
+
+// SetActiveNetworkPoliciesResponse
+//
+// x-displayName: "Response for SetActiveNetworkPolicies"
+// SetActiveNetworkPoliciesResponse is the shape of the response for SetActiveNetworkPolicies.
+type SetActiveNetworkPoliciesResponse struct {
+}
+
+func (m *SetActiveNetworkPoliciesResponse) Reset()      { *m = SetActiveNetworkPoliciesResponse{} }
+func (*SetActiveNetworkPoliciesResponse) ProtoMessage() {}
+func (*SetActiveNetworkPoliciesResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapiAkar, []int{9}
+}
+
+// GetActiveNetworkPoliciesRequest
+//
+// x-displayName: "Request for GetActiveNetworkPolicies"
+// GetActiveNetworkPoliciesRequest is the shape of the request for GetActiveNetworkPolicies.
+type GetActiveNetworkPoliciesRequest struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "ns1"
+	// The name of the namespace
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+}
+
+func (m *GetActiveNetworkPoliciesRequest) Reset()      { *m = GetActiveNetworkPoliciesRequest{} }
+func (*GetActiveNetworkPoliciesRequest) ProtoMessage() {}
+func (*GetActiveNetworkPoliciesRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapiAkar, []int{10}
+}
+
+func (m *GetActiveNetworkPoliciesRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+// GetActiveNetworkPoliciesResponse
+//
+// x-displayName: "Response for GetActiveNetworkPolicies"
+// GetActiveNetworkPoliciesResponse is the shape of the response for GetActiveNetworkPolicies.
+type GetActiveNetworkPoliciesResponse struct {
+	// network_policies
+	//
+	// x-displayName: "Network Policies"
+	// A list of references to network_policy objects.
+	NetworkPolicies []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,2,rep,name=network_policies,json=networkPolicies" json:"network_policies,omitempty"`
+}
+
+func (m *GetActiveNetworkPoliciesResponse) Reset()      { *m = GetActiveNetworkPoliciesResponse{} }
+func (*GetActiveNetworkPoliciesResponse) ProtoMessage() {}
+func (*GetActiveNetworkPoliciesResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapiAkar, []int{11}
+}
+
+func (m *GetActiveNetworkPoliciesResponse) GetNetworkPolicies() []*ves_io_schema_views.ObjectRefType {
+	if m != nil {
+		return m.NetworkPolicies
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*SetFastACLsForInternetVIPsRequest)(nil), "ves.io.schema.namespace.SetFastACLsForInternetVIPsRequest")
 	golang_proto.RegisterType((*SetFastACLsForInternetVIPsRequest)(nil), "ves.io.schema.namespace.SetFastACLsForInternetVIPsRequest")
@@ -266,6 +368,14 @@ func init() {
 	golang_proto.RegisterType((*GetActiveServicePoliciesRequest)(nil), "ves.io.schema.namespace.GetActiveServicePoliciesRequest")
 	proto.RegisterType((*GetActiveServicePoliciesResponse)(nil), "ves.io.schema.namespace.GetActiveServicePoliciesResponse")
 	golang_proto.RegisterType((*GetActiveServicePoliciesResponse)(nil), "ves.io.schema.namespace.GetActiveServicePoliciesResponse")
+	proto.RegisterType((*SetActiveNetworkPoliciesRequest)(nil), "ves.io.schema.namespace.SetActiveNetworkPoliciesRequest")
+	golang_proto.RegisterType((*SetActiveNetworkPoliciesRequest)(nil), "ves.io.schema.namespace.SetActiveNetworkPoliciesRequest")
+	proto.RegisterType((*SetActiveNetworkPoliciesResponse)(nil), "ves.io.schema.namespace.SetActiveNetworkPoliciesResponse")
+	golang_proto.RegisterType((*SetActiveNetworkPoliciesResponse)(nil), "ves.io.schema.namespace.SetActiveNetworkPoliciesResponse")
+	proto.RegisterType((*GetActiveNetworkPoliciesRequest)(nil), "ves.io.schema.namespace.GetActiveNetworkPoliciesRequest")
+	golang_proto.RegisterType((*GetActiveNetworkPoliciesRequest)(nil), "ves.io.schema.namespace.GetActiveNetworkPoliciesRequest")
+	proto.RegisterType((*GetActiveNetworkPoliciesResponse)(nil), "ves.io.schema.namespace.GetActiveNetworkPoliciesResponse")
+	golang_proto.RegisterType((*GetActiveNetworkPoliciesResponse)(nil), "ves.io.schema.namespace.GetActiveNetworkPoliciesResponse")
 }
 func (this *SetFastACLsForInternetVIPsRequest) Equal(that interface{}) bool {
 	if that == nil {
@@ -479,6 +589,112 @@ func (this *GetActiveServicePoliciesResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *SetActiveNetworkPoliciesRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SetActiveNetworkPoliciesRequest)
+	if !ok {
+		that2, ok := that.(SetActiveNetworkPoliciesRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if len(this.NetworkPolicies) != len(that1.NetworkPolicies) {
+		return false
+	}
+	for i := range this.NetworkPolicies {
+		if !this.NetworkPolicies[i].Equal(that1.NetworkPolicies[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *SetActiveNetworkPoliciesResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SetActiveNetworkPoliciesResponse)
+	if !ok {
+		that2, ok := that.(SetActiveNetworkPoliciesResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	return true
+}
+func (this *GetActiveNetworkPoliciesRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetActiveNetworkPoliciesRequest)
+	if !ok {
+		that2, ok := that.(GetActiveNetworkPoliciesRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	return true
+}
+func (this *GetActiveNetworkPoliciesResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetActiveNetworkPoliciesResponse)
+	if !ok {
+		that2, ok := that.(GetActiveNetworkPoliciesResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.NetworkPolicies) != len(that1.NetworkPolicies) {
+		return false
+	}
+	for i := range this.NetworkPolicies {
+		if !this.NetworkPolicies[i].Equal(that1.NetworkPolicies[i]) {
+			return false
+		}
+	}
+	return true
+}
 func (this *SetFastACLsForInternetVIPsRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -567,6 +783,50 @@ func (this *GetActiveServicePoliciesResponse) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *SetActiveNetworkPoliciesRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&namespace.SetActiveNetworkPoliciesRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	if this.NetworkPolicies != nil {
+		s = append(s, "NetworkPolicies: "+fmt.Sprintf("%#v", this.NetworkPolicies)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SetActiveNetworkPoliciesResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 4)
+	s = append(s, "&namespace.SetActiveNetworkPoliciesResponse{")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetActiveNetworkPoliciesRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&namespace.GetActiveNetworkPoliciesRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetActiveNetworkPoliciesResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&namespace.GetActiveNetworkPoliciesResponse{")
+	if this.NetworkPolicies != nil {
+		s = append(s, "NetworkPolicies: "+fmt.Sprintf("%#v", this.NetworkPolicies)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func valueToGoStringPublicCustomapiAkar(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -609,6 +869,17 @@ type NamespaceCustomAPIClient interface {
 	// x-displayName: "Get Active Service Policies"
 	// GetActiveServicePolicies resturn the list of active service policies for the namespace
 	GetActiveServicePolicies(ctx context.Context, in *GetActiveServicePoliciesRequest, opts ...grpc.CallOption) (*GetActiveServicePoliciesResponse, error)
+	// SetActiveNetworkPolicies
+	//
+	// x-displayName: "Set Active Network Policies"
+	// SetActiveNetworkPolicies sets the active network policies for the namespace
+	// An emtpy list in the request will clear the active network policies for the namespace
+	SetActiveNetworkPolicies(ctx context.Context, in *SetActiveNetworkPoliciesRequest, opts ...grpc.CallOption) (*SetActiveNetworkPoliciesResponse, error)
+	// GetActiveNetworkPolicies
+	//
+	// x-displayName: "Get Active Network Policies"
+	// GetActiveNetworkPolicies resturn the list of active network policies for the namespace
+	GetActiveNetworkPolicies(ctx context.Context, in *GetActiveNetworkPoliciesRequest, opts ...grpc.CallOption) (*GetActiveNetworkPoliciesResponse, error)
 }
 
 type namespaceCustomAPIClient struct {
@@ -655,6 +926,24 @@ func (c *namespaceCustomAPIClient) GetActiveServicePolicies(ctx context.Context,
 	return out, nil
 }
 
+func (c *namespaceCustomAPIClient) SetActiveNetworkPolicies(ctx context.Context, in *SetActiveNetworkPoliciesRequest, opts ...grpc.CallOption) (*SetActiveNetworkPoliciesResponse, error) {
+	out := new(SetActiveNetworkPoliciesResponse)
+	err := grpc.Invoke(ctx, "/ves.io.schema.namespace.NamespaceCustomAPI/SetActiveNetworkPolicies", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *namespaceCustomAPIClient) GetActiveNetworkPolicies(ctx context.Context, in *GetActiveNetworkPoliciesRequest, opts ...grpc.CallOption) (*GetActiveNetworkPoliciesResponse, error) {
+	out := new(GetActiveNetworkPoliciesResponse)
+	err := grpc.Invoke(ctx, "/ves.io.schema.namespace.NamespaceCustomAPI/GetActiveNetworkPolicies", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for NamespaceCustomAPI service
 
 type NamespaceCustomAPIServer interface {
@@ -680,6 +969,17 @@ type NamespaceCustomAPIServer interface {
 	// x-displayName: "Get Active Service Policies"
 	// GetActiveServicePolicies resturn the list of active service policies for the namespace
 	GetActiveServicePolicies(context.Context, *GetActiveServicePoliciesRequest) (*GetActiveServicePoliciesResponse, error)
+	// SetActiveNetworkPolicies
+	//
+	// x-displayName: "Set Active Network Policies"
+	// SetActiveNetworkPolicies sets the active network policies for the namespace
+	// An emtpy list in the request will clear the active network policies for the namespace
+	SetActiveNetworkPolicies(context.Context, *SetActiveNetworkPoliciesRequest) (*SetActiveNetworkPoliciesResponse, error)
+	// GetActiveNetworkPolicies
+	//
+	// x-displayName: "Get Active Network Policies"
+	// GetActiveNetworkPolicies resturn the list of active network policies for the namespace
+	GetActiveNetworkPolicies(context.Context, *GetActiveNetworkPoliciesRequest) (*GetActiveNetworkPoliciesResponse, error)
 }
 
 func RegisterNamespaceCustomAPIServer(s *grpc.Server, srv NamespaceCustomAPIServer) {
@@ -758,6 +1058,42 @@ func _NamespaceCustomAPI_GetActiveServicePolicies_Handler(srv interface{}, ctx c
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NamespaceCustomAPI_SetActiveNetworkPolicies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetActiveNetworkPoliciesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NamespaceCustomAPIServer).SetActiveNetworkPolicies(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.namespace.NamespaceCustomAPI/SetActiveNetworkPolicies",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NamespaceCustomAPIServer).SetActiveNetworkPolicies(ctx, req.(*SetActiveNetworkPoliciesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NamespaceCustomAPI_GetActiveNetworkPolicies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetActiveNetworkPoliciesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NamespaceCustomAPIServer).GetActiveNetworkPolicies(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.namespace.NamespaceCustomAPI/GetActiveNetworkPolicies",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NamespaceCustomAPIServer).GetActiveNetworkPolicies(ctx, req.(*GetActiveNetworkPoliciesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _NamespaceCustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.namespace.NamespaceCustomAPI",
 	HandlerType: (*NamespaceCustomAPIServer)(nil),
@@ -777,6 +1113,14 @@ var _NamespaceCustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetActiveServicePolicies",
 			Handler:    _NamespaceCustomAPI_GetActiveServicePolicies_Handler,
+		},
+		{
+			MethodName: "SetActiveNetworkPolicies",
+			Handler:    _NamespaceCustomAPI_SetActiveNetworkPolicies_Handler,
+		},
+		{
+			MethodName: "GetActiveNetworkPolicies",
+			Handler:    _NamespaceCustomAPI_GetActiveNetworkPolicies_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -999,6 +1343,114 @@ func (m *GetActiveServicePoliciesResponse) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *SetActiveNetworkPoliciesRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SetActiveNetworkPoliciesRequest) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Namespace) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(len(m.Namespace)))
+		i += copy(dAtA[i:], m.Namespace)
+	}
+	if len(m.NetworkPolicies) > 0 {
+		for _, msg := range m.NetworkPolicies {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
+func (m *SetActiveNetworkPoliciesResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SetActiveNetworkPoliciesResponse) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	return i, nil
+}
+
+func (m *GetActiveNetworkPoliciesRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetActiveNetworkPoliciesRequest) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Namespace) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(len(m.Namespace)))
+		i += copy(dAtA[i:], m.Namespace)
+	}
+	return i, nil
+}
+
+func (m *GetActiveNetworkPoliciesResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetActiveNetworkPoliciesResponse) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.NetworkPolicies) > 0 {
+		for _, msg := range m.NetworkPolicies {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
 func encodeVarintPublicCustomapiAkar(dAtA []byte, offset int, v uint64) int {
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
@@ -1096,6 +1548,50 @@ func (m *GetActiveServicePoliciesResponse) Size() (n int) {
 	return n
 }
 
+func (m *SetActiveNetworkPoliciesRequest) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if len(m.NetworkPolicies) > 0 {
+		for _, e := range m.NetworkPolicies {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *SetActiveNetworkPoliciesResponse) Size() (n int) {
+	var l int
+	_ = l
+	return n
+}
+
+func (m *GetActiveNetworkPoliciesRequest) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	return n
+}
+
+func (m *GetActiveNetworkPoliciesResponse) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.NetworkPolicies) > 0 {
+		for _, e := range m.NetworkPolicies {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+		}
+	}
+	return n
+}
+
 func sovPublicCustomapiAkar(x uint64) (n int) {
 	for {
 		n++
@@ -1185,6 +1681,46 @@ func (this *GetActiveServicePoliciesResponse) String() string {
 	}
 	s := strings.Join([]string{`&GetActiveServicePoliciesResponse{`,
 		`ServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.ServicePolicies), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SetActiveNetworkPoliciesRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SetActiveNetworkPoliciesRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`NetworkPolicies:` + strings.Replace(fmt.Sprintf("%v", this.NetworkPolicies), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SetActiveNetworkPoliciesResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SetActiveNetworkPoliciesResponse{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetActiveNetworkPoliciesRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetActiveNetworkPoliciesRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetActiveNetworkPoliciesResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetActiveNetworkPoliciesResponse{`,
+		`NetworkPolicies:` + strings.Replace(fmt.Sprintf("%v", this.NetworkPolicies), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1837,6 +2373,326 @@ func (m *GetActiveServicePoliciesResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *SetActiveNetworkPoliciesRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapiAkar
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SetActiveNetworkPoliciesRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SetActiveNetworkPoliciesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NetworkPolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NetworkPolicies = append(m.NetworkPolicies, &ves_io_schema_views.ObjectRefType{})
+			if err := m.NetworkPolicies[len(m.NetworkPolicies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapiAkar(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SetActiveNetworkPoliciesResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapiAkar
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SetActiveNetworkPoliciesResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SetActiveNetworkPoliciesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapiAkar(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetActiveNetworkPoliciesRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapiAkar
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetActiveNetworkPoliciesRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetActiveNetworkPoliciesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapiAkar(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetActiveNetworkPoliciesResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapiAkar
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetActiveNetworkPoliciesResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetActiveNetworkPoliciesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NetworkPolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NetworkPolicies = append(m.NetworkPolicies, &ves_io_schema_views.ObjectRefType{})
+			if err := m.NetworkPolicies[len(m.NetworkPolicies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapiAkar(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func skipPublicCustomapiAkar(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
@@ -1950,52 +2806,58 @@ func init() {
 }
 
 var fileDescriptorPublicCustomapiAkar = []byte{
-	// 745 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x96, 0xcf, 0x4f, 0x13, 0x41,
-	0x14, 0xc7, 0x3b, 0x6d, 0x24, 0x30, 0x24, 0x5a, 0x37, 0x51, 0x9b, 0x42, 0x96, 0xb2, 0xf1, 0x40,
-	0x8c, 0xdd, 0x4d, 0x20, 0x31, 0x08, 0x26, 0xa4, 0x90, 0xb0, 0x21, 0x41, 0x25, 0xc5, 0x48, 0x82,
-	0x89, 0xeb, 0x74, 0x99, 0x2e, 0x03, 0xed, 0xce, 0x3a, 0x33, 0xbb, 0xd2, 0x18, 0x22, 0x21, 0x1e,
-	0x3c, 0x1a, 0xbc, 0xf9, 0x17, 0x18, 0xfc, 0x0f, 0xe4, 0xc2, 0x4d, 0x4f, 0x86, 0xe8, 0xc5, 0xa3,
-	0x2c, 0x1e, 0x30, 0x5e, 0x88, 0x89, 0x77, 0xc3, 0x76, 0x29, 0x6d, 0x49, 0x5b, 0x68, 0x6f, 0xb3,
-	0xfb, 0xe6, 0x3b, 0xf3, 0x3e, 0xef, 0xd7, 0x2e, 0x1c, 0xf1, 0x30, 0x57, 0x09, 0xd5, 0xb8, 0xb9,
-	0x8c, 0x8b, 0x48, 0xb3, 0x51, 0x11, 0x73, 0x07, 0x99, 0x58, 0x73, 0xdc, 0x5c, 0x81, 0x98, 0x86,
-	0xe9, 0x72, 0x41, 0x8b, 0xc8, 0x21, 0x06, 0x5a, 0x45, 0x4c, 0x75, 0x18, 0x15, 0x54, 0xba, 0x51,
-	0x16, 0xa9, 0x65, 0x91, 0x5a, 0x11, 0x25, 0xd3, 0x16, 0x11, 0xcb, 0x6e, 0x4e, 0x35, 0x69, 0x51,
-	0xb3, 0xa8, 0x45, 0xb5, 0x60, 0x7f, 0xce, 0xcd, 0x07, 0x4f, 0xc1, 0x43, 0xb0, 0x2a, 0x9f, 0x93,
-	0xec, 0xb7, 0x28, 0xb5, 0x0a, 0x58, 0x43, 0x0e, 0xd1, 0x90, 0x6d, 0x53, 0x81, 0x04, 0xa1, 0x36,
-	0x0f, 0xad, 0x7d, 0xb5, 0xae, 0x51, 0xa7, 0xda, 0xd8, 0x5f, 0x6b, 0xf4, 0x50, 0x81, 0x2c, 0x21,
-	0x81, 0x43, 0xab, 0x52, 0x67, 0xc5, 0x1c, 0xdb, 0x5e, 0xdd, 0x09, 0x03, 0x75, 0x7b, 0x08, 0x7e,
-	0xc1, 0x35, 0x51, 0x72, 0x70, 0xb8, 0x41, 0x79, 0x0f, 0xe0, 0xe0, 0x3c, 0x16, 0xd3, 0x88, 0x8b,
-	0xcc, 0xd4, 0x2c, 0x9f, 0xa6, 0x6c, 0xc6, 0x16, 0x98, 0xd9, 0x58, 0x3c, 0x9e, 0x99, 0xe3, 0x59,
-	0xfc, 0xdc, 0xc5, 0x5c, 0x48, 0xfd, 0xb0, 0xa7, 0xc2, 0x9f, 0x00, 0x29, 0x30, 0xd4, 0x93, 0x3d,
-	0x7d, 0x21, 0x2d, 0xc0, 0x9e, 0x3c, 0xe2, 0xc2, 0x40, 0x66, 0x81, 0x27, 0xa2, 0xa9, 0xd8, 0x50,
-	0xef, 0xb0, 0xa2, 0xd6, 0x46, 0x2f, 0xb8, 0x58, 0x7d, 0x98, 0x5b, 0xc1, 0xa6, 0xc8, 0xe2, 0xfc,
-	0xa3, 0x92, 0x83, 0x27, 0xaf, 0x6f, 0xaf, 0x77, 0x9f, 0xe8, 0x3e, 0xfd, 0xde, 0x8d, 0x75, 0x6d,
-	0x81, 0x58, 0x7c, 0x03, 0x64, 0x83, 0x97, 0x19, 0xb3, 0xc0, 0x95, 0x9b, 0x50, 0x69, 0xe6, 0x1b,
-	0x77, 0xa8, 0xcd, 0xb1, 0x92, 0x81, 0x83, 0x7a, 0x67, 0x04, 0x0a, 0x83, 0x8a, 0xde, 0xf2, 0x22,
-	0x69, 0xb6, 0x9a, 0x13, 0x9c, 0x9b, 0xb3, 0xb7, 0x8a, 0xb3, 0x0a, 0xee, 0x23, 0x80, 0x03, 0xf3,
-	0x58, 0x64, 0x4c, 0x41, 0x3c, 0x3c, 0x8f, 0x99, 0x47, 0x4c, 0x3c, 0x47, 0x0b, 0xc4, 0x24, 0xf8,
-	0x9c, 0x71, 0x5f, 0x81, 0x71, 0x5e, 0xd6, 0x19, 0x4e, 0x28, 0xbc, 0x40, 0xf8, 0xfb, 0xb6, 0xd7,
-	0x2f, 0xd7, 0xc8, 0x4b, 0xc7, 0x49, 0xb8, 0xb4, 0x05, 0xa2, 0xf1, 0x54, 0xf6, 0x0a, 0xaf, 0x75,
-	0x48, 0x51, 0x60, 0xaa, 0xb1, 0xb3, 0x61, 0x22, 0x26, 0xe0, 0x80, 0xde, 0x09, 0x90, 0xf2, 0x1a,
-	0xc0, 0x94, 0xde, 0xe2, 0x16, 0xe9, 0x59, 0x47, 0xd4, 0x57, 0xcf, 0x50, 0x9f, 0x61, 0x1d, 0x7e,
-	0xd3, 0x0d, 0xa5, 0x07, 0x27, 0x4e, 0x4d, 0x05, 0xb3, 0x21, 0x33, 0x37, 0x23, 0xfd, 0x03, 0x30,
-	0xd9, 0xb8, 0x1c, 0xa5, 0x31, 0xb5, 0xc1, 0xc0, 0x50, 0x5b, 0xf6, 0x57, 0x72, 0xbc, 0x2d, 0x6d,
-	0x18, 0xf6, 0xa7, 0xfe, 0xe7, 0xc4, 0x35, 0x0f, 0xf3, 0x34, 0xa1, 0x69, 0x62, 0xe7, 0x19, 0xe2,
-	0x82, 0xb9, 0xa6, 0x70, 0x19, 0xde, 0xfc, 0xfe, 0xeb, 0x5d, 0x74, 0x42, 0x19, 0x0b, 0xe7, 0xdc,
-	0xe9, 0xe0, 0xe3, 0xda, 0xcb, 0xca, 0x7a, 0x5d, 0xab, 0x14, 0xb5, 0x91, 0xa7, 0xcc, 0x20, 0xe1,
-	0x1d, 0x86, 0x47, 0x1c, 0x3e, 0x06, 0x6e, 0x49, 0x7f, 0x01, 0x4c, 0xea, 0xed, 0x70, 0xeb, 0x1d,
-	0x70, 0xb7, 0x6e, 0x47, 0xe5, 0x49, 0x73, 0xee, 0x7b, 0x52, 0x07, 0xdc, 0xd2, 0x1f, 0x00, 0x13,
-	0x8d, 0x0a, 0x5e, 0x1a, 0x6d, 0x96, 0xae, 0x66, 0xf5, 0x9f, 0xbc, 0xdb, 0x86, 0x32, 0xc4, 0x5d,
-	0xac, 0xc2, 0x75, 0x18, 0x5d, 0x2b, 0xa5, 0x39, 0x36, 0x5d, 0x46, 0x44, 0x29, 0xc0, 0x1d, 0x57,
-	0xee, 0xb4, 0xc0, 0x45, 0xc1, 0xf1, 0x46, 0x7d, 0xf3, 0x1c, 0xa7, 0xf8, 0x10, 0xc0, 0x84, 0x7e,
-	0x71, 0x5a, 0xbd, 0x6d, 0xda, 0x56, 0x5d, 0xae, 0x2c, 0x34, 0xa7, 0x1d, 0x95, 0xda, 0xa4, 0x4d,
-	0xde, 0xde, 0xdd, 0x01, 0xb1, 0x6f, 0x3b, 0x40, 0x6e, 0xe4, 0x5a, 0x79, 0x5e, 0x6c, 0x7e, 0x4d,
-	0x44, 0xe3, 0x60, 0xf2, 0xd5, 0xde, 0xbe, 0x1c, 0xf9, 0xb1, 0x2f, 0x47, 0x8e, 0xf6, 0x65, 0xb0,
-	0xe1, 0xcb, 0xe0, 0x83, 0x2f, 0x83, 0x2f, 0xbe, 0x0c, 0xf6, 0x7c, 0x19, 0xfc, 0xf4, 0x65, 0x70,
-	0xe8, 0xcb, 0x91, 0x23, 0x5f, 0x06, 0x6f, 0x0f, 0xe4, 0xc8, 0xee, 0x81, 0x0c, 0x16, 0xef, 0x5b,
-	0xd4, 0x59, 0xb5, 0x54, 0x8f, 0x16, 0x04, 0x66, 0x0c, 0xa9, 0x2e, 0xd7, 0x82, 0x45, 0x9e, 0xb2,
-	0xe2, 0x31, 0x89, 0x47, 0x96, 0x30, 0x4b, 0x9f, 0x98, 0x35, 0x27, 0x67, 0x51, 0x0d, 0xaf, 0x89,
-	0xf0, 0x03, 0x5d, 0xff, 0x87, 0x92, 0xeb, 0x0a, 0x3e, 0xd3, 0x23, 0xff, 0x03, 0x00, 0x00, 0xff,
-	0xff, 0x6e, 0xb5, 0xef, 0x6b, 0xc3, 0x08, 0x00, 0x00,
+	// 846 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x97, 0x4f, 0x6b, 0xe3, 0x46,
+	0x18, 0xc6, 0x3d, 0x36, 0x5d, 0x9a, 0x09, 0xb4, 0x5e, 0x41, 0x5b, 0xe3, 0x0d, 0x8a, 0x77, 0xe8,
+	0x61, 0x29, 0xb5, 0x04, 0xbb, 0x50, 0xb6, 0xd9, 0xc2, 0xe2, 0x5d, 0x58, 0x11, 0xd8, 0xa6, 0xc1,
+	0x29, 0x0d, 0xa4, 0x50, 0x75, 0xac, 0x8c, 0x95, 0x49, 0x6c, 0x8d, 0x3a, 0x33, 0x52, 0x62, 0x4a,
+	0x68, 0x08, 0xfd, 0x00, 0x25, 0xbd, 0xf5, 0x13, 0x94, 0xf4, 0x0b, 0x94, 0xe6, 0x92, 0x5b, 0x73,
+	0x2a, 0xa1, 0xbd, 0xf4, 0xd8, 0x28, 0x3d, 0x24, 0xb4, 0x87, 0x5c, 0xda, 0xf3, 0x62, 0x59, 0x71,
+	0x2c, 0x39, 0xfe, 0x13, 0x39, 0xb7, 0x91, 0xde, 0x79, 0x66, 0xde, 0xdf, 0x3c, 0xf0, 0x8c, 0x04,
+	0x1f, 0xf9, 0x44, 0x68, 0x94, 0xe9, 0xc2, 0x5a, 0x23, 0x4d, 0xac, 0x3b, 0xb8, 0x49, 0x84, 0x8b,
+	0x2d, 0xa2, 0xbb, 0x5e, 0xad, 0x41, 0x2d, 0xd3, 0xf2, 0x84, 0x64, 0x4d, 0xec, 0x52, 0x13, 0x6f,
+	0x60, 0xae, 0xb9, 0x9c, 0x49, 0xa6, 0xbc, 0xd3, 0x11, 0x69, 0x1d, 0x91, 0xd6, 0x15, 0x15, 0xcb,
+	0x36, 0x95, 0x6b, 0x5e, 0x4d, 0xb3, 0x58, 0x53, 0xb7, 0x99, 0xcd, 0xf4, 0x70, 0x7e, 0xcd, 0xab,
+	0x87, 0x4f, 0xe1, 0x43, 0x38, 0xea, 0xac, 0x53, 0x9c, 0xb1, 0x19, 0xb3, 0x1b, 0x44, 0xc7, 0x2e,
+	0xd5, 0xb1, 0xe3, 0x30, 0x89, 0x25, 0x65, 0x8e, 0x88, 0xaa, 0xf7, 0xe2, 0xad, 0x31, 0xb7, 0xb7,
+	0x38, 0x13, 0x2f, 0xfa, 0xb8, 0x41, 0x57, 0xb1, 0x24, 0x51, 0x15, 0x25, 0xaa, 0x44, 0x10, 0xc7,
+	0x4f, 0xac, 0x30, 0x9b, 0x98, 0x43, 0xc9, 0xa6, 0xd0, 0x65, 0xcb, 0x25, 0xd1, 0x04, 0xf4, 0x03,
+	0x80, 0xf7, 0x97, 0x88, 0x7c, 0x81, 0x85, 0xac, 0x3c, 0x7f, 0x29, 0x5e, 0x30, 0x3e, 0xef, 0x48,
+	0xc2, 0x1d, 0x22, 0x3f, 0x9b, 0x5f, 0x14, 0x55, 0xf2, 0x95, 0x47, 0x84, 0x54, 0x66, 0xe0, 0x54,
+	0x97, 0xbf, 0x00, 0x4a, 0xe0, 0xc1, 0x54, 0xf5, 0xea, 0x85, 0xb2, 0x0c, 0xa7, 0xea, 0x58, 0x48,
+	0x13, 0x5b, 0x0d, 0x51, 0xc8, 0x96, 0x72, 0x0f, 0xa6, 0x1f, 0x22, 0x2d, 0x7e, 0x7a, 0xe1, 0xc6,
+	0xda, 0x27, 0xb5, 0x75, 0x62, 0xc9, 0x2a, 0xa9, 0x7f, 0xda, 0x72, 0xc9, 0xb3, 0xb7, 0xf7, 0xb7,
+	0x5f, 0xbf, 0xd4, 0xfd, 0x72, 0x7e, 0x98, 0xbb, 0xb3, 0x07, 0x72, 0xf9, 0x1d, 0x50, 0x0d, 0x5f,
+	0x56, 0xac, 0x86, 0x40, 0xef, 0x42, 0x34, 0xac, 0x37, 0xe1, 0x32, 0x47, 0x10, 0x54, 0x81, 0xf7,
+	0x8d, 0xc9, 0x08, 0x10, 0x87, 0xc8, 0x18, 0xb9, 0x91, 0xf2, 0xb2, 0x97, 0x13, 0x8c, 0xcd, 0x39,
+	0xdd, 0xc3, 0xd9, 0x03, 0xf7, 0x13, 0x80, 0xb3, 0x4b, 0x44, 0x56, 0x2c, 0x49, 0x7d, 0xb2, 0x44,
+	0xb8, 0x4f, 0x2d, 0xb2, 0xc8, 0x1a, 0xd4, 0xa2, 0x64, 0xcc, 0x73, 0x5f, 0x87, 0x79, 0xd1, 0xd1,
+	0x99, 0x6e, 0x24, 0xbc, 0xc1, 0xf1, 0xdf, 0xdb, 0xdf, 0x7e, 0x23, 0x26, 0x6f, 0xb5, 0x4d, 0x78,
+	0x6d, 0x0f, 0x64, 0xf3, 0xa5, 0xea, 0x9b, 0x22, 0xde, 0x10, 0x42, 0xb0, 0x34, 0xb8, 0xd9, 0xc8,
+	0x88, 0xa7, 0x70, 0xd6, 0x98, 0x04, 0x08, 0x7d, 0x0b, 0x60, 0xc9, 0x18, 0xb1, 0x8b, 0xf2, 0xe5,
+	0x44, 0xd4, 0x77, 0xfb, 0xa8, 0xfb, 0x59, 0x63, 0xce, 0x2c, 0x10, 0xb9, 0xc9, 0xf8, 0xc6, 0x8d,
+	0x9d, 0x71, 0x3a, 0xba, 0xb4, 0xce, 0xc4, 0xe4, 0x31, 0x67, 0x9c, 0x78, 0x43, 0x31, 0x67, 0xfa,
+	0x9a, 0xbd, 0xc6, 0x99, 0x34, 0x40, 0x71, 0x67, 0x06, 0xec, 0xd2, 0x76, 0x66, 0x02, 0xea, 0xbb,
+	0x7d, 0xd4, 0x7d, 0xac, 0x0f, 0xcf, 0xa7, 0xa1, 0xb2, 0x70, 0xd9, 0xd4, 0xf3, 0x30, 0xb5, 0x2b,
+	0x8b, 0xf3, 0xca, 0x7f, 0x00, 0x16, 0x07, 0x07, 0x85, 0x32, 0xa7, 0x0d, 0x88, 0x72, 0x6d, 0x64,
+	0xf2, 0x15, 0x9f, 0xa4, 0xd2, 0x46, 0xc7, 0xfe, 0x45, 0xf0, 0x6b, 0xe1, 0x2d, 0x9f, 0x88, 0x32,
+	0x65, 0x65, 0xea, 0xd4, 0x39, 0x16, 0x92, 0x7b, 0x96, 0xf4, 0x38, 0xd9, 0xfd, 0xe3, 0xef, 0xef,
+	0xb3, 0x4f, 0xd1, 0x5c, 0x74, 0x03, 0x5d, 0x5d, 0x49, 0x42, 0xff, 0xba, 0x3b, 0xde, 0xd6, 0xbb,
+	0x71, 0x63, 0xd6, 0x19, 0x37, 0x69, 0xb4, 0x87, 0xe9, 0x53, 0x57, 0xcc, 0x81, 0xf7, 0x94, 0xff,
+	0x01, 0x2c, 0x1a, 0x69, 0xb8, 0x8d, 0x09, 0xb8, 0x47, 0x07, 0x25, 0x32, 0x8f, 0x7e, 0xce, 0x82,
+	0xe1, 0xec, 0x1f, 0x29, 0x13, 0xb0, 0x2b, 0xff, 0x00, 0x58, 0x18, 0x14, 0x47, 0xca, 0xe3, 0x61,
+	0x96, 0x0d, 0x4b, 0xa7, 0xe2, 0x87, 0x29, 0x94, 0x11, 0xf2, 0x4a, 0x0f, 0xae, 0xcb, 0xd9, 0x56,
+	0xab, 0x2c, 0x88, 0xe5, 0x71, 0x2a, 0x5b, 0x21, 0xee, 0x13, 0xf4, 0xc1, 0x08, 0x5c, 0x1c, 0x2e,
+	0x6f, 0x26, 0xa3, 0xad, 0x6d, 0xf3, 0xbf, 0x00, 0x16, 0x8c, 0x9b, 0xd3, 0x1a, 0xa9, 0x69, 0x47,
+	0x65, 0x30, 0xfa, 0x3c, 0x61, 0xf0, 0x35, 0xc4, 0x8f, 0x95, 0x94, 0xc4, 0x71, 0x73, 0x13, 0x59,
+	0x33, 0x8e, 0xb9, 0xd7, 0x07, 0xdc, 0x38, 0xe6, 0x0e, 0x8a, 0xcf, 0xdb, 0x32, 0x37, 0x99, 0x8e,
+	0x6d, 0x73, 0xcf, 0x7a, 0xcd, 0x1d, 0x9f, 0xd6, 0x48, 0x4d, 0x3b, 0x2a, 0xc6, 0xd1, 0xf2, 0x2d,
+	0x19, 0x9b, 0xa4, 0x2d, 0xbe, 0x7f, 0x78, 0x00, 0x72, 0xbf, 0x1f, 0x00, 0x75, 0x50, 0x6b, 0x9d,
+	0x0b, 0x61, 0xf7, 0xb7, 0x42, 0x36, 0x0f, 0x9e, 0x7d, 0x73, 0x7c, 0xa2, 0x66, 0xfe, 0x3c, 0x51,
+	0x33, 0x17, 0x27, 0x2a, 0xd8, 0x09, 0x54, 0xf0, 0x63, 0xa0, 0x82, 0xa3, 0x40, 0x05, 0xc7, 0x81,
+	0x0a, 0xfe, 0x0a, 0x54, 0x70, 0x16, 0xa8, 0x99, 0x8b, 0x40, 0x05, 0xdf, 0x9d, 0xaa, 0x99, 0xc3,
+	0x53, 0x15, 0xac, 0x7c, 0x6c, 0x33, 0x77, 0xc3, 0xd6, 0x7c, 0xd6, 0x90, 0x84, 0x73, 0xac, 0x79,
+	0x42, 0x0f, 0x07, 0x75, 0xc6, 0x9b, 0x6d, 0x12, 0x9f, 0xae, 0x12, 0x5e, 0xbe, 0x2c, 0xeb, 0x6e,
+	0xcd, 0x66, 0x3a, 0xd9, 0x92, 0xd1, 0xb7, 0x71, 0xf2, 0xe7, 0xa0, 0x76, 0x27, 0xfc, 0x42, 0x7e,
+	0xf4, 0x2a, 0x00, 0x00, 0xff, 0xff, 0x61, 0x26, 0x80, 0xa8, 0x3e, 0x0c, 0x00, 0x00,
 }

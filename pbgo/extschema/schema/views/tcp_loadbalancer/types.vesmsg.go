@@ -315,6 +315,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["dns_volterra_managed"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_volterra_managed"))
+		if err := fv(ctx, m.GetDnsVolterraManaged(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
@@ -762,6 +771,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_volterra_managed"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_volterra_managed"))
+		if err := fv(ctx, m.GetDnsVolterraManaged(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1298,6 +1316,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["dns_volterra_managed"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_volterra_managed"))
+		if err := fv(ctx, m.GetDnsVolterraManaged(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
@@ -1773,6 +1800,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["dns_volterra_managed"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_volterra_managed"))
+		if err := fv(ctx, m.GetDnsVolterraManaged(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
@@ -1933,6 +1969,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m.GetAdvertiseChoiceFromGlobalSpecType(f)
+	m.DnsVolterraManaged = f.GetDnsVolterraManaged()
 	m.Domains = f.GetDomains()
 	m.ListenPort = f.GetListenPort()
 	m.OriginPoolsWeights = f.GetOriginPoolsWeights()
@@ -1946,6 +1983,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m1.SetAdvertiseChoiceToGlobalSpecType(f)
+	f.DnsVolterraManaged = m1.DnsVolterraManaged
 	f.Domains = m1.Domains
 	f.ListenPort = m1.ListenPort
 	f.OriginPoolsWeights = m1.OriginPoolsWeights
@@ -2005,6 +2043,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	}
 	m.GetAdvertiseChoiceFromGlobalSpecType(f)
 	m.DnsInfo = f.GetDnsInfo()
+	m.DnsVolterraManaged = f.GetDnsVolterraManaged()
 	m.Domains = f.GetDomains()
 	m.HostName = f.GetHostName()
 	m.ListenPort = f.GetListenPort()
@@ -2021,6 +2060,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 	m1.SetAdvertiseChoiceToGlobalSpecType(f)
 	f.DnsInfo = m1.DnsInfo
+	f.DnsVolterraManaged = m1.DnsVolterraManaged
 	f.Domains = m1.Domains
 	f.HostName = m1.HostName
 	f.ListenPort = m1.ListenPort
@@ -2081,6 +2121,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m.GetAdvertiseChoiceFromGlobalSpecType(f)
+	m.DnsVolterraManaged = f.GetDnsVolterraManaged()
 	m.Domains = f.GetDomains()
 	m.ListenPort = f.GetListenPort()
 	m.OriginPools = f.GetOriginPools()
@@ -2095,6 +2136,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m1.SetAdvertiseChoiceToGlobalSpecType(f)
+	f.DnsVolterraManaged = m1.DnsVolterraManaged
 	f.Domains = m1.Domains
 	f.ListenPort = m1.ListenPort
 	f.OriginPools = m1.OriginPools

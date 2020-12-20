@@ -416,6 +416,17 @@ func (v *ValidateFieldViewOptions) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
+	case *FieldViewOptions_InNamespaceTypes:
+		if fv, exists := v.FldValidators["type.in_namespace_types"]; exists {
+			val := m.GetType().(*FieldViewOptions_InNamespaceTypes).InNamespaceTypes
+			vOpts := append(opts,
+				db.WithValidateField("type"),
+				db.WithValidateField("in_namespace_types"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

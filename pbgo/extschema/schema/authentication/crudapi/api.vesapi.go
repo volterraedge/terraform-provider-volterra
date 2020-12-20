@@ -2038,11 +2038,17 @@ var APISwaggerJSON string = `{
                 },
                 "cookie_expiry": {
                     "type": "integer",
-                    "format": "int64"
+                    "description": " specifies in seconds max duration of the allocated cookie. This maps to “Max-Age” attribute in the session cookie.\n This will act as an expiry duration on the client side after which client will not  be setting the\n cookie as part of the request.\n Default cookie expiry is 3600 seconds\n\nExample: - 5000-",
+                    "title": "cookie expiry",
+                    "format": "int64",
+                    "x-displayname": "Cookie Expiry duration"
                 },
                 "cookie_refresh_interval": {
                     "type": "integer",
-                    "format": "int64"
+                    "description": " Specifies in seconds refresh interval for session cookie.\n This is used to keep the active user active and reduce re-login.\n When an incoming cookie's session expiry is still valid, and time to expire falls behind this interval,\n re-issue a cookie with new expiry and with the same original session expiry.\n Default refresh interval is 3000 seconds\n\nExample: - 3600-",
+                    "title": "cookie refresh interval",
+                    "format": "int64",
+                    "x-displayname": "Cookie Refresh Interval"
                 },
                 "kms_key_hmac": {
                     "description": "Exclusive with [auth_hmac]\nx-displayName: \"HMAC kms key\"\nHMAC configured using KMS_KEY",
@@ -2051,7 +2057,10 @@ var APISwaggerJSON string = `{
                 },
                 "session_expiry": {
                     "type": "integer",
-                    "format": "int64"
+                    "description": " specifies in seconds max lifetime of an authenticated session after which the user will be forced to login again.\n Default session expiry is 86400 seconds(24 hours).\n\nExample: - 36000-",
+                    "title": "session expiry",
+                    "format": "int64",
+                    "x-displayname": "Session Expiry duration"
                 }
             }
         },
@@ -2071,8 +2080,8 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "oidc_auth": {
-                    "description": "Exclusive with []\n",
-                    "title": "OIDC Auth\nx-displayName: \"OIDC Authentication\"\nOIDC Authentication Type",
+                    "description": "Exclusive with []\nx-displayName: \"OIDC Authentication\"\nOIDC Authentication Type",
+                    "title": "OIDC Auth",
                     "$ref": "#/definitions/authenticationOIDCAuthType"
                 }
             }
@@ -2171,8 +2180,8 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "oidc_auth_params": {
-                    "description": "Exclusive with [oidc_well_known_config_url]\n",
-                    "title": "OIDC endpoint configuration\nx-displayName: \"OIDC endpoint configuration URLs\"\nEndpoint configuration details for OIDC",
+                    "description": "Exclusive with [oidc_well_known_config_url]\nx-displayName: \"Endpoint configuration URLs\"\nEndpoint configuration details for OIDC",
+                    "title": "OIDC endpoint configuration",
                     "$ref": "#/definitions/authenticationOIDCAuthParams"
                 },
                 "oidc_client_id": {
@@ -2184,7 +2193,7 @@ var APISwaggerJSON string = `{
                 },
                 "oidc_well_known_config_url": {
                     "type": "string",
-                    "description": "Exclusive with [oidc_auth_params]\nx-displayName: \"oidc well_known config URL\"\nx-example: \"https://login.microsoftonline.com/some-client-id/v2.0/.well-known/openid-configuration\"\nUser can configure an OIDC well known config URL which will fetch necessary authentication related endpoints",
+                    "description": "Exclusive with [oidc_auth_params]\nx-displayName: \"Well-known Configuration URL\"\nx-example: \"https://login.microsoftonline.com/some-client-id/v2.0/.well-known/openid-configuration\"\nAn OIDC well-known configuration URL that will be used to fetch authentication related endpoints",
                     "title": "OIDC Config URL"
                 }
             }
@@ -2703,7 +2712,7 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretEncodingType": {
             "type": "string",
-            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: No Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
             "title": "SecretEncodingType",
             "enum": [
                 "EncodingNone",

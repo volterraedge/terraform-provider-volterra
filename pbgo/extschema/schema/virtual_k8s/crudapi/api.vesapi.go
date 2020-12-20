@@ -2274,6 +2274,13 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
+        },
         "schemaInitializerType": {
             "type": "object",
             "description": "Initializer is information about an initializer that has not yet completed.",
@@ -2678,8 +2685,19 @@ var APISwaggerJSON string = `{
             "description": "Configuration specification for Virtual K8s",
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
+            "x-ves-oneof-field-service_isolation_choice": "[\"disabled\",\"isolated\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_k8s.GlobalSpecType",
             "properties": {
+                "disabled": {
+                    "description": "Exclusive with [isolated]\nx-displayName: \"Disabled\"\nK8s services are not restricted and communcation can happen across namespaces unless overridden by the K8s service via\nsetting the ves.io/serviceIsolation annotation to true",
+                    "title": "Disabled",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "isolated": {
+                    "description": "Exclusive with [disabled]\nx-displayName: \"Isolated Services\"\nIsolated K8s services restrict any K8s services created in the Virtual K8s from communicating outside the namespace unless\noverridden by the K8s service via setting the ves.io/serviceIsolation annotation to false",
+                    "title": "Isolated",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "vsite_refs": {
                     "type": "array",
                     "description": " Reference to virtual-sites\n Default virtual-site of the Virtual K8s object. If no virtual-site is specified in the Kubernetes API resource object\n annotations via ves.io/virtual-sites, then this virtual-site is used select sites on which to instantiate the\n Kubernetes API resource object",

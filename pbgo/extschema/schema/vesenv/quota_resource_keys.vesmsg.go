@@ -79,6 +79,248 @@ func (v *ValidateQuotaResourceKeyChoice) Validate(ctx context.Context, pm interf
 	}
 
 	switch m.GetChoice().(type) {
+	case *QuotaResourceKeyChoice_ApiCredentialService:
+		if fv, exists := v.FldValidators["choice.api_credential_service"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_ApiCredentialService).ApiCredentialService
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("api_credential_service"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_CpuLimitsPerVk8SPerRegionalEdge:
+		if fv, exists := v.FldValidators["choice.cpu_limits_per_vk8s_per_regional_edge"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_CpuLimitsPerVk8SPerRegionalEdge).CpuLimitsPerVk8SPerRegionalEdge
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("cpu_limits_per_vk8s_per_regional_edge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_CpuRequestsPerVk8SPerRegionalEdge:
+		if fv, exists := v.FldValidators["choice.cpu_requests_per_vk8s_per_regional_edge"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_CpuRequestsPerVk8SPerRegionalEdge).CpuRequestsPerVk8SPerRegionalEdge
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("cpu_requests_per_vk8s_per_regional_edge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_MemoryLimitsPerVk8SPerRegionalEdge:
+		if fv, exists := v.FldValidators["choice.memory_limits_per_vk8s_per_regional_edge"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_MemoryLimitsPerVk8SPerRegionalEdge).MemoryLimitsPerVk8SPerRegionalEdge
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("memory_limits_per_vk8s_per_regional_edge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_MemoryRequestsPerVk8SPerRegionalEdge:
+		if fv, exists := v.FldValidators["choice.memory_requests_per_vk8s_per_regional_edge"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_MemoryRequestsPerVk8SPerRegionalEdge).MemoryRequestsPerVk8SPerRegionalEdge
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("memory_requests_per_vk8s_per_regional_edge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_NodeFlavorSmall:
+		if fv, exists := v.FldValidators["choice.node_flavor_small"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_NodeFlavorSmall).NodeFlavorSmall
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("node_flavor_small"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_NodeFlavorMedium:
+		if fv, exists := v.FldValidators["choice.node_flavor_medium"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_NodeFlavorMedium).NodeFlavorMedium
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("node_flavor_medium"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_NodeFlavorLarge:
+		if fv, exists := v.FldValidators["choice.node_flavor_large"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_NodeFlavorLarge).NodeFlavorLarge
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("node_flavor_large"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_StorageRequestsPerVk8SPerRegionalEdge:
+		if fv, exists := v.FldValidators["choice.storage_requests_per_vk8s_per_regional_edge"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_StorageRequestsPerVk8SPerRegionalEdge).StorageRequestsPerVk8SPerRegionalEdge
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("storage_requests_per_vk8s_per_regional_edge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_ChwAwsByol:
+		if fv, exists := v.FldValidators["choice.chw_aws_byol"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_ChwAwsByol).ChwAwsByol
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("chw_aws_byol"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_ChwAzureByol:
+		if fv, exists := v.FldValidators["choice.chw_azure_byol"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_ChwAzureByol).ChwAzureByol
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("chw_azure_byol"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_ChwGcpByol:
+		if fv, exists := v.FldValidators["choice.chw_gcp_byol"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_ChwGcpByol).ChwGcpByol
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("chw_gcp_byol"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_ChwAzureFree:
+		if fv, exists := v.FldValidators["choice.chw_azure_free"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_ChwAzureFree).ChwAzureFree
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("chw_azure_free"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_ChwAwsFree:
+		if fv, exists := v.FldValidators["choice.chw_aws_free"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_ChwAwsFree).ChwAwsFree
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("chw_aws_free"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_ChwGcpFree:
+		if fv, exists := v.FldValidators["choice.chw_gcp_free"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_ChwGcpFree).ChwGcpFree
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("chw_gcp_free"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_ChwGeneric:
+		if fv, exists := v.FldValidators["choice.chw_generic"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_ChwGeneric).ChwGeneric
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("chw_generic"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_ChwIgw:
+		if fv, exists := v.FldValidators["choice.chw_igw"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_ChwIgw).ChwIgw
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("chw_igw"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_ChwIsv:
+		if fv, exists := v.FldValidators["choice.chw_isv"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_ChwIsv).ChwIsv
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("chw_isv"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_ChwKvm:
+		if fv, exists := v.FldValidators["choice.chw_kvm"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_ChwKvm).ChwKvm
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("chw_kvm"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_ChwK8S:
+		if fv, exists := v.FldValidators["choice.chw_k8s"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_ChwK8S).ChwK8S
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("chw_k8s"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_ChwVmware:
+		if fv, exists := v.FldValidators["choice.chw_vmware"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_ChwVmware).ChwVmware
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("chw_vmware"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_ChwTiny:
+		if fv, exists := v.FldValidators["choice.chw_tiny"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_ChwTiny).ChwTiny
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("chw_tiny"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *QuotaResourceKeyChoice_VirtualHostPublic:
 		if fv, exists := v.FldValidators["choice.virtual_host_public"]; exists {
 			val := m.GetChoice().(*QuotaResourceKeyChoice_VirtualHostPublic).VirtualHostPublic

@@ -61,7 +61,7 @@ func (m *GlobalSpecType) GetPrefix() []string {
 
 // Create ip prefix set
 //
-// x-displayName: "Specification"
+// x-displayName: "Create IP Prefix Set"
 // Create ip_prefix_set creates a new object in the storage backend for metadata.namespace.
 type CreateSpecType struct {
 	Prefix []string `protobuf:"bytes,1,rep,name=prefix" json:"prefix,omitempty"`
@@ -80,7 +80,7 @@ func (m *CreateSpecType) GetPrefix() []string {
 
 // Replace ip prefix set
 //
-// x-displayName: "Specification"
+// x-displayName: "Replace IP Prefix Set"
 // Replace ip_prefix_set replaces an existing object in the storage backend for metadata.namespace.
 type ReplaceSpecType struct {
 	Prefix []string `protobuf:"bytes,1,rep,name=prefix" json:"prefix,omitempty"`
@@ -99,7 +99,7 @@ func (m *ReplaceSpecType) GetPrefix() []string {
 
 // Get ip prefix set
 //
-// x-displayName: "Specification"
+// x-displayName: "Get IP Prefix Set"
 // Get ip_prefix_set reads a given object from storage backend for metadata.namespace.
 type GetSpecType struct {
 	Prefix []string `protobuf:"bytes,1,rep,name=prefix" json:"prefix,omitempty"`

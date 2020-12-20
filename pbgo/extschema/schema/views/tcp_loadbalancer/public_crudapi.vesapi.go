@@ -1953,7 +1953,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1965,7 +1965,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2822,7 +2822,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Shape of the TCP loadbalancer create specification",
             "title": "CreateSpecType",
-            "x-displayname": "Create Specification",
+            "x-displayname": "Create TCP Loadbalancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.CreateSpecType",
             "properties": {
@@ -2837,6 +2837,12 @@ var APISwaggerJSON string = `{
                 "advertise_on_public_default_vip": {
                     "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "dns_volterra_managed": {
+                    "type": "boolean",
+                    "description": " DNS records for domains will be managed automatically by Volterra.\n This requires the domain to be delegated to Volterra using the Delegated Domain feature.",
+                    "format": "boolean",
+                    "x-displayname": "Automatically Manage DNS Records"
                 },
                 "do_not_advertise": {
                     "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n",
@@ -2937,7 +2943,7 @@ var APISwaggerJSON string = `{
         },
         "tcp_loadbalancerGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2952,7 +2958,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Shape of the TCP loadbalancer get specification",
             "title": "GetSpecType",
-            "x-displayname": "Get Specification",
+            "x-displayname": "Get TCP Loadbalancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.GetSpecType",
             "properties": {
@@ -2975,6 +2981,12 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/virtual_host_dns_infoDnsInfo"
                     },
                     "x-displayname": "DNS Information"
+                },
+                "dns_volterra_managed": {
+                    "type": "boolean",
+                    "description": " DNS records for domains will be managed automatically by Volterra.\n This requires the domain to be delegated to Volterra using the Delegated Domain feature.",
+                    "format": "boolean",
+                    "x-displayname": "Automatically Manage DNS Records"
                 },
                 "do_not_advertise": {
                     "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n",
@@ -3182,7 +3194,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Shape of the TCP loadbalancer replace specification",
             "title": "ReplaceSpecType",
-            "x-displayname": "Replace Specification",
+            "x-displayname": "Replace TCP Loadbalancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.ReplaceSpecType",
             "properties": {
@@ -3197,6 +3209,12 @@ var APISwaggerJSON string = `{
                 "advertise_on_public_default_vip": {
                     "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "dns_volterra_managed": {
+                    "type": "boolean",
+                    "description": " DNS records for domains will be managed automatically by Volterra.\n This requires the domain to be delegated to Volterra using the Delegated Domain feature.",
+                    "format": "boolean",
+                    "x-displayname": "Automatically Manage DNS Records"
                 },
                 "do_not_advertise": {
                     "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n",
@@ -3286,7 +3304,7 @@ var APISwaggerJSON string = `{
                 "advertise_where": {
                     "type": "array",
                     "description": " Where should this load balancer be available\nRequired: YES",
-                    "title": "Advertise Where\nx-displayName: \"List of Sites to Advertise\"\nx-required\nWhere should this load balancer be available",
+                    "title": "Advertise Where",
                     "items": {
                         "$ref": "#/definitions/viewsWhereType"
                     },
@@ -3502,6 +3520,13 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "DNS Information"
                 },
+                "dns_volterra_managed": {
+                    "type": "boolean",
+                    "description": " DNS records for domains will be managed automatically by Volterra.\n This requires the domain to be delegated to Volterra using the Delegated Domain feature.",
+                    "title": "Manage DNS Domain",
+                    "format": "boolean",
+                    "x-displayname": "Automatically Manage DNS Records"
+                },
                 "do_not_advertise": {
                     "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\nx-displayName: \"Do Not Advertise\"\nDo not advertise this loadbalancer",
                     "title": "Do Not Advertise",
@@ -3598,7 +3623,9 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.SpecType",
             "properties": {
                 "gc_spec": {
-                    "$ref": "#/definitions/viewstcp_loadbalancerGlobalSpecType"
+                    "title": "gc_spec",
+                    "$ref": "#/definitions/viewstcp_loadbalancerGlobalSpecType",
+                    "x-displayname": "GC Spec"
                 }
             }
         },

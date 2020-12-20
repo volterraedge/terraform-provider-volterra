@@ -21,7 +21,26 @@ resource "volterra_tcp_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
-  do_not_advertise = true
+
+  advertise_custom {
+    advertise_where {
+      // One of the arguments from this list "site virtual_site vk8s_service" must be set
+
+      site {
+        ip      = "ip"
+        network = "network"
+
+        site {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+      }
+
+      // One of the arguments from this list "use_default_port port" must be set
+      use_default_port = true
+    }
+  }
 }
 
 ```
@@ -52,6 +71,8 @@ Argument Reference
 `advertise_on_public_default_vip` - (Optional) Advertise this loadbalancer on public network with default VIP (bool).
 
 `do_not_advertise` - (Optional) Do not advertise this loadbalancer (bool).
+
+`dns_volterra_managed` - (Optional) This requires the domain to be delegated to Volterra using the Delegated Domain feature. (`Bool`).
 
 `domains` - (Optional) Domains also indicate the list of names for which DNS resolution will be done by VER (`List of String`).
 

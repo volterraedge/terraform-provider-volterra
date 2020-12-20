@@ -1458,6 +1458,15 @@ func (c *CustomAPIInprocClient) AccessLogAggregationQuery(ctx context.Context, i
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AccessLogAggregationQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.AccessLogAggregationQuery(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -1492,6 +1501,15 @@ func (c *CustomAPIInprocClient) AccessLogQueryV2(ctx context.Context, in *Access
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AccessLogQueryV2"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.AccessLogQueryV2(ctx, in)
 	if err != nil {
@@ -1528,6 +1546,15 @@ func (c *CustomAPIInprocClient) AccessLogScrollQuery(ctx context.Context, in *Lo
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AccessLogScrollQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.AccessLogScrollQuery(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -1562,6 +1589,15 @@ func (c *CustomAPIInprocClient) AuditLogAggregationQuery(ctx context.Context, in
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AuditLogAggregationQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.AuditLogAggregationQuery(ctx, in)
 	if err != nil {
@@ -1598,6 +1634,15 @@ func (c *CustomAPIInprocClient) AuditLogQueryV2(ctx context.Context, in *AuditLo
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AuditLogQueryV2"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.AuditLogQueryV2(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -1632,6 +1677,15 @@ func (c *CustomAPIInprocClient) AuditLogScrollQuery(ctx context.Context, in *Log
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AuditLogScrollQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.AuditLogScrollQuery(ctx, in)
 	if err != nil {
@@ -1668,6 +1722,15 @@ func (c *CustomAPIInprocClient) FirewallLogAggregationQuery(ctx context.Context,
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.FirewallLogAggregationQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.FirewallLogAggregationQuery(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -1702,6 +1765,15 @@ func (c *CustomAPIInprocClient) FirewallLogQuery(ctx context.Context, in *Firewa
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.FirewallLogQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.FirewallLogQuery(ctx, in)
 	if err != nil {
@@ -1738,6 +1810,15 @@ func (c *CustomAPIInprocClient) FirewallLogScrollQuery(ctx context.Context, in *
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.FirewallLogScrollQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.FirewallLogScrollQuery(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -1772,6 +1853,15 @@ func (c *CustomAPIInprocClient) VK8SAuditLogAggregationQuery(ctx context.Context
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SAuditLogAggregationQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.VK8SAuditLogAggregationQuery(ctx, in)
 	if err != nil {
@@ -1808,6 +1898,15 @@ func (c *CustomAPIInprocClient) VK8SAuditLogQuery(ctx context.Context, in *VK8SA
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SAuditLogQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.VK8SAuditLogQuery(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -1842,6 +1941,15 @@ func (c *CustomAPIInprocClient) VK8SAuditLogScrollQuery(ctx context.Context, in 
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.VK8SAuditLogScrollQuery(ctx, in)
 	if err != nil {
@@ -1878,6 +1986,15 @@ func (c *CustomAPIInprocClient) VK8SEventsAggregationQuery(ctx context.Context, 
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SEventsAggregationQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.VK8SEventsAggregationQuery(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -1913,6 +2030,15 @@ func (c *CustomAPIInprocClient) VK8SEventsQuery(ctx context.Context, in *VK8SEve
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
 
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SEventsQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
 	rsp, err = cah.VK8SEventsQuery(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
@@ -1947,6 +2073,15 @@ func (c *CustomAPIInprocClient) VK8SEventsScrollQuery(ctx context.Context, in *L
 		}
 		server.AddUserMsgToAPIAudit(ctx, userMsg)
 	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SEventsScrollQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
 
 	rsp, err = cah.VK8SEventsScrollQuery(ctx, in)
 	if err != nil {
@@ -4108,7 +4243,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "topk": {
                     "type": "integer",
-                    "description": "x-displayName \"TopK\"\n\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
+                    "description": "x-displayName: \"TopK\"\n\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
                     "title": "topk",
                     "format": "int64"
                 }
@@ -4169,7 +4304,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "logaudit_logDateAggregation": {
             "type": "object",
-            "description": "x-displayName: Date Aggregation\nAggregate access logs based on timestamp in the log",
+            "description": "x-displayName: \"Date Aggregation\"\nAggregate access logs based on timestamp in the log",
             "title": "Date Aggregation",
             "properties": {
                 "step": {
@@ -4191,7 +4326,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "topk": {
                     "type": "integer",
-                    "description": "x-displayName \"TopK\"\n\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
+                    "description": "x-displayName: \"TopK\"\n\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
                     "title": "topk",
                     "format": "int64"
                 }
@@ -4199,7 +4334,8 @@ var CustomAPISwaggerJSON string = `{
         },
         "logaudit_logKeyField": {
             "type": "string",
-            "title": "- AUTHORITY: x-displayName: \"Authority\"\n - DST: x-displayName: \"Destination Service\"\n - DST_INSTANCE: x-displayName: \"Destination Instance\"\n - DST_SITE: x-displayName: \"Destination Site\"\n - METHOD: x-displayName: \"Method\"\n - SCHEME: x-displayName: \"Scheme\"\n - REQ_PATH: x-displayName: \"Request Path\"\n - RSP_CODE: x-displayName: \"Response Code\"\n - SRC: x-displayName: \"Source Service\"\n - SRC_INSTANCE: x-displayName: \"Source Instance\"\n - SRC_SITE: x-displayName: \"Source Site\"\n - TRANSPORT: x-displayName: \"Trasnsport\"\n - USER: x-displayName: \"User\"",
+            "description": "x-displayName: \"Key Field\"\n\n - AUTHORITY: x-displayName: \"Authority\"\n - DST: x-displayName: \"Destination Service\"\n - DST_INSTANCE: x-displayName: \"Destination Instance\"\n - DST_SITE: x-displayName: \"Destination Site\"\n - METHOD: x-displayName: \"Method\"\n - SCHEME: x-displayName: \"Scheme\"\n - REQ_PATH: x-displayName: \"Request Path\"\n - RSP_CODE: x-displayName: \"Response Code\"\n - SRC: x-displayName: \"Source Service\"\n - SRC_INSTANCE: x-displayName: \"Source Instance\"\n - SRC_SITE: x-displayName: \"Source Site\"\n - TRANSPORT: x-displayName: \"Trasnsport\"\n - USER: x-displayName: \"User\"",
+            "title": "KeyField",
             "enum": [
                 "AUTHORITY",
                 "DST",
@@ -4292,7 +4428,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "topk": {
                     "type": "integer",
-                    "description": "x-displayName \"TopK\"\n\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
+                    "description": "x-displayName: \"TopK\"\n\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
                     "title": "topk",
                     "format": "int64"
                 }
@@ -4377,7 +4513,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "topk": {
                     "type": "integer",
-                    "description": "x-displayName \"TopK\"\n\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
+                    "description": "x-displayName: \"TopK\"\n\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
                     "title": "topk",
                     "format": "int64"
                 }

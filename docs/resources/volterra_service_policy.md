@@ -22,7 +22,10 @@ resource "volterra_service_policy" "example" {
   algo      = ["algo"]
 
   // One of the arguments from this list "any_server server_name server_selector server_name_matcher" must be set
-  any_server = true
+
+  server_selector {
+    expressions = ["region in (us-west1, us-west2),tier in (staging)"]
+  }
 }
 
 ```
@@ -50,13 +53,15 @@ Argument Reference
 
 `port_matcher` - (Optional) The list of port ranges to which the destination port should belong. In case of an HTTP Connect, the port is extracted from the desired destination.. See [Port Matcher ](#port-matcher) below for details.
 
-`allow_list` - (Optional) TBD unhide after implementation is ready. See [Allow List ](#allow-list) below for details.
+`allow_list` - (Optional) List of allowed sources for requests. See [Allow List ](#allow-list) below for details.
 
-`deny_list` - (Optional) TBD unhide after implementation is ready. See [Deny List ](#deny-list) below for details.
+`deny_list` - (Optional) List of denied sources for requests. See [Deny List ](#deny-list) below for details.
 
-`rule_list` - (Optional) TBD unhide after implementation is ready. See [Rule List ](#rule-list) below for details.
+`legacy_rule_list` - (Optional) List of references to service_policy_rule objects. See [Legacy Rule List ](#legacy-rule-list) below for details.
 
-`rules` - (Optional) The order of evaluation of the rules depends on the rule combining algorithm.. See [ref](#ref) below for details.
+`rule_list` - (Optional) List of custom rules. See [Rule List ](#rule-list) below for details.
+
+`rules` - (Optional) TBD mark as hidden + internal after implementation is ready. See [ref](#ref) below for details.
 
 `any_server` - (Optional) Any Server (bool).
 
@@ -68,7 +73,7 @@ Argument Reference
 
 ### Allow List
 
-TBD unhide after implementation is ready.
+List of allowed sources for requests.
 
 `asn_list` - (Optional) The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB.. See [Asn List ](#asn-list) below for details.
 
@@ -216,7 +221,7 @@ Evaluate the next service policy.
 
 ### Deny List
 
-TBD unhide after implementation is ready.
+List of denied sources for requests.
 
 `asn_list` - (Optional) The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB.. See [Asn List ](#asn-list) below for details.
 
@@ -348,6 +353,12 @@ other labels do not matter..
 
 `keys` - (Optional) The list of label key names that have to match (`String`).
 
+### Legacy Rule List
+
+List of references to service_policy_rule objects.
+
+`rules` - (Required) The order of evaluation of the rules depends on the rule combining algorithm.. See [ref](#ref) below for details.
+
 ### Malicious User Mitigation
 
 actions are taken for mitigation at different threat levels..
@@ -424,7 +435,7 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 ### Rule List
 
-TBD unhide after implementation is ready.
+List of custom rules.
 
 `rules` - (Optional) The order of evaluation of the rules depends on the rule combining algorithm.. See [Rules ](#rules) below for details.
 

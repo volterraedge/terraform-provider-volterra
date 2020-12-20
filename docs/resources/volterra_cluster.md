@@ -130,11 +130,15 @@ Common TLS parameters used in both upstream and downstream connections.
 
 `validation_params` - (Optional) and list of Subject Alt Names for verification. See [Validation Params ](#validation-params) below for details.
 
+### Disable Sni
+
+Do not use SNI..
+
 ### Endpoint Subsets
 
 .
 
-`keys` - (Optional) List of keys that define a cluster subset. (`String`).
+`keys` - (Optional) List of keys that define a cluster subset class. (`String`).
 
 ### Http2 Options
 
@@ -198,7 +202,15 @@ TLS parameters to access upstream endpoints for this cluster.
 
 `common_params` - (Optional) Common TLS parameters used in both upstream and downstream connections. See [Common Params ](#common-params) below for details.
 
-`sni` - (Optional) SNI to be used while connecting to upstream service. (`String`).
+`disable_sni` - (Optional) Do not use SNI. (bool).
+
+`sni` - (Optional) SNI value to be used. (`String`).
+
+`use_host_header_as_sni` - (Optional) Use the host header as SNI (bool).
+
+### Use Host Header As Sni
+
+Use the host header as SNI.
 
 ### Validation Params
 

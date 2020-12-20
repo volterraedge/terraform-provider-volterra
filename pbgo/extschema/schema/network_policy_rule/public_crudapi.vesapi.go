@@ -1965,7 +1965,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1977,7 +1977,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2177,7 +2177,7 @@ var APISwaggerJSON string = `{
             "description": "Creates a network policy rule with configured parameters in specified namespace",
             "title": "Create Network Policy Rule",
             "x-displayname": "Create Network Policy Rule",
-            "x-ves-displayorder": "1,4,5,7,3,2,6,10",
+            "x-ves-displayorder": "1,9,3,2,6,10",
             "x-ves-oneof-field-remote_endpoint": "[\"ip_prefix_set\",\"prefix\",\"prefix_selector\"]",
             "x-ves-proto-message": "ves.io.schema.network_policy_rule.CreateSpecType",
             "properties": {
@@ -2202,11 +2202,11 @@ var APISwaggerJSON string = `{
                 },
                 "ports": {
                     "type": "array",
-                    "description": " Ports is list of port ranges as match criteria. Range is expressed as start port and end port\n\nExample: - \"100-200\"-",
+                    "description": " List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192\n\nExample: - \"100-200\"-",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Port Ranges",
+                    "x-displayname": "List of Port Ranges",
                     "x-ves-example": "100-200"
                 },
                 "prefix": {
@@ -2287,7 +2287,7 @@ var APISwaggerJSON string = `{
         },
         "network_policy_ruleGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2303,7 +2303,7 @@ var APISwaggerJSON string = `{
             "description": "Get a network policy rule in specified namespace",
             "title": "Get Network Policy Rule",
             "x-displayname": "Get Network Policy Rule",
-            "x-ves-displayorder": "1,4,5,7,3,2,6,10",
+            "x-ves-displayorder": "1,9,3,2,6,10",
             "x-ves-oneof-field-remote_endpoint": "[\"ip_prefix_set\",\"prefix\",\"prefix_selector\"]",
             "x-ves-proto-message": "ves.io.schema.network_policy_rule.GetSpecType",
             "properties": {
@@ -2328,11 +2328,11 @@ var APISwaggerJSON string = `{
                 },
                 "ports": {
                     "type": "array",
-                    "description": " Ports is list of port ranges as match criteria. Range is expressed as start port and end port\n\nExample: - \"100-200\"-",
+                    "description": " List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192\n\nExample: - \"100-200\"-",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Port Ranges",
+                    "x-displayname": "List of Port Ranges",
                     "x-ves-example": "100-200"
                 },
                 "prefix": {
@@ -2390,12 +2390,12 @@ var APISwaggerJSON string = `{
                 },
                 "ports": {
                     "type": "array",
-                    "description": " Ports is list of port ranges as match criteria. Range is expressed as start port and end port\n\nExample: - \"100-200\"-",
+                    "description": " List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192\n\nExample: - \"100-200\"-",
                     "title": "ports",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Port Ranges",
+                    "x-displayname": "List of Port Ranges",
                     "x-ves-example": "100-200"
                 },
                 "prefix": {
@@ -2586,8 +2586,8 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_policy_rule.NetworkPolicyRuleAdvancedAction",
             "properties": {
                 "action": {
-                    "description": "\n Advanced action applied along with selection in NetworkPolicyRuleAction",
-                    "title": "Action\nx-displayName: \"Action\"",
+                    "description": " Advanced action applied along with selection in NetworkPolicyRuleAction",
+                    "title": "Action",
                     "$ref": "#/definitions/network_policy_ruleLogAction",
                     "x-displayname": "Action"
                 }
@@ -2657,7 +2657,7 @@ var APISwaggerJSON string = `{
             "description": "Replaces a network policy rule with configured parameters in specified namespace",
             "title": "Replace Network Policy Rule",
             "x-displayname": "Replace Network Policy Rule",
-            "x-ves-displayorder": "1,4,5,7,3,2,6,10",
+            "x-ves-displayorder": "1,9,3,2,6,10",
             "x-ves-oneof-field-remote_endpoint": "[\"ip_prefix_set\",\"prefix\",\"prefix_selector\"]",
             "x-ves-proto-message": "ves.io.schema.network_policy_rule.ReplaceSpecType",
             "properties": {
@@ -2682,11 +2682,11 @@ var APISwaggerJSON string = `{
                 },
                 "ports": {
                     "type": "array",
-                    "description": " Ports is list of port ranges as match criteria. Range is expressed as start port and end port\n\nExample: - \"100-200\"-",
+                    "description": " List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192\n\nExample: - \"100-200\"-",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Port Ranges",
+                    "x-displayname": "List of Port Ranges",
                     "x-ves-example": "100-200"
                 },
                 "prefix": {

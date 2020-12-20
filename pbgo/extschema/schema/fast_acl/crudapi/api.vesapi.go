@@ -2410,18 +2410,13 @@ var APISwaggerJSON string = `{
             "title": "Fast ACL for Site",
             "x-displayname": "Fast ACL for Site",
             "x-ves-oneof-field-network_choice": "[\"inside_network\",\"outside_network\"]",
-            "x-ves-oneof-field-vip_choice": "[\"all_services\",\"destination_ip_address\",\"interface_services\",\"shared_vip_services\",\"vip_services\"]",
+            "x-ves-oneof-field-vip_choice": "[\"all_services\",\"interface_services\",\"vip_services\"]",
             "x-ves-proto-message": "ves.io.schema.fast_acl.SiteACLType",
             "properties": {
                 "all_services": {
-                    "description": "Exclusive with [destination_ip_address interface_services shared_vip_services vip_services]\nx-displayName: \"All VIP(s)\"\nDestination will be all VIP(s), interface IP(s) and configured VIP(s)\nPort and protocol is picked up from advertise policies",
+                    "description": "Exclusive with [interface_services vip_services]\nx-displayName: \"All VIP(s)\"\nDestination will be all VIP(s), interface IP(s) and configured VIP(s)\nPort and protocol is picked up from advertise policies",
                     "title": "All VIP(S)",
                     "$ref": "#/definitions/schemaEmpty"
-                },
-                "destination_ip_address": {
-                    "description": "Exclusive with [all_services interface_services shared_vip_services vip_services]\nx-displayName: \"Custom Destinations\"\nDestination is configured (ip, protocol, port)",
-                    "title": "Custom Destinations",
-                    "$ref": "#/definitions/fast_aclDestinationIPAddressType"
                 },
                 "fast_acl_rules": {
                     "type": "array",
@@ -2433,27 +2428,22 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Rules"
                 },
                 "inside_network": {
-                    "description": "Exclusive with [outside_network]\nx-displayName: \"Outside Network\nSite local Outside network",
+                    "description": "Exclusive with [outside_network]\nx-displayName: \"Outside Network\"\nSite local Outside network",
                     "title": "Outside Network",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "interface_services": {
-                    "description": "Exclusive with [all_services destination_ip_address shared_vip_services vip_services]\nx-displayName: \"All Interface IP(s) as VIP\"\nDestination matching any IP address assigned to the interfaces (e.g from DHCP) and is used as (VIP)\nPort and protocol is picked up from advertise policies",
+                    "description": "Exclusive with [all_services vip_services]\nx-displayName: \"All Interface IP(s) as VIP\"\nDestination matching any IP address assigned to the interfaces (e.g from DHCP) and is used as (VIP)\nPort and protocol is picked up from advertise policies",
                     "title": "Interface Services",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "outside_network": {
-                    "description": "Exclusive with [inside_network]\nx-displayName: \"Inside Network\nSite local Inside network",
+                    "description": "Exclusive with [inside_network]\nx-displayName: \"Inside Network\"\nSite local Inside network",
                     "title": "Inside Network",
                     "$ref": "#/definitions/schemaEmpty"
                 },
-                "shared_vip_services": {
-                    "description": "Exclusive with [all_services destination_ip_address interface_services vip_services]\nx-displayName: \"Shared VIP services\"\nPort and protocol is picked up from listener config of shared VIP\nNote: This option is available only for volterra administrators\nCustomer Edge: Not applicable\nRegional Edge: Applies configuration on all shared VIPs used for services",
-                    "title": "Shared VIP Services",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
                 "vip_services": {
-                    "description": "Exclusive with [all_services destination_ip_address interface_services shared_vip_services]\nx-displayName: \"Configured VIP(s)\"\nDestination matching configured VIP(s)\nPort and protocol is picked up from advertise policies",
+                    "description": "Exclusive with [all_services interface_services]\nx-displayName: \"Configured VIP(s)\"\nDestination matching configured VIP(s)\nPort and protocol is picked up from advertise policies",
                     "title": "VIP Services",
                     "$ref": "#/definitions/schemaEmpty"
                 }

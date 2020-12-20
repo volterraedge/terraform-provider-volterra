@@ -1576,7 +1576,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Virtual K8s Object",
-        "description": "Virtual K8s object exposes a Kubernetes API endpoint in the namespace that operates on all the physical Kubernetes clusters in each of \nthe sites that are selected by the virtual-site referred to in the object.\n\nVirtual K8s supports only a subset of Kubernetes APIs.\n\nRead and write operations are currently supported on the following Kubernetes API resources:\n1. Deployment v1 apps\n2. Job v1 batch\n3. Service v1 core\n4. Secret v1 core\n5. ConfigMap v1 core\n\nRead only operations are currently supported on the following Kubernetes API resources:\n1. Pod v1 core\n2. ReplicaSet v1 apps\n3. Endpoints v1 core\n4. Node v1 core\n5. Namespace v1 core\n\nThe semantics of using Kubernetes APIs on a Virtual K8s object are different compared to those on a single Kubernetes cluster since the\nKubernetes resource objects created using the Virtual K8s API will be instantiated in all the physical Kubernetes clusters in each\nof the sites selected by the virtual-site referred to in the object. In a single Kubernetes cluster, when a Deployment resource is created\nwith Replicas set to 3, the expectation is that 3 Pods will be created on the Kubernetes cluster. On the Virtual K8S API, when a Deployment\nresource is created with Replicas set to 3, the total number of Pods created is equal to the number of Replicas times the number of physical\nclusters in each of the sites selected by the referred to virtual-site. For example, if the virtual-site associated with Virtual K8s object\nselects 3 sites each having 1 physical Kubernetes cluster, then the total number of Pods created will be 9.\n\nKubernetes API resource objects can also be created with the annotation ves.io/virtual-sites=\u003cvirtual-site-namespace\u003e/\u003cvirtual-site-name\u003e\nand those objects will be instantiated in all physical Kubernetes clusters in each of the sites selected by the virtual-site specified in the\nannotation only and not using the virtual-site specified in the Virtual K8s object. This provides an override mechanism to select different\nvirtual-sites for the Kubernetes API resource to be instantiated on. The virtual-site referred to in the Virtual K8s can hence be thought\nof as the default virtual-site for all the Kubernetes API resource objects created on the Virtual K8s API without the above annotation.",
+        "description": "Virtual K8s object exposes a Kubernetes API endpoint in the namespace that operates on all the physical Kubernetes clusters in each of \nthe sites that are selected by the virtual-site referred to in the object.\n\nVirtual K8s supports only a subset of Kubernetes APIs related to application management.\n\nRead and write operations are currently supported on the following Kubernetes API resources:\n1. Deployment v1 apps\n2. StatefulSet v1 apps\n3. DaemonSet v1 apps\n4. Job v1 batch\n5. CronJob v1beta1 batch\n6. Service v1 core with type ClusterIP\n7. Secret v1 core\n8. ConfigMap v1 core\n9. ServiceAccount v1 core\n10. PersistentVolumeClaim v1 core\n\nOnly delete is supported on Pod v1 core.\n\nRead only operations are currently supported on the following Kubernetes API resources:\n1. Pod v1 core\n2. ReplicaSet v1 apps\n3. Endpoints v1 core\n4. Node v1 core\n5. Namespace v1 core\n6. PersistentVolume v1 core\n7. Event v1 core\n\nThe semantics of using Kubernetes APIs on a Virtual K8s object are different compared to those on a single Kubernetes cluster since the\nKubernetes resource objects created using the Virtual K8s API will be instantiated in all the physical Kubernetes clusters in each\nof the sites selected by the virtual-site referred to in the object. In a single Kubernetes cluster, when a Deployment resource is created\nwith Replicas set to 3, the expectation is that 3 Pods will be created on the Kubernetes cluster. On the Virtual K8S API, when a Deployment\nresource is created with Replicas set to 3, the total number of Pods created is equal to the number of Replicas times the number of physical\nclusters in each of the sites selected by the referred to virtual-site. For example, if the virtual-site associated with Virtual K8s object\nselects 3 sites each having 1 physical Kubernetes cluster, then the total number of Pods created will be 9.\n\nKubernetes API resource objects can also be created with the annotation ves.io/virtual-sites=\u003cvirtual-site-namespace\u003e/\u003cvirtual-site-name\u003e\nand those objects will be instantiated in all physical Kubernetes clusters in each of the sites selected by the virtual-site specified in the\nannotation only and not using the virtual-site specified in the Virtual K8s object. This provides an override mechanism to select different\nvirtual-sites for the Kubernetes API resource to be instantiated on. The virtual-site referred to in the Virtual K8s can hence be thought\nof as the default virtual-site for all the Kubernetes API resource objects created on the Virtual K8s API without the above annotation.",
         "version": "version not set"
     },
     "schemes": [
@@ -1965,7 +1965,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1977,7 +1977,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2082,6 +2082,13 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "service Foo {\n      rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n    }\n\nThe JSON representation for -Empty- is empty JSON object -{}-.",
             "title": "A generic empty message that you can re-use to avoid defining duplicated\nempty messages in your APIs. A typical example is to use it as the request\nor the response type of an API method. For instance:"
+        },
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "schemaConditionType": {
             "type": "object",
@@ -2804,9 +2811,18 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Create virtual_k8s will create the object in the storage backend for namespace metadata.namespace",
             "title": "Create Virtual K8s",
-            "x-displayname": "Create Configuration Specification",
+            "x-displayname": "Create Virtual Kubernetes",
+            "x-ves-oneof-field-service_isolation_choice": "[\"disabled\",\"isolated\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_k8s.CreateSpecType",
             "properties": {
+                "disabled": {
+                    "description": "Exclusive with [isolated]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "isolated": {
+                    "description": "Exclusive with [disabled]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "vsite_refs": {
                     "type": "array",
                     "description": " Reference to virtual-sites\n Default virtual-site of the Virtual K8s object. If no virtual-site is specified in the Kubernetes API resource object\n annotations via ves.io/virtual-sites, then this virtual-site is used select sites on which to instantiate the\n Kubernetes API resource object",
@@ -2879,7 +2895,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_k8sGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2894,9 +2910,18 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Get virtual_k8s will get the object from the storage backend for namesapce metadata.namespace",
             "title": "Get Virtual K8s",
-            "x-displayname": "Get Configuration Specification",
+            "x-displayname": "Get Virtual Kubernetes",
+            "x-ves-oneof-field-service_isolation_choice": "[\"disabled\",\"isolated\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_k8s.GetSpecType",
             "properties": {
+                "disabled": {
+                    "description": "Exclusive with [isolated]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "isolated": {
+                    "description": "Exclusive with [disabled]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "vsite_refs": {
                     "type": "array",
                     "description": " Reference to virtual-sites\n Default virtual-site of the Virtual K8s object. If no virtual-site is specified in the Kubernetes API resource object\n annotations via ves.io/virtual-sites, then this virtual-site is used select sites on which to instantiate the\n Kubernetes API resource object",
@@ -2912,8 +2937,19 @@ var APISwaggerJSON string = `{
             "description": "Configuration specification for Virtual K8s",
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
+            "x-ves-oneof-field-service_isolation_choice": "[\"disabled\",\"isolated\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_k8s.GlobalSpecType",
             "properties": {
+                "disabled": {
+                    "description": "Exclusive with [isolated]\nx-displayName: \"Disabled\"\nK8s services are not restricted and communcation can happen across namespaces unless overridden by the K8s service via\nsetting the ves.io/serviceIsolation annotation to true",
+                    "title": "Disabled",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "isolated": {
+                    "description": "Exclusive with [disabled]\nx-displayName: \"Isolated Services\"\nIsolated K8s services restrict any K8s services created in the Virtual K8s from communicating outside the namespace unless\noverridden by the K8s service via setting the ves.io/serviceIsolation annotation to false",
+                    "title": "Isolated",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "vsite_refs": {
                     "type": "array",
                     "description": " Reference to virtual-sites\n Default virtual-site of the Virtual K8s object. If no virtual-site is specified in the Kubernetes API resource object\n annotations via ves.io/virtual-sites, then this virtual-site is used select sites on which to instantiate the\n Kubernetes API resource object",
@@ -3107,9 +3143,18 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Replacing an endpoint object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write.",
             "title": "Replace Virtual K8s",
-            "x-displayname": "Replace configuration specification",
+            "x-displayname": "Replace Virtual Kubernetes",
+            "x-ves-oneof-field-service_isolation_choice": "[\"disabled\",\"isolated\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_k8s.ReplaceSpecType",
             "properties": {
+                "disabled": {
+                    "description": "Exclusive with [isolated]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "isolated": {
+                    "description": "Exclusive with [disabled]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "vsite_refs": {
                     "type": "array",
                     "description": " Reference to virtual-sites\n Default virtual-site of the Virtual K8s object. If no virtual-site is specified in the Kubernetes API resource object\n annotations via ves.io/virtual-sites, then this virtual-site is used select sites on which to instantiate the\n Kubernetes API resource object",

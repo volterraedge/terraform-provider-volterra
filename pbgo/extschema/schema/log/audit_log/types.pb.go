@@ -49,6 +49,9 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
+// KeyField
+//
+// x-displayName: "Key Field"
 type KeyField int32
 
 const (
@@ -115,7 +118,7 @@ func (KeyField) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, [
 
 // Date Aggregation
 //
-// x-displayName: Date Aggregation
+// x-displayName: "Date Aggregation"
 // Aggregate access logs based on timestamp in the log
 type DateAggregation struct {
 	// step
@@ -155,7 +158,7 @@ type FieldAggregation struct {
 	Field KeyField `protobuf:"varint,1,opt,name=field,proto3,enum=ves.io.schema.log.audit_log.KeyField" json:"field,omitempty"`
 	// topk
 	//
-	// x-displayName "TopK"
+	// x-displayName: "TopK"
 	//
 	// Number of top field values to be returned in the response.
 	// Optional: If not specified, top 5 values will be returned in the response.

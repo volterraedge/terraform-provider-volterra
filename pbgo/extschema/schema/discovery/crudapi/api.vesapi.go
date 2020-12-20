@@ -2594,7 +2594,7 @@ var APISwaggerJSON string = `{
         },
         "discoverySchemeType": {
             "type": "string",
-            "description": "Scheme to use when doing REST API to discovery server\n\n - HTTP: http:// Scheme\n - HTTPS: https:// Scheme",
+            "description": "Scheme to use when doing REST API to discovery server\n\nhttp:// Scheme\nhttps:// Scheme",
             "title": "REST scheme",
             "enum": [
                 "HTTP",
@@ -3009,7 +3009,6 @@ var APISwaggerJSON string = `{
             "description": "NetworkSiteRefSelector defines a union of reference to site or reference to virtual_network  or reference to virtual_site\nIt is used to determine virtual network using following rules\n * Direct reference to virtual_network object\n * Site local network when refering to site object\n * All site local networks for sites selected by refering to virtual_site object",
             "title": "NetworkSiteRefSelector",
             "x-displayname": "Network or Site Reference",
-            "x-ves-displayorder": "3,2,1",
             "x-ves-oneof-field-reforselector": "[\"site\",\"virtual_network\",\"virtual_site\"]",
             "x-ves-proto-message": "ves.io.schema.NetworkSiteRefSelector",
             "properties": {
@@ -3136,7 +3135,7 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretEncodingType": {
             "type": "string",
-            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\n - EncodingNone: No Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
             "title": "SecretEncodingType",
             "enum": [
                 "EncodingNone",

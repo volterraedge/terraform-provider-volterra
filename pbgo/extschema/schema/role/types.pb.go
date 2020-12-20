@@ -59,7 +59,7 @@ func (m *GlobalSpecType) GetRbacPolicy() []*ves_io_schema4.ObjectRefType {
 
 // Role
 //
-// x-displayName: "Role"
+// x-displayName: "Create Role"
 // Creates a role
 type CreateSpecType struct {
 }
@@ -70,7 +70,7 @@ func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes
 
 // Role
 //
-// x-displayName: "Role"
+// x-displayName: "Replace Role"
 // Amends a role
 type ReplaceSpecType struct {
 }
@@ -81,7 +81,7 @@ func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorType
 
 // Role
 //
-// x-displayName: "Role"
+// x-displayName: "Get Role"
 // Reads a role
 type GetSpecType struct {
 	// RBAC Policy

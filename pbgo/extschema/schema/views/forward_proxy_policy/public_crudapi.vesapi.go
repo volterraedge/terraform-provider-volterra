@@ -1953,7 +1953,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1965,7 +1965,7 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_READ"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Response Format"
+                        "x-displayname": "GetSpecType format"
                     }
                 ],
                 "tags": [
@@ -2246,9 +2246,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "rules": {
                     "type": "array",
+                    "description": " List of custom rules",
+                    "title": "rules",
                     "items": {
                         "$ref": "#/definitions/forward_proxy_policyForwardProxyAdvancedRuleType"
-                    }
+                    },
+                    "x-displayname": "Custom Rule List"
                 }
             }
         },
@@ -2382,7 +2385,7 @@ var APISwaggerJSON string = `{
         },
         "forward_proxy_policyGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_FOR_CREATE: Response should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: Response should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: Response should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: Response should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2576,7 +2579,9 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.SpecType",
             "properties": {
                 "gc_spec": {
-                    "$ref": "#/definitions/viewsforward_proxy_policyGlobalSpecType"
+                    "title": "gc_spec",
+                    "$ref": "#/definitions/viewsforward_proxy_policyGlobalSpecType",
+                    "x-displayname": "GC Spec"
                 }
             }
         },
@@ -3546,7 +3551,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Shape of the Forward Proxy Policy specification",
             "title": "CreateSpecType",
-            "x-displayname": "Create Specification",
+            "x-displayname": "Create Forward Proxy Policy",
             "x-ves-oneof-field-proxy_choice": "[\"any_proxy\",\"drp_http_connect\",\"network_connector\",\"proxy_label_selector\"]",
             "x-ves-oneof-field-rule_choice": "[\"allow_all\",\"allow_list\",\"deny_list\",\"rule_list\"]",
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.CreateSpecType",
@@ -3589,7 +3594,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Shape of the Forward Proxy Policy specification",
             "title": "GetSpecType",
-            "x-displayname": "Specification",
+            "x-displayname": "Get Forward Proxy Policy",
             "x-ves-oneof-field-proxy_choice": "[\"any_proxy\",\"drp_http_connect\",\"network_connector\",\"proxy_label_selector\"]",
             "x-ves-oneof-field-rule_choice": "[\"allow_all\",\"allow_list\",\"deny_list\",\"rule_list\"]",
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.GetSpecType",
@@ -3689,7 +3694,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Shape of the Forward Proxy Policy replace specification",
             "title": "ReplaceSpecType",
-            "x-displayname": "Specification",
+            "x-displayname": "Replace Forward Proxy Policy",
             "x-ves-oneof-field-proxy_choice": "[\"any_proxy\",\"drp_http_connect\",\"network_connector\",\"proxy_label_selector\"]",
             "x-ves-oneof-field-rule_choice": "[\"allow_all\",\"allow_list\",\"deny_list\",\"rule_list\"]",
             "x-ves-proto-message": "ves.io.schema.views.forward_proxy_policy.ReplaceSpecType",
