@@ -17,6 +17,7 @@ import (
 	google_protobuf "github.com/gogo/protobuf/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	multierror "github.com/hashicorp/go-multierror"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -1010,7 +1011,10 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.fleet.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.fleet.crudapi.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1040,7 +1044,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.fleet.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.fleet.crudapi.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1143,7 +1150,10 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.fleet.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.fleet.crudapi.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -2570,7 +2580,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Add all interfaces belonging to this fleet",
             "title": "List of Interfaces",
-            "x-displayname": "List of Interface",
+            "x-displayname": "List of Interfaces",
             "x-ves-proto-message": "ves.io.schema.fleet.FleetInterfaceListType",
             "properties": {
                 "interfaces": {
@@ -2580,7 +2590,7 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
-                    "x-displayname": "List of Interface",
+                    "x-displayname": "List of Interfaces",
                     "x-ves-required": "true"
                 }
             }
@@ -2670,7 +2680,7 @@ var APISwaggerJSON string = `{
                 },
                 "storage_device": {
                     "type": "string",
-                    "description": " x-example \"DellEMC-isilon_F800-0\"\n Storage device that this class will use\nRequired: YES",
+                    "description": " x-example \"DellEMC-isilon_F800-0\"\n Storage device that this class will use. The Device name defined at previous step.\nRequired: YES",
                     "title": "Storage Device",
                     "x-displayname": "Storage Device",
                     "x-ves-required": "true"
@@ -2778,15 +2788,21 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-storage_device_choice": "[\"no_storage_device\",\"storage_device_list\"]",
             "x-ves-oneof-field-storage_interface_choice": "[\"no_storage_interfaces\",\"storage_interface_list\"]",
             "x-ves-oneof-field-storage_static_routes_choice": "[\"no_storage_static_routes\",\"storage_static_routes\"]",
+            "x-ves-oneof-field-usb_policy_choice": "[\"allow_all_usb\",\"deny_all_usb\",\"usb_policy\"]",
             "x-ves-proto-message": "ves.io.schema.fleet.GlobalSpecType",
             "properties": {
+                "allow_all_usb": {
+                    "description": "Exclusive with [deny_all_usb usb_policy]\nx-displayName: \"Allow All USB Devices\"\nAll USB devices are allowed",
+                    "title": "Allow All USB Devices",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "bond_device_list": {
                     "description": "Exclusive with [no_bond_devices]\nx-displayName: \"Configure Bond Interfaces\"\nConfigure Bond Devices for this fleet",
                     "title": "Configure Bond Devices",
                     "$ref": "#/definitions/fleetFleetBondDevicesListType"
                 },
                 "dc_cluster_group": {
-                    "description": "Exclusive with [dc_cluster_group_inside no_dc_cluster_group]\nx-displayName: \"Member of DC cluster Group,Site Local\"\nThis fleet is member of dc cluster group via site local network",
+                    "description": "Exclusive with [dc_cluster_group_inside no_dc_cluster_group]\nx-displayName: \"Member of DC cluster Group, Site Local\"\nThis fleet is member of dc cluster group via site local network",
                     "title": "Member of DC cluster Group",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
@@ -2803,6 +2819,11 @@ var APISwaggerJSON string = `{
                 "default_storage_class": {
                     "description": "Exclusive with [storage_class_list]\nx-displayName: \"Default Storage Class\"\nUse only default storage class in kubernetes",
                     "title": "Default Storage Class",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "deny_all_usb": {
+                    "description": "Exclusive with [allow_all_usb usb_policy]\nx-displayName: \"Deny All USB Devices\"\nAll USB devices are denied",
+                    "title": "Deny All USB Devices",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "devices": {
@@ -2865,6 +2886,12 @@ var APISwaggerJSON string = `{
                     "title": "List of Interfaces",
                     "$ref": "#/definitions/fleetFleetInterfaceListType"
                 },
+                "k8s_cluster": {
+                    "description": " Local K8s cluster access is enabled, using config k8s_cluster object",
+                    "title": "Enable Local K8s Cluster access",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Enable Local K8s Cluster access"
+                },
                 "legacy_devices": {
                     "description": "Exclusive with [default_interfaces interface_list]\nx-displayName: \"Legacy Device List\"\nAdd device for all interfaces belonging to this fleet",
                     "title": "Legacy Device Config",
@@ -2904,7 +2931,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "no_dc_cluster_group": {
-                    "description": "Exclusive with [dc_cluster_group dc_cluster_group_inside]\nx-displayName: \"Not a Member\"\nThis fleet is not a member of dC cluster group",
+                    "description": "Exclusive with [dc_cluster_group dc_cluster_group_inside]\nx-displayName: \"Not a Member\"\nThis fleet is not a member of a DC cluster group",
                     "title": "Not a Member",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2967,6 +2994,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [no_storage_static_routes]\nx-displayName: \"List of Storage Static Routes\"\nAdd all storage storage static routes",
                     "title": "List of Storage Interfaces",
                     "$ref": "#/definitions/fleetFleetStorageStaticRoutesListType"
+                },
+                "usb_policy": {
+                    "description": "Exclusive with [allow_all_usb deny_all_usb]\nx-displayName: \"USB Device Policy\"\nAllow only specific USB devices",
+                    "title": "USB Device Policy",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "volterra_software_version": {
                     "type": "string",
@@ -3136,7 +3168,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "node": {
                     "type": "string",
-                    "description": " Enter node name of Mayastor Node (MSN) where this pool is located.\n\nExample: - \"master-0\"-\nRequired: YES",
+                    "description": " Enter k8s node name of Mayastor Node (MSN) where this pool is or going to be located.\n\nExample: - \"master-0\"-\nRequired: YES",
                     "title": "Node Name",
                     "x-displayname": "Node Name",
                     "x-ves-example": "master-0",
@@ -3261,7 +3293,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "protocol": {
                     "type": "string",
-                    "description": " Defines type of transport protocol used to mount the PV to the worker node hosting the associated application pod (iSCSI, or NVMe-oF)\n\nExample: - \"nvmf\"-",
+                    "description": " Defines type of transport protocol used to mount the PV to the worker node hosting the associated application pod (NVMe-oF)\n\nExample: - \"nvmf\"-",
                     "title": "Protocol",
                     "x-displayname": "Protocol",
                     "x-ves-example": "nvmf"
@@ -4537,14 +4569,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\nRequired: YES",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-",
                     "title": "ipv4 prefix list",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefix List",
-                    "x-ves-example": "192.168.20.0/24",
-                    "x-ves-required": "true"
+                    "x-ves-example": "192.168.20.0/24"
                 }
             }
         }

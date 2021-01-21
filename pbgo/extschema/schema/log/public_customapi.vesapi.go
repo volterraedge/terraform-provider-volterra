@@ -117,6 +117,60 @@ func (c *CustomAPIGrpcClient) doRPCFirewallLogScrollQuery(ctx context.Context, y
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCK8SAuditLogAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &K8SAuditLogAggregationRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.K8SAuditLogAggregationRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.K8SAuditLogAggregationQuery(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomAPIGrpcClient) doRPCK8SAuditLogQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &K8SAuditLogRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.K8SAuditLogRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.K8SAuditLogQuery(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomAPIGrpcClient) doRPCK8SAuditLogScrollQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &LogScrollRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.K8SAuditLogScrollQuery(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomAPIGrpcClient) doRPCK8SEventsAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &K8SEventsAggregationRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.K8SEventsAggregationRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.K8SEventsAggregationQuery(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomAPIGrpcClient) doRPCK8SEventsQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &K8SEventsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.K8SEventsRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.K8SEventsQuery(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomAPIGrpcClient) doRPCK8SEventsScrollQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &LogScrollRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.K8SEventsScrollQuery(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCVK8SAuditLogAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &VK8SAuditLogAggregationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -215,6 +269,18 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["FirewallLogQuery"] = ccl.doRPCFirewallLogQuery
 
 	rpcFns["FirewallLogScrollQuery"] = ccl.doRPCFirewallLogScrollQuery
+
+	rpcFns["K8SAuditLogAggregationQuery"] = ccl.doRPCK8SAuditLogAggregationQuery
+
+	rpcFns["K8SAuditLogQuery"] = ccl.doRPCK8SAuditLogQuery
+
+	rpcFns["K8SAuditLogScrollQuery"] = ccl.doRPCK8SAuditLogScrollQuery
+
+	rpcFns["K8SEventsAggregationQuery"] = ccl.doRPCK8SEventsAggregationQuery
+
+	rpcFns["K8SEventsQuery"] = ccl.doRPCK8SEventsQuery
+
+	rpcFns["K8SEventsScrollQuery"] = ccl.doRPCK8SEventsScrollQuery
 
 	rpcFns["VK8SAuditLogAggregationQuery"] = ccl.doRPCVK8SAuditLogAggregationQuery
 
@@ -916,6 +982,460 @@ func (c *CustomAPIRestClient) doRPCFirewallLogScrollQuery(ctx context.Context, c
 	return pbRsp, nil
 }
 
+func (c *CustomAPIRestClient) doRPCK8SAuditLogAggregationQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &K8SAuditLogAggregationRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.K8SAuditLogAggregationRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("aggs", fmt.Sprintf("%v", req.Aggs))
+		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("query", fmt.Sprintf("%v", req.Query))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &LogAggregationResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCK8SAuditLogQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &K8SAuditLogRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.K8SAuditLogRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("aggs", fmt.Sprintf("%v", req.Aggs))
+		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
+		q.Add("limit", fmt.Sprintf("%v", req.Limit))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("query", fmt.Sprintf("%v", req.Query))
+		q.Add("scroll", fmt.Sprintf("%v", req.Scroll))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+		q.Add("sort", fmt.Sprintf("%v", req.Sort))
+		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &LogResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCK8SAuditLogScrollQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &LogScrollRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("scroll_id", fmt.Sprintf("%v", req.ScrollId))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &LogResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCK8SEventsAggregationQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &K8SEventsAggregationRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.K8SEventsAggregationRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("aggs", fmt.Sprintf("%v", req.Aggs))
+		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("query", fmt.Sprintf("%v", req.Query))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &LogAggregationResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCK8SEventsQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &K8SEventsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.K8SEventsRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("aggs", fmt.Sprintf("%v", req.Aggs))
+		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
+		q.Add("limit", fmt.Sprintf("%v", req.Limit))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("query", fmt.Sprintf("%v", req.Query))
+		q.Add("scroll", fmt.Sprintf("%v", req.Scroll))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+		q.Add("sort", fmt.Sprintf("%v", req.Sort))
+		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &LogResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCK8SEventsScrollQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &LogScrollRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("scroll_id", fmt.Sprintf("%v", req.ScrollId))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &LogResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomAPIRestClient) doRPCVK8SAuditLogAggregationQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1408,6 +1928,18 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["FirewallLogScrollQuery"] = ccl.doRPCFirewallLogScrollQuery
 
+	rpcFns["K8SAuditLogAggregationQuery"] = ccl.doRPCK8SAuditLogAggregationQuery
+
+	rpcFns["K8SAuditLogQuery"] = ccl.doRPCK8SAuditLogQuery
+
+	rpcFns["K8SAuditLogScrollQuery"] = ccl.doRPCK8SAuditLogScrollQuery
+
+	rpcFns["K8SEventsAggregationQuery"] = ccl.doRPCK8SEventsAggregationQuery
+
+	rpcFns["K8SEventsQuery"] = ccl.doRPCK8SEventsQuery
+
+	rpcFns["K8SEventsScrollQuery"] = ccl.doRPCK8SEventsScrollQuery
+
 	rpcFns["VK8SAuditLogAggregationQuery"] = ccl.doRPCVK8SAuditLogAggregationQuery
 
 	rpcFns["VK8SAuditLogQuery"] = ccl.doRPCVK8SAuditLogQuery
@@ -1820,6 +2352,270 @@ func (c *CustomAPIInprocClient) FirewallLogScrollQuery(ctx context.Context, in *
 	}
 
 	rsp, err = cah.FirewallLogScrollQuery(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomAPIInprocClient) K8SAuditLogAggregationQuery(ctx context.Context, in *K8SAuditLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+	}
+
+	var (
+		rsp *LogAggregationResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.K8SAuditLogAggregationRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.K8SAuditLogAggregationQuery' operation on 'log'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SAuditLogAggregationQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.K8SAuditLogAggregationQuery(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomAPIInprocClient) K8SAuditLogQuery(ctx context.Context, in *K8SAuditLogRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+	}
+
+	var (
+		rsp *LogResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.K8SAuditLogRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.K8SAuditLogQuery' operation on 'log'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SAuditLogQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.K8SAuditLogQuery(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomAPIInprocClient) K8SAuditLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+	}
+
+	var (
+		rsp *LogResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.LogScrollRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.K8SAuditLogScrollQuery' operation on 'log'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SAuditLogScrollQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.K8SAuditLogScrollQuery(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomAPIInprocClient) K8SEventsAggregationQuery(ctx context.Context, in *K8SEventsAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+	}
+
+	var (
+		rsp *LogAggregationResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.K8SEventsAggregationRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.K8SEventsAggregationQuery' operation on 'log'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SEventsAggregationQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.K8SEventsAggregationQuery(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogAggregationResponse", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomAPIInprocClient) K8SEventsQuery(ctx context.Context, in *K8SEventsRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+	}
+
+	var (
+		rsp *LogResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.K8SEventsRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.K8SEventsQuery' operation on 'log'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SEventsQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.K8SEventsQuery(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.log.LogResponse", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomAPIInprocClient) K8SEventsScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+	}
+
+	var (
+		rsp *LogResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.log.LogScrollRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.K8SEventsScrollQuery' operation on 'log'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SEventsScrollQuery"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.K8SEventsScrollQuery(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
@@ -2916,6 +3712,570 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.log.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/{namespace}/k8s_audit_logs/scroll": {
+            "get": {
+                "summary": "K8s Audit Log Scroll Query",
+                "description": "The response for K8s audit log query contain no more than 500 messages.\nOne can use scroll request to scroll through more than 500 messages or all messages\nin multiple batches. empty scroll_id in the response indicates no more messages to fetch (EOF).",
+                "operationId": "ves.io.schema.log.CustomAPI.K8SAuditLogScrollQuery",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/logLogResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "scroll_id",
+                        "description": "x-example: \"Vm9sdGVycmEgRWRnZSBQbGF0Zm9ybQ==\"\nLong Base-64 encoded string which can be used to retrieve next batch of log messages.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Scroll ID"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-K8SAuditLogScrollQuery"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SAuditLogScrollQuery"
+            },
+            "x-displayname": "Log",
+            "x-ves-proto-service": "ves.io.schema.log.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/k8s_events/scroll": {
+            "get": {
+                "summary": "K8s Events Scroll Query",
+                "description": "The response for K8s events query contain no more than 500 events.\nOne can use scroll request to scroll through more than 500 events or all events\nin multiple batches. Empty scroll_id in the response indicates no more messages to fetch (EOF).",
+                "operationId": "ves.io.schema.log.CustomAPI.K8SEventsScrollQuery",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/logLogResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "scroll_id",
+                        "description": "x-example: \"Vm9sdGVycmEgRWRnZSBQbGF0Zm9ybQ==\"\nLong Base-64 encoded string which can be used to retrieve next batch of log messages.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Scroll ID"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-K8SEventsScrollQuery"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SEventsScrollQuery"
+            },
+            "x-displayname": "Log",
+            "x-ves-proto-service": "ves.io.schema.log.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/site/{site}/k8s_audit_logs": {
+            "post": {
+                "summary": "K8s Audit Log Query",
+                "description": "Request to get Physical K8s audit logs that matches the criteria in request for a given namespace.\nIf no match conditions are specified in the request, then the response contains all\nCRUD operations performed in the namespace. User with access to the -system- namespace\nmay query for audit logs across all namespaces in a K8s Cluster.",
+                "operationId": "ves.io.schema.log.CustomAPI.K8SAuditLogQuery",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/logLogResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/logK8SAuditLogRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-K8SAuditLogQuery"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SAuditLogQuery"
+            },
+            "x-displayname": "Log",
+            "x-ves-proto-service": "ves.io.schema.log.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/site/{site}/k8s_audit_logs/aggregation": {
+            "post": {
+                "summary": "K8s Audit Log Aggregation Query",
+                "description": "Request to get summary/analytics data for the K8s audit logs that matches the criteria in request for a given namespace.\nUser with access to the -system- namespace may query aggregated data for audit logs across all namespaces in a K8s Cluster.",
+                "operationId": "ves.io.schema.log.CustomAPI.K8SAuditLogAggregationQuery",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/logLogAggregationResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/logK8SAuditLogAggregationRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-K8SAuditLogAggregationQuery"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SAuditLogAggregationQuery"
+            },
+            "x-displayname": "Log",
+            "x-ves-proto-service": "ves.io.schema.log.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/site/{site}/k8s_events": {
+            "post": {
+                "summary": "K8s Events Query",
+                "description": "Request to get physical K8s events that matches the criteria in request for a given namespace.\nIf no match conditions are specified in the request, then the response contains all\nK8s events in the namespace. User with access to the -system- namespace may query for K8s events across\nall namespaces in a K8s Cluster.",
+                "operationId": "ves.io.schema.log.CustomAPI.K8SEventsQuery",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/logLogResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/logK8SEventsRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-K8SEventsQuery"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SEventsQuery"
+            },
+            "x-displayname": "Log",
+            "x-ves-proto-service": "ves.io.schema.log.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/site/{site}/k8s_events/aggregation": {
+            "post": {
+                "summary": "K8s Events Aggregation Query",
+                "description": "Request to get summary/analytics data for the K8s events that matches the criteria in request for a given namespace.\nUser with access to the -system- namespace may query aggregated data for K8s events across all namespaces in a K8s Cluster.",
+                "operationId": "ves.io.schema.log.CustomAPI.K8SEventsAggregationQuery",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/logLogAggregationResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/logK8SEventsAggregationRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-K8SEventsAggregationQuery"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SEventsAggregationQuery"
+            },
+            "x-displayname": "Log",
+            "x-ves-proto-service": "ves.io.schema.log.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/vk8s_audit_logs": {
             "post": {
                 "summary": "vK8s Audit Log Query",
@@ -3867,6 +5227,250 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "logK8SAuditLogAggregationRequest": {
+            "type": "object",
+            "description": "Request to get only aggregation data for K8s audit logs",
+            "title": "K8SAuditLogAggregationRequest",
+            "x-displayname": "K8s Audit Log Aggregation Request",
+            "x-ves-proto-message": "ves.io.schema.log.K8SAuditLogAggregationRequest",
+            "properties": {
+                "aggs": {
+                    "type": "object",
+                    "description": " Aggregations provide summary/analytics data over the log response. If the number of logs that matched the query\n is large and cannot be returned in a single response message, user can get helpful insights/summary using aggregations.\n The aggregations are key'ed by user-defined aggregation name. The response will be key'ed with the same name.\n Optional",
+                    "title": "aggregations",
+                    "x-displayname": "Aggregations"
+                },
+                "end_time": {
+                    "type": "string",
+                    "description": " fetch audit logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "title": "end time",
+                    "x-displayname": "End Time",
+                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " get aggregation data for a given namespace\n\nExample: - \"value\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "value"
+                },
+                "query": {
+                    "type": "string",
+                    "description": " query is used to specify the list of matchers\n syntax for query := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n \u003cfield_name\u003e := string\n  One or more of the following fields in audit log may be specified in the query.\n   user.username - user name\n   sourceIPs - source ip\n   verb - method\n   objectRef.resource - K8s resource\n   requestURI - request URI\n \u003cvalue\u003e := string\n \u003coperator\u003e := [\"=\"|\"!=\"]\n   = : equal to\n   != : not equal to\n When more than one matcher is specified in the query, then audit logs matching ALL the matchers will be returned in the response.\n Example: query={objectRef.resource=\"deployments\"} will return all K8s audit logs for all deployment objects in the given namespace\n\n Optional: If not specified, all the audit logs matching the given tenant and namespace will be considered for aggregation\n\nExample: - \"query={objectRef.resource=\"deployments\"}\"-",
+                    "title": "query",
+                    "x-displayname": "Query",
+                    "x-ves-example": "query={objectRef.resource=\"deployments\"}"
+                },
+                "site": {
+                    "type": "string",
+                    "description": " Site where the K8s Cluster is running\n\nExample: - \"ce-1\"-",
+                    "title": "site",
+                    "x-displayname": "Site",
+                    "x-ves-example": "ce-1"
+                },
+                "start_time": {
+                    "type": "string",
+                    "description": " fetch audit logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "title": "start time",
+                    "x-displayname": "Start Time",
+                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                }
+            }
+        },
+        "logK8SAuditLogRequest": {
+            "type": "object",
+            "description": "Request to fetch K8s audit logs",
+            "title": "K8SAuditLogRequest",
+            "x-displayname": "K8s Audit Log Request",
+            "x-ves-proto-message": "ves.io.schema.log.K8SAuditLogRequest",
+            "properties": {
+                "aggs": {
+                    "type": "object",
+                    "description": " Aggregations provide summary/analytics data over the log response. If the number of logs that matched the query\n is large and cannot be returned in a single response message, user can get helpful insights/summary using aggregations.\n The aggregations are key'ed by user-defined aggregation name. The response will be key'ed with the same name.\n Optional",
+                    "title": "aggregations",
+                    "x-displayname": "Aggregations"
+                },
+                "end_time": {
+                    "type": "string",
+                    "description": " fetch audit logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "title": "end time",
+                    "x-displayname": "End Time",
+                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": " limits the number of logs returned in the response\n Optional: If not specified, first or last 500 log messages that matches the query (depending on the sort order) will be returned in the response.\n           The maximum value for limit is 500.\n\nExample: - \"100\"-",
+                    "title": "limit",
+                    "format": "int32",
+                    "x-displayname": "Limit",
+                    "x-ves-example": "100"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " fetch K8s audit logs for a given namespace\n\nExample: - \"value\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "value"
+                },
+                "query": {
+                    "type": "string",
+                    "description": " query is used to specify the list of matchers\n syntax for query := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n \u003cfield_name\u003e := string\n  One or more of the following fields in audit log may be specified in the query.\n   user.username - user name\n   sourceIPs - source ip\n   verb - method\n   objectRef.resource - K8s resource\n   requestURI - request URI\n \u003cvalue\u003e := string\n \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n   = : equal to\n   != : not equal to\n   =~ : regex match\n   !~ : not regex match\n When more than one matcher is specified in the query, then audit logs matching ALL the matchers will be returned in the response.\n Example: query={objectRef.resource=\"deployments\"} will return all K8s audit logs for all deployment objects in the given namespace\n\n Optional: If not specified, all the audit logs matching the given tenant and namespace are returned\n\nExample: - \"query={objectRef.resource=\"deployments\"}\"-",
+                    "title": "query",
+                    "x-displayname": "Query",
+                    "x-ves-example": "query={objectRef.resource=\"deployments\"}"
+                },
+                "scroll": {
+                    "type": "boolean",
+                    "description": " Scroll is used to retrieve large number of log messages (or all log messages) that matches the query.\n If scroll is set to true, the scroll_id in the response can be used in the scroll API to fetch the next\n batch of logs until there are no more logs left to return. The number of messages in each batch is determined\n by the limit field.\n Note: Scroll is used for processing large amount of data and therefore is not intended for real time user request.\n Optional: default is false\n\nExample: - \"true\"-",
+                    "title": "scroll",
+                    "format": "boolean",
+                    "x-displayname": "Scroll",
+                    "x-ves-example": "true"
+                },
+                "site": {
+                    "type": "string",
+                    "description": " Site where the K8s Cluster is running\n\nExample: - \"ce-1\"-",
+                    "title": "site",
+                    "x-displayname": "Site",
+                    "x-ves-example": "ce-1"
+                },
+                "sort": {
+                    "description": " specifies whether the response should be sorted in ascending or descending order based on timestamp in the log\n Optional: default is descending order",
+                    "title": "sort order",
+                    "$ref": "#/definitions/schemaSortOrder",
+                    "x-displayname": "Sort Order"
+                },
+                "start_time": {
+                    "type": "string",
+                    "description": " fetch audit logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "title": "start time",
+                    "x-displayname": "Start Time",
+                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                }
+            }
+        },
+        "logK8SEventsAggregationRequest": {
+            "type": "object",
+            "description": "Request to get only aggregation data for K8s events in a Cluster",
+            "title": "K8s Events Aggregation Request",
+            "x-displayname": "K8s Events Aggregation Request",
+            "x-ves-proto-message": "ves.io.schema.log.K8SEventsAggregationRequest",
+            "properties": {
+                "aggs": {
+                    "type": "object",
+                    "description": " Aggregations provide summary/analytics data over the events response. If the number of events that matched the query\n is large and cannot be returned in a single response message, user can get helpful insights/summary using aggregations.\n The aggregations are key'ed by user-defined aggregation name. The response will be key'ed with the same name.\n Optional",
+                    "title": "aggregations",
+                    "x-displayname": "Aggregations"
+                },
+                "end_time": {
+                    "type": "string",
+                    "description": " fetch vK8s events whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "title": "end time",
+                    "x-displayname": "End Time",
+                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " get aggregation data for a given namespace\n\nExample: - \"value\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "value"
+                },
+                "query": {
+                    "type": "string",
+                    "description": " query is used to specify the list of matchers\n syntax for query := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n \u003cfield_name\u003e := string\n  One or more of the following fields in the event may be specified in the query.\n   involvedObject.kind - The object that this event is about, like Pod, Deployment, Node, etc.\n   involvedObject.name - Name of the object\n   type - Type of event such as Warning or Normal\n   reason - A one-word description for an event. For example Pending, Running, Succeeded, Failed are some of values for reason that indicate the phase of a Pod lifecycle.\n   source.component - The K8s component reporting the event such as kubelet, kube-scheduler, etc.,\n \u003cvalue\u003e := string\n \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n   = : equal to\n   != : not equal to\n   =~ : regex match\n   !~ : not regex match\n\n Optional: If not specified, all the K8s events for the given tenant and namespace are returned\n\nExample: - \"query={involvedObject.kind=\"Pod\"}\"-",
+                    "title": "query",
+                    "x-displayname": "Query",
+                    "x-ves-example": "query={involvedObject.kind=\"Pod\"}"
+                },
+                "site": {
+                    "type": "string",
+                    "description": " Site where the K8s Cluster is running\n\nExample: - \"ce-1\"-",
+                    "title": "site",
+                    "x-displayname": "Site",
+                    "x-ves-example": "ce-1"
+                },
+                "start_time": {
+                    "type": "string",
+                    "description": " fetch vK8s events whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "title": "start time",
+                    "x-displayname": "Start Time",
+                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                }
+            }
+        },
+        "logK8SEventsRequest": {
+            "type": "object",
+            "description": "Request to fetch physical K8s events",
+            "title": "K8s Events Request",
+            "x-displayname": "K8s Events Request",
+            "x-ves-proto-message": "ves.io.schema.log.K8SEventsRequest",
+            "properties": {
+                "aggs": {
+                    "type": "object",
+                    "description": " Aggregations provide summary/analytics data over the events response. If the number of events that matched the query\n is large and cannot be returned in a single response message, user can get helpful insights/summary using aggregations.\n The aggregations are key'ed by user-defined aggregation name. The response will be key'ed with the same name.\n Optional",
+                    "title": "aggregations",
+                    "x-displayname": "Aggregations"
+                },
+                "end_time": {
+                    "type": "string",
+                    "description": " fetch vK8s events whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-",
+                    "title": "end time",
+                    "x-displayname": "End Time",
+                    "x-ves-example": "2019-09-24T12:30:11.733Z"
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": " limits the number of K8s events returned in the response\n Optional: If not specified, first or last 500 events that matches the query (depending on the sort order) will be returned in the response.\n           The maximum value for limit is 500.\n\nExample: - \"100\"-",
+                    "title": "limit",
+                    "format": "int32",
+                    "x-displayname": "Limit",
+                    "x-ves-example": "100"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " fetch K8s events for the given namespace\n\nExample: - \"value\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "value"
+                },
+                "query": {
+                    "type": "string",
+                    "description": " query is used to specify the list of matchers\n syntax for query := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003cfield_name\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n \u003cfield_name\u003e := string\n  One or more of the following fields in the event may be specified in the query.\n   involvedObject.kind - The object that this event is about, like Pod, Deployment, Node, etc.\n   involvedObject.name - Name of the object\n   type - Type of event such as Warning or Normal\n   reason - A one-word description for an event. For example Pending, Running, Succeeded, Failed are some of values for reason that indicate the phase of a Pod lifecycle.\n   source.component - The K8s component reporting the event such as kubelet, kube-scheduler, etc.,\n   site - Name of the site\n \u003cvalue\u003e := string\n \u003coperator\u003e := [\"=\"|\"!=\"|\"=~\"|\"!~\"]\n   = : equal to\n   != : not equal to\n   =~ : regex match\n   !~ : not regex match\n\n Optional: If not specified, all the K8s events for the given tenant and namespace are returned\n\nExample: - \"query={involvedObject.kind=\"Pod\"}\"-",
+                    "title": "query",
+                    "x-displayname": "Query",
+                    "x-ves-example": "query={involvedObject.kind=\"Pod\"}"
+                },
+                "scroll": {
+                    "type": "boolean",
+                    "description": " Scroll is used to retrieve large number of events (or all events) that matches the query.\n If scroll is set to true, the scroll_id in the response can be used in the scroll API to fetch the next\n batch of events until there are no more events left to return. The number of events in each batch is determined\n by the limit field.\n Note: Scroll is used for processing large amount of data and therefore is not intended for real time user request.\n Optional: default is false\n\nExample: - \"true\"-",
+                    "title": "scroll",
+                    "format": "boolean",
+                    "x-displayname": "Scroll",
+                    "x-ves-example": "true"
+                },
+                "site": {
+                    "type": "string",
+                    "description": " Site where the K8s Cluster is running\n\nExample: - \"ce-1\"-",
+                    "title": "site",
+                    "x-displayname": "Site",
+                    "x-ves-example": "ce-1"
+                },
+                "sort": {
+                    "description": " specifies whether the response should be sorted in ascending or descending order based on timestamp in the event\n Optional: default is descending order",
+                    "title": "sort order",
+                    "$ref": "#/definitions/schemaSortOrder",
+                    "x-displayname": "Sort Order"
+                },
+                "start_time": {
+                    "type": "string",
+                    "description": " fetch vK8s events whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "title": "start time",
+                    "x-displayname": "Start Time",
+                    "x-ves-example": "2019-09-23T12:30:11.733Z"
+                }
+            }
+        },
         "logLogAggregationData": {
             "type": "object",
             "description": "x-displayName: \"Log Aggregation\"\nLog aggregation response data",
@@ -4447,6 +6051,90 @@ var CustomAPISwaggerJSON string = `{
                 "POLICY_HITS_RESULT"
             ],
             "default": "SITE"
+        },
+        "logk8s_audit_logAggregationRequest": {
+            "type": "object",
+            "description": "x-displayName: \"Aggregation Request\"\nAggregation request to provide analytics data over the log response",
+            "title": "Aggregation Request",
+            "properties": {
+                "date_aggregation": {
+                    "description": "x-displayName: \"Date Aggregation\"\nAggregate based on timestamp in the log",
+                    "title": "Date Aggregation",
+                    "$ref": "#/definitions/logk8s_audit_logDateAggregation"
+                }
+            }
+        },
+        "logk8s_audit_logDateAggregation": {
+            "type": "object",
+            "description": "x-displayName: Date Aggregation\nAggregate K8s audit logs based on timestamp in the log",
+            "title": "Date Aggregation",
+            "properties": {
+                "step": {
+                    "type": "string",
+                    "description": "x-displayName: \"Step\"\nx-required\nx-example: \"5m\"\n\nstep is the resolution width, which determines the number of the data points [x-axis (time)] to be returned in the response.\nThe timestamps in the response will be t1=start_time, t2=t1+step, ... tn=tn-1+step, where tn \u003c= end_time.\nFormat: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days",
+                    "title": "step"
+                }
+            }
+        },
+        "logk8s_eventsAggregationRequest": {
+            "type": "object",
+            "description": "x-displayName: \"Aggregation Request\"\nAggregation request to provide analytics data over the K8s events",
+            "title": "Aggregation Request",
+            "properties": {
+                "date_aggregation": {
+                    "description": "x-displayName: \"Date Aggregation\"\nAggregate based on timestamp in the K8s event",
+                    "title": "Date Aggregation",
+                    "$ref": "#/definitions/logk8s_eventsDateAggregation"
+                },
+                "field_aggregation": {
+                    "description": "x-displayName: \"Field Aggregation\"\nAggregate based on one of the key fields in the K8s event",
+                    "title": "Field Aggregation",
+                    "$ref": "#/definitions/logk8s_eventsFieldAggregation"
+                }
+            }
+        },
+        "logk8s_eventsDateAggregation": {
+            "type": "object",
+            "description": "x-displayName: Date Aggregation\nAggregate K8s events based on timestamp in the event",
+            "title": "Date Aggregation",
+            "properties": {
+                "step": {
+                    "type": "string",
+                    "description": "x-displayName: \"Step\"\nx-required\nx-example: \"5m\"\n\nstep is the resolution width, which determines the number of the data points [x-axis (time)] to be returned in the response.\nThe timestamps in the response will be t1=start_time, t2=t1+step, ... tn=tn-1+step, where tn \u003c= end_time.\nFormat: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days",
+                    "title": "step"
+                }
+            }
+        },
+        "logk8s_eventsFieldAggregation": {
+            "type": "object",
+            "description": "x-displayName: \"Field Aggregation\"\nAggregate K8s events based on the key fields.",
+            "title": "Field Aggregation",
+            "properties": {
+                "field": {
+                    "description": "x-displayName: \"Field\"\nx-required\n\nField name by which the K8s events should be aggregated.",
+                    "title": "field",
+                    "$ref": "#/definitions/logk8s_eventsKeyField"
+                },
+                "topk": {
+                    "type": "integer",
+                    "description": "x-displayName: \"TopK\"\n\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
+                    "title": "topk",
+                    "format": "int64"
+                }
+            }
+        },
+        "logk8s_eventsKeyField": {
+            "type": "string",
+            "description": "x-displayName: \"Key Field\"\nK8s events can be aggregated based on these fields.\n\n - INVOLVED_OBJECT_KIND: x-displayName: \"Involved Object Kind\"\n - INVOLVED_OBJECT_NAME: x-displayName: \"Involved Object Name\"\n - TYPE: x-displayName: \"Type\"\n - REASON: x-displayName: \"Reason\"\n - SOURCE_COMPONENT: x-displayName: \"Source Component\"",
+            "title": "Key Field",
+            "enum": [
+                "INVOLVED_OBJECT_KIND",
+                "INVOLVED_OBJECT_NAME",
+                "TYPE",
+                "REASON",
+                "SOURCE_COMPONENT"
+            ],
+            "default": "INVOLVED_OBJECT_KIND"
         },
         "logvk8s_audit_logAggregationRequest": {
             "type": "object",

@@ -21,13 +21,7 @@ resource "volterra_virtual_host" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
-
-  js_challenge {
-    cookie_expiry       = "cookie_expiry"
-    custom_page         = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-    enable_js_challenge = true
-    js_script_delay     = "js_script_delay"
-  }
+  no_challenge = true
 }
 
 ```
@@ -197,7 +191,7 @@ Clear Secret is used for the secrets that are not encrypted .
 
 Common TLS parameters used in both upstream and downstream connections.
 
-`cipher_suites` - (Optional)cipher_suites (`String`).
+`cipher_suites` - (Optional) will be used. (`String`).
 
 `maximum_protocol_version` - (Optional) Maximum TLS protocol version. (`String`).
 
@@ -225,15 +219,15 @@ Only GZIP compression is supported.
 
 Configure all Cookie params.
 
-`cookie_expiry` - (Optional)cookie_expiry (`Int`).
+`cookie_expiry` - (Optional) Default cookie expiry is 3600 seconds (`Int`).
 
-`cookie_refresh_interval` - (Optional)cookie_refresh_interval (`Int`).
+`cookie_refresh_interval` - (Optional) Default refresh interval is 3000 seconds (`Int`).
 
 `auth_hmac` - (Optional) HMAC pair provided as primary and secondary key. See [Auth Hmac ](#auth-hmac) below for details.
 
 `kms_key_hmac` - (Optional) HMAC configured using KMS_KEY. See [Kms Key Hmac ](#kms-key-hmac) below for details.
 
-`session_expiry` - (Optional)session_expiry (`Int`).
+`session_expiry` - (Optional) Default session expiry is 86400 seconds(24 hours). (`Int`).
 
 ### Cors Policy
 

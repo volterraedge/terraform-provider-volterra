@@ -25,8 +25,21 @@ resource "volterra_origin_pool" "example" {
   origin_servers {
     // One of the arguments from this list "consul_service custom_endpoint_object public_ip public_name private_ip private_name k8s_service" must be set
 
-    public_ip {
+    private_ip {
       ip = "ip"
+
+      // One of the arguments from this list "inside_network outside_network" must be set
+      inside_network = true
+
+      site_locator {
+        // One of the arguments from this list "site virtual_site" must be set
+
+        site {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+      }
     }
 
     labels = {
@@ -61,7 +74,7 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`advanced_options` - (Optional) Advance options configuration like timeouts, circuit breaker, subset load balancing. See [Advanced Options ](#advanced-options) below for details.
+`advanced_options` - (Optional) Advanced options configuration like timeouts, circuit breaker, subset load balancing. See [Advanced Options ](#advanced-options) below for details.
 
 `endpoint_selection` - (Required) Policy for selection of endpoints from local site or remote site or both (`String`).
 
@@ -83,7 +96,7 @@ Argument Reference
 
 ### Advanced Options
 
-Advance options configuration like timeouts, circuit breaker, subset load balancing.
+Advanced options configuration like timeouts, circuit breaker, subset load balancing.
 
 `circuit_breaker` - (Optional) allows to apply back pressure on downstream quickly.. See [Circuit Breaker ](#circuit-breaker) below for details.
 

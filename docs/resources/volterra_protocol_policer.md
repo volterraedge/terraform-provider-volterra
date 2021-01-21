@@ -52,7 +52,7 @@ Match all DNS packets.
 
 ICMP message types to be matched in packet.
 
-`type` - (Optional)type (`List of Strings`).
+`type` - (Optional) ICMP message type to be matched in packet (`List of Strings`).
 
 ### Protocol
 
@@ -88,7 +88,7 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 TCP flags to be matched in packet.
 
-`flags` - (Optional)flags (`List of Strings`).
+`flags` - (Optional) TCP flag to be matched in a TCP packet (`List of Strings`).
 
 ### Udp
 

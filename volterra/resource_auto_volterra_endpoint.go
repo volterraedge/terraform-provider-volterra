@@ -64,7 +64,7 @@ func resourceVolterraEndpoint() *schema.Resource {
 				Optional: true,
 			},
 
-			"dns_name_advance": {
+			"dns_name_advanced": {
 
 				Type:     schema.TypeSet,
 				Optional: true,
@@ -356,11 +356,11 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 
 	}
 
-	if v, ok := d.GetOk("dns_name_advance"); ok && !endpointAddressTypeFound {
+	if v, ok := d.GetOk("dns_name_advanced"); ok && !endpointAddressTypeFound {
 
 		endpointAddressTypeFound = true
-		endpointAddressInt := &ves_io_schema_endpoint.CreateSpecType_DnsNameAdvance{}
-		endpointAddressInt.DnsNameAdvance = &ves_io_schema_endpoint.DnsNameAdvanceType{}
+		endpointAddressInt := &ves_io_schema_endpoint.CreateSpecType_DnsNameAdvanced{}
+		endpointAddressInt.DnsNameAdvanced = &ves_io_schema_endpoint.DnsNameAdvancedType{}
 		createSpec.EndpointAddress = endpointAddressInt
 
 		sl := v.(*schema.Set).List()
@@ -369,7 +369,7 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				endpointAddressInt.DnsNameAdvance.Name = v.(string)
+				endpointAddressInt.DnsNameAdvanced.Name = v.(string)
 			}
 
 			ttlChoiceTypeFound := false
@@ -377,9 +377,9 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 			if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) && !ttlChoiceTypeFound {
 
 				ttlChoiceTypeFound = true
-				ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvanceType_RefreshInterval{}
+				ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvancedType_RefreshInterval{}
 
-				endpointAddressInt.DnsNameAdvance.TtlChoice = ttlChoiceInt
+				endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
 
 				ttlChoiceInt.RefreshInterval =
 					uint32(v.(int))
@@ -391,9 +391,9 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 				ttlChoiceTypeFound = true
 
 				if v.(bool) {
-					ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvanceType_StrictTtl{}
+					ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvancedType_StrictTtl{}
 					ttlChoiceInt.StrictTtl = &ves_io_schema.Empty{}
-					endpointAddressInt.DnsNameAdvance.TtlChoice = ttlChoiceInt
+					endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
 				}
 
 			}
@@ -769,11 +769,11 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 
 	}
 
-	if v, ok := d.GetOk("dns_name_advance"); ok && !endpointAddressTypeFound {
+	if v, ok := d.GetOk("dns_name_advanced"); ok && !endpointAddressTypeFound {
 
 		endpointAddressTypeFound = true
-		endpointAddressInt := &ves_io_schema_endpoint.ReplaceSpecType_DnsNameAdvance{}
-		endpointAddressInt.DnsNameAdvance = &ves_io_schema_endpoint.DnsNameAdvanceType{}
+		endpointAddressInt := &ves_io_schema_endpoint.ReplaceSpecType_DnsNameAdvanced{}
+		endpointAddressInt.DnsNameAdvanced = &ves_io_schema_endpoint.DnsNameAdvancedType{}
 		updateSpec.EndpointAddress = endpointAddressInt
 
 		sl := v.(*schema.Set).List()
@@ -782,7 +782,7 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 
 			if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-				endpointAddressInt.DnsNameAdvance.Name = v.(string)
+				endpointAddressInt.DnsNameAdvanced.Name = v.(string)
 			}
 
 			ttlChoiceTypeFound := false
@@ -790,9 +790,9 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 			if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) && !ttlChoiceTypeFound {
 
 				ttlChoiceTypeFound = true
-				ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvanceType_RefreshInterval{}
+				ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvancedType_RefreshInterval{}
 
-				endpointAddressInt.DnsNameAdvance.TtlChoice = ttlChoiceInt
+				endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
 
 				ttlChoiceInt.RefreshInterval =
 					uint32(v.(int))
@@ -804,9 +804,9 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 				ttlChoiceTypeFound = true
 
 				if v.(bool) {
-					ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvanceType_StrictTtl{}
+					ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvancedType_StrictTtl{}
 					ttlChoiceInt.StrictTtl = &ves_io_schema.Empty{}
-					endpointAddressInt.DnsNameAdvance.TtlChoice = ttlChoiceInt
+					endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
 				}
 
 			}

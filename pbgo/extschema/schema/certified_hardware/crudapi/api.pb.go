@@ -22,44 +22,29 @@
 */
 package crudapi
 
-import (
-	proto "github.com/gogo/protobuf/proto"
-	golang_proto "github.com/golang/protobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
+import golang_proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/gogo/googleapis/google/api"
+import google_protobuf1 "github.com/gogo/protobuf/types"
+import ves_io_schema_certified_hardware1 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certified_hardware"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certified_hardware"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 
-	fmt "fmt"
+import strconv "strconv"
 
-	math "math"
+import strings "strings"
+import reflect "reflect"
+import sortkeys "github.com/gogo/protobuf/sortkeys"
 
-	_ "github.com/gogo/protobuf/gogoproto"
+import context "golang.org/x/net/context"
+import grpc "google.golang.org/grpc"
 
-	_ "github.com/gogo/googleapis/google/api"
-
-	google_protobuf1 "github.com/gogo/protobuf/types"
-
-	ves_io_schema_certified_hardware1 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certified_hardware"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certified_hardware"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
-
-	strconv "strconv"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	sortkeys "github.com/gogo/protobuf/sortkeys"
-
-	context "golang.org/x/net/context"
-
-	grpc "google.golang.org/grpc"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal

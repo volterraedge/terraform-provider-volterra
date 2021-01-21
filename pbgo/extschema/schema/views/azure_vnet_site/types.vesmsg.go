@@ -3199,6 +3199,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
 	rulesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
 		"ves.io.schema.rules.uint32.lte": "21",
 	}
 	vFn, err = vrhNodesPerAz(rulesNodesPerAz)
@@ -3869,6 +3870,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
 	rulesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
 		"ves.io.schema.rules.uint32.lte": "21",
 	}
 	vFn, err = vrhNodesPerAz(rulesNodesPerAz)
@@ -4669,6 +4671,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
 	rulesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
 		"ves.io.schema.rules.uint32.lte": "21",
 	}
 	vFn, err = vrhNodesPerAz(rulesNodesPerAz)
@@ -5034,6 +5037,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
 	rulesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
 		"ves.io.schema.rules.uint32.lte": "21",
 	}
 	vFn, err = vrhNodesPerAz(rulesNodesPerAz)

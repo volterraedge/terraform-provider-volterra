@@ -63,6 +63,15 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEndpoints(ctx context.Context, yam
 	return rsp, err
 }
 
+func (c *ApiepCustomAPIGrpcClient) doRPCGetSwaggerSpec(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &SwaggerSpecReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.SwaggerSpecReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetSwaggerSpec(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *ApiepCustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -95,6 +104,8 @@ func NewApiepCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["GetAPIEndpointPDF"] = ccl.doRPCGetAPIEndpointPDF
 
 	rpcFns["GetAPIEndpoints"] = ccl.doRPCGetAPIEndpoints
+
+	rpcFns["GetSwaggerSpec"] = ccl.doRPCGetSwaggerSpec
 
 	ccl.rpcFns = rpcFns
 
@@ -330,6 +341,78 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpoints(ctx context.Context, cal
 	return pbRsp, nil
 }
 
+func (c *ApiepCustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &SwaggerSpecReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.SwaggerSpecReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &SwaggerSpecRsp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.virtual_host.SwaggerSpecRsp", body)
+	}
+	return pbRsp, nil
+}
+
 func (c *ApiepCustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -359,6 +442,8 @@ func NewApiepCustomAPIRestClient(baseURL string, hc http.Client) server.CustomCl
 	rpcFns["GetAPIEndpointPDF"] = ccl.doRPCGetAPIEndpointPDF
 
 	rpcFns["GetAPIEndpoints"] = ccl.doRPCGetAPIEndpoints
+
+	rpcFns["GetSwaggerSpec"] = ccl.doRPCGetSwaggerSpec
 
 	ccl.rpcFns = rpcFns
 
@@ -504,6 +589,50 @@ func (c *ApiepCustomAPIInprocClient) GetAPIEndpoints(ctx context.Context, in *AP
 
 	return rsp, nil
 }
+func (c *ApiepCustomAPIInprocClient) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq, opts ...grpc.CallOption) (*SwaggerSpecRsp, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
+	cah, ok := ah.(ApiepCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *ApiepCustomAPISrv", ah)
+	}
+
+	var (
+		rsp *SwaggerSpecRsp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.virtual_host.SwaggerSpecReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'ApiepCustomAPI.GetSwaggerSpec' operation on 'virtual_host'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.GetSwaggerSpec"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetSwaggerSpec(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.virtual_host.SwaggerSpecRsp", rsp)...)
+
+	return rsp, nil
+}
 
 func NewApiepCustomAPIInprocClient(svc svcfw.Service) ApiepCustomAPIClient {
 	return &ApiepCustomAPIInprocClient{svc: svc}
@@ -632,10 +761,6 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "tags": [
                     "ApiepCustomAPI"
                 ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-ApiepCustomAPI-GetAPIEndpointLearntSchema"
-                },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointLearntSchema"
             },
             "x-displayname": "API Endpoints by Virtual Host Custom API",
@@ -840,6 +965,90 @@ var ApiepCustomAPISwaggerJSON string = `{
             "x-displayname": "API Endpoints by Virtual Host Custom API",
             "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoints/swagger_spec": {
+            "get": {
+                "summary": "Get Swagger Spec for App Type",
+                "description": "Get the corresponding Swagger spec for the given app type",
+                "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.GetSwaggerSpec",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostSwaggerSpecRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "ApiepCustomAPI"
+                ],
+                "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetSwaggerSpec"
+            },
+            "x-displayname": "API Endpoints by Virtual Host Custom API",
+            "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
     },
     "definitions": {
@@ -871,7 +1080,7 @@ var ApiepCustomAPISwaggerJSON string = `{
         },
         "app_typeAPIEPInfo": {
             "type": "object",
-            "description": "Information about automatically identified API endpoint\nEach identified API endpoint has a CollapsedURL and Method.\nCollapsedURL is created by replacing dynamic components in the URL, if any, with the keyword DYN.\nThese dynamic components are automatically identified. \nAdditionally, any API endpoint that has a collapsedURL with automatically identified DYN components, \nwill also have DYN-Examples which show a few examples of the original values of the components that were determined to be DYN.",
+            "description": "Information about automatically identified API endpoint\nEach identified API endpoint has a CollapsedURL and Method.\nCollapsedURL is created by replacing dynamic components in the URL, if any, with the keyword DYN.\nThese dynamic components are automatically identified.\nAdditionally, any API endpoint that has a collapsedURL with automatically identified DYN components,\nwill also have DYN-Examples which show a few examples of the original values of the components that were determined to be DYN.",
             "title": "Identified API",
             "x-displayname": "API Endpoint Info",
             "x-ves-proto-message": "ves.io.schema.app_type.APIEPInfo",
@@ -885,7 +1094,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                 },
                 "dyn_examples": {
                     "type": "array",
-                    "description": " For example - \n {\"dyn_examples\": [\n  {\n    \"component_identifier\": \"api/v1/user_id/DYN\",\n    \"component_examples\": [\n      \"cmenomo007\",\n      \"marcusaurelius\"\n      \"artattacksince1947\",\n      \"johndoe83\",\n    ]\n  },\n  {\n    \"component_identifier\": \"api/v1/user_id/DYN/vehicle_id/DYN\",\n    \"component_examples\": [\n      \"JN1CV6AR3AM458367\",\n      \"1GBCS10AXP2917522\",\n      \"JM1DE1KY9D0155647\",\n      \"JN1CA31D5YT533780\"\n    ]\n  }\n ]}\n List  of sample URL(s) that are collapsed and dynamic components to collapse them\n\nExample: - \"{component_identifierapi/v1/user_id/DYN,component_examples: [cmenomo007]}\"-",
+                    "description": " For example -\n {\"dyn_examples\": [\n  {\n    \"component_identifier\": \"api/v1/user_id/DYN\",\n    \"component_examples\": [\n      \"cmenomo007\",\n      \"marcusaurelius\"\n      \"artattacksince1947\",\n      \"johndoe83\",\n    ]\n  },\n  {\n    \"component_identifier\": \"api/v1/user_id/DYN/vehicle_id/DYN\",\n    \"component_examples\": [\n      \"JN1CV6AR3AM458367\",\n      \"1GBCS10AXP2917522\",\n      \"JM1DE1KY9D0155647\",\n      \"JN1CA31D5YT533780\"\n    ]\n  }\n ]}\n List  of sample URL(s) that are collapsed and dynamic components to collapse them\n\nExample: - \"{component_identifierapi/v1/user_id/DYN,component_examples: [cmenomo007]}\"-",
                     "title": "Expanded URL(s)",
                     "items": {
                         "$ref": "#/definitions/app_typeAPIEPDynExample"
@@ -1157,6 +1366,22 @@ var ApiepCustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/app_typeAPIEPInfo"
                     },
                     "x-displayname": "API Endpoints"
+                }
+            }
+        },
+        "virtual_hostSwaggerSpecRsp": {
+            "type": "object",
+            "description": "Json encoded swagger spec for the given vhost.",
+            "title": "Swagger Spec Response",
+            "x-displayname": "Swagger Spec Response",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.SwaggerSpecRsp",
+            "properties": {
+                "swagger_spec": {
+                    "type": "string",
+                    "description": " Swagger spec json encoded string for current request\n\nExample: - \"{\\\"info\\\"{\\\"description\\\": \\\"\\\",\\\"title\\\": \\\"\\\",\\\"version\\\": \\\"\\\"},\\\"paths\\\": {\\\"\\/api\\/Addresss\\\": {\\\"post\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"query\\\",\\\"name\\\": \\\"test1\\\",\\\"type\\\": \\\"string\\\"},{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"query\\\",\\\"items\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"name\\\": \\\"test\\\",\\\"type\\\": \\\"array\\\"},{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"body\\\",\\\"name\\\": \\\"body\\\",\\\"schema\\\": {\\\"example\\\": [\\\"{\\\\\\\"country\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"fullName\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"mobileNum\\\\\\\": 1234567890, \\\\\\\"zipCode\\\\\\\": \\\\\\\"121\\\\\\\", \\\\\\\"streetAddress\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"city\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"state\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"test\\\\\\\": \\\\\\\"Hello, \\\\\\\\u4e16\\\\\\\\u754c\\\\\\\", \\\\\\\"abc\\\\\\\": \\\\\\\"def\\\\\\\"}\\\"],\\\"properties\\\": {\\\"abc\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"city\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"country\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"fullName\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"mobileNum\\\": {\\\"type\\\": \\\"integer\\\"},\\\"state\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"streetAddress\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"test\\\": {\\\"type\\\": \\\"string\\\"},\\\"zipCode\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"}},\\\"required\\\": [\\\"fullName\\\",\\\"mobileNum\\\",\\\"city\\\",\\\"test\\\",\\\"zipCode\\\",\\\"state\\\",\\\"streetAddress\\\",\\\"country\\\",\\\"abc\\\"],\\\"type\\\": \\\"object\\\"}}],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}},\\\"\\/api\\/Cards\\\": {\\\"post\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"body\\\",\\\"name\\\": \\\"body\\\",\\\"schema\\\": {\\\"example\\\": [\\\"{\\\\\\\"fullName\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"cardNum\\\\\\\": 0, \\\\\\\"expMonth\\\\\\\": \\\\\\\"0\\\\\\\", \\\\\\\"expYear\\\\\\\": \\\\\\\"0\\\\\\\"}\\\"],\\\"properties\\\": {\\\"cardNum\\\": {\\\"type\\\": \\\"integer\\\"},\\\"expMonth\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"expYear\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"fullName\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"}},\\\"required\\\": [\\\"expMonth\\\",\\\"expYear\\\",\\\"fullName\\\",\\\"cardNum\\\"],\\\"type\\\": \\\"object\\\"}}],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}},\\\"\\/rest\\/basket\\/6\\/checkout\\\": {\\\"post\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"body\\\",\\\"name\\\": \\\"body\\\",\\\"schema\\\": {\\\"example\\\": [\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9792\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21189\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\",\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9814\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21409\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\",\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9822\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21489\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\",\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9793\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21199\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\",\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9817\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21439\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\"],\\\"properties\\\": {\\\"couponData\\\": {\\\"type\\\": \\\"string\\\"},\\\"orderDetails\\\": {\\\"properties\\\": {\\\"addressId\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"deliveryMethodId\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"paymentId\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"}},\\\"required\\\": [\\\"addressId\\\",\\\"paymentId\\\",\\\"deliveryMethodId\\\"],\\\"type\\\": \\\"object\\\"}},\\\"required\\\": [\\\"orderDetails\\\",\\\"couponData\\\"],\\\"type\\\": \\\"object\\\"}}],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}},\\\"\\/rest\\/products\\/1\\/reviews\\\": {\\\"put\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}},\\\"\\/rest\\/user\\/login\\\": {\\\"post\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"body\\\",\\\"name\\\": \\\"body\\\",\\\"schema\\\": {\\\"example\\\": [\\\"{\\\\\\\"email\\\\\\\":\\\\\\\"dummy0@dummy.com\\\\\\\",\\\\\\\"password\\\\\\\":\\\\\\\"redacted\\\\\\\",\\\\\\\"test\\\\\\\":\\\\\\\"Hello, \\u4E16\\u754C\\\\\\\"}\\\",\\\"{\\\\\\\"email\\\\\\\":\\\\\\\"dummy1@dummy.com\\\\\\\",\\\\\\\"password\\\\\\\":\\\\\\\"redacted\\\\\\\",\\\\\\\"test\\\\\\\":\\\\\\\"Hello, \\u4E16\\u754C\\\\\\\"}\\\",\\\"{\\\\\\\"email\\\\\\\":\\\\\\\"dummy2@dummy.com\\\\\\\",\\\\\\\"password\\\\\\\":\\\\\\\"redacted\\\\\\\",\\\\\\\"test\\\\\\\":\\\\\\\"Hello, \\u4E16\\u754C\\\\\\\"}\\\",\\\"{\\\\\\\"email\\\\\\\":\\\\\\\"dummy3@dummy.com\\\\\\\",\\\\\\\"password\\\\\\\":\\\\\\\"redacted\\\\\\\",\\\\\\\"test\\\\\\\":\\\\\\\"Hello, \\u4E16\\u754C\\\\\\\"}\\\"],\\\"properties\\\": {\\\"email\\\": {\\\"description\\\": \\\"Email\\\",\\\"pattern\\\": \\\".+@.+\\\",\\\"type\\\": \\\"string\\\",\\\"x-pii\\\": {\\\"examples\\\": [\\\"dummy0@dummy.com\\\",\\\"dummy1@dummy.com\\\",\\\"dummy2@dummy.com\\\",\\\"dummy3@dummy.com\\\"]}},\\\"password\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"test\\\": {\\\"type\\\": \\\"string\\\"}},\\\"required\\\": [\\\"email\\\",\\\"test\\\",\\\"password\\\"],\\\"type\\\": \\\"object\\\"}}],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}}},\\\"schemes\\\": [\\\"https\\\",\\\"http\\\"],\\\"swagger\\\": \\\"2.0\\\"}\"-",
+                    "title": "Swagger Spec",
+                    "x-displayname": "Swagger Spec",
+                    "x-ves-example": "{\\\"info\\\": {\\\"description\\\": \\\"\\\",\\\"title\\\": \\\"\\\",\\\"version\\\": \\\"\\\"},\\\"paths\\\": {\\\"\\/api\\/Addresss\\\": {\\\"post\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"query\\\",\\\"name\\\": \\\"test1\\\",\\\"type\\\": \\\"string\\\"},{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"query\\\",\\\"items\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"name\\\": \\\"test\\\",\\\"type\\\": \\\"array\\\"},{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"body\\\",\\\"name\\\": \\\"body\\\",\\\"schema\\\": {\\\"example\\\": [\\\"{\\\\\\\"country\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"fullName\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"mobileNum\\\\\\\": 1234567890, \\\\\\\"zipCode\\\\\\\": \\\\\\\"121\\\\\\\", \\\\\\\"streetAddress\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"city\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"state\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"test\\\\\\\": \\\\\\\"Hello, \\\\\\\\u4e16\\\\\\\\u754c\\\\\\\", \\\\\\\"abc\\\\\\\": \\\\\\\"def\\\\\\\"}\\\"],\\\"properties\\\": {\\\"abc\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"city\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"country\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"fullName\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"mobileNum\\\": {\\\"type\\\": \\\"integer\\\"},\\\"state\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"streetAddress\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"test\\\": {\\\"type\\\": \\\"string\\\"},\\\"zipCode\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"}},\\\"required\\\": [\\\"fullName\\\",\\\"mobileNum\\\",\\\"city\\\",\\\"test\\\",\\\"zipCode\\\",\\\"state\\\",\\\"streetAddress\\\",\\\"country\\\",\\\"abc\\\"],\\\"type\\\": \\\"object\\\"}}],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}},\\\"\\/api\\/Cards\\\": {\\\"post\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"body\\\",\\\"name\\\": \\\"body\\\",\\\"schema\\\": {\\\"example\\\": [\\\"{\\\\\\\"fullName\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"cardNum\\\\\\\": 0, \\\\\\\"expMonth\\\\\\\": \\\\\\\"0\\\\\\\", \\\\\\\"expYear\\\\\\\": \\\\\\\"0\\\\\\\"}\\\"],\\\"properties\\\": {\\\"cardNum\\\": {\\\"type\\\": \\\"integer\\\"},\\\"expMonth\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"expYear\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"fullName\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"}},\\\"required\\\": [\\\"expMonth\\\",\\\"expYear\\\",\\\"fullName\\\",\\\"cardNum\\\"],\\\"type\\\": \\\"object\\\"}}],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}},\\\"\\/rest\\/basket\\/6\\/checkout\\\": {\\\"post\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"body\\\",\\\"name\\\": \\\"body\\\",\\\"schema\\\": {\\\"example\\\": [\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9792\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21189\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\",\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9814\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21409\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\",\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9822\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21489\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\",\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9793\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21199\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\",\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9817\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21439\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\"],\\\"properties\\\": {\\\"couponData\\\": {\\\"type\\\": \\\"string\\\"},\\\"orderDetails\\\": {\\\"properties\\\": {\\\"addressId\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"deliveryMethodId\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"paymentId\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"}},\\\"required\\\": [\\\"addressId\\\",\\\"paymentId\\\",\\\"deliveryMethodId\\\"],\\\"type\\\": \\\"object\\\"}},\\\"required\\\": [\\\"orderDetails\\\",\\\"couponData\\\"],\\\"type\\\": \\\"object\\\"}}],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}},\\\"\\/rest\\/products\\/1\\/reviews\\\": {\\\"put\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}},\\\"\\/rest\\/user\\/login\\\": {\\\"post\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"body\\\",\\\"name\\\": \\\"body\\\",\\\"schema\\\": {\\\"example\\\": [\\\"{\\\\\\\"email\\\\\\\":\\\\\\\"dummy0@dummy.com\\\\\\\",\\\\\\\"password\\\\\\\":\\\\\\\"redacted\\\\\\\",\\\\\\\"test\\\\\\\":\\\\\\\"Hello, \\u4E16\\u754C\\\\\\\"}\\\",\\\"{\\\\\\\"email\\\\\\\":\\\\\\\"dummy1@dummy.com\\\\\\\",\\\\\\\"password\\\\\\\":\\\\\\\"redacted\\\\\\\",\\\\\\\"test\\\\\\\":\\\\\\\"Hello, \\u4E16\\u754C\\\\\\\"}\\\",\\\"{\\\\\\\"email\\\\\\\":\\\\\\\"dummy2@dummy.com\\\\\\\",\\\\\\\"password\\\\\\\":\\\\\\\"redacted\\\\\\\",\\\\\\\"test\\\\\\\":\\\\\\\"Hello, \\u4E16\\u754C\\\\\\\"}\\\",\\\"{\\\\\\\"email\\\\\\\":\\\\\\\"dummy3@dummy.com\\\\\\\",\\\\\\\"password\\\\\\\":\\\\\\\"redacted\\\\\\\",\\\\\\\"test\\\\\\\":\\\\\\\"Hello, \\u4E16\\u754C\\\\\\\"}\\\"],\\\"properties\\\": {\\\"email\\\": {\\\"description\\\": \\\"Email\\\",\\\"pattern\\\": \\\".+@.+\\\",\\\"type\\\": \\\"string\\\",\\\"x-pii\\\": {\\\"examples\\\": [\\\"dummy0@dummy.com\\\",\\\"dummy1@dummy.com\\\",\\\"dummy2@dummy.com\\\",\\\"dummy3@dummy.com\\\"]}},\\\"password\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"test\\\": {\\\"type\\\": \\\"string\\\"}},\\\"required\\\": [\\\"email\\\",\\\"test\\\",\\\"password\\\"],\\\"type\\\": \\\"object\\\"}}],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}}},\\\"schemes\\\": [\\\"https\\\",\\\"http\\\"],\\\"swagger\\\": \\\"2.0\\\"}"
                 }
             }
         }

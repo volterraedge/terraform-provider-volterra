@@ -3,36 +3,24 @@
 
 package service_policy_rule
 
-import (
-	proto "github.com/gogo/protobuf/proto"
-	golang_proto "github.com/golang/protobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
+import golang_proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import google_protobuf1 "github.com/gogo/protobuf/types"
+import ves_io_schema_malicious_user_mitigation "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
+import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
-	fmt "fmt"
+import strings "strings"
+import reflect "reflect"
 
-	math "math"
-
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	google_protobuf1 "github.com/gogo/protobuf/types"
-
-	ves_io_schema_malicious_user_mitigation "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
-
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -265,6 +253,12 @@ type GlobalSpecType struct {
 	// A L4 Destination matcher specifies a list of IPv4 prefixes and a TCP port range as match criteria. The match is considered successful if the destination
 	// IP matches one of the prefixes and the destination port belongs to the port range.
 	L4DestMatcher *ves_io_schema_policy.L4DestMatcherType `protobuf:"bytes,44,opt,name=l4_dest_matcher,json=l4DestMatcher" json:"l4_dest_matcher,omitempty"`
+	// Challenge Action
+	//
+	// x-displayName: "Select Challenge Action Type"
+	// x-required
+	// Select challenge action, enable javascript/captcha challenge or disable challenge
+	ChallengeAction ves_io_schema_policy.ChallengeAction `protobuf:"varint,54,opt,name=challenge_action,json=challengeAction,proto3,enum=ves.io.schema.policy.ChallengeAction" json:"challenge_action,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
@@ -684,6 +678,13 @@ func (m *GlobalSpecType) GetL4DestMatcher() *ves_io_schema_policy.L4DestMatcherT
 		return m.L4DestMatcher
 	}
 	return nil
+}
+
+func (m *GlobalSpecType) GetChallengeAction() ves_io_schema_policy.ChallengeAction {
+	if m != nil {
+		return m.ChallengeAction
+	}
+	return ves_io_schema_policy.NO_CHALLENGE
 }
 
 // XXX_OneofFuncs is for the internal use of the proto package.
@@ -1125,6 +1126,7 @@ type CreateSpecType struct {
 	Scheme                        []string                                                             `protobuf:"bytes,38,rep,name=scheme" json:"scheme,omitempty"`
 	UrlMatcher                    *ves_io_schema_policy.URLMatcherType                                 `protobuf:"bytes,39,opt,name=url_matcher,json=urlMatcher" json:"url_matcher,omitempty"`
 	L4DestMatcher                 *ves_io_schema_policy.L4DestMatcherType                              `protobuf:"bytes,44,opt,name=l4_dest_matcher,json=l4DestMatcher" json:"l4_dest_matcher,omitempty"`
+	ChallengeAction               ves_io_schema_policy.ChallengeAction                                 `protobuf:"varint,54,opt,name=challenge_action,json=challengeAction,proto3,enum=ves.io.schema.policy.ChallengeAction" json:"challenge_action,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
@@ -1537,6 +1539,13 @@ func (m *CreateSpecType) GetL4DestMatcher() *ves_io_schema_policy.L4DestMatcherT
 		return m.L4DestMatcher
 	}
 	return nil
+}
+
+func (m *CreateSpecType) GetChallengeAction() ves_io_schema_policy.ChallengeAction {
+	if m != nil {
+		return m.ChallengeAction
+	}
+	return ves_io_schema_policy.NO_CHALLENGE
 }
 
 // XXX_OneofFuncs is for the internal use of the proto package.
@@ -1978,6 +1987,7 @@ type ReplaceSpecType struct {
 	Scheme                        []string                                                             `protobuf:"bytes,38,rep,name=scheme" json:"scheme,omitempty"`
 	UrlMatcher                    *ves_io_schema_policy.URLMatcherType                                 `protobuf:"bytes,39,opt,name=url_matcher,json=urlMatcher" json:"url_matcher,omitempty"`
 	L4DestMatcher                 *ves_io_schema_policy.L4DestMatcherType                              `protobuf:"bytes,44,opt,name=l4_dest_matcher,json=l4DestMatcher" json:"l4_dest_matcher,omitempty"`
+	ChallengeAction               ves_io_schema_policy.ChallengeAction                                 `protobuf:"varint,54,opt,name=challenge_action,json=challengeAction,proto3,enum=ves.io.schema.policy.ChallengeAction" json:"challenge_action,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
@@ -2390,6 +2400,13 @@ func (m *ReplaceSpecType) GetL4DestMatcher() *ves_io_schema_policy.L4DestMatcher
 		return m.L4DestMatcher
 	}
 	return nil
+}
+
+func (m *ReplaceSpecType) GetChallengeAction() ves_io_schema_policy.ChallengeAction {
+	if m != nil {
+		return m.ChallengeAction
+	}
+	return ves_io_schema_policy.NO_CHALLENGE
 }
 
 // XXX_OneofFuncs is for the internal use of the proto package.
@@ -2831,6 +2848,7 @@ type GetSpecType struct {
 	Scheme                        []string                                                             `protobuf:"bytes,38,rep,name=scheme" json:"scheme,omitempty"`
 	UrlMatcher                    *ves_io_schema_policy.URLMatcherType                                 `protobuf:"bytes,39,opt,name=url_matcher,json=urlMatcher" json:"url_matcher,omitempty"`
 	L4DestMatcher                 *ves_io_schema_policy.L4DestMatcherType                              `protobuf:"bytes,44,opt,name=l4_dest_matcher,json=l4DestMatcher" json:"l4_dest_matcher,omitempty"`
+	ChallengeAction               ves_io_schema_policy.ChallengeAction                                 `protobuf:"varint,54,opt,name=challenge_action,json=challengeAction,proto3,enum=ves.io.schema.policy.ChallengeAction" json:"challenge_action,omitempty"`
 }
 
 func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
@@ -3245,6 +3263,13 @@ func (m *GetSpecType) GetL4DestMatcher() *ves_io_schema_policy.L4DestMatcherType
 	return nil
 }
 
+func (m *GetSpecType) GetChallengeAction() ves_io_schema_policy.ChallengeAction {
+	if m != nil {
+		return m.ChallengeAction
+	}
+	return ves_io_schema_policy.NO_CHALLENGE
+}
+
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
@@ -3629,6 +3654,608 @@ func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
 	return n
 }
 
+// Challenge Rule Spec
+//
+// x-displayName: "Challenge Rule Specification"
+// A Challenge Rule consists of an unordered list of predicates and an action. The predicates are evaluated against a set of input fields that are extracted from
+// or derived from an L7 request API. A request API is considered to match the rule if all predicates in the rule evaluate to true for that request. Any
+// predicates that are not specified in a rule are implicitly considered to be true. If a request API matches a challenge rule, the configured challenge is
+// enforced.
+type ChallengeRuleSpec struct {
+	// Select Action Type
+	//
+	// x-displayName: "Select Challenge Action Type"
+	// x-required
+	// Select challenge action, enable or disable challenge
+	// When enabled, the challenge type selected in PolicyBasedChallenge
+	// will be launched when match conditions in this challenge rule are met
+	// When the challenge type selected in PolicyBasedChallenge is always enable JS/Captcha challenge,
+	// the challenge can be disabled for certain requests which match the predicates defined in this rule
+	// by setting the action to disable_challenge
+	//
+	// Types that are valid to be assigned to ChallengeAction:
+	//	*ChallengeRuleSpec_DisableChallenge
+	//	*ChallengeRuleSpec_EnableJavascriptChallenge
+	//	*ChallengeRuleSpec_EnableCaptchaChallenge
+	ChallengeAction       isChallengeRuleSpec_ChallengeAction               `protobuf_oneof:"challenge_action"`
+	DomainMatcher         *ves_io_schema_policy.MatcherTypeBasic            `protobuf:"bytes,5,opt,name=domain_matcher,json=domainMatcher" json:"domain_matcher,omitempty"`
+	Path                  *ves_io_schema_policy.PathMatcherType             `protobuf:"bytes,6,opt,name=path" json:"path,omitempty"`
+	Headers               []*ves_io_schema_policy.HeaderMatcherType         `protobuf:"bytes,7,rep,name=headers" json:"headers,omitempty"`
+	HttpMethod            *ves_io_schema_policy.HttpMethodMatcherType       `protobuf:"bytes,8,opt,name=http_method,json=httpMethod" json:"http_method,omitempty"`
+	IpPrefixList          *ves_io_schema_policy.PrefixMatchList             `protobuf:"bytes,9,opt,name=ip_prefix_list,json=ipPrefixList" json:"ip_prefix_list,omitempty"`
+	TlsFingerprintMatcher *ves_io_schema_policy.TlsFingerprintMatcherType   `protobuf:"bytes,10,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher" json:"tls_fingerprint_matcher,omitempty"`
+	QueryParams           []*ves_io_schema_policy.QueryParameterMatcherType `protobuf:"bytes,11,rep,name=query_params,json=queryParams" json:"query_params,omitempty"`
+	BodyMatcher           *ves_io_schema_policy.MatcherType                 `protobuf:"bytes,12,opt,name=body_matcher,json=bodyMatcher" json:"body_matcher,omitempty"`
+	ArgMatchers           []*ves_io_schema_policy.ArgMatcherType            `protobuf:"bytes,13,rep,name=arg_matchers,json=argMatchers" json:"arg_matchers,omitempty"`
+	CookieMatchers        []*ves_io_schema_policy.CookieMatcherType         `protobuf:"bytes,14,rep,name=cookie_matchers,json=cookieMatchers" json:"cookie_matchers,omitempty"`
+	// Types that are valid to be assigned to ClientChoice:
+	//	*ChallengeRuleSpec_AnyClient
+	//	*ChallengeRuleSpec_ClientName
+	//	*ChallengeRuleSpec_ClientSelector
+	//	*ChallengeRuleSpec_ClientNameMatcher
+	ClientChoice        isChallengeRuleSpec_ClientChoice `protobuf_oneof:"client_choice"`
+	ExpirationTimestamp *google_protobuf1.Timestamp      `protobuf:"bytes,20,opt,name=expiration_timestamp,json=expirationTimestamp" json:"expiration_timestamp,omitempty"`
+}
+
+func (m *ChallengeRuleSpec) Reset()                    { *m = ChallengeRuleSpec{} }
+func (*ChallengeRuleSpec) ProtoMessage()               {}
+func (*ChallengeRuleSpec) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+
+type isChallengeRuleSpec_ChallengeAction interface {
+	isChallengeRuleSpec_ChallengeAction()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isChallengeRuleSpec_ClientChoice interface {
+	isChallengeRuleSpec_ClientChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ChallengeRuleSpec_DisableChallenge struct {
+	DisableChallenge *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=disable_challenge,json=disableChallenge,oneof"`
+}
+type ChallengeRuleSpec_EnableJavascriptChallenge struct {
+	EnableJavascriptChallenge *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=enable_javascript_challenge,json=enableJavascriptChallenge,oneof"`
+}
+type ChallengeRuleSpec_EnableCaptchaChallenge struct {
+	EnableCaptchaChallenge *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=enable_captcha_challenge,json=enableCaptchaChallenge,oneof"`
+}
+type ChallengeRuleSpec_AnyClient struct {
+	AnyClient *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=any_client,json=anyClient,oneof"`
+}
+type ChallengeRuleSpec_ClientName struct {
+	ClientName string `protobuf:"bytes,17,opt,name=client_name,json=clientName,proto3,oneof"`
+}
+type ChallengeRuleSpec_ClientSelector struct {
+	ClientSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,18,opt,name=client_selector,json=clientSelector,oneof"`
+}
+type ChallengeRuleSpec_ClientNameMatcher struct {
+	ClientNameMatcher *ves_io_schema_policy.MatcherType `protobuf:"bytes,19,opt,name=client_name_matcher,json=clientNameMatcher,oneof"`
+}
+
+func (*ChallengeRuleSpec_DisableChallenge) isChallengeRuleSpec_ChallengeAction()          {}
+func (*ChallengeRuleSpec_EnableJavascriptChallenge) isChallengeRuleSpec_ChallengeAction() {}
+func (*ChallengeRuleSpec_EnableCaptchaChallenge) isChallengeRuleSpec_ChallengeAction()    {}
+func (*ChallengeRuleSpec_AnyClient) isChallengeRuleSpec_ClientChoice()                    {}
+func (*ChallengeRuleSpec_ClientName) isChallengeRuleSpec_ClientChoice()                   {}
+func (*ChallengeRuleSpec_ClientSelector) isChallengeRuleSpec_ClientChoice()               {}
+func (*ChallengeRuleSpec_ClientNameMatcher) isChallengeRuleSpec_ClientChoice()            {}
+
+func (m *ChallengeRuleSpec) GetChallengeAction() isChallengeRuleSpec_ChallengeAction {
+	if m != nil {
+		return m.ChallengeAction
+	}
+	return nil
+}
+func (m *ChallengeRuleSpec) GetClientChoice() isChallengeRuleSpec_ClientChoice {
+	if m != nil {
+		return m.ClientChoice
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetDisableChallenge() *ves_io_schema4.Empty {
+	if x, ok := m.GetChallengeAction().(*ChallengeRuleSpec_DisableChallenge); ok {
+		return x.DisableChallenge
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetEnableJavascriptChallenge() *ves_io_schema4.Empty {
+	if x, ok := m.GetChallengeAction().(*ChallengeRuleSpec_EnableJavascriptChallenge); ok {
+		return x.EnableJavascriptChallenge
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetEnableCaptchaChallenge() *ves_io_schema4.Empty {
+	if x, ok := m.GetChallengeAction().(*ChallengeRuleSpec_EnableCaptchaChallenge); ok {
+		return x.EnableCaptchaChallenge
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetDomainMatcher() *ves_io_schema_policy.MatcherTypeBasic {
+	if m != nil {
+		return m.DomainMatcher
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetPath() *ves_io_schema_policy.PathMatcherType {
+	if m != nil {
+		return m.Path
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetHeaders() []*ves_io_schema_policy.HeaderMatcherType {
+	if m != nil {
+		return m.Headers
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetHttpMethod() *ves_io_schema_policy.HttpMethodMatcherType {
+	if m != nil {
+		return m.HttpMethod
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetIpPrefixList() *ves_io_schema_policy.PrefixMatchList {
+	if m != nil {
+		return m.IpPrefixList
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetTlsFingerprintMatcher() *ves_io_schema_policy.TlsFingerprintMatcherType {
+	if m != nil {
+		return m.TlsFingerprintMatcher
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetQueryParams() []*ves_io_schema_policy.QueryParameterMatcherType {
+	if m != nil {
+		return m.QueryParams
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetBodyMatcher() *ves_io_schema_policy.MatcherType {
+	if m != nil {
+		return m.BodyMatcher
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetArgMatchers() []*ves_io_schema_policy.ArgMatcherType {
+	if m != nil {
+		return m.ArgMatchers
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetCookieMatchers() []*ves_io_schema_policy.CookieMatcherType {
+	if m != nil {
+		return m.CookieMatchers
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetAnyClient() *ves_io_schema4.Empty {
+	if x, ok := m.GetClientChoice().(*ChallengeRuleSpec_AnyClient); ok {
+		return x.AnyClient
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetClientName() string {
+	if x, ok := m.GetClientChoice().(*ChallengeRuleSpec_ClientName); ok {
+		return x.ClientName
+	}
+	return ""
+}
+
+func (m *ChallengeRuleSpec) GetClientSelector() *ves_io_schema4.LabelSelectorType {
+	if x, ok := m.GetClientChoice().(*ChallengeRuleSpec_ClientSelector); ok {
+		return x.ClientSelector
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetClientNameMatcher() *ves_io_schema_policy.MatcherType {
+	if x, ok := m.GetClientChoice().(*ChallengeRuleSpec_ClientNameMatcher); ok {
+		return x.ClientNameMatcher
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) GetExpirationTimestamp() *google_protobuf1.Timestamp {
+	if m != nil {
+		return m.ExpirationTimestamp
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*ChallengeRuleSpec) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _ChallengeRuleSpec_OneofMarshaler, _ChallengeRuleSpec_OneofUnmarshaler, _ChallengeRuleSpec_OneofSizer, []interface{}{
+		(*ChallengeRuleSpec_DisableChallenge)(nil),
+		(*ChallengeRuleSpec_EnableJavascriptChallenge)(nil),
+		(*ChallengeRuleSpec_EnableCaptchaChallenge)(nil),
+		(*ChallengeRuleSpec_AnyClient)(nil),
+		(*ChallengeRuleSpec_ClientName)(nil),
+		(*ChallengeRuleSpec_ClientSelector)(nil),
+		(*ChallengeRuleSpec_ClientNameMatcher)(nil),
+	}
+}
+
+func _ChallengeRuleSpec_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*ChallengeRuleSpec)
+	// challenge_action
+	switch x := m.ChallengeAction.(type) {
+	case *ChallengeRuleSpec_DisableChallenge:
+		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.DisableChallenge); err != nil {
+			return err
+		}
+	case *ChallengeRuleSpec_EnableJavascriptChallenge:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.EnableJavascriptChallenge); err != nil {
+			return err
+		}
+	case *ChallengeRuleSpec_EnableCaptchaChallenge:
+		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.EnableCaptchaChallenge); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("ChallengeRuleSpec.ChallengeAction has unexpected type %T", x)
+	}
+	// client_choice
+	switch x := m.ClientChoice.(type) {
+	case *ChallengeRuleSpec_AnyClient:
+		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.AnyClient); err != nil {
+			return err
+		}
+	case *ChallengeRuleSpec_ClientName:
+		_ = b.EncodeVarint(17<<3 | proto.WireBytes)
+		_ = b.EncodeStringBytes(x.ClientName)
+	case *ChallengeRuleSpec_ClientSelector:
+		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.ClientSelector); err != nil {
+			return err
+		}
+	case *ChallengeRuleSpec_ClientNameMatcher:
+		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.ClientNameMatcher); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("ChallengeRuleSpec.ClientChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _ChallengeRuleSpec_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*ChallengeRuleSpec)
+	switch tag {
+	case 2: // challenge_action.disable_challenge
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ChallengeAction = &ChallengeRuleSpec_DisableChallenge{msg}
+		return true, err
+	case 3: // challenge_action.enable_javascript_challenge
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ChallengeAction = &ChallengeRuleSpec_EnableJavascriptChallenge{msg}
+		return true, err
+	case 4: // challenge_action.enable_captcha_challenge
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ChallengeAction = &ChallengeRuleSpec_EnableCaptchaChallenge{msg}
+		return true, err
+	case 16: // client_choice.any_client
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ClientChoice = &ChallengeRuleSpec_AnyClient{msg}
+		return true, err
+	case 17: // client_choice.client_name
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.ClientChoice = &ChallengeRuleSpec_ClientName{x}
+		return true, err
+	case 18: // client_choice.client_selector
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.LabelSelectorType)
+		err := b.DecodeMessage(msg)
+		m.ClientChoice = &ChallengeRuleSpec_ClientSelector{msg}
+		return true, err
+	case 19: // client_choice.client_name_matcher
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema_policy.MatcherType)
+		err := b.DecodeMessage(msg)
+		m.ClientChoice = &ChallengeRuleSpec_ClientNameMatcher{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _ChallengeRuleSpec_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*ChallengeRuleSpec)
+	// challenge_action
+	switch x := m.ChallengeAction.(type) {
+	case *ChallengeRuleSpec_DisableChallenge:
+		s := proto.Size(x.DisableChallenge)
+		n += proto.SizeVarint(2<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *ChallengeRuleSpec_EnableJavascriptChallenge:
+		s := proto.Size(x.EnableJavascriptChallenge)
+		n += proto.SizeVarint(3<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *ChallengeRuleSpec_EnableCaptchaChallenge:
+		s := proto.Size(x.EnableCaptchaChallenge)
+		n += proto.SizeVarint(4<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	// client_choice
+	switch x := m.ClientChoice.(type) {
+	case *ChallengeRuleSpec_AnyClient:
+		s := proto.Size(x.AnyClient)
+		n += proto.SizeVarint(16<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *ChallengeRuleSpec_ClientName:
+		n += proto.SizeVarint(17<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(len(x.ClientName)))
+		n += len(x.ClientName)
+	case *ChallengeRuleSpec_ClientSelector:
+		s := proto.Size(x.ClientSelector)
+		n += proto.SizeVarint(18<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *ChallengeRuleSpec_ClientNameMatcher:
+		s := proto.Size(x.ClientNameMatcher)
+		n += proto.SizeVarint(19<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// Rate Limiter Rule Spec
+//
+// x-displayName: "Rate Limiter Rule Specification"
+// Shape of Rate Limiter Rule
+type RateLimiterRuleSpec struct {
+	// action choice
+	//
+	// x-displayName: "Action"
+	// x-required
+	// Specify action for the rule.
+	//
+	// Types that are valid to be assigned to ActionChoice:
+	//	*RateLimiterRuleSpec_BypassRateLimiter
+	//	*RateLimiterRuleSpec_ApplyRateLimiter
+	//	*RateLimiterRuleSpec_CustomRateLimiter
+	ActionChoice  isRateLimiterRuleSpec_ActionChoice          `protobuf_oneof:"action_choice"`
+	HttpMethod    *ves_io_schema_policy.HttpMethodMatcherType `protobuf:"bytes,6,opt,name=http_method,json=httpMethod" json:"http_method,omitempty"`
+	DomainMatcher *ves_io_schema_policy.MatcherTypeBasic      `protobuf:"bytes,10,opt,name=domain_matcher,json=domainMatcher" json:"domain_matcher,omitempty"`
+	Path          *ves_io_schema_policy.PathMatcherType       `protobuf:"bytes,8,opt,name=path" json:"path,omitempty"`
+	Headers       []*ves_io_schema_policy.HeaderMatcherType   `protobuf:"bytes,9,rep,name=headers" json:"headers,omitempty"`
+}
+
+func (m *RateLimiterRuleSpec) Reset()                    { *m = RateLimiterRuleSpec{} }
+func (*RateLimiterRuleSpec) ProtoMessage()               {}
+func (*RateLimiterRuleSpec) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+
+type isRateLimiterRuleSpec_ActionChoice interface {
+	isRateLimiterRuleSpec_ActionChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type RateLimiterRuleSpec_BypassRateLimiter struct {
+	BypassRateLimiter *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=bypass_rate_limiter,json=bypassRateLimiter,oneof"`
+}
+type RateLimiterRuleSpec_ApplyRateLimiter struct {
+	ApplyRateLimiter *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=apply_rate_limiter,json=applyRateLimiter,oneof"`
+}
+type RateLimiterRuleSpec_CustomRateLimiter struct {
+	CustomRateLimiter *ves_io_schema_views.ObjectRefType `protobuf:"bytes,5,opt,name=custom_rate_limiter,json=customRateLimiter,oneof"`
+}
+
+func (*RateLimiterRuleSpec_BypassRateLimiter) isRateLimiterRuleSpec_ActionChoice() {}
+func (*RateLimiterRuleSpec_ApplyRateLimiter) isRateLimiterRuleSpec_ActionChoice()  {}
+func (*RateLimiterRuleSpec_CustomRateLimiter) isRateLimiterRuleSpec_ActionChoice() {}
+
+func (m *RateLimiterRuleSpec) GetActionChoice() isRateLimiterRuleSpec_ActionChoice {
+	if m != nil {
+		return m.ActionChoice
+	}
+	return nil
+}
+
+func (m *RateLimiterRuleSpec) GetBypassRateLimiter() *ves_io_schema4.Empty {
+	if x, ok := m.GetActionChoice().(*RateLimiterRuleSpec_BypassRateLimiter); ok {
+		return x.BypassRateLimiter
+	}
+	return nil
+}
+
+func (m *RateLimiterRuleSpec) GetApplyRateLimiter() *ves_io_schema4.Empty {
+	if x, ok := m.GetActionChoice().(*RateLimiterRuleSpec_ApplyRateLimiter); ok {
+		return x.ApplyRateLimiter
+	}
+	return nil
+}
+
+func (m *RateLimiterRuleSpec) GetCustomRateLimiter() *ves_io_schema_views.ObjectRefType {
+	if x, ok := m.GetActionChoice().(*RateLimiterRuleSpec_CustomRateLimiter); ok {
+		return x.CustomRateLimiter
+	}
+	return nil
+}
+
+func (m *RateLimiterRuleSpec) GetHttpMethod() *ves_io_schema_policy.HttpMethodMatcherType {
+	if m != nil {
+		return m.HttpMethod
+	}
+	return nil
+}
+
+func (m *RateLimiterRuleSpec) GetDomainMatcher() *ves_io_schema_policy.MatcherTypeBasic {
+	if m != nil {
+		return m.DomainMatcher
+	}
+	return nil
+}
+
+func (m *RateLimiterRuleSpec) GetPath() *ves_io_schema_policy.PathMatcherType {
+	if m != nil {
+		return m.Path
+	}
+	return nil
+}
+
+func (m *RateLimiterRuleSpec) GetHeaders() []*ves_io_schema_policy.HeaderMatcherType {
+	if m != nil {
+		return m.Headers
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*RateLimiterRuleSpec) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _RateLimiterRuleSpec_OneofMarshaler, _RateLimiterRuleSpec_OneofUnmarshaler, _RateLimiterRuleSpec_OneofSizer, []interface{}{
+		(*RateLimiterRuleSpec_BypassRateLimiter)(nil),
+		(*RateLimiterRuleSpec_ApplyRateLimiter)(nil),
+		(*RateLimiterRuleSpec_CustomRateLimiter)(nil),
+	}
+}
+
+func _RateLimiterRuleSpec_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*RateLimiterRuleSpec)
+	// action_choice
+	switch x := m.ActionChoice.(type) {
+	case *RateLimiterRuleSpec_BypassRateLimiter:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.BypassRateLimiter); err != nil {
+			return err
+		}
+	case *RateLimiterRuleSpec_ApplyRateLimiter:
+		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.ApplyRateLimiter); err != nil {
+			return err
+		}
+	case *RateLimiterRuleSpec_CustomRateLimiter:
+		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.CustomRateLimiter); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("RateLimiterRuleSpec.ActionChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _RateLimiterRuleSpec_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*RateLimiterRuleSpec)
+	switch tag {
+	case 3: // action_choice.bypass_rate_limiter
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ActionChoice = &RateLimiterRuleSpec_BypassRateLimiter{msg}
+		return true, err
+	case 4: // action_choice.apply_rate_limiter
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ActionChoice = &RateLimiterRuleSpec_ApplyRateLimiter{msg}
+		return true, err
+	case 5: // action_choice.custom_rate_limiter
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema_views.ObjectRefType)
+		err := b.DecodeMessage(msg)
+		m.ActionChoice = &RateLimiterRuleSpec_CustomRateLimiter{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _RateLimiterRuleSpec_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*RateLimiterRuleSpec)
+	// action_choice
+	switch x := m.ActionChoice.(type) {
+	case *RateLimiterRuleSpec_BypassRateLimiter:
+		s := proto.Size(x.BypassRateLimiter)
+		n += proto.SizeVarint(3<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *RateLimiterRuleSpec_ApplyRateLimiter:
+		s := proto.Size(x.ApplyRateLimiter)
+		n += proto.SizeVarint(4<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *RateLimiterRuleSpec_CustomRateLimiter:
+		s := proto.Size(x.CustomRateLimiter)
+		n += proto.SizeVarint(5<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
 func init() {
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.service_policy_rule.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.service_policy_rule.GlobalSpecType")
@@ -3638,6 +4265,10 @@ func init() {
 	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.service_policy_rule.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.service_policy_rule.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.service_policy_rule.GetSpecType")
+	proto.RegisterType((*ChallengeRuleSpec)(nil), "ves.io.schema.service_policy_rule.ChallengeRuleSpec")
+	golang_proto.RegisterType((*ChallengeRuleSpec)(nil), "ves.io.schema.service_policy_rule.ChallengeRuleSpec")
+	proto.RegisterType((*RateLimiterRuleSpec)(nil), "ves.io.schema.service_policy_rule.RateLimiterRuleSpec")
+	golang_proto.RegisterType((*RateLimiterRuleSpec)(nil), "ves.io.schema.service_policy_rule.RateLimiterRuleSpec")
 }
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
@@ -3811,6 +4442,9 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.L4DestMatcher.Equal(that1.L4DestMatcher) {
+		return false
+	}
+	if this.ChallengeAction != that1.ChallengeAction {
 		return false
 	}
 	return true
@@ -4365,6 +4999,9 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if !this.L4DestMatcher.Equal(that1.L4DestMatcher) {
 		return false
 	}
+	if this.ChallengeAction != that1.ChallengeAction {
+		return false
+	}
 	return true
 }
 func (this *CreateSpecType_AnyClient) Equal(that interface{}) bool {
@@ -4915,6 +5552,9 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.L4DestMatcher.Equal(that1.L4DestMatcher) {
+		return false
+	}
+	if this.ChallengeAction != that1.ChallengeAction {
 		return false
 	}
 	return true
@@ -5469,6 +6109,9 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if !this.L4DestMatcher.Equal(that1.L4DestMatcher) {
 		return false
 	}
+	if this.ChallengeAction != that1.ChallengeAction {
+		return false
+	}
 	return true
 }
 func (this *GetSpecType_AnyClient) Equal(that interface{}) bool {
@@ -5855,11 +6498,390 @@ func (this *GetSpecType_DstAsnMatcher) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ChallengeRuleSpec) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ChallengeRuleSpec)
+	if !ok {
+		that2, ok := that.(ChallengeRuleSpec)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.ChallengeAction == nil {
+		if this.ChallengeAction != nil {
+			return false
+		}
+	} else if this.ChallengeAction == nil {
+		return false
+	} else if !this.ChallengeAction.Equal(that1.ChallengeAction) {
+		return false
+	}
+	if !this.DomainMatcher.Equal(that1.DomainMatcher) {
+		return false
+	}
+	if !this.Path.Equal(that1.Path) {
+		return false
+	}
+	if len(this.Headers) != len(that1.Headers) {
+		return false
+	}
+	for i := range this.Headers {
+		if !this.Headers[i].Equal(that1.Headers[i]) {
+			return false
+		}
+	}
+	if !this.HttpMethod.Equal(that1.HttpMethod) {
+		return false
+	}
+	if !this.IpPrefixList.Equal(that1.IpPrefixList) {
+		return false
+	}
+	if !this.TlsFingerprintMatcher.Equal(that1.TlsFingerprintMatcher) {
+		return false
+	}
+	if len(this.QueryParams) != len(that1.QueryParams) {
+		return false
+	}
+	for i := range this.QueryParams {
+		if !this.QueryParams[i].Equal(that1.QueryParams[i]) {
+			return false
+		}
+	}
+	if !this.BodyMatcher.Equal(that1.BodyMatcher) {
+		return false
+	}
+	if len(this.ArgMatchers) != len(that1.ArgMatchers) {
+		return false
+	}
+	for i := range this.ArgMatchers {
+		if !this.ArgMatchers[i].Equal(that1.ArgMatchers[i]) {
+			return false
+		}
+	}
+	if len(this.CookieMatchers) != len(that1.CookieMatchers) {
+		return false
+	}
+	for i := range this.CookieMatchers {
+		if !this.CookieMatchers[i].Equal(that1.CookieMatchers[i]) {
+			return false
+		}
+	}
+	if that1.ClientChoice == nil {
+		if this.ClientChoice != nil {
+			return false
+		}
+	} else if this.ClientChoice == nil {
+		return false
+	} else if !this.ClientChoice.Equal(that1.ClientChoice) {
+		return false
+	}
+	if !this.ExpirationTimestamp.Equal(that1.ExpirationTimestamp) {
+		return false
+	}
+	return true
+}
+func (this *ChallengeRuleSpec_DisableChallenge) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ChallengeRuleSpec_DisableChallenge)
+	if !ok {
+		that2, ok := that.(ChallengeRuleSpec_DisableChallenge)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableChallenge.Equal(that1.DisableChallenge) {
+		return false
+	}
+	return true
+}
+func (this *ChallengeRuleSpec_EnableJavascriptChallenge) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ChallengeRuleSpec_EnableJavascriptChallenge)
+	if !ok {
+		that2, ok := that.(ChallengeRuleSpec_EnableJavascriptChallenge)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableJavascriptChallenge.Equal(that1.EnableJavascriptChallenge) {
+		return false
+	}
+	return true
+}
+func (this *ChallengeRuleSpec_EnableCaptchaChallenge) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ChallengeRuleSpec_EnableCaptchaChallenge)
+	if !ok {
+		that2, ok := that.(ChallengeRuleSpec_EnableCaptchaChallenge)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableCaptchaChallenge.Equal(that1.EnableCaptchaChallenge) {
+		return false
+	}
+	return true
+}
+func (this *ChallengeRuleSpec_AnyClient) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ChallengeRuleSpec_AnyClient)
+	if !ok {
+		that2, ok := that.(ChallengeRuleSpec_AnyClient)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AnyClient.Equal(that1.AnyClient) {
+		return false
+	}
+	return true
+}
+func (this *ChallengeRuleSpec_ClientName) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ChallengeRuleSpec_ClientName)
+	if !ok {
+		that2, ok := that.(ChallengeRuleSpec_ClientName)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ClientName != that1.ClientName {
+		return false
+	}
+	return true
+}
+func (this *ChallengeRuleSpec_ClientSelector) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ChallengeRuleSpec_ClientSelector)
+	if !ok {
+		that2, ok := that.(ChallengeRuleSpec_ClientSelector)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClientSelector.Equal(that1.ClientSelector) {
+		return false
+	}
+	return true
+}
+func (this *ChallengeRuleSpec_ClientNameMatcher) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ChallengeRuleSpec_ClientNameMatcher)
+	if !ok {
+		that2, ok := that.(ChallengeRuleSpec_ClientNameMatcher)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClientNameMatcher.Equal(that1.ClientNameMatcher) {
+		return false
+	}
+	return true
+}
+func (this *RateLimiterRuleSpec) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RateLimiterRuleSpec)
+	if !ok {
+		that2, ok := that.(RateLimiterRuleSpec)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.ActionChoice == nil {
+		if this.ActionChoice != nil {
+			return false
+		}
+	} else if this.ActionChoice == nil {
+		return false
+	} else if !this.ActionChoice.Equal(that1.ActionChoice) {
+		return false
+	}
+	if !this.HttpMethod.Equal(that1.HttpMethod) {
+		return false
+	}
+	if !this.DomainMatcher.Equal(that1.DomainMatcher) {
+		return false
+	}
+	if !this.Path.Equal(that1.Path) {
+		return false
+	}
+	if len(this.Headers) != len(that1.Headers) {
+		return false
+	}
+	for i := range this.Headers {
+		if !this.Headers[i].Equal(that1.Headers[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *RateLimiterRuleSpec_BypassRateLimiter) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RateLimiterRuleSpec_BypassRateLimiter)
+	if !ok {
+		that2, ok := that.(RateLimiterRuleSpec_BypassRateLimiter)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BypassRateLimiter.Equal(that1.BypassRateLimiter) {
+		return false
+	}
+	return true
+}
+func (this *RateLimiterRuleSpec_ApplyRateLimiter) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RateLimiterRuleSpec_ApplyRateLimiter)
+	if !ok {
+		that2, ok := that.(RateLimiterRuleSpec_ApplyRateLimiter)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ApplyRateLimiter.Equal(that1.ApplyRateLimiter) {
+		return false
+	}
+	return true
+}
+func (this *RateLimiterRuleSpec_CustomRateLimiter) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RateLimiterRuleSpec_CustomRateLimiter)
+	if !ok {
+		that2, ok := that.(RateLimiterRuleSpec_CustomRateLimiter)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CustomRateLimiter.Equal(that1.CustomRateLimiter) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 45)
+	s := make([]string, 0, 46)
 	s = append(s, "&service_policy_rule.GlobalSpecType{")
 	s = append(s, "Action: "+fmt.Sprintf("%#v", this.Action)+",\n")
 	if this.ClientChoice != nil {
@@ -5947,6 +6969,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this.L4DestMatcher != nil {
 		s = append(s, "L4DestMatcher: "+fmt.Sprintf("%#v", this.L4DestMatcher)+",\n")
 	}
+	s = append(s, "ChallengeAction: "+fmt.Sprintf("%#v", this.ChallengeAction)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -6082,7 +7105,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 44)
+	s := make([]string, 0, 45)
 	s = append(s, "&service_policy_rule.CreateSpecType{")
 	s = append(s, "Action: "+fmt.Sprintf("%#v", this.Action)+",\n")
 	if this.ClientChoice != nil {
@@ -6167,6 +7190,7 @@ func (this *CreateSpecType) GoString() string {
 	if this.L4DestMatcher != nil {
 		s = append(s, "L4DestMatcher: "+fmt.Sprintf("%#v", this.L4DestMatcher)+",\n")
 	}
+	s = append(s, "ChallengeAction: "+fmt.Sprintf("%#v", this.ChallengeAction)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -6302,7 +7326,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 44)
+	s := make([]string, 0, 45)
 	s = append(s, "&service_policy_rule.ReplaceSpecType{")
 	s = append(s, "Action: "+fmt.Sprintf("%#v", this.Action)+",\n")
 	if this.ClientChoice != nil {
@@ -6387,6 +7411,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this.L4DestMatcher != nil {
 		s = append(s, "L4DestMatcher: "+fmt.Sprintf("%#v", this.L4DestMatcher)+",\n")
 	}
+	s = append(s, "ChallengeAction: "+fmt.Sprintf("%#v", this.ChallengeAction)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -6522,7 +7547,7 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 44)
+	s := make([]string, 0, 45)
 	s = append(s, "&service_policy_rule.GetSpecType{")
 	s = append(s, "Action: "+fmt.Sprintf("%#v", this.Action)+",\n")
 	if this.ClientChoice != nil {
@@ -6607,6 +7632,7 @@ func (this *GetSpecType) GoString() string {
 	if this.L4DestMatcher != nil {
 		s = append(s, "L4DestMatcher: "+fmt.Sprintf("%#v", this.L4DestMatcher)+",\n")
 	}
+	s = append(s, "ChallengeAction: "+fmt.Sprintf("%#v", this.ChallengeAction)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -6736,6 +7762,158 @@ func (this *GetSpecType_DstAsnMatcher) GoString() string {
 	}
 	s := strings.Join([]string{`&service_policy_rule.GetSpecType_DstAsnMatcher{` +
 		`DstAsnMatcher:` + fmt.Sprintf("%#v", this.DstAsnMatcher) + `}`}, ", ")
+	return s
+}
+func (this *ChallengeRuleSpec) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 22)
+	s = append(s, "&service_policy_rule.ChallengeRuleSpec{")
+	if this.ChallengeAction != nil {
+		s = append(s, "ChallengeAction: "+fmt.Sprintf("%#v", this.ChallengeAction)+",\n")
+	}
+	if this.DomainMatcher != nil {
+		s = append(s, "DomainMatcher: "+fmt.Sprintf("%#v", this.DomainMatcher)+",\n")
+	}
+	if this.Path != nil {
+		s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
+	}
+	if this.Headers != nil {
+		s = append(s, "Headers: "+fmt.Sprintf("%#v", this.Headers)+",\n")
+	}
+	if this.HttpMethod != nil {
+		s = append(s, "HttpMethod: "+fmt.Sprintf("%#v", this.HttpMethod)+",\n")
+	}
+	if this.IpPrefixList != nil {
+		s = append(s, "IpPrefixList: "+fmt.Sprintf("%#v", this.IpPrefixList)+",\n")
+	}
+	if this.TlsFingerprintMatcher != nil {
+		s = append(s, "TlsFingerprintMatcher: "+fmt.Sprintf("%#v", this.TlsFingerprintMatcher)+",\n")
+	}
+	if this.QueryParams != nil {
+		s = append(s, "QueryParams: "+fmt.Sprintf("%#v", this.QueryParams)+",\n")
+	}
+	if this.BodyMatcher != nil {
+		s = append(s, "BodyMatcher: "+fmt.Sprintf("%#v", this.BodyMatcher)+",\n")
+	}
+	if this.ArgMatchers != nil {
+		s = append(s, "ArgMatchers: "+fmt.Sprintf("%#v", this.ArgMatchers)+",\n")
+	}
+	if this.CookieMatchers != nil {
+		s = append(s, "CookieMatchers: "+fmt.Sprintf("%#v", this.CookieMatchers)+",\n")
+	}
+	if this.ClientChoice != nil {
+		s = append(s, "ClientChoice: "+fmt.Sprintf("%#v", this.ClientChoice)+",\n")
+	}
+	if this.ExpirationTimestamp != nil {
+		s = append(s, "ExpirationTimestamp: "+fmt.Sprintf("%#v", this.ExpirationTimestamp)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ChallengeRuleSpec_DisableChallenge) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.ChallengeRuleSpec_DisableChallenge{` +
+		`DisableChallenge:` + fmt.Sprintf("%#v", this.DisableChallenge) + `}`}, ", ")
+	return s
+}
+func (this *ChallengeRuleSpec_EnableJavascriptChallenge) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.ChallengeRuleSpec_EnableJavascriptChallenge{` +
+		`EnableJavascriptChallenge:` + fmt.Sprintf("%#v", this.EnableJavascriptChallenge) + `}`}, ", ")
+	return s
+}
+func (this *ChallengeRuleSpec_EnableCaptchaChallenge) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.ChallengeRuleSpec_EnableCaptchaChallenge{` +
+		`EnableCaptchaChallenge:` + fmt.Sprintf("%#v", this.EnableCaptchaChallenge) + `}`}, ", ")
+	return s
+}
+func (this *ChallengeRuleSpec_AnyClient) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.ChallengeRuleSpec_AnyClient{` +
+		`AnyClient:` + fmt.Sprintf("%#v", this.AnyClient) + `}`}, ", ")
+	return s
+}
+func (this *ChallengeRuleSpec_ClientName) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.ChallengeRuleSpec_ClientName{` +
+		`ClientName:` + fmt.Sprintf("%#v", this.ClientName) + `}`}, ", ")
+	return s
+}
+func (this *ChallengeRuleSpec_ClientSelector) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.ChallengeRuleSpec_ClientSelector{` +
+		`ClientSelector:` + fmt.Sprintf("%#v", this.ClientSelector) + `}`}, ", ")
+	return s
+}
+func (this *ChallengeRuleSpec_ClientNameMatcher) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.ChallengeRuleSpec_ClientNameMatcher{` +
+		`ClientNameMatcher:` + fmt.Sprintf("%#v", this.ClientNameMatcher) + `}`}, ", ")
+	return s
+}
+func (this *RateLimiterRuleSpec) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 11)
+	s = append(s, "&service_policy_rule.RateLimiterRuleSpec{")
+	if this.ActionChoice != nil {
+		s = append(s, "ActionChoice: "+fmt.Sprintf("%#v", this.ActionChoice)+",\n")
+	}
+	if this.HttpMethod != nil {
+		s = append(s, "HttpMethod: "+fmt.Sprintf("%#v", this.HttpMethod)+",\n")
+	}
+	if this.DomainMatcher != nil {
+		s = append(s, "DomainMatcher: "+fmt.Sprintf("%#v", this.DomainMatcher)+",\n")
+	}
+	if this.Path != nil {
+		s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
+	}
+	if this.Headers != nil {
+		s = append(s, "Headers: "+fmt.Sprintf("%#v", this.Headers)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *RateLimiterRuleSpec_BypassRateLimiter) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.RateLimiterRuleSpec_BypassRateLimiter{` +
+		`BypassRateLimiter:` + fmt.Sprintf("%#v", this.BypassRateLimiter) + `}`}, ", ")
+	return s
+}
+func (this *RateLimiterRuleSpec_ApplyRateLimiter) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.RateLimiterRuleSpec_ApplyRateLimiter{` +
+		`ApplyRateLimiter:` + fmt.Sprintf("%#v", this.ApplyRateLimiter) + `}`}, ", ")
+	return s
+}
+func (this *RateLimiterRuleSpec_CustomRateLimiter) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&service_policy_rule.RateLimiterRuleSpec_CustomRateLimiter{` +
+		`CustomRateLimiter:` + fmt.Sprintf("%#v", this.CustomRateLimiter) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -7089,6 +8267,13 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 			return 0, err
 		}
 		i += nn22
+	}
+	if m.ChallengeAction != 0 {
+		dAtA[i] = 0xb0
+		i++
+		dAtA[i] = 0x3
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.ChallengeAction))
 	}
 	return i, nil
 }
@@ -7663,6 +8848,13 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += nn59
 	}
+	if m.ChallengeAction != 0 {
+		dAtA[i] = 0xb0
+		i++
+		dAtA[i] = 0x3
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.ChallengeAction))
+	}
 	return i, nil
 }
 
@@ -8235,6 +9427,13 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 			return 0, err
 		}
 		i += nn96
+	}
+	if m.ChallengeAction != 0 {
+		dAtA[i] = 0xb0
+		i++
+		dAtA[i] = 0x3
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.ChallengeAction))
 	}
 	return i, nil
 }
@@ -8809,6 +10008,13 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += nn133
 	}
+	if m.ChallengeAction != 0 {
+		dAtA[i] = 0xb0
+		i++
+		dAtA[i] = 0x3
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.ChallengeAction))
+	}
 	return i, nil
 }
 
@@ -9052,6 +10258,367 @@ func (m *GetSpecType_DstAsnMatcher) MarshalTo(dAtA []byte) (int, error) {
 	}
 	return i, nil
 }
+func (m *ChallengeRuleSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ChallengeRuleSpec) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.ChallengeAction != nil {
+		nn149, err := m.ChallengeAction.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn149
+	}
+	if m.DomainMatcher != nil {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DomainMatcher.Size()))
+		n150, err := m.DomainMatcher.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n150
+	}
+	if m.Path != nil {
+		dAtA[i] = 0x32
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Path.Size()))
+		n151, err := m.Path.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n151
+	}
+	if len(m.Headers) > 0 {
+		for _, msg := range m.Headers {
+			dAtA[i] = 0x3a
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.HttpMethod != nil {
+		dAtA[i] = 0x42
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HttpMethod.Size()))
+		n152, err := m.HttpMethod.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n152
+	}
+	if m.IpPrefixList != nil {
+		dAtA[i] = 0x4a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.IpPrefixList.Size()))
+		n153, err := m.IpPrefixList.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n153
+	}
+	if m.TlsFingerprintMatcher != nil {
+		dAtA[i] = 0x52
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.TlsFingerprintMatcher.Size()))
+		n154, err := m.TlsFingerprintMatcher.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n154
+	}
+	if len(m.QueryParams) > 0 {
+		for _, msg := range m.QueryParams {
+			dAtA[i] = 0x5a
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.BodyMatcher != nil {
+		dAtA[i] = 0x62
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.BodyMatcher.Size()))
+		n155, err := m.BodyMatcher.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n155
+	}
+	if len(m.ArgMatchers) > 0 {
+		for _, msg := range m.ArgMatchers {
+			dAtA[i] = 0x6a
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.CookieMatchers) > 0 {
+		for _, msg := range m.CookieMatchers {
+			dAtA[i] = 0x72
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.ClientChoice != nil {
+		nn156, err := m.ClientChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn156
+	}
+	if m.ExpirationTimestamp != nil {
+		dAtA[i] = 0xa2
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.ExpirationTimestamp.Size()))
+		n157, err := m.ExpirationTimestamp.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n157
+	}
+	return i, nil
+}
+
+func (m *ChallengeRuleSpec_DisableChallenge) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.DisableChallenge != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DisableChallenge.Size()))
+		n158, err := m.DisableChallenge.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n158
+	}
+	return i, nil
+}
+func (m *ChallengeRuleSpec_EnableJavascriptChallenge) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.EnableJavascriptChallenge != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.EnableJavascriptChallenge.Size()))
+		n159, err := m.EnableJavascriptChallenge.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n159
+	}
+	return i, nil
+}
+func (m *ChallengeRuleSpec_EnableCaptchaChallenge) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.EnableCaptchaChallenge != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.EnableCaptchaChallenge.Size()))
+		n160, err := m.EnableCaptchaChallenge.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n160
+	}
+	return i, nil
+}
+func (m *ChallengeRuleSpec_AnyClient) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.AnyClient != nil {
+		dAtA[i] = 0x82
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.AnyClient.Size()))
+		n161, err := m.AnyClient.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n161
+	}
+	return i, nil
+}
+func (m *ChallengeRuleSpec_ClientName) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x8a
+	i++
+	dAtA[i] = 0x1
+	i++
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.ClientName)))
+	i += copy(dAtA[i:], m.ClientName)
+	return i, nil
+}
+func (m *ChallengeRuleSpec_ClientSelector) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.ClientSelector != nil {
+		dAtA[i] = 0x92
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.ClientSelector.Size()))
+		n162, err := m.ClientSelector.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n162
+	}
+	return i, nil
+}
+func (m *ChallengeRuleSpec_ClientNameMatcher) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.ClientNameMatcher != nil {
+		dAtA[i] = 0x9a
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.ClientNameMatcher.Size()))
+		n163, err := m.ClientNameMatcher.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n163
+	}
+	return i, nil
+}
+func (m *RateLimiterRuleSpec) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RateLimiterRuleSpec) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.ActionChoice != nil {
+		nn164, err := m.ActionChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn164
+	}
+	if m.HttpMethod != nil {
+		dAtA[i] = 0x32
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HttpMethod.Size()))
+		n165, err := m.HttpMethod.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n165
+	}
+	if m.Path != nil {
+		dAtA[i] = 0x42
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Path.Size()))
+		n166, err := m.Path.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n166
+	}
+	if len(m.Headers) > 0 {
+		for _, msg := range m.Headers {
+			dAtA[i] = 0x4a
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.DomainMatcher != nil {
+		dAtA[i] = 0x52
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DomainMatcher.Size()))
+		n167, err := m.DomainMatcher.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n167
+	}
+	return i, nil
+}
+
+func (m *RateLimiterRuleSpec_BypassRateLimiter) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.BypassRateLimiter != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.BypassRateLimiter.Size()))
+		n168, err := m.BypassRateLimiter.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n168
+	}
+	return i, nil
+}
+func (m *RateLimiterRuleSpec_ApplyRateLimiter) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.ApplyRateLimiter != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.ApplyRateLimiter.Size()))
+		n169, err := m.ApplyRateLimiter.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n169
+	}
+	return i, nil
+}
+func (m *RateLimiterRuleSpec_CustomRateLimiter) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.CustomRateLimiter != nil {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.CustomRateLimiter.Size()))
+		n170, err := m.CustomRateLimiter.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n170
+	}
+	return i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
@@ -9063,7 +10630,7 @@ func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 }
 func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 	this := &GlobalSpecType{}
-	this.Action = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3}[r.Intn(4)])
+	this.Action = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
 	oneofNumber_ClientChoice := []int32{2, 3, 10, 37}[r.Intn(4)]
 	switch oneofNumber_ClientChoice {
 	case 2:
@@ -9209,6 +10776,7 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 	case 53:
 		this.DstAsnChoice = NewPopulatedGlobalSpecType_DstAsnMatcher(r, easy)
 	}
+	this.ChallengeAction = ves_io_schema_policy.ChallengeAction([]int32{0, 1, 2, 3}[r.Intn(4)])
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -9296,7 +10864,7 @@ func NewPopulatedGlobalSpecType_DstAsnMatcher(r randyTypes, easy bool) *GlobalSp
 }
 func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 	this := &CreateSpecType{}
-	this.Action = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3}[r.Intn(4)])
+	this.Action = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
 	oneofNumber_ClientChoice := []int32{2, 3, 10, 37}[r.Intn(4)]
 	switch oneofNumber_ClientChoice {
 	case 2:
@@ -9435,6 +11003,7 @@ func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 	case 53:
 		this.DstAsnChoice = NewPopulatedCreateSpecType_DstAsnMatcher(r, easy)
 	}
+	this.ChallengeAction = ves_io_schema_policy.ChallengeAction([]int32{0, 1, 2, 3}[r.Intn(4)])
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -9522,7 +11091,7 @@ func NewPopulatedCreateSpecType_DstAsnMatcher(r randyTypes, easy bool) *CreateSp
 }
 func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 	this := &ReplaceSpecType{}
-	this.Action = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3}[r.Intn(4)])
+	this.Action = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
 	oneofNumber_ClientChoice := []int32{2, 3, 10, 37}[r.Intn(4)]
 	switch oneofNumber_ClientChoice {
 	case 2:
@@ -9661,6 +11230,7 @@ func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 	case 53:
 		this.DstAsnChoice = NewPopulatedReplaceSpecType_DstAsnMatcher(r, easy)
 	}
+	this.ChallengeAction = ves_io_schema_policy.ChallengeAction([]int32{0, 1, 2, 3}[r.Intn(4)])
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -9748,7 +11318,7 @@ func NewPopulatedReplaceSpecType_DstAsnMatcher(r randyTypes, easy bool) *Replace
 }
 func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 	this := &GetSpecType{}
-	this.Action = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3}[r.Intn(4)])
+	this.Action = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
 	oneofNumber_ClientChoice := []int32{2, 3, 10, 37}[r.Intn(4)]
 	switch oneofNumber_ClientChoice {
 	case 2:
@@ -9887,6 +11457,7 @@ func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 	case 53:
 		this.DstAsnChoice = NewPopulatedGetSpecType_DstAsnMatcher(r, easy)
 	}
+	this.ChallengeAction = ves_io_schema_policy.ChallengeAction([]int32{0, 1, 2, 3}[r.Intn(4)])
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -9972,6 +11543,164 @@ func NewPopulatedGetSpecType_DstAsnMatcher(r randyTypes, easy bool) *GetSpecType
 	this.DstAsnMatcher = ves_io_schema_policy.NewPopulatedAsnMatcherType(r, easy)
 	return this
 }
+func NewPopulatedChallengeRuleSpec(r randyTypes, easy bool) *ChallengeRuleSpec {
+	this := &ChallengeRuleSpec{}
+	oneofNumber_ChallengeAction := []int32{2, 3, 4}[r.Intn(3)]
+	switch oneofNumber_ChallengeAction {
+	case 2:
+		this.ChallengeAction = NewPopulatedChallengeRuleSpec_DisableChallenge(r, easy)
+	case 3:
+		this.ChallengeAction = NewPopulatedChallengeRuleSpec_EnableJavascriptChallenge(r, easy)
+	case 4:
+		this.ChallengeAction = NewPopulatedChallengeRuleSpec_EnableCaptchaChallenge(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.DomainMatcher = ves_io_schema_policy.NewPopulatedMatcherTypeBasic(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.Path = ves_io_schema_policy.NewPopulatedPathMatcherType(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v26 := r.Intn(5)
+		this.Headers = make([]*ves_io_schema_policy.HeaderMatcherType, v26)
+		for i := 0; i < v26; i++ {
+			this.Headers[i] = ves_io_schema_policy.NewPopulatedHeaderMatcherType(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		this.HttpMethod = ves_io_schema_policy.NewPopulatedHttpMethodMatcherType(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.IpPrefixList = ves_io_schema_policy.NewPopulatedPrefixMatchList(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.TlsFingerprintMatcher = ves_io_schema_policy.NewPopulatedTlsFingerprintMatcherType(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v27 := r.Intn(5)
+		this.QueryParams = make([]*ves_io_schema_policy.QueryParameterMatcherType, v27)
+		for i := 0; i < v27; i++ {
+			this.QueryParams[i] = ves_io_schema_policy.NewPopulatedQueryParameterMatcherType(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		this.BodyMatcher = ves_io_schema_policy.NewPopulatedMatcherType(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v28 := r.Intn(5)
+		this.ArgMatchers = make([]*ves_io_schema_policy.ArgMatcherType, v28)
+		for i := 0; i < v28; i++ {
+			this.ArgMatchers[i] = ves_io_schema_policy.NewPopulatedArgMatcherType(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		v29 := r.Intn(5)
+		this.CookieMatchers = make([]*ves_io_schema_policy.CookieMatcherType, v29)
+		for i := 0; i < v29; i++ {
+			this.CookieMatchers[i] = ves_io_schema_policy.NewPopulatedCookieMatcherType(r, easy)
+		}
+	}
+	oneofNumber_ClientChoice := []int32{16, 17, 18, 19}[r.Intn(4)]
+	switch oneofNumber_ClientChoice {
+	case 16:
+		this.ClientChoice = NewPopulatedChallengeRuleSpec_AnyClient(r, easy)
+	case 17:
+		this.ClientChoice = NewPopulatedChallengeRuleSpec_ClientName(r, easy)
+	case 18:
+		this.ClientChoice = NewPopulatedChallengeRuleSpec_ClientSelector(r, easy)
+	case 19:
+		this.ClientChoice = NewPopulatedChallengeRuleSpec_ClientNameMatcher(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.ExpirationTimestamp = google_protobuf1.NewPopulatedTimestamp(r, easy)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedChallengeRuleSpec_DisableChallenge(r randyTypes, easy bool) *ChallengeRuleSpec_DisableChallenge {
+	this := &ChallengeRuleSpec_DisableChallenge{}
+	this.DisableChallenge = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedChallengeRuleSpec_EnableJavascriptChallenge(r randyTypes, easy bool) *ChallengeRuleSpec_EnableJavascriptChallenge {
+	this := &ChallengeRuleSpec_EnableJavascriptChallenge{}
+	this.EnableJavascriptChallenge = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedChallengeRuleSpec_EnableCaptchaChallenge(r randyTypes, easy bool) *ChallengeRuleSpec_EnableCaptchaChallenge {
+	this := &ChallengeRuleSpec_EnableCaptchaChallenge{}
+	this.EnableCaptchaChallenge = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedChallengeRuleSpec_AnyClient(r randyTypes, easy bool) *ChallengeRuleSpec_AnyClient {
+	this := &ChallengeRuleSpec_AnyClient{}
+	this.AnyClient = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedChallengeRuleSpec_ClientName(r randyTypes, easy bool) *ChallengeRuleSpec_ClientName {
+	this := &ChallengeRuleSpec_ClientName{}
+	this.ClientName = string(randStringTypes(r))
+	return this
+}
+func NewPopulatedChallengeRuleSpec_ClientSelector(r randyTypes, easy bool) *ChallengeRuleSpec_ClientSelector {
+	this := &ChallengeRuleSpec_ClientSelector{}
+	this.ClientSelector = ves_io_schema4.NewPopulatedLabelSelectorType(r, easy)
+	return this
+}
+func NewPopulatedChallengeRuleSpec_ClientNameMatcher(r randyTypes, easy bool) *ChallengeRuleSpec_ClientNameMatcher {
+	this := &ChallengeRuleSpec_ClientNameMatcher{}
+	this.ClientNameMatcher = ves_io_schema_policy.NewPopulatedMatcherType(r, easy)
+	return this
+}
+func NewPopulatedRateLimiterRuleSpec(r randyTypes, easy bool) *RateLimiterRuleSpec {
+	this := &RateLimiterRuleSpec{}
+	oneofNumber_ActionChoice := []int32{3, 4, 5}[r.Intn(3)]
+	switch oneofNumber_ActionChoice {
+	case 3:
+		this.ActionChoice = NewPopulatedRateLimiterRuleSpec_BypassRateLimiter(r, easy)
+	case 4:
+		this.ActionChoice = NewPopulatedRateLimiterRuleSpec_ApplyRateLimiter(r, easy)
+	case 5:
+		this.ActionChoice = NewPopulatedRateLimiterRuleSpec_CustomRateLimiter(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.HttpMethod = ves_io_schema_policy.NewPopulatedHttpMethodMatcherType(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.Path = ves_io_schema_policy.NewPopulatedPathMatcherType(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v30 := r.Intn(5)
+		this.Headers = make([]*ves_io_schema_policy.HeaderMatcherType, v30)
+		for i := 0; i < v30; i++ {
+			this.Headers[i] = ves_io_schema_policy.NewPopulatedHeaderMatcherType(r, easy)
+		}
+	}
+	if r.Intn(10) != 0 {
+		this.DomainMatcher = ves_io_schema_policy.NewPopulatedMatcherTypeBasic(r, easy)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedRateLimiterRuleSpec_BypassRateLimiter(r randyTypes, easy bool) *RateLimiterRuleSpec_BypassRateLimiter {
+	this := &RateLimiterRuleSpec_BypassRateLimiter{}
+	this.BypassRateLimiter = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedRateLimiterRuleSpec_ApplyRateLimiter(r randyTypes, easy bool) *RateLimiterRuleSpec_ApplyRateLimiter {
+	this := &RateLimiterRuleSpec_ApplyRateLimiter{}
+	this.ApplyRateLimiter = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedRateLimiterRuleSpec_CustomRateLimiter(r randyTypes, easy bool) *RateLimiterRuleSpec_CustomRateLimiter {
+	this := &RateLimiterRuleSpec_CustomRateLimiter{}
+	this.CustomRateLimiter = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
+	return this
+}
 
 type randyTypes interface {
 	Float32() float32
@@ -9992,9 +11721,9 @@ func randUTF8RuneTypes(r randyTypes) rune {
 	return rune(ru + 61)
 }
 func randStringTypes(r randyTypes) string {
-	v26 := r.Intn(100)
-	tmps := make([]rune, v26)
-	for i := 0; i < v26; i++ {
+	v31 := r.Intn(100)
+	tmps := make([]rune, v31)
+	for i := 0; i < v31; i++ {
 		tmps[i] = randUTF8RuneTypes(r)
 	}
 	return string(tmps)
@@ -10016,11 +11745,11 @@ func randFieldTypes(dAtA []byte, r randyTypes, fieldNumber int, wire int) []byte
 	switch wire {
 	case 0:
 		dAtA = encodeVarintPopulateTypes(dAtA, uint64(key))
-		v27 := r.Int63()
+		v32 := r.Int63()
 		if r.Intn(2) == 0 {
-			v27 *= -1
+			v32 *= -1
 		}
-		dAtA = encodeVarintPopulateTypes(dAtA, uint64(v27))
+		dAtA = encodeVarintPopulateTypes(dAtA, uint64(v32))
 	case 1:
 		dAtA = encodeVarintPopulateTypes(dAtA, uint64(key))
 		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -10175,6 +11904,9 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.DstAsnChoice != nil {
 		n += m.DstAsnChoice.Size()
+	}
+	if m.ChallengeAction != 0 {
+		n += 2 + sovTypes(uint64(m.ChallengeAction))
 	}
 	return n
 }
@@ -10446,6 +12178,9 @@ func (m *CreateSpecType) Size() (n int) {
 	if m.DstAsnChoice != nil {
 		n += m.DstAsnChoice.Size()
 	}
+	if m.ChallengeAction != 0 {
+		n += 2 + sovTypes(uint64(m.ChallengeAction))
+	}
 	return n
 }
 
@@ -10715,6 +12450,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	if m.DstAsnChoice != nil {
 		n += m.DstAsnChoice.Size()
+	}
+	if m.ChallengeAction != 0 {
+		n += 2 + sovTypes(uint64(m.ChallengeAction))
 	}
 	return n
 }
@@ -10986,6 +12724,9 @@ func (m *GetSpecType) Size() (n int) {
 	if m.DstAsnChoice != nil {
 		n += m.DstAsnChoice.Size()
 	}
+	if m.ChallengeAction != 0 {
+		n += 2 + sovTypes(uint64(m.ChallengeAction))
+	}
 	return n
 }
 
@@ -11131,6 +12872,185 @@ func (m *GetSpecType_DstAsnMatcher) Size() (n int) {
 	}
 	return n
 }
+func (m *ChallengeRuleSpec) Size() (n int) {
+	var l int
+	_ = l
+	if m.ChallengeAction != nil {
+		n += m.ChallengeAction.Size()
+	}
+	if m.DomainMatcher != nil {
+		l = m.DomainMatcher.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Path != nil {
+		l = m.Path.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Headers) > 0 {
+		for _, e := range m.Headers {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.HttpMethod != nil {
+		l = m.HttpMethod.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.IpPrefixList != nil {
+		l = m.IpPrefixList.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.TlsFingerprintMatcher != nil {
+		l = m.TlsFingerprintMatcher.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.QueryParams) > 0 {
+		for _, e := range m.QueryParams {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.BodyMatcher != nil {
+		l = m.BodyMatcher.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.ArgMatchers) > 0 {
+		for _, e := range m.ArgMatchers {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.CookieMatchers) > 0 {
+		for _, e := range m.CookieMatchers {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.ClientChoice != nil {
+		n += m.ClientChoice.Size()
+	}
+	if m.ExpirationTimestamp != nil {
+		l = m.ExpirationTimestamp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *ChallengeRuleSpec_DisableChallenge) Size() (n int) {
+	var l int
+	_ = l
+	if m.DisableChallenge != nil {
+		l = m.DisableChallenge.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ChallengeRuleSpec_EnableJavascriptChallenge) Size() (n int) {
+	var l int
+	_ = l
+	if m.EnableJavascriptChallenge != nil {
+		l = m.EnableJavascriptChallenge.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ChallengeRuleSpec_EnableCaptchaChallenge) Size() (n int) {
+	var l int
+	_ = l
+	if m.EnableCaptchaChallenge != nil {
+		l = m.EnableCaptchaChallenge.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ChallengeRuleSpec_AnyClient) Size() (n int) {
+	var l int
+	_ = l
+	if m.AnyClient != nil {
+		l = m.AnyClient.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ChallengeRuleSpec_ClientName) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.ClientName)
+	n += 2 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *ChallengeRuleSpec_ClientSelector) Size() (n int) {
+	var l int
+	_ = l
+	if m.ClientSelector != nil {
+		l = m.ClientSelector.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ChallengeRuleSpec_ClientNameMatcher) Size() (n int) {
+	var l int
+	_ = l
+	if m.ClientNameMatcher != nil {
+		l = m.ClientNameMatcher.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *RateLimiterRuleSpec) Size() (n int) {
+	var l int
+	_ = l
+	if m.ActionChoice != nil {
+		n += m.ActionChoice.Size()
+	}
+	if m.HttpMethod != nil {
+		l = m.HttpMethod.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Path != nil {
+		l = m.Path.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Headers) > 0 {
+		for _, e := range m.Headers {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.DomainMatcher != nil {
+		l = m.DomainMatcher.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *RateLimiterRuleSpec_BypassRateLimiter) Size() (n int) {
+	var l int
+	_ = l
+	if m.BypassRateLimiter != nil {
+		l = m.BypassRateLimiter.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *RateLimiterRuleSpec_ApplyRateLimiter) Size() (n int) {
+	var l int
+	_ = l
+	if m.ApplyRateLimiter != nil {
+		l = m.ApplyRateLimiter.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *RateLimiterRuleSpec_CustomRateLimiter) Size() (n int) {
+	var l int
+	_ = l
+	if m.CustomRateLimiter != nil {
+		l = m.CustomRateLimiter.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	for {
@@ -11180,6 +13100,7 @@ func (this *GlobalSpecType) String() string {
 		`L4DestMatcher:` + strings.Replace(fmt.Sprintf("%v", this.L4DestMatcher), "L4DestMatcherType", "ves_io_schema_policy.L4DestMatcherType", 1) + `,`,
 		`ServerSelector:` + strings.Replace(fmt.Sprintf("%v", this.ServerSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
 		`DstAsnChoice:` + fmt.Sprintf("%v", this.DstAsnChoice) + `,`,
+		`ChallengeAction:` + fmt.Sprintf("%v", this.ChallengeAction) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -11378,6 +13299,7 @@ func (this *CreateSpecType) String() string {
 		`L4DestMatcher:` + strings.Replace(fmt.Sprintf("%v", this.L4DestMatcher), "L4DestMatcherType", "ves_io_schema_policy.L4DestMatcherType", 1) + `,`,
 		`ServerSelector:` + strings.Replace(fmt.Sprintf("%v", this.ServerSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
 		`DstAsnChoice:` + fmt.Sprintf("%v", this.DstAsnChoice) + `,`,
+		`ChallengeAction:` + fmt.Sprintf("%v", this.ChallengeAction) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -11576,6 +13498,7 @@ func (this *ReplaceSpecType) String() string {
 		`L4DestMatcher:` + strings.Replace(fmt.Sprintf("%v", this.L4DestMatcher), "L4DestMatcherType", "ves_io_schema_policy.L4DestMatcherType", 1) + `,`,
 		`ServerSelector:` + strings.Replace(fmt.Sprintf("%v", this.ServerSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
 		`DstAsnChoice:` + fmt.Sprintf("%v", this.DstAsnChoice) + `,`,
+		`ChallengeAction:` + fmt.Sprintf("%v", this.ChallengeAction) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -11774,6 +13697,7 @@ func (this *GetSpecType) String() string {
 		`L4DestMatcher:` + strings.Replace(fmt.Sprintf("%v", this.L4DestMatcher), "L4DestMatcherType", "ves_io_schema_policy.L4DestMatcherType", 1) + `,`,
 		`ServerSelector:` + strings.Replace(fmt.Sprintf("%v", this.ServerSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
 		`DstAsnChoice:` + fmt.Sprintf("%v", this.DstAsnChoice) + `,`,
+		`ChallengeAction:` + fmt.Sprintf("%v", this.ChallengeAction) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -11934,6 +13858,142 @@ func (this *GetSpecType_DstAsnMatcher) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_DstAsnMatcher{`,
 		`DstAsnMatcher:` + strings.Replace(fmt.Sprintf("%v", this.DstAsnMatcher), "AsnMatcherType", "ves_io_schema_policy.AsnMatcherType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ChallengeRuleSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ChallengeRuleSpec{`,
+		`ChallengeAction:` + fmt.Sprintf("%v", this.ChallengeAction) + `,`,
+		`DomainMatcher:` + strings.Replace(fmt.Sprintf("%v", this.DomainMatcher), "MatcherTypeBasic", "ves_io_schema_policy.MatcherTypeBasic", 1) + `,`,
+		`Path:` + strings.Replace(fmt.Sprintf("%v", this.Path), "PathMatcherType", "ves_io_schema_policy.PathMatcherType", 1) + `,`,
+		`Headers:` + strings.Replace(fmt.Sprintf("%v", this.Headers), "HeaderMatcherType", "ves_io_schema_policy.HeaderMatcherType", 1) + `,`,
+		`HttpMethod:` + strings.Replace(fmt.Sprintf("%v", this.HttpMethod), "HttpMethodMatcherType", "ves_io_schema_policy.HttpMethodMatcherType", 1) + `,`,
+		`IpPrefixList:` + strings.Replace(fmt.Sprintf("%v", this.IpPrefixList), "PrefixMatchList", "ves_io_schema_policy.PrefixMatchList", 1) + `,`,
+		`TlsFingerprintMatcher:` + strings.Replace(fmt.Sprintf("%v", this.TlsFingerprintMatcher), "TlsFingerprintMatcherType", "ves_io_schema_policy.TlsFingerprintMatcherType", 1) + `,`,
+		`QueryParams:` + strings.Replace(fmt.Sprintf("%v", this.QueryParams), "QueryParameterMatcherType", "ves_io_schema_policy.QueryParameterMatcherType", 1) + `,`,
+		`BodyMatcher:` + strings.Replace(fmt.Sprintf("%v", this.BodyMatcher), "MatcherType", "ves_io_schema_policy.MatcherType", 1) + `,`,
+		`ArgMatchers:` + strings.Replace(fmt.Sprintf("%v", this.ArgMatchers), "ArgMatcherType", "ves_io_schema_policy.ArgMatcherType", 1) + `,`,
+		`CookieMatchers:` + strings.Replace(fmt.Sprintf("%v", this.CookieMatchers), "CookieMatcherType", "ves_io_schema_policy.CookieMatcherType", 1) + `,`,
+		`ClientChoice:` + fmt.Sprintf("%v", this.ClientChoice) + `,`,
+		`ExpirationTimestamp:` + strings.Replace(fmt.Sprintf("%v", this.ExpirationTimestamp), "Timestamp", "google_protobuf1.Timestamp", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ChallengeRuleSpec_DisableChallenge) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ChallengeRuleSpec_DisableChallenge{`,
+		`DisableChallenge:` + strings.Replace(fmt.Sprintf("%v", this.DisableChallenge), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ChallengeRuleSpec_EnableJavascriptChallenge) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ChallengeRuleSpec_EnableJavascriptChallenge{`,
+		`EnableJavascriptChallenge:` + strings.Replace(fmt.Sprintf("%v", this.EnableJavascriptChallenge), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ChallengeRuleSpec_EnableCaptchaChallenge) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ChallengeRuleSpec_EnableCaptchaChallenge{`,
+		`EnableCaptchaChallenge:` + strings.Replace(fmt.Sprintf("%v", this.EnableCaptchaChallenge), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ChallengeRuleSpec_AnyClient) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ChallengeRuleSpec_AnyClient{`,
+		`AnyClient:` + strings.Replace(fmt.Sprintf("%v", this.AnyClient), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ChallengeRuleSpec_ClientName) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ChallengeRuleSpec_ClientName{`,
+		`ClientName:` + fmt.Sprintf("%v", this.ClientName) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ChallengeRuleSpec_ClientSelector) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ChallengeRuleSpec_ClientSelector{`,
+		`ClientSelector:` + strings.Replace(fmt.Sprintf("%v", this.ClientSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ChallengeRuleSpec_ClientNameMatcher) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ChallengeRuleSpec_ClientNameMatcher{`,
+		`ClientNameMatcher:` + strings.Replace(fmt.Sprintf("%v", this.ClientNameMatcher), "MatcherType", "ves_io_schema_policy.MatcherType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RateLimiterRuleSpec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RateLimiterRuleSpec{`,
+		`ActionChoice:` + fmt.Sprintf("%v", this.ActionChoice) + `,`,
+		`HttpMethod:` + strings.Replace(fmt.Sprintf("%v", this.HttpMethod), "HttpMethodMatcherType", "ves_io_schema_policy.HttpMethodMatcherType", 1) + `,`,
+		`Path:` + strings.Replace(fmt.Sprintf("%v", this.Path), "PathMatcherType", "ves_io_schema_policy.PathMatcherType", 1) + `,`,
+		`Headers:` + strings.Replace(fmt.Sprintf("%v", this.Headers), "HeaderMatcherType", "ves_io_schema_policy.HeaderMatcherType", 1) + `,`,
+		`DomainMatcher:` + strings.Replace(fmt.Sprintf("%v", this.DomainMatcher), "MatcherTypeBasic", "ves_io_schema_policy.MatcherTypeBasic", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RateLimiterRuleSpec_BypassRateLimiter) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RateLimiterRuleSpec_BypassRateLimiter{`,
+		`BypassRateLimiter:` + strings.Replace(fmt.Sprintf("%v", this.BypassRateLimiter), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RateLimiterRuleSpec_ApplyRateLimiter) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RateLimiterRuleSpec_ApplyRateLimiter{`,
+		`ApplyRateLimiter:` + strings.Replace(fmt.Sprintf("%v", this.ApplyRateLimiter), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RateLimiterRuleSpec_CustomRateLimiter) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RateLimiterRuleSpec_CustomRateLimiter{`,
+		`CustomRateLimiter:` + strings.Replace(fmt.Sprintf("%v", this.CustomRateLimiter), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -13279,6 +15339,25 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.DstAsnChoice = &GlobalSpecType_DstAsnMatcher{v}
 			iNdEx = postIndex
+		case 54:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengeAction", wireType)
+			}
+			m.ChallengeAction = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ChallengeAction |= (ves_io_schema_policy.ChallengeAction(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -14602,6 +16681,25 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.DstAsnChoice = &CreateSpecType_DstAsnMatcher{v}
 			iNdEx = postIndex
+		case 54:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengeAction", wireType)
+			}
+			m.ChallengeAction = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ChallengeAction |= (ves_io_schema_policy.ChallengeAction(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -15925,6 +18023,25 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.DstAsnChoice = &ReplaceSpecType_DstAsnMatcher{v}
 			iNdEx = postIndex
+		case 54:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengeAction", wireType)
+			}
+			m.ChallengeAction = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ChallengeAction |= (ves_io_schema_policy.ChallengeAction(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -17248,6 +19365,927 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.DstAsnChoice = &GetSpecType_DstAsnMatcher{v}
 			iNdEx = postIndex
+		case 54:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengeAction", wireType)
+			}
+			m.ChallengeAction = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ChallengeAction |= (ves_io_schema_policy.ChallengeAction(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ChallengeRuleSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ChallengeRuleSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ChallengeRuleSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableChallenge", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ChallengeAction = &ChallengeRuleSpec_DisableChallenge{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableJavascriptChallenge", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ChallengeAction = &ChallengeRuleSpec_EnableJavascriptChallenge{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableCaptchaChallenge", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ChallengeAction = &ChallengeRuleSpec_EnableCaptchaChallenge{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DomainMatcher", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DomainMatcher == nil {
+				m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+			}
+			if err := m.DomainMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Path == nil {
+				m.Path = &ves_io_schema_policy.PathMatcherType{}
+			}
+			if err := m.Path.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Headers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Headers = append(m.Headers, &ves_io_schema_policy.HeaderMatcherType{})
+			if err := m.Headers[len(m.Headers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpMethod", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HttpMethod == nil {
+				m.HttpMethod = &ves_io_schema_policy.HttpMethodMatcherType{}
+			}
+			if err := m.HttpMethod.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IpPrefixList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.IpPrefixList == nil {
+				m.IpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
+			}
+			if err := m.IpPrefixList.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TlsFingerprintMatcher", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TlsFingerprintMatcher == nil {
+				m.TlsFingerprintMatcher = &ves_io_schema_policy.TlsFingerprintMatcherType{}
+			}
+			if err := m.TlsFingerprintMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field QueryParams", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.QueryParams = append(m.QueryParams, &ves_io_schema_policy.QueryParameterMatcherType{})
+			if err := m.QueryParams[len(m.QueryParams)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BodyMatcher", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.BodyMatcher == nil {
+				m.BodyMatcher = &ves_io_schema_policy.MatcherType{}
+			}
+			if err := m.BodyMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ArgMatchers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ArgMatchers = append(m.ArgMatchers, &ves_io_schema_policy.ArgMatcherType{})
+			if err := m.ArgMatchers[len(m.ArgMatchers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CookieMatchers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CookieMatchers = append(m.CookieMatchers, &ves_io_schema_policy.CookieMatcherType{})
+			if err := m.CookieMatchers[len(m.CookieMatchers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AnyClient", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClientChoice = &ChallengeRuleSpec_AnyClient{v}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientChoice = &ChallengeRuleSpec_ClientName{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientSelector", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.LabelSelectorType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClientChoice = &ChallengeRuleSpec_ClientSelector{v}
+			iNdEx = postIndex
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientNameMatcher", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema_policy.MatcherType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClientChoice = &ChallengeRuleSpec_ClientNameMatcher{v}
+			iNdEx = postIndex
+		case 20:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExpirationTimestamp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ExpirationTimestamp == nil {
+				m.ExpirationTimestamp = &google_protobuf1.Timestamp{}
+			}
+			if err := m.ExpirationTimestamp.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RateLimiterRuleSpec) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RateLimiterRuleSpec: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RateLimiterRuleSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BypassRateLimiter", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ActionChoice = &RateLimiterRuleSpec_BypassRateLimiter{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApplyRateLimiter", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ActionChoice = &RateLimiterRuleSpec_ApplyRateLimiter{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomRateLimiter", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema_views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ActionChoice = &RateLimiterRuleSpec_CustomRateLimiter{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpMethod", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HttpMethod == nil {
+				m.HttpMethod = &ves_io_schema_policy.HttpMethodMatcherType{}
+			}
+			if err := m.HttpMethod.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Path == nil {
+				m.Path = &ves_io_schema_policy.PathMatcherType{}
+			}
+			if err := m.Path.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Headers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Headers = append(m.Headers, &ves_io_schema_policy.HeaderMatcherType{})
+			if err := m.Headers[len(m.Headers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DomainMatcher", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DomainMatcher == nil {
+				m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+			}
+			if err := m.DomainMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -17380,139 +20418,169 @@ func init() {
 }
 
 var fileDescriptorTypes = []byte{
-	// 2144 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x9b, 0xcd, 0x6f, 0x1b, 0xc7,
-	0x19, 0xc6, 0x35, 0x12, 0x2d, 0x51, 0xc3, 0x4f, 0x6d, 0xfc, 0xb1, 0x56, 0x6c, 0x7a, 0xcd, 0xd8,
-	0x8a, 0x9c, 0xac, 0x48, 0x93, 0x94, 0x1c, 0xa7, 0x40, 0x63, 0x88, 0x92, 0x2d, 0x5a, 0xd1, 0x87,
-	0xb3, 0x92, 0x61, 0x27, 0x8d, 0xbb, 0x1d, 0x91, 0x23, 0x72, 0x9b, 0x25, 0x77, 0xbd, 0x3b, 0x94,
-	0x4d, 0x14, 0x46, 0x0d, 0xdf, 0x7a, 0x2b, 0x72, 0x6b, 0xcf, 0x05, 0x1a, 0xe4, 0x2f, 0x28, 0xca,
-	0x16, 0x10, 0x7a, 0x0a, 0x7a, 0xf2, 0xd1, 0xe8, 0xa9, 0x66, 0x2e, 0xe9, 0xcd, 0xc7, 0xc2, 0xa7,
-	0x62, 0x67, 0x3f, 0xb8, 0x4b, 0x2d, 0x59, 0x9a, 0x72, 0x8b, 0x16, 0xd8, 0x93, 0xb9, 0x33, 0xcf,
-	0xfb, 0xcc, 0xec, 0x3b, 0xef, 0xce, 0xcc, 0x0f, 0x86, 0xe0, 0xc2, 0x01, 0xd6, 0x33, 0x92, 0x92,
-	0xd5, 0xcb, 0x35, 0x5c, 0x47, 0x59, 0x1d, 0x6b, 0x07, 0x52, 0x19, 0x8b, 0xaa, 0x22, 0x4b, 0xe5,
-	0x96, 0xa8, 0x35, 0x65, 0x9c, 0x25, 0x2d, 0x15, 0xeb, 0x19, 0x55, 0x53, 0x88, 0xc2, 0x5c, 0x34,
-	0xe5, 0x19, 0x53, 0x9e, 0xf1, 0x91, 0xcf, 0x2e, 0x54, 0x25, 0x52, 0x6b, 0xee, 0x65, 0xca, 0x4a,
-	0x3d, 0x5b, 0x55, 0xaa, 0x4a, 0x96, 0x46, 0xee, 0x35, 0xf7, 0xe9, 0x13, 0x7d, 0xa0, 0xbf, 0x4c,
-	0xc7, 0xd9, 0x0b, 0x55, 0x45, 0xa9, 0xca, 0xb8, 0xab, 0x22, 0x52, 0x1d, 0xeb, 0x04, 0xd5, 0x55,
-	0x4b, 0x50, 0xf0, 0xce, 0xb0, 0x8e, 0x64, 0xa9, 0x2c, 0x29, 0x4d, 0x5d, 0x6c, 0xea, 0x58, 0x13,
-	0xeb, 0x12, 0x91, 0xaa, 0x88, 0x48, 0x4a, 0xc3, 0x3d, 0xcf, 0xd9, 0x77, 0xbd, 0x41, 0x8a, 0x6a,
-	0x28, 0xec, 0x4e, 0xce, 0xdb, 0x69, 0x4e, 0xde, 0x13, 0x7e, 0xd6, 0xab, 0x70, 0x77, 0x9d, 0xf3,
-	0x76, 0x1d, 0x20, 0x59, 0xaa, 0x20, 0x82, 0xfd, 0xad, 0x0f, 0x24, 0xfc, 0x48, 0xf4, 0x0c, 0x9e,
-	0xfe, 0xf3, 0x79, 0x18, 0x5f, 0x93, 0x95, 0x3d, 0x24, 0xef, 0xa8, 0xb8, 0xbc, 0xdb, 0x52, 0x31,
-	0x53, 0x84, 0x93, 0xa8, 0x6c, 0x68, 0x58, 0xc0, 0x81, 0xf9, 0x78, 0x9e, 0xcb, 0x78, 0xb3, 0x6c,
-	0x4e, 0x30, 0x23, 0x34, 0x65, 0xbc, 0x4c, 0x75, 0xc5, 0xf0, 0xdf, 0xda, 0x20, 0xb4, 0x7a, 0x73,
-	0xeb, 0x73, 0xc1, 0x8a, 0x64, 0x16, 0x60, 0xa4, 0x2c, 0x4b, 0xb8, 0x41, 0xc4, 0x06, 0xaa, 0x63,
-	0x76, 0x9c, 0x03, 0xf3, 0xd3, 0x45, 0xf8, 0xc7, 0x7f, 0x1c, 0x4e, 0x9c, 0xd0, 0x26, 0xe6, 0x9f,
-	0x8e, 0x97, 0xc6, 0x04, 0x68, 0x0a, 0xb6, 0x50, 0x1d, 0x33, 0x77, 0x61, 0xc2, 0x92, 0xeb, 0x58,
-	0xc6, 0x65, 0xa2, 0x68, 0xec, 0x04, 0x07, 0xe6, 0x23, 0x47, 0xc6, 0xde, 0x40, 0x7b, 0x58, 0xde,
-	0xb1, 0x34, 0xc6, 0x6c, 0x8b, 0xe1, 0xdf, 0xfe, 0x09, 0x84, 0xe0, 0x38, 0x30, 0x2c, 0xe3, 0xa6,
-	0x89, 0xdd, 0xcf, 0xac, 0xc2, 0x98, 0x6c, 0x04, 0x88, 0x75, 0x44, 0xca, 0x35, 0xac, 0xb1, 0x21,
-	0x6a, 0x7a, 0xc1, 0xcf, 0x74, 0xd3, 0x94, 0x18, 0x9e, 0x42, 0x54, 0x76, 0xb5, 0x30, 0x1f, 0xc3,
-	0x90, 0x8a, 0x48, 0x8d, 0x3d, 0x41, 0x83, 0x2f, 0xfb, 0x67, 0xe3, 0x0e, 0x22, 0x35, 0xb7, 0x05,
-	0x0d, 0x61, 0x36, 0xe1, 0x54, 0x0d, 0xa3, 0x0a, 0xd6, 0x74, 0x76, 0x92, 0x9b, 0x98, 0x8f, 0xe4,
-	0xdf, 0xf7, 0x8f, 0x2e, 0x51, 0x91, 0x2b, 0xde, 0xca, 0xd5, 0xd7, 0x60, 0x3c, 0x99, 0x14, 0x6c,
-	0x0f, 0xe6, 0xa7, 0x30, 0xfa, 0xb0, 0x89, 0xb5, 0x96, 0xa8, 0x22, 0x0d, 0xd5, 0x75, 0x76, 0x8a,
-	0x7a, 0x66, 0xfd, 0x3d, 0x3f, 0x33, 0x94, 0x77, 0x0c, 0x21, 0x26, 0xfd, 0xbd, 0x23, 0x0f, 0x1d,
-	0x99, 0xce, 0x6c, 0xc0, 0x48, 0x8d, 0x10, 0x55, 0xac, 0x63, 0x52, 0x53, 0x2a, 0x6c, 0x98, 0xbe,
-	0xf0, 0x87, 0x7d, 0xa6, 0x4c, 0x88, 0xba, 0x49, 0x75, 0xee, 0xd7, 0x86, 0x35, 0xa7, 0x99, 0xd9,
-	0x76, 0x6a, 0x40, 0x53, 0x64, 0xcc, 0x4e, 0x0f, 0x4a, 0x9f, 0xa0, 0xc8, 0xd8, 0x3d, 0xc5, 0xa9,
-	0x17, 0x4f, 0xc0, 0x0f, 0x6d, 0x00, 0xec, 0x2a, 0x31, 0xfa, 0x99, 0x1d, 0xf8, 0x8e, 0xab, 0xa8,
-	0x9c, 0x45, 0x85, 0xd4, 0xf8, 0xa2, 0xbf, 0xb1, 0xcb, 0xb4, 0x34, 0x26, 0xcc, 0x74, 0x6b, 0xce,
-	0x5e, 0xdd, 0x55, 0x08, 0x25, 0xd5, 0xf1, 0x8a, 0x52, 0xaf, 0xf7, 0xfc, 0xbd, 0x6e, 0xab, 0x6e,
-	0x37, 0x20, 0x4c, 0x4b, 0x76, 0x03, 0xb3, 0x06, 0x23, 0x48, 0x6f, 0x38, 0x36, 0x31, 0x6a, 0x73,
-	0xc9, 0xdf, 0x66, 0x59, 0x6f, 0xb8, 0x7d, 0x26, 0x04, 0x88, 0x9c, 0x16, 0xe6, 0x4b, 0x38, 0x83,
-	0x54, 0x49, 0xac, 0x6a, 0x4a, 0xb3, 0x3b, 0xab, 0x38, 0xb5, 0xeb, 0x53, 0x3b, 0x3b, 0x44, 0x93,
-	0x1a, 0x55, 0xdf, 0xe4, 0x25, 0x90, 0x2a, 0xad, 0x19, 0x4e, 0xb6, 0xfb, 0x67, 0x30, 0xaa, 0x2a,
-	0x1a, 0x71, 0x8c, 0x13, 0x03, 0x4b, 0x5a, 0xd1, 0x88, 0xaf, 0x6d, 0x44, 0xed, 0xf6, 0x30, 0x3b,
-	0xf0, 0x24, 0x7e, 0xac, 0x4a, 0x1a, 0xdd, 0xf4, 0x44, 0x67, 0xb7, 0x64, 0x93, 0xd4, 0x7a, 0x36,
-	0x63, 0xee, 0xa7, 0x19, 0x7b, 0x3f, 0xcd, 0xec, 0xda, 0x8a, 0x62, 0xe8, 0xd0, 0x30, 0x7b, 0xa7,
-	0x1b, 0xed, 0x74, 0x31, 0xf7, 0x60, 0x14, 0x69, 0x55, 0x7b, 0x9a, 0x3a, 0xcb, 0xd0, 0x42, 0xef,
-	0x97, 0x4f, 0xcd, 0xf3, 0xf6, 0x71, 0xc3, 0xd6, 0x5d, 0xe1, 0xc8, 0xe9, 0xd7, 0x99, 0x9f, 0xc1,
-	0x44, 0x59, 0x51, 0xbe, 0x92, 0x70, 0xd7, 0xfb, 0x9d, 0x41, 0x1f, 0xe6, 0x0a, 0x15, 0x0f, 0xb2,
-	0x8f, 0x97, 0xdd, 0x12, 0xdd, 0xa8, 0xa7, 0x47, 0x68, 0x5f, 0xb4, 0x76, 0xd0, 0x93, 0xbe, 0x1b,
-	0x8e, 0x65, 0x7e, 0x0f, 0xed, 0x5b, 0x1b, 0xa8, 0x99, 0x8a, 0xe9, 0x47, 0x76, 0x03, 0xb3, 0x0e,
-	0xa3, 0x7b, 0x4a, 0xa5, 0xe5, 0x2c, 0xd4, 0xa9, 0x21, 0x6b, 0xdc, 0x72, 0x8a, 0x18, 0xc1, 0xf6,
-	0x0a, 0x95, 0x60, 0xbc, 0xa2, 0xd4, 0x91, 0xd4, 0x2d, 0xcf, 0xd3, 0x43, 0xba, 0x09, 0x31, 0x33,
-	0xd0, 0x76, 0x42, 0x30, 0xaa, 0x21, 0x82, 0x45, 0x59, 0xaa, 0x4b, 0x04, 0x6b, 0xec, 0x19, 0x9a,
-	0xba, 0x73, 0x3d, 0x3e, 0xdb, 0x7b, 0x3f, 0xc7, 0x65, 0x22, 0xe0, 0x7d, 0x3a, 0x21, 0xee, 0xdb,
-	0x27, 0x9e, 0x20, 0xab, 0x88, 0x9c, 0x0c, 0x8e, 0x0b, 0x11, 0xa3, 0x7b, 0xc3, 0xec, 0x65, 0xbe,
-	0x84, 0x27, 0x0f, 0x24, 0x8d, 0x34, 0x91, 0x2c, 0xd6, 0x14, 0xbd, 0x5b, 0xa9, 0xec, 0xb0, 0x09,
-	0x70, 0xaa, 0x94, 0xb1, 0x7c, 0x4a, 0x8a, 0xee, 0x14, 0xeb, 0x43, 0x78, 0x86, 0xc8, 0xba, 0xb8,
-	0x2f, 0x35, 0xaa, 0x58, 0x53, 0x35, 0xa9, 0xd1, 0x1d, 0xe0, 0x2c, 0x1d, 0xa0, 0xcf, 0x5e, 0xba,
-	0x2b, 0xeb, 0xb7, 0xba, 0x31, 0xee, 0xe1, 0xc2, 0x46, 0xbe, 0x9f, 0x1b, 0xe3, 0x9d, 0x22, 0x7e,
-	0x22, 0xa6, 0x0e, 0x93, 0xfb, 0x8a, 0xf6, 0x08, 0x69, 0x15, 0xa9, 0x51, 0x15, 0xcb, 0x32, 0xd2,
-	0x75, 0x76, 0x76, 0x88, 0xbc, 0x5d, 0xfa, 0xf6, 0xc9, 0x91, 0xc0, 0xde, 0xdc, 0x4d, 0x08, 0x89,
-	0xae, 0x64, 0xc5, 0x50, 0x30, 0xbf, 0x02, 0xf0, 0x6c, 0xdf, 0x3b, 0x09, 0xfb, 0x2e, 0x7d, 0xc9,
-	0xd5, 0x9e, 0x81, 0xfb, 0xea, 0x33, 0x9b, 0x76, 0xcf, 0x5d, 0x1d, 0x6b, 0x9b, 0x4e, 0xbb, 0x37,
-	0xd1, 0x67, 0xea, 0xfe, 0x2a, 0x66, 0x1f, 0x72, 0x7d, 0xad, 0xc5, 0xbd, 0x96, 0x6a, 0xa4, 0xe2,
-	0x1c, 0x9d, 0xd1, 0xc9, 0x9e, 0x19, 0xdd, 0xac, 0xab, 0xa4, 0xd5, 0x1d, 0xe1, 0x7c, 0x9f, 0x11,
-	0x8a, 0xd4, 0x83, 0x59, 0x80, 0x93, 0xa8, 0xd1, 0x12, 0x25, 0x95, 0xbd, 0xd0, 0xdf, 0xad, 0x04,
-	0x84, 0x13, 0xa8, 0xd1, 0xba, 0xad, 0x32, 0x9b, 0x30, 0x2e, 0xa9, 0xa2, 0xaa, 0xe1, 0x7d, 0xe9,
-	0xb1, 0x28, 0x4b, 0x3a, 0x61, 0xb9, 0x81, 0xdb, 0x20, 0x15, 0xd2, 0xe5, 0xdc, 0x90, 0x74, 0x52,
-	0x02, 0x42, 0x54, 0x52, 0xcd, 0x46, 0xe3, 0x99, 0xc9, 0xc2, 0x29, 0x63, 0x74, 0xa4, 0x37, 0xd8,
-	0xf4, 0x80, 0xe1, 0x27, 0x04, 0x63, 0x92, 0xcb, 0x7a, 0x83, 0xb9, 0x01, 0xc3, 0xc6, 0x59, 0x41,
-	0x47, 0x7e, 0x8f, 0x46, 0xa4, 0x07, 0x1f, 0x14, 0x74, 0xd8, 0x09, 0x61, 0x0a, 0xe9, 0x0d, 0x3a,
-	0xe2, 0x12, 0x84, 0xc6, 0x88, 0xe6, 0x59, 0xc6, 0x5e, 0x1e, 0x30, 0xe8, 0x98, 0x30, 0x8d, 0x1a,
-	0xad, 0x15, 0x2a, 0x64, 0xaa, 0x70, 0x92, 0x76, 0x62, 0x76, 0x8e, 0x9b, 0x98, 0x9f, 0x2e, 0x6e,
-	0xbb, 0xca, 0x29, 0xfb, 0x35, 0xe0, 0xd3, 0x1f, 0x68, 0xf3, 0xc2, 0xdc, 0x4f, 0xd2, 0xcb, 0x5b,
-	0x9f, 0xa7, 0x79, 0x2e, 0x5d, 0xda, 0xdd, 0xbd, 0x63, 0xff, 0xbb, 0x63, 0xfc, 0xd8, 0x5d, 0xa1,
-	0xcf, 0xbb, 0x1b, 0x3b, 0xe9, 0x07, 0x4e, 0x09, 0x86, 0xec, 0x5f, 0x2c, 0x10, 0x2c, 0x7b, 0x66,
-	0x0b, 0x46, 0x9a, 0x5a, 0xf7, 0xd2, 0xf5, 0xfe, 0xa0, 0xc3, 0xf0, 0xae, 0xb0, 0xe1, 0x7f, 0xee,
-	0x37, 0x35, 0xe7, 0x02, 0xf6, 0x63, 0xf3, 0x7d, 0x2b, 0x3a, 0x31, 0xd6, 0xf8, 0xca, 0x10, 0x15,
-	0x53, 0x1a, 0x17, 0xc2, 0xa8, 0xd1, 0x5a, 0xd5, 0xc9, 0x6d, 0x95, 0x79, 0x00, 0x19, 0x33, 0xd4,
-	0xb3, 0xe6, 0x1f, 0xbc, 0xc1, 0x9a, 0xbb, 0x7d, 0x13, 0x15, 0xc3, 0xd4, 0xb5, 0xfe, 0xbb, 0x30,
-	0x6e, 0xd9, 0xdb, 0x2f, 0xfc, 0xe1, 0xd0, 0x97, 0x08, 0xb7, 0x71, 0x94, 0x1a, 0xdb, 0xef, 0x7c,
-	0x1f, 0x26, 0xe4, 0x45, 0xb1, 0x82, 0x5d, 0x5b, 0x20, 0x3f, 0xe8, 0x16, 0xb0, 0xb1, 0xb8, 0x8a,
-	0x75, 0xff, 0xe3, 0x3a, 0x26, 0xbb, 0xfb, 0x98, 0x2f, 0x60, 0xc2, 0xe0, 0x24, 0xac, 0x75, 0xef,
-	0xda, 0x0b, 0x43, 0xde, 0xb5, 0x13, 0x96, 0xa5, 0x7d, 0xe5, 0x16, 0xe2, 0xa6, 0x93, 0x73, 0xe1,
-	0xbe, 0x01, 0x23, 0xf6, 0x4a, 0x19, 0xdf, 0x43, 0x61, 0x98, 0xa5, 0x0a, 0xd1, 0x1a, 0x5d, 0xd5,
-	0x89, 0xf1, 0x6d, 0x6c, 0xc3, 0xa8, 0x15, 0x6c, 0xae, 0xd2, 0xe2, 0xb0, 0xdf, 0x87, 0xdb, 0x0f,
-	0x56, 0xa8, 0x19, 0x5d, 0x9d, 0x7b, 0x30, 0x61, 0x1b, 0xda, 0x79, 0x5c, 0x1a, 0xfe, 0x72, 0xe6,
-	0x76, 0x8d, 0x99, 0xae, 0x56, 0xef, 0x8f, 0x7e, 0xf9, 0x97, 0x36, 0xf8, 0x05, 0x4c, 0xc0, 0x49,
-	0xeb, 0xc4, 0x3e, 0x91, 0xe3, 0xb9, 0xfc, 0x55, 0x78, 0x16, 0x4e, 0x99, 0x9f, 0x9b, 0xce, 0xc4,
-	0x0b, 0xd7, 0x78, 0xae, 0x70, 0x95, 0xe7, 0x0a, 0x05, 0x9e, 0xcb, 0x2f, 0xc1, 0x18, 0x9c, 0xda,
-	0xa1, 0xe9, 0xd2, 0x99, 0xf1, 0x7c, 0x1e, 0xce, 0xc1, 0x98, 0x80, 0x1f, 0x36, 0xb1, 0x4e, 0x38,
-	0xea, 0xc9, 0x9c, 0xba, 0xce, 0x73, 0x4b, 0x3c, 0xf7, 0x11, 0xcf, 0x5d, 0xe3, 0xb9, 0xdc, 0xc7,
-	0x7c, 0xee, 0x3a, 0xcf, 0xe5, 0x73, 0xf0, 0x34, 0x8c, 0x2f, 0x57, 0x0e, 0x50, 0xa3, 0x8c, 0x2b,
-	0x96, 0x30, 0xb4, 0xc8, 0xe7, 0xae, 0x15, 0xe7, 0x60, 0xcc, 0xba, 0x0d, 0x97, 0x6b, 0x8a, 0x54,
-	0xc6, 0xcc, 0xa9, 0xc3, 0x36, 0xb8, 0xfc, 0xbc, 0x0d, 0x2e, 0x75, 0xda, 0x60, 0xba, 0xf0, 0x11,
-	0x9f, 0xe7, 0x73, 0x57, 0xf9, 0x42, 0xf1, 0x32, 0x9c, 0x96, 0x54, 0x5b, 0xc3, 0x1e, 0xb6, 0xc1,
-	0x85, 0xef, 0xcc, 0x23, 0x2b, 0xd5, 0x69, 0x83, 0x70, 0x21, 0xc7, 0x17, 0xf2, 0x7c, 0x2e, 0x5f,
-	0x5c, 0x80, 0x31, 0xab, 0x8c, 0x2d, 0xe9, 0xb9, 0xc3, 0x36, 0xb8, 0x62, 0x49, 0xe7, 0x0d, 0xe9,
-	0x62, 0x8e, 0x5f, 0xcc, 0xf3, 0x8b, 0x85, 0x57, 0x6d, 0x00, 0x8a, 0x73, 0xd0, 0xb8, 0xb5, 0xba,
-	0x6d, 0xd3, 0x96, 0xf6, 0x22, 0xb5, 0x5d, 0xe4, 0x0b, 0x4b, 0x7c, 0xae, 0x50, 0xcc, 0x98, 0x5f,
-	0x87, 0x4b, 0x6b, 0xf8, 0x16, 0x2c, 0x6d, 0xde, 0xd0, 0x2e, 0xe5, 0xf8, 0xa5, 0x3c, 0xbf, 0x44,
-	0x7d, 0xd7, 0x43, 0xe1, 0x4b, 0xc9, 0xcb, 0xeb, 0xa1, 0x70, 0x24, 0x19, 0x5d, 0x0f, 0x85, 0x53,
-	0xc9, 0x0b, 0xeb, 0xa1, 0xf0, 0x7c, 0xf2, 0xca, 0x7a, 0x28, 0x7c, 0x31, 0x99, 0x5e, 0x0f, 0x85,
-	0xf3, 0xc9, 0xc2, 0x7a, 0x28, 0x3c, 0x93, 0x64, 0xd6, 0x43, 0xe1, 0xf3, 0xc9, 0x54, 0xfa, 0xf7,
-	0x2c, 0x8c, 0xaf, 0x68, 0x18, 0x11, 0xec, 0xf0, 0xeb, 0xf5, 0x37, 0xe5, 0x57, 0x87, 0x5a, 0x2f,
-	0xfa, 0x50, 0x6b, 0x0f, 0xa9, 0x7e, 0x3a, 0x32, 0xa9, 0xfe, 0x2f, 0xf2, 0xe9, 0xf2, 0xa8, 0x7c,
-	0xda, 0x65, 0x52, 0xe1, 0xad, 0x30, 0xe9, 0x7f, 0x92, 0x43, 0x6f, 0x8d, 0xce, 0xa1, 0x1e, 0xfc,
-	0xbc, 0x3f, 0x08, 0x3f, 0xe7, 0xfe, 0xfd, 0xcd, 0x14, 0xe9, 0x52, 0xf9, 0xff, 0x82, 0x41, 0x77,
-	0x8e, 0xcf, 0xa0, 0x47, 0xd1, 0xb3, 0x74, 0x0c, 0xf4, 0xf4, 0x12, 0xe7, 0xe6, 0xa8, 0xc4, 0xe9,
-	0xcf, 0x9a, 0x6b, 0xa3, 0xb3, 0xa6, 0x97, 0x2d, 0xef, 0x1c, 0x97, 0x2d, 0x8f, 0xb0, 0xe4, 0x27,
-	0x23, 0xb0, 0xa4, 0x9b, 0x22, 0x57, 0x47, 0xa4, 0x48, 0x2f, 0x3f, 0x6e, 0xf6, 0xe1, 0xc7, 0x21,
-	0x4b, 0xbe, 0x17, 0x22, 0x6f, 0xbc, 0x39, 0x44, 0x7a, 0x11, 0xf1, 0xfe, 0x40, 0x44, 0x1c, 0x76,
-	0x56, 0x7e, 0x78, 0x58, 0x7d, 0xdb, 0x78, 0xd8, 0x0f, 0x0a, 0x9f, 0xfe, 0xb7, 0x28, 0xad, 0x3f,
-	0x9c, 0x3d, 0x38, 0x1e, 0x9c, 0x05, 0x4c, 0xf6, 0x56, 0x98, 0xec, 0xb4, 0x97, 0xc9, 0x1c, 0x84,
-	0xba, 0x39, 0x32, 0x42, 0x79, 0xc8, 0x69, 0x71, 0x58, 0x72, 0xf2, 0x00, 0xd3, 0xee, 0xb1, 0x81,
-	0xc9, 0x8f, 0x93, 0x3e, 0x3d, 0x06, 0x27, 0x1d, 0xc1, 0xa3, 0xed, 0xe3, 0xe2, 0x51, 0x2f, 0x15,
-	0xdd, 0x1e, 0x99, 0x8a, 0x8e, 0x40, 0xd0, 0xb5, 0xa1, 0x21, 0xc8, 0xcb, 0x3e, 0xb7, 0x46, 0x65,
-	0x9f, 0x1e, 0xe4, 0xd9, 0x3a, 0x16, 0xf2, 0x1c, 0x25, 0x9d, 0x99, 0xbf, 0x7e, 0xd2, 0xf3, 0x5f,
-	0x44, 0xc5, 0x74, 0x2f, 0x7b, 0xcc, 0x3c, 0x7b, 0x0d, 0xbc, 0x4d, 0xc5, 0x59, 0x37, 0x77, 0xc4,
-	0x9e, 0xbd, 0x06, 0xdd, 0x47, 0x23, 0xde, 0x0b, 0x1b, 0x34, 0xde, 0xd3, 0x54, 0x3c, 0xe7, 0x21,
-	0x8c, 0xf8, 0xb3, 0xd7, 0xc0, 0xf5, 0x5c, 0xbc, 0x74, 0x84, 0x2b, 0x98, 0x67, 0xaf, 0x41, 0x4f,
-	0x9b, 0xc3, 0x11, 0x33, 0x49, 0x26, 0xfd, 0x0d, 0x0b, 0x13, 0x02, 0x56, 0x65, 0x54, 0x0e, 0x50,
-	0x21, 0x40, 0x85, 0x00, 0x15, 0x02, 0x54, 0x08, 0x50, 0x21, 0x40, 0x85, 0x00, 0x15, 0x02, 0x54,
-	0x08, 0x50, 0x21, 0x40, 0x85, 0x00, 0x15, 0x02, 0x54, 0x70, 0x50, 0xe1, 0x77, 0x2c, 0x8c, 0xac,
-	0x61, 0x12, 0x60, 0x42, 0x80, 0x09, 0x01, 0x26, 0x04, 0x98, 0x10, 0x60, 0x42, 0x80, 0x09, 0x01,
-	0x26, 0x04, 0x98, 0x10, 0x60, 0x42, 0x80, 0x09, 0x01, 0x26, 0x04, 0x98, 0x60, 0x61, 0x42, 0xf1,
-	0x37, 0xe0, 0xf9, 0xcb, 0xd4, 0xd8, 0x8b, 0x97, 0xa9, 0xb1, 0x57, 0x2f, 0x53, 0xe0, 0x9f, 0x2f,
-	0x53, 0xe0, 0x69, 0x27, 0x05, 0xbe, 0xe9, 0xa4, 0xc0, 0x1f, 0x3a, 0x29, 0x70, 0xd8, 0x49, 0x81,
-	0xef, 0x3a, 0x29, 0xf0, 0xbc, 0x93, 0x02, 0x2f, 0x3a, 0x29, 0xf0, 0xf7, 0x4e, 0x0a, 0xfc, 0xd0,
-	0x49, 0x8d, 0xbd, 0xea, 0xa4, 0xc0, 0xaf, 0xbf, 0x4f, 0x8d, 0x1d, 0x7e, 0x9f, 0x02, 0x5f, 0xdc,
-	0xab, 0x2a, 0xea, 0x57, 0xd5, 0xcc, 0x81, 0x22, 0x13, 0xac, 0x69, 0x28, 0xd3, 0xd4, 0xb3, 0xf4,
-	0xc7, 0xbe, 0xa2, 0xd5, 0x17, 0x54, 0x4d, 0x39, 0x90, 0x2a, 0x58, 0x5b, 0xb0, 0xbb, 0xb3, 0xea,
-	0x5e, 0x55, 0xc9, 0xe2, 0xc7, 0xc4, 0xfe, 0xf3, 0xa8, 0xbe, 0x7f, 0x25, 0xb5, 0x37, 0x49, 0x2f,
-	0x2b, 0x85, 0x7f, 0x05, 0x00, 0x00, 0xff, 0xff, 0x19, 0x04, 0x72, 0x7d, 0x51, 0x35, 0x00, 0x00,
+	// 2622 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x9b, 0xcf, 0x73, 0xdb, 0xc6,
+	0x15, 0xc7, 0xb5, 0x22, 0x25, 0x51, 0x4b, 0x8a, 0x84, 0x20, 0xd9, 0x81, 0x15, 0x85, 0xa2, 0x19,
+	0x4b, 0x51, 0x12, 0x88, 0x32, 0x49, 0x49, 0xb1, 0x33, 0xd3, 0xa4, 0xa2, 0x14, 0x5b, 0x66, 0x24,
+	0x5b, 0x81, 0x94, 0x3a, 0x49, 0xe3, 0xb2, 0x2b, 0x70, 0x45, 0x22, 0x01, 0x09, 0x18, 0x00, 0x65,
+	0x73, 0x3a, 0x9e, 0x7a, 0x7c, 0xeb, 0xad, 0x93, 0x53, 0xdb, 0xbf, 0x20, 0x93, 0x99, 0xde, 0x3b,
+	0x65, 0x0f, 0x9a, 0x9c, 0x32, 0x3d, 0xe9, 0xe8, 0xe9, 0xa9, 0x66, 0x2e, 0xe9, 0xcd, 0xa7, 0x4e,
+	0xeb, 0x53, 0x07, 0x8b, 0x1f, 0x04, 0x48, 0x90, 0xa1, 0x44, 0xb9, 0xd3, 0xce, 0xe0, 0x14, 0x02,
+	0xfb, 0xde, 0x77, 0x7f, 0x3d, 0xec, 0x7b, 0x1f, 0xc5, 0x0b, 0x97, 0x8e, 0xb0, 0x9a, 0x12, 0xa4,
+	0x65, 0x95, 0x2f, 0xe3, 0x0a, 0x5a, 0x56, 0xb1, 0x72, 0x24, 0xf0, 0xb8, 0x20, 0x4b, 0xa2, 0xc0,
+	0xd7, 0x0b, 0x4a, 0x4d, 0xc4, 0xcb, 0x5a, 0x5d, 0xc6, 0x6a, 0x4a, 0x56, 0x24, 0x4d, 0xa2, 0x2f,
+	0x1b, 0xe6, 0x29, 0xc3, 0x3c, 0xe5, 0x61, 0x3e, 0xb3, 0x54, 0x12, 0xb4, 0x72, 0xed, 0x20, 0xc5,
+	0x4b, 0x95, 0xe5, 0x92, 0x54, 0x92, 0x96, 0x89, 0xe7, 0x41, 0xed, 0x90, 0x3c, 0x91, 0x07, 0xf2,
+	0xcb, 0x50, 0x9c, 0x99, 0x2b, 0x49, 0x52, 0x49, 0xc4, 0x2d, 0x2b, 0x4d, 0xa8, 0x60, 0x55, 0x43,
+	0x15, 0xd9, 0x34, 0xc8, 0xba, 0x47, 0x58, 0x41, 0xa2, 0xc0, 0x0b, 0x52, 0x4d, 0x2d, 0xd4, 0x54,
+	0xac, 0x14, 0x2a, 0x82, 0x26, 0x94, 0x90, 0x26, 0x48, 0x55, 0xe7, 0x38, 0x67, 0x5e, 0x75, 0x3b,
+	0x49, 0xb2, 0x6e, 0x61, 0x35, 0x26, 0xdc, 0x8d, 0xc6, 0xe0, 0x5d, 0xee, 0x97, 0xdc, 0x16, 0xce,
+	0xa6, 0x59, 0x77, 0xd3, 0x11, 0x12, 0x85, 0x22, 0xd2, 0xb0, 0xb7, 0xf4, 0x91, 0x80, 0x1f, 0x14,
+	0xdc, 0x9d, 0xcf, 0x75, 0x5a, 0xa8, 0xce, 0x0e, 0x92, 0xbf, 0x8b, 0xc3, 0xe8, 0x4d, 0x51, 0x3a,
+	0x40, 0xe2, 0x9e, 0x8c, 0xf9, 0xfd, 0xba, 0x8c, 0xe9, 0x1c, 0x1c, 0x45, 0xbc, 0x2e, 0xc2, 0x80,
+	0x04, 0x58, 0x8c, 0x66, 0x12, 0x29, 0xf7, 0x36, 0x18, 0x33, 0x48, 0x71, 0x35, 0x11, 0xaf, 0x13,
+	0xbb, 0x5c, 0xe8, 0x6f, 0x0d, 0x10, 0xdc, 0xfc, 0xe0, 0xf6, 0xa7, 0x9c, 0xe9, 0x49, 0x2f, 0xc1,
+	0x30, 0x2f, 0x0a, 0xb8, 0xaa, 0x15, 0xaa, 0xa8, 0x82, 0x99, 0xe1, 0x04, 0x58, 0x1c, 0xcf, 0xc1,
+	0x3f, 0xff, 0xe3, 0x38, 0x30, 0xa2, 0x04, 0x16, 0x1f, 0x0f, 0x6f, 0x0d, 0x71, 0xd0, 0x30, 0xb8,
+	0x8d, 0x2a, 0x98, 0xfe, 0x18, 0xc6, 0x4c, 0x73, 0x15, 0x8b, 0x98, 0xd7, 0x24, 0x85, 0x09, 0x24,
+	0xc0, 0x62, 0xb8, 0xa3, 0xef, 0x6d, 0x74, 0x80, 0xc5, 0x3d, 0xd3, 0x46, 0x1f, 0x6d, 0x2e, 0xf4,
+	0x87, 0xbf, 0x80, 0x20, 0x1c, 0x06, 0xba, 0x64, 0xd4, 0x10, 0xb1, 0xda, 0xe9, 0x4d, 0x38, 0x21,
+	0xea, 0x0e, 0x85, 0x0a, 0xd2, 0xf8, 0x32, 0x56, 0x98, 0x20, 0x11, 0x9d, 0xf3, 0x12, 0xdd, 0x31,
+	0x4c, 0x74, 0x4d, 0x2e, 0x22, 0x3a, 0xde, 0xd0, 0xd7, 0x61, 0x50, 0x46, 0x5a, 0x99, 0x19, 0x21,
+	0xce, 0xf3, 0xde, 0xab, 0xb1, 0x8b, 0xb4, 0xb2, 0x53, 0x82, 0xb8, 0xd0, 0x3b, 0x70, 0xac, 0x8c,
+	0x51, 0x11, 0x2b, 0x2a, 0x33, 0x9a, 0x08, 0x2c, 0x86, 0x33, 0x6f, 0x78, 0x7b, 0x6f, 0x11, 0x23,
+	0x87, 0xbf, 0xb9, 0x56, 0x5f, 0x81, 0x61, 0x8a, 0xe2, 0x2c, 0x0d, 0xfa, 0x17, 0x30, 0x72, 0xbf,
+	0x86, 0x95, 0x7a, 0x41, 0x46, 0x0a, 0xaa, 0xa8, 0xcc, 0x18, 0xd1, 0x5c, 0xf6, 0xd6, 0xfc, 0x48,
+	0xb7, 0xdc, 0xd5, 0x0d, 0xb1, 0xd6, 0x5d, 0x3b, 0x7c, 0xdf, 0x36, 0x53, 0xe9, 0x6d, 0x18, 0x2e,
+	0x6b, 0x9a, 0x5c, 0xa8, 0x60, 0xad, 0x2c, 0x15, 0x99, 0x10, 0x99, 0xf0, 0xdb, 0x5d, 0x86, 0xac,
+	0x69, 0xf2, 0x0e, 0xb1, 0x73, 0x4e, 0x1b, 0x96, 0xed, 0xd7, 0xf4, 0x1d, 0x3b, 0x06, 0x14, 0x49,
+	0xc4, 0xcc, 0x78, 0xaf, 0xe5, 0xe3, 0x24, 0x11, 0x3b, 0x87, 0x38, 0xf6, 0xf4, 0x11, 0xf8, 0xa1,
+	0x01, 0x80, 0x15, 0x25, 0x7a, 0x3b, 0xbd, 0x07, 0xa7, 0x1c, 0x41, 0x65, 0x6f, 0x2a, 0x24, 0xc2,
+	0x97, 0xbd, 0x85, 0x1d, 0xa2, 0x5b, 0x43, 0xdc, 0x64, 0x2b, 0xe6, 0xac, 0xdd, 0xdd, 0x84, 0x50,
+	0x90, 0x6d, 0xad, 0x08, 0xd1, 0x7a, 0xdd, 0x5b, 0xeb, 0x96, 0xec, 0x54, 0x03, 0xdc, 0xb8, 0x60,
+	0xbd, 0xa0, 0x6f, 0xc2, 0x30, 0x52, 0xab, 0xb6, 0xcc, 0x04, 0x91, 0xb9, 0xe2, 0x2d, 0xb3, 0xae,
+	0x56, 0x9d, 0x3a, 0x01, 0x0e, 0x22, 0xfb, 0x0d, 0xfd, 0x39, 0x9c, 0x44, 0xb2, 0x50, 0x28, 0x29,
+	0x52, 0xad, 0x35, 0xaa, 0x28, 0x91, 0xeb, 0x12, 0x3b, 0x7b, 0x9a, 0x22, 0x54, 0x4b, 0x9e, 0x8b,
+	0x17, 0x43, 0xb2, 0x70, 0x53, 0x57, 0xb2, 0xd4, 0x3f, 0x82, 0x11, 0x59, 0x52, 0x34, 0x5b, 0x38,
+	0xd6, 0x33, 0xa4, 0x25, 0x45, 0xf3, 0x94, 0x0d, 0xcb, 0xad, 0x16, 0x7a, 0x0f, 0x4e, 0xe3, 0x87,
+	0xb2, 0xa0, 0x90, 0x53, 0xb1, 0x60, 0x1f, 0xa7, 0x0c, 0x45, 0xa4, 0x67, 0x52, 0xc6, 0x81, 0x9b,
+	0xb2, 0x0e, 0xdc, 0xd4, 0xbe, 0x65, 0x91, 0x0b, 0x1e, 0xeb, 0x62, 0x53, 0x2d, 0x6f, 0xbb, 0x89,
+	0xbe, 0x0b, 0x23, 0x48, 0x29, 0x59, 0xc3, 0x54, 0x19, 0x9a, 0x04, 0x7a, 0xb7, 0xf5, 0x54, 0x5c,
+	0xb3, 0x8f, 0xea, 0xb2, 0xce, 0x08, 0x47, 0x76, 0xbb, 0x4a, 0xff, 0x12, 0xc6, 0x78, 0x49, 0xfa,
+	0x52, 0xc0, 0x2d, 0xed, 0xa9, 0x5e, 0x1f, 0xe6, 0x06, 0x31, 0xee, 0x25, 0x1f, 0xe5, 0x9d, 0x26,
+	0xaa, 0x1e, 0x4f, 0x0f, 0xd0, 0x61, 0xc1, 0x3c, 0x41, 0xa7, 0x3d, 0x0f, 0x1c, 0x53, 0xfc, 0x2e,
+	0x3a, 0x34, 0x0f, 0x50, 0x63, 0x29, 0xc6, 0x1f, 0x58, 0x2f, 0xe8, 0x3c, 0x8c, 0x1c, 0x48, 0xc5,
+	0xba, 0xbd, 0x51, 0x17, 0xfa, 0x8c, 0x71, 0x53, 0x29, 0xac, 0x3b, 0x5b, 0x3b, 0xb4, 0x05, 0xa3,
+	0x45, 0xa9, 0x82, 0x84, 0x56, 0x78, 0x5e, 0xec, 0x53, 0x8d, 0x9b, 0x30, 0x1c, 0x2d, 0x25, 0x04,
+	0x23, 0x0a, 0xd2, 0x70, 0x41, 0x14, 0x2a, 0x82, 0x86, 0x15, 0xe6, 0x15, 0xb2, 0x74, 0xb3, 0x6d,
+	0x3a, 0x77, 0x0e, 0xbe, 0xc0, 0xbc, 0xc6, 0xe1, 0x43, 0x32, 0xa0, 0xc4, 0x37, 0x8f, 0x5c, 0x4e,
+	0x66, 0x10, 0xd9, 0x2b, 0x38, 0xcc, 0x85, 0xf5, 0xe6, 0x6d, 0xa3, 0x95, 0xfe, 0x1c, 0x4e, 0x1f,
+	0x09, 0x8a, 0x56, 0x43, 0x62, 0xa1, 0x2c, 0xa9, 0xad, 0x48, 0x65, 0xfa, 0x5d, 0x00, 0x3b, 0x4a,
+	0x69, 0x53, 0x67, 0x4b, 0x52, 0xed, 0x60, 0xbd, 0x0f, 0x5f, 0xd1, 0x44, 0xb5, 0x70, 0x28, 0x54,
+	0x4b, 0x58, 0x91, 0x15, 0xa1, 0xda, 0xea, 0xe0, 0x12, 0xe9, 0xa0, 0xcb, 0x59, 0xba, 0x2f, 0xaa,
+	0x37, 0x5a, 0x3e, 0xce, 0xee, 0x42, 0xfa, 0x7a, 0x9f, 0xe8, 0xfd, 0x5d, 0xd0, 0xbc, 0x8c, 0xe8,
+	0x0a, 0xa4, 0x0e, 0x25, 0xe5, 0x01, 0x52, 0x8a, 0x42, 0xb5, 0x54, 0xe0, 0x45, 0xa4, 0xaa, 0xcc,
+	0x4c, 0x1f, 0xeb, 0x76, 0xe5, 0x9b, 0x47, 0x1d, 0x8e, 0xed, 0x6b, 0x17, 0xe0, 0x62, 0x2d, 0x93,
+	0x0d, 0xdd, 0x82, 0xfe, 0x0d, 0x80, 0x97, 0xba, 0x16, 0x2d, 0xcc, 0xab, 0x64, 0x92, 0x9b, 0x6d,
+	0x1d, 0x77, 0xb5, 0x4f, 0xed, 0x58, 0x2d, 0x1f, 0xab, 0x58, 0xd9, 0xb1, 0xdf, 0xbb, 0x17, 0xfa,
+	0x95, 0x8a, 0xb7, 0x15, 0x7d, 0x08, 0x13, 0x5d, 0xa5, 0x0b, 0x07, 0x75, 0x59, 0x5f, 0x8a, 0x59,
+	0x32, 0xa2, 0xe9, 0xb6, 0x11, 0x7d, 0x50, 0x91, 0xb5, 0x7a, 0xab, 0x87, 0xd7, 0xba, 0xf4, 0x90,
+	0x23, 0x1a, 0xf4, 0x12, 0x1c, 0x45, 0xd5, 0x7a, 0x41, 0x90, 0x99, 0xb9, 0xee, 0x6a, 0x5b, 0x80,
+	0x1b, 0x41, 0xd5, 0xfa, 0x2d, 0x99, 0xde, 0x81, 0x51, 0x41, 0x2e, 0xc8, 0x0a, 0x3e, 0x14, 0x1e,
+	0x16, 0x44, 0x41, 0xd5, 0x98, 0x44, 0xcf, 0x63, 0x90, 0x18, 0x92, 0xed, 0xdc, 0x16, 0x54, 0x6d,
+	0x0b, 0x70, 0x11, 0x41, 0x36, 0x5e, 0xea, 0xcf, 0xf4, 0x32, 0x1c, 0xd3, 0x7b, 0x47, 0x6a, 0x95,
+	0x49, 0xf6, 0xe8, 0x3e, 0xc0, 0xe9, 0x83, 0x5c, 0x57, 0xab, 0xf4, 0xfb, 0x30, 0xa4, 0xe7, 0x0a,
+	0xd2, 0xf3, 0xeb, 0xc4, 0x23, 0xd9, 0x3b, 0x51, 0x90, 0x6e, 0x03, 0xdc, 0x18, 0x52, 0xab, 0xa4,
+	0xc7, 0x55, 0x08, 0xf5, 0x1e, 0x8d, 0x5c, 0xc6, 0xcc, 0xf7, 0xe8, 0x74, 0x88, 0x1b, 0x47, 0xd5,
+	0xfa, 0x06, 0x31, 0xa4, 0x4b, 0x70, 0x94, 0x34, 0x62, 0x66, 0x21, 0x11, 0x58, 0x1c, 0xcf, 0xdd,
+	0x71, 0x84, 0xd3, 0xf2, 0x57, 0x80, 0x4d, 0xbe, 0xa5, 0x2c, 0x72, 0x0b, 0x3f, 0x4f, 0xae, 0xdf,
+	0xfe, 0x34, 0xc9, 0x26, 0x92, 0x5b, 0xfb, 0xfb, 0xbb, 0xd6, 0x7f, 0xf7, 0xf4, 0x1f, 0xfb, 0x1b,
+	0xe4, 0x79, 0x7f, 0x7b, 0x2f, 0x79, 0xcf, 0x0e, 0xc1, 0xa0, 0xf5, 0x8b, 0x01, 0x9c, 0x29, 0x4f,
+	0xdf, 0x86, 0xe1, 0x9a, 0xd2, 0x2a, 0xba, 0xde, 0xe8, 0x95, 0x0c, 0x3f, 0xe6, 0xb6, 0xbd, 0xf3,
+	0x7e, 0x4d, 0xb1, 0x0b, 0xb0, 0x9f, 0x18, 0xf3, 0x2d, 0xaa, 0x9a, 0xbe, 0xc7, 0x6f, 0xf6, 0x11,
+	0x31, 0x5b, 0xc3, 0x5c, 0x08, 0x55, 0xeb, 0x9b, 0xaa, 0x76, 0x4b, 0xa6, 0xef, 0x41, 0xda, 0x70,
+	0x75, 0xed, 0xf9, 0x5b, 0xa7, 0xd8, 0x73, 0xa7, 0x6e, 0xac, 0xa8, 0x8b, 0x3a, 0xf6, 0x7f, 0x1f,
+	0x46, 0x4d, 0x79, 0x6b, 0xc2, 0x6f, 0xf7, 0x5d, 0x44, 0x38, 0x85, 0x23, 0x44, 0xd8, 0x9a, 0xf3,
+	0x27, 0x30, 0x26, 0xae, 0x14, 0x8a, 0xd8, 0x71, 0x04, 0xb2, 0xbd, 0xaa, 0x80, 0xed, 0x95, 0x4d,
+	0xac, 0x7a, 0xa7, 0xeb, 0x09, 0xd1, 0xd9, 0x46, 0x7f, 0x06, 0x63, 0x3a, 0x48, 0x61, 0xa5, 0x55,
+	0x6b, 0x2f, 0xf5, 0x59, 0x6b, 0xc7, 0x4c, 0x49, 0xab, 0xe4, 0xe6, 0xa2, 0x86, 0x92, 0x5d, 0x70,
+	0xbf, 0x0f, 0xc3, 0xd6, 0x4e, 0xe9, 0xdf, 0x43, 0xb6, 0x9f, 0xad, 0x0a, 0x92, 0x18, 0xdd, 0x54,
+	0x35, 0xfd, 0xdb, 0xb8, 0x03, 0x23, 0xa6, 0xb3, 0xb1, 0x4b, 0x2b, 0xfd, 0x7e, 0x1f, 0x4e, 0x3d,
+	0x58, 0x24, 0x62, 0x64, 0x77, 0xee, 0xc2, 0x98, 0x25, 0x68, 0xad, 0xe3, 0x6a, 0xff, 0xc5, 0x99,
+	0x53, 0x75, 0xc2, 0x50, 0xb5, 0x96, 0xf1, 0x53, 0x48, 0xf1, 0x65, 0x24, 0x8a, 0xb8, 0x5a, 0xc2,
+	0x56, 0xb6, 0x5f, 0x23, 0xbc, 0xd4, 0x25, 0xa6, 0x36, 0x2c, 0x6b, 0x33, 0xe7, 0xb7, 0xaa, 0x34,
+	0xde, 0xdd, 0xf2, 0xee, 0xaf, 0xbf, 0x6d, 0x80, 0x5f, 0xc1, 0x18, 0x1c, 0x35, 0x8b, 0x81, 0x91,
+	0x34, 0x9b, 0xc8, 0x5c, 0x85, 0x97, 0xe0, 0x98, 0xf1, 0x25, 0xab, 0x74, 0x34, 0xbb, 0xc6, 0x26,
+	0xb2, 0x57, 0xd9, 0x44, 0x36, 0xcb, 0x26, 0x32, 0xab, 0x70, 0x02, 0x8e, 0xed, 0x91, 0x9d, 0x50,
+	0xe9, 0xe1, 0x4c, 0x06, 0x2e, 0xc0, 0x09, 0x0e, 0xdf, 0xaf, 0x61, 0x55, 0x4b, 0x90, 0xe1, 0xd2,
+	0x17, 0xae, 0xb1, 0x89, 0x55, 0x36, 0xf1, 0x0e, 0x9b, 0x58, 0x63, 0x13, 0xe9, 0xeb, 0x6c, 0xfa,
+	0x1a, 0x9b, 0xc8, 0xa4, 0xe1, 0x45, 0x18, 0x5d, 0x2f, 0x1e, 0xa1, 0x2a, 0x8f, 0x8b, 0xa6, 0x61,
+	0x70, 0x85, 0x4d, 0xaf, 0xe5, 0x16, 0xe0, 0x84, 0x59, 0x68, 0xf3, 0x65, 0x49, 0xe0, 0x31, 0x7d,
+	0xe1, 0xb8, 0x01, 0xe6, 0x4f, 0x1a, 0xe0, 0x4a, 0xb3, 0x01, 0xc6, 0xb3, 0xef, 0xb0, 0x19, 0x36,
+	0x7d, 0x95, 0xcd, 0xe6, 0xe6, 0xe1, 0xb8, 0x20, 0x5b, 0x36, 0xcc, 0x71, 0x03, 0xcc, 0x7d, 0x67,
+	0x64, 0xc3, 0x78, 0xb3, 0x01, 0x42, 0xd9, 0x34, 0x9b, 0xcd, 0xb0, 0xe9, 0x4c, 0x6e, 0x09, 0x4e,
+	0x98, 0x5f, 0x88, 0x69, 0x3a, 0x7b, 0xdc, 0x00, 0x6f, 0x9a, 0xa6, 0x8b, 0xba, 0xe9, 0x4a, 0x9a,
+	0x5d, 0xc9, 0xb0, 0x2b, 0xd9, 0xe7, 0x0d, 0x00, 0x72, 0x0b, 0x50, 0x2f, 0x88, 0x9d, 0xb2, 0x49,
+	0xd3, 0xf6, 0x32, 0x91, 0x5d, 0x61, 0xb3, 0xab, 0x6c, 0x3a, 0x9b, 0x4b, 0x19, 0x1f, 0x9e, 0xc3,
+	0x56, 0xd7, 0xcd, 0x9a, 0xb6, 0x19, 0xdd, 0x76, 0x35, 0xcd, 0xae, 0x66, 0xd8, 0x55, 0xa2, 0x9b,
+	0x0f, 0x86, 0xae, 0x50, 0xf3, 0xf9, 0x60, 0x28, 0x4c, 0x45, 0xf2, 0xc1, 0x50, 0x9c, 0x9a, 0xcb,
+	0x07, 0x43, 0x8b, 0xd4, 0x9b, 0xf9, 0x60, 0xe8, 0x32, 0x95, 0xcc, 0x07, 0x43, 0x19, 0x2a, 0x9b,
+	0x0f, 0x86, 0x26, 0x29, 0x3a, 0x1f, 0x0c, 0xbd, 0x46, 0xc5, 0x93, 0xff, 0x66, 0x60, 0x74, 0x43,
+	0xc1, 0x48, 0xc3, 0x36, 0x1a, 0x5f, 0x3b, 0x2d, 0x1a, 0xdb, 0x40, 0x7c, 0xd9, 0x03, 0x88, 0xdb,
+	0x20, 0xf8, 0xc3, 0x33, 0x43, 0xf0, 0xff, 0x22, 0xfa, 0xae, 0x9f, 0x15, 0x7d, 0x5b, 0xb8, 0xcb,
+	0x9d, 0x0b, 0xee, 0xbe, 0x4c, 0xc4, 0xbd, 0x71, 0x76, 0xc4, 0x75, 0x91, 0xed, 0x27, 0xbd, 0xc8,
+	0x76, 0xe1, 0xc7, 0x8b, 0x5e, 0xa4, 0x0a, 0xfc, 0xff, 0x05, 0xde, 0xee, 0x0d, 0x8e, 0xb7, 0x9d,
+	0x54, 0xbb, 0x35, 0x00, 0xd5, 0xba, 0x61, 0x76, 0xe7, 0xac, 0x30, 0xeb, 0x8d, 0xb1, 0x37, 0xcf,
+	0x8e, 0xb1, 0x6e, 0x6c, 0xdd, 0x1d, 0x14, 0x5b, 0x3b, 0x30, 0xf5, 0xbd, 0x33, 0x60, 0xaa, 0x13,
+	0x50, 0x37, 0xcf, 0x08, 0xa8, 0x6e, 0x34, 0xdd, 0xe9, 0x82, 0xa6, 0x7d, 0x86, 0x7c, 0x3b, 0x9f,
+	0xbe, 0x7f, 0x7a, 0x3e, 0x75, 0xd3, 0xe7, 0x27, 0x3d, 0xe9, 0xb3, 0xdf, 0x51, 0x79, 0x91, 0x67,
+	0xe9, 0xbc, 0xc9, 0xb3, 0x1b, 0x6f, 0x3e, 0xfe, 0x6f, 0x01, 0x60, 0x77, 0xee, 0xbb, 0x37, 0x18,
+	0xf7, 0xf9, 0xb8, 0x77, 0x2e, 0xb8, 0x77, 0xd1, 0x8d, 0x7b, 0x36, 0x9d, 0x7d, 0x70, 0x66, 0x3a,
+	0x73, 0x41, 0xd9, 0x4a, 0xbf, 0x50, 0xe6, 0x62, 0xb1, 0xfd, 0x81, 0x59, 0xcc, 0x0b, 0xc1, 0x3e,
+	0x1c, 0x00, 0xc1, 0x3a, 0xc8, 0xeb, 0xce, 0xa0, 0xe4, 0xd5, 0x0e, 0x5c, 0xb7, 0xce, 0x0c, 0x5c,
+	0x1d, 0x7c, 0xb5, 0xd6, 0x37, 0x5f, 0xb9, 0xb1, 0xea, 0xc6, 0x59, 0xb1, 0xaa, 0x8d, 0xa6, 0x6e,
+	0x0f, 0x44, 0x53, 0x9d, 0x10, 0xb5, 0x3b, 0x20, 0x44, 0x75, 0xb2, 0xd3, 0xe4, 0x5f, 0xdf, 0x6b,
+	0xfb, 0xff, 0x59, 0xb9, 0x64, 0x3b, 0xcd, 0x4c, 0x3e, 0x79, 0x01, 0xdc, 0xaf, 0x72, 0x33, 0x4e,
+	0x92, 0x99, 0x78, 0xf2, 0x02, 0xb4, 0x1e, 0x75, 0x7f, 0x37, 0xbe, 0x10, 0x7f, 0xd7, 0xab, 0xdc,
+	0xac, 0x8b, 0x59, 0xa2, 0x4f, 0x5e, 0x00, 0xc7, 0x73, 0xee, 0x4a, 0x07, 0xa9, 0xd0, 0x4f, 0x5e,
+	0x80, 0xb6, 0x77, 0x36, 0x99, 0x4c, 0x52, 0x74, 0xf2, 0x05, 0x03, 0x63, 0x1c, 0x96, 0x45, 0xc4,
+	0xfb, 0xf0, 0xe1, 0xc3, 0x87, 0x0f, 0x1f, 0x3e, 0x7c, 0xf8, 0xf0, 0xe1, 0xc3, 0x87, 0x0f, 0x1f,
+	0x3e, 0x7c, 0xf8, 0xf0, 0xe1, 0xc3, 0x87, 0x0f, 0x1f, 0x3e, 0x7c, 0xbc, 0x44, 0xf8, 0xf8, 0x27,
+	0x03, 0xc3, 0x37, 0xb1, 0xe6, 0x83, 0x87, 0x0f, 0x1e, 0x3e, 0x78, 0xf8, 0xe0, 0xe1, 0x83, 0x87,
+	0x0f, 0x1e, 0x3e, 0x78, 0xf8, 0xe0, 0xe1, 0x83, 0x87, 0x0f, 0x1e, 0x3e, 0x78, 0xf8, 0xe0, 0xf1,
+	0xf2, 0xc0, 0xe3, 0xeb, 0x08, 0x9c, 0xb4, 0xe7, 0xaa, 0xe3, 0x84, 0x3e, 0x1b, 0x7a, 0x03, 0x4e,
+	0x16, 0x05, 0x15, 0x1d, 0x88, 0xb8, 0x60, 0xcf, 0x9b, 0xa0, 0x44, 0xf7, 0x03, 0x81, 0x32, 0x1d,
+	0x6c, 0x31, 0xfa, 0x67, 0xf0, 0x55, 0x5c, 0x25, 0x1a, 0x5f, 0xa0, 0x23, 0xa4, 0xf2, 0x8a, 0x20,
+	0x6b, 0x0e, 0xb9, 0x40, 0x4f, 0xb9, 0x4b, 0x86, 0x6b, 0xde, 0xf6, 0x6c, 0xe9, 0xee, 0x42, 0xc6,
+	0xd4, 0xe5, 0x91, 0xac, 0xf1, 0x65, 0xe4, 0x10, 0x0d, 0xf6, 0x14, 0xbd, 0x68, 0xf8, 0x6d, 0x18,
+	0x6e, 0x2d, 0xc5, 0xce, 0xea, 0x60, 0x64, 0x90, 0xea, 0xc0, 0x82, 0x99, 0xd1, 0x81, 0x6e, 0x2f,
+	0x8d, 0x9d, 0xc3, 0xed, 0xa5, 0xf3, 0x85, 0x90, 0x0f, 0x3b, 0x12, 0xdc, 0xf8, 0x29, 0xce, 0xd3,
+	0xb6, 0xf4, 0xd6, 0xa3, 0x4e, 0x81, 0xe7, 0x5a, 0xa7, 0xb4, 0xdf, 0xe0, 0x0a, 0x9f, 0xf3, 0x0d,
+	0xae, 0xf6, 0x7b, 0x23, 0x91, 0x01, 0xee, 0x8d, 0xb4, 0x5f, 0xc2, 0x99, 0x78, 0x89, 0x97, 0x70,
+	0xa2, 0xe7, 0x7b, 0x09, 0xc7, 0x5d, 0x3c, 0x50, 0x3d, 0x0b, 0x26, 0x47, 0xf1, 0xd0, 0x76, 0x6b,
+	0x71, 0xb2, 0xe3, 0xd6, 0x22, 0xf8, 0xb1, 0x5b, 0x8b, 0xf4, 0xa9, 0x6f, 0x2d, 0x82, 0x8e, 0x3f,
+	0x62, 0x74, 0xb9, 0xe6, 0x36, 0xd5, 0xef, 0x35, 0x37, 0xe0, 0x45, 0xc4, 0xdd, 0x18, 0x6f, 0xfa,
+	0x4c, 0x8c, 0xe7, 0x95, 0x70, 0xe6, 0x3b, 0xb3, 0x1a, 0x3d, 0x79, 0xdc, 0x00, 0xc3, 0x27, 0x0d,
+	0x00, 0x9a, 0x0d, 0x30, 0x92, 0x61, 0xb3, 0xec, 0x4a, 0xee, 0x7a, 0x7b, 0x5e, 0x5a, 0x3c, 0x6e,
+	0x00, 0xea, 0xa4, 0x01, 0x62, 0xcd, 0x06, 0x08, 0xa7, 0xd7, 0xd8, 0xf4, 0x3b, 0x6c, 0xfa, 0x1a,
+	0x9b, 0xbe, 0xde, 0x91, 0xae, 0xf2, 0xc1, 0x10, 0xa0, 0x86, 0xf3, 0xc1, 0x50, 0x8c, 0xa2, 0x92,
+	0x7f, 0x1c, 0x81, 0x53, 0x5c, 0x8b, 0x61, 0xec, 0x64, 0x71, 0x03, 0x4e, 0x19, 0xb5, 0x76, 0xc1,
+	0xc5, 0x44, 0xbd, 0xcf, 0xf7, 0x49, 0xc3, 0xc5, 0xa1, 0x47, 0x6f, 0x42, 0x1a, 0xc9, 0xb2, 0x58,
+	0x77, 0xcb, 0xf4, 0x3e, 0xd1, 0x29, 0xe2, 0xe1, 0x54, 0xc1, 0x70, 0x8a, 0xaf, 0xa9, 0x9a, 0x54,
+	0x71, 0xcb, 0x8c, 0x78, 0x16, 0x22, 0xe4, 0x72, 0x6e, 0xdb, 0x2d, 0xa0, 0x58, 0xdb, 0xed, 0x29,
+	0xf2, 0xe7, 0x0e, 0xa2, 0xe8, 0xec, 0xa6, 0xed, 0x64, 0x1d, 0x1d, 0xec, 0x64, 0xb5, 0x32, 0x46,
+	0xe8, 0xf4, 0x19, 0xe3, 0x6e, 0x2b, 0x63, 0x8c, 0x9f, 0x2e, 0x63, 0x4c, 0x7b, 0xde, 0x28, 0xb1,
+	0x73, 0x47, 0x67, 0x52, 0x84, 0x03, 0x24, 0xc5, 0x77, 0x7f, 0xda, 0x11, 0xbe, 0xdf, 0x36, 0xc0,
+	0xdb, 0x30, 0x6c, 0xff, 0x93, 0x7b, 0x90, 0x81, 0xb3, 0x90, 0x22, 0xe6, 0x89, 0x5d, 0x05, 0x17,
+	0x05, 0x1e, 0x69, 0x58, 0xa5, 0x43, 0x6b, 0x6c, 0xfa, 0x2a, 0x7b, 0x8d, 0xbd, 0xae, 0x97, 0x47,
+	0x46, 0x8c, 0xdb, 0xe5, 0xd1, 0x71, 0x03, 0x04, 0x4e, 0x1a, 0x60, 0x58, 0x0f, 0xf5, 0x2c, 0xbb,
+	0xc2, 0xae, 0xe6, 0x83, 0xa1, 0x61, 0x2a, 0x90, 0x0f, 0x86, 0xc6, 0xa8, 0x50, 0xee, 0xf7, 0xe0,
+	0xe4, 0x59, 0x7c, 0xe8, 0xe9, 0xb3, 0xf8, 0xd0, 0xf3, 0x67, 0x71, 0xf0, 0xaf, 0x67, 0x71, 0xf0,
+	0xb8, 0x19, 0x07, 0x5f, 0x37, 0xe3, 0xe0, 0x4f, 0xcd, 0x38, 0x38, 0x6e, 0xc6, 0xc1, 0x77, 0xcd,
+	0x38, 0x38, 0x69, 0xc6, 0xc1, 0xd3, 0x66, 0x1c, 0xfc, 0xbd, 0x19, 0x07, 0x3f, 0x34, 0xe3, 0x43,
+	0xcf, 0x9b, 0x71, 0xf0, 0xdb, 0xef, 0xe3, 0x43, 0xc7, 0xdf, 0xc7, 0xc1, 0x67, 0x77, 0x4b, 0x92,
+	0xfc, 0x65, 0x29, 0x75, 0x24, 0x89, 0x1a, 0x56, 0x14, 0x94, 0xaa, 0xa9, 0xcb, 0xe4, 0xc7, 0xa1,
+	0xa4, 0x54, 0x96, 0x64, 0x45, 0x3a, 0x12, 0x8a, 0x58, 0x59, 0xb2, 0x9a, 0x97, 0xe5, 0x83, 0x92,
+	0xb4, 0x8c, 0x1f, 0x6a, 0xd6, 0x5d, 0xfb, 0xae, 0x57, 0xee, 0x0f, 0x46, 0xc9, 0x57, 0x9f, 0xfd,
+	0x4f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xce, 0x9c, 0x03, 0x02, 0x9e, 0x3f, 0x00, 0x00,
 }

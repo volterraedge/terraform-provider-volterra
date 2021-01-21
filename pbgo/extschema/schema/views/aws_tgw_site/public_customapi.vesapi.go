@@ -36,6 +36,15 @@ type CustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *CustomAPIGrpcClient) doRPCSetTGWInfo(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &SetTGWInfoRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.aws_tgw_site.SetTGWInfoRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.SetTGWInfo(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCSetVPCIpPrefixes(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SetVPCIpPrefixesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -81,6 +90,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["SetTGWInfo"] = ccl.doRPCSetTGWInfo
+
 	rpcFns["SetVPCIpPrefixes"] = ccl.doRPCSetVPCIpPrefixes
 
 	rpcFns["SetVPNTunnels"] = ccl.doRPCSetVPNTunnels
@@ -96,6 +107,79 @@ type CustomAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *CustomAPIRestClient) doRPCSetTGWInfo(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &SetTGWInfoRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.aws_tgw_site.SetTGWInfoRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("tgw_info", fmt.Sprintf("%v", req.TgwInfo))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &SetTGWInfoResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.aws_tgw_site.SetTGWInfoResponse", body)
+	}
+	return pbRsp, nil
 }
 
 func (c *CustomAPIRestClient) doRPCSetVPCIpPrefixes(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -268,6 +352,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["SetTGWInfo"] = ccl.doRPCSetTGWInfo
+
 	rpcFns["SetVPCIpPrefixes"] = ccl.doRPCSetVPCIpPrefixes
 
 	rpcFns["SetVPNTunnels"] = ccl.doRPCSetVPNTunnels
@@ -284,6 +370,50 @@ type CustomAPIInprocClient struct {
 	svc svcfw.Service
 }
 
+func (c *CustomAPIInprocClient) SetTGWInfo(ctx context.Context, in *SetTGWInfoRequest, opts ...grpc.CallOption) (*SetTGWInfoResponse, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+	}
+
+	var (
+		rsp *SetTGWInfoResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.views.aws_tgw_site.SetTGWInfoRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.SetTGWInfo' operation on 'aws_tgw_site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.views.aws_tgw_site.CustomAPI.SetTGWInfo"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.SetTGWInfo(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.views.aws_tgw_site.SetTGWInfoResponse", rsp)...)
+
+	return rsp, nil
+}
 func (c *CustomAPIInprocClient) SetVPCIpPrefixes(ctx context.Context, in *SetVPCIpPrefixesRequest, opts ...grpc.CallOption) (*SetVPCIpPrefixesResponse, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
@@ -406,6 +536,102 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": null,
     "paths": {
+        "/public/namespaces/{namespace}/aws_tgw_site/{name}/set_tgw_info": {
+            "post": {
+                "summary": "Configure TGW Information",
+                "description": "Configure TGW Information like tgw-id, volterra site's vpc-id",
+                "operationId": "ves.io.schema.views.aws_tgw_site.CustomAPI.SetTGWInfo",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/aws_tgw_siteSetTGWInfoResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/aws_tgw_siteSetTGWInfoRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-CustomAPI-SetTGWInfo"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.CustomAPI.SetTGWInfo"
+            },
+            "x-displayname": "Custom API for AWS TGW site",
+            "x-ves-proto-service": "ves.io.schema.views.aws_tgw_site.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/aws_tgw_site/{name}/set_vpc_ip_prefixes": {
             "post": {
                 "summary": "Configure VPC IP prefixes",
@@ -600,6 +826,31 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "aws_tgw_siteAWSTGWInfoConfigType": {
+            "type": "object",
+            "description": "AWS tgw information like tgw-id and site's vpc-id",
+            "title": "AWS TGW Information Config",
+            "x-displayname": "AWS TGW Information Config",
+            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.AWSTGWInfoConfigType",
+            "properties": {
+                "tgw_id": {
+                    "type": "string",
+                    "description": " TGW ID populated by AWS\n\nExample: - \"tgw-12345678\"-\nRequired: YES",
+                    "title": "TGW ID",
+                    "x-displayname": "TGW ID",
+                    "x-ves-example": "tgw-12345678",
+                    "x-ves-required": "true"
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": " VPC ID where the volterra site exists\n\nExample: - \"vpc-12345678\"-\nRequired: YES",
+                    "title": "VPC ID",
+                    "x-displayname": "VPC ID",
+                    "x-ves-example": "vpc-12345678",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "aws_tgw_siteAWSVPNTunnelConfigType": {
             "type": "object",
             "description": "Remote IP for VPN tunnels of a node",
@@ -635,6 +886,42 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-required": "true"
                 }
             }
+        },
+        "aws_tgw_siteSetTGWInfoRequest": {
+            "type": "object",
+            "description": "Request to configure TGW Information",
+            "title": "Request to configure TGW Information",
+            "x-displayname": "Request to configure TGW Information",
+            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.SetTGWInfoRequest",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the object to be configured\n\nExample: - \"aws-tgw-site-1\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "aws-tgw-site-1"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace for the object to be configured\n\nExample: - \"default\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "default"
+                },
+                "tgw_info": {
+                    "description": " AWS TGW Info Config",
+                    "title": "AWS TGW Info Config",
+                    "$ref": "#/definitions/aws_tgw_siteAWSTGWInfoConfigType",
+                    "x-displayname": "AWS TGW Info Config"
+                }
+            }
+        },
+        "aws_tgw_siteSetTGWInfoResponse": {
+            "type": "object",
+            "description": "Response to configure TGW info",
+            "title": "Response to configure TGW info",
+            "x-displayname": "Response to configure TGW info",
+            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.SetTGWInfoResponse"
         },
         "aws_tgw_siteSetVPCIpPrefixesRequest": {
             "type": "object",

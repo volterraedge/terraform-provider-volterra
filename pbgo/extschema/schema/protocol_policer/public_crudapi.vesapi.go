@@ -494,8 +494,8 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		namespace = rReq.Metadata.Namespace
-		name = rReq.Metadata.Name
+		namespace = rReq.GetMetadata().GetNamespace()
+		name = rReq.GetMetadata().GetName()
 	} else {
 		jsn = cco.ReplaceJSONReq
 		reqMap := make(map[string]interface{})
@@ -1116,8 +1116,11 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.protocol_policer.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.protocol_policer.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1169,8 +1172,11 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.protocol_policer.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.protocol_policer.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1287,8 +1293,11 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.protocol_policer.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.protocol_policer.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -1302,6 +1311,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	tenant := server.TenantFromContext(ctx)
 	key := fmt.Sprintf("%s/%s/%s", tenant, req.GetNamespace(), req.GetName())
 	rsrcReq := &server.ResourceDeleteRequest{Key: key}
+	rsrcReq.FailIfReferred = req.FailIfReferred
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
@@ -2061,6 +2071,14 @@ var APISwaggerJSON string = `{
                         "in": "path",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/protocol_policerDeleteRequest"
+                        }
                     }
                 ],
                 "tags": [
@@ -2143,6 +2161,36 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/protocol_policerProtocolPolicerType"
                     },
                     "x-displayname": "Protocol Policer"
+                }
+            }
+        },
+        "protocol_policerDeleteRequest": {
+            "type": "object",
+            "description": "This is the input message of the 'Delete' RPC.",
+            "title": "DeleteRequest is used to delete a protocol_policer",
+            "x-displayname": "Delete Request",
+            "x-ves-proto-message": "ves.io.schema.protocol_policer.DeleteRequest",
+            "properties": {
+                "fail_if_referred": {
+                    "type": "boolean",
+                    "description": " Fail the delete operation if this object is being referred by other objects",
+                    "title": "fail_if_referred",
+                    "format": "boolean",
+                    "x-displayname": "Fail-If-Referred"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the configuration object\n\nExample: - \"name\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the configuration object is present\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
                 }
             }
         },
@@ -2597,7 +2645,7 @@ var APISwaggerJSON string = `{
         },
         "protocol_policerTcpFlags": {
             "type": "string",
-            "description": "TCP flags indicate a particular connection state\n\n\"Finished\" flag indicates there will be no more data from the sender\n\"Synchronisation\" flag, is first step in establishing in TCP connection\n\"Reset\" flag gets sent from the server to the client upon receiving unexpected\ndata\n\"Push\" flag indicates receiver to not buffer data\n\"Acknowledgment\" to the successful receipt of data\n\"Urgent\" flag is used to notify the receiver to process the urgent packets before\nprocessing all other packets.\nAll of the above flags in union",
+            "description": "TCP flags indicate a particular connection state\n\nFIN flag which indicates that there is no more data from the sender, used in the last packet sent from the sender\nSYN flag set in the first packet from sender and receiver while establishing three way handshake between two hosts\nRST flag that resets a connection when the host receives an unexpected packet\nPSH flag that tells the receiver to process packets as they are received, instead of buffering them\nACK flag that acknowledges successful receipt of a packet\nURG flag that notifies the receiver about urgent packets that need to processed before other packets\nMatch any TCP Flag - FIN / SYN / RST / PSH / ACK / URG",
             "title": "TCP Flags",
             "enum": [
                 "FIN",

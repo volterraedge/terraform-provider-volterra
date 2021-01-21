@@ -494,8 +494,8 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		namespace = rReq.Metadata.Namespace
-		name = rReq.Metadata.Name
+		namespace = rReq.GetMetadata().GetNamespace()
+		name = rReq.GetMetadata().GetName()
 	} else {
 		jsn = cco.ReplaceJSONReq
 		reqMap := make(map[string]interface{})
@@ -1116,8 +1116,11 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_connector.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.network_connector.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1169,8 +1172,11 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_connector.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.network_connector.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1287,8 +1293,11 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_connector.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.network_connector.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -1302,6 +1311,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	tenant := server.TenantFromContext(ctx)
 	key := fmt.Sprintf("%s/%s/%s", tenant, req.GetNamespace(), req.GetName())
 	rsrcReq := &server.ResourceDeleteRequest{Key: key}
+	rsrcReq.FailIfReferred = req.FailIfReferred
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
@@ -2061,6 +2071,14 @@ var APISwaggerJSON string = `{
                         "in": "path",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/network_connectorDeleteRequest"
+                        }
                     }
                 ],
                 "tags": [
@@ -2227,6 +2245,36 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [sli_to_global_dr sli_to_global_snat sli_to_slo_dr sli_to_slo_snat slo_to_global_dr]\nx-displayName: \"SNAT, Site Local Outside to a Global Network\"\nSite local outside is connected directly to a given global network",
                     "title": "Site Local outside to a Global Network SNAT\"",
                     "$ref": "#/definitions/network_connectorGlobalSnatConnectorType"
+                }
+            }
+        },
+        "network_connectorDeleteRequest": {
+            "type": "object",
+            "description": "This is the input message of the 'Delete' RPC.",
+            "title": "DeleteRequest is used to delete a network_connector",
+            "x-displayname": "Delete Request",
+            "x-ves-proto-message": "ves.io.schema.network_connector.DeleteRequest",
+            "properties": {
+                "fail_if_referred": {
+                    "type": "boolean",
+                    "description": " Fail the delete operation if this object is being referred by other objects",
+                    "title": "fail_if_referred",
+                    "format": "boolean",
+                    "x-displayname": "Fail-If-Referred"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the configuration object\n\nExample: - \"name\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the configuration object is present\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
                 }
             }
         },
@@ -2970,7 +3018,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "connection_timeout": {
                     "type": "integer",
-                    "description": " The timeout for new network connections to upstream server.\n This is specified in milliseconds. The default value is 2 seconds\n\nExample: - \"4000\"-",
+                    "description": " The timeout for new network connections to upstream server.\n This is specified in milliseconds. The default value is 2000 (2 seconds)\n\nExample: - \"4000\"-",
                     "title": "connection_timeout",
                     "format": "int64",
                     "x-displayname": "Connection Timeout",

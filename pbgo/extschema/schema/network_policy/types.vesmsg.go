@@ -16,6 +16,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -24,6 +25,87 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *ApplicationsType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApplicationsType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApplicationsType) DeepCopy() *ApplicationsType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApplicationsType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApplicationsType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApplicationsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApplicationsTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateApplicationsType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApplicationsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApplicationsType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApplicationsType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["applications"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("applications"))
+		for idx, item := range m.GetApplications() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApplicationsTypeValidator = func() *ValidateApplicationsType {
+	v := &ValidateApplicationsType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ApplicationsTypeValidator() db.Validator {
+	return DefaultApplicationsTypeValidator
+}
 
 // augmented methods on protoc/std generated struct
 
@@ -64,13 +146,13 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetEgressRulesDRefInfo(); err != nil {
+	if fdrInfos, err := m.GetEndpointDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetIngressRulesDRefInfo(); err != nil {
+	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -79,166 +161,78 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
-func (m *CreateSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetEgressRules() {
-		if ref == nil {
-			return nil, fmt.Errorf("CreateSpecType.egress_rules[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "network_policy_rule.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "egress_rules",
-			Ref:        ref,
-		})
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.Endpoint == nil {
+		return []db.DRefInfo{}, nil
 	}
 
-	return drInfos, nil
-}
-
-// GetEgressRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *CreateSpecType) GetEgressRulesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "network_policy_rule.Object")
+	driSet, err = m.Endpoint.GetDRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: network_policy_rule")
+		return nil, err
 	}
-	for _, ref := range m.GetEgressRules() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
+	for _, dri := range driSet {
+		dri.DRField = "endpoint." + dri.DRField
+		drInfos = append(drInfos, dri)
 	}
 
-	return entries, nil
+	return drInfos, err
 }
 
-func (m *CreateSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetIngressRules() {
-		if ref == nil {
-			return nil, fmt.Errorf("CreateSpecType.ingress_rules[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "network_policy_rule.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "ingress_rules",
-			Ref:        ref,
-		})
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.Rules == nil {
+		return []db.DRefInfo{}, nil
 	}
 
-	return drInfos, nil
-}
-
-// GetIngressRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *CreateSpecType) GetIngressRulesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "network_policy_rule.Object")
+	driSet, err = m.Rules.GetDRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: network_policy_rule")
+		return nil, err
 	}
-	for _, ref := range m.GetIngressRules() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
+	for _, dri := range driSet {
+		dri.DRField = "rules." + dri.DRField
+		drInfos = append(drInfos, dri)
 	}
 
-	return entries, nil
+	return drInfos, err
 }
 
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateCreateSpecType) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateCreateSpecType) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ingress_rules")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated ingress_rules")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items ingress_rules")
-		}
-		return nil
-	}
+	validatorFn := EndpointChoiceTypeValidator().Validate
 
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) EgressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateCreateSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for egress_rules")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for rules")
 	}
-
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
 		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
+
+		if err := NetworkPolicyRuleChoiceValidator().Validate(ctx, val, opts...); err != nil {
+			return err
 		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated egress_rules")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items egress_rules")
-		}
+
 		return nil
 	}
 
@@ -259,44 +253,20 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["egress_rules"]; exists {
-		vOpts := append(opts, db.WithValidateField("egress_rules"))
-		if err := fv(ctx, m.GetEgressRules(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["endpoint"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("endpoint"))
+		if err := fv(ctx, m.GetEndpoint(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["ingress_rules"]; exists {
-		vOpts := append(opts, db.WithValidateField("ingress_rules"))
-		if err := fv(ctx, m.GetIngressRules(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["rules"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("rules"))
+		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
 			return err
-		}
-
-	}
-
-	switch m.GetLocalEndpoint().(type) {
-	case *CreateSpecType_Prefix:
-		if fv, exists := v.FldValidators["local_endpoint.prefix"]; exists {
-			val := m.GetLocalEndpoint().(*CreateSpecType_Prefix).Prefix
-			vOpts := append(opts,
-				db.WithValidateField("local_endpoint"),
-				db.WithValidateField("prefix"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *CreateSpecType_PrefixSelector:
-		if fv, exists := v.FldValidators["local_endpoint.prefix_selector"]; exists {
-			val := m.GetLocalEndpoint().(*CreateSpecType_PrefixSelector).PrefixSelector
-			vOpts := append(opts,
-				db.WithValidateField("local_endpoint"),
-				db.WithValidateField("prefix_selector"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
 		}
 
 	}
@@ -316,36 +286,277 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhIngressRules := v.IngressRulesValidationRuleHandler
-	rulesIngressRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
-	}
-	vFn, err = vrhIngressRules(rulesIngressRules)
+	vrhEndpoint := v.EndpointValidationRuleHandler
+	rulesEndpoint := map[string]string{}
+	vFn, err = vrhEndpoint(rulesEndpoint)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.ingress_rules: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.endpoint: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["ingress_rules"] = vFn
+	v.FldValidators["endpoint"] = vFn
 
-	vrhEgressRules := v.EgressRulesValidationRuleHandler
-	rulesEgressRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+	vrhRules := v.RulesValidationRuleHandler
+	rulesRules := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhEgressRules(rulesEgressRules)
+	vFn, err = vrhRules(rulesRules)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.egress_rules: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.rules: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["egress_rules"] = vFn
-
-	v.FldValidators["local_endpoint.prefix"] = ves_io_schema.PrefixListTypeValidator().Validate
-	v.FldValidators["local_endpoint.prefix_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+	v.FldValidators["rules"] = vFn
 
 	return v
 }()
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *EndpointChoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *EndpointChoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *EndpointChoiceType) DeepCopy() *EndpointChoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &EndpointChoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *EndpointChoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *EndpointChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return EndpointChoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *EndpointChoiceType) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetEndpointChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *EndpointChoiceType) GetEndpointChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var odrInfos []db.DRefInfo
+
+	switch m.GetEndpointChoice().(type) {
+	case *EndpointChoiceType_PrefixList:
+
+	case *EndpointChoiceType_Any:
+
+	case *EndpointChoiceType_OutsideEndpoints:
+
+	case *EndpointChoiceType_InsideEndpoints:
+
+	case *EndpointChoiceType_Interface:
+
+		vref := m.GetInterface()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_interface.Object")
+		odri := db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "interface",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
+	case *EndpointChoiceType_LabelSelector:
+
+	}
+
+	return odrInfos, nil
+}
+
+// GetEndpointChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *EndpointChoiceType) GetEndpointChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetEndpointChoice().(type) {
+	case *EndpointChoiceType_PrefixList:
+
+	case *EndpointChoiceType_Any:
+
+	case *EndpointChoiceType_OutsideEndpoints:
+
+	case *EndpointChoiceType_InsideEndpoints:
+
+	case *EndpointChoiceType_Interface:
+		refdType, err := d.TypeForEntryKind("", "", "network_interface.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
+		}
+
+		vref := m.GetInterface()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "network_interface.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	case *EndpointChoiceType_LabelSelector:
+
+	}
+
+	return entries, nil
+}
+
+type ValidateEndpointChoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateEndpointChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*EndpointChoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *EndpointChoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetEndpointChoice().(type) {
+	case *EndpointChoiceType_PrefixList:
+		if fv, exists := v.FldValidators["endpoint_choice.prefix_list"]; exists {
+			val := m.GetEndpointChoice().(*EndpointChoiceType_PrefixList).PrefixList
+			vOpts := append(opts,
+				db.WithValidateField("endpoint_choice"),
+				db.WithValidateField("prefix_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *EndpointChoiceType_Any:
+		if fv, exists := v.FldValidators["endpoint_choice.any"]; exists {
+			val := m.GetEndpointChoice().(*EndpointChoiceType_Any).Any
+			vOpts := append(opts,
+				db.WithValidateField("endpoint_choice"),
+				db.WithValidateField("any"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *EndpointChoiceType_OutsideEndpoints:
+		if fv, exists := v.FldValidators["endpoint_choice.outside_endpoints"]; exists {
+			val := m.GetEndpointChoice().(*EndpointChoiceType_OutsideEndpoints).OutsideEndpoints
+			vOpts := append(opts,
+				db.WithValidateField("endpoint_choice"),
+				db.WithValidateField("outside_endpoints"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *EndpointChoiceType_InsideEndpoints:
+		if fv, exists := v.FldValidators["endpoint_choice.inside_endpoints"]; exists {
+			val := m.GetEndpointChoice().(*EndpointChoiceType_InsideEndpoints).InsideEndpoints
+			vOpts := append(opts,
+				db.WithValidateField("endpoint_choice"),
+				db.WithValidateField("inside_endpoints"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *EndpointChoiceType_Interface:
+		if fv, exists := v.FldValidators["endpoint_choice.interface"]; exists {
+			val := m.GetEndpointChoice().(*EndpointChoiceType_Interface).Interface
+			vOpts := append(opts,
+				db.WithValidateField("endpoint_choice"),
+				db.WithValidateField("interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *EndpointChoiceType_Namespace:
+		if fv, exists := v.FldValidators["endpoint_choice.namespace"]; exists {
+			val := m.GetEndpointChoice().(*EndpointChoiceType_Namespace).Namespace
+			vOpts := append(opts,
+				db.WithValidateField("endpoint_choice"),
+				db.WithValidateField("namespace"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *EndpointChoiceType_LabelSelector:
+		if fv, exists := v.FldValidators["endpoint_choice.label_selector"]; exists {
+			val := m.GetEndpointChoice().(*EndpointChoiceType_LabelSelector).LabelSelector
+			vOpts := append(opts,
+				db.WithValidateField("endpoint_choice"),
+				db.WithValidateField("label_selector"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultEndpointChoiceTypeValidator = func() *ValidateEndpointChoiceType {
+	v := &ValidateEndpointChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["endpoint_choice.prefix_list"] = ves_io_schema_views.PrefixStringListTypeValidator().Validate
+	v.FldValidators["endpoint_choice.interface"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["endpoint_choice.label_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+
+	return v
+}()
+
+func EndpointChoiceTypeValidator() db.Validator {
+	return DefaultEndpointChoiceTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -387,13 +598,13 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetEgressRulesDRefInfo(); err != nil {
+	if fdrInfos, err := m.GetEndpointDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetIngressRulesDRefInfo(); err != nil {
+	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -402,170 +613,70 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
-func (m *GetSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetEgressRules() {
-		if ref == nil {
-			return nil, fmt.Errorf("GetSpecType.egress_rules[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "network_policy_rule.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "egress_rules",
-			Ref:        ref,
-		})
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.Endpoint == nil {
+		return []db.DRefInfo{}, nil
 	}
 
-	return drInfos, nil
-}
-
-// GetEgressRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GetSpecType) GetEgressRulesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "network_policy_rule.Object")
+	driSet, err = m.Endpoint.GetDRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: network_policy_rule")
+		return nil, err
 	}
-	for _, ref := range m.GetEgressRules() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
+	for _, dri := range driSet {
+		dri.DRField = "endpoint." + dri.DRField
+		drInfos = append(drInfos, dri)
 	}
 
-	return entries, nil
+	return drInfos, err
 }
 
-func (m *GetSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetIngressRules() {
-		if ref == nil {
-			return nil, fmt.Errorf("GetSpecType.ingress_rules[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "network_policy_rule.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "ingress_rules",
-			Ref:        ref,
-		})
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.RuleChoice == nil {
+		return []db.DRefInfo{}, nil
 	}
 
-	return drInfos, nil
-}
+	var odrInfos []db.DRefInfo
 
-// GetIngressRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GetSpecType) GetIngressRulesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "network_policy_rule.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: network_policy_rule")
-	}
-	for _, ref := range m.GetIngressRules() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	switch m.GetRuleChoice().(type) {
+	case *GetSpecType_Rules:
+		odrInfos, err = m.GetRules().GetDRefInfo()
 		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
+			return nil, err
 		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
+		for _, odri := range odrInfos {
+			odri.DRField = "rules." + odri.DRField
+			drInfos = append(drInfos, odri)
 		}
+
+	case *GetSpecType_LegacyRules:
+		odrInfos, err = m.GetLegacyRules().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "legacy_rules." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
 	}
 
-	return entries, nil
+	return drInfos, err
 }
 
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateGetSpecType) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ingress_rules")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated ingress_rules")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items ingress_rules")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateGetSpecType) EgressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for egress_rules")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated egress_rules")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items egress_rules")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
 }
 
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -582,40 +693,33 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["egress_rules"]; exists {
-		vOpts := append(opts, db.WithValidateField("egress_rules"))
-		if err := fv(ctx, m.GetEgressRules(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["endpoint"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("endpoint"))
+		if err := fv(ctx, m.GetEndpoint(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["ingress_rules"]; exists {
-		vOpts := append(opts, db.WithValidateField("ingress_rules"))
-		if err := fv(ctx, m.GetIngressRules(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	switch m.GetLocalEndpoint().(type) {
-	case *GetSpecType_Prefix:
-		if fv, exists := v.FldValidators["local_endpoint.prefix"]; exists {
-			val := m.GetLocalEndpoint().(*GetSpecType_Prefix).Prefix
+	switch m.GetRuleChoice().(type) {
+	case *GetSpecType_Rules:
+		if fv, exists := v.FldValidators["rule_choice.rules"]; exists {
+			val := m.GetRuleChoice().(*GetSpecType_Rules).Rules
 			vOpts := append(opts,
-				db.WithValidateField("local_endpoint"),
-				db.WithValidateField("prefix"),
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("rules"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *GetSpecType_PrefixSelector:
-		if fv, exists := v.FldValidators["local_endpoint.prefix_selector"]; exists {
-			val := m.GetLocalEndpoint().(*GetSpecType_PrefixSelector).PrefixSelector
+	case *GetSpecType_LegacyRules:
+		if fv, exists := v.FldValidators["rule_choice.legacy_rules"]; exists {
+			val := m.GetRuleChoice().(*GetSpecType_LegacyRules).LegacyRules
 			vOpts := append(opts,
-				db.WithValidateField("local_endpoint"),
-				db.WithValidateField("prefix_selector"),
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("legacy_rules"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -639,30 +743,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhIngressRules := v.IngressRulesValidationRuleHandler
-	rulesIngressRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
-	}
-	vFn, err = vrhIngressRules(rulesIngressRules)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.ingress_rules: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["ingress_rules"] = vFn
+	v.FldValidators["rule_choice.rules"] = NetworkPolicyRuleChoiceValidator().Validate
+	v.FldValidators["rule_choice.legacy_rules"] = LegacyNetworkPolicyRuleChoiceValidator().Validate
 
-	vrhEgressRules := v.EgressRulesValidationRuleHandler
-	rulesEgressRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
-	}
-	vFn, err = vrhEgressRules(rulesEgressRules)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.egress_rules: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["egress_rules"] = vFn
-
-	v.FldValidators["local_endpoint.prefix"] = ves_io_schema.PrefixListTypeValidator().Validate
-	v.FldValidators["local_endpoint.prefix_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+	v.FldValidators["endpoint"] = EndpointChoiceTypeValidator().Validate
 
 	return v
 }()
@@ -716,6 +800,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetEndpointDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetForwardingClassDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -723,6 +813,18 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	if fdrInfos, err := m.GetIngressRulesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -770,6 +872,29 @@ func (m *GlobalSpecType) GetEgressRulesDBEntries(ctx context.Context, d db.Inter
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.Endpoint == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	driSet, err = m.Endpoint.GetDRefInfo()
+	if err != nil {
+		return nil, err
+	}
+	for _, dri := range driSet {
+		dri.DRField = "endpoint." + dri.DRField
+		drInfos = append(drInfos, dri)
+	}
+
+	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetForwardingClassDRefInfo() ([]db.DRefInfo, error) {
@@ -849,6 +974,95 @@ func (m *GlobalSpecType) GetIngressRulesDBEntries(ctx context.Context, d db.Inte
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
+	}
+
+	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.RuleChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetRuleChoice().(type) {
+	case *GlobalSpecType_Rules:
+		odrInfos, err = m.GetRules().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "rules." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *GlobalSpecType_LegacyRules:
+		odrInfos, err = m.GetLegacyRules().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "legacy_rules." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	drInfos = append(drInfos, db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	})
+
+	return drInfos, nil
+}
+
+// GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "view_internal.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
+	}
+
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "view_internal.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
 	}
 
 	return entries, nil
@@ -1000,6 +1214,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["endpoint"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("endpoint"))
+		if err := fv(ctx, m.GetEndpoint(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["forwarding_class"]; exists {
 		vOpts := append(opts, db.WithValidateField("forwarding_class"))
 		if err := fv(ctx, m.GetForwardingClass(), vOpts...); err != nil {
@@ -1038,6 +1261,41 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	switch m.GetRuleChoice().(type) {
+	case *GlobalSpecType_Rules:
+		if fv, exists := v.FldValidators["rule_choice.rules"]; exists {
+			val := m.GetRuleChoice().(*GlobalSpecType_Rules).Rules
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("rules"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_LegacyRules:
+		if fv, exists := v.FldValidators["rule_choice.legacy_rules"]; exists {
+			val := m.GetRuleChoice().(*GlobalSpecType_LegacyRules).LegacyRules
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("legacy_rules"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["view_internal"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("view_internal"))
+		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1093,11 +1351,1150 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["local_endpoint.prefix"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["local_endpoint.prefix_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
+	v.FldValidators["rule_choice.rules"] = NetworkPolicyRuleChoiceValidator().Validate
+	v.FldValidators["rule_choice.legacy_rules"] = LegacyNetworkPolicyRuleChoiceValidator().Validate
+
+	v.FldValidators["endpoint"] = EndpointChoiceTypeValidator().Validate
+
+	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
 	return v
 }()
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *LegacyNetworkPolicyRuleChoice) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LegacyNetworkPolicyRuleChoice) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LegacyNetworkPolicyRuleChoice) DeepCopy() *LegacyNetworkPolicyRuleChoice {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LegacyNetworkPolicyRuleChoice{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LegacyNetworkPolicyRuleChoice) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LegacyNetworkPolicyRuleChoice) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LegacyNetworkPolicyRuleChoiceValidator().Validate(ctx, m, opts...)
+}
+
+func (m *LegacyNetworkPolicyRuleChoice) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetEgressRulesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetIngressRulesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *LegacyNetworkPolicyRuleChoice) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, ref := range m.GetEgressRules() {
+		if ref == nil {
+			return nil, fmt.Errorf("LegacyNetworkPolicyRuleChoice.egress_rules[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_policy_rule.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "egress_rules",
+			Ref:        ref,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetEgressRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *LegacyNetworkPolicyRuleChoice) GetEgressRulesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "network_policy_rule.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: network_policy_rule")
+	}
+	for _, ref := range m.GetEgressRules() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *LegacyNetworkPolicyRuleChoice) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, ref := range m.GetIngressRules() {
+		if ref == nil {
+			return nil, fmt.Errorf("LegacyNetworkPolicyRuleChoice.ingress_rules[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_policy_rule.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "ingress_rules",
+			Ref:        ref,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetIngressRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *LegacyNetworkPolicyRuleChoice) GetIngressRulesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "network_policy_rule.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: network_policy_rule")
+	}
+	for _, ref := range m.GetIngressRules() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateLegacyNetworkPolicyRuleChoice struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLegacyNetworkPolicyRuleChoice) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ingress_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ingress_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ingress_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLegacyNetworkPolicyRuleChoice) EgressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for egress_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated egress_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items egress_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLegacyNetworkPolicyRuleChoice) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LegacyNetworkPolicyRuleChoice)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LegacyNetworkPolicyRuleChoice got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["egress_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("egress_rules"))
+		if err := fv(ctx, m.GetEgressRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ingress_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("ingress_rules"))
+		if err := fv(ctx, m.GetIngressRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLegacyNetworkPolicyRuleChoiceValidator = func() *ValidateLegacyNetworkPolicyRuleChoice {
+	v := &ValidateLegacyNetworkPolicyRuleChoice{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIngressRules := v.IngressRulesValidationRuleHandler
+	rulesIngressRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhIngressRules(rulesIngressRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LegacyNetworkPolicyRuleChoice.ingress_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ingress_rules"] = vFn
+
+	vrhEgressRules := v.EgressRulesValidationRuleHandler
+	rulesEgressRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhEgressRules(rulesEgressRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LegacyNetworkPolicyRuleChoice.egress_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["egress_rules"] = vFn
+
+	return v
+}()
+
+func LegacyNetworkPolicyRuleChoiceValidator() db.Validator {
+	return DefaultLegacyNetworkPolicyRuleChoiceValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NetworkPolicyRuleChoice) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NetworkPolicyRuleChoice) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NetworkPolicyRuleChoice) DeepCopy() *NetworkPolicyRuleChoice {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NetworkPolicyRuleChoice{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NetworkPolicyRuleChoice) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NetworkPolicyRuleChoice) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NetworkPolicyRuleChoiceValidator().Validate(ctx, m, opts...)
+}
+
+func (m *NetworkPolicyRuleChoice) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetEgressRulesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetIngressRulesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *NetworkPolicyRuleChoice) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.EgressRules == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	for idx, e := range m.EgressRules {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, dri := range driSet {
+			dri.DRField = fmt.Sprintf("egress_rules[%v].%s", idx, dri.DRField)
+			drInfos = append(drInfos, dri)
+		}
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *NetworkPolicyRuleChoice) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.IngressRules == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	for idx, e := range m.IngressRules {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, dri := range driSet {
+			dri.DRField = fmt.Sprintf("ingress_rules[%v].%s", idx, dri.DRField)
+			drInfos = append(drInfos, dri)
+		}
+	}
+
+	return drInfos, err
+}
+
+type ValidateNetworkPolicyRuleChoice struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNetworkPolicyRuleChoice) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ingress_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*NetworkPolicyRuleType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*NetworkPolicyRuleType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ingress_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ingress_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNetworkPolicyRuleChoice) EgressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for egress_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*NetworkPolicyRuleType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*NetworkPolicyRuleType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated egress_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items egress_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNetworkPolicyRuleChoice) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NetworkPolicyRuleChoice)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NetworkPolicyRuleChoice got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["egress_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("egress_rules"))
+		if err := fv(ctx, m.GetEgressRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ingress_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("ingress_rules"))
+		if err := fv(ctx, m.GetIngressRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNetworkPolicyRuleChoiceValidator = func() *ValidateNetworkPolicyRuleChoice {
+	v := &ValidateNetworkPolicyRuleChoice{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIngressRules := v.IngressRulesValidationRuleHandler
+	rulesIngressRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "128",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhIngressRules(rulesIngressRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NetworkPolicyRuleChoice.ingress_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ingress_rules"] = vFn
+
+	vrhEgressRules := v.EgressRulesValidationRuleHandler
+	rulesEgressRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "128",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhEgressRules(rulesEgressRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NetworkPolicyRuleChoice.egress_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["egress_rules"] = vFn
+
+	return v
+}()
+
+func NetworkPolicyRuleChoiceValidator() db.Validator {
+	return DefaultNetworkPolicyRuleChoiceValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NetworkPolicyRuleType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NetworkPolicyRuleType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NetworkPolicyRuleType) DeepCopy() *NetworkPolicyRuleType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NetworkPolicyRuleType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NetworkPolicyRuleType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NetworkPolicyRuleType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NetworkPolicyRuleTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *NetworkPolicyRuleType) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetOtherEndpointDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *NetworkPolicyRuleType) GetOtherEndpointDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.OtherEndpoint == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetOtherEndpoint().(type) {
+	case *NetworkPolicyRuleType_IpPrefixSet:
+		odrInfos, err = m.GetIpPrefixSet().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "ip_prefix_set." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *NetworkPolicyRuleType_Any:
+
+	case *NetworkPolicyRuleType_PrefixList:
+
+	case *NetworkPolicyRuleType_OutsideEndpoints:
+
+	case *NetworkPolicyRuleType_InsideEndpoints:
+
+	case *NetworkPolicyRuleType_LabelSelector:
+
+	}
+
+	return drInfos, err
+}
+
+type ValidateNetworkPolicyRuleType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNetworkPolicyRuleType) KeysValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for keys")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for keys")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated keys")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items keys")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNetworkPolicyRuleType) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNetworkPolicyRuleType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NetworkPolicyRuleType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NetworkPolicyRuleType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("action"))
+		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["keys"]; exists {
+		vOpts := append(opts, db.WithValidateField("keys"))
+		if err := fv(ctx, m.GetKeys(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetOtherEndpoint().(type) {
+	case *NetworkPolicyRuleType_IpPrefixSet:
+		if fv, exists := v.FldValidators["other_endpoint.ip_prefix_set"]; exists {
+			val := m.GetOtherEndpoint().(*NetworkPolicyRuleType_IpPrefixSet).IpPrefixSet
+			vOpts := append(opts,
+				db.WithValidateField("other_endpoint"),
+				db.WithValidateField("ip_prefix_set"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NetworkPolicyRuleType_Any:
+		if fv, exists := v.FldValidators["other_endpoint.any"]; exists {
+			val := m.GetOtherEndpoint().(*NetworkPolicyRuleType_Any).Any
+			vOpts := append(opts,
+				db.WithValidateField("other_endpoint"),
+				db.WithValidateField("any"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NetworkPolicyRuleType_PrefixList:
+		if fv, exists := v.FldValidators["other_endpoint.prefix_list"]; exists {
+			val := m.GetOtherEndpoint().(*NetworkPolicyRuleType_PrefixList).PrefixList
+			vOpts := append(opts,
+				db.WithValidateField("other_endpoint"),
+				db.WithValidateField("prefix_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NetworkPolicyRuleType_OutsideEndpoints:
+		if fv, exists := v.FldValidators["other_endpoint.outside_endpoints"]; exists {
+			val := m.GetOtherEndpoint().(*NetworkPolicyRuleType_OutsideEndpoints).OutsideEndpoints
+			vOpts := append(opts,
+				db.WithValidateField("other_endpoint"),
+				db.WithValidateField("outside_endpoints"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NetworkPolicyRuleType_InsideEndpoints:
+		if fv, exists := v.FldValidators["other_endpoint.inside_endpoints"]; exists {
+			val := m.GetOtherEndpoint().(*NetworkPolicyRuleType_InsideEndpoints).InsideEndpoints
+			vOpts := append(opts,
+				db.WithValidateField("other_endpoint"),
+				db.WithValidateField("inside_endpoints"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NetworkPolicyRuleType_Namespace:
+		if fv, exists := v.FldValidators["other_endpoint.namespace"]; exists {
+			val := m.GetOtherEndpoint().(*NetworkPolicyRuleType_Namespace).Namespace
+			vOpts := append(opts,
+				db.WithValidateField("other_endpoint"),
+				db.WithValidateField("namespace"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NetworkPolicyRuleType_LabelSelector:
+		if fv, exists := v.FldValidators["other_endpoint.label_selector"]; exists {
+			val := m.GetOtherEndpoint().(*NetworkPolicyRuleType_LabelSelector).LabelSelector
+			vOpts := append(opts,
+				db.WithValidateField("other_endpoint"),
+				db.WithValidateField("label_selector"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rule_description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("rule_description"))
+		if err := fv(ctx, m.GetRuleDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rule_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("rule_name"))
+		if err := fv(ctx, m.GetRuleName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetTrafficChoice().(type) {
+	case *NetworkPolicyRuleType_AllTraffic:
+		if fv, exists := v.FldValidators["traffic_choice.all_traffic"]; exists {
+			val := m.GetTrafficChoice().(*NetworkPolicyRuleType_AllTraffic).AllTraffic
+			vOpts := append(opts,
+				db.WithValidateField("traffic_choice"),
+				db.WithValidateField("all_traffic"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NetworkPolicyRuleType_AllTcpTraffic:
+		if fv, exists := v.FldValidators["traffic_choice.all_tcp_traffic"]; exists {
+			val := m.GetTrafficChoice().(*NetworkPolicyRuleType_AllTcpTraffic).AllTcpTraffic
+			vOpts := append(opts,
+				db.WithValidateField("traffic_choice"),
+				db.WithValidateField("all_tcp_traffic"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NetworkPolicyRuleType_AllUdpTraffic:
+		if fv, exists := v.FldValidators["traffic_choice.all_udp_traffic"]; exists {
+			val := m.GetTrafficChoice().(*NetworkPolicyRuleType_AllUdpTraffic).AllUdpTraffic
+			vOpts := append(opts,
+				db.WithValidateField("traffic_choice"),
+				db.WithValidateField("all_udp_traffic"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NetworkPolicyRuleType_Applications:
+		if fv, exists := v.FldValidators["traffic_choice.applications"]; exists {
+			val := m.GetTrafficChoice().(*NetworkPolicyRuleType_Applications).Applications
+			vOpts := append(opts,
+				db.WithValidateField("traffic_choice"),
+				db.WithValidateField("applications"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NetworkPolicyRuleType_ProtocolPortRange:
+		if fv, exists := v.FldValidators["traffic_choice.protocol_port_range"]; exists {
+			val := m.GetTrafficChoice().(*NetworkPolicyRuleType_ProtocolPortRange).ProtocolPortRange
+			vOpts := append(opts,
+				db.WithValidateField("traffic_choice"),
+				db.WithValidateField("protocol_port_range"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNetworkPolicyRuleTypeValidator = func() *ValidateNetworkPolicyRuleType {
+	v := &ValidateNetworkPolicyRuleType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhKeys := v.KeysValidationRuleHandler
+	rulesKeys := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhKeys(rulesKeys)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NetworkPolicyRuleType.keys: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["keys"] = vFn
+
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMetadata(rulesMetadata)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NetworkPolicyRuleType.metadata: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metadata"] = vFn
+
+	v.FldValidators["other_endpoint.ip_prefix_set"] = ves_io_schema.IpPrefixSetRefTypeValidator().Validate
+	v.FldValidators["other_endpoint.prefix_list"] = ves_io_schema_views.PrefixStringListTypeValidator().Validate
+	v.FldValidators["other_endpoint.label_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+
+	v.FldValidators["traffic_choice.protocol_port_range"] = ProtocolPortTypeValidator().Validate
+
+	return v
+}()
+
+func NetworkPolicyRuleTypeValidator() db.Validator {
+	return DefaultNetworkPolicyRuleTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ProtocolPortType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ProtocolPortType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ProtocolPortType) DeepCopy() *ProtocolPortType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ProtocolPortType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ProtocolPortType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ProtocolPortType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ProtocolPortTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateProtocolPortType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateProtocolPortType) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateProtocolPortType) PortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for port_ranges")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for port_ranges")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated port_ranges")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items port_ranges")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateProtocolPortType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ProtocolPortType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ProtocolPortType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["port_ranges"]; exists {
+		vOpts := append(opts, db.WithValidateField("port_ranges"))
+		if err := fv(ctx, m.GetPortRanges(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["protocol"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("protocol"))
+		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultProtocolPortTypeValidator = func() *ValidateProtocolPortType {
+	v := &ValidateProtocolPortType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhProtocol := v.ProtocolValidationRuleHandler
+	rulesProtocol := map[string]string{
+		"ves.io.schema.rules.string.in": "[\"\",\"ALL\",\"TCP\",\"UDP\",\"ICMP\"]",
+	}
+	vFn, err = vrhProtocol(rulesProtocol)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProtocolPortType.protocol: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["protocol"] = vFn
+
+	vrhPortRanges := v.PortRangesValidationRuleHandler
+	rulesPortRanges := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.port_range": "true",
+		"ves.io.schema.rules.repeated.max_items":               "128",
+	}
+	vFn, err = vrhPortRanges(rulesPortRanges)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProtocolPortType.port_ranges: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port_ranges"] = vFn
+
+	return v
+}()
+
+func ProtocolPortTypeValidator() db.Validator {
+	return DefaultProtocolPortTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1139,13 +2536,13 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetEgressRulesDRefInfo(); err != nil {
+	if fdrInfos, err := m.GetEndpointDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetIngressRulesDRefInfo(); err != nil {
+	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -1154,170 +2551,70 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
-func (m *ReplaceSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetEgressRules() {
-		if ref == nil {
-			return nil, fmt.Errorf("ReplaceSpecType.egress_rules[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "network_policy_rule.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "egress_rules",
-			Ref:        ref,
-		})
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.Endpoint == nil {
+		return []db.DRefInfo{}, nil
 	}
 
-	return drInfos, nil
-}
-
-// GetEgressRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *ReplaceSpecType) GetEgressRulesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "network_policy_rule.Object")
+	driSet, err = m.Endpoint.GetDRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: network_policy_rule")
+		return nil, err
 	}
-	for _, ref := range m.GetEgressRules() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
+	for _, dri := range driSet {
+		dri.DRField = "endpoint." + dri.DRField
+		drInfos = append(drInfos, dri)
 	}
 
-	return entries, nil
+	return drInfos, err
 }
 
-func (m *ReplaceSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetIngressRules() {
-		if ref == nil {
-			return nil, fmt.Errorf("ReplaceSpecType.ingress_rules[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "network_policy_rule.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "ingress_rules",
-			Ref:        ref,
-		})
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.RuleChoice == nil {
+		return []db.DRefInfo{}, nil
 	}
 
-	return drInfos, nil
-}
+	var odrInfos []db.DRefInfo
 
-// GetIngressRulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *ReplaceSpecType) GetIngressRulesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "network_policy_rule.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: network_policy_rule")
-	}
-	for _, ref := range m.GetIngressRules() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	switch m.GetRuleChoice().(type) {
+	case *ReplaceSpecType_Rules:
+		odrInfos, err = m.GetRules().GetDRefInfo()
 		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
+			return nil, err
 		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
+		for _, odri := range odrInfos {
+			odri.DRField = "rules." + odri.DRField
+			drInfos = append(drInfos, odri)
 		}
+
+	case *ReplaceSpecType_LegacyRules:
+		odrInfos, err = m.GetLegacyRules().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "legacy_rules." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
 	}
 
-	return entries, nil
+	return drInfos, err
 }
 
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateReplaceSpecType) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ingress_rules")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated ingress_rules")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items ingress_rules")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateReplaceSpecType) EgressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for egress_rules")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated egress_rules")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items egress_rules")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
 }
 
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -1334,40 +2631,33 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["egress_rules"]; exists {
-		vOpts := append(opts, db.WithValidateField("egress_rules"))
-		if err := fv(ctx, m.GetEgressRules(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["endpoint"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("endpoint"))
+		if err := fv(ctx, m.GetEndpoint(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["ingress_rules"]; exists {
-		vOpts := append(opts, db.WithValidateField("ingress_rules"))
-		if err := fv(ctx, m.GetIngressRules(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	switch m.GetLocalEndpoint().(type) {
-	case *ReplaceSpecType_Prefix:
-		if fv, exists := v.FldValidators["local_endpoint.prefix"]; exists {
-			val := m.GetLocalEndpoint().(*ReplaceSpecType_Prefix).Prefix
+	switch m.GetRuleChoice().(type) {
+	case *ReplaceSpecType_Rules:
+		if fv, exists := v.FldValidators["rule_choice.rules"]; exists {
+			val := m.GetRuleChoice().(*ReplaceSpecType_Rules).Rules
 			vOpts := append(opts,
-				db.WithValidateField("local_endpoint"),
-				db.WithValidateField("prefix"),
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("rules"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *ReplaceSpecType_PrefixSelector:
-		if fv, exists := v.FldValidators["local_endpoint.prefix_selector"]; exists {
-			val := m.GetLocalEndpoint().(*ReplaceSpecType_PrefixSelector).PrefixSelector
+	case *ReplaceSpecType_LegacyRules:
+		if fv, exists := v.FldValidators["rule_choice.legacy_rules"]; exists {
+			val := m.GetRuleChoice().(*ReplaceSpecType_LegacyRules).LegacyRules
 			vOpts := append(opts,
-				db.WithValidateField("local_endpoint"),
-				db.WithValidateField("prefix_selector"),
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("legacy_rules"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1391,30 +2681,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhIngressRules := v.IngressRulesValidationRuleHandler
-	rulesIngressRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
-	}
-	vFn, err = vrhIngressRules(rulesIngressRules)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.ingress_rules: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["ingress_rules"] = vFn
+	v.FldValidators["rule_choice.rules"] = NetworkPolicyRuleChoiceValidator().Validate
+	v.FldValidators["rule_choice.legacy_rules"] = LegacyNetworkPolicyRuleChoiceValidator().Validate
 
-	vrhEgressRules := v.EgressRulesValidationRuleHandler
-	rulesEgressRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
-	}
-	vFn, err = vrhEgressRules(rulesEgressRules)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.egress_rules: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["egress_rules"] = vFn
-
-	v.FldValidators["local_endpoint.prefix"] = ves_io_schema.PrefixListTypeValidator().Validate
-	v.FldValidators["local_endpoint.prefix_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+	v.FldValidators["endpoint"] = EndpointChoiceTypeValidator().Validate
 
 	return v
 }()
@@ -1423,48 +2693,12 @@ func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
 }
 
-// create setters in CreateSpecType from GlobalSpecType for oneof fields
-func (r *CreateSpecType) SetLocalEndpointToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.LocalEndpoint.(type) {
-	case nil:
-		o.LocalEndpoint = nil
-
-	case *CreateSpecType_Prefix:
-		o.LocalEndpoint = &GlobalSpecType_Prefix{Prefix: of.Prefix}
-
-	case *CreateSpecType_PrefixSelector:
-		o.LocalEndpoint = &GlobalSpecType_PrefixSelector{PrefixSelector: of.PrefixSelector}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *CreateSpecType) GetLocalEndpointFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.LocalEndpoint.(type) {
-	case nil:
-		r.LocalEndpoint = nil
-
-	case *GlobalSpecType_Prefix:
-		r.LocalEndpoint = &CreateSpecType_Prefix{Prefix: of.Prefix}
-
-	case *GlobalSpecType_PrefixSelector:
-		r.LocalEndpoint = &CreateSpecType_PrefixSelector{PrefixSelector: of.PrefixSelector}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	m.EgressRules = f.GetEgressRules()
-	m.IngressRules = f.GetIngressRules()
-	m.GetLocalEndpointFromGlobalSpecType(f)
+	m.Endpoint = f.GetEndpoint()
+
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -1473,22 +2707,21 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	f.EgressRules = m1.EgressRules
-	f.IngressRules = m1.IngressRules
-	m1.SetLocalEndpointToGlobalSpecType(f)
+	f.Endpoint = m1.Endpoint
+
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
-func (r *GetSpecType) SetLocalEndpointToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.LocalEndpoint.(type) {
+func (r *GetSpecType) SetRuleChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.RuleChoice.(type) {
 	case nil:
-		o.LocalEndpoint = nil
+		o.RuleChoice = nil
 
-	case *GetSpecType_Prefix:
-		o.LocalEndpoint = &GlobalSpecType_Prefix{Prefix: of.Prefix}
+	case *GetSpecType_LegacyRules:
+		o.RuleChoice = &GlobalSpecType_LegacyRules{LegacyRules: of.LegacyRules}
 
-	case *GetSpecType_PrefixSelector:
-		o.LocalEndpoint = &GlobalSpecType_PrefixSelector{PrefixSelector: of.PrefixSelector}
+	case *GetSpecType_Rules:
+		o.RuleChoice = &GlobalSpecType_Rules{Rules: of.Rules}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -1496,16 +2729,16 @@ func (r *GetSpecType) SetLocalEndpointToGlobalSpecType(o *GlobalSpecType) error 
 	return nil
 }
 
-func (r *GetSpecType) GetLocalEndpointFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.LocalEndpoint.(type) {
+func (r *GetSpecType) GetRuleChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.RuleChoice.(type) {
 	case nil:
-		r.LocalEndpoint = nil
+		r.RuleChoice = nil
 
-	case *GlobalSpecType_Prefix:
-		r.LocalEndpoint = &GetSpecType_Prefix{Prefix: of.Prefix}
+	case *GlobalSpecType_LegacyRules:
+		r.RuleChoice = &GetSpecType_LegacyRules{LegacyRules: of.LegacyRules}
 
-	case *GlobalSpecType_PrefixSelector:
-		r.LocalEndpoint = &GetSpecType_PrefixSelector{PrefixSelector: of.PrefixSelector}
+	case *GlobalSpecType_Rules:
+		r.RuleChoice = &GetSpecType_Rules{Rules: of.Rules}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -1517,9 +2750,8 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	m.EgressRules = f.GetEgressRules()
-	m.IngressRules = f.GetIngressRules()
-	m.GetLocalEndpointFromGlobalSpecType(f)
+	m.Endpoint = f.GetEndpoint()
+	m.GetRuleChoiceFromGlobalSpecType(f)
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -1528,22 +2760,21 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	f.EgressRules = m1.EgressRules
-	f.IngressRules = m1.IngressRules
-	m1.SetLocalEndpointToGlobalSpecType(f)
+	f.Endpoint = m1.Endpoint
+	m1.SetRuleChoiceToGlobalSpecType(f)
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
-func (r *ReplaceSpecType) SetLocalEndpointToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.LocalEndpoint.(type) {
+func (r *ReplaceSpecType) SetRuleChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.RuleChoice.(type) {
 	case nil:
-		o.LocalEndpoint = nil
+		o.RuleChoice = nil
 
-	case *ReplaceSpecType_Prefix:
-		o.LocalEndpoint = &GlobalSpecType_Prefix{Prefix: of.Prefix}
+	case *ReplaceSpecType_LegacyRules:
+		o.RuleChoice = &GlobalSpecType_LegacyRules{LegacyRules: of.LegacyRules}
 
-	case *ReplaceSpecType_PrefixSelector:
-		o.LocalEndpoint = &GlobalSpecType_PrefixSelector{PrefixSelector: of.PrefixSelector}
+	case *ReplaceSpecType_Rules:
+		o.RuleChoice = &GlobalSpecType_Rules{Rules: of.Rules}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -1551,16 +2782,16 @@ func (r *ReplaceSpecType) SetLocalEndpointToGlobalSpecType(o *GlobalSpecType) er
 	return nil
 }
 
-func (r *ReplaceSpecType) GetLocalEndpointFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.LocalEndpoint.(type) {
+func (r *ReplaceSpecType) GetRuleChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.RuleChoice.(type) {
 	case nil:
-		r.LocalEndpoint = nil
+		r.RuleChoice = nil
 
-	case *GlobalSpecType_Prefix:
-		r.LocalEndpoint = &ReplaceSpecType_Prefix{Prefix: of.Prefix}
+	case *GlobalSpecType_LegacyRules:
+		r.RuleChoice = &ReplaceSpecType_LegacyRules{LegacyRules: of.LegacyRules}
 
-	case *GlobalSpecType_PrefixSelector:
-		r.LocalEndpoint = &ReplaceSpecType_PrefixSelector{PrefixSelector: of.PrefixSelector}
+	case *GlobalSpecType_Rules:
+		r.RuleChoice = &ReplaceSpecType_Rules{Rules: of.Rules}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -1572,9 +2803,8 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	m.EgressRules = f.GetEgressRules()
-	m.IngressRules = f.GetIngressRules()
-	m.GetLocalEndpointFromGlobalSpecType(f)
+	m.Endpoint = f.GetEndpoint()
+	m.GetRuleChoiceFromGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -1583,7 +2813,6 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	f.EgressRules = m1.EgressRules
-	f.IngressRules = m1.IngressRules
-	m1.SetLocalEndpointToGlobalSpecType(f)
+	f.Endpoint = m1.Endpoint
+	m1.SetRuleChoiceToGlobalSpecType(f)
 }

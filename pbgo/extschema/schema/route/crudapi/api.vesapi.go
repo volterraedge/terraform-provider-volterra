@@ -17,6 +17,7 @@ import (
 	google_protobuf "github.com/gogo/protobuf/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	multierror "github.com/hashicorp/go-multierror"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -1010,7 +1011,10 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.route.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.route.crudapi.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1040,7 +1044,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.route.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.route.crudapi.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1143,7 +1150,10 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.route.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.route.crudapi.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -2372,7 +2382,7 @@ var APISwaggerJSON string = `{
             "title": "RouteDestinationList",
             "x-displayname": "Destination List",
             "x-ves-displayorder": "1,8,9,5,20,10,11,13,14,15,16,18,19",
-            "x-ves-oneof-field-hostrewriteparams": "[\"auto_host_rewrite\",\"host_rewrite\"]",
+            "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"host_rewrite\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteDestinationList",
             "properties": {
                 "auto_host_rewrite": {
@@ -2517,7 +2527,7 @@ var APISwaggerJSON string = `{
             "title": "RouteRedirect",
             "x-displayname": "Redirect",
             "x-ves-displayorder": "3,1,2,6,7",
-            "x-ves-oneof-field-queryparams": "[\"all_params\",\"remove_all_params\",\"retain_all_params\",\"strip_query_params\"]",
+            "x-ves-oneof-field-query_params": "[\"all_params\",\"remove_all_params\",\"retain_all_params\",\"strip_query_params\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteRedirect",
             "properties": {
                 "all_params": {
@@ -2577,7 +2587,7 @@ var APISwaggerJSON string = `{
             "title": "RouteType",
             "x-displayname": "Route",
             "x-ves-displayorder": "1,14,13,12,11,7,9,8,10,5",
-            "x-ves-oneof-field-routeaction": "[\"route_destination\",\"route_direct_response\",\"route_redirect\"]",
+            "x-ves-oneof-field-route_action": "[\"route_destination\",\"route_direct_response\",\"route_redirect\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteType",
             "properties": {
                 "disable_custom_script": {

@@ -2107,6 +2107,15 @@ func (v *ValidateRepeatedRules) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["unique_metadata_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("unique_metadata_name"))
+		if err := fv(ctx, m.GetUniqueMetadataName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -3151,6 +3160,28 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("well_known"),
 				db.WithValidateField("port_range_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_VhDomainNoPort:
+		if fv, exists := v.FldValidators["well_known.vh_domain_no_port"]; exists {
+			val := m.GetWellKnown().(*StringRules_VhDomainNoPort).VhDomainNoPort
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("vh_domain_no_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_HostnameOrIp:
+		if fv, exists := v.FldValidators["well_known.hostname_or_ip"]; exists {
+			val := m.GetWellKnown().(*StringRules_HostnameOrIp).HostnameOrIp
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("hostname_or_ip"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

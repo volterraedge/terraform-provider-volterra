@@ -22,7 +22,14 @@ resource "volterra_fast_acl_rule" "example" {
 
   action {
     // One of the arguments from this list "simple_action policer_action protocol_policer_action" must be set
-    simple_action = "simple_action"
+
+    protocol_policer_action {
+      ref {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+    }
   }
 
   // One of the arguments from this list "prefix ip_prefix_set" must be set

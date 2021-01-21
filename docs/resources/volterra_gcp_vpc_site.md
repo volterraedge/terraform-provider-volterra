@@ -20,7 +20,7 @@ resource "volterra_gcp_vpc_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "cloud_credentials assisted" must be set
+  // One of the arguments from this list "assisted cloud_credentials" must be set
 
   cloud_credentials {
     name      = "test1"
@@ -30,7 +30,7 @@ resource "volterra_gcp_vpc_site" "example" {
   gcp_region    = ["us-west1"]
   instance_type = ["n1-standard-4"]
 
-  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
   ingress_gw {
     gcp_certified_hw = "gcp-byol-voltmesh"
@@ -38,10 +38,10 @@ resource "volterra_gcp_vpc_site" "example" {
     gcp_zone_names = ["us-west1-a, us-west1-b, us-west1-c"]
 
     local_network {
-      // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
+      // One of the arguments from this list "existing_network new_network_autogenerate new_network" must be set
 
-      existing_network {
-        name = "network1"
+      new_network_autogenerate {
+        autogenerate = true
       }
     }
 
@@ -93,7 +93,7 @@ Argument Reference
 
 `instance_type` - (Required) n1-standard-16 (16 x vCPU, 64GB RAM) very high performance (`String`).
 
-`nodes_per_az` - (Optional) Auto scale maximum worker nodes limit up to 21, value of zero will disable auto scale (`Int`).
+`nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
 
 `operating_system_version` - (Optional) Desired Operating System version for this site. (`String`).
 
@@ -111,7 +111,7 @@ Argument Reference
 
 Enable Forward Proxy for this site and manage policies.
 
-`forward_proxy_policies` - (Required) Ordered List of Network Policies active for this network firewall. See [ref](#ref) below for details.
+`forward_proxy_policies` - (Required) List of Forward Proxy Policies. See [ref](#ref) below for details.
 
 ### Active Network Policies
 
@@ -203,7 +203,7 @@ Enable interception for all domains.
 
 Forward Proxy is enabled for this connector.
 
-`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2 seconds (`Int`).
+`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2000 (2 seconds) (`Int`).
 
 `max_connect_attempts` - (Optional) Specifies the allowed number of retries on connect failure to upstream server. Defaults to 1. (`Int`).
 

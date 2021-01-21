@@ -3,29 +3,20 @@
 
 package user
 
-import (
-	fmt "fmt"
+import proto "github.com/gogo/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/gogo/protobuf/types"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	proto "github.com/gogo/protobuf/proto"
+import strconv "strconv"
 
-	math "math"
+import strings "strings"
+import reflect "reflect"
 
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	_ "github.com/gogo/protobuf/types"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	strconv "strconv"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal

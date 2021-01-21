@@ -18,6 +18,7 @@ import (
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_malicious_user_mitigation "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation"
 	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -26,6 +27,531 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *ChallengeRuleSpec) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ChallengeRuleSpec) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ChallengeRuleSpec) DeepCopy() *ChallengeRuleSpec {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ChallengeRuleSpec{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ChallengeRuleSpec) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ChallengeRuleSpec) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ChallengeRuleSpecValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateChallengeRuleSpec struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateChallengeRuleSpec) ChallengeActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_action")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateChallengeRuleSpec) ClientChoiceClientNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ClientName, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for client_name")
+	}
+	return oValidatorFn_ClientName, nil
+}
+
+func (v *ValidateChallengeRuleSpec) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.HeaderMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_policy.HeaderMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for headers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.HeaderMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.HeaderMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated headers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items headers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateChallengeRuleSpec) QueryParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.QueryParameterMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_policy.QueryParameterMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for query_params")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.QueryParameterMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.QueryParameterMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated query_params")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items query_params")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateChallengeRuleSpec) ArgMatchersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.ArgMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_policy.ArgMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for arg_matchers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.ArgMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.ArgMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated arg_matchers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items arg_matchers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateChallengeRuleSpec) CookieMatchersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.CookieMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_policy.CookieMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cookie_matchers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.CookieMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.CookieMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cookie_matchers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cookie_matchers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateChallengeRuleSpec) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ChallengeRuleSpec)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ChallengeRuleSpec got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["arg_matchers"]; exists {
+		vOpts := append(opts, db.WithValidateField("arg_matchers"))
+		if err := fv(ctx, m.GetArgMatchers(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["body_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("body_matcher"))
+		if err := fv(ctx, m.GetBodyMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["challenge_action"]; exists {
+		val := m.GetChallengeAction()
+		vOpts := append(opts,
+			db.WithValidateField("challenge_action"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetChallengeAction().(type) {
+	case *ChallengeRuleSpec_DisableChallenge:
+		if fv, exists := v.FldValidators["challenge_action.disable_challenge"]; exists {
+			val := m.GetChallengeAction().(*ChallengeRuleSpec_DisableChallenge).DisableChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_action"),
+				db.WithValidateField("disable_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ChallengeRuleSpec_EnableJavascriptChallenge:
+		if fv, exists := v.FldValidators["challenge_action.enable_javascript_challenge"]; exists {
+			val := m.GetChallengeAction().(*ChallengeRuleSpec_EnableJavascriptChallenge).EnableJavascriptChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_action"),
+				db.WithValidateField("enable_javascript_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ChallengeRuleSpec_EnableCaptchaChallenge:
+		if fv, exists := v.FldValidators["challenge_action.enable_captcha_challenge"]; exists {
+			val := m.GetChallengeAction().(*ChallengeRuleSpec_EnableCaptchaChallenge).EnableCaptchaChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_action"),
+				db.WithValidateField("enable_captcha_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetClientChoice().(type) {
+	case *ChallengeRuleSpec_AnyClient:
+		if fv, exists := v.FldValidators["client_choice.any_client"]; exists {
+			val := m.GetClientChoice().(*ChallengeRuleSpec_AnyClient).AnyClient
+			vOpts := append(opts,
+				db.WithValidateField("client_choice"),
+				db.WithValidateField("any_client"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ChallengeRuleSpec_ClientName:
+		if fv, exists := v.FldValidators["client_choice.client_name"]; exists {
+			val := m.GetClientChoice().(*ChallengeRuleSpec_ClientName).ClientName
+			vOpts := append(opts,
+				db.WithValidateField("client_choice"),
+				db.WithValidateField("client_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ChallengeRuleSpec_ClientSelector:
+		if fv, exists := v.FldValidators["client_choice.client_selector"]; exists {
+			val := m.GetClientChoice().(*ChallengeRuleSpec_ClientSelector).ClientSelector
+			vOpts := append(opts,
+				db.WithValidateField("client_choice"),
+				db.WithValidateField("client_selector"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ChallengeRuleSpec_ClientNameMatcher:
+		if fv, exists := v.FldValidators["client_choice.client_name_matcher"]; exists {
+			val := m.GetClientChoice().(*ChallengeRuleSpec_ClientNameMatcher).ClientNameMatcher
+			vOpts := append(opts,
+				db.WithValidateField("client_choice"),
+				db.WithValidateField("client_name_matcher"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cookie_matchers"]; exists {
+		vOpts := append(opts, db.WithValidateField("cookie_matchers"))
+		if err := fv(ctx, m.GetCookieMatchers(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["domain_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("domain_matcher"))
+		if err := fv(ctx, m.GetDomainMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
+		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["headers"]; exists {
+		vOpts := append(opts, db.WithValidateField("headers"))
+		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["http_method"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_method"))
+		if err := fv(ctx, m.GetHttpMethod(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ip_prefix_list"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip_prefix_list"))
+		if err := fv(ctx, m.GetIpPrefixList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("path"))
+		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["query_params"]; exists {
+		vOpts := append(opts, db.WithValidateField("query_params"))
+		if err := fv(ctx, m.GetQueryParams(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
+		if err := fv(ctx, m.GetTlsFingerprintMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultChallengeRuleSpecValidator = func() *ValidateChallengeRuleSpec {
+	v := &ValidateChallengeRuleSpec{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhChallengeAction := v.ChallengeActionValidationRuleHandler
+	rulesChallengeAction := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhChallengeAction(rulesChallengeAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ChallengeRuleSpec.challenge_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["challenge_action"] = vFn
+
+	vrhClientChoiceClientName := v.ClientChoiceClientNameValidationRuleHandler
+	rulesClientChoiceClientName := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "256",
+	}
+	vFnMap["client_choice.client_name"], err = vrhClientChoiceClientName(rulesClientChoiceClientName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ChallengeRuleSpec.client_choice_client_name: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["client_choice.client_name"] = vFnMap["client_choice.client_name"]
+
+	vrhHeaders := v.HeadersValidationRuleHandler
+	rulesHeaders := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhHeaders(rulesHeaders)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ChallengeRuleSpec.headers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["headers"] = vFn
+
+	vrhQueryParams := v.QueryParamsValidationRuleHandler
+	rulesQueryParams := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhQueryParams(rulesQueryParams)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ChallengeRuleSpec.query_params: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["query_params"] = vFn
+
+	vrhArgMatchers := v.ArgMatchersValidationRuleHandler
+	rulesArgMatchers := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhArgMatchers(rulesArgMatchers)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ChallengeRuleSpec.arg_matchers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["arg_matchers"] = vFn
+
+	vrhCookieMatchers := v.CookieMatchersValidationRuleHandler
+	rulesCookieMatchers := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhCookieMatchers(rulesCookieMatchers)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ChallengeRuleSpec.cookie_matchers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cookie_matchers"] = vFn
+
+	v.FldValidators["client_choice.client_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+	v.FldValidators["client_choice.client_name_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
+
+	v.FldValidators["domain_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
+
+	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
+
+	v.FldValidators["http_method"] = ves_io_schema_policy.HttpMethodMatcherTypeValidator().Validate
+
+	v.FldValidators["ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
+
+	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
+
+	v.FldValidators["body_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
+
+	return v
+}()
+
+func ChallengeRuleSpecValidator() db.Validator {
+	return DefaultChallengeRuleSpecValidator
+}
 
 // augmented methods on protoc/std generated struct
 
@@ -616,6 +1142,22 @@ func (v *ValidateCreateSpecType) SchemeValidationRuleHandler(rules map[string]st
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) ChallengeActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema_policy.ChallengeAction)
+		return int32(i)
+	}
+	// ves_io_schema_policy.ChallengeAction_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema_policy.ChallengeAction_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_action")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -707,6 +1249,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("body_matcher"))
 		if err := fv(ctx, m.GetBodyMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["challenge_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("challenge_action"))
+		if err := fv(ctx, m.GetChallengeAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1215,6 +1766,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["scheme"] = vFn
+
+	vrhChallengeAction := v.ChallengeActionValidationRuleHandler
+	rulesChallengeAction := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhChallengeAction(rulesChallengeAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.challenge_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["challenge_action"] = vFn
 
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
@@ -1855,6 +2417,22 @@ func (v *ValidateGetSpecType) SchemeValidationRuleHandler(rules map[string]strin
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) ChallengeActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema_policy.ChallengeAction)
+		return int32(i)
+	}
+	// ves_io_schema_policy.ChallengeAction_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema_policy.ChallengeAction_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_action")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -1946,6 +2524,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("body_matcher"))
 		if err := fv(ctx, m.GetBodyMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["challenge_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("challenge_action"))
+		if err := fv(ctx, m.GetChallengeAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2454,6 +3041,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["scheme"] = vFn
+
+	vrhChallengeAction := v.ChallengeActionValidationRuleHandler
+	rulesChallengeAction := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhChallengeAction(rulesChallengeAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.challenge_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["challenge_action"] = vFn
 
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
@@ -3181,6 +3779,22 @@ func (v *ValidateGlobalSpecType) SchemeValidationRuleHandler(rules map[string]st
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) ChallengeActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema_policy.ChallengeAction)
+		return int32(i)
+	}
+	// ves_io_schema_policy.ChallengeAction_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema_policy.ChallengeAction_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_action")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -3272,6 +3886,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("body_matcher"))
 		if err := fv(ctx, m.GetBodyMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["challenge_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("challenge_action"))
+		if err := fv(ctx, m.GetChallengeAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3800,6 +4423,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["scheme"] = vFn
 
+	vrhChallengeAction := v.ChallengeActionValidationRuleHandler
+	rulesChallengeAction := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhChallengeAction(rulesChallengeAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.challenge_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["challenge_action"] = vFn
+
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
 
@@ -3848,6 +4482,324 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RateLimiterRuleSpec) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RateLimiterRuleSpec) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RateLimiterRuleSpec) DeepCopy() *RateLimiterRuleSpec {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RateLimiterRuleSpec{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RateLimiterRuleSpec) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RateLimiterRuleSpec) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RateLimiterRuleSpecValidator().Validate(ctx, m, opts...)
+}
+
+func (m *RateLimiterRuleSpec) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetActionChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *RateLimiterRuleSpec) GetActionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var odrInfos []db.DRefInfo
+
+	switch m.GetActionChoice().(type) {
+	case *RateLimiterRuleSpec_BypassRateLimiter:
+
+	case *RateLimiterRuleSpec_ApplyRateLimiter:
+
+	case *RateLimiterRuleSpec_CustomRateLimiter:
+
+		vref := m.GetCustomRateLimiter()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("rate_limiter.Object")
+		odri := db.DRefInfo{
+			RefdType:   "rate_limiter.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "custom_rate_limiter",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
+	}
+
+	return odrInfos, nil
+}
+
+// GetActionChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *RateLimiterRuleSpec) GetActionChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetActionChoice().(type) {
+	case *RateLimiterRuleSpec_BypassRateLimiter:
+
+	case *RateLimiterRuleSpec_ApplyRateLimiter:
+
+	case *RateLimiterRuleSpec_CustomRateLimiter:
+		refdType, err := d.TypeForEntryKind("", "", "rate_limiter.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: rate_limiter")
+		}
+
+		vref := m.GetCustomRateLimiter()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "rate_limiter.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
+type ValidateRateLimiterRuleSpec struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRateLimiterRuleSpec) ActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for action_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRateLimiterRuleSpec) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.HeaderMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_policy.HeaderMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for headers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.HeaderMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.HeaderMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated headers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items headers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRateLimiterRuleSpec) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RateLimiterRuleSpec)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RateLimiterRuleSpec got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["action_choice"]; exists {
+		val := m.GetActionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("action_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetActionChoice().(type) {
+	case *RateLimiterRuleSpec_BypassRateLimiter:
+		if fv, exists := v.FldValidators["action_choice.bypass_rate_limiter"]; exists {
+			val := m.GetActionChoice().(*RateLimiterRuleSpec_BypassRateLimiter).BypassRateLimiter
+			vOpts := append(opts,
+				db.WithValidateField("action_choice"),
+				db.WithValidateField("bypass_rate_limiter"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RateLimiterRuleSpec_ApplyRateLimiter:
+		if fv, exists := v.FldValidators["action_choice.apply_rate_limiter"]; exists {
+			val := m.GetActionChoice().(*RateLimiterRuleSpec_ApplyRateLimiter).ApplyRateLimiter
+			vOpts := append(opts,
+				db.WithValidateField("action_choice"),
+				db.WithValidateField("apply_rate_limiter"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RateLimiterRuleSpec_CustomRateLimiter:
+		if fv, exists := v.FldValidators["action_choice.custom_rate_limiter"]; exists {
+			val := m.GetActionChoice().(*RateLimiterRuleSpec_CustomRateLimiter).CustomRateLimiter
+			vOpts := append(opts,
+				db.WithValidateField("action_choice"),
+				db.WithValidateField("custom_rate_limiter"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["domain_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("domain_matcher"))
+		if err := fv(ctx, m.GetDomainMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["headers"]; exists {
+		vOpts := append(opts, db.WithValidateField("headers"))
+		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["http_method"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_method"))
+		if err := fv(ctx, m.GetHttpMethod(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("path"))
+		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRateLimiterRuleSpecValidator = func() *ValidateRateLimiterRuleSpec {
+	v := &ValidateRateLimiterRuleSpec{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhActionChoice := v.ActionChoiceValidationRuleHandler
+	rulesActionChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhActionChoice(rulesActionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RateLimiterRuleSpec.action_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["action_choice"] = vFn
+
+	vrhHeaders := v.HeadersValidationRuleHandler
+	rulesHeaders := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "4",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhHeaders(rulesHeaders)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RateLimiterRuleSpec.headers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["headers"] = vFn
+
+	v.FldValidators["action_choice.custom_rate_limiter"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["http_method"] = ves_io_schema_policy.HttpMethodMatcherTypeValidator().Validate
+
+	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
+
+	v.FldValidators["domain_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
+
+	return v
+}()
+
+func RateLimiterRuleSpecValidator() db.Validator {
+	return DefaultRateLimiterRuleSpecValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -4439,6 +5391,22 @@ func (v *ValidateReplaceSpecType) SchemeValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) ChallengeActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema_policy.ChallengeAction)
+		return int32(i)
+	}
+	// ves_io_schema_policy.ChallengeAction_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema_policy.ChallengeAction_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_action")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -4530,6 +5498,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("body_matcher"))
 		if err := fv(ctx, m.GetBodyMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["challenge_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("challenge_action"))
+		if err := fv(ctx, m.GetChallengeAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5039,6 +6016,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["scheme"] = vFn
 
+	vrhChallengeAction := v.ChallengeActionValidationRuleHandler
+	rulesChallengeAction := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhChallengeAction(rulesChallengeAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.challenge_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["challenge_action"] = vFn
+
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
 
@@ -5087,6 +6075,114 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// create setters in ChallengeRuleSpec from GlobalSpecType for oneof fields
+func (r *ChallengeRuleSpec) SetClientChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ClientChoice.(type) {
+	case nil:
+		o.ClientChoice = nil
+
+	case *ChallengeRuleSpec_AnyClient:
+		o.ClientChoice = &GlobalSpecType_AnyClient{AnyClient: of.AnyClient}
+
+	case *ChallengeRuleSpec_ClientName:
+		o.ClientChoice = &GlobalSpecType_ClientName{ClientName: of.ClientName}
+
+	case *ChallengeRuleSpec_ClientNameMatcher:
+		o.ClientChoice = &GlobalSpecType_ClientNameMatcher{ClientNameMatcher: of.ClientNameMatcher}
+
+	case *ChallengeRuleSpec_ClientSelector:
+		o.ClientChoice = &GlobalSpecType_ClientSelector{ClientSelector: of.ClientSelector}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ChallengeRuleSpec) GetClientChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ClientChoice.(type) {
+	case nil:
+		r.ClientChoice = nil
+
+	case *GlobalSpecType_AnyClient:
+		r.ClientChoice = &ChallengeRuleSpec_AnyClient{AnyClient: of.AnyClient}
+
+	case *GlobalSpecType_ClientName:
+		r.ClientChoice = &ChallengeRuleSpec_ClientName{ClientName: of.ClientName}
+
+	case *GlobalSpecType_ClientNameMatcher:
+		r.ClientChoice = &ChallengeRuleSpec_ClientNameMatcher{ClientNameMatcher: of.ClientNameMatcher}
+
+	case *GlobalSpecType_ClientSelector:
+		r.ClientChoice = &ChallengeRuleSpec_ClientSelector{ClientSelector: of.ClientSelector}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (m *ChallengeRuleSpec) FromGlobalSpecType(f *GlobalSpecType) {
+	if f == nil {
+		return
+	}
+	m.ArgMatchers = f.GetArgMatchers()
+	m.BodyMatcher = f.GetBodyMatcher()
+
+	m.GetClientChoiceFromGlobalSpecType(f)
+	m.CookieMatchers = f.GetCookieMatchers()
+
+	if f.GetDomainMatcher() != nil {
+		if m.DomainMatcher == nil {
+			m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+		}
+		m.DomainMatcher.FromMatcherType(f.GetDomainMatcher())
+	} else {
+		m.DomainMatcher = nil
+	}
+
+	m.ExpirationTimestamp = f.GetExpirationTimestamp()
+	m.Headers = f.GetHeaders()
+	m.HttpMethod = f.GetHttpMethod()
+
+	m.Path = f.GetPath()
+	m.QueryParams = f.GetQueryParams()
+	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
+}
+
+func (m *ChallengeRuleSpec) ToGlobalSpecType(f *GlobalSpecType) {
+	m1 := m.DeepCopy()
+	_ = m1
+	if f == nil {
+		return
+	}
+	f.ArgMatchers = m1.ArgMatchers
+	f.BodyMatcher = m1.BodyMatcher
+
+	m1.SetClientChoiceToGlobalSpecType(f)
+	f.CookieMatchers = m1.CookieMatchers
+
+	if m1.DomainMatcher != nil {
+		if f.DomainMatcher == nil {
+			f.DomainMatcher = &ves_io_schema_policy.MatcherType{}
+		}
+	} else if f.DomainMatcher != nil {
+		f.DomainMatcher = nil
+	}
+
+	if m1.DomainMatcher != nil {
+		m1.DomainMatcher.ToMatcherType(f.DomainMatcher)
+	}
+
+	f.ExpirationTimestamp = m1.ExpirationTimestamp
+	f.Headers = m1.Headers
+	f.HttpMethod = m1.HttpMethod
+
+	f.Path = m1.Path
+	f.QueryParams = m1.QueryParams
+	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
@@ -5318,6 +6414,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.ArgMatchers = f.GetArgMatchers()
 	m.GetAsnChoiceFromGlobalSpecType(f)
 	m.BodyMatcher = f.GetBodyMatcher()
+	m.ChallengeAction = f.GetChallengeAction()
 	m.GetClientChoiceFromGlobalSpecType(f)
 	m.ClientRole = f.GetClientRole()
 	m.CookieMatchers = f.GetCookieMatchers()
@@ -5327,6 +6424,8 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 			m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
 		}
 		m.DomainMatcher.FromMatcherType(f.GetDomainMatcher())
+	} else {
+		m.DomainMatcher = nil
 	}
 
 	m.GetDstAsnChoiceFromGlobalSpecType(f)
@@ -5353,6 +6452,8 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 			m.VirtualHostMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
 		}
 		m.VirtualHostMatcher.FromMatcherType(f.GetVirtualHostMatcher())
+	} else {
+		m.VirtualHostMatcher = nil
 	}
 
 	m.WafAction = f.GetWafAction()
@@ -5369,6 +6470,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.ArgMatchers = m1.ArgMatchers
 	m1.SetAsnChoiceToGlobalSpecType(f)
 	f.BodyMatcher = m1.BodyMatcher
+	f.ChallengeAction = m1.ChallengeAction
 	m1.SetClientChoiceToGlobalSpecType(f)
 	f.ClientRole = m1.ClientRole
 	f.CookieMatchers = m1.CookieMatchers
@@ -5377,6 +6479,8 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		if f.DomainMatcher == nil {
 			f.DomainMatcher = &ves_io_schema_policy.MatcherType{}
 		}
+	} else if f.DomainMatcher != nil {
+		f.DomainMatcher = nil
 	}
 
 	if m1.DomainMatcher != nil {
@@ -5406,6 +6510,8 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		if f.VirtualHostMatcher == nil {
 			f.VirtualHostMatcher = &ves_io_schema_policy.MatcherType{}
 		}
+	} else if f.VirtualHostMatcher != nil {
+		f.VirtualHostMatcher = nil
 	}
 
 	if m1.VirtualHostMatcher != nil {
@@ -5644,6 +6750,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.ArgMatchers = f.GetArgMatchers()
 	m.GetAsnChoiceFromGlobalSpecType(f)
 	m.BodyMatcher = f.GetBodyMatcher()
+	m.ChallengeAction = f.GetChallengeAction()
 	m.GetClientChoiceFromGlobalSpecType(f)
 	m.ClientRole = f.GetClientRole()
 	m.CookieMatchers = f.GetCookieMatchers()
@@ -5653,6 +6760,8 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 			m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
 		}
 		m.DomainMatcher.FromMatcherType(f.GetDomainMatcher())
+	} else {
+		m.DomainMatcher = nil
 	}
 
 	m.GetDstAsnChoiceFromGlobalSpecType(f)
@@ -5679,6 +6788,8 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 			m.VirtualHostMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
 		}
 		m.VirtualHostMatcher.FromMatcherType(f.GetVirtualHostMatcher())
+	} else {
+		m.VirtualHostMatcher = nil
 	}
 
 	m.WafAction = f.GetWafAction()
@@ -5695,6 +6806,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.ArgMatchers = m1.ArgMatchers
 	m1.SetAsnChoiceToGlobalSpecType(f)
 	f.BodyMatcher = m1.BodyMatcher
+	f.ChallengeAction = m1.ChallengeAction
 	m1.SetClientChoiceToGlobalSpecType(f)
 	f.ClientRole = m1.ClientRole
 	f.CookieMatchers = m1.CookieMatchers
@@ -5703,6 +6815,8 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		if f.DomainMatcher == nil {
 			f.DomainMatcher = &ves_io_schema_policy.MatcherType{}
 		}
+	} else if f.DomainMatcher != nil {
+		f.DomainMatcher = nil
 	}
 
 	if m1.DomainMatcher != nil {
@@ -5732,6 +6846,8 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		if f.VirtualHostMatcher == nil {
 			f.VirtualHostMatcher = &ves_io_schema_policy.MatcherType{}
 		}
+	} else if f.VirtualHostMatcher != nil {
+		f.VirtualHostMatcher = nil
 	}
 
 	if m1.VirtualHostMatcher != nil {
@@ -5739,6 +6855,49 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 
 	f.WafAction = m1.WafAction
+}
+
+func (m *RateLimiterRuleSpec) FromGlobalSpecType(f *GlobalSpecType) {
+	if f == nil {
+		return
+	}
+
+	if f.GetDomainMatcher() != nil {
+		if m.DomainMatcher == nil {
+			m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+		}
+		m.DomainMatcher.FromMatcherType(f.GetDomainMatcher())
+	} else {
+		m.DomainMatcher = nil
+	}
+
+	m.Headers = f.GetHeaders()
+	m.HttpMethod = f.GetHttpMethod()
+	m.Path = f.GetPath()
+}
+
+func (m *RateLimiterRuleSpec) ToGlobalSpecType(f *GlobalSpecType) {
+	m1 := m.DeepCopy()
+	_ = m1
+	if f == nil {
+		return
+	}
+
+	if m1.DomainMatcher != nil {
+		if f.DomainMatcher == nil {
+			f.DomainMatcher = &ves_io_schema_policy.MatcherType{}
+		}
+	} else if f.DomainMatcher != nil {
+		f.DomainMatcher = nil
+	}
+
+	if m1.DomainMatcher != nil {
+		m1.DomainMatcher.ToMatcherType(f.DomainMatcher)
+	}
+
+	f.Headers = m1.Headers
+	f.HttpMethod = m1.HttpMethod
+	f.Path = m1.Path
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -5970,6 +7129,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.ArgMatchers = f.GetArgMatchers()
 	m.GetAsnChoiceFromGlobalSpecType(f)
 	m.BodyMatcher = f.GetBodyMatcher()
+	m.ChallengeAction = f.GetChallengeAction()
 	m.GetClientChoiceFromGlobalSpecType(f)
 	m.ClientRole = f.GetClientRole()
 	m.CookieMatchers = f.GetCookieMatchers()
@@ -5979,6 +7139,8 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 			m.DomainMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
 		}
 		m.DomainMatcher.FromMatcherType(f.GetDomainMatcher())
+	} else {
+		m.DomainMatcher = nil
 	}
 
 	m.GetDstAsnChoiceFromGlobalSpecType(f)
@@ -6005,6 +7167,8 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 			m.VirtualHostMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
 		}
 		m.VirtualHostMatcher.FromMatcherType(f.GetVirtualHostMatcher())
+	} else {
+		m.VirtualHostMatcher = nil
 	}
 
 	m.WafAction = f.GetWafAction()
@@ -6021,6 +7185,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.ArgMatchers = m1.ArgMatchers
 	m1.SetAsnChoiceToGlobalSpecType(f)
 	f.BodyMatcher = m1.BodyMatcher
+	f.ChallengeAction = m1.ChallengeAction
 	m1.SetClientChoiceToGlobalSpecType(f)
 	f.ClientRole = m1.ClientRole
 	f.CookieMatchers = m1.CookieMatchers
@@ -6029,6 +7194,8 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		if f.DomainMatcher == nil {
 			f.DomainMatcher = &ves_io_schema_policy.MatcherType{}
 		}
+	} else if f.DomainMatcher != nil {
+		f.DomainMatcher = nil
 	}
 
 	if m1.DomainMatcher != nil {
@@ -6058,6 +7225,8 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		if f.VirtualHostMatcher == nil {
 			f.VirtualHostMatcher = &ves_io_schema_policy.MatcherType{}
 		}
+	} else if f.VirtualHostMatcher != nil {
+		f.VirtualHostMatcher = nil
 	}
 
 	if m1.VirtualHostMatcher != nil {

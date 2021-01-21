@@ -3,38 +3,24 @@
 
 package network_firewall
 
-import (
-	proto "github.com/gogo/protobuf/proto"
-	golang_proto "github.com/golang/protobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
+import golang_proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/gogo/protobuf/types"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
-	fmt "fmt"
+import strings "strings"
+import reflect "reflect"
 
-	math "math"
-
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	_ "github.com/gogo/protobuf/types"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -69,13 +55,13 @@ func (m *ActiveNetworkPoliciesType) GetNetworkPolicies() []*ves_io_schema_views.
 // Active Forward Proxy Policies Type
 //
 // x-displayName: "Active Forward Proxy Policies Type"
-// List of forward proxy policy views.
+// List of Forward Proxy Policies
 type ActiveForwardProxyPoliciesType struct {
 	// Forward Proxy Policies
 	//
 	// x-displayName: "Forward Proxy Policies"
 	// x-required
-	// Ordered List of Network Policies active for this network firewall
+	// List of Forward Proxy Policies
 	ForwardProxyPolicies []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,rep,name=forward_proxy_policies,json=forwardProxyPolicies" json:"forward_proxy_policies,omitempty"`
 }
 

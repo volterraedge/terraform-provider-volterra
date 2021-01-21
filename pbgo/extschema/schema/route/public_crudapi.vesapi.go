@@ -494,8 +494,8 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		namespace = rReq.Metadata.Namespace
-		name = rReq.Metadata.Name
+		namespace = rReq.GetMetadata().GetNamespace()
+		name = rReq.GetMetadata().GetName()
 	} else {
 		jsn = cco.ReplaceJSONReq
 		reqMap := make(map[string]interface{})
@@ -1116,8 +1116,11 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.route.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.route.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1169,8 +1172,11 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.route.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.route.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1287,8 +1293,11 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.route.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.route.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -1302,6 +1311,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	tenant := server.TenantFromContext(ctx)
 	key := fmt.Sprintf("%s/%s/%s", tenant, req.GetNamespace(), req.GetName())
 	rsrcReq := &server.ResourceDeleteRequest{Key: key}
+	rsrcReq.FailIfReferred = req.FailIfReferred
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
@@ -2061,6 +2071,14 @@ var APISwaggerJSON string = `{
                         "in": "path",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/routeDeleteRequest"
+                        }
                     }
                 ],
                 "tags": [
@@ -2181,6 +2199,36 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Routes",
                     "x-ves-required": "true"
+                }
+            }
+        },
+        "routeDeleteRequest": {
+            "type": "object",
+            "description": "This is the input message of the 'Delete' RPC.",
+            "title": "DeleteRequest is used to delete a route",
+            "x-displayname": "Delete Request",
+            "x-ves-proto-message": "ves.io.schema.route.DeleteRequest",
+            "properties": {
+                "fail_if_referred": {
+                    "type": "boolean",
+                    "description": " Fail the delete operation if this object is being referred by other objects",
+                    "title": "fail_if_referred",
+                    "format": "boolean",
+                    "x-displayname": "Fail-If-Referred"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the configuration object\n\nExample: - \"name\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the configuration object is present\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
                 }
             }
         },
@@ -2587,7 +2635,7 @@ var APISwaggerJSON string = `{
             "title": "RouteDestinationList",
             "x-displayname": "Destination List",
             "x-ves-displayorder": "1,8,9,5,20,10,11,13,14,15,16,18,19",
-            "x-ves-oneof-field-hostrewriteparams": "[\"auto_host_rewrite\",\"host_rewrite\"]",
+            "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"host_rewrite\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteDestinationList",
             "properties": {
                 "auto_host_rewrite": {
@@ -2732,7 +2780,7 @@ var APISwaggerJSON string = `{
             "title": "RouteRedirect",
             "x-displayname": "Redirect",
             "x-ves-displayorder": "3,1,2,6,7",
-            "x-ves-oneof-field-queryparams": "[\"all_params\",\"remove_all_params\",\"retain_all_params\",\"strip_query_params\"]",
+            "x-ves-oneof-field-query_params": "[\"all_params\",\"remove_all_params\",\"retain_all_params\",\"strip_query_params\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteRedirect",
             "properties": {
                 "all_params": {
@@ -2792,7 +2840,7 @@ var APISwaggerJSON string = `{
             "title": "RouteType",
             "x-displayname": "Route",
             "x-ves-displayorder": "1,14,13,12,11,7,9,8,10,5",
-            "x-ves-oneof-field-routeaction": "[\"route_destination\",\"route_direct_response\",\"route_redirect\"]",
+            "x-ves-oneof-field-route_action": "[\"route_destination\",\"route_direct_response\",\"route_redirect\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteType",
             "properties": {
                 "disable_custom_script": {

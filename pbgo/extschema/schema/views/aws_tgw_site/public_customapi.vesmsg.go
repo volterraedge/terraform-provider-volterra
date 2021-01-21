@@ -25,6 +25,173 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *SetTGWInfoRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SetTGWInfoRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SetTGWInfoRequest) DeepCopy() *SetTGWInfoRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SetTGWInfoRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SetTGWInfoRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SetTGWInfoRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SetTGWInfoRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSetTGWInfoRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSetTGWInfoRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SetTGWInfoRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SetTGWInfoRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tgw_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_info"))
+		if err := fv(ctx, m.GetTgwInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSetTGWInfoRequestValidator = func() *ValidateSetTGWInfoRequest {
+	v := &ValidateSetTGWInfoRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["tgw_info"] = AWSTGWInfoConfigTypeValidator().Validate
+
+	return v
+}()
+
+func SetTGWInfoRequestValidator() db.Validator {
+	return DefaultSetTGWInfoRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SetTGWInfoResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SetTGWInfoResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SetTGWInfoResponse) DeepCopy() *SetTGWInfoResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SetTGWInfoResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SetTGWInfoResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SetTGWInfoResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SetTGWInfoResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSetTGWInfoResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSetTGWInfoResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SetTGWInfoResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SetTGWInfoResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSetTGWInfoResponseValidator = func() *ValidateSetTGWInfoResponse {
+	v := &ValidateSetTGWInfoResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SetTGWInfoResponseValidator() db.Validator {
+	return DefaultSetTGWInfoResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SetVPCIpPrefixesRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

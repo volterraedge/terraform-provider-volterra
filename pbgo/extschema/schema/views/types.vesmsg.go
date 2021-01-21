@@ -1545,7 +1545,6 @@ var DefaultPrefixStringListTypeValidator = func() *ValidatePrefixStringListType 
 
 	vrhPrefixes := v.PrefixesValidationRuleHandler
 	rulesPrefixes := map[string]string{
-		"ves.io.schema.rules.message.required":                  "true",
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
 		"ves.io.schema.rules.repeated.max_items":                "128",
 		"ves.io.schema.rules.repeated.min_items":                "1",

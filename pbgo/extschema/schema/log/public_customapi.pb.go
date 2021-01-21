@@ -33,8 +33,12 @@
 		AuditLogAggregationRequest
 		VK8SAuditLogRequest
 		VK8SAuditLogAggregationRequest
+		K8SAuditLogRequest
+		K8SAuditLogAggregationRequest
 		VK8SEventsRequest
 		VK8SEventsAggregationRequest
+		K8SEventsRequest
+		K8SEventsAggregationRequest
 		FirewallLogRequest
 		FirewallLogAggregationRequest
 		LogScrollRequest
@@ -50,46 +54,31 @@
 */
 package log
 
-import (
-	proto "github.com/gogo/protobuf/proto"
-	golang_proto "github.com/golang/protobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
+import golang_proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/gogo/googleapis/google/api"
+import ves_io_schema_log_access_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/access_log"
+import ves_io_schema_log_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/audit_log"
+import ves_io_schema_log_firewall_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/firewall_log"
+import ves_io_schema_log_k8s_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_audit_log"
+import ves_io_schema_log_k8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_events"
+import ves_io_schema_log_vk8s_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_audit_log"
+import ves_io_schema_log_vk8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_events"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 
-	fmt "fmt"
+import strings "strings"
+import reflect "reflect"
+import sortkeys "github.com/gogo/protobuf/sortkeys"
 
-	math "math"
+import context "golang.org/x/net/context"
+import grpc "google.golang.org/grpc"
 
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	_ "github.com/gogo/googleapis/google/api"
-
-	ves_io_schema_log_access_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/access_log"
-
-	ves_io_schema_log_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/audit_log"
-
-	ves_io_schema_log_firewall_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/firewall_log"
-
-	ves_io_schema_log_vk8s_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_audit_log"
-
-	ves_io_schema_log_vk8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_events"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	sortkeys "github.com/gogo/protobuf/sortkeys"
-
-	context "golang.org/x/net/context"
-
-	grpc "google.golang.org/grpc"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -908,6 +897,290 @@ func (m *VK8SAuditLogAggregationRequest) GetAggs() map[string]*ves_io_schema_log
 	return nil
 }
 
+// K8SAuditLogRequest
+//
+// x-displayName: "K8s Audit Log Request"
+// Request to fetch K8s audit logs
+type K8SAuditLogRequest struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "value"
+	// fetch K8s audit logs for a given namespace
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// site
+	//
+	// x-displayName: "Site"
+	// x-example: "ce-1"
+	// Site where the K8s Cluster is running
+	Site string `protobuf:"bytes,2,opt,name=site,proto3" json:"site,omitempty"`
+	// query
+	//
+	// x-displayName: "Query"
+	// x-example: "query={objectRef.resource="deployments"}"
+	// query is used to specify the list of matchers
+	// syntax for query := {[<matcher>]}
+	// <matcher> := <field_name><operator>"<value>"
+	// <field_name> := string
+	//  One or more of the following fields in audit log may be specified in the query.
+	//   user.username - user name
+	//   sourceIPs - source ip
+	//   verb - method
+	//   objectRef.resource - K8s resource
+	//   requestURI - request URI
+	// <value> := string
+	// <operator> := ["="|"!="|"=~"|"!~"]
+	//   = : equal to
+	//   != : not equal to
+	//   =~ : regex match
+	//   !~ : not regex match
+	// When more than one matcher is specified in the query, then audit logs matching ALL the matchers will be returned in the response.
+	// Example: query={objectRef.resource="deployments"} will return all K8s audit logs for all deployment objects in the given namespace
+	//
+	// Optional: If not specified, all the audit logs matching the given tenant and namespace are returned
+	Query string `protobuf:"bytes,3,opt,name=query,proto3" json:"query,omitempty"`
+	// start time
+	//
+	// x-displayName: "Start Time"
+	// x-example: "2019-09-23T12:30:11.733Z"
+	// fetch audit logs whose timestamp >= start_time
+	// format: unix_timestamp|rfc 3339
+	//
+	// Optional: If not specified, then the start_time will be evaluated to end_time-10m
+	//           If end_time is not specified, then the start_time will be evaluated to <current time>-10m
+	StartTime string `protobuf:"bytes,4,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	// end time
+	//
+	// x-displayName: "End Time"
+	// x-example: "2019-09-24T12:30:11.733Z"
+	// fetch audit logs whose timestamp <= end_time
+	// format: unix_timestamp|rfc 3339
+	//
+	// Optional: If not specified, then the end_time will be evaluated to start_time+10m
+	//           If start_time is not specified, then the end_time will be evaluated to <current time>
+	EndTime string `protobuf:"bytes,5,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	// sort order
+	//
+	// x-displayName: "Sort Order"
+	// specifies whether the response should be sorted in ascending or descending order based on timestamp in the log
+	// Optional: default is descending order
+	Sort ves_io_schema4.SortOrder `protobuf:"varint,6,opt,name=sort,proto3,enum=ves.io.schema.SortOrder" json:"sort,omitempty"`
+	// limit
+	//
+	// x-displayName: "Limit"
+	// x-example: "100"
+	// limits the number of logs returned in the response
+	// Optional: If not specified, first or last 500 log messages that matches the query (depending on the sort order) will be returned in the response.
+	//           The maximum value for limit is 500.
+	Limit int32 `protobuf:"varint,7,opt,name=limit,proto3" json:"limit,omitempty"`
+	// scroll
+	//
+	// x-displayName: "Scroll"
+	// x-example: "true"
+	// Scroll is used to retrieve large number of log messages (or all log messages) that matches the query.
+	// If scroll is set to true, the scroll_id in the response can be used in the scroll API to fetch the next
+	// batch of logs until there are no more logs left to return. The number of messages in each batch is determined
+	// by the limit field.
+	// Note: Scroll is used for processing large amount of data and therefore is not intended for real time user request.
+	// Optional: default is false
+	Scroll bool `protobuf:"varint,8,opt,name=scroll,proto3" json:"scroll,omitempty"`
+	// aggregations
+	//
+	// x-displayName: "Aggregations"
+	// Aggregations provide summary/analytics data over the log response. If the number of logs that matched the query
+	// is large and cannot be returned in a single response message, user can get helpful insights/summary using aggregations.
+	// The aggregations are key'ed by user-defined aggregation name. The response will be key'ed with the same name.
+	// Optional
+	Aggs map[string]*ves_io_schema_log_k8s_audit_log.AggregationRequest `protobuf:"bytes,9,rep,name=aggs" json:"aggs,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value"`
+}
+
+func (m *K8SAuditLogRequest) Reset()      { *m = K8SAuditLogRequest{} }
+func (*K8SAuditLogRequest) ProtoMessage() {}
+func (*K8SAuditLogRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{6}
+}
+
+func (m *K8SAuditLogRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *K8SAuditLogRequest) GetSite() string {
+	if m != nil {
+		return m.Site
+	}
+	return ""
+}
+
+func (m *K8SAuditLogRequest) GetQuery() string {
+	if m != nil {
+		return m.Query
+	}
+	return ""
+}
+
+func (m *K8SAuditLogRequest) GetStartTime() string {
+	if m != nil {
+		return m.StartTime
+	}
+	return ""
+}
+
+func (m *K8SAuditLogRequest) GetEndTime() string {
+	if m != nil {
+		return m.EndTime
+	}
+	return ""
+}
+
+func (m *K8SAuditLogRequest) GetSort() ves_io_schema4.SortOrder {
+	if m != nil {
+		return m.Sort
+	}
+	return ves_io_schema4.DESCENDING
+}
+
+func (m *K8SAuditLogRequest) GetLimit() int32 {
+	if m != nil {
+		return m.Limit
+	}
+	return 0
+}
+
+func (m *K8SAuditLogRequest) GetScroll() bool {
+	if m != nil {
+		return m.Scroll
+	}
+	return false
+}
+
+func (m *K8SAuditLogRequest) GetAggs() map[string]*ves_io_schema_log_k8s_audit_log.AggregationRequest {
+	if m != nil {
+		return m.Aggs
+	}
+	return nil
+}
+
+// K8SAuditLogAggregationRequest
+//
+// x-displayName: "K8s Audit Log Aggregation Request"
+// Request to get only aggregation data for K8s audit logs
+type K8SAuditLogAggregationRequest struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "value"
+	// get aggregation data for a given namespace
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// site
+	//
+	// x-displayName: "Site"
+	// x-example: "ce-1"
+	// Site where the K8s Cluster is running
+	Site string `protobuf:"bytes,2,opt,name=site,proto3" json:"site,omitempty"`
+	// query
+	//
+	// x-displayName: "Query"
+	// x-example: "query={objectRef.resource="deployments"}"
+	// query is used to specify the list of matchers
+	// syntax for query := {[<matcher>]}
+	// <matcher> := <field_name><operator>"<value>"
+	// <field_name> := string
+	//  One or more of the following fields in audit log may be specified in the query.
+	//   user.username - user name
+	//   sourceIPs - source ip
+	//   verb - method
+	//   objectRef.resource - K8s resource
+	//   requestURI - request URI
+	// <value> := string
+	// <operator> := ["="|"!="]
+	//   = : equal to
+	//   != : not equal to
+	// When more than one matcher is specified in the query, then audit logs matching ALL the matchers will be returned in the response.
+	// Example: query={objectRef.resource="deployments"} will return all K8s audit logs for all deployment objects in the given namespace
+	//
+	// Optional: If not specified, all the audit logs matching the given tenant and namespace will be considered for aggregation
+	Query string `protobuf:"bytes,3,opt,name=query,proto3" json:"query,omitempty"`
+	// start time
+	//
+	// x-displayName: "Start Time"
+	// x-example: "2019-09-23T12:30:11.733Z"
+	// fetch audit logs whose timestamp >= start_time
+	// format: unix_timestamp|rfc 3339
+	//
+	// Optional: If not specified, then the start_time will be evaluated to end_time-10m
+	//           If end_time is not specified, then the start_time will be evaluated to <current time>-10m
+	StartTime string `protobuf:"bytes,4,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	// end time
+	//
+	// x-displayName: "End Time"
+	// x-example: "2019-09-24T12:30:11.733Z"
+	// fetch audit logs whose timestamp <= end_time
+	// format: unix_timestamp|rfc 3339
+	//
+	// Optional: If not specified, then the end_time will be evaluated to start_time+10m
+	//           If start_time is not specified, then the end_time will be evaluated to <current time>
+	EndTime string `protobuf:"bytes,5,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	// aggregations
+	//
+	// x-displayName: "Aggregations"
+	// Aggregations provide summary/analytics data over the log response. If the number of logs that matched the query
+	// is large and cannot be returned in a single response message, user can get helpful insights/summary using aggregations.
+	// The aggregations are key'ed by user-defined aggregation name. The response will be key'ed with the same name.
+	// Optional
+	Aggs map[string]*ves_io_schema_log_k8s_audit_log.AggregationRequest `protobuf:"bytes,6,rep,name=aggs" json:"aggs,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value"`
+}
+
+func (m *K8SAuditLogAggregationRequest) Reset()      { *m = K8SAuditLogAggregationRequest{} }
+func (*K8SAuditLogAggregationRequest) ProtoMessage() {}
+func (*K8SAuditLogAggregationRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{7}
+}
+
+func (m *K8SAuditLogAggregationRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *K8SAuditLogAggregationRequest) GetSite() string {
+	if m != nil {
+		return m.Site
+	}
+	return ""
+}
+
+func (m *K8SAuditLogAggregationRequest) GetQuery() string {
+	if m != nil {
+		return m.Query
+	}
+	return ""
+}
+
+func (m *K8SAuditLogAggregationRequest) GetStartTime() string {
+	if m != nil {
+		return m.StartTime
+	}
+	return ""
+}
+
+func (m *K8SAuditLogAggregationRequest) GetEndTime() string {
+	if m != nil {
+		return m.EndTime
+	}
+	return ""
+}
+
+func (m *K8SAuditLogAggregationRequest) GetAggs() map[string]*ves_io_schema_log_k8s_audit_log.AggregationRequest {
+	if m != nil {
+		return m.Aggs
+	}
+	return nil
+}
+
 // vK8s Events Request
 //
 // x-displayName: "vK8s Events Request"
@@ -1001,7 +1274,7 @@ type VK8SEventsRequest struct {
 func (m *VK8SEventsRequest) Reset()      { *m = VK8SEventsRequest{} }
 func (*VK8SEventsRequest) ProtoMessage() {}
 func (*VK8SEventsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicCustomapi, []int{6}
+	return fileDescriptorPublicCustomapi, []int{8}
 }
 
 func (m *VK8SEventsRequest) GetNamespace() string {
@@ -1127,7 +1400,7 @@ type VK8SEventsAggregationRequest struct {
 func (m *VK8SEventsAggregationRequest) Reset()      { *m = VK8SEventsAggregationRequest{} }
 func (*VK8SEventsAggregationRequest) ProtoMessage() {}
 func (*VK8SEventsAggregationRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicCustomapi, []int{7}
+	return fileDescriptorPublicCustomapi, []int{9}
 }
 
 func (m *VK8SEventsAggregationRequest) GetNamespace() string {
@@ -1159,6 +1432,289 @@ func (m *VK8SEventsAggregationRequest) GetEndTime() string {
 }
 
 func (m *VK8SEventsAggregationRequest) GetAggs() map[string]*ves_io_schema_log_vk8s_events.AggregationRequest {
+	if m != nil {
+		return m.Aggs
+	}
+	return nil
+}
+
+// K8s Events Request
+//
+// x-displayName: "K8s Events Request"
+// Request to fetch physical K8s events
+type K8SEventsRequest struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "value"
+	// fetch K8s events for the given namespace
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// site
+	//
+	// x-displayName: "Site"
+	// x-example: "ce-1"
+	// Site where the K8s Cluster is running
+	Site string `protobuf:"bytes,2,opt,name=site,proto3" json:"site,omitempty"`
+	// query
+	//
+	// x-displayName: "Query"
+	// x-example: "query={involvedObject.kind="Pod"}"
+	// query is used to specify the list of matchers
+	// syntax for query := {[<matcher>]}
+	// <matcher> := <field_name><operator>"<value>"
+	// <field_name> := string
+	//  One or more of the following fields in the event may be specified in the query.
+	//   involvedObject.kind - The object that this event is about, like Pod, Deployment, Node, etc.
+	//   involvedObject.name - Name of the object
+	//   type - Type of event such as Warning or Normal
+	//   reason - A one-word description for an event. For example Pending, Running, Succeeded, Failed are some of values for reason that indicate the phase of a Pod lifecycle.
+	//   source.component - The K8s component reporting the event such as kubelet, kube-scheduler, etc.,
+	//   site - Name of the site
+	// <value> := string
+	// <operator> := ["="|"!="|"=~"|"!~"]
+	//   = : equal to
+	//   != : not equal to
+	//   =~ : regex match
+	//   !~ : not regex match
+	//
+	// Optional: If not specified, all the K8s events for the given tenant and namespace are returned
+	Query string `protobuf:"bytes,3,opt,name=query,proto3" json:"query,omitempty"`
+	// start time
+	//
+	// x-displayName: "Start Time"
+	// x-example: "2019-09-23T12:30:11.733Z"
+	// fetch vK8s events whose timestamp >= start_time
+	// format: unix_timestamp|rfc 3339
+	//
+	// Optional: If not specified, then the start_time will be evaluated to end_time-10m
+	//           If end_time is not specified, then the start_time will be evaluated to <current time>-10m
+	StartTime string `protobuf:"bytes,4,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	// end time
+	//
+	// x-displayName: "End Time"
+	// x-example: "2019-09-24T12:30:11.733Z"
+	// fetch vK8s events whose timestamp <= end_time
+	// format: unix_timestamp|rfc 3339
+	//
+	// Optional: If not specified, then the end_time will be evaluated to start_time+10m
+	//           If start_time is not specified, then the end_time will be evaluated to <current time>
+	EndTime string `protobuf:"bytes,5,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	// sort order
+	//
+	// x-displayName: "Sort Order"
+	// specifies whether the response should be sorted in ascending or descending order based on timestamp in the event
+	// Optional: default is descending order
+	Sort ves_io_schema4.SortOrder `protobuf:"varint,6,opt,name=sort,proto3,enum=ves.io.schema.SortOrder" json:"sort,omitempty"`
+	// limit
+	//
+	// x-displayName: "Limit"
+	// x-example: "100"
+	// limits the number of K8s events returned in the response
+	// Optional: If not specified, first or last 500 events that matches the query (depending on the sort order) will be returned in the response.
+	//           The maximum value for limit is 500.
+	Limit int32 `protobuf:"varint,7,opt,name=limit,proto3" json:"limit,omitempty"`
+	// scroll
+	//
+	// x-displayName: "Scroll"
+	// x-example: "true"
+	// Scroll is used to retrieve large number of events (or all events) that matches the query.
+	// If scroll is set to true, the scroll_id in the response can be used in the scroll API to fetch the next
+	// batch of events until there are no more events left to return. The number of events in each batch is determined
+	// by the limit field.
+	// Note: Scroll is used for processing large amount of data and therefore is not intended for real time user request.
+	// Optional: default is false
+	Scroll bool `protobuf:"varint,8,opt,name=scroll,proto3" json:"scroll,omitempty"`
+	// aggregations
+	//
+	// x-displayName: "Aggregations"
+	// Aggregations provide summary/analytics data over the events response. If the number of events that matched the query
+	// is large and cannot be returned in a single response message, user can get helpful insights/summary using aggregations.
+	// The aggregations are key'ed by user-defined aggregation name. The response will be key'ed with the same name.
+	// Optional
+	Aggs map[string]*ves_io_schema_log_k8s_events.AggregationRequest `protobuf:"bytes,9,rep,name=aggs" json:"aggs,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value"`
+}
+
+func (m *K8SEventsRequest) Reset()      { *m = K8SEventsRequest{} }
+func (*K8SEventsRequest) ProtoMessage() {}
+func (*K8SEventsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{10}
+}
+
+func (m *K8SEventsRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *K8SEventsRequest) GetSite() string {
+	if m != nil {
+		return m.Site
+	}
+	return ""
+}
+
+func (m *K8SEventsRequest) GetQuery() string {
+	if m != nil {
+		return m.Query
+	}
+	return ""
+}
+
+func (m *K8SEventsRequest) GetStartTime() string {
+	if m != nil {
+		return m.StartTime
+	}
+	return ""
+}
+
+func (m *K8SEventsRequest) GetEndTime() string {
+	if m != nil {
+		return m.EndTime
+	}
+	return ""
+}
+
+func (m *K8SEventsRequest) GetSort() ves_io_schema4.SortOrder {
+	if m != nil {
+		return m.Sort
+	}
+	return ves_io_schema4.DESCENDING
+}
+
+func (m *K8SEventsRequest) GetLimit() int32 {
+	if m != nil {
+		return m.Limit
+	}
+	return 0
+}
+
+func (m *K8SEventsRequest) GetScroll() bool {
+	if m != nil {
+		return m.Scroll
+	}
+	return false
+}
+
+func (m *K8SEventsRequest) GetAggs() map[string]*ves_io_schema_log_k8s_events.AggregationRequest {
+	if m != nil {
+		return m.Aggs
+	}
+	return nil
+}
+
+// K8s Events Aggregation Request
+//
+// x-displayName: "K8s Events Aggregation Request"
+// Request to get only aggregation data for K8s events in a Cluster
+type K8SEventsAggregationRequest struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "value"
+	// get aggregation data for a given namespace
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// site
+	//
+	// x-displayName: "Site"
+	// x-example: "ce-1"
+	// Site where the K8s Cluster is running
+	Site string `protobuf:"bytes,2,opt,name=site,proto3" json:"site,omitempty"`
+	// query
+	//
+	// x-displayName: "Query"
+	// x-example: "query={involvedObject.kind="Pod"}"
+	// query is used to specify the list of matchers
+	// syntax for query := {[<matcher>]}
+	// <matcher> := <field_name><operator>"<value>"
+	// <field_name> := string
+	//  One or more of the following fields in the event may be specified in the query.
+	//   involvedObject.kind - The object that this event is about, like Pod, Deployment, Node, etc.
+	//   involvedObject.name - Name of the object
+	//   type - Type of event such as Warning or Normal
+	//   reason - A one-word description for an event. For example Pending, Running, Succeeded, Failed are some of values for reason that indicate the phase of a Pod lifecycle.
+	//   source.component - The K8s component reporting the event such as kubelet, kube-scheduler, etc.,
+	// <value> := string
+	// <operator> := ["="|"!="|"=~"|"!~"]
+	//   = : equal to
+	//   != : not equal to
+	//   =~ : regex match
+	//   !~ : not regex match
+	//
+	// Optional: If not specified, all the K8s events for the given tenant and namespace are returned
+	Query string `protobuf:"bytes,3,opt,name=query,proto3" json:"query,omitempty"`
+	// start time
+	//
+	// x-displayName: "Start Time"
+	// x-example: "2019-09-23T12:30:11.733Z"
+	// fetch vK8s events whose timestamp >= start_time
+	// format: unix_timestamp|rfc 3339
+	//
+	// Optional: If not specified, then the start_time will be evaluated to end_time-10m
+	//           If end_time is not specified, then the start_time will be evaluated to <current time>-10m
+	StartTime string `protobuf:"bytes,4,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	// end time
+	//
+	// x-displayName: "End Time"
+	// x-example: "2019-09-24T12:30:11.733Z"
+	// fetch vK8s events whose timestamp <= end_time
+	// format: unix_timestamp|rfc 3339
+	//
+	// Optional: If not specified, then the end_time will be evaluated to start_time+10m
+	//           If start_time is not specified, then the end_time will be evaluated to <current time>
+	EndTime string `protobuf:"bytes,5,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	// aggregations
+	//
+	// x-displayName: "Aggregations"
+	// Aggregations provide summary/analytics data over the events response. If the number of events that matched the query
+	// is large and cannot be returned in a single response message, user can get helpful insights/summary using aggregations.
+	// The aggregations are key'ed by user-defined aggregation name. The response will be key'ed with the same name.
+	// Optional
+	Aggs map[string]*ves_io_schema_log_k8s_events.AggregationRequest `protobuf:"bytes,6,rep,name=aggs" json:"aggs,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value"`
+}
+
+func (m *K8SEventsAggregationRequest) Reset()      { *m = K8SEventsAggregationRequest{} }
+func (*K8SEventsAggregationRequest) ProtoMessage() {}
+func (*K8SEventsAggregationRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{11}
+}
+
+func (m *K8SEventsAggregationRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *K8SEventsAggregationRequest) GetSite() string {
+	if m != nil {
+		return m.Site
+	}
+	return ""
+}
+
+func (m *K8SEventsAggregationRequest) GetQuery() string {
+	if m != nil {
+		return m.Query
+	}
+	return ""
+}
+
+func (m *K8SEventsAggregationRequest) GetStartTime() string {
+	if m != nil {
+		return m.StartTime
+	}
+	return ""
+}
+
+func (m *K8SEventsAggregationRequest) GetEndTime() string {
+	if m != nil {
+		return m.EndTime
+	}
+	return ""
+}
+
+func (m *K8SEventsAggregationRequest) GetAggs() map[string]*ves_io_schema_log_k8s_events.AggregationRequest {
 	if m != nil {
 		return m.Aggs
 	}
@@ -1259,7 +1815,7 @@ type FirewallLogRequest struct {
 func (m *FirewallLogRequest) Reset()      { *m = FirewallLogRequest{} }
 func (*FirewallLogRequest) ProtoMessage() {}
 func (*FirewallLogRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicCustomapi, []int{8}
+	return fileDescriptorPublicCustomapi, []int{12}
 }
 
 func (m *FirewallLogRequest) GetNamespace() string {
@@ -1387,7 +1943,7 @@ type FirewallLogAggregationRequest struct {
 func (m *FirewallLogAggregationRequest) Reset()      { *m = FirewallLogAggregationRequest{} }
 func (*FirewallLogAggregationRequest) ProtoMessage() {}
 func (*FirewallLogAggregationRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicCustomapi, []int{9}
+	return fileDescriptorPublicCustomapi, []int{13}
 }
 
 func (m *FirewallLogAggregationRequest) GetNamespace() string {
@@ -1451,7 +2007,7 @@ type LogScrollRequest struct {
 func (m *LogScrollRequest) Reset()      { *m = LogScrollRequest{} }
 func (*LogScrollRequest) ProtoMessage() {}
 func (*LogScrollRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicCustomapi, []int{10}
+	return fileDescriptorPublicCustomapi, []int{14}
 }
 
 func (m *LogScrollRequest) GetNamespace() string {
@@ -1505,7 +2061,7 @@ type LogResponse struct {
 
 func (m *LogResponse) Reset()                    { *m = LogResponse{} }
 func (*LogResponse) ProtoMessage()               {}
-func (*LogResponse) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{11} }
+func (*LogResponse) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{15} }
 
 func (m *LogResponse) GetLogs() []string {
 	if m != nil {
@@ -1558,7 +2114,7 @@ type LogAggregationResponse struct {
 func (m *LogAggregationResponse) Reset()      { *m = LogAggregationResponse{} }
 func (*LogAggregationResponse) ProtoMessage() {}
 func (*LogAggregationResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicCustomapi, []int{12}
+	return fileDescriptorPublicCustomapi, []int{16}
 }
 
 func (m *LogAggregationResponse) GetTotalHits() uint64 {
@@ -1588,10 +2144,18 @@ func init() {
 	golang_proto.RegisterType((*VK8SAuditLogRequest)(nil), "ves.io.schema.log.VK8SAuditLogRequest")
 	proto.RegisterType((*VK8SAuditLogAggregationRequest)(nil), "ves.io.schema.log.VK8SAuditLogAggregationRequest")
 	golang_proto.RegisterType((*VK8SAuditLogAggregationRequest)(nil), "ves.io.schema.log.VK8SAuditLogAggregationRequest")
+	proto.RegisterType((*K8SAuditLogRequest)(nil), "ves.io.schema.log.K8SAuditLogRequest")
+	golang_proto.RegisterType((*K8SAuditLogRequest)(nil), "ves.io.schema.log.K8SAuditLogRequest")
+	proto.RegisterType((*K8SAuditLogAggregationRequest)(nil), "ves.io.schema.log.K8SAuditLogAggregationRequest")
+	golang_proto.RegisterType((*K8SAuditLogAggregationRequest)(nil), "ves.io.schema.log.K8SAuditLogAggregationRequest")
 	proto.RegisterType((*VK8SEventsRequest)(nil), "ves.io.schema.log.VK8SEventsRequest")
 	golang_proto.RegisterType((*VK8SEventsRequest)(nil), "ves.io.schema.log.VK8SEventsRequest")
 	proto.RegisterType((*VK8SEventsAggregationRequest)(nil), "ves.io.schema.log.VK8SEventsAggregationRequest")
 	golang_proto.RegisterType((*VK8SEventsAggregationRequest)(nil), "ves.io.schema.log.VK8SEventsAggregationRequest")
+	proto.RegisterType((*K8SEventsRequest)(nil), "ves.io.schema.log.K8SEventsRequest")
+	golang_proto.RegisterType((*K8SEventsRequest)(nil), "ves.io.schema.log.K8SEventsRequest")
+	proto.RegisterType((*K8SEventsAggregationRequest)(nil), "ves.io.schema.log.K8SEventsAggregationRequest")
+	golang_proto.RegisterType((*K8SEventsAggregationRequest)(nil), "ves.io.schema.log.K8SEventsAggregationRequest")
 	proto.RegisterType((*FirewallLogRequest)(nil), "ves.io.schema.log.FirewallLogRequest")
 	golang_proto.RegisterType((*FirewallLogRequest)(nil), "ves.io.schema.log.FirewallLogRequest")
 	proto.RegisterType((*FirewallLogAggregationRequest)(nil), "ves.io.schema.log.FirewallLogAggregationRequest")
@@ -1876,6 +2440,103 @@ func (this *VK8SAuditLogAggregationRequest) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *K8SAuditLogRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*K8SAuditLogRequest)
+	if !ok {
+		that2, ok := that.(K8SAuditLogRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Site != that1.Site {
+		return false
+	}
+	if this.Query != that1.Query {
+		return false
+	}
+	if this.StartTime != that1.StartTime {
+		return false
+	}
+	if this.EndTime != that1.EndTime {
+		return false
+	}
+	if this.Sort != that1.Sort {
+		return false
+	}
+	if this.Limit != that1.Limit {
+		return false
+	}
+	if this.Scroll != that1.Scroll {
+		return false
+	}
+	if len(this.Aggs) != len(that1.Aggs) {
+		return false
+	}
+	for i := range this.Aggs {
+		if !this.Aggs[i].Equal(that1.Aggs[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *K8SAuditLogAggregationRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*K8SAuditLogAggregationRequest)
+	if !ok {
+		that2, ok := that.(K8SAuditLogAggregationRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Site != that1.Site {
+		return false
+	}
+	if this.Query != that1.Query {
+		return false
+	}
+	if this.StartTime != that1.StartTime {
+		return false
+	}
+	if this.EndTime != that1.EndTime {
+		return false
+	}
+	if len(this.Aggs) != len(that1.Aggs) {
+		return false
+	}
+	for i := range this.Aggs {
+		if !this.Aggs[i].Equal(that1.Aggs[i]) {
+			return false
+		}
+	}
+	return true
+}
 func (this *VK8SEventsRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1946,6 +2607,103 @@ func (this *VK8SEventsAggregationRequest) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Query != that1.Query {
+		return false
+	}
+	if this.StartTime != that1.StartTime {
+		return false
+	}
+	if this.EndTime != that1.EndTime {
+		return false
+	}
+	if len(this.Aggs) != len(that1.Aggs) {
+		return false
+	}
+	for i := range this.Aggs {
+		if !this.Aggs[i].Equal(that1.Aggs[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *K8SEventsRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*K8SEventsRequest)
+	if !ok {
+		that2, ok := that.(K8SEventsRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Site != that1.Site {
+		return false
+	}
+	if this.Query != that1.Query {
+		return false
+	}
+	if this.StartTime != that1.StartTime {
+		return false
+	}
+	if this.EndTime != that1.EndTime {
+		return false
+	}
+	if this.Sort != that1.Sort {
+		return false
+	}
+	if this.Limit != that1.Limit {
+		return false
+	}
+	if this.Scroll != that1.Scroll {
+		return false
+	}
+	if len(this.Aggs) != len(that1.Aggs) {
+		return false
+	}
+	for i := range this.Aggs {
+		if !this.Aggs[i].Equal(that1.Aggs[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *K8SEventsAggregationRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*K8SEventsAggregationRequest)
+	if !ok {
+		that2, ok := that.(K8SEventsAggregationRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Site != that1.Site {
 		return false
 	}
 	if this.Query != that1.Query {
@@ -2325,6 +3083,63 @@ func (this *VK8SAuditLogAggregationRequest) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *K8SAuditLogRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 13)
+	s = append(s, "&log.K8SAuditLogRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Site: "+fmt.Sprintf("%#v", this.Site)+",\n")
+	s = append(s, "Query: "+fmt.Sprintf("%#v", this.Query)+",\n")
+	s = append(s, "StartTime: "+fmt.Sprintf("%#v", this.StartTime)+",\n")
+	s = append(s, "EndTime: "+fmt.Sprintf("%#v", this.EndTime)+",\n")
+	s = append(s, "Sort: "+fmt.Sprintf("%#v", this.Sort)+",\n")
+	s = append(s, "Limit: "+fmt.Sprintf("%#v", this.Limit)+",\n")
+	s = append(s, "Scroll: "+fmt.Sprintf("%#v", this.Scroll)+",\n")
+	keysForAggs := make([]string, 0, len(this.Aggs))
+	for k, _ := range this.Aggs {
+		keysForAggs = append(keysForAggs, k)
+	}
+	sortkeys.Strings(keysForAggs)
+	mapStringForAggs := "map[string]*ves_io_schema_log_k8s_audit_log.AggregationRequest{"
+	for _, k := range keysForAggs {
+		mapStringForAggs += fmt.Sprintf("%#v: %#v,", k, this.Aggs[k])
+	}
+	mapStringForAggs += "}"
+	if this.Aggs != nil {
+		s = append(s, "Aggs: "+mapStringForAggs+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *K8SAuditLogAggregationRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&log.K8SAuditLogAggregationRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Site: "+fmt.Sprintf("%#v", this.Site)+",\n")
+	s = append(s, "Query: "+fmt.Sprintf("%#v", this.Query)+",\n")
+	s = append(s, "StartTime: "+fmt.Sprintf("%#v", this.StartTime)+",\n")
+	s = append(s, "EndTime: "+fmt.Sprintf("%#v", this.EndTime)+",\n")
+	keysForAggs := make([]string, 0, len(this.Aggs))
+	for k, _ := range this.Aggs {
+		keysForAggs = append(keysForAggs, k)
+	}
+	sortkeys.Strings(keysForAggs)
+	mapStringForAggs := "map[string]*ves_io_schema_log_k8s_audit_log.AggregationRequest{"
+	for _, k := range keysForAggs {
+		mapStringForAggs += fmt.Sprintf("%#v: %#v,", k, this.Aggs[k])
+	}
+	mapStringForAggs += "}"
+	if this.Aggs != nil {
+		s = append(s, "Aggs: "+mapStringForAggs+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *VK8SEventsRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -2370,6 +3185,63 @@ func (this *VK8SEventsAggregationRequest) GoString() string {
 	}
 	sortkeys.Strings(keysForAggs)
 	mapStringForAggs := "map[string]*ves_io_schema_log_vk8s_events.AggregationRequest{"
+	for _, k := range keysForAggs {
+		mapStringForAggs += fmt.Sprintf("%#v: %#v,", k, this.Aggs[k])
+	}
+	mapStringForAggs += "}"
+	if this.Aggs != nil {
+		s = append(s, "Aggs: "+mapStringForAggs+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *K8SEventsRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 13)
+	s = append(s, "&log.K8SEventsRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Site: "+fmt.Sprintf("%#v", this.Site)+",\n")
+	s = append(s, "Query: "+fmt.Sprintf("%#v", this.Query)+",\n")
+	s = append(s, "StartTime: "+fmt.Sprintf("%#v", this.StartTime)+",\n")
+	s = append(s, "EndTime: "+fmt.Sprintf("%#v", this.EndTime)+",\n")
+	s = append(s, "Sort: "+fmt.Sprintf("%#v", this.Sort)+",\n")
+	s = append(s, "Limit: "+fmt.Sprintf("%#v", this.Limit)+",\n")
+	s = append(s, "Scroll: "+fmt.Sprintf("%#v", this.Scroll)+",\n")
+	keysForAggs := make([]string, 0, len(this.Aggs))
+	for k, _ := range this.Aggs {
+		keysForAggs = append(keysForAggs, k)
+	}
+	sortkeys.Strings(keysForAggs)
+	mapStringForAggs := "map[string]*ves_io_schema_log_k8s_events.AggregationRequest{"
+	for _, k := range keysForAggs {
+		mapStringForAggs += fmt.Sprintf("%#v: %#v,", k, this.Aggs[k])
+	}
+	mapStringForAggs += "}"
+	if this.Aggs != nil {
+		s = append(s, "Aggs: "+mapStringForAggs+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *K8SEventsAggregationRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&log.K8SEventsAggregationRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Site: "+fmt.Sprintf("%#v", this.Site)+",\n")
+	s = append(s, "Query: "+fmt.Sprintf("%#v", this.Query)+",\n")
+	s = append(s, "StartTime: "+fmt.Sprintf("%#v", this.StartTime)+",\n")
+	s = append(s, "EndTime: "+fmt.Sprintf("%#v", this.EndTime)+",\n")
+	keysForAggs := make([]string, 0, len(this.Aggs))
+	for k, _ := range this.Aggs {
+		keysForAggs = append(keysForAggs, k)
+	}
+	sortkeys.Strings(keysForAggs)
+	mapStringForAggs := "map[string]*ves_io_schema_log_k8s_events.AggregationRequest{"
 	for _, k := range keysForAggs {
 		mapStringForAggs += fmt.Sprintf("%#v: %#v,", k, this.Aggs[k])
 	}
@@ -2577,6 +3449,27 @@ type CustomAPIClient interface {
 	// Request to get summary/analytics data for the vK8s audit logs that matches the criteria in request for a given namespace.
 	// User with access to the `system` namespace may query aggregated data for audit logs across all namespaces for a given tenant.
 	VK8SAuditLogAggregationQuery(ctx context.Context, in *VK8SAuditLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error)
+	// K8s Audit Log Query
+	//
+	// x-displayName: "K8s Audit Log Query"
+	// Request to get Physical K8s audit logs that matches the criteria in request for a given namespace.
+	// If no match conditions are specified in the request, then the response contains all
+	// CRUD operations performed in the namespace. User with access to the `system` namespace
+	// may query for audit logs across all namespaces in a K8s Cluster.
+	K8SAuditLogQuery(ctx context.Context, in *K8SAuditLogRequest, opts ...grpc.CallOption) (*LogResponse, error)
+	// K8s Audit Log Scroll Query
+	//
+	// x-displayName: "K8s Audit Log Scroll Query"
+	// The response for K8s audit log query contain no more than 500 messages.
+	// One can use scroll request to scroll through more than 500 messages or all messages
+	// in multiple batches. empty scroll_id in the response indicates no more messages to fetch (EOF).
+	K8SAuditLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error)
+	// K8s Audit Log Aggregation Query
+	//
+	// x-displayName: "K8s Audit Log Aggregation Query"
+	// Request to get summary/analytics data for the K8s audit logs that matches the criteria in request for a given namespace.
+	// User with access to the `system` namespace may query aggregated data for audit logs across all namespaces in a K8s Cluster.
+	K8SAuditLogAggregationQuery(ctx context.Context, in *K8SAuditLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error)
 	// vK8s Events Query
 	//
 	// x-displayName: "vK8s Events Query"
@@ -2598,6 +3491,27 @@ type CustomAPIClient interface {
 	// Request to get summary/analytics data for the vK8s events that matches the criteria in request for a given namespace.
 	// User with access to the `system` namespace may query aggregated data for vK8s events across all namespaces for a given tenant.
 	VK8SEventsAggregationQuery(ctx context.Context, in *VK8SEventsAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error)
+	// K8s Events Query
+	//
+	// x-displayName: "K8s Events Query"
+	// Request to get physical K8s events that matches the criteria in request for a given namespace.
+	// If no match conditions are specified in the request, then the response contains all
+	// K8s events in the namespace. User with access to the `system` namespace may query for K8s events across
+	// all namespaces in a K8s Cluster.
+	K8SEventsQuery(ctx context.Context, in *K8SEventsRequest, opts ...grpc.CallOption) (*LogResponse, error)
+	// K8s Events Scroll Query
+	//
+	// x-displayName: "K8s Events Scroll Query"
+	// The response for K8s events query contain no more than 500 events.
+	// One can use scroll request to scroll through more than 500 events or all events
+	// in multiple batches. Empty scroll_id in the response indicates no more messages to fetch (EOF).
+	K8SEventsScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error)
+	// K8s Events Aggregation Query
+	//
+	// x-displayName: "K8s Events Aggregation Query"
+	// Request to get summary/analytics data for the K8s events that matches the criteria in request for a given namespace.
+	// User with access to the `system` namespace may query aggregated data for K8s events across all namespaces in a K8s Cluster.
+	K8SEventsAggregationQuery(ctx context.Context, in *K8SEventsAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error)
 	// Firewall Logs Query
 	//
 	// x-displayName: "Firewall Logs Query"
@@ -2707,6 +3621,33 @@ func (c *customAPIClient) VK8SAuditLogAggregationQuery(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *customAPIClient) K8SAuditLogQuery(ctx context.Context, in *K8SAuditLogRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	out := new(LogResponse)
+	err := grpc.Invoke(ctx, "/ves.io.schema.log.CustomAPI/K8SAuditLogQuery", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *customAPIClient) K8SAuditLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	out := new(LogResponse)
+	err := grpc.Invoke(ctx, "/ves.io.schema.log.CustomAPI/K8SAuditLogScrollQuery", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *customAPIClient) K8SAuditLogAggregationQuery(ctx context.Context, in *K8SAuditLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	out := new(LogAggregationResponse)
+	err := grpc.Invoke(ctx, "/ves.io.schema.log.CustomAPI/K8SAuditLogAggregationQuery", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *customAPIClient) VK8SEventsQuery(ctx context.Context, in *VK8SEventsRequest, opts ...grpc.CallOption) (*LogResponse, error) {
 	out := new(LogResponse)
 	err := grpc.Invoke(ctx, "/ves.io.schema.log.CustomAPI/VK8SEventsQuery", in, out, c.cc, opts...)
@@ -2728,6 +3669,33 @@ func (c *customAPIClient) VK8SEventsScrollQuery(ctx context.Context, in *LogScro
 func (c *customAPIClient) VK8SEventsAggregationQuery(ctx context.Context, in *VK8SEventsAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
 	out := new(LogAggregationResponse)
 	err := grpc.Invoke(ctx, "/ves.io.schema.log.CustomAPI/VK8SEventsAggregationQuery", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *customAPIClient) K8SEventsQuery(ctx context.Context, in *K8SEventsRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	out := new(LogResponse)
+	err := grpc.Invoke(ctx, "/ves.io.schema.log.CustomAPI/K8SEventsQuery", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *customAPIClient) K8SEventsScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	out := new(LogResponse)
+	err := grpc.Invoke(ctx, "/ves.io.schema.log.CustomAPI/K8SEventsScrollQuery", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *customAPIClient) K8SEventsAggregationQuery(ctx context.Context, in *K8SEventsAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	out := new(LogAggregationResponse)
+	err := grpc.Invoke(ctx, "/ves.io.schema.log.CustomAPI/K8SEventsAggregationQuery", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -2827,6 +3795,27 @@ type CustomAPIServer interface {
 	// Request to get summary/analytics data for the vK8s audit logs that matches the criteria in request for a given namespace.
 	// User with access to the `system` namespace may query aggregated data for audit logs across all namespaces for a given tenant.
 	VK8SAuditLogAggregationQuery(context.Context, *VK8SAuditLogAggregationRequest) (*LogAggregationResponse, error)
+	// K8s Audit Log Query
+	//
+	// x-displayName: "K8s Audit Log Query"
+	// Request to get Physical K8s audit logs that matches the criteria in request for a given namespace.
+	// If no match conditions are specified in the request, then the response contains all
+	// CRUD operations performed in the namespace. User with access to the `system` namespace
+	// may query for audit logs across all namespaces in a K8s Cluster.
+	K8SAuditLogQuery(context.Context, *K8SAuditLogRequest) (*LogResponse, error)
+	// K8s Audit Log Scroll Query
+	//
+	// x-displayName: "K8s Audit Log Scroll Query"
+	// The response for K8s audit log query contain no more than 500 messages.
+	// One can use scroll request to scroll through more than 500 messages or all messages
+	// in multiple batches. empty scroll_id in the response indicates no more messages to fetch (EOF).
+	K8SAuditLogScrollQuery(context.Context, *LogScrollRequest) (*LogResponse, error)
+	// K8s Audit Log Aggregation Query
+	//
+	// x-displayName: "K8s Audit Log Aggregation Query"
+	// Request to get summary/analytics data for the K8s audit logs that matches the criteria in request for a given namespace.
+	// User with access to the `system` namespace may query aggregated data for audit logs across all namespaces in a K8s Cluster.
+	K8SAuditLogAggregationQuery(context.Context, *K8SAuditLogAggregationRequest) (*LogAggregationResponse, error)
 	// vK8s Events Query
 	//
 	// x-displayName: "vK8s Events Query"
@@ -2848,6 +3837,27 @@ type CustomAPIServer interface {
 	// Request to get summary/analytics data for the vK8s events that matches the criteria in request for a given namespace.
 	// User with access to the `system` namespace may query aggregated data for vK8s events across all namespaces for a given tenant.
 	VK8SEventsAggregationQuery(context.Context, *VK8SEventsAggregationRequest) (*LogAggregationResponse, error)
+	// K8s Events Query
+	//
+	// x-displayName: "K8s Events Query"
+	// Request to get physical K8s events that matches the criteria in request for a given namespace.
+	// If no match conditions are specified in the request, then the response contains all
+	// K8s events in the namespace. User with access to the `system` namespace may query for K8s events across
+	// all namespaces in a K8s Cluster.
+	K8SEventsQuery(context.Context, *K8SEventsRequest) (*LogResponse, error)
+	// K8s Events Scroll Query
+	//
+	// x-displayName: "K8s Events Scroll Query"
+	// The response for K8s events query contain no more than 500 events.
+	// One can use scroll request to scroll through more than 500 events or all events
+	// in multiple batches. Empty scroll_id in the response indicates no more messages to fetch (EOF).
+	K8SEventsScrollQuery(context.Context, *LogScrollRequest) (*LogResponse, error)
+	// K8s Events Aggregation Query
+	//
+	// x-displayName: "K8s Events Aggregation Query"
+	// Request to get summary/analytics data for the K8s events that matches the criteria in request for a given namespace.
+	// User with access to the `system` namespace may query aggregated data for K8s events across all namespaces in a K8s Cluster.
+	K8SEventsAggregationQuery(context.Context, *K8SEventsAggregationRequest) (*LogAggregationResponse, error)
 	// Firewall Logs Query
 	//
 	// x-displayName: "Firewall Logs Query"
@@ -3034,6 +4044,60 @@ func _CustomAPI_VK8SAuditLogAggregationQuery_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomAPI_K8SAuditLogQuery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(K8SAuditLogRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).K8SAuditLogQuery(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.log.CustomAPI/K8SAuditLogQuery",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).K8SAuditLogQuery(ctx, req.(*K8SAuditLogRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CustomAPI_K8SAuditLogScrollQuery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogScrollRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).K8SAuditLogScrollQuery(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.log.CustomAPI/K8SAuditLogScrollQuery",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).K8SAuditLogScrollQuery(ctx, req.(*LogScrollRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CustomAPI_K8SAuditLogAggregationQuery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(K8SAuditLogAggregationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).K8SAuditLogAggregationQuery(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.log.CustomAPI/K8SAuditLogAggregationQuery",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).K8SAuditLogAggregationQuery(ctx, req.(*K8SAuditLogAggregationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CustomAPI_VK8SEventsQuery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(VK8SEventsRequest)
 	if err := dec(in); err != nil {
@@ -3084,6 +4148,60 @@ func _CustomAPI_VK8SEventsAggregationQuery_Handler(srv interface{}, ctx context.
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CustomAPIServer).VK8SEventsAggregationQuery(ctx, req.(*VK8SEventsAggregationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CustomAPI_K8SEventsQuery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(K8SEventsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).K8SEventsQuery(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.log.CustomAPI/K8SEventsQuery",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).K8SEventsQuery(ctx, req.(*K8SEventsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CustomAPI_K8SEventsScrollQuery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogScrollRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).K8SEventsScrollQuery(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.log.CustomAPI/K8SEventsScrollQuery",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).K8SEventsScrollQuery(ctx, req.(*LogScrollRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CustomAPI_K8SEventsAggregationQuery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(K8SEventsAggregationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).K8SEventsAggregationQuery(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.log.CustomAPI/K8SEventsAggregationQuery",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).K8SEventsAggregationQuery(ctx, req.(*K8SEventsAggregationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -3183,6 +4301,18 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 			Handler:    _CustomAPI_VK8SAuditLogAggregationQuery_Handler,
 		},
 		{
+			MethodName: "K8SAuditLogQuery",
+			Handler:    _CustomAPI_K8SAuditLogQuery_Handler,
+		},
+		{
+			MethodName: "K8SAuditLogScrollQuery",
+			Handler:    _CustomAPI_K8SAuditLogScrollQuery_Handler,
+		},
+		{
+			MethodName: "K8SAuditLogAggregationQuery",
+			Handler:    _CustomAPI_K8SAuditLogAggregationQuery_Handler,
+		},
+		{
 			MethodName: "VK8SEventsQuery",
 			Handler:    _CustomAPI_VK8SEventsQuery_Handler,
 		},
@@ -3193,6 +4323,18 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "VK8SEventsAggregationQuery",
 			Handler:    _CustomAPI_VK8SEventsAggregationQuery_Handler,
+		},
+		{
+			MethodName: "K8SEventsQuery",
+			Handler:    _CustomAPI_K8SEventsQuery_Handler,
+		},
+		{
+			MethodName: "K8SEventsScrollQuery",
+			Handler:    _CustomAPI_K8SEventsScrollQuery_Handler,
+		},
+		{
+			MethodName: "K8SEventsAggregationQuery",
+			Handler:    _CustomAPI_K8SEventsAggregationQuery_Handler,
 		},
 		{
 			MethodName: "FirewallLogQuery",
@@ -3691,6 +4833,178 @@ func (m *VK8SAuditLogAggregationRequest) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *K8SAuditLogRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *K8SAuditLogRequest) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Namespace) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i += copy(dAtA[i:], m.Namespace)
+	}
+	if len(m.Site) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Site)))
+		i += copy(dAtA[i:], m.Site)
+	}
+	if len(m.Query) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Query)))
+		i += copy(dAtA[i:], m.Query)
+	}
+	if len(m.StartTime) > 0 {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.StartTime)))
+		i += copy(dAtA[i:], m.StartTime)
+	}
+	if len(m.EndTime) > 0 {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.EndTime)))
+		i += copy(dAtA[i:], m.EndTime)
+	}
+	if m.Sort != 0 {
+		dAtA[i] = 0x30
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(m.Sort))
+	}
+	if m.Limit != 0 {
+		dAtA[i] = 0x38
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(m.Limit))
+	}
+	if m.Scroll {
+		dAtA[i] = 0x40
+		i++
+		if m.Scroll {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	if len(m.Aggs) > 0 {
+		for k, _ := range m.Aggs {
+			dAtA[i] = 0x4a
+			i++
+			v := m.Aggs[k]
+			msgSize := 0
+			if v != nil {
+				msgSize = v.Size()
+				msgSize += 1 + sovPublicCustomapi(uint64(msgSize))
+			}
+			mapSize := 1 + len(k) + sovPublicCustomapi(uint64(len(k))) + msgSize
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
+			if v != nil {
+				dAtA[i] = 0x12
+				i++
+				i = encodeVarintPublicCustomapi(dAtA, i, uint64(v.Size()))
+				n7, err := v.MarshalTo(dAtA[i:])
+				if err != nil {
+					return 0, err
+				}
+				i += n7
+			}
+		}
+	}
+	return i, nil
+}
+
+func (m *K8SAuditLogAggregationRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *K8SAuditLogAggregationRequest) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Namespace) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i += copy(dAtA[i:], m.Namespace)
+	}
+	if len(m.Site) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Site)))
+		i += copy(dAtA[i:], m.Site)
+	}
+	if len(m.Query) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Query)))
+		i += copy(dAtA[i:], m.Query)
+	}
+	if len(m.StartTime) > 0 {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.StartTime)))
+		i += copy(dAtA[i:], m.StartTime)
+	}
+	if len(m.EndTime) > 0 {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.EndTime)))
+		i += copy(dAtA[i:], m.EndTime)
+	}
+	if len(m.Aggs) > 0 {
+		for k, _ := range m.Aggs {
+			dAtA[i] = 0x32
+			i++
+			v := m.Aggs[k]
+			msgSize := 0
+			if v != nil {
+				msgSize = v.Size()
+				msgSize += 1 + sovPublicCustomapi(uint64(msgSize))
+			}
+			mapSize := 1 + len(k) + sovPublicCustomapi(uint64(len(k))) + msgSize
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
+			if v != nil {
+				dAtA[i] = 0x12
+				i++
+				i = encodeVarintPublicCustomapi(dAtA, i, uint64(v.Size()))
+				n8, err := v.MarshalTo(dAtA[i:])
+				if err != nil {
+					return 0, err
+				}
+				i += n8
+			}
+		}
+	}
+	return i, nil
+}
+
 func (m *VK8SEventsRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3770,11 +5084,11 @@ func (m *VK8SEventsRequest) MarshalTo(dAtA []byte) (int, error) {
 				dAtA[i] = 0x12
 				i++
 				i = encodeVarintPublicCustomapi(dAtA, i, uint64(v.Size()))
-				n7, err := v.MarshalTo(dAtA[i:])
+				n9, err := v.MarshalTo(dAtA[i:])
 				if err != nil {
 					return 0, err
 				}
-				i += n7
+				i += n9
 			}
 		}
 	}
@@ -3840,11 +5154,183 @@ func (m *VK8SEventsAggregationRequest) MarshalTo(dAtA []byte) (int, error) {
 				dAtA[i] = 0x12
 				i++
 				i = encodeVarintPublicCustomapi(dAtA, i, uint64(v.Size()))
-				n8, err := v.MarshalTo(dAtA[i:])
+				n10, err := v.MarshalTo(dAtA[i:])
 				if err != nil {
 					return 0, err
 				}
-				i += n8
+				i += n10
+			}
+		}
+	}
+	return i, nil
+}
+
+func (m *K8SEventsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *K8SEventsRequest) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Namespace) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i += copy(dAtA[i:], m.Namespace)
+	}
+	if len(m.Site) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Site)))
+		i += copy(dAtA[i:], m.Site)
+	}
+	if len(m.Query) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Query)))
+		i += copy(dAtA[i:], m.Query)
+	}
+	if len(m.StartTime) > 0 {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.StartTime)))
+		i += copy(dAtA[i:], m.StartTime)
+	}
+	if len(m.EndTime) > 0 {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.EndTime)))
+		i += copy(dAtA[i:], m.EndTime)
+	}
+	if m.Sort != 0 {
+		dAtA[i] = 0x30
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(m.Sort))
+	}
+	if m.Limit != 0 {
+		dAtA[i] = 0x38
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(m.Limit))
+	}
+	if m.Scroll {
+		dAtA[i] = 0x40
+		i++
+		if m.Scroll {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	if len(m.Aggs) > 0 {
+		for k, _ := range m.Aggs {
+			dAtA[i] = 0x4a
+			i++
+			v := m.Aggs[k]
+			msgSize := 0
+			if v != nil {
+				msgSize = v.Size()
+				msgSize += 1 + sovPublicCustomapi(uint64(msgSize))
+			}
+			mapSize := 1 + len(k) + sovPublicCustomapi(uint64(len(k))) + msgSize
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
+			if v != nil {
+				dAtA[i] = 0x12
+				i++
+				i = encodeVarintPublicCustomapi(dAtA, i, uint64(v.Size()))
+				n11, err := v.MarshalTo(dAtA[i:])
+				if err != nil {
+					return 0, err
+				}
+				i += n11
+			}
+		}
+	}
+	return i, nil
+}
+
+func (m *K8SEventsAggregationRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *K8SEventsAggregationRequest) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Namespace) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i += copy(dAtA[i:], m.Namespace)
+	}
+	if len(m.Site) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Site)))
+		i += copy(dAtA[i:], m.Site)
+	}
+	if len(m.Query) > 0 {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Query)))
+		i += copy(dAtA[i:], m.Query)
+	}
+	if len(m.StartTime) > 0 {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.StartTime)))
+		i += copy(dAtA[i:], m.StartTime)
+	}
+	if len(m.EndTime) > 0 {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.EndTime)))
+		i += copy(dAtA[i:], m.EndTime)
+	}
+	if len(m.Aggs) > 0 {
+		for k, _ := range m.Aggs {
+			dAtA[i] = 0x32
+			i++
+			v := m.Aggs[k]
+			msgSize := 0
+			if v != nil {
+				msgSize = v.Size()
+				msgSize += 1 + sovPublicCustomapi(uint64(msgSize))
+			}
+			mapSize := 1 + len(k) + sovPublicCustomapi(uint64(len(k))) + msgSize
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
+			if v != nil {
+				dAtA[i] = 0x12
+				i++
+				i = encodeVarintPublicCustomapi(dAtA, i, uint64(v.Size()))
+				n12, err := v.MarshalTo(dAtA[i:])
+				if err != nil {
+					return 0, err
+				}
+				i += n12
 			}
 		}
 	}
@@ -3930,11 +5416,11 @@ func (m *FirewallLogRequest) MarshalTo(dAtA []byte) (int, error) {
 				dAtA[i] = 0x12
 				i++
 				i = encodeVarintPublicCustomapi(dAtA, i, uint64(v.Size()))
-				n9, err := v.MarshalTo(dAtA[i:])
+				n13, err := v.MarshalTo(dAtA[i:])
 				if err != nil {
 					return 0, err
 				}
-				i += n9
+				i += n13
 			}
 		}
 	}
@@ -4000,11 +5486,11 @@ func (m *FirewallLogAggregationRequest) MarshalTo(dAtA []byte) (int, error) {
 				dAtA[i] = 0x12
 				i++
 				i = encodeVarintPublicCustomapi(dAtA, i, uint64(v.Size()))
-				n10, err := v.MarshalTo(dAtA[i:])
+				n14, err := v.MarshalTo(dAtA[i:])
 				if err != nil {
 					return 0, err
 				}
-				i += n10
+				i += n14
 			}
 		}
 	}
@@ -4102,11 +5588,11 @@ func (m *LogResponse) MarshalTo(dAtA []byte) (int, error) {
 				dAtA[i] = 0x12
 				i++
 				i = encodeVarintPublicCustomapi(dAtA, i, uint64(v.Size()))
-				n11, err := v.MarshalTo(dAtA[i:])
+				n15, err := v.MarshalTo(dAtA[i:])
 				if err != nil {
 					return 0, err
 				}
-				i += n11
+				i += n15
 			}
 		}
 	}
@@ -4153,11 +5639,11 @@ func (m *LogAggregationResponse) MarshalTo(dAtA []byte) (int, error) {
 				dAtA[i] = 0x12
 				i++
 				i = encodeVarintPublicCustomapi(dAtA, i, uint64(v.Size()))
-				n12, err := v.MarshalTo(dAtA[i:])
+				n16, err := v.MarshalTo(dAtA[i:])
 				if err != nil {
 					return 0, err
 				}
-				i += n12
+				i += n16
 			}
 		}
 	}
@@ -4410,6 +5896,93 @@ func (m *VK8SAuditLogAggregationRequest) Size() (n int) {
 	return n
 }
 
+func (m *K8SAuditLogRequest) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Site)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Query)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.StartTime)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.EndTime)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if m.Sort != 0 {
+		n += 1 + sovPublicCustomapi(uint64(m.Sort))
+	}
+	if m.Limit != 0 {
+		n += 1 + sovPublicCustomapi(uint64(m.Limit))
+	}
+	if m.Scroll {
+		n += 2
+	}
+	if len(m.Aggs) > 0 {
+		for k, v := range m.Aggs {
+			_ = k
+			_ = v
+			l = 0
+			if v != nil {
+				l = v.Size()
+				l += 1 + sovPublicCustomapi(uint64(l))
+			}
+			mapEntrySize := 1 + len(k) + sovPublicCustomapi(uint64(len(k))) + l
+			n += mapEntrySize + 1 + sovPublicCustomapi(uint64(mapEntrySize))
+		}
+	}
+	return n
+}
+
+func (m *K8SAuditLogAggregationRequest) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Site)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Query)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.StartTime)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.EndTime)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if len(m.Aggs) > 0 {
+		for k, v := range m.Aggs {
+			_ = k
+			_ = v
+			l = 0
+			if v != nil {
+				l = v.Size()
+				l += 1 + sovPublicCustomapi(uint64(l))
+			}
+			mapEntrySize := 1 + len(k) + sovPublicCustomapi(uint64(len(k))) + l
+			n += mapEntrySize + 1 + sovPublicCustomapi(uint64(mapEntrySize))
+		}
+	}
+	return n
+}
+
 func (m *VK8SEventsRequest) Size() (n int) {
 	var l int
 	_ = l
@@ -4458,6 +6031,93 @@ func (m *VK8SEventsAggregationRequest) Size() (n int) {
 	var l int
 	_ = l
 	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Query)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.StartTime)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.EndTime)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if len(m.Aggs) > 0 {
+		for k, v := range m.Aggs {
+			_ = k
+			_ = v
+			l = 0
+			if v != nil {
+				l = v.Size()
+				l += 1 + sovPublicCustomapi(uint64(l))
+			}
+			mapEntrySize := 1 + len(k) + sovPublicCustomapi(uint64(len(k))) + l
+			n += mapEntrySize + 1 + sovPublicCustomapi(uint64(mapEntrySize))
+		}
+	}
+	return n
+}
+
+func (m *K8SEventsRequest) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Site)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Query)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.StartTime)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.EndTime)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if m.Sort != 0 {
+		n += 1 + sovPublicCustomapi(uint64(m.Sort))
+	}
+	if m.Limit != 0 {
+		n += 1 + sovPublicCustomapi(uint64(m.Limit))
+	}
+	if m.Scroll {
+		n += 2
+	}
+	if len(m.Aggs) > 0 {
+		for k, v := range m.Aggs {
+			_ = k
+			_ = v
+			l = 0
+			if v != nil {
+				l = v.Size()
+				l += 1 + sovPublicCustomapi(uint64(l))
+			}
+			mapEntrySize := 1 + len(k) + sovPublicCustomapi(uint64(len(k))) + l
+			n += mapEntrySize + 1 + sovPublicCustomapi(uint64(mapEntrySize))
+		}
+	}
+	return n
+}
+
+func (m *K8SEventsAggregationRequest) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Site)
 	if l > 0 {
 		n += 1 + l + sovPublicCustomapi(uint64(l))
 	}
@@ -4802,6 +6462,59 @@ func (this *VK8SAuditLogAggregationRequest) String() string {
 	}, "")
 	return s
 }
+func (this *K8SAuditLogRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForAggs := make([]string, 0, len(this.Aggs))
+	for k, _ := range this.Aggs {
+		keysForAggs = append(keysForAggs, k)
+	}
+	sortkeys.Strings(keysForAggs)
+	mapStringForAggs := "map[string]*ves_io_schema_log_k8s_audit_log.AggregationRequest{"
+	for _, k := range keysForAggs {
+		mapStringForAggs += fmt.Sprintf("%v: %v,", k, this.Aggs[k])
+	}
+	mapStringForAggs += "}"
+	s := strings.Join([]string{`&K8SAuditLogRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Site:` + fmt.Sprintf("%v", this.Site) + `,`,
+		`Query:` + fmt.Sprintf("%v", this.Query) + `,`,
+		`StartTime:` + fmt.Sprintf("%v", this.StartTime) + `,`,
+		`EndTime:` + fmt.Sprintf("%v", this.EndTime) + `,`,
+		`Sort:` + fmt.Sprintf("%v", this.Sort) + `,`,
+		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
+		`Scroll:` + fmt.Sprintf("%v", this.Scroll) + `,`,
+		`Aggs:` + mapStringForAggs + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *K8SAuditLogAggregationRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForAggs := make([]string, 0, len(this.Aggs))
+	for k, _ := range this.Aggs {
+		keysForAggs = append(keysForAggs, k)
+	}
+	sortkeys.Strings(keysForAggs)
+	mapStringForAggs := "map[string]*ves_io_schema_log_k8s_audit_log.AggregationRequest{"
+	for _, k := range keysForAggs {
+		mapStringForAggs += fmt.Sprintf("%v: %v,", k, this.Aggs[k])
+	}
+	mapStringForAggs += "}"
+	s := strings.Join([]string{`&K8SAuditLogAggregationRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Site:` + fmt.Sprintf("%v", this.Site) + `,`,
+		`Query:` + fmt.Sprintf("%v", this.Query) + `,`,
+		`StartTime:` + fmt.Sprintf("%v", this.StartTime) + `,`,
+		`EndTime:` + fmt.Sprintf("%v", this.EndTime) + `,`,
+		`Aggs:` + mapStringForAggs + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *VK8SEventsRequest) String() string {
 	if this == nil {
 		return "nil"
@@ -4845,6 +6558,59 @@ func (this *VK8SEventsAggregationRequest) String() string {
 	mapStringForAggs += "}"
 	s := strings.Join([]string{`&VK8SEventsAggregationRequest{`,
 		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Query:` + fmt.Sprintf("%v", this.Query) + `,`,
+		`StartTime:` + fmt.Sprintf("%v", this.StartTime) + `,`,
+		`EndTime:` + fmt.Sprintf("%v", this.EndTime) + `,`,
+		`Aggs:` + mapStringForAggs + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *K8SEventsRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForAggs := make([]string, 0, len(this.Aggs))
+	for k, _ := range this.Aggs {
+		keysForAggs = append(keysForAggs, k)
+	}
+	sortkeys.Strings(keysForAggs)
+	mapStringForAggs := "map[string]*ves_io_schema_log_k8s_events.AggregationRequest{"
+	for _, k := range keysForAggs {
+		mapStringForAggs += fmt.Sprintf("%v: %v,", k, this.Aggs[k])
+	}
+	mapStringForAggs += "}"
+	s := strings.Join([]string{`&K8SEventsRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Site:` + fmt.Sprintf("%v", this.Site) + `,`,
+		`Query:` + fmt.Sprintf("%v", this.Query) + `,`,
+		`StartTime:` + fmt.Sprintf("%v", this.StartTime) + `,`,
+		`EndTime:` + fmt.Sprintf("%v", this.EndTime) + `,`,
+		`Sort:` + fmt.Sprintf("%v", this.Sort) + `,`,
+		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
+		`Scroll:` + fmt.Sprintf("%v", this.Scroll) + `,`,
+		`Aggs:` + mapStringForAggs + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *K8SEventsAggregationRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForAggs := make([]string, 0, len(this.Aggs))
+	for k, _ := range this.Aggs {
+		keysForAggs = append(keysForAggs, k)
+	}
+	sortkeys.Strings(keysForAggs)
+	mapStringForAggs := "map[string]*ves_io_schema_log_k8s_events.AggregationRequest{"
+	for _, k := range keysForAggs {
+		mapStringForAggs += fmt.Sprintf("%v: %v,", k, this.Aggs[k])
+	}
+	mapStringForAggs += "}"
+	s := strings.Join([]string{`&K8SEventsAggregationRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Site:` + fmt.Sprintf("%v", this.Site) + `,`,
 		`Query:` + fmt.Sprintf("%v", this.Query) + `,`,
 		`StartTime:` + fmt.Sprintf("%v", this.StartTime) + `,`,
 		`EndTime:` + fmt.Sprintf("%v", this.EndTime) + `,`,
@@ -6875,6 +8641,700 @@ func (m *VK8SAuditLogAggregationRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *K8SAuditLogRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: K8SAuditLogRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: K8SAuditLogRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Site", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Site = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Query", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Query = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StartTime = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EndTime", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EndTime = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sort", wireType)
+			}
+			m.Sort = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Sort |= (ves_io_schema4.SortOrder(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Limit", wireType)
+			}
+			m.Limit = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Limit |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Scroll", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Scroll = bool(v != 0)
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Aggs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Aggs == nil {
+				m.Aggs = make(map[string]*ves_io_schema_log_k8s_audit_log.AggregationRequest)
+			}
+			var mapkey string
+			var mapvalue *ves_io_schema_log_k8s_audit_log.AggregationRequest
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var mapmsglen int
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						mapmsglen |= (int(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					if mapmsglen < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					postmsgIndex := iNdEx + mapmsglen
+					if mapmsglen < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					if postmsgIndex > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = &ves_io_schema_log_k8s_audit_log.AggregationRequest{}
+					if err := mapvalue.Unmarshal(dAtA[iNdEx:postmsgIndex]); err != nil {
+						return err
+					}
+					iNdEx = postmsgIndex
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Aggs[mapkey] = mapvalue
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *K8SAuditLogAggregationRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: K8SAuditLogAggregationRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: K8SAuditLogAggregationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Site", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Site = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Query", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Query = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StartTime = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EndTime", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EndTime = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Aggs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Aggs == nil {
+				m.Aggs = make(map[string]*ves_io_schema_log_k8s_audit_log.AggregationRequest)
+			}
+			var mapkey string
+			var mapvalue *ves_io_schema_log_k8s_audit_log.AggregationRequest
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var mapmsglen int
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						mapmsglen |= (int(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					if mapmsglen < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					postmsgIndex := iNdEx + mapmsglen
+					if mapmsglen < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					if postmsgIndex > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = &ves_io_schema_log_k8s_audit_log.AggregationRequest{}
+					if err := mapvalue.Unmarshal(dAtA[iNdEx:postmsgIndex]); err != nil {
+						return err
+					}
+					iNdEx = postmsgIndex
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Aggs[mapkey] = mapvalue
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *VK8SEventsRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -7469,6 +9929,700 @@ func (m *VK8SEventsAggregationRequest) Unmarshal(dAtA []byte) error {
 						return io.ErrUnexpectedEOF
 					}
 					mapvalue = &ves_io_schema_log_vk8s_events.AggregationRequest{}
+					if err := mapvalue.Unmarshal(dAtA[iNdEx:postmsgIndex]); err != nil {
+						return err
+					}
+					iNdEx = postmsgIndex
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Aggs[mapkey] = mapvalue
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *K8SEventsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: K8SEventsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: K8SEventsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Site", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Site = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Query", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Query = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StartTime = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EndTime", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EndTime = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sort", wireType)
+			}
+			m.Sort = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Sort |= (ves_io_schema4.SortOrder(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Limit", wireType)
+			}
+			m.Limit = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Limit |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Scroll", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Scroll = bool(v != 0)
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Aggs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Aggs == nil {
+				m.Aggs = make(map[string]*ves_io_schema_log_k8s_events.AggregationRequest)
+			}
+			var mapkey string
+			var mapvalue *ves_io_schema_log_k8s_events.AggregationRequest
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var mapmsglen int
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						mapmsglen |= (int(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					if mapmsglen < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					postmsgIndex := iNdEx + mapmsglen
+					if mapmsglen < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					if postmsgIndex > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = &ves_io_schema_log_k8s_events.AggregationRequest{}
+					if err := mapvalue.Unmarshal(dAtA[iNdEx:postmsgIndex]); err != nil {
+						return err
+					}
+					iNdEx = postmsgIndex
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Aggs[mapkey] = mapvalue
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *K8SEventsAggregationRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: K8SEventsAggregationRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: K8SEventsAggregationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Site", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Site = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Query", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Query = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StartTime = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EndTime", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EndTime = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Aggs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Aggs == nil {
+				m.Aggs = make(map[string]*ves_io_schema_log_k8s_events.AggregationRequest)
+			}
+			var mapkey string
+			var mapvalue *ves_io_schema_log_k8s_events.AggregationRequest
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var mapmsglen int
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						mapmsglen |= (int(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					if mapmsglen < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					postmsgIndex := iNdEx + mapmsglen
+					if mapmsglen < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					if postmsgIndex > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = &ves_io_schema_log_k8s_events.AggregationRequest{}
 					if err := mapvalue.Unmarshal(dAtA[iNdEx:postmsgIndex]); err != nil {
 						return err
 					}
@@ -8810,94 +11964,110 @@ func init() {
 }
 
 var fileDescriptorPublicCustomapi = []byte{
-	// 1411 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x59, 0xdd, 0x6f, 0xdb, 0x54,
-	0x1c, 0xed, 0x4d, 0xda, 0xae, 0xb9, 0x93, 0x58, 0xe7, 0x8d, 0xe2, 0xa5, 0x9b, 0x15, 0x99, 0x6d,
-	0x64, 0xd3, 0x62, 0xaf, 0x29, 0x63, 0xa5, 0x03, 0xa1, 0xee, 0x7b, 0xac, 0xa3, 0x23, 0x9d, 0x2a,
-	0x04, 0x68, 0xc1, 0x49, 0x6e, 0x5d, 0xaf, 0x4e, 0x6e, 0xe6, 0x7b, 0x13, 0xa8, 0x10, 0x12, 0xda,
-	0x2b, 0x02, 0x4d, 0x82, 0x3f, 0x62, 0x08, 0x21, 0x34, 0x24, 0xa4, 0x49, 0x7b, 0x19, 0x12, 0xd2,
-	0x26, 0x1e, 0xa6, 0xf1, 0x21, 0x84, 0x78, 0x40, 0x6b, 0xc6, 0x03, 0x0f, 0x3c, 0xec, 0x9d, 0x17,
-	0x94, 0x6b, 0x27, 0xf1, 0x8d, 0xdd, 0xd8, 0x96, 0xaa, 0x04, 0xf5, 0xcd, 0xf6, 0xfd, 0xd9, 0xf7,
-	0xfc, 0xce, 0x39, 0xb6, 0xef, 0xb1, 0x61, 0xba, 0x8e, 0x88, 0x62, 0x60, 0x95, 0x14, 0x57, 0x50,
-	0x59, 0x53, 0x4d, 0xac, 0xab, 0xd5, 0x5a, 0xc1, 0x34, 0x8a, 0xf9, 0x62, 0x8d, 0x50, 0x5c, 0xd6,
-	0xaa, 0x86, 0x52, 0xb5, 0x30, 0xc5, 0xc2, 0x4e, 0xbb, 0x52, 0xb1, 0x2b, 0x15, 0x13, 0xeb, 0xc9,
-	0x8c, 0x6e, 0xd0, 0x95, 0x5a, 0x41, 0x29, 0xe2, 0xb2, 0xaa, 0x63, 0x1d, 0xab, 0xac, 0xb2, 0x50,
-	0x5b, 0x66, 0x7b, 0x6c, 0x87, 0x6d, 0xd9, 0x57, 0x48, 0xee, 0xd5, 0x31, 0xd6, 0x4d, 0xa4, 0x6a,
-	0x55, 0x43, 0xd5, 0x2a, 0x15, 0x4c, 0x35, 0x6a, 0xe0, 0x0a, 0x71, 0x46, 0x7d, 0x90, 0x68, 0xc5,
-	0x22, 0x22, 0x24, 0xdf, 0xdc, 0xa4, 0x6b, 0x55, 0xd4, 0xaa, 0x7c, 0xc1, 0xa7, 0xb2, 0x56, 0x32,
-	0xa8, 0xa7, 0xf0, 0xb0, 0xb7, 0x70, 0xd9, 0xb0, 0xd0, 0xfb, 0x9a, 0x69, 0x7a, 0x6a, 0xf7, 0x79,
-	0x6b, 0xdd, 0xc3, 0x47, 0xbc, 0xc3, 0xf5, 0xd5, 0x19, 0x92, 0xf7, 0x9f, 0xf8, 0xd0, 0x06, 0xd5,
-	0xa8, 0x8e, 0x2a, 0x94, 0x70, 0xa5, 0x93, 0x7c, 0x29, 0xae, 0xba, 0x39, 0xd9, 0xc3, 0x0f, 0xba,
-	0xcf, 0x93, 0xf9, 0xa1, 0x3a, 0x22, 0xa8, 0x52, 0xe7, 0x4f, 0x97, 0x3f, 0x8b, 0x43, 0x61, 0x8e,
-	0x71, 0x38, 0x8f, 0xf5, 0x1c, 0xba, 0x5e, 0x43, 0x84, 0x2e, 0x65, 0x85, 0xbd, 0x30, 0x51, 0xd1,
-	0xca, 0x88, 0x54, 0xb5, 0x22, 0x12, 0x41, 0x0a, 0xa4, 0x13, 0xb9, 0xce, 0x01, 0x61, 0x37, 0x1c,
-	0xb9, 0x5e, 0x43, 0xd6, 0x9a, 0x18, 0x63, 0x23, 0xf6, 0x8e, 0xb0, 0x0f, 0x42, 0x42, 0x35, 0x8b,
-	0xe6, 0xa9, 0x51, 0x46, 0x62, 0xdc, 0x3e, 0x89, 0x1d, 0xb9, 0x62, 0x94, 0x91, 0xb0, 0x07, 0x8e,
-	0xa1, 0x4a, 0xc9, 0x1e, 0x1c, 0x66, 0x83, 0xdb, 0x50, 0xa5, 0xc4, 0x86, 0x8e, 0xc0, 0x61, 0x82,
-	0x2d, 0x2a, 0x8e, 0xa4, 0x40, 0xfa, 0x99, 0xac, 0xa8, 0xf0, 0x36, 0x5a, 0xc4, 0x16, 0x5d, 0xb0,
-	0x4a, 0xc8, 0xca, 0xb1, 0xaa, 0xe6, 0xec, 0xa6, 0x51, 0x36, 0xa8, 0x38, 0x9a, 0x02, 0xe9, 0x91,
-	0x9c, 0xbd, 0x23, 0x4c, 0xc0, 0x51, 0x52, 0xb4, 0xb0, 0x69, 0x8a, 0xdb, 0x52, 0x20, 0x3d, 0x96,
-	0x73, 0xf6, 0x84, 0x53, 0x70, 0x58, 0xd3, 0x75, 0x22, 0x26, 0x52, 0xf1, 0xf4, 0xf6, 0xac, 0xaa,
-	0x78, 0x2c, 0xaa, 0x78, 0xdb, 0x57, 0xe6, 0x74, 0x9d, 0x9c, 0xa9, 0x50, 0x6b, 0x2d, 0xc7, 0x4e,
-	0x4e, 0x1a, 0x30, 0xd1, 0x3e, 0x24, 0x8c, 0xc3, 0xf8, 0x2a, 0x5a, 0x73, 0x58, 0x69, 0x6e, 0x0a,
-	0x67, 0xe1, 0x48, 0x5d, 0x33, 0x6b, 0x88, 0xf1, 0xb1, 0x3d, 0x7b, 0xd4, 0x67, 0x92, 0x8e, 0x4f,
-	0x9b, 0x17, 0xb7, 0x90, 0xce, 0x8c, 0xed, 0xcc, 0x98, 0xb3, 0x4f, 0x9f, 0x8d, 0xcd, 0x00, 0xf9,
-	0x87, 0x18, 0x9c, 0x6c, 0x23, 0xf2, 0x96, 0xf6, 0x59, 0x99, 0x79, 0x87, 0xbd, 0x51, 0xc6, 0xde,
-	0x4c, 0x2f, 0xf6, 0xbc, 0x58, 0x07, 0x49, 0xe3, 0x27, 0x71, 0xb8, 0x73, 0xae, 0x79, 0xe3, 0x6d,
-	0x51, 0x5b, 0x9f, 0xe4, 0x6c, 0xad, 0xf8, 0x09, 0xd3, 0xdd, 0xbd, 0x47, 0x8e, 0x95, 0xde, 0x72,
-	0x9c, 0xe1, 0xe5, 0xf0, 0xbb, 0x75, 0xda, 0x8f, 0xb6, 0x00, 0x35, 0xbe, 0x8f, 0xc1, 0x64, 0x0b,
-	0xcf, 0xc0, 0x3d, 0x7d, 0x91, 0xa3, 0xee, 0x78, 0x0f, 0xea, 0x42, 0x58, 0xba, 0x7f, 0x1c, 0x7e,
-	0x11, 0x87, 0xbb, 0x96, 0x2e, 0xce, 0x2c, 0x76, 0xe9, 0xba, 0x85, 0x3c, 0x7d, 0xda, 0x11, 0x66,
-	0x8c, 0x09, 0xe3, 0x77, 0xfb, 0xfb, 0xf4, 0xef, 0x51, 0xa4, 0xdc, 0x5b, 0x91, 0xd7, 0x79, 0x45,
-	0x5e, 0xf4, 0x99, 0x85, 0x7f, 0x6b, 0x07, 0xc8, 0xf2, 0x30, 0x06, 0x25, 0x37, 0xac, 0x81, 0xdb,
-	0x7b, 0xc1, 0x61, 0x71, 0x84, 0xb1, 0x78, 0x22, 0x80, 0xc5, 0x10, 0x16, 0xef, 0x33, 0xa1, 0x9f,
-	0xc6, 0xe1, 0xce, 0x26, 0xc2, 0x33, 0x6c, 0x21, 0xb4, 0xf5, 0x5c, 0x7e, 0x92, 0x73, 0xb9, 0xb2,
-	0x81, 0x3e, 0x5c, 0xf7, 0x1e, 0x49, 0xae, 0xf5, 0x96, 0xe4, 0x1c, 0x2f, 0xc9, 0xd4, 0x46, 0x92,
-	0xd8, 0x6b, 0xcd, 0x00, 0x3d, 0xee, 0xc7, 0xe0, 0xde, 0x0e, 0xa2, 0x81, 0xdb, 0xfb, 0x12, 0x67,
-	0xef, 0x97, 0x7b, 0xd2, 0x17, 0xc2, 0xdc, 0xfd, 0x64, 0xf2, 0x66, 0x1c, 0x0a, 0x67, 0x9d, 0x70,
-	0xb1, 0x25, 0x1f, 0xe0, 0xc1, 0x6b, 0x6d, 0x6f, 0xfb, 0x1e, 0x45, 0x56, 0x7b, 0x2b, 0x72, 0x9e,
-	0x57, 0x24, 0xeb, 0x33, 0x89, 0x3b, 0xc0, 0x05, 0x48, 0xf2, 0x63, 0x0c, 0xee, 0x73, 0x61, 0x1a,
-	0xb8, 0xbb, 0xdf, 0xe0, 0xd6, 0xdb, 0xb3, 0xbd, 0x19, 0x0c, 0x61, 0xef, 0xbe, 0x92, 0x79, 0x09,
-	0x8e, 0xcf, 0x63, 0x7d, 0x91, 0x79, 0x21, 0x1c, 0x7d, 0x93, 0x30, 0x61, 0x5b, 0x27, 0x6f, 0x94,
-	0x1c, 0x0a, 0xc7, 0xec, 0x03, 0x17, 0x4a, 0xf2, 0xbf, 0x00, 0x6e, 0x67, 0x3e, 0x21, 0x55, 0x5c,
-	0x21, 0x48, 0x10, 0xe0, 0xb0, 0x89, 0x75, 0x22, 0x82, 0x54, 0x3c, 0x9d, 0xc8, 0xb1, 0xed, 0x9e,
-	0x17, 0x68, 0xca, 0x40, 0x31, 0xd5, 0xcc, 0xfc, 0x8a, 0x41, 0x09, 0x93, 0x61, 0x38, 0x97, 0x60,
-	0x47, 0xce, 0x1b, 0x94, 0x08, 0xaf, 0x70, 0x4f, 0x92, 0xb4, 0x4f, 0xef, 0xae, 0xd9, 0x3d, 0xcc,
-	0x5e, 0xed, 0xcd, 0xec, 0x09, 0x9e, 0xd9, 0x03, 0xfe, 0x57, 0x77, 0xf1, 0x79, 0x5a, 0xa3, 0x9a,
-	0x9b, 0xcc, 0xc7, 0x00, 0x4e, 0x74, 0x6b, 0xec, 0x10, 0xc1, 0xf7, 0x05, 0xba, 0xfb, 0x3a, 0xe7,
-	0xf4, 0x15, 0x67, 0x7d, 0x4d, 0x07, 0xce, 0x3c, 0xa8, 0x16, 0xb3, 0xff, 0x4c, 0xc0, 0xc4, 0x29,
-	0xf6, 0x09, 0x69, 0xee, 0xf2, 0x05, 0xe1, 0x2b, 0x00, 0xc7, 0xdb, 0x61, 0xf2, 0xcd, 0xe6, 0x7d,
-	0xb4, 0x94, 0x15, 0x0e, 0x84, 0xca, 0xeb, 0x49, 0xa9, 0xb7, 0x78, 0xf2, 0xe5, 0x07, 0x77, 0x62,
-	0xa0, 0x71, 0x5f, 0xdc, 0x55, 0x47, 0x24, 0x63, 0xe0, 0x8c, 0x8e, 0x2a, 0xc8, 0xd2, 0xcc, 0x8c,
-	0x85, 0xb4, 0xd2, 0x8d, 0x5f, 0xfe, 0xfa, 0x3c, 0xa6, 0xca, 0x87, 0x9d, 0x8f, 0x5a, 0x6a, 0xdb,
-	0x9d, 0x44, 0xfd, 0xb0, 0xbd, 0xfd, 0x91, 0xeb, 0x43, 0x13, 0x99, 0x05, 0x87, 0x85, 0xdb, 0x00,
-	0xee, 0x6e, 0x03, 0xb1, 0x2d, 0xcf, 0x30, 0x0b, 0xcf, 0xfb, 0x43, 0xe1, 0xee, 0x8a, 0x40, 0xbc,
-	0x57, 0x82, 0xf0, 0x4e, 0x0b, 0x53, 0xe1, 0xf1, 0xaa, 0xce, 0xe3, 0xf9, 0x57, 0x00, 0xf7, 0xf8,
-	0xc5, 0x75, 0x1b, 0xb8, 0x12, 0x2d, 0xdc, 0x27, 0x0f, 0x85, 0x36, 0x96, 0xfc, 0x6e, 0x50, 0x3b,
-	0x27, 0xe4, 0x97, 0x22, 0xb4, 0xa3, 0x75, 0xa6, 0x68, 0x4a, 0x71, 0x0b, 0xc0, 0x1d, 0xad, 0xe5,
-	0x6c, 0xcb, 0x37, 0xfb, 0xc3, 0x04, 0xe2, 0x40, 0x19, 0x16, 0x82, 0x70, 0x2b, 0xf2, 0xa1, 0x20,
-	0xdc, 0xad, 0x55, 0x2f, 0x73, 0xcd, 0x37, 0x00, 0xee, 0x6a, 0xc1, 0xd8, 0x74, 0xd3, 0x2c, 0x06,
-	0xa1, 0xcd, 0x0a, 0x47, 0x43, 0xa3, 0x6d, 0x79, 0xe6, 0x27, 0x00, 0x45, 0x9f, 0xac, 0x60, 0xc3,
-	0xce, 0x44, 0xca, 0xce, 0x51, 0x1c, 0xf3, 0x4e, 0x50, 0x2f, 0xb3, 0xf2, 0xb1, 0xf0, 0xbd, 0x74,
-	0x19, 0xe6, 0x36, 0xb0, 0x13, 0x06, 0x67, 0x1a, 0xe1, 0x60, 0xb8, 0xbc, 0xb9, 0x09, 0xf7, 0xae,
-	0xac, 0x04, 0x40, 0xe7, 0xf3, 0x12, 0x73, 0xce, 0x1d, 0x00, 0x9f, 0x73, 0xa3, 0xd9, 0x74, 0xf7,
-	0xbc, 0x15, 0x04, 0xfb, 0xb8, 0x70, 0x2c, 0x1a, 0xec, 0x96, 0x85, 0xfe, 0x04, 0x76, 0x80, 0xd8,
-	0xd0, 0x46, 0x53, 0x91, 0x33, 0x6a, 0x14, 0x2b, 0xbd, 0x17, 0xd4, 0xd8, 0x6b, 0xf2, 0x6c, 0xc4,
-	0xc6, 0xba, 0xfc, 0xf4, 0x25, 0x80, 0x3b, 0x3a, 0xa1, 0xc3, 0xee, 0x69, 0x7f, 0x98, 0x5c, 0xd7,
-	0x8f, 0xf7, 0x96, 0x2b, 0x9e, 0x34, 0xb1, 0x7e, 0x0b, 0xe0, 0xb3, 0x1d, 0x1c, 0xff, 0xc7, 0x17,
-	0x97, 0xfb, 0x2f, 0x88, 0xe3, 0xa0, 0xdf, 0x00, 0x4c, 0xfa, 0xa6, 0x3a, 0x1b, 0xb9, 0x1a, 0x31,
-	0x04, 0xf6, 0xf9, 0xd5, 0xe5, 0x6e, 0xa8, 0xcb, 0x39, 0x5f, 0x03, 0x38, 0xee, 0x5a, 0xd0, 0xdb,
-	0xed, 0x1c, 0x08, 0x95, 0x9b, 0x02, 0xa5, 0xc8, 0x05, 0x21, 0x9f, 0x92, 0x8f, 0x04, 0x20, 0x77,
-	0xaf, 0xfd, 0x99, 0x7b, 0xbe, 0x03, 0x70, 0xc2, 0x05, 0x65, 0xd3, 0xed, 0xb3, 0x14, 0x84, 0xf9,
-	0x98, 0x30, 0x1d, 0x05, 0x73, 0xcb, 0x40, 0x7f, 0x00, 0x38, 0xe9, 0x1f, 0x9c, 0x6c, 0xf0, 0x47,
-	0xa3, 0x06, 0xad, 0x28, 0x16, 0xba, 0x1a, 0xd4, 0xd4, 0xab, 0xf2, 0x4c, 0xa4, 0xa6, 0x78, 0x13,
-	0x25, 0x0f, 0xde, 0xbb, 0x0b, 0xe2, 0x3f, 0xdf, 0x05, 0xa2, 0x17, 0xd1, 0x42, 0xe1, 0x1a, 0x2a,
-	0xd2, 0x1b, 0x0f, 0xc5, 0x98, 0x08, 0x4e, 0xae, 0x3d, 0x5a, 0x97, 0x86, 0x7e, 0x5f, 0x97, 0x86,
-	0x9e, 0xae, 0x4b, 0xe0, 0xe3, 0x86, 0x04, 0x6e, 0x35, 0x24, 0xf0, 0xa0, 0x21, 0x81, 0x47, 0x0d,
-	0x09, 0x3c, 0x6e, 0x48, 0xe0, 0xef, 0x86, 0x34, 0xf4, 0xb4, 0x21, 0x81, 0x9b, 0x4f, 0xa4, 0xa1,
-	0x7b, 0x4f, 0x24, 0xf0, 0xf6, 0x39, 0x1d, 0x57, 0x57, 0x75, 0xa5, 0x8e, 0x4d, 0x8a, 0x2c, 0x4b,
-	0x53, 0x6a, 0x44, 0x65, 0x1b, 0xcb, 0xd8, 0x2a, 0x67, 0xaa, 0x16, 0xae, 0x1b, 0x25, 0x64, 0x65,
-	0x5a, 0xc3, 0x6a, 0xb5, 0xa0, 0x63, 0x15, 0x7d, 0x40, 0x9d, 0xff, 0x8d, 0x9d, 0x3f, 0x9b, 0x85,
-	0x51, 0xf6, 0xb3, 0x71, 0xfa, 0xbf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x57, 0xe1, 0x19, 0xc1, 0x4b,
-	0x1e, 0x00, 0x00,
+	// 1676 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x5a, 0x4b, 0x6c, 0xd4, 0x46,
+	0x18, 0xce, 0xac, 0x93, 0x90, 0x0c, 0x12, 0x04, 0x43, 0x53, 0x67, 0x43, 0xac, 0xc8, 0x3c, 0xba,
+	0x50, 0xd6, 0x26, 0x1b, 0x1e, 0x21, 0xf4, 0xa1, 0x00, 0xe1, 0x4d, 0x43, 0x37, 0x28, 0xad, 0xda,
+	0x8a, 0xd4, 0xd9, 0x1d, 0x1c, 0x13, 0xef, 0xce, 0x62, 0x7b, 0xb7, 0x8d, 0x10, 0x52, 0xc5, 0xb5,
+	0x6a, 0x85, 0xd4, 0xaa, 0xc7, 0xde, 0x2a, 0x51, 0x55, 0x55, 0x0b, 0x52, 0x2b, 0x54, 0x2e, 0x54,
+	0xaa, 0x04, 0xea, 0x01, 0xd1, 0x87, 0x2a, 0xd4, 0x43, 0x81, 0xa5, 0x52, 0x7b, 0xe4, 0xde, 0x4b,
+	0xe5, 0xb1, 0x37, 0x6b, 0xaf, 0xbd, 0x1e, 0x1b, 0xc2, 0xa6, 0xcd, 0x65, 0x65, 0x7b, 0x7e, 0x7b,
+	0xbe, 0xff, 0xfb, 0xbe, 0x19, 0xcf, 0xfc, 0x6b, 0x98, 0xaa, 0x20, 0x43, 0x54, 0xb1, 0x64, 0xe4,
+	0x66, 0x51, 0x41, 0x96, 0x34, 0xac, 0x48, 0xa5, 0xf2, 0x8c, 0xa6, 0xe6, 0xa6, 0x73, 0x65, 0xc3,
+	0xc4, 0x05, 0xb9, 0xa4, 0x8a, 0x25, 0x1d, 0x9b, 0x98, 0x5d, 0x63, 0x47, 0x8a, 0x76, 0xa4, 0xa8,
+	0x61, 0x25, 0x99, 0x56, 0x54, 0x73, 0xb6, 0x3c, 0x23, 0xe6, 0x70, 0x41, 0x52, 0xb0, 0x82, 0x25,
+	0x12, 0x39, 0x53, 0x3e, 0x43, 0xce, 0xc8, 0x09, 0x39, 0xb2, 0x9f, 0x90, 0x5c, 0xaf, 0x60, 0xac,
+	0x68, 0x48, 0x92, 0x4b, 0xaa, 0x24, 0x17, 0x8b, 0xd8, 0x94, 0x4d, 0x15, 0x17, 0x0d, 0xa7, 0x35,
+	0x00, 0x89, 0x9c, 0xcb, 0x21, 0xc3, 0x98, 0xb6, 0x0e, 0xcd, 0xf9, 0x12, 0xaa, 0x45, 0x3e, 0x17,
+	0x10, 0x59, 0xce, 0xab, 0xa6, 0x2f, 0x70, 0xab, 0x3f, 0xf0, 0x8c, 0xaa, 0xa3, 0x77, 0x64, 0x4d,
+	0xf3, 0xc5, 0x3e, 0xef, 0x8f, 0x9d, 0x1b, 0x31, 0xa6, 0x83, 0x1f, 0x9c, 0x0a, 0x0e, 0x46, 0x15,
+	0x54, 0x34, 0x0d, 0x4f, 0xe4, 0x80, 0x3f, 0xd2, 0xdd, 0xbc, 0xcd, 0xdf, 0x5c, 0x69, 0xde, 0xed,
+	0x96, 0x26, 0xd1, 0x01, 0xfd, 0xf6, 0x7b, 0x43, 0x71, 0xc9, 0x4d, 0x75, 0x9f, 0xb7, 0xd1, 0x7d,
+	0x9f, 0xe0, 0x6d, 0xaa, 0x20, 0x03, 0x15, 0x2b, 0xde, 0xdb, 0x85, 0x0f, 0x19, 0xc8, 0x8e, 0x11,
+	0x69, 0x8e, 0x63, 0x25, 0x8b, 0xce, 0x95, 0x91, 0x61, 0x4e, 0x65, 0xd8, 0xf5, 0xb0, 0xbb, 0x28,
+	0x17, 0x90, 0x51, 0x92, 0x73, 0x88, 0x03, 0x83, 0x20, 0xd5, 0x9d, 0xad, 0x5f, 0x60, 0xd7, 0xc1,
+	0x8e, 0x73, 0x65, 0xa4, 0xcf, 0x73, 0x09, 0xd2, 0x62, 0x9f, 0xb0, 0x03, 0x10, 0x1a, 0xa6, 0xac,
+	0x9b, 0xd3, 0xa6, 0x5a, 0x40, 0x1c, 0x63, 0xdf, 0x44, 0xae, 0x9c, 0x52, 0x0b, 0x88, 0xed, 0x83,
+	0x5d, 0xa8, 0x98, 0xb7, 0x1b, 0xdb, 0x49, 0xe3, 0x0a, 0x54, 0xcc, 0x93, 0xa6, 0x6d, 0xb0, 0xdd,
+	0xc0, 0xba, 0xc9, 0x75, 0x0c, 0x82, 0xd4, 0xaa, 0x0c, 0x27, 0x7a, 0xdd, 0x39, 0x89, 0x75, 0x73,
+	0x42, 0xcf, 0x23, 0x3d, 0x4b, 0xa2, 0xac, 0xde, 0x35, 0xb5, 0xa0, 0x9a, 0x5c, 0xe7, 0x20, 0x48,
+	0x75, 0x64, 0xed, 0x13, 0xb6, 0x17, 0x76, 0x1a, 0x39, 0x1d, 0x6b, 0x1a, 0xb7, 0x62, 0x10, 0xa4,
+	0xba, 0xb2, 0xce, 0x19, 0xbb, 0x1f, 0xb6, 0xcb, 0x8a, 0x62, 0x70, 0xdd, 0x83, 0x4c, 0x6a, 0x65,
+	0x46, 0x12, 0x7d, 0xce, 0x17, 0xfd, 0xe9, 0x8b, 0x63, 0x8a, 0x62, 0x8c, 0x17, 0x4d, 0x7d, 0x3e,
+	0x4b, 0x6e, 0x4e, 0xaa, 0xb0, 0x7b, 0xe1, 0x12, 0xdb, 0x03, 0x99, 0x39, 0x34, 0xef, 0xb0, 0x62,
+	0x1d, 0xb2, 0x07, 0x61, 0x47, 0x45, 0xd6, 0xca, 0x88, 0xf0, 0xb1, 0x32, 0xb3, 0x3d, 0xa0, 0x93,
+	0xba, 0xfd, 0xad, 0x87, 0xeb, 0x48, 0x21, 0xe3, 0xc5, 0xe9, 0x31, 0x6b, 0xdf, 0x3e, 0x9a, 0x18,
+	0x01, 0xc2, 0x0f, 0x09, 0xd8, 0xbf, 0x80, 0xc8, 0x1f, 0xda, 0x62, 0x65, 0x8e, 0x3b, 0xec, 0x75,
+	0x12, 0xf6, 0x46, 0xc2, 0xd8, 0xf3, 0x63, 0x5d, 0x4a, 0x1a, 0xdf, 0x67, 0xe0, 0x9a, 0x31, 0x6b,
+	0xe0, 0x2d, 0x53, 0x5b, 0xef, 0xf3, 0xd8, 0x5a, 0x0c, 0x12, 0xa6, 0x31, 0x7b, 0x9f, 0x1c, 0xb3,
+	0xe1, 0x72, 0x8c, 0x7b, 0xe5, 0x08, 0x1a, 0x3a, 0x0b, 0x53, 0x1b, 0x45, 0x8d, 0xef, 0x13, 0x30,
+	0x59, 0xc3, 0xb3, 0xe4, 0x9e, 0x3e, 0xe6, 0xa1, 0x6e, 0x77, 0x08, 0x75, 0x11, 0x2c, 0xdd, 0x3a,
+	0x0e, 0x3f, 0x66, 0xe0, 0xda, 0xa9, 0x63, 0x23, 0x93, 0x0d, 0xba, 0x2e, 0x23, 0x4f, 0x1f, 0x70,
+	0x84, 0xe9, 0x22, 0xc2, 0x04, 0x0d, 0xff, 0x80, 0xfc, 0x7d, 0x8a, 0x14, 0xc2, 0x15, 0x39, 0xea,
+	0x55, 0x64, 0x47, 0x40, 0x2f, 0xde, 0xb7, 0x36, 0x45, 0x96, 0xdb, 0x09, 0xc8, 0xbb, 0x61, 0x2d,
+	0xb9, 0xbd, 0x27, 0x1c, 0x16, 0x3b, 0x08, 0x8b, 0x7b, 0x29, 0x2c, 0x46, 0xb0, 0x78, 0x8b, 0x09,
+	0xfd, 0x8c, 0x81, 0x6c, 0x6c, 0x9b, 0xb3, 0xb0, 0xdd, 0x50, 0x4d, 0xe4, 0x70, 0x48, 0x8e, 0xeb,
+	0xc4, 0x32, 0xcd, 0x89, 0x6d, 0x0f, 0x23, 0xb6, 0x23, 0xd8, 0xfa, 0x9d, 0xf1, 0xac, 0xbf, 0x22,
+	0xd8, 0xfa, 0x5d, 0x31, 0x57, 0x29, 0x11, 0x9c, 0xaf, 0x85, 0x0b, 0x75, 0xc4, 0x2b, 0xd4, 0x70,
+	0x40, 0x27, 0x71, 0x74, 0xba, 0x97, 0x80, 0x03, 0x4f, 0xe2, 0xfb, 0x56, 0x48, 0xf6, 0x8a, 0x67,
+	0xf9, 0x32, 0x1a, 0x4e, 0x6b, 0x84, 0xa1, 0xd0, 0x5a, 0x86, 0x3f, 0x60, 0xe0, 0x1a, 0x6b, 0xac,
+	0x8e, 0x93, 0x2d, 0xc1, 0xf2, 0x9b, 0xef, 0xf7, 0x79, 0xe6, 0x7b, 0xb1, 0xc9, 0x4c, 0xe5, 0xc9,
+	0xde, 0xa7, 0xc8, 0xd9, 0x70, 0x45, 0x0e, 0x79, 0x15, 0x19, 0x6a, 0x36, 0x39, 0xd9, 0xbb, 0x2e,
+	0x8a, 0x1e, 0x37, 0x13, 0x70, 0x7d, 0x1d, 0xd1, 0x92, 0x4f, 0xf4, 0x27, 0x3c, 0x13, 0xfd, 0x9e,
+	0x50, 0xfa, 0x22, 0x78, 0xbb, 0x95, 0x4c, 0x7e, 0xca, 0xc0, 0x9e, 0x98, 0xc6, 0xfe, 0xbf, 0xcf,
+	0xf0, 0x63, 0x9e, 0x19, 0x3e, 0x1d, 0x3c, 0x15, 0x85, 0x7b, 0xfd, 0xc9, 0xb7, 0x4f, 0x91, 0x05,
+	0xba, 0x9b, 0x80, 0xfd, 0x8f, 0xef, 0xf4, 0x56, 0x68, 0x45, 0xdf, 0x99, 0xc6, 0x31, 0x7f, 0x0b,
+	0xa9, 0xbd, 0xc4, 0x40, 0xf6, 0xa0, 0x53, 0xb9, 0x5a, 0x96, 0xcb, 0x78, 0xfa, 0x5a, 0xc6, 0x9f,
+	0xbe, 0x4f, 0x90, 0xb9, 0x70, 0x41, 0x0e, 0x7b, 0x05, 0xc9, 0x04, 0x74, 0xe2, 0xae, 0x0e, 0x52,
+	0x24, 0xf9, 0x31, 0x01, 0x07, 0x5c, 0x98, 0x96, 0x7c, 0x66, 0xa7, 0x2f, 0x5b, 0x42, 0xd1, 0x2e,
+	0x2d, 0x99, 0x27, 0x60, 0xcf, 0x71, 0xac, 0x4c, 0x12, 0x2f, 0x44, 0xa3, 0xaf, 0x1f, 0x76, 0xdb,
+	0xd6, 0x99, 0x56, 0xf3, 0x0e, 0x85, 0x5d, 0xf6, 0x85, 0x23, 0x79, 0xe1, 0x1f, 0x00, 0x57, 0x12,
+	0x9f, 0x18, 0x25, 0x5c, 0x34, 0xc8, 0xdc, 0xa2, 0x61, 0xc5, 0xe0, 0xc0, 0x20, 0x63, 0xcd, 0x2d,
+	0xd6, 0x71, 0xe8, 0x03, 0x2c, 0x19, 0x4c, 0x6c, 0xca, 0xda, 0xf4, 0xac, 0x6a, 0x1a, 0x44, 0x86,
+	0xf6, 0x6c, 0x37, 0xb9, 0x72, 0x58, 0x35, 0x0d, 0xf6, 0x05, 0xcf, 0x5b, 0x34, 0x15, 0x90, 0xbb,
+	0xab, 0x77, 0x1f, 0xb3, 0xa7, 0xc3, 0x99, 0xdd, 0xeb, 0x65, 0x76, 0x53, 0xf0, 0xd3, 0x5d, 0x7c,
+	0x1e, 0x90, 0x4d, 0xd9, 0x4d, 0xe6, 0x7d, 0x00, 0x7b, 0x1b, 0x35, 0x76, 0x88, 0xf0, 0xe6, 0x05,
+	0x1a, 0xf3, 0x3a, 0xe4, 0xe4, 0xc5, 0x90, 0xbc, 0x86, 0xa9, 0x3d, 0x2f, 0x55, 0x8a, 0x99, 0x4f,
+	0x06, 0x61, 0xf7, 0x7e, 0xf2, 0xff, 0xc4, 0xd8, 0xc9, 0x23, 0xec, 0x17, 0x00, 0xf6, 0x2c, 0x94,
+	0x14, 0x5f, 0xb5, 0xc6, 0xd1, 0x54, 0x86, 0xdd, 0x14, 0xa9, 0x6a, 0x9b, 0xe4, 0xc3, 0xc5, 0x13,
+	0x4e, 0xde, 0xba, 0x96, 0x00, 0xd5, 0x9b, 0xdc, 0xda, 0x0a, 0x32, 0xd2, 0x2a, 0x4e, 0x2b, 0xa8,
+	0x88, 0x74, 0x59, 0x4b, 0xeb, 0x48, 0xce, 0x5f, 0xfc, 0xe5, 0xcf, 0x8f, 0x12, 0x92, 0xb0, 0xd5,
+	0xf9, 0xc7, 0x44, 0x5a, 0x70, 0xa7, 0x21, 0x9d, 0x5f, 0x38, 0xbe, 0xe0, 0xfa, 0x17, 0xc3, 0x18,
+	0x05, 0x5b, 0xd9, 0x2b, 0x00, 0xae, 0x5b, 0x00, 0x62, 0x5b, 0x9e, 0x60, 0x66, 0x37, 0x04, 0x43,
+	0xf1, 0x8c, 0x0a, 0x2a, 0xde, 0x53, 0x34, 0xbc, 0xc3, 0xec, 0x50, 0x74, 0xbc, 0x92, 0x33, 0x3d,
+	0xff, 0x0a, 0x60, 0x5f, 0x50, 0xd1, 0xd6, 0x06, 0x2e, 0xc6, 0x2b, 0xf1, 0x26, 0xb7, 0x44, 0x36,
+	0x96, 0xf0, 0x16, 0x2d, 0x9d, 0xbd, 0xc2, 0xae, 0x18, 0xe9, 0xc8, 0xf5, 0x2e, 0x2c, 0x29, 0x2e,
+	0x03, 0xb8, 0xba, 0xb6, 0x93, 0xab, 0xf9, 0x66, 0x63, 0x94, 0xb2, 0x28, 0x55, 0x86, 0x09, 0x1a,
+	0x6e, 0x51, 0xd8, 0x42, 0xc3, 0x5d, 0xdb, 0xf1, 0x11, 0xd7, 0x7c, 0x05, 0xe0, 0xda, 0x1a, 0x8c,
+	0x45, 0x37, 0xcd, 0x24, 0x0d, 0x6d, 0x86, 0xdd, 0x1e, 0x19, 0x6d, 0xcd, 0x33, 0x3f, 0x01, 0xc8,
+	0x05, 0x6c, 0x93, 0x6d, 0xd8, 0xe9, 0x58, 0x15, 0xd4, 0x38, 0x8e, 0x79, 0x93, 0x96, 0xcb, 0xa8,
+	0xb0, 0x33, 0x7a, 0x2e, 0x0d, 0x86, 0xb9, 0x02, 0xec, 0xdd, 0xb5, 0xc7, 0x34, 0xec, 0xe6, 0x68,
+	0x55, 0xc7, 0x45, 0x18, 0xbb, 0x82, 0x48, 0x81, 0xee, 0xad, 0x9a, 0x11, 0xe7, 0x5c, 0x03, 0xf0,
+	0x59, 0x37, 0x9a, 0x45, 0x77, 0xcf, 0xeb, 0x34, 0xd8, 0xbb, 0xd9, 0x9d, 0xf1, 0x60, 0xd7, 0x2c,
+	0xf4, 0x07, 0xb0, 0x37, 0xcf, 0x4d, 0x6d, 0x34, 0x14, 0xbb, 0x52, 0x19, 0xc7, 0x4a, 0x6f, 0xd3,
+	0x12, 0x7b, 0x59, 0x18, 0x8d, 0x99, 0x58, 0x83, 0x9f, 0xbe, 0x03, 0x64, 0x4f, 0xeb, 0xb5, 0xd3,
+	0xa6, 0x48, 0x95, 0x3c, 0xaa, 0x2c, 0xd3, 0x34, 0xf4, 0x2f, 0x09, 0x7b, 0x28, 0xe8, 0xad, 0x4d,
+	0x98, 0x74, 0xde, 0xfa, 0xbd, 0x20, 0xf9, 0x8d, 0xf5, 0x2d, 0x80, 0xbd, 0x4f, 0xd3, 0x57, 0xaf,
+	0xd1, 0x12, 0xd8, 0xc5, 0xee, 0xa0, 0x24, 0x10, 0x6c, 0xab, 0xbf, 0x00, 0xd9, 0xa8, 0x36, 0x75,
+	0xd5, 0xf6, 0xb8, 0x35, 0xbf, 0x38, 0xa6, 0x9a, 0xa3, 0x65, 0x75, 0x54, 0x18, 0x7f, 0x6c, 0x59,
+	0x1a, 0xfd, 0xf5, 0x39, 0x80, 0xab, 0xeb, 0x05, 0x1d, 0x3b, 0xbb, 0x8d, 0x51, 0x6a, 0x66, 0xad,
+	0x58, 0x17, 0xb9, 0x4a, 0x3f, 0x16, 0xd6, 0xab, 0x00, 0x3e, 0x53, 0xc7, 0xf1, 0x5f, 0x5c, 0x18,
+	0xb9, 0xbf, 0xb5, 0x70, 0xac, 0xf4, 0x1b, 0x80, 0xc9, 0xc0, 0x8a, 0x99, 0x8d, 0x5c, 0x8a, 0x59,
+	0x60, 0x6b, 0xf1, 0xd2, 0xc8, 0x9d, 0x50, 0x83, 0x73, 0xae, 0x02, 0xb8, 0xaa, 0xc1, 0x38, 0x1b,
+	0x22, 0xd4, 0x9f, 0xa8, 0x32, 0x2c, 0xc2, 0xeb, 0xb9, 0xd1, 0xfe, 0x75, 0x0b, 0x7d, 0x0d, 0xe0,
+	0xba, 0xa7, 0xe7, 0xa0, 0x45, 0x58, 0x25, 0xf9, 0x0d, 0x74, 0x0f, 0xc0, 0xbe, 0xe6, 0xfe, 0x11,
+	0xe3, 0x95, 0xa8, 0xe2, 0xd8, 0x47, 0xa1, 0x65, 0x73, 0x50, 0x18, 0x7b, 0x2c, 0x21, 0x1a, 0x9d,
+	0xf4, 0x25, 0x80, 0x3d, 0xae, 0xd2, 0x43, 0xf3, 0x77, 0x9c, 0xbf, 0xc2, 0x43, 0x95, 0x24, 0x4b,
+	0x4b, 0x62, 0x48, 0xd8, 0x46, 0x49, 0xc2, 0x5d, 0xa5, 0x20, 0x26, 0xfa, 0x06, 0xc0, 0x5e, 0x17,
+	0x94, 0x45, 0xb7, 0xd1, 0x14, 0x0d, 0xf3, 0x4e, 0x76, 0x38, 0x0e, 0xe6, 0x9a, 0x93, 0x7e, 0x07,
+	0xb0, 0x3f, 0xb8, 0xc4, 0xd3, 0xfc, 0xad, 0x16, 0x5a, 0x12, 0x8a, 0xe3, 0xa6, 0xd3, 0xb4, 0xa4,
+	0x5e, 0x14, 0x46, 0x62, 0x25, 0xe5, 0x35, 0x51, 0x72, 0xf3, 0x8d, 0xeb, 0x80, 0xf9, 0xf9, 0x3a,
+	0xe0, 0xfc, 0x88, 0x26, 0x66, 0xce, 0xa2, 0x9c, 0x79, 0xf1, 0x36, 0x97, 0xe0, 0xc0, 0xbe, 0xf9,
+	0x3b, 0x0f, 0xf8, 0xb6, 0xbb, 0x0f, 0xf8, 0xb6, 0x47, 0x0f, 0x78, 0xf0, 0x5e, 0x95, 0x07, 0x97,
+	0xab, 0x3c, 0xb8, 0x55, 0xe5, 0xc1, 0x9d, 0x2a, 0x0f, 0xee, 0x57, 0x79, 0xf0, 0x77, 0x95, 0x6f,
+	0x7b, 0x54, 0xe5, 0xc1, 0xa5, 0x87, 0x7c, 0xdb, 0x8d, 0x87, 0x3c, 0x78, 0xe3, 0x90, 0x82, 0x4b,
+	0x73, 0x8a, 0x58, 0xc1, 0x9a, 0x89, 0x74, 0x5d, 0x16, 0xcb, 0x86, 0x44, 0x0e, 0xce, 0x60, 0xbd,
+	0x90, 0x2e, 0xe9, 0xb8, 0xa2, 0xe6, 0x91, 0x9e, 0xae, 0x35, 0x4b, 0xa5, 0x19, 0x05, 0x4b, 0xe8,
+	0x5d, 0xd3, 0xf9, 0x3e, 0xae, 0xfe, 0x25, 0xde, 0x4c, 0x27, 0xf9, 0x38, 0x6e, 0xf8, 0xdf, 0x00,
+	0x00, 0x00, 0xff, 0xff, 0x03, 0xd7, 0x2f, 0x40, 0x52, 0x29, 0x00, 0x00,
 }

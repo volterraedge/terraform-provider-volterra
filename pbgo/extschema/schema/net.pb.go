@@ -3,24 +3,18 @@
 
 package schema
 
-import (
-	proto "github.com/gogo/protobuf/proto"
-	golang_proto "github.com/golang/protobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
+import golang_proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
 
-	fmt "fmt"
+import strconv "strconv"
 
-	math "math"
+import strings "strings"
+import reflect "reflect"
 
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	strconv "strconv"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal

@@ -2242,6 +2242,14 @@ func (v *ValidateAWSVPCVoltstackClusterType) OutsideStaticRouteChoiceValidationR
 	return validatorFn, nil
 }
 
+func (v *ValidateAWSVPCVoltstackClusterType) StorageClassChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for storage_class_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSVPCVoltstackClusterType) AwsCertifiedHwValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -2478,6 +2486,42 @@ func (v *ValidateAWSVPCVoltstackClusterType) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["storage_class_choice"]; exists {
+		val := m.GetStorageClassChoice()
+		vOpts := append(opts,
+			db.WithValidateField("storage_class_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetStorageClassChoice().(type) {
+	case *AWSVPCVoltstackClusterType_DefaultStorage:
+		if fv, exists := v.FldValidators["storage_class_choice.default_storage"]; exists {
+			val := m.GetStorageClassChoice().(*AWSVPCVoltstackClusterType_DefaultStorage).DefaultStorage
+			vOpts := append(opts,
+				db.WithValidateField("storage_class_choice"),
+				db.WithValidateField("default_storage"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSVPCVoltstackClusterType_StorageClassList:
+		if fv, exists := v.FldValidators["storage_class_choice.storage_class_list"]; exists {
+			val := m.GetStorageClassChoice().(*AWSVPCVoltstackClusterType_StorageClassList).StorageClassList
+			vOpts := append(opts,
+				db.WithValidateField("storage_class_choice"),
+				db.WithValidateField("storage_class_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -2537,6 +2581,17 @@ var DefaultAWSVPCVoltstackClusterTypeValidator = func() *ValidateAWSVPCVoltstack
 	}
 	v.FldValidators["outside_static_route_choice"] = vFn
 
+	vrhStorageClassChoice := v.StorageClassChoiceValidationRuleHandler
+	rulesStorageClassChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhStorageClassChoice(rulesStorageClassChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSVPCVoltstackClusterType.storage_class_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["storage_class_choice"] = vFn
+
 	vrhAwsCertifiedHw := v.AwsCertifiedHwValidationRuleHandler
 	rulesAwsCertifiedHw := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -2568,6 +2623,8 @@ var DefaultAWSVPCVoltstackClusterTypeValidator = func() *ValidateAWSVPCVoltstack
 	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["storage_class_choice.storage_class_list"] = ves_io_schema_views.StorageClassListTypeValidator().Validate
 
 	return v
 }()
@@ -3137,6 +3194,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
 	rulesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
 		"ves.io.schema.rules.uint32.lte": "21",
 	}
 	vFn, err = vrhNodesPerAz(rulesNodesPerAz)
@@ -3746,6 +3804,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
 	rulesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
 		"ves.io.schema.rules.uint32.lte": "21",
 	}
 	vFn, err = vrhNodesPerAz(rulesNodesPerAz)
@@ -4485,6 +4544,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
 	rulesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
 		"ves.io.schema.rules.uint32.lte": "21",
 	}
 	vFn, err = vrhNodesPerAz(rulesNodesPerAz)
@@ -4852,6 +4912,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
 	rulesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
 		"ves.io.schema.rules.uint32.lte": "21",
 	}
 	vFn, err = vrhNodesPerAz(rulesNodesPerAz)

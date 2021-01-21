@@ -27,7 +27,7 @@ resource "volterra_aws_tgw_site" "example" {
     az_nodes {
       aws_az_name = "us-west-2a"
 
-      // One of the arguments from this list "inside_subnet reserved_inside_subnet" must be set
+      // One of the arguments from this list "reserved_inside_subnet inside_subnet" must be set
       reserved_inside_subnet = true
       disk_size              = "disk_size"
 
@@ -123,7 +123,7 @@ Argument Reference
 
 Enable Forward Proxy for this site and manage policies.
 
-`forward_proxy_policies` - (Required) Ordered List of Network Policies active for this network firewall. See [ref](#ref) below for details.
+`forward_proxy_policies` - (Required) List of Forward Proxy Policies. See [ref](#ref) below for details.
 
 ### Active Network Policies
 
@@ -157,7 +157,7 @@ Configure AWS TGW, services VPC and site nodes parameters..
 
 `instance_type` - (Required) Select Instance size based on performance needed (`String`).
 
-`nodes_per_az` - (Optional) Auto scale maximum worker nodes limit up to 21, value of zero will disable auto scale (`Int`).
+`nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
 
 `new_vpc` - (Optional) Parameters for creating new VPC. See [New Vpc ](#new-vpc) below for details.
 
@@ -173,7 +173,7 @@ Configure AWS TGW, services VPC and site nodes parameters..
 
 Only Single AZ or Three AZ(s) nodes are supported currently..
 
-`aws_az_name` - (Required) Name for AWS availability Zone, should match with AWS region selected. (`String`).
+`aws_az_name` - (Required) AWS availability zone, must be consistent with the selected AWS region. (`String`).
 
 `inside_subnet` - (Optional) Subnets for the inside interface of the node. See [Inside Subnet ](#inside-subnet) below for details.
 
@@ -269,7 +269,7 @@ Enable interception for all domains.
 
 Forward Proxy is enabled for this connector.
 
-`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2 seconds (`Int`).
+`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2000 (2 seconds) (`Int`).
 
 `max_connect_attempts` - (Optional) Specifies the allowed number of retries on connect failure to upstream server. Defaults to 1. (`Int`).
 
@@ -585,11 +585,11 @@ Default volterra trusted CA list for validating upstream server certificate.
 
 VPC attachments to transit gateway.
 
-`vpc_list` - (Optional)vpc_list. See [Vpc List ](#vpc-list) below for details.
+`vpc_list` - (Optional) List of VPC attachments to transit gateway. See [Vpc List ](#vpc-list) below for details.
 
 ### Vpc List
 
-vpc_list.
+List of VPC attachments to transit gateway.
 
 `labels` - (Optional) Add Labels for each of the VPC ID, these labels can be used in network policy (`String`).
 

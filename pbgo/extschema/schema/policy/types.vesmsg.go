@@ -345,7 +345,6 @@ var DefaultAsnMatchListValidator = func() *ValidateAsnMatchList {
 
 	vrhAsNumbers := v.AsNumbersValidationRuleHandler
 	rulesAsNumbers := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "16",
 		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
@@ -4299,6 +4298,8 @@ func (m *WafAction) GetActionTypeDRefInfo() ([]db.DRefInfo, error) {
 
 	case *WafAction_WafInlineRuleControl:
 
+	case *WafAction_WafInMonitoringMode:
+
 	}
 
 	return drInfos, err
@@ -4380,6 +4381,17 @@ func (v *ValidateWafAction) Validate(ctx context.Context, pm interface{}, opts .
 			vOpts := append(opts,
 				db.WithValidateField("action_type"),
 				db.WithValidateField("waf_inline_rule_control"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WafAction_WafInMonitoringMode:
+		if fv, exists := v.FldValidators["action_type.waf_in_monitoring_mode"]; exists {
+			val := m.GetActionType().(*WafAction_WafInMonitoringMode).WafInMonitoringMode
+			vOpts := append(opts,
+				db.WithValidateField("action_type"),
+				db.WithValidateField("waf_in_monitoring_mode"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -4530,6 +4542,15 @@ func (v *ValidateWafInlineRuleControl) Validate(ctx context.Context, pm interfac
 	if fv, exists := v.FldValidators["exclude_rule_ids"]; exists {
 		vOpts := append(opts, db.WithValidateField("exclude_rule_ids"))
 		if err := fv(ctx, m.GetExcludeRuleIds(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["monitoring_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("monitoring_mode"))
+		if err := fv(ctx, m.GetMonitoringMode(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4719,6 +4740,15 @@ func (v *ValidateWafRuleControl) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["exclude_rule_ids"]; exists {
 		vOpts := append(opts, db.WithValidateField("exclude_rule_ids"))
 		if err := fv(ctx, m.GetExcludeRuleIds(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["monitoring_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("monitoring_mode"))
+		if err := fv(ctx, m.GetMonitoringMode(), vOpts...); err != nil {
 			return err
 		}
 

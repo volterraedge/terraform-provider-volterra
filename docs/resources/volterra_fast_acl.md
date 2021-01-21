@@ -29,14 +29,20 @@ resource "volterra_fast_acl" "example" {
         simple_action = "simple_action"
       }
 
+      metadata {
+        description = "Virtual Host for acmecorp website"
+        disable     = true
+        name        = "acmecorp-web"
+      }
+
       name = "name"
 
       port {
-        // One of the arguments from this list "user_defined dns all" must be set
-        all = true
+        // One of the arguments from this list "all user_defined dns" must be set
+        user_defined = "user_defined"
       }
 
-      // One of the arguments from this list "ip_prefix_set prefix" must be set
+      // One of the arguments from this list "prefix ip_prefix_set" must be set
 
       prefix {
         prefix = ["[192.168.1.0/24, 192.168.2.0/24]\" or \"[2001:db8::1::/112, 2001::db8::2::/112]"]
@@ -46,8 +52,8 @@ resource "volterra_fast_acl" "example" {
     // One of the arguments from this list "outside_network inside_network" must be set
     outside_network = true
 
-    // One of the arguments from this list "all_services interface_services vip_services" must be set
-    vip_services = true
+    // One of the arguments from this list "interface_services vip_services all_services" must be set
+    interface_services = true
   }
 }
 
@@ -150,7 +156,9 @@ Fast ACL rules to match .
 
 `action` - (Required) Action to be applied if traffic matched rule (pass, deny or rate limit). See [Action ](#action) below for details.
 
-`name` - (Required) Name for this rule, will be used to generate metrics (`String`).
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
+`name` - (Optional) Name for this rule, will be used to generate metrics (`String`).
 
 `port` - (Optional) L4 port numbers to match. See [Port ](#port) below for details.
 
@@ -160,7 +168,7 @@ Fast ACL rules to match .
 
 ### Inside Network
 
-Site local Outside network.
+Site Local Inside network.
 
 ### Interface Services
 
@@ -194,6 +202,16 @@ ACL may be applied at regional edge sites or customer edge sites. Not recommende
 
 `source_rules` - (Optional) List of fast ACL rules to be applied to received packets on this site. See [ref](#ref) below for details.
 
+### Metadata
+
+Common attributes for the rule including name and description..
+
+`description` - (Optional) Human readable description for the object that corresponds to the containing message. (`String`).
+
+`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).
+
+`name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
+
 ### Network Type
 
 CE applies Fast ACLs with network type selector as "site_local" and "site_local_inside" only.
@@ -206,7 +224,7 @@ CE applies Fast ACLs with network type selector as "site_local" and "site_local_
 
 ### Outside Network
 
-Site local Inside network.
+Site Local Outside network.
 
 ### Policer Action
 
@@ -296,9 +314,9 @@ ACL will be applied at customer edge sites.
 
 `fast_acl_rules` - (Optional) Fast ACL rules to match . See [Fast Acl Rules ](#fast-acl-rules) below for details.
 
-`inside_network` - (Optional) Site local Outside network (bool).
+`inside_network` - (Optional) Site Local Inside network (bool).
 
-`outside_network` - (Optional) Site local Inside network (bool).
+`outside_network` - (Optional) Site Local Outside network (bool).
 
 `all_services` - (Optional) Port and protocol is picked up from advertise policies (bool).
 

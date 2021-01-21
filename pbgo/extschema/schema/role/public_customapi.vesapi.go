@@ -737,6 +737,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-role-CustomAPI-CustomList"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.role.CustomAPI.CustomList"
             },
             "post": {
@@ -818,6 +822,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-role-CustomAPI-CustomCreate"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.role.CustomAPI.CustomCreate"
             },
             "x-displayname": "Role",
@@ -902,6 +910,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-role-CustomAPI-CustomGet"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.role.CustomAPI.CustomGet"
             },
             "put": {
@@ -989,6 +1001,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-role-CustomAPI-CustomReplace"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.role.CustomAPI.CustomReplace"
             },
             "x-displayname": "Role",

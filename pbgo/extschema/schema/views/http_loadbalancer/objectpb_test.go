@@ -6,6 +6,7 @@ Package http_loadbalancer is a generated protocol buffer package.
 
 It is generated from these files:
 	ves.io/schema/views/http_loadbalancer/object.proto
+	ves.io/schema/views/http_loadbalancer/public_apiep_customapi.proto
 	ves.io/schema/views/http_loadbalancer/public_crudapi.proto
 	ves.io/schema/views/http_loadbalancer/public_customapi.proto
 	ves.io/schema/views/http_loadbalancer/types.proto
@@ -14,6 +15,8 @@ It has these top-level messages:
 	Object
 	SpecType
 	StatusObject
+	SwaggerSpecReq
+	SwaggerSpecRsp
 	CreateRequest
 	CreateResponse
 	ReplaceRequest
@@ -41,6 +44,9 @@ It has these top-level messages:
 	RouteTypeCustomRoute
 	RouteType
 	AdvancedOptionsType
+	PolicyBasedChallenge
+	ChallengeRule
+	ChallengeRuleList
 	SimpleClientSrcRule
 	CustomIpAllowedList
 	RateLimitConfigType
@@ -52,38 +58,22 @@ It has these top-level messages:
 */
 package http_loadbalancer
 
-import (
-	rand "math/rand"
-	testing "testing"
-
-	time "time"
-
-	proto "github.com/gogo/protobuf/proto"
-
-	jsonpb "github.com/gogo/protobuf/jsonpb"
-
-	fmt "fmt"
-
-	parser "go/parser"
-
-	golang_proto "github.com/golang/protobuf/proto"
-
-	math "math"
-
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-)
+import testing "testing"
+import rand "math/rand"
+import time "time"
+import proto "github.com/gogo/protobuf/proto"
+import jsonpb "github.com/gogo/protobuf/jsonpb"
+import fmt "fmt"
+import parser "go/parser"
+import golang_proto "github.com/golang/protobuf/proto"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal

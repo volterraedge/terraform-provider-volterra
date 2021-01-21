@@ -16,6 +16,8 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_network_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy"
+	ves_io_schema_network_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_rule"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 // resourceVolterraNetworkPolicy is implementation of Volterra's NetworkPolicy resources
@@ -58,96 +60,557 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 				Required: true,
 			},
 
-			"egress_rules": {
-
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"kind": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-
-						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-						"namespace": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-						"tenant": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-					},
-				},
-			},
-
-			"ingress_rules": {
-
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"kind": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-
-						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-						"namespace": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-						"tenant": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-					},
-				},
-			},
-
-			"prefix": {
+			"endpoint": {
 
 				Type:     schema.TypeSet,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
-						"prefix": {
+						"any": {
 
-							Type: schema.TypeList,
-
+							Type:     schema.TypeBool,
 							Optional: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
+						},
+
+						"inside_endpoints": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"interface": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"label_selector": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"expressions": {
+
+										Type: schema.TypeList,
+
+										Required: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+								},
+							},
+						},
+
+						"namespace": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"outside_endpoints": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"prefix_list": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"prefixes": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+								},
 							},
 						},
 					},
 				},
 			},
 
-			"prefix_selector": {
+			"rules": {
 
 				Type:     schema.TypeSet,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
-						"expressions": {
+						"egress_rules": {
 
-							Type: schema.TypeList,
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
 
-							Required: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
+									"action": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"keys": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
+									"metadata": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"description": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"disable": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"any": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"inside_endpoints": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ip_prefix_set": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ref": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"label_selector": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"expressions": {
+
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
+									"namespace": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"outside_endpoints": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"prefix_list": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"prefixes": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
+									"rule_description": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"rule_name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"all_tcp_traffic": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"all_traffic": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"all_udp_traffic": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"applications": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"applications": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
+									"protocol_port_range": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"port_ranges": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+
+												"protocol": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"ingress_rules": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"action": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"keys": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
+									"metadata": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"description": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"disable": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"any": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"inside_endpoints": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ip_prefix_set": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ref": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"label_selector": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"expressions": {
+
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
+									"namespace": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"outside_endpoints": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"prefix_list": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"prefixes": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
+									"rule_description": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"rule_name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"all_tcp_traffic": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"all_traffic": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"all_udp_traffic": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"applications": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"applications": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
+									"protocol_port_range": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"port_ranges": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+
+												"protocol": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
 							},
 						},
 					},
@@ -210,90 +673,141 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 			v.(string)
 	}
 
-	if v, ok := d.GetOk("egress_rules"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		egressRulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-		createSpec.EgressRules = egressRulesInt
-		for i, ps := range sl {
-
-			erMapToStrVal := ps.(map[string]interface{})
-			egressRulesInt[i] = &ves_io_schema.ObjectRefType{}
-
-			egressRulesInt[i].Kind = "network_policy_rule"
-
-			if v, ok := erMapToStrVal["name"]; ok && !isIntfNil(v) {
-				egressRulesInt[i].Name = v.(string)
-			}
-
-			if v, ok := erMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				egressRulesInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := erMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				egressRulesInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := erMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				egressRulesInt[i].Uid = v.(string)
-			}
-
-		}
-
-	}
-
-	if v, ok := d.GetOk("ingress_rules"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		ingressRulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-		createSpec.IngressRules = ingressRulesInt
-		for i, ps := range sl {
-
-			irMapToStrVal := ps.(map[string]interface{})
-			ingressRulesInt[i] = &ves_io_schema.ObjectRefType{}
-
-			ingressRulesInt[i].Kind = "network_policy_rule"
-
-			if v, ok := irMapToStrVal["name"]; ok && !isIntfNil(v) {
-				ingressRulesInt[i].Name = v.(string)
-			}
-
-			if v, ok := irMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				ingressRulesInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := irMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				ingressRulesInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := irMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				ingressRulesInt[i].Uid = v.(string)
-			}
-
-		}
-
-	}
-
-	localEndpointTypeFound := false
-
-	if v, ok := d.GetOk("prefix"); ok && !localEndpointTypeFound {
-
-		localEndpointTypeFound = true
-		localEndpointInt := &ves_io_schema_network_policy.CreateSpecType_Prefix{}
-		localEndpointInt.Prefix = &ves_io_schema.PrefixListType{}
-		createSpec.LocalEndpoint = localEndpointInt
+	if v, ok := d.GetOk("endpoint"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
+		endpoint := &ves_io_schema_network_policy.EndpointChoiceType{}
+		createSpec.Endpoint = endpoint
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
 
-			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+			endpointMapStrToI := set.(map[string]interface{})
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+			endpointChoiceTypeFound := false
+
+			if v, ok := endpointMapStrToI["any"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+				endpointChoiceTypeFound = true
+
+				if v.(bool) {
+					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Any{}
+					endpointChoiceInt.Any = &ves_io_schema.Empty{}
+					endpoint.EndpointChoice = endpointChoiceInt
 				}
-				localEndpointInt.Prefix.Prefix = ls
+
+			}
+
+			if v, ok := endpointMapStrToI["inside_endpoints"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+				endpointChoiceTypeFound = true
+
+				if v.(bool) {
+					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_InsideEndpoints{}
+					endpointChoiceInt.InsideEndpoints = &ves_io_schema.Empty{}
+					endpoint.EndpointChoice = endpointChoiceInt
+				}
+
+			}
+
+			if v, ok := endpointMapStrToI["interface"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+				endpointChoiceTypeFound = true
+				endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Interface{}
+				endpointChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
+				endpoint.EndpointChoice = endpointChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						endpointChoiceInt.Interface.Name = v.(string)
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						endpointChoiceInt.Interface.Namespace = v.(string)
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						endpointChoiceInt.Interface.Tenant = v.(string)
+					}
+
+				}
+
+			}
+
+			if v, ok := endpointMapStrToI["label_selector"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+				endpointChoiceTypeFound = true
+				endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_LabelSelector{}
+				endpointChoiceInt.LabelSelector = &ves_io_schema.LabelSelectorType{}
+				endpoint.EndpointChoice = endpointChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						endpointChoiceInt.LabelSelector.Expressions = ls
+
+					}
+
+				}
+
+			}
+
+			if v, ok := endpointMapStrToI["namespace"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+				endpointChoiceTypeFound = true
+				endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Namespace{}
+
+				endpoint.EndpointChoice = endpointChoiceInt
+
+				endpointChoiceInt.Namespace = v.(string)
+
+			}
+
+			if v, ok := endpointMapStrToI["outside_endpoints"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+				endpointChoiceTypeFound = true
+
+				if v.(bool) {
+					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_OutsideEndpoints{}
+					endpointChoiceInt.OutsideEndpoints = &ves_io_schema.Empty{}
+					endpoint.EndpointChoice = endpointChoiceInt
+				}
+
+			}
+
+			if v, ok := endpointMapStrToI["prefix_list"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+				endpointChoiceTypeFound = true
+				endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_PrefixList{}
+				endpointChoiceInt.PrefixList = &ves_io_schema_views.PrefixStringListType{}
+				endpoint.EndpointChoice = endpointChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						endpointChoiceInt.PrefixList.Prefixes = ls
+
+					}
+
+				}
 
 			}
 
@@ -301,24 +815,612 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("prefix_selector"); ok && !localEndpointTypeFound {
-
-		localEndpointTypeFound = true
-		localEndpointInt := &ves_io_schema_network_policy.CreateSpecType_PrefixSelector{}
-		localEndpointInt.PrefixSelector = &ves_io_schema.LabelSelectorType{}
-		createSpec.LocalEndpoint = localEndpointInt
+	if v, ok := d.GetOk("rules"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
+		rules := &ves_io_schema_network_policy.NetworkPolicyRuleChoice{}
+		createSpec.Rules = rules
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
 
-			if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+			rulesMapStrToI := set.(map[string]interface{})
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+			if v, ok := rulesMapStrToI["egress_rules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				egressRules := make([]*ves_io_schema_network_policy.NetworkPolicyRuleType, len(sl))
+				rules.EgressRules = egressRules
+				for i, set := range sl {
+					egressRules[i] = &ves_io_schema_network_policy.NetworkPolicyRuleType{}
+
+					egressRulesMapStrToI := set.(map[string]interface{})
+
+					if v, ok := egressRulesMapStrToI["action"]; ok && !isIntfNil(v) {
+
+						egressRules[i].Action = ves_io_schema_network_policy_rule.NetworkPolicyRuleAction(ves_io_schema_network_policy_rule.NetworkPolicyRuleAction_value[v.(string)])
+
+					}
+
+					if w, ok := egressRulesMapStrToI["keys"]; ok && !isIntfNil(w) {
+						ls := make([]string, len(w.([]interface{})))
+						for i, v := range w.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						egressRules[i].Keys = ls
+					}
+
+					if v, ok := egressRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						egressRules[i].Metadata = metadata
+						for _, set := range sl {
+
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
+							}
+
+						}
+
+					}
+
+					otherEndpointTypeFound := false
+
+					if v, ok := egressRulesMapStrToI["any"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+
+						if v.(bool) {
+							otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Any{}
+							otherEndpointInt.Any = &ves_io_schema.Empty{}
+							egressRules[i].OtherEndpoint = otherEndpointInt
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["inside_endpoints"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+
+						if v.(bool) {
+							otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_InsideEndpoints{}
+							otherEndpointInt.InsideEndpoints = &ves_io_schema.Empty{}
+							egressRules[i].OtherEndpoint = otherEndpointInt
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+						otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_IpPrefixSet{}
+						otherEndpointInt.IpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
+						egressRules[i].OtherEndpoint = otherEndpointInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								otherEndpointInt.IpPrefixSet.Ref = refInt
+								for i, ps := range sl {
+
+									rMapToStrVal := ps.(map[string]interface{})
+									refInt[i] = &ves_io_schema.ObjectRefType{}
+
+									refInt[i].Kind = "ip_prefix_set"
+
+									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+										refInt[i].Name = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										refInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										refInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										refInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["label_selector"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+						otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_LabelSelector{}
+						otherEndpointInt.LabelSelector = &ves_io_schema.LabelSelectorType{}
+						egressRules[i].OtherEndpoint = otherEndpointInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								otherEndpointInt.LabelSelector.Expressions = ls
+
+							}
+
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+						otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Namespace{}
+
+						egressRules[i].OtherEndpoint = otherEndpointInt
+
+						otherEndpointInt.Namespace = v.(string)
+
+					}
+
+					if v, ok := egressRulesMapStrToI["outside_endpoints"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+
+						if v.(bool) {
+							otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_OutsideEndpoints{}
+							otherEndpointInt.OutsideEndpoints = &ves_io_schema.Empty{}
+							egressRules[i].OtherEndpoint = otherEndpointInt
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["prefix_list"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+						otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_PrefixList{}
+						otherEndpointInt.PrefixList = &ves_io_schema_views.PrefixStringListType{}
+						egressRules[i].OtherEndpoint = otherEndpointInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								otherEndpointInt.PrefixList.Prefixes = ls
+
+							}
+
+						}
+
+					}
+
+					if w, ok := egressRulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
+						egressRules[i].RuleDescription = w.(string)
+					}
+
+					if w, ok := egressRulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
+						egressRules[i].RuleName = w.(string)
+					}
+
+					trafficChoiceTypeFound := false
+
+					if v, ok := egressRulesMapStrToI["all_tcp_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+
+						if v.(bool) {
+							trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllTcpTraffic{}
+							trafficChoiceInt.AllTcpTraffic = &ves_io_schema.Empty{}
+							egressRules[i].TrafficChoice = trafficChoiceInt
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["all_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+
+						if v.(bool) {
+							trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllTraffic{}
+							trafficChoiceInt.AllTraffic = &ves_io_schema.Empty{}
+							egressRules[i].TrafficChoice = trafficChoiceInt
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["all_udp_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+
+						if v.(bool) {
+							trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllUdpTraffic{}
+							trafficChoiceInt.AllUdpTraffic = &ves_io_schema.Empty{}
+							egressRules[i].TrafficChoice = trafficChoiceInt
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["applications"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+						trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Applications{}
+						trafficChoiceInt.Applications = &ves_io_schema_network_policy.ApplicationsType{}
+						egressRules[i].TrafficChoice = trafficChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["applications"]; ok && !isIntfNil(v) {
+
+								applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
+								for _, j := range v.([]interface{}) {
+									applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
+								}
+								trafficChoiceInt.Applications.Applications = applicationsList
+
+							}
+
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["protocol_port_range"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+						trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_ProtocolPortRange{}
+						trafficChoiceInt.ProtocolPortRange = &ves_io_schema_network_policy.ProtocolPortType{}
+						egressRules[i].TrafficChoice = trafficChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								trafficChoiceInt.ProtocolPortRange.PortRanges = ls
+
+							}
+
+							if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
+
+								trafficChoiceInt.ProtocolPortRange.Protocol = v.(string)
+							}
+
+						}
+
+					}
+
 				}
-				localEndpointInt.PrefixSelector.Expressions = ls
+
+			}
+
+			if v, ok := rulesMapStrToI["ingress_rules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				ingressRules := make([]*ves_io_schema_network_policy.NetworkPolicyRuleType, len(sl))
+				rules.IngressRules = ingressRules
+				for i, set := range sl {
+					ingressRules[i] = &ves_io_schema_network_policy.NetworkPolicyRuleType{}
+
+					ingressRulesMapStrToI := set.(map[string]interface{})
+
+					if v, ok := ingressRulesMapStrToI["action"]; ok && !isIntfNil(v) {
+
+						ingressRules[i].Action = ves_io_schema_network_policy_rule.NetworkPolicyRuleAction(ves_io_schema_network_policy_rule.NetworkPolicyRuleAction_value[v.(string)])
+
+					}
+
+					if w, ok := ingressRulesMapStrToI["keys"]; ok && !isIntfNil(w) {
+						ls := make([]string, len(w.([]interface{})))
+						for i, v := range w.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						ingressRules[i].Keys = ls
+					}
+
+					if v, ok := ingressRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						ingressRules[i].Metadata = metadata
+						for _, set := range sl {
+
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
+							}
+
+						}
+
+					}
+
+					otherEndpointTypeFound := false
+
+					if v, ok := ingressRulesMapStrToI["any"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+
+						if v.(bool) {
+							otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Any{}
+							otherEndpointInt.Any = &ves_io_schema.Empty{}
+							ingressRules[i].OtherEndpoint = otherEndpointInt
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["inside_endpoints"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+
+						if v.(bool) {
+							otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_InsideEndpoints{}
+							otherEndpointInt.InsideEndpoints = &ves_io_schema.Empty{}
+							ingressRules[i].OtherEndpoint = otherEndpointInt
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+						otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_IpPrefixSet{}
+						otherEndpointInt.IpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
+						ingressRules[i].OtherEndpoint = otherEndpointInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								otherEndpointInt.IpPrefixSet.Ref = refInt
+								for i, ps := range sl {
+
+									rMapToStrVal := ps.(map[string]interface{})
+									refInt[i] = &ves_io_schema.ObjectRefType{}
+
+									refInt[i].Kind = "ip_prefix_set"
+
+									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+										refInt[i].Name = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										refInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										refInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										refInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["label_selector"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+						otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_LabelSelector{}
+						otherEndpointInt.LabelSelector = &ves_io_schema.LabelSelectorType{}
+						ingressRules[i].OtherEndpoint = otherEndpointInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								otherEndpointInt.LabelSelector.Expressions = ls
+
+							}
+
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+						otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Namespace{}
+
+						ingressRules[i].OtherEndpoint = otherEndpointInt
+
+						otherEndpointInt.Namespace = v.(string)
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["outside_endpoints"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+
+						if v.(bool) {
+							otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_OutsideEndpoints{}
+							otherEndpointInt.OutsideEndpoints = &ves_io_schema.Empty{}
+							ingressRules[i].OtherEndpoint = otherEndpointInt
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["prefix_list"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+						otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_PrefixList{}
+						otherEndpointInt.PrefixList = &ves_io_schema_views.PrefixStringListType{}
+						ingressRules[i].OtherEndpoint = otherEndpointInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								otherEndpointInt.PrefixList.Prefixes = ls
+
+							}
+
+						}
+
+					}
+
+					if w, ok := ingressRulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
+						ingressRules[i].RuleDescription = w.(string)
+					}
+
+					if w, ok := ingressRulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
+						ingressRules[i].RuleName = w.(string)
+					}
+
+					trafficChoiceTypeFound := false
+
+					if v, ok := ingressRulesMapStrToI["all_tcp_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+
+						if v.(bool) {
+							trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllTcpTraffic{}
+							trafficChoiceInt.AllTcpTraffic = &ves_io_schema.Empty{}
+							ingressRules[i].TrafficChoice = trafficChoiceInt
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["all_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+
+						if v.(bool) {
+							trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllTraffic{}
+							trafficChoiceInt.AllTraffic = &ves_io_schema.Empty{}
+							ingressRules[i].TrafficChoice = trafficChoiceInt
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["all_udp_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+
+						if v.(bool) {
+							trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllUdpTraffic{}
+							trafficChoiceInt.AllUdpTraffic = &ves_io_schema.Empty{}
+							ingressRules[i].TrafficChoice = trafficChoiceInt
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["applications"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+						trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Applications{}
+						trafficChoiceInt.Applications = &ves_io_schema_network_policy.ApplicationsType{}
+						ingressRules[i].TrafficChoice = trafficChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["applications"]; ok && !isIntfNil(v) {
+
+								applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
+								for _, j := range v.([]interface{}) {
+									applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
+								}
+								trafficChoiceInt.Applications.Applications = applicationsList
+
+							}
+
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["protocol_port_range"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+						trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_ProtocolPortRange{}
+						trafficChoiceInt.ProtocolPortRange = &ves_io_schema_network_policy.ProtocolPortType{}
+						ingressRules[i].TrafficChoice = trafficChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								trafficChoiceInt.ProtocolPortRange.PortRanges = ls
+
+							}
+
+							if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
+
+								trafficChoiceInt.ProtocolPortRange.Protocol = v.(string)
+							}
+
+						}
+
+					}
+
+				}
 
 			}
 
@@ -424,90 +1526,222 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 			v.(string)
 	}
 
-	if v, ok := d.GetOk("egress_rules"); ok && !isIntfNil(v) {
+	if v, ok := d.GetOk("endpoint"); ok && !isIntfNil(v) {
 
-		sl := v.([]interface{})
-		egressRulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-		updateSpec.EgressRules = egressRulesInt
-		for i, ps := range sl {
+		sl := v.(*schema.Set).List()
+		endpoint := &ves_io_schema_network_policy.EndpointChoiceType{}
+		updateSpec.Endpoint = endpoint
+		for _, set := range sl {
 
-			erMapToStrVal := ps.(map[string]interface{})
-			egressRulesInt[i] = &ves_io_schema.ObjectRefType{}
+			endpointMapStrToI := set.(map[string]interface{})
 
-			egressRulesInt[i].Kind = "network_policy_rule"
+			endpointChoiceTypeFound := false
 
-			if v, ok := erMapToStrVal["name"]; ok && !isIntfNil(v) {
-				egressRulesInt[i].Name = v.(string)
+			if v, ok := endpointMapStrToI["any"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+				endpointChoiceTypeFound = true
+
+				if v.(bool) {
+					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Any{}
+					endpointChoiceInt.Any = &ves_io_schema.Empty{}
+					endpoint.EndpointChoice = endpointChoiceInt
+				}
+
 			}
 
-			if v, ok := erMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				egressRulesInt[i].Namespace = v.(string)
+			if v, ok := endpointMapStrToI["inside_endpoints"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+				endpointChoiceTypeFound = true
+
+				if v.(bool) {
+					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_InsideEndpoints{}
+					endpointChoiceInt.InsideEndpoints = &ves_io_schema.Empty{}
+					endpoint.EndpointChoice = endpointChoiceInt
+				}
+
 			}
 
-			if v, ok := erMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				egressRulesInt[i].Tenant = v.(string)
+			if v, ok := endpointMapStrToI["interface"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+				endpointChoiceTypeFound = true
+				endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Interface{}
+				endpointChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
+				endpoint.EndpointChoice = endpointChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						endpointChoiceInt.Interface.Name = v.(string)
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						endpointChoiceInt.Interface.Namespace = v.(string)
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						endpointChoiceInt.Interface.Tenant = v.(string)
+					}
+
+				}
+
 			}
 
-			if v, ok := erMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				egressRulesInt[i].Uid = v.(string)
+			if v, ok := endpointMapStrToI["label_selector"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+				endpointChoiceTypeFound = true
+				endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_LabelSelector{}
+				endpointChoiceInt.LabelSelector = &ves_io_schema.LabelSelectorType{}
+				endpoint.EndpointChoice = endpointChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						endpointChoiceInt.LabelSelector.Expressions = ls
+
+					}
+
+				}
+
+			}
+
+			if v, ok := endpointMapStrToI["namespace"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+				endpointChoiceTypeFound = true
+				endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Namespace{}
+
+				endpoint.EndpointChoice = endpointChoiceInt
+
+				endpointChoiceInt.Namespace = v.(string)
+
+			}
+
+			if v, ok := endpointMapStrToI["outside_endpoints"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+				endpointChoiceTypeFound = true
+
+				if v.(bool) {
+					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_OutsideEndpoints{}
+					endpointChoiceInt.OutsideEndpoints = &ves_io_schema.Empty{}
+					endpoint.EndpointChoice = endpointChoiceInt
+				}
+
+			}
+
+			if v, ok := endpointMapStrToI["prefix_list"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+				endpointChoiceTypeFound = true
+				endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_PrefixList{}
+				endpointChoiceInt.PrefixList = &ves_io_schema_views.PrefixStringListType{}
+				endpoint.EndpointChoice = endpointChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						endpointChoiceInt.PrefixList.Prefixes = ls
+
+					}
+
+				}
+
 			}
 
 		}
 
 	}
 
-	if v, ok := d.GetOk("ingress_rules"); ok && !isIntfNil(v) {
+	ruleChoiceTypeFound := false
 
-		sl := v.([]interface{})
-		ingressRulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-		updateSpec.IngressRules = ingressRulesInt
-		for i, ps := range sl {
+	if v, ok := d.GetOk("legacy_rules"); ok && !ruleChoiceTypeFound {
 
-			irMapToStrVal := ps.(map[string]interface{})
-			ingressRulesInt[i] = &ves_io_schema.ObjectRefType{}
-
-			ingressRulesInt[i].Kind = "network_policy_rule"
-
-			if v, ok := irMapToStrVal["name"]; ok && !isIntfNil(v) {
-				ingressRulesInt[i].Name = v.(string)
-			}
-
-			if v, ok := irMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				ingressRulesInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := irMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				ingressRulesInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := irMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				ingressRulesInt[i].Uid = v.(string)
-			}
-
-		}
-
-	}
-
-	localEndpointTypeFound := false
-
-	if v, ok := d.GetOk("prefix"); ok && !localEndpointTypeFound {
-
-		localEndpointTypeFound = true
-		localEndpointInt := &ves_io_schema_network_policy.ReplaceSpecType_Prefix{}
-		localEndpointInt.Prefix = &ves_io_schema.PrefixListType{}
-		updateSpec.LocalEndpoint = localEndpointInt
+		ruleChoiceTypeFound = true
+		ruleChoiceInt := &ves_io_schema_network_policy.ReplaceSpecType_LegacyRules{}
+		ruleChoiceInt.LegacyRules = &ves_io_schema_network_policy.LegacyNetworkPolicyRuleChoice{}
+		updateSpec.RuleChoice = ruleChoiceInt
 
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
-			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
+			if v, ok := cs["egress_rules"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+				sl := v.([]interface{})
+				egressRulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+				ruleChoiceInt.LegacyRules.EgressRules = egressRulesInt
+				for i, ps := range sl {
+
+					erMapToStrVal := ps.(map[string]interface{})
+					egressRulesInt[i] = &ves_io_schema.ObjectRefType{}
+
+					egressRulesInt[i].Kind = "network_policy_rule"
+
+					if v, ok := erMapToStrVal["name"]; ok && !isIntfNil(v) {
+						egressRulesInt[i].Name = v.(string)
+					}
+
+					if v, ok := erMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						egressRulesInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := erMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						egressRulesInt[i].Tenant = v.(string)
+					}
+
+					if v, ok := erMapToStrVal["uid"]; ok && !isIntfNil(v) {
+						egressRulesInt[i].Uid = v.(string)
+					}
+
 				}
-				localEndpointInt.Prefix.Prefix = ls
+
+			}
+
+			if v, ok := cs["ingress_rules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				ingressRulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+				ruleChoiceInt.LegacyRules.IngressRules = ingressRulesInt
+				for i, ps := range sl {
+
+					irMapToStrVal := ps.(map[string]interface{})
+					ingressRulesInt[i] = &ves_io_schema.ObjectRefType{}
+
+					ingressRulesInt[i].Kind = "network_policy_rule"
+
+					if v, ok := irMapToStrVal["name"]; ok && !isIntfNil(v) {
+						ingressRulesInt[i].Name = v.(string)
+					}
+
+					if v, ok := irMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						ingressRulesInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := irMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						ingressRulesInt[i].Tenant = v.(string)
+					}
+
+					if v, ok := irMapToStrVal["uid"]; ok && !isIntfNil(v) {
+						ingressRulesInt[i].Uid = v.(string)
+					}
+
+				}
 
 			}
 
@@ -515,24 +1749,614 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("prefix_selector"); ok && !localEndpointTypeFound {
+	if v, ok := d.GetOk("rules"); ok && !ruleChoiceTypeFound {
 
-		localEndpointTypeFound = true
-		localEndpointInt := &ves_io_schema_network_policy.ReplaceSpecType_PrefixSelector{}
-		localEndpointInt.PrefixSelector = &ves_io_schema.LabelSelectorType{}
-		updateSpec.LocalEndpoint = localEndpointInt
+		ruleChoiceTypeFound = true
+		ruleChoiceInt := &ves_io_schema_network_policy.ReplaceSpecType_Rules{}
+		ruleChoiceInt.Rules = &ves_io_schema_network_policy.NetworkPolicyRuleChoice{}
+		updateSpec.RuleChoice = ruleChoiceInt
 
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
-			if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+			if v, ok := cs["egress_rules"]; ok && !isIntfNil(v) {
 
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
+				sl := v.([]interface{})
+				egressRules := make([]*ves_io_schema_network_policy.NetworkPolicyRuleType, len(sl))
+				ruleChoiceInt.Rules.EgressRules = egressRules
+				for i, set := range sl {
+					egressRules[i] = &ves_io_schema_network_policy.NetworkPolicyRuleType{}
+
+					egressRulesMapStrToI := set.(map[string]interface{})
+
+					if v, ok := egressRulesMapStrToI["action"]; ok && !isIntfNil(v) {
+
+						egressRules[i].Action = ves_io_schema_network_policy_rule.NetworkPolicyRuleAction(ves_io_schema_network_policy_rule.NetworkPolicyRuleAction_value[v.(string)])
+
+					}
+
+					if w, ok := egressRulesMapStrToI["keys"]; ok && !isIntfNil(w) {
+						ls := make([]string, len(w.([]interface{})))
+						for i, v := range w.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						egressRules[i].Keys = ls
+					}
+
+					if v, ok := egressRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						egressRules[i].Metadata = metadata
+						for _, set := range sl {
+
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
+							}
+
+						}
+
+					}
+
+					otherEndpointTypeFound := false
+
+					if v, ok := egressRulesMapStrToI["any"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+
+						if v.(bool) {
+							otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Any{}
+							otherEndpointInt.Any = &ves_io_schema.Empty{}
+							egressRules[i].OtherEndpoint = otherEndpointInt
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["inside_endpoints"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+
+						if v.(bool) {
+							otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_InsideEndpoints{}
+							otherEndpointInt.InsideEndpoints = &ves_io_schema.Empty{}
+							egressRules[i].OtherEndpoint = otherEndpointInt
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+						otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_IpPrefixSet{}
+						otherEndpointInt.IpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
+						egressRules[i].OtherEndpoint = otherEndpointInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								otherEndpointInt.IpPrefixSet.Ref = refInt
+								for i, ps := range sl {
+
+									rMapToStrVal := ps.(map[string]interface{})
+									refInt[i] = &ves_io_schema.ObjectRefType{}
+
+									refInt[i].Kind = "ip_prefix_set"
+
+									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+										refInt[i].Name = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										refInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										refInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										refInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["label_selector"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+						otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_LabelSelector{}
+						otherEndpointInt.LabelSelector = &ves_io_schema.LabelSelectorType{}
+						egressRules[i].OtherEndpoint = otherEndpointInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								otherEndpointInt.LabelSelector.Expressions = ls
+
+							}
+
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+						otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Namespace{}
+
+						egressRules[i].OtherEndpoint = otherEndpointInt
+
+						otherEndpointInt.Namespace = v.(string)
+
+					}
+
+					if v, ok := egressRulesMapStrToI["outside_endpoints"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+
+						if v.(bool) {
+							otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_OutsideEndpoints{}
+							otherEndpointInt.OutsideEndpoints = &ves_io_schema.Empty{}
+							egressRules[i].OtherEndpoint = otherEndpointInt
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["prefix_list"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+						otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_PrefixList{}
+						otherEndpointInt.PrefixList = &ves_io_schema_views.PrefixStringListType{}
+						egressRules[i].OtherEndpoint = otherEndpointInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								otherEndpointInt.PrefixList.Prefixes = ls
+
+							}
+
+						}
+
+					}
+
+					if w, ok := egressRulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
+						egressRules[i].RuleDescription = w.(string)
+					}
+
+					if w, ok := egressRulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
+						egressRules[i].RuleName = w.(string)
+					}
+
+					trafficChoiceTypeFound := false
+
+					if v, ok := egressRulesMapStrToI["all_tcp_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+
+						if v.(bool) {
+							trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllTcpTraffic{}
+							trafficChoiceInt.AllTcpTraffic = &ves_io_schema.Empty{}
+							egressRules[i].TrafficChoice = trafficChoiceInt
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["all_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+
+						if v.(bool) {
+							trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllTraffic{}
+							trafficChoiceInt.AllTraffic = &ves_io_schema.Empty{}
+							egressRules[i].TrafficChoice = trafficChoiceInt
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["all_udp_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+
+						if v.(bool) {
+							trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllUdpTraffic{}
+							trafficChoiceInt.AllUdpTraffic = &ves_io_schema.Empty{}
+							egressRules[i].TrafficChoice = trafficChoiceInt
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["applications"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+						trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Applications{}
+						trafficChoiceInt.Applications = &ves_io_schema_network_policy.ApplicationsType{}
+						egressRules[i].TrafficChoice = trafficChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["applications"]; ok && !isIntfNil(v) {
+
+								applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
+								for _, j := range v.([]interface{}) {
+									applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
+								}
+								trafficChoiceInt.Applications.Applications = applicationsList
+
+							}
+
+						}
+
+					}
+
+					if v, ok := egressRulesMapStrToI["protocol_port_range"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+						trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_ProtocolPortRange{}
+						trafficChoiceInt.ProtocolPortRange = &ves_io_schema_network_policy.ProtocolPortType{}
+						egressRules[i].TrafficChoice = trafficChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								trafficChoiceInt.ProtocolPortRange.PortRanges = ls
+
+							}
+
+							if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
+
+								trafficChoiceInt.ProtocolPortRange.Protocol = v.(string)
+							}
+
+						}
+
+					}
+
 				}
-				localEndpointInt.PrefixSelector.Expressions = ls
+
+			}
+
+			if v, ok := cs["ingress_rules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				ingressRules := make([]*ves_io_schema_network_policy.NetworkPolicyRuleType, len(sl))
+				ruleChoiceInt.Rules.IngressRules = ingressRules
+				for i, set := range sl {
+					ingressRules[i] = &ves_io_schema_network_policy.NetworkPolicyRuleType{}
+
+					ingressRulesMapStrToI := set.(map[string]interface{})
+
+					if v, ok := ingressRulesMapStrToI["action"]; ok && !isIntfNil(v) {
+
+						ingressRules[i].Action = ves_io_schema_network_policy_rule.NetworkPolicyRuleAction(ves_io_schema_network_policy_rule.NetworkPolicyRuleAction_value[v.(string)])
+
+					}
+
+					if w, ok := ingressRulesMapStrToI["keys"]; ok && !isIntfNil(w) {
+						ls := make([]string, len(w.([]interface{})))
+						for i, v := range w.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						ingressRules[i].Keys = ls
+					}
+
+					if v, ok := ingressRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						ingressRules[i].Metadata = metadata
+						for _, set := range sl {
+
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
+							}
+
+						}
+
+					}
+
+					otherEndpointTypeFound := false
+
+					if v, ok := ingressRulesMapStrToI["any"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+
+						if v.(bool) {
+							otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Any{}
+							otherEndpointInt.Any = &ves_io_schema.Empty{}
+							ingressRules[i].OtherEndpoint = otherEndpointInt
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["inside_endpoints"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+
+						if v.(bool) {
+							otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_InsideEndpoints{}
+							otherEndpointInt.InsideEndpoints = &ves_io_schema.Empty{}
+							ingressRules[i].OtherEndpoint = otherEndpointInt
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+						otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_IpPrefixSet{}
+						otherEndpointInt.IpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
+						ingressRules[i].OtherEndpoint = otherEndpointInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								otherEndpointInt.IpPrefixSet.Ref = refInt
+								for i, ps := range sl {
+
+									rMapToStrVal := ps.(map[string]interface{})
+									refInt[i] = &ves_io_schema.ObjectRefType{}
+
+									refInt[i].Kind = "ip_prefix_set"
+
+									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+										refInt[i].Name = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										refInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										refInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										refInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["label_selector"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+						otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_LabelSelector{}
+						otherEndpointInt.LabelSelector = &ves_io_schema.LabelSelectorType{}
+						ingressRules[i].OtherEndpoint = otherEndpointInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								otherEndpointInt.LabelSelector.Expressions = ls
+
+							}
+
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+						otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Namespace{}
+
+						ingressRules[i].OtherEndpoint = otherEndpointInt
+
+						otherEndpointInt.Namespace = v.(string)
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["outside_endpoints"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+
+						if v.(bool) {
+							otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_OutsideEndpoints{}
+							otherEndpointInt.OutsideEndpoints = &ves_io_schema.Empty{}
+							ingressRules[i].OtherEndpoint = otherEndpointInt
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["prefix_list"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+						otherEndpointTypeFound = true
+						otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_PrefixList{}
+						otherEndpointInt.PrefixList = &ves_io_schema_views.PrefixStringListType{}
+						ingressRules[i].OtherEndpoint = otherEndpointInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								otherEndpointInt.PrefixList.Prefixes = ls
+
+							}
+
+						}
+
+					}
+
+					if w, ok := ingressRulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
+						ingressRules[i].RuleDescription = w.(string)
+					}
+
+					if w, ok := ingressRulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
+						ingressRules[i].RuleName = w.(string)
+					}
+
+					trafficChoiceTypeFound := false
+
+					if v, ok := ingressRulesMapStrToI["all_tcp_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+
+						if v.(bool) {
+							trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllTcpTraffic{}
+							trafficChoiceInt.AllTcpTraffic = &ves_io_schema.Empty{}
+							ingressRules[i].TrafficChoice = trafficChoiceInt
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["all_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+
+						if v.(bool) {
+							trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllTraffic{}
+							trafficChoiceInt.AllTraffic = &ves_io_schema.Empty{}
+							ingressRules[i].TrafficChoice = trafficChoiceInt
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["all_udp_traffic"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+
+						if v.(bool) {
+							trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllUdpTraffic{}
+							trafficChoiceInt.AllUdpTraffic = &ves_io_schema.Empty{}
+							ingressRules[i].TrafficChoice = trafficChoiceInt
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["applications"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+						trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Applications{}
+						trafficChoiceInt.Applications = &ves_io_schema_network_policy.ApplicationsType{}
+						ingressRules[i].TrafficChoice = trafficChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["applications"]; ok && !isIntfNil(v) {
+
+								applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
+								for _, j := range v.([]interface{}) {
+									applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
+								}
+								trafficChoiceInt.Applications.Applications = applicationsList
+
+							}
+
+						}
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["protocol_port_range"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
+
+						trafficChoiceTypeFound = true
+						trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_ProtocolPortRange{}
+						trafficChoiceInt.ProtocolPortRange = &ves_io_schema_network_policy.ProtocolPortType{}
+						ingressRules[i].TrafficChoice = trafficChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								trafficChoiceInt.ProtocolPortRange.PortRanges = ls
+
+							}
+
+							if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
+
+								trafficChoiceInt.ProtocolPortRange.Protocol = v.(string)
+							}
+
+						}
+
+					}
+
+				}
 
 			}
 

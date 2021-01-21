@@ -305,6 +305,15 @@ func (v *ValidateDeleteRequest) Validate(ctx context.Context, pm interface{}, op
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["fail_if_referred"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("fail_if_referred"))
+		if err := fv(ctx, m.GetFailIfReferred(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))
@@ -1295,6 +1304,8 @@ func (m *CreateRequest) ToObject(e db.Entry) {
 		if f.Metadata == nil {
 			f.Metadata = &ves_io_schema.ObjectMetaType{}
 		}
+	} else if f.Metadata != nil {
+		f.Metadata = nil
 	}
 
 	if m1.Metadata != nil {
@@ -1305,12 +1316,16 @@ func (m *CreateRequest) ToObject(e db.Entry) {
 		if f.Spec == nil {
 			f.Spec = &SpecType{}
 		}
+	} else if f.Spec != nil {
+		f.Spec = nil
 	}
 
 	if m1.Spec != nil {
 		if f.Spec.GcSpec == nil {
 			f.Spec.GcSpec = &GlobalSpecType{}
 		}
+	} else if f.Spec != nil {
+		f.Spec.GcSpec = nil
 	}
 
 	if m1.Spec != nil {
@@ -1350,6 +1365,8 @@ func (m *CreateResponse) ToObject(e db.Entry) {
 		if f.Metadata == nil {
 			f.Metadata = &ves_io_schema.ObjectMetaType{}
 		}
+	} else if f.Metadata != nil {
+		f.Metadata = nil
 	}
 
 	if m1.Metadata != nil {
@@ -1360,12 +1377,16 @@ func (m *CreateResponse) ToObject(e db.Entry) {
 		if f.Spec == nil {
 			f.Spec = &SpecType{}
 		}
+	} else if f.Spec != nil {
+		f.Spec = nil
 	}
 
 	if m1.Spec != nil {
 		if f.Spec.GcSpec == nil {
 			f.Spec.GcSpec = &GlobalSpecType{}
 		}
+	} else if f.Spec != nil {
+		f.Spec.GcSpec = nil
 	}
 
 	if m1.Spec != nil {
@@ -1376,6 +1397,8 @@ func (m *CreateResponse) ToObject(e db.Entry) {
 		if f.SystemMetadata == nil {
 			f.SystemMetadata = &ves_io_schema.SystemObjectMetaType{}
 		}
+	} else if f.SystemMetadata != nil {
+		f.SystemMetadata = nil
 	}
 
 	if m1.SystemMetadata != nil {
@@ -1415,6 +1438,8 @@ func (m *GetResponse) ToObject(e db.Entry) {
 		if f.Metadata == nil {
 			f.Metadata = &ves_io_schema.ObjectMetaType{}
 		}
+	} else if f.Metadata != nil {
+		f.Metadata = nil
 	}
 
 	if m1.Metadata != nil {
@@ -1425,12 +1450,16 @@ func (m *GetResponse) ToObject(e db.Entry) {
 		if f.Spec == nil {
 			f.Spec = &SpecType{}
 		}
+	} else if f.Spec != nil {
+		f.Spec = nil
 	}
 
 	if m1.Spec != nil {
 		if f.Spec.GcSpec == nil {
 			f.Spec.GcSpec = &GlobalSpecType{}
 		}
+	} else if f.Spec != nil {
+		f.Spec.GcSpec = nil
 	}
 
 	if m1.Spec != nil {
@@ -1441,6 +1470,8 @@ func (m *GetResponse) ToObject(e db.Entry) {
 		if f.SystemMetadata == nil {
 			f.SystemMetadata = &ves_io_schema.SystemObjectMetaType{}
 		}
+	} else if f.SystemMetadata != nil {
+		f.SystemMetadata = nil
 	}
 
 	if m1.SystemMetadata != nil {
@@ -1475,6 +1506,8 @@ func (m *ReplaceRequest) ToObject(e db.Entry) {
 		if f.Metadata == nil {
 			f.Metadata = &ves_io_schema.ObjectMetaType{}
 		}
+	} else if f.Metadata != nil {
+		f.Metadata = nil
 	}
 
 	if m1.Metadata != nil {
@@ -1485,12 +1518,16 @@ func (m *ReplaceRequest) ToObject(e db.Entry) {
 		if f.Spec == nil {
 			f.Spec = &SpecType{}
 		}
+	} else if f.Spec != nil {
+		f.Spec = nil
 	}
 
 	if m1.Spec != nil {
 		if f.Spec.GcSpec == nil {
 			f.Spec.GcSpec = &GlobalSpecType{}
 		}
+	} else if f.Spec != nil {
+		f.Spec.GcSpec = nil
 	}
 
 	if m1.Spec != nil {

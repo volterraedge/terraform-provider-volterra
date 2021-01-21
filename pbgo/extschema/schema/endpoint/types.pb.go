@@ -3,36 +3,24 @@
 
 package endpoint
 
-import (
-	proto "github.com/gogo/protobuf/proto"
-	golang_proto "github.com/golang/protobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
+import golang_proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import ves_io_schema3 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	fmt "fmt"
+import strconv "strconv"
 
-	math "math"
+import strings "strings"
+import reflect "reflect"
+import sortkeys "github.com/gogo/protobuf/sortkeys"
 
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	ves_io_schema3 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	strconv "strconv"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	sortkeys "github.com/gogo/protobuf/sortkeys"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -211,11 +199,11 @@ func _ServiceInfoType_OneofSizer(msg proto.Message) (n int) {
 	return n
 }
 
-// DnsNameAdvanceType
+// DnsNameAdvancedType
 //
-// x-displayName: "DNS Name Advance Type"
+// x-displayName: "DNS Name Advanced Type"
 // Specifies name and TTL used for DNS resolution.
-type DnsNameAdvanceType struct {
+type DnsNameAdvancedType struct {
 	// name
 	//
 	// x-displayName: "Endpoint DNS Name"
@@ -228,89 +216,89 @@ type DnsNameAdvanceType struct {
 	// Time to live parameter
 	//
 	// Types that are valid to be assigned to TtlChoice:
-	//	*DnsNameAdvanceType_StrictTtl
-	//	*DnsNameAdvanceType_RefreshInterval
-	TtlChoice isDnsNameAdvanceType_TtlChoice `protobuf_oneof:"ttl_choice"`
+	//	*DnsNameAdvancedType_StrictTtl
+	//	*DnsNameAdvancedType_RefreshInterval
+	TtlChoice isDnsNameAdvancedType_TtlChoice `protobuf_oneof:"ttl_choice"`
 }
 
-func (m *DnsNameAdvanceType) Reset()                    { *m = DnsNameAdvanceType{} }
-func (*DnsNameAdvanceType) ProtoMessage()               {}
-func (*DnsNameAdvanceType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
+func (m *DnsNameAdvancedType) Reset()                    { *m = DnsNameAdvancedType{} }
+func (*DnsNameAdvancedType) ProtoMessage()               {}
+func (*DnsNameAdvancedType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
 
-type isDnsNameAdvanceType_TtlChoice interface {
-	isDnsNameAdvanceType_TtlChoice()
+type isDnsNameAdvancedType_TtlChoice interface {
+	isDnsNameAdvancedType_TtlChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
 
-type DnsNameAdvanceType_StrictTtl struct {
+type DnsNameAdvancedType_StrictTtl struct {
 	StrictTtl *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=strict_ttl,json=strictTtl,oneof"`
 }
-type DnsNameAdvanceType_RefreshInterval struct {
+type DnsNameAdvancedType_RefreshInterval struct {
 	RefreshInterval uint32 `protobuf:"varint,4,opt,name=refresh_interval,json=refreshInterval,proto3,oneof"`
 }
 
-func (*DnsNameAdvanceType_StrictTtl) isDnsNameAdvanceType_TtlChoice()       {}
-func (*DnsNameAdvanceType_RefreshInterval) isDnsNameAdvanceType_TtlChoice() {}
+func (*DnsNameAdvancedType_StrictTtl) isDnsNameAdvancedType_TtlChoice()       {}
+func (*DnsNameAdvancedType_RefreshInterval) isDnsNameAdvancedType_TtlChoice() {}
 
-func (m *DnsNameAdvanceType) GetTtlChoice() isDnsNameAdvanceType_TtlChoice {
+func (m *DnsNameAdvancedType) GetTtlChoice() isDnsNameAdvancedType_TtlChoice {
 	if m != nil {
 		return m.TtlChoice
 	}
 	return nil
 }
 
-func (m *DnsNameAdvanceType) GetName() string {
+func (m *DnsNameAdvancedType) GetName() string {
 	if m != nil {
 		return m.Name
 	}
 	return ""
 }
 
-func (m *DnsNameAdvanceType) GetStrictTtl() *ves_io_schema4.Empty {
-	if x, ok := m.GetTtlChoice().(*DnsNameAdvanceType_StrictTtl); ok {
+func (m *DnsNameAdvancedType) GetStrictTtl() *ves_io_schema4.Empty {
+	if x, ok := m.GetTtlChoice().(*DnsNameAdvancedType_StrictTtl); ok {
 		return x.StrictTtl
 	}
 	return nil
 }
 
-func (m *DnsNameAdvanceType) GetRefreshInterval() uint32 {
-	if x, ok := m.GetTtlChoice().(*DnsNameAdvanceType_RefreshInterval); ok {
+func (m *DnsNameAdvancedType) GetRefreshInterval() uint32 {
+	if x, ok := m.GetTtlChoice().(*DnsNameAdvancedType_RefreshInterval); ok {
 		return x.RefreshInterval
 	}
 	return 0
 }
 
 // XXX_OneofFuncs is for the internal use of the proto package.
-func (*DnsNameAdvanceType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _DnsNameAdvanceType_OneofMarshaler, _DnsNameAdvanceType_OneofUnmarshaler, _DnsNameAdvanceType_OneofSizer, []interface{}{
-		(*DnsNameAdvanceType_StrictTtl)(nil),
-		(*DnsNameAdvanceType_RefreshInterval)(nil),
+func (*DnsNameAdvancedType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _DnsNameAdvancedType_OneofMarshaler, _DnsNameAdvancedType_OneofUnmarshaler, _DnsNameAdvancedType_OneofSizer, []interface{}{
+		(*DnsNameAdvancedType_StrictTtl)(nil),
+		(*DnsNameAdvancedType_RefreshInterval)(nil),
 	}
 }
 
-func _DnsNameAdvanceType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*DnsNameAdvanceType)
+func _DnsNameAdvancedType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*DnsNameAdvancedType)
 	// ttl_choice
 	switch x := m.TtlChoice.(type) {
-	case *DnsNameAdvanceType_StrictTtl:
+	case *DnsNameAdvancedType_StrictTtl:
 		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.StrictTtl); err != nil {
 			return err
 		}
-	case *DnsNameAdvanceType_RefreshInterval:
+	case *DnsNameAdvancedType_RefreshInterval:
 		_ = b.EncodeVarint(4<<3 | proto.WireVarint)
 		_ = b.EncodeVarint(uint64(x.RefreshInterval))
 	case nil:
 	default:
-		return fmt.Errorf("DnsNameAdvanceType.TtlChoice has unexpected type %T", x)
+		return fmt.Errorf("DnsNameAdvancedType.TtlChoice has unexpected type %T", x)
 	}
 	return nil
 }
 
-func _DnsNameAdvanceType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*DnsNameAdvanceType)
+func _DnsNameAdvancedType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*DnsNameAdvancedType)
 	switch tag {
 	case 3: // ttl_choice.strict_ttl
 		if wire != proto.WireBytes {
@@ -318,30 +306,30 @@ func _DnsNameAdvanceType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *p
 		}
 		msg := new(ves_io_schema4.Empty)
 		err := b.DecodeMessage(msg)
-		m.TtlChoice = &DnsNameAdvanceType_StrictTtl{msg}
+		m.TtlChoice = &DnsNameAdvancedType_StrictTtl{msg}
 		return true, err
 	case 4: // ttl_choice.refresh_interval
 		if wire != proto.WireVarint {
 			return true, proto.ErrInternalBadWireType
 		}
 		x, err := b.DecodeVarint()
-		m.TtlChoice = &DnsNameAdvanceType_RefreshInterval{uint32(x)}
+		m.TtlChoice = &DnsNameAdvancedType_RefreshInterval{uint32(x)}
 		return true, err
 	default:
 		return false, nil
 	}
 }
 
-func _DnsNameAdvanceType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*DnsNameAdvanceType)
+func _DnsNameAdvancedType_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*DnsNameAdvancedType)
 	// ttl_choice
 	switch x := m.TtlChoice.(type) {
-	case *DnsNameAdvanceType_StrictTtl:
+	case *DnsNameAdvancedType_StrictTtl:
 		s := proto.Size(x.StrictTtl)
 		n += proto.SizeVarint(3<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(s))
 		n += s
-	case *DnsNameAdvanceType_RefreshInterval:
+	case *DnsNameAdvancedType_RefreshInterval:
 		n += proto.SizeVarint(4<<3 | proto.WireVarint)
 		n += proto.SizeVarint(uint64(x.RefreshInterval))
 	case nil:
@@ -391,9 +379,10 @@ type GlobalSpecType struct {
 	// Types that are valid to be assigned to EndpointAddress:
 	//	*GlobalSpecType_Ip
 	//	*GlobalSpecType_DnsName
-	//	*GlobalSpecType_DnsNameAdvance
+	//	*GlobalSpecType_DnsNameAdvanced
 	//	*GlobalSpecType_ServerlessServiceName
 	//	*GlobalSpecType_ServiceInfo
+	//	*GlobalSpecType_K8SClusterApiServer
 	EndpointAddress isGlobalSpecType_EndpointAddress `protobuf_oneof:"endpoint_address"`
 }
 
@@ -414,8 +403,8 @@ type GlobalSpecType_Ip struct {
 type GlobalSpecType_DnsName struct {
 	DnsName string `protobuf:"bytes,4,opt,name=dns_name,json=dnsName,proto3,oneof"`
 }
-type GlobalSpecType_DnsNameAdvance struct {
-	DnsNameAdvance *DnsNameAdvanceType `protobuf:"bytes,11,opt,name=dns_name_advance,json=dnsNameAdvance,oneof"`
+type GlobalSpecType_DnsNameAdvanced struct {
+	DnsNameAdvanced *DnsNameAdvancedType `protobuf:"bytes,11,opt,name=dns_name_advanced,json=dnsNameAdvanced,oneof"`
 }
 type GlobalSpecType_ServerlessServiceName struct {
 	ServerlessServiceName string `protobuf:"bytes,6,opt,name=serverless_service_name,json=serverlessServiceName,proto3,oneof"`
@@ -423,12 +412,16 @@ type GlobalSpecType_ServerlessServiceName struct {
 type GlobalSpecType_ServiceInfo struct {
 	ServiceInfo *ServiceInfoType `protobuf:"bytes,8,opt,name=service_info,json=serviceInfo,oneof"`
 }
+type GlobalSpecType_K8SClusterApiServer struct {
+	K8SClusterApiServer *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=k8s_cluster_api_server,json=k8sClusterApiServer,oneof"`
+}
 
 func (*GlobalSpecType_Ip) isGlobalSpecType_EndpointAddress()                    {}
 func (*GlobalSpecType_DnsName) isGlobalSpecType_EndpointAddress()               {}
-func (*GlobalSpecType_DnsNameAdvance) isGlobalSpecType_EndpointAddress()        {}
+func (*GlobalSpecType_DnsNameAdvanced) isGlobalSpecType_EndpointAddress()       {}
 func (*GlobalSpecType_ServerlessServiceName) isGlobalSpecType_EndpointAddress() {}
 func (*GlobalSpecType_ServiceInfo) isGlobalSpecType_EndpointAddress()           {}
+func (*GlobalSpecType_K8SClusterApiServer) isGlobalSpecType_EndpointAddress()   {}
 
 func (m *GlobalSpecType) GetEndpointAddress() isGlobalSpecType_EndpointAddress {
 	if m != nil {
@@ -479,9 +472,9 @@ func (m *GlobalSpecType) GetDnsName() string {
 	return ""
 }
 
-func (m *GlobalSpecType) GetDnsNameAdvance() *DnsNameAdvanceType {
-	if x, ok := m.GetEndpointAddress().(*GlobalSpecType_DnsNameAdvance); ok {
-		return x.DnsNameAdvance
+func (m *GlobalSpecType) GetDnsNameAdvanced() *DnsNameAdvancedType {
+	if x, ok := m.GetEndpointAddress().(*GlobalSpecType_DnsNameAdvanced); ok {
+		return x.DnsNameAdvanced
 	}
 	return nil
 }
@@ -500,14 +493,22 @@ func (m *GlobalSpecType) GetServiceInfo() *ServiceInfoType {
 	return nil
 }
 
+func (m *GlobalSpecType) GetK8SClusterApiServer() *ves_io_schema4.Empty {
+	if x, ok := m.GetEndpointAddress().(*GlobalSpecType_K8SClusterApiServer); ok {
+		return x.K8SClusterApiServer
+	}
+	return nil
+}
+
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
 		(*GlobalSpecType_Ip)(nil),
 		(*GlobalSpecType_DnsName)(nil),
-		(*GlobalSpecType_DnsNameAdvance)(nil),
+		(*GlobalSpecType_DnsNameAdvanced)(nil),
 		(*GlobalSpecType_ServerlessServiceName)(nil),
 		(*GlobalSpecType_ServiceInfo)(nil),
+		(*GlobalSpecType_K8SClusterApiServer)(nil),
 	}
 }
 
@@ -521,9 +522,9 @@ func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case *GlobalSpecType_DnsName:
 		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
 		_ = b.EncodeStringBytes(x.DnsName)
-	case *GlobalSpecType_DnsNameAdvance:
+	case *GlobalSpecType_DnsNameAdvanced:
 		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DnsNameAdvance); err != nil {
+		if err := b.EncodeMessage(x.DnsNameAdvanced); err != nil {
 			return err
 		}
 	case *GlobalSpecType_ServerlessServiceName:
@@ -532,6 +533,11 @@ func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case *GlobalSpecType_ServiceInfo:
 		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.ServiceInfo); err != nil {
+			return err
+		}
+	case *GlobalSpecType_K8SClusterApiServer:
+		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.K8SClusterApiServer); err != nil {
 			return err
 		}
 	case nil:
@@ -558,13 +564,13 @@ func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto
 		x, err := b.DecodeStringBytes()
 		m.EndpointAddress = &GlobalSpecType_DnsName{x}
 		return true, err
-	case 11: // endpoint_address.dns_name_advance
+	case 11: // endpoint_address.dns_name_advanced
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(DnsNameAdvanceType)
+		msg := new(DnsNameAdvancedType)
 		err := b.DecodeMessage(msg)
-		m.EndpointAddress = &GlobalSpecType_DnsNameAdvance{msg}
+		m.EndpointAddress = &GlobalSpecType_DnsNameAdvanced{msg}
 		return true, err
 	case 6: // endpoint_address.serverless_service_name
 		if wire != proto.WireBytes {
@@ -580,6 +586,14 @@ func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto
 		msg := new(ServiceInfoType)
 		err := b.DecodeMessage(msg)
 		m.EndpointAddress = &GlobalSpecType_ServiceInfo{msg}
+		return true, err
+	case 13: // endpoint_address.k8s_cluster_api_server
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.EndpointAddress = &GlobalSpecType_K8SClusterApiServer{msg}
 		return true, err
 	default:
 		return false, nil
@@ -598,8 +612,8 @@ func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
 		n += proto.SizeVarint(4<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(len(x.DnsName)))
 		n += len(x.DnsName)
-	case *GlobalSpecType_DnsNameAdvance:
-		s := proto.Size(x.DnsNameAdvance)
+	case *GlobalSpecType_DnsNameAdvanced:
+		s := proto.Size(x.DnsNameAdvanced)
 		n += proto.SizeVarint(11<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(s))
 		n += s
@@ -610,6 +624,11 @@ func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
 	case *GlobalSpecType_ServiceInfo:
 		s := proto.Size(x.ServiceInfo)
 		n += proto.SizeVarint(8<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GlobalSpecType_K8SClusterApiServer:
+		s := proto.Size(x.K8SClusterApiServer)
+		n += proto.SizeVarint(13<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(s))
 		n += s
 	case nil:
@@ -631,7 +650,7 @@ type CreateSpecType struct {
 	// Types that are valid to be assigned to EndpointAddress:
 	//	*CreateSpecType_Ip
 	//	*CreateSpecType_DnsName
-	//	*CreateSpecType_DnsNameAdvance
+	//	*CreateSpecType_DnsNameAdvanced
 	//	*CreateSpecType_ServiceInfo
 	EndpointAddress isCreateSpecType_EndpointAddress `protobuf_oneof:"endpoint_address"`
 }
@@ -653,17 +672,17 @@ type CreateSpecType_Ip struct {
 type CreateSpecType_DnsName struct {
 	DnsName string `protobuf:"bytes,4,opt,name=dns_name,json=dnsName,proto3,oneof"`
 }
-type CreateSpecType_DnsNameAdvance struct {
-	DnsNameAdvance *DnsNameAdvanceType `protobuf:"bytes,11,opt,name=dns_name_advance,json=dnsNameAdvance,oneof"`
+type CreateSpecType_DnsNameAdvanced struct {
+	DnsNameAdvanced *DnsNameAdvancedType `protobuf:"bytes,11,opt,name=dns_name_advanced,json=dnsNameAdvanced,oneof"`
 }
 type CreateSpecType_ServiceInfo struct {
 	ServiceInfo *ServiceInfoType `protobuf:"bytes,8,opt,name=service_info,json=serviceInfo,oneof"`
 }
 
-func (*CreateSpecType_Ip) isCreateSpecType_EndpointAddress()             {}
-func (*CreateSpecType_DnsName) isCreateSpecType_EndpointAddress()        {}
-func (*CreateSpecType_DnsNameAdvance) isCreateSpecType_EndpointAddress() {}
-func (*CreateSpecType_ServiceInfo) isCreateSpecType_EndpointAddress()    {}
+func (*CreateSpecType_Ip) isCreateSpecType_EndpointAddress()              {}
+func (*CreateSpecType_DnsName) isCreateSpecType_EndpointAddress()         {}
+func (*CreateSpecType_DnsNameAdvanced) isCreateSpecType_EndpointAddress() {}
+func (*CreateSpecType_ServiceInfo) isCreateSpecType_EndpointAddress()     {}
 
 func (m *CreateSpecType) GetEndpointAddress() isCreateSpecType_EndpointAddress {
 	if m != nil {
@@ -714,9 +733,9 @@ func (m *CreateSpecType) GetDnsName() string {
 	return ""
 }
 
-func (m *CreateSpecType) GetDnsNameAdvance() *DnsNameAdvanceType {
-	if x, ok := m.GetEndpointAddress().(*CreateSpecType_DnsNameAdvance); ok {
-		return x.DnsNameAdvance
+func (m *CreateSpecType) GetDnsNameAdvanced() *DnsNameAdvancedType {
+	if x, ok := m.GetEndpointAddress().(*CreateSpecType_DnsNameAdvanced); ok {
+		return x.DnsNameAdvanced
 	}
 	return nil
 }
@@ -733,7 +752,7 @@ func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
 		(*CreateSpecType_Ip)(nil),
 		(*CreateSpecType_DnsName)(nil),
-		(*CreateSpecType_DnsNameAdvance)(nil),
+		(*CreateSpecType_DnsNameAdvanced)(nil),
 		(*CreateSpecType_ServiceInfo)(nil),
 	}
 }
@@ -748,9 +767,9 @@ func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case *CreateSpecType_DnsName:
 		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
 		_ = b.EncodeStringBytes(x.DnsName)
-	case *CreateSpecType_DnsNameAdvance:
+	case *CreateSpecType_DnsNameAdvanced:
 		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DnsNameAdvance); err != nil {
+		if err := b.EncodeMessage(x.DnsNameAdvanced); err != nil {
 			return err
 		}
 	case *CreateSpecType_ServiceInfo:
@@ -782,13 +801,13 @@ func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto
 		x, err := b.DecodeStringBytes()
 		m.EndpointAddress = &CreateSpecType_DnsName{x}
 		return true, err
-	case 11: // endpoint_address.dns_name_advance
+	case 11: // endpoint_address.dns_name_advanced
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(DnsNameAdvanceType)
+		msg := new(DnsNameAdvancedType)
 		err := b.DecodeMessage(msg)
-		m.EndpointAddress = &CreateSpecType_DnsNameAdvance{msg}
+		m.EndpointAddress = &CreateSpecType_DnsNameAdvanced{msg}
 		return true, err
 	case 8: // endpoint_address.service_info
 		if wire != proto.WireBytes {
@@ -815,8 +834,8 @@ func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
 		n += proto.SizeVarint(4<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(len(x.DnsName)))
 		n += len(x.DnsName)
-	case *CreateSpecType_DnsNameAdvance:
-		s := proto.Size(x.DnsNameAdvance)
+	case *CreateSpecType_DnsNameAdvanced:
+		s := proto.Size(x.DnsNameAdvanced)
 		n += proto.SizeVarint(11<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(s))
 		n += s
@@ -845,7 +864,7 @@ type ReplaceSpecType struct {
 	// Types that are valid to be assigned to EndpointAddress:
 	//	*ReplaceSpecType_Ip
 	//	*ReplaceSpecType_DnsName
-	//	*ReplaceSpecType_DnsNameAdvance
+	//	*ReplaceSpecType_DnsNameAdvanced
 	//	*ReplaceSpecType_ServiceInfo
 	EndpointAddress isReplaceSpecType_EndpointAddress `protobuf_oneof:"endpoint_address"`
 }
@@ -867,17 +886,17 @@ type ReplaceSpecType_Ip struct {
 type ReplaceSpecType_DnsName struct {
 	DnsName string `protobuf:"bytes,4,opt,name=dns_name,json=dnsName,proto3,oneof"`
 }
-type ReplaceSpecType_DnsNameAdvance struct {
-	DnsNameAdvance *DnsNameAdvanceType `protobuf:"bytes,11,opt,name=dns_name_advance,json=dnsNameAdvance,oneof"`
+type ReplaceSpecType_DnsNameAdvanced struct {
+	DnsNameAdvanced *DnsNameAdvancedType `protobuf:"bytes,11,opt,name=dns_name_advanced,json=dnsNameAdvanced,oneof"`
 }
 type ReplaceSpecType_ServiceInfo struct {
 	ServiceInfo *ServiceInfoType `protobuf:"bytes,8,opt,name=service_info,json=serviceInfo,oneof"`
 }
 
-func (*ReplaceSpecType_Ip) isReplaceSpecType_EndpointAddress()             {}
-func (*ReplaceSpecType_DnsName) isReplaceSpecType_EndpointAddress()        {}
-func (*ReplaceSpecType_DnsNameAdvance) isReplaceSpecType_EndpointAddress() {}
-func (*ReplaceSpecType_ServiceInfo) isReplaceSpecType_EndpointAddress()    {}
+func (*ReplaceSpecType_Ip) isReplaceSpecType_EndpointAddress()              {}
+func (*ReplaceSpecType_DnsName) isReplaceSpecType_EndpointAddress()         {}
+func (*ReplaceSpecType_DnsNameAdvanced) isReplaceSpecType_EndpointAddress() {}
+func (*ReplaceSpecType_ServiceInfo) isReplaceSpecType_EndpointAddress()     {}
 
 func (m *ReplaceSpecType) GetEndpointAddress() isReplaceSpecType_EndpointAddress {
 	if m != nil {
@@ -928,9 +947,9 @@ func (m *ReplaceSpecType) GetDnsName() string {
 	return ""
 }
 
-func (m *ReplaceSpecType) GetDnsNameAdvance() *DnsNameAdvanceType {
-	if x, ok := m.GetEndpointAddress().(*ReplaceSpecType_DnsNameAdvance); ok {
-		return x.DnsNameAdvance
+func (m *ReplaceSpecType) GetDnsNameAdvanced() *DnsNameAdvancedType {
+	if x, ok := m.GetEndpointAddress().(*ReplaceSpecType_DnsNameAdvanced); ok {
+		return x.DnsNameAdvanced
 	}
 	return nil
 }
@@ -947,7 +966,7 @@ func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffe
 	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
 		(*ReplaceSpecType_Ip)(nil),
 		(*ReplaceSpecType_DnsName)(nil),
-		(*ReplaceSpecType_DnsNameAdvance)(nil),
+		(*ReplaceSpecType_DnsNameAdvanced)(nil),
 		(*ReplaceSpecType_ServiceInfo)(nil),
 	}
 }
@@ -962,9 +981,9 @@ func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case *ReplaceSpecType_DnsName:
 		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
 		_ = b.EncodeStringBytes(x.DnsName)
-	case *ReplaceSpecType_DnsNameAdvance:
+	case *ReplaceSpecType_DnsNameAdvanced:
 		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DnsNameAdvance); err != nil {
+		if err := b.EncodeMessage(x.DnsNameAdvanced); err != nil {
 			return err
 		}
 	case *ReplaceSpecType_ServiceInfo:
@@ -996,13 +1015,13 @@ func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *prot
 		x, err := b.DecodeStringBytes()
 		m.EndpointAddress = &ReplaceSpecType_DnsName{x}
 		return true, err
-	case 11: // endpoint_address.dns_name_advance
+	case 11: // endpoint_address.dns_name_advanced
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(DnsNameAdvanceType)
+		msg := new(DnsNameAdvancedType)
 		err := b.DecodeMessage(msg)
-		m.EndpointAddress = &ReplaceSpecType_DnsNameAdvance{msg}
+		m.EndpointAddress = &ReplaceSpecType_DnsNameAdvanced{msg}
 		return true, err
 	case 8: // endpoint_address.service_info
 		if wire != proto.WireBytes {
@@ -1029,8 +1048,8 @@ func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
 		n += proto.SizeVarint(4<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(len(x.DnsName)))
 		n += len(x.DnsName)
-	case *ReplaceSpecType_DnsNameAdvance:
-		s := proto.Size(x.DnsNameAdvance)
+	case *ReplaceSpecType_DnsNameAdvanced:
+		s := proto.Size(x.DnsNameAdvanced)
 		n += proto.SizeVarint(11<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(s))
 		n += s
@@ -1058,7 +1077,7 @@ type GetSpecType struct {
 	// Types that are valid to be assigned to EndpointAddress:
 	//	*GetSpecType_Ip
 	//	*GetSpecType_DnsName
-	//	*GetSpecType_DnsNameAdvance
+	//	*GetSpecType_DnsNameAdvanced
 	//	*GetSpecType_ServiceInfo
 	EndpointAddress isGetSpecType_EndpointAddress `protobuf_oneof:"endpoint_address"`
 }
@@ -1080,17 +1099,17 @@ type GetSpecType_Ip struct {
 type GetSpecType_DnsName struct {
 	DnsName string `protobuf:"bytes,4,opt,name=dns_name,json=dnsName,proto3,oneof"`
 }
-type GetSpecType_DnsNameAdvance struct {
-	DnsNameAdvance *DnsNameAdvanceType `protobuf:"bytes,11,opt,name=dns_name_advance,json=dnsNameAdvance,oneof"`
+type GetSpecType_DnsNameAdvanced struct {
+	DnsNameAdvanced *DnsNameAdvancedType `protobuf:"bytes,11,opt,name=dns_name_advanced,json=dnsNameAdvanced,oneof"`
 }
 type GetSpecType_ServiceInfo struct {
 	ServiceInfo *ServiceInfoType `protobuf:"bytes,8,opt,name=service_info,json=serviceInfo,oneof"`
 }
 
-func (*GetSpecType_Ip) isGetSpecType_EndpointAddress()             {}
-func (*GetSpecType_DnsName) isGetSpecType_EndpointAddress()        {}
-func (*GetSpecType_DnsNameAdvance) isGetSpecType_EndpointAddress() {}
-func (*GetSpecType_ServiceInfo) isGetSpecType_EndpointAddress()    {}
+func (*GetSpecType_Ip) isGetSpecType_EndpointAddress()              {}
+func (*GetSpecType_DnsName) isGetSpecType_EndpointAddress()         {}
+func (*GetSpecType_DnsNameAdvanced) isGetSpecType_EndpointAddress() {}
+func (*GetSpecType_ServiceInfo) isGetSpecType_EndpointAddress()     {}
 
 func (m *GetSpecType) GetEndpointAddress() isGetSpecType_EndpointAddress {
 	if m != nil {
@@ -1141,9 +1160,9 @@ func (m *GetSpecType) GetDnsName() string {
 	return ""
 }
 
-func (m *GetSpecType) GetDnsNameAdvance() *DnsNameAdvanceType {
-	if x, ok := m.GetEndpointAddress().(*GetSpecType_DnsNameAdvance); ok {
-		return x.DnsNameAdvance
+func (m *GetSpecType) GetDnsNameAdvanced() *DnsNameAdvancedType {
+	if x, ok := m.GetEndpointAddress().(*GetSpecType_DnsNameAdvanced); ok {
+		return x.DnsNameAdvanced
 	}
 	return nil
 }
@@ -1160,7 +1179,7 @@ func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) e
 	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
 		(*GetSpecType_Ip)(nil),
 		(*GetSpecType_DnsName)(nil),
-		(*GetSpecType_DnsNameAdvance)(nil),
+		(*GetSpecType_DnsNameAdvanced)(nil),
 		(*GetSpecType_ServiceInfo)(nil),
 	}
 }
@@ -1175,9 +1194,9 @@ func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case *GetSpecType_DnsName:
 		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
 		_ = b.EncodeStringBytes(x.DnsName)
-	case *GetSpecType_DnsNameAdvance:
+	case *GetSpecType_DnsNameAdvanced:
 		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.DnsNameAdvance); err != nil {
+		if err := b.EncodeMessage(x.DnsNameAdvanced); err != nil {
 			return err
 		}
 	case *GetSpecType_ServiceInfo:
@@ -1209,13 +1228,13 @@ func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Bu
 		x, err := b.DecodeStringBytes()
 		m.EndpointAddress = &GetSpecType_DnsName{x}
 		return true, err
-	case 11: // endpoint_address.dns_name_advance
+	case 11: // endpoint_address.dns_name_advanced
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
 		}
-		msg := new(DnsNameAdvanceType)
+		msg := new(DnsNameAdvancedType)
 		err := b.DecodeMessage(msg)
-		m.EndpointAddress = &GetSpecType_DnsNameAdvance{msg}
+		m.EndpointAddress = &GetSpecType_DnsNameAdvanced{msg}
 		return true, err
 	case 8: // endpoint_address.service_info
 		if wire != proto.WireBytes {
@@ -1242,8 +1261,8 @@ func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
 		n += proto.SizeVarint(4<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(len(x.DnsName)))
 		n += len(x.DnsName)
-	case *GetSpecType_DnsNameAdvance:
-		s := proto.Size(x.DnsNameAdvance)
+	case *GetSpecType_DnsNameAdvanced:
+		s := proto.Size(x.DnsNameAdvanced)
 		n += proto.SizeVarint(11<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(s))
 		n += s
@@ -1628,8 +1647,8 @@ func (m *VerStatusType) GetDiscoveredInfo() *DiscoveredInfoType {
 func init() {
 	proto.RegisterType((*ServiceInfoType)(nil), "ves.io.schema.endpoint.ServiceInfoType")
 	golang_proto.RegisterType((*ServiceInfoType)(nil), "ves.io.schema.endpoint.ServiceInfoType")
-	proto.RegisterType((*DnsNameAdvanceType)(nil), "ves.io.schema.endpoint.DnsNameAdvanceType")
-	golang_proto.RegisterType((*DnsNameAdvanceType)(nil), "ves.io.schema.endpoint.DnsNameAdvanceType")
+	proto.RegisterType((*DnsNameAdvancedType)(nil), "ves.io.schema.endpoint.DnsNameAdvancedType")
+	golang_proto.RegisterType((*DnsNameAdvancedType)(nil), "ves.io.schema.endpoint.DnsNameAdvancedType")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.endpoint.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.endpoint.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.endpoint.CreateSpecType")
@@ -1739,14 +1758,14 @@ func (this *ServiceInfoType_ServiceSelector) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *DnsNameAdvanceType) Equal(that interface{}) bool {
+func (this *DnsNameAdvancedType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*DnsNameAdvanceType)
+	that1, ok := that.(*DnsNameAdvancedType)
 	if !ok {
-		that2, ok := that.(DnsNameAdvanceType)
+		that2, ok := that.(DnsNameAdvancedType)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1772,14 +1791,14 @@ func (this *DnsNameAdvanceType) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *DnsNameAdvanceType_StrictTtl) Equal(that interface{}) bool {
+func (this *DnsNameAdvancedType_StrictTtl) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*DnsNameAdvanceType_StrictTtl)
+	that1, ok := that.(*DnsNameAdvancedType_StrictTtl)
 	if !ok {
-		that2, ok := that.(DnsNameAdvanceType_StrictTtl)
+		that2, ok := that.(DnsNameAdvancedType_StrictTtl)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1796,14 +1815,14 @@ func (this *DnsNameAdvanceType_StrictTtl) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *DnsNameAdvanceType_RefreshInterval) Equal(that interface{}) bool {
+func (this *DnsNameAdvancedType_RefreshInterval) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*DnsNameAdvanceType_RefreshInterval)
+	that1, ok := that.(*DnsNameAdvancedType_RefreshInterval)
 	if !ok {
-		that2, ok := that.(DnsNameAdvanceType_RefreshInterval)
+		that2, ok := that.(DnsNameAdvancedType_RefreshInterval)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1910,14 +1929,14 @@ func (this *GlobalSpecType_DnsName) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *GlobalSpecType_DnsNameAdvance) Equal(that interface{}) bool {
+func (this *GlobalSpecType_DnsNameAdvanced) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*GlobalSpecType_DnsNameAdvance)
+	that1, ok := that.(*GlobalSpecType_DnsNameAdvanced)
 	if !ok {
-		that2, ok := that.(GlobalSpecType_DnsNameAdvance)
+		that2, ok := that.(GlobalSpecType_DnsNameAdvanced)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1929,7 +1948,7 @@ func (this *GlobalSpecType_DnsNameAdvance) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.DnsNameAdvance.Equal(that1.DnsNameAdvance) {
+	if !this.DnsNameAdvanced.Equal(that1.DnsNameAdvanced) {
 		return false
 	}
 	return true
@@ -1978,6 +1997,30 @@ func (this *GlobalSpecType_ServiceInfo) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.ServiceInfo.Equal(that1.ServiceInfo) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_K8SClusterApiServer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_K8SClusterApiServer)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_K8SClusterApiServer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.K8SClusterApiServer.Equal(that1.K8SClusterApiServer) {
 		return false
 	}
 	return true
@@ -2072,14 +2115,14 @@ func (this *CreateSpecType_DnsName) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *CreateSpecType_DnsNameAdvance) Equal(that interface{}) bool {
+func (this *CreateSpecType_DnsNameAdvanced) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*CreateSpecType_DnsNameAdvance)
+	that1, ok := that.(*CreateSpecType_DnsNameAdvanced)
 	if !ok {
-		that2, ok := that.(CreateSpecType_DnsNameAdvance)
+		that2, ok := that.(CreateSpecType_DnsNameAdvanced)
 		if ok {
 			that1 = &that2
 		} else {
@@ -2091,7 +2134,7 @@ func (this *CreateSpecType_DnsNameAdvance) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.DnsNameAdvance.Equal(that1.DnsNameAdvance) {
+	if !this.DnsNameAdvanced.Equal(that1.DnsNameAdvanced) {
 		return false
 	}
 	return true
@@ -2210,14 +2253,14 @@ func (this *ReplaceSpecType_DnsName) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *ReplaceSpecType_DnsNameAdvance) Equal(that interface{}) bool {
+func (this *ReplaceSpecType_DnsNameAdvanced) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*ReplaceSpecType_DnsNameAdvance)
+	that1, ok := that.(*ReplaceSpecType_DnsNameAdvanced)
 	if !ok {
-		that2, ok := that.(ReplaceSpecType_DnsNameAdvance)
+		that2, ok := that.(ReplaceSpecType_DnsNameAdvanced)
 		if ok {
 			that1 = &that2
 		} else {
@@ -2229,7 +2272,7 @@ func (this *ReplaceSpecType_DnsNameAdvance) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.DnsNameAdvance.Equal(that1.DnsNameAdvance) {
+	if !this.DnsNameAdvanced.Equal(that1.DnsNameAdvanced) {
 		return false
 	}
 	return true
@@ -2348,14 +2391,14 @@ func (this *GetSpecType_DnsName) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *GetSpecType_DnsNameAdvance) Equal(that interface{}) bool {
+func (this *GetSpecType_DnsNameAdvanced) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*GetSpecType_DnsNameAdvance)
+	that1, ok := that.(*GetSpecType_DnsNameAdvanced)
 	if !ok {
-		that2, ok := that.(GetSpecType_DnsNameAdvance)
+		that2, ok := that.(GetSpecType_DnsNameAdvanced)
 		if ok {
 			that1 = &that2
 		} else {
@@ -2367,7 +2410,7 @@ func (this *GetSpecType_DnsNameAdvance) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.DnsNameAdvance.Equal(that1.DnsNameAdvance) {
+	if !this.DnsNameAdvanced.Equal(that1.DnsNameAdvanced) {
 		return false
 	}
 	return true
@@ -2680,12 +2723,12 @@ func (this *ServiceInfoType_ServiceSelector) GoString() string {
 		`ServiceSelector:` + fmt.Sprintf("%#v", this.ServiceSelector) + `}`}, ", ")
 	return s
 }
-func (this *DnsNameAdvanceType) GoString() string {
+func (this *DnsNameAdvancedType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 7)
-	s = append(s, "&endpoint.DnsNameAdvanceType{")
+	s = append(s, "&endpoint.DnsNameAdvancedType{")
 	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
 	if this.TtlChoice != nil {
 		s = append(s, "TtlChoice: "+fmt.Sprintf("%#v", this.TtlChoice)+",\n")
@@ -2693,19 +2736,19 @@ func (this *DnsNameAdvanceType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *DnsNameAdvanceType_StrictTtl) GoString() string {
+func (this *DnsNameAdvancedType_StrictTtl) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&endpoint.DnsNameAdvanceType_StrictTtl{` +
+	s := strings.Join([]string{`&endpoint.DnsNameAdvancedType_StrictTtl{` +
 		`StrictTtl:` + fmt.Sprintf("%#v", this.StrictTtl) + `}`}, ", ")
 	return s
 }
-func (this *DnsNameAdvanceType_RefreshInterval) GoString() string {
+func (this *DnsNameAdvancedType_RefreshInterval) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&endpoint.DnsNameAdvanceType_RefreshInterval{` +
+	s := strings.Join([]string{`&endpoint.DnsNameAdvancedType_RefreshInterval{` +
 		`RefreshInterval:` + fmt.Sprintf("%#v", this.RefreshInterval) + `}`}, ", ")
 	return s
 }
@@ -2713,7 +2756,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 13)
+	s := make([]string, 0, 14)
 	s = append(s, "&endpoint.GlobalSpecType{")
 	if this.Where != nil {
 		s = append(s, "Where: "+fmt.Sprintf("%#v", this.Where)+",\n")
@@ -2743,12 +2786,12 @@ func (this *GlobalSpecType_DnsName) GoString() string {
 		`DnsName:` + fmt.Sprintf("%#v", this.DnsName) + `}`}, ", ")
 	return s
 }
-func (this *GlobalSpecType_DnsNameAdvance) GoString() string {
+func (this *GlobalSpecType_DnsNameAdvanced) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&endpoint.GlobalSpecType_DnsNameAdvance{` +
-		`DnsNameAdvance:` + fmt.Sprintf("%#v", this.DnsNameAdvance) + `}`}, ", ")
+	s := strings.Join([]string{`&endpoint.GlobalSpecType_DnsNameAdvanced{` +
+		`DnsNameAdvanced:` + fmt.Sprintf("%#v", this.DnsNameAdvanced) + `}`}, ", ")
 	return s
 }
 func (this *GlobalSpecType_ServerlessServiceName) GoString() string {
@@ -2765,6 +2808,14 @@ func (this *GlobalSpecType_ServiceInfo) GoString() string {
 	}
 	s := strings.Join([]string{`&endpoint.GlobalSpecType_ServiceInfo{` +
 		`ServiceInfo:` + fmt.Sprintf("%#v", this.ServiceInfo) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_K8SClusterApiServer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&endpoint.GlobalSpecType_K8SClusterApiServer{` +
+		`K8SClusterApiServer:` + fmt.Sprintf("%#v", this.K8SClusterApiServer) + `}`}, ", ")
 	return s
 }
 func (this *CreateSpecType) GoString() string {
@@ -2801,12 +2852,12 @@ func (this *CreateSpecType_DnsName) GoString() string {
 		`DnsName:` + fmt.Sprintf("%#v", this.DnsName) + `}`}, ", ")
 	return s
 }
-func (this *CreateSpecType_DnsNameAdvance) GoString() string {
+func (this *CreateSpecType_DnsNameAdvanced) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&endpoint.CreateSpecType_DnsNameAdvance{` +
-		`DnsNameAdvance:` + fmt.Sprintf("%#v", this.DnsNameAdvance) + `}`}, ", ")
+	s := strings.Join([]string{`&endpoint.CreateSpecType_DnsNameAdvanced{` +
+		`DnsNameAdvanced:` + fmt.Sprintf("%#v", this.DnsNameAdvanced) + `}`}, ", ")
 	return s
 }
 func (this *CreateSpecType_ServiceInfo) GoString() string {
@@ -2851,12 +2902,12 @@ func (this *ReplaceSpecType_DnsName) GoString() string {
 		`DnsName:` + fmt.Sprintf("%#v", this.DnsName) + `}`}, ", ")
 	return s
 }
-func (this *ReplaceSpecType_DnsNameAdvance) GoString() string {
+func (this *ReplaceSpecType_DnsNameAdvanced) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&endpoint.ReplaceSpecType_DnsNameAdvance{` +
-		`DnsNameAdvance:` + fmt.Sprintf("%#v", this.DnsNameAdvance) + `}`}, ", ")
+	s := strings.Join([]string{`&endpoint.ReplaceSpecType_DnsNameAdvanced{` +
+		`DnsNameAdvanced:` + fmt.Sprintf("%#v", this.DnsNameAdvanced) + `}`}, ", ")
 	return s
 }
 func (this *ReplaceSpecType_ServiceInfo) GoString() string {
@@ -2901,12 +2952,12 @@ func (this *GetSpecType_DnsName) GoString() string {
 		`DnsName:` + fmt.Sprintf("%#v", this.DnsName) + `}`}, ", ")
 	return s
 }
-func (this *GetSpecType_DnsNameAdvance) GoString() string {
+func (this *GetSpecType_DnsNameAdvanced) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&endpoint.GetSpecType_DnsNameAdvance{` +
-		`DnsNameAdvance:` + fmt.Sprintf("%#v", this.DnsNameAdvance) + `}`}, ", ")
+	s := strings.Join([]string{`&endpoint.GetSpecType_DnsNameAdvanced{` +
+		`DnsNameAdvanced:` + fmt.Sprintf("%#v", this.DnsNameAdvanced) + `}`}, ", ")
 	return s
 }
 func (this *GetSpecType_ServiceInfo) GoString() string {
@@ -3104,7 +3155,7 @@ func (m *ServiceInfoType_ServiceSelector) MarshalTo(dAtA []byte) (int, error) {
 	}
 	return i, nil
 }
-func (m *DnsNameAdvanceType) Marshal() (dAtA []byte, err error) {
+func (m *DnsNameAdvancedType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -3114,7 +3165,7 @@ func (m *DnsNameAdvanceType) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *DnsNameAdvanceType) MarshalTo(dAtA []byte) (int, error) {
+func (m *DnsNameAdvancedType) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -3135,7 +3186,7 @@ func (m *DnsNameAdvanceType) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *DnsNameAdvanceType_StrictTtl) MarshalTo(dAtA []byte) (int, error) {
+func (m *DnsNameAdvancedType_StrictTtl) MarshalTo(dAtA []byte) (int, error) {
 	i := 0
 	if m.StrictTtl != nil {
 		dAtA[i] = 0x1a
@@ -3149,7 +3200,7 @@ func (m *DnsNameAdvanceType_StrictTtl) MarshalTo(dAtA []byte) (int, error) {
 	}
 	return i, nil
 }
-func (m *DnsNameAdvanceType_RefreshInterval) MarshalTo(dAtA []byte) (int, error) {
+func (m *DnsNameAdvancedType_RefreshInterval) MarshalTo(dAtA []byte) (int, error) {
 	i := 0
 	dAtA[i] = 0x20
 	i++
@@ -3245,17 +3296,31 @@ func (m *GlobalSpecType_ServiceInfo) MarshalTo(dAtA []byte) (int, error) {
 	}
 	return i, nil
 }
-func (m *GlobalSpecType_DnsNameAdvance) MarshalTo(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_DnsNameAdvanced) MarshalTo(dAtA []byte) (int, error) {
 	i := 0
-	if m.DnsNameAdvance != nil {
+	if m.DnsNameAdvanced != nil {
 		dAtA[i] = 0x5a
 		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DnsNameAdvance.Size()))
-		n8, err := m.DnsNameAdvance.MarshalTo(dAtA[i:])
+		i = encodeVarintTypes(dAtA, i, uint64(m.DnsNameAdvanced.Size()))
+		n8, err := m.DnsNameAdvanced.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n8
+	}
+	return i, nil
+}
+func (m *GlobalSpecType_K8SClusterApiServer) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.K8SClusterApiServer != nil {
+		dAtA[i] = 0x6a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.K8SClusterApiServer.Size()))
+		n9, err := m.K8SClusterApiServer.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n9
 	}
 	return i, nil
 }
@@ -3278,11 +3343,11 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Where.Size()))
-		n9, err := m.Where.MarshalTo(dAtA[i:])
+		n10, err := m.Where.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n9
+		i += n10
 	}
 	if m.Port != 0 {
 		dAtA[i] = 0x10
@@ -3290,11 +3355,11 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
 	}
 	if m.EndpointAddress != nil {
-		nn10, err := m.EndpointAddress.MarshalTo(dAtA[i:])
+		nn11, err := m.EndpointAddress.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn10
+		i += nn11
 	}
 	if len(m.Protocol) > 0 {
 		dAtA[i] = 0x4a
@@ -3332,25 +3397,25 @@ func (m *CreateSpecType_ServiceInfo) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ServiceInfo.Size()))
-		n11, err := m.ServiceInfo.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n11
-	}
-	return i, nil
-}
-func (m *CreateSpecType_DnsNameAdvance) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DnsNameAdvance != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DnsNameAdvance.Size()))
-		n12, err := m.DnsNameAdvance.MarshalTo(dAtA[i:])
+		n12, err := m.ServiceInfo.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n12
+	}
+	return i, nil
+}
+func (m *CreateSpecType_DnsNameAdvanced) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.DnsNameAdvanced != nil {
+		dAtA[i] = 0x5a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DnsNameAdvanced.Size()))
+		n13, err := m.DnsNameAdvanced.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n13
 	}
 	return i, nil
 }
@@ -3373,11 +3438,11 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Where.Size()))
-		n13, err := m.Where.MarshalTo(dAtA[i:])
+		n14, err := m.Where.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n13
+		i += n14
 	}
 	if m.Port != 0 {
 		dAtA[i] = 0x10
@@ -3385,11 +3450,11 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
 	}
 	if m.EndpointAddress != nil {
-		nn14, err := m.EndpointAddress.MarshalTo(dAtA[i:])
+		nn15, err := m.EndpointAddress.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn14
+		i += nn15
 	}
 	if len(m.Protocol) > 0 {
 		dAtA[i] = 0x4a
@@ -3427,25 +3492,25 @@ func (m *ReplaceSpecType_ServiceInfo) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ServiceInfo.Size()))
-		n15, err := m.ServiceInfo.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n15
-	}
-	return i, nil
-}
-func (m *ReplaceSpecType_DnsNameAdvance) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DnsNameAdvance != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DnsNameAdvance.Size()))
-		n16, err := m.DnsNameAdvance.MarshalTo(dAtA[i:])
+		n16, err := m.ServiceInfo.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n16
+	}
+	return i, nil
+}
+func (m *ReplaceSpecType_DnsNameAdvanced) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.DnsNameAdvanced != nil {
+		dAtA[i] = 0x5a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DnsNameAdvanced.Size()))
+		n17, err := m.DnsNameAdvanced.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n17
 	}
 	return i, nil
 }
@@ -3468,11 +3533,11 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Where.Size()))
-		n17, err := m.Where.MarshalTo(dAtA[i:])
+		n18, err := m.Where.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n17
+		i += n18
 	}
 	if m.Port != 0 {
 		dAtA[i] = 0x10
@@ -3480,11 +3545,11 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
 	}
 	if m.EndpointAddress != nil {
-		nn18, err := m.EndpointAddress.MarshalTo(dAtA[i:])
+		nn19, err := m.EndpointAddress.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn18
+		i += nn19
 	}
 	if len(m.Protocol) > 0 {
 		dAtA[i] = 0x4a
@@ -3522,25 +3587,25 @@ func (m *GetSpecType_ServiceInfo) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ServiceInfo.Size()))
-		n19, err := m.ServiceInfo.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n19
-	}
-	return i, nil
-}
-func (m *GetSpecType_DnsNameAdvance) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.DnsNameAdvance != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.DnsNameAdvance.Size()))
-		n20, err := m.DnsNameAdvance.MarshalTo(dAtA[i:])
+		n20, err := m.ServiceInfo.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n20
+	}
+	return i, nil
+}
+func (m *GetSpecType_DnsNameAdvanced) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.DnsNameAdvanced != nil {
+		dAtA[i] = 0x5a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DnsNameAdvanced.Size()))
+		n21, err := m.DnsNameAdvanced.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n21
 	}
 	return i, nil
 }
@@ -3713,11 +3778,11 @@ func (m *DiscoveredInfoType) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.DiscoveredInfo != nil {
-		nn21, err := m.DiscoveredInfo.MarshalTo(dAtA[i:])
+		nn22, err := m.DiscoveredInfo.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn21
+		i += nn22
 	}
 	return i, nil
 }
@@ -3728,11 +3793,11 @@ func (m *DiscoveredInfoType_K8SInfo) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.K8SInfo.Size()))
-		n22, err := m.K8SInfo.MarshalTo(dAtA[i:])
+		n23, err := m.K8SInfo.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n22
+		i += n23
 	}
 	return i, nil
 }
@@ -3742,11 +3807,11 @@ func (m *DiscoveredInfoType_ConsulInfo) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ConsulInfo.Size()))
-		n23, err := m.ConsulInfo.MarshalTo(dAtA[i:])
+		n24, err := m.ConsulInfo.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n23
+		i += n24
 	}
 	return i, nil
 }
@@ -3756,11 +3821,11 @@ func (m *DiscoveredInfoType_DnsInfo) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DnsInfo.Size()))
-		n24, err := m.DnsInfo.MarshalTo(dAtA[i:])
+		n25, err := m.DnsInfo.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n24
+		i += n25
 	}
 	return i, nil
 }
@@ -3789,11 +3854,11 @@ func (m *VerStatusType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DiscoveredIp.Size()))
-		n25, err := m.DiscoveredIp.MarshalTo(dAtA[i:])
+		n26, err := m.DiscoveredIp.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n25
+		i += n26
 	}
 	if m.DiscoveredPort != 0 {
 		dAtA[i] = 0x18
@@ -3804,11 +3869,11 @@ func (m *VerStatusType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AllocatedIp.Size()))
-		n26, err := m.AllocatedIp.MarshalTo(dAtA[i:])
+		n27, err := m.AllocatedIp.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n26
+		i += n27
 	}
 	if len(m.Site) > 0 {
 		dAtA[i] = 0x2a
@@ -3841,11 +3906,11 @@ func (m *VerStatusType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DiscoveredInfo.Size()))
-		n27, err := m.DiscoveredInfo.MarshalTo(dAtA[i:])
+		n28, err := m.DiscoveredInfo.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n27
+		i += n28
 	}
 	return i, nil
 }
@@ -3884,28 +3949,28 @@ func NewPopulatedServiceInfoType_ServiceSelector(r randyTypes, easy bool) *Servi
 	this.ServiceSelector = ves_io_schema4.NewPopulatedLabelSelectorType(r, easy)
 	return this
 }
-func NewPopulatedDnsNameAdvanceType(r randyTypes, easy bool) *DnsNameAdvanceType {
-	this := &DnsNameAdvanceType{}
+func NewPopulatedDnsNameAdvancedType(r randyTypes, easy bool) *DnsNameAdvancedType {
+	this := &DnsNameAdvancedType{}
 	this.Name = string(randStringTypes(r))
 	oneofNumber_TtlChoice := []int32{3, 4}[r.Intn(2)]
 	switch oneofNumber_TtlChoice {
 	case 3:
-		this.TtlChoice = NewPopulatedDnsNameAdvanceType_StrictTtl(r, easy)
+		this.TtlChoice = NewPopulatedDnsNameAdvancedType_StrictTtl(r, easy)
 	case 4:
-		this.TtlChoice = NewPopulatedDnsNameAdvanceType_RefreshInterval(r, easy)
+		this.TtlChoice = NewPopulatedDnsNameAdvancedType_RefreshInterval(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
-func NewPopulatedDnsNameAdvanceType_StrictTtl(r randyTypes, easy bool) *DnsNameAdvanceType_StrictTtl {
-	this := &DnsNameAdvanceType_StrictTtl{}
+func NewPopulatedDnsNameAdvancedType_StrictTtl(r randyTypes, easy bool) *DnsNameAdvancedType_StrictTtl {
+	this := &DnsNameAdvancedType_StrictTtl{}
 	this.StrictTtl = ves_io_schema4.NewPopulatedEmpty(r, easy)
 	return this
 }
-func NewPopulatedDnsNameAdvanceType_RefreshInterval(r randyTypes, easy bool) *DnsNameAdvanceType_RefreshInterval {
-	this := &DnsNameAdvanceType_RefreshInterval{}
+func NewPopulatedDnsNameAdvancedType_RefreshInterval(r randyTypes, easy bool) *DnsNameAdvancedType_RefreshInterval {
+	this := &DnsNameAdvancedType_RefreshInterval{}
 	this.RefreshInterval = uint32(r.Uint32())
 	return this
 }
@@ -3915,7 +3980,7 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 		this.Where = ves_io_schema4.NewPopulatedNetworkSiteRefSelector(r, easy)
 	}
 	this.Port = uint32(r.Uint32())
-	oneofNumber_EndpointAddress := []int32{3, 4, 6, 8, 11}[r.Intn(5)]
+	oneofNumber_EndpointAddress := []int32{3, 4, 6, 8, 11, 13}[r.Intn(6)]
 	switch oneofNumber_EndpointAddress {
 	case 3:
 		this.EndpointAddress = NewPopulatedGlobalSpecType_Ip(r, easy)
@@ -3926,7 +3991,9 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 	case 8:
 		this.EndpointAddress = NewPopulatedGlobalSpecType_ServiceInfo(r, easy)
 	case 11:
-		this.EndpointAddress = NewPopulatedGlobalSpecType_DnsNameAdvance(r, easy)
+		this.EndpointAddress = NewPopulatedGlobalSpecType_DnsNameAdvanced(r, easy)
+	case 13:
+		this.EndpointAddress = NewPopulatedGlobalSpecType_K8SClusterApiServer(r, easy)
 	}
 	this.Protocol = string(randStringTypes(r))
 	this.HealthCheckPort = uint32(r.Uint32())
@@ -3955,9 +4022,14 @@ func NewPopulatedGlobalSpecType_ServiceInfo(r randyTypes, easy bool) *GlobalSpec
 	this.ServiceInfo = NewPopulatedServiceInfoType(r, easy)
 	return this
 }
-func NewPopulatedGlobalSpecType_DnsNameAdvance(r randyTypes, easy bool) *GlobalSpecType_DnsNameAdvance {
-	this := &GlobalSpecType_DnsNameAdvance{}
-	this.DnsNameAdvance = NewPopulatedDnsNameAdvanceType(r, easy)
+func NewPopulatedGlobalSpecType_DnsNameAdvanced(r randyTypes, easy bool) *GlobalSpecType_DnsNameAdvanced {
+	this := &GlobalSpecType_DnsNameAdvanced{}
+	this.DnsNameAdvanced = NewPopulatedDnsNameAdvancedType(r, easy)
+	return this
+}
+func NewPopulatedGlobalSpecType_K8SClusterApiServer(r randyTypes, easy bool) *GlobalSpecType_K8SClusterApiServer {
+	this := &GlobalSpecType_K8SClusterApiServer{}
+	this.K8SClusterApiServer = ves_io_schema4.NewPopulatedEmpty(r, easy)
 	return this
 }
 func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
@@ -3975,7 +4047,7 @@ func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 	case 8:
 		this.EndpointAddress = NewPopulatedCreateSpecType_ServiceInfo(r, easy)
 	case 11:
-		this.EndpointAddress = NewPopulatedCreateSpecType_DnsNameAdvance(r, easy)
+		this.EndpointAddress = NewPopulatedCreateSpecType_DnsNameAdvanced(r, easy)
 	}
 	this.Protocol = string(randStringTypes(r))
 	this.HealthCheckPort = uint32(r.Uint32())
@@ -3999,9 +4071,9 @@ func NewPopulatedCreateSpecType_ServiceInfo(r randyTypes, easy bool) *CreateSpec
 	this.ServiceInfo = NewPopulatedServiceInfoType(r, easy)
 	return this
 }
-func NewPopulatedCreateSpecType_DnsNameAdvance(r randyTypes, easy bool) *CreateSpecType_DnsNameAdvance {
-	this := &CreateSpecType_DnsNameAdvance{}
-	this.DnsNameAdvance = NewPopulatedDnsNameAdvanceType(r, easy)
+func NewPopulatedCreateSpecType_DnsNameAdvanced(r randyTypes, easy bool) *CreateSpecType_DnsNameAdvanced {
+	this := &CreateSpecType_DnsNameAdvanced{}
+	this.DnsNameAdvanced = NewPopulatedDnsNameAdvancedType(r, easy)
 	return this
 }
 func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
@@ -4019,7 +4091,7 @@ func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 	case 8:
 		this.EndpointAddress = NewPopulatedReplaceSpecType_ServiceInfo(r, easy)
 	case 11:
-		this.EndpointAddress = NewPopulatedReplaceSpecType_DnsNameAdvance(r, easy)
+		this.EndpointAddress = NewPopulatedReplaceSpecType_DnsNameAdvanced(r, easy)
 	}
 	this.Protocol = string(randStringTypes(r))
 	this.HealthCheckPort = uint32(r.Uint32())
@@ -4043,9 +4115,9 @@ func NewPopulatedReplaceSpecType_ServiceInfo(r randyTypes, easy bool) *ReplaceSp
 	this.ServiceInfo = NewPopulatedServiceInfoType(r, easy)
 	return this
 }
-func NewPopulatedReplaceSpecType_DnsNameAdvance(r randyTypes, easy bool) *ReplaceSpecType_DnsNameAdvance {
-	this := &ReplaceSpecType_DnsNameAdvance{}
-	this.DnsNameAdvance = NewPopulatedDnsNameAdvanceType(r, easy)
+func NewPopulatedReplaceSpecType_DnsNameAdvanced(r randyTypes, easy bool) *ReplaceSpecType_DnsNameAdvanced {
+	this := &ReplaceSpecType_DnsNameAdvanced{}
+	this.DnsNameAdvanced = NewPopulatedDnsNameAdvancedType(r, easy)
 	return this
 }
 func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
@@ -4063,7 +4135,7 @@ func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 	case 8:
 		this.EndpointAddress = NewPopulatedGetSpecType_ServiceInfo(r, easy)
 	case 11:
-		this.EndpointAddress = NewPopulatedGetSpecType_DnsNameAdvance(r, easy)
+		this.EndpointAddress = NewPopulatedGetSpecType_DnsNameAdvanced(r, easy)
 	}
 	this.Protocol = string(randStringTypes(r))
 	this.HealthCheckPort = uint32(r.Uint32())
@@ -4087,9 +4159,9 @@ func NewPopulatedGetSpecType_ServiceInfo(r randyTypes, easy bool) *GetSpecType_S
 	this.ServiceInfo = NewPopulatedServiceInfoType(r, easy)
 	return this
 }
-func NewPopulatedGetSpecType_DnsNameAdvance(r randyTypes, easy bool) *GetSpecType_DnsNameAdvance {
-	this := &GetSpecType_DnsNameAdvance{}
-	this.DnsNameAdvance = NewPopulatedDnsNameAdvanceType(r, easy)
+func NewPopulatedGetSpecType_DnsNameAdvanced(r randyTypes, easy bool) *GetSpecType_DnsNameAdvanced {
+	this := &GetSpecType_DnsNameAdvanced{}
+	this.DnsNameAdvanced = NewPopulatedDnsNameAdvancedType(r, easy)
 	return this
 }
 func NewPopulatedK8SInfo(r randyTypes, easy bool) *K8SInfo {
@@ -4300,7 +4372,7 @@ func (m *ServiceInfoType_ServiceSelector) Size() (n int) {
 	}
 	return n
 }
-func (m *DnsNameAdvanceType) Size() (n int) {
+func (m *DnsNameAdvancedType) Size() (n int) {
 	var l int
 	_ = l
 	l = len(m.Name)
@@ -4313,7 +4385,7 @@ func (m *DnsNameAdvanceType) Size() (n int) {
 	return n
 }
 
-func (m *DnsNameAdvanceType_StrictTtl) Size() (n int) {
+func (m *DnsNameAdvancedType_StrictTtl) Size() (n int) {
 	var l int
 	_ = l
 	if m.StrictTtl != nil {
@@ -4322,7 +4394,7 @@ func (m *DnsNameAdvanceType_StrictTtl) Size() (n int) {
 	}
 	return n
 }
-func (m *DnsNameAdvanceType_RefreshInterval) Size() (n int) {
+func (m *DnsNameAdvancedType_RefreshInterval) Size() (n int) {
 	var l int
 	_ = l
 	n += 1 + sovTypes(uint64(m.RefreshInterval))
@@ -4381,11 +4453,20 @@ func (m *GlobalSpecType_ServiceInfo) Size() (n int) {
 	}
 	return n
 }
-func (m *GlobalSpecType_DnsNameAdvance) Size() (n int) {
+func (m *GlobalSpecType_DnsNameAdvanced) Size() (n int) {
 	var l int
 	_ = l
-	if m.DnsNameAdvance != nil {
-		l = m.DnsNameAdvance.Size()
+	if m.DnsNameAdvanced != nil {
+		l = m.DnsNameAdvanced.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_K8SClusterApiServer) Size() (n int) {
+	var l int
+	_ = l
+	if m.K8SClusterApiServer != nil {
+		l = m.K8SClusterApiServer.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -4436,11 +4517,11 @@ func (m *CreateSpecType_ServiceInfo) Size() (n int) {
 	}
 	return n
 }
-func (m *CreateSpecType_DnsNameAdvance) Size() (n int) {
+func (m *CreateSpecType_DnsNameAdvanced) Size() (n int) {
 	var l int
 	_ = l
-	if m.DnsNameAdvance != nil {
-		l = m.DnsNameAdvance.Size()
+	if m.DnsNameAdvanced != nil {
+		l = m.DnsNameAdvanced.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -4491,11 +4572,11 @@ func (m *ReplaceSpecType_ServiceInfo) Size() (n int) {
 	}
 	return n
 }
-func (m *ReplaceSpecType_DnsNameAdvance) Size() (n int) {
+func (m *ReplaceSpecType_DnsNameAdvanced) Size() (n int) {
 	var l int
 	_ = l
-	if m.DnsNameAdvance != nil {
-		l = m.DnsNameAdvance.Size()
+	if m.DnsNameAdvanced != nil {
+		l = m.DnsNameAdvanced.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -4546,11 +4627,11 @@ func (m *GetSpecType_ServiceInfo) Size() (n int) {
 	}
 	return n
 }
-func (m *GetSpecType_DnsNameAdvance) Size() (n int) {
+func (m *GetSpecType_DnsNameAdvanced) Size() (n int) {
 	var l int
 	_ = l
-	if m.DnsNameAdvance != nil {
-		l = m.DnsNameAdvance.Size()
+	if m.DnsNameAdvanced != nil {
+		l = m.DnsNameAdvanced.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -4727,32 +4808,32 @@ func (this *ServiceInfoType_ServiceSelector) String() string {
 	}, "")
 	return s
 }
-func (this *DnsNameAdvanceType) String() string {
+func (this *DnsNameAdvancedType) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&DnsNameAdvanceType{`,
+	s := strings.Join([]string{`&DnsNameAdvancedType{`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
 		`TtlChoice:` + fmt.Sprintf("%v", this.TtlChoice) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *DnsNameAdvanceType_StrictTtl) String() string {
+func (this *DnsNameAdvancedType_StrictTtl) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&DnsNameAdvanceType_StrictTtl{`,
+	s := strings.Join([]string{`&DnsNameAdvancedType_StrictTtl{`,
 		`StrictTtl:` + strings.Replace(fmt.Sprintf("%v", this.StrictTtl), "Empty", "ves_io_schema4.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *DnsNameAdvanceType_RefreshInterval) String() string {
+func (this *DnsNameAdvancedType_RefreshInterval) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&DnsNameAdvanceType_RefreshInterval{`,
+	s := strings.Join([]string{`&DnsNameAdvancedType_RefreshInterval{`,
 		`RefreshInterval:` + fmt.Sprintf("%v", this.RefreshInterval) + `,`,
 		`}`,
 	}, "")
@@ -4812,12 +4893,22 @@ func (this *GlobalSpecType_ServiceInfo) String() string {
 	}, "")
 	return s
 }
-func (this *GlobalSpecType_DnsNameAdvance) String() string {
+func (this *GlobalSpecType_DnsNameAdvanced) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&GlobalSpecType_DnsNameAdvance{`,
-		`DnsNameAdvance:` + strings.Replace(fmt.Sprintf("%v", this.DnsNameAdvance), "DnsNameAdvanceType", "DnsNameAdvanceType", 1) + `,`,
+	s := strings.Join([]string{`&GlobalSpecType_DnsNameAdvanced{`,
+		`DnsNameAdvanced:` + strings.Replace(fmt.Sprintf("%v", this.DnsNameAdvanced), "DnsNameAdvancedType", "DnsNameAdvancedType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_K8SClusterApiServer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_K8SClusterApiServer{`,
+		`K8SClusterApiServer:` + strings.Replace(fmt.Sprintf("%v", this.K8SClusterApiServer), "Empty", "ves_io_schema4.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4866,12 +4957,12 @@ func (this *CreateSpecType_ServiceInfo) String() string {
 	}, "")
 	return s
 }
-func (this *CreateSpecType_DnsNameAdvance) String() string {
+func (this *CreateSpecType_DnsNameAdvanced) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&CreateSpecType_DnsNameAdvance{`,
-		`DnsNameAdvance:` + strings.Replace(fmt.Sprintf("%v", this.DnsNameAdvance), "DnsNameAdvanceType", "DnsNameAdvanceType", 1) + `,`,
+	s := strings.Join([]string{`&CreateSpecType_DnsNameAdvanced{`,
+		`DnsNameAdvanced:` + strings.Replace(fmt.Sprintf("%v", this.DnsNameAdvanced), "DnsNameAdvancedType", "DnsNameAdvancedType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4920,12 +5011,12 @@ func (this *ReplaceSpecType_ServiceInfo) String() string {
 	}, "")
 	return s
 }
-func (this *ReplaceSpecType_DnsNameAdvance) String() string {
+func (this *ReplaceSpecType_DnsNameAdvanced) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&ReplaceSpecType_DnsNameAdvance{`,
-		`DnsNameAdvance:` + strings.Replace(fmt.Sprintf("%v", this.DnsNameAdvance), "DnsNameAdvanceType", "DnsNameAdvanceType", 1) + `,`,
+	s := strings.Join([]string{`&ReplaceSpecType_DnsNameAdvanced{`,
+		`DnsNameAdvanced:` + strings.Replace(fmt.Sprintf("%v", this.DnsNameAdvanced), "DnsNameAdvancedType", "DnsNameAdvancedType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4974,12 +5065,12 @@ func (this *GetSpecType_ServiceInfo) String() string {
 	}, "")
 	return s
 }
-func (this *GetSpecType_DnsNameAdvance) String() string {
+func (this *GetSpecType_DnsNameAdvanced) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&GetSpecType_DnsNameAdvance{`,
-		`DnsNameAdvance:` + strings.Replace(fmt.Sprintf("%v", this.DnsNameAdvance), "DnsNameAdvanceType", "DnsNameAdvanceType", 1) + `,`,
+	s := strings.Join([]string{`&GetSpecType_DnsNameAdvanced{`,
+		`DnsNameAdvanced:` + strings.Replace(fmt.Sprintf("%v", this.DnsNameAdvanced), "DnsNameAdvancedType", "DnsNameAdvancedType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5241,7 +5332,7 @@ func (m *ServiceInfoType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *DnsNameAdvanceType) Unmarshal(dAtA []byte) error {
+func (m *DnsNameAdvancedType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -5264,10 +5355,10 @@ func (m *DnsNameAdvanceType) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: DnsNameAdvanceType: wiretype end group for non-group")
+			return fmt.Errorf("proto: DnsNameAdvancedType: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DnsNameAdvanceType: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: DnsNameAdvancedType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -5329,7 +5420,7 @@ func (m *DnsNameAdvanceType) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.TtlChoice = &DnsNameAdvanceType_StrictTtl{v}
+			m.TtlChoice = &DnsNameAdvancedType_StrictTtl{v}
 			iNdEx = postIndex
 		case 4:
 			if wireType != 0 {
@@ -5350,7 +5441,7 @@ func (m *DnsNameAdvanceType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-			m.TtlChoice = &DnsNameAdvanceType_RefreshInterval{v}
+			m.TtlChoice = &DnsNameAdvancedType_RefreshInterval{v}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -5603,7 +5694,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 11:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DnsNameAdvance", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsNameAdvanced", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5627,11 +5718,11 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &DnsNameAdvanceType{}
+			v := &DnsNameAdvancedType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.EndpointAddress = &GlobalSpecType_DnsNameAdvance{v}
+			m.EndpointAddress = &GlobalSpecType_DnsNameAdvanced{v}
 			iNdEx = postIndex
 		case 12:
 			if wireType != 0 {
@@ -5652,6 +5743,38 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field K8SClusterApiServer", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EndpointAddress = &GlobalSpecType_K8SClusterApiServer{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -5875,7 +5998,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 11:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DnsNameAdvance", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsNameAdvanced", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5899,11 +6022,11 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &DnsNameAdvanceType{}
+			v := &DnsNameAdvancedType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.EndpointAddress = &CreateSpecType_DnsNameAdvance{v}
+			m.EndpointAddress = &CreateSpecType_DnsNameAdvanced{v}
 			iNdEx = postIndex
 		case 12:
 			if wireType != 0 {
@@ -6147,7 +6270,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 11:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DnsNameAdvance", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsNameAdvanced", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -6171,11 +6294,11 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &DnsNameAdvanceType{}
+			v := &DnsNameAdvancedType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.EndpointAddress = &ReplaceSpecType_DnsNameAdvance{v}
+			m.EndpointAddress = &ReplaceSpecType_DnsNameAdvanced{v}
 			iNdEx = postIndex
 		case 12:
 			if wireType != 0 {
@@ -6419,7 +6542,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 11:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DnsNameAdvance", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsNameAdvanced", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -6443,11 +6566,11 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &DnsNameAdvanceType{}
+			v := &DnsNameAdvancedType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.EndpointAddress = &GetSpecType_DnsNameAdvance{v}
+			m.EndpointAddress = &GetSpecType_DnsNameAdvanced{v}
 			iNdEx = postIndex
 		case 12:
 			if wireType != 0 {
@@ -7570,102 +7693,104 @@ func init() { proto.RegisterFile("ves.io/schema/endpoint/types.proto", fileDescr
 func init() { golang_proto.RegisterFile("ves.io/schema/endpoint/types.proto", fileDescriptorTypes) }
 
 var fileDescriptorTypes = []byte{
-	// 1543 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xdd, 0x6f, 0xd3, 0x56,
-	0x1f, 0xce, 0xb1, 0xdd, 0xc4, 0x3d, 0xf9, 0x68, 0xea, 0xb7, 0x50, 0x53, 0x78, 0x4d, 0x08, 0x20,
-	0x42, 0x09, 0x49, 0xbf, 0xc4, 0x5b, 0xfa, 0xa2, 0x4e, 0x4d, 0x5b, 0x91, 0x76, 0x55, 0x87, 0x9c,
-	0x82, 0x34, 0xc6, 0x64, 0xb9, 0xf6, 0x69, 0x63, 0xd5, 0xb5, 0x2d, 0xfb, 0x34, 0xac, 0x17, 0x93,
-	0x2a, 0x2e, 0x77, 0xb1, 0xed, 0x9a, 0x7f, 0x60, 0xfc, 0x09, 0xd3, 0xc2, 0x45, 0x35, 0x69, 0xd2,
-	0x3e, 0x6e, 0x7a, 0x89, 0x76, 0x45, 0xc3, 0x0d, 0x9b, 0x84, 0x84, 0x90, 0x26, 0xa1, 0xdd, 0x30,
-	0xf9, 0xd8, 0x4e, 0xed, 0xa4, 0x05, 0x6d, 0x42, 0x9b, 0x26, 0x71, 0x67, 0x9f, 0xdf, 0xe7, 0xf3,
-	0x7b, 0x9e, 0x73, 0x72, 0x1c, 0x98, 0x6f, 0x20, 0xa7, 0xa4, 0x99, 0x65, 0x47, 0xa9, 0xa3, 0x4d,
-	0xb9, 0x8c, 0x0c, 0xd5, 0x32, 0x35, 0x03, 0x97, 0xf1, 0xb6, 0x85, 0x9c, 0x92, 0x65, 0x9b, 0xd8,
-	0xe4, 0x8e, 0x7b, 0x3e, 0x25, 0xcf, 0xa7, 0x14, 0xf8, 0x0c, 0x5d, 0x5e, 0xd7, 0x70, 0x7d, 0x6b,
-	0xb5, 0xa4, 0x98, 0x9b, 0xe5, 0x75, 0x73, 0xdd, 0x2c, 0x13, 0xf7, 0xd5, 0xad, 0x35, 0xf2, 0x46,
-	0x5e, 0xc8, 0x93, 0x97, 0x66, 0x68, 0x30, 0x5a, 0xca, 0x40, 0xd8, 0x37, 0x9c, 0x8c, 0x1a, 0x4c,
-	0x0b, 0x6b, 0xa6, 0xe1, 0x17, 0x1f, 0x3a, 0x11, 0x35, 0x86, 0xfa, 0x1a, 0x3a, 0x15, 0x35, 0x35,
-	0x64, 0x5d, 0x53, 0x65, 0x8c, 0x7c, 0x6b, 0xae, 0xc3, 0xaa, 0xa1, 0xbb, 0x52, 0x24, 0x75, 0xfe,
-	0x2b, 0x0a, 0xf6, 0xd5, 0x90, 0xdd, 0xd0, 0x14, 0xb4, 0x60, 0xac, 0x99, 0x2b, 0xdb, 0x16, 0xe2,
-	0x6a, 0x30, 0xa3, 0x6a, 0x8e, 0x62, 0x36, 0x90, 0xbd, 0x2d, 0xb9, 0xc5, 0x78, 0x90, 0x03, 0x85,
-	0xcc, 0xd8, 0xa9, 0x52, 0x74, 0x08, 0x73, 0x81, 0x93, 0x1b, 0x55, 0xc9, 0xbc, 0x6c, 0x82, 0xd8,
-	0x37, 0xbf, 0xec, 0xd2, 0x3d, 0xf7, 0x00, 0x95, 0x8b, 0x89, 0x69, 0x35, 0x6c, 0xe6, 0xc6, 0x61,
-	0xca, 0xf1, 0xea, 0x48, 0x86, 0xbc, 0x89, 0x78, 0x2a, 0x07, 0x0a, 0xbd, 0xa1, 0x20, 0x9b, 0x2e,
-	0xec, 0x50, 0xd5, 0x98, 0x98, 0xf4, 0xbd, 0x96, 0xe5, 0x4d, 0xc4, 0x7d, 0x04, 0xb3, 0x41, 0x90,
-	0x83, 0x74, 0xa4, 0x60, 0xd3, 0xe6, 0xe9, 0x1c, 0x28, 0x24, 0xc7, 0x72, 0x1d, 0xbd, 0x2c, 0xc9,
-	0xab, 0x48, 0xaf, 0xf9, 0x3e, 0xa4, 0x9f, 0x94, 0x9b, 0xfa, 0xfe, 0x43, 0xc0, 0x40, 0x2a, 0x06,
-	0xaa, 0x31, 0xb1, 0xcf, 0xcf, 0x14, 0x38, 0x4d, 0xc5, 0x5f, 0x4c, 0xd3, 0xa3, 0xc5, 0x89, 0xca,
-	0xe9, 0x83, 0xce, 0x34, 0x63, 0xcd, 0xe4, 0xfa, 0x76, 0x9b, 0x80, 0xde, 0x6b, 0x02, 0xa6, 0xd5,
-	0x04, 0xf4, 0x58, 0x71, 0x7c, 0x91, 0x61, 0x99, 0x6c, 0x4f, 0xfe, 0x19, 0x80, 0xdc, 0x9c, 0xe1,
-	0xb8, 0x7d, 0xcd, 0xa8, 0x0d, 0xd9, 0x50, 0x10, 0xc1, 0x75, 0x09, 0x32, 0x04, 0x0f, 0x20, 0x78,
-	0x06, 0x43, 0x78, 0xf8, 0x1d, 0xca, 0x7d, 0x62, 0x6c, 0xaa, 0x0e, 0x44, 0xe2, 0xc4, 0x4d, 0x43,
-	0xe8, 0x60, 0x5b, 0x53, 0xb0, 0x84, 0xb1, 0xee, 0x23, 0x19, 0xe8, 0x40, 0x32, 0xbf, 0x69, 0xe1,
-	0xed, 0x4a, 0xe2, 0xd1, 0xa7, 0xe0, 0x69, 0x13, 0xb8, 0x8d, 0xf7, 0x7a, 0x21, 0x2b, 0x58, 0xe7,
-	0xe6, 0x61, 0xd6, 0x46, 0x6b, 0x36, 0x72, 0xea, 0x92, 0x66, 0x60, 0x64, 0x37, 0x64, 0x9d, 0x67,
-	0x72, 0xa0, 0x90, 0xae, 0xf0, 0x3f, 0x37, 0x01, 0x3d, 0x3e, 0x32, 0x12, 0xd4, 0x67, 0x87, 0xe3,
-	0xfc, 0xce, 0x6f, 0xe7, 0x0a, 0xd0, 0x45, 0xee, 0xc7, 0x2c, 0xf8, 0x21, 0x95, 0xff, 0x42, 0x88,
-	0xb1, 0x2e, 0x29, 0x75, 0x53, 0x53, 0x10, 0xc1, 0xcb, 0xec, 0x35, 0x01, 0xe5, 0xe2, 0x1d, 0x2f,
-	0x4e, 0x2c, 0x32, 0x2c, 0x95, 0xa5, 0xf3, 0x0f, 0x7a, 0x60, 0xe6, 0xba, 0x6e, 0xae, 0xca, 0x7a,
-	0xcd, 0x42, 0x0a, 0xc1, 0x3a, 0x03, 0x7b, 0xee, 0xd6, 0x91, 0xed, 0x81, 0x4d, 0x8e, 0x9d, 0xef,
-	0xe8, 0x7c, 0x19, 0xe1, 0xbb, 0xa6, 0xbd, 0x51, 0xd3, 0x30, 0x12, 0xd1, 0x5a, 0x30, 0xe7, 0x0a,
-	0xf3, 0xbc, 0x09, 0x80, 0xe8, 0x45, 0x72, 0x67, 0x21, 0x63, 0x99, 0x36, 0x26, 0xf4, 0xa7, 0x2b,
-	0x7d, 0x41, 0xbb, 0xf1, 0x61, 0x86, 0x7f, 0xf5, 0x8a, 0x16, 0x89, 0x91, 0x3b, 0x0d, 0x29, 0xcd,
-	0x22, 0xe3, 0xe9, 0xad, 0xa4, 0x03, 0x17, 0xc6, 0xa6, 0x2c, 0x77, 0x1c, 0x94, 0x66, 0x71, 0x13,
-	0x90, 0x55, 0x0d, 0xc7, 0x13, 0x12, 0xf3, 0xda, 0xc1, 0x57, 0x63, 0x62, 0x42, 0xf5, 0x58, 0xe3,
-	0x96, 0xe0, 0xa0, 0x4b, 0x34, 0xb2, 0x75, 0xe4, 0x38, 0x52, 0x44, 0x8d, 0x71, 0x92, 0x84, 0x73,
-	0x27, 0x1e, 0x4d, 0x54, 0x8d, 0x89, 0xc7, 0x0e, 0x82, 0x6a, 0x21, 0x6d, 0x2e, 0x45, 0x65, 0xc3,
-	0xb3, 0x64, 0x26, 0x17, 0x4a, 0x87, 0x1f, 0x14, 0xa5, 0x8e, 0x4d, 0x16, 0x52, 0xba, 0xbb, 0xc4,
-	0x8d, 0x43, 0x96, 0x6c, 0x48, 0xc5, 0xd4, 0xf9, 0xde, 0x28, 0xa2, 0x8c, 0x9d, 0x12, 0x63, 0x22,
-	0xbd, 0x32, 0x7b, 0x43, 0xa4, 0x6f, 0xce, 0xdd, 0x10, 0xdb, 0x8e, 0xdc, 0x1d, 0x98, 0x0d, 0xc6,
-	0x20, 0xc9, 0x9e, 0x26, 0xf9, 0x24, 0x69, 0x63, 0xf8, 0xa8, 0x36, 0xba, 0x15, 0x5c, 0x61, 0x76,
-	0x3d, 0x9d, 0x65, 0xd4, 0x88, 0x8d, 0x7b, 0x0f, 0xf6, 0xd7, 0x91, 0xac, 0xe3, 0xba, 0xa4, 0xd4,
-	0x91, 0xb2, 0x21, 0x11, 0xde, 0x52, 0x84, 0xb7, 0xff, 0xec, 0x86, 0x06, 0x15, 0x70, 0xd7, 0xe7,
-	0x79, 0xcf, 0xba, 0xce, 0x37, 0x4c, 0x1b, 0x4f, 0x5d, 0xfc, 0xb6, 0x09, 0xce, 0xc3, 0xb3, 0x70,
-	0xf0, 0x03, 0x5b, 0x5b, 0xd7, 0x8c, 0x5c, 0x8d, 0xcc, 0xb1, 0x30, 0xef, 0xf7, 0x72, 0x91, 0x63,
-	0x47, 0x47, 0x8a, 0x57, 0x8b, 0x63, 0xc5, 0xd1, 0xca, 0x30, 0xcc, 0x06, 0x2d, 0x4a, 0xb2, 0xaa,
-	0xda, 0xc8, 0x71, 0xb8, 0xe3, 0xfe, 0x3e, 0x84, 0xad, 0x26, 0x80, 0xe3, 0xc5, 0x89, 0xe2, 0x95,
-	0xe2, 0x64, 0x71, 0x74, 0x74, 0x91, 0x61, 0x7b, 0xb2, 0xf1, 0x45, 0x86, 0x4d, 0x64, 0xd9, 0x45,
-	0x86, 0x85, 0xd9, 0x64, 0xbe, 0x49, 0xc3, 0xcc, 0xac, 0x8d, 0x64, 0x8c, 0xda, 0x52, 0xfd, 0xff,
-	0x5f, 0x91, 0x6a, 0x20, 0x52, 0x2e, 0x2c, 0x52, 0x5f, 0x93, 0xd9, 0x03, 0x4d, 0xfa, 0x22, 0x3c,
-	0xd9, 0x29, 0xc2, 0xa8, 0xd6, 0xde, 0xa6, 0x3a, 0x86, 0x3a, 0xd5, 0x11, 0x12, 0xc1, 0xad, 0xb7,
-	0x21, 0x82, 0x43, 0xe8, 0x1f, 0x3e, 0x92, 0xfe, 0x6e, 0xa6, 0xfb, 0x7f, 0x9c, 0xee, 0x38, 0x2b,
-	0x2a, 0x85, 0x43, 0x18, 0x1d, 0xb8, 0xf7, 0x3b, 0xe8, 0x5a, 0xcd, 0x3f, 0xa4, 0x61, 0x9f, 0x88,
-	0x2c, 0x5d, 0x56, 0xde, 0xd1, 0xf7, 0x2f, 0xa4, 0xef, 0x07, 0x1a, 0x26, 0xaf, 0x23, 0xfc, 0x8e,
-	0xba, 0x7f, 0x84, 0xba, 0x7c, 0x17, 0x75, 0x2f, 0xa6, 0x33, 0xa3, 0x45, 0xf7, 0xb8, 0x74, 0x0f,
-	0x4b, 0xf7, 0x78, 0xfd, 0x13, 0x5c, 0x3e, 0x03, 0x30, 0xf1, 0xfe, 0x64, 0x8d, 0x20, 0x1f, 0x81,
-	0x03, 0x9a, 0x21, 0x29, 0xfa, 0x96, 0x83, 0x91, 0x2d, 0xb5, 0x2f, 0x73, 0x84, 0x56, 0x56, 0xe4,
-	0x34, 0x63, 0xd6, 0x33, 0xb5, 0x6f, 0x81, 0xdc, 0x09, 0xc8, 0x5a, 0xa6, 0x1a, 0x5c, 0xef, 0xe8,
-	0x42, 0xaf, 0x98, 0xb0, 0x4c, 0x95, 0x90, 0x72, 0x1b, 0xc6, 0x75, 0xf7, 0x86, 0xe6, 0xf0, 0x74,
-	0x8e, 0x2e, 0x24, 0xc7, 0x2e, 0x1d, 0x35, 0x20, 0xbf, 0xba, 0x77, 0x9f, 0x73, 0xe6, 0x0d, 0x6c,
-	0x6f, 0x57, 0x8e, 0x91, 0x9f, 0xe3, 0xfb, 0x80, 0xca, 0xe6, 0x5a, 0x8f, 0xbf, 0xa3, 0xe3, 0x9f,
-	0x3d, 0x04, 0x14, 0x1b, 0x13, 0xfd, 0x8c, 0x43, 0x57, 0x61, 0x32, 0xe4, 0xcd, 0x65, 0x21, 0xbd,
-	0x81, 0xbc, 0x36, 0x7b, 0x45, 0xf7, 0x91, 0x1b, 0x80, 0x3d, 0x0d, 0x59, 0xdf, 0xf2, 0xef, 0x9c,
-	0xa2, 0xf7, 0x32, 0x45, 0x4d, 0x82, 0x7c, 0x11, 0x26, 0xe6, 0x96, 0x3d, 0xb8, 0x67, 0x60, 0xca,
-	0x46, 0x8e, 0xa9, 0x37, 0x90, 0x2a, 0x69, 0x96, 0xc3, 0x03, 0x02, 0x20, 0x19, 0xac, 0x2d, 0x58,
-	0x4e, 0xfe, 0x27, 0x00, 0xe1, 0xac, 0x69, 0x38, 0x5b, 0x3a, 0x89, 0x38, 0x0b, 0xd3, 0x9a, 0xe1,
-	0x60, 0x97, 0x32, 0xc9, 0xbf, 0x02, 0xba, 0x21, 0xa9, 0x60, 0x91, 0x00, 0xff, 0xb8, 0x0d, 0x9c,
-	0x22, 0xc0, 0x4b, 0x47, 0x01, 0x3f, 0x48, 0xfc, 0x37, 0x61, 0xff, 0xd5, 0xbd, 0xcf, 0xfa, 0xdc,
-	0x21, 0xb5, 0x7d, 0xf9, 0xbf, 0x06, 0xd9, 0x8d, 0x49, 0xc7, 0xdb, 0x3a, 0xde, 0x0e, 0x3e, 0xfd,
-	0x06, 0xae, 0xdc, 0xcd, 0xb7, 0x31, 0xe9, 0x90, 0x99, 0xcc, 0xc3, 0xa4, 0x42, 0x80, 0x78, 0x09,
-	0x28, 0x92, 0x20, 0xff, 0x66, 0xcc, 0xd5, 0x98, 0x08, 0x95, 0x83, 0xd1, 0x5e, 0xf3, 0x36, 0x38,
-	0xc9, 0x41, 0xbf, 0xbe, 0x09, 0x9f, 0x3f, 0xff, 0x04, 0x70, 0x1f, 0x2b, 0xfd, 0xb0, 0x4f, 0x6d,
-	0x03, 0x23, 0x49, 0xf2, 0x5f, 0x30, 0x30, 0x7d, 0x0b, 0xd9, 0x35, 0x2c, 0xe3, 0x2d, 0x87, 0xe0,
-	0x3c, 0xd3, 0xf1, 0x3d, 0xe2, 0xcd, 0x2c, 0xf2, 0xf5, 0x31, 0x03, 0xd3, 0xe1, 0x3c, 0x96, 0x0f,
-	0xa7, 0xf3, 0x33, 0x68, 0xc1, 0x9a, 0xf1, 0xb6, 0x8f, 0x9b, 0x57, 0x4c, 0x1d, 0x84, 0x2c, 0x58,
-	0xdc, 0x85, 0x48, 0x2b, 0x64, 0x23, 0xd3, 0x64, 0x23, 0x67, 0x0e, 0x96, 0xdd, 0x7d, 0xcc, 0xcd,
-	0xc0, 0x94, 0xac, 0xeb, 0xa6, 0x22, 0x63, 0xaf, 0x14, 0x43, 0x4a, 0x09, 0x5d, 0xa5, 0x1a, 0x57,
-	0xc2, 0xc5, 0x92, 0xed, 0x98, 0x05, 0xcb, 0x3d, 0x3b, 0x1d, 0x0d, 0x23, 0xbe, 0x87, 0x20, 0x21,
-	0xcf, 0xdc, 0x1d, 0x98, 0xf6, 0x8f, 0x12, 0x87, 0x40, 0xe7, 0xe3, 0x44, 0x85, 0xff, 0x3b, 0x6a,
-	0x9a, 0x91, 0x19, 0x95, 0xaa, 0x24, 0xd4, 0x5b, 0x20, 0x02, 0x13, 0x53, 0xf5, 0xd0, 0x12, 0x57,
-	0xeb, 0x1a, 0x34, 0x9f, 0x78, 0xc3, 0xf9, 0xd7, 0x25, 0xb8, 0xf0, 0x24, 0xdc, 0xb5, 0x21, 0x04,
-	0xfb, 0xbb, 0xea, 0x1e, 0x22, 0xec, 0xa9, 0xb0, 0xb0, 0x33, 0x63, 0xe7, 0x8e, 0xaa, 0x18, 0xce,
-	0x15, 0x92, 0xff, 0xf0, 0x30, 0x4c, 0x85, 0x4d, 0x5c, 0x12, 0x26, 0xaa, 0xf3, 0x33, 0x4b, 0x2b,
-	0xd5, 0x0f, 0xb3, 0x31, 0x2e, 0x0d, 0x7b, 0x6f, 0x2e, 0x07, 0xaf, 0xa0, 0xf2, 0x39, 0xd8, 0xdb,
-	0x17, 0x62, 0x8f, 0xf6, 0x85, 0xd8, 0xf3, 0x7d, 0x01, 0xbc, 0xdc, 0x17, 0xc0, 0x4e, 0x4b, 0x00,
-	0x0f, 0x5a, 0x02, 0xf8, 0xba, 0x25, 0x80, 0xdd, 0x96, 0x00, 0xbe, 0x6f, 0x09, 0x60, 0xaf, 0x25,
-	0x80, 0x47, 0x2d, 0x01, 0x3c, 0x6e, 0x09, 0xe0, 0x69, 0x4b, 0x88, 0x3d, 0x6f, 0x09, 0xe0, 0xcb,
-	0x27, 0x42, 0x6c, 0xf7, 0x89, 0x00, 0x6e, 0x2f, 0xad, 0x9b, 0xd6, 0xc6, 0x7a, 0xa9, 0x61, 0xea,
-	0x18, 0xd9, 0xb6, 0x5c, 0xda, 0x72, 0xca, 0xe4, 0x61, 0xcd, 0xb4, 0x37, 0x2f, 0x5b, 0xb6, 0xd9,
-	0xd0, 0x54, 0x64, 0x5f, 0x0e, 0xcc, 0x65, 0x6b, 0x75, 0xdd, 0x2c, 0xa3, 0x4f, 0xb0, 0xff, 0xe1,
-	0xde, 0xf1, 0xcf, 0xc4, 0x6a, 0x9c, 0xfc, 0x06, 0x8d, 0xff, 0x11, 0x00, 0x00, 0xff, 0xff, 0x29,
-	0x15, 0x07, 0x98, 0xba, 0x10, 0x00, 0x00,
+	// 1575 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xcd, 0x6f, 0xd4, 0xd6,
+	0x16, 0x9f, 0x6b, 0x3b, 0x33, 0xce, 0x9d, 0xcf, 0x98, 0x40, 0x4c, 0xe0, 0x99, 0x61, 0x00, 0x31,
+	0x84, 0x61, 0x26, 0x5f, 0xe2, 0x85, 0x3c, 0x94, 0xa7, 0x4c, 0x12, 0x31, 0xc9, 0x8b, 0xf2, 0x90,
+	0x27, 0x3c, 0x09, 0xde, 0x7b, 0xb2, 0x1c, 0xfb, 0x26, 0x63, 0xc5, 0xb1, 0x2d, 0xfb, 0x66, 0x68,
+	0x16, 0x95, 0x52, 0x96, 0x5d, 0xb4, 0x5d, 0xf3, 0x0f, 0xb4, 0x7f, 0x42, 0xd5, 0x41, 0x6d, 0x54,
+	0xa9, 0x52, 0xd5, 0x76, 0x91, 0x25, 0xea, 0x8a, 0x0c, 0x1b, 0x5a, 0xa9, 0x15, 0x42, 0xaa, 0x84,
+	0xba, 0xa1, 0xf2, 0xb5, 0x3d, 0xb1, 0x27, 0x09, 0xb4, 0x15, 0x6a, 0x55, 0x89, 0xdd, 0xf5, 0x3d,
+	0x9f, 0xbf, 0x73, 0x7e, 0xe7, 0xfa, 0xda, 0xb0, 0xd0, 0x44, 0x4e, 0x59, 0x33, 0x2b, 0x8e, 0xd2,
+	0x40, 0x1b, 0x72, 0x05, 0x19, 0xaa, 0x65, 0x6a, 0x06, 0xae, 0xe0, 0x2d, 0x0b, 0x39, 0x65, 0xcb,
+	0x36, 0xb1, 0xc9, 0x9d, 0xf0, 0x74, 0xca, 0x9e, 0x4e, 0x39, 0xd0, 0x19, 0xbc, 0xb2, 0xa6, 0xe1,
+	0xc6, 0xe6, 0x4a, 0x59, 0x31, 0x37, 0x2a, 0x6b, 0xe6, 0x9a, 0x59, 0x21, 0xea, 0x2b, 0x9b, 0xab,
+	0xe4, 0x89, 0x3c, 0x90, 0x95, 0xe7, 0x66, 0x70, 0x20, 0x1a, 0xca, 0x40, 0xd8, 0x17, 0x9c, 0x8a,
+	0x0a, 0x4c, 0x0b, 0x6b, 0xa6, 0xe1, 0x07, 0x1f, 0x3c, 0x19, 0x15, 0x86, 0xf2, 0x1a, 0x3c, 0x1d,
+	0x15, 0x35, 0x65, 0x5d, 0x53, 0x65, 0x8c, 0x7c, 0x69, 0xbe, 0x4b, 0xaa, 0xa1, 0xbb, 0x52, 0xc4,
+	0x75, 0xe1, 0x43, 0x0a, 0x66, 0xeb, 0xc8, 0x6e, 0x6a, 0x0a, 0x9a, 0x37, 0x56, 0xcd, 0xe5, 0x2d,
+	0x0b, 0x71, 0x75, 0x98, 0x51, 0x35, 0x47, 0x31, 0x9b, 0xc8, 0xde, 0x92, 0xdc, 0x60, 0x3c, 0xc8,
+	0x83, 0x62, 0x66, 0xf4, 0x74, 0x39, 0x5a, 0x84, 0xd9, 0x40, 0xc9, 0xb5, 0xaa, 0x66, 0x9e, 0xb7,
+	0x40, 0xec, 0x93, 0xef, 0x76, 0xe8, 0x9e, 0x7b, 0x80, 0xca, 0xc7, 0xc4, 0xb4, 0x1a, 0x16, 0x73,
+	0x63, 0x30, 0xe5, 0x78, 0x71, 0x24, 0x43, 0xde, 0x40, 0x3c, 0x95, 0x07, 0xc5, 0xde, 0x90, 0x91,
+	0x4d, 0x17, 0xb7, 0xa9, 0x5a, 0x4c, 0x4c, 0xfa, 0x5a, 0x4b, 0xf2, 0x06, 0xe2, 0xfe, 0x0b, 0x73,
+	0x81, 0x91, 0x83, 0x74, 0xa4, 0x60, 0xd3, 0xe6, 0xe9, 0x3c, 0x28, 0x26, 0x47, 0xf3, 0x5d, 0xb9,
+	0x2c, 0xca, 0x2b, 0x48, 0xaf, 0xfb, 0x3a, 0x24, 0x9f, 0x94, 0xeb, 0xfa, 0xfe, 0x03, 0xc0, 0x40,
+	0x2a, 0x06, 0x6a, 0x31, 0x31, 0xeb, 0x7b, 0x0a, 0x94, 0x26, 0xe3, 0xcf, 0xa6, 0xe8, 0x91, 0xd2,
+	0x78, 0xf5, 0xcc, 0x7e, 0x66, 0x9a, 0xb1, 0x6a, 0x72, 0xd9, 0x9d, 0x16, 0xa0, 0x77, 0x5b, 0x80,
+	0x69, 0xb7, 0x00, 0x3d, 0x5a, 0x1a, 0x5b, 0x60, 0x58, 0x26, 0xd7, 0x53, 0xf8, 0x11, 0xc0, 0x63,
+	0xb3, 0x86, 0xe3, 0xe6, 0x35, 0xad, 0x36, 0x65, 0x43, 0x41, 0x2a, 0x01, 0x76, 0x19, 0x32, 0x04,
+	0x10, 0x20, 0x80, 0x06, 0x42, 0x80, 0xf8, 0x6d, 0xca, 0x5d, 0x31, 0x36, 0xd5, 0x00, 0x22, 0x51,
+	0xe2, 0xa6, 0x20, 0x74, 0xb0, 0xad, 0x29, 0x58, 0xc2, 0x58, 0xf7, 0xa1, 0xf4, 0x77, 0x41, 0x99,
+	0xdb, 0xb0, 0xf0, 0x56, 0x35, 0xf1, 0xf0, 0x6d, 0xf0, 0xa4, 0x05, 0xdc, 0xcc, 0x7b, 0x3d, 0x93,
+	0x65, 0xac, 0x73, 0x73, 0x30, 0x67, 0xa3, 0x55, 0x1b, 0x39, 0x0d, 0x49, 0x33, 0x30, 0xb2, 0x9b,
+	0xb2, 0xce, 0x33, 0x79, 0x50, 0x4c, 0x57, 0xf9, 0x6f, 0x5b, 0x80, 0x1e, 0x1b, 0x1e, 0x0e, 0xe2,
+	0xb3, 0x43, 0x71, 0x7e, 0xfb, 0xa7, 0xf3, 0x45, 0xe8, 0x42, 0xf7, 0x6d, 0xe6, 0x7d, 0x93, 0xea,
+	0xdf, 0x20, 0xc4, 0x58, 0x97, 0x94, 0x86, 0xa9, 0x29, 0x88, 0x00, 0x66, 0x76, 0x5b, 0x80, 0x72,
+	0x01, 0x8f, 0x95, 0xc6, 0x17, 0x18, 0x96, 0xca, 0xd1, 0x85, 0x77, 0xe2, 0x30, 0x73, 0x43, 0x37,
+	0x57, 0x64, 0xbd, 0x6e, 0x21, 0x85, 0x60, 0x9d, 0x86, 0x3d, 0x77, 0x1b, 0xc8, 0xf6, 0xc0, 0x26,
+	0x47, 0x2f, 0x74, 0x65, 0xbe, 0x84, 0xf0, 0x5d, 0xd3, 0x5e, 0xaf, 0x6b, 0x18, 0x89, 0x68, 0x35,
+	0x28, 0x74, 0x95, 0x79, 0xda, 0x02, 0x40, 0xf4, 0x2c, 0xb9, 0x73, 0x90, 0xb1, 0x4c, 0x1b, 0x93,
+	0xfe, 0xa7, 0xab, 0xd9, 0x20, 0xdd, 0xf8, 0x10, 0xc3, 0xbf, 0x78, 0x41, 0x8b, 0x44, 0xc8, 0x9d,
+	0x81, 0x94, 0x66, 0x91, 0xf2, 0xf4, 0x56, 0xd3, 0x81, 0x0a, 0x63, 0x53, 0x96, 0x5b, 0x0e, 0x4a,
+	0xb3, 0xb8, 0x71, 0xc8, 0xaa, 0x86, 0xe3, 0x31, 0x89, 0x79, 0x69, 0xe1, 0x6b, 0x31, 0x31, 0xa1,
+	0x7a, 0x6d, 0xe3, 0x16, 0xe1, 0x80, 0xdb, 0x69, 0x64, 0xeb, 0xc8, 0x71, 0xa4, 0x08, 0x1d, 0xe3,
+	0xc4, 0x09, 0xe7, 0x56, 0x3c, 0xea, 0xa8, 0x16, 0x13, 0x8f, 0xef, 0x1b, 0xd5, 0x43, 0xe4, 0x5c,
+	0x8c, 0xf2, 0x86, 0x67, 0x49, 0x4d, 0x2e, 0x96, 0x0f, 0x3f, 0x29, 0xca, 0x5d, 0x53, 0x16, 0xa2,
+	0xba, 0xbb, 0xc5, 0x8d, 0x41, 0x96, 0x4c, 0xa4, 0x62, 0xea, 0x7c, 0x6f, 0x14, 0x51, 0xc6, 0x4e,
+	0x89, 0x31, 0x91, 0x5e, 0x9e, 0xb9, 0x29, 0xd2, 0xb7, 0x66, 0x6f, 0x8a, 0x1d, 0x45, 0x4e, 0x82,
+	0x7d, 0x41, 0x19, 0x24, 0xd9, 0x27, 0x25, 0x9f, 0x24, 0x79, 0x5c, 0x3e, 0x2a, 0x8f, 0x43, 0x38,
+	0x5c, 0x65, 0x76, 0x3c, 0xa6, 0x65, 0xd5, 0xa8, 0x90, 0xfb, 0x27, 0xec, 0x6b, 0x20, 0x59, 0xc7,
+	0x0d, 0x49, 0x69, 0x20, 0x65, 0x5d, 0x22, 0xad, 0x4b, 0x91, 0xd6, 0x1d, 0xdb, 0x09, 0xd5, 0x2a,
+	0x68, 0x5f, 0xd6, 0xd3, 0x9e, 0x71, 0x95, 0x6f, 0xba, 0x9d, 0x5c, 0x86, 0x27, 0xd6, 0x27, 0x1c,
+	0x49, 0xd1, 0x37, 0x1d, 0x8c, 0x6c, 0x49, 0xb6, 0x34, 0xc9, 0xab, 0x26, 0x9f, 0xfe, 0x75, 0xe4,
+	0x3f, 0xb6, 0x3e, 0xe1, 0xcc, 0x78, 0xd6, 0xd3, 0x96, 0x56, 0x27, 0xb6, 0x93, 0x97, 0x3e, 0x6f,
+	0x81, 0x0b, 0xf0, 0x1c, 0x1c, 0xf8, 0xb7, 0xad, 0xad, 0x69, 0x46, 0xde, 0xdb, 0x2e, 0xce, 0xf9,
+	0x18, 0x2f, 0x71, 0xec, 0xc8, 0x70, 0xe9, 0x5a, 0x69, 0xb4, 0x34, 0x52, 0x1d, 0x82, 0xb9, 0x00,
+	0xba, 0x24, 0xab, 0xaa, 0x8d, 0x1c, 0x87, 0x3b, 0xe1, 0x4f, 0x38, 0x6c, 0xb7, 0x00, 0x1c, 0x2b,
+	0x8d, 0x97, 0xae, 0x96, 0x26, 0x4a, 0x23, 0x23, 0x0b, 0x0c, 0xdb, 0x93, 0x8b, 0x2f, 0x30, 0x6c,
+	0x22, 0xc7, 0x2e, 0x30, 0x2c, 0xcc, 0x25, 0x0b, 0x9f, 0xd2, 0x30, 0x33, 0x63, 0x23, 0x19, 0xa3,
+	0xce, 0x0c, 0xfc, 0xe3, 0xf7, 0xcc, 0x40, 0xc0, 0x7e, 0x2e, 0xcc, 0x7e, 0x9f, 0xec, 0xb9, 0x7d,
+	0xb2, 0xfb, 0xec, 0x3e, 0xd5, 0xcd, 0xee, 0x28, 0x89, 0x5f, 0x27, 0xed, 0x06, 0xbb, 0x69, 0x17,
+	0x62, 0xd7, 0xed, 0xd7, 0xc3, 0xae, 0xc3, 0x78, 0x35, 0x74, 0x24, 0xaf, 0x0e, 0x50, 0x68, 0xb2,
+	0xef, 0xab, 0xa9, 0xae, 0x73, 0xa8, 0x5a, 0x3c, 0xa4, 0xa9, 0xfd, 0xf7, 0x7e, 0x06, 0x07, 0x76,
+	0x0b, 0x9f, 0xd1, 0x30, 0x2b, 0x22, 0x4b, 0x97, 0x95, 0x37, 0x1d, 0xfc, 0x6b, 0x76, 0xf0, 0x1b,
+	0x1a, 0x26, 0x6f, 0x20, 0xfc, 0xa6, 0x7b, 0x7f, 0x56, 0xf7, 0x0a, 0x07, 0xba, 0xf7, 0x6c, 0x2a,
+	0x33, 0x52, 0x72, 0xcf, 0x4d, 0xf7, 0xd4, 0x74, 0xcf, 0xd9, 0xdf, 0xd0, 0xce, 0x1f, 0x00, 0x4c,
+	0xfc, 0x6b, 0xa2, 0x4e, 0xc0, 0x0f, 0xc3, 0x7e, 0xcd, 0xe8, 0xbc, 0x1b, 0x3a, 0xf7, 0x45, 0xd2,
+	0x59, 0x56, 0xe4, 0x34, 0xc3, 0x3f, 0xf8, 0x3b, 0x17, 0x4d, 0xee, 0x24, 0x64, 0x2d, 0x53, 0x0d,
+	0x6e, 0x90, 0x74, 0xb1, 0x57, 0x4c, 0x58, 0xa6, 0x4a, 0xfa, 0x72, 0x07, 0xc6, 0x75, 0xf7, 0x12,
+	0xe8, 0xf0, 0x74, 0x9e, 0x7e, 0x59, 0x89, 0xfc, 0xe8, 0xde, 0x95, 0xd1, 0x99, 0x33, 0xb0, 0xbd,
+	0x55, 0x3d, 0x4e, 0x5e, 0xf8, 0xf7, 0x01, 0x95, 0xcb, 0xb7, 0x1f, 0x7d, 0x41, 0xc7, 0xdf, 0x7d,
+	0x00, 0x28, 0x36, 0x26, 0xfa, 0x1e, 0x07, 0xaf, 0xc1, 0x64, 0x48, 0x9b, 0xcb, 0x41, 0x7a, 0x1d,
+	0x79, 0x69, 0xf6, 0x8a, 0xee, 0x92, 0xeb, 0x87, 0x3d, 0x4d, 0x59, 0xdf, 0xf4, 0xaf, 0xb5, 0xa2,
+	0xf7, 0x30, 0x49, 0x4d, 0x80, 0x42, 0x09, 0x26, 0x66, 0x97, 0x3c, 0xb8, 0x67, 0x61, 0xca, 0x46,
+	0x8e, 0xa9, 0x37, 0x91, 0x2a, 0x69, 0x96, 0xc3, 0x03, 0x02, 0x20, 0x19, 0xec, 0xcd, 0x5b, 0x4e,
+	0xe1, 0x6b, 0x00, 0xe1, 0x8c, 0x69, 0x38, 0x9b, 0x3a, 0xb1, 0x38, 0x07, 0xd3, 0x9a, 0xe1, 0x60,
+	0xb7, 0x67, 0x92, 0x7f, 0xc9, 0x74, 0x4d, 0x52, 0xc1, 0x26, 0x01, 0xfe, 0xff, 0x0e, 0x70, 0x8a,
+	0x00, 0x2f, 0x1f, 0x05, 0x7c, 0xdf, 0xf1, 0x1f, 0x84, 0xfd, 0x7b, 0x00, 0xb9, 0xa0, 0x77, 0x48,
+	0xed, 0x7c, 0x5f, 0x5c, 0x87, 0xac, 0x7b, 0x27, 0x20, 0xd3, 0xe3, 0x0d, 0xf1, 0x99, 0x57, 0xf4,
+	0xca, 0x9d, 0xbf, 0xf5, 0x09, 0x87, 0xd4, 0x64, 0x0e, 0x26, 0x15, 0x02, 0xc4, 0x73, 0x40, 0x11,
+	0x07, 0x85, 0x57, 0x63, 0xae, 0xc5, 0x44, 0xa8, 0xec, 0x97, 0xf6, 0xba, 0x37, 0xe3, 0xc4, 0x07,
+	0xfd, 0xf2, 0x24, 0xfc, 0xfe, 0xf9, 0x87, 0x80, 0xbb, 0xac, 0xf6, 0xc1, 0xac, 0xda, 0x01, 0x46,
+	0x9c, 0x14, 0xde, 0x67, 0x60, 0xfa, 0x3f, 0xc8, 0xae, 0x63, 0x19, 0x6f, 0x3a, 0x04, 0xe7, 0xd9,
+	0xae, 0x4f, 0x1e, 0xaf, 0x66, 0x91, 0x0f, 0x9c, 0x69, 0x98, 0x0e, 0xfb, 0xb1, 0x7c, 0x38, 0xdd,
+	0x5f, 0x5a, 0xf3, 0xd6, 0xb4, 0x37, 0x3e, 0xae, 0x5f, 0x31, 0xb5, 0x6f, 0x32, 0x6f, 0x71, 0x17,
+	0x23, 0xa9, 0x90, 0x41, 0xa6, 0xc9, 0x20, 0x67, 0xf6, 0xb7, 0xc9, 0x55, 0x6c, 0x1a, 0xa6, 0x64,
+	0x5d, 0x37, 0x15, 0x19, 0x7b, 0xa1, 0x18, 0x12, 0x4a, 0x38, 0x10, 0xaa, 0x79, 0x35, 0x1c, 0x2c,
+	0xd9, 0xb1, 0x99, 0xb7, 0xdc, 0xe3, 0xd3, 0xd1, 0x30, 0xe2, 0x7b, 0x08, 0x12, 0xb2, 0xe6, 0xfe,
+	0x07, 0xd3, 0xfe, 0x51, 0xe2, 0x10, 0xe8, 0x7c, 0x9c, 0xb0, 0xf0, 0xef, 0x47, 0x55, 0x33, 0x52,
+	0xa3, 0x72, 0x8d, 0x98, 0x7a, 0x1b, 0x84, 0x60, 0x62, 0xaa, 0x11, 0xda, 0xe2, 0xea, 0x07, 0x0a,
+	0xcd, 0x27, 0x48, 0xde, 0x43, 0x47, 0x76, 0xeb, 0x00, 0xe1, 0xc2, 0x95, 0x70, 0xf7, 0x06, 0x11,
+	0xec, 0x3b, 0x10, 0xf7, 0x10, 0x62, 0x4f, 0x86, 0x89, 0x9d, 0x19, 0x3d, 0x7f, 0x54, 0xc4, 0xb0,
+	0xaf, 0x10, 0xfd, 0x87, 0x86, 0x60, 0x2a, 0x2c, 0xe2, 0x92, 0x30, 0x51, 0x9b, 0x9b, 0x5e, 0x5c,
+	0xae, 0xdd, 0xce, 0xc5, 0xb8, 0x34, 0xec, 0xbd, 0xb5, 0x14, 0x3c, 0x82, 0xea, 0x7b, 0x60, 0x77,
+	0x4f, 0x88, 0x3d, 0xdc, 0x13, 0x62, 0x4f, 0xf7, 0x04, 0xf0, 0x7c, 0x4f, 0x00, 0xdb, 0x6d, 0x01,
+	0x7c, 0xd4, 0x16, 0xc0, 0xc7, 0x6d, 0x01, 0xec, 0xb4, 0x05, 0xf0, 0x65, 0x5b, 0x00, 0xbb, 0x6d,
+	0x01, 0x3c, 0x6c, 0x0b, 0xe0, 0x51, 0x5b, 0x00, 0x4f, 0xda, 0x42, 0xec, 0x69, 0x5b, 0x00, 0x1f,
+	0x3c, 0x16, 0x62, 0x3b, 0x8f, 0x05, 0x70, 0x67, 0x71, 0xcd, 0xb4, 0xd6, 0xd7, 0xca, 0x4d, 0x53,
+	0xc7, 0xc8, 0xb6, 0xe5, 0xf2, 0xa6, 0x53, 0x21, 0x8b, 0x55, 0xd3, 0xde, 0xb8, 0x62, 0xd9, 0x66,
+	0x53, 0x53, 0x91, 0x7d, 0x25, 0x10, 0x57, 0xac, 0x95, 0x35, 0xb3, 0x82, 0xde, 0xc2, 0xfe, 0xbf,
+	0x81, 0xae, 0x9f, 0x1f, 0x2b, 0x71, 0xf2, 0x1a, 0x1a, 0xfb, 0x25, 0x00, 0x00, 0xff, 0xff, 0xf9,
+	0x8f, 0xea, 0xed, 0x1d, 0x11, 0x00, 0x00,
 }

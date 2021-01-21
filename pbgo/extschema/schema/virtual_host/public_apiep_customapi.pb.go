@@ -3,36 +3,24 @@
 
 package virtual_host
 
-import (
-	proto "github.com/gogo/protobuf/proto"
-	golang_proto "github.com/golang/protobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
+import golang_proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/gogo/googleapis/google/api"
+import ves_io_schema_app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 
-	fmt "fmt"
+import strings "strings"
+import reflect "reflect"
 
-	math "math"
+import context "golang.org/x/net/context"
+import grpc "google.golang.org/grpc"
 
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	_ "github.com/gogo/googleapis/google/api"
-
-	ves_io_schema_app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	context "golang.org/x/net/context"
-
-	grpc "google.golang.org/grpc"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -91,6 +79,71 @@ func (m *APIEndpointsReq) GetApiEndpointInfoRequest() []ves_io_schema_app_type.A
 	return nil
 }
 
+// Swagger spec request
+//
+// x-displayName: "Swagger spec Request"
+// Request shape for GET Swagger Spec API
+type SwaggerSpecReq struct {
+	// Virtual Host Name
+	//
+	// x-displayName: "Virtual Host Name"
+	// x-example: "blogging-app"
+	// Virtual Host for current request
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "shared"
+	// Namespace of the App type for current request
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+}
+
+func (m *SwaggerSpecReq) Reset()      { *m = SwaggerSpecReq{} }
+func (*SwaggerSpecReq) ProtoMessage() {}
+func (*SwaggerSpecReq) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicApiepCustomapi, []int{1}
+}
+
+func (m *SwaggerSpecReq) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *SwaggerSpecReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+// Swagger Spec Response
+//
+// x-displayName: "Swagger Spec Response"
+// Json encoded swagger spec for the given vhost.
+type SwaggerSpecRsp struct {
+	// Swagger Spec
+	//
+	// x-displayName: "Swagger Spec"
+	// x-example: "{\"info\": {\"description\": \"\",\"title\": \"\",\"version\": \"\"},\"paths\": {\"\/api\/Addresss\": {\"post\": {\"consumes\": [\"application\/json\"],\"description\": \"Swagger auto-generated from learnt schema\",\"parameters\": [{\"description\": \"\",\"in\": \"query\",\"name\": \"test1\",\"type\": \"string\"},{\"description\": \"\",\"in\": \"query\",\"items\": {\"description\": \"Integer\",\"pattern\": \"-?\\\\d+\",\"type\": \"string\"},\"name\": \"test\",\"type\": \"array\"},{\"description\": \"\",\"in\": \"body\",\"name\": \"body\",\"schema\": {\"example\": [\"{\\\"country\\\": \\\"dummy\\\", \\\"fullName\\\": \\\"dummy\\\", \\\"mobileNum\\\": 1234567890, \\\"zipCode\\\": \\\"121\\\", \\\"streetAddress\\\": \\\"dummy\\\", \\\"city\\\": \\\"dummy\\\", \\\"state\\\": \\\"dummy\\\", \\\"test\\\": \\\"Hello, \\\\u4e16\\\\u754c\\\", \\\"abc\\\": \\\"def\\\"}\"],\"properties\": {\"abc\": {\"description\": \"Word\",\"pattern\": \"[a-z0-9-]+\",\"type\": \"string\"},\"city\": {\"description\": \"Word\",\"pattern\": \"[a-z0-9-]+\",\"type\": \"string\"},\"country\": {\"description\": \"Word\",\"pattern\": \"[a-z0-9-]+\",\"type\": \"string\"},\"fullName\": {\"description\": \"Word\",\"pattern\": \"[a-z0-9-]+\",\"type\": \"string\"},\"mobileNum\": {\"type\": \"integer\"},\"state\": {\"description\": \"Word\",\"pattern\": \"[a-z0-9-]+\",\"type\": \"string\"},\"streetAddress\": {\"description\": \"Word\",\"pattern\": \"[a-z0-9-]+\",\"type\": \"string\"},\"test\": {\"type\": \"string\"},\"zipCode\": {\"description\": \"Integer\",\"pattern\": \"-?\\\\d+\",\"type\": \"string\"}},\"required\": [\"fullName\",\"mobileNum\",\"city\",\"test\",\"zipCode\",\"state\",\"streetAddress\",\"country\",\"abc\"],\"type\": \"object\"}}],\"responses\": {\"200\": {\"description\": \"\"}}}},\"\/api\/Cards\": {\"post\": {\"consumes\": [\"application\/json\"],\"description\": \"Swagger auto-generated from learnt schema\",\"parameters\": [{\"description\": \"\",\"in\": \"body\",\"name\": \"body\",\"schema\": {\"example\": [\"{\\\"fullName\\\": \\\"dummy\\\", \\\"cardNum\\\": 0, \\\"expMonth\\\": \\\"0\\\", \\\"expYear\\\": \\\"0\\\"}\"],\"properties\": {\"cardNum\": {\"type\": \"integer\"},\"expMonth\": {\"description\": \"Integer\",\"pattern\": \"-?\\\\d+\",\"type\": \"string\"},\"expYear\": {\"description\": \"Integer\",\"pattern\": \"-?\\\\d+\",\"type\": \"string\"},\"fullName\": {\"description\": \"Word\",\"pattern\": \"[a-z0-9-]+\",\"type\": \"string\"}},\"required\": [\"expMonth\",\"expYear\",\"fullName\",\"cardNum\"],\"type\": \"object\"}}],\"responses\": {\"200\": {\"description\": \"\"}}}},\"\/rest\/basket\/6\/checkout\": {\"post\": {\"consumes\": [\"application\/json\"],\"description\": \"Swagger auto-generated from learnt schema\",\"parameters\": [{\"description\": \"\",\"in\": \"body\",\"name\": \"body\",\"schema\": {\"example\": [\"{\\\"couponData\\\": \\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\", \\\"orderDetails\\\": {\\\"paymentId\\\": \\\"9792\\\", \\\"addressId\\\": \\\"21189\\\", \\\"deliveryMethodId\\\": \\\"1\\\"}}\",\"{\\\"couponData\\\": \\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\", \\\"orderDetails\\\": {\\\"paymentId\\\": \\\"9814\\\", \\\"addressId\\\": \\\"21409\\\", \\\"deliveryMethodId\\\": \\\"1\\\"}}\",\"{\\\"couponData\\\": \\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\", \\\"orderDetails\\\": {\\\"paymentId\\\": \\\"9822\\\", \\\"addressId\\\": \\\"21489\\\", \\\"deliveryMethodId\\\": \\\"1\\\"}}\",\"{\\\"couponData\\\": \\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\", \\\"orderDetails\\\": {\\\"paymentId\\\": \\\"9793\\\", \\\"addressId\\\": \\\"21199\\\", \\\"deliveryMethodId\\\": \\\"1\\\"}}\",\"{\\\"couponData\\\": \\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\", \\\"orderDetails\\\": {\\\"paymentId\\\": \\\"9817\\\", \\\"addressId\\\": \\\"21439\\\", \\\"deliveryMethodId\\\": \\\"1\\\"}}\"],\"properties\": {\"couponData\": {\"type\": \"string\"},\"orderDetails\": {\"properties\": {\"addressId\": {\"description\": \"Integer\",\"pattern\": \"-?\\\\d+\",\"type\": \"string\"},\"deliveryMethodId\": {\"description\": \"Integer\",\"pattern\": \"-?\\\\d+\",\"type\": \"string\"},\"paymentId\": {\"description\": \"Integer\",\"pattern\": \"-?\\\\d+\",\"type\": \"string\"}},\"required\": [\"addressId\",\"paymentId\",\"deliveryMethodId\"],\"type\": \"object\"}},\"required\": [\"orderDetails\",\"couponData\"],\"type\": \"object\"}}],\"responses\": {\"200\": {\"description\": \"\"}}}},\"\/rest\/products\/1\/reviews\": {\"put\": {\"consumes\": [\"application\/json\"],\"description\": \"Swagger auto-generated from learnt schema\",\"parameters\": [],\"responses\": {\"200\": {\"description\": \"\"}}}},\"\/rest\/user\/login\": {\"post\": {\"consumes\": [\"application\/json\"],\"description\": \"Swagger auto-generated from learnt schema\",\"parameters\": [{\"description\": \"\",\"in\": \"body\",\"name\": \"body\",\"schema\": {\"example\": [\"{\\\"email\\\":\\\"dummy0@dummy.com\\\",\\\"password\\\":\\\"redacted\\\",\\\"test\\\":\\\"Hello, \u4E16\u754C\\\"}\",\"{\\\"email\\\":\\\"dummy1@dummy.com\\\",\\\"password\\\":\\\"redacted\\\",\\\"test\\\":\\\"Hello, \u4E16\u754C\\\"}\",\"{\\\"email\\\":\\\"dummy2@dummy.com\\\",\\\"password\\\":\\\"redacted\\\",\\\"test\\\":\\\"Hello, \u4E16\u754C\\\"}\",\"{\\\"email\\\":\\\"dummy3@dummy.com\\\",\\\"password\\\":\\\"redacted\\\",\\\"test\\\":\\\"Hello, \u4E16\u754C\\\"}\"],\"properties\": {\"email\": {\"description\": \"Email\",\"pattern\": \".+@.+\",\"type\": \"string\",\"x-pii\": {\"examples\": [\"dummy0@dummy.com\",\"dummy1@dummy.com\",\"dummy2@dummy.com\",\"dummy3@dummy.com\"]}},\"password\": {\"description\": \"Word\",\"pattern\": \"[a-z0-9-]+\",\"type\": \"string\"},\"test\": {\"type\": \"string\"}},\"required\": [\"email\",\"test\",\"password\"],\"type\": \"object\"}}],\"responses\": {\"200\": {\"description\": \"\"}}}}},\"schemes\": [\"https\",\"http\"],\"swagger\": \"2.0\"}"
+	// Swagger spec json encoded string for current request
+	SwaggerSpec string `protobuf:"bytes,1,opt,name=swagger_spec,json=swaggerSpec,proto3" json:"swagger_spec,omitempty"`
+}
+
+func (m *SwaggerSpecRsp) Reset()      { *m = SwaggerSpecRsp{} }
+func (*SwaggerSpecRsp) ProtoMessage() {}
+func (*SwaggerSpecRsp) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicApiepCustomapi, []int{2}
+}
+
+func (m *SwaggerSpecRsp) GetSwaggerSpec() string {
+	if m != nil {
+		return m.SwaggerSpec
+	}
+	return ""
+}
+
 // API endpoint PDF request Per Virtual Host
 //
 // x-displayName: "PDF Request per Virtual Host"
@@ -125,7 +178,7 @@ type APIEndpointPDFReq struct {
 func (m *APIEndpointPDFReq) Reset()      { *m = APIEndpointPDFReq{} }
 func (*APIEndpointPDFReq) ProtoMessage() {}
 func (*APIEndpointPDFReq) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicApiepCustomapi, []int{1}
+	return fileDescriptorPublicApiepCustomapi, []int{3}
 }
 
 func (m *APIEndpointPDFReq) GetNamespace() string {
@@ -190,7 +243,7 @@ type APIEndpointLearntSchemaReq struct {
 func (m *APIEndpointLearntSchemaReq) Reset()      { *m = APIEndpointLearntSchemaReq{} }
 func (*APIEndpointLearntSchemaReq) ProtoMessage() {}
 func (*APIEndpointLearntSchemaReq) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicApiepCustomapi, []int{2}
+	return fileDescriptorPublicApiepCustomapi, []int{4}
 }
 
 func (m *APIEndpointLearntSchemaReq) GetNamespace() string {
@@ -236,7 +289,7 @@ type APIEndpointsRsp struct {
 func (m *APIEndpointsRsp) Reset()      { *m = APIEndpointsRsp{} }
 func (*APIEndpointsRsp) ProtoMessage() {}
 func (*APIEndpointsRsp) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicApiepCustomapi, []int{3}
+	return fileDescriptorPublicApiepCustomapi, []int{5}
 }
 
 func (m *APIEndpointsRsp) GetApiepList() []*ves_io_schema_app_type.APIEPInfo {
@@ -261,7 +314,7 @@ type APIEndpointPDFRsp struct {
 func (m *APIEndpointPDFRsp) Reset()      { *m = APIEndpointPDFRsp{} }
 func (*APIEndpointPDFRsp) ProtoMessage() {}
 func (*APIEndpointPDFRsp) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicApiepCustomapi, []int{4}
+	return fileDescriptorPublicApiepCustomapi, []int{6}
 }
 
 func (m *APIEndpointPDFRsp) GetPdfInfo() *ves_io_schema_app_type.APIEPPDFInfo {
@@ -293,7 +346,7 @@ type APIEndpointLearntSchemaRsp struct {
 func (m *APIEndpointLearntSchemaRsp) Reset()      { *m = APIEndpointLearntSchemaRsp{} }
 func (*APIEndpointLearntSchemaRsp) ProtoMessage() {}
 func (*APIEndpointLearntSchemaRsp) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicApiepCustomapi, []int{5}
+	return fileDescriptorPublicApiepCustomapi, []int{7}
 }
 
 func (m *APIEndpointLearntSchemaRsp) GetLearntSchema() string {
@@ -313,6 +366,10 @@ func (m *APIEndpointLearntSchemaRsp) GetSwaggerSpec() string {
 func init() {
 	proto.RegisterType((*APIEndpointsReq)(nil), "ves.io.schema.virtual_host.APIEndpointsReq")
 	golang_proto.RegisterType((*APIEndpointsReq)(nil), "ves.io.schema.virtual_host.APIEndpointsReq")
+	proto.RegisterType((*SwaggerSpecReq)(nil), "ves.io.schema.virtual_host.SwaggerSpecReq")
+	golang_proto.RegisterType((*SwaggerSpecReq)(nil), "ves.io.schema.virtual_host.SwaggerSpecReq")
+	proto.RegisterType((*SwaggerSpecRsp)(nil), "ves.io.schema.virtual_host.SwaggerSpecRsp")
+	golang_proto.RegisterType((*SwaggerSpecRsp)(nil), "ves.io.schema.virtual_host.SwaggerSpecRsp")
 	proto.RegisterType((*APIEndpointPDFReq)(nil), "ves.io.schema.virtual_host.APIEndpointPDFReq")
 	golang_proto.RegisterType((*APIEndpointPDFReq)(nil), "ves.io.schema.virtual_host.APIEndpointPDFReq")
 	proto.RegisterType((*APIEndpointLearntSchemaReq)(nil), "ves.io.schema.virtual_host.APIEndpointLearntSchemaReq")
@@ -356,6 +413,57 @@ func (this *APIEndpointsReq) Equal(that interface{}) bool {
 		if this.ApiEndpointInfoRequest[i] != that1.ApiEndpointInfoRequest[i] {
 			return false
 		}
+	}
+	return true
+}
+func (this *SwaggerSpecReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SwaggerSpecReq)
+	if !ok {
+		that2, ok := that.(SwaggerSpecReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	return true
+}
+func (this *SwaggerSpecRsp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SwaggerSpecRsp)
+	if !ok {
+		that2, ok := that.(SwaggerSpecRsp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.SwaggerSpec != that1.SwaggerSpec {
+		return false
 	}
 	return true
 }
@@ -517,6 +625,27 @@ func (this *APIEndpointsReq) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *SwaggerSpecReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&virtual_host.SwaggerSpecReq{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SwaggerSpecRsp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&virtual_host.SwaggerSpecRsp{")
+	s = append(s, "SwaggerSpec: "+fmt.Sprintf("%#v", this.SwaggerSpec)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *APIEndpointPDFReq) GoString() string {
 	if this == nil {
 		return "nil"
@@ -613,6 +742,11 @@ type ApiepCustomAPIClient interface {
 	// x-displayName: "Get Get Learnt Schema per API endpoint"
 	// Get Learnt Schema per API endpoint for a given auto discovered API endpoint for Virtual Host
 	GetAPIEndpointLearntSchema(ctx context.Context, in *APIEndpointLearntSchemaReq, opts ...grpc.CallOption) (*APIEndpointLearntSchemaRsp, error)
+	// Get Swagger Spec for App Type
+	//
+	// x-displayName: "Get Swagger Spec for App Type"
+	// Get the corresponding Swagger spec for the given app type
+	GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq, opts ...grpc.CallOption) (*SwaggerSpecRsp, error)
 }
 
 type apiepCustomAPIClient struct {
@@ -650,6 +784,15 @@ func (c *apiepCustomAPIClient) GetAPIEndpointLearntSchema(ctx context.Context, i
 	return out, nil
 }
 
+func (c *apiepCustomAPIClient) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq, opts ...grpc.CallOption) (*SwaggerSpecRsp, error) {
+	out := new(SwaggerSpecRsp)
+	err := grpc.Invoke(ctx, "/ves.io.schema.virtual_host.ApiepCustomAPI/GetSwaggerSpec", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for ApiepCustomAPI service
 
 type ApiepCustomAPIServer interface {
@@ -668,6 +811,11 @@ type ApiepCustomAPIServer interface {
 	// x-displayName: "Get Get Learnt Schema per API endpoint"
 	// Get Learnt Schema per API endpoint for a given auto discovered API endpoint for Virtual Host
 	GetAPIEndpointLearntSchema(context.Context, *APIEndpointLearntSchemaReq) (*APIEndpointLearntSchemaRsp, error)
+	// Get Swagger Spec for App Type
+	//
+	// x-displayName: "Get Swagger Spec for App Type"
+	// Get the corresponding Swagger spec for the given app type
+	GetSwaggerSpec(context.Context, *SwaggerSpecReq) (*SwaggerSpecRsp, error)
 }
 
 func RegisterApiepCustomAPIServer(s *grpc.Server, srv ApiepCustomAPIServer) {
@@ -728,6 +876,24 @@ func _ApiepCustomAPI_GetAPIEndpointLearntSchema_Handler(srv interface{}, ctx con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApiepCustomAPI_GetSwaggerSpec_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SwaggerSpecReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApiepCustomAPIServer).GetSwaggerSpec(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.virtual_host.ApiepCustomAPI/GetSwaggerSpec",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApiepCustomAPIServer).GetSwaggerSpec(ctx, req.(*SwaggerSpecReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _ApiepCustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.virtual_host.ApiepCustomAPI",
 	HandlerType: (*ApiepCustomAPIServer)(nil),
@@ -743,6 +909,10 @@ var _ApiepCustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAPIEndpointLearntSchema",
 			Handler:    _ApiepCustomAPI_GetAPIEndpointLearntSchema_Handler,
+		},
+		{
+			MethodName: "GetSwaggerSpec",
+			Handler:    _ApiepCustomAPI_GetSwaggerSpec_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -792,6 +962,60 @@ func (m *APIEndpointsReq) MarshalTo(dAtA []byte) (int, error) {
 		i++
 		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(j1))
 		i += copy(dAtA[i:], dAtA2[:j1])
+	}
+	return i, nil
+}
+
+func (m *SwaggerSpecReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SwaggerSpecReq) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
+	}
+	if len(m.Namespace) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i += copy(dAtA[i:], m.Namespace)
+	}
+	return i, nil
+}
+
+func (m *SwaggerSpecRsp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SwaggerSpecRsp) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.SwaggerSpec) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.SwaggerSpec)))
+		i += copy(dAtA[i:], m.SwaggerSpec)
 	}
 	return i, nil
 }
@@ -998,6 +1222,30 @@ func (m *APIEndpointsReq) Size() (n int) {
 	return n
 }
 
+func (m *SwaggerSpecReq) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *SwaggerSpecRsp) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.SwaggerSpec)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	return n
+}
+
 func (m *APIEndpointPDFReq) Size() (n int) {
 	var l int
 	_ = l
@@ -1099,6 +1347,27 @@ func (this *APIEndpointsReq) String() string {
 		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
 		`ApiEndpointInfoRequest:` + fmt.Sprintf("%v", this.ApiEndpointInfoRequest) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SwaggerSpecReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SwaggerSpecReq{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SwaggerSpecRsp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SwaggerSpecRsp{`,
+		`SwaggerSpec:` + fmt.Sprintf("%v", this.SwaggerSpec) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1317,6 +1586,193 @@ func (m *APIEndpointsReq) Unmarshal(dAtA []byte) error {
 			} else {
 				return fmt.Errorf("proto: wrong wireType = %d for field ApiEndpointInfoRequest", wireType)
 			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SwaggerSpecReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SwaggerSpecReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SwaggerSpecReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SwaggerSpecRsp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SwaggerSpecRsp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SwaggerSpecRsp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SwaggerSpec", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SwaggerSpec = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
@@ -2055,53 +2511,57 @@ func init() {
 }
 
 var fileDescriptorPublicApiepCustomapi = []byte{
-	// 765 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x55, 0xbf, 0x6f, 0xf3, 0x44,
-	0x18, 0xce, 0x25, 0xdf, 0xf7, 0x41, 0xaf, 0xe5, 0xab, 0x7a, 0x48, 0x95, 0x31, 0x95, 0xd5, 0x1a,
-	0x86, 0x4a, 0x28, 0x3e, 0x14, 0x24, 0x18, 0x21, 0x6d, 0x1a, 0x14, 0xa9, 0x02, 0x2b, 0x85, 0x85,
-	0xc5, 0xba, 0xd8, 0x17, 0xe7, 0xc0, 0xf1, 0x5d, 0x7d, 0xe7, 0x00, 0x42, 0x95, 0x50, 0x56, 0x16,
-	0x04, 0xff, 0x04, 0x7f, 0x02, 0x6a, 0x97, 0x6e, 0x74, 0x42, 0x05, 0x16, 0xc4, 0x44, 0x5d, 0x06,
-	0xd8, 0x3a, 0xb0, 0x83, 0x72, 0x71, 0x8a, 0x1d, 0xfa, 0x8b, 0x76, 0x60, 0x89, 0xde, 0xbb, 0xf7,
-	0x7d, 0x9f, 0x3c, 0xcf, 0x73, 0xf7, 0xfa, 0xe0, 0x1b, 0x23, 0x2a, 0x1d, 0xc6, 0xb1, 0xf4, 0x07,
-	0x74, 0x48, 0xf0, 0x88, 0x25, 0x2a, 0x25, 0x91, 0x37, 0xe0, 0x52, 0x61, 0x91, 0xf6, 0x22, 0xe6,
-	0x7b, 0x44, 0x30, 0x2a, 0x3c, 0x3f, 0x95, 0x8a, 0x0f, 0x89, 0x60, 0x8e, 0x48, 0xb8, 0xe2, 0xc8,
-	0x9c, 0x36, 0x3a, 0xd3, 0x46, 0xa7, 0xd8, 0x68, 0xd6, 0x43, 0xa6, 0x06, 0x69, 0xcf, 0xf1, 0xf9,
-	0x10, 0x87, 0x3c, 0xe4, 0x58, 0xb7, 0xf4, 0xd2, 0xbe, 0x5e, 0xe9, 0x85, 0x8e, 0xa6, 0x50, 0xe6,
-	0x5a, 0xc8, 0x79, 0x18, 0x51, 0x4c, 0x04, 0xc3, 0x24, 0x8e, 0xb9, 0x22, 0x8a, 0xf1, 0x58, 0xe6,
-	0x59, 0xbb, 0xcc, 0x90, 0x08, 0xe1, 0xa9, 0x4f, 0x05, 0xc5, 0x93, 0x9f, 0x59, 0xcd, 0x8b, 0xe5,
-	0x1a, 0x2e, 0x8a, 0x00, 0x6b, 0x73, 0x12, 0x49, 0xc4, 0x02, 0xa2, 0xe8, 0xd5, 0xf0, 0x23, 0x2a,
-	0x69, 0x3c, 0x2a, 0x23, 0xd8, 0x87, 0x00, 0x2e, 0x37, 0xdd, 0xce, 0x4e, 0x1c, 0x08, 0xce, 0x62,
-	0x25, 0xbb, 0x74, 0x1f, 0xad, 0xc1, 0x85, 0x98, 0x0c, 0xa9, 0x14, 0xc4, 0xa7, 0x06, 0x58, 0x07,
-	0x9b, 0x0b, 0xdd, 0x7f, 0x36, 0x10, 0x82, 0x8f, 0x26, 0x0b, 0xa3, 0xaa, 0x13, 0x3a, 0x46, 0x29,
-	0x7c, 0x81, 0x08, 0xe6, 0xd1, 0x1c, 0xc5, 0x63, 0x71, 0x9f, 0x7b, 0x09, 0xdd, 0x4f, 0xa9, 0x54,
-	0x46, 0x6d, 0xbd, 0xb6, 0xf9, 0xb4, 0xe1, 0x38, 0x65, 0x57, 0x67, 0x62, 0x9d, 0xa6, 0x60, 0xb3,
-	0x7f, 0xef, 0xc4, 0x7d, 0xde, 0x9d, 0x76, 0x6d, 0xc1, 0xc3, 0x3f, 0x8e, 0x6b, 0x8f, 0xbf, 0x02,
-	0x55, 0x03, 0x74, 0x57, 0xc9, 0x95, 0x35, 0xf6, 0x18, 0xc0, 0x95, 0x02, 0x79, 0xb7, 0xd5, 0xbe,
-	0x1f, 0xfd, 0x97, 0xe0, 0x73, 0x3e, 0x8f, 0x22, 0x22, 0x24, 0x0d, 0xbc, 0x34, 0x89, 0x8c, 0x9a,
-	0x4e, 0x2e, 0x5d, 0x6e, 0xbe, 0x9f, 0x44, 0x68, 0x15, 0x3e, 0x19, 0x52, 0x35, 0xe0, 0x81, 0xf1,
-	0x48, 0x67, 0xf3, 0x95, 0xfd, 0x05, 0x80, 0x66, 0x81, 0xc4, 0x2e, 0x25, 0x49, 0xac, 0xf6, 0xb4,
-	0xc8, 0xff, 0x81, 0xcd, 0xde, 0xdc, 0x71, 0x4a, 0x81, 0xde, 0x82, 0x70, 0x7a, 0xcf, 0x23, 0x26,
-	0x95, 0x01, 0xd6, 0x6b, 0x9b, 0x8b, 0x8d, 0x8d, 0x6b, 0x4f, 0xc3, 0xed, 0xec, 0xb8, 0xda, 0xe3,
-	0x05, 0xdd, 0xb4, 0xcb, 0xa4, 0xb2, 0xdf, 0xfb, 0x97, 0xcd, 0x52, 0xa0, 0x37, 0xe1, 0xb3, 0x22,
-	0xe8, 0xeb, 0xa3, 0xd6, 0xba, 0x16, 0x1b, 0x2f, 0xdf, 0x08, 0xea, 0xb6, 0xda, 0x1a, 0xf7, 0x19,
-	0x11, 0xf4, 0x27, 0x81, 0x1d, 0x5c, 0xef, 0x9b, 0x14, 0x13, 0x17, 0x22, 0xbd, 0xe5, 0x4d, 0xd1,
-	0x72, 0xef, 0x96, 0xa2, 0x42, 0x1d, 0xda, 0x80, 0x4b, 0xf2, 0x63, 0x12, 0x86, 0x34, 0xf1, 0xa4,
-	0xa0, 0x7e, 0x6e, 0xe3, 0x62, 0xbe, 0xb7, 0x27, 0xa8, 0xdf, 0xf8, 0xf3, 0x31, 0x7c, 0xda, 0x9c,
-	0x28, 0xd9, 0xd6, 0x53, 0xde, 0x74, 0x3b, 0xe8, 0x07, 0x00, 0x97, 0xdf, 0xa6, 0xaa, 0xe8, 0x13,
-	0x7a, 0xc5, 0xb9, 0x7e, 0xe8, 0x9d, 0xb9, 0x01, 0x31, 0xef, 0x5e, 0x2c, 0x85, 0x1d, 0x9c, 0x7c,
-	0x5b, 0x05, 0xd9, 0x77, 0xc6, 0xf3, 0x23, 0x2a, 0xeb, 0x8c, 0xd7, 0x43, 0x1a, 0xd3, 0x84, 0x44,
-	0xf5, 0x84, 0x92, 0x60, 0xfc, 0xd3, 0x6f, 0x5f, 0x57, 0xb7, 0x51, 0x33, 0xff, 0x1e, 0xe1, 0xcb,
-	0x8b, 0x21, 0xf1, 0x67, 0x97, 0xf1, 0x41, 0xe9, 0xd3, 0x95, 0x67, 0x0e, 0x70, 0x71, 0xe0, 0x24,
-	0xfa, 0x05, 0xc0, 0x95, 0xb2, 0x26, 0xb7, 0xd5, 0x46, 0xf5, 0x3b, 0x12, 0x9d, 0x4e, 0x8e, 0xf9,
-	0x5f, 0xca, 0xa5, 0xb0, 0xc3, 0xdb, 0x94, 0xb5, 0x51, 0xeb, 0xa1, 0xca, 0xb0, 0x08, 0xfa, 0xe8,
-	0x2f, 0x00, 0xcd, 0xb2, 0xb8, 0xe2, 0x6d, 0x41, 0xaf, 0xdf, 0x91, 0xf6, 0xdc, 0x68, 0x9a, 0xf7,
-	0xea, 0x93, 0xc2, 0xde, 0xbf, 0x4d, 0xb7, 0x8b, 0xde, 0x79, 0xb0, 0xee, 0xd2, 0xe5, 0x37, 0xf1,
-	0xf1, 0x11, 0xa8, 0xfd, 0x78, 0x04, 0x36, 0x6e, 0x60, 0xfc, 0x6e, 0xef, 0x43, 0xea, 0xab, 0xf1,
-	0xf7, 0x46, 0xf5, 0x55, 0xb0, 0x35, 0x06, 0xa7, 0x67, 0x56, 0xe5, 0xe7, 0x33, 0xab, 0x72, 0x71,
-	0x66, 0x81, 0xcf, 0x33, 0x0b, 0x7c, 0x93, 0x59, 0xe0, 0x24, 0xb3, 0xc0, 0x69, 0x66, 0x81, 0x5f,
-	0x33, 0x0b, 0xfc, 0x9e, 0x59, 0x95, 0x8b, 0xcc, 0x02, 0x5f, 0x9e, 0x5b, 0x95, 0xe3, 0x73, 0x0b,
-	0x7c, 0xe0, 0x86, 0x5c, 0x7c, 0x14, 0x3a, 0x23, 0x1e, 0x29, 0x9a, 0x24, 0xc4, 0x49, 0x25, 0xd6,
-	0x41, 0x9f, 0x27, 0xc3, 0xba, 0x48, 0xf8, 0x88, 0x05, 0x34, 0xa9, 0xcf, 0xd2, 0x58, 0xf4, 0x42,
-	0x8e, 0xe9, 0x27, 0x2a, 0x7f, 0x5d, 0xae, 0x78, 0x65, 0x7b, 0x4f, 0xf4, 0x1b, 0xf3, 0xda, 0xdf,
-	0x01, 0x00, 0x00, 0xff, 0xff, 0xe0, 0x9e, 0xb7, 0x93, 0x8a, 0x07, 0x00, 0x00,
+	// 825 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x56, 0x4f, 0x8f, 0xdb, 0x44,
+	0x14, 0xcf, 0x24, 0xa5, 0x65, 0x67, 0x97, 0x54, 0x1d, 0xa4, 0xca, 0x98, 0x95, 0xb5, 0x6b, 0x38,
+	0xac, 0x40, 0xf1, 0xa0, 0x54, 0x82, 0x23, 0x64, 0x9b, 0xa6, 0x8a, 0x54, 0x81, 0x95, 0xc0, 0x85,
+	0x8b, 0x35, 0xb1, 0x27, 0xce, 0x80, 0xe3, 0x99, 0xf5, 0x8c, 0x03, 0x08, 0x55, 0x42, 0xb9, 0x72,
+	0x41, 0xf0, 0x25, 0xf8, 0x08, 0xa8, 0xbd, 0xec, 0x8d, 0x9e, 0x50, 0x29, 0x17, 0x04, 0x17, 0xd6,
+	0xe5, 0x00, 0xb7, 0x7e, 0x03, 0x50, 0xc6, 0xce, 0xd6, 0xce, 0xfe, 0x69, 0x68, 0x25, 0x7a, 0x89,
+	0xde, 0xcc, 0x7b, 0xef, 0x97, 0xdf, 0xef, 0xe5, 0xbd, 0x37, 0x81, 0xef, 0xcc, 0xa8, 0x74, 0x18,
+	0xc7, 0xd2, 0x9f, 0xd0, 0x29, 0xc1, 0x33, 0x96, 0xa8, 0x94, 0x44, 0xde, 0x84, 0x4b, 0x85, 0x45,
+	0x3a, 0x8a, 0x98, 0xef, 0x11, 0xc1, 0xa8, 0xf0, 0xfc, 0x54, 0x2a, 0x3e, 0x25, 0x82, 0x39, 0x22,
+	0xe1, 0x8a, 0x23, 0x33, 0x4f, 0x74, 0xf2, 0x44, 0xa7, 0x9c, 0x68, 0xb6, 0x42, 0xa6, 0x26, 0xe9,
+	0xc8, 0xf1, 0xf9, 0x14, 0x87, 0x3c, 0xe4, 0x58, 0xa7, 0x8c, 0xd2, 0xb1, 0x3e, 0xe9, 0x83, 0xb6,
+	0x72, 0x28, 0x73, 0x3b, 0xe4, 0x3c, 0x8c, 0x28, 0x26, 0x82, 0x61, 0x12, 0xc7, 0x5c, 0x11, 0xc5,
+	0x78, 0x2c, 0x0b, 0xaf, 0x5d, 0x65, 0x48, 0x84, 0xf0, 0xd4, 0x17, 0x82, 0xe2, 0xc5, 0xc7, 0x32,
+	0xe6, 0xd5, 0x6a, 0x0c, 0x17, 0x65, 0x80, 0xed, 0x15, 0x89, 0x24, 0x62, 0x01, 0x51, 0xf4, 0x74,
+	0xf8, 0x19, 0x95, 0x34, 0x9e, 0x55, 0x11, 0xec, 0x3b, 0x00, 0x5e, 0xee, 0xb8, 0xfd, 0x1b, 0x71,
+	0x20, 0x38, 0x8b, 0x95, 0x1c, 0xd0, 0x03, 0xb4, 0x0d, 0x37, 0x62, 0x32, 0xa5, 0x52, 0x10, 0x9f,
+	0x1a, 0x60, 0x07, 0xec, 0x6d, 0x0c, 0x1e, 0x5f, 0x20, 0x04, 0x2f, 0x2c, 0x0e, 0x46, 0x5d, 0x3b,
+	0xb4, 0x8d, 0x52, 0xf8, 0x0a, 0x11, 0xcc, 0xa3, 0x05, 0x8a, 0xc7, 0xe2, 0x31, 0xf7, 0x12, 0x7a,
+	0x90, 0x52, 0xa9, 0x8c, 0xc6, 0x4e, 0x63, 0xaf, 0xd9, 0x76, 0x9c, 0x6a, 0x55, 0x97, 0x62, 0x9d,
+	0x8e, 0x60, 0xcb, 0x6f, 0xef, 0xc7, 0x63, 0x3e, 0xc8, 0xb3, 0xf6, 0xe1, 0x9d, 0xbf, 0x0f, 0x1b,
+	0x2f, 0x7c, 0x0b, 0xea, 0x06, 0x18, 0x5c, 0x25, 0xa7, 0xc6, 0xd8, 0xfb, 0xb0, 0x39, 0xfc, 0x8c,
+	0x84, 0x21, 0x4d, 0x86, 0x82, 0xfa, 0x0b, 0xea, 0x4b, 0x72, 0xa0, 0x44, 0xae, 0x22, 0xa7, 0xbe,
+	0x22, 0xc7, 0xbe, 0x56, 0xc5, 0x90, 0x02, 0xed, 0xc2, 0x2d, 0x99, 0xdf, 0x78, 0x52, 0x50, 0xbf,
+	0xc0, 0xda, 0x94, 0x8f, 0xa3, 0xec, 0x39, 0x80, 0x57, 0x4a, 0x55, 0x73, 0xbb, 0xbd, 0xa7, 0xab,
+	0xdb, 0x6b, 0xf0, 0x25, 0x9f, 0x47, 0x11, 0x11, 0x92, 0x06, 0x5e, 0x9a, 0x44, 0x46, 0x43, 0x3b,
+	0xb7, 0x8e, 0x2f, 0x3f, 0x4a, 0x22, 0x74, 0x15, 0x5e, 0x9c, 0x52, 0x35, 0xe1, 0x81, 0x71, 0x41,
+	0x7b, 0x8b, 0x93, 0xfd, 0x35, 0x80, 0x66, 0x89, 0xc4, 0x2d, 0x4a, 0x92, 0x58, 0x0d, 0x75, 0x75,
+	0x9f, 0x03, 0x9b, 0xe1, 0x4a, 0x1f, 0x49, 0x81, 0xde, 0x83, 0x30, 0x1f, 0xb0, 0x88, 0x49, 0x65,
+	0x80, 0x9d, 0xc6, 0xde, 0x66, 0x7b, 0xf7, 0xcc, 0x36, 0x70, 0xfb, 0x37, 0x5c, 0xfd, 0xe3, 0x6e,
+	0xe8, 0xa4, 0x5b, 0x4c, 0x2a, 0xfb, 0xc3, 0x13, 0x65, 0x96, 0x02, 0xbd, 0x0b, 0x5f, 0x14, 0xc1,
+	0x58, 0xf7, 0x98, 0xd6, 0xb5, 0xd9, 0x7e, 0xfd, 0x5c, 0x50, 0xb7, 0xdb, 0xd3, 0xb8, 0x97, 0x44,
+	0x30, 0x5e, 0x18, 0x76, 0x70, 0x76, 0xdd, 0xa4, 0x58, 0x54, 0x21, 0xd2, 0x57, 0x5e, 0x8e, 0x56,
+	0xd4, 0x6e, 0x2b, 0x2a, 0xc5, 0x9d, 0xe8, 0x91, 0xfa, 0x89, 0x1e, 0x69, 0x3f, 0xb8, 0x04, 0x9b,
+	0x9d, 0x85, 0x92, 0xeb, 0x7a, 0xbd, 0x74, 0xdc, 0x3e, 0xfa, 0x19, 0xc0, 0xcb, 0x37, 0xa9, 0x2a,
+	0xd7, 0x09, 0xbd, 0xe9, 0x9c, 0xbd, 0x6d, 0x9c, 0x95, 0xc9, 0x34, 0xd7, 0x0f, 0x96, 0xc2, 0x0e,
+	0xee, 0xfd, 0x50, 0x07, 0xd9, 0x8f, 0xc6, 0xcb, 0x33, 0x2a, 0x5b, 0x8c, 0xb7, 0x42, 0x1a, 0xd3,
+	0x84, 0x44, 0xad, 0x84, 0x92, 0x60, 0xfe, 0xcb, 0x9f, 0xdf, 0xd5, 0xaf, 0xa3, 0x4e, 0xb1, 0x08,
+	0xf1, 0x71, 0x63, 0x48, 0xfc, 0xe5, 0xb1, 0x7d, 0xbb, 0xb2, 0x33, 0x0b, 0xcf, 0x6d, 0x5c, 0x9e,
+	0x74, 0x89, 0x7e, 0x03, 0xf0, 0x4a, 0x55, 0x93, 0xdb, 0xed, 0xa1, 0xd6, 0x9a, 0x44, 0xf3, 0xc9,
+	0x31, 0xff, 0x4b, 0xb8, 0x14, 0x76, 0xf8, 0x24, 0x65, 0x3d, 0xd4, 0x7d, 0x56, 0x65, 0x58, 0x04,
+	0x63, 0xf4, 0x0f, 0x80, 0x66, 0x55, 0x5c, 0xb9, 0x5b, 0xd0, 0xdb, 0x6b, 0xd2, 0x5e, 0x19, 0x4d,
+	0xf3, 0xa9, 0xf2, 0xa4, 0xb0, 0x0f, 0x9e, 0xa4, 0xdb, 0x45, 0xef, 0x3f, 0xb3, 0xee, 0x4a, 0xf3,
+	0xa3, 0xdf, 0x01, 0x6c, 0xde, 0xa4, 0xaa, 0xb4, 0x22, 0xd1, 0x1b, 0xe7, 0xb1, 0xaf, 0xee, 0x63,
+	0x73, 0xed, 0xd8, 0xff, 0x49, 0x9d, 0xc4, 0xe5, 0xb1, 0x35, 0xf1, 0xe1, 0x5d, 0xd0, 0x78, 0x70,
+	0x17, 0xec, 0x9e, 0xc3, 0xf2, 0x83, 0xd1, 0x27, 0xd4, 0x57, 0xf3, 0x9f, 0x8c, 0xfa, 0x5b, 0x60,
+	0x7f, 0x0e, 0xee, 0x1f, 0x59, 0xb5, 0x5f, 0x8f, 0xac, 0xda, 0xa3, 0x23, 0x0b, 0x7c, 0x95, 0x59,
+	0xe0, 0xfb, 0xcc, 0x02, 0xf7, 0x32, 0x0b, 0xdc, 0xcf, 0x2c, 0xf0, 0x47, 0x66, 0x81, 0xbf, 0x32,
+	0xab, 0xf6, 0x28, 0xb3, 0xc0, 0x37, 0x0f, 0xad, 0xda, 0xe1, 0x43, 0x0b, 0x7c, 0xec, 0x86, 0x5c,
+	0x7c, 0x1a, 0x3a, 0x33, 0x1e, 0x29, 0x9a, 0x24, 0xc4, 0x49, 0x25, 0xd6, 0xc6, 0x98, 0x27, 0xd3,
+	0x96, 0x48, 0xf8, 0x8c, 0x05, 0x34, 0x69, 0x2d, 0xdd, 0x58, 0x8c, 0x42, 0x8e, 0xe9, 0xe7, 0xaa,
+	0x78, 0xb4, 0x4f, 0xf9, 0xf3, 0x32, 0xba, 0xa8, 0x9f, 0xee, 0x6b, 0xff, 0x06, 0x00, 0x00, 0xff,
+	0xff, 0x80, 0x7b, 0xde, 0xfe, 0xe1, 0x08, 0x00, 0x00,
 }

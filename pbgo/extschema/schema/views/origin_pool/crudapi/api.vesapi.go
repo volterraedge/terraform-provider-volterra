@@ -17,6 +17,7 @@ import (
 	google_protobuf "github.com/gogo/protobuf/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	multierror "github.com/hashicorp/go-multierror"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -1010,7 +1011,10 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.origin_pool.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.origin_pool.crudapi.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1040,7 +1044,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.origin_pool.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.origin_pool.crudapi.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1143,7 +1150,10 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.origin_pool.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.origin_pool.crudapi.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -2396,7 +2406,7 @@ var APISwaggerJSON string = `{
         },
         "origin_poolOriginPoolAdvancedOptions": {
             "type": "object",
-            "description": "Configure Advance options for origin pool",
+            "description": "Configure Advanced options for origin pool",
             "title": "Origin Pool Advanced Options",
             "x-displayname": "Origin Pool Advanced Options",
             "x-ves-oneof-field-circuit_breaker_choice": "[\"circuit_breaker\",\"disable_circuit_breaker\"]",
@@ -2479,7 +2489,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "default_subset": {
                     "type": "object",
-                    "description": " List of key-value pairs that define default subset. \n which gets used when route specifies no metadata or no subset matching the metadata exists.\n\nExample: - \"key:value\"-",
+                    "description": " List of key-value pairs that define default subset.\n which gets used when route specifies no metadata or no subset matching the metadata exists.\n\nExample: - \"key:value\"-",
                     "title": "default_subset",
                     "x-displayname": "Default Subset for Origin Pool",
                     "x-ves-example": "key:value"
@@ -3545,10 +3555,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.GlobalSpecType",
             "properties": {
                 "advanced_options": {
-                    "description": " Advance options configuration like timeouts, circuit breaker, subset load balancing",
-                    "title": "Advance Options",
+                    "description": " Advanced options configuration like timeouts, circuit breaker, subset load balancing",
+                    "title": "Advanced Options",
                     "$ref": "#/definitions/origin_poolOriginPoolAdvancedOptions",
-                    "x-displayname": "Advance Options"
+                    "x-displayname": "Advanced Options"
                 },
                 "endpoint_selection": {
                     "description": " Policy for selection of endpoints from local site or remote site or both\nRequired: YES",

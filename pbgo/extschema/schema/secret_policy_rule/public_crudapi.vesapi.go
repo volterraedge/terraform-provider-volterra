@@ -494,8 +494,8 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		namespace = rReq.Metadata.Namespace
-		name = rReq.Metadata.Name
+		namespace = rReq.GetMetadata().GetNamespace()
+		name = rReq.GetMetadata().GetName()
 	} else {
 		jsn = cco.ReplaceJSONReq
 		reqMap := make(map[string]interface{})
@@ -1116,8 +1116,11 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.secret_policy_rule.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.secret_policy_rule.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1169,8 +1172,11 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.secret_policy_rule.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.secret_policy_rule.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1287,8 +1293,11 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.secret_policy_rule.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.secret_policy_rule.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -1302,6 +1311,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	tenant := server.TenantFromContext(ctx)
 	key := fmt.Sprintf("%s/%s/%s", tenant, req.GetNamespace(), req.GetName())
 	rsrcReq := &server.ResourceDeleteRequest{Key: key}
+	rsrcReq.FailIfReferred = req.FailIfReferred
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
@@ -2061,6 +2071,14 @@ var APISwaggerJSON string = `{
                         "in": "path",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/secret_policy_ruleDeleteRequest"
+                        }
                     }
                 ],
                 "tags": [
@@ -2152,13 +2170,14 @@ var APISwaggerJSON string = `{
         },
         "policyRuleAction": {
             "type": "string",
-            "description": "The rule action determines the disposition of the input request API. If a policy matches a rule with an ALLOW action, the processing of the request proceeds\nforward. If it matches a rule with a DENY action, the processing of the request is terminated and an appropriate message/code returned to the originator. If\nit matches a rule with a NEXT_POLICY_SET action, evaluation of the current policy set terminates and evaluation of the next policy set in the chain begins.\n\n - DENY: DENY\n\nDeny the request.\n - ALLOW: ALLOW\n\nAllow the request to proceed.\n - NEXT_POLICY_SET: NEXT_POLICY_SET\n\nTerminate evaluation of the current policy set and begin evaluating the next policy set in the chain. Note that the evaluation of any remaining policies\nin the current policy set is skipped.\n - NEXT_POLICY: NEXT_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the next policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.",
+            "description": "The rule action determines the disposition of the input request API. If a policy matches a rule with an ALLOW action, the processing of the request proceeds\nforward. If it matches a rule with a DENY action, the processing of the request is terminated and an appropriate message/code returned to the originator. If\nit matches a rule with a NEXT_POLICY_SET action, evaluation of the current policy set terminates and evaluation of the next policy set in the chain begins.\n\n - DENY: DENY\n\nDeny the request.\n - ALLOW: ALLOW\n\nAllow the request to proceed.\n - NEXT_POLICY_SET: NEXT_POLICY_SET\n\nTerminate evaluation of the current policy set and begin evaluating the next policy set in the chain. Note that the evaluation of any remaining policies\nin the current policy set is skipped.\n - NEXT_POLICY: NEXT_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the next policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.\n - LAST_POLICY: LAST_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the last policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.",
             "title": "Rule Action",
             "enum": [
                 "DENY",
                 "ALLOW",
                 "NEXT_POLICY_SET",
-                "NEXT_POLICY"
+                "NEXT_POLICY",
+                "LAST_POLICY"
             ],
             "default": "DENY",
             "x-displayname": "Rule Action",
@@ -3074,6 +3093,36 @@ var APISwaggerJSON string = `{
                     "title": "system metadata",
                     "$ref": "#/definitions/schemaSystemObjectGetMetaType",
                     "x-displayname": "System Metadata"
+                }
+            }
+        },
+        "secret_policy_ruleDeleteRequest": {
+            "type": "object",
+            "description": "This is the input message of the 'Delete' RPC.",
+            "title": "DeleteRequest is used to delete a secret_policy_rule",
+            "x-displayname": "Delete Request",
+            "x-ves-proto-message": "ves.io.schema.secret_policy_rule.DeleteRequest",
+            "properties": {
+                "fail_if_referred": {
+                    "type": "boolean",
+                    "description": " Fail the delete operation if this object is being referred by other objects",
+                    "title": "fail_if_referred",
+                    "format": "boolean",
+                    "x-displayname": "Fail-If-Referred"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the configuration object\n\nExample: - \"name\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the configuration object is present\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
                 }
             }
         },

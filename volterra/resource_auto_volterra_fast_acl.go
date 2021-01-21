@@ -417,6 +417,31 @@ func resourceVolterraFastAcl() *schema.Resource {
 										},
 									},
 
+									"metadata": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"description": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"disable": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"name": {
 										Type:     schema.TypeString,
 										Optional: true,
@@ -663,6 +688,31 @@ func resourceVolterraFastAcl() *schema.Resource {
 
 												"simple_action": {
 
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"metadata": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"description": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"disable": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"name": {
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -1369,6 +1419,31 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 
 					}
 
+					if v, ok := fastAclRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						fastAclRules[i].Metadata = metadata
+						for _, set := range sl {
+
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
+							}
+
+						}
+
+					}
+
 					if w, ok := fastAclRulesMapStrToI["name"]; ok && !isIntfNil(w) {
 						fastAclRules[i].Name = w.(string)
 					}
@@ -1714,6 +1789,31 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 
 								actionInt.SimpleAction = ves_io_schema_fast_acl_rule.FastAclRuleSimpleAction(ves_io_schema_fast_acl_rule.FastAclRuleSimpleAction_value[v.(string)])
 
+							}
+
+						}
+
+					}
+
+					if v, ok := fastAclRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						fastAclRules[i].Metadata = metadata
+						for _, set := range sl {
+
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
 							}
 
 						}
@@ -2536,6 +2636,31 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 
 					}
 
+					if v, ok := fastAclRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						fastAclRules[i].Metadata = metadata
+						for _, set := range sl {
+
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
+							}
+
+						}
+
+					}
+
 					if w, ok := fastAclRulesMapStrToI["name"]; ok && !isIntfNil(w) {
 						fastAclRules[i].Name = w.(string)
 					}
@@ -2881,6 +3006,31 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 
 								actionInt.SimpleAction = ves_io_schema_fast_acl_rule.FastAclRuleSimpleAction(ves_io_schema_fast_acl_rule.FastAclRuleSimpleAction_value[v.(string)])
 
+							}
+
+						}
+
+					}
+
+					if v, ok := fastAclRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						fastAclRules[i].Metadata = metadata
+						for _, set := range sl {
+
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
 							}
 
 						}

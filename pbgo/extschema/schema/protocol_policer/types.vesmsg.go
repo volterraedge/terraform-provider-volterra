@@ -978,10 +978,10 @@ func (v *ValidateProtocolType) Validate(ctx context.Context, pm interface{}, opt
 
 	switch m.GetType().(type) {
 	case *ProtocolType_Tcp:
-		if fv, exists := v.FldValidators["Type.tcp"]; exists {
+		if fv, exists := v.FldValidators["type.tcp"]; exists {
 			val := m.GetType().(*ProtocolType_Tcp).Tcp
 			vOpts := append(opts,
-				db.WithValidateField("Type"),
+				db.WithValidateField("type"),
 				db.WithValidateField("tcp"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -989,10 +989,10 @@ func (v *ValidateProtocolType) Validate(ctx context.Context, pm interface{}, opt
 			}
 		}
 	case *ProtocolType_Icmp:
-		if fv, exists := v.FldValidators["Type.icmp"]; exists {
+		if fv, exists := v.FldValidators["type.icmp"]; exists {
 			val := m.GetType().(*ProtocolType_Icmp).Icmp
 			vOpts := append(opts,
-				db.WithValidateField("Type"),
+				db.WithValidateField("type"),
 				db.WithValidateField("icmp"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -1000,10 +1000,10 @@ func (v *ValidateProtocolType) Validate(ctx context.Context, pm interface{}, opt
 			}
 		}
 	case *ProtocolType_Udp:
-		if fv, exists := v.FldValidators["Type.udp"]; exists {
+		if fv, exists := v.FldValidators["type.udp"]; exists {
 			val := m.GetType().(*ProtocolType_Udp).Udp
 			vOpts := append(opts,
-				db.WithValidateField("Type"),
+				db.WithValidateField("type"),
 				db.WithValidateField("udp"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -1011,10 +1011,10 @@ func (v *ValidateProtocolType) Validate(ctx context.Context, pm interface{}, opt
 			}
 		}
 	case *ProtocolType_Dns:
-		if fv, exists := v.FldValidators["Type.dns"]; exists {
+		if fv, exists := v.FldValidators["type.dns"]; exists {
 			val := m.GetType().(*ProtocolType_Dns).Dns
 			vOpts := append(opts,
-				db.WithValidateField("Type"),
+				db.WithValidateField("type"),
 				db.WithValidateField("dns"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {

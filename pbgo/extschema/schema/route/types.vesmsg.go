@@ -1590,7 +1590,7 @@ type ValidateRouteDestinationList struct {
 func (v *ValidateRouteDestinationList) HostRewriteParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for HostRewriteParams")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for host_rewrite_params")
 	}
 	return validatorFn, nil
 }
@@ -1694,42 +1694,6 @@ func (v *ValidateRouteDestinationList) Validate(ctx context.Context, pm interfac
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["HostRewriteParams"]; exists {
-		val := m.GetHostRewriteParams()
-		vOpts := append(opts,
-			db.WithValidateField("HostRewriteParams"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetHostRewriteParams().(type) {
-	case *RouteDestinationList_HostRewrite:
-		if fv, exists := v.FldValidators["HostRewriteParams.host_rewrite"]; exists {
-			val := m.GetHostRewriteParams().(*RouteDestinationList_HostRewrite).HostRewrite
-			vOpts := append(opts,
-				db.WithValidateField("HostRewriteParams"),
-				db.WithValidateField("host_rewrite"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *RouteDestinationList_AutoHostRewrite:
-		if fv, exists := v.FldValidators["HostRewriteParams.auto_host_rewrite"]; exists {
-			val := m.GetHostRewriteParams().(*RouteDestinationList_AutoHostRewrite).AutoHostRewrite
-			vOpts := append(opts,
-				db.WithValidateField("HostRewriteParams"),
-				db.WithValidateField("auto_host_rewrite"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["buffer_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("buffer_policy"))
@@ -1770,6 +1734,42 @@ func (v *ValidateRouteDestinationList) Validate(ctx context.Context, pm interfac
 		for idx, item := range m.GetHashPolicy() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx))
 			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["host_rewrite_params"]; exists {
+		val := m.GetHostRewriteParams()
+		vOpts := append(opts,
+			db.WithValidateField("host_rewrite_params"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHostRewriteParams().(type) {
+	case *RouteDestinationList_HostRewrite:
+		if fv, exists := v.FldValidators["host_rewrite_params.host_rewrite"]; exists {
+			val := m.GetHostRewriteParams().(*RouteDestinationList_HostRewrite).HostRewrite
+			vOpts := append(opts,
+				db.WithValidateField("host_rewrite_params"),
+				db.WithValidateField("host_rewrite"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteDestinationList_AutoHostRewrite:
+		if fv, exists := v.FldValidators["host_rewrite_params.auto_host_rewrite"]; exists {
+			val := m.GetHostRewriteParams().(*RouteDestinationList_AutoHostRewrite).AutoHostRewrite
+			vOpts := append(opts,
+				db.WithValidateField("host_rewrite_params"),
+				db.WithValidateField("auto_host_rewrite"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
@@ -1860,10 +1860,10 @@ var DefaultRouteDestinationListValidator = func() *ValidateRouteDestinationList 
 	}
 	vFn, err = vrhHostRewriteParams(rulesHostRewriteParams)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteDestinationList.HostRewriteParams: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteDestinationList.host_rewrite_params: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["HostRewriteParams"] = vFn
+	v.FldValidators["host_rewrite_params"] = vFn
 
 	vrhDestinations := v.DestinationsValidationRuleHandler
 	rulesDestinations := map[string]string{
@@ -2257,54 +2257,6 @@ func (v *ValidateRouteRedirect) Validate(ctx context.Context, pm interface{}, op
 		return nil
 	}
 
-	switch m.GetQueryParams().(type) {
-	case *RouteRedirect_StripQueryParams:
-		if fv, exists := v.FldValidators["QueryParams.strip_query_params"]; exists {
-			val := m.GetQueryParams().(*RouteRedirect_StripQueryParams).StripQueryParams
-			vOpts := append(opts,
-				db.WithValidateField("QueryParams"),
-				db.WithValidateField("strip_query_params"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *RouteRedirect_AllParams:
-		if fv, exists := v.FldValidators["QueryParams.all_params"]; exists {
-			val := m.GetQueryParams().(*RouteRedirect_AllParams).AllParams
-			vOpts := append(opts,
-				db.WithValidateField("QueryParams"),
-				db.WithValidateField("all_params"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *RouteRedirect_RetainAllParams:
-		if fv, exists := v.FldValidators["QueryParams.retain_all_params"]; exists {
-			val := m.GetQueryParams().(*RouteRedirect_RetainAllParams).RetainAllParams
-			vOpts := append(opts,
-				db.WithValidateField("QueryParams"),
-				db.WithValidateField("retain_all_params"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *RouteRedirect_RemoveAllParams:
-		if fv, exists := v.FldValidators["QueryParams.remove_all_params"]; exists {
-			val := m.GetQueryParams().(*RouteRedirect_RemoveAllParams).RemoveAllParams
-			vOpts := append(opts,
-				db.WithValidateField("QueryParams"),
-				db.WithValidateField("remove_all_params"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["host_redirect"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("host_redirect"))
@@ -2328,6 +2280,54 @@ func (v *ValidateRouteRedirect) Validate(ctx context.Context, pm interface{}, op
 		vOpts := append(opts, db.WithValidateField("proto_redirect"))
 		if err := fv(ctx, m.GetProtoRedirect(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetQueryParams().(type) {
+	case *RouteRedirect_StripQueryParams:
+		if fv, exists := v.FldValidators["query_params.strip_query_params"]; exists {
+			val := m.GetQueryParams().(*RouteRedirect_StripQueryParams).StripQueryParams
+			vOpts := append(opts,
+				db.WithValidateField("query_params"),
+				db.WithValidateField("strip_query_params"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteRedirect_AllParams:
+		if fv, exists := v.FldValidators["query_params.all_params"]; exists {
+			val := m.GetQueryParams().(*RouteRedirect_AllParams).AllParams
+			vOpts := append(opts,
+				db.WithValidateField("query_params"),
+				db.WithValidateField("all_params"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteRedirect_RetainAllParams:
+		if fv, exists := v.FldValidators["query_params.retain_all_params"]; exists {
+			val := m.GetQueryParams().(*RouteRedirect_RetainAllParams).RetainAllParams
+			vOpts := append(opts,
+				db.WithValidateField("query_params"),
+				db.WithValidateField("retain_all_params"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteRedirect_RemoveAllParams:
+		if fv, exists := v.FldValidators["query_params.remove_all_params"]; exists {
+			val := m.GetQueryParams().(*RouteRedirect_RemoveAllParams).RemoveAllParams
+			vOpts := append(opts,
+				db.WithValidateField("query_params"),
+				db.WithValidateField("remove_all_params"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2378,7 +2378,7 @@ var DefaultRouteRedirectValidator = func() *ValidateRouteRedirect {
 	}
 	v.FldValidators["response_code"] = vFn
 
-	v.FldValidators["QueryParams.strip_query_params"] = RouteQueryParamsValidator().Validate
+	v.FldValidators["query_params.strip_query_params"] = RouteQueryParamsValidator().Validate
 
 	return v
 }()
@@ -2504,7 +2504,7 @@ type ValidateRouteType struct {
 func (v *ValidateRouteType) RouteActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for RouteAction")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for route_action")
 	}
 	return validatorFn, nil
 }
@@ -2687,53 +2687,6 @@ func (v *ValidateRouteType) Validate(ctx context.Context, pm interface{}, opts .
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["RouteAction"]; exists {
-		val := m.GetRouteAction()
-		vOpts := append(opts,
-			db.WithValidateField("RouteAction"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetRouteAction().(type) {
-	case *RouteType_RouteDestination:
-		if fv, exists := v.FldValidators["RouteAction.route_destination"]; exists {
-			val := m.GetRouteAction().(*RouteType_RouteDestination).RouteDestination
-			vOpts := append(opts,
-				db.WithValidateField("RouteAction"),
-				db.WithValidateField("route_destination"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *RouteType_RouteRedirect:
-		if fv, exists := v.FldValidators["RouteAction.route_redirect"]; exists {
-			val := m.GetRouteAction().(*RouteType_RouteRedirect).RouteRedirect
-			vOpts := append(opts,
-				db.WithValidateField("RouteAction"),
-				db.WithValidateField("route_redirect"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *RouteType_RouteDirectResponse:
-		if fv, exists := v.FldValidators["RouteAction.route_direct_response"]; exists {
-			val := m.GetRouteAction().(*RouteType_RouteDirectResponse).RouteDirectResponse
-			vOpts := append(opts,
-				db.WithValidateField("RouteAction"),
-				db.WithValidateField("route_direct_response"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["disable_custom_script"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("disable_custom_script"))
@@ -2796,6 +2749,53 @@ func (v *ValidateRouteType) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
+	if fv, exists := v.FldValidators["route_action"]; exists {
+		val := m.GetRouteAction()
+		vOpts := append(opts,
+			db.WithValidateField("route_action"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRouteAction().(type) {
+	case *RouteType_RouteDestination:
+		if fv, exists := v.FldValidators["route_action.route_destination"]; exists {
+			val := m.GetRouteAction().(*RouteType_RouteDestination).RouteDestination
+			vOpts := append(opts,
+				db.WithValidateField("route_action"),
+				db.WithValidateField("route_destination"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteType_RouteRedirect:
+		if fv, exists := v.FldValidators["route_action.route_redirect"]; exists {
+			val := m.GetRouteAction().(*RouteType_RouteRedirect).RouteRedirect
+			vOpts := append(opts,
+				db.WithValidateField("route_action"),
+				db.WithValidateField("route_redirect"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteType_RouteDirectResponse:
+		if fv, exists := v.FldValidators["route_action.route_direct_response"]; exists {
+			val := m.GetRouteAction().(*RouteType_RouteDirectResponse).RouteDirectResponse
+			vOpts := append(opts,
+				db.WithValidateField("route_action"),
+				db.WithValidateField("route_direct_response"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["service_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("service_policy"))
@@ -2835,10 +2835,10 @@ var DefaultRouteTypeValidator = func() *ValidateRouteType {
 	}
 	vFn, err = vrhRouteAction(rulesRouteAction)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteType.RouteAction: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteType.route_action: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["RouteAction"] = vFn
+	v.FldValidators["route_action"] = vFn
 
 	vrhRequestHeadersToAdd := v.RequestHeadersToAddValidationRuleHandler
 	rulesRequestHeadersToAdd := map[string]string{
@@ -2888,9 +2888,9 @@ var DefaultRouteTypeValidator = func() *ValidateRouteType {
 	}
 	v.FldValidators["response_headers_to_remove"] = vFn
 
-	v.FldValidators["RouteAction.route_destination"] = RouteDestinationListValidator().Validate
-	v.FldValidators["RouteAction.route_redirect"] = RouteRedirectValidator().Validate
-	v.FldValidators["RouteAction.route_direct_response"] = RouteDirectResponseValidator().Validate
+	v.FldValidators["route_action.route_destination"] = RouteDestinationListValidator().Validate
+	v.FldValidators["route_action.route_redirect"] = RouteRedirectValidator().Validate
+	v.FldValidators["route_action.route_direct_response"] = RouteDirectResponseValidator().Validate
 
 	v.FldValidators["match"] = ves_io_schema.RouteMatchValidator().Validate
 

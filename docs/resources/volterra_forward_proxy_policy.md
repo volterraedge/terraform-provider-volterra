@@ -86,9 +86,11 @@ List of allowed connections.
 
 `http_list` - (Optional) URLs for HTTP connections. See [Http List ](#http-list) below for details.
 
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
 `rule_description` - (Optional) Human readable description for the rule (`String`).
 
-`rule_name` - (Required) Rule Name that will be used to query metrics for this rule. (`String`).
+`rule_name` - (Optional) Rule Name that will be used to query metrics for this rule. (`String`).
 
 `tls_list` - (Optional) Domains in SNI for TLS connections. See [Tls List ](#tls-list) below for details.
 
@@ -122,9 +124,11 @@ List of denied connections.
 
 `http_list` - (Optional) URLs for HTTP connections. See [Http List ](#http-list) below for details.
 
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
 `rule_description` - (Optional) Human readable description for the rule (`String`).
 
-`rule_name` - (Required) Rule Name that will be used to query metrics for this rule. (`String`).
+`rule_name` - (Optional) Rule Name that will be used to query metrics for this rule. (`String`).
 
 `tls_list` - (Optional) Domains in SNI for TLS connections. See [Tls List ](#tls-list) below for details.
 
@@ -140,7 +144,7 @@ L4 destinations for non-HTTP and non-TLS connections and TLS connections without
 
 The ASN is obtained by performing a lookup for the destination IPv4 Address in a GeoIP DB..
 
-`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Optional) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
 
 ### Dst Label Selector
 
@@ -152,7 +156,7 @@ Destination is the set of prefixes determined by the label selector expression.
 
 Addresses that are covered by the given list of IPv4 prefixes.
 
-`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
+`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
 
 ### Http List
 
@@ -182,6 +186,16 @@ Sources is set of prefixes determined by label selector expression.
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
+### Metadata
+
+Common attributes for the rule including name and description..
+
+`description` - (Optional) Human readable description for the object that corresponds to the containing message. (`String`).
+
+`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).
+
+`name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
+
 ### No Http Connect Port
 
 Ignore destination ports for connections.
@@ -198,7 +212,7 @@ In case of an HTTP Connect, the destination port is extracted from the connect d
 
 list of ip prefixes that are representing source of traffic seen by proxy.
 
-`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
+`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
 
 ### Proxy Label Selector
 
@@ -220,11 +234,11 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 List of custom rules.
 
-`rules` - (Optional)rules. See [Rules ](#rules) below for details.
+`rules` - (Optional) List of custom rules. See [Rules ](#rules) below for details.
 
 ### Rules
 
-rules.
+List of custom rules.
 
 `action` - (Required) Action to be enforced if the input request matches the rule. (`String`).
 
@@ -248,9 +262,11 @@ rules.
 
 `port_matcher` - (Optional) In case of an HTTP Connect, the destination port is extracted from the connect destination.. See [Port Matcher ](#port-matcher) below for details.
 
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
 `rule_description` - (Optional) Human readable description for the rule (`String`).
 
-`rule_name` - (Required) Rule Name that will be used to query metrics for this rule. (`String`).
+`rule_name` - (Optional) Rule Name that will be used to query metrics for this rule. (`String`).
 
 `all_sources` - (Optional) Any source that matches 0/0 ip prefix (bool).
 

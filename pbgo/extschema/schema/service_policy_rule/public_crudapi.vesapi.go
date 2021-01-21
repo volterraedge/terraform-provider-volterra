@@ -494,8 +494,8 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		namespace = rReq.Metadata.Namespace
-		name = rReq.Metadata.Name
+		namespace = rReq.GetMetadata().GetNamespace()
+		name = rReq.GetMetadata().GetName()
 	} else {
 		jsn = cco.ReplaceJSONReq
 		reqMap := make(map[string]interface{})
@@ -1116,8 +1116,11 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.service_policy_rule.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.service_policy_rule.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1169,8 +1172,11 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.service_policy_rule.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.service_policy_rule.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1287,8 +1293,11 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.service_policy_rule.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.service_policy_rule.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -1302,6 +1311,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	tenant := server.TenantFromContext(ctx)
 	key := fmt.Sprintf("%s/%s/%s", tenant, req.GetNamespace(), req.GetName())
 	rsrcReq := &server.ResourceDeleteRequest{Key: key}
+	rsrcReq.FailIfReferred = req.FailIfReferred
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
@@ -2061,6 +2071,14 @@ var APISwaggerJSON string = `{
                         "in": "path",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service_policy_ruleDeleteRequest"
+                        }
                     }
                 ],
                 "tags": [
@@ -2089,6 +2107,50 @@ var APISwaggerJSON string = `{
             "title": "Empty",
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
+        },
+        "ioschemaObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
         },
         "malicious_user_mitigationMaliciousUserMitigationAction": {
             "type": "object",
@@ -2248,15 +2310,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "as_numbers": {
                     "type": "array",
-                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\nRequired: YES",
+                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-",
                     "title": "as numbers",
                     "items": {
                         "type": "integer",
                         "format": "int64"
                     },
                     "x-displayname": "AS Numbers",
-                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]",
-                    "x-ves-required": "true"
+                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]"
                 }
             }
         },
@@ -2272,12 +2333,26 @@ var APISwaggerJSON string = `{
                     "description": " A list of references to bgp_asn_set objects.\nRequired: YES",
                     "title": "asn_sets",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "BGP ASN Sets",
                     "x-ves-required": "true"
                 }
             }
+        },
+        "policyChallengeAction": {
+            "type": "string",
+            "description": "The challenge options to use when a policy based challenge is configured.\n\n - NO_CHALLENGE: NO_CHALLENGE\n\nNo challenge.\n - ENABLE_JAVASCRIPT_CHALLENGE: ENABLE_JAVASCRIPT_CHALLENGE\n\nEnable javascript challenge.\n - ENABLE_CAPTCHA_CHALLENGE: ENABLE_CAPTCHA_CHALLENGE\n\nCaptcha challenge.\n - DISABLE_CHALLENGE: DISABLE_CHALLENGE\n\nDisable challenge",
+            "title": "Challenge Action",
+            "enum": [
+                "NO_CHALLENGE",
+                "ENABLE_JAVASCRIPT_CHALLENGE",
+                "ENABLE_CAPTCHA_CHALLENGE",
+                "DISABLE_CHALLENGE"
+            ],
+            "default": "NO_CHALLENGE",
+            "x-displayname": "Challenge Action",
+            "x-ves-proto-enum": "ves.io.schema.policy.ChallengeAction"
         },
         "policyCookieMatcherType": {
             "type": "object",
@@ -2371,7 +2446,7 @@ var APISwaggerJSON string = `{
                     "description": " A list of references to ip_prefix_set objects.\nRequired: YES",
                     "title": "prefix_sets",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "IP Prefix Sets",
                     "x-ves-required": "true"
@@ -2568,13 +2643,14 @@ var APISwaggerJSON string = `{
         },
         "policyRuleAction": {
             "type": "string",
-            "description": "The rule action determines the disposition of the input request API. If a policy matches a rule with an ALLOW action, the processing of the request proceeds\nforward. If it matches a rule with a DENY action, the processing of the request is terminated and an appropriate message/code returned to the originator. If\nit matches a rule with a NEXT_POLICY_SET action, evaluation of the current policy set terminates and evaluation of the next policy set in the chain begins.\n\n - DENY: DENY\n\nDeny the request.\n - ALLOW: ALLOW\n\nAllow the request to proceed.\n - NEXT_POLICY_SET: NEXT_POLICY_SET\n\nTerminate evaluation of the current policy set and begin evaluating the next policy set in the chain. Note that the evaluation of any remaining policies\nin the current policy set is skipped.\n - NEXT_POLICY: NEXT_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the next policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.",
+            "description": "The rule action determines the disposition of the input request API. If a policy matches a rule with an ALLOW action, the processing of the request proceeds\nforward. If it matches a rule with a DENY action, the processing of the request is terminated and an appropriate message/code returned to the originator. If\nit matches a rule with a NEXT_POLICY_SET action, evaluation of the current policy set terminates and evaluation of the next policy set in the chain begins.\n\n - DENY: DENY\n\nDeny the request.\n - ALLOW: ALLOW\n\nAllow the request to proceed.\n - NEXT_POLICY_SET: NEXT_POLICY_SET\n\nTerminate evaluation of the current policy set and begin evaluating the next policy set in the chain. Note that the evaluation of any remaining policies\nin the current policy set is skipped.\n - NEXT_POLICY: NEXT_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the next policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.\n - LAST_POLICY: LAST_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the last policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.",
             "title": "Rule Action",
             "enum": [
                 "DENY",
                 "ALLOW",
                 "NEXT_POLICY_SET",
-                "NEXT_POLICY"
+                "NEXT_POLICY",
+                "LAST_POLICY"
             ],
             "default": "DENY",
             "x-displayname": "Rule Action",
@@ -2731,26 +2807,31 @@ var APISwaggerJSON string = `{
             "description": "Modify App Firewall behavior for a matching request. The modification could either be to entirely skip firewall processing or to customize the firewall rules\nto be applied as defined by App Firewall Rule Control settings.",
             "title": "App Firewall Action",
             "x-displayname": "App Firewall Action",
-            "x-ves-oneof-field-action_type": "[\"none\",\"waf_inline_rule_control\",\"waf_rule_control\",\"waf_skip_processing\"]",
+            "x-ves-oneof-field-action_type": "[\"none\",\"waf_in_monitoring_mode\",\"waf_inline_rule_control\",\"waf_rule_control\",\"waf_skip_processing\"]",
             "x-ves-proto-message": "ves.io.schema.policy.WafAction",
             "properties": {
                 "none": {
-                    "description": "Exclusive with [waf_inline_rule_control waf_rule_control waf_skip_processing]\nx-displayName: \"Do not modify App Firewall Processing\"\nPerform normal App Firewall processing for this request",
+                    "description": "Exclusive with [waf_in_monitoring_mode waf_inline_rule_control waf_rule_control waf_skip_processing]\nx-displayName: \"Do not modify App Firewall Processing\"\nPerform normal App Firewall processing for this request",
                     "title": "Normal App Firewall Processing",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "waf_in_monitoring_mode": {
+                    "description": "Exclusive with [none waf_inline_rule_control waf_rule_control waf_skip_processing]\nx-displayName: \"Set App Firewall in Monitoring Mode\"\nApp Firewall will run in monitoring mode without blocking the request",
+                    "title": "Set App Firewall in Monitoring Mode",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "waf_inline_rule_control": {
-                    "description": "Exclusive with [none waf_rule_control waf_skip_processing]\nx-displayName: \"App Firewall Rule Control with inline Rule IDs\"\nApp Firewall rule changes to be applied for this request",
+                    "description": "Exclusive with [none waf_in_monitoring_mode waf_rule_control waf_skip_processing]\nx-displayName: \"App Firewall Rule Control with inline Rule IDs\"\nApp Firewall rule changes to be applied for this request",
                     "title": "App Firewall Rule Control with inline Rule IDs",
                     "$ref": "#/definitions/policyWafInlineRuleControl"
                 },
                 "waf_rule_control": {
-                    "description": "Exclusive with [none waf_inline_rule_control waf_skip_processing]\nx-displayName: \"App Firewall Rule Control\"\nApp Firewall rule changes to be applied for this request",
+                    "description": "Exclusive with [none waf_in_monitoring_mode waf_inline_rule_control waf_skip_processing]\nx-displayName: \"App Firewall Rule Control\"\nApp Firewall rule changes to be applied for this request",
                     "title": "App Firewall Rule Control",
                     "$ref": "#/definitions/policyWafRuleControl"
                 },
                 "waf_skip_processing": {
-                    "description": "Exclusive with [none waf_inline_rule_control waf_rule_control]\nx-displayName: \"Skip App Firewall Processing\"\nSkip all App Firewall processing for this request",
+                    "description": "Exclusive with [none waf_in_monitoring_mode waf_inline_rule_control waf_rule_control]\nx-displayName: \"Skip App Firewall Processing\"\nSkip all App Firewall processing for this request",
                     "title": "Skip App Firewall Processing",
                     "$ref": "#/definitions/ioschemaEmpty"
                 }
@@ -2771,6 +2852,13 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/waf_rule_listWafRuleID"
                     },
                     "x-displayname": "Exclude App Firewall Rule IDs"
+                },
+                "monitoring_mode": {
+                    "type": "boolean",
+                    "description": " App Firewall will run in monitoring mode without blocking the request",
+                    "title": "Set App Firewall in Monitoring Mode",
+                    "format": "boolean",
+                    "x-displayname": "Set App Firewall in Monitoring Mode"
                 }
             }
         },
@@ -2786,9 +2874,16 @@ var APISwaggerJSON string = `{
                     "description": " App Firewall Rule List specifying the rule IDs to be excluded for this request",
                     "title": "Exclude Rule IDs",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Exclude App Firewall Rule List"
+                },
+                "monitoring_mode": {
+                    "type": "boolean",
+                    "description": " App Firewall will run in monitoring mode without blocking the request",
+                    "title": "Set App Firewall in Monitoring Mode",
+                    "format": "boolean",
+                    "x-displayname": "Set App Firewall in Monitoring Mode"
                 }
             }
         },
@@ -3128,50 +3223,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
-            "properties": {
-                "kind": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
-                    "title": "kind",
-                    "x-displayname": "Kind",
-                    "x-ves-example": "virtual_site"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contactus-route"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
         "schemaObjectReplaceMetaType": {
             "type": "object",
             "description": "ObjectReplaceMetaType is metadata that can be specified in Replace request of an object.",
@@ -3471,7 +3522,7 @@ var APISwaggerJSON string = `{
                     "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
                     "title": "namespace",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Namespace Reference"
                 },
@@ -3755,6 +3806,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyMatcherType",
                     "x-displayname": "Request Body Matcher"
                 },
+                "challenge_action": {
+                    "description": " Select challenge action, enable javascript/captcha challenge or disable challenge\nRequired: YES",
+                    "$ref": "#/definitions/policyChallengeAction",
+                    "x-displayname": "Select Challenge Action Type",
+                    "x-ves-required": "true"
+                },
                 "client_name": {
                     "type": "string",
                     "description": "Exclusive with [any_client client_name_matcher client_selector]\n"
@@ -3872,7 +3929,7 @@ var APISwaggerJSON string = `{
                     "type": "array",
                     "description": " A reference to rate_limiter object.\n Requests matching this the enclosing rule are subjected to the specified rate_limiter.",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Rate Limiter"
                 },
@@ -3977,6 +4034,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyMatcherType",
                     "x-displayname": "Request Body Matcher"
                 },
+                "challenge_action": {
+                    "description": " Select challenge action, enable javascript/captcha challenge or disable challenge\nRequired: YES",
+                    "$ref": "#/definitions/policyChallengeAction",
+                    "x-displayname": "Select Challenge Action Type",
+                    "x-ves-required": "true"
+                },
                 "client_name": {
                     "type": "string",
                     "description": "Exclusive with [any_client client_name_matcher client_selector]\n"
@@ -4094,7 +4157,7 @@ var APISwaggerJSON string = `{
                     "type": "array",
                     "description": " A reference to rate_limiter object.\n Requests matching this the enclosing rule are subjected to the specified rate_limiter.",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Rate Limiter"
                 },
@@ -4210,6 +4273,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyMatcherType",
                     "x-displayname": "Request Body Matcher"
                 },
+                "challenge_action": {
+                    "description": " Select challenge action, enable javascript/captcha challenge or disable challenge\nRequired: YES",
+                    "title": "Challenge Action",
+                    "$ref": "#/definitions/policyChallengeAction",
+                    "x-displayname": "Select Challenge Action Type",
+                    "x-ves-required": "true"
+                },
                 "client_name": {
                     "type": "string",
                     "description": "Exclusive with [any_client client_name_matcher client_selector]\nx-displayName: \"Client Name\"\nx-example: \"backend.production.customer.volterra.us\"\nThe expected name of the client invoking the request API.\nThe predicate evaluates to true if any of the actual names is the same as the expected client name.",
@@ -4279,7 +4349,7 @@ var APISwaggerJSON string = `{
                     "description": " Ordered list of forwarding class to use for traffic that match the enclosing rule\n Action valid only when the policy is used PBR",
                     "title": "Forwarding Classes",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Forwarding Classes"
                 },
@@ -4359,7 +4429,7 @@ var APISwaggerJSON string = `{
                     "description": " A reference to rate_limiter object.\n Requests matching this the enclosing rule are subjected to the specified rate_limiter.",
                     "title": "rate_limiter",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Rate Limiter"
                 },
@@ -4469,6 +4539,12 @@ var APISwaggerJSON string = `{
                     "description": " Predicate for matching the request body string. The criteria for matching the request body is described in MatcherType.\n The actual request body value is extracted from the request API as a string.",
                     "$ref": "#/definitions/policyMatcherType",
                     "x-displayname": "Request Body Matcher"
+                },
+                "challenge_action": {
+                    "description": " Select challenge action, enable javascript/captcha challenge or disable challenge\nRequired: YES",
+                    "$ref": "#/definitions/policyChallengeAction",
+                    "x-displayname": "Select Challenge Action Type",
+                    "x-ves-required": "true"
                 },
                 "client_name": {
                     "type": "string",
@@ -4587,7 +4663,7 @@ var APISwaggerJSON string = `{
                     "type": "array",
                     "description": " A reference to rate_limiter object.\n Requests matching this the enclosing rule are subjected to the specified rate_limiter.",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Rate Limiter"
                 },
@@ -4670,6 +4746,36 @@ var APISwaggerJSON string = `{
                     "title": "system metadata",
                     "$ref": "#/definitions/schemaSystemObjectGetMetaType",
                     "x-displayname": "System Metadata"
+                }
+            }
+        },
+        "service_policy_ruleDeleteRequest": {
+            "type": "object",
+            "description": "This is the input message of the 'Delete' RPC.",
+            "title": "DeleteRequest is used to delete a service_policy_rule",
+            "x-displayname": "Delete Request",
+            "x-ves-proto-message": "ves.io.schema.service_policy_rule.DeleteRequest",
+            "properties": {
+                "fail_if_referred": {
+                    "type": "boolean",
+                    "description": " Fail the delete operation if this object is being referred by other objects",
+                    "title": "fail_if_referred",
+                    "format": "boolean",
+                    "x-displayname": "Fail-If-Referred"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the configuration object\n\nExample: - \"name\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the configuration object is present\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
                 }
             }
         },
@@ -4965,7 +5071,7 @@ var APISwaggerJSON string = `{
                     "description": " Object reference",
                     "title": "object_refs",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
                 }

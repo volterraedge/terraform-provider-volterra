@@ -164,6 +164,11 @@ func (t *tgwCustomAPIServer) SetVPNTunnels(context.Context,
 	return &ves_io_schema_aws_tgw_site.SetVPNTunnelsResponse{}, nil
 }
 
+func (t *tgwCustomAPIServer) SetTGWInfo(context.Context,
+	*ves_io_schema_aws_tgw_site.SetTGWInfoRequest) (*ves_io_schema_aws_tgw_site.SetTGWInfoResponse, error) {
+	return &ves_io_schema_aws_tgw_site.SetTGWInfoResponse{}, nil
+}
+
 var _ ves_io_schema_aws_tgw_site.CustomAPIServer = &tgwCustomAPIServer{}
 
 // ves.io.schema.views.aws_tgw_site.CustomAPI handling - end

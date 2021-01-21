@@ -381,6 +381,17 @@ func (v *ValidateBFSecretChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *BFSecretChoice_VesTerraformJobViewSite:
+		if fv, exists := v.FldValidators["choice.ves_terraform_job_view_site"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesTerraformJobViewSite).VesTerraformJobViewSite
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_terraform_job_view_site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -451,6 +462,18 @@ func (v *ValidateBFSecretInfo) Validate(ctx context.Context, pm interface{}, opt
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["gc_jobs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gc_jobs"))
+		for idx, item := range m.GetGcJobs() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["gc_services"]; exists {

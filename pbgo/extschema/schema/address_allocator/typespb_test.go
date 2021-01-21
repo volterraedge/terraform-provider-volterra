@@ -3,38 +3,22 @@
 
 package address_allocator
 
-import (
-	rand "math/rand"
-	testing "testing"
-
-	time "time"
-
-	proto "github.com/gogo/protobuf/proto"
-
-	jsonpb "github.com/gogo/protobuf/jsonpb"
-
-	fmt "fmt"
-
-	parser "go/parser"
-
-	golang_proto "github.com/golang/protobuf/proto"
-
-	math "math"
-
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-)
+import testing "testing"
+import rand "math/rand"
+import time "time"
+import proto "github.com/gogo/protobuf/proto"
+import jsonpb "github.com/gogo/protobuf/jsonpb"
+import fmt "fmt"
+import parser "go/parser"
+import golang_proto "github.com/golang/protobuf/proto"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal

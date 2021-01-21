@@ -16,6 +16,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -64,6 +65,12 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDefaultFlavorRefDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetVsiteRefsDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -71,6 +78,56 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+}
+
+func (m *CreateSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+
+	vref := m.GetDefaultFlavorRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("workload_flavor.Object")
+	drInfos = append(drInfos, db.DRefInfo{
+		RefdType:   "workload_flavor.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "default_flavor_ref",
+		Ref:        vdRef,
+	})
+
+	return drInfos, nil
+}
+
+// GetDefaultFlavorRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CreateSpecType) GetDefaultFlavorRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "workload_flavor.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: workload_flavor")
+	}
+
+	vref := m.GetDefaultFlavorRef()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "workload_flavor.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
 }
 
 func (m *CreateSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
@@ -172,6 +229,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["default_flavor_ref"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_flavor_ref"))
+		if err := fv(ctx, m.GetDefaultFlavorRef(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetServiceIsolationChoice().(type) {
 	case *CreateSpecType_Isolated:
 		if fv, exists := v.FldValidators["service_isolation_choice.isolated"]; exists {
@@ -232,6 +298,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["vsite_refs"] = vFn
 
+	v.FldValidators["default_flavor_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
 	return v
 }()
 
@@ -278,6 +346,12 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDefaultFlavorRefDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetVsiteRefsDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -285,6 +359,56 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+}
+
+func (m *GetSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+
+	vref := m.GetDefaultFlavorRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("workload_flavor.Object")
+	drInfos = append(drInfos, db.DRefInfo{
+		RefdType:   "workload_flavor.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "default_flavor_ref",
+		Ref:        vdRef,
+	})
+
+	return drInfos, nil
+}
+
+// GetDefaultFlavorRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetSpecType) GetDefaultFlavorRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "workload_flavor.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: workload_flavor")
+	}
+
+	vref := m.GetDefaultFlavorRef()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "workload_flavor.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
 }
 
 func (m *GetSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
@@ -386,6 +510,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["default_flavor_ref"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_flavor_ref"))
+		if err := fv(ctx, m.GetDefaultFlavorRef(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetServiceIsolationChoice().(type) {
 	case *GetSpecType_Isolated:
 		if fv, exists := v.FldValidators["service_isolation_choice.isolated"]; exists {
@@ -446,6 +579,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["vsite_refs"] = vFn
 
+	v.FldValidators["default_flavor_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
 	return v
 }()
 
@@ -492,6 +627,12 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDefaultFlavorRefDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetVsiteRefsDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -499,6 +640,56 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+}
+
+func (m *GlobalSpecType) GetDefaultFlavorRefDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+
+	vref := m.GetDefaultFlavorRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("workload_flavor.Object")
+	drInfos = append(drInfos, db.DRefInfo{
+		RefdType:   "workload_flavor.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "default_flavor_ref",
+		Ref:        vdRef,
+	})
+
+	return drInfos, nil
+}
+
+// GetDefaultFlavorRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetDefaultFlavorRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "workload_flavor.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: workload_flavor")
+	}
+
+	vref := m.GetDefaultFlavorRef()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "workload_flavor.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
 }
 
 func (m *GlobalSpecType) GetVsiteRefsDRefInfo() ([]db.DRefInfo, error) {
@@ -600,6 +791,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["default_flavor_ref"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_flavor_ref"))
+		if err := fv(ctx, m.GetDefaultFlavorRef(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetServiceIsolationChoice().(type) {
 	case *GlobalSpecType_Isolated:
 		if fv, exists := v.FldValidators["service_isolation_choice.isolated"]; exists {
@@ -659,6 +859,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["vsite_refs"] = vFn
+
+	v.FldValidators["default_flavor_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -920,6 +1122,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.DefaultFlavorRef = f.GetDefaultFlavorRef()
 	m.GetServiceIsolationChoiceFromGlobalSpecType(f)
 	m.VsiteRefs = f.GetVsiteRefs()
 }
@@ -930,6 +1133,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	f.DefaultFlavorRef = m1.DefaultFlavorRef
 	m1.SetServiceIsolationChoiceToGlobalSpecType(f)
 	f.VsiteRefs = m1.VsiteRefs
 }
@@ -973,6 +1177,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	m.DefaultFlavorRef = f.GetDefaultFlavorRef()
 	m.GetServiceIsolationChoiceFromGlobalSpecType(f)
 	m.VsiteRefs = f.GetVsiteRefs()
 }
@@ -983,6 +1188,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
+	f.DefaultFlavorRef = m1.DefaultFlavorRef
 	m1.SetServiceIsolationChoiceToGlobalSpecType(f)
 	f.VsiteRefs = m1.VsiteRefs
 }

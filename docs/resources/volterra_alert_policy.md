@@ -30,12 +30,12 @@ resource "volterra_alert_policy" "example" {
     // One of the arguments from this list "send dont_send" must be set
     send = true
 
-    // One of the arguments from this list "alertname alertname_regex custom any severity group" must be set
-    any = true
+    // One of the arguments from this list "custom any severity group alertname alertname_regex" must be set
+    alertname = "alertname"
 
     notification_parameters {
-      // One of the arguments from this list "custom default individual ves_io_group" must be set
-      individual      = true
+      // One of the arguments from this list "default individual ves_io_group custom" must be set
+      default         = true
       group_interval  = "1m"
       group_wait      = "30s"
       repeat_interval = "4h"
@@ -78,7 +78,7 @@ Matches all alerts in the namespace.
 
 Specify set of labels for grouping the alerts.
 
-`labels` - (Optional)labels (`String`).
+`labels` - (Optional) Name of labels to group/aggregate the alerts (`String`).
 
 ### Default
 
@@ -92,7 +92,7 @@ Do not send the alert.
 
 Matches the group name of the alert.
 
-`groups` - (Optional)groups (`List of Strings`).
+`groups` - (Optional) Name of groups to match the alert (`List of Strings`).
 
 ### Individual
 

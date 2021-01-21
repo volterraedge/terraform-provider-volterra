@@ -494,8 +494,8 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		namespace = rReq.Metadata.Namespace
-		name = rReq.Metadata.Name
+		namespace = rReq.GetMetadata().GetNamespace()
+		name = rReq.GetMetadata().GetName()
 	} else {
 		jsn = cco.ReplaceJSONReq
 		reqMap := make(map[string]interface{})
@@ -1116,8 +1116,11 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_tgw_site.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.aws_tgw_site.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1169,8 +1172,11 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_tgw_site.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.aws_tgw_site.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1287,8 +1293,11 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_tgw_site.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.aws_tgw_site.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -1302,6 +1311,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	tenant := server.TenantFromContext(ctx)
 	key := fmt.Sprintf("%s/%s/%s", tenant, req.GetNamespace(), req.GetName())
 	rsrcReq := &server.ResourceDeleteRequest{Key: key}
+	rsrcReq.FailIfReferred = req.FailIfReferred
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
@@ -2061,6 +2071,14 @@ var APISwaggerJSON string = `{
                         "in": "path",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/aws_tgw_siteDeleteRequest"
+                        }
                     }
                 ],
                 "tags": [
@@ -2078,6 +2096,31 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "aws_tgw_siteAWSTGWInfoConfigType": {
+            "type": "object",
+            "description": "AWS tgw information like tgw-id and site's vpc-id",
+            "title": "AWS TGW Information Config",
+            "x-displayname": "AWS TGW Information Config",
+            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.AWSTGWInfoConfigType",
+            "properties": {
+                "tgw_id": {
+                    "type": "string",
+                    "description": " TGW ID populated by AWS\n\nExample: - \"tgw-12345678\"-\nRequired: YES",
+                    "title": "TGW ID",
+                    "x-displayname": "TGW ID",
+                    "x-ves-example": "tgw-12345678",
+                    "x-ves-required": "true"
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": " VPC ID where the volterra site exists\n\nExample: - \"vpc-12345678\"-\nRequired: YES",
+                    "title": "VPC ID",
+                    "x-displayname": "VPC ID",
+                    "x-ves-example": "vpc-12345678",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "aws_tgw_siteAWSVPNTunnelConfigType": {
             "type": "object",
             "description": "Remote IP for VPN tunnels of a node",
@@ -2156,6 +2199,36 @@ var APISwaggerJSON string = `{
                     "title": "system metadata",
                     "$ref": "#/definitions/schemaSystemObjectGetMetaType",
                     "x-displayname": "System Metadata"
+                }
+            }
+        },
+        "aws_tgw_siteDeleteRequest": {
+            "type": "object",
+            "description": "This is the input message of the 'Delete' RPC.",
+            "title": "DeleteRequest is used to delete a aws_tgw_site",
+            "x-displayname": "Delete Request",
+            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.DeleteRequest",
+            "properties": {
+                "fail_if_referred": {
+                    "type": "boolean",
+                    "description": " Fail the delete operation if this object is being referred by other objects",
+                    "title": "fail_if_referred",
+                    "format": "boolean",
+                    "x-displayname": "Fail-If-Referred"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the configuration object\n\nExample: - \"name\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the configuration object is present\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
                 }
             }
         },
@@ -2556,10 +2629,10 @@ var APISwaggerJSON string = `{
                 },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": " Auto scale maximum worker nodes limit up to 21, value of zero will disable auto scale\n\nExample: - \"2\"-",
-                    "title": "Auto Scale Limit",
+                    "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
+                    "title": "Desired Worker Nodes Per AZ",
                     "format": "int64",
-                    "x-displayname": "Auto Scale Limit",
+                    "x-displayname": "Desired Worker Nodes Per AZ",
                     "x-ves-example": "2"
                 },
                 "ssh_key": {
@@ -2818,14 +2891,14 @@ var APISwaggerJSON string = `{
         },
         "network_firewallActiveForwardProxyPoliciesType": {
             "type": "object",
-            "description": "List of forward proxy policy views.",
+            "description": "List of Forward Proxy Policies",
             "title": "Active Forward Proxy Policies Type",
             "x-displayname": "Active Forward Proxy Policies Type",
             "x-ves-proto-message": "ves.io.schema.network_firewall.ActiveForwardProxyPoliciesType",
             "properties": {
                 "forward_proxy_policies": {
                     "type": "array",
-                    "description": " Ordered List of Network Policies active for this network firewall\nRequired: YES",
+                    "description": " List of Forward Proxy Policies\nRequired: YES",
                     "title": "Forward Proxy Policies",
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
@@ -2993,7 +3066,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "connection_timeout": {
                     "type": "integer",
-                    "description": " The timeout for new network connections to upstream server.\n This is specified in milliseconds. The default value is 2 seconds\n\nExample: - \"4000\"-",
+                    "description": " The timeout for new network connections to upstream server.\n This is specified in milliseconds. The default value is 2000 (2 seconds)\n\nExample: - \"4000\"-",
                     "title": "connection_timeout",
                     "format": "int64",
                     "x-displayname": "Connection Timeout",
@@ -4174,9 +4247,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "aws_az_name": {
                     "type": "string",
-                    "description": " Name for AWS availability Zone, should match with AWS region selected.\n\nExample: - \"us-west-2a\"-\nRequired: YES",
+                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\nRequired: YES",
                     "title": "AWS AZ",
-                    "x-displayname": "AWS AZ name",
+                    "x-displayname": "AWS AZ Name",
                     "x-ves-example": "us-west-2a",
                     "x-ves-required": "true"
                 },
@@ -4444,6 +4517,11 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Operating System Version",
                     "x-ves-example": "value"
                 },
+                "tgw_info": {
+                    "description": " TGW Site information obtained after creating the site and TGW",
+                    "$ref": "#/definitions/aws_tgw_siteAWSTGWInfoConfigType",
+                    "x-displayname": "TGW Site Information"
+                },
                 "tgw_security": {
                     "description": " Security Configuration for transit gateway",
                     "$ref": "#/definitions/aws_tgw_siteSecurityConfigType",
@@ -4525,6 +4603,12 @@ var APISwaggerJSON string = `{
                     "title": "Reference to terraform parameters",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Terraform Parameters"
+                },
+                "tgw_info": {
+                    "description": " TGW Site information obtained after creating the site and TGW",
+                    "title": "TGW information",
+                    "$ref": "#/definitions/aws_tgw_siteAWSTGWInfoConfigType",
+                    "x-displayname": "TGW Site Information"
                 },
                 "tgw_security": {
                     "description": " Security Configuration for transit gateway",

@@ -17,6 +17,7 @@ import (
 	google_protobuf "github.com/gogo/protobuf/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	multierror "github.com/hashicorp/go-multierror"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -1010,7 +1011,10 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.virtual_host.crudapi.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1040,7 +1044,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.virtual_host.crudapi.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1143,7 +1150,10 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.virtual_host.crudapi.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -3615,7 +3625,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
-            "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
+            "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.GlobalSpecType",
             "properties": {
                 "add_location": {
@@ -3666,7 +3676,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Buffer Policy"
                 },
                 "captcha_challenge": {
-                    "description": "Exclusive with [js_challenge no_challenge]\nx-displayName: \"Captcha Challenge\"\nConfigure Captcha challenge on Virtual Host",
+                    "description": "Exclusive with [js_challenge no_challenge policy_based_challenge]\nx-displayName: \"Captcha Challenge\"\nConfigure Captcha challenge on Virtual Host",
                     "title": "Captcha Challenge",
                     "$ref": "#/definitions/virtual_hostCaptchaChallengeType"
                 },
@@ -3768,7 +3778,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Javascript Info"
                 },
                 "js_challenge": {
-                    "description": "Exclusive with [captcha_challenge no_challenge]\nx-displayName: \"Javascript Challenge\"\nConfigure Javascript challenge on Virtual Host",
+                    "description": "Exclusive with [captcha_challenge no_challenge policy_based_challenge]\nx-displayName: \"Javascript Challenge\"\nConfigure Javascript challenge on Virtual Host",
                     "title": "Javascript Challenge",
                     "$ref": "#/definitions/virtual_hostJavascriptChallengeType"
                 },
@@ -3810,9 +3820,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "no_challenge": {
-                    "description": "Exclusive with [captcha_challenge js_challenge]\nx-displayName: \"No Challenge\"\nNo challenge is enabled for this virtual host",
+                    "description": "Exclusive with [captcha_challenge js_challenge policy_based_challenge]\nx-displayName: \"No Challenge\"\nNo challenge is enabled for this virtual host",
                     "title": "No Challenge",
                     "$ref": "#/definitions/schemaEmpty"
+                },
+                "policy_based_challenge": {
+                    "description": "Exclusive with [captcha_challenge js_challenge no_challenge]\nx-displayName: \"Policy Based Challenge\"\nSpecifies the settings for policy rule based challenge",
+                    "title": "policy based challenge",
+                    "$ref": "#/definitions/virtual_hostPolicyBasedChallenge"
                 },
                 "proxy": {
                     "description": " Indicates whether the type of proxy is HTTP/HTTPS/TCP/UDP/Secret Management Access",
@@ -4235,6 +4250,58 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "virtual_hostPolicyBasedChallenge": {
+            "type": "object",
+            "description": "Specifies the settings for policy rule based challenge",
+            "title": "policy based challenge",
+            "x-displayname": "Policy Based Challenge",
+            "x-ves-oneof-field-enable_choice": "[\"always_enable_captcha\",\"always_enable_js_challenge\",\"rule_based_challenge\"]",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.PolicyBasedChallenge",
+            "properties": {
+                "always_enable_captcha": {
+                    "description": "Exclusive with [always_enable_js_challenge rule_based_challenge]\nx-displayName: \"Always enable captcha challenge\"\nWhen selected, enables captcha challenge for all requests. \nPolicy rules can be used to disable the challenge for subset of requests that match the conditions specified in the rules.",
+                    "title": "always enable captcha challenge",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "always_enable_js_challenge": {
+                    "description": "Exclusive with [always_enable_captcha rule_based_challenge]\nx-displayName: \"Always enable JS challenge\"\nWhen selected, enables JS challenge for all requests. \nPolicy rules can be used to disable the challenge for subset of requests that match the conditions specified in the rules.",
+                    "title": "always enable JS challenge",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "captcha_challenge": {
+                    "description": " Configure Captcha challenge parameters",
+                    "title": "Captcha Challenge",
+                    "$ref": "#/definitions/virtual_hostCaptchaChallengeType",
+                    "x-displayname": "Captcha Challenge"
+                },
+                "js_challenge": {
+                    "description": " Configure Javascript challenge parameters",
+                    "title": "Javascript Challenge",
+                    "$ref": "#/definitions/virtual_hostJavascriptChallengeType",
+                    "x-displayname": "Javascript Challenge Parameters"
+                },
+                "malicious_user_mitigation": {
+                    "type": "array",
+                    "description": " Settings that specify the actions to be taken when malicious users are determined to be at different threat levels.\n User's activity is monitored and continuously analyzed for malicious behavior. From this analysis, a threat level is assigned to each user.\n The settings defined in malicious user mitigation specify what mitigation actions to take for users determined to be at different threat levels.",
+                    "title": "Malicious User Mitigation",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Malicious User Mitigation"
+                },
+                "rule_based_challenge": {
+                    "description": "Exclusive with [always_enable_captcha always_enable_js_challenge]\nx-displayName: \"Rule based challenge\"\nEnables rule based challenge. When selected, the match conditions and challenge type to be launched is determined using a policy rule.",
+                    "title": "rule based challenge",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "temporary_user_blocking": {
+                    "description": " Specifies configuration for temporary user blocking resulting from malicious user detection",
+                    "title": "Temporary User Blocking",
+                    "$ref": "#/definitions/virtual_hostTemporaryUserBlockingType",
+                    "x-displayname": "Temporary User Blocking"
+                }
+            }
+        },
         "virtual_hostProxyType": {
             "type": "string",
             "description": "ProxyType tells the type of proxy to install for the virtual host.\n\nOnly the following combination of VirtualHosts within same AdvertisePolicy is permitted\n(None of them should have \"*\" in domains when used with other VirtualHosts in same AdvertisePolicy)\n1. Multiple TCP_PROXY_WITH_SNI and multiple HTTPS_PROXY\n2. Multiple HTTP_PROXY\n3. Multiple HTTPS_PROXY\n4. Multiple TCP_PROXY_WITH_SNI\n\nHTTPS_PROXY without TLS parameters is not permitted\nHTTP_PROXY/HTTPS_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY with empty domains is not permitted\nTCP_PROXY_WITH_SNI/SMA_PROXY should not have \"*\" in domains\n\n - HTTP_PROXY: HTTP_PROXY\n\nInstall HTTP proxy. HTTP Proxy is the default proxy installed.\n - TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - HTTPS_PROXY: HTTPS_PROXY\n\nInstall HTTPS proxy\n - UDP_PROXY: UDP_PROXY\n\nInstall UDP proxy\n - SMA_PROXY: SMA_PROXY\n\nInstall Secret Management Access proxy",
@@ -4316,14 +4383,15 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostVirtualHostType": {
             "type": "string",
-            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy",
+            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy\n - LOCAL_K8S_API_GATEWAY: LOCAL_K8S_API_GATEWAY\n\nInternal use only, used for k8s cluster api gateway on the site.",
             "title": "VirtualHostType",
             "enum": [
                 "VIRTUAL_SERVICE",
                 "HTTP_LOAD_BALANCER",
                 "API_GATEWAY",
                 "TCP_LOAD_BALANCER",
-                "PROXY"
+                "PROXY",
+                "LOCAL_K8S_API_GATEWAY"
             ],
             "default": "VIRTUAL_SERVICE",
             "x-displayname": "Virtual Host Type",

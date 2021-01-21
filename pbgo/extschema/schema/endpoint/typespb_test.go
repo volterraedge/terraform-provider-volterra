@@ -3,36 +3,21 @@
 
 package endpoint
 
-import (
-	rand "math/rand"
-	testing "testing"
-
-	time "time"
-
-	proto "github.com/gogo/protobuf/proto"
-
-	jsonpb "github.com/gogo/protobuf/jsonpb"
-
-	fmt "fmt"
-
-	parser "go/parser"
-
-	golang_proto "github.com/golang/protobuf/proto"
-
-	math "math"
-
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-)
+import testing "testing"
+import rand "math/rand"
+import time "time"
+import proto "github.com/gogo/protobuf/proto"
+import jsonpb "github.com/gogo/protobuf/jsonpb"
+import fmt "fmt"
+import parser "go/parser"
+import golang_proto "github.com/golang/protobuf/proto"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -136,15 +121,15 @@ func BenchmarkServiceInfoTypeProtoUnmarshal(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func TestDnsNameAdvanceTypeProto(t *testing.T) {
+func TestDnsNameAdvancedTypeProto(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedDnsNameAdvanceType(popr, false)
+	p := NewPopulatedDnsNameAdvancedType(popr, false)
 	dAtA, err := proto.Marshal(p)
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
-	msg := &DnsNameAdvanceType{}
+	msg := &DnsNameAdvancedType{}
 	if err := proto.Unmarshal(dAtA, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -167,10 +152,10 @@ func TestDnsNameAdvanceTypeProto(t *testing.T) {
 	}
 }
 
-func TestDnsNameAdvanceTypeMarshalTo(t *testing.T) {
+func TestDnsNameAdvancedTypeMarshalTo(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedDnsNameAdvanceType(popr, false)
+	p := NewPopulatedDnsNameAdvancedType(popr, false)
 	size := p.Size()
 	dAtA := make([]byte, size)
 	for i := range dAtA {
@@ -180,7 +165,7 @@ func TestDnsNameAdvanceTypeMarshalTo(t *testing.T) {
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
-	msg := &DnsNameAdvanceType{}
+	msg := &DnsNameAdvancedType{}
 	if err := proto.Unmarshal(dAtA, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -192,12 +177,12 @@ func TestDnsNameAdvanceTypeMarshalTo(t *testing.T) {
 	}
 }
 
-func BenchmarkDnsNameAdvanceTypeProtoMarshal(b *testing.B) {
+func BenchmarkDnsNameAdvancedTypeProtoMarshal(b *testing.B) {
 	popr := rand.New(rand.NewSource(616))
 	total := 0
-	pops := make([]*DnsNameAdvanceType, 10000)
+	pops := make([]*DnsNameAdvancedType, 10000)
 	for i := 0; i < 10000; i++ {
-		pops[i] = NewPopulatedDnsNameAdvanceType(popr, false)
+		pops[i] = NewPopulatedDnsNameAdvancedType(popr, false)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -210,18 +195,18 @@ func BenchmarkDnsNameAdvanceTypeProtoMarshal(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func BenchmarkDnsNameAdvanceTypeProtoUnmarshal(b *testing.B) {
+func BenchmarkDnsNameAdvancedTypeProtoUnmarshal(b *testing.B) {
 	popr := rand.New(rand.NewSource(616))
 	total := 0
 	datas := make([][]byte, 10000)
 	for i := 0; i < 10000; i++ {
-		dAtA, err := proto.Marshal(NewPopulatedDnsNameAdvanceType(popr, false))
+		dAtA, err := proto.Marshal(NewPopulatedDnsNameAdvancedType(popr, false))
 		if err != nil {
 			panic(err)
 		}
 		datas[i] = dAtA
 	}
-	msg := &DnsNameAdvanceType{}
+	msg := &DnsNameAdvancedType{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		total += len(datas[i%10000])
@@ -1114,16 +1099,16 @@ func TestServiceInfoTypeJSON(t *testing.T) {
 		t.Fatalf("seed = %d, %#v !Json Equal %#v", seed, msg, p)
 	}
 }
-func TestDnsNameAdvanceTypeJSON(t *testing.T) {
+func TestDnsNameAdvancedTypeJSON(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedDnsNameAdvanceType(popr, true)
+	p := NewPopulatedDnsNameAdvancedType(popr, true)
 	marshaler := jsonpb.Marshaler{}
 	jsondata, err := marshaler.MarshalToString(p)
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
-	msg := &DnsNameAdvanceType{}
+	msg := &DnsNameAdvancedType{}
 	err = jsonpb.UnmarshalString(jsondata, msg)
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
@@ -1322,12 +1307,12 @@ func TestServiceInfoTypeProtoCompactText(t *testing.T) {
 	}
 }
 
-func TestDnsNameAdvanceTypeProtoText(t *testing.T) {
+func TestDnsNameAdvancedTypeProtoText(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedDnsNameAdvanceType(popr, true)
+	p := NewPopulatedDnsNameAdvancedType(popr, true)
 	dAtA := proto.MarshalTextString(p)
-	msg := &DnsNameAdvanceType{}
+	msg := &DnsNameAdvancedType{}
 	if err := proto.UnmarshalText(dAtA, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -1336,12 +1321,12 @@ func TestDnsNameAdvanceTypeProtoText(t *testing.T) {
 	}
 }
 
-func TestDnsNameAdvanceTypeProtoCompactText(t *testing.T) {
+func TestDnsNameAdvancedTypeProtoCompactText(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedDnsNameAdvanceType(popr, true)
+	p := NewPopulatedDnsNameAdvancedType(popr, true)
 	dAtA := proto.CompactTextString(p)
-	msg := &DnsNameAdvanceType{}
+	msg := &DnsNameAdvancedType{}
 	if err := proto.UnmarshalText(dAtA, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -1615,9 +1600,9 @@ func TestServiceInfoTypeGoString(t *testing.T) {
 		t.Fatal(err)
 	}
 }
-func TestDnsNameAdvanceTypeGoString(t *testing.T) {
+func TestDnsNameAdvancedTypeGoString(t *testing.T) {
 	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedDnsNameAdvanceType(popr, false)
+	p := NewPopulatedDnsNameAdvancedType(popr, false)
 	s1 := p.GoString()
 	s2 := fmt.Sprintf("%#v", p)
 	if s1 != s2 {
@@ -1781,10 +1766,10 @@ func BenchmarkServiceInfoTypeSize(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func TestDnsNameAdvanceTypeSize(t *testing.T) {
+func TestDnsNameAdvancedTypeSize(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedDnsNameAdvanceType(popr, true)
+	p := NewPopulatedDnsNameAdvancedType(popr, true)
 	size2 := proto.Size(p)
 	dAtA, err := proto.Marshal(p)
 	if err != nil {
@@ -1803,12 +1788,12 @@ func TestDnsNameAdvanceTypeSize(t *testing.T) {
 	}
 }
 
-func BenchmarkDnsNameAdvanceTypeSize(b *testing.B) {
+func BenchmarkDnsNameAdvancedTypeSize(b *testing.B) {
 	popr := rand.New(rand.NewSource(616))
 	total := 0
-	pops := make([]*DnsNameAdvanceType, 1000)
+	pops := make([]*DnsNameAdvancedType, 1000)
 	for i := 0; i < 1000; i++ {
-		pops[i] = NewPopulatedDnsNameAdvanceType(popr, false)
+		pops[i] = NewPopulatedDnsNameAdvancedType(popr, false)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -2150,9 +2135,9 @@ func TestServiceInfoTypeStringer(t *testing.T) {
 		t.Fatalf("String want %v got %v", s1, s2)
 	}
 }
-func TestDnsNameAdvanceTypeStringer(t *testing.T) {
+func TestDnsNameAdvancedTypeStringer(t *testing.T) {
 	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedDnsNameAdvanceType(popr, false)
+	p := NewPopulatedDnsNameAdvancedType(popr, false)
 	s1 := p.String()
 	s2 := fmt.Sprintf("%v", p)
 	if s1 != s2 {

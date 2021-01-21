@@ -6,6 +6,7 @@
 
 	It is generated from these files:
 		ves.io/schema/views/http_loadbalancer/object.proto
+		ves.io/schema/views/http_loadbalancer/public_apiep_customapi.proto
 		ves.io/schema/views/http_loadbalancer/public_crudapi.proto
 		ves.io/schema/views/http_loadbalancer/public_customapi.proto
 		ves.io/schema/views/http_loadbalancer/types.proto
@@ -14,6 +15,8 @@
 		Object
 		SpecType
 		StatusObject
+		SwaggerSpecReq
+		SwaggerSpecRsp
 		CreateRequest
 		CreateResponse
 		ReplaceRequest
@@ -41,6 +44,9 @@
 		RouteTypeCustomRoute
 		RouteType
 		AdvancedOptionsType
+		PolicyBasedChallenge
+		ChallengeRule
+		ChallengeRuleList
 		SimpleClientSrcRule
 		CustomIpAllowedList
 		RateLimitConfigType
@@ -52,34 +58,22 @@
 */
 package http_loadbalancer
 
-import (
-	proto "github.com/gogo/protobuf/proto"
-	golang_proto "github.com/golang/protobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
+import golang_proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
+import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
-	fmt "fmt"
+import strings "strings"
+import reflect "reflect"
 
-	math "math"
-
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
-
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal

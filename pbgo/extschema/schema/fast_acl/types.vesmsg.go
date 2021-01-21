@@ -787,16 +787,6 @@ func (v *ValidateFastACLRuleType) SourceValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
-func (v *ValidateFastACLRuleType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateFastACLRuleType) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -854,6 +844,27 @@ func (v *ValidateFastACLRuleType) PortValidationRuleHandler(rules map[string]str
 	return validatorFn, nil
 }
 
+func (v *ValidateFastACLRuleType) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateFastACLRuleType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*FastACLRuleType)
 	if !ok {
@@ -872,6 +883,15 @@ func (v *ValidateFastACLRuleType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
 
@@ -956,19 +976,6 @@ var DefaultFastACLRuleTypeValidator = func() *ValidateFastACLRuleType {
 	}
 	v.FldValidators["source"] = vFn
 
-	vrhName := v.NameValidationRuleHandler
-	rulesName := map[string]string{
-		"ves.io.schema.rules.message.required":       "true",
-		"ves.io.schema.rules.string.max_len":         "64",
-		"ves.io.schema.rules.string.ves_object_name": "true",
-	}
-	vFn, err = vrhName(rulesName)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for FastACLRuleType.name: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["name"] = vFn
-
 	vrhAction := v.ActionValidationRuleHandler
 	rulesAction := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -990,6 +997,17 @@ var DefaultFastACLRuleTypeValidator = func() *ValidateFastACLRuleType {
 		panic(errMsg)
 	}
 	v.FldValidators["port"] = vFn
+
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMetadata(rulesMetadata)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FastACLRuleType.metadata: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metadata"] = vFn
 
 	v.FldValidators["source.prefix"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["source.ip_prefix_set"] = ves_io_schema.IpPrefixSetRefTypeValidator().Validate
@@ -2426,7 +2444,8 @@ var DefaultReACLTypeValidator = func() *ValidateReACLType {
 
 	vrhFastAclRules := v.FastAclRulesValidationRuleHandler
 	rulesFastAclRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items":            "128",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
 	vFn, err = vrhFastAclRules(rulesFastAclRules)
 	if err != nil {
@@ -3340,7 +3359,8 @@ var DefaultSiteACLTypeValidator = func() *ValidateSiteACLType {
 
 	vrhFastAclRules := v.FastAclRulesValidationRuleHandler
 	rulesFastAclRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items":            "128",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
 	vFn, err = vrhFastAclRules(rulesFastAclRules)
 	if err != nil {

@@ -22,15 +22,10 @@ resource "volterra_aws_vpc_site" "example" {
   aws_region = ["us-east-1"]
 
   // One of the arguments from this list "assisted aws_cred" must be set
-
-  aws_cred {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  assisted      = true
   instance_type = ["a1.xlarge"]
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
+  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
 
   ingress_gw {
     aws_certified_hw = "aws-byol-voltmesh"
@@ -41,7 +36,11 @@ resource "volterra_aws_vpc_site" "example" {
 
       local_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
-        existing_subnet_id = "subnet-12345678901234567"
+
+        subnet_param {
+          ipv4 = "10.1.2.0/24"
+          ipv6 = "1234:568:abcd:9100::/64"
+        }
       }
     }
   }
@@ -82,7 +81,7 @@ Argument Reference
 
 `instance_type` - (Required) m5.4xlarge (16 x vCPU, 64GB RAM) very high performance (`String`).
 
-`nodes_per_az` - (Optional) Auto scale maximum worker nodes limit up to 21, value of zero will disable auto scale (`Int`).
+`nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
 
 `operating_system_version` - (Optional) Desired Operating System version for this site. (`String`).
 
@@ -102,7 +101,7 @@ Argument Reference
 
 Enable Forward Proxy for this site and manage policies.
 
-`forward_proxy_policies` - (Required) Ordered List of Network Policies active for this network firewall. See [ref](#ref) below for details.
+`forward_proxy_policies` - (Required) List of Forward Proxy Policies. See [ref](#ref) below for details.
 
 ### Active Network Policies
 
@@ -118,7 +117,7 @@ Autogenerate the VPC Name.
 
 Only Single AZ or Three AZ(s) nodes are supported currently..
 
-`aws_az_name` - (Required) Name for AWS availability Zone, should match with AWS region selected. (`String`).
+`aws_az_name` - (Required) AWS availability zone, must be consistent with the selected AWS region. (`String`).
 
 `inside_subnet` - (Optional) Subnets for the inside interface of the node. See [Inside Subnet ](#inside-subnet) below for details.
 
@@ -188,6 +187,10 @@ Use Custom static route to configure all advanced options.
 
 `subnets` - (Optional) List of route prefixes. See [Subnets ](#subnets) below for details.
 
+### Default Storage
+
+Use standard storage class configured as AWS EBS.
+
 ### Disable Forward Proxy
 
 Forward Proxy is disabled for this connector.
@@ -214,7 +217,7 @@ Enable interception for all domains.
 
 Forward Proxy is enabled for this connector.
 
-`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2 seconds (`Int`).
+`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2000 (2 seconds) (`Int`).
 
 `max_connect_attempts` - (Optional) Specifies the allowed number of retries on connect failure to upstream server. Defaults to 1. (`Int`).
 
@@ -362,7 +365,7 @@ Disable Forward Proxy for this site.
 
 ### No Global Network
 
-No global network to connect .
+No global network to connect.
 
 ### No Inside Static Routes
 
@@ -379,6 +382,14 @@ Network Policy is disabled for this site..
 ### No Outside Static Routes
 
 Static Routes disabled for outside network..
+
+### Openebs Enterprise
+
+Storage class Device configuration for OpenEBS Enterprise.
+
+`replication` - (Optional) Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3. (`Int`).
+
+`storage_class_size` - (Optional) Three 10GB disk will be created and assigned to nodes. (`Int`).
 
 ### Outside Static Routes
 
@@ -449,6 +460,22 @@ List of Static routes.
 `custom_static_route` - (Optional) Use Custom static route to configure all advanced options. See [Custom Static Route ](#custom-static-route) below for details.
 
 `simple_static_route` - (Optional) Use simple static route for prefix pointing to single interface in the network (`String`).
+
+### Storage Class List
+
+Add additional custom storage classes in kubernetes for site.
+
+`storage_classes` - (Optional) List of custom storage classes. See [Storage Classes ](#storage-classes) below for details.
+
+### Storage Classes
+
+List of custom storage classes.
+
+`default_storage_class` - (Optional) Make this storage class default storage class for the K8s cluster (`Bool`).
+
+`openebs_enterprise` - (Optional) Storage class Device configuration for OpenEBS Enterprise. See [Openebs Enterprise ](#openebs-enterprise) below for details.
+
+`storage_class_name` - (Required) Name of the storage class as it will appear in K8s. (`String`).
 
 ### Subnet Param
 
@@ -529,6 +556,10 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 `no_outside_static_routes` - (Optional) Static Routes disabled for site local network. (bool).
 
 `outside_static_routes` - (Optional) Manage static routes for site local network.. See [Outside Static Routes ](#outside-static-routes) below for details.
+
+`default_storage` - (Optional) Use standard storage class configured as AWS EBS (bool).
+
+`storage_class_list` - (Optional) Add additional custom storage classes in kubernetes for site. See [Storage Class List ](#storage-class-list) below for details.
 
 ### Vpc
 

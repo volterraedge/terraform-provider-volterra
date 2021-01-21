@@ -18,6 +18,8 @@ import (
 	ves_io_schema_log_access_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/access_log"
 	ves_io_schema_log_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/audit_log"
 	ves_io_schema_log_firewall_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/firewall_log"
+	ves_io_schema_log_k8s_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_audit_log"
+	ves_io_schema_log_k8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_events"
 	ves_io_schema_log_vk8s_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_audit_log"
 	ves_io_schema_log_vk8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_events"
 )
@@ -822,6 +824,572 @@ var DefaultFirewallLogRequestValidator = func() *ValidateFirewallLogRequest {
 
 func FirewallLogRequestValidator() db.Validator {
 	return DefaultFirewallLogRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *K8SAuditLogAggregationRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *K8SAuditLogAggregationRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *K8SAuditLogAggregationRequest) DeepCopy() *K8SAuditLogAggregationRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &K8SAuditLogAggregationRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *K8SAuditLogAggregationRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *K8SAuditLogAggregationRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return K8SAuditLogAggregationRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateK8SAuditLogAggregationRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateK8SAuditLogAggregationRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*K8SAuditLogAggregationRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *K8SAuditLogAggregationRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["aggs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aggs"))
+		for key, value := range m.GetAggs() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["end_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["query"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("query"))
+		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultK8SAuditLogAggregationRequestValidator = func() *ValidateK8SAuditLogAggregationRequest {
+	v := &ValidateK8SAuditLogAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["aggs"] = ves_io_schema_log_k8s_audit_log.AggregationRequestValidator().Validate
+
+	return v
+}()
+
+func K8SAuditLogAggregationRequestValidator() db.Validator {
+	return DefaultK8SAuditLogAggregationRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *K8SAuditLogRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *K8SAuditLogRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *K8SAuditLogRequest) DeepCopy() *K8SAuditLogRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &K8SAuditLogRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *K8SAuditLogRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *K8SAuditLogRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return K8SAuditLogRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateK8SAuditLogRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateK8SAuditLogRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*K8SAuditLogRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *K8SAuditLogRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["aggs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aggs"))
+		for key, value := range m.GetAggs() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["end_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("limit"))
+		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["query"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("query"))
+		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["scroll"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("scroll"))
+		if err := fv(ctx, m.GetScroll(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sort"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sort"))
+		if err := fv(ctx, m.GetSort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultK8SAuditLogRequestValidator = func() *ValidateK8SAuditLogRequest {
+	v := &ValidateK8SAuditLogRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["aggs"] = ves_io_schema_log_k8s_audit_log.AggregationRequestValidator().Validate
+
+	return v
+}()
+
+func K8SAuditLogRequestValidator() db.Validator {
+	return DefaultK8SAuditLogRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *K8SEventsAggregationRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *K8SEventsAggregationRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *K8SEventsAggregationRequest) DeepCopy() *K8SEventsAggregationRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &K8SEventsAggregationRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *K8SEventsAggregationRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *K8SEventsAggregationRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return K8SEventsAggregationRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateK8SEventsAggregationRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateK8SEventsAggregationRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*K8SEventsAggregationRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *K8SEventsAggregationRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["aggs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aggs"))
+		for key, value := range m.GetAggs() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["end_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["query"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("query"))
+		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultK8SEventsAggregationRequestValidator = func() *ValidateK8SEventsAggregationRequest {
+	v := &ValidateK8SEventsAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["aggs"] = ves_io_schema_log_k8s_events.AggregationRequestValidator().Validate
+
+	return v
+}()
+
+func K8SEventsAggregationRequestValidator() db.Validator {
+	return DefaultK8SEventsAggregationRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *K8SEventsRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *K8SEventsRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *K8SEventsRequest) DeepCopy() *K8SEventsRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &K8SEventsRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *K8SEventsRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *K8SEventsRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return K8SEventsRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateK8SEventsRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateK8SEventsRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*K8SEventsRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *K8SEventsRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["aggs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aggs"))
+		for key, value := range m.GetAggs() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["end_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("limit"))
+		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["query"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("query"))
+		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["scroll"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("scroll"))
+		if err := fv(ctx, m.GetScroll(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sort"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sort"))
+		if err := fv(ctx, m.GetSort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultK8SEventsRequestValidator = func() *ValidateK8SEventsRequest {
+	v := &ValidateK8SEventsRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["aggs"] = ves_io_schema_log_k8s_events.AggregationRequestValidator().Validate
+
+	return v
+}()
+
+func K8SEventsRequestValidator() db.Validator {
+	return DefaultK8SEventsRequestValidator
 }
 
 // augmented methods on protoc/std generated struct

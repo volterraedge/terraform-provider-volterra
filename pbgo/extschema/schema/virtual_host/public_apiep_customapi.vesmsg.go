@@ -642,3 +642,168 @@ var DefaultAPIEndpointsRspValidator = func() *ValidateAPIEndpointsRsp {
 func APIEndpointsRspValidator() db.Validator {
 	return DefaultAPIEndpointsRspValidator
 }
+
+// augmented methods on protoc/std generated struct
+
+func (m *SwaggerSpecReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SwaggerSpecReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SwaggerSpecReq) DeepCopy() *SwaggerSpecReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SwaggerSpecReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SwaggerSpecReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SwaggerSpecReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SwaggerSpecReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSwaggerSpecReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSwaggerSpecReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SwaggerSpecReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SwaggerSpecReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSwaggerSpecReqValidator = func() *ValidateSwaggerSpecReq {
+	v := &ValidateSwaggerSpecReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SwaggerSpecReqValidator() db.Validator {
+	return DefaultSwaggerSpecReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SwaggerSpecRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SwaggerSpecRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SwaggerSpecRsp) DeepCopy() *SwaggerSpecRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SwaggerSpecRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SwaggerSpecRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SwaggerSpecRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SwaggerSpecRspValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSwaggerSpecRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSwaggerSpecRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SwaggerSpecRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SwaggerSpecRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["swagger_spec"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("swagger_spec"))
+		if err := fv(ctx, m.GetSwaggerSpec(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSwaggerSpecRspValidator = func() *ValidateSwaggerSpecRsp {
+	v := &ValidateSwaggerSpecRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SwaggerSpecRspValidator() db.Validator {
+	return DefaultSwaggerSpecRspValidator
+}

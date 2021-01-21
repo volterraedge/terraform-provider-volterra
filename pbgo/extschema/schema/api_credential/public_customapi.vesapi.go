@@ -1265,6 +1265,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-Activate"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Activate"
             },
             "x-displayname": "API Credential",
@@ -1606,6 +1610,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-Renew"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Renew"
             },
             "x-displayname": "API Credential",
@@ -1692,6 +1700,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-CustomAPI-Revoke"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Revoke"
             },
             "x-displayname": "API Credential",
@@ -2556,6 +2568,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Active",
                     "format": "boolean",
                     "x-displayname": "Active"
+                },
+                "certificate_serial_num": {
+                    "type": "string",
+                    "description": " Serial number of the client certificate part of credential type API Certificate or Kubeconfig",
+                    "title": "Certificate Serial Number",
+                    "x-displayname": "Certificate Serial Number"
                 },
                 "created_timestamp": {
                     "type": "string",

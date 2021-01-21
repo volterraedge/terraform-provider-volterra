@@ -17,6 +17,7 @@ import (
 	google_protobuf "github.com/gogo/protobuf/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	multierror "github.com/hashicorp/go-multierror"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -1010,7 +1011,10 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.site.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.site.crudapi.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1040,7 +1044,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.site.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.site.crudapi.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1143,7 +1150,10 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.site.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.site.crudapi.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -3206,7 +3216,7 @@ var APISwaggerJSON string = `{
                 },
                 "desired_pool_count": {
                     "type": "integer",
-                    "description": " Desire pool count represent number of nodes in scaling group for manual scaling. It is valid only for K8s worker nodes\n not masters. The desired count must be less than or equal to the maximum size of the group.\n If new value for Desired is greater than Max, then Max must be updated in cloud provider configuration.\n\nExample: - \"0\"-",
+                    "description": " Desired pool count represent desired number of worker(non master) nodes\n for manual scaling of public cloud(AWS, GCP, Azure) sites. The desired count\n must be less than or equal to the maximum size of the scaling group for a\n given public cloud. One may also have to increase maximum scaling group size to\n effectively increase desired pool count.\n\nExample: - \"0\"-",
                     "title": "desired_pool_count",
                     "format": "int32",
                     "x-displayname": "Desired Pool Count",
@@ -3232,6 +3242,22 @@ var APISwaggerJSON string = `{
                     "title": "k8s_api_servers",
                     "x-displayname": "Kubernetes API Servers"
                 },
+                "k8s_cluster_api_gw": {
+                    "type": "array",
+                    "description": " Internal reference to k8s cluster api gateway VH",
+                    "title": "k8s cluster api gateway",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "K8s Cluster API Gateway"
+                },
+                "local_k8s_access_enabled": {
+                    "type": "boolean",
+                    "description": " Lets user know if this site has local k8s cluster enabled via fleet configuration.",
+                    "title": "Local K8s Cluster Access Enabled",
+                    "format": "boolean",
+                    "x-displayname": "Local K8s Cluster Access Enabled"
+                },
                 "mars_list": {
                     "type": "array",
                     "description": " List of Mars services in an RE site. This is used to create a full mesh of Mars services across all REs.",
@@ -3249,6 +3275,13 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaServiceParameters"
                     },
                     "x-displayname": "Mars VTRP Services"
+                },
+                "no_tenant_in_vk8s_ns": {
+                    "type": "boolean",
+                    "description": " Disable appending tenant to vk8s namepsaces created in CE site.",
+                    "title": "Disable appending tenant in vk8s namespace",
+                    "format": "boolean",
+                    "x-displayname": "vk8s ns format"
                 },
                 "opera": {
                     "description": " opera in the site",
@@ -3584,14 +3617,16 @@ var APISwaggerJSON string = `{
         },
         "siteLinkType": {
             "type": "string",
-            "description": "Link type of interface determined operationally\n\nLink type unknown\nLink type ethernet\nWiFi link of type 802.11ac\nWiFi link of type 802.11bgn\nLink type 4G",
+            "description": "Link type of interface determined operationally\n\nLink type unknown\nLink type ethernet\nWiFi link of type 802.11ac\nWiFi link of type 802.11bgn\nLink type 4G\nWiFi link\nWan link",
             "title": "Link type",
             "enum": [
                 "LINK_TYPE_UNKNOWN",
                 "LINK_TYPE_ETHERNET",
                 "LINK_TYPE_WIFI_802_11AC",
                 "LINK_TYPE_WIFI_802_11BGN",
-                "LINK_TYPE_4G"
+                "LINK_TYPE_4G",
+                "LINK_TYPE_WIFI",
+                "LINK_TYPE_WAN"
             ],
             "default": "LINK_TYPE_UNKNOWN",
             "x-displayname": "Link type",

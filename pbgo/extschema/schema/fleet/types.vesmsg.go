@@ -241,6 +241,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetUsbPolicyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 }
 
@@ -683,6 +689,75 @@ func (m *CreateSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, 
 	return drInfos, err
 }
 
+func (m *CreateSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var odrInfos []db.DRefInfo
+
+	switch m.GetUsbPolicyChoice().(type) {
+	case *CreateSpecType_DenyAllUsb:
+
+	case *CreateSpecType_AllowAllUsb:
+
+	case *CreateSpecType_UsbPolicy:
+
+		vref := m.GetUsbPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("usb_policy.Object")
+		odri := db.DRefInfo{
+			RefdType:   "usb_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "usb_policy",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
+	}
+
+	return odrInfos, nil
+}
+
+// GetUsbPolicyChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CreateSpecType) GetUsbPolicyChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetUsbPolicyChoice().(type) {
+	case *CreateSpecType_DenyAllUsb:
+
+	case *CreateSpecType_AllowAllUsb:
+
+	case *CreateSpecType_UsbPolicy:
+		refdType, err := d.TypeForEntryKind("", "", "usb_policy.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: usb_policy")
+		}
+
+		vref := m.GetUsbPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "usb_policy.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -755,6 +830,14 @@ func (v *ValidateCreateSpecType) StorageStaticRoutesChoiceValidationRuleHandler(
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for storage_static_routes_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) UsbPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for usb_policy_choice")
 	}
 	return validatorFn, nil
 }
@@ -1152,17 +1235,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *CreateSpecType_Bar:
-		if fv, exists := v.FldValidators["interface_choice.bar"]; exists {
-			val := m.GetInterfaceChoice().(*CreateSpecType_Bar).Bar
-			vOpts := append(opts,
-				db.WithValidateField("interface_choice"),
-				db.WithValidateField("bar"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 
 	}
 
@@ -1379,6 +1451,53 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["usb_policy_choice"]; exists {
+		val := m.GetUsbPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("usb_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetUsbPolicyChoice().(type) {
+	case *CreateSpecType_DenyAllUsb:
+		if fv, exists := v.FldValidators["usb_policy_choice.deny_all_usb"]; exists {
+			val := m.GetUsbPolicyChoice().(*CreateSpecType_DenyAllUsb).DenyAllUsb
+			vOpts := append(opts,
+				db.WithValidateField("usb_policy_choice"),
+				db.WithValidateField("deny_all_usb"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_AllowAllUsb:
+		if fv, exists := v.FldValidators["usb_policy_choice.allow_all_usb"]; exists {
+			val := m.GetUsbPolicyChoice().(*CreateSpecType_AllowAllUsb).AllowAllUsb
+			vOpts := append(opts,
+				db.WithValidateField("usb_policy_choice"),
+				db.WithValidateField("allow_all_usb"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_UsbPolicy:
+		if fv, exists := v.FldValidators["usb_policy_choice.usb_policy"]; exists {
+			val := m.GetUsbPolicyChoice().(*CreateSpecType_UsbPolicy).UsbPolicy
+			vOpts := append(opts,
+				db.WithValidateField("usb_policy_choice"),
+				db.WithValidateField("usb_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
@@ -1502,6 +1621,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["storage_static_routes_choice"] = vFn
 
+	vrhUsbPolicyChoice := v.UsbPolicyChoiceValidationRuleHandler
+	rulesUsbPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhUsbPolicyChoice(rulesUsbPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.usb_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["usb_policy_choice"] = vFn
+
 	vrhFleetLabel := v.FleetLabelValidationRuleHandler
 	rulesFleetLabel := map[string]string{
 		"ves.io.schema.rules.message.required":       "true",
@@ -1597,6 +1727,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["storage_interface_choice.storage_interface_list"] = FleetInterfaceListTypeValidator().Validate
 
 	v.FldValidators["storage_static_routes_choice.storage_static_routes"] = FleetStorageStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["usb_policy_choice.usb_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -5264,6 +5396,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetUsbPolicyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 }
 
@@ -5706,6 +5844,75 @@ func (m *GetSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, err
 	return drInfos, err
 }
 
+func (m *GetSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var odrInfos []db.DRefInfo
+
+	switch m.GetUsbPolicyChoice().(type) {
+	case *GetSpecType_DenyAllUsb:
+
+	case *GetSpecType_AllowAllUsb:
+
+	case *GetSpecType_UsbPolicy:
+
+		vref := m.GetUsbPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("usb_policy.Object")
+		odri := db.DRefInfo{
+			RefdType:   "usb_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "usb_policy",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
+	}
+
+	return odrInfos, nil
+}
+
+// GetUsbPolicyChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetSpecType) GetUsbPolicyChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetUsbPolicyChoice().(type) {
+	case *GetSpecType_DenyAllUsb:
+
+	case *GetSpecType_AllowAllUsb:
+
+	case *GetSpecType_UsbPolicy:
+		refdType, err := d.TypeForEntryKind("", "", "usb_policy.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: usb_policy")
+		}
+
+		vref := m.GetUsbPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "usb_policy.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -5778,6 +5985,14 @@ func (v *ValidateGetSpecType) StorageStaticRoutesChoiceValidationRuleHandler(rul
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for storage_static_routes_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) UsbPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for usb_policy_choice")
 	}
 	return validatorFn, nil
 }
@@ -6391,6 +6606,53 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["usb_policy_choice"]; exists {
+		val := m.GetUsbPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("usb_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetUsbPolicyChoice().(type) {
+	case *GetSpecType_DenyAllUsb:
+		if fv, exists := v.FldValidators["usb_policy_choice.deny_all_usb"]; exists {
+			val := m.GetUsbPolicyChoice().(*GetSpecType_DenyAllUsb).DenyAllUsb
+			vOpts := append(opts,
+				db.WithValidateField("usb_policy_choice"),
+				db.WithValidateField("deny_all_usb"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_AllowAllUsb:
+		if fv, exists := v.FldValidators["usb_policy_choice.allow_all_usb"]; exists {
+			val := m.GetUsbPolicyChoice().(*GetSpecType_AllowAllUsb).AllowAllUsb
+			vOpts := append(opts,
+				db.WithValidateField("usb_policy_choice"),
+				db.WithValidateField("allow_all_usb"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_UsbPolicy:
+		if fv, exists := v.FldValidators["usb_policy_choice.usb_policy"]; exists {
+			val := m.GetUsbPolicyChoice().(*GetSpecType_UsbPolicy).UsbPolicy
+			vOpts := append(opts,
+				db.WithValidateField("usb_policy_choice"),
+				db.WithValidateField("usb_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
@@ -6514,6 +6776,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["storage_static_routes_choice"] = vFn
 
+	vrhUsbPolicyChoice := v.UsbPolicyChoiceValidationRuleHandler
+	rulesUsbPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhUsbPolicyChoice(rulesUsbPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.usb_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["usb_policy_choice"] = vFn
+
 	vrhFleetLabel := v.FleetLabelValidationRuleHandler
 	rulesFleetLabel := map[string]string{
 		"ves.io.schema.rules.message.required":       "true",
@@ -6610,6 +6883,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["storage_static_routes_choice.storage_static_routes"] = FleetStorageStaticRoutesListTypeValidator().Validate
 
+	v.FldValidators["usb_policy_choice.usb_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
 	return v
 }()
 
@@ -6694,6 +6969,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetK8SClusterDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -6731,6 +7012,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	if fdrInfos, err := m.GetStorageStaticRoutesChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetUsbPolicyChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -6943,6 +7230,56 @@ func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, err
+}
+
+func (m *GlobalSpecType) GetK8SClusterDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+
+	vref := m.GetK8SCluster()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("k8s_cluster.Object")
+	drInfos = append(drInfos, db.DRefInfo{
+		RefdType:   "k8s_cluster.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "k8s_cluster",
+		Ref:        vdRef,
+	})
+
+	return drInfos, nil
+}
+
+// GetK8SClusterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetK8SClusterDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "k8s_cluster.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: k8s_cluster")
+	}
+
+	vref := m.GetK8SCluster()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "k8s_cluster.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
 }
 
 func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -7236,6 +7573,75 @@ func (m *GlobalSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, 
 	return drInfos, err
 }
 
+func (m *GlobalSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var odrInfos []db.DRefInfo
+
+	switch m.GetUsbPolicyChoice().(type) {
+	case *GlobalSpecType_DenyAllUsb:
+
+	case *GlobalSpecType_AllowAllUsb:
+
+	case *GlobalSpecType_UsbPolicy:
+
+		vref := m.GetUsbPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("usb_policy.Object")
+		odri := db.DRefInfo{
+			RefdType:   "usb_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "usb_policy",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
+	}
+
+	return odrInfos, nil
+}
+
+// GetUsbPolicyChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetUsbPolicyChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetUsbPolicyChoice().(type) {
+	case *GlobalSpecType_DenyAllUsb:
+
+	case *GlobalSpecType_AllowAllUsb:
+
+	case *GlobalSpecType_UsbPolicy:
+		refdType, err := d.TypeForEntryKind("", "", "usb_policy.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: usb_policy")
+		}
+
+		vref := m.GetUsbPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "usb_policy.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
 type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -7308,6 +7714,14 @@ func (v *ValidateGlobalSpecType) StorageStaticRoutesChoiceValidationRuleHandler(
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for storage_static_routes_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) UsbPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for usb_policy_choice")
 	}
 	return validatorFn, nil
 }
@@ -7814,6 +8228,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["k8s_cluster"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("k8s_cluster"))
+		if err := fv(ctx, m.GetK8SCluster(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -8035,6 +8458,53 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["usb_policy_choice"]; exists {
+		val := m.GetUsbPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("usb_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetUsbPolicyChoice().(type) {
+	case *GlobalSpecType_DenyAllUsb:
+		if fv, exists := v.FldValidators["usb_policy_choice.deny_all_usb"]; exists {
+			val := m.GetUsbPolicyChoice().(*GlobalSpecType_DenyAllUsb).DenyAllUsb
+			vOpts := append(opts,
+				db.WithValidateField("usb_policy_choice"),
+				db.WithValidateField("deny_all_usb"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_AllowAllUsb:
+		if fv, exists := v.FldValidators["usb_policy_choice.allow_all_usb"]; exists {
+			val := m.GetUsbPolicyChoice().(*GlobalSpecType_AllowAllUsb).AllowAllUsb
+			vOpts := append(opts,
+				db.WithValidateField("usb_policy_choice"),
+				db.WithValidateField("allow_all_usb"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_UsbPolicy:
+		if fv, exists := v.FldValidators["usb_policy_choice.usb_policy"]; exists {
+			val := m.GetUsbPolicyChoice().(*GlobalSpecType_UsbPolicy).UsbPolicy
+			vOpts := append(opts,
+				db.WithValidateField("usb_policy_choice"),
+				db.WithValidateField("usb_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
@@ -8158,6 +8628,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["storage_static_routes_choice"] = vFn
 
+	vrhUsbPolicyChoice := v.UsbPolicyChoiceValidationRuleHandler
+	rulesUsbPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhUsbPolicyChoice(rulesUsbPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.usb_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["usb_policy_choice"] = vFn
+
 	vrhFleetLabel := v.FleetLabelValidationRuleHandler
 	rulesFleetLabel := map[string]string{
 		"ves.io.schema.rules.message.required":       "true",
@@ -8274,6 +8755,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["storage_interface_choice.storage_interface_list"] = FleetInterfaceListTypeValidator().Validate
 
 	v.FldValidators["storage_static_routes_choice.storage_static_routes"] = FleetStorageStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["usb_policy_choice.usb_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["k8s_cluster"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -9021,7 +9506,8 @@ var DefaultOpenebsMayastorPoolTypeValidator = func() *ValidateOpenebsMayastorPoo
 	vrhPoolName := v.PoolNameValidationRuleHandler
 	rulesPoolName := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.hostname":  "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
 	}
 	vFn, err = vrhPoolName(rulesPoolName)
 	if err != nil {
@@ -9274,6 +9760,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	if fdrInfos, err := m.GetStorageStaticRoutesChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetUsbPolicyChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -9721,6 +10213,75 @@ func (m *ReplaceSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo,
 	return drInfos, err
 }
 
+func (m *ReplaceSpecType) GetUsbPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var odrInfos []db.DRefInfo
+
+	switch m.GetUsbPolicyChoice().(type) {
+	case *ReplaceSpecType_DenyAllUsb:
+
+	case *ReplaceSpecType_AllowAllUsb:
+
+	case *ReplaceSpecType_UsbPolicy:
+
+		vref := m.GetUsbPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("usb_policy.Object")
+		odri := db.DRefInfo{
+			RefdType:   "usb_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "usb_policy",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
+	}
+
+	return odrInfos, nil
+}
+
+// GetUsbPolicyChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ReplaceSpecType) GetUsbPolicyChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetUsbPolicyChoice().(type) {
+	case *ReplaceSpecType_DenyAllUsb:
+
+	case *ReplaceSpecType_AllowAllUsb:
+
+	case *ReplaceSpecType_UsbPolicy:
+		refdType, err := d.TypeForEntryKind("", "", "usb_policy.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: usb_policy")
+		}
+
+		vref := m.GetUsbPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "usb_policy.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -9793,6 +10354,14 @@ func (v *ValidateReplaceSpecType) StorageStaticRoutesChoiceValidationRuleHandler
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for storage_static_routes_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) UsbPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for usb_policy_choice")
 	}
 	return validatorFn, nil
 }
@@ -10387,6 +10956,53 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["usb_policy_choice"]; exists {
+		val := m.GetUsbPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("usb_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetUsbPolicyChoice().(type) {
+	case *ReplaceSpecType_DenyAllUsb:
+		if fv, exists := v.FldValidators["usb_policy_choice.deny_all_usb"]; exists {
+			val := m.GetUsbPolicyChoice().(*ReplaceSpecType_DenyAllUsb).DenyAllUsb
+			vOpts := append(opts,
+				db.WithValidateField("usb_policy_choice"),
+				db.WithValidateField("deny_all_usb"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_AllowAllUsb:
+		if fv, exists := v.FldValidators["usb_policy_choice.allow_all_usb"]; exists {
+			val := m.GetUsbPolicyChoice().(*ReplaceSpecType_AllowAllUsb).AllowAllUsb
+			vOpts := append(opts,
+				db.WithValidateField("usb_policy_choice"),
+				db.WithValidateField("allow_all_usb"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_UsbPolicy:
+		if fv, exists := v.FldValidators["usb_policy_choice.usb_policy"]; exists {
+			val := m.GetUsbPolicyChoice().(*ReplaceSpecType_UsbPolicy).UsbPolicy
+			vOpts := append(opts,
+				db.WithValidateField("usb_policy_choice"),
+				db.WithValidateField("usb_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
@@ -10510,6 +11126,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["storage_static_routes_choice"] = vFn
 
+	vrhUsbPolicyChoice := v.UsbPolicyChoiceValidationRuleHandler
+	rulesUsbPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhUsbPolicyChoice(rulesUsbPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.usb_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["usb_policy_choice"] = vFn
+
 	vrhVolterraSoftwareVersion := v.VolterraSoftwareVersionValidationRuleHandler
 	rulesVolterraSoftwareVersion := map[string]string{
 		"ves.io.schema.rules.string.max_len": "256",
@@ -10593,6 +11220,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["storage_interface_choice.storage_interface_list"] = FleetInterfaceListTypeValidator().Validate
 
 	v.FldValidators["storage_static_routes_choice.storage_static_routes"] = FleetStorageStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["usb_policy_choice.usb_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -11146,7 +11775,7 @@ var DefaultStorageClassOpenebsEnterpriseTypeValidator = func() *ValidateStorageC
 
 	vrhProtocol := v.ProtocolValidationRuleHandler
 	rulesProtocol := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"iscsi\",\"nvmf\"]",
+		"ves.io.schema.rules.string.in": "[\"nvmf\"]",
 	}
 	vFn, err = vrhProtocol(rulesProtocol)
 	if err != nil {
@@ -13944,6 +14573,47 @@ func (r *CreateSpecType) GetStorageStaticRoutesChoiceFromGlobalSpecType(o *Globa
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetUsbPolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.UsbPolicyChoice.(type) {
+	case nil:
+		o.UsbPolicyChoice = nil
+
+	case *CreateSpecType_AllowAllUsb:
+		o.UsbPolicyChoice = &GlobalSpecType_AllowAllUsb{AllowAllUsb: of.AllowAllUsb}
+
+	case *CreateSpecType_DenyAllUsb:
+		o.UsbPolicyChoice = &GlobalSpecType_DenyAllUsb{DenyAllUsb: of.DenyAllUsb}
+
+	case *CreateSpecType_UsbPolicy:
+		o.UsbPolicyChoice = &GlobalSpecType_UsbPolicy{UsbPolicy: of.UsbPolicy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetUsbPolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.UsbPolicyChoice.(type) {
+	case nil:
+		r.UsbPolicyChoice = nil
+
+	case *GlobalSpecType_AllowAllUsb:
+		r.UsbPolicyChoice = &CreateSpecType_AllowAllUsb{AllowAllUsb: of.AllowAllUsb}
+
+	case *GlobalSpecType_DenyAllUsb:
+		r.UsbPolicyChoice = &CreateSpecType_DenyAllUsb{DenyAllUsb: of.DenyAllUsb}
+
+	case *GlobalSpecType_UsbPolicy:
+		r.UsbPolicyChoice = &CreateSpecType_UsbPolicy{UsbPolicy: of.UsbPolicy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -13964,6 +14634,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetStorageDeviceChoiceFromGlobalSpecType(f)
 	m.GetStorageInterfaceChoiceFromGlobalSpecType(f)
 	m.GetStorageStaticRoutesChoiceFromGlobalSpecType(f)
+	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 }
 
@@ -13989,6 +14660,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetStorageDeviceChoiceToGlobalSpecType(f)
 	m1.SetStorageInterfaceChoiceToGlobalSpecType(f)
 	m1.SetStorageStaticRoutesChoiceToGlobalSpecType(f)
+	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 }
 
@@ -14278,6 +14950,47 @@ func (r *GetSpecType) GetStorageStaticRoutesChoiceFromGlobalSpecType(o *GlobalSp
 	return nil
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetUsbPolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.UsbPolicyChoice.(type) {
+	case nil:
+		o.UsbPolicyChoice = nil
+
+	case *GetSpecType_AllowAllUsb:
+		o.UsbPolicyChoice = &GlobalSpecType_AllowAllUsb{AllowAllUsb: of.AllowAllUsb}
+
+	case *GetSpecType_DenyAllUsb:
+		o.UsbPolicyChoice = &GlobalSpecType_DenyAllUsb{DenyAllUsb: of.DenyAllUsb}
+
+	case *GetSpecType_UsbPolicy:
+		o.UsbPolicyChoice = &GlobalSpecType_UsbPolicy{UsbPolicy: of.UsbPolicy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetUsbPolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.UsbPolicyChoice.(type) {
+	case nil:
+		r.UsbPolicyChoice = nil
+
+	case *GlobalSpecType_AllowAllUsb:
+		r.UsbPolicyChoice = &GetSpecType_AllowAllUsb{AllowAllUsb: of.AllowAllUsb}
+
+	case *GlobalSpecType_DenyAllUsb:
+		r.UsbPolicyChoice = &GetSpecType_DenyAllUsb{DenyAllUsb: of.DenyAllUsb}
+
+	case *GlobalSpecType_UsbPolicy:
+		r.UsbPolicyChoice = &GetSpecType_UsbPolicy{UsbPolicy: of.UsbPolicy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -14298,6 +15011,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetStorageDeviceChoiceFromGlobalSpecType(f)
 	m.GetStorageInterfaceChoiceFromGlobalSpecType(f)
 	m.GetStorageStaticRoutesChoiceFromGlobalSpecType(f)
+	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 }
 
@@ -14323,6 +15037,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetStorageDeviceChoiceToGlobalSpecType(f)
 	m1.SetStorageInterfaceChoiceToGlobalSpecType(f)
 	m1.SetStorageStaticRoutesChoiceToGlobalSpecType(f)
+	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 }
 
@@ -14612,6 +15327,47 @@ func (r *ReplaceSpecType) GetStorageStaticRoutesChoiceFromGlobalSpecType(o *Glob
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetUsbPolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.UsbPolicyChoice.(type) {
+	case nil:
+		o.UsbPolicyChoice = nil
+
+	case *ReplaceSpecType_AllowAllUsb:
+		o.UsbPolicyChoice = &GlobalSpecType_AllowAllUsb{AllowAllUsb: of.AllowAllUsb}
+
+	case *ReplaceSpecType_DenyAllUsb:
+		o.UsbPolicyChoice = &GlobalSpecType_DenyAllUsb{DenyAllUsb: of.DenyAllUsb}
+
+	case *ReplaceSpecType_UsbPolicy:
+		o.UsbPolicyChoice = &GlobalSpecType_UsbPolicy{UsbPolicy: of.UsbPolicy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetUsbPolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.UsbPolicyChoice.(type) {
+	case nil:
+		r.UsbPolicyChoice = nil
+
+	case *GlobalSpecType_AllowAllUsb:
+		r.UsbPolicyChoice = &ReplaceSpecType_AllowAllUsb{AllowAllUsb: of.AllowAllUsb}
+
+	case *GlobalSpecType_DenyAllUsb:
+		r.UsbPolicyChoice = &ReplaceSpecType_DenyAllUsb{DenyAllUsb: of.DenyAllUsb}
+
+	case *GlobalSpecType_UsbPolicy:
+		r.UsbPolicyChoice = &ReplaceSpecType_UsbPolicy{UsbPolicy: of.UsbPolicy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -14631,6 +15387,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetStorageDeviceChoiceFromGlobalSpecType(f)
 	m.GetStorageInterfaceChoiceFromGlobalSpecType(f)
 	m.GetStorageStaticRoutesChoiceFromGlobalSpecType(f)
+	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 }
 
@@ -14655,5 +15412,6 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetStorageDeviceChoiceToGlobalSpecType(f)
 	m1.SetStorageInterfaceChoiceToGlobalSpecType(f)
 	m1.SetStorageStaticRoutesChoiceToGlobalSpecType(f)
+	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 }

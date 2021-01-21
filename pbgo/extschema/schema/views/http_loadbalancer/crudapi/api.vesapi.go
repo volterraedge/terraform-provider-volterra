@@ -17,6 +17,7 @@ import (
 	google_protobuf "github.com/gogo/protobuf/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	multierror "github.com/hashicorp/go-multierror"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -1010,7 +1011,10 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.http_loadbalancer.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.http_loadbalancer.crudapi.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1040,7 +1044,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1143,7 +1150,10 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.http_loadbalancer.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.http_loadbalancer.crudapi.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -2235,6 +2245,14 @@ var APISwaggerJSON string = `{
                     "title": "Custom Errors",
                     "x-displayname": "Custom Error Responses"
                 },
+                "disable_default_error_pages": {
+                    "type": "boolean",
+                    "description": "\n An option to specify the use of default Volterra error pages\n\nExample: - \"true\"-",
+                    "title": "Disable the use of default Volterra error pages",
+                    "format": "boolean",
+                    "x-displayname": "Disable default error pages",
+                    "x-ves-example": "true"
+                },
                 "idle_timeout": {
                     "type": "integer",
                     "description": " Idle timeout is the amount of time that the loadbalancer will allow a stream to exist with\n no upstream or downstream activity.\n\n Idle timeout and Proxy Type:\n\n HTTP_PROXY, HTTPS_PROXY:\n Idle timer is started when the first byte is received on the connection.\n Each time an encode/decode event for headers or data is processed for the stream,\n the timer will be reset.\n If the timeout fires, the stream is terminated with a 408 (Request Timeout) error code if\n no upstream response header has been received, otherwise a stream reset occurs.\n The default idle timeout is 30 seconds\n\n TCP PROXY, TCP_PROXY_WITH_SNI, SMA_PROXY:\n The idle timeout is defined as the period in which there are no bytes sent or received on\n either the upstream or downstream connection.\n The default idle timeout is 1 hour.\n\n UDP PROXY:\n The idle timeout for sessions. Idle timeout is defined as the period in which there are no\n datagrams sent or received on the session.\n The default if not specified is 1 minute.\n\nExample: - \"2000\"-",
@@ -2260,7 +2278,7 @@ var APISwaggerJSON string = `{
                 },
                 "max_request_header_size": {
                     "type": "integer",
-                    "description": "\n The maximum request header size in KiB for incoming connections.\n\n If un-configured, the default max request headers allowed is 60 KiB.\n\n Requests that exceed this limit will receive a 431 response.\n\n The max configurable limit is 96 KiB, based on current implementation constraints.\n\n Note: \n\n  *  When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective\n     \"maximum request header size\" for such virtual hosts is the highest value configured\n     on any of the virtual hosts",
+                    "description": "\n The maximum request header size in KiB for incoming connections.\n\n If un-configured, the default max request headers allowed is 60 KiB.\n\n Requests that exceed this limit will receive a 431 response.\n\n The max configurable limit is 96 KiB, based on current implementation constraints.\n\n Note:\n\n  *  When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective\n     \"maximum request header size\" for such virtual hosts is the highest value configured\n     on any of the virtual hosts",
                     "title": "Maximum request header size",
                     "format": "int64",
                     "x-displayname": "Maximum Request Header Size"
@@ -2302,6 +2320,47 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Remove Response Headers",
                     "x-ves-example": "host"
+                }
+            }
+        },
+        "http_loadbalancerChallengeRule": {
+            "type": "object",
+            "description": "Challenge rule",
+            "title": "Challenge Rule",
+            "x-displayname": "Challenge Rule",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ChallengeRule",
+            "properties": {
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\nRequired: YES",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true"
+                },
+                "spec": {
+                    "description": " Specification for the rule including match predicates and actions.\nRequired: YES",
+                    "title": "spec",
+                    "$ref": "#/definitions/service_policy_ruleChallengeRuleSpec",
+                    "x-displayname": "Challenge Rule Specification",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "http_loadbalancerChallengeRuleList": {
+            "type": "object",
+            "description": "List of challenge rules to be used in policy based challenge",
+            "title": "Challenge Rule List",
+            "x-displayname": "Challenge Rule List",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ChallengeRuleList",
+            "properties": {
+                "rules": {
+                    "type": "array",
+                    "description": " Rules that specify the match conditions and challenge type to be launched.\n When a challenge type is selected to be always enabled,\n these rules can be used to disable challenge or launch a different challenge for requests that match the specified conditions",
+                    "title": "Rules",
+                    "items": {
+                        "$ref": "#/definitions/http_loadbalancerChallengeRule"
+                    },
+                    "x-displayname": "Rules"
                 }
             }
         },
@@ -2399,7 +2458,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "HTTP Redirect to HTTPS"
                 },
                 "tls_parameters": {
-                    "description": " TLS parameters for downstream connections. ",
+                    "description": " TLS parameters for downstream connections.",
                     "$ref": "#/definitions/viewshttp_loadbalancerDownstreamTlsParamsType",
                     "x-displayname": "HTTP Loadbalancer TLS Parameters"
                 }
@@ -2438,22 +2497,33 @@ var APISwaggerJSON string = `{
         "http_loadbalancerRateLimitConfigType": {
             "type": "object",
             "x-ves-oneof-field-ip_allowed_list_choice": "[\"custom_ip_allowed_list\",\"ip_allowed_list\",\"no_ip_allowed_list\"]",
+            "x-ves-oneof-field-policy_choice": "[\"no_policies\",\"policies\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RateLimitConfigType",
             "properties": {
                 "custom_ip_allowed_list": {
-                    "description": "Exclusive with [ip_allowed_list no_ip_allowed_list]\nx-displayName: \"IP Allowed List using IP Prefix Set(s)\"\nIP Allowed list using existing ip_prefix_set objects",
+                    "description": "Exclusive with [ip_allowed_list no_ip_allowed_list]\nx-displayName: \"IP Allowed List using IP Prefix Set(s)\"\nIP Allowed list using existing ip_prefix_set objects.",
                     "title": "Custom IP list",
                     "$ref": "#/definitions/http_loadbalancerCustomIpAllowedList"
                 },
                 "ip_allowed_list": {
-                    "description": "Exclusive with [custom_ip_allowed_list no_ip_allowed_list]\nx-displayName: \"IP Allowed List\"\nList of IP(s) for which rate limiting will be disabled",
+                    "description": "Exclusive with [custom_ip_allowed_list no_ip_allowed_list]\nx-displayName: \"IP Allowed List\"\nList of IP(s) for which rate limiting will be disabled.",
                     "title": "IP Allowed List",
                     "$ref": "#/definitions/viewsPrefixStringListType"
                 },
                 "no_ip_allowed_list": {
-                    "description": "Exclusive with [custom_ip_allowed_list ip_allowed_list]\nx-displayName: \"No IP Allowed\"\nThere is no ip allowed list for rate limiting, all clients go thru rate limiting",
+                    "description": "Exclusive with [custom_ip_allowed_list ip_allowed_list]\nx-displayName: \"No IP Allowed\"\nThere is no ip allowed list for rate limiting, all clients go through rate limiting.",
                     "title": "No IP Allowed List",
                     "$ref": "#/definitions/schemaEmpty"
+                },
+                "no_policies": {
+                    "description": "Exclusive with [policies]\nx-displayName: \"No Rate Limiter Policies\"\nDo not apply additional rate limiter policies.",
+                    "title": "no_policies",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "policies": {
+                    "description": "Exclusive with [no_policies]\nx-displayName: \"Rate Limiter Policies\"\nApply rate limiter policies to requests that are not from the IP Allowed List.\nThe policies are evaluated sequentially until a matching rule is identified. If there's a match, the rate limiting behavior is modified according\nto the action configured in the rule. If there's no match, the rate limiting configuration for the HTTP loadbalancer is honored.",
+                    "title": "policies",
+                    "$ref": "#/definitions/rate_limiter_policyPolicyList"
                 },
                 "rate_limiter": {
                     "description": " Requests to the virtual_host are rate limited based on the parameters specified in the rate_limiter.",
@@ -2465,9 +2535,9 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerRouteSimpleAdvancedOptions": {
             "type": "object",
-            "description": "Configure Advance options for route, like path rewrite, has policy, etc",
-            "title": "Route Advanced Options",
-            "x-displayname": "Route Advance Options",
+            "description": "Configure advanced options for route like path rewrite, hash policy, etc.",
+            "title": "Advanced Route Options",
+            "x-displayname": "Advanced Route Options",
             "x-ves-oneof-field-buffer_choice": "[\"buffer_policy\",\"common_buffering\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"common_hash_policy\",\"specific_hash_policy\"]",
             "x-ves-oneof-field-mirroring_choice": "[\"disable_mirroring\",\"mirror_policy\"]",
@@ -2709,7 +2779,7 @@ var APISwaggerJSON string = `{
             "title": "RouteTypeSimple",
             "x-displayname": "Simple Route",
             "x-ves-displayorder": "2,1,3,4,8",
-            "x-ves-oneof-field-hostrewriteparams": "[\"auto_host_rewrite\",\"disable_host_rewrite\",\"host_rewrite\"]",
+            "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"disable_host_rewrite\",\"host_rewrite\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteTypeSimple",
             "properties": {
                 "advanced_options": {
@@ -2922,6 +2992,244 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyArgMatcherType": {
+            "type": "object",
+            "description": "A argument matcher specifies the name of a single argument in the body and the criteria to match it.\nA argument matcher can check for one of the following:\n* Presence or absence of the argument\n* At least one of the values for the argument in the request satisfies the MatcherType item",
+            "title": "ArgMatcherType",
+            "x-displayname": "Argument Matcher",
+            "x-ves-displayorder": "1,6,4",
+            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\",\"presence\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.ArgMatcherType",
+            "properties": {
+                "check_not_present": {
+                    "description": "Exclusive with [check_present item presence]\nx-displayName: \"Not Present\"\nCheck that the argument is not present.",
+                    "title": "check_not_present",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "check_present": {
+                    "description": "Exclusive with [check_not_present item presence]\nx-displayName: \"Present\"\nCheck that the argument is present.",
+                    "title": "check_present",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert Match of the expression defined",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert Matcher"
+                },
+                "item": {
+                    "description": "Exclusive with [check_not_present check_present presence]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the Arg. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
+                    "title": "item",
+                    "$ref": "#/definitions/policyMatcherType"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " x-example: \"phones[_]\"\n x-example: \"cars.make.toyota.models[1]\"\n x-example: \"cars.make.honda.models[_]\"\n x-example: \"cars.make[_].models[_]\"\n A case-sensitive JSON path in the HTTP request body.\n\nExample: - \"name\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Argument Name",
+                    "x-ves-example": "name",
+                    "x-ves-required": "true"
+                },
+                "presence": {
+                    "type": "boolean",
+                    "description": "Exclusive with [check_not_present check_present item]\nx-displayName: \"Present Or Absent\"\nCheck if the arg is present or absent.",
+                    "title": "presence",
+                    "format": "boolean"
+                }
+            }
+        },
+        "policyCookieMatcherType": {
+            "type": "object",
+            "description": "A cookie matcher specifies the name of a single cookie and the criteria to match it. The input has a list of values for each\ncookie in the request.\nA cookie matcher can check for one of the following:\n* Presence or absence of the cookie\n* At least one of the values for the cookie in the request satisfies the MatcherType item",
+            "title": "CookieMatcherType",
+            "x-displayname": "Cookie Matcher",
+            "x-ves-displayorder": "1,6,4",
+            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\",\"presence\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.CookieMatcherType",
+            "properties": {
+                "check_not_present": {
+                    "description": "Exclusive with [check_present item presence]\nx-displayName: \"Not Present\"\nCheck that the cookie is not present.",
+                    "title": "check_not_present",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "check_present": {
+                    "description": "Exclusive with [check_not_present item presence]\nx-displayName: \"Present\"\nCheck that the cookie is present.",
+                    "title": "check_present",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert Match of the expression defined",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert Matcher"
+                },
+                "item": {
+                    "description": "Exclusive with [check_not_present check_present presence]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the cookie. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
+                    "title": "item",
+                    "$ref": "#/definitions/policyMatcherType"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " A case-sensitive cookie name.\n\nExample: - \"Session\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Cookie Name",
+                    "x-ves-example": "Session",
+                    "x-ves-required": "true"
+                },
+                "presence": {
+                    "type": "boolean",
+                    "description": "Exclusive with [check_not_present check_present item]\nx-displayName: \"Present Or Absent\"\nCheck if the cookie is present or absent.",
+                    "title": "presence",
+                    "format": "boolean"
+                }
+            }
+        },
+        "policyHttpMethodMatcherType": {
+            "type": "object",
+            "description": "A http method matcher specifies a list of methods to match an input HTTP method. The match is considered successful if the input method is a member of the list.\nThe result of the match based on the method list is inverted if invert_matcher is true.",
+            "title": "HttpMethodMatcherType",
+            "x-displayname": "HTTP Method Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.HttpMethodMatcherType",
+            "properties": {
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert the match result.",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert Method Matcher"
+                },
+                "methods": {
+                    "type": "array",
+                    "description": " List of methods values to match against.\n\nExample: - \"['GET', 'POST', 'DELETE']\"-",
+                    "title": "methods",
+                    "items": {
+                        "$ref": "#/definitions/schemaHttpMethod"
+                    },
+                    "x-displayname": "Method List",
+                    "x-ves-example": "['GET', 'POST', 'DELETE']"
+                }
+            }
+        },
+        "policyKnownTlsFingerprintClass": {
+            "type": "string",
+            "description": "Specifies known TLS fingerprint classes\n\n - TLS_FINGERPRINT_NONE: TLS_FINGERPRINT_NONE\n\nNo TLS fingerprint\n - ANY_MALICIOUS_FINGERPRINT: ANY_MALICIOUS_FINGERPRINT\n\nTLS fingerprints known to be associated with malicious clients\n - ADWARE: ADWARE\n\nTLS fingerprints known to be associated with adware\n - ADWIND: ADWIND\n\nTLS fingerprints known to be associated with adwind\n - DRIDEX: DRIDEX\n\nTLS fingerprints known to be associated with dridex\n - GOOTKIT: GOOTKIT\n\nTLS fingerprints known to be associated with gootkit\n - GOZI: GOZI\n\nTLS fingerprints known to be associated with gozi\n - JBIFROST: JBIFROST\n\nTLS fingerprints known to be associated with jbifrost\n - QUAKBOT: QUAKBOT\n\nTLS fingerprints known to be associated with quakbot\n - RANSOMWARE: RANSOMWARE\n\nTLS fingerprints known to be associated with ransomware\n - TROLDESH: TROLDESH\n\nTLS fingerprints known to be associated with troldesh\n - TOFSEE: TOFSEE\n\nTLS fingerprints known to be associated with tofsee\n - TORRENTLOCKER: TORRENTLOCKER\n\nTLS fingerprints known to be associated with torrentlocker\n - TRICKBOT: TRICKBOT\n\nTLS fingerprints known to be associated with trickbot",
+            "title": "TLS known fingerprint class",
+            "enum": [
+                "TLS_FINGERPRINT_NONE",
+                "ANY_MALICIOUS_FINGERPRINT",
+                "ADWARE",
+                "ADWIND",
+                "DRIDEX",
+                "GOOTKIT",
+                "GOZI",
+                "JBIFROST",
+                "QUAKBOT",
+                "RANSOMWARE",
+                "TROLDESH",
+                "TOFSEE",
+                "TORRENTLOCKER",
+                "TRICKBOT"
+            ],
+            "default": "TLS_FINGERPRINT_NONE",
+            "x-displayname": "TLS known fingerprint class",
+            "x-ves-proto-enum": "ves.io.schema.policy.KnownTlsFingerprintClass"
+        },
+        "policyMatcherType": {
+            "type": "object",
+            "description": "A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set\nof supported match criteria includes a list of exact values and a list of regular expressions.",
+            "title": "MatcherType",
+            "x-displayname": "Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.MatcherType",
+            "properties": {
+                "exact_values": {
+                    "type": "array",
+                    "description": " A list of exact values to match the input against.\n\nExample: - \"['new york', 'london', 'sydney', 'tokyo', 'cairo']\"-",
+                    "title": "exact values",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Exact Values",
+                    "x-ves-example": "['new york', 'london', 'sydney', 'tokyo', 'cairo']"
+                },
+                "regex_values": {
+                    "type": "array",
+                    "description": " A list of regular expressions to match the input against.\n\nExample: - \"['^new .*$', 'san f.*', '.* del .*']\"-",
+                    "title": "regex values",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Regex Values",
+                    "x-ves-example": "['^new .*$', 'san f.*', '.* del .*']"
+                },
+                "transformers": {
+                    "type": "array",
+                    "description": " An ordered list of transformers (starting from index 0) to be applied to the path before matching. \n\nExample: - \"[BASE64_DECODE, LOWER_CASE]-",
+                    "title": "transformers",
+                    "items": {
+                        "$ref": "#/definitions/policyTransformer"
+                    },
+                    "x-displayname": "Transformers"
+                }
+            }
+        },
+        "policyMatcherTypeBasic": {
+            "type": "object",
+            "description": "A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set\nof supported match criteria includes a list of exact values and a list of regular expressions.",
+            "title": "MatcherTypeBasic",
+            "x-displayname": "Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.MatcherTypeBasic",
+            "properties": {
+                "exact_values": {
+                    "type": "array",
+                    "description": " A list of exact values to match the input against.\n\nExample: - \"['new york', 'london', 'sydney', 'tokyo', 'cairo']\"-",
+                    "title": "exact values",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Exact Values",
+                    "x-ves-example": "['new york', 'london', 'sydney', 'tokyo', 'cairo']"
+                },
+                "regex_values": {
+                    "type": "array",
+                    "description": " A list of regular expressions to match the input against.\n\nExample: - \"['^new .*$', 'san f.*', '.* del .*']\"-",
+                    "title": "regex values",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Regex Values",
+                    "x-ves-example": "['^new .*$', 'san f.*', '.* del .*']"
+                }
+            }
+        },
+        "policyPrefixMatchList": {
+            "type": "object",
+            "description": "List of IPv4 Prefix strings to match against.",
+            "title": "Prefix Match List",
+            "x-displayname": "IP Prefix Match List",
+            "x-ves-proto-message": "ves.io.schema.policy.PrefixMatchList",
+            "properties": {
+                "invert_match": {
+                    "type": "boolean",
+                    "description": " Invert the match result.",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert Match Result"
+                },
+                "ip_prefixes": {
+                    "type": "array",
+                    "description": " List of IPv4 prefix strings.\n\nExample: - \"192.168.20.0/24\"-\nRequired: YES",
+                    "title": "ip prefixes",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IP Prefix List",
+                    "x-ves-example": "192.168.20.0/24",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "policySimpleWafExclusionRule": {
             "type": "object",
             "description": "Simple WAF exclusion rule specifies a simple set of match conditions to be matched to skip a list of WAF rule ids",
@@ -2993,6 +3301,62 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 }
             }
+        },
+        "policyTlsFingerprintMatcherType": {
+            "type": "object",
+            "description": "A TLS fingerprint matcher specifies multiple criteria for matching a TLS fingerprint. The set of supported positve match criteria includes a list of known\nclasses of TLS fingerprints and a list of exact values. The match is considered successful if either of these positive criteria are satisfied and the input\nfingerprint is not one of the excluded values.",
+            "title": "TlsFingerprintMatcherType",
+            "x-displayname": "TLS Fingerprint Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.TlsFingerprintMatcherType",
+            "properties": {
+                "classes": {
+                    "type": "array",
+                    "description": " A list of known classes of TLS fingerprints to match the input TLS JA3 fingerprint against.\n\nExample: - \"['ADWARE', 'TRICKBOT']-",
+                    "title": "classes",
+                    "items": {
+                        "$ref": "#/definitions/policyKnownTlsFingerprintClass"
+                    },
+                    "x-displayname": "TLS fingerprint classes"
+                },
+                "exact_values": {
+                    "type": "array",
+                    "description": " A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against.\n\nExample: - \"['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']-",
+                    "title": "exact values",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Exact Values"
+                },
+                "excluded_values": {
+                    "type": "array",
+                    "description": " A list of TLS JA3 fingerprints to be excluded when matching the input TLS JA3 fingerprint. This can be used to skip known false positives when using one\n or more known TLS fingerprint classes in the enclosing matcher.\n\nExample: - \"['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']-",
+                    "title": "excluded values",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Excluded Values"
+                }
+            }
+        },
+        "policyTransformer": {
+            "type": "string",
+            "description": "Transformers to be applied on the part of the request before matching.\n\n - TRANSFORMER_NONE: transformer none\n\nNo transformers enabled\n - LOWER_CASE: lower case\n\nConvert string to lower case\n - UPPER_CASE: upper case\n\nConvert string to upper case\n - BASE64_DECODE: base64 decode\n\nDecode string assuming base64 encoding\n - NORMALIZE_PATH: normalize path\n\nNormalize URL path so that /a/b/../c will be transformed to /a/c\n - REMOVE_WHITESPACE: remove whitespace\n\nRemove whitespaces\n - URL_DECODE: URL decode\n\nDecode string assuming URL encoding as per rfc1738\n - TRIM_LEFT: trim left\n\nRemove whitespace from the left side of the input string\n - TRIM_RIGHT: trim right\n\nRemove whitespace from the right side of the input string\n - TRIM: trim\n\nRemove whitespace from the both sides of the input string",
+            "title": "Transformer",
+            "enum": [
+                "TRANSFORMER_NONE",
+                "LOWER_CASE",
+                "UPPER_CASE",
+                "BASE64_DECODE",
+                "NORMALIZE_PATH",
+                "REMOVE_WHITESPACE",
+                "URL_DECODE",
+                "TRIM_LEFT",
+                "TRIM_RIGHT",
+                "TRIM"
+            ],
+            "default": "TRANSFORMER_NONE",
+            "x-displayname": "Transformer",
+            "x-ves-proto-enum": "ves.io.schema.policy.Transformer"
         },
         "protobufAny": {
             "type": "object",
@@ -3111,6 +3475,25 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "rate_limiter_policyPolicyList": {
+            "type": "object",
+            "description": "List of rate limiter policies to be applied.",
+            "title": "Rate Limiter Policy List",
+            "x-displayname": "Rate Limiter Policy List",
+            "x-ves-proto-message": "ves.io.schema.views.rate_limiter_policy.PolicyList",
+            "properties": {
+                "policies": {
+                    "type": "array",
+                    "description": " Ordered list of rate limiter policies.\nRequired: YES",
+                    "title": "Rate Limiter Policies",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Rate Limiter Policies",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "routeCookieForHashing": {
             "type": "object",
             "description": "Two types of cookie affinity:\n\n1. Passive. Takes a cookie that's present in the cookies header and\n   hashes on its value.\n\n2. Generated. Generates and sets a cookie with an expiration (TTL)\n   on the first request from the client in its response to the client,\n   based on the endpoint the request gets sent to. The client then\n   presents this on the next and all subsequent requests. The hash of\n   this is sufficient to ensure these requests get sent to the same\n   endpoint. The cookie is generated by hashing the source and\n   destination ports and addresses so that multiple independent HTTP2\n   streams on the same connection will independently receive the same\n   cookie, even if they arrive simultaneously.",
@@ -3223,7 +3606,7 @@ var APISwaggerJSON string = `{
             "title": "RouteRedirect",
             "x-displayname": "Redirect",
             "x-ves-displayorder": "3,1,2,6,7",
-            "x-ves-oneof-field-queryparams": "[\"all_params\",\"remove_all_params\",\"retain_all_params\",\"strip_query_params\"]",
+            "x-ves-oneof-field-query_params": "[\"all_params\",\"remove_all_params\",\"retain_all_params\",\"strip_query_params\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteRedirect",
             "properties": {
                 "all_params": {
@@ -3652,6 +4035,26 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaLabelSelectorType": {
+            "type": "object",
+            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to \na set of other objects(called selectees) based on the value of expresssions. \nA label selector is a label query over a set of resources. An empty label selector matches all objects. \nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression. \nEach string has \",\" seperated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
+            "title": "LabelSelectorType",
+            "x-displayname": "Label Selector",
+            "x-ves-proto-message": "ves.io.schema.LabelSelectorType",
+            "properties": {
+                "expressions": {
+                    "type": "array",
+                    "description": " expressions contains the kubernetes style label expression for selections.\n\nExample: - \"region in (us-west1, us-west2),tier in (staging)\"-\nRequired: YES",
+                    "title": "expressions",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Selector Expression",
+                    "x-ves-example": "region in (us-west1, us-west2),tier in (staging)",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "schemaListMetaType": {
             "type": "object",
             "description": "ListMetaType is metadata that all lists must have.",
@@ -3665,6 +4068,38 @@ var APISwaggerJSON string = `{
                     "title": "resource_version",
                     "x-displayname": "Resource Version",
                     "x-ves-example": "181255"
+                }
+            }
+        },
+        "schemaMessageMetaType": {
+            "type": "object",
+            "description": "MessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
+            "title": "MessageMetaType",
+            "x-displayname": "Message Metadata",
+            "x-ves-proto-message": "ves.io.schema.MessageMetaType",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " Human readable description for the object that corresponds to the containing message.\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "title": "description",
+                    "x-displayname": "Description",
+                    "x-ves-example": "Virtual Host for acmecorp website"
+                },
+                "disable": {
+                    "type": "boolean",
+                    "description": " A value of true will administratively disable the object that corresponds to the containing message.\n\nExample: - \"true\"-",
+                    "title": "disable",
+                    "format": "boolean",
+                    "x-displayname": "Disable",
+                    "x-ves-example": "true"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " This is the name of the message.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -4214,6 +4649,148 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemapolicyHeaderMatcherType": {
+            "type": "object",
+            "description": "A header matcher specifies the name of a single HTTP header and the criteria for the input request to match it. The input has a list of actual values for each\nheader name in the original HTTP request.\nA header matcher can check for one of the following:\n* Presence or absence of the header in the input\n* At least one of the values for the header in the input satisfies the MatcherType item",
+            "title": "HeaderMatcherType",
+            "x-displayname": "Header Matcher",
+            "x-ves-displayorder": "1,6,4",
+            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\",\"presence\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.HeaderMatcherType",
+            "properties": {
+                "check_not_present": {
+                    "description": "Exclusive with [check_present item presence]\nx-displayName: \"Not Present\"\nCheck that the header is not present.",
+                    "title": "check_not_present",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "check_present": {
+                    "description": "Exclusive with [check_not_present item presence]\nx-displayName: \"Present\"\nCheck that the header is present.",
+                    "title": "check_present",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert the match result.",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert Header Matcher"
+                },
+                "item": {
+                    "description": "Exclusive with [check_not_present check_present presence]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
+                    "title": "item",
+                    "$ref": "#/definitions/policyMatcherType"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " A case-insensitive HTTP header name.\n\nExample: - \"Accept-Encoding\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Header Name",
+                    "x-ves-example": "Accept-Encoding",
+                    "x-ves-required": "true"
+                },
+                "presence": {
+                    "type": "boolean",
+                    "description": "Exclusive with [check_not_present check_present item]\nx-displayName: \"Present Or Absent\"\nCheck if the header is present or absent.",
+                    "title": "presence",
+                    "format": "boolean"
+                }
+            }
+        },
+        "schemapolicyPathMatcherType": {
+            "type": "object",
+            "description": "A path matcher specifies multiple criteria for matching an HTTP path string. The match is considered successful if any of the criteria are satisfied. The set\nof supported match criteria includes a list of path prefixes, a list of exact path values and a list of regular expressions.",
+            "title": "PathMatcherType",
+            "x-displayname": "Path Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.PathMatcherType",
+            "properties": {
+                "exact_values": {
+                    "type": "array",
+                    "description": " A list of exact path values to match the input HTTP path against.\n\nExample: - \"['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']\"-",
+                    "title": "exact values",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Exact Values",
+                    "x-ves-example": "['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']"
+                },
+                "prefix_values": {
+                    "type": "array",
+                    "description": " A list of path prefix values to match the input HTTP path against.\n\nExample: - \"['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']\"-",
+                    "title": "prefix values",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Prefix Values",
+                    "x-ves-example": "['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']"
+                },
+                "regex_values": {
+                    "type": "array",
+                    "description": " A list of regular expressions to match the input HTTP path against.\n\nExample: - \"['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']\"-",
+                    "title": "regex values",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Regex Values",
+                    "x-ves-example": "['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']"
+                },
+                "transformers": {
+                    "type": "array",
+                    "description": " An ordered list of transformers (starting from index 0) to be applied to the path before matching. \n\nExample: - \"[BASE64_DECODE, LOWER_CASE]-",
+                    "title": "transformers",
+                    "items": {
+                        "$ref": "#/definitions/policyTransformer"
+                    },
+                    "x-displayname": "Transformers"
+                }
+            }
+        },
+        "schemapolicyQueryParameterMatcherType": {
+            "type": "object",
+            "description": "A query parameter matcher specifies the name of a single query parameter and the criteria for the input request to match it. The input has a list of actual\nvalues for each query parameter name in the original HTTP request.\nA query parameter matcher can check for one of the following:\n* Presence or absence of the query parameter in the input\n* At least one of the values for the query parameter in the input satisfies the MatcherType item",
+            "title": "QueryParameterMatcherType",
+            "x-displayname": "Query Parameter Matcher",
+            "x-ves-displayorder": "1,6,4",
+            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\",\"presence\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.QueryParameterMatcherType",
+            "properties": {
+                "check_not_present": {
+                    "description": "Exclusive with [check_present item presence]\nx-displayName: \"Not Present\"\nCheck that the query parameter is not present.",
+                    "title": "check_not_present",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "check_present": {
+                    "description": "Exclusive with [check_not_present item presence]\nx-displayName: \"Present\"\nCheck that the query parameter is present.",
+                    "title": "check_present",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert the match result.",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert Query Parameter Matcher"
+                },
+                "item": {
+                    "description": "Exclusive with [check_not_present check_present presence]\nx-displayName: \"Match Values\"\nCriteria for matching the values for the given query parameter. The match is successful if any of the values for the query parameter satisfies the\ncriteria in the matcher.",
+                    "title": "item",
+                    "$ref": "#/definitions/policyMatcherType"
+                },
+                "key": {
+                    "type": "string",
+                    "description": " A case-sensitive HTTP query parameter name.\n\nExample: - \"sourceid\"-\nRequired: YES",
+                    "title": "key",
+                    "x-displayname": "Query Parameter Name",
+                    "x-ves-example": "sourceid",
+                    "x-ves-required": "true"
+                },
+                "presence": {
+                    "type": "boolean",
+                    "description": "Exclusive with [check_not_present check_present item]\nx-displayName: \"Present Or Absent\"\nCheck if the query parameter is present or absent.",
+                    "title": "presence",
+                    "format": "boolean"
+                }
+            }
+        },
         "schemaviewsObjectRefType": {
             "type": "object",
             "description": "This type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
@@ -4242,6 +4819,104 @@ var APISwaggerJSON string = `{
                     "title": "tenant",
                     "x-displayname": "Tenant",
                     "x-ves-example": "acmecorp"
+                }
+            }
+        },
+        "service_policy_ruleChallengeRuleSpec": {
+            "type": "object",
+            "description": "A Challenge Rule consists of an unordered list of predicates and an action. The predicates are evaluated against a set of input fields that are extracted from\nor derived from an L7 request API. A request API is considered to match the rule if all predicates in the rule evaluate to true for that request. Any\npredicates that are not specified in a rule are implicitly considered to be true. If a request API matches a challenge rule, the configured challenge is\nenforced.",
+            "title": "Challenge Rule Spec",
+            "x-displayname": "Challenge Rule Specification",
+            "x-ves-oneof-field-challenge_action": "[\"disable_challenge\",\"enable_captcha_challenge\",\"enable_javascript_challenge\"]",
+            "x-ves-oneof-field-client_choice": "[\"any_client\",\"client_name\",\"client_name_matcher\",\"client_selector\"]",
+            "x-ves-proto-message": "ves.io.schema.service_policy_rule.ChallengeRuleSpec",
+            "properties": {
+                "any_client": {
+                    "description": "Exclusive with [client_name client_name_matcher client_selector]\n",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "arg_matchers": {
+                    "type": "array",
+                    "description": " A list of predicates for all POST args that need to be matched. The criteria for matching each arg are described in individual instances\n of ArgMatcherType. The actual arg values are extracted from the request API as a list of strings for each arg selector name.\n Note that all specified arg matcher predicates must evaluate to true.",
+                    "items": {
+                        "$ref": "#/definitions/policyArgMatcherType"
+                    }
+                },
+                "body_matcher": {
+                    "description": " Predicate for matching the request body string. The criteria for matching the request body is described in MatcherType.\n The actual request body value is extracted from the request API as a string.",
+                    "$ref": "#/definitions/policyMatcherType"
+                },
+                "client_name": {
+                    "type": "string",
+                    "description": "Exclusive with [any_client client_name_matcher client_selector]\n"
+                },
+                "client_name_matcher": {
+                    "description": "Exclusive with [any_client client_name client_selector]\n",
+                    "$ref": "#/definitions/policyMatcherType"
+                },
+                "client_selector": {
+                    "description": "Exclusive with [any_client client_name client_name_matcher]\n",
+                    "$ref": "#/definitions/schemaLabelSelectorType"
+                },
+                "cookie_matchers": {
+                    "type": "array",
+                    "description": " A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances\n of CookieMatcherType. The actual cookie values are extracted from the request API as a list of strings for each cookie name.\n Note that all specified cookie matcher predicates must evaluate to true.",
+                    "items": {
+                        "$ref": "#/definitions/policyCookieMatcherType"
+                    }
+                },
+                "disable_challenge": {
+                    "description": "Exclusive with [enable_captcha_challenge enable_javascript_challenge]\nx-displayName: \"Disable challenge\"\nDisable the challenge type selected in PolicyBasedChallenge",
+                    "title": "Disable challenge",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "domain_matcher": {
+                    "description": " A list of exact values and/or regular expressions for the expected name of the domain. The actual value of domain is the host component\n from the URL. The predicate evaluates to true if the domain value matches any of the exact values or regular expressions in the domain\n matcher.",
+                    "$ref": "#/definitions/policyMatcherTypeBasic"
+                },
+                "enable_captcha_challenge": {
+                    "description": "Exclusive with [disable_challenge enable_javascript_challenge]\nx-displayName: \"Enable captcha challenge\"\nEnable captcha challenge",
+                    "title": "Enable captcha challenge",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable_javascript_challenge": {
+                    "description": "Exclusive with [disable_challenge enable_captcha_challenge]\nx-displayName: \"Enable javascript challenge\"\nEnable javascript challenge",
+                    "title": "Enable javascript challenge",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "expiration_timestamp": {
+                    "type": "string",
+                    "description": " The expiration_timestamp is the RFC 3339 format timestamp at which the containing rule is considered to be logically expired. The rule continues to exist in\n the configuration but is not applied anymore.\n\nExample: - \"2019-12-31:44:34.171543432Z\"-",
+                    "format": "date-time"
+                },
+                "headers": {
+                    "type": "array",
+                    "description": " A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType\n instances. The actual HTTP header values are extracted from the request API as a list of strings for each HTTP header type.\n Note that all specified header predicates must evaluate to true.",
+                    "items": {
+                        "$ref": "#/definitions/schemapolicyHeaderMatcherType"
+                    }
+                },
+                "http_method": {
+                    "description": " The list of expected values for the HTTP method in the request API. The actual value of the HTTP method is extracted from the HTTP request.\n The predicate evaluates to true if the actual HTTP method belongs is present in the list of expected values.",
+                    "$ref": "#/definitions/policyHttpMethodMatcherType"
+                },
+                "ip_prefix_list": {
+                    "$ref": "#/definitions/policyPrefixMatchList"
+                },
+                "path": {
+                    "description": " A list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\n value extracted from the HTTP URL Resource, excluding any query and fragment information.\n The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",
+                    "$ref": "#/definitions/schemapolicyPathMatcherType"
+                },
+                "query_params": {
+                    "type": "array",
+                    "description": " A list of predicates for all query parameters that need to be matched. The criteria for matching each query parameter are described in individual instances\n of QueryParameterMatcherType. The actual query parameter values are extracted from the request API as a list of strings for each query parameter name.\n Note that all specified query parameter predicates must evaluate to true.",
+                    "items": {
+                        "$ref": "#/definitions/schemapolicyQueryParameterMatcherType"
+                    }
+                },
+                "tls_fingerprint_matcher": {
+                    "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
+                    "$ref": "#/definitions/policyTlsFingerprintMatcherType"
                 }
             }
         },
@@ -4354,14 +5029,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\nRequired: YES",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-",
                     "title": "ipv4 prefix list",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefix List",
-                    "x-ves-example": "192.168.20.0/24",
-                    "x-ves-required": "true"
+                    "x-ves-example": "192.168.20.0/24"
                 }
             }
         },
@@ -4564,9 +5238,9 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
-            "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
+            "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"cookie_stickiness\",\"least_active\",\"random\",\"ring_hash\",\"round_robin\",\"source_ip_stickiness\"]",
-            "x-ves-oneof-field-hostrewriteparams": "[\"auto_host_rewrite\",\"disable_host_rewrite\",\"host_rewrite\"]",
+            "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"disable_host_rewrite\",\"host_rewrite\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"http\",\"https\",\"https_auto_cert\"]",
             "x-ves-oneof-field-rate_limit_choice": "[\"disable_rate_limit\",\"rate_limit\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
@@ -4628,7 +5302,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Client Blacklisting Rules"
                 },
                 "captcha_challenge": {
-                    "description": "Exclusive with [js_challenge no_challenge]\nx-displayName: \"Captcha Challenge\"\nConfigure Captcha challenge on this load balancer",
+                    "description": "Exclusive with [js_challenge no_challenge policy_based_challenge]\nx-displayName: \"Captcha Challenge\"\nConfigure Captcha challenge on this load balancer",
                     "title": "Captcha Challenge",
                     "$ref": "#/definitions/virtual_hostCaptchaChallengeType"
                 },
@@ -4720,7 +5394,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttpsAutoCerts"
                 },
                 "js_challenge": {
-                    "description": "Exclusive with [captcha_challenge no_challenge]\nx-displayName: \"Javascript Challenge\"\nConfigure Javascript challenge on this load balancer",
+                    "description": "Exclusive with [captcha_challenge no_challenge policy_based_challenge]\nx-displayName: \"Javascript Challenge\"\nConfigure Javascript challenge on this load balancer",
                     "title": "Javascript Challenge",
                     "$ref": "#/definitions/virtual_hostJavascriptChallengeType"
                 },
@@ -4742,7 +5416,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "More Options"
                 },
                 "no_challenge": {
-                    "description": "Exclusive with [captcha_challenge js_challenge]\nx-displayName: \"No Challenge\"\nNo challenge is enabled for this load balancer",
+                    "description": "Exclusive with [captcha_challenge js_challenge policy_based_challenge]\nx-displayName: \"No Challenge\"\nNo challenge is enabled for this load balancer",
                     "title": "No Challenge",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -4750,6 +5424,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [active_service_policies service_policies_from_namespace]\nx-displayName: \"Do Not Apply Service Policies\"\nDo not apply any service policies i.e. bypass the namespace service policy set",
                     "title": "Do Not Apply Service Policies",
                     "$ref": "#/definitions/schemaEmpty"
+                },
+                "policy_based_challenge": {
+                    "description": "Exclusive with [captcha_challenge js_challenge no_challenge]\nx-displayName: \"Policy Based Challenge\"\nSpecifies the settings for policy rule based challenge",
+                    "title": "policy based challenge",
+                    "$ref": "#/definitions/viewshttp_loadbalancerPolicyBasedChallenge"
                 },
                 "random": {
                     "description": "Exclusive with [cookie_stickiness least_active ring_hash round_robin source_ip_stickiness]\nx-displayName: \"Random\"\nRequest are sent to all eligible origin servers in random fashion",
@@ -4824,7 +5503,7 @@ var APISwaggerJSON string = `{
                 },
                 "waf_exclusion_rules": {
                     "type": "array",
-                    "description": " Rules that specify the match conditions and the corresponding WAF_RULE_IDs which should be excluded from WAF evaluation ",
+                    "description": " Rules that specify the match conditions and the corresponding WAF_RULE_IDs which should be excluded from WAF evaluation",
                     "title": "WAF Exclusion Rules",
                     "items": {
                         "$ref": "#/definitions/policySimpleWafExclusionRule"
@@ -4858,6 +5537,81 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaFractionalPercent",
                     "x-displayname": "Mirror Percentage",
                     "x-ves-required": "true"
+                }
+            }
+        },
+        "viewshttp_loadbalancerPolicyBasedChallenge": {
+            "type": "object",
+            "description": "Specifies the settings for policy rule based challenge",
+            "title": "policy based challenge",
+            "x-displayname": "Policy Based Challenge",
+            "x-ves-oneof-field-captcha_challenge_parameters_choice": "[\"captcha_challenge_parameters\",\"default_captcha_challenge_parameters\"]",
+            "x-ves-oneof-field-enable_choice": "[\"always_enable_captcha\",\"always_enable_js_challenge\",\"rule_based_challenge\"]",
+            "x-ves-oneof-field-js_challenge_parameters_choice": "[\"default_js_challenge_parameters\",\"js_challenge_parameters\"]",
+            "x-ves-oneof-field-malicious_user_mitigation_choice": "[\"default_mitigation_settings\",\"malicious_user_mitigation\"]",
+            "x-ves-oneof-field-temporary_blocking_parameters_choice": "[\"default_temporary_blocking_parameters\",\"temporary_user_blocking\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.PolicyBasedChallenge",
+            "properties": {
+                "always_enable_captcha": {
+                    "description": "Exclusive with [always_enable_js_challenge rule_based_challenge]\nx-displayName: \"Always enable captcha challenge\"\nWhen selected, enables captcha challenge for all requests.\nPolicy rules can be used to disable the challenge for subset of requests that match the conditions specified in the rules.",
+                    "title": "always enable captcha challenge",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "always_enable_js_challenge": {
+                    "description": "Exclusive with [always_enable_captcha rule_based_challenge]\nx-displayName: \"Always enable JS challenge\"\nWhen selected, enables JS challenge for all requests.\nPolicy rules can be used to disable the challenge for subset of requests that match the conditions specified in the rules.",
+                    "title": "always enable JS challenge",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "captcha_challenge_parameters": {
+                    "description": "Exclusive with [default_captcha_challenge_parameters]\nx-displayName: \"Captcha Challenge Parameters\"\nConfigure captcha challenge parameters",
+                    "title": "Captcha Challenge",
+                    "$ref": "#/definitions/virtual_hostCaptchaChallengeType"
+                },
+                "default_captcha_challenge_parameters": {
+                    "description": "Exclusive with [captcha_challenge_parameters]\nx-displayName: \"Use Default Parameters\"\nUse default parameters",
+                    "title": "default parameters",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "default_js_challenge_parameters": {
+                    "description": "Exclusive with [js_challenge_parameters]\nx-displayName: \"Use Default Parameters\"\nUse default parameters",
+                    "title": "default parameters",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "default_mitigation_settings": {
+                    "description": "Exclusive with [malicious_user_mitigation]\nx-displayName: \"Use Default Parameters\"\nUse default parameters",
+                    "title": "default parameters",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "default_temporary_blocking_parameters": {
+                    "description": "Exclusive with [temporary_user_blocking]\nx-displayName: \"Use Default Parameters\"\nUse default parameters",
+                    "title": "default parameters",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "js_challenge_parameters": {
+                    "description": "Exclusive with [default_js_challenge_parameters]\nx-displayName: \"Javascript Challenge Parameters\"\nConfigure Javascript challenge parameters",
+                    "title": "Javascript Challenge",
+                    "$ref": "#/definitions/virtual_hostJavascriptChallengeType"
+                },
+                "malicious_user_mitigation": {
+                    "description": "Exclusive with [default_mitigation_settings]\nx-displayName: \"Malicious User Mitigation\"\nSettings that specify the actions to be taken when malicious users are determined to be at different threat levels.\nUser's activity is monitored and continuously analyzed for malicious behavior. From this analysis, a threat level is assigned to each user.\nThe settings defined in malicious user mitigation specify what mitigation actions to take for users determined to be at different threat levels.",
+                    "title": "Malicious User Mitigation",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "rule_based_challenge": {
+                    "description": "Exclusive with [always_enable_captcha always_enable_js_challenge]\nx-displayName: \"Rule based challenge\"\nEnables rule based challenge. When selected, the match conditions and challenge type to be launched is determined using a policy rule.",
+                    "title": "rule based challenge",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "rule_list": {
+                    "description": " list challenge rules to be used in policy based challenge",
+                    "title": "Challenge rule list",
+                    "$ref": "#/definitions/http_loadbalancerChallengeRuleList",
+                    "x-displayname": "Challenge rule list"
+                },
+                "temporary_user_blocking": {
+                    "description": "Exclusive with [default_temporary_blocking_parameters]\nx-displayName: \"Temporary User Blocking Parameters\"\nSpecifies configuration for temporary user blocking resulting from malicious user detection",
+                    "title": "Temporary User Blocking",
+                    "$ref": "#/definitions/virtual_hostTemporaryUserBlockingType"
                 }
             }
         },
@@ -5093,6 +5847,22 @@ var APISwaggerJSON string = `{
                     "title": "js_script_delay",
                     "format": "int64",
                     "x-displayname": "Javascript Delay"
+                }
+            }
+        },
+        "virtual_hostTemporaryUserBlockingType": {
+            "type": "object",
+            "description": "\nSpecifies configuration for temporary user blocking resulting from user behavior analysis.\n\nWhen Malicious User Mitigation is enabled from service policy rules, users' accessing the application will be analyzed for \nmalicious activity and the configured mitigation actions will be taken on identified malicious users.\nThese mitigation actions include setting up temporary blocking on that user. \nThis configuration specifies settings on how that blocking should be done by the loadbalancer.",
+            "title": "TemporaryUserBlockingType",
+            "x-displayname": "Temporary User Blocking",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.TemporaryUserBlockingType",
+            "properties": {
+                "custom_page": {
+                    "type": "string",
+                    "description": " Custom message is of type -uri_ref-. Currently supported URL schemes is -string:///-.\n For -string:///- scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Blocked..\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Blocked \u003c/p\u003e\". Base64 encoded string for this html is \"PHA+IFBsZWFzZSBXYWl0IDwvcD4=\"\n\nExample: - \"string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4=\"-",
+                    "title": "custom_page",
+                    "x-displayname": "Custom Message for Temporary Blocking",
+                    "x-ves-example": "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
                 }
             }
         },

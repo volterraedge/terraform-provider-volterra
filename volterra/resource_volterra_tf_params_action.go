@@ -237,6 +237,12 @@ func resourceVolterraTFParamsRunActionDelete(d *schema.ResourceData, meta interf
 	if err != nil {
 		return fmt.Errorf("Error Running terraform parameter action struct: %s", err)
 	}
+	if actionParams.waitForAction {
+		if _, err := waitForActionToComplete(client, "destroy",
+			actionParams.siteName, actionParams.siteKind); err != nil {
+			return err
+		}
+	}
 	d.SetId("")
 	return nil
 }

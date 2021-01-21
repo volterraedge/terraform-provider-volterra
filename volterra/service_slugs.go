@@ -81,6 +81,7 @@ var (
 		"ves.io.schema.user.Object":                                          "web",
 		"ves.io.schema.views.aws_vpc_site.Object":                            "config",
 		"ves.io.schema.views.aws_tgw_site.Object":                            "config",
+		"ves.io.schema.views.aws_tgw_site.CustomAPI.SetTGWInfo":              "config",
 		"ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPCIpPrefixes":        "config",
 		"ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPNTunnels":           "config",
 		"ves.io.schema.views.azure_vnet_site.Object":                         "config",

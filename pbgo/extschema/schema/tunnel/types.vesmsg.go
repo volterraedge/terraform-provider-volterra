@@ -1147,10 +1147,10 @@ func (v *ValidateLocalIpAddressSelector) Validate(ctx context.Context, pm interf
 
 	switch m.GetType().(type) {
 	case *LocalIpAddressSelector_Intf:
-		if fv, exists := v.FldValidators["Type.intf"]; exists {
+		if fv, exists := v.FldValidators["type.intf"]; exists {
 			val := m.GetType().(*LocalIpAddressSelector_Intf).Intf
 			vOpts := append(opts,
-				db.WithValidateField("Type"),
+				db.WithValidateField("type"),
 				db.WithValidateField("intf"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -1158,10 +1158,10 @@ func (v *ValidateLocalIpAddressSelector) Validate(ctx context.Context, pm interf
 			}
 		}
 	case *LocalIpAddressSelector_IpAddress:
-		if fv, exists := v.FldValidators["Type.ip_address"]; exists {
+		if fv, exists := v.FldValidators["type.ip_address"]; exists {
 			val := m.GetType().(*LocalIpAddressSelector_IpAddress).IpAddress
 			vOpts := append(opts,
-				db.WithValidateField("Type"),
+				db.WithValidateField("type"),
 				db.WithValidateField("ip_address"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -1178,8 +1178,8 @@ func (v *ValidateLocalIpAddressSelector) Validate(ctx context.Context, pm interf
 var DefaultLocalIpAddressSelectorValidator = func() *ValidateLocalIpAddressSelector {
 	v := &ValidateLocalIpAddressSelector{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["Type.intf"] = InterfaceTypeValidator().Validate
-	v.FldValidators["Type.ip_address"] = LocalIpAddressTypeValidator().Validate
+	v.FldValidators["type.intf"] = InterfaceTypeValidator().Validate
+	v.FldValidators["type.ip_address"] = LocalIpAddressTypeValidator().Validate
 
 	return v
 }()
@@ -1266,10 +1266,10 @@ func (v *ValidateLocalIpAddressType) Validate(ctx context.Context, pm interface{
 
 	switch m.GetType().(type) {
 	case *LocalIpAddressType_IpAddress:
-		if fv, exists := v.FldValidators["Type.ip_address"]; exists {
+		if fv, exists := v.FldValidators["type.ip_address"]; exists {
 			val := m.GetType().(*LocalIpAddressType_IpAddress).IpAddress
 			vOpts := append(opts,
-				db.WithValidateField("Type"),
+				db.WithValidateField("type"),
 				db.WithValidateField("ip_address"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -1277,10 +1277,10 @@ func (v *ValidateLocalIpAddressType) Validate(ctx context.Context, pm interface{
 			}
 		}
 	case *LocalIpAddressType_Auto:
-		if fv, exists := v.FldValidators["Type.auto"]; exists {
+		if fv, exists := v.FldValidators["type.auto"]; exists {
 			val := m.GetType().(*LocalIpAddressType_Auto).Auto
 			vOpts := append(opts,
-				db.WithValidateField("Type"),
+				db.WithValidateField("type"),
 				db.WithValidateField("auto"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -1318,13 +1318,13 @@ var DefaultLocalIpAddressTypeValidator = func() *ValidateLocalIpAddressType {
 	rulesTypeIpAddress := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFnMap["Type.ip_address"], err = vrhTypeIpAddress(rulesTypeIpAddress)
+	vFnMap["type.ip_address"], err = vrhTypeIpAddress(rulesTypeIpAddress)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field LocalIpAddressType.Type_ip_address: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field LocalIpAddressType.type_ip_address: %s", err)
 		panic(errMsg)
 	}
 
-	v.FldValidators["Type.ip_address"] = vFnMap["Type.ip_address"]
+	v.FldValidators["type.ip_address"] = vFnMap["type.ip_address"]
 
 	vrhVirtualNetworkType := v.VirtualNetworkTypeValidationRuleHandler
 	rulesVirtualNetworkType := map[string]string{
@@ -1539,10 +1539,10 @@ func (v *ValidateRemoteIpAddressSelector) Validate(ctx context.Context, pm inter
 
 	switch m.GetType().(type) {
 	case *RemoteIpAddressSelector_Ip:
-		if fv, exists := v.FldValidators["Type.ip"]; exists {
+		if fv, exists := v.FldValidators["type.ip"]; exists {
 			val := m.GetType().(*RemoteIpAddressSelector_Ip).Ip
 			vOpts := append(opts,
-				db.WithValidateField("Type"),
+				db.WithValidateField("type"),
 				db.WithValidateField("ip"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -1550,10 +1550,10 @@ func (v *ValidateRemoteIpAddressSelector) Validate(ctx context.Context, pm inter
 			}
 		}
 	case *RemoteIpAddressSelector_Endpoints:
-		if fv, exists := v.FldValidators["Type.endpoints"]; exists {
+		if fv, exists := v.FldValidators["type.endpoints"]; exists {
 			val := m.GetType().(*RemoteIpAddressSelector_Endpoints).Endpoints
 			vOpts := append(opts,
-				db.WithValidateField("Type"),
+				db.WithValidateField("type"),
 				db.WithValidateField("endpoints"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -1570,8 +1570,8 @@ func (v *ValidateRemoteIpAddressSelector) Validate(ctx context.Context, pm inter
 var DefaultRemoteIpAddressSelectorValidator = func() *ValidateRemoteIpAddressSelector {
 	v := &ValidateRemoteIpAddressSelector{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["Type.ip"] = ves_io_schema.IpAddressTypeValidator().Validate
-	v.FldValidators["Type.endpoints"] = RemoteEndpointTypeValidator().Validate
+	v.FldValidators["type.ip"] = ves_io_schema.IpAddressTypeValidator().Validate
+	v.FldValidators["type.endpoints"] = RemoteEndpointTypeValidator().Validate
 
 	return v
 }()
@@ -1978,10 +1978,10 @@ func (v *ValidateTunnelParams) Validate(ctx context.Context, pm interface{}, opt
 
 	switch m.GetType().(type) {
 	case *TunnelParams_Ipsec:
-		if fv, exists := v.FldValidators["Type.ipsec"]; exists {
+		if fv, exists := v.FldValidators["type.ipsec"]; exists {
 			val := m.GetType().(*TunnelParams_Ipsec).Ipsec
 			vOpts := append(opts,
-				db.WithValidateField("Type"),
+				db.WithValidateField("type"),
 				db.WithValidateField("ipsec"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -1998,7 +1998,7 @@ func (v *ValidateTunnelParams) Validate(ctx context.Context, pm interface{}, opt
 var DefaultTunnelParamsValidator = func() *ValidateTunnelParams {
 	v := &ValidateTunnelParams{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["Type.ipsec"] = IpsecTunnelParamsValidator().Validate
+	v.FldValidators["type.ipsec"] = IpsecTunnelParamsValidator().Validate
 
 	return v
 }()

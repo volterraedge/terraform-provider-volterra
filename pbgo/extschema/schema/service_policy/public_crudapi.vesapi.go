@@ -494,8 +494,8 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		namespace = rReq.Metadata.Namespace
-		name = rReq.Metadata.Name
+		namespace = rReq.GetMetadata().GetNamespace()
+		name = rReq.GetMetadata().GetName()
 	} else {
 		jsn = cco.ReplaceJSONReq
 		reqMap := make(map[string]interface{})
@@ -1116,8 +1116,11 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.service_policy.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.service_policy.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1169,8 +1172,11 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.service_policy.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.service_policy.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1287,8 +1293,11 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.service_policy.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.service_policy.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -1302,6 +1311,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	tenant := server.TenantFromContext(ctx)
 	key := fmt.Sprintf("%s/%s/%s", tenant, req.GetNamespace(), req.GetName())
 	rsrcReq := &server.ResourceDeleteRequest{Key: key}
+	rsrcReq.FailIfReferred = req.FailIfReferred
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
@@ -2061,6 +2071,14 @@ var APISwaggerJSON string = `{
                         "in": "path",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service_policyDeleteRequest"
+                        }
                     }
                 ],
                 "tags": [
@@ -2292,15 +2310,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "as_numbers": {
                     "type": "array",
-                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\nRequired: YES",
+                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-",
                     "title": "as numbers",
                     "items": {
                         "type": "integer",
                         "format": "int64"
                     },
                     "x-displayname": "AS Numbers",
-                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]",
-                    "x-ves-required": "true"
+                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]"
                 }
             }
         },
@@ -2322,6 +2339,20 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 }
             }
+        },
+        "policyChallengeAction": {
+            "type": "string",
+            "description": "The challenge options to use when a policy based challenge is configured.\n\n - NO_CHALLENGE: NO_CHALLENGE\n\nNo challenge.\n - ENABLE_JAVASCRIPT_CHALLENGE: ENABLE_JAVASCRIPT_CHALLENGE\n\nEnable javascript challenge.\n - ENABLE_CAPTCHA_CHALLENGE: ENABLE_CAPTCHA_CHALLENGE\n\nCaptcha challenge.\n - DISABLE_CHALLENGE: DISABLE_CHALLENGE\n\nDisable challenge",
+            "title": "Challenge Action",
+            "enum": [
+                "NO_CHALLENGE",
+                "ENABLE_JAVASCRIPT_CHALLENGE",
+                "ENABLE_CAPTCHA_CHALLENGE",
+                "DISABLE_CHALLENGE"
+            ],
+            "default": "NO_CHALLENGE",
+            "x-displayname": "Challenge Action",
+            "x-ves-proto-enum": "ves.io.schema.policy.ChallengeAction"
         },
         "policyCookieMatcherType": {
             "type": "object",
@@ -2372,12 +2403,263 @@ var APISwaggerJSON string = `{
         },
         "policyCountryCode": {
             "type": "string",
-            "description": "ISO 3166 Aplpha-2 country codes\nNote that we use the numeric code from ISO 3166 as the value\nTBD enumerate all country codes here\n\nNone\nAfghanistan\nAlbania",
+            "description": "ISO 3166 Aplpha-2 country codes\n",
             "title": "CountryCode",
             "enum": [
                 "COUNTRY_NONE",
+                "COUNTRY_AD",
+                "COUNTRY_AE",
                 "COUNTRY_AF",
-                "COUNTRY_AL"
+                "COUNTRY_AG",
+                "COUNTRY_AI",
+                "COUNTRY_AL",
+                "COUNTRY_AM",
+                "COUNTRY_AN",
+                "COUNTRY_AO",
+                "COUNTRY_AQ",
+                "COUNTRY_AR",
+                "COUNTRY_AS",
+                "COUNTRY_AT",
+                "COUNTRY_AU",
+                "COUNTRY_AW",
+                "COUNTRY_AX",
+                "COUNTRY_AZ",
+                "COUNTRY_BA",
+                "COUNTRY_BB",
+                "COUNTRY_BD",
+                "COUNTRY_BE",
+                "COUNTRY_BF",
+                "COUNTRY_BG",
+                "COUNTRY_BH",
+                "COUNTRY_BI",
+                "COUNTRY_BJ",
+                "COUNTRY_BL",
+                "COUNTRY_BM",
+                "COUNTRY_BN",
+                "COUNTRY_BO",
+                "COUNTRY_BQ",
+                "COUNTRY_BR",
+                "COUNTRY_BS",
+                "COUNTRY_BT",
+                "COUNTRY_BV",
+                "COUNTRY_BW",
+                "COUNTRY_BY",
+                "COUNTRY_BZ",
+                "COUNTRY_CA",
+                "COUNTRY_CC",
+                "COUNTRY_CD",
+                "COUNTRY_CF",
+                "COUNTRY_CG",
+                "COUNTRY_CH",
+                "COUNTRY_CI",
+                "COUNTRY_CK",
+                "COUNTRY_CL",
+                "COUNTRY_CM",
+                "COUNTRY_CN",
+                "COUNTRY_CO",
+                "COUNTRY_CR",
+                "COUNTRY_CS",
+                "COUNTRY_CU",
+                "COUNTRY_CV",
+                "COUNTRY_CW",
+                "COUNTRY_CX",
+                "COUNTRY_CY",
+                "COUNTRY_CZ",
+                "COUNTRY_DE",
+                "COUNTRY_DJ",
+                "COUNTRY_DK",
+                "COUNTRY_DM",
+                "COUNTRY_DO",
+                "COUNTRY_DZ",
+                "COUNTRY_EC",
+                "COUNTRY_EE",
+                "COUNTRY_EG",
+                "COUNTRY_EH",
+                "COUNTRY_ER",
+                "COUNTRY_ES",
+                "COUNTRY_ET",
+                "COUNTRY_FI",
+                "COUNTRY_FJ",
+                "COUNTRY_FK",
+                "COUNTRY_FM",
+                "COUNTRY_FO",
+                "COUNTRY_FR",
+                "COUNTRY_GA",
+                "COUNTRY_GB",
+                "COUNTRY_GD",
+                "COUNTRY_GE",
+                "COUNTRY_GF",
+                "COUNTRY_GG",
+                "COUNTRY_GH",
+                "COUNTRY_GI",
+                "COUNTRY_GL",
+                "COUNTRY_GM",
+                "COUNTRY_GN",
+                "COUNTRY_GP",
+                "COUNTRY_GQ",
+                "COUNTRY_GR",
+                "COUNTRY_GS",
+                "COUNTRY_GT",
+                "COUNTRY_GU",
+                "COUNTRY_GW",
+                "COUNTRY_GY",
+                "COUNTRY_HK",
+                "COUNTRY_HM",
+                "COUNTRY_HN",
+                "COUNTRY_HR",
+                "COUNTRY_HT",
+                "COUNTRY_HU",
+                "COUNTRY_ID",
+                "COUNTRY_IE",
+                "COUNTRY_IL",
+                "COUNTRY_IM",
+                "COUNTRY_IN",
+                "COUNTRY_IO",
+                "COUNTRY_IQ",
+                "COUNTRY_IR",
+                "COUNTRY_IS",
+                "COUNTRY_IT",
+                "COUNTRY_JE",
+                "COUNTRY_JM",
+                "COUNTRY_JO",
+                "COUNTRY_JP",
+                "COUNTRY_KE",
+                "COUNTRY_KG",
+                "COUNTRY_KH",
+                "COUNTRY_KI",
+                "COUNTRY_KM",
+                "COUNTRY_KN",
+                "COUNTRY_KP",
+                "COUNTRY_KR",
+                "COUNTRY_KW",
+                "COUNTRY_KY",
+                "COUNTRY_KZ",
+                "COUNTRY_LA",
+                "COUNTRY_LB",
+                "COUNTRY_LC",
+                "COUNTRY_LI",
+                "COUNTRY_LK",
+                "COUNTRY_LR",
+                "COUNTRY_LS",
+                "COUNTRY_LT",
+                "COUNTRY_LU",
+                "COUNTRY_LV",
+                "COUNTRY_LY",
+                "COUNTRY_MA",
+                "COUNTRY_MC",
+                "COUNTRY_MD",
+                "COUNTRY_ME",
+                "COUNTRY_MF",
+                "COUNTRY_MG",
+                "COUNTRY_MH",
+                "COUNTRY_MK",
+                "COUNTRY_ML",
+                "COUNTRY_MM",
+                "COUNTRY_MN",
+                "COUNTRY_MO",
+                "COUNTRY_MP",
+                "COUNTRY_MQ",
+                "COUNTRY_MR",
+                "COUNTRY_MS",
+                "COUNTRY_MT",
+                "COUNTRY_MU",
+                "COUNTRY_MV",
+                "COUNTRY_MW",
+                "COUNTRY_MX",
+                "COUNTRY_MY",
+                "COUNTRY_MZ",
+                "COUNTRY_NA",
+                "COUNTRY_NC",
+                "COUNTRY_NE",
+                "COUNTRY_NF",
+                "COUNTRY_NG",
+                "COUNTRY_NI",
+                "COUNTRY_NL",
+                "COUNTRY_NO",
+                "COUNTRY_NP",
+                "COUNTRY_NR",
+                "COUNTRY_NU",
+                "COUNTRY_NZ",
+                "COUNTRY_OM",
+                "COUNTRY_PA",
+                "COUNTRY_PE",
+                "COUNTRY_PF",
+                "COUNTRY_PG",
+                "COUNTRY_PH",
+                "COUNTRY_PK",
+                "COUNTRY_PL",
+                "COUNTRY_PM",
+                "COUNTRY_PN",
+                "COUNTRY_PR",
+                "COUNTRY_PS",
+                "COUNTRY_PT",
+                "COUNTRY_PW",
+                "COUNTRY_PY",
+                "COUNTRY_QA",
+                "COUNTRY_RE",
+                "COUNTRY_RO",
+                "COUNTRY_RS",
+                "COUNTRY_RU",
+                "COUNTRY_RW",
+                "COUNTRY_SA",
+                "COUNTRY_SB",
+                "COUNTRY_SC",
+                "COUNTRY_SD",
+                "COUNTRY_SE",
+                "COUNTRY_SG",
+                "COUNTRY_SH",
+                "COUNTRY_SI",
+                "COUNTRY_SJ",
+                "COUNTRY_SK",
+                "COUNTRY_SL",
+                "COUNTRY_SM",
+                "COUNTRY_SN",
+                "COUNTRY_SO",
+                "COUNTRY_SR",
+                "COUNTRY_SS",
+                "COUNTRY_ST",
+                "COUNTRY_SV",
+                "COUNTRY_SX",
+                "COUNTRY_SY",
+                "COUNTRY_SZ",
+                "COUNTRY_TC",
+                "COUNTRY_TD",
+                "COUNTRY_TF",
+                "COUNTRY_TG",
+                "COUNTRY_TH",
+                "COUNTRY_TJ",
+                "COUNTRY_TK",
+                "COUNTRY_TL",
+                "COUNTRY_TM",
+                "COUNTRY_TN",
+                "COUNTRY_TO",
+                "COUNTRY_TR",
+                "COUNTRY_TT",
+                "COUNTRY_TV",
+                "COUNTRY_TW",
+                "COUNTRY_TZ",
+                "COUNTRY_UA",
+                "COUNTRY_UG",
+                "COUNTRY_UM",
+                "COUNTRY_US",
+                "COUNTRY_UY",
+                "COUNTRY_UZ",
+                "COUNTRY_VA",
+                "COUNTRY_VC",
+                "COUNTRY_VE",
+                "COUNTRY_VG",
+                "COUNTRY_VI",
+                "COUNTRY_VN",
+                "COUNTRY_VU",
+                "COUNTRY_WF",
+                "COUNTRY_WS",
+                "COUNTRY_XK",
+                "COUNTRY_XT",
+                "COUNTRY_YE",
+                "COUNTRY_YT",
+                "COUNTRY_ZA",
+                "COUNTRY_ZM",
+                "COUNTRY_ZW"
             ],
             "default": "COUNTRY_NONE",
             "x-displayname": "Country Code",
@@ -2648,13 +2930,14 @@ var APISwaggerJSON string = `{
         },
         "policyRuleAction": {
             "type": "string",
-            "description": "The rule action determines the disposition of the input request API. If a policy matches a rule with an ALLOW action, the processing of the request proceeds\nforward. If it matches a rule with a DENY action, the processing of the request is terminated and an appropriate message/code returned to the originator. If\nit matches a rule with a NEXT_POLICY_SET action, evaluation of the current policy set terminates and evaluation of the next policy set in the chain begins.\n\n - DENY: DENY\n\nDeny the request.\n - ALLOW: ALLOW\n\nAllow the request to proceed.\n - NEXT_POLICY_SET: NEXT_POLICY_SET\n\nTerminate evaluation of the current policy set and begin evaluating the next policy set in the chain. Note that the evaluation of any remaining policies\nin the current policy set is skipped.\n - NEXT_POLICY: NEXT_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the next policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.",
+            "description": "The rule action determines the disposition of the input request API. If a policy matches a rule with an ALLOW action, the processing of the request proceeds\nforward. If it matches a rule with a DENY action, the processing of the request is terminated and an appropriate message/code returned to the originator. If\nit matches a rule with a NEXT_POLICY_SET action, evaluation of the current policy set terminates and evaluation of the next policy set in the chain begins.\n\n - DENY: DENY\n\nDeny the request.\n - ALLOW: ALLOW\n\nAllow the request to proceed.\n - NEXT_POLICY_SET: NEXT_POLICY_SET\n\nTerminate evaluation of the current policy set and begin evaluating the next policy set in the chain. Note that the evaluation of any remaining policies\nin the current policy set is skipped.\n - NEXT_POLICY: NEXT_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the next policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.\n - LAST_POLICY: LAST_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the last policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.",
             "title": "Rule Action",
             "enum": [
                 "DENY",
                 "ALLOW",
                 "NEXT_POLICY_SET",
-                "NEXT_POLICY"
+                "NEXT_POLICY",
+                "LAST_POLICY"
             ],
             "default": "DENY",
             "x-displayname": "Rule Action",
@@ -2824,26 +3107,31 @@ var APISwaggerJSON string = `{
             "description": "Modify App Firewall behavior for a matching request. The modification could either be to entirely skip firewall processing or to customize the firewall rules\nto be applied as defined by App Firewall Rule Control settings.",
             "title": "App Firewall Action",
             "x-displayname": "App Firewall Action",
-            "x-ves-oneof-field-action_type": "[\"none\",\"waf_inline_rule_control\",\"waf_rule_control\",\"waf_skip_processing\"]",
+            "x-ves-oneof-field-action_type": "[\"none\",\"waf_in_monitoring_mode\",\"waf_inline_rule_control\",\"waf_rule_control\",\"waf_skip_processing\"]",
             "x-ves-proto-message": "ves.io.schema.policy.WafAction",
             "properties": {
                 "none": {
-                    "description": "Exclusive with [waf_inline_rule_control waf_rule_control waf_skip_processing]\nx-displayName: \"Do not modify App Firewall Processing\"\nPerform normal App Firewall processing for this request",
+                    "description": "Exclusive with [waf_in_monitoring_mode waf_inline_rule_control waf_rule_control waf_skip_processing]\nx-displayName: \"Do not modify App Firewall Processing\"\nPerform normal App Firewall processing for this request",
                     "title": "Normal App Firewall Processing",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "waf_in_monitoring_mode": {
+                    "description": "Exclusive with [none waf_inline_rule_control waf_rule_control waf_skip_processing]\nx-displayName: \"Set App Firewall in Monitoring Mode\"\nApp Firewall will run in monitoring mode without blocking the request",
+                    "title": "Set App Firewall in Monitoring Mode",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "waf_inline_rule_control": {
-                    "description": "Exclusive with [none waf_rule_control waf_skip_processing]\nx-displayName: \"App Firewall Rule Control with inline Rule IDs\"\nApp Firewall rule changes to be applied for this request",
+                    "description": "Exclusive with [none waf_in_monitoring_mode waf_rule_control waf_skip_processing]\nx-displayName: \"App Firewall Rule Control with inline Rule IDs\"\nApp Firewall rule changes to be applied for this request",
                     "title": "App Firewall Rule Control with inline Rule IDs",
                     "$ref": "#/definitions/policyWafInlineRuleControl"
                 },
                 "waf_rule_control": {
-                    "description": "Exclusive with [none waf_inline_rule_control waf_skip_processing]\nx-displayName: \"App Firewall Rule Control\"\nApp Firewall rule changes to be applied for this request",
+                    "description": "Exclusive with [none waf_in_monitoring_mode waf_inline_rule_control waf_skip_processing]\nx-displayName: \"App Firewall Rule Control\"\nApp Firewall rule changes to be applied for this request",
                     "title": "App Firewall Rule Control",
                     "$ref": "#/definitions/policyWafRuleControl"
                 },
                 "waf_skip_processing": {
-                    "description": "Exclusive with [none waf_inline_rule_control waf_rule_control]\nx-displayName: \"Skip App Firewall Processing\"\nSkip all App Firewall processing for this request",
+                    "description": "Exclusive with [none waf_in_monitoring_mode waf_inline_rule_control waf_rule_control]\nx-displayName: \"Skip App Firewall Processing\"\nSkip all App Firewall processing for this request",
                     "title": "Skip App Firewall Processing",
                     "$ref": "#/definitions/ioschemaEmpty"
                 }
@@ -2864,6 +3152,13 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/waf_rule_listWafRuleID"
                     },
                     "x-displayname": "Exclude App Firewall Rule IDs"
+                },
+                "monitoring_mode": {
+                    "type": "boolean",
+                    "description": " App Firewall will run in monitoring mode without blocking the request",
+                    "title": "Set App Firewall in Monitoring Mode",
+                    "format": "boolean",
+                    "x-displayname": "Set App Firewall in Monitoring Mode"
                 }
             }
         },
@@ -2882,6 +3177,13 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Exclude App Firewall Rule List"
+                },
+                "monitoring_mode": {
+                    "type": "boolean",
+                    "description": " App Firewall will run in monitoring mode without blocking the request",
+                    "title": "Set App Firewall in Monitoring Mode",
+                    "format": "boolean",
+                    "x-displayname": "Set App Firewall in Monitoring Mode"
                 }
             }
         },
@@ -3082,7 +3384,7 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " This is the name of the message.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "description": " This is the name of the message.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "acmecorp-web",
@@ -3777,7 +4079,7 @@ var APISwaggerJSON string = `{
             "description": "Create service_policy creates a new object in the storage backend for metadata.namespace.",
             "title": "Create service policy",
             "x-displayname": "Create Service Policy",
-            "x-ves-oneof-field-rule_choice": "[\"allow_list\",\"deny_list\",\"legacy_rule_list\",\"rule_list\"]",
+            "x-ves-oneof-field-rule_choice": "[\"allow_list\",\"deny_list\",\"internally_generated\",\"legacy_rule_list\",\"rule_list\"]",
             "x-ves-oneof-field-server_choice": "[\"any_server\",\"server_name\",\"server_name_matcher\",\"server_selector\"]",
             "x-ves-proto-message": "ves.io.schema.service_policy.CreateSpecType",
             "properties": {
@@ -3788,7 +4090,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "allow_list": {
-                    "description": "Exclusive with [deny_list legacy_rule_list rule_list]\n",
+                    "description": "Exclusive with [deny_list internally_generated legacy_rule_list rule_list]\n",
                     "$ref": "#/definitions/service_policySourceList"
                 },
                 "any_server": {
@@ -3796,11 +4098,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "deny_list": {
-                    "description": "Exclusive with [allow_list legacy_rule_list rule_list]\n",
+                    "description": "Exclusive with [allow_list internally_generated legacy_rule_list rule_list]\n",
                     "$ref": "#/definitions/service_policySourceList"
                 },
+                "internally_generated": {
+                    "description": "Exclusive with [allow_list deny_list legacy_rule_list rule_list]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "legacy_rule_list": {
-                    "description": "Exclusive with [allow_list deny_list rule_list]\n",
+                    "description": "Exclusive with [allow_list deny_list internally_generated rule_list]\n",
                     "$ref": "#/definitions/service_policyLegacyRuleList"
                 },
                 "port_matcher": {
@@ -3809,16 +4115,8 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Port Matcher"
                 },
                 "rule_list": {
-                    "description": "Exclusive with [allow_list deny_list legacy_rule_list]\n",
+                    "description": "Exclusive with [allow_list deny_list internally_generated legacy_rule_list]\n",
                     "$ref": "#/definitions/service_policyRuleList"
-                },
-                "rules": {
-                    "type": "array",
-                    "description": " A list of references to service_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.\n TBD mark as hidden + internal after implementation is ready",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Rules"
                 },
                 "server_name": {
                     "type": "string",
@@ -3839,7 +4137,7 @@ var APISwaggerJSON string = `{
             "description": "Get service_policy reads a given object from storage backend for metadata.namespace.",
             "title": "Get service policy",
             "x-displayname": "Get Service Policy",
-            "x-ves-oneof-field-rule_choice": "[\"allow_list\",\"deny_list\",\"legacy_rule_list\",\"rule_list\"]",
+            "x-ves-oneof-field-rule_choice": "[\"allow_list\",\"deny_list\",\"internally_generated\",\"legacy_rule_list\",\"rule_list\"]",
             "x-ves-oneof-field-server_choice": "[\"any_server\",\"server_name\",\"server_name_matcher\",\"server_selector\"]",
             "x-ves-proto-message": "ves.io.schema.service_policy.GetSpecType",
             "properties": {
@@ -3850,7 +4148,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "allow_list": {
-                    "description": "Exclusive with [deny_list legacy_rule_list rule_list]\n",
+                    "description": "Exclusive with [deny_list internally_generated legacy_rule_list rule_list]\n",
                     "$ref": "#/definitions/service_policySourceList"
                 },
                 "any_server": {
@@ -3858,11 +4156,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "deny_list": {
-                    "description": "Exclusive with [allow_list legacy_rule_list rule_list]\n",
+                    "description": "Exclusive with [allow_list internally_generated legacy_rule_list rule_list]\n",
                     "$ref": "#/definitions/service_policySourceList"
                 },
+                "internally_generated": {
+                    "description": "Exclusive with [allow_list deny_list legacy_rule_list rule_list]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "legacy_rule_list": {
-                    "description": "Exclusive with [allow_list deny_list rule_list]\n",
+                    "description": "Exclusive with [allow_list deny_list internally_generated rule_list]\n",
                     "$ref": "#/definitions/service_policyLegacyRuleList"
                 },
                 "port_matcher": {
@@ -3871,7 +4173,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Port Matcher"
                 },
                 "rule_list": {
-                    "description": "Exclusive with [allow_list deny_list legacy_rule_list]\n",
+                    "description": "Exclusive with [allow_list deny_list internally_generated legacy_rule_list]\n",
                     "$ref": "#/definitions/service_policyRuleList"
                 },
                 "rules": {
@@ -3909,7 +4211,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of service_policy in the storage backend.",
             "title": "GlobalSpecType",
             "x-displayname": "Specification",
-            "x-ves-oneof-field-rule_choice": "[\"allow_list\",\"deny_list\",\"legacy_rule_list\",\"rule_list\"]",
+            "x-ves-oneof-field-rule_choice": "[\"allow_list\",\"deny_list\",\"internally_generated\",\"legacy_rule_list\",\"rule_list\"]",
             "x-ves-oneof-field-server_choice": "[\"any_server\",\"server_name\",\"server_name_matcher\",\"server_selector\"]",
             "x-ves-proto-message": "ves.io.schema.service_policy.GlobalSpecType",
             "properties": {
@@ -3921,7 +4223,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "allow_list": {
-                    "description": "Exclusive with [deny_list legacy_rule_list rule_list]\nx-displayName: \"Allowed Sources\"\nList of allowed sources for requests",
+                    "description": "Exclusive with [deny_list internally_generated legacy_rule_list rule_list]\nx-displayName: \"Allowed Sources\"\nList of allowed sources for requests",
                     "title": "allow_list",
                     "$ref": "#/definitions/service_policySourceList"
                 },
@@ -3946,12 +4248,17 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Deny Information"
                 },
                 "deny_list": {
-                    "description": "Exclusive with [allow_list legacy_rule_list rule_list]\nx-displayName: \"Denied Sources\"\nList of denied sources for requests",
+                    "description": "Exclusive with [allow_list internally_generated legacy_rule_list rule_list]\nx-displayName: \"Denied Sources\"\nList of denied sources for requests",
                     "title": "deny_list",
                     "$ref": "#/definitions/service_policySourceList"
                 },
+                "internally_generated": {
+                    "description": "Exclusive with [allow_list deny_list legacy_rule_list rule_list]\nx-displayName: \"Interally Generated\"\nPlaceholder that's used for internally generated service_policy objects to satisy the validation check that rule_choice is non-nil.",
+                    "title": "internally_generated",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "legacy_rule_list": {
-                    "description": "Exclusive with [allow_list deny_list rule_list]\nx-displayName: \"Legacy Rule List\"\nList of references to service_policy_rule objects",
+                    "description": "Exclusive with [allow_list deny_list internally_generated rule_list]\nx-displayName: \"Legacy Rule List\"\nList of references to service_policy_rule objects",
                     "title": "legacy_rule_list",
                     "$ref": "#/definitions/service_policyLegacyRuleList"
                 },
@@ -3968,7 +4275,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Role"
                 },
                 "rule_list": {
-                    "description": "Exclusive with [allow_list deny_list legacy_rule_list]\nx-displayName: \"Custom Rule List\"\nList of custom rules",
+                    "description": "Exclusive with [allow_list deny_list internally_generated legacy_rule_list]\nx-displayName: \"Custom Rule List\"\nList of custom rules",
                     "title": "rule_list",
                     "$ref": "#/definitions/service_policyRuleList"
                 },
@@ -4018,7 +4325,7 @@ var APISwaggerJSON string = `{
             "description": "Replace service_policy replaces an existing object in the storage backend for metadata.namespace.",
             "title": "Replace service policy",
             "x-displayname": "Replace Service Policy",
-            "x-ves-oneof-field-rule_choice": "[\"allow_list\",\"deny_list\",\"legacy_rule_list\",\"rule_list\"]",
+            "x-ves-oneof-field-rule_choice": "[\"allow_list\",\"deny_list\",\"internally_generated\",\"legacy_rule_list\",\"rule_list\"]",
             "x-ves-oneof-field-server_choice": "[\"any_server\",\"server_name\",\"server_name_matcher\",\"server_selector\"]",
             "x-ves-proto-message": "ves.io.schema.service_policy.ReplaceSpecType",
             "properties": {
@@ -4029,7 +4336,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "allow_list": {
-                    "description": "Exclusive with [deny_list legacy_rule_list rule_list]\n",
+                    "description": "Exclusive with [deny_list internally_generated legacy_rule_list rule_list]\n",
                     "$ref": "#/definitions/service_policySourceList"
                 },
                 "any_server": {
@@ -4037,11 +4344,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "deny_list": {
-                    "description": "Exclusive with [allow_list legacy_rule_list rule_list]\n",
+                    "description": "Exclusive with [allow_list internally_generated legacy_rule_list rule_list]\n",
                     "$ref": "#/definitions/service_policySourceList"
                 },
+                "internally_generated": {
+                    "description": "Exclusive with [allow_list deny_list legacy_rule_list rule_list]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "legacy_rule_list": {
-                    "description": "Exclusive with [allow_list deny_list rule_list]\n",
+                    "description": "Exclusive with [allow_list deny_list internally_generated rule_list]\n",
                     "$ref": "#/definitions/service_policyLegacyRuleList"
                 },
                 "port_matcher": {
@@ -4050,16 +4361,8 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Port Matcher"
                 },
                 "rule_list": {
-                    "description": "Exclusive with [allow_list deny_list legacy_rule_list]\n",
+                    "description": "Exclusive with [allow_list deny_list internally_generated legacy_rule_list]\n",
                     "$ref": "#/definitions/service_policyRuleList"
-                },
-                "rules": {
-                    "type": "array",
-                    "description": " A list of references to service_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.\n TBD mark as hidden + internal after implementation is ready",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Rules"
                 },
                 "server_name": {
                     "type": "string",
@@ -4149,6 +4452,13 @@ var APISwaggerJSON string = `{
                     "title": "request body matcher",
                     "$ref": "#/definitions/policyMatcherType",
                     "x-displayname": "Request Body Matcher"
+                },
+                "challenge_action": {
+                    "description": " Select challenge action, enable javascript/captcha challenge or disable challenge\nRequired: YES",
+                    "title": "Challenge Action",
+                    "$ref": "#/definitions/policyChallengeAction",
+                    "x-displayname": "Select Challenge Action Type",
+                    "x-ves-required": "true"
                 },
                 "client_name": {
                     "type": "string",
@@ -4422,6 +4732,36 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "service_policyDeleteRequest": {
+            "type": "object",
+            "description": "This is the input message of the 'Delete' RPC.",
+            "title": "DeleteRequest is used to delete a service_policy",
+            "x-displayname": "Delete Request",
+            "x-ves-proto-message": "ves.io.schema.service_policy.DeleteRequest",
+            "properties": {
+                "fail_if_referred": {
+                    "type": "boolean",
+                    "description": " Fail the delete operation if this object is being referred by other objects",
+                    "title": "fail_if_referred",
+                    "format": "boolean",
+                    "x-displayname": "Fail-If-Referred"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the configuration object\n\nExample: - \"name\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the configuration object is present\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                }
+            }
+        },
         "service_policyGetResponse": {
             "type": "object",
             "description": "This is the output message of the 'Get' RPC",
@@ -4504,13 +4844,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "rules": {
                     "type": "array",
-                    "description": " A list of references to service_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.\nRequired: YES",
+                    "description": " A list of references to service_policy_rule objects.\n The order of evaluation of the rules depends on the rule combining algorithm.",
                     "title": "rules",
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Rules",
-                    "x-ves-required": "true"
+                    "x-displayname": "Rules"
                 }
             }
         },
@@ -4707,7 +5046,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "spec": {
-                    "description": " Specification for the rule including match preicates and actions.\nRequired: YES",
+                    "description": " Specification for the rule including match predicates and actions.\nRequired: YES",
                     "title": "spec",
                     "$ref": "#/definitions/schemaservice_policy_ruleGlobalSpecType",
                     "x-displayname": "Rule Specification",
@@ -4746,6 +5085,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/policyRuleAction",
                     "x-displayname": "Action",
                     "x-ves-required": "true"
+                },
+                "asn_list": {
+                    "description": " List of 4-byte ASN values.\n The predicate evaluates to true if the origin ASN is present in the ASN list.",
+                    "title": "asn list",
+                    "$ref": "#/definitions/policyAsnMatchList",
+                    "x-displayname": "ASN List"
                 },
                 "description": {
                     "type": "string",
@@ -4996,14 +5341,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\nRequired: YES",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-",
                     "title": "ipv4 prefix list",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefix List",
-                    "x-ves-example": "192.168.20.0/24",
-                    "x-ves-required": "true"
+                    "x-ves-example": "192.168.20.0/24"
                 }
             }
         },
