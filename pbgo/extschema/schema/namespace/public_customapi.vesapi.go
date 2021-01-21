@@ -354,6 +354,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-CustomAPI-CascadeDelete"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.CustomAPI.CascadeDelete"
             },
             "x-displayname": "CustomAPI",

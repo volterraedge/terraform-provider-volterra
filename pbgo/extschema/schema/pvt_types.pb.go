@@ -3,26 +3,19 @@
 
 package schema
 
-import (
-	proto "github.com/gogo/protobuf/proto"
-	golang_proto "github.com/golang/protobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
+import golang_proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import google_protobuf3 "github.com/gogo/protobuf/types"
 
-	fmt "fmt"
+import strconv "strconv"
 
-	math "math"
+import strings "strings"
+import reflect "reflect"
 
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	google_protobuf3 "github.com/gogo/protobuf/types"
-
-	strconv "strconv"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -54,9 +47,7 @@ var ServiceConnectionType_value = map[string]int32{
 	"NoTLS": 1,
 }
 
-func (ServiceConnectionType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptorPvtTypes, []int{0}
-}
+func (ServiceConnectionType) EnumDescriptor() ([]byte, []int) { return fileDescriptorPvtTypes, []int{0} }
 
 // DaemonTLSParamsType
 //
@@ -111,11 +102,9 @@ type DaemonTlsCertificateType struct {
 	PrivateKeyUrl string `protobuf:"bytes,2,opt,name=private_key_url,json=privateKeyUrl,proto3" json:"private_key_url,omitempty"`
 }
 
-func (m *DaemonTlsCertificateType) Reset()      { *m = DaemonTlsCertificateType{} }
-func (*DaemonTlsCertificateType) ProtoMessage() {}
-func (*DaemonTlsCertificateType) Descriptor() ([]byte, []int) {
-	return fileDescriptorPvtTypes, []int{1}
-}
+func (m *DaemonTlsCertificateType) Reset()                    { *m = DaemonTlsCertificateType{} }
+func (*DaemonTlsCertificateType) ProtoMessage()               {}
+func (*DaemonTlsCertificateType) Descriptor() ([]byte, []int) { return fileDescriptorPvtTypes, []int{1} }
 
 func (m *DaemonTlsCertificateType) GetCertificateUrl() string {
 	if m != nil {

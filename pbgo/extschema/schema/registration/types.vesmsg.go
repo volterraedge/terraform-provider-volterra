@@ -898,6 +898,15 @@ func (v *ValidateInfra) Validate(ctx context.Context, pm interface{}, opts ...db
 
 	}
 
+	if fv, exists := v.FldValidators["timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("timestamp"))
+		if err := fv(ctx, m.GetTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["zone"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("zone"))
@@ -1401,7 +1410,7 @@ var DefaultPassportValidator = func() *ValidatePassport {
 
 	vrhClusterSize := v.ClusterSizeValidationRuleHandler
 	rulesClusterSize := map[string]string{
-		"ves.io.schema.rules.int32.in": "[1,3]",
+		"ves.io.schema.rules.int32.in": "[0,1,3]",
 	}
 	vFn, err = vrhClusterSize(rulesClusterSize)
 	if err != nil {

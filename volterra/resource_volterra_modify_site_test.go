@@ -18,7 +18,6 @@ import (
 
 const (
 	siteName = "site-sb-1"
-	systemNS = "system"
 )
 
 func TestAccSiteUpdate(t *testing.T) {

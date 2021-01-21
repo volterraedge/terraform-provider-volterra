@@ -844,6 +844,16 @@ func (v *ValidateCreateSpecType) OutsideNameserverValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) DesiredPoolCountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for desired_pool_count")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) TunnelTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	var conv db.EnumConvFn
@@ -1169,6 +1179,18 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["outside_nameserver"] = vFn
 
+	vrhDesiredPoolCount := v.DesiredPoolCountValidationRuleHandler
+	rulesDesiredPoolCount := map[string]string{
+		"ves.io.schema.rules.int32.gte": "-1",
+		"ves.io.schema.rules.int32.lte": "64",
+	}
+	vFn, err = vrhDesiredPoolCount(rulesDesiredPoolCount)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.desired_pool_count: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["desired_pool_count"] = vFn
+
 	vrhTunnelType := v.TunnelTypeValidationRuleHandler
 	rulesTunnelType := map[string]string{
 		"ves.io.schema.rules.enum.in": "[0,1,2]",
@@ -1313,6 +1335,147 @@ var DefaultDeploymentStateValidator = func() *ValidateDeploymentState {
 
 func DeploymentStateValidator() db.Validator {
 	return DefaultDeploymentStateValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetKubeConfigReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetKubeConfigReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetKubeConfigReq) DeepCopy() *GetKubeConfigReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetKubeConfigReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetKubeConfigReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetKubeConfigReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetKubeConfigReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetKubeConfigReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetKubeConfigReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetKubeConfigReq) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetKubeConfigReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetKubeConfigReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetKubeConfigReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetKubeConfigReqValidator = func() *ValidateGetKubeConfigReq {
+	v := &ValidateGetKubeConfigReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetKubeConfigReq.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetKubeConfigReq.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	return v
+}()
+
+func GetKubeConfigReqValidator() db.Validator {
+	return DefaultGetKubeConfigReqValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1631,6 +1794,16 @@ func (v *ValidateGetSpecType) OutsideNameserverValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) DesiredPoolCountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for desired_pool_count")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) TunnelTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	var conv db.EnumConvFn
@@ -1754,6 +1927,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("inside_vip"))
 		if err := fv(ctx, m.GetInsideVip(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["local_k8s_access_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_k8s_access_enabled"))
+		if err := fv(ctx, m.GetLocalK8SAccessEnabled(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2012,6 +2194,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["outside_nameserver"] = vFn
 
+	vrhDesiredPoolCount := v.DesiredPoolCountValidationRuleHandler
+	rulesDesiredPoolCount := map[string]string{
+		"ves.io.schema.rules.int32.gte": "-1",
+		"ves.io.schema.rules.int32.lte": "64",
+	}
+	vFn, err = vrhDesiredPoolCount(rulesDesiredPoolCount)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.desired_pool_count: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["desired_pool_count"] = vFn
+
 	vrhTunnelType := v.TunnelTypeValidationRuleHandler
 	rulesTunnelType := map[string]string{
 		"ves.io.schema.rules.enum.in": "[0,1,2]",
@@ -2095,6 +2289,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetK8SClusterApiGwDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 }
 
@@ -2168,6 +2368,47 @@ func (m *GlobalSpecType) GetConnectedReForConfigDBEntries(ctx context.Context, d
 		return nil, errors.Wrap(err, "Cannot find type for kind: site")
 	}
 	for _, ref := range m.GetConnectedReForConfig() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *GlobalSpecType) GetK8SClusterApiGwDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, ref := range m.GetK8SClusterApiGw() {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.k8s_cluster_api_gw[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_host.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "k8s_cluster_api_gw",
+			Ref:        ref,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetK8SClusterApiGwDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetK8SClusterApiGwDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "virtual_host.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_host")
+	}
+	for _, ref := range m.GetK8SClusterApiGw() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -2422,6 +2663,16 @@ func (v *ValidateGlobalSpecType) OutsideNameserverValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) DesiredPoolCountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for desired_pool_count")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) TunnelTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	var conv db.EnumConvFn
@@ -2443,6 +2694,46 @@ func (v *ValidateGlobalSpecType) TunnelDeadTimeoutValidationRuleHandler(rules ma
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tunnel_dead_timeout")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) K8SClusterApiGwValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for k8s_cluster_api_gw")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated k8s_cluster_api_gw")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items k8s_cluster_api_gw")
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -2595,6 +2886,23 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["k8s_cluster_api_gw"]; exists {
+		vOpts := append(opts, db.WithValidateField("k8s_cluster_api_gw"))
+		if err := fv(ctx, m.GetK8SClusterApiGw(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["local_k8s_access_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_k8s_access_enabled"))
+		if err := fv(ctx, m.GetLocalK8SAccessEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["mars_list"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("mars_list"))
@@ -2615,6 +2923,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["no_tenant_in_vk8s_ns"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("no_tenant_in_vk8s_ns"))
+		if err := fv(ctx, m.GetNoTenantInVk8SNs(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -2971,6 +3288,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["outside_nameserver"] = vFn
 
+	vrhDesiredPoolCount := v.DesiredPoolCountValidationRuleHandler
+	rulesDesiredPoolCount := map[string]string{
+		"ves.io.schema.rules.int32.gte": "-1",
+		"ves.io.schema.rules.int32.lte": "64",
+	}
+	vFn, err = vrhDesiredPoolCount(rulesDesiredPoolCount)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.desired_pool_count: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["desired_pool_count"] = vFn
+
 	vrhTunnelType := v.TunnelTypeValidationRuleHandler
 	rulesTunnelType := map[string]string{
 		"ves.io.schema.rules.enum.in": "[0,1,2]",
@@ -2993,6 +3322,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["tunnel_dead_timeout"] = vFn
+
+	vrhK8SClusterApiGw := v.K8SClusterApiGwValidationRuleHandler
+	rulesK8SClusterApiGw := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhK8SClusterApiGw(rulesK8SClusterApiGw)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.k8s_cluster_api_gw: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["k8s_cluster_api_gw"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -3459,6 +3799,333 @@ var DefaultKernelValidator = func() *ValidateKernel {
 
 func KernelValidator() db.Validator {
 	return DefaultKernelValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListKubeConfigReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListKubeConfigReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListKubeConfigReq) DeepCopy() *ListKubeConfigReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListKubeConfigReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListKubeConfigReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListKubeConfigReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListKubeConfigReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListKubeConfigReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListKubeConfigReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateListKubeConfigReq) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateListKubeConfigReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListKubeConfigReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListKubeConfigReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListKubeConfigReqValidator = func() *ValidateListKubeConfigReq {
+	v := &ValidateListKubeConfigReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListKubeConfigReq.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListKubeConfigReq.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	return v
+}()
+
+func ListKubeConfigReqValidator() db.Validator {
+	return DefaultListKubeConfigReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListKubeConfigRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListKubeConfigRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListKubeConfigRsp) DeepCopy() *ListKubeConfigRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListKubeConfigRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListKubeConfigRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListKubeConfigRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListKubeConfigRspValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListKubeConfigRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListKubeConfigRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListKubeConfigRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListKubeConfigRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["items"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("items"))
+		for idx, item := range m.GetItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListKubeConfigRspValidator = func() *ValidateListKubeConfigRsp {
+	v := &ValidateListKubeConfigRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ListKubeConfigRspValidator() db.Validator {
+	return DefaultListKubeConfigRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListKubeConfigRspItem) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListKubeConfigRspItem) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListKubeConfigRspItem) DeepCopy() *ListKubeConfigRspItem {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListKubeConfigRspItem{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListKubeConfigRspItem) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListKubeConfigRspItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListKubeConfigRspItemValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListKubeConfigRspItem struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListKubeConfigRspItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListKubeConfigRspItem)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListKubeConfigRspItem got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["create_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("create_timestamp"))
+		if err := fv(ctx, m.GetCreateTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["expiry_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("expiry_timestamp"))
+		if err := fv(ctx, m.GetExpiryTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["uid"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("uid"))
+		if err := fv(ctx, m.GetUid(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_email"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_email"))
+		if err := fv(ctx, m.GetUserEmail(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListKubeConfigRspItemValidator = func() *ValidateListKubeConfigRspItem {
+	v := &ValidateListKubeConfigRspItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ListKubeConfigRspItemValidator() db.Validator {
+	return DefaultListKubeConfigRspItemValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -4395,6 +5062,16 @@ func (v *ValidateReplaceSpecType) OutsideNameserverValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) DesiredPoolCountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for desired_pool_count")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) TunnelTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	var conv db.EnumConvFn
@@ -4699,6 +5376,18 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["outside_nameserver"] = vFn
+
+	vrhDesiredPoolCount := v.DesiredPoolCountValidationRuleHandler
+	rulesDesiredPoolCount := map[string]string{
+		"ves.io.schema.rules.int32.gte": "-1",
+		"ves.io.schema.rules.int32.lte": "64",
+	}
+	vFn, err = vrhDesiredPoolCount(rulesDesiredPoolCount)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.desired_pool_count: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["desired_pool_count"] = vFn
 
 	vrhTunnelType := v.TunnelTypeValidationRuleHandler
 	rulesTunnelType := map[string]string{
@@ -5904,6 +6593,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.DesiredPoolCount = f.GetDesiredPoolCount()
 	m.InsideNameserver = f.GetInsideNameserver()
 	m.InsideVip = f.GetInsideVip()
+	m.LocalK8SAccessEnabled = f.GetLocalK8SAccessEnabled()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideNameserver = f.GetOutsideNameserver()
 	m.OutsideVip = f.GetOutsideVip()
@@ -5935,6 +6625,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.DesiredPoolCount = m1.DesiredPoolCount
 	f.InsideNameserver = m1.InsideNameserver
 	f.InsideVip = m1.InsideVip
+	f.LocalK8SAccessEnabled = m1.LocalK8SAccessEnabled
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideNameserver = m1.OutsideNameserver
 	f.OutsideVip = m1.OutsideVip

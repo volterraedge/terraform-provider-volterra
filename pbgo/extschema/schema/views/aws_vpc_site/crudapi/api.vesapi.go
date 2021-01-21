@@ -17,6 +17,7 @@ import (
 	google_protobuf "github.com/gogo/protobuf/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	multierror "github.com/hashicorp/go-multierror"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -1010,7 +1011,10 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_vpc_site.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.aws_vpc_site.crudapi.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1040,7 +1044,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_vpc_site.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.aws_vpc_site.crudapi.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1143,7 +1150,10 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_vpc_site.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.aws_vpc_site.crudapi.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -2146,6 +2156,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
+            "x-ves-oneof-field-storage_class_choice": "[\"default_storage\",\"storage_class_list\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.AWSVPCVoltstackClusterType",
             "properties": {
                 "active_forward_proxy_policies": {
@@ -2174,6 +2185,11 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/viewsAWSVPCOneInterfaceNodeType"
                     },
                     "x-displayname": "VoltStack Cluster (One Interface) Nodes in AZ"
+                },
+                "default_storage": {
+                    "description": "Exclusive with [storage_class_list]\nx-displayName: \"Default Storage Class\"\nUse standard storage class configured as AWS EBS",
+                    "title": "Default Storage Class",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "forward_proxy_allow_all": {
                     "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
@@ -2209,6 +2225,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for site local network.",
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType"
+                },
+                "storage_class_list": {
+                    "description": "Exclusive with [default_storage]\nx-displayName: \"Add Custom Storage Class\"\nAdd additional custom storage classes in kubernetes for site",
+                    "title": "Custom Storage Class",
+                    "$ref": "#/definitions/viewsStorageClassListType"
                 }
             }
         },
@@ -2489,14 +2510,14 @@ var APISwaggerJSON string = `{
         },
         "network_firewallActiveForwardProxyPoliciesType": {
             "type": "object",
-            "description": "List of forward proxy policy views.",
+            "description": "List of Forward Proxy Policies",
             "title": "Active Forward Proxy Policies Type",
             "x-displayname": "Active Forward Proxy Policies Type",
             "x-ves-proto-message": "ves.io.schema.network_firewall.ActiveForwardProxyPoliciesType",
             "properties": {
                 "forward_proxy_policies": {
                     "type": "array",
-                    "description": " Ordered List of Network Policies active for this network firewall\nRequired: YES",
+                    "description": " List of Forward Proxy Policies\nRequired: YES",
                     "title": "Forward Proxy Policies",
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
@@ -2686,7 +2707,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "connection_timeout": {
                     "type": "integer",
-                    "description": " The timeout for new network connections to upstream server.\n This is specified in milliseconds. The default value is 2 seconds\n\nExample: - \"4000\"-",
+                    "description": " The timeout for new network connections to upstream server.\n This is specified in milliseconds. The default value is 2000 (2 seconds)\n\nExample: - \"4000\"-",
                     "title": "connection_timeout",
                     "format": "int64",
                     "x-displayname": "Connection Timeout",
@@ -3606,9 +3627,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "aws_az_name": {
                     "type": "string",
-                    "description": " x-required\n Name for AWS availability Zone, should match with region selected.\n\nExample: - \"us-west-2a\"-\nRequired: YES",
+                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\nRequired: YES",
                     "title": "AWS AZ",
-                    "x-displayname": "AWS AZ name",
+                    "x-displayname": "AWS AZ Name",
                     "x-ves-example": "us-west-2a",
                     "x-ves-required": "true"
                 },
@@ -3674,9 +3695,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "aws_az_name": {
                     "type": "string",
-                    "description": " Name for AWS availability Zone, should match with AWS region selected.\n\nExample: - \"us-west-2a\"-\nRequired: YES",
+                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\nRequired: YES",
                     "title": "AWS AZ",
-                    "x-displayname": "AWS AZ name",
+                    "x-displayname": "AWS AZ Name",
                     "x-ves-example": "us-west-2a",
                     "x-ves-required": "true"
                 },
@@ -3881,6 +3902,78 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsStorageClassListType": {
+            "type": "object",
+            "description": "Add additional custom storage classes in kubernetes for this site",
+            "title": "Custom Storage Class List",
+            "x-displayname": "Custom Storage Class List",
+            "x-ves-proto-message": "ves.io.schema.views.StorageClassListType",
+            "properties": {
+                "storage_classes": {
+                    "type": "array",
+                    "description": " List of custom storage classes",
+                    "title": "List of Storage Classes",
+                    "items": {
+                        "$ref": "#/definitions/viewsStorageClassType"
+                    },
+                    "x-displayname": "List of Storage Classes"
+                }
+            }
+        },
+        "viewsStorageClassOpenebsEnterpriseType": {
+            "type": "object",
+            "description": "Storage class Device configuration for OpenEBS Enterprise",
+            "title": "OpenEBS Enterprise",
+            "x-displayname": "OpenEBS Enterprise",
+            "x-ves-proto-message": "ves.io.schema.views.StorageClassOpenebsEnterpriseType",
+            "properties": {
+                "replication": {
+                    "type": "integer",
+                    "description": " Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3.\n\nExample: - \"1\"-",
+                    "title": "Replication",
+                    "format": "int32",
+                    "x-displayname": "Replication",
+                    "x-ves-example": "1"
+                },
+                "storage_class_size": {
+                    "type": "integer",
+                    "description": " x-example \"10\"\n Size of each node of storage class. e.g If \"Storage Class Replicas\" will be set to 3 and \"Storage Class Size\" to 10GB.\n Three 10GB disk will be created and assigned to nodes.",
+                    "title": "Storage Size",
+                    "format": "int64",
+                    "x-displayname": "Storage Size"
+                }
+            }
+        },
+        "viewsStorageClassType": {
+            "type": "object",
+            "description": "Configuration of custom storage class",
+            "title": "Custom Storage Class",
+            "x-displayname": "Custom Storage Class",
+            "x-ves-oneof-field-device_choice": "[\"openebs_enterprise\"]",
+            "x-ves-proto-message": "ves.io.schema.views.StorageClassType",
+            "properties": {
+                "default_storage_class": {
+                    "type": "boolean",
+                    "description": " Make this storage class default storage class for the K8s cluster",
+                    "title": "Default Storage Class",
+                    "format": "boolean",
+                    "x-displayname": "Default Storage Class"
+                },
+                "openebs_enterprise": {
+                    "description": "Exclusive with []\nx-displayName: \"OpenEBS Enterprise\"\nStorage class Device configuration for OpenEBS Enterprise",
+                    "title": "OpenEBS Enterprise",
+                    "$ref": "#/definitions/viewsStorageClassOpenebsEnterpriseType"
+                },
+                "storage_class_name": {
+                    "type": "string",
+                    "description": " Name of the storage class as it will appear in K8s.\n\nExample: - \"premium\"-\nRequired: YES",
+                    "title": "Storage Class Name",
+                    "x-displayname": "Storage Class Name",
+                    "x-ves-example": "premium",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "viewsaws_vpc_siteGlobalSpecType": {
             "type": "object",
             "description": "Shape of the AWS VPC site specification",
@@ -3949,10 +4042,10 @@ var APISwaggerJSON string = `{
                 },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": " Auto scale maximum worker nodes limit up to 21, value of zero will disable auto scale\n\nExample: - \"2\"-",
-                    "title": "Auto Scale Limit",
+                    "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
+                    "title": "Desired Worker Nodes Per AZ",
                     "format": "int64",
-                    "x-displayname": "Auto Scale Limit",
+                    "x-displayname": "Desired Worker Nodes Per AZ",
                     "x-ves-example": "2"
                 },
                 "operating_system_version": {

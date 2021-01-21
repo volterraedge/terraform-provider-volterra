@@ -17,6 +17,7 @@ import (
 	google_protobuf "github.com/gogo/protobuf/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	multierror "github.com/hashicorp/go-multierror"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -1010,7 +1011,10 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.network_policy_view.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.network_policy_view.crudapi.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1040,7 +1044,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.network_policy_view.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.network_policy_view.crudapi.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1143,7 +1150,10 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.network_policy_view.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.network_policy_view.crudapi.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -2254,19 +2264,7 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "network_policy_ruleNetworkPolicyRuleAction": {
-            "type": "string",
-            "description": "Network policy rule action configures the action to be taken on rule match\n\n - DENY: Apply deny action on rule match\n - ALLOW: Apply allow action on rule match",
-            "title": "Network Policy Rule Action",
-            "enum": [
-                "DENY",
-                "ALLOW"
-            ],
-            "default": "DENY",
-            "x-displayname": "Network Policy Rule Action",
-            "x-ves-proto-enum": "ves.io.schema.network_policy_rule.NetworkPolicyRuleAction"
-        },
-        "network_policy_viewApplicationEnumType": {
+        "network_policyApplicationEnumType": {
             "type": "string",
             "description": "Application protocols like HTTP, SNMP\n",
             "title": "Applications",
@@ -2278,35 +2276,35 @@ var APISwaggerJSON string = `{
             ],
             "default": "APPLICATION_HTTP",
             "x-displayname": "Applications",
-            "x-ves-proto-enum": "ves.io.schema.views.network_policy_view.ApplicationEnumType"
+            "x-ves-proto-enum": "ves.io.schema.network_policy.ApplicationEnumType"
         },
-        "network_policy_viewApplicationsType": {
+        "network_policyApplicationsType": {
             "type": "object",
             "description": "Application protocols like HTTP, SNMP",
             "title": "Applications",
             "x-displayname": "Applications",
             "x-ves-displayorder": "1",
-            "x-ves-proto-message": "ves.io.schema.views.network_policy_view.ApplicationsType",
+            "x-ves-proto-message": "ves.io.schema.network_policy.ApplicationsType",
             "properties": {
                 "applications": {
                     "type": "array",
                     "description": " Application protocols like HTTP, SNMP",
                     "title": "Applications",
                     "items": {
-                        "$ref": "#/definitions/network_policy_viewApplicationEnumType"
+                        "$ref": "#/definitions/network_policyApplicationEnumType"
                     },
                     "x-displayname": "Application Protocols"
                 }
             }
         },
-        "network_policy_viewEndpointChoiceType": {
+        "network_policyEndpointChoiceType": {
             "type": "object",
             "description": "Shape of the endpoint choices for a view",
             "title": "Endpoint Choice",
             "x-displayname": "Endpoint Choice",
             "x-ves-displayorder": "10",
             "x-ves-oneof-field-endpoint_choice": "[\"any\",\"inside_endpoints\",\"interface\",\"label_selector\",\"namespace\",\"outside_endpoints\",\"prefix_list\"]",
-            "x-ves-proto-message": "ves.io.schema.views.network_policy_view.EndpointChoiceType",
+            "x-ves-proto-message": "ves.io.schema.network_policy.EndpointChoiceType",
             "properties": {
                 "any": {
                     "description": "Exclusive with [inside_endpoints interface label_selector namespace outside_endpoints prefix_list]\nx-displayName: \"Any Endpoint\"\nAny Endpoint that matches 0/0 ip prefix",
@@ -2345,14 +2343,14 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "network_policy_viewNetworkPolicyRuleType": {
+        "network_policyNetworkPolicyRuleType": {
             "type": "object",
             "description": "Shape of Network Policy Rule",
             "title": "Network Policy Rule",
             "x-displayname": "Network Policy Rule",
             "x-ves-oneof-field-other_endpoint": "[\"any\",\"inside_endpoints\",\"ip_prefix_set\",\"label_selector\",\"namespace\",\"outside_endpoints\",\"prefix_list\"]",
             "x-ves-oneof-field-traffic_choice": "[\"all_tcp_traffic\",\"all_traffic\",\"all_udp_traffic\",\"applications\",\"protocol_port_range\"]",
-            "x-ves-proto-message": "ves.io.schema.views.network_policy_view.NetworkPolicyRuleType",
+            "x-ves-proto-message": "ves.io.schema.network_policy.NetworkPolicyRuleType",
             "properties": {
                 "action": {
                     "description": " Action to be taken at rule match. Currently supported actions are Allow and  Deny",
@@ -2383,7 +2381,7 @@ var APISwaggerJSON string = `{
                 "applications": {
                     "description": "Exclusive with [all_tcp_traffic all_traffic all_udp_traffic protocol_port_range]\nx-displayName: \"Match Application Traffic\"\nSelect Application traffic to match",
                     "title": "Specific Applications",
-                    "$ref": "#/definitions/network_policy_viewApplicationsType"
+                    "$ref": "#/definitions/network_policyApplicationsType"
                 },
                 "inside_endpoints": {
                     "description": "Exclusive with [any ip_prefix_set label_selector namespace outside_endpoints prefix_list]\nx-displayName: \"Endpoints Reachable via all Inside Interfaces\"\nAll ip prefixes that are reachable via inside interfaces are chosen as Endpoints",
@@ -2397,7 +2395,7 @@ var APISwaggerJSON string = `{
                 },
                 "keys": {
                     "type": "array",
-                    "description": " list of label keys to be for which label values will be matched\n Keys are \"site\" and rule lets \"web\" talk to \"db\", site in (abc, xyz) then \"web\" in site \"abc\" \n can talk to \"db\" in site \"abc\" and can not talk to \"db\" in site \"xyz\"\n\nExample: - \"['site']\"-",
+                    "description": " list of label keys to be for which label values will be matched\n Keys are \"site\" and rule lets \"web\" talk to \"db\", site in (abc, xyz) then \"web\" in site \"abc\"\n can talk to \"db\" in site \"abc\" and can not talk to \"db\" in site \"xyz\"\n\nExample: - \"['site']\"-",
                     "title": "label matcher",
                     "items": {
                         "type": "string"
@@ -2409,6 +2407,13 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [any inside_endpoints ip_prefix_set namespace outside_endpoints prefix_list]\nx-displayName: \"Label Selector\"\nx-example: \"app != web\"\nlocal end point is set of prefixes determined by label selector expression",
                     "title": "prefix Label selector",
                     "$ref": "#/definitions/schemaLabelSelectorType"
+                },
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\nRequired: YES",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true"
                 },
                 "namespace": {
                     "type": "string",
@@ -2428,7 +2433,7 @@ var APISwaggerJSON string = `{
                 "protocol_port_range": {
                     "description": "Exclusive with [all_tcp_traffic all_traffic all_udp_traffic applications]\nx-displayName: \"Match Protocol and Port Ranges\"\nSelect specific protocol and port ranges traffic to match",
                     "title": "Protocol and Port Ranges",
-                    "$ref": "#/definitions/network_policy_viewProtocolPortType"
+                    "$ref": "#/definitions/network_policyProtocolPortType"
                 },
                 "rule_description": {
                     "type": "string",
@@ -2439,21 +2444,20 @@ var APISwaggerJSON string = `{
                 },
                 "rule_name": {
                     "type": "string",
-                    "description": " Rule Name that will be used to query metrics for this rule.\n\nExample: - \"mypolicy-allow-htpp\"-\nRequired: YES",
+                    "description": " Rule Name that will be used to query metrics for this rule.\n\nExample: - \"mypolicy-allow-htpp\"-",
                     "title": "Name",
                     "x-displayname": "Name",
-                    "x-ves-example": "mypolicy-allow-htpp",
-                    "x-ves-required": "true"
+                    "x-ves-example": "mypolicy-allow-htpp"
                 }
             }
         },
-        "network_policy_viewProtocolPortType": {
+        "network_policyProtocolPortType": {
             "type": "object",
             "description": "Protocol and Port ranges",
             "title": "Protocol and Port",
             "x-displayname": "Protocol and Port",
             "x-ves-displayorder": "1,2",
-            "x-ves-proto-message": "ves.io.schema.views.network_policy_view.ProtocolPortType",
+            "x-ves-proto-message": "ves.io.schema.network_policy.ProtocolPortType",
             "properties": {
                 "port_ranges": {
                     "type": "array",
@@ -2472,6 +2476,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Protocol"
                 }
             }
+        },
+        "network_policy_ruleNetworkPolicyRuleAction": {
+            "type": "string",
+            "description": "Network policy rule action configures the action to be taken on rule match\n\n - DENY: Apply deny action on rule match\n - ALLOW: Apply allow action on rule match",
+            "title": "Network Policy Rule Action",
+            "enum": [
+                "DENY",
+                "ALLOW"
+            ],
+            "default": "DENY",
+            "x-displayname": "Network Policy Rule Action",
+            "x-ves-proto-enum": "ves.io.schema.network_policy_rule.NetworkPolicyRuleAction"
         },
         "network_policy_viewSpecType": {
             "type": "object",
@@ -2678,6 +2694,38 @@ var APISwaggerJSON string = `{
                     "title": "resource_version",
                     "x-displayname": "Resource Version",
                     "x-ves-example": "181255"
+                }
+            }
+        },
+        "schemaMessageMetaType": {
+            "type": "object",
+            "description": "MessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
+            "title": "MessageMetaType",
+            "x-displayname": "Message Metadata",
+            "x-ves-proto-message": "ves.io.schema.MessageMetaType",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " Human readable description for the object that corresponds to the containing message.\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "title": "description",
+                    "x-displayname": "Description",
+                    "x-ves-example": "Virtual Host for acmecorp website"
+                },
+                "disable": {
+                    "type": "boolean",
+                    "description": " A value of true will administratively disable the object that corresponds to the containing message.\n\nExample: - \"true\"-",
+                    "title": "disable",
+                    "format": "boolean",
+                    "x-displayname": "Disable",
+                    "x-ves-example": "true"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " This is the name of the message.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -3021,14 +3069,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\nRequired: YES",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-",
                     "title": "ipv4 prefix list",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefix List",
-                    "x-ves-example": "192.168.20.0/24",
-                    "x-ves-required": "true"
+                    "x-ves-example": "192.168.20.0/24"
                 }
             }
         },
@@ -3044,14 +3091,14 @@ var APISwaggerJSON string = `{
                     "description": " Ordered list of rules applied to connections from policy endpoints.",
                     "title": "Egress Rules",
                     "items": {
-                        "$ref": "#/definitions/network_policy_viewNetworkPolicyRuleType"
+                        "$ref": "#/definitions/network_policyNetworkPolicyRuleType"
                     },
                     "x-displayname": "Egress Rules"
                 },
                 "endpoint": {
                     "description": " Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.",
                     "title": "Policy Endpoint",
-                    "$ref": "#/definitions/network_policy_viewEndpointChoiceType",
+                    "$ref": "#/definitions/network_policyEndpointChoiceType",
                     "x-displayname": "Endpoint(s)"
                 },
                 "ingress_rules": {
@@ -3059,7 +3106,7 @@ var APISwaggerJSON string = `{
                     "description": " Ordered list of rules applied to connections to policy endpoints.",
                     "title": "Ingress Rules",
                     "items": {
-                        "$ref": "#/definitions/network_policy_viewNetworkPolicyRuleType"
+                        "$ref": "#/definitions/network_policyNetworkPolicyRuleType"
                     },
                     "x-displayname": "Ingress Rules"
                 },

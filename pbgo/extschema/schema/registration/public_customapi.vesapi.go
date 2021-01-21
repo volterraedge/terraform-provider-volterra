@@ -1310,11 +1310,10 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "passport": {
-                    "description": " Passport to be changed in registration, must be valid and always provided\nRequired: YES",
+                    "description": " Passport to be changed in registration, must be valid and always provided",
                     "title": "Passport",
                     "$ref": "#/definitions/registrationPassport",
-                    "x-displayname": "Passport",
-                    "x-ves-required": "true"
+                    "x-displayname": "Passport"
                 },
                 "state": {
                     "description": " State to approve (APPROVED or RETIRED)\nRequired: YES",
@@ -1453,6 +1452,13 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Provider",
                     "$ref": "#/definitions/registrationProvider",
                     "x-displayname": "Provider"
+                },
+                "timestamp": {
+                    "type": "string",
+                    "description": " It's used to verify machine have acceptable time difference from server",
+                    "title": "Timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Current (machine) time"
                 },
                 "zone": {
                     "type": "string",
@@ -1743,7 +1749,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "cluster_size": {
                     "type": "integer",
-                    "description": " Defines how many master nodes is in the cluster, only 1 or 3 is allowed\n 1 - cluster have single master, without HA\n 3 - cluster have 3 masters, with HA, all nodes should be allowed at same time, cluster won't start until ALL nodes are ADMITTED\n This value can't be changed after installation.\n It does not interact with auto-scaling as only pool nodes are scaled.\n\nExample: - \"3\"-",
+                    "description": " Defines how many master nodes is in the cluster, only 1 or 3 is allowed\n 1 - cluster have single master, without HA\n 3 - cluster have 3 masters, with HA, all nodes should be allowed at same time, cluster won't start until ALL nodes are ADMITTED\n 0 - same as 1\n This value can't be changed after installation.\n It does not interact with auto-scaling as only pool nodes are scaled.\n\nExample: - \"3\"-",
                     "title": "Cluster size",
                     "format": "int32",
                     "x-displayname": "Cluster Size",
@@ -2704,14 +2710,16 @@ var CustomAPISwaggerJSON string = `{
         },
         "siteLinkType": {
             "type": "string",
-            "description": "Link type of interface determined operationally\n\nLink type unknown\nLink type ethernet\nWiFi link of type 802.11ac\nWiFi link of type 802.11bgn\nLink type 4G",
+            "description": "Link type of interface determined operationally\n\nLink type unknown\nLink type ethernet\nWiFi link of type 802.11ac\nWiFi link of type 802.11bgn\nLink type 4G\nWiFi link\nWan link",
             "title": "Link type",
             "enum": [
                 "LINK_TYPE_UNKNOWN",
                 "LINK_TYPE_ETHERNET",
                 "LINK_TYPE_WIFI_802_11AC",
                 "LINK_TYPE_WIFI_802_11BGN",
-                "LINK_TYPE_4G"
+                "LINK_TYPE_4G",
+                "LINK_TYPE_WIFI",
+                "LINK_TYPE_WAN"
             ],
             "default": "LINK_TYPE_UNKNOWN",
             "x-displayname": "Link type",

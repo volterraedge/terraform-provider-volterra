@@ -3,30 +3,21 @@
 
 package virtual_k8s
 
-import (
-	proto "github.com/gogo/protobuf/proto"
-	golang_proto "github.com/golang/protobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
+import golang_proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
-	fmt "fmt"
+import strings "strings"
+import reflect "reflect"
 
-	math "math"
-
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -56,6 +47,11 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_Isolated
 	//	*GlobalSpecType_Disabled
 	ServiceIsolationChoice isGlobalSpecType_ServiceIsolationChoice `protobuf_oneof:"service_isolation_choice"`
+	// Default Workload Flavor
+	//
+	// x-displayName: "Default Workload Flavor"
+	// Default workfload flavor for all workloads launched in this Virtual K8s
+	DefaultFlavorRef *ves_io_schema_views.ObjectRefType `protobuf:"bytes,5,opt,name=default_flavor_ref,json=defaultFlavorRef" json:"default_flavor_ref,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
@@ -103,6 +99,13 @@ func (m *GlobalSpecType) GetIsolated() *ves_io_schema4.Empty {
 func (m *GlobalSpecType) GetDisabled() *ves_io_schema4.Empty {
 	if x, ok := m.GetServiceIsolationChoice().(*GlobalSpecType_Disabled); ok {
 		return x.Disabled
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDefaultFlavorRef() *ves_io_schema_views.ObjectRefType {
+	if m != nil {
+		return m.DefaultFlavorRef
 	}
 	return nil
 }
@@ -191,6 +194,7 @@ type CreateSpecType struct {
 	//	*CreateSpecType_Isolated
 	//	*CreateSpecType_Disabled
 	ServiceIsolationChoice isCreateSpecType_ServiceIsolationChoice `protobuf_oneof:"service_isolation_choice"`
+	DefaultFlavorRef       *ves_io_schema_views.ObjectRefType      `protobuf:"bytes,5,opt,name=default_flavor_ref,json=defaultFlavorRef" json:"default_flavor_ref,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
@@ -238,6 +242,13 @@ func (m *CreateSpecType) GetIsolated() *ves_io_schema4.Empty {
 func (m *CreateSpecType) GetDisabled() *ves_io_schema4.Empty {
 	if x, ok := m.GetServiceIsolationChoice().(*CreateSpecType_Disabled); ok {
 		return x.Disabled
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDefaultFlavorRef() *ves_io_schema_views.ObjectRefType {
+	if m != nil {
+		return m.DefaultFlavorRef
 	}
 	return nil
 }
@@ -462,6 +473,7 @@ type GetSpecType struct {
 	//	*GetSpecType_Isolated
 	//	*GetSpecType_Disabled
 	ServiceIsolationChoice isGetSpecType_ServiceIsolationChoice `protobuf_oneof:"service_isolation_choice"`
+	DefaultFlavorRef       *ves_io_schema_views.ObjectRefType   `protobuf:"bytes,5,opt,name=default_flavor_ref,json=defaultFlavorRef" json:"default_flavor_ref,omitempty"`
 }
 
 func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
@@ -509,6 +521,13 @@ func (m *GetSpecType) GetIsolated() *ves_io_schema4.Empty {
 func (m *GetSpecType) GetDisabled() *ves_io_schema4.Empty {
 	if x, ok := m.GetServiceIsolationChoice().(*GetSpecType_Disabled); ok {
 		return x.Disabled
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDefaultFlavorRef() *ves_io_schema_views.ObjectRefType {
+	if m != nil {
+		return m.DefaultFlavorRef
 	}
 	return nil
 }
@@ -633,6 +652,9 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if !this.ServiceIsolationChoice.Equal(that1.ServiceIsolationChoice) {
 		return false
 	}
+	if !this.DefaultFlavorRef.Equal(that1.DefaultFlavorRef) {
+		return false
+	}
 	return true
 }
 func (this *GlobalSpecType_Isolated) Equal(that interface{}) bool {
@@ -717,6 +739,9 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this.ServiceIsolationChoice == nil {
 		return false
 	} else if !this.ServiceIsolationChoice.Equal(that1.ServiceIsolationChoice) {
+		return false
+	}
+	if !this.DefaultFlavorRef.Equal(that1.DefaultFlavorRef) {
 		return false
 	}
 	return true
@@ -891,6 +916,9 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if !this.ServiceIsolationChoice.Equal(that1.ServiceIsolationChoice) {
 		return false
 	}
+	if !this.DefaultFlavorRef.Equal(that1.DefaultFlavorRef) {
+		return false
+	}
 	return true
 }
 func (this *GetSpecType_Isolated) Equal(that interface{}) bool {
@@ -945,13 +973,16 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 8)
 	s = append(s, "&virtual_k8s.GlobalSpecType{")
 	if this.VsiteRefs != nil {
 		s = append(s, "VsiteRefs: "+fmt.Sprintf("%#v", this.VsiteRefs)+",\n")
 	}
 	if this.ServiceIsolationChoice != nil {
 		s = append(s, "ServiceIsolationChoice: "+fmt.Sprintf("%#v", this.ServiceIsolationChoice)+",\n")
+	}
+	if this.DefaultFlavorRef != nil {
+		s = append(s, "DefaultFlavorRef: "+fmt.Sprintf("%#v", this.DefaultFlavorRef)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -976,13 +1007,16 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 8)
 	s = append(s, "&virtual_k8s.CreateSpecType{")
 	if this.VsiteRefs != nil {
 		s = append(s, "VsiteRefs: "+fmt.Sprintf("%#v", this.VsiteRefs)+",\n")
 	}
 	if this.ServiceIsolationChoice != nil {
 		s = append(s, "ServiceIsolationChoice: "+fmt.Sprintf("%#v", this.ServiceIsolationChoice)+",\n")
+	}
+	if this.DefaultFlavorRef != nil {
+		s = append(s, "DefaultFlavorRef: "+fmt.Sprintf("%#v", this.DefaultFlavorRef)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1038,13 +1072,16 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 8)
 	s = append(s, "&virtual_k8s.GetSpecType{")
 	if this.VsiteRefs != nil {
 		s = append(s, "VsiteRefs: "+fmt.Sprintf("%#v", this.VsiteRefs)+",\n")
 	}
 	if this.ServiceIsolationChoice != nil {
 		s = append(s, "ServiceIsolationChoice: "+fmt.Sprintf("%#v", this.ServiceIsolationChoice)+",\n")
+	}
+	if this.DefaultFlavorRef != nil {
+		s = append(s, "DefaultFlavorRef: "+fmt.Sprintf("%#v", this.DefaultFlavorRef)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1107,6 +1144,16 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += nn1
 	}
+	if m.DefaultFlavorRef != nil {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultFlavorRef.Size()))
+		n2, err := m.DefaultFlavorRef.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
+	}
 	return i, nil
 }
 
@@ -1116,11 +1163,11 @@ func (m *GlobalSpecType_Isolated) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Isolated.Size()))
-		n2, err := m.Isolated.MarshalTo(dAtA[i:])
+		n3, err := m.Isolated.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n2
+		i += n3
 	}
 	return i, nil
 }
@@ -1130,11 +1177,11 @@ func (m *GlobalSpecType_Disabled) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Disabled.Size()))
-		n3, err := m.Disabled.MarshalTo(dAtA[i:])
+		n4, err := m.Disabled.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n4
 	}
 	return i, nil
 }
@@ -1166,11 +1213,21 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.ServiceIsolationChoice != nil {
-		nn4, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:])
+		nn5, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn4
+		i += nn5
+	}
+	if m.DefaultFlavorRef != nil {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultFlavorRef.Size()))
+		n6, err := m.DefaultFlavorRef.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n6
 	}
 	return i, nil
 }
@@ -1181,11 +1238,11 @@ func (m *CreateSpecType_Isolated) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Isolated.Size()))
-		n5, err := m.Isolated.MarshalTo(dAtA[i:])
+		n7, err := m.Isolated.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n5
+		i += n7
 	}
 	return i, nil
 }
@@ -1195,11 +1252,11 @@ func (m *CreateSpecType_Disabled) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Disabled.Size()))
-		n6, err := m.Disabled.MarshalTo(dAtA[i:])
+		n8, err := m.Disabled.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n6
+		i += n8
 	}
 	return i, nil
 }
@@ -1231,11 +1288,11 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.ServiceIsolationChoice != nil {
-		nn7, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:])
+		nn9, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn7
+		i += nn9
 	}
 	return i, nil
 }
@@ -1246,11 +1303,11 @@ func (m *ReplaceSpecType_Isolated) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Isolated.Size()))
-		n8, err := m.Isolated.MarshalTo(dAtA[i:])
+		n10, err := m.Isolated.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n8
+		i += n10
 	}
 	return i, nil
 }
@@ -1260,11 +1317,11 @@ func (m *ReplaceSpecType_Disabled) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Disabled.Size()))
-		n9, err := m.Disabled.MarshalTo(dAtA[i:])
+		n11, err := m.Disabled.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n9
+		i += n11
 	}
 	return i, nil
 }
@@ -1296,11 +1353,21 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.ServiceIsolationChoice != nil {
-		nn10, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:])
+		nn12, err := m.ServiceIsolationChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn10
+		i += nn12
+	}
+	if m.DefaultFlavorRef != nil {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultFlavorRef.Size()))
+		n13, err := m.DefaultFlavorRef.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n13
 	}
 	return i, nil
 }
@@ -1311,11 +1378,11 @@ func (m *GetSpecType_Isolated) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Isolated.Size()))
-		n11, err := m.Isolated.MarshalTo(dAtA[i:])
+		n14, err := m.Isolated.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n11
+		i += n14
 	}
 	return i, nil
 }
@@ -1325,11 +1392,11 @@ func (m *GetSpecType_Disabled) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Disabled.Size()))
-		n12, err := m.Disabled.MarshalTo(dAtA[i:])
+		n15, err := m.Disabled.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n12
+		i += n15
 	}
 	return i, nil
 }
@@ -1357,6 +1424,9 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 		this.ServiceIsolationChoice = NewPopulatedGlobalSpecType_Isolated(r, easy)
 	case 4:
 		this.ServiceIsolationChoice = NewPopulatedGlobalSpecType_Disabled(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.DefaultFlavorRef = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -1388,6 +1458,9 @@ func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 		this.ServiceIsolationChoice = NewPopulatedCreateSpecType_Isolated(r, easy)
 	case 4:
 		this.ServiceIsolationChoice = NewPopulatedCreateSpecType_Disabled(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.DefaultFlavorRef = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -1450,6 +1523,9 @@ func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 		this.ServiceIsolationChoice = NewPopulatedGetSpecType_Isolated(r, easy)
 	case 4:
 		this.ServiceIsolationChoice = NewPopulatedGetSpecType_Disabled(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.DefaultFlavorRef = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -1551,6 +1627,10 @@ func (m *GlobalSpecType) Size() (n int) {
 	if m.ServiceIsolationChoice != nil {
 		n += m.ServiceIsolationChoice.Size()
 	}
+	if m.DefaultFlavorRef != nil {
+		l = m.DefaultFlavorRef.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -1583,6 +1663,10 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	if m.ServiceIsolationChoice != nil {
 		n += m.ServiceIsolationChoice.Size()
+	}
+	if m.DefaultFlavorRef != nil {
+		l = m.DefaultFlavorRef.Size()
+		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -1650,6 +1734,10 @@ func (m *GetSpecType) Size() (n int) {
 	if m.ServiceIsolationChoice != nil {
 		n += m.ServiceIsolationChoice.Size()
 	}
+	if m.DefaultFlavorRef != nil {
+		l = m.DefaultFlavorRef.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -1692,6 +1780,7 @@ func (this *GlobalSpecType) String() string {
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`VsiteRefs:` + strings.Replace(fmt.Sprintf("%v", this.VsiteRefs), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
 		`ServiceIsolationChoice:` + fmt.Sprintf("%v", this.ServiceIsolationChoice) + `,`,
+		`DefaultFlavorRef:` + strings.Replace(fmt.Sprintf("%v", this.DefaultFlavorRef), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1723,6 +1812,7 @@ func (this *CreateSpecType) String() string {
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`VsiteRefs:` + strings.Replace(fmt.Sprintf("%v", this.VsiteRefs), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
 		`ServiceIsolationChoice:` + fmt.Sprintf("%v", this.ServiceIsolationChoice) + `,`,
+		`DefaultFlavorRef:` + strings.Replace(fmt.Sprintf("%v", this.DefaultFlavorRef), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1785,6 +1875,7 @@ func (this *GetSpecType) String() string {
 	s := strings.Join([]string{`&GetSpecType{`,
 		`VsiteRefs:` + strings.Replace(fmt.Sprintf("%v", this.VsiteRefs), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
 		`ServiceIsolationChoice:` + fmt.Sprintf("%v", this.ServiceIsolationChoice) + `,`,
+		`DefaultFlavorRef:` + strings.Replace(fmt.Sprintf("%v", this.DefaultFlavorRef), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1941,6 +2032,39 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ServiceIsolationChoice = &GlobalSpecType_Disabled{v}
 			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultFlavorRef", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DefaultFlavorRef == nil {
+				m.DefaultFlavorRef = &ves_io_schema_views.ObjectRefType{}
+			}
+			if err := m.DefaultFlavorRef.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -2085,6 +2209,39 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.ServiceIsolationChoice = &CreateSpecType_Disabled{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultFlavorRef", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DefaultFlavorRef == nil {
+				m.DefaultFlavorRef = &ves_io_schema_views.ObjectRefType{}
+			}
+			if err := m.DefaultFlavorRef.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2376,6 +2533,39 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ServiceIsolationChoice = &GetSpecType_Disabled{v}
 			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultFlavorRef", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DefaultFlavorRef == nil {
+				m.DefaultFlavorRef = &ves_io_schema_views.ObjectRefType{}
+			}
+			if err := m.DefaultFlavorRef.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -2506,37 +2696,41 @@ func init() { proto.RegisterFile("ves.io/schema/virtual_k8s/types.proto", fileDe
 func init() { golang_proto.RegisterFile("ves.io/schema/virtual_k8s/types.proto", fileDescriptorTypes) }
 
 var fileDescriptorTypes = []byte{
-	// 507 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x94, 0xb1, 0x8b, 0x13, 0x41,
-	0x14, 0xc6, 0x33, 0xbb, 0x51, 0xce, 0x8d, 0x5c, 0xce, 0x60, 0x91, 0xc4, 0x30, 0x84, 0x03, 0xe1,
-	0x40, 0xb3, 0x0b, 0x39, 0x8b, 0xc3, 0xc2, 0x22, 0x22, 0x27, 0x22, 0x1c, 0xac, 0x62, 0x61, 0xb3,
-	0xcc, 0xee, 0xbe, 0xdd, 0x8c, 0xb7, 0xb9, 0x19, 0x66, 0x26, 0xab, 0x29, 0x04, 0xd1, 0xca, 0x4e,
-	0x2c, 0x04, 0xfd, 0x0b, 0xc4, 0x3f, 0xc1, 0x34, 0x29, 0xc5, 0x2a, 0xe5, 0x95, 0x66, 0xae, 0xd1,
-	0xee, 0x4a, 0xb1, 0x92, 0x6c, 0x92, 0xe3, 0xb2, 0x87, 0x07, 0x56, 0xd7, 0x5c, 0x37, 0xc3, 0xfb,
-	0xbe, 0x6f, 0xde, 0xfb, 0x0d, 0x3c, 0xeb, 0x7a, 0x0a, 0xd2, 0xa6, 0xcc, 0x91, 0x41, 0x17, 0x7a,
-	0xc4, 0x49, 0xa9, 0x50, 0x7d, 0x92, 0x78, 0xbb, 0x5b, 0xd2, 0x51, 0x03, 0x0e, 0xd2, 0xe6, 0x82,
-	0x29, 0x56, 0xa9, 0xcd, 0x64, 0xf6, 0x4c, 0x66, 0x1f, 0x93, 0xd5, 0x5b, 0x31, 0x55, 0xdd, 0xbe,
-	0x6f, 0x07, 0xac, 0xe7, 0xc4, 0x2c, 0x66, 0x4e, 0xe6, 0xf0, 0xfb, 0x51, 0x76, 0xcb, 0x2e, 0xd9,
-	0x69, 0x96, 0x54, 0xbf, 0xb6, 0xfc, 0x20, 0xe3, 0x8a, 0xb2, 0xbd, 0xf9, 0x33, 0xf5, 0xda, 0x72,
-	0xf1, 0x58, 0x07, 0xf5, 0x46, 0xae, 0x51, 0x92, 0xd0, 0x90, 0x28, 0x98, 0x57, 0x9b, 0xf9, 0x31,
-	0xe0, 0xb9, 0xb7, 0x14, 0xbd, 0xfe, 0xc6, 0xb0, 0x56, 0xb7, 0x13, 0xe6, 0x93, 0xe4, 0x11, 0x87,
-	0xe0, 0xf1, 0x80, 0x43, 0xe5, 0x89, 0x65, 0xa5, 0x92, 0x2a, 0xf0, 0x04, 0x44, 0xb2, 0x8a, 0x9a,
-	0xe6, 0x46, 0xa9, 0xdd, 0xb0, 0x97, 0x27, 0xdd, 0xf1, 0x9f, 0x41, 0xa0, 0x5c, 0x88, 0xa6, 0x8e,
-	0x4e, 0xed, 0xcb, 0xcb, 0xcb, 0x8b, 0xd9, 0xa7, 0xce, 0xaf, 0xbf, 0x46, 0xe6, 0x85, 0xf7, 0xc8,
-	0x58, 0x6b, 0xba, 0x97, 0xb2, 0x28, 0x17, 0x22, 0x59, 0x69, 0x5b, 0x2b, 0x54, 0xb2, 0x84, 0x28,
-	0x08, 0xab, 0x66, 0x13, 0x6d, 0x94, 0xda, 0x57, 0x73, 0xa9, 0xf7, 0x7a, 0x5c, 0x0d, 0xee, 0x17,
-	0xdc, 0x23, 0xdd, 0xd4, 0x13, 0x52, 0x49, 0xfc, 0x04, 0xc2, 0x6a, 0xf1, 0x74, 0xcf, 0x42, 0xd7,
-	0xb9, 0x61, 0x55, 0x25, 0x88, 0x94, 0x06, 0xe0, 0xcd, 0x72, 0x28, 0xdb, 0xf3, 0x82, 0x2e, 0xa3,
-	0x01, 0x54, 0xca, 0xa3, 0x21, 0x2a, 0x8e, 0x87, 0xc8, 0xd0, 0x43, 0x64, 0x6e, 0xde, 0xbc, 0xf5,
-	0xa0, 0xb8, 0x62, 0xac, 0x99, 0xeb, 0x1f, 0x0d, 0x6b, 0xf5, 0xae, 0x00, 0xa2, 0xe0, 0x88, 0xc2,
-	0xc3, 0xff, 0xa6, 0x50, 0xce, 0x51, 0x38, 0x83, 0xd9, 0x6f, 0x5f, 0xf9, 0x7e, 0x27, 0xf7, 0x9d,
-	0x9d, 0xad, 0x53, 0x70, 0x34, 0x5e, 0xff, 0x41, 0xff, 0xac, 0xce, 0xd9, 0x7c, 0x32, 0xac, 0xb2,
-	0x0b, 0x3c, 0x21, 0xc1, 0x39, 0x9c, 0x13, 0x70, 0x3e, 0x18, 0x56, 0x69, 0x1b, 0xd4, 0x39, 0x98,
-	0x1c, 0x98, 0xce, 0x5b, 0x34, 0x9e, 0xe0, 0xc2, 0xfe, 0x04, 0x17, 0x0e, 0x27, 0x18, 0xfd, 0x9e,
-	0x60, 0xf4, 0x4a, 0x63, 0xf4, 0x59, 0x63, 0xf4, 0x4d, 0x63, 0x34, 0xd6, 0x18, 0xed, 0x6b, 0x8c,
-	0x7e, 0x68, 0x8c, 0x7e, 0x6a, 0x5c, 0x38, 0xd4, 0x18, 0xbd, 0x3b, 0xc0, 0x85, 0xd1, 0x01, 0x46,
-	0x4f, 0x77, 0x62, 0xc6, 0x77, 0x63, 0x3b, 0x65, 0x89, 0x02, 0x21, 0x88, 0xdd, 0x97, 0x4e, 0x76,
-	0x88, 0x98, 0xe8, 0xb5, 0xb8, 0x60, 0x29, 0x0d, 0x41, 0xb4, 0x16, 0x65, 0x87, 0xfb, 0x31, 0x73,
-	0xe0, 0x85, 0x9a, 0xef, 0xb8, 0x93, 0x1b, 0xdb, 0xbf, 0x98, 0xad, 0xba, 0xcd, 0xbf, 0x01, 0x00,
-	0x00, 0xff, 0xff, 0x93, 0x3e, 0xc7, 0x61, 0xd5, 0x05, 0x00, 0x00,
+	// 567 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x55, 0x31, 0x8b, 0x13, 0x41,
+	0x14, 0xce, 0x64, 0xef, 0xe4, 0xdc, 0x93, 0xcb, 0xb9, 0x58, 0xe4, 0x62, 0x18, 0x43, 0x40, 0x38,
+	0xd0, 0xec, 0x42, 0xce, 0xe2, 0xb0, 0xb0, 0x88, 0xe8, 0x89, 0x08, 0x07, 0xab, 0x58, 0xd8, 0x2c,
+	0xb3, 0xbb, 0x6f, 0x37, 0x63, 0x36, 0x37, 0xcb, 0xcc, 0x64, 0x63, 0x8a, 0x03, 0x51, 0x10, 0xec,
+	0xc4, 0xd2, 0x5f, 0x20, 0xfe, 0x04, 0xd3, 0xa4, 0x14, 0xab, 0x94, 0x29, 0xcd, 0x5e, 0x73, 0x76,
+	0x29, 0xc5, 0x4a, 0xb2, 0xd9, 0x1c, 0x97, 0x0d, 0x1e, 0x58, 0x88, 0x28, 0x76, 0x33, 0xf3, 0xbe,
+	0xef, 0x9b, 0xf7, 0xbe, 0xf7, 0xe0, 0xa9, 0x57, 0x23, 0x10, 0x3a, 0x65, 0x86, 0x70, 0x9a, 0xd0,
+	0x26, 0x46, 0x44, 0xb9, 0xec, 0x90, 0xc0, 0x6a, 0xed, 0x0a, 0x43, 0xf6, 0x42, 0x10, 0x7a, 0xc8,
+	0x99, 0x64, 0xda, 0xd6, 0x0c, 0xa6, 0xcf, 0x60, 0xfa, 0x29, 0x58, 0xa9, 0xe6, 0x53, 0xd9, 0xec,
+	0xd8, 0xba, 0xc3, 0xda, 0x86, 0xcf, 0x7c, 0x66, 0x24, 0x0c, 0xbb, 0xe3, 0x25, 0xb7, 0xe4, 0x92,
+	0x9c, 0x66, 0x4a, 0xa5, 0xcb, 0x8b, 0x1f, 0xb2, 0x50, 0x52, 0x76, 0x90, 0x7e, 0x53, 0xda, 0x5a,
+	0x0c, 0x9e, 0xca, 0xa0, 0x54, 0xce, 0x24, 0x4a, 0x02, 0xea, 0x12, 0x09, 0x69, 0xb4, 0x92, 0x2d,
+	0x03, 0xba, 0xd6, 0xa2, 0xf4, 0x95, 0x65, 0xc4, 0x42, 0x89, 0xd5, 0x49, 0x5e, 0xdd, 0xd8, 0x0b,
+	0x98, 0x4d, 0x82, 0x87, 0x21, 0x38, 0x8f, 0x7a, 0x21, 0x68, 0x8f, 0x55, 0x35, 0x12, 0x54, 0x82,
+	0xc5, 0xc1, 0x13, 0x45, 0x54, 0x51, 0xb6, 0xd7, 0xeb, 0x65, 0x7d, 0xd1, 0x8a, 0x7d, 0xfb, 0x29,
+	0x38, 0xd2, 0x04, 0x6f, 0xca, 0x68, 0x6c, 0x7d, 0x38, 0xbc, 0x30, 0x37, 0x67, 0xca, 0xfc, 0xf8,
+	0x75, 0xa0, 0xac, 0xbe, 0x45, 0xf9, 0xcd, 0x8a, 0x79, 0x3e, 0x91, 0x32, 0xc1, 0x13, 0x5a, 0x5d,
+	0x5d, 0xa3, 0x82, 0x05, 0x44, 0x82, 0x5b, 0x54, 0x2a, 0x68, 0x7b, 0xbd, 0x7e, 0x29, 0xa3, 0x7a,
+	0xa7, 0x1d, 0xca, 0xde, 0xbd, 0x9c, 0x79, 0x82, 0x9b, 0x72, 0x5c, 0x2a, 0x88, 0x1d, 0x80, 0x5b,
+	0x5c, 0x39, 0x9b, 0x33, 0xc7, 0x69, 0x2d, 0x55, 0x73, 0xc1, 0x23, 0x9d, 0x40, 0x5a, 0x5e, 0x40,
+	0x22, 0xc6, 0xa7, 0x85, 0x14, 0x57, 0x13, 0x76, 0x55, 0xcf, 0xb6, 0x14, 0xba, 0x62, 0xb9, 0x9a,
+	0x42, 0x97, 0xf1, 0x56, 0xc0, 0x88, 0x9b, 0x2a, 0x8c, 0x0e, 0xd1, 0x71, 0x1f, 0x21, 0x73, 0x33,
+	0x15, 0xbe, 0x9b, 0xbc, 0x9a, 0xe0, 0x35, 0xae, 0xa9, 0x45, 0x01, 0x3c, 0xa2, 0x0e, 0x58, 0xb3,
+	0xa4, 0x29, 0x3b, 0xb0, 0x9c, 0x26, 0xa3, 0x0e, 0x68, 0x85, 0x41, 0x1f, 0xad, 0x0c, 0xfb, 0x28,
+	0x1f, 0xf7, 0x91, 0xb2, 0x73, 0xfd, 0xc6, 0xfd, 0x95, 0xb5, 0xfc, 0xa6, 0x52, 0x7d, 0xa5, 0xa8,
+	0x1b, 0xb7, 0x39, 0x10, 0x09, 0x27, 0x96, 0x3f, 0xf8, 0x65, 0xcb, 0x0b, 0x19, 0xcb, 0xff, 0x75,
+	0xa3, 0x6f, 0x5e, 0xfc, 0x7c, 0x2b, 0x33, 0xa8, 0x8d, 0xdd, 0x33, 0xbc, 0x2f, 0xbf, 0xf8, 0x8e,
+	0x7e, 0x1a, 0x4d, 0x1b, 0xf1, 0x2e, 0xaf, 0x16, 0x4c, 0x08, 0x03, 0xe2, 0xfc, 0xe5, 0x9d, 0xf8,
+	0x1d, 0xe6, 0xbc, 0x54, 0xd4, 0xf5, 0x3d, 0x90, 0xff, 0x47, 0xf4, 0x4f, 0x8e, 0x68, 0xe3, 0x35,
+	0x1a, 0x8e, 0x71, 0x6e, 0x34, 0xc6, 0xb9, 0xc9, 0x18, 0xa3, 0x6f, 0x63, 0x8c, 0x9e, 0xc7, 0x18,
+	0xbd, 0x8f, 0x31, 0xfa, 0x14, 0x63, 0x34, 0x8c, 0x31, 0x1a, 0xc5, 0x18, 0x7d, 0x89, 0x31, 0x3a,
+	0x8e, 0x71, 0x6e, 0x12, 0x63, 0xf4, 0xe6, 0x08, 0xe7, 0x06, 0x47, 0x18, 0x3d, 0xd9, 0xf7, 0x59,
+	0xd8, 0xf2, 0xf5, 0x88, 0x05, 0x12, 0x38, 0x27, 0x7a, 0x47, 0x18, 0xc9, 0xc1, 0x63, 0xbc, 0x5d,
+	0x0b, 0x39, 0x8b, 0xa8, 0x0b, 0xbc, 0x36, 0x0f, 0x1b, 0xa1, 0xed, 0x33, 0x03, 0x9e, 0xc9, 0x74,
+	0x53, 0x2c, 0x6f, 0x46, 0xfb, 0x5c, 0xb2, 0x31, 0x76, 0x7e, 0x04, 0x00, 0x00, 0xff, 0xff, 0xd2,
+	0x24, 0xb8, 0x46, 0x3d, 0x07, 0x00, 0x00,
 }

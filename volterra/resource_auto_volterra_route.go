@@ -65,24 +65,200 @@ func resourceVolterraRoute() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"disable_custom_script": {
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"disable_location_add": {
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"match": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"headers": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"invert_match": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"exact": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"presence": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"regex": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"http_method": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"path": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"path": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"prefix": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"regex": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"query_params": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"key": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"exact": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"regex": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"request_headers_to_add": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"append": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"value": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"request_headers_to_remove": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
+						"response_headers_to_add": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"append": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"value": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"response_headers_to_remove": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
 						"route_destination": {
 
 							Type:     schema.TypeSet,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-
-									"auto_host_rewrite": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"host_rewrite": {
-
-										Type:     schema.TypeString,
-										Optional: true,
-									},
 
 									"buffer_policy": {
 
@@ -277,6 +453,18 @@ func resourceVolterraRoute() *schema.Resource {
 												},
 											},
 										},
+									},
+
+									"auto_host_rewrite": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"host_rewrite": {
+
+										Type:     schema.TypeString,
+										Optional: true,
 									},
 
 									"mirror_policy": {
@@ -477,6 +665,21 @@ func resourceVolterraRoute() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"host_redirect": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"path_redirect": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"proto_redirect": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
 									"all_params": {
 
 										Type:     schema.TypeBool,
@@ -515,214 +718,11 @@ func resourceVolterraRoute() *schema.Resource {
 										},
 									},
 
-									"host_redirect": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"path_redirect": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"proto_redirect": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
 									"response_code": {
 										Type:     schema.TypeInt,
 										Optional: true,
 									},
 								},
-							},
-						},
-
-						"disable_custom_script": {
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"disable_location_add": {
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"match": {
-
-							Type:     schema.TypeList,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"headers": {
-
-										Type:     schema.TypeList,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"invert_match": {
-													Type:     schema.TypeBool,
-													Optional: true,
-												},
-
-												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"exact": {
-
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"presence": {
-
-													Type:     schema.TypeBool,
-													Optional: true,
-												},
-
-												"regex": {
-
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"http_method": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"path": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"path": {
-
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"prefix": {
-
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"regex": {
-
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"query_params": {
-
-										Type:     schema.TypeList,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"key": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"exact": {
-
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"regex": {
-
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
-						"request_headers_to_add": {
-
-							Type:     schema.TypeList,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"append": {
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"value": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-								},
-							},
-						},
-
-						"request_headers_to_remove": {
-
-							Type: schema.TypeList,
-
-							Optional: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-						},
-
-						"response_headers_to_add": {
-
-							Type:     schema.TypeList,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"append": {
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"value": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-								},
-							},
-						},
-
-						"response_headers_to_remove": {
-
-							Type: schema.TypeList,
-
-							Optional: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
 							},
 						},
 
@@ -895,574 +895,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 			routes[i] = &ves_io_schema_route.RouteType{}
 
 			routesMapStrToI := set.(map[string]interface{})
-
-			routeActionTypeFound := false
-
-			if v, ok := routesMapStrToI["route_destination"]; ok && !isIntfNil(v) && !routeActionTypeFound {
-
-				routeActionTypeFound = true
-				routeActionInt := &ves_io_schema_route.RouteType_RouteDestination{}
-				routeActionInt.RouteDestination = &ves_io_schema_route.RouteDestinationList{}
-				routes[i].RouteAction = routeActionInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					hostRewriteParamsTypeFound := false
-
-					if v, ok := cs["auto_host_rewrite"]; ok && !isIntfNil(v) && !hostRewriteParamsTypeFound {
-
-						hostRewriteParamsTypeFound = true
-						hostRewriteParamsInt := &ves_io_schema_route.RouteDestinationList_AutoHostRewrite{}
-
-						routeActionInt.RouteDestination.HostRewriteParams = hostRewriteParamsInt
-
-						hostRewriteParamsInt.AutoHostRewrite =
-							v.(bool)
-
-					}
-
-					if v, ok := cs["host_rewrite"]; ok && !isIntfNil(v) && !hostRewriteParamsTypeFound {
-
-						hostRewriteParamsTypeFound = true
-						hostRewriteParamsInt := &ves_io_schema_route.RouteDestinationList_HostRewrite{}
-
-						routeActionInt.RouteDestination.HostRewriteParams = hostRewriteParamsInt
-
-						hostRewriteParamsInt.HostRewrite = v.(string)
-
-					}
-
-					if v, ok := cs["buffer_policy"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						bufferPolicy := &ves_io_schema.BufferConfigType{}
-						routeActionInt.RouteDestination.BufferPolicy = bufferPolicy
-						for _, set := range sl {
-
-							bufferPolicyMapStrToI := set.(map[string]interface{})
-
-							if w, ok := bufferPolicyMapStrToI["disabled"]; ok && !isIntfNil(w) {
-								bufferPolicy.Disabled = w.(bool)
-							}
-
-							if w, ok := bufferPolicyMapStrToI["max_request_bytes"]; ok && !isIntfNil(w) {
-								bufferPolicy.MaxRequestBytes = uint32(w.(int))
-							}
-
-							if w, ok := bufferPolicyMapStrToI["max_request_time"]; ok && !isIntfNil(w) {
-								bufferPolicy.MaxRequestTime = uint32(w.(int))
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["cors_policy"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						corsPolicy := &ves_io_schema.CorsPolicy{}
-						routeActionInt.RouteDestination.CorsPolicy = corsPolicy
-						for _, set := range sl {
-
-							corsPolicyMapStrToI := set.(map[string]interface{})
-
-							if w, ok := corsPolicyMapStrToI["allow_credentials"]; ok && !isIntfNil(w) {
-								corsPolicy.AllowCredentials = w.(bool)
-							}
-
-							if w, ok := corsPolicyMapStrToI["allow_headers"]; ok && !isIntfNil(w) {
-								corsPolicy.AllowHeaders = w.(string)
-							}
-
-							if w, ok := corsPolicyMapStrToI["allow_methods"]; ok && !isIntfNil(w) {
-								corsPolicy.AllowMethods = w.(string)
-							}
-
-							if w, ok := corsPolicyMapStrToI["allow_origin"]; ok && !isIntfNil(w) {
-								ls := make([]string, len(w.([]interface{})))
-								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								corsPolicy.AllowOrigin = ls
-							}
-
-							if w, ok := corsPolicyMapStrToI["allow_origin_regex"]; ok && !isIntfNil(w) {
-								ls := make([]string, len(w.([]interface{})))
-								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								corsPolicy.AllowOriginRegex = ls
-							}
-
-							if w, ok := corsPolicyMapStrToI["disabled"]; ok && !isIntfNil(w) {
-								corsPolicy.Disabled = w.(bool)
-							}
-
-							if w, ok := corsPolicyMapStrToI["expose_headers"]; ok && !isIntfNil(w) {
-								corsPolicy.ExposeHeaders = w.(string)
-							}
-
-							if w, ok := corsPolicyMapStrToI["max_age"]; ok && !isIntfNil(w) {
-								corsPolicy.MaxAge = w.(string)
-							}
-
-							if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
-								corsPolicy.MaximumAge = w.(int32)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["destinations"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						destinations := make([]*ves_io_schema_route.RouteDestination, len(sl))
-						routeActionInt.RouteDestination.Destinations = destinations
-						for i, set := range sl {
-							destinations[i] = &ves_io_schema_route.RouteDestination{}
-
-							destinationsMapStrToI := set.(map[string]interface{})
-
-							if v, ok := destinationsMapStrToI["cluster"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								clusterInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								destinations[i].Cluster = clusterInt
-								for i, ps := range sl {
-
-									cMapToStrVal := ps.(map[string]interface{})
-									clusterInt[i] = &ves_io_schema.ObjectRefType{}
-
-									clusterInt[i].Kind = "cluster"
-
-									if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-										clusterInt[i].Name = v.(string)
-									}
-
-									if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										clusterInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										clusterInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										clusterInt[i].Uid = v.(string)
-									}
-
-								}
-
-							}
-
-							if w, ok := destinationsMapStrToI["endpoint_subsets"]; ok && !isIntfNil(w) {
-								ms := map[string]string{}
-								for k, v := range w.(map[string]interface{}) {
-									ms[k] = v.(string)
-								}
-								destinations[i].EndpointSubsets = ms
-							}
-
-							if w, ok := destinationsMapStrToI["weight"]; ok && !isIntfNil(w) {
-								destinations[i].Weight = uint32(w.(int))
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["endpoint_subsets"]; ok && !isIntfNil(v) {
-
-						ms := map[string]string{}
-						for k, v := range v.(map[string]interface{}) {
-							ms[k] = v.(string)
-						}
-						routeActionInt.RouteDestination.EndpointSubsets = ms
-					}
-
-					if v, ok := cs["hash_policy"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						hashPolicy := make([]*ves_io_schema_route.HashPolicyType, len(sl))
-						routeActionInt.RouteDestination.HashPolicy = hashPolicy
-						for i, set := range sl {
-							hashPolicy[i] = &ves_io_schema_route.HashPolicyType{}
-
-							hashPolicyMapStrToI := set.(map[string]interface{})
-
-							policySpecifierTypeFound := false
-
-							if v, ok := hashPolicyMapStrToI["cookie"]; ok && !isIntfNil(v) && !policySpecifierTypeFound {
-
-								policySpecifierTypeFound = true
-								policySpecifierInt := &ves_io_schema_route.HashPolicyType_Cookie{}
-								policySpecifierInt.Cookie = &ves_io_schema_route.CookieForHashing{}
-								hashPolicy[i].PolicySpecifier = policySpecifierInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										policySpecifierInt.Cookie.Name = v.(string)
-									}
-
-									if v, ok := cs["path"]; ok && !isIntfNil(v) {
-
-										policySpecifierInt.Cookie.Path = v.(string)
-									}
-
-									if v, ok := cs["ttl"]; ok && !isIntfNil(v) {
-
-										policySpecifierInt.Cookie.Ttl = uint32(v.(int))
-									}
-
-								}
-
-							}
-
-							if v, ok := hashPolicyMapStrToI["header_name"]; ok && !isIntfNil(v) && !policySpecifierTypeFound {
-
-								policySpecifierTypeFound = true
-								policySpecifierInt := &ves_io_schema_route.HashPolicyType_HeaderName{}
-
-								hashPolicy[i].PolicySpecifier = policySpecifierInt
-
-								policySpecifierInt.HeaderName = v.(string)
-
-							}
-
-							if v, ok := hashPolicyMapStrToI["source_ip"]; ok && !isIntfNil(v) && !policySpecifierTypeFound {
-
-								policySpecifierTypeFound = true
-								policySpecifierInt := &ves_io_schema_route.HashPolicyType_SourceIp{}
-
-								hashPolicy[i].PolicySpecifier = policySpecifierInt
-
-								policySpecifierInt.SourceIp =
-									v.(bool)
-
-							}
-
-							if w, ok := hashPolicyMapStrToI["terminal"]; ok && !isIntfNil(w) {
-								hashPolicy[i].Terminal = w.(bool)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["mirror_policy"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						mirrorPolicy := &ves_io_schema_route.MirrorPolicyType{}
-						routeActionInt.RouteDestination.MirrorPolicy = mirrorPolicy
-						for _, set := range sl {
-
-							mirrorPolicyMapStrToI := set.(map[string]interface{})
-
-							if v, ok := mirrorPolicyMapStrToI["cluster"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								clusterInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								mirrorPolicy.Cluster = clusterInt
-								for i, ps := range sl {
-
-									cMapToStrVal := ps.(map[string]interface{})
-									clusterInt[i] = &ves_io_schema.ObjectRefType{}
-
-									clusterInt[i].Kind = "cluster"
-
-									if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-										clusterInt[i].Name = v.(string)
-									}
-
-									if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										clusterInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										clusterInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										clusterInt[i].Uid = v.(string)
-									}
-
-								}
-
-							}
-
-							if v, ok := mirrorPolicyMapStrToI["percent"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								percent := &ves_io_schema.FractionalPercent{}
-								mirrorPolicy.Percent = percent
-								for _, set := range sl {
-
-									percentMapStrToI := set.(map[string]interface{})
-
-									if v, ok := percentMapStrToI["denominator"]; ok && !isIntfNil(v) {
-
-										percent.Denominator = ves_io_schema.DenominatorType(ves_io_schema.DenominatorType_value[v.(string)])
-
-									}
-
-									if w, ok := percentMapStrToI["numerator"]; ok && !isIntfNil(w) {
-										percent.Numerator = uint32(w.(int))
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["prefix_rewrite"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteDestination.PrefixRewrite = v.(string)
-					}
-
-					if v, ok := cs["priority"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteDestination.Priority = ves_io_schema.RoutingPriority(ves_io_schema.RoutingPriority_value[v.(string)])
-
-					}
-
-					if v, ok := cs["retry_policy"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						retryPolicy := &ves_io_schema.RetryPolicyType{}
-						routeActionInt.RouteDestination.RetryPolicy = retryPolicy
-						for _, set := range sl {
-
-							retryPolicyMapStrToI := set.(map[string]interface{})
-
-							if v, ok := retryPolicyMapStrToI["back_off"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								backOff := &ves_io_schema.RetryBackOff{}
-								retryPolicy.BackOff = backOff
-								for _, set := range sl {
-
-									backOffMapStrToI := set.(map[string]interface{})
-
-									if w, ok := backOffMapStrToI["base_interval"]; ok && !isIntfNil(w) {
-										backOff.BaseInterval = uint32(w.(int))
-									}
-
-									if w, ok := backOffMapStrToI["max_interval"]; ok && !isIntfNil(w) {
-										backOff.MaxInterval = uint32(w.(int))
-									}
-
-								}
-
-							}
-
-							if w, ok := retryPolicyMapStrToI["num_retries"]; ok && !isIntfNil(w) {
-								retryPolicy.NumRetries = uint32(w.(int))
-							}
-
-							if w, ok := retryPolicyMapStrToI["per_try_timeout"]; ok && !isIntfNil(w) {
-								retryPolicy.PerTryTimeout = uint32(w.(int))
-							}
-
-							if w, ok := retryPolicyMapStrToI["retriable_status_codes"]; ok && !isIntfNil(w) {
-								ls := make([]uint32, len(w.([]interface{})))
-								for i, v := range w.([]interface{}) {
-
-									ls[i] = uint32(v.(int))
-								}
-								retryPolicy.RetriableStatusCodes = ls
-							}
-
-							if w, ok := retryPolicyMapStrToI["retry_on"]; ok && !isIntfNil(w) {
-								retryPolicy.RetryOn = w.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["spdy_config"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						spdyConfig := &ves_io_schema_route.SpdyConfigType{}
-						routeActionInt.RouteDestination.SpdyConfig = spdyConfig
-						for _, set := range sl {
-
-							spdyConfigMapStrToI := set.(map[string]interface{})
-
-							if w, ok := spdyConfigMapStrToI["use_spdy"]; ok && !isIntfNil(w) {
-								spdyConfig.UseSpdy = w.(bool)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["timeout"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteDestination.Timeout = uint32(v.(int))
-					}
-
-					if v, ok := cs["web_socket_config"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						webSocketConfig := &ves_io_schema_route.WebsocketConfigType{}
-						routeActionInt.RouteDestination.WebSocketConfig = webSocketConfig
-						for _, set := range sl {
-
-							webSocketConfigMapStrToI := set.(map[string]interface{})
-
-							if w, ok := webSocketConfigMapStrToI["idle_timeout"]; ok && !isIntfNil(w) {
-								webSocketConfig.IdleTimeout = uint32(w.(int))
-							}
-
-							if w, ok := webSocketConfigMapStrToI["max_connect_attempts"]; ok && !isIntfNil(w) {
-								webSocketConfig.MaxConnectAttempts = uint32(w.(int))
-							}
-
-							if w, ok := webSocketConfigMapStrToI["use_websocket"]; ok && !isIntfNil(w) {
-								webSocketConfig.UseWebsocket = w.(bool)
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := routesMapStrToI["route_direct_response"]; ok && !isIntfNil(v) && !routeActionTypeFound {
-
-				routeActionTypeFound = true
-				routeActionInt := &ves_io_schema_route.RouteType_RouteDirectResponse{}
-				routeActionInt.RouteDirectResponse = &ves_io_schema_route.RouteDirectResponse{}
-				routes[i].RouteAction = routeActionInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["response_body"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteDirectResponse.ResponseBody = v.(string)
-					}
-
-					if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteDirectResponse.ResponseCode = uint32(v.(int))
-					}
-
-				}
-
-			}
-
-			if v, ok := routesMapStrToI["route_redirect"]; ok && !isIntfNil(v) && !routeActionTypeFound {
-
-				routeActionTypeFound = true
-				routeActionInt := &ves_io_schema_route.RouteType_RouteRedirect{}
-				routeActionInt.RouteRedirect = &ves_io_schema_route.RouteRedirect{}
-				routes[i].RouteAction = routeActionInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					queryParamsTypeFound := false
-
-					if v, ok := cs["all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
-
-						queryParamsTypeFound = true
-						queryParamsInt := &ves_io_schema_route.RouteRedirect_AllParams{}
-
-						routeActionInt.RouteRedirect.QueryParams = queryParamsInt
-
-						queryParamsInt.AllParams =
-							v.(bool)
-
-					}
-
-					if v, ok := cs["remove_all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
-
-						queryParamsTypeFound = true
-
-						if v.(bool) {
-							queryParamsInt := &ves_io_schema_route.RouteRedirect_RemoveAllParams{}
-							queryParamsInt.RemoveAllParams = &ves_io_schema.Empty{}
-							routeActionInt.RouteRedirect.QueryParams = queryParamsInt
-						}
-
-					}
-
-					if v, ok := cs["retain_all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
-
-						queryParamsTypeFound = true
-
-						if v.(bool) {
-							queryParamsInt := &ves_io_schema_route.RouteRedirect_RetainAllParams{}
-							queryParamsInt.RetainAllParams = &ves_io_schema.Empty{}
-							routeActionInt.RouteRedirect.QueryParams = queryParamsInt
-						}
-
-					}
-
-					if v, ok := cs["strip_query_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
-
-						queryParamsTypeFound = true
-						queryParamsInt := &ves_io_schema_route.RouteRedirect_StripQueryParams{}
-						queryParamsInt.StripQueryParams = &ves_io_schema_route.RouteQueryParams{}
-						routeActionInt.RouteRedirect.QueryParams = queryParamsInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["query_params"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								queryParamsInt.StripQueryParams.QueryParams = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["host_redirect"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteRedirect.HostRedirect = v.(string)
-					}
-
-					if v, ok := cs["path_redirect"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteRedirect.PathRedirect = v.(string)
-					}
-
-					if v, ok := cs["proto_redirect"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteRedirect.ProtoRedirect = v.(string)
-					}
-
-					if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteRedirect.ResponseCode = uint32(v.(int))
-					}
-
-				}
-
-			}
 
 			if w, ok := routesMapStrToI["disable_custom_script"]; ok && !isIntfNil(w) {
 				routes[i].DisableCustomScript = w.(bool)
@@ -1706,6 +1138,574 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 					ls[i] = v.(string)
 				}
 				routes[i].ResponseHeadersToRemove = ls
+			}
+
+			routeActionTypeFound := false
+
+			if v, ok := routesMapStrToI["route_destination"]; ok && !isIntfNil(v) && !routeActionTypeFound {
+
+				routeActionTypeFound = true
+				routeActionInt := &ves_io_schema_route.RouteType_RouteDestination{}
+				routeActionInt.RouteDestination = &ves_io_schema_route.RouteDestinationList{}
+				routes[i].RouteAction = routeActionInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["buffer_policy"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						bufferPolicy := &ves_io_schema.BufferConfigType{}
+						routeActionInt.RouteDestination.BufferPolicy = bufferPolicy
+						for _, set := range sl {
+
+							bufferPolicyMapStrToI := set.(map[string]interface{})
+
+							if w, ok := bufferPolicyMapStrToI["disabled"]; ok && !isIntfNil(w) {
+								bufferPolicy.Disabled = w.(bool)
+							}
+
+							if w, ok := bufferPolicyMapStrToI["max_request_bytes"]; ok && !isIntfNil(w) {
+								bufferPolicy.MaxRequestBytes = uint32(w.(int))
+							}
+
+							if w, ok := bufferPolicyMapStrToI["max_request_time"]; ok && !isIntfNil(w) {
+								bufferPolicy.MaxRequestTime = uint32(w.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["cors_policy"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						corsPolicy := &ves_io_schema.CorsPolicy{}
+						routeActionInt.RouteDestination.CorsPolicy = corsPolicy
+						for _, set := range sl {
+
+							corsPolicyMapStrToI := set.(map[string]interface{})
+
+							if w, ok := corsPolicyMapStrToI["allow_credentials"]; ok && !isIntfNil(w) {
+								corsPolicy.AllowCredentials = w.(bool)
+							}
+
+							if w, ok := corsPolicyMapStrToI["allow_headers"]; ok && !isIntfNil(w) {
+								corsPolicy.AllowHeaders = w.(string)
+							}
+
+							if w, ok := corsPolicyMapStrToI["allow_methods"]; ok && !isIntfNil(w) {
+								corsPolicy.AllowMethods = w.(string)
+							}
+
+							if w, ok := corsPolicyMapStrToI["allow_origin"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								corsPolicy.AllowOrigin = ls
+							}
+
+							if w, ok := corsPolicyMapStrToI["allow_origin_regex"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								corsPolicy.AllowOriginRegex = ls
+							}
+
+							if w, ok := corsPolicyMapStrToI["disabled"]; ok && !isIntfNil(w) {
+								corsPolicy.Disabled = w.(bool)
+							}
+
+							if w, ok := corsPolicyMapStrToI["expose_headers"]; ok && !isIntfNil(w) {
+								corsPolicy.ExposeHeaders = w.(string)
+							}
+
+							if w, ok := corsPolicyMapStrToI["max_age"]; ok && !isIntfNil(w) {
+								corsPolicy.MaxAge = w.(string)
+							}
+
+							if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
+								corsPolicy.MaximumAge = w.(int32)
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["destinations"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						destinations := make([]*ves_io_schema_route.RouteDestination, len(sl))
+						routeActionInt.RouteDestination.Destinations = destinations
+						for i, set := range sl {
+							destinations[i] = &ves_io_schema_route.RouteDestination{}
+
+							destinationsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := destinationsMapStrToI["cluster"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								clusterInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								destinations[i].Cluster = clusterInt
+								for i, ps := range sl {
+
+									cMapToStrVal := ps.(map[string]interface{})
+									clusterInt[i] = &ves_io_schema.ObjectRefType{}
+
+									clusterInt[i].Kind = "cluster"
+
+									if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+										clusterInt[i].Name = v.(string)
+									}
+
+									if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										clusterInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										clusterInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										clusterInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+							if w, ok := destinationsMapStrToI["endpoint_subsets"]; ok && !isIntfNil(w) {
+								ms := map[string]string{}
+								for k, v := range w.(map[string]interface{}) {
+									ms[k] = v.(string)
+								}
+								destinations[i].EndpointSubsets = ms
+							}
+
+							if w, ok := destinationsMapStrToI["weight"]; ok && !isIntfNil(w) {
+								destinations[i].Weight = uint32(w.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["endpoint_subsets"]; ok && !isIntfNil(v) {
+
+						ms := map[string]string{}
+						for k, v := range v.(map[string]interface{}) {
+							ms[k] = v.(string)
+						}
+						routeActionInt.RouteDestination.EndpointSubsets = ms
+					}
+
+					if v, ok := cs["hash_policy"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						hashPolicy := make([]*ves_io_schema_route.HashPolicyType, len(sl))
+						routeActionInt.RouteDestination.HashPolicy = hashPolicy
+						for i, set := range sl {
+							hashPolicy[i] = &ves_io_schema_route.HashPolicyType{}
+
+							hashPolicyMapStrToI := set.(map[string]interface{})
+
+							policySpecifierTypeFound := false
+
+							if v, ok := hashPolicyMapStrToI["cookie"]; ok && !isIntfNil(v) && !policySpecifierTypeFound {
+
+								policySpecifierTypeFound = true
+								policySpecifierInt := &ves_io_schema_route.HashPolicyType_Cookie{}
+								policySpecifierInt.Cookie = &ves_io_schema_route.CookieForHashing{}
+								hashPolicy[i].PolicySpecifier = policySpecifierInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										policySpecifierInt.Cookie.Name = v.(string)
+									}
+
+									if v, ok := cs["path"]; ok && !isIntfNil(v) {
+
+										policySpecifierInt.Cookie.Path = v.(string)
+									}
+
+									if v, ok := cs["ttl"]; ok && !isIntfNil(v) {
+
+										policySpecifierInt.Cookie.Ttl = uint32(v.(int))
+									}
+
+								}
+
+							}
+
+							if v, ok := hashPolicyMapStrToI["header_name"]; ok && !isIntfNil(v) && !policySpecifierTypeFound {
+
+								policySpecifierTypeFound = true
+								policySpecifierInt := &ves_io_schema_route.HashPolicyType_HeaderName{}
+
+								hashPolicy[i].PolicySpecifier = policySpecifierInt
+
+								policySpecifierInt.HeaderName = v.(string)
+
+							}
+
+							if v, ok := hashPolicyMapStrToI["source_ip"]; ok && !isIntfNil(v) && !policySpecifierTypeFound {
+
+								policySpecifierTypeFound = true
+								policySpecifierInt := &ves_io_schema_route.HashPolicyType_SourceIp{}
+
+								hashPolicy[i].PolicySpecifier = policySpecifierInt
+
+								policySpecifierInt.SourceIp =
+									v.(bool)
+
+							}
+
+							if w, ok := hashPolicyMapStrToI["terminal"]; ok && !isIntfNil(w) {
+								hashPolicy[i].Terminal = w.(bool)
+							}
+
+						}
+
+					}
+
+					hostRewriteParamsTypeFound := false
+
+					if v, ok := cs["auto_host_rewrite"]; ok && !isIntfNil(v) && !hostRewriteParamsTypeFound {
+
+						hostRewriteParamsTypeFound = true
+						hostRewriteParamsInt := &ves_io_schema_route.RouteDestinationList_AutoHostRewrite{}
+
+						routeActionInt.RouteDestination.HostRewriteParams = hostRewriteParamsInt
+
+						hostRewriteParamsInt.AutoHostRewrite =
+							v.(bool)
+
+					}
+
+					if v, ok := cs["host_rewrite"]; ok && !isIntfNil(v) && !hostRewriteParamsTypeFound {
+
+						hostRewriteParamsTypeFound = true
+						hostRewriteParamsInt := &ves_io_schema_route.RouteDestinationList_HostRewrite{}
+
+						routeActionInt.RouteDestination.HostRewriteParams = hostRewriteParamsInt
+
+						hostRewriteParamsInt.HostRewrite = v.(string)
+
+					}
+
+					if v, ok := cs["mirror_policy"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						mirrorPolicy := &ves_io_schema_route.MirrorPolicyType{}
+						routeActionInt.RouteDestination.MirrorPolicy = mirrorPolicy
+						for _, set := range sl {
+
+							mirrorPolicyMapStrToI := set.(map[string]interface{})
+
+							if v, ok := mirrorPolicyMapStrToI["cluster"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								clusterInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								mirrorPolicy.Cluster = clusterInt
+								for i, ps := range sl {
+
+									cMapToStrVal := ps.(map[string]interface{})
+									clusterInt[i] = &ves_io_schema.ObjectRefType{}
+
+									clusterInt[i].Kind = "cluster"
+
+									if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+										clusterInt[i].Name = v.(string)
+									}
+
+									if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										clusterInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										clusterInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										clusterInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := mirrorPolicyMapStrToI["percent"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								percent := &ves_io_schema.FractionalPercent{}
+								mirrorPolicy.Percent = percent
+								for _, set := range sl {
+
+									percentMapStrToI := set.(map[string]interface{})
+
+									if v, ok := percentMapStrToI["denominator"]; ok && !isIntfNil(v) {
+
+										percent.Denominator = ves_io_schema.DenominatorType(ves_io_schema.DenominatorType_value[v.(string)])
+
+									}
+
+									if w, ok := percentMapStrToI["numerator"]; ok && !isIntfNil(w) {
+										percent.Numerator = uint32(w.(int))
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["prefix_rewrite"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteDestination.PrefixRewrite = v.(string)
+					}
+
+					if v, ok := cs["priority"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteDestination.Priority = ves_io_schema.RoutingPriority(ves_io_schema.RoutingPriority_value[v.(string)])
+
+					}
+
+					if v, ok := cs["retry_policy"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						retryPolicy := &ves_io_schema.RetryPolicyType{}
+						routeActionInt.RouteDestination.RetryPolicy = retryPolicy
+						for _, set := range sl {
+
+							retryPolicyMapStrToI := set.(map[string]interface{})
+
+							if v, ok := retryPolicyMapStrToI["back_off"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								backOff := &ves_io_schema.RetryBackOff{}
+								retryPolicy.BackOff = backOff
+								for _, set := range sl {
+
+									backOffMapStrToI := set.(map[string]interface{})
+
+									if w, ok := backOffMapStrToI["base_interval"]; ok && !isIntfNil(w) {
+										backOff.BaseInterval = uint32(w.(int))
+									}
+
+									if w, ok := backOffMapStrToI["max_interval"]; ok && !isIntfNil(w) {
+										backOff.MaxInterval = uint32(w.(int))
+									}
+
+								}
+
+							}
+
+							if w, ok := retryPolicyMapStrToI["num_retries"]; ok && !isIntfNil(w) {
+								retryPolicy.NumRetries = uint32(w.(int))
+							}
+
+							if w, ok := retryPolicyMapStrToI["per_try_timeout"]; ok && !isIntfNil(w) {
+								retryPolicy.PerTryTimeout = uint32(w.(int))
+							}
+
+							if w, ok := retryPolicyMapStrToI["retriable_status_codes"]; ok && !isIntfNil(w) {
+								ls := make([]uint32, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+
+									ls[i] = uint32(v.(int))
+								}
+								retryPolicy.RetriableStatusCodes = ls
+							}
+
+							if w, ok := retryPolicyMapStrToI["retry_on"]; ok && !isIntfNil(w) {
+								retryPolicy.RetryOn = w.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["spdy_config"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						spdyConfig := &ves_io_schema_route.SpdyConfigType{}
+						routeActionInt.RouteDestination.SpdyConfig = spdyConfig
+						for _, set := range sl {
+
+							spdyConfigMapStrToI := set.(map[string]interface{})
+
+							if w, ok := spdyConfigMapStrToI["use_spdy"]; ok && !isIntfNil(w) {
+								spdyConfig.UseSpdy = w.(bool)
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["timeout"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteDestination.Timeout = uint32(v.(int))
+					}
+
+					if v, ok := cs["web_socket_config"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						webSocketConfig := &ves_io_schema_route.WebsocketConfigType{}
+						routeActionInt.RouteDestination.WebSocketConfig = webSocketConfig
+						for _, set := range sl {
+
+							webSocketConfigMapStrToI := set.(map[string]interface{})
+
+							if w, ok := webSocketConfigMapStrToI["idle_timeout"]; ok && !isIntfNil(w) {
+								webSocketConfig.IdleTimeout = uint32(w.(int))
+							}
+
+							if w, ok := webSocketConfigMapStrToI["max_connect_attempts"]; ok && !isIntfNil(w) {
+								webSocketConfig.MaxConnectAttempts = uint32(w.(int))
+							}
+
+							if w, ok := webSocketConfigMapStrToI["use_websocket"]; ok && !isIntfNil(w) {
+								webSocketConfig.UseWebsocket = w.(bool)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := routesMapStrToI["route_direct_response"]; ok && !isIntfNil(v) && !routeActionTypeFound {
+
+				routeActionTypeFound = true
+				routeActionInt := &ves_io_schema_route.RouteType_RouteDirectResponse{}
+				routeActionInt.RouteDirectResponse = &ves_io_schema_route.RouteDirectResponse{}
+				routes[i].RouteAction = routeActionInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["response_body"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteDirectResponse.ResponseBody = v.(string)
+					}
+
+					if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteDirectResponse.ResponseCode = uint32(v.(int))
+					}
+
+				}
+
+			}
+
+			if v, ok := routesMapStrToI["route_redirect"]; ok && !isIntfNil(v) && !routeActionTypeFound {
+
+				routeActionTypeFound = true
+				routeActionInt := &ves_io_schema_route.RouteType_RouteRedirect{}
+				routeActionInt.RouteRedirect = &ves_io_schema_route.RouteRedirect{}
+				routes[i].RouteAction = routeActionInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["host_redirect"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteRedirect.HostRedirect = v.(string)
+					}
+
+					if v, ok := cs["path_redirect"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteRedirect.PathRedirect = v.(string)
+					}
+
+					if v, ok := cs["proto_redirect"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteRedirect.ProtoRedirect = v.(string)
+					}
+
+					queryParamsTypeFound := false
+
+					if v, ok := cs["all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
+
+						queryParamsTypeFound = true
+						queryParamsInt := &ves_io_schema_route.RouteRedirect_AllParams{}
+
+						routeActionInt.RouteRedirect.QueryParams = queryParamsInt
+
+						queryParamsInt.AllParams =
+							v.(bool)
+
+					}
+
+					if v, ok := cs["remove_all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
+
+						queryParamsTypeFound = true
+
+						if v.(bool) {
+							queryParamsInt := &ves_io_schema_route.RouteRedirect_RemoveAllParams{}
+							queryParamsInt.RemoveAllParams = &ves_io_schema.Empty{}
+							routeActionInt.RouteRedirect.QueryParams = queryParamsInt
+						}
+
+					}
+
+					if v, ok := cs["retain_all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
+
+						queryParamsTypeFound = true
+
+						if v.(bool) {
+							queryParamsInt := &ves_io_schema_route.RouteRedirect_RetainAllParams{}
+							queryParamsInt.RetainAllParams = &ves_io_schema.Empty{}
+							routeActionInt.RouteRedirect.QueryParams = queryParamsInt
+						}
+
+					}
+
+					if v, ok := cs["strip_query_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
+
+						queryParamsTypeFound = true
+						queryParamsInt := &ves_io_schema_route.RouteRedirect_StripQueryParams{}
+						queryParamsInt.StripQueryParams = &ves_io_schema_route.RouteQueryParams{}
+						routeActionInt.RouteRedirect.QueryParams = queryParamsInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["query_params"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								queryParamsInt.StripQueryParams.QueryParams = ls
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteRedirect.ResponseCode = uint32(v.(int))
+					}
+
+				}
+
 			}
 
 			if v, ok := routesMapStrToI["service_policy"]; ok && !isIntfNil(v) {
@@ -1946,574 +1946,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 			routesMapStrToI := set.(map[string]interface{})
 
-			routeActionTypeFound := false
-
-			if v, ok := routesMapStrToI["route_destination"]; ok && !isIntfNil(v) && !routeActionTypeFound {
-
-				routeActionTypeFound = true
-				routeActionInt := &ves_io_schema_route.RouteType_RouteDestination{}
-				routeActionInt.RouteDestination = &ves_io_schema_route.RouteDestinationList{}
-				routes[i].RouteAction = routeActionInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					hostRewriteParamsTypeFound := false
-
-					if v, ok := cs["auto_host_rewrite"]; ok && !isIntfNil(v) && !hostRewriteParamsTypeFound {
-
-						hostRewriteParamsTypeFound = true
-						hostRewriteParamsInt := &ves_io_schema_route.RouteDestinationList_AutoHostRewrite{}
-
-						routeActionInt.RouteDestination.HostRewriteParams = hostRewriteParamsInt
-
-						hostRewriteParamsInt.AutoHostRewrite =
-							v.(bool)
-
-					}
-
-					if v, ok := cs["host_rewrite"]; ok && !isIntfNil(v) && !hostRewriteParamsTypeFound {
-
-						hostRewriteParamsTypeFound = true
-						hostRewriteParamsInt := &ves_io_schema_route.RouteDestinationList_HostRewrite{}
-
-						routeActionInt.RouteDestination.HostRewriteParams = hostRewriteParamsInt
-
-						hostRewriteParamsInt.HostRewrite = v.(string)
-
-					}
-
-					if v, ok := cs["buffer_policy"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						bufferPolicy := &ves_io_schema.BufferConfigType{}
-						routeActionInt.RouteDestination.BufferPolicy = bufferPolicy
-						for _, set := range sl {
-
-							bufferPolicyMapStrToI := set.(map[string]interface{})
-
-							if w, ok := bufferPolicyMapStrToI["disabled"]; ok && !isIntfNil(w) {
-								bufferPolicy.Disabled = w.(bool)
-							}
-
-							if w, ok := bufferPolicyMapStrToI["max_request_bytes"]; ok && !isIntfNil(w) {
-								bufferPolicy.MaxRequestBytes = uint32(w.(int))
-							}
-
-							if w, ok := bufferPolicyMapStrToI["max_request_time"]; ok && !isIntfNil(w) {
-								bufferPolicy.MaxRequestTime = uint32(w.(int))
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["cors_policy"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						corsPolicy := &ves_io_schema.CorsPolicy{}
-						routeActionInt.RouteDestination.CorsPolicy = corsPolicy
-						for _, set := range sl {
-
-							corsPolicyMapStrToI := set.(map[string]interface{})
-
-							if w, ok := corsPolicyMapStrToI["allow_credentials"]; ok && !isIntfNil(w) {
-								corsPolicy.AllowCredentials = w.(bool)
-							}
-
-							if w, ok := corsPolicyMapStrToI["allow_headers"]; ok && !isIntfNil(w) {
-								corsPolicy.AllowHeaders = w.(string)
-							}
-
-							if w, ok := corsPolicyMapStrToI["allow_methods"]; ok && !isIntfNil(w) {
-								corsPolicy.AllowMethods = w.(string)
-							}
-
-							if w, ok := corsPolicyMapStrToI["allow_origin"]; ok && !isIntfNil(w) {
-								ls := make([]string, len(w.([]interface{})))
-								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								corsPolicy.AllowOrigin = ls
-							}
-
-							if w, ok := corsPolicyMapStrToI["allow_origin_regex"]; ok && !isIntfNil(w) {
-								ls := make([]string, len(w.([]interface{})))
-								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								corsPolicy.AllowOriginRegex = ls
-							}
-
-							if w, ok := corsPolicyMapStrToI["disabled"]; ok && !isIntfNil(w) {
-								corsPolicy.Disabled = w.(bool)
-							}
-
-							if w, ok := corsPolicyMapStrToI["expose_headers"]; ok && !isIntfNil(w) {
-								corsPolicy.ExposeHeaders = w.(string)
-							}
-
-							if w, ok := corsPolicyMapStrToI["max_age"]; ok && !isIntfNil(w) {
-								corsPolicy.MaxAge = w.(string)
-							}
-
-							if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
-								corsPolicy.MaximumAge = w.(int32)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["destinations"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						destinations := make([]*ves_io_schema_route.RouteDestination, len(sl))
-						routeActionInt.RouteDestination.Destinations = destinations
-						for i, set := range sl {
-							destinations[i] = &ves_io_schema_route.RouteDestination{}
-
-							destinationsMapStrToI := set.(map[string]interface{})
-
-							if v, ok := destinationsMapStrToI["cluster"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								clusterInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								destinations[i].Cluster = clusterInt
-								for i, ps := range sl {
-
-									cMapToStrVal := ps.(map[string]interface{})
-									clusterInt[i] = &ves_io_schema.ObjectRefType{}
-
-									clusterInt[i].Kind = "cluster"
-
-									if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-										clusterInt[i].Name = v.(string)
-									}
-
-									if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										clusterInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										clusterInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										clusterInt[i].Uid = v.(string)
-									}
-
-								}
-
-							}
-
-							if w, ok := destinationsMapStrToI["endpoint_subsets"]; ok && !isIntfNil(w) {
-								ms := map[string]string{}
-								for k, v := range w.(map[string]interface{}) {
-									ms[k] = v.(string)
-								}
-								destinations[i].EndpointSubsets = ms
-							}
-
-							if w, ok := destinationsMapStrToI["weight"]; ok && !isIntfNil(w) {
-								destinations[i].Weight = uint32(w.(int))
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["endpoint_subsets"]; ok && !isIntfNil(v) {
-
-						ms := map[string]string{}
-						for k, v := range v.(map[string]interface{}) {
-							ms[k] = v.(string)
-						}
-						routeActionInt.RouteDestination.EndpointSubsets = ms
-					}
-
-					if v, ok := cs["hash_policy"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						hashPolicy := make([]*ves_io_schema_route.HashPolicyType, len(sl))
-						routeActionInt.RouteDestination.HashPolicy = hashPolicy
-						for i, set := range sl {
-							hashPolicy[i] = &ves_io_schema_route.HashPolicyType{}
-
-							hashPolicyMapStrToI := set.(map[string]interface{})
-
-							policySpecifierTypeFound := false
-
-							if v, ok := hashPolicyMapStrToI["cookie"]; ok && !isIntfNil(v) && !policySpecifierTypeFound {
-
-								policySpecifierTypeFound = true
-								policySpecifierInt := &ves_io_schema_route.HashPolicyType_Cookie{}
-								policySpecifierInt.Cookie = &ves_io_schema_route.CookieForHashing{}
-								hashPolicy[i].PolicySpecifier = policySpecifierInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										policySpecifierInt.Cookie.Name = v.(string)
-									}
-
-									if v, ok := cs["path"]; ok && !isIntfNil(v) {
-
-										policySpecifierInt.Cookie.Path = v.(string)
-									}
-
-									if v, ok := cs["ttl"]; ok && !isIntfNil(v) {
-
-										policySpecifierInt.Cookie.Ttl = uint32(v.(int))
-									}
-
-								}
-
-							}
-
-							if v, ok := hashPolicyMapStrToI["header_name"]; ok && !isIntfNil(v) && !policySpecifierTypeFound {
-
-								policySpecifierTypeFound = true
-								policySpecifierInt := &ves_io_schema_route.HashPolicyType_HeaderName{}
-
-								hashPolicy[i].PolicySpecifier = policySpecifierInt
-
-								policySpecifierInt.HeaderName = v.(string)
-
-							}
-
-							if v, ok := hashPolicyMapStrToI["source_ip"]; ok && !isIntfNil(v) && !policySpecifierTypeFound {
-
-								policySpecifierTypeFound = true
-								policySpecifierInt := &ves_io_schema_route.HashPolicyType_SourceIp{}
-
-								hashPolicy[i].PolicySpecifier = policySpecifierInt
-
-								policySpecifierInt.SourceIp =
-									v.(bool)
-
-							}
-
-							if w, ok := hashPolicyMapStrToI["terminal"]; ok && !isIntfNil(w) {
-								hashPolicy[i].Terminal = w.(bool)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["mirror_policy"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						mirrorPolicy := &ves_io_schema_route.MirrorPolicyType{}
-						routeActionInt.RouteDestination.MirrorPolicy = mirrorPolicy
-						for _, set := range sl {
-
-							mirrorPolicyMapStrToI := set.(map[string]interface{})
-
-							if v, ok := mirrorPolicyMapStrToI["cluster"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								clusterInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								mirrorPolicy.Cluster = clusterInt
-								for i, ps := range sl {
-
-									cMapToStrVal := ps.(map[string]interface{})
-									clusterInt[i] = &ves_io_schema.ObjectRefType{}
-
-									clusterInt[i].Kind = "cluster"
-
-									if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-										clusterInt[i].Name = v.(string)
-									}
-
-									if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										clusterInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										clusterInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										clusterInt[i].Uid = v.(string)
-									}
-
-								}
-
-							}
-
-							if v, ok := mirrorPolicyMapStrToI["percent"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								percent := &ves_io_schema.FractionalPercent{}
-								mirrorPolicy.Percent = percent
-								for _, set := range sl {
-
-									percentMapStrToI := set.(map[string]interface{})
-
-									if v, ok := percentMapStrToI["denominator"]; ok && !isIntfNil(v) {
-
-										percent.Denominator = ves_io_schema.DenominatorType(ves_io_schema.DenominatorType_value[v.(string)])
-
-									}
-
-									if w, ok := percentMapStrToI["numerator"]; ok && !isIntfNil(w) {
-										percent.Numerator = uint32(w.(int))
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["prefix_rewrite"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteDestination.PrefixRewrite = v.(string)
-					}
-
-					if v, ok := cs["priority"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteDestination.Priority = ves_io_schema.RoutingPriority(ves_io_schema.RoutingPriority_value[v.(string)])
-
-					}
-
-					if v, ok := cs["retry_policy"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						retryPolicy := &ves_io_schema.RetryPolicyType{}
-						routeActionInt.RouteDestination.RetryPolicy = retryPolicy
-						for _, set := range sl {
-
-							retryPolicyMapStrToI := set.(map[string]interface{})
-
-							if v, ok := retryPolicyMapStrToI["back_off"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								backOff := &ves_io_schema.RetryBackOff{}
-								retryPolicy.BackOff = backOff
-								for _, set := range sl {
-
-									backOffMapStrToI := set.(map[string]interface{})
-
-									if w, ok := backOffMapStrToI["base_interval"]; ok && !isIntfNil(w) {
-										backOff.BaseInterval = uint32(w.(int))
-									}
-
-									if w, ok := backOffMapStrToI["max_interval"]; ok && !isIntfNil(w) {
-										backOff.MaxInterval = uint32(w.(int))
-									}
-
-								}
-
-							}
-
-							if w, ok := retryPolicyMapStrToI["num_retries"]; ok && !isIntfNil(w) {
-								retryPolicy.NumRetries = uint32(w.(int))
-							}
-
-							if w, ok := retryPolicyMapStrToI["per_try_timeout"]; ok && !isIntfNil(w) {
-								retryPolicy.PerTryTimeout = uint32(w.(int))
-							}
-
-							if w, ok := retryPolicyMapStrToI["retriable_status_codes"]; ok && !isIntfNil(w) {
-								ls := make([]uint32, len(w.([]interface{})))
-								for i, v := range w.([]interface{}) {
-
-									ls[i] = uint32(v.(int))
-								}
-								retryPolicy.RetriableStatusCodes = ls
-							}
-
-							if w, ok := retryPolicyMapStrToI["retry_on"]; ok && !isIntfNil(w) {
-								retryPolicy.RetryOn = w.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["spdy_config"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						spdyConfig := &ves_io_schema_route.SpdyConfigType{}
-						routeActionInt.RouteDestination.SpdyConfig = spdyConfig
-						for _, set := range sl {
-
-							spdyConfigMapStrToI := set.(map[string]interface{})
-
-							if w, ok := spdyConfigMapStrToI["use_spdy"]; ok && !isIntfNil(w) {
-								spdyConfig.UseSpdy = w.(bool)
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["timeout"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteDestination.Timeout = uint32(v.(int))
-					}
-
-					if v, ok := cs["web_socket_config"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						webSocketConfig := &ves_io_schema_route.WebsocketConfigType{}
-						routeActionInt.RouteDestination.WebSocketConfig = webSocketConfig
-						for _, set := range sl {
-
-							webSocketConfigMapStrToI := set.(map[string]interface{})
-
-							if w, ok := webSocketConfigMapStrToI["idle_timeout"]; ok && !isIntfNil(w) {
-								webSocketConfig.IdleTimeout = uint32(w.(int))
-							}
-
-							if w, ok := webSocketConfigMapStrToI["max_connect_attempts"]; ok && !isIntfNil(w) {
-								webSocketConfig.MaxConnectAttempts = uint32(w.(int))
-							}
-
-							if w, ok := webSocketConfigMapStrToI["use_websocket"]; ok && !isIntfNil(w) {
-								webSocketConfig.UseWebsocket = w.(bool)
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := routesMapStrToI["route_direct_response"]; ok && !isIntfNil(v) && !routeActionTypeFound {
-
-				routeActionTypeFound = true
-				routeActionInt := &ves_io_schema_route.RouteType_RouteDirectResponse{}
-				routeActionInt.RouteDirectResponse = &ves_io_schema_route.RouteDirectResponse{}
-				routes[i].RouteAction = routeActionInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["response_body"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteDirectResponse.ResponseBody = v.(string)
-					}
-
-					if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteDirectResponse.ResponseCode = uint32(v.(int))
-					}
-
-				}
-
-			}
-
-			if v, ok := routesMapStrToI["route_redirect"]; ok && !isIntfNil(v) && !routeActionTypeFound {
-
-				routeActionTypeFound = true
-				routeActionInt := &ves_io_schema_route.RouteType_RouteRedirect{}
-				routeActionInt.RouteRedirect = &ves_io_schema_route.RouteRedirect{}
-				routes[i].RouteAction = routeActionInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					queryParamsTypeFound := false
-
-					if v, ok := cs["all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
-
-						queryParamsTypeFound = true
-						queryParamsInt := &ves_io_schema_route.RouteRedirect_AllParams{}
-
-						routeActionInt.RouteRedirect.QueryParams = queryParamsInt
-
-						queryParamsInt.AllParams =
-							v.(bool)
-
-					}
-
-					if v, ok := cs["remove_all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
-
-						queryParamsTypeFound = true
-
-						if v.(bool) {
-							queryParamsInt := &ves_io_schema_route.RouteRedirect_RemoveAllParams{}
-							queryParamsInt.RemoveAllParams = &ves_io_schema.Empty{}
-							routeActionInt.RouteRedirect.QueryParams = queryParamsInt
-						}
-
-					}
-
-					if v, ok := cs["retain_all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
-
-						queryParamsTypeFound = true
-
-						if v.(bool) {
-							queryParamsInt := &ves_io_schema_route.RouteRedirect_RetainAllParams{}
-							queryParamsInt.RetainAllParams = &ves_io_schema.Empty{}
-							routeActionInt.RouteRedirect.QueryParams = queryParamsInt
-						}
-
-					}
-
-					if v, ok := cs["strip_query_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
-
-						queryParamsTypeFound = true
-						queryParamsInt := &ves_io_schema_route.RouteRedirect_StripQueryParams{}
-						queryParamsInt.StripQueryParams = &ves_io_schema_route.RouteQueryParams{}
-						routeActionInt.RouteRedirect.QueryParams = queryParamsInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["query_params"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								queryParamsInt.StripQueryParams.QueryParams = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["host_redirect"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteRedirect.HostRedirect = v.(string)
-					}
-
-					if v, ok := cs["path_redirect"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteRedirect.PathRedirect = v.(string)
-					}
-
-					if v, ok := cs["proto_redirect"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteRedirect.ProtoRedirect = v.(string)
-					}
-
-					if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteRedirect.ResponseCode = uint32(v.(int))
-					}
-
-				}
-
-			}
-
 			if w, ok := routesMapStrToI["disable_custom_script"]; ok && !isIntfNil(w) {
 				routes[i].DisableCustomScript = w.(bool)
 			}
@@ -2756,6 +2188,574 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 					ls[i] = v.(string)
 				}
 				routes[i].ResponseHeadersToRemove = ls
+			}
+
+			routeActionTypeFound := false
+
+			if v, ok := routesMapStrToI["route_destination"]; ok && !isIntfNil(v) && !routeActionTypeFound {
+
+				routeActionTypeFound = true
+				routeActionInt := &ves_io_schema_route.RouteType_RouteDestination{}
+				routeActionInt.RouteDestination = &ves_io_schema_route.RouteDestinationList{}
+				routes[i].RouteAction = routeActionInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["buffer_policy"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						bufferPolicy := &ves_io_schema.BufferConfigType{}
+						routeActionInt.RouteDestination.BufferPolicy = bufferPolicy
+						for _, set := range sl {
+
+							bufferPolicyMapStrToI := set.(map[string]interface{})
+
+							if w, ok := bufferPolicyMapStrToI["disabled"]; ok && !isIntfNil(w) {
+								bufferPolicy.Disabled = w.(bool)
+							}
+
+							if w, ok := bufferPolicyMapStrToI["max_request_bytes"]; ok && !isIntfNil(w) {
+								bufferPolicy.MaxRequestBytes = uint32(w.(int))
+							}
+
+							if w, ok := bufferPolicyMapStrToI["max_request_time"]; ok && !isIntfNil(w) {
+								bufferPolicy.MaxRequestTime = uint32(w.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["cors_policy"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						corsPolicy := &ves_io_schema.CorsPolicy{}
+						routeActionInt.RouteDestination.CorsPolicy = corsPolicy
+						for _, set := range sl {
+
+							corsPolicyMapStrToI := set.(map[string]interface{})
+
+							if w, ok := corsPolicyMapStrToI["allow_credentials"]; ok && !isIntfNil(w) {
+								corsPolicy.AllowCredentials = w.(bool)
+							}
+
+							if w, ok := corsPolicyMapStrToI["allow_headers"]; ok && !isIntfNil(w) {
+								corsPolicy.AllowHeaders = w.(string)
+							}
+
+							if w, ok := corsPolicyMapStrToI["allow_methods"]; ok && !isIntfNil(w) {
+								corsPolicy.AllowMethods = w.(string)
+							}
+
+							if w, ok := corsPolicyMapStrToI["allow_origin"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								corsPolicy.AllowOrigin = ls
+							}
+
+							if w, ok := corsPolicyMapStrToI["allow_origin_regex"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								corsPolicy.AllowOriginRegex = ls
+							}
+
+							if w, ok := corsPolicyMapStrToI["disabled"]; ok && !isIntfNil(w) {
+								corsPolicy.Disabled = w.(bool)
+							}
+
+							if w, ok := corsPolicyMapStrToI["expose_headers"]; ok && !isIntfNil(w) {
+								corsPolicy.ExposeHeaders = w.(string)
+							}
+
+							if w, ok := corsPolicyMapStrToI["max_age"]; ok && !isIntfNil(w) {
+								corsPolicy.MaxAge = w.(string)
+							}
+
+							if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
+								corsPolicy.MaximumAge = w.(int32)
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["destinations"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						destinations := make([]*ves_io_schema_route.RouteDestination, len(sl))
+						routeActionInt.RouteDestination.Destinations = destinations
+						for i, set := range sl {
+							destinations[i] = &ves_io_schema_route.RouteDestination{}
+
+							destinationsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := destinationsMapStrToI["cluster"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								clusterInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								destinations[i].Cluster = clusterInt
+								for i, ps := range sl {
+
+									cMapToStrVal := ps.(map[string]interface{})
+									clusterInt[i] = &ves_io_schema.ObjectRefType{}
+
+									clusterInt[i].Kind = "cluster"
+
+									if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+										clusterInt[i].Name = v.(string)
+									}
+
+									if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										clusterInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										clusterInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										clusterInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+							if w, ok := destinationsMapStrToI["endpoint_subsets"]; ok && !isIntfNil(w) {
+								ms := map[string]string{}
+								for k, v := range w.(map[string]interface{}) {
+									ms[k] = v.(string)
+								}
+								destinations[i].EndpointSubsets = ms
+							}
+
+							if w, ok := destinationsMapStrToI["weight"]; ok && !isIntfNil(w) {
+								destinations[i].Weight = uint32(w.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["endpoint_subsets"]; ok && !isIntfNil(v) {
+
+						ms := map[string]string{}
+						for k, v := range v.(map[string]interface{}) {
+							ms[k] = v.(string)
+						}
+						routeActionInt.RouteDestination.EndpointSubsets = ms
+					}
+
+					if v, ok := cs["hash_policy"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						hashPolicy := make([]*ves_io_schema_route.HashPolicyType, len(sl))
+						routeActionInt.RouteDestination.HashPolicy = hashPolicy
+						for i, set := range sl {
+							hashPolicy[i] = &ves_io_schema_route.HashPolicyType{}
+
+							hashPolicyMapStrToI := set.(map[string]interface{})
+
+							policySpecifierTypeFound := false
+
+							if v, ok := hashPolicyMapStrToI["cookie"]; ok && !isIntfNil(v) && !policySpecifierTypeFound {
+
+								policySpecifierTypeFound = true
+								policySpecifierInt := &ves_io_schema_route.HashPolicyType_Cookie{}
+								policySpecifierInt.Cookie = &ves_io_schema_route.CookieForHashing{}
+								hashPolicy[i].PolicySpecifier = policySpecifierInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										policySpecifierInt.Cookie.Name = v.(string)
+									}
+
+									if v, ok := cs["path"]; ok && !isIntfNil(v) {
+
+										policySpecifierInt.Cookie.Path = v.(string)
+									}
+
+									if v, ok := cs["ttl"]; ok && !isIntfNil(v) {
+
+										policySpecifierInt.Cookie.Ttl = uint32(v.(int))
+									}
+
+								}
+
+							}
+
+							if v, ok := hashPolicyMapStrToI["header_name"]; ok && !isIntfNil(v) && !policySpecifierTypeFound {
+
+								policySpecifierTypeFound = true
+								policySpecifierInt := &ves_io_schema_route.HashPolicyType_HeaderName{}
+
+								hashPolicy[i].PolicySpecifier = policySpecifierInt
+
+								policySpecifierInt.HeaderName = v.(string)
+
+							}
+
+							if v, ok := hashPolicyMapStrToI["source_ip"]; ok && !isIntfNil(v) && !policySpecifierTypeFound {
+
+								policySpecifierTypeFound = true
+								policySpecifierInt := &ves_io_schema_route.HashPolicyType_SourceIp{}
+
+								hashPolicy[i].PolicySpecifier = policySpecifierInt
+
+								policySpecifierInt.SourceIp =
+									v.(bool)
+
+							}
+
+							if w, ok := hashPolicyMapStrToI["terminal"]; ok && !isIntfNil(w) {
+								hashPolicy[i].Terminal = w.(bool)
+							}
+
+						}
+
+					}
+
+					hostRewriteParamsTypeFound := false
+
+					if v, ok := cs["auto_host_rewrite"]; ok && !isIntfNil(v) && !hostRewriteParamsTypeFound {
+
+						hostRewriteParamsTypeFound = true
+						hostRewriteParamsInt := &ves_io_schema_route.RouteDestinationList_AutoHostRewrite{}
+
+						routeActionInt.RouteDestination.HostRewriteParams = hostRewriteParamsInt
+
+						hostRewriteParamsInt.AutoHostRewrite =
+							v.(bool)
+
+					}
+
+					if v, ok := cs["host_rewrite"]; ok && !isIntfNil(v) && !hostRewriteParamsTypeFound {
+
+						hostRewriteParamsTypeFound = true
+						hostRewriteParamsInt := &ves_io_schema_route.RouteDestinationList_HostRewrite{}
+
+						routeActionInt.RouteDestination.HostRewriteParams = hostRewriteParamsInt
+
+						hostRewriteParamsInt.HostRewrite = v.(string)
+
+					}
+
+					if v, ok := cs["mirror_policy"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						mirrorPolicy := &ves_io_schema_route.MirrorPolicyType{}
+						routeActionInt.RouteDestination.MirrorPolicy = mirrorPolicy
+						for _, set := range sl {
+
+							mirrorPolicyMapStrToI := set.(map[string]interface{})
+
+							if v, ok := mirrorPolicyMapStrToI["cluster"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								clusterInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								mirrorPolicy.Cluster = clusterInt
+								for i, ps := range sl {
+
+									cMapToStrVal := ps.(map[string]interface{})
+									clusterInt[i] = &ves_io_schema.ObjectRefType{}
+
+									clusterInt[i].Kind = "cluster"
+
+									if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+										clusterInt[i].Name = v.(string)
+									}
+
+									if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										clusterInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										clusterInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										clusterInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := mirrorPolicyMapStrToI["percent"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								percent := &ves_io_schema.FractionalPercent{}
+								mirrorPolicy.Percent = percent
+								for _, set := range sl {
+
+									percentMapStrToI := set.(map[string]interface{})
+
+									if v, ok := percentMapStrToI["denominator"]; ok && !isIntfNil(v) {
+
+										percent.Denominator = ves_io_schema.DenominatorType(ves_io_schema.DenominatorType_value[v.(string)])
+
+									}
+
+									if w, ok := percentMapStrToI["numerator"]; ok && !isIntfNil(w) {
+										percent.Numerator = uint32(w.(int))
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["prefix_rewrite"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteDestination.PrefixRewrite = v.(string)
+					}
+
+					if v, ok := cs["priority"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteDestination.Priority = ves_io_schema.RoutingPriority(ves_io_schema.RoutingPriority_value[v.(string)])
+
+					}
+
+					if v, ok := cs["retry_policy"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						retryPolicy := &ves_io_schema.RetryPolicyType{}
+						routeActionInt.RouteDestination.RetryPolicy = retryPolicy
+						for _, set := range sl {
+
+							retryPolicyMapStrToI := set.(map[string]interface{})
+
+							if v, ok := retryPolicyMapStrToI["back_off"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								backOff := &ves_io_schema.RetryBackOff{}
+								retryPolicy.BackOff = backOff
+								for _, set := range sl {
+
+									backOffMapStrToI := set.(map[string]interface{})
+
+									if w, ok := backOffMapStrToI["base_interval"]; ok && !isIntfNil(w) {
+										backOff.BaseInterval = uint32(w.(int))
+									}
+
+									if w, ok := backOffMapStrToI["max_interval"]; ok && !isIntfNil(w) {
+										backOff.MaxInterval = uint32(w.(int))
+									}
+
+								}
+
+							}
+
+							if w, ok := retryPolicyMapStrToI["num_retries"]; ok && !isIntfNil(w) {
+								retryPolicy.NumRetries = uint32(w.(int))
+							}
+
+							if w, ok := retryPolicyMapStrToI["per_try_timeout"]; ok && !isIntfNil(w) {
+								retryPolicy.PerTryTimeout = uint32(w.(int))
+							}
+
+							if w, ok := retryPolicyMapStrToI["retriable_status_codes"]; ok && !isIntfNil(w) {
+								ls := make([]uint32, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+
+									ls[i] = uint32(v.(int))
+								}
+								retryPolicy.RetriableStatusCodes = ls
+							}
+
+							if w, ok := retryPolicyMapStrToI["retry_on"]; ok && !isIntfNil(w) {
+								retryPolicy.RetryOn = w.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["spdy_config"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						spdyConfig := &ves_io_schema_route.SpdyConfigType{}
+						routeActionInt.RouteDestination.SpdyConfig = spdyConfig
+						for _, set := range sl {
+
+							spdyConfigMapStrToI := set.(map[string]interface{})
+
+							if w, ok := spdyConfigMapStrToI["use_spdy"]; ok && !isIntfNil(w) {
+								spdyConfig.UseSpdy = w.(bool)
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["timeout"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteDestination.Timeout = uint32(v.(int))
+					}
+
+					if v, ok := cs["web_socket_config"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						webSocketConfig := &ves_io_schema_route.WebsocketConfigType{}
+						routeActionInt.RouteDestination.WebSocketConfig = webSocketConfig
+						for _, set := range sl {
+
+							webSocketConfigMapStrToI := set.(map[string]interface{})
+
+							if w, ok := webSocketConfigMapStrToI["idle_timeout"]; ok && !isIntfNil(w) {
+								webSocketConfig.IdleTimeout = uint32(w.(int))
+							}
+
+							if w, ok := webSocketConfigMapStrToI["max_connect_attempts"]; ok && !isIntfNil(w) {
+								webSocketConfig.MaxConnectAttempts = uint32(w.(int))
+							}
+
+							if w, ok := webSocketConfigMapStrToI["use_websocket"]; ok && !isIntfNil(w) {
+								webSocketConfig.UseWebsocket = w.(bool)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := routesMapStrToI["route_direct_response"]; ok && !isIntfNil(v) && !routeActionTypeFound {
+
+				routeActionTypeFound = true
+				routeActionInt := &ves_io_schema_route.RouteType_RouteDirectResponse{}
+				routeActionInt.RouteDirectResponse = &ves_io_schema_route.RouteDirectResponse{}
+				routes[i].RouteAction = routeActionInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["response_body"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteDirectResponse.ResponseBody = v.(string)
+					}
+
+					if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteDirectResponse.ResponseCode = uint32(v.(int))
+					}
+
+				}
+
+			}
+
+			if v, ok := routesMapStrToI["route_redirect"]; ok && !isIntfNil(v) && !routeActionTypeFound {
+
+				routeActionTypeFound = true
+				routeActionInt := &ves_io_schema_route.RouteType_RouteRedirect{}
+				routeActionInt.RouteRedirect = &ves_io_schema_route.RouteRedirect{}
+				routes[i].RouteAction = routeActionInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["host_redirect"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteRedirect.HostRedirect = v.(string)
+					}
+
+					if v, ok := cs["path_redirect"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteRedirect.PathRedirect = v.(string)
+					}
+
+					if v, ok := cs["proto_redirect"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteRedirect.ProtoRedirect = v.(string)
+					}
+
+					queryParamsTypeFound := false
+
+					if v, ok := cs["all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
+
+						queryParamsTypeFound = true
+						queryParamsInt := &ves_io_schema_route.RouteRedirect_AllParams{}
+
+						routeActionInt.RouteRedirect.QueryParams = queryParamsInt
+
+						queryParamsInt.AllParams =
+							v.(bool)
+
+					}
+
+					if v, ok := cs["remove_all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
+
+						queryParamsTypeFound = true
+
+						if v.(bool) {
+							queryParamsInt := &ves_io_schema_route.RouteRedirect_RemoveAllParams{}
+							queryParamsInt.RemoveAllParams = &ves_io_schema.Empty{}
+							routeActionInt.RouteRedirect.QueryParams = queryParamsInt
+						}
+
+					}
+
+					if v, ok := cs["retain_all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
+
+						queryParamsTypeFound = true
+
+						if v.(bool) {
+							queryParamsInt := &ves_io_schema_route.RouteRedirect_RetainAllParams{}
+							queryParamsInt.RetainAllParams = &ves_io_schema.Empty{}
+							routeActionInt.RouteRedirect.QueryParams = queryParamsInt
+						}
+
+					}
+
+					if v, ok := cs["strip_query_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
+
+						queryParamsTypeFound = true
+						queryParamsInt := &ves_io_schema_route.RouteRedirect_StripQueryParams{}
+						queryParamsInt.StripQueryParams = &ves_io_schema_route.RouteQueryParams{}
+						routeActionInt.RouteRedirect.QueryParams = queryParamsInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["query_params"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								queryParamsInt.StripQueryParams.QueryParams = ls
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
+
+						routeActionInt.RouteRedirect.ResponseCode = uint32(v.(int))
+					}
+
+				}
+
 			}
 
 			if v, ok := routesMapStrToI["service_policy"]; ok && !isIntfNil(v) {

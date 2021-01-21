@@ -16,6 +16,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_network_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
@@ -25,87 +26,6 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
-
-// augmented methods on protoc/std generated struct
-
-func (m *ApplicationsType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *ApplicationsType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *ApplicationsType) DeepCopy() *ApplicationsType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &ApplicationsType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *ApplicationsType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *ApplicationsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return ApplicationsTypeValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateApplicationsType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateApplicationsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*ApplicationsType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *ApplicationsType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["applications"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("applications"))
-		for idx, item := range m.GetApplications() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultApplicationsTypeValidator = func() *ValidateApplicationsType {
-	v := &ValidateApplicationsType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	return v
-}()
-
-func ApplicationsTypeValidator() db.Validator {
-	return DefaultApplicationsTypeValidator
-}
 
 // augmented methods on protoc/std generated struct
 
@@ -246,9 +166,9 @@ type ValidateCreateSpecType struct {
 
 func (v *ValidateCreateSpecType) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemsValidatorFn := func(ctx context.Context, elems []*NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_network_policy.NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
-			if err := NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_network_policy.NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -260,9 +180,9 @@ func (v *ValidateCreateSpecType) IngressRulesValidationRuleHandler(rules map[str
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*NetworkPolicyRuleType)
+		elems, ok := val.([]*ves_io_schema_network_policy.NetworkPolicyRuleType)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*NetworkPolicyRuleType, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_network_policy.NetworkPolicyRuleType, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -286,9 +206,9 @@ func (v *ValidateCreateSpecType) IngressRulesValidationRuleHandler(rules map[str
 
 func (v *ValidateCreateSpecType) EgressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemsValidatorFn := func(ctx context.Context, elems []*NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_network_policy.NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
-			if err := NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_network_policy.NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -300,9 +220,9 @@ func (v *ValidateCreateSpecType) EgressRulesValidationRuleHandler(rules map[stri
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*NetworkPolicyRuleType)
+		elems, ok := val.([]*ves_io_schema_network_policy.NetworkPolicyRuleType)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*NetworkPolicyRuleType, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_network_policy.NetworkPolicyRuleType, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -380,7 +300,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhIngressRules := v.IngressRulesValidationRuleHandler
 	rulesIngressRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items":            "128",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
 	vFn, err = vrhIngressRules(rulesIngressRules)
 	if err != nil {
@@ -391,7 +312,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhEgressRules := v.EgressRulesValidationRuleHandler
 	rulesEgressRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items":            "128",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
 	vFn, err = vrhEgressRules(rulesEgressRules)
 	if err != nil {
@@ -400,259 +322,13 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["egress_rules"] = vFn
 
-	v.FldValidators["endpoint"] = EndpointChoiceTypeValidator().Validate
+	v.FldValidators["endpoint"] = ves_io_schema_network_policy.EndpointChoiceTypeValidator().Validate
 
 	return v
 }()
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *EndpointChoiceType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *EndpointChoiceType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *EndpointChoiceType) DeepCopy() *EndpointChoiceType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &EndpointChoiceType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *EndpointChoiceType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *EndpointChoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return EndpointChoiceTypeValidator().Validate(ctx, m, opts...)
-}
-
-func (m *EndpointChoiceType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetEndpointChoiceDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
-	return drInfos, nil
-}
-
-func (m *EndpointChoiceType) GetEndpointChoiceDRefInfo() ([]db.DRefInfo, error) {
-	var odrInfos []db.DRefInfo
-
-	switch m.GetEndpointChoice().(type) {
-	case *EndpointChoiceType_PrefixList:
-
-	case *EndpointChoiceType_Any:
-
-	case *EndpointChoiceType_OutsideEndpoints:
-
-	case *EndpointChoiceType_InsideEndpoints:
-
-	case *EndpointChoiceType_Interface:
-
-		vref := m.GetInterface()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("network_interface.Object")
-		odri := db.DRefInfo{
-			RefdType:   "network_interface.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "interface",
-			Ref:        vdRef,
-		}
-		odrInfos = append(odrInfos, odri)
-
-	case *EndpointChoiceType_LabelSelector:
-
-	}
-
-	return odrInfos, nil
-}
-
-// GetEndpointChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *EndpointChoiceType) GetEndpointChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetEndpointChoice().(type) {
-	case *EndpointChoiceType_PrefixList:
-
-	case *EndpointChoiceType_Any:
-
-	case *EndpointChoiceType_OutsideEndpoints:
-
-	case *EndpointChoiceType_InsideEndpoints:
-
-	case *EndpointChoiceType_Interface:
-		refdType, err := d.TypeForEntryKind("", "", "network_interface.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
-		}
-
-		vref := m.GetInterface()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "network_interface.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-
-	case *EndpointChoiceType_LabelSelector:
-
-	}
-
-	return entries, nil
-}
-
-type ValidateEndpointChoiceType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateEndpointChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*EndpointChoiceType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *EndpointChoiceType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	switch m.GetEndpointChoice().(type) {
-	case *EndpointChoiceType_PrefixList:
-		if fv, exists := v.FldValidators["endpoint_choice.prefix_list"]; exists {
-			val := m.GetEndpointChoice().(*EndpointChoiceType_PrefixList).PrefixList
-			vOpts := append(opts,
-				db.WithValidateField("endpoint_choice"),
-				db.WithValidateField("prefix_list"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *EndpointChoiceType_Any:
-		if fv, exists := v.FldValidators["endpoint_choice.any"]; exists {
-			val := m.GetEndpointChoice().(*EndpointChoiceType_Any).Any
-			vOpts := append(opts,
-				db.WithValidateField("endpoint_choice"),
-				db.WithValidateField("any"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *EndpointChoiceType_OutsideEndpoints:
-		if fv, exists := v.FldValidators["endpoint_choice.outside_endpoints"]; exists {
-			val := m.GetEndpointChoice().(*EndpointChoiceType_OutsideEndpoints).OutsideEndpoints
-			vOpts := append(opts,
-				db.WithValidateField("endpoint_choice"),
-				db.WithValidateField("outside_endpoints"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *EndpointChoiceType_InsideEndpoints:
-		if fv, exists := v.FldValidators["endpoint_choice.inside_endpoints"]; exists {
-			val := m.GetEndpointChoice().(*EndpointChoiceType_InsideEndpoints).InsideEndpoints
-			vOpts := append(opts,
-				db.WithValidateField("endpoint_choice"),
-				db.WithValidateField("inside_endpoints"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *EndpointChoiceType_Interface:
-		if fv, exists := v.FldValidators["endpoint_choice.interface"]; exists {
-			val := m.GetEndpointChoice().(*EndpointChoiceType_Interface).Interface
-			vOpts := append(opts,
-				db.WithValidateField("endpoint_choice"),
-				db.WithValidateField("interface"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *EndpointChoiceType_Namespace:
-		if fv, exists := v.FldValidators["endpoint_choice.namespace"]; exists {
-			val := m.GetEndpointChoice().(*EndpointChoiceType_Namespace).Namespace
-			vOpts := append(opts,
-				db.WithValidateField("endpoint_choice"),
-				db.WithValidateField("namespace"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *EndpointChoiceType_LabelSelector:
-		if fv, exists := v.FldValidators["endpoint_choice.label_selector"]; exists {
-			val := m.GetEndpointChoice().(*EndpointChoiceType_LabelSelector).LabelSelector
-			vOpts := append(opts,
-				db.WithValidateField("endpoint_choice"),
-				db.WithValidateField("label_selector"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultEndpointChoiceTypeValidator = func() *ValidateEndpointChoiceType {
-	v := &ValidateEndpointChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	v.FldValidators["endpoint_choice.prefix_list"] = ves_io_schema_views.PrefixStringListTypeValidator().Validate
-	v.FldValidators["endpoint_choice.interface"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-	v.FldValidators["endpoint_choice.label_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
-
-	return v
-}()
-
-func EndpointChoiceTypeValidator() db.Validator {
-	return DefaultEndpointChoiceTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -794,9 +470,9 @@ type ValidateGetSpecType struct {
 
 func (v *ValidateGetSpecType) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemsValidatorFn := func(ctx context.Context, elems []*NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_network_policy.NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
-			if err := NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_network_policy.NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -808,9 +484,9 @@ func (v *ValidateGetSpecType) IngressRulesValidationRuleHandler(rules map[string
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*NetworkPolicyRuleType)
+		elems, ok := val.([]*ves_io_schema_network_policy.NetworkPolicyRuleType)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*NetworkPolicyRuleType, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_network_policy.NetworkPolicyRuleType, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -834,9 +510,9 @@ func (v *ValidateGetSpecType) IngressRulesValidationRuleHandler(rules map[string
 
 func (v *ValidateGetSpecType) EgressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemsValidatorFn := func(ctx context.Context, elems []*NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_network_policy.NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
-			if err := NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_network_policy.NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -848,9 +524,9 @@ func (v *ValidateGetSpecType) EgressRulesValidationRuleHandler(rules map[string]
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*NetworkPolicyRuleType)
+		elems, ok := val.([]*ves_io_schema_network_policy.NetworkPolicyRuleType)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*NetworkPolicyRuleType, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_network_policy.NetworkPolicyRuleType, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -928,7 +604,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhIngressRules := v.IngressRulesValidationRuleHandler
 	rulesIngressRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items":            "128",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
 	vFn, err = vrhIngressRules(rulesIngressRules)
 	if err != nil {
@@ -939,7 +616,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhEgressRules := v.EgressRulesValidationRuleHandler
 	rulesEgressRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items":            "128",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
 	vFn, err = vrhEgressRules(rulesEgressRules)
 	if err != nil {
@@ -948,7 +626,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["egress_rules"] = vFn
 
-	v.FldValidators["endpoint"] = EndpointChoiceTypeValidator().Validate
+	v.FldValidators["endpoint"] = ves_io_schema_network_policy.EndpointChoiceTypeValidator().Validate
 
 	return v
 }()
@@ -1152,9 +830,9 @@ type ValidateGlobalSpecType struct {
 
 func (v *ValidateGlobalSpecType) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemsValidatorFn := func(ctx context.Context, elems []*NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_network_policy.NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
-			if err := NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_network_policy.NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -1166,9 +844,9 @@ func (v *ValidateGlobalSpecType) IngressRulesValidationRuleHandler(rules map[str
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*NetworkPolicyRuleType)
+		elems, ok := val.([]*ves_io_schema_network_policy.NetworkPolicyRuleType)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*NetworkPolicyRuleType, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_network_policy.NetworkPolicyRuleType, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -1192,9 +870,9 @@ func (v *ValidateGlobalSpecType) IngressRulesValidationRuleHandler(rules map[str
 
 func (v *ValidateGlobalSpecType) EgressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemsValidatorFn := func(ctx context.Context, elems []*NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_network_policy.NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
-			if err := NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_network_policy.NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -1206,9 +884,9 @@ func (v *ValidateGlobalSpecType) EgressRulesValidationRuleHandler(rules map[stri
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*NetworkPolicyRuleType)
+		elems, ok := val.([]*ves_io_schema_network_policy.NetworkPolicyRuleType)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*NetworkPolicyRuleType, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_network_policy.NetworkPolicyRuleType, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -1295,7 +973,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhIngressRules := v.IngressRulesValidationRuleHandler
 	rulesIngressRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items":            "128",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
 	vFn, err = vrhIngressRules(rulesIngressRules)
 	if err != nil {
@@ -1306,7 +985,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhEgressRules := v.EgressRulesValidationRuleHandler
 	rulesEgressRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items":            "128",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
 	vFn, err = vrhEgressRules(rulesEgressRules)
 	if err != nil {
@@ -1315,7 +995,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["egress_rules"] = vFn
 
-	v.FldValidators["endpoint"] = EndpointChoiceTypeValidator().Validate
+	v.FldValidators["endpoint"] = ves_io_schema_network_policy.EndpointChoiceTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -1324,582 +1004,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *NetworkPolicyRuleType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *NetworkPolicyRuleType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *NetworkPolicyRuleType) DeepCopy() *NetworkPolicyRuleType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &NetworkPolicyRuleType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *NetworkPolicyRuleType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *NetworkPolicyRuleType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return NetworkPolicyRuleTypeValidator().Validate(ctx, m, opts...)
-}
-
-func (m *NetworkPolicyRuleType) GetDRefInfo() ([]db.DRefInfo, error) {
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetOtherEndpointDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
-	return drInfos, nil
-}
-
-// GetDRefInfo for the field's type
-func (m *NetworkPolicyRuleType) GetOtherEndpointDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
-	if m.OtherEndpoint == nil {
-		return []db.DRefInfo{}, nil
-	}
-
-	var odrInfos []db.DRefInfo
-
-	switch m.GetOtherEndpoint().(type) {
-	case *NetworkPolicyRuleType_IpPrefixSet:
-		odrInfos, err = m.GetIpPrefixSet().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "ip_prefix_set." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
-
-	case *NetworkPolicyRuleType_Any:
-
-	case *NetworkPolicyRuleType_PrefixList:
-
-	case *NetworkPolicyRuleType_OutsideEndpoints:
-
-	case *NetworkPolicyRuleType_InsideEndpoints:
-
-	case *NetworkPolicyRuleType_LabelSelector:
-
-	}
-
-	return drInfos, err
-}
-
-type ValidateNetworkPolicyRuleType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateNetworkPolicyRuleType) RuleNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for rule_name")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateNetworkPolicyRuleType) KeysValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepStringItemRules(rules)
-	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for keys")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for keys")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]string)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []string, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated keys")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items keys")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateNetworkPolicyRuleType) RuleDescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for rule_description")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateNetworkPolicyRuleType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*NetworkPolicyRuleType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *NetworkPolicyRuleType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["action"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("action"))
-		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["keys"]; exists {
-		vOpts := append(opts, db.WithValidateField("keys"))
-		if err := fv(ctx, m.GetKeys(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	switch m.GetOtherEndpoint().(type) {
-	case *NetworkPolicyRuleType_IpPrefixSet:
-		if fv, exists := v.FldValidators["other_endpoint.ip_prefix_set"]; exists {
-			val := m.GetOtherEndpoint().(*NetworkPolicyRuleType_IpPrefixSet).IpPrefixSet
-			vOpts := append(opts,
-				db.WithValidateField("other_endpoint"),
-				db.WithValidateField("ip_prefix_set"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *NetworkPolicyRuleType_Any:
-		if fv, exists := v.FldValidators["other_endpoint.any"]; exists {
-			val := m.GetOtherEndpoint().(*NetworkPolicyRuleType_Any).Any
-			vOpts := append(opts,
-				db.WithValidateField("other_endpoint"),
-				db.WithValidateField("any"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *NetworkPolicyRuleType_PrefixList:
-		if fv, exists := v.FldValidators["other_endpoint.prefix_list"]; exists {
-			val := m.GetOtherEndpoint().(*NetworkPolicyRuleType_PrefixList).PrefixList
-			vOpts := append(opts,
-				db.WithValidateField("other_endpoint"),
-				db.WithValidateField("prefix_list"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *NetworkPolicyRuleType_OutsideEndpoints:
-		if fv, exists := v.FldValidators["other_endpoint.outside_endpoints"]; exists {
-			val := m.GetOtherEndpoint().(*NetworkPolicyRuleType_OutsideEndpoints).OutsideEndpoints
-			vOpts := append(opts,
-				db.WithValidateField("other_endpoint"),
-				db.WithValidateField("outside_endpoints"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *NetworkPolicyRuleType_InsideEndpoints:
-		if fv, exists := v.FldValidators["other_endpoint.inside_endpoints"]; exists {
-			val := m.GetOtherEndpoint().(*NetworkPolicyRuleType_InsideEndpoints).InsideEndpoints
-			vOpts := append(opts,
-				db.WithValidateField("other_endpoint"),
-				db.WithValidateField("inside_endpoints"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *NetworkPolicyRuleType_Namespace:
-		if fv, exists := v.FldValidators["other_endpoint.namespace"]; exists {
-			val := m.GetOtherEndpoint().(*NetworkPolicyRuleType_Namespace).Namespace
-			vOpts := append(opts,
-				db.WithValidateField("other_endpoint"),
-				db.WithValidateField("namespace"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *NetworkPolicyRuleType_LabelSelector:
-		if fv, exists := v.FldValidators["other_endpoint.label_selector"]; exists {
-			val := m.GetOtherEndpoint().(*NetworkPolicyRuleType_LabelSelector).LabelSelector
-			vOpts := append(opts,
-				db.WithValidateField("other_endpoint"),
-				db.WithValidateField("label_selector"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["rule_description"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("rule_description"))
-		if err := fv(ctx, m.GetRuleDescription(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["rule_name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("rule_name"))
-		if err := fv(ctx, m.GetRuleName(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	switch m.GetTrafficChoice().(type) {
-	case *NetworkPolicyRuleType_AllTraffic:
-		if fv, exists := v.FldValidators["traffic_choice.all_traffic"]; exists {
-			val := m.GetTrafficChoice().(*NetworkPolicyRuleType_AllTraffic).AllTraffic
-			vOpts := append(opts,
-				db.WithValidateField("traffic_choice"),
-				db.WithValidateField("all_traffic"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *NetworkPolicyRuleType_AllTcpTraffic:
-		if fv, exists := v.FldValidators["traffic_choice.all_tcp_traffic"]; exists {
-			val := m.GetTrafficChoice().(*NetworkPolicyRuleType_AllTcpTraffic).AllTcpTraffic
-			vOpts := append(opts,
-				db.WithValidateField("traffic_choice"),
-				db.WithValidateField("all_tcp_traffic"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *NetworkPolicyRuleType_AllUdpTraffic:
-		if fv, exists := v.FldValidators["traffic_choice.all_udp_traffic"]; exists {
-			val := m.GetTrafficChoice().(*NetworkPolicyRuleType_AllUdpTraffic).AllUdpTraffic
-			vOpts := append(opts,
-				db.WithValidateField("traffic_choice"),
-				db.WithValidateField("all_udp_traffic"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *NetworkPolicyRuleType_Applications:
-		if fv, exists := v.FldValidators["traffic_choice.applications"]; exists {
-			val := m.GetTrafficChoice().(*NetworkPolicyRuleType_Applications).Applications
-			vOpts := append(opts,
-				db.WithValidateField("traffic_choice"),
-				db.WithValidateField("applications"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *NetworkPolicyRuleType_ProtocolPortRange:
-		if fv, exists := v.FldValidators["traffic_choice.protocol_port_range"]; exists {
-			val := m.GetTrafficChoice().(*NetworkPolicyRuleType_ProtocolPortRange).ProtocolPortRange
-			vOpts := append(opts,
-				db.WithValidateField("traffic_choice"),
-				db.WithValidateField("protocol_port_range"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultNetworkPolicyRuleTypeValidator = func() *ValidateNetworkPolicyRuleType {
-	v := &ValidateNetworkPolicyRuleType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhRuleName := v.RuleNameValidationRuleHandler
-	rulesRuleName := map[string]string{
-		"ves.io.schema.rules.message.required":       "true",
-		"ves.io.schema.rules.string.max_len":         "64",
-		"ves.io.schema.rules.string.min_len":         "1",
-		"ves.io.schema.rules.string.ves_object_name": "true",
-	}
-	vFn, err = vrhRuleName(rulesRuleName)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for NetworkPolicyRuleType.rule_name: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["rule_name"] = vFn
-
-	vrhKeys := v.KeysValidationRuleHandler
-	rulesKeys := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "16",
-		"ves.io.schema.rules.repeated.unique":    "true",
-	}
-	vFn, err = vrhKeys(rulesKeys)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for NetworkPolicyRuleType.keys: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["keys"] = vFn
-
-	vrhRuleDescription := v.RuleDescriptionValidationRuleHandler
-	rulesRuleDescription := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhRuleDescription(rulesRuleDescription)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for NetworkPolicyRuleType.rule_description: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["rule_description"] = vFn
-
-	v.FldValidators["other_endpoint.ip_prefix_set"] = ves_io_schema.IpPrefixSetRefTypeValidator().Validate
-	v.FldValidators["other_endpoint.prefix_list"] = ves_io_schema_views.PrefixStringListTypeValidator().Validate
-	v.FldValidators["other_endpoint.label_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
-
-	v.FldValidators["traffic_choice.protocol_port_range"] = ProtocolPortTypeValidator().Validate
-
-	return v
-}()
-
-func NetworkPolicyRuleTypeValidator() db.Validator {
-	return DefaultNetworkPolicyRuleTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *ProtocolPortType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *ProtocolPortType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *ProtocolPortType) DeepCopy() *ProtocolPortType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &ProtocolPortType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *ProtocolPortType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *ProtocolPortType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return ProtocolPortTypeValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateProtocolPortType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateProtocolPortType) ProtocolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateProtocolPortType) PortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepStringItemRules(rules)
-	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for port_ranges")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for port_ranges")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]string)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []string, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated port_ranges")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items port_ranges")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateProtocolPortType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*ProtocolPortType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *ProtocolPortType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["port_ranges"]; exists {
-		vOpts := append(opts, db.WithValidateField("port_ranges"))
-		if err := fv(ctx, m.GetPortRanges(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["protocol"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("protocol"))
-		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultProtocolPortTypeValidator = func() *ValidateProtocolPortType {
-	v := &ValidateProtocolPortType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhProtocol := v.ProtocolValidationRuleHandler
-	rulesProtocol := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"\",\"ALL\",\"TCP\",\"UDP\",\"ICMP\"]",
-	}
-	vFn, err = vrhProtocol(rulesProtocol)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ProtocolPortType.protocol: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["protocol"] = vFn
-
-	vrhPortRanges := v.PortRangesValidationRuleHandler
-	rulesPortRanges := map[string]string{
-		"ves.io.schema.rules.repeated.items.string.port_range": "true",
-		"ves.io.schema.rules.repeated.max_items":               "128",
-	}
-	vFn, err = vrhPortRanges(rulesPortRanges)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ProtocolPortType.port_ranges: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["port_ranges"] = vFn
-
-	return v
-}()
-
-func ProtocolPortTypeValidator() db.Validator {
-	return DefaultProtocolPortTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2041,9 +1145,9 @@ type ValidateReplaceSpecType struct {
 
 func (v *ValidateReplaceSpecType) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemsValidatorFn := func(ctx context.Context, elems []*NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_network_policy.NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
-			if err := NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_network_policy.NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -2055,9 +1159,9 @@ func (v *ValidateReplaceSpecType) IngressRulesValidationRuleHandler(rules map[st
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*NetworkPolicyRuleType)
+		elems, ok := val.([]*ves_io_schema_network_policy.NetworkPolicyRuleType)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*NetworkPolicyRuleType, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_network_policy.NetworkPolicyRuleType, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -2081,9 +1185,9 @@ func (v *ValidateReplaceSpecType) IngressRulesValidationRuleHandler(rules map[st
 
 func (v *ValidateReplaceSpecType) EgressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemsValidatorFn := func(ctx context.Context, elems []*NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_network_policy.NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
-			if err := NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_network_policy.NetworkPolicyRuleTypeValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -2095,9 +1199,9 @@ func (v *ValidateReplaceSpecType) EgressRulesValidationRuleHandler(rules map[str
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*NetworkPolicyRuleType)
+		elems, ok := val.([]*ves_io_schema_network_policy.NetworkPolicyRuleType)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*NetworkPolicyRuleType, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_network_policy.NetworkPolicyRuleType, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -2175,7 +1279,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhIngressRules := v.IngressRulesValidationRuleHandler
 	rulesIngressRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items":            "128",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
 	vFn, err = vrhIngressRules(rulesIngressRules)
 	if err != nil {
@@ -2186,7 +1291,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhEgressRules := v.EgressRulesValidationRuleHandler
 	rulesEgressRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.max_items":            "128",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
 	vFn, err = vrhEgressRules(rulesEgressRules)
 	if err != nil {
@@ -2195,7 +1301,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["egress_rules"] = vFn
 
-	v.FldValidators["endpoint"] = EndpointChoiceTypeValidator().Validate
+	v.FldValidators["endpoint"] = ves_io_schema_network_policy.EndpointChoiceTypeValidator().Validate
 
 	return v
 }()

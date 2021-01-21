@@ -5269,12 +5269,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
-	if v, ok := d.GetOk("nodes_per_az"); ok && !isIntfNil(v) {
-
-		updateSpec.NodesPerAz =
-			uint32(v.(int))
-	}
-
 	if v, ok := d.GetOk("operating_system_version"); ok && !isIntfNil(v) {
 
 		updateSpec.OperatingSystemVersion =

@@ -186,7 +186,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Required: true,
+							Optional: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeInt,
 							},
@@ -271,6 +271,11 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 						},
 					},
 				},
+			},
+
+			"challenge_action": {
+				Type:     schema.TypeString,
+				Required: true,
 			},
 
 			"any_client": {
@@ -475,7 +480,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Required: true,
+							Optional: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeInt,
 							},
@@ -1280,6 +1285,12 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							Optional: true,
 						},
 
+						"waf_in_monitoring_mode": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"waf_inline_rule_control": {
 
 							Type:     schema.TypeSet,
@@ -1295,6 +1306,11 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
+									},
+
+									"monitoring_mode": {
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 								},
 							},
@@ -1333,6 +1349,11 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 												},
 											},
 										},
+									},
+
+									"monitoring_mode": {
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 								},
 							},
@@ -1662,6 +1683,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 			}
 
 		}
+
+	}
+
+	if v, ok := d.GetOk("challenge_action"); ok && !isIntfNil(v) {
+
+		createSpec.ChallengeAction = ves_io_schema_policy.ChallengeAction(ves_io_schema_policy.ChallengeAction_value[v.(string)])
 
 	}
 
@@ -2968,6 +2995,18 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 			}
 
+			if v, ok := wafActionMapStrToI["waf_in_monitoring_mode"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.WafAction_WafInMonitoringMode{}
+					actionTypeInt.WafInMonitoringMode = &ves_io_schema.Empty{}
+					wafAction.ActionType = actionTypeInt
+				}
+
+			}
+
 			if v, ok := wafActionMapStrToI["waf_inline_rule_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
 				actionTypeTypeFound = true
@@ -2987,6 +3026,11 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 						}
 						actionTypeInt.WafInlineRuleControl.ExcludeRuleIds = exclude_rule_idsList
 
+					}
+
+					if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
+
+						actionTypeInt.WafInlineRuleControl.MonitoringMode = v.(bool)
 					}
 
 				}
@@ -3034,6 +3078,11 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 						}
 
+					}
+
+					if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
+
+						actionTypeInt.WafRuleControl.MonitoringMode = v.(bool)
 					}
 
 				}
@@ -3413,6 +3462,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 			}
 
 		}
+
+	}
+
+	if v, ok := d.GetOk("challenge_action"); ok && !isIntfNil(v) {
+
+		updateSpec.ChallengeAction = ves_io_schema_policy.ChallengeAction(ves_io_schema_policy.ChallengeAction_value[v.(string)])
 
 	}
 
@@ -4719,6 +4774,18 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 			}
 
+			if v, ok := wafActionMapStrToI["waf_in_monitoring_mode"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.WafAction_WafInMonitoringMode{}
+					actionTypeInt.WafInMonitoringMode = &ves_io_schema.Empty{}
+					wafAction.ActionType = actionTypeInt
+				}
+
+			}
+
 			if v, ok := wafActionMapStrToI["waf_inline_rule_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
 				actionTypeTypeFound = true
@@ -4738,6 +4805,11 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 						}
 						actionTypeInt.WafInlineRuleControl.ExcludeRuleIds = exclude_rule_idsList
 
+					}
+
+					if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
+
+						actionTypeInt.WafInlineRuleControl.MonitoringMode = v.(bool)
 					}
 
 				}
@@ -4785,6 +4857,11 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 						}
 
+					}
+
+					if v, ok := cs["monitoring_mode"]; ok && !isIntfNil(v) {
+
+						actionTypeInt.WafRuleControl.MonitoringMode = v.(bool)
 					}
 
 				}

@@ -146,6 +146,12 @@ func request_API_Delete_0(ctx context.Context, marshaler runtime.Marshaler, clie
 	var protoReq DeleteRequest
 	var metadata runtime.ServerMetadata
 
+	if req.ContentLength > 0 {
+		if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil {
+			return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+		}
+	}
+
 	var (
 		val string
 		ok  bool

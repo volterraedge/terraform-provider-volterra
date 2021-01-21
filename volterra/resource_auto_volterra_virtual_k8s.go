@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	ves_io_schema_virtual_k8s "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_k8s"
 )
 
@@ -56,6 +57,29 @@ func resourceVolterraVirtualK8S() *schema.Resource {
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+			},
+
+			"default_flavor_ref": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"namespace": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"tenant": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
 			},
 
 			"disabled": {
@@ -152,6 +176,25 @@ func resourceVolterraVirtualK8SCreate(d *schema.ResourceData, meta interface{}) 
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		createMeta.Namespace =
 			v.(string)
+	}
+
+	if v, ok := d.GetOk("default_flavor_ref"); ok && !isIntfNil(v) {
+
+		defaultFlavorRefInt := &ves_io_schema_views.ObjectRefType{}
+		createSpec.DefaultFlavorRef = defaultFlavorRefInt
+
+		dfrMapToStrVal := v.(map[string]interface{})
+		if val, ok := dfrMapToStrVal["name"]; ok && !isIntfNil(v) {
+			defaultFlavorRefInt.Name = val.(string)
+		}
+		if val, ok := dfrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+			defaultFlavorRefInt.Namespace = val.(string)
+		}
+
+		if val, ok := dfrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+			defaultFlavorRefInt.Tenant = val.(string)
+		}
+
 	}
 
 	serviceIsolationChoiceTypeFound := false

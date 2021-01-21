@@ -78,6 +78,8 @@ Ordered list of rules applied to connections from policy endpoints..
 
 `keys` - (Optional) can talk to "db" in site "abc" and can not talk to "db" in site "xyz" (`String`).
 
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
 `any` - (Optional) Any Endpoint that matches 0/0 ip prefix (bool).
 
 `inside_endpoints` - (Optional) All ip prefixes that are reachable via inside interfaces are chosen as Endpoints (bool).
@@ -94,7 +96,7 @@ Ordered list of rules applied to connections from policy endpoints..
 
 `rule_description` - (Optional) Human readable description for the rule (`String`).
 
-`rule_name` - (Required) Rule Name that will be used to query metrics for this rule. (`String`).
+`rule_name` - (Optional) Rule Name that will be used to query metrics for this rule. (`String`).
 
 `all_tcp_traffic` - (Optional) Select all TCP traffic to match (bool).
 
@@ -132,6 +134,8 @@ Ordered list of rules applied to connections to policy endpoints..
 
 `keys` - (Optional) can talk to "db" in site "abc" and can not talk to "db" in site "xyz" (`String`).
 
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
 `any` - (Optional) Any Endpoint that matches 0/0 ip prefix (bool).
 
 `inside_endpoints` - (Optional) All ip prefixes that are reachable via inside interfaces are chosen as Endpoints (bool).
@@ -148,7 +152,7 @@ Ordered list of rules applied to connections to policy endpoints..
 
 `rule_description` - (Optional) Human readable description for the rule (`String`).
 
-`rule_name` - (Required) Rule Name that will be used to query metrics for this rule. (`String`).
+`rule_name` - (Optional) Rule Name that will be used to query metrics for this rule. (`String`).
 
 `all_tcp_traffic` - (Optional) Select all TCP traffic to match (bool).
 
@@ -176,6 +180,16 @@ local end point is set of prefixes determined by label selector expression.
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
+### Metadata
+
+Common attributes for the rule including name and description..
+
+`description` - (Optional) Human readable description for the object that corresponds to the containing message. (`String`).
+
+`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).
+
+`name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
+
 ### Outside Endpoints
 
 All ip prefixes that are reachable via outside interfaces are chosen as Endpoints.
@@ -184,7 +198,7 @@ All ip prefixes that are reachable via outside interfaces are chosen as Endpoint
 
 For Ingress rules: To these endpoints from remote endpoints these ip prefixes are destination IPs..
 
-`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
+`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
 
 ### Protocol Port Range
 

@@ -3,42 +3,27 @@
 
 package network_interface
 
-import (
-	proto "github.com/gogo/protobuf/proto"
-	golang_proto "github.com/golang/protobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
+import golang_proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/gogo/protobuf/types"
+import ves_io_schema3 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
-	fmt "fmt"
+import strconv "strconv"
 
-	math "math"
+import strings "strings"
+import reflect "reflect"
+import sortkeys "github.com/gogo/protobuf/sortkeys"
 
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	_ "github.com/gogo/protobuf/types"
-
-	ves_io_schema3 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-	strconv "strconv"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	sortkeys "github.com/gogo/protobuf/sortkeys"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -3007,8 +2992,8 @@ type LegacyInterfaceType struct {
 	// allocate a subnet for the interface and an address from the subnet is set on the interface.
 	AddressAllocator []*ves_io_schema4.ObjectRefType `protobuf:"bytes,16,rep,name=address_allocator,json=addressAllocator" json:"address_allocator,omitempty"`
 	// Select Link Quality Monitoring configuration
-	// x-displayName: "Select Link Quality Monitoring configuration"
 	//
+	// x-displayName: "Select Link Quality Monitoring configuration"
 	// Link Quality Monitoring configuration for a network interface. When enabled, VER will send probes
 	// on the network interface to monitor quality of the link. Links are assigned a score based on the result of probes.
 	//

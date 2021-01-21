@@ -27,10 +27,9 @@ resource "volterra_healthcheck" "example" {
       "key1" = "value1"
     }
 
-    // One of the arguments from this list "host_header use_origin_server_name" must be set
-    host_header = "one.volterra.com"
-
-    path = "/healthcheck"
+    // One of the arguments from this list "use_origin_server_name host_header" must be set
+    use_origin_server_name = true
+    path                   = "/healthcheck"
 
     request_headers_to_remove = ["user-agent"]
     use_http2                 = true

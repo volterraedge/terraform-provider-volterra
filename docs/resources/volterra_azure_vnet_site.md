@@ -21,7 +21,7 @@ resource "volterra_azure_vnet_site" "example" {
   namespace    = "staging"
   azure_region = ["East US"]
 
-  // One of the arguments from this list "azure_cred assisted" must be set
+  // One of the arguments from this list "assisted azure_cred" must be set
 
   azure_cred {
     name      = "test1"
@@ -30,7 +30,7 @@ resource "volterra_azure_vnet_site" "example" {
   }
   resource_group = ["my-resources"]
 
-  // One of the arguments from this list "voltstack_cluster ingress_gw ingress_egress_gw" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
   ingress_gw {
     az_nodes {
@@ -38,11 +38,13 @@ resource "volterra_azure_vnet_site" "example" {
       disk_size = "disk_size"
 
       local_subnet {
-        // One of the arguments from this list "subnet subnet_param" must be set
+        // One of the arguments from this list "subnet_param subnet" must be set
 
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-          ipv6 = "1234:568:abcd:9100::/64"
+        subnet {
+          // One of the arguments from this list "subnet_resource_grp vnet_resource_group" must be set
+          subnet_resource_grp = "subnet_resource_grp"
+
+          subnet_name = "MySubnet"
         }
       }
     }
@@ -96,7 +98,7 @@ Argument Reference
 
 `machine_type` - (Optional) Standard_D5_v2 (16 x vCPU, 56GB RAM) very high performance (`String`).
 
-`nodes_per_az` - (Optional) Auto scale maximum worker nodes limit up to 21, value of zero will disable auto scale (`Int`).
+`nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
 
 `operating_system_version` - (Optional) Desired Operating System version for this site. (`String`).
 
@@ -118,7 +120,7 @@ Argument Reference
 
 Enable Forward Proxy for this site and manage policies.
 
-`forward_proxy_policies` - (Required) Ordered List of Network Policies active for this network firewall. See [ref](#ref) below for details.
+`forward_proxy_policies` - (Required) List of Forward Proxy Policies. See [ref](#ref) below for details.
 
 ### Active Network Policies
 
@@ -134,7 +136,7 @@ Autogenerate the Vnet Name.
 
 Only Single AZ or Three AZ(s) nodes are supported currently..
 
-`azure_az` - (Required) Name for AWS availability Zone. (`String`).
+`azure_az` - (Required) Azure availability zone. (`String`).
 
 `disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`String`).
 
@@ -226,7 +228,7 @@ Enable interception for all domains.
 
 Forward Proxy is enabled for this connector.
 
-`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2 seconds (`Int`).
+`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2000 (2 seconds) (`Int`).
 
 `max_connect_attempts` - (Optional) Specifies the allowed number of retries on connect failure to upstream server. Defaults to 1. (`Int`).
 
@@ -380,7 +382,7 @@ Disable Forward Proxy for this site.
 
 ### No Global Network
 
-No global network to connect .
+No global network to connect.
 
 ### No Inside Static Routes
 

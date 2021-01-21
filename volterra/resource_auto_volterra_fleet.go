@@ -233,12 +233,6 @@ func resourceVolterraFleet() *schema.Resource {
 				},
 			},
 
-			"bar": {
-
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-
 			"default_config": {
 
 				Type:     schema.TypeBool,
@@ -620,7 +614,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Required: true,
+																			Optional: true,
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2339,6 +2333,41 @@ func resourceVolterraFleet() *schema.Resource {
 				},
 			},
 
+			"allow_all_usb": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"deny_all_usb": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"usb_policy": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"namespace": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"tenant": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"volterra_software_version": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -2642,17 +2671,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 	}
 
 	interfaceChoiceTypeFound := false
-
-	if v, ok := d.GetOk("bar"); ok && !interfaceChoiceTypeFound {
-
-		interfaceChoiceTypeFound = true
-		interfaceChoiceInt := &ves_io_schema_fleet.CreateSpecType_Bar{}
-
-		createSpec.InterfaceChoice = interfaceChoiceInt
-
-		interfaceChoiceInt.Bar = v.(string)
-
-	}
 
 	if v, ok := d.GetOk("default_config"); ok && !interfaceChoiceTypeFound {
 
@@ -5237,6 +5255,62 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 				}
 
+			}
+
+		}
+
+	}
+
+	usbPolicyChoiceTypeFound := false
+
+	if v, ok := d.GetOk("allow_all_usb"); ok && !usbPolicyChoiceTypeFound {
+
+		usbPolicyChoiceTypeFound = true
+
+		if v.(bool) {
+			usbPolicyChoiceInt := &ves_io_schema_fleet.CreateSpecType_AllowAllUsb{}
+			usbPolicyChoiceInt.AllowAllUsb = &ves_io_schema.Empty{}
+			createSpec.UsbPolicyChoice = usbPolicyChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("deny_all_usb"); ok && !usbPolicyChoiceTypeFound {
+
+		usbPolicyChoiceTypeFound = true
+
+		if v.(bool) {
+			usbPolicyChoiceInt := &ves_io_schema_fleet.CreateSpecType_DenyAllUsb{}
+			usbPolicyChoiceInt.DenyAllUsb = &ves_io_schema.Empty{}
+			createSpec.UsbPolicyChoice = usbPolicyChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("usb_policy"); ok && !usbPolicyChoiceTypeFound {
+
+		usbPolicyChoiceTypeFound = true
+		usbPolicyChoiceInt := &ves_io_schema_fleet.CreateSpecType_UsbPolicy{}
+		usbPolicyChoiceInt.UsbPolicy = &ves_io_schema_views.ObjectRefType{}
+		createSpec.UsbPolicyChoice = usbPolicyChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+				usbPolicyChoiceInt.UsbPolicy.Name = v.(string)
+			}
+
+			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+				usbPolicyChoiceInt.UsbPolicy.Namespace = v.(string)
+			}
+
+			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+				usbPolicyChoiceInt.UsbPolicy.Tenant = v.(string)
 			}
 
 		}
@@ -8167,6 +8241,62 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 
 				}
 
+			}
+
+		}
+
+	}
+
+	usbPolicyChoiceTypeFound := false
+
+	if v, ok := d.GetOk("allow_all_usb"); ok && !usbPolicyChoiceTypeFound {
+
+		usbPolicyChoiceTypeFound = true
+
+		if v.(bool) {
+			usbPolicyChoiceInt := &ves_io_schema_fleet.ReplaceSpecType_AllowAllUsb{}
+			usbPolicyChoiceInt.AllowAllUsb = &ves_io_schema.Empty{}
+			updateSpec.UsbPolicyChoice = usbPolicyChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("deny_all_usb"); ok && !usbPolicyChoiceTypeFound {
+
+		usbPolicyChoiceTypeFound = true
+
+		if v.(bool) {
+			usbPolicyChoiceInt := &ves_io_schema_fleet.ReplaceSpecType_DenyAllUsb{}
+			usbPolicyChoiceInt.DenyAllUsb = &ves_io_schema.Empty{}
+			updateSpec.UsbPolicyChoice = usbPolicyChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("usb_policy"); ok && !usbPolicyChoiceTypeFound {
+
+		usbPolicyChoiceTypeFound = true
+		usbPolicyChoiceInt := &ves_io_schema_fleet.ReplaceSpecType_UsbPolicy{}
+		usbPolicyChoiceInt.UsbPolicy = &ves_io_schema_views.ObjectRefType{}
+		updateSpec.UsbPolicyChoice = usbPolicyChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+				usbPolicyChoiceInt.UsbPolicy.Name = v.(string)
+			}
+
+			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+				usbPolicyChoiceInt.UsbPolicy.Namespace = v.(string)
+			}
+
+			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+				usbPolicyChoiceInt.UsbPolicy.Tenant = v.(string)
 			}
 
 		}

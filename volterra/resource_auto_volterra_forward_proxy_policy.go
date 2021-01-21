@@ -223,6 +223,31 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 							},
 						},
 
+						"metadata": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"description": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"disable": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"rule_description": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -366,6 +391,31 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 							},
 						},
 
+						"metadata": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"description": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"disable": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"rule_description": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -443,7 +493,7 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 													Type: schema.TypeList,
 
-													Required: true,
+													Optional: true,
 													Elem: &schema.Schema{
 														Type: schema.TypeInt,
 													},
@@ -529,7 +579,7 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 													Type: schema.TypeList,
 
-													Required: true,
+													Optional: true,
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
@@ -669,6 +719,31 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 										},
 									},
 
+									"metadata": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"description": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"disable": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"rule_description": {
 										Type:     schema.TypeString,
 										Optional: true,
@@ -774,7 +849,7 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 													Type: schema.TypeList,
 
-													Required: true,
+													Optional: true,
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
@@ -1111,6 +1186,31 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 			}
 
+			if v, ok := cs["metadata"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				metadata := &ves_io_schema.MessageMetaType{}
+				ruleChoiceInt.AllowList.Metadata = metadata
+				for _, set := range sl {
+
+					metadataMapStrToI := set.(map[string]interface{})
+
+					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+						metadata.Description = w.(string)
+					}
+
+					if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+						metadata.Disable = w.(bool)
+					}
+
+					if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+						metadata.Name = w.(string)
+					}
+
+				}
+
+			}
+
 			if v, ok := cs["rule_description"]; ok && !isIntfNil(v) {
 
 				ruleChoiceInt.AllowList.RuleDescription = v.(string)
@@ -1339,6 +1439,31 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 						pathChoiceInt.PathRegexValue = v.(string)
 
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["metadata"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				metadata := &ves_io_schema.MessageMetaType{}
+				ruleChoiceInt.DenyList.Metadata = metadata
+				for _, set := range sl {
+
+					metadataMapStrToI := set.(map[string]interface{})
+
+					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+						metadata.Description = w.(string)
+					}
+
+					if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+						metadata.Disable = w.(bool)
+					}
+
+					if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+						metadata.Name = w.(string)
 					}
 
 				}
@@ -1798,6 +1923,31 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 								}
 								httpConnectChoiceInt.PortMatcher.Ports = ls
 
+							}
+
+						}
+
+					}
+
+					if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						rules[i].Metadata = metadata
+						for _, set := range sl {
+
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
 							}
 
 						}
@@ -2331,6 +2481,31 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 			}
 
+			if v, ok := cs["metadata"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				metadata := &ves_io_schema.MessageMetaType{}
+				ruleChoiceInt.AllowList.Metadata = metadata
+				for _, set := range sl {
+
+					metadataMapStrToI := set.(map[string]interface{})
+
+					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+						metadata.Description = w.(string)
+					}
+
+					if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+						metadata.Disable = w.(bool)
+					}
+
+					if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+						metadata.Name = w.(string)
+					}
+
+				}
+
+			}
+
 			if v, ok := cs["rule_description"]; ok && !isIntfNil(v) {
 
 				ruleChoiceInt.AllowList.RuleDescription = v.(string)
@@ -2559,6 +2734,31 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 						pathChoiceInt.PathRegexValue = v.(string)
 
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["metadata"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				metadata := &ves_io_schema.MessageMetaType{}
+				ruleChoiceInt.DenyList.Metadata = metadata
+				for _, set := range sl {
+
+					metadataMapStrToI := set.(map[string]interface{})
+
+					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+						metadata.Description = w.(string)
+					}
+
+					if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+						metadata.Disable = w.(bool)
+					}
+
+					if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+						metadata.Name = w.(string)
 					}
 
 				}
@@ -3018,6 +3218,31 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 								}
 								httpConnectChoiceInt.PortMatcher.Ports = ls
 
+							}
+
+						}
+
+					}
+
+					if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						metadata := &ves_io_schema.MessageMetaType{}
+						rules[i].Metadata = metadata
+						for _, set := range sl {
+
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
 							}
 
 						}

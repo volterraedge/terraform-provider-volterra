@@ -1636,7 +1636,7 @@ var APISwaggerJSON string = `{
             "description": "Describes the image to be used for this certified hardware",
             "title": "Image Type",
             "x-displayname": "Image Type",
-            "x-ves-oneof-field-cloudprovider": "[\"aws\",\"azure\",\"gcp\"]",
+            "x-ves-oneof-field-cloud_provider": "[\"aws\",\"azure\",\"gcp\"]",
             "x-ves-proto-message": "ves.io.schema.certified_hardware.ImageType",
             "properties": {
                 "aws": {

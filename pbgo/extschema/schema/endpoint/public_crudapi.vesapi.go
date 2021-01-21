@@ -494,8 +494,8 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		namespace = rReq.Metadata.Namespace
-		name = rReq.Metadata.Name
+		namespace = rReq.GetMetadata().GetNamespace()
+		name = rReq.GetMetadata().GetName()
 	} else {
 		jsn = cco.ReplaceJSONReq
 		reqMap := make(map[string]interface{})
@@ -1116,8 +1116,11 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.endpoint.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.endpoint.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1169,8 +1172,11 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.endpoint.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.endpoint.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1287,8 +1293,11 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.endpoint.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.endpoint.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -1302,6 +1311,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	tenant := server.TenantFromContext(ctx)
 	key := fmt.Sprintf("%s/%s/%s", tenant, req.GetNamespace(), req.GetName())
 	rsrcReq := &server.ResourceDeleteRequest{Key: key}
+	rsrcReq.FailIfReferred = req.FailIfReferred
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
@@ -2061,6 +2071,14 @@ var APISwaggerJSON string = `{
                         "in": "path",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/endpointDeleteRequest"
+                        }
                     }
                 ],
                 "tags": [
@@ -2153,16 +2171,16 @@ var APISwaggerJSON string = `{
             "description": "Create endpoint will create the object in the storage backend for namespace metadata.namespace",
             "title": "Create Endpoint",
             "x-displayname": "Create Endpoint",
-            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advance\",\"ip\",\"service_info\"]",
+            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advanced\",\"ip\",\"service_info\"]",
             "x-ves-proto-message": "ves.io.schema.endpoint.CreateSpecType",
             "properties": {
                 "dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name_advance ip service_info]\n"
+                    "description": "Exclusive with [dns_name_advanced ip service_info]\n"
                 },
-                "dns_name_advance": {
+                "dns_name_advanced": {
                     "description": "Exclusive with [dns_name ip service_info]\n",
-                    "$ref": "#/definitions/endpointDnsNameAdvanceType"
+                    "$ref": "#/definitions/endpointDnsNameAdvancedType"
                 },
                 "health_check_port": {
                     "type": "integer",
@@ -2173,7 +2191,7 @@ var APISwaggerJSON string = `{
                 },
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name dns_name_advance service_info]\n"
+                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\n"
                 },
                 "port": {
                     "type": "integer",
@@ -2189,7 +2207,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "TCP"
                 },
                 "service_info": {
-                    "description": "Exclusive with [dns_name dns_name_advance ip]\n",
+                    "description": "Exclusive with [dns_name dns_name_advanced ip]\n",
                     "$ref": "#/definitions/endpointServiceInfoType"
                 },
                 "where": {
@@ -2218,6 +2236,36 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "endpointDeleteRequest": {
+            "type": "object",
+            "description": "This is the input message of the 'Delete' RPC.",
+            "title": "DeleteRequest is used to delete a endpoint",
+            "x-displayname": "Delete Request",
+            "x-ves-proto-message": "ves.io.schema.endpoint.DeleteRequest",
+            "properties": {
+                "fail_if_referred": {
+                    "type": "boolean",
+                    "description": " Fail the delete operation if this object is being referred by other objects",
+                    "title": "fail_if_referred",
+                    "format": "boolean",
+                    "x-displayname": "Fail-If-Referred"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the configuration object\n\nExample: - \"name\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the configuration object is present\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                }
+            }
+        },
         "endpointDiscoveredInfoType": {
             "type": "object",
             "description": "Discovered Information for endpoints",
@@ -2243,13 +2291,13 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "endpointDnsNameAdvanceType": {
+        "endpointDnsNameAdvancedType": {
             "type": "object",
             "description": "Specifies name and TTL used for DNS resolution.",
-            "title": "DnsNameAdvanceType",
-            "x-displayname": "DNS Name Advance Type",
+            "title": "DnsNameAdvancedType",
+            "x-displayname": "DNS Name Advanced Type",
             "x-ves-oneof-field-ttl_choice": "[\"refresh_interval\",\"strict_ttl\"]",
-            "x-ves-proto-message": "ves.io.schema.endpoint.DnsNameAdvanceType",
+            "x-ves-proto-message": "ves.io.schema.endpoint.DnsNameAdvancedType",
             "properties": {
                 "name": {
                     "type": "string",
@@ -2350,16 +2398,16 @@ var APISwaggerJSON string = `{
             "title": "Get Endpoint",
             "x-displayname": "Get Endpoint",
             "x-ves-displayorder": "1,3,4,8,11,9,2",
-            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advance\",\"ip\",\"service_info\"]",
+            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advanced\",\"ip\",\"service_info\"]",
             "x-ves-proto-message": "ves.io.schema.endpoint.GetSpecType",
             "properties": {
                 "dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name_advance ip service_info]\n"
+                    "description": "Exclusive with [dns_name_advanced ip service_info]\n"
                 },
-                "dns_name_advance": {
+                "dns_name_advanced": {
                     "description": "Exclusive with [dns_name ip service_info]\n",
-                    "$ref": "#/definitions/endpointDnsNameAdvanceType"
+                    "$ref": "#/definitions/endpointDnsNameAdvancedType"
                 },
                 "health_check_port": {
                     "type": "integer",
@@ -2370,7 +2418,7 @@ var APISwaggerJSON string = `{
                 },
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name dns_name_advance service_info]\n"
+                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\n"
                 },
                 "port": {
                     "type": "integer",
@@ -2386,7 +2434,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "TCP"
                 },
                 "service_info": {
-                    "description": "Exclusive with [dns_name dns_name_advance ip]\n",
+                    "description": "Exclusive with [dns_name dns_name_advanced ip]\n",
                     "$ref": "#/definitions/endpointServiceInfoType"
                 },
                 "where": {
@@ -2401,18 +2449,18 @@ var APISwaggerJSON string = `{
             "description": "Configuration specification for Endpoint",
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
-            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advance\",\"ip\",\"serverless_service_name\",\"service_info\"]",
+            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advanced\",\"ip\",\"k8s_cluster_api_server\",\"serverless_service_name\",\"service_info\"]",
             "x-ves-proto-message": "ves.io.schema.endpoint.GlobalSpecType",
             "properties": {
                 "dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name_advance ip serverless_service_name service_info]\nx-displayName: \"Endpoint Name\"\nx-example: \"ves.io\"\nEndpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.",
+                    "description": "Exclusive with [dns_name_advanced ip k8s_cluster_api_server serverless_service_name service_info]\nx-displayName: \"Endpoint Name\"\nx-example: \"ves.io\"\nEndpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.",
                     "title": "dns_name"
                 },
-                "dns_name_advance": {
-                    "description": "Exclusive with [dns_name ip serverless_service_name service_info]\nx-displayName: \"Endpoint Name (Advanced)\"\nSpecifies name and TTL used for DNS resolution.",
-                    "title": "dns_name_advance",
-                    "$ref": "#/definitions/endpointDnsNameAdvanceType"
+                "dns_name_advanced": {
+                    "description": "Exclusive with [dns_name ip k8s_cluster_api_server serverless_service_name service_info]\nx-displayName: \"Endpoint Name (Advanced)\"\nSpecifies name and TTL used for DNS resolution.",
+                    "title": "dns_name_advanced",
+                    "$ref": "#/definitions/endpointDnsNameAdvancedType"
                 },
                 "health_check_port": {
                     "type": "integer",
@@ -2424,8 +2472,13 @@ var APISwaggerJSON string = `{
                 },
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name dns_name_advance serverless_service_name service_info]\nx-displayName: \"Endpoint IP Address\"\nx-example: \"10.5.2.4\"\nEndpoint is reachable at the given ip address",
+                    "description": "Exclusive with [dns_name dns_name_advanced k8s_cluster_api_server serverless_service_name service_info]\nx-displayName: \"Endpoint IP Address\"\nx-example: \"10.5.2.4\"\nEndpoint is reachable at the given ip address",
                     "title": "Endpoint IP Address"
+                },
+                "k8s_cluster_api_server": {
+                    "description": "Exclusive with [dns_name dns_name_advanced ip serverless_service_name service_info]\nx-displayName: \"Local K8s Cluster API Server\"\nUsed internally to refer local in cluster  k8s api server",
+                    "title": "Local K8s Cluster API Server",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "port": {
                     "type": "integer",
@@ -2444,11 +2497,11 @@ var APISwaggerJSON string = `{
                 },
                 "serverless_service_name": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name dns_name_advance ip service_info]\nx-displayName: \"Serverless Service Name\"\nx-example: \"simpleservice\"\nNot supported",
+                    "description": "Exclusive with [dns_name dns_name_advanced ip k8s_cluster_api_server service_info]\nx-displayName: \"Serverless Service Name\"\nx-example: \"simpleservice\"\nNot supported",
                     "title": "serverless_service_name"
                 },
                 "service_info": {
-                    "description": "Exclusive with [dns_name dns_name_advance ip serverless_service_name]\nx-displayName: \"Service Selector Info\"\nIt contains information about how the service is selected (either by service name or\nlabel selector) and where the service is discovered (either in K8s or Consul)\n\n  Service Name.\n\n    String represent name of the service. System will perform discovery based on the\n    discovery method.\n\n    In case of K8S, System will watch K8s API server and automatically discover services and\n    endpoints of interest.\n    In case Virtual K8s cluster, system already has access to it.\n    In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n    In case of Consul, System will watch the consul server and automatically discover the\n    services and endpoints of interest.\n\n  Label selector for selecting the services\n\n    Label selector expression for selecting services or serverless functions\n    to automatically discover services and endpoint of interest.\n\n    discovery_type specifies where endpoint will be discovered\n\n    Endpoint can be discovered in K8S or Consul\n    In case of K8S, labels on the service is matched against service_selector\n    In case of Consul, tags on the service is matched against service_selector",
+                    "description": "Exclusive with [dns_name dns_name_advanced ip k8s_cluster_api_server serverless_service_name]\nx-displayName: \"Service Selector Info\"\nIt contains information about how the service is selected (either by service name or\nlabel selector) and where the service is discovered (either in K8s or Consul)\n\n  Service Name.\n\n    String represent name of the service. System will perform discovery based on the\n    discovery method.\n\n    In case of K8S, System will watch K8s API server and automatically discover services and\n    endpoints of interest.\n    In case Virtual K8s cluster, system already has access to it.\n    In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n    In case of Consul, System will watch the consul server and automatically discover the\n    services and endpoints of interest.\n\n  Label selector for selecting the services\n\n    Label selector expression for selecting services or serverless functions\n    to automatically discover services and endpoint of interest.\n\n    discovery_type specifies where endpoint will be discovered\n\n    Endpoint can be discovered in K8S or Consul\n    In case of K8S, labels on the service is matched against service_selector\n    In case of Consul, tags on the service is matched against service_selector",
                     "title": "Service Selector Info",
                     "$ref": "#/definitions/endpointServiceInfoType"
                 },
@@ -2687,16 +2740,16 @@ var APISwaggerJSON string = `{
             "description": "Replacing an endpoint object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write.",
             "title": "Replace Endpoint",
             "x-displayname": "Replace Endpoint",
-            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advance\",\"ip\",\"service_info\"]",
+            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advanced\",\"ip\",\"service_info\"]",
             "x-ves-proto-message": "ves.io.schema.endpoint.ReplaceSpecType",
             "properties": {
                 "dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name_advance ip service_info]\n"
+                    "description": "Exclusive with [dns_name_advanced ip service_info]\n"
                 },
-                "dns_name_advance": {
+                "dns_name_advanced": {
                     "description": "Exclusive with [dns_name ip service_info]\n",
-                    "$ref": "#/definitions/endpointDnsNameAdvanceType"
+                    "$ref": "#/definitions/endpointDnsNameAdvancedType"
                 },
                 "health_check_port": {
                     "type": "integer",
@@ -2707,7 +2760,7 @@ var APISwaggerJSON string = `{
                 },
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name dns_name_advance service_info]\n"
+                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\n"
                 },
                 "port": {
                     "type": "integer",
@@ -2723,7 +2776,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "TCP"
                 },
                 "service_info": {
-                    "description": "Exclusive with [dns_name dns_name_advance ip]\n",
+                    "description": "Exclusive with [dns_name dns_name_advanced ip]\n",
                     "$ref": "#/definitions/endpointServiceInfoType"
                 },
                 "where": {
@@ -3083,7 +3136,7 @@ var APISwaggerJSON string = `{
             "description": "NetworkSiteRefSelector defines a union of reference to site or reference to virtual_network  or reference to virtual_site\nIt is used to determine virtual network using following rules\n * Direct reference to virtual_network object\n * Site local network when refering to site object\n * All site local networks for sites selected by refering to virtual_site object",
             "title": "NetworkSiteRefSelector",
             "x-displayname": "Network or Site Reference",
-            "x-ves-oneof-field-reforselector": "[\"site\",\"virtual_network\",\"virtual_site\"]",
+            "x-ves-oneof-field-ref_or_selector": "[\"site\",\"virtual_network\",\"virtual_site\"]",
             "x-ves-proto-message": "ves.io.schema.NetworkSiteRefSelector",
             "properties": {
                 "site": {

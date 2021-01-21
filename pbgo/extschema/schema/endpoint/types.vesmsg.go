@@ -346,12 +346,12 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *CreateSpecType_DnsNameAdvance:
-		if fv, exists := v.FldValidators["endpoint_address.dns_name_advance"]; exists {
-			val := m.GetEndpointAddress().(*CreateSpecType_DnsNameAdvance).DnsNameAdvance
+	case *CreateSpecType_DnsNameAdvanced:
+		if fv, exists := v.FldValidators["endpoint_address.dns_name_advanced"]; exists {
+			val := m.GetEndpointAddress().(*CreateSpecType_DnsNameAdvanced).DnsNameAdvanced
 			vOpts := append(opts,
 				db.WithValidateField("endpoint_address"),
-				db.WithValidateField("dns_name_advance"),
+				db.WithValidateField("dns_name_advanced"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -468,7 +468,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["health_check_port"] = vFn
 
 	v.FldValidators["endpoint_address.service_info"] = ServiceInfoTypeValidator().Validate
-	v.FldValidators["endpoint_address.dns_name_advance"] = DnsNameAdvanceTypeValidator().Validate
+	v.FldValidators["endpoint_address.dns_name_advanced"] = DnsNameAdvancedTypeValidator().Validate
 
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
 
@@ -671,15 +671,15 @@ func DiscoveredInfoTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *DnsNameAdvanceType) ToJSON() (string, error) {
+func (m *DnsNameAdvancedType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *DnsNameAdvanceType) ToYAML() (string, error) {
+func (m *DnsNameAdvancedType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *DnsNameAdvanceType) DeepCopy() *DnsNameAdvanceType {
+func (m *DnsNameAdvancedType) DeepCopy() *DnsNameAdvancedType {
 	if m == nil {
 		return nil
 	}
@@ -687,7 +687,7 @@ func (m *DnsNameAdvanceType) DeepCopy() *DnsNameAdvanceType {
 	if err != nil {
 		return nil
 	}
-	c := &DnsNameAdvanceType{}
+	c := &DnsNameAdvancedType{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -695,22 +695,22 @@ func (m *DnsNameAdvanceType) DeepCopy() *DnsNameAdvanceType {
 	return c
 }
 
-func (m *DnsNameAdvanceType) DeepCopyProto() proto.Message {
+func (m *DnsNameAdvancedType) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *DnsNameAdvanceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return DnsNameAdvanceTypeValidator().Validate(ctx, m, opts...)
+func (m *DnsNameAdvancedType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DnsNameAdvancedTypeValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateDnsNameAdvanceType struct {
+type ValidateDnsNameAdvancedType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateDnsNameAdvanceType) TtlChoiceRefreshIntervalValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateDnsNameAdvancedType) TtlChoiceRefreshIntervalValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_RefreshInterval, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for refresh_interval")
@@ -718,7 +718,7 @@ func (v *ValidateDnsNameAdvanceType) TtlChoiceRefreshIntervalValidationRuleHandl
 	return oValidatorFn_RefreshInterval, nil
 }
 
-func (v *ValidateDnsNameAdvanceType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateDnsNameAdvancedType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -728,14 +728,14 @@ func (v *ValidateDnsNameAdvanceType) NameValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
-func (v *ValidateDnsNameAdvanceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*DnsNameAdvanceType)
+func (v *ValidateDnsNameAdvancedType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DnsNameAdvancedType)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *DnsNameAdvanceType got type %s", t)
+			return fmt.Errorf("Expected type *DnsNameAdvancedType got type %s", t)
 		}
 	}
 	if m == nil {
@@ -752,9 +752,9 @@ func (v *ValidateDnsNameAdvanceType) Validate(ctx context.Context, pm interface{
 	}
 
 	switch m.GetTtlChoice().(type) {
-	case *DnsNameAdvanceType_StrictTtl:
+	case *DnsNameAdvancedType_StrictTtl:
 		if fv, exists := v.FldValidators["ttl_choice.strict_ttl"]; exists {
-			val := m.GetTtlChoice().(*DnsNameAdvanceType_StrictTtl).StrictTtl
+			val := m.GetTtlChoice().(*DnsNameAdvancedType_StrictTtl).StrictTtl
 			vOpts := append(opts,
 				db.WithValidateField("ttl_choice"),
 				db.WithValidateField("strict_ttl"),
@@ -763,9 +763,9 @@ func (v *ValidateDnsNameAdvanceType) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-	case *DnsNameAdvanceType_RefreshInterval:
+	case *DnsNameAdvancedType_RefreshInterval:
 		if fv, exists := v.FldValidators["ttl_choice.refresh_interval"]; exists {
-			val := m.GetTtlChoice().(*DnsNameAdvanceType_RefreshInterval).RefreshInterval
+			val := m.GetTtlChoice().(*DnsNameAdvancedType_RefreshInterval).RefreshInterval
 			vOpts := append(opts,
 				db.WithValidateField("ttl_choice"),
 				db.WithValidateField("refresh_interval"),
@@ -781,8 +781,8 @@ func (v *ValidateDnsNameAdvanceType) Validate(ctx context.Context, pm interface{
 }
 
 // Well-known symbol for default validator implementation
-var DefaultDnsNameAdvanceTypeValidator = func() *ValidateDnsNameAdvanceType {
-	v := &ValidateDnsNameAdvanceType{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultDnsNameAdvancedTypeValidator = func() *ValidateDnsNameAdvancedType {
+	v := &ValidateDnsNameAdvancedType{FldValidators: map[string]db.ValidatorFunc{}}
 
 	var (
 		err error
@@ -799,7 +799,7 @@ var DefaultDnsNameAdvanceTypeValidator = func() *ValidateDnsNameAdvanceType {
 	}
 	vFnMap["ttl_choice.refresh_interval"], err = vrhTtlChoiceRefreshInterval(rulesTtlChoiceRefreshInterval)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DnsNameAdvanceType.ttl_choice_refresh_interval: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DnsNameAdvancedType.ttl_choice_refresh_interval: %s", err)
 		panic(errMsg)
 	}
 
@@ -812,7 +812,7 @@ var DefaultDnsNameAdvanceTypeValidator = func() *ValidateDnsNameAdvanceType {
 	}
 	vFn, err = vrhName(rulesName)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DnsNameAdvanceType.name: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DnsNameAdvancedType.name: %s", err)
 		panic(errMsg)
 	}
 	v.FldValidators["name"] = vFn
@@ -820,8 +820,8 @@ var DefaultDnsNameAdvanceTypeValidator = func() *ValidateDnsNameAdvanceType {
 	return v
 }()
 
-func DnsNameAdvanceTypeValidator() db.Validator {
-	return DefaultDnsNameAdvanceTypeValidator
+func DnsNameAdvancedTypeValidator() db.Validator {
+	return DefaultDnsNameAdvancedTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -992,12 +992,12 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-	case *GetSpecType_DnsNameAdvance:
-		if fv, exists := v.FldValidators["endpoint_address.dns_name_advance"]; exists {
-			val := m.GetEndpointAddress().(*GetSpecType_DnsNameAdvance).DnsNameAdvance
+	case *GetSpecType_DnsNameAdvanced:
+		if fv, exists := v.FldValidators["endpoint_address.dns_name_advanced"]; exists {
+			val := m.GetEndpointAddress().(*GetSpecType_DnsNameAdvanced).DnsNameAdvanced
 			vOpts := append(opts,
 				db.WithValidateField("endpoint_address"),
-				db.WithValidateField("dns_name_advance"),
+				db.WithValidateField("dns_name_advanced"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1114,7 +1114,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["health_check_port"] = vFn
 
 	v.FldValidators["endpoint_address.service_info"] = ServiceInfoTypeValidator().Validate
-	v.FldValidators["endpoint_address.dns_name_advance"] = DnsNameAdvanceTypeValidator().Validate
+	v.FldValidators["endpoint_address.dns_name_advanced"] = DnsNameAdvancedTypeValidator().Validate
 
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
 
@@ -1311,12 +1311,23 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *GlobalSpecType_DnsNameAdvance:
-		if fv, exists := v.FldValidators["endpoint_address.dns_name_advance"]; exists {
-			val := m.GetEndpointAddress().(*GlobalSpecType_DnsNameAdvance).DnsNameAdvance
+	case *GlobalSpecType_DnsNameAdvanced:
+		if fv, exists := v.FldValidators["endpoint_address.dns_name_advanced"]; exists {
+			val := m.GetEndpointAddress().(*GlobalSpecType_DnsNameAdvanced).DnsNameAdvanced
 			vOpts := append(opts,
 				db.WithValidateField("endpoint_address"),
-				db.WithValidateField("dns_name_advance"),
+				db.WithValidateField("dns_name_advanced"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_K8SClusterApiServer:
+		if fv, exists := v.FldValidators["endpoint_address.k8s_cluster_api_server"]; exists {
+			val := m.GetEndpointAddress().(*GlobalSpecType_K8SClusterApiServer).K8SClusterApiServer
+			vOpts := append(opts,
+				db.WithValidateField("endpoint_address"),
+				db.WithValidateField("k8s_cluster_api_server"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1443,7 +1454,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["health_check_port"] = vFn
 
 	v.FldValidators["endpoint_address.service_info"] = ServiceInfoTypeValidator().Validate
-	v.FldValidators["endpoint_address.dns_name_advance"] = DnsNameAdvanceTypeValidator().Validate
+	v.FldValidators["endpoint_address.dns_name_advanced"] = DnsNameAdvancedTypeValidator().Validate
 
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
 
@@ -1784,12 +1795,12 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
-	case *ReplaceSpecType_DnsNameAdvance:
-		if fv, exists := v.FldValidators["endpoint_address.dns_name_advance"]; exists {
-			val := m.GetEndpointAddress().(*ReplaceSpecType_DnsNameAdvance).DnsNameAdvance
+	case *ReplaceSpecType_DnsNameAdvanced:
+		if fv, exists := v.FldValidators["endpoint_address.dns_name_advanced"]; exists {
+			val := m.GetEndpointAddress().(*ReplaceSpecType_DnsNameAdvanced).DnsNameAdvanced
 			vOpts := append(opts,
 				db.WithValidateField("endpoint_address"),
-				db.WithValidateField("dns_name_advance"),
+				db.WithValidateField("dns_name_advanced"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1906,7 +1917,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["health_check_port"] = vFn
 
 	v.FldValidators["endpoint_address.service_info"] = ServiceInfoTypeValidator().Validate
-	v.FldValidators["endpoint_address.dns_name_advance"] = DnsNameAdvanceTypeValidator().Validate
+	v.FldValidators["endpoint_address.dns_name_advanced"] = DnsNameAdvancedTypeValidator().Validate
 
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
 
@@ -2229,8 +2240,8 @@ func (r *CreateSpecType) SetEndpointAddressToGlobalSpecType(o *GlobalSpecType) e
 	case *CreateSpecType_DnsName:
 		o.EndpointAddress = &GlobalSpecType_DnsName{DnsName: of.DnsName}
 
-	case *CreateSpecType_DnsNameAdvance:
-		o.EndpointAddress = &GlobalSpecType_DnsNameAdvance{DnsNameAdvance: of.DnsNameAdvance}
+	case *CreateSpecType_DnsNameAdvanced:
+		o.EndpointAddress = &GlobalSpecType_DnsNameAdvanced{DnsNameAdvanced: of.DnsNameAdvanced}
 
 	case *CreateSpecType_Ip:
 		o.EndpointAddress = &GlobalSpecType_Ip{Ip: of.Ip}
@@ -2252,8 +2263,8 @@ func (r *CreateSpecType) GetEndpointAddressFromGlobalSpecType(o *GlobalSpecType)
 	case *GlobalSpecType_DnsName:
 		r.EndpointAddress = &CreateSpecType_DnsName{DnsName: of.DnsName}
 
-	case *GlobalSpecType_DnsNameAdvance:
-		r.EndpointAddress = &CreateSpecType_DnsNameAdvance{DnsNameAdvance: of.DnsNameAdvance}
+	case *GlobalSpecType_DnsNameAdvanced:
+		r.EndpointAddress = &CreateSpecType_DnsNameAdvanced{DnsNameAdvanced: of.DnsNameAdvanced}
 
 	case *GlobalSpecType_Ip:
 		r.EndpointAddress = &CreateSpecType_Ip{Ip: of.Ip}
@@ -2300,8 +2311,8 @@ func (r *GetSpecType) SetEndpointAddressToGlobalSpecType(o *GlobalSpecType) erro
 	case *GetSpecType_DnsName:
 		o.EndpointAddress = &GlobalSpecType_DnsName{DnsName: of.DnsName}
 
-	case *GetSpecType_DnsNameAdvance:
-		o.EndpointAddress = &GlobalSpecType_DnsNameAdvance{DnsNameAdvance: of.DnsNameAdvance}
+	case *GetSpecType_DnsNameAdvanced:
+		o.EndpointAddress = &GlobalSpecType_DnsNameAdvanced{DnsNameAdvanced: of.DnsNameAdvanced}
 
 	case *GetSpecType_Ip:
 		o.EndpointAddress = &GlobalSpecType_Ip{Ip: of.Ip}
@@ -2323,8 +2334,8 @@ func (r *GetSpecType) GetEndpointAddressFromGlobalSpecType(o *GlobalSpecType) er
 	case *GlobalSpecType_DnsName:
 		r.EndpointAddress = &GetSpecType_DnsName{DnsName: of.DnsName}
 
-	case *GlobalSpecType_DnsNameAdvance:
-		r.EndpointAddress = &GetSpecType_DnsNameAdvance{DnsNameAdvance: of.DnsNameAdvance}
+	case *GlobalSpecType_DnsNameAdvanced:
+		r.EndpointAddress = &GetSpecType_DnsNameAdvanced{DnsNameAdvanced: of.DnsNameAdvanced}
 
 	case *GlobalSpecType_Ip:
 		r.EndpointAddress = &GetSpecType_Ip{Ip: of.Ip}
@@ -2371,8 +2382,8 @@ func (r *ReplaceSpecType) SetEndpointAddressToGlobalSpecType(o *GlobalSpecType) 
 	case *ReplaceSpecType_DnsName:
 		o.EndpointAddress = &GlobalSpecType_DnsName{DnsName: of.DnsName}
 
-	case *ReplaceSpecType_DnsNameAdvance:
-		o.EndpointAddress = &GlobalSpecType_DnsNameAdvance{DnsNameAdvance: of.DnsNameAdvance}
+	case *ReplaceSpecType_DnsNameAdvanced:
+		o.EndpointAddress = &GlobalSpecType_DnsNameAdvanced{DnsNameAdvanced: of.DnsNameAdvanced}
 
 	case *ReplaceSpecType_Ip:
 		o.EndpointAddress = &GlobalSpecType_Ip{Ip: of.Ip}
@@ -2394,8 +2405,8 @@ func (r *ReplaceSpecType) GetEndpointAddressFromGlobalSpecType(o *GlobalSpecType
 	case *GlobalSpecType_DnsName:
 		r.EndpointAddress = &ReplaceSpecType_DnsName{DnsName: of.DnsName}
 
-	case *GlobalSpecType_DnsNameAdvance:
-		r.EndpointAddress = &ReplaceSpecType_DnsNameAdvance{DnsNameAdvance: of.DnsNameAdvance}
+	case *GlobalSpecType_DnsNameAdvanced:
+		r.EndpointAddress = &ReplaceSpecType_DnsNameAdvanced{DnsNameAdvanced: of.DnsNameAdvanced}
 
 	case *GlobalSpecType_Ip:
 		r.EndpointAddress = &ReplaceSpecType_Ip{Ip: of.Ip}

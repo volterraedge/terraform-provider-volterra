@@ -4182,6 +4182,19 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.RPCIdx["ves.io.schema.app_type.CustomAPI.GetServiceAPIEndpoints"] = rpcInfo
 	}
 	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetSwaggerSpec",
+		InMsgType:    "ves.io.schema.app_type.SwaggerSpecReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.app_type.SwaggerSpecRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_types/{app_type_name}/api_endpoints/swagger_spec"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetSwaggerSpec")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.app_type.CustomAPI.GetSwaggerSpec"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
 		Name:         "OverridePop",
 		InMsgType:    "ves.io.schema.app_type.OverridePopReq",
 		InStreaming:  false,
@@ -4323,6 +4336,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.app_type.ServiceAPIEndpointsReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SwaggerSpecReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.app_type.SwaggerSpecReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SwaggerSpecRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.app_type.SwaggerSpecRsp"] = mInfo
 	}
 
 	fInfo = &svcfw.FileInfo{
@@ -6767,6 +6794,11 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		ReEncryptSecrets: make(map[string]uint64),
 	}
 
+	oInfo.ReEncryptSecrets["ves.io.schema.cloud_credentials.Object.spec.gc_spec.cloud.aws_secret_key.secret_key"] = uint64(1000005)
+	oInfo.ReEncryptSecrets["ves.io.schema.cloud_credentials.Object.spec.gc_spec.cloud.azure_pfx_certificate.password"] = uint64(1000005)
+	oInfo.ReEncryptSecrets["ves.io.schema.cloud_credentials.Object.spec.gc_spec.cloud.azure_client_secret.client_secret"] = uint64(1000005)
+	oInfo.ReEncryptSecrets["ves.io.schema.cloud_credentials.Object.spec.gc_spec.cloud.gcp_cred_file.credential_file"] = uint64(1000005)
+
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	if mdr.ObjIdx != nil {
 		mdr.ObjIdx["ves.io.schema.cloud_credentials.Object"] = oInfo
@@ -8551,11 +8583,11 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.endpoint.DiscoveredInfoType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
-		Name:     "DnsNameAdvanceType",
+		Name:     "DnsNameAdvancedType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
 	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.endpoint.DnsNameAdvanceType"] = mInfo
+		mdr.MsgIdx["ves.io.schema.endpoint.DnsNameAdvancedType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "GetSpecType",
@@ -12102,6 +12134,84 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.RPCIdx["ves.io.schema.log.CustomAPI.FirewallLogScrollQuery"] = rpcInfo
 	}
 	rpcInfo = &svcfw.RPCInfo{
+		Name:         "K8SAuditLogAggregationQuery",
+		InMsgType:    "ves.io.schema.log.K8SAuditLogAggregationRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.log.LogAggregationResponse",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/site/{site}/k8s_audit_logs/aggregation"}}
+	aInfo.RPCsInfo[svcfw.RPCName("K8SAuditLogAggregationQuery")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.log.CustomAPI.K8SAuditLogAggregationQuery"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "K8SAuditLogQuery",
+		InMsgType:    "ves.io.schema.log.K8SAuditLogRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.log.LogResponse",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/site/{site}/k8s_audit_logs"}}
+	aInfo.RPCsInfo[svcfw.RPCName("K8SAuditLogQuery")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.log.CustomAPI.K8SAuditLogQuery"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "K8SAuditLogScrollQuery",
+		InMsgType:    "ves.io.schema.log.LogScrollRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.log.LogResponse",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/k8s_audit_logs/scroll"}}
+	aInfo.RPCsInfo[svcfw.RPCName("K8SAuditLogScrollQuery")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.log.CustomAPI.K8SAuditLogScrollQuery"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "K8SEventsAggregationQuery",
+		InMsgType:    "ves.io.schema.log.K8SEventsAggregationRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.log.LogAggregationResponse",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/site/{site}/k8s_events/aggregation"}}
+	aInfo.RPCsInfo[svcfw.RPCName("K8SEventsAggregationQuery")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.log.CustomAPI.K8SEventsAggregationQuery"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "K8SEventsQuery",
+		InMsgType:    "ves.io.schema.log.K8SEventsRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.log.LogResponse",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/site/{site}/k8s_events"}}
+	aInfo.RPCsInfo[svcfw.RPCName("K8SEventsQuery")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.log.CustomAPI.K8SEventsQuery"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "K8SEventsScrollQuery",
+		InMsgType:    "ves.io.schema.log.LogScrollRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.log.LogResponse",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/k8s_events/scroll"}}
+	aInfo.RPCsInfo[svcfw.RPCName("K8SEventsScrollQuery")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.log.CustomAPI.K8SEventsScrollQuery"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
 		Name:         "VK8SAuditLogAggregationQuery",
 		InMsgType:    "ves.io.schema.log.VK8SAuditLogAggregationRequest",
 		InStreaming:  false,
@@ -12226,6 +12336,34 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.log.FirewallLogRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "K8SAuditLogAggregationRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.log.K8SAuditLogAggregationRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "K8SAuditLogRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.log.K8SAuditLogRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "K8SEventsAggregationRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.log.K8SEventsAggregationRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "K8SEventsRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.log.K8SEventsRequest"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "LogAggregationResponse",
@@ -12495,6 +12633,85 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.log.firewall_log.FieldAggregation"] = mInfo
+	}
+
+	pInfo = &svcfw.PkgInfo{
+		Name:      svcfw.PkgName("ves.io.schema.log.k8s_audit_log"),
+		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_audit_log",
+		IsExtSch:  true,
+		FilesInfo: make(map[string]*svcfw.FileInfo),
+	}
+	mdr.PkgsInfo["ves.io.schema.log.k8s_audit_log"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/log/k8s_audit_log/types.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/log/k8s_audit_log/types.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/log/k8s_audit_log/types.proto"] = fInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "AggregationRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.log.k8s_audit_log.AggregationRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DateAggregation",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.log.k8s_audit_log.DateAggregation"] = mInfo
+	}
+
+	pInfo = &svcfw.PkgInfo{
+		Name:      svcfw.PkgName("ves.io.schema.log.k8s_events"),
+		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_events",
+		IsExtSch:  true,
+		FilesInfo: make(map[string]*svcfw.FileInfo),
+	}
+	mdr.PkgsInfo["ves.io.schema.log.k8s_events"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/log/k8s_events/types.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/log/k8s_events/types.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/log/k8s_events/types.proto"] = fInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "AggregationRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.log.k8s_events.AggregationRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DateAggregation",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.log.k8s_events.DateAggregation"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "FieldAggregation",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.log.k8s_events.FieldAggregation"] = mInfo
 	}
 
 	pInfo = &svcfw.PkgInfo{
@@ -15640,11 +15857,25 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
+		Name:     "ApplicationsType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.network_policy.ApplicationsType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "CreateSpecType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.network_policy.CreateSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "EndpointChoiceType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.network_policy.EndpointChoiceType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "GetSpecType",
@@ -15659,6 +15890,34 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.network_policy.GlobalSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "LegacyNetworkPolicyRuleChoice",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.network_policy.LegacyNetworkPolicyRuleChoice"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "NetworkPolicyRuleChoice",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.network_policy.NetworkPolicyRuleChoice"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "NetworkPolicyRuleType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.network_policy.NetworkPolicyRuleType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ProtocolPortType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.network_policy.ProtocolPortType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "ReplaceSpecType",
@@ -22346,6 +22605,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
+		Name:     "ChallengeRuleSpec",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.service_policy_rule.ChallengeRuleSpec"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "CreateSpecType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -22365,6 +22631,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.service_policy_rule.GlobalSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "RateLimiterRuleSpec",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.service_policy_rule.RateLimiterRuleSpec"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "ReplaceSpecType",
@@ -23092,6 +23365,59 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/site/public_config_kubconfig.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/site/public_config_kubconfig.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/site/public_config_kubconfig.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "ConfigKubeConfigAPI",
+		ServiceType: "CUSTOM_PUBLIC",
+		IsSDRO:      false,
+		ObjType:     "ves.io.schema.site.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetLocalKubeConfig",
+		InMsgType:    "ves.io.schema.site.GetKubeConfigReq",
+		InStreaming:  false,
+		OutMsgType:   "google.api.HttpBody",
+		OutStreaming: false,
+		IsImmutable:  false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/sites/{name}/local-kubeconfig"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetLocalKubeConfig")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.site.ConfigKubeConfigAPI.GetLocalKubeConfig"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ListLocalKubeConfig",
+		InMsgType:    "ves.io.schema.site.ListKubeConfigReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.site.ListKubeConfigRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/sites/{name}/local-kubeconfigs"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ListLocalKubeConfig")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.site.ConfigKubeConfigAPI.ListLocalKubeConfig"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["ConfigKubeConfigAPI"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.site.ConfigKubeConfigAPI"] = aInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
 		Name:        "ves.io/schema/site/public_crudapi.proto",
 		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
 		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
@@ -23310,6 +23636,59 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/site/public_uam_kubeconfig.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/site/public_uam_kubeconfig.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/site/public_uam_kubeconfig.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "UamKubeConfigAPI",
+		ServiceType: "CUSTOM_PUBLIC",
+		IsSDRO:      false,
+		ObjType:     "ves.io.schema.site.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetGlobalKubeConfig",
+		InMsgType:    "ves.io.schema.site.GetKubeConfigReq",
+		InStreaming:  false,
+		OutMsgType:   "google.api.HttpBody",
+		OutStreaming: false,
+		IsImmutable:  false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/sites/{name}/global-kubeconfig"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetGlobalKubeConfig")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.site.UamKubeConfigAPI.GetGlobalKubeConfig"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ListGlobalKubeConfig",
+		InMsgType:    "ves.io.schema.site.ListKubeConfigReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.site.ListKubeConfigRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/sites/{name}/global-kubeconfigs"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ListGlobalKubeConfig")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.site.UamKubeConfigAPI.ListGlobalKubeConfig"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["UamKubeConfigAPI"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.site.UamKubeConfigAPI"] = aInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
 		Name:        "ves.io/schema/site/public_upgradeapi.proto",
 		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
 		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
@@ -23516,6 +23895,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.site.DeploymentState"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "GetKubeConfigReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.GetKubeConfigReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "GetSpecType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -23556,6 +23942,27 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.site.Kernel"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListKubeConfigReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.ListKubeConfigReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListKubeConfigRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.ListKubeConfigRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ListKubeConfigRspItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.ListKubeConfigRspItem"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "Memory",
@@ -25995,6 +26402,41 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/storage_types.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/storage_types.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/storage_types.proto"] = fInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "StorageClassListType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.StorageClassListType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "StorageClassOpenebsEnterpriseType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.StorageClassOpenebsEnterpriseType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "StorageClassType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.StorageClassType"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
 		Name:        "ves.io/schema/views/types.proto",
 		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
 		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
@@ -26363,6 +26805,19 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	rpcInfo = &svcfw.RPCInfo{
+		Name:         "SetTGWInfo",
+		InMsgType:    "ves.io.schema.views.aws_tgw_site.SetTGWInfoRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.aws_tgw_site.SetTGWInfoResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/aws_tgw_site/{name}/set_tgw_info"}}
+	aInfo.RPCsInfo[svcfw.RPCName("SetTGWInfo")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.aws_tgw_site.CustomAPI.SetTGWInfo"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
 		Name:         "SetVPCIpPrefixes",
 		InMsgType:    "ves.io.schema.views.aws_tgw_site.SetVPCIpPrefixesRequest",
 		InStreaming:  false,
@@ -26394,6 +26849,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.APIIdx["ves.io.schema.views.aws_tgw_site.CustomAPI"] = aInfo
 	}
 
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SetTGWInfoRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.aws_tgw_site.SetTGWInfoRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SetTGWInfoResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.aws_tgw_site.SetTGWInfoResponse"] = mInfo
+	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "SetVPCIpPrefixesRequest",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
@@ -26436,6 +26905,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.FileIdx["ves.io/schema/views/aws_tgw_site/types.proto"] = fInfo
 	}
 
+	mInfo = &svcfw.MsgInfo{
+		Name:     "AWSTGWInfoConfigType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.aws_tgw_site.AWSTGWInfoConfigType"] = mInfo
+	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "AWSVPNTunnelConfigType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
@@ -28880,6 +29356,61 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/http_loadbalancer/public_apiep_customapi.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/http_loadbalancer/public_apiep_customapi.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/http_loadbalancer/public_apiep_customapi.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "ApiepLBCustomAPI",
+		ServiceType: "CUSTOM_PUBLIC",
+		IsSDRO:      false,
+		ObjType:     "ves.io.schema.views.http_loadbalancer.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetSwaggerSpec",
+		InMsgType:    "ves.io.schema.views.http_loadbalancer.SwaggerSpecReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.views.http_loadbalancer.SwaggerSpecRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/api_endpoints/swagger_spec"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetSwaggerSpec")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetSwaggerSpec"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["ApiepLBCustomAPI"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SwaggerSpecReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.SwaggerSpecReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SwaggerSpecRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.SwaggerSpecRsp"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
 		Name:        "ves.io/schema/views/http_loadbalancer/public_crudapi.proto",
 		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
 		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
@@ -29118,6 +29649,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.AdvancedOptionsType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "ChallengeRule",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.ChallengeRule"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ChallengeRuleList",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.ChallengeRuleList"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "CreateSpecType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -29172,6 +29717,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.MirrorPolicyType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "PolicyBasedChallenge",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.http_loadbalancer.PolicyBasedChallenge"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "ProxyTypeHttp",
@@ -29781,25 +30333,11 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
-		Name:     "ApplicationsType",
-		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
-	}
-	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.views.network_policy_view.ApplicationsType"] = mInfo
-	}
-	mInfo = &svcfw.MsgInfo{
 		Name:     "CreateSpecType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.network_policy_view.CreateSpecType"] = mInfo
-	}
-	mInfo = &svcfw.MsgInfo{
-		Name:     "EndpointChoiceType",
-		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
-	}
-	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.views.network_policy_view.EndpointChoiceType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "GetSpecType",
@@ -29814,20 +30352,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.network_policy_view.GlobalSpecType"] = mInfo
-	}
-	mInfo = &svcfw.MsgInfo{
-		Name:     "NetworkPolicyRuleType",
-		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
-	}
-	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.views.network_policy_view.NetworkPolicyRuleType"] = mInfo
-	}
-	mInfo = &svcfw.MsgInfo{
-		Name:     "ProtocolPortType",
-		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
-	}
-	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.views.network_policy_view.ProtocolPortType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "ReplaceSpecType",
@@ -30563,6 +31087,70 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.origin_pool.crudapi.ObjectReplaceRsp"] = mInfo
+	}
+
+	pInfo = &svcfw.PkgInfo{
+		Name:      svcfw.PkgName("ves.io.schema.views.rate_limiter_policy"),
+		GoName:    "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy",
+		IsExtSch:  true,
+		FilesInfo: make(map[string]*svcfw.FileInfo),
+	}
+	mdr.PkgsInfo["ves.io.schema.views.rate_limiter_policy"] = pInfo
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/views/rate_limiter_policy/types.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/views/rate_limiter_policy/types.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/views/rate_limiter_policy/types.proto"] = fInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CreateSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.rate_limiter_policy.CreateSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.rate_limiter_policy.GetSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GlobalSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.rate_limiter_policy.GlobalSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "PolicyList",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.rate_limiter_policy.PolicyList"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "RateLimiterRule",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.rate_limiter_policy.RateLimiterRule"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ReplaceSpecType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.rate_limiter_policy.ReplaceSpecType"] = mInfo
 	}
 
 	pInfo = &svcfw.PkgInfo{
@@ -31821,6 +32409,19 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoints"] = rpcInfo
 	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetSwaggerSpec",
+		InMsgType:    "ves.io.schema.virtual_host.SwaggerSpecReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.virtual_host.SwaggerSpecRsp",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoints/swagger_spec"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetSwaggerSpec")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.virtual_host.ApiepCustomAPI.GetSwaggerSpec"] = rpcInfo
+	}
 
 	fInfo.APIsInfo["ApiepCustomAPI"] = aInfo
 	if mdr.APIIdx != nil {
@@ -31868,6 +32469,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.virtual_host.APIEndpointsRsp"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SwaggerSpecReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.virtual_host.SwaggerSpecReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SwaggerSpecRsp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.virtual_host.SwaggerSpecRsp"] = mInfo
 	}
 
 	fInfo = &svcfw.FileInfo{
@@ -32170,6 +32785,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.virtual_host.JavascriptChallengeType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "PolicyBasedChallenge",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.virtual_host.PolicyBasedChallenge"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "ReplaceSpecType",
@@ -32851,6 +33473,75 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.virtual_k8s.ReplaceResponse"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/virtual_k8s/public_custom_data_api.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/virtual_k8s/public_custom_data_api.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/virtual_k8s/public_custom_data_api.proto"] = fInfo
+	}
+
+	aInfo = &svcfw.APIInfo{
+		Name:        "CustomDataAPI",
+		ServiceType: "CUSTOM_PUBLIC",
+		IsSDRO:      false,
+		ObjType:     "ves.io.schema.virtual_k8s.Object",
+		RPCsInfo:    make(map[svcfw.RPCName]*svcfw.RPCInfo),
+	}
+
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "PVCMetrics",
+		InMsgType:    "ves.io.schema.virtual_k8s.PVCMetricsRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.virtual_k8s.PVCMetricsResponse",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/virtual_k8s/pvc/metrics"}}
+	aInfo.RPCsInfo[svcfw.RPCName("PVCMetrics")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.virtual_k8s.CustomDataAPI.PVCMetrics"] = rpcInfo
+	}
+
+	fInfo.APIsInfo["CustomDataAPI"] = aInfo
+	if mdr.APIIdx != nil {
+		mdr.APIIdx["ves.io.schema.virtual_k8s.CustomDataAPI"] = aInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "PVCMetricData",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.virtual_k8s.PVCMetricData"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "PVCMetricTypeData",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.virtual_k8s.PVCMetricTypeData"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "PVCMetricsRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.virtual_k8s.PVCMetricsRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "PVCMetricsResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.virtual_k8s.PVCMetricsResponse"] = mInfo
 	}
 
 	fInfo = &svcfw.FileInfo{

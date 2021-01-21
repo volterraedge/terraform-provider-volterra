@@ -17,6 +17,7 @@ import (
 	google_protobuf "github.com/gogo/protobuf/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	multierror "github.com/hashicorp/go-multierror"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -1010,7 +1011,10 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_tgw_site.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.aws_tgw_site.crudapi.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1040,7 +1044,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_tgw_site.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.aws_tgw_site.crudapi.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1143,7 +1150,10 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_tgw_site.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.aws_tgw_site.crudapi.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -2023,6 +2033,31 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "aws_tgw_siteAWSTGWInfoConfigType": {
+            "type": "object",
+            "description": "AWS tgw information like tgw-id and site's vpc-id",
+            "title": "AWS TGW Information Config",
+            "x-displayname": "AWS TGW Information Config",
+            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.AWSTGWInfoConfigType",
+            "properties": {
+                "tgw_id": {
+                    "type": "string",
+                    "description": " TGW ID populated by AWS\n\nExample: - \"tgw-12345678\"-\nRequired: YES",
+                    "title": "TGW ID",
+                    "x-displayname": "TGW ID",
+                    "x-ves-example": "tgw-12345678",
+                    "x-ves-required": "true"
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": " VPC ID where the volterra site exists\n\nExample: - \"vpc-12345678\"-\nRequired: YES",
+                    "title": "VPC ID",
+                    "x-displayname": "VPC ID",
+                    "x-ves-example": "vpc-12345678",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "aws_tgw_siteAWSVPNTunnelConfigType": {
             "type": "object",
             "description": "Remote IP for VPN tunnels of a node",
@@ -2205,10 +2240,10 @@ var APISwaggerJSON string = `{
                 },
                 "nodes_per_az": {
                     "type": "integer",
-                    "description": " Auto scale maximum worker nodes limit up to 21, value of zero will disable auto scale\n\nExample: - \"2\"-",
-                    "title": "Auto Scale Limit",
+                    "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
+                    "title": "Desired Worker Nodes Per AZ",
                     "format": "int64",
-                    "x-displayname": "Auto Scale Limit",
+                    "x-displayname": "Desired Worker Nodes Per AZ",
                     "x-ves-example": "2"
                 },
                 "ssh_key": {
@@ -2642,14 +2677,14 @@ var APISwaggerJSON string = `{
         },
         "network_firewallActiveForwardProxyPoliciesType": {
             "type": "object",
-            "description": "List of forward proxy policy views.",
+            "description": "List of Forward Proxy Policies",
             "title": "Active Forward Proxy Policies Type",
             "x-displayname": "Active Forward Proxy Policies Type",
             "x-ves-proto-message": "ves.io.schema.network_firewall.ActiveForwardProxyPoliciesType",
             "properties": {
                 "forward_proxy_policies": {
                     "type": "array",
-                    "description": " Ordered List of Network Policies active for this network firewall\nRequired: YES",
+                    "description": " List of Forward Proxy Policies\nRequired: YES",
                     "title": "Forward Proxy Policies",
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
@@ -2839,7 +2874,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "connection_timeout": {
                     "type": "integer",
-                    "description": " The timeout for new network connections to upstream server.\n This is specified in milliseconds. The default value is 2 seconds\n\nExample: - \"4000\"-",
+                    "description": " The timeout for new network connections to upstream server.\n This is specified in milliseconds. The default value is 2000 (2 seconds)\n\nExample: - \"4000\"-",
                     "title": "connection_timeout",
                     "format": "int64",
                     "x-displayname": "Connection Timeout",
@@ -3796,9 +3831,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "aws_az_name": {
                     "type": "string",
-                    "description": " Name for AWS availability Zone, should match with AWS region selected.\n\nExample: - \"us-west-2a\"-\nRequired: YES",
+                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\nRequired: YES",
                     "title": "AWS AZ",
-                    "x-displayname": "AWS AZ name",
+                    "x-displayname": "AWS AZ Name",
                     "x-ves-example": "us-west-2a",
                     "x-ves-required": "true"
                 },
@@ -4022,6 +4057,12 @@ var APISwaggerJSON string = `{
                     "title": "Reference to terraform parameters",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Terraform Parameters"
+                },
+                "tgw_info": {
+                    "description": " TGW Site information obtained after creating the site and TGW",
+                    "title": "TGW information",
+                    "$ref": "#/definitions/aws_tgw_siteAWSTGWInfoConfigType",
+                    "x-displayname": "TGW Site Information"
                 },
                 "tgw_security": {
                     "description": " Security Configuration for transit gateway",

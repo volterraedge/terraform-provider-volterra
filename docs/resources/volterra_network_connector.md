@@ -20,15 +20,9 @@ resource "volterra_network_connector" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "sli_to_slo_snat sli_to_slo_dr sli_to_global_dr sli_to_global_snat slo_to_global_dr slo_to_global_snat" must be set
+  // One of the arguments from this list "sli_to_global_dr sli_to_global_snat slo_to_global_dr slo_to_global_snat sli_to_slo_snat sli_to_slo_dr" must be set
+  sli_to_slo_dr = true
 
-  slo_to_global_dr {
-    global_vn {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
   // One of the arguments from this list "disable_forward_proxy enable_forward_proxy" must be set
   disable_forward_proxy = true
 }
@@ -138,7 +132,7 @@ Enable interception for all domains.
 
 Forward Proxy is enabled for this connector.
 
-`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2 seconds (`Int`).
+`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2000 (2 seconds) (`Int`).
 
 `max_connect_attempts` - (Optional) Specifies the allowed number of retries on connect failure to upstream server. Defaults to 1. (`Int`).
 

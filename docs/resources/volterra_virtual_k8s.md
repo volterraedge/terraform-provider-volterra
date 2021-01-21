@@ -42,6 +42,12 @@ Argument Reference
 
 ### Spec Argument Reference
 
+`default_flavor_ref` - (Optional) Default workfload flavor for all workloads launched in this Virtual K8s. See [ref](#ref) below for details.
+
+`disabled` - (Optional) setting the ves.io/serviceIsolation annotation to true (bool).
+
+`isolated` - (Optional) overridden by the K8s service via setting the ves.io/serviceIsolation annotation to false (bool).
+
 `vsite_refs` - (Optional) Kubernetes API resource object. See [ref](#ref) below for details.
 
 ### Ref

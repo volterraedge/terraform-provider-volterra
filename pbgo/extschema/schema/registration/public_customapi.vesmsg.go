@@ -102,27 +102,6 @@ func (v *ValidateApprovalReq) StateValidationRuleHandler(rules map[string]string
 	return validatorFn, nil
 }
 
-func (v *ValidateApprovalReq) PassportValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for passport")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := PassportValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateApprovalReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ApprovalReq)
 	if !ok {
@@ -263,16 +242,7 @@ var DefaultApprovalReqValidator = func() *ValidateApprovalReq {
 	}
 	v.FldValidators["state"] = vFn
 
-	vrhPassport := v.PassportValidationRuleHandler
-	rulesPassport := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhPassport(rulesPassport)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ApprovalReq.passport: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["passport"] = vFn
+	v.FldValidators["passport"] = PassportValidator().Validate
 
 	return v
 }()
@@ -1021,6 +991,8 @@ func (m *RegistrationCreateRequest) ToObject(e db.Entry) {
 		if f.Metadata == nil {
 			f.Metadata = &ves_io_schema.ObjectMetaType{}
 		}
+	} else if f.Metadata != nil {
+		f.Metadata = nil
 	}
 
 	if m1.Metadata != nil {
@@ -1031,12 +1003,16 @@ func (m *RegistrationCreateRequest) ToObject(e db.Entry) {
 		if f.Spec == nil {
 			f.Spec = &SpecType{}
 		}
+	} else if f.Spec != nil {
+		f.Spec = nil
 	}
 
 	if m1.Spec != nil {
 		if f.Spec.GcSpec == nil {
 			f.Spec.GcSpec = &GlobalSpecType{}
 		}
+	} else if f.Spec != nil {
+		f.Spec.GcSpec = nil
 	}
 
 	if m1.Spec != nil {

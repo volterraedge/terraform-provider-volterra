@@ -1077,6 +1077,8 @@ gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c h1:dUUwHk2QECo/6vqA44rthZ8ie
 gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
 gopkg.volterra.us/stdlib v0.0.0-20201113235150-33acccd7c714 h1:rt927e4Vgz7KNza53LYODTOh+pBov3JvPCJMe8YqWWQ=
 gopkg.volterra.us/stdlib v0.0.0-20201113235150-33acccd7c714/go.mod h1:iLN+H84zUD+A8+gkyoTzSgVLdyCwGfHKdyEqKyIGSqE=
+gopkg.volterra.us/stdlib v0.0.0-20210109004138-e408a04d224a h1:CZGBHsYUqQR70KWPl3rV8aIQT4slKgEo425gcZIS4No=
+gopkg.volterra.us/stdlib v0.0.0-20210109004138-e408a04d224a/go.mod h1:iLN+H84zUD+A8+gkyoTzSgVLdyCwGfHKdyEqKyIGSqE=
 honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 honnef.co/go/tools v0.0.0-20190106161140-3f1c8253044a/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 honnef.co/go/tools v0.0.0-20190418001031-e561f6794a2a/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=

@@ -3334,6 +3334,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetChallengeTypeDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetDnsDomainsDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -3461,6 +3467,41 @@ func (m *GlobalSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error
 		}
 		for _, odri := range odrInfos {
 			odri.DRField = "authentication." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.ChallengeType == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetChallengeType().(type) {
+	case *GlobalSpecType_JsChallenge:
+
+	case *GlobalSpecType_CaptchaChallenge:
+
+	case *GlobalSpecType_NoChallenge:
+
+	case *GlobalSpecType_PolicyBasedChallenge:
+		odrInfos, err = m.GetPolicyBasedChallenge().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "policy_based_challenge." + odri.DRField
 			drInfos = append(drInfos, odri)
 		}
 
@@ -4415,6 +4456,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_PolicyBasedChallenge:
+		if fv, exists := v.FldValidators["challenge_type.policy_based_challenge"]; exists {
+			val := m.GetChallengeType().(*GlobalSpecType_PolicyBasedChallenge).PolicyBasedChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("policy_based_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -4900,6 +4952,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["challenge_type.js_challenge"] = JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
+	v.FldValidators["challenge_type.policy_based_challenge"] = PolicyBasedChallengeValidator().Validate
 
 	v.FldValidators["request_headers_to_add"] = ves_io_schema.HeaderManipulationOptionTypeValidator().Validate
 
@@ -5201,6 +5254,293 @@ var DefaultJavascriptChallengeTypeValidator = func() *ValidateJavascriptChalleng
 
 func JavascriptChallengeTypeValidator() db.Validator {
 	return DefaultJavascriptChallengeTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PolicyBasedChallenge) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PolicyBasedChallenge) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PolicyBasedChallenge) DeepCopy() *PolicyBasedChallenge {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PolicyBasedChallenge{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PolicyBasedChallenge) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PolicyBasedChallenge) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PolicyBasedChallengeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *PolicyBasedChallenge) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetMaliciousUserMitigationDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *PolicyBasedChallenge) GetMaliciousUserMitigationDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, ref := range m.GetMaliciousUserMitigation() {
+		if ref == nil {
+			return nil, fmt.Errorf("PolicyBasedChallenge.malicious_user_mitigation[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "malicious_user_mitigation.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "malicious_user_mitigation",
+			Ref:        ref,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetMaliciousUserMitigationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *PolicyBasedChallenge) GetMaliciousUserMitigationDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "malicious_user_mitigation.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: malicious_user_mitigation")
+	}
+	for _, ref := range m.GetMaliciousUserMitigation() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidatePolicyBasedChallenge struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePolicyBasedChallenge) EnableChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for enable_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidatePolicyBasedChallenge) MaliciousUserMitigationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for malicious_user_mitigation")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated malicious_user_mitigation")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items malicious_user_mitigation")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePolicyBasedChallenge) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PolicyBasedChallenge)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PolicyBasedChallenge got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["captcha_challenge"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("captcha_challenge"))
+		if err := fv(ctx, m.GetCaptchaChallenge(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["enable_choice"]; exists {
+		val := m.GetEnableChoice()
+		vOpts := append(opts,
+			db.WithValidateField("enable_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEnableChoice().(type) {
+	case *PolicyBasedChallenge_RuleBasedChallenge:
+		if fv, exists := v.FldValidators["enable_choice.rule_based_challenge"]; exists {
+			val := m.GetEnableChoice().(*PolicyBasedChallenge_RuleBasedChallenge).RuleBasedChallenge
+			vOpts := append(opts,
+				db.WithValidateField("enable_choice"),
+				db.WithValidateField("rule_based_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PolicyBasedChallenge_AlwaysEnableJsChallenge:
+		if fv, exists := v.FldValidators["enable_choice.always_enable_js_challenge"]; exists {
+			val := m.GetEnableChoice().(*PolicyBasedChallenge_AlwaysEnableJsChallenge).AlwaysEnableJsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("enable_choice"),
+				db.WithValidateField("always_enable_js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PolicyBasedChallenge_AlwaysEnableCaptcha:
+		if fv, exists := v.FldValidators["enable_choice.always_enable_captcha"]; exists {
+			val := m.GetEnableChoice().(*PolicyBasedChallenge_AlwaysEnableCaptcha).AlwaysEnableCaptcha
+			vOpts := append(opts,
+				db.WithValidateField("enable_choice"),
+				db.WithValidateField("always_enable_captcha"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["js_challenge"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("js_challenge"))
+		if err := fv(ctx, m.GetJsChallenge(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["malicious_user_mitigation"]; exists {
+		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation"))
+		if err := fv(ctx, m.GetMaliciousUserMitigation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["temporary_user_blocking"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("temporary_user_blocking"))
+		if err := fv(ctx, m.GetTemporaryUserBlocking(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPolicyBasedChallengeValidator = func() *ValidatePolicyBasedChallenge {
+	v := &ValidatePolicyBasedChallenge{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhEnableChoice := v.EnableChoiceValidationRuleHandler
+	rulesEnableChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhEnableChoice(rulesEnableChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PolicyBasedChallenge.enable_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enable_choice"] = vFn
+
+	vrhMaliciousUserMitigation := v.MaliciousUserMitigationValidationRuleHandler
+	rulesMaliciousUserMitigation := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhMaliciousUserMitigation(rulesMaliciousUserMitigation)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PolicyBasedChallenge.malicious_user_mitigation: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["malicious_user_mitigation"] = vFn
+
+	v.FldValidators["js_challenge"] = JavascriptChallengeTypeValidator().Validate
+
+	v.FldValidators["captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
+
+	v.FldValidators["temporary_user_blocking"] = TemporaryUserBlockingTypeValidator().Validate
+
+	return v
+}()
+
+func PolicyBasedChallengeValidator() db.Validator {
+	return DefaultPolicyBasedChallengeValidator
 }
 
 // augmented methods on protoc/std generated struct

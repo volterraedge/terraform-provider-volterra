@@ -847,16 +847,6 @@ func (v *ValidateForwardProxyAdvancedRuleType) SourceChoiceValidationRuleHandler
 	return validatorFn, nil
 }
 
-func (v *ValidateForwardProxyAdvancedRuleType) RuleNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for rule_name")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateForwardProxyAdvancedRuleType) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	var conv db.EnumConvFn
@@ -873,11 +863,22 @@ func (v *ValidateForwardProxyAdvancedRuleType) ActionValidationRuleHandler(rules
 	return validatorFn, nil
 }
 
-func (v *ValidateForwardProxyAdvancedRuleType) RuleDescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateForwardProxyAdvancedRuleType) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for rule_description")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
 	}
 
 	return validatorFn, nil
@@ -1034,6 +1035,15 @@ func (v *ValidateForwardProxyAdvancedRuleType) Validate(ctx context.Context, pm 
 
 	}
 
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["rule_description"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("rule_description"))
@@ -1180,20 +1190,6 @@ var DefaultForwardProxyAdvancedRuleTypeValidator = func() *ValidateForwardProxyA
 	}
 	v.FldValidators["source_choice"] = vFn
 
-	vrhRuleName := v.RuleNameValidationRuleHandler
-	rulesRuleName := map[string]string{
-		"ves.io.schema.rules.message.required":       "true",
-		"ves.io.schema.rules.string.max_len":         "64",
-		"ves.io.schema.rules.string.min_len":         "1",
-		"ves.io.schema.rules.string.ves_object_name": "true",
-	}
-	vFn, err = vrhRuleName(rulesRuleName)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ForwardProxyAdvancedRuleType.rule_name: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["rule_name"] = vFn
-
 	vrhAction := v.ActionValidationRuleHandler
 	rulesAction := map[string]string{
 		"ves.io.schema.rules.enum.in":          "[0,1]",
@@ -1206,16 +1202,16 @@ var DefaultForwardProxyAdvancedRuleTypeValidator = func() *ValidateForwardProxyA
 	}
 	v.FldValidators["action"] = vFn
 
-	vrhRuleDescription := v.RuleDescriptionValidationRuleHandler
-	rulesRuleDescription := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhRuleDescription(rulesRuleDescription)
+	vFn, err = vrhMetadata(rulesMetadata)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ForwardProxyAdvancedRuleType.rule_description: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ForwardProxyAdvancedRuleType.metadata: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["rule_description"] = vFn
+	v.FldValidators["metadata"] = vFn
 
 	v.FldValidators["destination_choice.tls_list"] = DomainListTypeValidator().Validate
 	v.FldValidators["destination_choice.http_list"] = URLListTypeValidator().Validate
@@ -1395,8 +1391,9 @@ var DefaultForwardProxyRuleListTypeValidator = func() *ValidateForwardProxyRuleL
 
 	vrhRules := v.RulesValidationRuleHandler
 	rulesRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "32",
-		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.max_items":            "32",
+		"ves.io.schema.rules.repeated.min_items":            "1",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
 	vFn, err = vrhRules(rulesRules)
 	if err != nil {
@@ -1581,21 +1578,22 @@ func (v *ValidateForwardProxySimpleRuleType) DestListValidationRuleHandler(rules
 	return validatorFn, nil
 }
 
-func (v *ValidateForwardProxySimpleRuleType) RuleNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateForwardProxySimpleRuleType) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for rule_name")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
 	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
 
-	return validatorFn, nil
-}
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
 
-func (v *ValidateForwardProxySimpleRuleType) RuleDescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for rule_description")
+		return nil
 	}
 
 	return validatorFn, nil
@@ -1673,6 +1671,15 @@ func (v *ValidateForwardProxySimpleRuleType) Validate(ctx context.Context, pm in
 	if fv, exists := v.FldValidators["http_list"]; exists {
 		vOpts := append(opts, db.WithValidateField("http_list"))
 		if err := fv(ctx, m.GetHttpList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1766,30 +1773,16 @@ var DefaultForwardProxySimpleRuleTypeValidator = func() *ValidateForwardProxySim
 	}
 	v.FldValidators["dest_list"] = vFn
 
-	vrhRuleName := v.RuleNameValidationRuleHandler
-	rulesRuleName := map[string]string{
-		"ves.io.schema.rules.message.required":       "true",
-		"ves.io.schema.rules.string.max_len":         "64",
-		"ves.io.schema.rules.string.min_len":         "1",
-		"ves.io.schema.rules.string.ves_object_name": "true",
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhRuleName(rulesRuleName)
+	vFn, err = vrhMetadata(rulesMetadata)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ForwardProxySimpleRuleType.rule_name: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ForwardProxySimpleRuleType.metadata: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["rule_name"] = vFn
-
-	vrhRuleDescription := v.RuleDescriptionValidationRuleHandler
-	rulesRuleDescription := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhRuleDescription(rulesRuleDescription)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ForwardProxySimpleRuleType.rule_description: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["rule_description"] = vFn
+	v.FldValidators["metadata"] = vFn
 
 	return v
 }()

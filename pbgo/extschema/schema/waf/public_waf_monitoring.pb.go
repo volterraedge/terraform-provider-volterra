@@ -3,36 +3,24 @@
 
 package waf
 
-import (
-	proto "github.com/gogo/protobuf/proto"
-	golang_proto "github.com/golang/protobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
+import golang_proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/gogo/googleapis/google/api"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 
-	fmt "fmt"
+import strings "strings"
+import reflect "reflect"
 
-	math "math"
+import context "golang.org/x/net/context"
+import grpc "google.golang.org/grpc"
 
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	_ "github.com/gogo/googleapis/google/api"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	context "golang.org/x/net/context"
-
-	grpc "google.golang.org/grpc"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal

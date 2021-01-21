@@ -14,6 +14,7 @@ import (
 
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/metastatus"
+	"gopkg.volterra.us/stdlib/sets"
 	"gopkg.volterra.us/stdlib/store"
 	"gopkg.volterra.us/stdlib/svcfw"
 
@@ -65,6 +66,8 @@ import (
 	ves_io_schema_log_access_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/access_log"
 	ves_io_schema_log_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/audit_log"
 	ves_io_schema_log_firewall_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/firewall_log"
+	ves_io_schema_log_k8s_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_audit_log"
+	ves_io_schema_log_k8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_events"
 	ves_io_schema_log_vk8s_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_audit_log"
 	ves_io_schema_log_vk8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_events"
 	ves_io_schema_malicious_user_mitigation "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation"
@@ -134,6 +137,7 @@ import (
 	ves_io_schema_views_network_policy_view_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/network_policy_view/crudapi"
 	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 	ves_io_schema_views_origin_pool_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool/crudapi"
+	ves_io_schema_views_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
 	ves_io_schema_views_tcp_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer"
 	ves_io_schema_views_tcp_loadbalancer_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer/crudapi"
 	ves_io_schema_views_terraform_parameters "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/terraform_parameters"
@@ -520,6 +524,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.app_type.OverridesRsp"] = ves_io_schema_app_type.OverridesRspValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_type.ServiceAPIEndpointPDFReq"] = ves_io_schema_app_type.ServiceAPIEndpointPDFReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_type.ServiceAPIEndpointsReq"] = ves_io_schema_app_type.ServiceAPIEndpointsReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_type.SwaggerSpecReq"] = ves_io_schema_app_type.SwaggerSpecReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_type.SwaggerSpecRsp"] = ves_io_schema_app_type.SwaggerSpecRspValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.app_type.SpecType"] = ves_io_schema_app_type.SpecTypeValidator()
 
@@ -823,7 +829,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.endpoint.CreateSpecType"] = ves_io_schema_endpoint.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.endpoint.DNSInfo"] = ves_io_schema_endpoint.DNSInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.endpoint.DiscoveredInfoType"] = ves_io_schema_endpoint.DiscoveredInfoTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.endpoint.DnsNameAdvanceType"] = ves_io_schema_endpoint.DnsNameAdvanceTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.endpoint.DnsNameAdvancedType"] = ves_io_schema_endpoint.DnsNameAdvancedTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.endpoint.GetSpecType"] = ves_io_schema_endpoint.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.endpoint.GlobalSpecType"] = ves_io_schema_endpoint.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.endpoint.K8SInfo"] = ves_io_schema_endpoint.K8SInfoValidator()
@@ -1081,6 +1087,10 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.log.AuditLogRequestV2"] = ves_io_schema_log.AuditLogRequestV2Validator()
 	MDR.ValidatorRegistry["ves.io.schema.log.FirewallLogAggregationRequest"] = ves_io_schema_log.FirewallLogAggregationRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.FirewallLogRequest"] = ves_io_schema_log.FirewallLogRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log.K8SAuditLogAggregationRequest"] = ves_io_schema_log.K8SAuditLogAggregationRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log.K8SAuditLogRequest"] = ves_io_schema_log.K8SAuditLogRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log.K8SEventsAggregationRequest"] = ves_io_schema_log.K8SEventsAggregationRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log.K8SEventsRequest"] = ves_io_schema_log.K8SEventsRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.LogAggregationResponse"] = ves_io_schema_log.LogAggregationResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.LogResponse"] = ves_io_schema_log.LogResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.LogScrollRequest"] = ves_io_schema_log.LogScrollRequestValidator()
@@ -1112,6 +1122,13 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.log.firewall_log.DateAggregation"] = ves_io_schema_log_firewall_log.DateAggregationValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.firewall_log.DateSubAggregation"] = ves_io_schema_log_firewall_log.DateSubAggregationValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.firewall_log.FieldAggregation"] = ves_io_schema_log_firewall_log.FieldAggregationValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.log.k8s_audit_log.AggregationRequest"] = ves_io_schema_log_k8s_audit_log.AggregationRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log.k8s_audit_log.DateAggregation"] = ves_io_schema_log_k8s_audit_log.DateAggregationValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.log.k8s_events.AggregationRequest"] = ves_io_schema_log_k8s_events.AggregationRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log.k8s_events.DateAggregation"] = ves_io_schema_log_k8s_events.DateAggregationValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log.k8s_events.FieldAggregation"] = ves_io_schema_log_k8s_events.FieldAggregationValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.log.vk8s_audit_log.AggregationRequest"] = ves_io_schema_log_vk8s_audit_log.AggregationRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.vk8s_audit_log.DateAggregation"] = ves_io_schema_log_vk8s_audit_log.DateAggregationValidator()
@@ -1338,9 +1355,15 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.network_policy.NetworkPolicyHitsResponse"] = ves_io_schema_network_policy.NetworkPolicyHitsResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.network_policy.NetworkPolicyMetricLabelFilter"] = ves_io_schema_network_policy.NetworkPolicyMetricLabelFilterValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.network_policy.ApplicationsType"] = ves_io_schema_network_policy.ApplicationsTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.network_policy.CreateSpecType"] = ves_io_schema_network_policy.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.network_policy.EndpointChoiceType"] = ves_io_schema_network_policy.EndpointChoiceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.network_policy.GetSpecType"] = ves_io_schema_network_policy.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.network_policy.GlobalSpecType"] = ves_io_schema_network_policy.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.network_policy.LegacyNetworkPolicyRuleChoice"] = ves_io_schema_network_policy.LegacyNetworkPolicyRuleChoiceValidator()
+	MDR.ValidatorRegistry["ves.io.schema.network_policy.NetworkPolicyRuleChoice"] = ves_io_schema_network_policy.NetworkPolicyRuleChoiceValidator()
+	MDR.ValidatorRegistry["ves.io.schema.network_policy.NetworkPolicyRuleType"] = ves_io_schema_network_policy.NetworkPolicyRuleTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.network_policy.ProtocolPortType"] = ves_io_schema_network_policy.ProtocolPortTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.network_policy.ReplaceSpecType"] = ves_io_schema_network_policy.ReplaceSpecTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.network_policy.crudapi.ObjectCreateReq"] = ves_io_schema_network_policy_crudapi.ObjectCreateReqValidator()
@@ -1804,9 +1827,11 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.ReplaceRequest"] = ves_io_schema_service_policy_rule.ReplaceRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.ReplaceResponse"] = ves_io_schema_service_policy_rule.ReplaceResponseValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.ChallengeRuleSpec"] = ves_io_schema_service_policy_rule.ChallengeRuleSpecValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.CreateSpecType"] = ves_io_schema_service_policy_rule.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.GetSpecType"] = ves_io_schema_service_policy_rule.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.GlobalSpecType"] = ves_io_schema_service_policy_rule.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.RateLimiterRuleSpec"] = ves_io_schema_service_policy_rule.RateLimiterRuleSpecValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.ReplaceSpecType"] = ves_io_schema_service_policy_rule.ReplaceSpecTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.crudapi.ObjectCreateReq"] = ves_io_schema_service_policy_rule_crudapi.ObjectCreateReqValidator()
@@ -1883,12 +1908,16 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.site.Cpu"] = ves_io_schema_site.CpuValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.CreateSpecType"] = ves_io_schema_site.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.DeploymentState"] = ves_io_schema_site.DeploymentStateValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.GetKubeConfigReq"] = ves_io_schema_site.GetKubeConfigReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.GetSpecType"] = ves_io_schema_site.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.GlobalSpecType"] = ves_io_schema_site.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.InterfaceStatus"] = ves_io_schema_site.InterfaceStatusValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.IpsecConnectionStatus"] = ves_io_schema_site.IpsecConnectionStatusValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.K8SApiServerParameters"] = ves_io_schema_site.K8SApiServerParametersValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.Kernel"] = ves_io_schema_site.KernelValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.ListKubeConfigReq"] = ves_io_schema_site.ListKubeConfigReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.ListKubeConfigRsp"] = ves_io_schema_site.ListKubeConfigRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.ListKubeConfigRspItem"] = ves_io_schema_site.ListKubeConfigRspItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.Memory"] = ves_io_schema_site.MemoryValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.NetworkDevice"] = ves_io_schema_site.NetworkDeviceValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.NodeInfo"] = ves_io_schema_site.NodeInfoValidator()
@@ -2083,6 +2112,10 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.SiteStaticRoutesListType"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.SiteStaticRoutesType"] = ves_io_schema_views.SiteStaticRoutesTypeValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.StorageClassListType"] = ves_io_schema_views.StorageClassListTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.StorageClassOpenebsEnterpriseType"] = ves_io_schema_views.StorageClassOpenebsEnterpriseTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.StorageClassType"] = ves_io_schema_views.StorageClassTypeValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.views.AdvertiseCustom"] = ves_io_schema_views.AdvertiseCustomValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.AdvertisePublic"] = ves_io_schema_views.AdvertisePublicValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.AdvertiseSiteVsite"] = ves_io_schema_views.AdvertiseSiteVsiteValidator()
@@ -2112,11 +2145,14 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.ReplaceRequest"] = ves_io_schema_views_aws_tgw_site.ReplaceRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.ReplaceResponse"] = ves_io_schema_views_aws_tgw_site.ReplaceResponseValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.SetTGWInfoRequest"] = ves_io_schema_views_aws_tgw_site.SetTGWInfoRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.SetTGWInfoResponse"] = ves_io_schema_views_aws_tgw_site.SetTGWInfoResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.SetVPCIpPrefixesRequest"] = ves_io_schema_views_aws_tgw_site.SetVPCIpPrefixesRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.SetVPCIpPrefixesResponse"] = ves_io_schema_views_aws_tgw_site.SetVPCIpPrefixesResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.SetVPNTunnelsRequest"] = ves_io_schema_views_aws_tgw_site.SetVPNTunnelsRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.SetVPNTunnelsResponse"] = ves_io_schema_views_aws_tgw_site.SetVPNTunnelsResponseValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.AWSTGWInfoConfigType"] = ves_io_schema_views_aws_tgw_site.AWSTGWInfoConfigTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.AWSVPNTunnelConfigType"] = ves_io_schema_views_aws_tgw_site.AWSVPNTunnelConfigTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.CreateSpecType"] = ves_io_schema_views_aws_tgw_site.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.ExistingTGWType"] = ves_io_schema_views_aws_tgw_site.ExistingTGWTypeValidator()
@@ -2296,6 +2332,9 @@ func init() {
 
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.SpecType"] = ves_io_schema_views_http_loadbalancer.SpecTypeValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.SwaggerSpecReq"] = ves_io_schema_views_http_loadbalancer.SwaggerSpecReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.SwaggerSpecRsp"] = ves_io_schema_views_http_loadbalancer.SwaggerSpecRspValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.CreateRequest"] = ves_io_schema_views_http_loadbalancer.CreateRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.CreateResponse"] = ves_io_schema_views_http_loadbalancer.CreateResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.DeleteRequest"] = ves_io_schema_views_http_loadbalancer.DeleteRequestValidator()
@@ -2311,6 +2350,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.GetDnsInfoResponse"] = ves_io_schema_views_http_loadbalancer.GetDnsInfoResponseValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.AdvancedOptionsType"] = ves_io_schema_views_http_loadbalancer.AdvancedOptionsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ChallengeRule"] = ves_io_schema_views_http_loadbalancer.ChallengeRuleValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ChallengeRuleList"] = ves_io_schema_views_http_loadbalancer.ChallengeRuleListValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.CreateSpecType"] = ves_io_schema_views_http_loadbalancer.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.CustomIpAllowedList"] = ves_io_schema_views_http_loadbalancer.CustomIpAllowedListValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.DownstreamTlsParamsType"] = ves_io_schema_views_http_loadbalancer.DownstreamTlsParamsTypeValidator()
@@ -2319,6 +2360,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.GlobalSpecType"] = ves_io_schema_views_http_loadbalancer.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.HashPolicyListType"] = ves_io_schema_views_http_loadbalancer.HashPolicyListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.MirrorPolicyType"] = ves_io_schema_views_http_loadbalancer.MirrorPolicyTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.PolicyBasedChallenge"] = ves_io_schema_views_http_loadbalancer.PolicyBasedChallengeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ProxyTypeHttp"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ProxyTypeHttps"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ProxyTypeHttpsAutoCerts"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCertsValidator()
@@ -2365,13 +2407,9 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.NetworkPolicyHitsResponse"] = ves_io_schema_views_network_policy_view.NetworkPolicyHitsResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.NetworkPolicyMetricLabelFilter"] = ves_io_schema_views_network_policy_view.NetworkPolicyMetricLabelFilterValidator()
 
-	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.ApplicationsType"] = ves_io_schema_views_network_policy_view.ApplicationsTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.CreateSpecType"] = ves_io_schema_views_network_policy_view.CreateSpecTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.EndpointChoiceType"] = ves_io_schema_views_network_policy_view.EndpointChoiceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.GetSpecType"] = ves_io_schema_views_network_policy_view.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.GlobalSpecType"] = ves_io_schema_views_network_policy_view.GlobalSpecTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.NetworkPolicyRuleType"] = ves_io_schema_views_network_policy_view.NetworkPolicyRuleTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.ProtocolPortType"] = ves_io_schema_views_network_policy_view.ProtocolPortTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.ReplaceSpecType"] = ves_io_schema_views_network_policy_view.ReplaceSpecTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.crudapi.ObjectCreateReq"] = ves_io_schema_views_network_policy_view_crudapi.ObjectCreateReqValidator()
@@ -2429,6 +2467,13 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.crudapi.ObjectListRspItem"] = ves_io_schema_views_origin_pool_crudapi.ObjectListRspItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.crudapi.ObjectReplaceReq"] = ves_io_schema_views_origin_pool_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.crudapi.ObjectReplaceRsp"] = ves_io_schema_views_origin_pool_crudapi.ObjectReplaceRspValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.CreateSpecType"] = ves_io_schema_views_rate_limiter_policy.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.GetSpecType"] = ves_io_schema_views_rate_limiter_policy.GetSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.GlobalSpecType"] = ves_io_schema_views_rate_limiter_policy.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.PolicyList"] = ves_io_schema_views_rate_limiter_policy.PolicyListValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.RateLimiterRule"] = ves_io_schema_views_rate_limiter_policy.RateLimiterRuleValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.ReplaceSpecType"] = ves_io_schema_views_rate_limiter_policy.ReplaceSpecTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.views.tcp_loadbalancer.SpecType"] = ves_io_schema_views_tcp_loadbalancer.SpecTypeValidator()
 
@@ -2520,6 +2565,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.APIEndpointPDFRsp"] = ves_io_schema_virtual_host.APIEndpointPDFRspValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.APIEndpointsReq"] = ves_io_schema_virtual_host.APIEndpointsReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.APIEndpointsRsp"] = ves_io_schema_virtual_host.APIEndpointsRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_host.SwaggerSpecReq"] = ves_io_schema_virtual_host.SwaggerSpecReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_host.SwaggerSpecRsp"] = ves_io_schema_virtual_host.SwaggerSpecRspValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.CreateRequest"] = ves_io_schema_virtual_host.CreateRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.CreateResponse"] = ves_io_schema_virtual_host.CreateResponseValidator()
@@ -2545,6 +2592,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.GlobalSpecType"] = ves_io_schema_virtual_host.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.JavaScriptConfigType"] = ves_io_schema_virtual_host.JavaScriptConfigTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.JavascriptChallengeType"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_host.PolicyBasedChallenge"] = ves_io_schema_virtual_host.PolicyBasedChallengeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.ReplaceSpecType"] = ves_io_schema_virtual_host.ReplaceSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.TemporaryUserBlockingType"] = ves_io_schema_virtual_host.TemporaryUserBlockingTypeValidator()
 
@@ -2588,6 +2636,11 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.ListResponseItem"] = ves_io_schema_virtual_k8s.ListResponseItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.ReplaceRequest"] = ves_io_schema_virtual_k8s.ReplaceRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.ReplaceResponse"] = ves_io_schema_virtual_k8s.ReplaceResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.PVCMetricData"] = ves_io_schema_virtual_k8s.PVCMetricDataValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.PVCMetricTypeData"] = ves_io_schema_virtual_k8s.PVCMetricTypeDataValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.PVCMetricsRequest"] = ves_io_schema_virtual_k8s.PVCMetricsRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.PVCMetricsResponse"] = ves_io_schema_virtual_k8s.PVCMetricsResponseValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.CreateSpecType"] = ves_io_schema_virtual_k8s.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.GetSpecType"] = ves_io_schema_virtual_k8s.GetSpecTypeValidator()
@@ -2789,6 +2842,5485 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.waf_rules.crudapi.ObjectListRspItem"] = ves_io_schema_waf_rules_crudapi.ObjectListRspItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.waf_rules.crudapi.ObjectReplaceReq"] = ves_io_schema_waf_rules_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.waf_rules.crudapi.ObjectReplaceRsp"] = ves_io_schema_waf_rules_crudapi.ObjectReplaceRspValidator()
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.advertise_policy.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.tls_parameters.common_params.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.where": []sets.String{
+				sets.NewString([]string{"site", "virtual_network", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.advertise_policy.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.tls_parameters.common_params.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.where": []sets.String{
+				sets.NewString([]string{"site", "virtual_network", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.advertise_policy.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.tls_parameters.common_params.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.where": []sets.String{
+				sets.NewString([]string{"site", "virtual_network", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.advertise_policy.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.tls_parameters.common_params.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.where": []sets.String{
+				sets.NewString([]string{"site", "virtual_network", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.alert_policy.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.notification_parameters": []sets.String{
+				sets.NewString([]string{"custom", "default", "individual", "ves_io_group"}...),
+			},
+			"spec.routes": []sets.String{
+				sets.NewString([]string{"alertname", "alertname_regex", "any", "custom", "group", "severity"}...),
+				sets.NewString([]string{"dont_send", "send"}...),
+			},
+			"spec.routes.custom.alertname": []sets.String{
+				sets.NewString([]string{"exact_match", "regex_match"}...),
+			},
+			"spec.routes.custom.group": []sets.String{
+				sets.NewString([]string{"exact_match", "regex_match"}...),
+			},
+			"spec.routes.custom.severity": []sets.String{
+				sets.NewString([]string{"exact_match", "regex_match"}...),
+			},
+			"spec.routes.notification_parameters": []sets.String{
+				sets.NewString([]string{"custom", "default", "individual", "ves_io_group"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.alert_policy.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.notification_parameters": []sets.String{
+				sets.NewString([]string{"custom", "default", "individual", "ves_io_group"}...),
+			},
+			"spec.routes": []sets.String{
+				sets.NewString([]string{"alertname", "alertname_regex", "any", "custom", "group", "severity"}...),
+				sets.NewString([]string{"dont_send", "send"}...),
+			},
+			"spec.routes.custom.alertname": []sets.String{
+				sets.NewString([]string{"exact_match", "regex_match"}...),
+			},
+			"spec.routes.custom.group": []sets.String{
+				sets.NewString([]string{"exact_match", "regex_match"}...),
+			},
+			"spec.routes.custom.severity": []sets.String{
+				sets.NewString([]string{"exact_match", "regex_match"}...),
+			},
+			"spec.routes.notification_parameters": []sets.String{
+				sets.NewString([]string{"custom", "default", "individual", "ves_io_group"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.alert_policy.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.notification_parameters": []sets.String{
+				sets.NewString([]string{"custom", "default", "individual", "ves_io_group"}...),
+			},
+			"spec.gc_spec.routes": []sets.String{
+				sets.NewString([]string{"alertname", "alertname_regex", "any", "custom", "group", "severity"}...),
+				sets.NewString([]string{"dont_send", "send"}...),
+			},
+			"spec.gc_spec.routes.custom.alertname": []sets.String{
+				sets.NewString([]string{"exact_match", "regex_match"}...),
+			},
+			"spec.gc_spec.routes.custom.group": []sets.String{
+				sets.NewString([]string{"exact_match", "regex_match"}...),
+			},
+			"spec.gc_spec.routes.custom.severity": []sets.String{
+				sets.NewString([]string{"exact_match", "regex_match"}...),
+			},
+			"spec.gc_spec.routes.notification_parameters": []sets.String{
+				sets.NewString([]string{"custom", "default", "individual", "ves_io_group"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.alert_policy.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.notification_parameters": []sets.String{
+				sets.NewString([]string{"custom", "default", "individual", "ves_io_group"}...),
+			},
+			"spec.gc_spec.routes": []sets.String{
+				sets.NewString([]string{"alertname", "alertname_regex", "any", "custom", "group", "severity"}...),
+				sets.NewString([]string{"dont_send", "send"}...),
+			},
+			"spec.gc_spec.routes.custom.alertname": []sets.String{
+				sets.NewString([]string{"exact_match", "regex_match"}...),
+			},
+			"spec.gc_spec.routes.custom.group": []sets.String{
+				sets.NewString([]string{"exact_match", "regex_match"}...),
+			},
+			"spec.gc_spec.routes.custom.severity": []sets.String{
+				sets.NewString([]string{"exact_match", "regex_match"}...),
+			},
+			"spec.gc_spec.routes.notification_parameters": []sets.String{
+				sets.NewString([]string{"custom", "default", "individual", "ves_io_group"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.alert_receiver.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"email", "opsgenie", "pagerduty", "slack", "sms"}...),
+			},
+			"spec.opsgenie.api_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.pagerduty.routing_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.slack.url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.alert_receiver.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"email", "opsgenie", "pagerduty", "slack", "sms"}...),
+			},
+			"spec.opsgenie.api_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.pagerduty.routing_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.slack.url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.alert_receiver.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"email", "opsgenie", "pagerduty", "slack", "sms"}...),
+			},
+			"spec.gc_spec.opsgenie.api_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.pagerduty.routing_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.slack.url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.alert_receiver.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"email", "opsgenie", "pagerduty", "slack", "sms"}...),
+			},
+			"spec.gc_spec.opsgenie.api_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.pagerduty.routing_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.slack.url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.app_type.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.business_logic_markup_setting": []sets.String{
+				sets.NewString([]string{"disable", "enable"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.app_type.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.business_logic_markup_setting": []sets.String{
+				sets.NewString([]string{"disable", "enable"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.app_type.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.business_logic_markup_setting": []sets.String{
+				sets.NewString([]string{"disable", "enable"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.app_type.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.business_logic_markup_setting": []sets.String{
+				sets.NewString([]string{"disable", "enable"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.authentication.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"oidc_auth"}...),
+			},
+			"spec.cookie_params": []sets.String{
+				sets.NewString([]string{"auth_hmac", "kms_key_hmac"}...),
+			},
+			"spec.cookie_params.auth_hmac.prim_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.cookie_params.auth_hmac.sec_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.oidc_auth": []sets.String{
+				sets.NewString([]string{"oidc_auth_params", "oidc_well_known_config_url"}...),
+			},
+			"spec.oidc_auth.client_secret": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.authentication.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"oidc_auth"}...),
+			},
+			"spec.cookie_params": []sets.String{
+				sets.NewString([]string{"auth_hmac", "kms_key_hmac"}...),
+			},
+			"spec.cookie_params.auth_hmac.prim_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.cookie_params.auth_hmac.sec_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.oidc_auth": []sets.String{
+				sets.NewString([]string{"oidc_auth_params", "oidc_well_known_config_url"}...),
+			},
+			"spec.oidc_auth.client_secret": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.authentication.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"oidc_auth"}...),
+			},
+			"spec.gc_spec.cookie_params": []sets.String{
+				sets.NewString([]string{"auth_hmac", "kms_key_hmac"}...),
+			},
+			"spec.gc_spec.cookie_params.auth_hmac.prim_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.cookie_params.auth_hmac.sec_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.oidc_auth": []sets.String{
+				sets.NewString([]string{"oidc_auth_params", "oidc_well_known_config_url"}...),
+			},
+			"spec.gc_spec.oidc_auth.client_secret": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.authentication.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"oidc_auth"}...),
+			},
+			"spec.gc_spec.cookie_params": []sets.String{
+				sets.NewString([]string{"auth_hmac", "kms_key_hmac"}...),
+			},
+			"spec.gc_spec.cookie_params.auth_hmac.prim_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.cookie_params.auth_hmac.sec_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.oidc_auth": []sets.String{
+				sets.NewString([]string{"oidc_auth_params", "oidc_well_known_config_url"}...),
+			},
+			"spec.gc_spec.oidc_auth.client_secret": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.bgp.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.bgp_parameters.bgp_router_id": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.bgp_peers.bgp_peer_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.where": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.bgp.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.bgp_parameters.bgp_router_id": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.bgp_peers.bgp_peer_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.where": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.bgp.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.bgp_parameters.bgp_router_id": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.bgp_peers.bgp_peer_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.where": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.bgp.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.bgp_parameters.bgp_router_id": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.bgp_peers.bgp_peer_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.where": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.certified_hardware.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.image_list": []sets.String{
+				sets.NewString([]string{"aws", "azure", "gcp"}...),
+			},
+			"spec.gc_spec.image_list.aws": []sets.String{
+				sets.NewString([]string{"image_id"}...),
+			},
+			"spec.gc_spec.image_list.azure": []sets.String{
+				sets.NewString([]string{"image_id", "marketplace"}...),
+			},
+			"spec.gc_spec.image_list.gcp": []sets.String{
+				sets.NewString([]string{"image_id"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.certified_hardware.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.image_list": []sets.String{
+				sets.NewString([]string{"aws", "azure", "gcp"}...),
+			},
+			"spec.gc_spec.image_list.aws": []sets.String{
+				sets.NewString([]string{"image_id"}...),
+			},
+			"spec.gc_spec.image_list.azure": []sets.String{
+				sets.NewString([]string{"image_id", "marketplace"}...),
+			},
+			"spec.gc_spec.image_list.gcp": []sets.String{
+				sets.NewString([]string{"image_id"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.cloud_credentials.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"aws_secret_key", "azure_client_secret", "azure_pfx_certificate", "gcp_cred_file"}...),
+			},
+			"spec.aws_secret_key.secret_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.azure_client_secret.client_secret": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.azure_pfx_certificate.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gcp_cred_file.credential_file": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.cloud_credentials.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"aws_secret_key", "azure_client_secret", "azure_pfx_certificate", "gcp_cred_file"}...),
+			},
+			"spec.aws_secret_key.secret_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.azure_client_secret.client_secret": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.azure_pfx_certificate.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gcp_cred_file.credential_file": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.cloud_credentials.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"aws_secret_key", "azure_client_secret", "azure_pfx_certificate", "gcp_cred_file"}...),
+			},
+			"spec.gc_spec.aws_secret_key.secret_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.azure_client_secret.client_secret": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.azure_pfx_certificate.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.gcp_cred_file.credential_file": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.cloud_credentials.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"aws_secret_key", "azure_client_secret", "azure_pfx_certificate", "gcp_cred_file"}...),
+			},
+			"spec.gc_spec.aws_secret_key.secret_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.azure_client_secret.client_secret": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.azure_pfx_certificate.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.gcp_cred_file.credential_file": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.cluster.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"no_panic_threshold", "panic_threshold"}...),
+			},
+			"spec.tls_parameters": []sets.String{
+				sets.NewString([]string{"disable_sni", "sni", "use_host_header_as_sni"}...),
+			},
+			"spec.tls_parameters.common_params.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.cluster.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"no_panic_threshold", "panic_threshold"}...),
+			},
+			"spec.tls_parameters": []sets.String{
+				sets.NewString([]string{"disable_sni", "sni", "use_host_header_as_sni"}...),
+			},
+			"spec.tls_parameters.common_params.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.cluster.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"no_panic_threshold", "panic_threshold"}...),
+			},
+			"spec.gc_spec.tls_parameters": []sets.String{
+				sets.NewString([]string{"disable_sni", "sni", "use_host_header_as_sni"}...),
+			},
+			"spec.gc_spec.tls_parameters.common_params.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.cluster.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"no_panic_threshold", "panic_threshold"}...),
+			},
+			"spec.gc_spec.tls_parameters": []sets.String{
+				sets.NewString([]string{"disable_sni", "sni", "use_host_header_as_sni"}...),
+			},
+			"spec.gc_spec.tls_parameters.common_params.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.discovery.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"discovery_consul", "discovery_k8s"}...),
+			},
+			"spec.discovery_consul.access_info.connection_info.tls_info.ca_certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.discovery_consul.access_info.connection_info.tls_info.certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.discovery_consul.access_info.connection_info.tls_info.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.discovery_consul.access_info.http_basic_auth_info.passwd_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.discovery_consul.publish_info": []sets.String{
+				sets.NewString([]string{"disable", "publish"}...),
+			},
+			"spec.discovery_k8s.access_info": []sets.String{
+				sets.NewString([]string{"connection_info", "in_cluster", "kubeconfig_url"}...),
+				sets.NewString([]string{"isolated", "reachable"}...),
+			},
+			"spec.discovery_k8s.access_info.connection_info.tls_info.ca_certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.discovery_k8s.access_info.connection_info.tls_info.certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.discovery_k8s.access_info.connection_info.tls_info.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.discovery_k8s.access_info.kubeconfig_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.discovery_k8s.publish_info": []sets.String{
+				sets.NewString([]string{"disable", "dns_delegation", "publish", "publish_fqdns"}...),
+			},
+			"spec.where": []sets.String{
+				sets.NewString([]string{"site", "virtual_network", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.discovery.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"discovery_consul", "discovery_k8s"}...),
+			},
+			"spec.discovery_consul.access_info.connection_info.tls_info.ca_certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.discovery_consul.access_info.connection_info.tls_info.certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.discovery_consul.access_info.connection_info.tls_info.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.discovery_consul.access_info.http_basic_auth_info.passwd_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.discovery_consul.publish_info": []sets.String{
+				sets.NewString([]string{"disable", "publish"}...),
+			},
+			"spec.discovery_k8s.access_info": []sets.String{
+				sets.NewString([]string{"connection_info", "in_cluster", "kubeconfig_url"}...),
+				sets.NewString([]string{"isolated", "reachable"}...),
+			},
+			"spec.discovery_k8s.access_info.connection_info.tls_info.ca_certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.discovery_k8s.access_info.connection_info.tls_info.certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.discovery_k8s.access_info.connection_info.tls_info.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.discovery_k8s.access_info.kubeconfig_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.discovery_k8s.publish_info": []sets.String{
+				sets.NewString([]string{"disable", "dns_delegation", "publish", "publish_fqdns"}...),
+			},
+			"spec.where": []sets.String{
+				sets.NewString([]string{"site", "virtual_network", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.discovery.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"consul", "k8s"}...),
+				sets.NewString([]string{"discovery_consul", "discovery_k8s"}...),
+			},
+			"spec.gc_spec.consul.connection_info.tls_info.ca_certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.consul.connection_info.tls_info.certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.consul.connection_info.tls_info.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.consul.http_basic_auth_info.passwd_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_consul.access_info.connection_info.tls_info.ca_certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_consul.access_info.connection_info.tls_info.certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_consul.access_info.connection_info.tls_info.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_consul.access_info.http_basic_auth_info.passwd_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_consul.publish_info": []sets.String{
+				sets.NewString([]string{"disable", "publish"}...),
+			},
+			"spec.gc_spec.discovery_k8s.access_info": []sets.String{
+				sets.NewString([]string{"connection_info", "in_cluster", "kubeconfig_url"}...),
+				sets.NewString([]string{"isolated", "reachable"}...),
+			},
+			"spec.gc_spec.discovery_k8s.access_info.connection_info.tls_info.ca_certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_k8s.access_info.connection_info.tls_info.certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_k8s.access_info.connection_info.tls_info.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_k8s.access_info.kubeconfig_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_k8s.publish_info": []sets.String{
+				sets.NewString([]string{"disable", "dns_delegation", "publish", "publish_fqdns"}...),
+			},
+			"spec.gc_spec.k8s": []sets.String{
+				sets.NewString([]string{"connection_info", "in_cluster", "kubeconfig_url"}...),
+				sets.NewString([]string{"isolated", "reachable"}...),
+			},
+			"spec.gc_spec.k8s.connection_info.tls_info.ca_certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.k8s.connection_info.tls_info.certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.k8s.connection_info.tls_info.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.k8s.kubeconfig_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.where": []sets.String{
+				sets.NewString([]string{"site", "virtual_network", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.discovery.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"consul", "k8s"}...),
+				sets.NewString([]string{"discovery_consul", "discovery_k8s"}...),
+			},
+			"spec.gc_spec.consul.connection_info.tls_info.ca_certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.consul.connection_info.tls_info.certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.consul.connection_info.tls_info.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.consul.http_basic_auth_info.passwd_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_consul.access_info.connection_info.tls_info.ca_certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_consul.access_info.connection_info.tls_info.certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_consul.access_info.connection_info.tls_info.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_consul.access_info.http_basic_auth_info.passwd_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_consul.publish_info": []sets.String{
+				sets.NewString([]string{"disable", "publish"}...),
+			},
+			"spec.gc_spec.discovery_k8s.access_info": []sets.String{
+				sets.NewString([]string{"connection_info", "in_cluster", "kubeconfig_url"}...),
+				sets.NewString([]string{"isolated", "reachable"}...),
+			},
+			"spec.gc_spec.discovery_k8s.access_info.connection_info.tls_info.ca_certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_k8s.access_info.connection_info.tls_info.certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_k8s.access_info.connection_info.tls_info.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_k8s.access_info.kubeconfig_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.discovery_k8s.publish_info": []sets.String{
+				sets.NewString([]string{"disable", "dns_delegation", "publish", "publish_fqdns"}...),
+			},
+			"spec.gc_spec.k8s": []sets.String{
+				sets.NewString([]string{"connection_info", "in_cluster", "kubeconfig_url"}...),
+				sets.NewString([]string{"isolated", "reachable"}...),
+			},
+			"spec.gc_spec.k8s.connection_info.tls_info.ca_certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.k8s.connection_info.tls_info.certificate_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.k8s.connection_info.tls_info.key_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.k8s.kubeconfig_url": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.where": []sets.String{
+				sets.NewString([]string{"site", "virtual_network", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.endpoint.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"dns_name", "dns_name_advanced", "ip", "service_info"}...),
+			},
+			"spec.dns_name_advanced": []sets.String{
+				sets.NewString([]string{"refresh_interval", "strict_ttl"}...),
+			},
+			"spec.service_info": []sets.String{
+				sets.NewString([]string{"service_name", "service_selector"}...),
+			},
+			"spec.where": []sets.String{
+				sets.NewString([]string{"site", "virtual_network", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.endpoint.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"dns_name", "dns_name_advanced", "ip", "service_info"}...),
+			},
+			"spec.dns_name_advanced": []sets.String{
+				sets.NewString([]string{"refresh_interval", "strict_ttl"}...),
+			},
+			"spec.service_info": []sets.String{
+				sets.NewString([]string{"service_name", "service_selector"}...),
+			},
+			"spec.where": []sets.String{
+				sets.NewString([]string{"site", "virtual_network", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.endpoint.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"dns_name", "dns_name_advanced", "ip", "k8s_cluster_api_server", "serverless_service_name", "service_info"}...),
+			},
+			"spec.gc_spec.dns_name_advanced": []sets.String{
+				sets.NewString([]string{"refresh_interval", "strict_ttl"}...),
+			},
+			"spec.gc_spec.service_info": []sets.String{
+				sets.NewString([]string{"service_name", "service_selector"}...),
+			},
+			"spec.gc_spec.where": []sets.String{
+				sets.NewString([]string{"site", "virtual_network", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.endpoint.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"dns_name", "dns_name_advanced", "ip", "k8s_cluster_api_server", "serverless_service_name", "service_info"}...),
+			},
+			"spec.gc_spec.dns_name_advanced": []sets.String{
+				sets.NewString([]string{"refresh_interval", "strict_ttl"}...),
+			},
+			"spec.gc_spec.service_info": []sets.String{
+				sets.NewString([]string{"service_name", "service_selector"}...),
+			},
+			"spec.gc_spec.where": []sets.String{
+				sets.NewString([]string{"site", "virtual_network", "virtual_site"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.fast_acl.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"legacy_acl", "re_acl", "site_acl"}...),
+			},
+			"spec.legacy_acl.destination_type": []sets.String{
+				sets.NewString([]string{"all_services", "destination_ip_address", "interface_services", "selected_vip_address", "shared_vip_services", "vip_services"}...),
+			},
+			"spec.legacy_acl.destination_type.destination_ip_address.address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.legacy_acl.destination_type.destination_ip_address.ports": []sets.String{
+				sets.NewString([]string{"all", "dns", "user_defined"}...),
+			},
+			"spec.legacy_acl.destination_type.selected_vip_address.address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.legacy_acl.network_type": []sets.String{
+				sets.NewString([]string{"public", "site_local", "site_local_inside"}...),
+			},
+			"spec.re_acl": []sets.String{
+				sets.NewString([]string{"all_public_vips", "default_tenant_vip", "selected_tenant_vip"}...),
+			},
+			"spec.re_acl.fast_acl_rules": []sets.String{
+				sets.NewString([]string{"ip_prefix_set", "prefix"}...),
+			},
+			"spec.re_acl.fast_acl_rules.action": []sets.String{
+				sets.NewString([]string{"policer_action", "protocol_policer_action", "simple_action"}...),
+			},
+			"spec.re_acl.fast_acl_rules.port": []sets.String{
+				sets.NewString([]string{"all", "dns", "user_defined"}...),
+			},
+			"spec.site_acl": []sets.String{
+				sets.NewString([]string{"all_services", "interface_services", "vip_services"}...),
+				sets.NewString([]string{"inside_network", "outside_network"}...),
+			},
+			"spec.site_acl.fast_acl_rules": []sets.String{
+				sets.NewString([]string{"ip_prefix_set", "prefix"}...),
+			},
+			"spec.site_acl.fast_acl_rules.action": []sets.String{
+				sets.NewString([]string{"policer_action", "protocol_policer_action", "simple_action"}...),
+			},
+			"spec.site_acl.fast_acl_rules.port": []sets.String{
+				sets.NewString([]string{"all", "dns", "user_defined"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.fast_acl.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"legacy_acl", "re_acl", "site_acl"}...),
+			},
+			"spec.legacy_acl.destination_type": []sets.String{
+				sets.NewString([]string{"all_services", "destination_ip_address", "interface_services", "selected_vip_address", "shared_vip_services", "vip_services"}...),
+			},
+			"spec.legacy_acl.destination_type.destination_ip_address.address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.legacy_acl.destination_type.destination_ip_address.ports": []sets.String{
+				sets.NewString([]string{"all", "dns", "user_defined"}...),
+			},
+			"spec.legacy_acl.destination_type.selected_vip_address.address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.legacy_acl.network_type": []sets.String{
+				sets.NewString([]string{"public", "site_local", "site_local_inside"}...),
+			},
+			"spec.re_acl": []sets.String{
+				sets.NewString([]string{"all_public_vips", "default_tenant_vip", "selected_tenant_vip"}...),
+			},
+			"spec.re_acl.fast_acl_rules": []sets.String{
+				sets.NewString([]string{"ip_prefix_set", "prefix"}...),
+			},
+			"spec.re_acl.fast_acl_rules.action": []sets.String{
+				sets.NewString([]string{"policer_action", "protocol_policer_action", "simple_action"}...),
+			},
+			"spec.re_acl.fast_acl_rules.port": []sets.String{
+				sets.NewString([]string{"all", "dns", "user_defined"}...),
+			},
+			"spec.site_acl": []sets.String{
+				sets.NewString([]string{"all_services", "interface_services", "vip_services"}...),
+				sets.NewString([]string{"inside_network", "outside_network"}...),
+			},
+			"spec.site_acl.fast_acl_rules": []sets.String{
+				sets.NewString([]string{"ip_prefix_set", "prefix"}...),
+			},
+			"spec.site_acl.fast_acl_rules.action": []sets.String{
+				sets.NewString([]string{"policer_action", "protocol_policer_action", "simple_action"}...),
+			},
+			"spec.site_acl.fast_acl_rules.port": []sets.String{
+				sets.NewString([]string{"all", "dns", "user_defined"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.fast_acl.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"legacy_acl", "re_acl", "site_acl"}...),
+			},
+			"spec.gc_spec.destination_type": []sets.String{
+				sets.NewString([]string{"all_services", "destination_ip_address", "interface_services", "selected_vip_address", "shared_vip_services", "vip_services"}...),
+			},
+			"spec.gc_spec.destination_type.destination_ip_address.address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.destination_type.destination_ip_address.ports": []sets.String{
+				sets.NewString([]string{"all", "dns", "user_defined"}...),
+			},
+			"spec.gc_spec.destination_type.selected_vip_address.address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.network_type": []sets.String{
+				sets.NewString([]string{"public", "site_local", "site_local_inside"}...),
+			},
+			"spec.gc_spec.re_acl": []sets.String{
+				sets.NewString([]string{"all_public_vips", "default_tenant_vip", "selected_tenant_vip"}...),
+			},
+			"spec.gc_spec.re_acl.fast_acl_rules": []sets.String{
+				sets.NewString([]string{"ip_prefix_set", "prefix"}...),
+			},
+			"spec.gc_spec.re_acl.fast_acl_rules.action": []sets.String{
+				sets.NewString([]string{"policer_action", "protocol_policer_action", "simple_action"}...),
+			},
+			"spec.gc_spec.re_acl.fast_acl_rules.port": []sets.String{
+				sets.NewString([]string{"all", "dns", "user_defined"}...),
+			},
+			"spec.gc_spec.site_acl": []sets.String{
+				sets.NewString([]string{"all_services", "interface_services", "vip_services"}...),
+				sets.NewString([]string{"inside_network", "outside_network"}...),
+			},
+			"spec.gc_spec.site_acl.fast_acl_rules": []sets.String{
+				sets.NewString([]string{"ip_prefix_set", "prefix"}...),
+			},
+			"spec.gc_spec.site_acl.fast_acl_rules.action": []sets.String{
+				sets.NewString([]string{"policer_action", "protocol_policer_action", "simple_action"}...),
+			},
+			"spec.gc_spec.site_acl.fast_acl_rules.port": []sets.String{
+				sets.NewString([]string{"all", "dns", "user_defined"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.fast_acl.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"legacy_acl", "re_acl", "site_acl"}...),
+			},
+			"spec.gc_spec.destination_type": []sets.String{
+				sets.NewString([]string{"all_services", "destination_ip_address", "interface_services", "selected_vip_address", "shared_vip_services", "vip_services"}...),
+			},
+			"spec.gc_spec.destination_type.destination_ip_address.address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.destination_type.destination_ip_address.ports": []sets.String{
+				sets.NewString([]string{"all", "dns", "user_defined"}...),
+			},
+			"spec.gc_spec.destination_type.selected_vip_address.address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.network_type": []sets.String{
+				sets.NewString([]string{"public", "site_local", "site_local_inside"}...),
+			},
+			"spec.gc_spec.re_acl": []sets.String{
+				sets.NewString([]string{"all_public_vips", "default_tenant_vip", "selected_tenant_vip"}...),
+			},
+			"spec.gc_spec.re_acl.fast_acl_rules": []sets.String{
+				sets.NewString([]string{"ip_prefix_set", "prefix"}...),
+			},
+			"spec.gc_spec.re_acl.fast_acl_rules.action": []sets.String{
+				sets.NewString([]string{"policer_action", "protocol_policer_action", "simple_action"}...),
+			},
+			"spec.gc_spec.re_acl.fast_acl_rules.port": []sets.String{
+				sets.NewString([]string{"all", "dns", "user_defined"}...),
+			},
+			"spec.gc_spec.site_acl": []sets.String{
+				sets.NewString([]string{"all_services", "interface_services", "vip_services"}...),
+				sets.NewString([]string{"inside_network", "outside_network"}...),
+			},
+			"spec.gc_spec.site_acl.fast_acl_rules": []sets.String{
+				sets.NewString([]string{"ip_prefix_set", "prefix"}...),
+			},
+			"spec.gc_spec.site_acl.fast_acl_rules.action": []sets.String{
+				sets.NewString([]string{"policer_action", "protocol_policer_action", "simple_action"}...),
+			},
+			"spec.gc_spec.site_acl.fast_acl_rules.port": []sets.String{
+				sets.NewString([]string{"all", "dns", "user_defined"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.fast_acl_rule.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"ip_prefix_set", "prefix"}...),
+			},
+			"spec.action": []sets.String{
+				sets.NewString([]string{"policer_action", "protocol_policer_action", "simple_action"}...),
+			},
+			"spec.port": []sets.String{
+				sets.NewString([]string{"all", "dns", "user_defined"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.fast_acl_rule.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"ip_prefix_set", "prefix"}...),
+			},
+			"spec.action": []sets.String{
+				sets.NewString([]string{"policer_action", "protocol_policer_action", "simple_action"}...),
+			},
+			"spec.port": []sets.String{
+				sets.NewString([]string{"all", "dns", "user_defined"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.fast_acl_rule.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"ip_prefix_set", "prefix"}...),
+			},
+			"spec.gc_spec.action": []sets.String{
+				sets.NewString([]string{"policer_action", "protocol_policer_action", "simple_action"}...),
+			},
+			"spec.gc_spec.port": []sets.String{
+				sets.NewString([]string{"all", "dns", "user_defined"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.fast_acl_rule.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"ip_prefix_set", "prefix"}...),
+			},
+			"spec.gc_spec.action": []sets.String{
+				sets.NewString([]string{"policer_action", "protocol_policer_action", "simple_action"}...),
+			},
+			"spec.gc_spec.port": []sets.String{
+				sets.NewString([]string{"all", "dns", "user_defined"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.fleet.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"allow_all_usb", "deny_all_usb", "usb_policy"}...),
+				sets.NewString([]string{"bond_device_list", "no_bond_devices"}...),
+				sets.NewString([]string{"dc_cluster_group", "dc_cluster_group_inside", "no_dc_cluster_group"}...),
+				sets.NewString([]string{"default_config", "device_list", "interface_list"}...),
+				sets.NewString([]string{"default_storage_class", "storage_class_list"}...),
+				sets.NewString([]string{"disable_gpu", "enable_gpu"}...),
+				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
+				sets.NewString([]string{"no_storage_device", "storage_device_list"}...),
+				sets.NewString([]string{"no_storage_interfaces", "storage_interface_list"}...),
+				sets.NewString([]string{"no_storage_static_routes", "storage_static_routes"}...),
+			},
+			"spec.bond_device_list.bond_devices": []sets.String{
+				sets.NewString([]string{"active_backup", "lacp"}...),
+			},
+			"spec.device_list.devices": []sets.String{
+				sets.NewString([]string{"network_device"}...),
+			},
+			"spec.storage_class_list.storage_classes": []sets.String{
+				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+			},
+			"spec.storage_device_list.storage_devices": []sets.String{
+				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident": []sets.String{
+				sets.NewString([]string{"netapp_backend_ontap_nas", "netapp_backend_ontap_san"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas": []sets.String{
+				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
+				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san": []sets.String{
+				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
+				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
+				sets.NewString([]string{"no_chap", "use_chap"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_initiator_secret": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_target_initiator_secret": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_array.flash_arrays": []sets.String{
+				sets.NewString([]string{"mgmt_dns_name", "mgmt_ip"}...),
+			},
+			"spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_array.flash_arrays.api_token": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_blade.flash_blades": []sets.String{
+				sets.NewString([]string{"mgmt_dns_name", "mgmt_ip"}...),
+				sets.NewString([]string{"nfs_endpoint_dns_name", "nfs_endpoint_ip"}...),
+			},
+			"spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_blade.flash_blades.api_token": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_static_routes.storage_routes.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.storage_static_routes.storage_routes.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.fleet.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"allow_all_usb", "deny_all_usb", "usb_policy"}...),
+				sets.NewString([]string{"bond_device_list", "no_bond_devices"}...),
+				sets.NewString([]string{"dc_cluster_group", "dc_cluster_group_inside", "no_dc_cluster_group"}...),
+				sets.NewString([]string{"default_config", "device_list", "interface_list"}...),
+				sets.NewString([]string{"default_storage_class", "storage_class_list"}...),
+				sets.NewString([]string{"disable_gpu", "enable_gpu"}...),
+				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
+				sets.NewString([]string{"no_storage_device", "storage_device_list"}...),
+				sets.NewString([]string{"no_storage_interfaces", "storage_interface_list"}...),
+				sets.NewString([]string{"no_storage_static_routes", "storage_static_routes"}...),
+			},
+			"spec.bond_device_list.bond_devices": []sets.String{
+				sets.NewString([]string{"active_backup", "lacp"}...),
+			},
+			"spec.device_list.devices": []sets.String{
+				sets.NewString([]string{"network_device"}...),
+			},
+			"spec.storage_class_list.storage_classes": []sets.String{
+				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+			},
+			"spec.storage_device_list.storage_devices": []sets.String{
+				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident": []sets.String{
+				sets.NewString([]string{"netapp_backend_ontap_nas", "netapp_backend_ontap_san"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas": []sets.String{
+				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
+				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san": []sets.String{
+				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
+				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
+				sets.NewString([]string{"no_chap", "use_chap"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_initiator_secret": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_target_initiator_secret": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_array.flash_arrays": []sets.String{
+				sets.NewString([]string{"mgmt_dns_name", "mgmt_ip"}...),
+			},
+			"spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_array.flash_arrays.api_token": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_blade.flash_blades": []sets.String{
+				sets.NewString([]string{"mgmt_dns_name", "mgmt_ip"}...),
+				sets.NewString([]string{"nfs_endpoint_dns_name", "nfs_endpoint_ip"}...),
+			},
+			"spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_blade.flash_blades.api_token": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_static_routes.storage_routes.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.storage_static_routes.storage_routes.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.fleet.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"allow_all_usb", "deny_all_usb", "usb_policy"}...),
+				sets.NewString([]string{"bond_device_list", "no_bond_devices"}...),
+				sets.NewString([]string{"dc_cluster_group", "dc_cluster_group_inside", "no_dc_cluster_group"}...),
+				sets.NewString([]string{"default_interfaces", "interface_list", "legacy_devices"}...),
+				sets.NewString([]string{"default_storage_class", "storage_class_list"}...),
+				sets.NewString([]string{"disable_gpu", "enable_gpu"}...),
+				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
+				sets.NewString([]string{"no_storage_device", "storage_device_list"}...),
+				sets.NewString([]string{"no_storage_interfaces", "storage_interface_list"}...),
+				sets.NewString([]string{"no_storage_static_routes", "storage_static_routes"}...),
+			},
+			"spec.gc_spec.bond_device_list.bond_devices": []sets.String{
+				sets.NewString([]string{"active_backup", "lacp"}...),
+			},
+			"spec.gc_spec.devices": []sets.String{
+				sets.NewString([]string{"network_device"}...),
+			},
+			"spec.gc_spec.storage_class_list.storage_classes": []sets.String{
+				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices": []sets.String{
+				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident": []sets.String{
+				sets.NewString([]string{"netapp_backend_ontap_nas", "netapp_backend_ontap_san"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas": []sets.String{
+				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
+				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san": []sets.String{
+				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
+				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
+				sets.NewString([]string{"no_chap", "use_chap"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_initiator_secret": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_target_initiator_secret": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_array.flash_arrays": []sets.String{
+				sets.NewString([]string{"mgmt_dns_name", "mgmt_ip"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_array.flash_arrays.api_token": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_blade.flash_blades": []sets.String{
+				sets.NewString([]string{"mgmt_dns_name", "mgmt_ip"}...),
+				sets.NewString([]string{"nfs_endpoint_dns_name", "nfs_endpoint_ip"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_blade.flash_blades.api_token": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_static_routes.storage_routes.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.storage_static_routes.storage_routes.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.fleet.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"allow_all_usb", "deny_all_usb", "usb_policy"}...),
+				sets.NewString([]string{"bond_device_list", "no_bond_devices"}...),
+				sets.NewString([]string{"dc_cluster_group", "dc_cluster_group_inside", "no_dc_cluster_group"}...),
+				sets.NewString([]string{"default_interfaces", "interface_list", "legacy_devices"}...),
+				sets.NewString([]string{"default_storage_class", "storage_class_list"}...),
+				sets.NewString([]string{"disable_gpu", "enable_gpu"}...),
+				sets.NewString([]string{"log_receiver", "logs_streaming_disabled"}...),
+				sets.NewString([]string{"no_storage_device", "storage_device_list"}...),
+				sets.NewString([]string{"no_storage_interfaces", "storage_interface_list"}...),
+				sets.NewString([]string{"no_storage_static_routes", "storage_static_routes"}...),
+			},
+			"spec.gc_spec.bond_device_list.bond_devices": []sets.String{
+				sets.NewString([]string{"active_backup", "lacp"}...),
+			},
+			"spec.gc_spec.devices": []sets.String{
+				sets.NewString([]string{"network_device"}...),
+			},
+			"spec.gc_spec.storage_class_list.storage_classes": []sets.String{
+				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices": []sets.String{
+				sets.NewString([]string{"netapp_trident", "openebs_enterprise", "pure_service_orchestrator"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident": []sets.String{
+				sets.NewString([]string{"netapp_backend_ontap_nas", "netapp_backend_ontap_san"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas": []sets.String{
+				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
+				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san": []sets.String{
+				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
+				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
+				sets.NewString([]string{"no_chap", "use_chap"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.password": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_initiator_secret": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_target_initiator_secret": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_array.flash_arrays": []sets.String{
+				sets.NewString([]string{"mgmt_dns_name", "mgmt_ip"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_array.flash_arrays.api_token": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_blade.flash_blades": []sets.String{
+				sets.NewString([]string{"mgmt_dns_name", "mgmt_ip"}...),
+				sets.NewString([]string{"nfs_endpoint_dns_name", "nfs_endpoint_ip"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_blade.flash_blades.api_token": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_static_routes.storage_routes.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.storage_static_routes.storage_routes.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.healthcheck.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"http_health_check", "tcp_health_check"}...),
+			},
+			"spec.http_health_check": []sets.String{
+				sets.NewString([]string{"host_header", "use_origin_server_name"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.healthcheck.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"http_health_check", "tcp_health_check"}...),
+			},
+			"spec.http_health_check": []sets.String{
+				sets.NewString([]string{"host_header", "use_origin_server_name"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.healthcheck.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.http_health_check": []sets.String{
+				sets.NewString([]string{"host_header", "use_origin_server_name"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.healthcheck.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"http_health_check", "tcp_health_check"}...),
+			},
+			"spec.gc_spec.http_health_check": []sets.String{
+				sets.NewString([]string{"host_header", "use_origin_server_name"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log.CustomAPI.AccessLogAggregationQuery"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"aggs": []sets.String{
+				sets.NewString([]string{"cardinality_aggregation", "date_aggregation", "field_aggregation"}...),
+			},
+			"aggs.date_aggregation.sub_aggs": []sets.String{
+				sets.NewString([]string{"field_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log.CustomAPI.AccessLogQueryV2"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"aggs": []sets.String{
+				sets.NewString([]string{"cardinality_aggregation", "date_aggregation", "field_aggregation"}...),
+			},
+			"aggs.date_aggregation.sub_aggs": []sets.String{
+				sets.NewString([]string{"field_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log.CustomAPI.AuditLogAggregationQuery"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"aggs": []sets.String{
+				sets.NewString([]string{"date_aggregation", "field_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log.CustomAPI.AuditLogQueryV2"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"aggs": []sets.String{
+				sets.NewString([]string{"date_aggregation", "field_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log.CustomAPI.FirewallLogAggregationQuery"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"aggs": []sets.String{
+				sets.NewString([]string{"cardinality_aggregation", "date_aggregation", "field_aggregation"}...),
+			},
+			"aggs.date_aggregation.sub_aggs": []sets.String{
+				sets.NewString([]string{"field_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log.CustomAPI.FirewallLogQuery"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"aggs": []sets.String{
+				sets.NewString([]string{"cardinality_aggregation", "date_aggregation", "field_aggregation"}...),
+			},
+			"aggs.date_aggregation.sub_aggs": []sets.String{
+				sets.NewString([]string{"field_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log.CustomAPI.K8SAuditLogAggregationQuery"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"aggs": []sets.String{
+				sets.NewString([]string{"date_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log.CustomAPI.K8SAuditLogQuery"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"aggs": []sets.String{
+				sets.NewString([]string{"date_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log.CustomAPI.K8SEventsAggregationQuery"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"aggs": []sets.String{
+				sets.NewString([]string{"date_aggregation", "field_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log.CustomAPI.K8SEventsQuery"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"aggs": []sets.String{
+				sets.NewString([]string{"date_aggregation", "field_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log.CustomAPI.VK8SAuditLogAggregationQuery"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"aggs": []sets.String{
+				sets.NewString([]string{"date_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log.CustomAPI.VK8SAuditLogQuery"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"aggs": []sets.String{
+				sets.NewString([]string{"date_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log.CustomAPI.VK8SEventsAggregationQuery"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"aggs": []sets.String{
+				sets.NewString([]string{"date_aggregation", "field_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log.CustomAPI.VK8SEventsQuery"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"aggs": []sets.String{
+				sets.NewString([]string{"date_aggregation", "field_aggregation"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.malicious_user_mitigation.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.mitigation_type.rules.mitigation_action": []sets.String{
+				sets.NewString([]string{"alert_only", "block_temporarily", "captcha_challenge", "javascript_challenge", "none"}...),
+			},
+			"spec.mitigation_type.rules.threat_level": []sets.String{
+				sets.NewString([]string{"high", "low", "medium"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.malicious_user_mitigation.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.mitigation_type.rules.mitigation_action": []sets.String{
+				sets.NewString([]string{"alert_only", "block_temporarily", "captcha_challenge", "javascript_challenge", "none"}...),
+			},
+			"spec.mitigation_type.rules.threat_level": []sets.String{
+				sets.NewString([]string{"high", "low", "medium"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.malicious_user_mitigation.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.mitigation_type.rules.mitigation_action": []sets.String{
+				sets.NewString([]string{"alert_only", "block_temporarily", "captcha_challenge", "javascript_challenge", "none"}...),
+			},
+			"spec.gc_spec.mitigation_type.rules.threat_level": []sets.String{
+				sets.NewString([]string{"high", "low", "medium"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.malicious_user_mitigation.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.mitigation_type.rules.mitigation_action": []sets.String{
+				sets.NewString([]string{"alert_only", "block_temporarily", "captcha_challenge", "javascript_challenge", "none"}...),
+			},
+			"spec.gc_spec.mitigation_type.rules.threat_level": []sets.String{
+				sets.NewString([]string{"high", "low", "medium"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_connector.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "sli_to_global_snat", "sli_to_slo_dr", "sli_to_slo_snat", "slo_to_global_dr", "slo_to_global_snat"}...),
+			},
+			"spec.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.sli_to_global_snat.snat_config": []sets.String{
+				sets.NewString([]string{"default_gw_snat", "dynamic_routing"}...),
+				sets.NewString([]string{"interface_ip", "snat_pool", "snat_pool_allocator"}...),
+			},
+			"spec.sli_to_slo_snat": []sets.String{
+				sets.NewString([]string{"default_gw_snat", "dynamic_routing"}...),
+				sets.NewString([]string{"interface_ip", "snat_pool", "snat_pool_allocator"}...),
+			},
+			"spec.slo_to_global_snat.snat_config": []sets.String{
+				sets.NewString([]string{"default_gw_snat", "dynamic_routing"}...),
+				sets.NewString([]string{"interface_ip", "snat_pool", "snat_pool_allocator"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_connector.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "sli_to_global_snat", "sli_to_slo_dr", "sli_to_slo_snat", "slo_to_global_dr", "slo_to_global_snat"}...),
+			},
+			"spec.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.sli_to_global_snat.snat_config": []sets.String{
+				sets.NewString([]string{"default_gw_snat", "dynamic_routing"}...),
+				sets.NewString([]string{"interface_ip", "snat_pool", "snat_pool_allocator"}...),
+			},
+			"spec.sli_to_slo_snat": []sets.String{
+				sets.NewString([]string{"default_gw_snat", "dynamic_routing"}...),
+				sets.NewString([]string{"interface_ip", "snat_pool", "snat_pool_allocator"}...),
+			},
+			"spec.slo_to_global_snat.snat_config": []sets.String{
+				sets.NewString([]string{"default_gw_snat", "dynamic_routing"}...),
+				sets.NewString([]string{"interface_ip", "snat_pool", "snat_pool_allocator"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_connector.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_connector.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_firewall.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"active_fast_acls", "disable_fast_acl", "fast_acl_set"}...),
+				sets.NewString([]string{"active_forward_proxy_policies", "disable_forward_proxy_policy", "forward_proxy_policy_set"}...),
+				sets.NewString([]string{"active_network_policies", "disable_network_policy", "network_policy_set"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_firewall.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"active_fast_acls", "disable_fast_acl", "fast_acl_set"}...),
+				sets.NewString([]string{"active_forward_proxy_policies", "disable_forward_proxy_policy", "forward_proxy_policy_set"}...),
+				sets.NewString([]string{"active_network_policies", "disable_network_policy", "network_policy_set"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_firewall.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"active_fast_acls", "disable_fast_acl", "fast_acl_legacy_mode"}...),
+				sets.NewString([]string{"active_forward_proxy_policies", "disable_forward_proxy_policy", "forward_proxy_policy_legacy_mode"}...),
+				sets.NewString([]string{"active_network_policies", "disable_network_policy", "network_policy_legacy_mode"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_firewall.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"active_fast_acls", "disable_fast_acl", "fast_acl_legacy_mode"}...),
+				sets.NewString([]string{"active_forward_proxy_policies", "disable_forward_proxy_policy", "forward_proxy_policy_legacy_mode"}...),
+				sets.NewString([]string{"active_network_policies", "disable_network_policy", "network_policy_legacy_mode"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_interface.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "legacy_interface", "tunnel_interface"}...),
+			},
+			"spec.dedicated_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"is_primary", "not_primary"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+			},
+			"spec.dedicated_management_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+			},
+			"spec.ethernet_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "storage_network"}...),
+				sets.NewString([]string{"is_primary", "not_primary"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+				sets.NewString([]string{"untagged", "vlan_id"}...),
+			},
+			"spec.ethernet_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.ethernet_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.ethernet_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.legacy_interface": []sets.String{
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+			},
+			"spec.tunnel_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network"}...),
+			},
+			"spec.tunnel_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_interface.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "legacy_interface", "tunnel_interface"}...),
+			},
+			"spec.dedicated_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"is_primary", "not_primary"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+			},
+			"spec.dedicated_management_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+			},
+			"spec.ethernet_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "storage_network"}...),
+				sets.NewString([]string{"is_primary", "not_primary"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+				sets.NewString([]string{"untagged", "vlan_id"}...),
+			},
+			"spec.ethernet_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.ethernet_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.ethernet_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.legacy_interface": []sets.String{
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+			},
+			"spec.tunnel_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network"}...),
+			},
+			"spec.tunnel_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_interface.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "legacy", "tunnel_interface"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+			},
+			"spec.gc_spec.dhcp_server_params": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.gc_spec.dhcp_server_params.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_interface.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "legacy", "tunnel_interface"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+			},
+			"spec.gc_spec.dhcp_server_params": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.gc_spec.dhcp_server_params.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_policy.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.endpoint": []sets.String{
+				sets.NewString([]string{"any", "inside_endpoints", "interface", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+			"spec.rules.egress_rules": []sets.String{
+				sets.NewString([]string{"all_tcp_traffic", "all_traffic", "all_udp_traffic", "applications", "protocol_port_range"}...),
+				sets.NewString([]string{"any", "inside_endpoints", "ip_prefix_set", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+			"spec.rules.ingress_rules": []sets.String{
+				sets.NewString([]string{"all_tcp_traffic", "all_traffic", "all_udp_traffic", "applications", "protocol_port_range"}...),
+				sets.NewString([]string{"any", "inside_endpoints", "ip_prefix_set", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_policy.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"legacy_rules", "rules"}...),
+			},
+			"spec.endpoint": []sets.String{
+				sets.NewString([]string{"any", "inside_endpoints", "interface", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+			"spec.rules.egress_rules": []sets.String{
+				sets.NewString([]string{"all_tcp_traffic", "all_traffic", "all_udp_traffic", "applications", "protocol_port_range"}...),
+				sets.NewString([]string{"any", "inside_endpoints", "ip_prefix_set", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+			"spec.rules.ingress_rules": []sets.String{
+				sets.NewString([]string{"all_tcp_traffic", "all_traffic", "all_udp_traffic", "applications", "protocol_port_range"}...),
+				sets.NewString([]string{"any", "inside_endpoints", "ip_prefix_set", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_policy.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"legacy_rules", "rules"}...),
+				sets.NewString([]string{"prefix", "prefix_selector"}...),
+			},
+			"spec.gc_spec.endpoint": []sets.String{
+				sets.NewString([]string{"any", "inside_endpoints", "interface", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+			"spec.gc_spec.rules.egress_rules": []sets.String{
+				sets.NewString([]string{"all_tcp_traffic", "all_traffic", "all_udp_traffic", "applications", "protocol_port_range"}...),
+				sets.NewString([]string{"any", "inside_endpoints", "ip_prefix_set", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+			"spec.gc_spec.rules.ingress_rules": []sets.String{
+				sets.NewString([]string{"all_tcp_traffic", "all_traffic", "all_udp_traffic", "applications", "protocol_port_range"}...),
+				sets.NewString([]string{"any", "inside_endpoints", "ip_prefix_set", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_policy.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"legacy_rules", "rules"}...),
+				sets.NewString([]string{"prefix", "prefix_selector"}...),
+			},
+			"spec.gc_spec.endpoint": []sets.String{
+				sets.NewString([]string{"any", "inside_endpoints", "interface", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+			"spec.gc_spec.rules.egress_rules": []sets.String{
+				sets.NewString([]string{"all_tcp_traffic", "all_traffic", "all_udp_traffic", "applications", "protocol_port_range"}...),
+				sets.NewString([]string{"any", "inside_endpoints", "ip_prefix_set", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+			"spec.gc_spec.rules.ingress_rules": []sets.String{
+				sets.NewString([]string{"all_tcp_traffic", "all_traffic", "all_udp_traffic", "applications", "protocol_port_range"}...),
+				sets.NewString([]string{"any", "inside_endpoints", "ip_prefix_set", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_policy_rule.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"ip_prefix_set", "prefix", "prefix_selector"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_policy_rule.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"ip_prefix_set", "prefix", "prefix_selector"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_policy_rule.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"ip_prefix_set", "prefix", "prefix_selector"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_policy_rule.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"ip_prefix_set", "prefix", "prefix_selector"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.protocol_policer.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.protocol_policer.protocol": []sets.String{
+				sets.NewString([]string{"dns", "icmp", "tcp", "udp"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.protocol_policer.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.protocol_policer.protocol": []sets.String{
+				sets.NewString([]string{"dns", "icmp", "tcp", "udp"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.protocol_policer.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.protocol_policer.protocol": []sets.String{
+				sets.NewString([]string{"dns", "icmp", "tcp", "udp"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.protocol_policer.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.protocol_policer.protocol": []sets.String{
+				sets.NewString([]string{"dns", "icmp", "tcp", "udp"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.route.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.routes": []sets.String{
+				sets.NewString([]string{"route_destination", "route_direct_response", "route_redirect"}...),
+			},
+			"spec.routes.match.headers": []sets.String{
+				sets.NewString([]string{"exact", "presence", "regex"}...),
+			},
+			"spec.routes.match.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.routes.match.query_params": []sets.String{
+				sets.NewString([]string{"exact", "regex"}...),
+			},
+			"spec.routes.route_destination": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.routes.route_destination.hash_policy": []sets.String{
+				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
+			},
+			"spec.routes.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.routes.waf_type": []sets.String{
+				sets.NewString([]string{"waf", "waf_rules"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.route.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.routes": []sets.String{
+				sets.NewString([]string{"route_destination", "route_direct_response", "route_redirect"}...),
+			},
+			"spec.routes.match.headers": []sets.String{
+				sets.NewString([]string{"exact", "presence", "regex"}...),
+			},
+			"spec.routes.match.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.routes.match.query_params": []sets.String{
+				sets.NewString([]string{"exact", "regex"}...),
+			},
+			"spec.routes.route_destination": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.routes.route_destination.hash_policy": []sets.String{
+				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
+			},
+			"spec.routes.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.routes.waf_type": []sets.String{
+				sets.NewString([]string{"waf", "waf_rules"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.route.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.routes": []sets.String{
+				sets.NewString([]string{"route_destination", "route_direct_response", "route_redirect"}...),
+			},
+			"spec.gc_spec.routes.match.headers": []sets.String{
+				sets.NewString([]string{"exact", "presence", "regex"}...),
+			},
+			"spec.gc_spec.routes.match.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.routes.match.query_params": []sets.String{
+				sets.NewString([]string{"exact", "regex"}...),
+			},
+			"spec.gc_spec.routes.route_destination": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.routes.route_destination.hash_policy": []sets.String{
+				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
+			},
+			"spec.gc_spec.routes.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.gc_spec.routes.waf_type": []sets.String{
+				sets.NewString([]string{"waf", "waf_rules"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.route.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.routes": []sets.String{
+				sets.NewString([]string{"route_destination", "route_direct_response", "route_redirect"}...),
+			},
+			"spec.gc_spec.routes.match.headers": []sets.String{
+				sets.NewString([]string{"exact", "presence", "regex"}...),
+			},
+			"spec.gc_spec.routes.match.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.routes.match.query_params": []sets.String{
+				sets.NewString([]string{"exact", "regex"}...),
+			},
+			"spec.gc_spec.routes.route_destination": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.routes.route_destination.hash_policy": []sets.String{
+				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
+			},
+			"spec.gc_spec.routes.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.gc_spec.routes.waf_type": []sets.String{
+				sets.NewString([]string{"waf", "waf_rules"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.secret_policy_rule.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"client_name", "client_name_matcher", "client_selector"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.secret_policy_rule.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"client_name", "client_name_matcher", "client_selector"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.secret_policy_rule.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"client_name", "client_name_matcher", "client_selector"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.secret_policy_rule.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"client_name", "client_name_matcher", "client_selector"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.service_policy.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"allow_list", "deny_list", "internally_generated", "legacy_rule_list", "rule_list"}...),
+				sets.NewString([]string{"any_server", "server_name", "server_name_matcher", "server_selector"}...),
+			},
+			"spec.allow_list": []sets.String{
+				sets.NewString([]string{"default_action_allow", "default_action_deny", "default_action_next_policy"}...),
+			},
+			"spec.deny_list": []sets.String{
+				sets.NewString([]string{"default_action_allow", "default_action_deny", "default_action_next_policy"}...),
+			},
+			"spec.rule_list.rules.spec": []sets.String{
+				sets.NewString([]string{"any_asn", "asn_list", "asn_matcher"}...),
+				sets.NewString([]string{"any_client", "client_name", "client_name_matcher", "client_selector"}...),
+				sets.NewString([]string{"any_dst_asn", "dst_asn_list", "dst_asn_matcher"}...),
+				sets.NewString([]string{"any_dst_ip", "dst_ip_matcher", "dst_ip_prefix_list"}...),
+				sets.NewString([]string{"any_ip", "ip_matcher", "ip_prefix_list"}...),
+			},
+			"spec.rule_list.rules.spec.arg_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.rule_list.rules.spec.cookie_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.rule_list.rules.spec.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.rule_list.rules.spec.malicious_user_mitigation.rules.mitigation_action": []sets.String{
+				sets.NewString([]string{"alert_only", "block_temporarily", "captcha_challenge", "javascript_challenge", "none"}...),
+			},
+			"spec.rule_list.rules.spec.malicious_user_mitigation.rules.threat_level": []sets.String{
+				sets.NewString([]string{"high", "low", "medium"}...),
+			},
+			"spec.rule_list.rules.spec.query_params": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.rule_list.rules.spec.url_matcher.url_items": []sets.String{
+				sets.NewString([]string{"domain_regex", "domain_value"}...),
+				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
+			},
+			"spec.rule_list.rules.spec.waf_action": []sets.String{
+				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.service_policy.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"allow_list", "deny_list", "internally_generated", "legacy_rule_list", "rule_list"}...),
+				sets.NewString([]string{"any_server", "server_name", "server_name_matcher", "server_selector"}...),
+			},
+			"spec.allow_list": []sets.String{
+				sets.NewString([]string{"default_action_allow", "default_action_deny", "default_action_next_policy"}...),
+			},
+			"spec.deny_list": []sets.String{
+				sets.NewString([]string{"default_action_allow", "default_action_deny", "default_action_next_policy"}...),
+			},
+			"spec.rule_list.rules.spec": []sets.String{
+				sets.NewString([]string{"any_asn", "asn_list", "asn_matcher"}...),
+				sets.NewString([]string{"any_client", "client_name", "client_name_matcher", "client_selector"}...),
+				sets.NewString([]string{"any_dst_asn", "dst_asn_list", "dst_asn_matcher"}...),
+				sets.NewString([]string{"any_dst_ip", "dst_ip_matcher", "dst_ip_prefix_list"}...),
+				sets.NewString([]string{"any_ip", "ip_matcher", "ip_prefix_list"}...),
+			},
+			"spec.rule_list.rules.spec.arg_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.rule_list.rules.spec.cookie_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.rule_list.rules.spec.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.rule_list.rules.spec.malicious_user_mitigation.rules.mitigation_action": []sets.String{
+				sets.NewString([]string{"alert_only", "block_temporarily", "captcha_challenge", "javascript_challenge", "none"}...),
+			},
+			"spec.rule_list.rules.spec.malicious_user_mitigation.rules.threat_level": []sets.String{
+				sets.NewString([]string{"high", "low", "medium"}...),
+			},
+			"spec.rule_list.rules.spec.query_params": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.rule_list.rules.spec.url_matcher.url_items": []sets.String{
+				sets.NewString([]string{"domain_regex", "domain_value"}...),
+				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
+			},
+			"spec.rule_list.rules.spec.waf_action": []sets.String{
+				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.service_policy.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"allow_list", "deny_list", "internally_generated", "legacy_rule_list", "rule_list"}...),
+				sets.NewString([]string{"any_server", "server_name", "server_name_matcher", "server_selector"}...),
+			},
+			"spec.gc_spec.allow_list": []sets.String{
+				sets.NewString([]string{"default_action_allow", "default_action_deny", "default_action_next_policy"}...),
+			},
+			"spec.gc_spec.deny_list": []sets.String{
+				sets.NewString([]string{"default_action_allow", "default_action_deny", "default_action_next_policy"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec": []sets.String{
+				sets.NewString([]string{"any_asn", "asn_list", "asn_matcher"}...),
+				sets.NewString([]string{"any_client", "client_name", "client_name_matcher", "client_selector"}...),
+				sets.NewString([]string{"any_dst_asn", "dst_asn_list", "dst_asn_matcher"}...),
+				sets.NewString([]string{"any_dst_ip", "dst_ip_matcher", "dst_ip_prefix_list"}...),
+				sets.NewString([]string{"any_ip", "ip_matcher", "ip_prefix_list"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec.arg_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec.cookie_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec.malicious_user_mitigation.rules.mitigation_action": []sets.String{
+				sets.NewString([]string{"alert_only", "block_temporarily", "captcha_challenge", "javascript_challenge", "none"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec.malicious_user_mitigation.rules.threat_level": []sets.String{
+				sets.NewString([]string{"high", "low", "medium"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec.query_params": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec.url_matcher.url_items": []sets.String{
+				sets.NewString([]string{"domain_regex", "domain_value"}...),
+				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec.waf_action": []sets.String{
+				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+			},
+			"spec.gc_spec.simple_rules.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.simple_rules.url_matcher.url_items": []sets.String{
+				sets.NewString([]string{"domain_regex", "domain_value"}...),
+				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
+			},
+			"spec.gc_spec.simple_rules.waf_action": []sets.String{
+				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.service_policy.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"allow_list", "deny_list", "internally_generated", "legacy_rule_list", "rule_list"}...),
+				sets.NewString([]string{"any_server", "server_name", "server_name_matcher", "server_selector"}...),
+			},
+			"spec.gc_spec.allow_list": []sets.String{
+				sets.NewString([]string{"default_action_allow", "default_action_deny", "default_action_next_policy"}...),
+			},
+			"spec.gc_spec.deny_list": []sets.String{
+				sets.NewString([]string{"default_action_allow", "default_action_deny", "default_action_next_policy"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec": []sets.String{
+				sets.NewString([]string{"any_asn", "asn_list", "asn_matcher"}...),
+				sets.NewString([]string{"any_client", "client_name", "client_name_matcher", "client_selector"}...),
+				sets.NewString([]string{"any_dst_asn", "dst_asn_list", "dst_asn_matcher"}...),
+				sets.NewString([]string{"any_dst_ip", "dst_ip_matcher", "dst_ip_prefix_list"}...),
+				sets.NewString([]string{"any_ip", "ip_matcher", "ip_prefix_list"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec.arg_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec.cookie_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec.malicious_user_mitigation.rules.mitigation_action": []sets.String{
+				sets.NewString([]string{"alert_only", "block_temporarily", "captcha_challenge", "javascript_challenge", "none"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec.malicious_user_mitigation.rules.threat_level": []sets.String{
+				sets.NewString([]string{"high", "low", "medium"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec.query_params": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec.url_matcher.url_items": []sets.String{
+				sets.NewString([]string{"domain_regex", "domain_value"}...),
+				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
+			},
+			"spec.gc_spec.rule_list.rules.spec.waf_action": []sets.String{
+				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+			},
+			"spec.gc_spec.simple_rules.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.simple_rules.url_matcher.url_items": []sets.String{
+				sets.NewString([]string{"domain_regex", "domain_value"}...),
+				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
+			},
+			"spec.gc_spec.simple_rules.waf_action": []sets.String{
+				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.service_policy_rule.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"any_asn", "asn_list", "asn_matcher"}...),
+				sets.NewString([]string{"any_client", "client_name", "client_name_matcher", "client_selector"}...),
+				sets.NewString([]string{"any_dst_asn", "dst_asn_list", "dst_asn_matcher"}...),
+				sets.NewString([]string{"any_dst_ip", "dst_ip_matcher", "dst_ip_prefix_list"}...),
+				sets.NewString([]string{"any_ip", "ip_matcher", "ip_prefix_list"}...),
+			},
+			"spec.arg_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.cookie_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.malicious_user_mitigation.rules.mitigation_action": []sets.String{
+				sets.NewString([]string{"alert_only", "block_temporarily", "captcha_challenge", "javascript_challenge", "none"}...),
+			},
+			"spec.malicious_user_mitigation.rules.threat_level": []sets.String{
+				sets.NewString([]string{"high", "low", "medium"}...),
+			},
+			"spec.query_params": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.url_matcher.url_items": []sets.String{
+				sets.NewString([]string{"domain_regex", "domain_value"}...),
+				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
+			},
+			"spec.waf_action": []sets.String{
+				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.service_policy_rule.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"any_asn", "asn_list", "asn_matcher"}...),
+				sets.NewString([]string{"any_client", "client_name", "client_name_matcher", "client_selector"}...),
+				sets.NewString([]string{"any_dst_asn", "dst_asn_list", "dst_asn_matcher"}...),
+				sets.NewString([]string{"any_dst_ip", "dst_ip_matcher", "dst_ip_prefix_list"}...),
+				sets.NewString([]string{"any_ip", "ip_matcher", "ip_prefix_list"}...),
+			},
+			"spec.arg_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.cookie_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.malicious_user_mitigation.rules.mitigation_action": []sets.String{
+				sets.NewString([]string{"alert_only", "block_temporarily", "captcha_challenge", "javascript_challenge", "none"}...),
+			},
+			"spec.malicious_user_mitigation.rules.threat_level": []sets.String{
+				sets.NewString([]string{"high", "low", "medium"}...),
+			},
+			"spec.query_params": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.url_matcher.url_items": []sets.String{
+				sets.NewString([]string{"domain_regex", "domain_value"}...),
+				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
+			},
+			"spec.waf_action": []sets.String{
+				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.service_policy_rule.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"any_asn", "asn_list", "asn_matcher"}...),
+				sets.NewString([]string{"any_client", "client_name", "client_name_matcher", "client_selector"}...),
+				sets.NewString([]string{"any_dst_asn", "dst_asn_list", "dst_asn_matcher"}...),
+				sets.NewString([]string{"any_dst_ip", "dst_ip_matcher", "dst_ip_prefix_list"}...),
+				sets.NewString([]string{"any_ip", "ip_matcher", "ip_prefix_list"}...),
+			},
+			"spec.gc_spec.arg_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.cookie_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.malicious_user_mitigation.rules.mitigation_action": []sets.String{
+				sets.NewString([]string{"alert_only", "block_temporarily", "captcha_challenge", "javascript_challenge", "none"}...),
+			},
+			"spec.gc_spec.malicious_user_mitigation.rules.threat_level": []sets.String{
+				sets.NewString([]string{"high", "low", "medium"}...),
+			},
+			"spec.gc_spec.query_params": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.url_matcher.url_items": []sets.String{
+				sets.NewString([]string{"domain_regex", "domain_value"}...),
+				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
+			},
+			"spec.gc_spec.waf_action": []sets.String{
+				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.service_policy_rule.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"any_asn", "asn_list", "asn_matcher"}...),
+				sets.NewString([]string{"any_client", "client_name", "client_name_matcher", "client_selector"}...),
+				sets.NewString([]string{"any_dst_asn", "dst_asn_list", "dst_asn_matcher"}...),
+				sets.NewString([]string{"any_dst_ip", "dst_ip_matcher", "dst_ip_prefix_list"}...),
+				sets.NewString([]string{"any_ip", "ip_matcher", "ip_prefix_list"}...),
+			},
+			"spec.gc_spec.arg_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.cookie_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.malicious_user_mitigation.rules.mitigation_action": []sets.String{
+				sets.NewString([]string{"alert_only", "block_temporarily", "captcha_challenge", "javascript_challenge", "none"}...),
+			},
+			"spec.gc_spec.malicious_user_mitigation.rules.threat_level": []sets.String{
+				sets.NewString([]string{"high", "low", "medium"}...),
+			},
+			"spec.gc_spec.query_params": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.url_matcher.url_items": []sets.String{
+				sets.NewString([]string{"domain_regex", "domain_value"}...),
+				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
+			},
+			"spec.gc_spec.waf_action": []sets.String{
+				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.tunnel.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.local_ip": []sets.String{
+				sets.NewString([]string{"intf", "ip_address"}...),
+			},
+			"spec.local_ip.ip_address": []sets.String{
+				sets.NewString([]string{"auto", "ip_address"}...),
+			},
+			"spec.local_ip.ip_address.ip_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.local_ip.ip_address.virtual_network_type": []sets.String{
+				sets.NewString([]string{"public", "site_local", "site_local_inside"}...),
+			},
+			"spec.params": []sets.String{
+				sets.NewString([]string{"ipsec"}...),
+			},
+			"spec.params.ipsec.ipsec_psk": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.remote_ip": []sets.String{
+				sets.NewString([]string{"endpoints", "ip"}...),
+			},
+			"spec.remote_ip.endpoints.endpoints.ip": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.remote_ip.ip": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.tunnel.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.local_ip": []sets.String{
+				sets.NewString([]string{"intf", "ip_address"}...),
+			},
+			"spec.local_ip.ip_address": []sets.String{
+				sets.NewString([]string{"auto", "ip_address"}...),
+			},
+			"spec.local_ip.ip_address.ip_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.local_ip.ip_address.virtual_network_type": []sets.String{
+				sets.NewString([]string{"public", "site_local", "site_local_inside"}...),
+			},
+			"spec.params": []sets.String{
+				sets.NewString([]string{"ipsec"}...),
+			},
+			"spec.params.ipsec.ipsec_psk": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.remote_ip": []sets.String{
+				sets.NewString([]string{"endpoints", "ip"}...),
+			},
+			"spec.remote_ip.endpoints.endpoints.ip": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.remote_ip.ip": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.tunnel.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.local_ip": []sets.String{
+				sets.NewString([]string{"intf", "ip_address"}...),
+			},
+			"spec.gc_spec.local_ip.ip_address": []sets.String{
+				sets.NewString([]string{"auto", "ip_address"}...),
+			},
+			"spec.gc_spec.local_ip.ip_address.ip_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.local_ip.ip_address.virtual_network_type": []sets.String{
+				sets.NewString([]string{"public", "site_local", "site_local_inside"}...),
+			},
+			"spec.gc_spec.params": []sets.String{
+				sets.NewString([]string{"ipsec"}...),
+			},
+			"spec.gc_spec.params.ipsec.ipsec_psk": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.remote_ip": []sets.String{
+				sets.NewString([]string{"endpoints", "ip"}...),
+			},
+			"spec.gc_spec.remote_ip.endpoints.endpoints.ip": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.remote_ip.ip": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.tunnel.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.local_ip": []sets.String{
+				sets.NewString([]string{"intf", "ip_address"}...),
+			},
+			"spec.gc_spec.local_ip.ip_address": []sets.String{
+				sets.NewString([]string{"auto", "ip_address"}...),
+			},
+			"spec.gc_spec.local_ip.ip_address.ip_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.local_ip.ip_address.virtual_network_type": []sets.String{
+				sets.NewString([]string{"public", "site_local", "site_local_inside"}...),
+			},
+			"spec.gc_spec.params": []sets.String{
+				sets.NewString([]string{"ipsec"}...),
+			},
+			"spec.gc_spec.params.ipsec.ipsec_psk": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.remote_ip": []sets.String{
+				sets.NewString([]string{"endpoints", "ip"}...),
+			},
+			"spec.gc_spec.remote_ip.endpoints.endpoints.ip": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.remote_ip.ip": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.aws_tgw_site.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.aws_parameters": []sets.String{
+				sets.NewString([]string{"assisted", "aws_cred"}...),
+				sets.NewString([]string{"existing_tgw", "new_tgw"}...),
+				sets.NewString([]string{"new_vpc", "vpc_id"}...),
+			},
+			"spec.aws_parameters.az_nodes": []sets.String{
+				sets.NewString([]string{"inside_subnet", "reserved_inside_subnet"}...),
+			},
+			"spec.aws_parameters.az_nodes.inside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.aws_parameters.az_nodes.outside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.aws_parameters.az_nodes.workload_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.aws_parameters.new_tgw": []sets.String{
+				sets.NewString([]string{"system_generated", "user_assigned"}...),
+			},
+			"spec.aws_parameters.new_vpc": []sets.String{
+				sets.NewString([]string{"autogenerate", "name_tag"}...),
+			},
+			"spec.tgw_security": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+			},
+			"spec.vn_config": []sets.String{
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.vn_config.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.vn_config.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.vn_config.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.vn_config.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.vn_config.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.vn_config.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.vn_config.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.aws_tgw_site.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.tgw_security": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+			},
+			"spec.vn_config": []sets.String{
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.vn_config.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.vn_config.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.vn_config.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.vn_config.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.vn_config.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.vn_config.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.vn_config.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.aws_tgw_site.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.aws_parameters": []sets.String{
+				sets.NewString([]string{"assisted", "aws_cred"}...),
+				sets.NewString([]string{"existing_tgw", "new_tgw"}...),
+				sets.NewString([]string{"new_vpc", "vpc_id"}...),
+			},
+			"spec.gc_spec.aws_parameters.az_nodes": []sets.String{
+				sets.NewString([]string{"inside_subnet", "reserved_inside_subnet"}...),
+			},
+			"spec.gc_spec.aws_parameters.az_nodes.inside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.gc_spec.aws_parameters.az_nodes.outside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.gc_spec.aws_parameters.az_nodes.workload_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.gc_spec.aws_parameters.new_tgw": []sets.String{
+				sets.NewString([]string{"system_generated", "user_assigned"}...),
+			},
+			"spec.gc_spec.aws_parameters.new_vpc": []sets.String{
+				sets.NewString([]string{"autogenerate", "name_tag"}...),
+			},
+			"spec.gc_spec.tgw_security": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+			},
+			"spec.gc_spec.vn_config": []sets.String{
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.vn_config.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.vn_config.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.vn_config.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.vn_config.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.vn_config.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.vn_config.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.vn_config.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.aws_tgw_site.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.aws_parameters": []sets.String{
+				sets.NewString([]string{"assisted", "aws_cred"}...),
+				sets.NewString([]string{"existing_tgw", "new_tgw"}...),
+				sets.NewString([]string{"new_vpc", "vpc_id"}...),
+			},
+			"spec.gc_spec.aws_parameters.az_nodes": []sets.String{
+				sets.NewString([]string{"inside_subnet", "reserved_inside_subnet"}...),
+			},
+			"spec.gc_spec.aws_parameters.az_nodes.inside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.gc_spec.aws_parameters.az_nodes.outside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.gc_spec.aws_parameters.az_nodes.workload_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.gc_spec.aws_parameters.new_tgw": []sets.String{
+				sets.NewString([]string{"system_generated", "user_assigned"}...),
+			},
+			"spec.gc_spec.aws_parameters.new_vpc": []sets.String{
+				sets.NewString([]string{"autogenerate", "name_tag"}...),
+			},
+			"spec.gc_spec.tgw_security": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+			},
+			"spec.gc_spec.vn_config": []sets.String{
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.vn_config.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.vn_config.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.vn_config.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.vn_config.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.vn_config.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.vn_config.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.vn_config.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.vn_config.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.aws_vpc_site.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"assisted", "aws_cred"}...),
+				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
+			},
+			"spec.ingress_egress_gw": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.ingress_egress_gw.az_nodes": []sets.String{
+				sets.NewString([]string{"inside_subnet", "reserved_inside_subnet"}...),
+			},
+			"spec.ingress_egress_gw.az_nodes.inside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.ingress_egress_gw.az_nodes.outside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.ingress_egress_gw.az_nodes.workload_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_gw.az_nodes.local_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.voltstack_cluster": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"default_storage", "storage_class_list"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.voltstack_cluster.az_nodes.local_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.voltstack_cluster.storage_class_list.storage_classes": []sets.String{
+				sets.NewString([]string{"openebs_enterprise"}...),
+			},
+			"spec.vpc": []sets.String{
+				sets.NewString([]string{"new_vpc", "vpc_id"}...),
+			},
+			"spec.vpc.new_vpc": []sets.String{
+				sets.NewString([]string{"autogenerate", "name_tag"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.aws_vpc_site.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
+			},
+			"spec.ingress_egress_gw": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.voltstack_cluster": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.aws_vpc_site.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"assisted", "aws_cred"}...),
+				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.az_nodes": []sets.String{
+				sets.NewString([]string{"inside_subnet", "reserved_inside_subnet"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.az_nodes.inside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.az_nodes.outside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.az_nodes.workload_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_gw.az_nodes.local_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.gc_spec.voltstack_cluster": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"default_storage", "storage_class_list"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.az_nodes.local_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.storage_class_list.storage_classes": []sets.String{
+				sets.NewString([]string{"openebs_enterprise"}...),
+			},
+			"spec.gc_spec.vpc": []sets.String{
+				sets.NewString([]string{"new_vpc", "vpc_id"}...),
+			},
+			"spec.gc_spec.vpc.new_vpc": []sets.String{
+				sets.NewString([]string{"autogenerate", "name_tag"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.aws_vpc_site.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"assisted", "aws_cred"}...),
+				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.az_nodes": []sets.String{
+				sets.NewString([]string{"inside_subnet", "reserved_inside_subnet"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.az_nodes.inside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.az_nodes.outside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.az_nodes.workload_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_gw.az_nodes.local_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.gc_spec.voltstack_cluster": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"default_storage", "storage_class_list"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.az_nodes.local_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet_id", "subnet_param"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.storage_class_list.storage_classes": []sets.String{
+				sets.NewString([]string{"openebs_enterprise"}...),
+			},
+			"spec.gc_spec.vpc": []sets.String{
+				sets.NewString([]string{"new_vpc", "vpc_id"}...),
+			},
+			"spec.gc_spec.vpc.new_vpc": []sets.String{
+				sets.NewString([]string{"autogenerate", "name_tag"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"assisted", "azure_cred"}...),
+				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
+			},
+			"spec.ingress_egress_gw": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.ingress_egress_gw.az_nodes.inside_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.ingress_egress_gw.az_nodes.inside_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.ingress_egress_gw.az_nodes.outside_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.ingress_egress_gw.az_nodes.outside_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_gw.az_nodes.local_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.ingress_gw.az_nodes.local_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.vnet": []sets.String{
+				sets.NewString([]string{"existing_vnet", "new_vnet"}...),
+			},
+			"spec.vnet.new_vnet": []sets.String{
+				sets.NewString([]string{"autogenerate", "name"}...),
+			},
+			"spec.voltstack_cluster": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.voltstack_cluster.az_nodes.local_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.voltstack_cluster.az_nodes.local_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
+			},
+			"spec.ingress_egress_gw": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.voltstack_cluster": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.azure_vnet_site.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"assisted", "azure_cred"}...),
+				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.az_nodes.inside_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.az_nodes.inside_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.az_nodes.outside_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.az_nodes.outside_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_gw.az_nodes.local_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_gw.az_nodes.local_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.gc_spec.vnet": []sets.String{
+				sets.NewString([]string{"existing_vnet", "new_vnet"}...),
+			},
+			"spec.gc_spec.vnet.new_vnet": []sets.String{
+				sets.NewString([]string{"autogenerate", "name"}...),
+			},
+			"spec.gc_spec.voltstack_cluster": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.az_nodes.local_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.az_nodes.local_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.azure_vnet_site.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"assisted", "azure_cred"}...),
+				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.az_nodes.inside_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.az_nodes.inside_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.az_nodes.outside_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.az_nodes.outside_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_gw.az_nodes.local_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.gc_spec.ingress_gw.az_nodes.local_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.gc_spec.vnet": []sets.String{
+				sets.NewString([]string{"existing_vnet", "new_vnet"}...),
+			},
+			"spec.gc_spec.vnet.new_vnet": []sets.String{
+				sets.NewString([]string{"autogenerate", "name"}...),
+			},
+			"spec.gc_spec.voltstack_cluster": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.az_nodes.local_subnet": []sets.String{
+				sets.NewString([]string{"subnet", "subnet_param"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.az_nodes.local_subnet.subnet": []sets.String{
+				sets.NewString([]string{"subnet_resource_grp", "vnet_resource_group"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.forward_proxy_policy.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"allow_all", "allow_list", "deny_list", "rule_list"}...),
+				sets.NewString([]string{"any_proxy", "drp_http_connect", "network_connector", "proxy_label_selector"}...),
+			},
+			"spec.allow_list": []sets.String{
+				sets.NewString([]string{"default_action_allow", "default_action_deny", "default_action_next_policy"}...),
+			},
+			"spec.allow_list.http_list": []sets.String{
+				sets.NewString([]string{"any_path", "path_exact_value", "path_prefix_value", "path_regex_value"}...),
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.allow_list.tls_list": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.deny_list": []sets.String{
+				sets.NewString([]string{"default_action_allow", "default_action_deny", "default_action_next_policy"}...),
+			},
+			"spec.deny_list.http_list": []sets.String{
+				sets.NewString([]string{"any_path", "path_exact_value", "path_prefix_value", "path_regex_value"}...),
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.deny_list.tls_list": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.rule_list.rules": []sets.String{
+				sets.NewString([]string{"all_destinations", "dst_asn_list", "dst_asn_set", "dst_ip_prefix_set", "dst_label_selector", "dst_prefix_list", "http_list", "tls_list"}...),
+				sets.NewString([]string{"all_sources", "inside_sources", "interface", "ip_prefix_set", "label_selector", "namespace", "prefix_list"}...),
+				sets.NewString([]string{"no_http_connect_port", "port_matcher"}...),
+			},
+			"spec.rule_list.rules.http_list.http_list": []sets.String{
+				sets.NewString([]string{"any_path", "path_exact_value", "path_prefix_value", "path_regex_value"}...),
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.rule_list.rules.tls_list.tls_list": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.forward_proxy_policy.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"allow_all", "allow_list", "deny_list", "rule_list"}...),
+				sets.NewString([]string{"any_proxy", "drp_http_connect", "network_connector", "proxy_label_selector"}...),
+			},
+			"spec.allow_list": []sets.String{
+				sets.NewString([]string{"default_action_allow", "default_action_deny", "default_action_next_policy"}...),
+			},
+			"spec.allow_list.http_list": []sets.String{
+				sets.NewString([]string{"any_path", "path_exact_value", "path_prefix_value", "path_regex_value"}...),
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.allow_list.tls_list": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.deny_list": []sets.String{
+				sets.NewString([]string{"default_action_allow", "default_action_deny", "default_action_next_policy"}...),
+			},
+			"spec.deny_list.http_list": []sets.String{
+				sets.NewString([]string{"any_path", "path_exact_value", "path_prefix_value", "path_regex_value"}...),
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.deny_list.tls_list": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.rule_list.rules": []sets.String{
+				sets.NewString([]string{"all_destinations", "dst_asn_list", "dst_asn_set", "dst_ip_prefix_set", "dst_label_selector", "dst_prefix_list", "http_list", "tls_list"}...),
+				sets.NewString([]string{"all_sources", "inside_sources", "interface", "ip_prefix_set", "label_selector", "namespace", "prefix_list"}...),
+				sets.NewString([]string{"no_http_connect_port", "port_matcher"}...),
+			},
+			"spec.rule_list.rules.http_list.http_list": []sets.String{
+				sets.NewString([]string{"any_path", "path_exact_value", "path_prefix_value", "path_regex_value"}...),
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.rule_list.rules.tls_list.tls_list": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.forward_proxy_policy.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"allow_all", "allow_list", "deny_list", "rule_list"}...),
+				sets.NewString([]string{"any_proxy", "drp_http_connect", "network_connector", "proxy_label_selector"}...),
+			},
+			"spec.gc_spec.allow_list": []sets.String{
+				sets.NewString([]string{"default_action_allow", "default_action_deny", "default_action_next_policy"}...),
+			},
+			"spec.gc_spec.allow_list.http_list": []sets.String{
+				sets.NewString([]string{"any_path", "path_exact_value", "path_prefix_value", "path_regex_value"}...),
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.allow_list.tls_list": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.deny_list": []sets.String{
+				sets.NewString([]string{"default_action_allow", "default_action_deny", "default_action_next_policy"}...),
+			},
+			"spec.gc_spec.deny_list.http_list": []sets.String{
+				sets.NewString([]string{"any_path", "path_exact_value", "path_prefix_value", "path_regex_value"}...),
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.deny_list.tls_list": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.rule_list.rules": []sets.String{
+				sets.NewString([]string{"all_destinations", "dst_asn_list", "dst_asn_set", "dst_ip_prefix_set", "dst_label_selector", "dst_prefix_list", "http_list", "tls_list"}...),
+				sets.NewString([]string{"all_sources", "inside_sources", "interface", "ip_prefix_set", "label_selector", "namespace", "prefix_list"}...),
+				sets.NewString([]string{"no_http_connect_port", "port_matcher"}...),
+			},
+			"spec.gc_spec.rule_list.rules.http_list.http_list": []sets.String{
+				sets.NewString([]string{"any_path", "path_exact_value", "path_prefix_value", "path_regex_value"}...),
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.rule_list.rules.tls_list.tls_list": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.forward_proxy_policy.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"allow_all", "allow_list", "deny_list", "rule_list"}...),
+				sets.NewString([]string{"any_proxy", "drp_http_connect", "network_connector", "proxy_label_selector"}...),
+			},
+			"spec.gc_spec.allow_list": []sets.String{
+				sets.NewString([]string{"default_action_allow", "default_action_deny", "default_action_next_policy"}...),
+			},
+			"spec.gc_spec.allow_list.http_list": []sets.String{
+				sets.NewString([]string{"any_path", "path_exact_value", "path_prefix_value", "path_regex_value"}...),
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.allow_list.tls_list": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.deny_list": []sets.String{
+				sets.NewString([]string{"default_action_allow", "default_action_deny", "default_action_next_policy"}...),
+			},
+			"spec.gc_spec.deny_list.http_list": []sets.String{
+				sets.NewString([]string{"any_path", "path_exact_value", "path_prefix_value", "path_regex_value"}...),
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.deny_list.tls_list": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.rule_list.rules": []sets.String{
+				sets.NewString([]string{"all_destinations", "dst_asn_list", "dst_asn_set", "dst_ip_prefix_set", "dst_label_selector", "dst_prefix_list", "http_list", "tls_list"}...),
+				sets.NewString([]string{"all_sources", "inside_sources", "interface", "ip_prefix_set", "label_selector", "namespace", "prefix_list"}...),
+				sets.NewString([]string{"no_http_connect_port", "port_matcher"}...),
+			},
+			"spec.gc_spec.rule_list.rules.http_list.http_list": []sets.String{
+				sets.NewString([]string{"any_path", "path_exact_value", "path_prefix_value", "path_regex_value"}...),
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.rule_list.rules.tls_list.tls_list": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.gcp_vpc_site.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"assisted", "cloud_credentials"}...),
+				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
+			},
+			"spec.ingress_egress_gw": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.ingress_egress_gw.inside_network": []sets.String{
+				sets.NewString([]string{"existing_network", "new_network", "new_network_autogenerate"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.inside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet", "new_subnet"}...),
+			},
+			"spec.ingress_egress_gw.outside_network": []sets.String{
+				sets.NewString([]string{"existing_network", "new_network", "new_network_autogenerate"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.outside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet", "new_subnet"}...),
+			},
+			"spec.ingress_gw.local_network": []sets.String{
+				sets.NewString([]string{"existing_network", "new_network", "new_network_autogenerate"}...),
+			},
+			"spec.ingress_gw.local_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet", "new_subnet"}...),
+			},
+			"spec.voltstack_cluster": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.voltstack_cluster.site_local_network": []sets.String{
+				sets.NewString([]string{"existing_network", "new_network", "new_network_autogenerate"}...),
+			},
+			"spec.voltstack_cluster.site_local_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet", "new_subnet"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.gcp_vpc_site.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
+			},
+			"spec.ingress_egress_gw": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.voltstack_cluster": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.gcp_vpc_site.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"assisted", "cloud_credentials"}...),
+				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_network": []sets.String{
+				sets.NewString([]string{"existing_network", "new_network", "new_network_autogenerate"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet", "new_subnet"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_network": []sets.String{
+				sets.NewString([]string{"existing_network", "new_network", "new_network_autogenerate"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet", "new_subnet"}...),
+			},
+			"spec.gc_spec.ingress_gw.local_network": []sets.String{
+				sets.NewString([]string{"existing_network", "new_network", "new_network_autogenerate"}...),
+			},
+			"spec.gc_spec.ingress_gw.local_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet", "new_subnet"}...),
+			},
+			"spec.gc_spec.voltstack_cluster": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.site_local_network": []sets.String{
+				sets.NewString([]string{"existing_network", "new_network", "new_network_autogenerate"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.site_local_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet", "new_subnet"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.gcp_vpc_site.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"assisted", "cloud_credentials"}...),
+				sets.NewString([]string{"ingress_egress_gw", "ingress_gw", "voltstack_cluster"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"inside_static_routes", "no_inside_static_routes"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_network": []sets.String{
+				sets.NewString([]string{"existing_network", "new_network", "new_network_autogenerate"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.inside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet", "new_subnet"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_network": []sets.String{
+				sets.NewString([]string{"existing_network", "new_network", "new_network_autogenerate"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.ingress_egress_gw.outside_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet", "new_subnet"}...),
+			},
+			"spec.gc_spec.ingress_gw.local_network": []sets.String{
+				sets.NewString([]string{"existing_network", "new_network", "new_network_autogenerate"}...),
+			},
+			"spec.gc_spec.ingress_gw.local_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet", "new_subnet"}...),
+			},
+			"spec.gc_spec.voltstack_cluster": []sets.String{
+				sets.NewString([]string{"active_forward_proxy_policies", "forward_proxy_allow_all", "no_forward_proxy"}...),
+				sets.NewString([]string{"active_network_policies", "no_network_policy"}...),
+				sets.NewString([]string{"global_network_list", "no_global_network"}...),
+				sets.NewString([]string{"no_outside_static_routes", "outside_static_routes"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections": []sets.String{
+				sets.NewString([]string{"disable_forward_proxy", "enable_forward_proxy"}...),
+				sets.NewString([]string{"sli_to_global_dr", "slo_to_global_dr"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy": []sets.String{
+				sets.NewString([]string{"no_interception", "tls_intercept"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.global_network_list.global_network_connections.enable_forward_proxy.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list": []sets.String{
+				sets.NewString([]string{"custom_static_route", "simple_static_route"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.outside_static_routes.static_route_list.custom_static_route.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.site_local_network": []sets.String{
+				sets.NewString([]string{"existing_network", "new_network", "new_network_autogenerate"}...),
+			},
+			"spec.gc_spec.voltstack_cluster.site_local_subnet": []sets.String{
+				sets.NewString([]string{"existing_subnet", "new_subnet"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"active_service_policies", "no_service_policies", "service_policies_from_namespace"}...),
+				sets.NewString([]string{"advertise_custom", "advertise_on_public", "advertise_on_public_default_vip", "do_not_advertise"}...),
+				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
+				sets.NewString([]string{"cookie_stickiness", "least_active", "random", "ring_hash", "round_robin", "source_ip_stickiness"}...),
+				sets.NewString([]string{"disable_rate_limit", "rate_limit"}...),
+				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.advertise_custom.advertise_where": []sets.String{
+				sets.NewString([]string{"port", "use_default_port"}...),
+				sets.NewString([]string{"site", "virtual_site", "vk8s_service"}...),
+			},
+			"spec.advertise_custom.advertise_where.vk8s_service": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.blocked_clients": []sets.String{
+				sets.NewString([]string{"as_number", "ip_prefix"}...),
+			},
+			"spec.default_route_pools": []sets.String{
+				sets.NewString([]string{"cluster", "pool"}...),
+			},
+			"spec.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.policy_based_challenge": []sets.String{
+				sets.NewString([]string{"always_enable_captcha", "always_enable_js_challenge", "rule_based_challenge"}...),
+				sets.NewString([]string{"captcha_challenge_parameters", "default_captcha_challenge_parameters"}...),
+				sets.NewString([]string{"default_js_challenge_parameters", "js_challenge_parameters"}...),
+				sets.NewString([]string{"default_mitigation_settings", "malicious_user_mitigation"}...),
+				sets.NewString([]string{"default_temporary_blocking_parameters", "temporary_user_blocking"}...),
+			},
+			"spec.policy_based_challenge.rule_list.rules.spec": []sets.String{
+				sets.NewString([]string{"any_client", "client_name", "client_name_matcher", "client_selector"}...),
+				sets.NewString([]string{"disable_challenge", "enable_captcha_challenge", "enable_javascript_challenge"}...),
+			},
+			"spec.policy_based_challenge.rule_list.rules.spec.arg_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.policy_based_challenge.rule_list.rules.spec.cookie_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.policy_based_challenge.rule_list.rules.spec.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.policy_based_challenge.rule_list.rules.spec.query_params": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.rate_limit": []sets.String{
+				sets.NewString([]string{"custom_ip_allowed_list", "ip_allowed_list", "no_ip_allowed_list"}...),
+				sets.NewString([]string{"no_policies", "policies"}...),
+			},
+			"spec.ring_hash.hash_policy": []sets.String{
+				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
+			},
+			"spec.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.routes.simple_route.advanced_options": []sets.String{
+				sets.NewString([]string{"buffer_policy", "common_buffering"}...),
+				sets.NewString([]string{"common_hash_policy", "specific_hash_policy"}...),
+				sets.NewString([]string{"default_retry_policy", "retry_policy"}...),
+				sets.NewString([]string{"disable_mirroring", "mirror_policy"}...),
+				sets.NewString([]string{"disable_prefix_rewrite", "prefix_rewrite"}...),
+				sets.NewString([]string{"disable_spdy", "enable_spdy"}...),
+				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
+				sets.NewString([]string{"disable_web_socket_config", "web_socket_config"}...),
+			},
+			"spec.routes.simple_route.advanced_options.specific_hash_policy.hash_policy": []sets.String{
+				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
+			},
+			"spec.routes.simple_route.origin_pools": []sets.String{
+				sets.NewString([]string{"cluster", "pool"}...),
+			},
+			"spec.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.trusted_clients": []sets.String{
+				sets.NewString([]string{"as_number", "ip_prefix"}...),
+			},
+			"spec.waf_exclusion_rules": []sets.String{
+				sets.NewString([]string{"any_domain", "domain_regex"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.http_loadbalancer.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"active_service_policies", "no_service_policies", "service_policies_from_namespace"}...),
+				sets.NewString([]string{"advertise_custom", "advertise_on_public", "advertise_on_public_default_vip", "do_not_advertise"}...),
+				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
+				sets.NewString([]string{"cookie_stickiness", "least_active", "random", "ring_hash", "round_robin", "source_ip_stickiness"}...),
+				sets.NewString([]string{"disable_rate_limit", "rate_limit"}...),
+				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.advertise_custom.advertise_where": []sets.String{
+				sets.NewString([]string{"port", "use_default_port"}...),
+				sets.NewString([]string{"site", "virtual_site", "vk8s_service"}...),
+			},
+			"spec.advertise_custom.advertise_where.vk8s_service": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.blocked_clients": []sets.String{
+				sets.NewString([]string{"as_number", "ip_prefix"}...),
+			},
+			"spec.default_route_pools": []sets.String{
+				sets.NewString([]string{"cluster", "pool"}...),
+			},
+			"spec.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.policy_based_challenge": []sets.String{
+				sets.NewString([]string{"always_enable_captcha", "always_enable_js_challenge", "rule_based_challenge"}...),
+				sets.NewString([]string{"captcha_challenge_parameters", "default_captcha_challenge_parameters"}...),
+				sets.NewString([]string{"default_js_challenge_parameters", "js_challenge_parameters"}...),
+				sets.NewString([]string{"default_mitigation_settings", "malicious_user_mitigation"}...),
+				sets.NewString([]string{"default_temporary_blocking_parameters", "temporary_user_blocking"}...),
+			},
+			"spec.policy_based_challenge.rule_list.rules.spec": []sets.String{
+				sets.NewString([]string{"any_client", "client_name", "client_name_matcher", "client_selector"}...),
+				sets.NewString([]string{"disable_challenge", "enable_captcha_challenge", "enable_javascript_challenge"}...),
+			},
+			"spec.policy_based_challenge.rule_list.rules.spec.arg_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.policy_based_challenge.rule_list.rules.spec.cookie_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.policy_based_challenge.rule_list.rules.spec.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.policy_based_challenge.rule_list.rules.spec.query_params": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.rate_limit": []sets.String{
+				sets.NewString([]string{"custom_ip_allowed_list", "ip_allowed_list", "no_ip_allowed_list"}...),
+				sets.NewString([]string{"no_policies", "policies"}...),
+			},
+			"spec.ring_hash.hash_policy": []sets.String{
+				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
+			},
+			"spec.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.routes.simple_route.advanced_options": []sets.String{
+				sets.NewString([]string{"buffer_policy", "common_buffering"}...),
+				sets.NewString([]string{"common_hash_policy", "specific_hash_policy"}...),
+				sets.NewString([]string{"default_retry_policy", "retry_policy"}...),
+				sets.NewString([]string{"disable_mirroring", "mirror_policy"}...),
+				sets.NewString([]string{"disable_prefix_rewrite", "prefix_rewrite"}...),
+				sets.NewString([]string{"disable_spdy", "enable_spdy"}...),
+				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
+				sets.NewString([]string{"disable_web_socket_config", "web_socket_config"}...),
+			},
+			"spec.routes.simple_route.advanced_options.specific_hash_policy.hash_policy": []sets.String{
+				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
+			},
+			"spec.routes.simple_route.origin_pools": []sets.String{
+				sets.NewString([]string{"cluster", "pool"}...),
+			},
+			"spec.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.trusted_clients": []sets.String{
+				sets.NewString([]string{"as_number", "ip_prefix"}...),
+			},
+			"spec.waf_exclusion_rules": []sets.String{
+				sets.NewString([]string{"any_domain", "domain_regex"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"active_service_policies", "no_service_policies", "service_policies_from_namespace"}...),
+				sets.NewString([]string{"advertise_custom", "advertise_on_public", "advertise_on_public_default_vip", "do_not_advertise"}...),
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
+				sets.NewString([]string{"cookie_stickiness", "least_active", "random", "ring_hash", "round_robin", "source_ip_stickiness"}...),
+				sets.NewString([]string{"disable_rate_limit", "rate_limit"}...),
+				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.gc_spec.advertise_custom.advertise_where": []sets.String{
+				sets.NewString([]string{"port", "use_default_port"}...),
+				sets.NewString([]string{"site", "virtual_site", "vk8s_service"}...),
+			},
+			"spec.gc_spec.advertise_custom.advertise_where.vk8s_service": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.gc_spec.blocked_clients": []sets.String{
+				sets.NewString([]string{"as_number", "ip_prefix"}...),
+			},
+			"spec.gc_spec.default_route_pools": []sets.String{
+				sets.NewString([]string{"cluster", "pool"}...),
+			},
+			"spec.gc_spec.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.policy_based_challenge": []sets.String{
+				sets.NewString([]string{"always_enable_captcha", "always_enable_js_challenge", "rule_based_challenge"}...),
+				sets.NewString([]string{"captcha_challenge_parameters", "default_captcha_challenge_parameters"}...),
+				sets.NewString([]string{"default_js_challenge_parameters", "js_challenge_parameters"}...),
+				sets.NewString([]string{"default_mitigation_settings", "malicious_user_mitigation"}...),
+				sets.NewString([]string{"default_temporary_blocking_parameters", "temporary_user_blocking"}...),
+			},
+			"spec.gc_spec.policy_based_challenge.rule_list.rules.spec": []sets.String{
+				sets.NewString([]string{"any_client", "client_name", "client_name_matcher", "client_selector"}...),
+				sets.NewString([]string{"disable_challenge", "enable_captcha_challenge", "enable_javascript_challenge"}...),
+			},
+			"spec.gc_spec.policy_based_challenge.rule_list.rules.spec.arg_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.policy_based_challenge.rule_list.rules.spec.cookie_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.policy_based_challenge.rule_list.rules.spec.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.policy_based_challenge.rule_list.rules.spec.query_params": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.rate_limit": []sets.String{
+				sets.NewString([]string{"custom_ip_allowed_list", "ip_allowed_list", "no_ip_allowed_list"}...),
+				sets.NewString([]string{"no_policies", "policies"}...),
+			},
+			"spec.gc_spec.ring_hash.hash_policy": []sets.String{
+				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
+			},
+			"spec.gc_spec.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.gc_spec.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.gc_spec.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.routes.simple_route.advanced_options": []sets.String{
+				sets.NewString([]string{"buffer_policy", "common_buffering"}...),
+				sets.NewString([]string{"common_hash_policy", "specific_hash_policy"}...),
+				sets.NewString([]string{"default_retry_policy", "retry_policy"}...),
+				sets.NewString([]string{"disable_mirroring", "mirror_policy"}...),
+				sets.NewString([]string{"disable_prefix_rewrite", "prefix_rewrite"}...),
+				sets.NewString([]string{"disable_spdy", "enable_spdy"}...),
+				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
+				sets.NewString([]string{"disable_web_socket_config", "web_socket_config"}...),
+			},
+			"spec.gc_spec.routes.simple_route.advanced_options.specific_hash_policy.hash_policy": []sets.String{
+				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
+			},
+			"spec.gc_spec.routes.simple_route.origin_pools": []sets.String{
+				sets.NewString([]string{"cluster", "pool"}...),
+			},
+			"spec.gc_spec.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.trusted_clients": []sets.String{
+				sets.NewString([]string{"as_number", "ip_prefix"}...),
+			},
+			"spec.gc_spec.waf_exclusion_rules": []sets.String{
+				sets.NewString([]string{"any_domain", "domain_regex"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"active_service_policies", "no_service_policies", "service_policies_from_namespace"}...),
+				sets.NewString([]string{"advertise_custom", "advertise_on_public", "advertise_on_public_default_vip", "do_not_advertise"}...),
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
+				sets.NewString([]string{"cookie_stickiness", "least_active", "random", "ring_hash", "round_robin", "source_ip_stickiness"}...),
+				sets.NewString([]string{"disable_rate_limit", "rate_limit"}...),
+				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
+				sets.NewString([]string{"http", "https", "https_auto_cert"}...),
+			},
+			"spec.gc_spec.advertise_custom.advertise_where": []sets.String{
+				sets.NewString([]string{"port", "use_default_port"}...),
+				sets.NewString([]string{"site", "virtual_site", "vk8s_service"}...),
+			},
+			"spec.gc_spec.advertise_custom.advertise_where.vk8s_service": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.gc_spec.blocked_clients": []sets.String{
+				sets.NewString([]string{"as_number", "ip_prefix"}...),
+			},
+			"spec.gc_spec.default_route_pools": []sets.String{
+				sets.NewString([]string{"cluster", "pool"}...),
+			},
+			"spec.gc_spec.https.tls_parameters": []sets.String{
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+			},
+			"spec.gc_spec.https.tls_parameters.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.https.tls_parameters.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.https_auto_cert.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.policy_based_challenge": []sets.String{
+				sets.NewString([]string{"always_enable_captcha", "always_enable_js_challenge", "rule_based_challenge"}...),
+				sets.NewString([]string{"captcha_challenge_parameters", "default_captcha_challenge_parameters"}...),
+				sets.NewString([]string{"default_js_challenge_parameters", "js_challenge_parameters"}...),
+				sets.NewString([]string{"default_mitigation_settings", "malicious_user_mitigation"}...),
+				sets.NewString([]string{"default_temporary_blocking_parameters", "temporary_user_blocking"}...),
+			},
+			"spec.gc_spec.policy_based_challenge.rule_list.rules.spec": []sets.String{
+				sets.NewString([]string{"any_client", "client_name", "client_name_matcher", "client_selector"}...),
+				sets.NewString([]string{"disable_challenge", "enable_captcha_challenge", "enable_javascript_challenge"}...),
+			},
+			"spec.gc_spec.policy_based_challenge.rule_list.rules.spec.arg_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.policy_based_challenge.rule_list.rules.spec.cookie_matchers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.policy_based_challenge.rule_list.rules.spec.headers": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.policy_based_challenge.rule_list.rules.spec.query_params": []sets.String{
+				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
+			},
+			"spec.gc_spec.rate_limit": []sets.String{
+				sets.NewString([]string{"custom_ip_allowed_list", "ip_allowed_list", "no_ip_allowed_list"}...),
+				sets.NewString([]string{"no_policies", "policies"}...),
+			},
+			"spec.gc_spec.ring_hash.hash_policy": []sets.String{
+				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
+			},
+			"spec.gc_spec.routes": []sets.String{
+				sets.NewString([]string{"custom_route_object", "direct_response_route", "redirect_route", "simple_route"}...),
+			},
+			"spec.gc_spec.routes.direct_response_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.routes.redirect_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.routes.redirect_route.route_redirect": []sets.String{
+				sets.NewString([]string{"all_params", "remove_all_params", "retain_all_params", "strip_query_params"}...),
+			},
+			"spec.gc_spec.routes.simple_route": []sets.String{
+				sets.NewString([]string{"auto_host_rewrite", "disable_host_rewrite", "host_rewrite"}...),
+			},
+			"spec.gc_spec.routes.simple_route.advanced_options": []sets.String{
+				sets.NewString([]string{"buffer_policy", "common_buffering"}...),
+				sets.NewString([]string{"common_hash_policy", "specific_hash_policy"}...),
+				sets.NewString([]string{"default_retry_policy", "retry_policy"}...),
+				sets.NewString([]string{"disable_mirroring", "mirror_policy"}...),
+				sets.NewString([]string{"disable_prefix_rewrite", "prefix_rewrite"}...),
+				sets.NewString([]string{"disable_spdy", "enable_spdy"}...),
+				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
+				sets.NewString([]string{"disable_web_socket_config", "web_socket_config"}...),
+			},
+			"spec.gc_spec.routes.simple_route.advanced_options.specific_hash_policy.hash_policy": []sets.String{
+				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
+			},
+			"spec.gc_spec.routes.simple_route.origin_pools": []sets.String{
+				sets.NewString([]string{"cluster", "pool"}...),
+			},
+			"spec.gc_spec.routes.simple_route.path": []sets.String{
+				sets.NewString([]string{"path", "prefix", "regex"}...),
+			},
+			"spec.gc_spec.trusted_clients": []sets.String{
+				sets.NewString([]string{"as_number", "ip_prefix"}...),
+			},
+			"spec.gc_spec.waf_exclusion_rules": []sets.String{
+				sets.NewString([]string{"any_domain", "domain_regex"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.network_policy_view.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.egress_rules": []sets.String{
+				sets.NewString([]string{"all_tcp_traffic", "all_traffic", "all_udp_traffic", "applications", "protocol_port_range"}...),
+				sets.NewString([]string{"any", "inside_endpoints", "ip_prefix_set", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+			"spec.endpoint": []sets.String{
+				sets.NewString([]string{"any", "inside_endpoints", "interface", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+			"spec.ingress_rules": []sets.String{
+				sets.NewString([]string{"all_tcp_traffic", "all_traffic", "all_udp_traffic", "applications", "protocol_port_range"}...),
+				sets.NewString([]string{"any", "inside_endpoints", "ip_prefix_set", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.network_policy_view.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.egress_rules": []sets.String{
+				sets.NewString([]string{"all_tcp_traffic", "all_traffic", "all_udp_traffic", "applications", "protocol_port_range"}...),
+				sets.NewString([]string{"any", "inside_endpoints", "ip_prefix_set", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+			"spec.endpoint": []sets.String{
+				sets.NewString([]string{"any", "inside_endpoints", "interface", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+			"spec.ingress_rules": []sets.String{
+				sets.NewString([]string{"all_tcp_traffic", "all_traffic", "all_udp_traffic", "applications", "protocol_port_range"}...),
+				sets.NewString([]string{"any", "inside_endpoints", "ip_prefix_set", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.network_policy_view.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.egress_rules": []sets.String{
+				sets.NewString([]string{"all_tcp_traffic", "all_traffic", "all_udp_traffic", "applications", "protocol_port_range"}...),
+				sets.NewString([]string{"any", "inside_endpoints", "ip_prefix_set", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+			"spec.gc_spec.endpoint": []sets.String{
+				sets.NewString([]string{"any", "inside_endpoints", "interface", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+			"spec.gc_spec.ingress_rules": []sets.String{
+				sets.NewString([]string{"all_tcp_traffic", "all_traffic", "all_udp_traffic", "applications", "protocol_port_range"}...),
+				sets.NewString([]string{"any", "inside_endpoints", "ip_prefix_set", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.network_policy_view.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.egress_rules": []sets.String{
+				sets.NewString([]string{"all_tcp_traffic", "all_traffic", "all_udp_traffic", "applications", "protocol_port_range"}...),
+				sets.NewString([]string{"any", "inside_endpoints", "ip_prefix_set", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+			"spec.gc_spec.endpoint": []sets.String{
+				sets.NewString([]string{"any", "inside_endpoints", "interface", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+			"spec.gc_spec.ingress_rules": []sets.String{
+				sets.NewString([]string{"all_tcp_traffic", "all_traffic", "all_udp_traffic", "applications", "protocol_port_range"}...),
+				sets.NewString([]string{"any", "inside_endpoints", "ip_prefix_set", "label_selector", "namespace", "outside_endpoints", "prefix_list"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.origin_pool.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"health_check_port", "same_as_endpoint_port"}...),
+				sets.NewString([]string{"no_tls", "use_tls"}...),
+			},
+			"spec.advanced_options": []sets.String{
+				sets.NewString([]string{"circuit_breaker", "disable_circuit_breaker"}...),
+				sets.NewString([]string{"disable_outlier_detection", "outlier_detection"}...),
+				sets.NewString([]string{"disable_subsets", "enable_subsets"}...),
+				sets.NewString([]string{"no_panic_threshold", "panic_threshold"}...),
+			},
+			"spec.advanced_options.enable_subsets": []sets.String{
+				sets.NewString([]string{"any_endpoint", "default_subset", "fail_request"}...),
+			},
+			"spec.origin_servers": []sets.String{
+				sets.NewString([]string{"consul_service", "custom_endpoint_object", "k8s_service", "private_ip", "private_name", "public_ip", "public_name"}...),
+			},
+			"spec.origin_servers.consul_service": []sets.String{
+				sets.NewString([]string{"inside_network", "outside_network"}...),
+			},
+			"spec.origin_servers.consul_service.site_locator": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.origin_servers.k8s_service": []sets.String{
+				sets.NewString([]string{"inside_network", "outside_network", "vk8s_networks"}...),
+			},
+			"spec.origin_servers.k8s_service.site_locator": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.origin_servers.private_ip": []sets.String{
+				sets.NewString([]string{"inside_network", "outside_network"}...),
+			},
+			"spec.origin_servers.private_ip.site_locator": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.origin_servers.private_name": []sets.String{
+				sets.NewString([]string{"inside_network", "outside_network"}...),
+			},
+			"spec.origin_servers.private_name.site_locator": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.use_tls": []sets.String{
+				sets.NewString([]string{"disable_sni", "sni", "use_host_header_as_sni"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+				sets.NewString([]string{"skip_server_verification", "use_server_verification", "volterra_trusted_ca"}...),
+			},
+			"spec.use_tls.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.use_tls.use_mtls.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.origin_pool.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"health_check_port", "same_as_endpoint_port"}...),
+				sets.NewString([]string{"no_tls", "use_tls"}...),
+			},
+			"spec.advanced_options": []sets.String{
+				sets.NewString([]string{"circuit_breaker", "disable_circuit_breaker"}...),
+				sets.NewString([]string{"disable_outlier_detection", "outlier_detection"}...),
+				sets.NewString([]string{"disable_subsets", "enable_subsets"}...),
+				sets.NewString([]string{"no_panic_threshold", "panic_threshold"}...),
+			},
+			"spec.advanced_options.enable_subsets": []sets.String{
+				sets.NewString([]string{"any_endpoint", "default_subset", "fail_request"}...),
+			},
+			"spec.origin_servers": []sets.String{
+				sets.NewString([]string{"consul_service", "custom_endpoint_object", "k8s_service", "private_ip", "private_name", "public_ip", "public_name"}...),
+			},
+			"spec.origin_servers.consul_service": []sets.String{
+				sets.NewString([]string{"inside_network", "outside_network"}...),
+			},
+			"spec.origin_servers.consul_service.site_locator": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.origin_servers.k8s_service": []sets.String{
+				sets.NewString([]string{"inside_network", "outside_network", "vk8s_networks"}...),
+			},
+			"spec.origin_servers.k8s_service.site_locator": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.origin_servers.private_ip": []sets.String{
+				sets.NewString([]string{"inside_network", "outside_network"}...),
+			},
+			"spec.origin_servers.private_ip.site_locator": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.origin_servers.private_name": []sets.String{
+				sets.NewString([]string{"inside_network", "outside_network"}...),
+			},
+			"spec.origin_servers.private_name.site_locator": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.use_tls": []sets.String{
+				sets.NewString([]string{"disable_sni", "sni", "use_host_header_as_sni"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+				sets.NewString([]string{"skip_server_verification", "use_server_verification", "volterra_trusted_ca"}...),
+			},
+			"spec.use_tls.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.use_tls.use_mtls.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.origin_pool.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"health_check_port", "same_as_endpoint_port"}...),
+				sets.NewString([]string{"no_tls", "use_tls"}...),
+			},
+			"spec.gc_spec.advanced_options": []sets.String{
+				sets.NewString([]string{"circuit_breaker", "disable_circuit_breaker"}...),
+				sets.NewString([]string{"disable_outlier_detection", "outlier_detection"}...),
+				sets.NewString([]string{"disable_subsets", "enable_subsets"}...),
+				sets.NewString([]string{"no_panic_threshold", "panic_threshold"}...),
+			},
+			"spec.gc_spec.advanced_options.enable_subsets": []sets.String{
+				sets.NewString([]string{"any_endpoint", "default_subset", "fail_request"}...),
+			},
+			"spec.gc_spec.origin_servers": []sets.String{
+				sets.NewString([]string{"consul_service", "custom_endpoint_object", "k8s_service", "private_ip", "private_name", "public_ip", "public_name"}...),
+			},
+			"spec.gc_spec.origin_servers.consul_service": []sets.String{
+				sets.NewString([]string{"inside_network", "outside_network"}...),
+			},
+			"spec.gc_spec.origin_servers.consul_service.site_locator": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.gc_spec.origin_servers.k8s_service": []sets.String{
+				sets.NewString([]string{"inside_network", "outside_network", "vk8s_networks"}...),
+			},
+			"spec.gc_spec.origin_servers.k8s_service.site_locator": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.gc_spec.origin_servers.private_ip": []sets.String{
+				sets.NewString([]string{"inside_network", "outside_network"}...),
+			},
+			"spec.gc_spec.origin_servers.private_ip.site_locator": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.gc_spec.origin_servers.private_name": []sets.String{
+				sets.NewString([]string{"inside_network", "outside_network"}...),
+			},
+			"spec.gc_spec.origin_servers.private_name.site_locator": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.gc_spec.use_tls": []sets.String{
+				sets.NewString([]string{"disable_sni", "sni", "use_host_header_as_sni"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+				sets.NewString([]string{"skip_server_verification", "use_server_verification", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.use_tls.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.use_tls.use_mtls.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.origin_pool.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"health_check_port", "same_as_endpoint_port"}...),
+				sets.NewString([]string{"no_tls", "use_tls"}...),
+			},
+			"spec.gc_spec.advanced_options": []sets.String{
+				sets.NewString([]string{"circuit_breaker", "disable_circuit_breaker"}...),
+				sets.NewString([]string{"disable_outlier_detection", "outlier_detection"}...),
+				sets.NewString([]string{"disable_subsets", "enable_subsets"}...),
+				sets.NewString([]string{"no_panic_threshold", "panic_threshold"}...),
+			},
+			"spec.gc_spec.advanced_options.enable_subsets": []sets.String{
+				sets.NewString([]string{"any_endpoint", "default_subset", "fail_request"}...),
+			},
+			"spec.gc_spec.origin_servers": []sets.String{
+				sets.NewString([]string{"consul_service", "custom_endpoint_object", "k8s_service", "private_ip", "private_name", "public_ip", "public_name"}...),
+			},
+			"spec.gc_spec.origin_servers.consul_service": []sets.String{
+				sets.NewString([]string{"inside_network", "outside_network"}...),
+			},
+			"spec.gc_spec.origin_servers.consul_service.site_locator": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.gc_spec.origin_servers.k8s_service": []sets.String{
+				sets.NewString([]string{"inside_network", "outside_network", "vk8s_networks"}...),
+			},
+			"spec.gc_spec.origin_servers.k8s_service.site_locator": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.gc_spec.origin_servers.private_ip": []sets.String{
+				sets.NewString([]string{"inside_network", "outside_network"}...),
+			},
+			"spec.gc_spec.origin_servers.private_ip.site_locator": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.gc_spec.origin_servers.private_name": []sets.String{
+				sets.NewString([]string{"inside_network", "outside_network"}...),
+			},
+			"spec.gc_spec.origin_servers.private_name.site_locator": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.gc_spec.use_tls": []sets.String{
+				sets.NewString([]string{"disable_sni", "sni", "use_host_header_as_sni"}...),
+				sets.NewString([]string{"no_mtls", "use_mtls"}...),
+				sets.NewString([]string{"skip_server_verification", "use_server_verification", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.use_tls.tls_config": []sets.String{
+				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
+			},
+			"spec.gc_spec.use_tls.use_mtls.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.tcp_loadbalancer.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"advertise_custom", "advertise_on_public", "advertise_on_public_default_vip", "do_not_advertise"}...),
+			},
+			"spec.advertise_custom.advertise_where": []sets.String{
+				sets.NewString([]string{"port", "use_default_port"}...),
+				sets.NewString([]string{"site", "virtual_site", "vk8s_service"}...),
+			},
+			"spec.advertise_custom.advertise_where.vk8s_service": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.origin_pools_weights": []sets.String{
+				sets.NewString([]string{"cluster", "pool"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.tcp_loadbalancer.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"advertise_custom", "advertise_on_public", "advertise_on_public_default_vip", "do_not_advertise"}...),
+			},
+			"spec.advertise_custom.advertise_where": []sets.String{
+				sets.NewString([]string{"port", "use_default_port"}...),
+				sets.NewString([]string{"site", "virtual_site", "vk8s_service"}...),
+			},
+			"spec.advertise_custom.advertise_where.vk8s_service": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.origin_pools_weights": []sets.String{
+				sets.NewString([]string{"cluster", "pool"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.tcp_loadbalancer.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"advertise_custom", "advertise_on_public", "advertise_on_public_default_vip", "do_not_advertise"}...),
+			},
+			"spec.gc_spec.advertise_custom.advertise_where": []sets.String{
+				sets.NewString([]string{"port", "use_default_port"}...),
+				sets.NewString([]string{"site", "virtual_site", "vk8s_service"}...),
+			},
+			"spec.gc_spec.advertise_custom.advertise_where.vk8s_service": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.gc_spec.origin_pools_weights": []sets.String{
+				sets.NewString([]string{"cluster", "pool"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.views.tcp_loadbalancer.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"advertise_custom", "advertise_on_public", "advertise_on_public_default_vip", "do_not_advertise"}...),
+			},
+			"spec.gc_spec.advertise_custom.advertise_where": []sets.String{
+				sets.NewString([]string{"port", "use_default_port"}...),
+				sets.NewString([]string{"site", "virtual_site", "vk8s_service"}...),
+			},
+			"spec.gc_spec.advertise_custom.advertise_where.vk8s_service": []sets.String{
+				sets.NewString([]string{"site", "virtual_site"}...),
+			},
+			"spec.gc_spec.origin_pools_weights": []sets.String{
+				sets.NewString([]string{"cluster", "pool"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.virtual_host.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"authentication", "no_authentication"}...),
+				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge"}...),
+			},
+			"spec.authentication": []sets.String{
+				sets.NewString([]string{"cookie_params", "use_auth_object_config"}...),
+				sets.NewString([]string{"redirect_dynamic", "redirect_url"}...),
+			},
+			"spec.authentication.cookie_params": []sets.String{
+				sets.NewString([]string{"auth_hmac", "kms_key_hmac"}...),
+			},
+			"spec.authentication.cookie_params.auth_hmac.prim_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.authentication.cookie_params.auth_hmac.sec_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.tls_parameters.common_params.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.waf_type": []sets.String{
+				sets.NewString([]string{"waf", "waf_rules"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.virtual_host.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"authentication", "no_authentication"}...),
+				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge"}...),
+			},
+			"spec.authentication": []sets.String{
+				sets.NewString([]string{"cookie_params", "use_auth_object_config"}...),
+				sets.NewString([]string{"redirect_dynamic", "redirect_url"}...),
+			},
+			"spec.authentication.cookie_params": []sets.String{
+				sets.NewString([]string{"auth_hmac", "kms_key_hmac"}...),
+			},
+			"spec.authentication.cookie_params.auth_hmac.prim_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.authentication.cookie_params.auth_hmac.sec_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.tls_parameters.common_params.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.waf_type": []sets.String{
+				sets.NewString([]string{"waf", "waf_rules"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.virtual_host.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"authentication", "no_authentication"}...),
+				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
+			},
+			"spec.gc_spec.authentication": []sets.String{
+				sets.NewString([]string{"cookie_params", "use_auth_object_config"}...),
+				sets.NewString([]string{"redirect_dynamic", "redirect_url"}...),
+			},
+			"spec.gc_spec.authentication.cookie_params": []sets.String{
+				sets.NewString([]string{"auth_hmac", "kms_key_hmac"}...),
+			},
+			"spec.gc_spec.authentication.cookie_params.auth_hmac.prim_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.authentication.cookie_params.auth_hmac.sec_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.policy_based_challenge": []sets.String{
+				sets.NewString([]string{"always_enable_captcha", "always_enable_js_challenge", "rule_based_challenge"}...),
+			},
+			"spec.gc_spec.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.tls_parameters.common_params.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.waf_type": []sets.String{
+				sets.NewString([]string{"waf", "waf_rules"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.virtual_host.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"authentication", "no_authentication"}...),
+				sets.NewString([]string{"captcha_challenge", "js_challenge", "no_challenge", "policy_based_challenge"}...),
+			},
+			"spec.gc_spec.authentication": []sets.String{
+				sets.NewString([]string{"cookie_params", "use_auth_object_config"}...),
+				sets.NewString([]string{"redirect_dynamic", "redirect_url"}...),
+			},
+			"spec.gc_spec.authentication.cookie_params": []sets.String{
+				sets.NewString([]string{"auth_hmac", "kms_key_hmac"}...),
+			},
+			"spec.gc_spec.authentication.cookie_params.auth_hmac.prim_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.authentication.cookie_params.auth_hmac.sec_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.policy_based_challenge": []sets.String{
+				sets.NewString([]string{"always_enable_captcha", "always_enable_js_challenge", "rule_based_challenge"}...),
+			},
+			"spec.gc_spec.tls_intercept": []sets.String{
+				sets.NewString([]string{"custom_certificate", "volterra_certificate"}...),
+				sets.NewString([]string{"enable_for_all_domains", "policy"}...),
+				sets.NewString([]string{"trusted_ca_url", "volterra_trusted_ca"}...),
+			},
+			"spec.gc_spec.tls_intercept.custom_certificate.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.tls_intercept.policy.interception_rules": []sets.String{
+				sets.NewString([]string{"disable_interception", "enable_interception"}...),
+			},
+			"spec.gc_spec.tls_intercept.policy.interception_rules.domain_match": []sets.String{
+				sets.NewString([]string{"exact_value", "regex_value", "suffix_value"}...),
+			},
+			"spec.gc_spec.tls_parameters.common_params.tls_certificates.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.waf_type": []sets.String{
+				sets.NewString([]string{"waf", "waf_rules"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.virtual_k8s.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"disabled", "isolated"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.virtual_k8s.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"disabled", "isolated"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.virtual_k8s.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"disabled", "isolated"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.virtual_k8s.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"disabled", "isolated"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.virtual_network.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"global_network", "legacy_type", "site_local_inside_network", "site_local_network"}...),
+			},
+			"spec.static_routes": []sets.String{
+				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.virtual_network.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec": []sets.String{
+				sets.NewString([]string{"global_network", "legacy_type", "site_local_inside_network", "site_local_network"}...),
+			},
+			"spec.static_routes": []sets.String{
+				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.virtual_network.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"global_network", "inside_network", "legacy_type", "site_local_inside_network", "site_local_network"}...),
+			},
+			"spec.gc_spec.static_routes.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.static_routes.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.virtual_network.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"global_network", "inside_network", "legacy_type", "site_local_inside_network", "site_local_network"}...),
+			},
+			"spec.gc_spec.static_routes.nexthop.nexthop_address": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.static_routes.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+			"spec.gc_spec.subnets": []sets.String{
+				sets.NewString([]string{"ipv4", "ipv6"}...),
+			},
+		},
+	}
 
 	// Generate Entry registry and factory
 	MDR.EntryFactory["ves.io.schema.address_allocator.Object"] = ves_io_schema_address_allocator.NewEntryObject
@@ -4578,6 +10110,16 @@ func init() {
 	MDR.EntryIndexers["ves.io.schema.site.StatusObject"] = ves_io_schema_site.GetStatusObjectIndexers
 	MDR.ValidatorRegistry["ves.io.schema.site.StatusObject"] = ves_io_schema_site.StatusObjectValidator()
 
+	customCSR = MDR.PubCustomServiceRegistry
+	customCSR.GrpcClientRegistry["ves.io.schema.site.ConfigKubeConfigAPI"] = ves_io_schema_site.NewConfigKubeConfigAPIGrpcClient
+	customCSR.RestClientRegistry["ves.io.schema.site.ConfigKubeConfigAPI"] = ves_io_schema_site.NewConfigKubeConfigAPIRestClient
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.site.ConfigKubeConfigAPI"] = ves_io_schema_site.RegisterConfigKubeConfigAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.site.ConfigKubeConfigAPI"] = ves_io_schema_site.RegisterGwConfigKubeConfigAPIHandler
+
+	customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = ves_io_schema_site.ConfigKubeConfigAPISwaggerJSON
+
 	csr = MDR.PubCRUDServiceRegistry
 
 	// Generate Service register handlers
@@ -4601,6 +10143,16 @@ func init() {
 	MDR.SvcGwRegisterHandlers["ves.io.schema.site.CustomStateAPI"] = ves_io_schema_site.RegisterGwCustomStateAPIHandler
 
 	customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = ves_io_schema_site.CustomStateAPISwaggerJSON
+
+	customCSR = MDR.PubCustomServiceRegistry
+	customCSR.GrpcClientRegistry["ves.io.schema.site.UamKubeConfigAPI"] = ves_io_schema_site.NewUamKubeConfigAPIGrpcClient
+	customCSR.RestClientRegistry["ves.io.schema.site.UamKubeConfigAPI"] = ves_io_schema_site.NewUamKubeConfigAPIRestClient
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.site.UamKubeConfigAPI"] = ves_io_schema_site.RegisterUamKubeConfigAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.site.UamKubeConfigAPI"] = ves_io_schema_site.RegisterGwUamKubeConfigAPIHandler
+
+	customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = ves_io_schema_site.UamKubeConfigAPISwaggerJSON
 
 	customCSR = MDR.PubCustomServiceRegistry
 	customCSR.GrpcClientRegistry["ves.io.schema.site.UpgradeAPI"] = ves_io_schema_site.NewUpgradeAPIGrpcClient
@@ -5017,6 +10569,16 @@ func init() {
 	MDR.EntryIndexers["ves.io.schema.views.http_loadbalancer.StatusObject"] = ves_io_schema_views_http_loadbalancer.GetStatusObjectIndexers
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.StatusObject"] = ves_io_schema_views_http_loadbalancer.StatusObjectValidator()
 
+	customCSR = MDR.PubCustomServiceRegistry
+	customCSR.GrpcClientRegistry["ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI"] = ves_io_schema_views_http_loadbalancer.NewApiepLBCustomAPIGrpcClient
+	customCSR.RestClientRegistry["ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI"] = ves_io_schema_views_http_loadbalancer.NewApiepLBCustomAPIRestClient
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI"] = ves_io_schema_views_http_loadbalancer.RegisterApiepLBCustomAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI"] = ves_io_schema_views_http_loadbalancer.RegisterGwApiepLBCustomAPIHandler
+
+	customCSR.SwaggerRegistry["ves.io.schema.views.http_loadbalancer.Object"] = ves_io_schema_views_http_loadbalancer.ApiepLBCustomAPISwaggerJSON
+
 	csr = MDR.PubCRUDServiceRegistry
 
 	// Generate Service register handlers
@@ -5347,6 +10909,16 @@ func init() {
 	csr.AllowedInNSTypes["ves.io.schema.virtual_k8s.Object"] = nil
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.virtual_k8s.Object"] = ves_io_schema_virtual_k8s.APISwaggerJSON
+
+	customCSR = MDR.PubCustomServiceRegistry
+	customCSR.GrpcClientRegistry["ves.io.schema.virtual_k8s.CustomDataAPI"] = ves_io_schema_virtual_k8s.NewCustomDataAPIGrpcClient
+	customCSR.RestClientRegistry["ves.io.schema.virtual_k8s.CustomDataAPI"] = ves_io_schema_virtual_k8s.NewCustomDataAPIRestClient
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.virtual_k8s.CustomDataAPI"] = ves_io_schema_virtual_k8s.RegisterCustomDataAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.virtual_k8s.CustomDataAPI"] = ves_io_schema_virtual_k8s.RegisterGwCustomDataAPIHandler
+
+	customCSR.SwaggerRegistry["ves.io.schema.virtual_k8s.Object"] = ves_io_schema_virtual_k8s.CustomDataAPISwaggerJSON
 
 	csr = MDR.PvtCRUDServiceRegistry
 
@@ -6752,6 +12324,18 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		}
 		h(gSrv, s)
 
+	case "ves.io.schema.site.ConfigKubeConfigAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_site.ConfigKubeConfigAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_site.ConfigKubeConfigAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_site.ConfigKubeConfigAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_site.ConfigKubeConfigAPIServer", srv))
+		}
+		h(gSrv, s)
+
 	case "ves.io.schema.site.API":
 		gh, _ := MDR.SvcRegisterHandlers[api]
 		h, ok := gh.(func(*grpc.Server, ves_io_schema_site.APIServer))
@@ -6773,6 +12357,18 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_site.CustomStateAPIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_site.CustomStateAPIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.site.UamKubeConfigAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_site.UamKubeConfigAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_site.UamKubeConfigAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_site.UamKubeConfigAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_site.UamKubeConfigAPIServer", srv))
 		}
 		h(gSrv, s)
 
@@ -7052,6 +12648,18 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		}
 		h(gSrv, s)
 
+	case "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_http_loadbalancer.ApiepLBCustomAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_views_http_loadbalancer.ApiepLBCustomAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_views_http_loadbalancer.ApiepLBCustomAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_views_http_loadbalancer.ApiepLBCustomAPIServer", srv))
+		}
+		h(gSrv, s)
+
 	case "ves.io.schema.views.http_loadbalancer.API":
 		gh, _ := MDR.SvcRegisterHandlers[api]
 		h, ok := gh.(func(*grpc.Server, ves_io_schema_views_http_loadbalancer.APIServer))
@@ -7288,6 +12896,18 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_virtual_k8s.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_virtual_k8s.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.virtual_k8s.CustomDataAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_virtual_k8s.CustomDataAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_virtual_k8s.CustomDataAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_virtual_k8s.CustomDataAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_virtual_k8s.CustomDataAPIServer", srv))
 		}
 		h(gSrv, s)
 

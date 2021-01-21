@@ -21,12 +21,24 @@ resource "volterra_fleet" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
-  no_bond_devices = true
 
-  // One of the arguments from this list "dc_cluster_group dc_cluster_group_inside no_dc_cluster_group" must be set
+  bond_device_list {
+    bond_devices {
+      devices = ["devices"]
+
+      // One of the arguments from this list "lacp active_backup" must be set
+
+      lacp {
+        rate = "30"
+      }
+      link_polling_interval = "1000"
+      link_up_delay         = "200"
+      name                  = "bond0"
+    }
+  }
+  // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
   no_dc_cluster_group = true
   fleet_label         = ["sfo"]
-
   // One of the arguments from this list "disable_gpu enable_gpu" must be set
   disable_gpu = true
 
@@ -52,7 +64,7 @@ resource "volterra_fleet" "example" {
   }
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
-  // One of the arguments from this list "storage_class_list default_storage_class" must be set
+  // One of the arguments from this list "default_storage_class storage_class_list" must be set
   default_storage_class = true
 
   // One of the arguments from this list "no_storage_device storage_device_list" must be set
@@ -65,21 +77,100 @@ resource "volterra_fleet" "example" {
 
       // One of the arguments from this list "netapp_trident pure_service_orchestrator openebs_enterprise" must be set
 
-      openebs_enterprise {
-        mayastor_pools {
-          node = "master-0"
+      netapp_trident {
+        // One of the arguments from this list "netapp_backend_ontap_nas netapp_backend_ontap_san" must be set
 
-          pool_disk_devices = ["/dev/sdb"]
-          pool_name         = "pool_name"
+        netapp_backend_ontap_nas {
+          auto_export_cidrs {
+            prefixes = ["192.168.20.0/24"]
+          }
+
+          auto_export_policy = true
+          backend_name       = "backend_name"
+
+          // One of the arguments from this list "data_lif_ip data_lif_dns_name" must be set
+          data_lif_ip = "10.5.2.4"
+
+          labels = {
+            "key1" = "value1"
+          }
+
+          limit_aggregate_usage = "80%"
+          limit_volume_size     = "50Gi"
+
+          // One of the arguments from this list "management_lif_ip management_lif_dns_name" must be set
+          management_lif_ip = "10.5.2.4"
+
+          nfs_mount_options = "nfsvers=4"
+
+          password {
+            blindfold_secret_info_internal {
+              decryption_provider = "decryption_provider"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "store_provider"
+            }
+
+            secret_encoding_type = "secret_encoding_type"
+
+            // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+
+            clear_secret_info {
+              provider = "box-provider"
+              url      = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+            }
+          }
+
+          region = "us_east_1b"
+
+          storage {
+            labels = {
+              "key1" = "value1"
+            }
+
+            volume_defaults {
+              encryption       = true
+              export_policy    = "default"
+              security_style   = "unix"
+              snapshot_dir     = true
+              snapshot_policy  = "none"
+              snapshot_reserve = "10"
+              space_reserve    = "thick"
+              split_on_clone   = true
+              tiering_policy   = "snapshot-only"
+              unix_permissions = "777"
+            }
+
+            zone = "us_east_1b"
+          }
+
+          storage_driver_name = "ontap-nas"
+          storage_prefix      = "trident"
+          svm                 = "trident_svm"
+          username            = "cluster-admin"
+
+          volume_defaults {
+            encryption       = true
+            export_policy    = "default"
+            security_style   = "unix"
+            snapshot_dir     = true
+            snapshot_policy  = "none"
+            snapshot_reserve = "10"
+            space_reserve    = "thick"
+            split_on_clone   = true
+            tiering_policy   = "snapshot-only"
+            unix_permissions = "777"
+          }
         }
       }
       storage_device = "storage_device"
     }
   }
-  // One of the arguments from this list "storage_interface_list no_storage_interfaces" must be set
+  // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
   no_storage_interfaces = true
-  // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
+  // One of the arguments from this list "storage_static_routes no_storage_static_routes" must be set
   no_storage_static_routes = true
+  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
+  deny_all_usb = true
 }
 
 ```
@@ -111,7 +202,7 @@ Argument Reference
 
 `dc_cluster_group_inside` - (Optional) This fleet is member of dc cluster group via site local inside network. See [ref](#ref) below for details.
 
-`no_dc_cluster_group` - (Optional) This fleet is not a member of dC cluster group (bool).
+`no_dc_cluster_group` - (Optional) This fleet is not a member of a DC cluster group (bool).
 
 `enable_default_fleet_config_download` - (Optional) Enable default fleet config, It must be set for storage config and gpu config (`Bool`).
 
@@ -156,6 +247,12 @@ Argument Reference
 `no_storage_static_routes` - (Optional) This fleet does not have any storage static routes (bool).
 
 `storage_static_routes` - (Optional) Add all storage storage static routes. See [Storage Static Routes ](#storage-static-routes) below for details.
+
+`allow_all_usb` - (Optional) All USB devices are allowed (bool).
+
+`deny_all_usb` - (Optional) All USB devices are denied (bool).
+
+`usb_policy` - (Optional) Allow only specific USB devices. See [ref](#ref) below for details.
 
 `volterra_software_version` - (Optional) Current software installed can be overridden via site config. (`String`).
 
@@ -261,7 +358,7 @@ Nexthop address when type is "Use-Configured".
 
 Storage class Device configuration for OpenEBS Enterprise.
 
-`protocol` - (Optional) Defines type of transport protocol used to mount the PV to the worker node hosting the associated application pod (iSCSI, or NVMe-oF) (`String`).
+`protocol` - (Optional) Defines type of transport protocol used to mount the PV to the worker node hosting the associated application pod (NVMe-oF) (`String`).
 
 `replication` - (Optional) Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3. (`Int`).
 
@@ -305,7 +402,7 @@ List of custom storage classes.
 
 `storage_class_name` - (Required) Name of the storage class as it will appear in K8s. (`String`).
 
-`storage_device` - (Required) Storage device that this class will use (`String`).
+`storage_device` - (Required) Storage device that this class will use. The Device name defined at previous step. (`String`).
 
 ### Storage Device List
 

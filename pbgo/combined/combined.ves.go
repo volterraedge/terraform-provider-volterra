@@ -66,6 +66,8 @@ import (
 	ves_io_schema_log_access_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/access_log"
 	ves_io_schema_log_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/audit_log"
 	ves_io_schema_log_firewall_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/firewall_log"
+	ves_io_schema_log_k8s_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_audit_log"
+	ves_io_schema_log_k8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_events"
 	ves_io_schema_log_vk8s_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_audit_log"
 	ves_io_schema_log_vk8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_events"
 	ves_io_schema_malicious_user_mitigation "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation"
@@ -135,6 +137,7 @@ import (
 	ves_io_schema_views_network_policy_view_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/network_policy_view/crudapi"
 	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 	ves_io_schema_views_origin_pool_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool/crudapi"
+	ves_io_schema_views_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
 	ves_io_schema_views_tcp_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer"
 	ves_io_schema_views_tcp_loadbalancer_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer/crudapi"
 	ves_io_schema_views_terraform_parameters "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/terraform_parameters"
@@ -521,6 +524,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.app_type.OverridesRsp"] = ves_io_schema_app_type.OverridesRspValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_type.ServiceAPIEndpointPDFReq"] = ves_io_schema_app_type.ServiceAPIEndpointPDFReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.app_type.ServiceAPIEndpointsReq"] = ves_io_schema_app_type.ServiceAPIEndpointsReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_type.SwaggerSpecReq"] = ves_io_schema_app_type.SwaggerSpecReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.app_type.SwaggerSpecRsp"] = ves_io_schema_app_type.SwaggerSpecRspValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.app_type.SpecType"] = ves_io_schema_app_type.SpecTypeValidator()
 
@@ -824,7 +829,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.endpoint.CreateSpecType"] = ves_io_schema_endpoint.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.endpoint.DNSInfo"] = ves_io_schema_endpoint.DNSInfoValidator()
 	MDR.ValidatorRegistry["ves.io.schema.endpoint.DiscoveredInfoType"] = ves_io_schema_endpoint.DiscoveredInfoTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.endpoint.DnsNameAdvanceType"] = ves_io_schema_endpoint.DnsNameAdvanceTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.endpoint.DnsNameAdvancedType"] = ves_io_schema_endpoint.DnsNameAdvancedTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.endpoint.GetSpecType"] = ves_io_schema_endpoint.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.endpoint.GlobalSpecType"] = ves_io_schema_endpoint.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.endpoint.K8SInfo"] = ves_io_schema_endpoint.K8SInfoValidator()
@@ -1082,6 +1087,10 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.log.AuditLogRequestV2"] = ves_io_schema_log.AuditLogRequestV2Validator()
 	MDR.ValidatorRegistry["ves.io.schema.log.FirewallLogAggregationRequest"] = ves_io_schema_log.FirewallLogAggregationRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.FirewallLogRequest"] = ves_io_schema_log.FirewallLogRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log.K8SAuditLogAggregationRequest"] = ves_io_schema_log.K8SAuditLogAggregationRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log.K8SAuditLogRequest"] = ves_io_schema_log.K8SAuditLogRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log.K8SEventsAggregationRequest"] = ves_io_schema_log.K8SEventsAggregationRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log.K8SEventsRequest"] = ves_io_schema_log.K8SEventsRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.LogAggregationResponse"] = ves_io_schema_log.LogAggregationResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.LogResponse"] = ves_io_schema_log.LogResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.LogScrollRequest"] = ves_io_schema_log.LogScrollRequestValidator()
@@ -1113,6 +1122,13 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.log.firewall_log.DateAggregation"] = ves_io_schema_log_firewall_log.DateAggregationValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.firewall_log.DateSubAggregation"] = ves_io_schema_log_firewall_log.DateSubAggregationValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.firewall_log.FieldAggregation"] = ves_io_schema_log_firewall_log.FieldAggregationValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.log.k8s_audit_log.AggregationRequest"] = ves_io_schema_log_k8s_audit_log.AggregationRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log.k8s_audit_log.DateAggregation"] = ves_io_schema_log_k8s_audit_log.DateAggregationValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.log.k8s_events.AggregationRequest"] = ves_io_schema_log_k8s_events.AggregationRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log.k8s_events.DateAggregation"] = ves_io_schema_log_k8s_events.DateAggregationValidator()
+	MDR.ValidatorRegistry["ves.io.schema.log.k8s_events.FieldAggregation"] = ves_io_schema_log_k8s_events.FieldAggregationValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.log.vk8s_audit_log.AggregationRequest"] = ves_io_schema_log_vk8s_audit_log.AggregationRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.vk8s_audit_log.DateAggregation"] = ves_io_schema_log_vk8s_audit_log.DateAggregationValidator()
@@ -1339,9 +1355,15 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.network_policy.NetworkPolicyHitsResponse"] = ves_io_schema_network_policy.NetworkPolicyHitsResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.network_policy.NetworkPolicyMetricLabelFilter"] = ves_io_schema_network_policy.NetworkPolicyMetricLabelFilterValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.network_policy.ApplicationsType"] = ves_io_schema_network_policy.ApplicationsTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.network_policy.CreateSpecType"] = ves_io_schema_network_policy.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.network_policy.EndpointChoiceType"] = ves_io_schema_network_policy.EndpointChoiceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.network_policy.GetSpecType"] = ves_io_schema_network_policy.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.network_policy.GlobalSpecType"] = ves_io_schema_network_policy.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.network_policy.LegacyNetworkPolicyRuleChoice"] = ves_io_schema_network_policy.LegacyNetworkPolicyRuleChoiceValidator()
+	MDR.ValidatorRegistry["ves.io.schema.network_policy.NetworkPolicyRuleChoice"] = ves_io_schema_network_policy.NetworkPolicyRuleChoiceValidator()
+	MDR.ValidatorRegistry["ves.io.schema.network_policy.NetworkPolicyRuleType"] = ves_io_schema_network_policy.NetworkPolicyRuleTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.network_policy.ProtocolPortType"] = ves_io_schema_network_policy.ProtocolPortTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.network_policy.ReplaceSpecType"] = ves_io_schema_network_policy.ReplaceSpecTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.network_policy.crudapi.ObjectCreateReq"] = ves_io_schema_network_policy_crudapi.ObjectCreateReqValidator()
@@ -1805,9 +1827,11 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.ReplaceRequest"] = ves_io_schema_service_policy_rule.ReplaceRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.ReplaceResponse"] = ves_io_schema_service_policy_rule.ReplaceResponseValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.ChallengeRuleSpec"] = ves_io_schema_service_policy_rule.ChallengeRuleSpecValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.CreateSpecType"] = ves_io_schema_service_policy_rule.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.GetSpecType"] = ves_io_schema_service_policy_rule.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.GlobalSpecType"] = ves_io_schema_service_policy_rule.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.RateLimiterRuleSpec"] = ves_io_schema_service_policy_rule.RateLimiterRuleSpecValidator()
 	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.ReplaceSpecType"] = ves_io_schema_service_policy_rule.ReplaceSpecTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.service_policy_rule.crudapi.ObjectCreateReq"] = ves_io_schema_service_policy_rule_crudapi.ObjectCreateReqValidator()
@@ -1884,12 +1908,16 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.site.Cpu"] = ves_io_schema_site.CpuValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.CreateSpecType"] = ves_io_schema_site.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.DeploymentState"] = ves_io_schema_site.DeploymentStateValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.GetKubeConfigReq"] = ves_io_schema_site.GetKubeConfigReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.GetSpecType"] = ves_io_schema_site.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.GlobalSpecType"] = ves_io_schema_site.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.InterfaceStatus"] = ves_io_schema_site.InterfaceStatusValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.IpsecConnectionStatus"] = ves_io_schema_site.IpsecConnectionStatusValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.K8SApiServerParameters"] = ves_io_schema_site.K8SApiServerParametersValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.Kernel"] = ves_io_schema_site.KernelValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.ListKubeConfigReq"] = ves_io_schema_site.ListKubeConfigReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.ListKubeConfigRsp"] = ves_io_schema_site.ListKubeConfigRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.ListKubeConfigRspItem"] = ves_io_schema_site.ListKubeConfigRspItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.Memory"] = ves_io_schema_site.MemoryValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.NetworkDevice"] = ves_io_schema_site.NetworkDeviceValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.NodeInfo"] = ves_io_schema_site.NodeInfoValidator()
@@ -2084,6 +2112,10 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.SiteStaticRoutesListType"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.SiteStaticRoutesType"] = ves_io_schema_views.SiteStaticRoutesTypeValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.StorageClassListType"] = ves_io_schema_views.StorageClassListTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.StorageClassOpenebsEnterpriseType"] = ves_io_schema_views.StorageClassOpenebsEnterpriseTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.StorageClassType"] = ves_io_schema_views.StorageClassTypeValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.views.AdvertiseCustom"] = ves_io_schema_views.AdvertiseCustomValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.AdvertisePublic"] = ves_io_schema_views.AdvertisePublicValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.AdvertiseSiteVsite"] = ves_io_schema_views.AdvertiseSiteVsiteValidator()
@@ -2113,11 +2145,14 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.ReplaceRequest"] = ves_io_schema_views_aws_tgw_site.ReplaceRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.ReplaceResponse"] = ves_io_schema_views_aws_tgw_site.ReplaceResponseValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.SetTGWInfoRequest"] = ves_io_schema_views_aws_tgw_site.SetTGWInfoRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.SetTGWInfoResponse"] = ves_io_schema_views_aws_tgw_site.SetTGWInfoResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.SetVPCIpPrefixesRequest"] = ves_io_schema_views_aws_tgw_site.SetVPCIpPrefixesRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.SetVPCIpPrefixesResponse"] = ves_io_schema_views_aws_tgw_site.SetVPCIpPrefixesResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.SetVPNTunnelsRequest"] = ves_io_schema_views_aws_tgw_site.SetVPNTunnelsRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.SetVPNTunnelsResponse"] = ves_io_schema_views_aws_tgw_site.SetVPNTunnelsResponseValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.AWSTGWInfoConfigType"] = ves_io_schema_views_aws_tgw_site.AWSTGWInfoConfigTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.AWSVPNTunnelConfigType"] = ves_io_schema_views_aws_tgw_site.AWSVPNTunnelConfigTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.CreateSpecType"] = ves_io_schema_views_aws_tgw_site.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.aws_tgw_site.ExistingTGWType"] = ves_io_schema_views_aws_tgw_site.ExistingTGWTypeValidator()
@@ -2297,6 +2332,9 @@ func init() {
 
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.SpecType"] = ves_io_schema_views_http_loadbalancer.SpecTypeValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.SwaggerSpecReq"] = ves_io_schema_views_http_loadbalancer.SwaggerSpecReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.SwaggerSpecRsp"] = ves_io_schema_views_http_loadbalancer.SwaggerSpecRspValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.CreateRequest"] = ves_io_schema_views_http_loadbalancer.CreateRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.CreateResponse"] = ves_io_schema_views_http_loadbalancer.CreateResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.DeleteRequest"] = ves_io_schema_views_http_loadbalancer.DeleteRequestValidator()
@@ -2312,6 +2350,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.GetDnsInfoResponse"] = ves_io_schema_views_http_loadbalancer.GetDnsInfoResponseValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.AdvancedOptionsType"] = ves_io_schema_views_http_loadbalancer.AdvancedOptionsTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ChallengeRule"] = ves_io_schema_views_http_loadbalancer.ChallengeRuleValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ChallengeRuleList"] = ves_io_schema_views_http_loadbalancer.ChallengeRuleListValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.CreateSpecType"] = ves_io_schema_views_http_loadbalancer.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.CustomIpAllowedList"] = ves_io_schema_views_http_loadbalancer.CustomIpAllowedListValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.DownstreamTlsParamsType"] = ves_io_schema_views_http_loadbalancer.DownstreamTlsParamsTypeValidator()
@@ -2320,6 +2360,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.GlobalSpecType"] = ves_io_schema_views_http_loadbalancer.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.HashPolicyListType"] = ves_io_schema_views_http_loadbalancer.HashPolicyListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.MirrorPolicyType"] = ves_io_schema_views_http_loadbalancer.MirrorPolicyTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.PolicyBasedChallenge"] = ves_io_schema_views_http_loadbalancer.PolicyBasedChallengeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ProxyTypeHttp"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ProxyTypeHttps"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.ProxyTypeHttpsAutoCerts"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCertsValidator()
@@ -2366,13 +2407,9 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.NetworkPolicyHitsResponse"] = ves_io_schema_views_network_policy_view.NetworkPolicyHitsResponseValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.NetworkPolicyMetricLabelFilter"] = ves_io_schema_views_network_policy_view.NetworkPolicyMetricLabelFilterValidator()
 
-	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.ApplicationsType"] = ves_io_schema_views_network_policy_view.ApplicationsTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.CreateSpecType"] = ves_io_schema_views_network_policy_view.CreateSpecTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.EndpointChoiceType"] = ves_io_schema_views_network_policy_view.EndpointChoiceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.GetSpecType"] = ves_io_schema_views_network_policy_view.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.GlobalSpecType"] = ves_io_schema_views_network_policy_view.GlobalSpecTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.NetworkPolicyRuleType"] = ves_io_schema_views_network_policy_view.NetworkPolicyRuleTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.ProtocolPortType"] = ves_io_schema_views_network_policy_view.ProtocolPortTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.ReplaceSpecType"] = ves_io_schema_views_network_policy_view.ReplaceSpecTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.views.network_policy_view.crudapi.ObjectCreateReq"] = ves_io_schema_views_network_policy_view_crudapi.ObjectCreateReqValidator()
@@ -2430,6 +2467,13 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.crudapi.ObjectListRspItem"] = ves_io_schema_views_origin_pool_crudapi.ObjectListRspItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.crudapi.ObjectReplaceReq"] = ves_io_schema_views_origin_pool_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.crudapi.ObjectReplaceRsp"] = ves_io_schema_views_origin_pool_crudapi.ObjectReplaceRspValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.CreateSpecType"] = ves_io_schema_views_rate_limiter_policy.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.GetSpecType"] = ves_io_schema_views_rate_limiter_policy.GetSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.GlobalSpecType"] = ves_io_schema_views_rate_limiter_policy.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.PolicyList"] = ves_io_schema_views_rate_limiter_policy.PolicyListValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.RateLimiterRule"] = ves_io_schema_views_rate_limiter_policy.RateLimiterRuleValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.rate_limiter_policy.ReplaceSpecType"] = ves_io_schema_views_rate_limiter_policy.ReplaceSpecTypeValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.views.tcp_loadbalancer.SpecType"] = ves_io_schema_views_tcp_loadbalancer.SpecTypeValidator()
 
@@ -2521,6 +2565,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.APIEndpointPDFRsp"] = ves_io_schema_virtual_host.APIEndpointPDFRspValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.APIEndpointsReq"] = ves_io_schema_virtual_host.APIEndpointsReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.APIEndpointsRsp"] = ves_io_schema_virtual_host.APIEndpointsRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_host.SwaggerSpecReq"] = ves_io_schema_virtual_host.SwaggerSpecReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_host.SwaggerSpecRsp"] = ves_io_schema_virtual_host.SwaggerSpecRspValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.CreateRequest"] = ves_io_schema_virtual_host.CreateRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.CreateResponse"] = ves_io_schema_virtual_host.CreateResponseValidator()
@@ -2546,6 +2592,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.GlobalSpecType"] = ves_io_schema_virtual_host.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.JavaScriptConfigType"] = ves_io_schema_virtual_host.JavaScriptConfigTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.JavascriptChallengeType"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_host.PolicyBasedChallenge"] = ves_io_schema_virtual_host.PolicyBasedChallengeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.ReplaceSpecType"] = ves_io_schema_virtual_host.ReplaceSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_host.TemporaryUserBlockingType"] = ves_io_schema_virtual_host.TemporaryUserBlockingTypeValidator()
 
@@ -2589,6 +2636,11 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.ListResponseItem"] = ves_io_schema_virtual_k8s.ListResponseItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.ReplaceRequest"] = ves_io_schema_virtual_k8s.ReplaceRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.ReplaceResponse"] = ves_io_schema_virtual_k8s.ReplaceResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.PVCMetricData"] = ves_io_schema_virtual_k8s.PVCMetricDataValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.PVCMetricTypeData"] = ves_io_schema_virtual_k8s.PVCMetricTypeDataValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.PVCMetricsRequest"] = ves_io_schema_virtual_k8s.PVCMetricsRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.PVCMetricsResponse"] = ves_io_schema_virtual_k8s.PVCMetricsResponseValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.CreateSpecType"] = ves_io_schema_virtual_k8s.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_k8s.GetSpecType"] = ves_io_schema_virtual_k8s.GetSpecTypeValidator()
@@ -3721,6 +3773,12 @@ func init() {
 	MDR.EntryIndexers["ves.io.schema.site.StatusObject"] = ves_io_schema_site.GetStatusObjectIndexers
 	MDR.ValidatorRegistry["ves.io.schema.site.StatusObject"] = ves_io_schema_site.StatusObjectValidator()
 
+	customCSR = MDR.PubCustomServiceRegistry
+	customCSR.GrpcClientRegistry["ves.io.schema.site.ConfigKubeConfigAPI"] = ves_io_schema_site.NewConfigKubeConfigAPIGrpcClient
+	customCSR.RestClientRegistry["ves.io.schema.site.ConfigKubeConfigAPI"] = ves_io_schema_site.NewConfigKubeConfigAPIRestClient
+
+	customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = ves_io_schema_site.ConfigKubeConfigAPISwaggerJSON
+
 	csr = MDR.PubCRUDServiceRegistry
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.site.Object"] = ves_io_schema_site.APISwaggerJSON
@@ -3730,6 +3788,12 @@ func init() {
 	customCSR.RestClientRegistry["ves.io.schema.site.CustomStateAPI"] = ves_io_schema_site.NewCustomStateAPIRestClient
 
 	customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = ves_io_schema_site.CustomStateAPISwaggerJSON
+
+	customCSR = MDR.PubCustomServiceRegistry
+	customCSR.GrpcClientRegistry["ves.io.schema.site.UamKubeConfigAPI"] = ves_io_schema_site.NewUamKubeConfigAPIGrpcClient
+	customCSR.RestClientRegistry["ves.io.schema.site.UamKubeConfigAPI"] = ves_io_schema_site.NewUamKubeConfigAPIRestClient
+
+	customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = ves_io_schema_site.UamKubeConfigAPISwaggerJSON
 
 	customCSR = MDR.PubCustomServiceRegistry
 	customCSR.GrpcClientRegistry["ves.io.schema.site.UpgradeAPI"] = ves_io_schema_site.NewUpgradeAPIGrpcClient
@@ -3952,6 +4016,12 @@ func init() {
 	MDR.EntryIndexers["ves.io.schema.views.http_loadbalancer.StatusObject"] = ves_io_schema_views_http_loadbalancer.GetStatusObjectIndexers
 	MDR.ValidatorRegistry["ves.io.schema.views.http_loadbalancer.StatusObject"] = ves_io_schema_views_http_loadbalancer.StatusObjectValidator()
 
+	customCSR = MDR.PubCustomServiceRegistry
+	customCSR.GrpcClientRegistry["ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI"] = ves_io_schema_views_http_loadbalancer.NewApiepLBCustomAPIGrpcClient
+	customCSR.RestClientRegistry["ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI"] = ves_io_schema_views_http_loadbalancer.NewApiepLBCustomAPIRestClient
+
+	customCSR.SwaggerRegistry["ves.io.schema.views.http_loadbalancer.Object"] = ves_io_schema_views_http_loadbalancer.ApiepLBCustomAPISwaggerJSON
+
 	csr = MDR.PubCRUDServiceRegistry
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.views.http_loadbalancer.Object"] = ves_io_schema_views_http_loadbalancer.APISwaggerJSON
@@ -4124,6 +4194,12 @@ func init() {
 	csr = MDR.PubCRUDServiceRegistry
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.virtual_k8s.Object"] = ves_io_schema_virtual_k8s.APISwaggerJSON
+
+	customCSR = MDR.PubCustomServiceRegistry
+	customCSR.GrpcClientRegistry["ves.io.schema.virtual_k8s.CustomDataAPI"] = ves_io_schema_virtual_k8s.NewCustomDataAPIGrpcClient
+	customCSR.RestClientRegistry["ves.io.schema.virtual_k8s.CustomDataAPI"] = ves_io_schema_virtual_k8s.NewCustomDataAPIRestClient
+
+	customCSR.SwaggerRegistry["ves.io.schema.virtual_k8s.Object"] = ves_io_schema_virtual_k8s.CustomDataAPISwaggerJSON
 
 	csr = MDR.PvtCRUDServiceRegistry
 

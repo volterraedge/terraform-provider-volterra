@@ -88,7 +88,7 @@ Clear Secret is used for the secrets that are not encrypted .
 
 Common TLS parameters used in both upstream and downstream connections.
 
-`cipher_suites` - (Optional)cipher_suites (`String`).
+`cipher_suites` - (Optional) will be used. (`String`).
 
 `maximum_protocol_version` - (Optional) Maximum TLS protocol version. (`String`).
 

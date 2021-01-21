@@ -22,17 +22,25 @@ resource "volterra_service_policy_rule" "example" {
   action    = ["action"]
 
   // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
-  any_asn = true
+  any_asn          = true
+  challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "any_client client_name client_selector client_name_matcher" must be set
-  any_client = true
+  // One of the arguments from this list "client_name_matcher any_client client_name client_selector" must be set
 
+  client_name_matcher {
+    exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+    regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+  }
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
   any_ip = true
-
   waf_action {
-    // One of the arguments from this list "none waf_skip_processing waf_rule_control waf_inline_rule_control" must be set
-    none = true
+    // One of the arguments from this list "waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode none" must be set
+
+    waf_inline_rule_control {
+      exclude_rule_ids = ["exclude_rule_ids"]
+      monitoring_mode  = true
+    }
   }
 }
 
@@ -70,6 +78,8 @@ Argument Reference
 `asn_matcher` - (Optional) The predicate evaluates to true if the origin ASN is present in one of the BGP ASN Set objects.. See [Asn Matcher ](#asn-matcher) below for details.
 
 `body_matcher` - (Optional) The actual request body value is extracted from the request API as a string.. See [Body Matcher ](#body-matcher) below for details.
+
+`challenge_action` - (Required) Select challenge action, enable javascript/captcha challenge or disable challenge (`String`).
 
 `any_client` - (Optional) Any Client (bool).
 
@@ -169,7 +179,7 @@ Note that all specified arg matcher predicates must evaluate to true..
 
 The predicate evaluates to true if the origin ASN is present in the ASN list..
 
-`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Optional) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
 
 ### Asn Matcher
 
@@ -251,7 +261,7 @@ matcher..
 
 The predicate evaluates to true if the destination ASN is present in the ASN list..
 
-`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Optional) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
 
 ### Dst Asn Matcher
 
@@ -503,11 +513,17 @@ App Firewall action to be enforced if the input request matches the rule..
 
 `none` - (Optional) Perform normal App Firewall processing for this request (bool).
 
+`waf_in_monitoring_mode` - (Optional) App Firewall will run in monitoring mode without blocking the request (bool).
+
 `waf_inline_rule_control` - (Optional) App Firewall rule changes to be applied for this request. See [Waf Inline Rule Control ](#waf-inline-rule-control) below for details.
 
 `waf_rule_control` - (Optional) App Firewall rule changes to be applied for this request. See [Waf Rule Control ](#waf-rule-control) below for details.
 
 `waf_skip_processing` - (Optional) Skip all App Firewall processing for this request (bool).
+
+### Waf In Monitoring Mode
+
+App Firewall will run in monitoring mode without blocking the request.
 
 ### Waf Inline Rule Control
 
@@ -515,11 +531,15 @@ App Firewall rule changes to be applied for this request.
 
 `exclude_rule_ids` - (Optional) App Firewall Rule IDs to be excluded for this request (`List of Strings`).
 
+`monitoring_mode` - (Optional) App Firewall will run in monitoring mode without blocking the request (`Bool`).
+
 ### Waf Rule Control
 
 App Firewall rule changes to be applied for this request.
 
 `exclude_rule_ids` - (Optional) App Firewall Rule List specifying the rule IDs to be excluded for this request. See [ref](#ref) below for details.
+
+`monitoring_mode` - (Optional) App Firewall will run in monitoring mode without blocking the request (`Bool`).
 
 ### Waf Skip Processing
 

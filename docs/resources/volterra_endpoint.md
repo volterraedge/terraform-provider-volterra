@@ -44,7 +44,7 @@ Argument Reference
 
 `dns_name` - (Optional) Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
 
-`dns_name_advance` - (Optional) Specifies name and TTL used for DNS resolution.. See [Dns Name Advance ](#dns-name-advance) below for details.
+`dns_name_advanced` - (Optional) Specifies name and TTL used for DNS resolution.. See [Dns Name Advanced ](#dns-name-advanced) below for details.
 
 `ip` - (Optional) Endpoint is reachable at the given ip address (`String`).
 
@@ -58,7 +58,7 @@ Argument Reference
 
 `where` - (Optional) This endpoint is present in site, virtual_site or virtual_network selected by following field.. See [Where ](#where) below for details.
 
-### Dns Name Advance
+### Dns Name Advanced
 
 Specifies name and TTL used for DNS resolution..
 

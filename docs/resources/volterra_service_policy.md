@@ -21,6 +21,39 @@ resource "volterra_service_policy" "example" {
   namespace = "staging"
   algo      = ["algo"]
 
+  // One of the arguments from this list "allow_list deny_list rule_list legacy_rule_list internally_generated" must be set
+
+  allow_list {
+    asn_list {
+      as_numbers = ["[713, 7932, 847325, 4683, 15269, 1000001]"]
+    }
+
+    asn_set {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    country_list = ["country_list"]
+
+    // One of the arguments from this list "default_action_next_policy default_action_deny default_action_allow" must be set
+    default_action_deny = true
+
+    ip_prefix_set {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    prefix_list {
+      prefixes = ["192.168.20.0/24"]
+    }
+
+    tls_fingerprint_classes = ["tls_fingerprint_classes"]
+
+    tls_fingerprint_values = ["tls_fingerprint_values"]
+  }
+
   // One of the arguments from this list "any_server server_name server_selector server_name_matcher" must be set
 
   server_selector {
@@ -57,11 +90,11 @@ Argument Reference
 
 `deny_list` - (Optional) List of denied sources for requests. See [Deny List ](#deny-list) below for details.
 
+`internally_generated` - (Optional) Placeholder that's used for internally generated service_policy objects to satisy the validation check that rule_choice is non-nil. (bool).
+
 `legacy_rule_list` - (Optional) List of references to service_policy_rule objects. See [Legacy Rule List ](#legacy-rule-list) below for details.
 
 `rule_list` - (Optional) List of custom rules. See [Rule List ](#rule-list) below for details.
-
-`rules` - (Optional) TBD mark as hidden + internal after implementation is ready. See [ref](#ref) below for details.
 
 `any_server` - (Optional) Any Server (bool).
 
@@ -143,7 +176,7 @@ Note that all specified arg matcher predicates must evaluate to true..
 
 The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB..
 
-`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Optional) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
 
 ### Asn Matcher
 
@@ -257,7 +290,7 @@ matcher..
 
 The predicate evaluates to true if the destination ASN is present in the ASN list..
 
-`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Optional) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
 
 ### Dst Asn Matcher
 
@@ -357,7 +390,7 @@ other labels do not matter..
 
 List of references to service_policy_rule objects.
 
-`rules` - (Required) The order of evaluation of the rules depends on the rule combining algorithm.. See [ref](#ref) below for details.
+`rules` - (Optional) The order of evaluation of the rules depends on the rule combining algorithm.. See [ref](#ref) below for details.
 
 ### Malicious User Mitigation
 
@@ -405,7 +438,7 @@ The list of port ranges to which the destination port should belong. In case of 
 
 Addresses that are covered by the given list of IPv4 prefixes.
 
-`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
+`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
 
 ### Query Params
 
@@ -445,7 +478,7 @@ The order of evaluation of the rules depends on the rule combining algorithm..
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
 
-`spec` - (Required) Specification for the rule including match preicates and actions.. See [Spec ](#spec) below for details.
+`spec` - (Required) Specification for the rule including match predicates and actions.. See [Spec ](#spec) below for details.
 
 ### Server Name Matcher
 
@@ -463,7 +496,7 @@ The predicate evaluates to true if the expressions in the label selector are tru
 
 ### Spec
 
-Specification for the rule including match preicates and actions..
+Specification for the rule including match predicates and actions..
 
 `action` - (Required) Action to be enforced if the input request matches the rule. (`String`).
 
@@ -478,6 +511,8 @@ Specification for the rule including match preicates and actions..
 `asn_matcher` - (Optional) The predicate evaluates to true if the origin ASN is present in one of the BGP ASN Set objects.. See [Asn Matcher ](#asn-matcher) below for details.
 
 `body_matcher` - (Optional) The actual request body value is extracted from the request API as a string.. See [Body Matcher ](#body-matcher) below for details.
+
+`challenge_action` - (Required) Select challenge action, enable javascript/captcha challenge or disable challenge (`String`).
 
 `any_client` - (Optional) Any Client (bool).
 
@@ -595,11 +630,17 @@ App Firewall action to be enforced if the input request matches the rule..
 
 `none` - (Optional) Perform normal App Firewall processing for this request (bool).
 
+`waf_in_monitoring_mode` - (Optional) App Firewall will run in monitoring mode without blocking the request (bool).
+
 `waf_inline_rule_control` - (Optional) App Firewall rule changes to be applied for this request. See [Waf Inline Rule Control ](#waf-inline-rule-control) below for details.
 
 `waf_rule_control` - (Optional) App Firewall rule changes to be applied for this request. See [Waf Rule Control ](#waf-rule-control) below for details.
 
 `waf_skip_processing` - (Optional) Skip all App Firewall processing for this request (bool).
+
+### Waf In Monitoring Mode
+
+App Firewall will run in monitoring mode without blocking the request.
 
 ### Waf Inline Rule Control
 
@@ -607,11 +648,15 @@ App Firewall rule changes to be applied for this request.
 
 `exclude_rule_ids` - (Optional) App Firewall Rule IDs to be excluded for this request (`List of Strings`).
 
+`monitoring_mode` - (Optional) App Firewall will run in monitoring mode without blocking the request (`Bool`).
+
 ### Waf Rule Control
 
 App Firewall rule changes to be applied for this request.
 
 `exclude_rule_ids` - (Optional) App Firewall Rule List specifying the rule IDs to be excluded for this request. See [ref](#ref) below for details.
+
+`monitoring_mode` - (Optional) App Firewall will run in monitoring mode without blocking the request (`Bool`).
 
 ### Waf Skip Processing
 

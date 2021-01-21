@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_network_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy"
 	ves_io_schema_network_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_rule"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	ves_io_schema_views_network_policy_view "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/network_policy_view"
@@ -79,6 +80,31 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 							Optional: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
+							},
+						},
+
+						"metadata": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"description": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"disable": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
 							},
 						},
 
@@ -175,7 +201,7 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 
 										Type: schema.TypeList,
 
-										Required: true,
+										Optional: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -345,7 +371,7 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 
 										Type: schema.TypeList,
 
-										Required: true,
+										Optional: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -376,6 +402,31 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 							Optional: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
+							},
+						},
+
+						"metadata": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"description": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"disable": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
 							},
 						},
 
@@ -472,7 +523,7 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 
 										Type: schema.TypeList,
 
-										Required: true,
+										Optional: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -616,10 +667,10 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 	if v, ok := d.GetOk("egress_rules"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
-		egressRules := make([]*ves_io_schema_views_network_policy_view.NetworkPolicyRuleType, len(sl))
+		egressRules := make([]*ves_io_schema_network_policy.NetworkPolicyRuleType, len(sl))
 		createSpec.EgressRules = egressRules
 		for i, set := range sl {
-			egressRules[i] = &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType{}
+			egressRules[i] = &ves_io_schema_network_policy.NetworkPolicyRuleType{}
 
 			egressRulesMapStrToI := set.(map[string]interface{})
 
@@ -637,6 +688,31 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				egressRules[i].Keys = ls
 			}
 
+			if v, ok := egressRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				metadata := &ves_io_schema.MessageMetaType{}
+				egressRules[i].Metadata = metadata
+				for _, set := range sl {
+
+					metadataMapStrToI := set.(map[string]interface{})
+
+					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+						metadata.Description = w.(string)
+					}
+
+					if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+						metadata.Disable = w.(bool)
+					}
+
+					if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+						metadata.Name = w.(string)
+					}
+
+				}
+
+			}
+
 			otherEndpointTypeFound := false
 
 			if v, ok := egressRulesMapStrToI["any"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
@@ -644,7 +720,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				otherEndpointTypeFound = true
 
 				if v.(bool) {
-					otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_Any{}
+					otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Any{}
 					otherEndpointInt.Any = &ves_io_schema.Empty{}
 					egressRules[i].OtherEndpoint = otherEndpointInt
 				}
@@ -656,7 +732,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				otherEndpointTypeFound = true
 
 				if v.(bool) {
-					otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_InsideEndpoints{}
+					otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_InsideEndpoints{}
 					otherEndpointInt.InsideEndpoints = &ves_io_schema.Empty{}
 					egressRules[i].OtherEndpoint = otherEndpointInt
 				}
@@ -666,7 +742,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 			if v, ok := egressRulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
 
 				otherEndpointTypeFound = true
-				otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_IpPrefixSet{}
+				otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_IpPrefixSet{}
 				otherEndpointInt.IpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
 				egressRules[i].OtherEndpoint = otherEndpointInt
 
@@ -713,7 +789,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 			if v, ok := egressRulesMapStrToI["label_selector"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
 
 				otherEndpointTypeFound = true
-				otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_LabelSelector{}
+				otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_LabelSelector{}
 				otherEndpointInt.LabelSelector = &ves_io_schema.LabelSelectorType{}
 				egressRules[i].OtherEndpoint = otherEndpointInt
 
@@ -738,7 +814,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 			if v, ok := egressRulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
 
 				otherEndpointTypeFound = true
-				otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_Namespace{}
+				otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Namespace{}
 
 				egressRules[i].OtherEndpoint = otherEndpointInt
 
@@ -751,7 +827,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				otherEndpointTypeFound = true
 
 				if v.(bool) {
-					otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_OutsideEndpoints{}
+					otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_OutsideEndpoints{}
 					otherEndpointInt.OutsideEndpoints = &ves_io_schema.Empty{}
 					egressRules[i].OtherEndpoint = otherEndpointInt
 				}
@@ -761,7 +837,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 			if v, ok := egressRulesMapStrToI["prefix_list"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
 
 				otherEndpointTypeFound = true
-				otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_PrefixList{}
+				otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_PrefixList{}
 				otherEndpointInt.PrefixList = &ves_io_schema_views.PrefixStringListType{}
 				egressRules[i].OtherEndpoint = otherEndpointInt
 
@@ -798,7 +874,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				trafficChoiceTypeFound = true
 
 				if v.(bool) {
-					trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_AllTcpTraffic{}
+					trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllTcpTraffic{}
 					trafficChoiceInt.AllTcpTraffic = &ves_io_schema.Empty{}
 					egressRules[i].TrafficChoice = trafficChoiceInt
 				}
@@ -810,7 +886,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				trafficChoiceTypeFound = true
 
 				if v.(bool) {
-					trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_AllTraffic{}
+					trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllTraffic{}
 					trafficChoiceInt.AllTraffic = &ves_io_schema.Empty{}
 					egressRules[i].TrafficChoice = trafficChoiceInt
 				}
@@ -822,7 +898,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				trafficChoiceTypeFound = true
 
 				if v.(bool) {
-					trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_AllUdpTraffic{}
+					trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllUdpTraffic{}
 					trafficChoiceInt.AllUdpTraffic = &ves_io_schema.Empty{}
 					egressRules[i].TrafficChoice = trafficChoiceInt
 				}
@@ -832,8 +908,8 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 			if v, ok := egressRulesMapStrToI["applications"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
 
 				trafficChoiceTypeFound = true
-				trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_Applications{}
-				trafficChoiceInt.Applications = &ves_io_schema_views_network_policy_view.ApplicationsType{}
+				trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Applications{}
+				trafficChoiceInt.Applications = &ves_io_schema_network_policy.ApplicationsType{}
 				egressRules[i].TrafficChoice = trafficChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -842,9 +918,9 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 					if v, ok := cs["applications"]; ok && !isIntfNil(v) {
 
-						applicationsList := []ves_io_schema_views_network_policy_view.ApplicationEnumType{}
+						applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
 						for _, j := range v.([]interface{}) {
-							applicationsList = append(applicationsList, ves_io_schema_views_network_policy_view.ApplicationEnumType(ves_io_schema_views_network_policy_view.ApplicationEnumType_value[j.(string)]))
+							applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
 						}
 						trafficChoiceInt.Applications.Applications = applicationsList
 
@@ -857,8 +933,8 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 			if v, ok := egressRulesMapStrToI["protocol_port_range"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
 
 				trafficChoiceTypeFound = true
-				trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_ProtocolPortRange{}
-				trafficChoiceInt.ProtocolPortRange = &ves_io_schema_views_network_policy_view.ProtocolPortType{}
+				trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_ProtocolPortRange{}
+				trafficChoiceInt.ProtocolPortRange = &ves_io_schema_network_policy.ProtocolPortType{}
 				egressRules[i].TrafficChoice = trafficChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -891,7 +967,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 	if v, ok := d.GetOk("endpoint"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
-		endpoint := &ves_io_schema_views_network_policy_view.EndpointChoiceType{}
+		endpoint := &ves_io_schema_network_policy.EndpointChoiceType{}
 		createSpec.Endpoint = endpoint
 		for _, set := range sl {
 
@@ -904,7 +980,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				endpointChoiceTypeFound = true
 
 				if v.(bool) {
-					endpointChoiceInt := &ves_io_schema_views_network_policy_view.EndpointChoiceType_Any{}
+					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Any{}
 					endpointChoiceInt.Any = &ves_io_schema.Empty{}
 					endpoint.EndpointChoice = endpointChoiceInt
 				}
@@ -916,7 +992,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				endpointChoiceTypeFound = true
 
 				if v.(bool) {
-					endpointChoiceInt := &ves_io_schema_views_network_policy_view.EndpointChoiceType_InsideEndpoints{}
+					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_InsideEndpoints{}
 					endpointChoiceInt.InsideEndpoints = &ves_io_schema.Empty{}
 					endpoint.EndpointChoice = endpointChoiceInt
 				}
@@ -926,7 +1002,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 			if v, ok := endpointMapStrToI["interface"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
 
 				endpointChoiceTypeFound = true
-				endpointChoiceInt := &ves_io_schema_views_network_policy_view.EndpointChoiceType_Interface{}
+				endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Interface{}
 				endpointChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
 				endpoint.EndpointChoice = endpointChoiceInt
 
@@ -956,7 +1032,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 			if v, ok := endpointMapStrToI["label_selector"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
 
 				endpointChoiceTypeFound = true
-				endpointChoiceInt := &ves_io_schema_views_network_policy_view.EndpointChoiceType_LabelSelector{}
+				endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_LabelSelector{}
 				endpointChoiceInt.LabelSelector = &ves_io_schema.LabelSelectorType{}
 				endpoint.EndpointChoice = endpointChoiceInt
 
@@ -981,7 +1057,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 			if v, ok := endpointMapStrToI["namespace"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
 
 				endpointChoiceTypeFound = true
-				endpointChoiceInt := &ves_io_schema_views_network_policy_view.EndpointChoiceType_Namespace{}
+				endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Namespace{}
 
 				endpoint.EndpointChoice = endpointChoiceInt
 
@@ -994,7 +1070,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				endpointChoiceTypeFound = true
 
 				if v.(bool) {
-					endpointChoiceInt := &ves_io_schema_views_network_policy_view.EndpointChoiceType_OutsideEndpoints{}
+					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_OutsideEndpoints{}
 					endpointChoiceInt.OutsideEndpoints = &ves_io_schema.Empty{}
 					endpoint.EndpointChoice = endpointChoiceInt
 				}
@@ -1004,7 +1080,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 			if v, ok := endpointMapStrToI["prefix_list"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
 
 				endpointChoiceTypeFound = true
-				endpointChoiceInt := &ves_io_schema_views_network_policy_view.EndpointChoiceType_PrefixList{}
+				endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_PrefixList{}
 				endpointChoiceInt.PrefixList = &ves_io_schema_views.PrefixStringListType{}
 				endpoint.EndpointChoice = endpointChoiceInt
 
@@ -1033,10 +1109,10 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 	if v, ok := d.GetOk("ingress_rules"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
-		ingressRules := make([]*ves_io_schema_views_network_policy_view.NetworkPolicyRuleType, len(sl))
+		ingressRules := make([]*ves_io_schema_network_policy.NetworkPolicyRuleType, len(sl))
 		createSpec.IngressRules = ingressRules
 		for i, set := range sl {
-			ingressRules[i] = &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType{}
+			ingressRules[i] = &ves_io_schema_network_policy.NetworkPolicyRuleType{}
 
 			ingressRulesMapStrToI := set.(map[string]interface{})
 
@@ -1054,6 +1130,31 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				ingressRules[i].Keys = ls
 			}
 
+			if v, ok := ingressRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				metadata := &ves_io_schema.MessageMetaType{}
+				ingressRules[i].Metadata = metadata
+				for _, set := range sl {
+
+					metadataMapStrToI := set.(map[string]interface{})
+
+					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+						metadata.Description = w.(string)
+					}
+
+					if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+						metadata.Disable = w.(bool)
+					}
+
+					if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+						metadata.Name = w.(string)
+					}
+
+				}
+
+			}
+
 			otherEndpointTypeFound := false
 
 			if v, ok := ingressRulesMapStrToI["any"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
@@ -1061,7 +1162,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				otherEndpointTypeFound = true
 
 				if v.(bool) {
-					otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_Any{}
+					otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Any{}
 					otherEndpointInt.Any = &ves_io_schema.Empty{}
 					ingressRules[i].OtherEndpoint = otherEndpointInt
 				}
@@ -1073,7 +1174,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				otherEndpointTypeFound = true
 
 				if v.(bool) {
-					otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_InsideEndpoints{}
+					otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_InsideEndpoints{}
 					otherEndpointInt.InsideEndpoints = &ves_io_schema.Empty{}
 					ingressRules[i].OtherEndpoint = otherEndpointInt
 				}
@@ -1083,7 +1184,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 			if v, ok := ingressRulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
 
 				otherEndpointTypeFound = true
-				otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_IpPrefixSet{}
+				otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_IpPrefixSet{}
 				otherEndpointInt.IpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
 				ingressRules[i].OtherEndpoint = otherEndpointInt
 
@@ -1130,7 +1231,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 			if v, ok := ingressRulesMapStrToI["label_selector"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
 
 				otherEndpointTypeFound = true
-				otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_LabelSelector{}
+				otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_LabelSelector{}
 				otherEndpointInt.LabelSelector = &ves_io_schema.LabelSelectorType{}
 				ingressRules[i].OtherEndpoint = otherEndpointInt
 
@@ -1155,7 +1256,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 			if v, ok := ingressRulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
 
 				otherEndpointTypeFound = true
-				otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_Namespace{}
+				otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Namespace{}
 
 				ingressRules[i].OtherEndpoint = otherEndpointInt
 
@@ -1168,7 +1269,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				otherEndpointTypeFound = true
 
 				if v.(bool) {
-					otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_OutsideEndpoints{}
+					otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_OutsideEndpoints{}
 					otherEndpointInt.OutsideEndpoints = &ves_io_schema.Empty{}
 					ingressRules[i].OtherEndpoint = otherEndpointInt
 				}
@@ -1178,7 +1279,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 			if v, ok := ingressRulesMapStrToI["prefix_list"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
 
 				otherEndpointTypeFound = true
-				otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_PrefixList{}
+				otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_PrefixList{}
 				otherEndpointInt.PrefixList = &ves_io_schema_views.PrefixStringListType{}
 				ingressRules[i].OtherEndpoint = otherEndpointInt
 
@@ -1215,7 +1316,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				trafficChoiceTypeFound = true
 
 				if v.(bool) {
-					trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_AllTcpTraffic{}
+					trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllTcpTraffic{}
 					trafficChoiceInt.AllTcpTraffic = &ves_io_schema.Empty{}
 					ingressRules[i].TrafficChoice = trafficChoiceInt
 				}
@@ -1227,7 +1328,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				trafficChoiceTypeFound = true
 
 				if v.(bool) {
-					trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_AllTraffic{}
+					trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllTraffic{}
 					trafficChoiceInt.AllTraffic = &ves_io_schema.Empty{}
 					ingressRules[i].TrafficChoice = trafficChoiceInt
 				}
@@ -1239,7 +1340,7 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 				trafficChoiceTypeFound = true
 
 				if v.(bool) {
-					trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_AllUdpTraffic{}
+					trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllUdpTraffic{}
 					trafficChoiceInt.AllUdpTraffic = &ves_io_schema.Empty{}
 					ingressRules[i].TrafficChoice = trafficChoiceInt
 				}
@@ -1249,8 +1350,8 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 			if v, ok := ingressRulesMapStrToI["applications"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
 
 				trafficChoiceTypeFound = true
-				trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_Applications{}
-				trafficChoiceInt.Applications = &ves_io_schema_views_network_policy_view.ApplicationsType{}
+				trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Applications{}
+				trafficChoiceInt.Applications = &ves_io_schema_network_policy.ApplicationsType{}
 				ingressRules[i].TrafficChoice = trafficChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -1259,9 +1360,9 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 					if v, ok := cs["applications"]; ok && !isIntfNil(v) {
 
-						applicationsList := []ves_io_schema_views_network_policy_view.ApplicationEnumType{}
+						applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
 						for _, j := range v.([]interface{}) {
-							applicationsList = append(applicationsList, ves_io_schema_views_network_policy_view.ApplicationEnumType(ves_io_schema_views_network_policy_view.ApplicationEnumType_value[j.(string)]))
+							applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
 						}
 						trafficChoiceInt.Applications.Applications = applicationsList
 
@@ -1274,8 +1375,8 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 			if v, ok := ingressRulesMapStrToI["protocol_port_range"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
 
 				trafficChoiceTypeFound = true
-				trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_ProtocolPortRange{}
-				trafficChoiceInt.ProtocolPortRange = &ves_io_schema_views_network_policy_view.ProtocolPortType{}
+				trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_ProtocolPortRange{}
+				trafficChoiceInt.ProtocolPortRange = &ves_io_schema_network_policy.ProtocolPortType{}
 				ingressRules[i].TrafficChoice = trafficChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -1406,10 +1507,10 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 	if v, ok := d.GetOk("egress_rules"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
-		egressRules := make([]*ves_io_schema_views_network_policy_view.NetworkPolicyRuleType, len(sl))
+		egressRules := make([]*ves_io_schema_network_policy.NetworkPolicyRuleType, len(sl))
 		updateSpec.EgressRules = egressRules
 		for i, set := range sl {
-			egressRules[i] = &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType{}
+			egressRules[i] = &ves_io_schema_network_policy.NetworkPolicyRuleType{}
 
 			egressRulesMapStrToI := set.(map[string]interface{})
 
@@ -1427,6 +1528,31 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				egressRules[i].Keys = ls
 			}
 
+			if v, ok := egressRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				metadata := &ves_io_schema.MessageMetaType{}
+				egressRules[i].Metadata = metadata
+				for _, set := range sl {
+
+					metadataMapStrToI := set.(map[string]interface{})
+
+					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+						metadata.Description = w.(string)
+					}
+
+					if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+						metadata.Disable = w.(bool)
+					}
+
+					if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+						metadata.Name = w.(string)
+					}
+
+				}
+
+			}
+
 			otherEndpointTypeFound := false
 
 			if v, ok := egressRulesMapStrToI["any"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
@@ -1434,7 +1560,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				otherEndpointTypeFound = true
 
 				if v.(bool) {
-					otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_Any{}
+					otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Any{}
 					otherEndpointInt.Any = &ves_io_schema.Empty{}
 					egressRules[i].OtherEndpoint = otherEndpointInt
 				}
@@ -1446,7 +1572,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				otherEndpointTypeFound = true
 
 				if v.(bool) {
-					otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_InsideEndpoints{}
+					otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_InsideEndpoints{}
 					otherEndpointInt.InsideEndpoints = &ves_io_schema.Empty{}
 					egressRules[i].OtherEndpoint = otherEndpointInt
 				}
@@ -1456,7 +1582,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 			if v, ok := egressRulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
 
 				otherEndpointTypeFound = true
-				otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_IpPrefixSet{}
+				otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_IpPrefixSet{}
 				otherEndpointInt.IpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
 				egressRules[i].OtherEndpoint = otherEndpointInt
 
@@ -1503,7 +1629,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 			if v, ok := egressRulesMapStrToI["label_selector"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
 
 				otherEndpointTypeFound = true
-				otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_LabelSelector{}
+				otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_LabelSelector{}
 				otherEndpointInt.LabelSelector = &ves_io_schema.LabelSelectorType{}
 				egressRules[i].OtherEndpoint = otherEndpointInt
 
@@ -1528,7 +1654,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 			if v, ok := egressRulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
 
 				otherEndpointTypeFound = true
-				otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_Namespace{}
+				otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Namespace{}
 
 				egressRules[i].OtherEndpoint = otherEndpointInt
 
@@ -1541,7 +1667,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				otherEndpointTypeFound = true
 
 				if v.(bool) {
-					otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_OutsideEndpoints{}
+					otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_OutsideEndpoints{}
 					otherEndpointInt.OutsideEndpoints = &ves_io_schema.Empty{}
 					egressRules[i].OtherEndpoint = otherEndpointInt
 				}
@@ -1551,7 +1677,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 			if v, ok := egressRulesMapStrToI["prefix_list"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
 
 				otherEndpointTypeFound = true
-				otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_PrefixList{}
+				otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_PrefixList{}
 				otherEndpointInt.PrefixList = &ves_io_schema_views.PrefixStringListType{}
 				egressRules[i].OtherEndpoint = otherEndpointInt
 
@@ -1588,7 +1714,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				trafficChoiceTypeFound = true
 
 				if v.(bool) {
-					trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_AllTcpTraffic{}
+					trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllTcpTraffic{}
 					trafficChoiceInt.AllTcpTraffic = &ves_io_schema.Empty{}
 					egressRules[i].TrafficChoice = trafficChoiceInt
 				}
@@ -1600,7 +1726,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				trafficChoiceTypeFound = true
 
 				if v.(bool) {
-					trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_AllTraffic{}
+					trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllTraffic{}
 					trafficChoiceInt.AllTraffic = &ves_io_schema.Empty{}
 					egressRules[i].TrafficChoice = trafficChoiceInt
 				}
@@ -1612,7 +1738,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				trafficChoiceTypeFound = true
 
 				if v.(bool) {
-					trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_AllUdpTraffic{}
+					trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllUdpTraffic{}
 					trafficChoiceInt.AllUdpTraffic = &ves_io_schema.Empty{}
 					egressRules[i].TrafficChoice = trafficChoiceInt
 				}
@@ -1622,8 +1748,8 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 			if v, ok := egressRulesMapStrToI["applications"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
 
 				trafficChoiceTypeFound = true
-				trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_Applications{}
-				trafficChoiceInt.Applications = &ves_io_schema_views_network_policy_view.ApplicationsType{}
+				trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Applications{}
+				trafficChoiceInt.Applications = &ves_io_schema_network_policy.ApplicationsType{}
 				egressRules[i].TrafficChoice = trafficChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -1632,9 +1758,9 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 					if v, ok := cs["applications"]; ok && !isIntfNil(v) {
 
-						applicationsList := []ves_io_schema_views_network_policy_view.ApplicationEnumType{}
+						applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
 						for _, j := range v.([]interface{}) {
-							applicationsList = append(applicationsList, ves_io_schema_views_network_policy_view.ApplicationEnumType(ves_io_schema_views_network_policy_view.ApplicationEnumType_value[j.(string)]))
+							applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
 						}
 						trafficChoiceInt.Applications.Applications = applicationsList
 
@@ -1647,8 +1773,8 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 			if v, ok := egressRulesMapStrToI["protocol_port_range"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
 
 				trafficChoiceTypeFound = true
-				trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_ProtocolPortRange{}
-				trafficChoiceInt.ProtocolPortRange = &ves_io_schema_views_network_policy_view.ProtocolPortType{}
+				trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_ProtocolPortRange{}
+				trafficChoiceInt.ProtocolPortRange = &ves_io_schema_network_policy.ProtocolPortType{}
 				egressRules[i].TrafficChoice = trafficChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -1681,7 +1807,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 	if v, ok := d.GetOk("endpoint"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
-		endpoint := &ves_io_schema_views_network_policy_view.EndpointChoiceType{}
+		endpoint := &ves_io_schema_network_policy.EndpointChoiceType{}
 		updateSpec.Endpoint = endpoint
 		for _, set := range sl {
 
@@ -1694,7 +1820,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				endpointChoiceTypeFound = true
 
 				if v.(bool) {
-					endpointChoiceInt := &ves_io_schema_views_network_policy_view.EndpointChoiceType_Any{}
+					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Any{}
 					endpointChoiceInt.Any = &ves_io_schema.Empty{}
 					endpoint.EndpointChoice = endpointChoiceInt
 				}
@@ -1706,7 +1832,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				endpointChoiceTypeFound = true
 
 				if v.(bool) {
-					endpointChoiceInt := &ves_io_schema_views_network_policy_view.EndpointChoiceType_InsideEndpoints{}
+					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_InsideEndpoints{}
 					endpointChoiceInt.InsideEndpoints = &ves_io_schema.Empty{}
 					endpoint.EndpointChoice = endpointChoiceInt
 				}
@@ -1716,7 +1842,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 			if v, ok := endpointMapStrToI["interface"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
 
 				endpointChoiceTypeFound = true
-				endpointChoiceInt := &ves_io_schema_views_network_policy_view.EndpointChoiceType_Interface{}
+				endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Interface{}
 				endpointChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
 				endpoint.EndpointChoice = endpointChoiceInt
 
@@ -1746,7 +1872,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 			if v, ok := endpointMapStrToI["label_selector"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
 
 				endpointChoiceTypeFound = true
-				endpointChoiceInt := &ves_io_schema_views_network_policy_view.EndpointChoiceType_LabelSelector{}
+				endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_LabelSelector{}
 				endpointChoiceInt.LabelSelector = &ves_io_schema.LabelSelectorType{}
 				endpoint.EndpointChoice = endpointChoiceInt
 
@@ -1771,7 +1897,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 			if v, ok := endpointMapStrToI["namespace"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
 
 				endpointChoiceTypeFound = true
-				endpointChoiceInt := &ves_io_schema_views_network_policy_view.EndpointChoiceType_Namespace{}
+				endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Namespace{}
 
 				endpoint.EndpointChoice = endpointChoiceInt
 
@@ -1784,7 +1910,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				endpointChoiceTypeFound = true
 
 				if v.(bool) {
-					endpointChoiceInt := &ves_io_schema_views_network_policy_view.EndpointChoiceType_OutsideEndpoints{}
+					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_OutsideEndpoints{}
 					endpointChoiceInt.OutsideEndpoints = &ves_io_schema.Empty{}
 					endpoint.EndpointChoice = endpointChoiceInt
 				}
@@ -1794,7 +1920,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 			if v, ok := endpointMapStrToI["prefix_list"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
 
 				endpointChoiceTypeFound = true
-				endpointChoiceInt := &ves_io_schema_views_network_policy_view.EndpointChoiceType_PrefixList{}
+				endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_PrefixList{}
 				endpointChoiceInt.PrefixList = &ves_io_schema_views.PrefixStringListType{}
 				endpoint.EndpointChoice = endpointChoiceInt
 
@@ -1823,10 +1949,10 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 	if v, ok := d.GetOk("ingress_rules"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
-		ingressRules := make([]*ves_io_schema_views_network_policy_view.NetworkPolicyRuleType, len(sl))
+		ingressRules := make([]*ves_io_schema_network_policy.NetworkPolicyRuleType, len(sl))
 		updateSpec.IngressRules = ingressRules
 		for i, set := range sl {
-			ingressRules[i] = &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType{}
+			ingressRules[i] = &ves_io_schema_network_policy.NetworkPolicyRuleType{}
 
 			ingressRulesMapStrToI := set.(map[string]interface{})
 
@@ -1844,6 +1970,31 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				ingressRules[i].Keys = ls
 			}
 
+			if v, ok := ingressRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				metadata := &ves_io_schema.MessageMetaType{}
+				ingressRules[i].Metadata = metadata
+				for _, set := range sl {
+
+					metadataMapStrToI := set.(map[string]interface{})
+
+					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+						metadata.Description = w.(string)
+					}
+
+					if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+						metadata.Disable = w.(bool)
+					}
+
+					if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+						metadata.Name = w.(string)
+					}
+
+				}
+
+			}
+
 			otherEndpointTypeFound := false
 
 			if v, ok := ingressRulesMapStrToI["any"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
@@ -1851,7 +2002,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				otherEndpointTypeFound = true
 
 				if v.(bool) {
-					otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_Any{}
+					otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Any{}
 					otherEndpointInt.Any = &ves_io_schema.Empty{}
 					ingressRules[i].OtherEndpoint = otherEndpointInt
 				}
@@ -1863,7 +2014,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				otherEndpointTypeFound = true
 
 				if v.(bool) {
-					otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_InsideEndpoints{}
+					otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_InsideEndpoints{}
 					otherEndpointInt.InsideEndpoints = &ves_io_schema.Empty{}
 					ingressRules[i].OtherEndpoint = otherEndpointInt
 				}
@@ -1873,7 +2024,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 			if v, ok := ingressRulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
 
 				otherEndpointTypeFound = true
-				otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_IpPrefixSet{}
+				otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_IpPrefixSet{}
 				otherEndpointInt.IpPrefixSet = &ves_io_schema.IpPrefixSetRefType{}
 				ingressRules[i].OtherEndpoint = otherEndpointInt
 
@@ -1920,7 +2071,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 			if v, ok := ingressRulesMapStrToI["label_selector"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
 
 				otherEndpointTypeFound = true
-				otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_LabelSelector{}
+				otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_LabelSelector{}
 				otherEndpointInt.LabelSelector = &ves_io_schema.LabelSelectorType{}
 				ingressRules[i].OtherEndpoint = otherEndpointInt
 
@@ -1945,7 +2096,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 			if v, ok := ingressRulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
 
 				otherEndpointTypeFound = true
-				otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_Namespace{}
+				otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Namespace{}
 
 				ingressRules[i].OtherEndpoint = otherEndpointInt
 
@@ -1958,7 +2109,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				otherEndpointTypeFound = true
 
 				if v.(bool) {
-					otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_OutsideEndpoints{}
+					otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_OutsideEndpoints{}
 					otherEndpointInt.OutsideEndpoints = &ves_io_schema.Empty{}
 					ingressRules[i].OtherEndpoint = otherEndpointInt
 				}
@@ -1968,7 +2119,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 			if v, ok := ingressRulesMapStrToI["prefix_list"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
 
 				otherEndpointTypeFound = true
-				otherEndpointInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_PrefixList{}
+				otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_PrefixList{}
 				otherEndpointInt.PrefixList = &ves_io_schema_views.PrefixStringListType{}
 				ingressRules[i].OtherEndpoint = otherEndpointInt
 
@@ -2005,7 +2156,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				trafficChoiceTypeFound = true
 
 				if v.(bool) {
-					trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_AllTcpTraffic{}
+					trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllTcpTraffic{}
 					trafficChoiceInt.AllTcpTraffic = &ves_io_schema.Empty{}
 					ingressRules[i].TrafficChoice = trafficChoiceInt
 				}
@@ -2017,7 +2168,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				trafficChoiceTypeFound = true
 
 				if v.(bool) {
-					trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_AllTraffic{}
+					trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllTraffic{}
 					trafficChoiceInt.AllTraffic = &ves_io_schema.Empty{}
 					ingressRules[i].TrafficChoice = trafficChoiceInt
 				}
@@ -2029,7 +2180,7 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 				trafficChoiceTypeFound = true
 
 				if v.(bool) {
-					trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_AllUdpTraffic{}
+					trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_AllUdpTraffic{}
 					trafficChoiceInt.AllUdpTraffic = &ves_io_schema.Empty{}
 					ingressRules[i].TrafficChoice = trafficChoiceInt
 				}
@@ -2039,8 +2190,8 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 			if v, ok := ingressRulesMapStrToI["applications"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
 
 				trafficChoiceTypeFound = true
-				trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_Applications{}
-				trafficChoiceInt.Applications = &ves_io_schema_views_network_policy_view.ApplicationsType{}
+				trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Applications{}
+				trafficChoiceInt.Applications = &ves_io_schema_network_policy.ApplicationsType{}
 				ingressRules[i].TrafficChoice = trafficChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -2049,9 +2200,9 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 					if v, ok := cs["applications"]; ok && !isIntfNil(v) {
 
-						applicationsList := []ves_io_schema_views_network_policy_view.ApplicationEnumType{}
+						applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
 						for _, j := range v.([]interface{}) {
-							applicationsList = append(applicationsList, ves_io_schema_views_network_policy_view.ApplicationEnumType(ves_io_schema_views_network_policy_view.ApplicationEnumType_value[j.(string)]))
+							applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
 						}
 						trafficChoiceInt.Applications.Applications = applicationsList
 
@@ -2064,8 +2215,8 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 			if v, ok := ingressRulesMapStrToI["protocol_port_range"]; ok && !isIntfNil(v) && !trafficChoiceTypeFound {
 
 				trafficChoiceTypeFound = true
-				trafficChoiceInt := &ves_io_schema_views_network_policy_view.NetworkPolicyRuleType_ProtocolPortRange{}
-				trafficChoiceInt.ProtocolPortRange = &ves_io_schema_views_network_policy_view.ProtocolPortType{}
+				trafficChoiceInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_ProtocolPortRange{}
+				trafficChoiceInt.ProtocolPortRange = &ves_io_schema_network_policy.ProtocolPortType{}
 				ingressRules[i].TrafficChoice = trafficChoiceInt
 
 				sl := v.(*schema.Set).List()

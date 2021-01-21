@@ -21,12 +21,52 @@ resource "volterra_route" "example" {
   namespace = "staging"
 
   routes {
+    disable_custom_script = true
+    disable_location_add  = true
+
+    match {
+      headers {
+        invert_match = true
+        name         = "Content-Type"
+
+        // One of the arguments from this list "exact regex presence" must be set
+        regex = "regex"
+      }
+
+      http_method = "http_method"
+
+      path {
+        // One of the arguments from this list "prefix path regex" must be set
+        prefix = "prefix"
+      }
+
+      query_params {
+        key = "assignee_username"
+
+        // One of the arguments from this list "exact regex" must be set
+        exact = "exact"
+      }
+    }
+
+    request_headers_to_add {
+      append = true
+      name   = "name"
+      value  = "value"
+    }
+
+    request_headers_to_remove = ["host"]
+
+    response_headers_to_add {
+      append = true
+      name   = "name"
+      value  = "value"
+    }
+
+    response_headers_to_remove = ["host"]
+
     // One of the arguments from this list "route_destination route_redirect route_direct_response" must be set
 
     route_destination {
-      // One of the arguments from this list "host_rewrite auto_host_rewrite" must be set
-      host_rewrite = "one.volterra.com"
-
       buffer_policy {
         disabled          = true
         max_request_bytes = "2048"
@@ -72,6 +112,9 @@ resource "volterra_route" "example" {
         terminal = true
       }
 
+      // One of the arguments from this list "host_rewrite auto_host_rewrite" must be set
+      host_rewrite = "one.volterra.com"
+
       mirror_policy {
         cluster {
           name      = "test1"
@@ -113,56 +156,11 @@ resource "volterra_route" "example" {
         use_websocket        = true
       }
     }
-
-    disable_custom_script = true
-    disable_location_add  = true
-
-    match {
-      headers {
-        invert_match = true
-        name         = "Content-Type"
-
-        // One of the arguments from this list "exact regex presence" must be set
-        exact = "application/json"
-      }
-
-      http_method = "http_method"
-
-      path {
-        // One of the arguments from this list "prefix path regex" must be set
-        prefix = "prefix"
-      }
-
-      query_params {
-        key = "assignee_username"
-
-        // One of the arguments from this list "exact regex" must be set
-        exact = "exact"
-      }
-    }
-
-    request_headers_to_add {
-      append = true
-      name   = "name"
-      value  = "value"
-    }
-
-    request_headers_to_remove = ["host"]
-
-    response_headers_to_add {
-      append = true
-      name   = "name"
-      value  = "value"
-    }
-
-    response_headers_to_remove = ["host"]
-
     service_policy {
       disable = true
     }
-
     waf_type {
-      // One of the arguments from this list "waf_rules waf" must be set
+      // One of the arguments from this list "waf waf_rules" must be set
 
       waf {
         waf {
@@ -388,10 +386,6 @@ Indicates that the route has a retry policy..
 
 Send request to one of the destination from list of destinations.
 
-`auto_host_rewrite` - (Optional) of the upstream host chosen by the cluster (`Bool`).
-
-`host_rewrite` - (Optional) Indicates that during forwarding, the host header will be swapped with this value (`String`).
-
 `buffer_policy` - (Optional) Route level buffer configuration overrides any configuration at VirtualHost level.. See [Buffer Policy ](#buffer-policy) below for details.
 
 `cors_policy` - (Optional) resources from a server at a different origin. See [Cors Policy ](#cors-policy) below for details.
@@ -401,6 +395,10 @@ Send request to one of the destination from list of destinations.
 `endpoint_subsets` - (Optional) upstream cluster which match this metadata will be selected for load balancing (`String`).
 
 `hash_policy` - (Optional) route the request. See [Hash Policy ](#hash-policy) below for details.
+
+`auto_host_rewrite` - (Optional) of the upstream host chosen by the cluster (`Bool`).
+
+`host_rewrite` - (Optional) Indicates that during forwarding, the host header will be swapped with this value (`String`).
 
 `mirror_policy` - (Optional) useful for logging. For example, *cluster1* becomes *cluster1-shadow*.. See [Mirror Policy ](#mirror-policy) below for details.
 
@@ -428,6 +426,12 @@ Send direct response.
 
 Send redirect response.
 
+`host_redirect` - (Optional) swap host part of incoming URL in redirect URL (`String`).
+
+`path_redirect` - (Optional) swap path part of incoming URL in redirect URL (`String`).
+
+`proto_redirect` - (Optional)swap proto part of incoming URL in redirect URL (`String`).
+
 `all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).
 
 `remove_all_params` - (Optional) Remove all query parameters (bool).
@@ -436,23 +440,11 @@ Send redirect response.
 
 `strip_query_params` - (Optional) Specifies the list of query params to be removed. Not supported. See [Strip Query Params ](#strip-query-params) below for details.
 
-`host_redirect` - (Optional) swap host part of incoming URL in redirect URL (`String`).
-
-`path_redirect` - (Optional) swap path part of incoming URL in redirect URL (`String`).
-
-`proto_redirect` - (Optional)swap proto part of incoming URL in redirect URL (`String`).
-
 `response_code` - (Optional) code is MOVED_PERMANENTLY (301). (`Int`).
 
 ### Routes
 
 List of routes to match for incoming request.
-
-`route_destination` - (Optional) Send request to one of the destination from list of destinations. See [Route Destination ](#route-destination) below for details.
-
-`route_direct_response` - (Optional) Send direct response. See [Route Direct Response ](#route-direct-response) below for details.
-
-`route_redirect` - (Optional) Send redirect response. See [Route Redirect ](#route-redirect) below for details.
 
 `disable_custom_script` - (Optional) disable execution of Javascript at route level, if it is configured at virtual-host level (`Bool`).
 
@@ -467,6 +459,12 @@ List of routes to match for incoming request.
 `response_headers_to_add` - (Optional) enclosing VirtualHost object level. See [Response Headers To Add ](#response-headers-to-add) below for details.
 
 `response_headers_to_remove` - (Optional) List of keys of Headers to be removed from the HTTP response being sent towards downstream. (`String`).
+
+`route_destination` - (Optional) Send request to one of the destination from list of destinations. See [Route Destination ](#route-destination) below for details.
+
+`route_direct_response` - (Optional) Send direct response. See [Route Direct Response ](#route-direct-response) below for details.
+
+`route_redirect` - (Optional) Send redirect response. See [Route Redirect ](#route-redirect) below for details.
 
 `service_policy` - (Optional) service policy configuration at route level which overrides configuration at virtual-host level. See [Service Policy ](#service-policy) below for details.
 

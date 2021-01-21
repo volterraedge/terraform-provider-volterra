@@ -489,8 +489,8 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		namespace = rReq.Metadata.Namespace
-		name = rReq.Metadata.Name
+		namespace = rReq.GetMetadata().GetNamespace()
+		name = rReq.GetMetadata().GetName()
 	} else {
 		jsn = cco.ReplaceJSONReq
 		reqMap := make(map[string]interface{})
@@ -1105,8 +1105,11 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.registration.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.registration.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1158,8 +1161,11 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.registration.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.registration.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1273,8 +1279,11 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.registration.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.registration.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -1288,6 +1297,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	tenant := server.TenantFromContext(ctx)
 	key := fmt.Sprintf("%s/%s/%s", tenant, req.GetNamespace(), req.GetName())
 	rsrcReq := &server.ResourceDeleteRequest{Key: key}
+	rsrcReq.FailIfReferred = req.FailIfReferred
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
@@ -2024,6 +2034,14 @@ var APISwaggerJSON string = `{
                         "in": "path",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/registrationDeleteRequest"
+                        }
                     }
                 ],
                 "tags": [
@@ -2119,6 +2137,36 @@ var APISwaggerJSON string = `{
                     "title": "system metadata",
                     "$ref": "#/definitions/schemaSystemObjectGetMetaType",
                     "x-displayname": "System Metadata"
+                }
+            }
+        },
+        "registrationDeleteRequest": {
+            "type": "object",
+            "description": "This is the input message of the 'Delete' RPC.",
+            "title": "DeleteRequest is used to delete a registration",
+            "x-displayname": "Delete Request",
+            "x-ves-proto-message": "ves.io.schema.registration.DeleteRequest",
+            "properties": {
+                "fail_if_referred": {
+                    "type": "boolean",
+                    "description": " Fail the delete operation if this object is being referred by other objects",
+                    "title": "fail_if_referred",
+                    "format": "boolean",
+                    "x-displayname": "Fail-If-Referred"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the configuration object\n\nExample: - \"name\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the configuration object is present\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
                 }
             }
         },
@@ -2253,6 +2301,13 @@ var APISwaggerJSON string = `{
                     "title": "Provider",
                     "$ref": "#/definitions/registrationProvider",
                     "x-displayname": "Provider"
+                },
+                "timestamp": {
+                    "type": "string",
+                    "description": " It's used to verify machine have acceptable time difference from server",
+                    "title": "Timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Current (machine) time"
                 },
                 "zone": {
                     "type": "string",
@@ -2505,7 +2560,7 @@ var APISwaggerJSON string = `{
                 },
                 "cluster_size": {
                     "type": "integer",
-                    "description": " Defines how many master nodes is in the cluster, only 1 or 3 is allowed\n 1 - cluster have single master, without HA\n 3 - cluster have 3 masters, with HA, all nodes should be allowed at same time, cluster won't start until ALL nodes are ADMITTED\n This value can't be changed after installation.\n It does not interact with auto-scaling as only pool nodes are scaled.\n\nExample: - \"3\"-",
+                    "description": " Defines how many master nodes is in the cluster, only 1 or 3 is allowed\n 1 - cluster have single master, without HA\n 3 - cluster have 3 masters, with HA, all nodes should be allowed at same time, cluster won't start until ALL nodes are ADMITTED\n 0 - same as 1\n This value can't be changed after installation.\n It does not interact with auto-scaling as only pool nodes are scaled.\n\nExample: - \"3\"-",
                     "title": "Cluster size",
                     "format": "int32",
                     "x-displayname": "Cluster Size",
@@ -3521,14 +3576,16 @@ var APISwaggerJSON string = `{
         },
         "siteLinkType": {
             "type": "string",
-            "description": "Link type of interface determined operationally\n\nLink type unknown\nLink type ethernet\nWiFi link of type 802.11ac\nWiFi link of type 802.11bgn\nLink type 4G",
+            "description": "Link type of interface determined operationally\n\nLink type unknown\nLink type ethernet\nWiFi link of type 802.11ac\nWiFi link of type 802.11bgn\nLink type 4G\nWiFi link\nWan link",
             "title": "Link type",
             "enum": [
                 "LINK_TYPE_UNKNOWN",
                 "LINK_TYPE_ETHERNET",
                 "LINK_TYPE_WIFI_802_11AC",
                 "LINK_TYPE_WIFI_802_11BGN",
-                "LINK_TYPE_4G"
+                "LINK_TYPE_4G",
+                "LINK_TYPE_WIFI",
+                "LINK_TYPE_WAN"
             ],
             "default": "LINK_TYPE_UNKNOWN",
             "x-displayname": "Link type",

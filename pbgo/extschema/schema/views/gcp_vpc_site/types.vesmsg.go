@@ -547,6 +547,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
 	rulesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
 		"ves.io.schema.rules.uint32.lte": "21",
 	}
 	vFn, err = vrhNodesPerAz(rulesNodesPerAz)
@@ -3819,6 +3820,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
 	rulesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
 		"ves.io.schema.rules.uint32.lte": "21",
 	}
 	vFn, err = vrhNodesPerAz(rulesNodesPerAz)
@@ -4547,6 +4549,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
 	rulesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
 		"ves.io.schema.rules.uint32.lte": "21",
 	}
 	vFn, err = vrhNodesPerAz(rulesNodesPerAz)
@@ -4749,16 +4752,6 @@ func (v *ValidateReplaceSpecType) SiteTypeValidationRuleHandler(rules map[string
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) NodesPerAzValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for nodes_per_az")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateReplaceSpecType) VolterraSoftwareVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -4816,15 +4809,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["nodes_per_az"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("nodes_per_az"))
-		if err := fv(ctx, m.GetNodesPerAz(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4920,17 +4904,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_type"] = vFn
-
-	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
-	rulesNodesPerAz := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "21",
-	}
-	vFn, err = vrhNodesPerAz(rulesNodesPerAz)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.nodes_per_az: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["nodes_per_az"] = vFn
 
 	vrhVolterraSoftwareVersion := v.VolterraSoftwareVersionValidationRuleHandler
 	rulesVolterraSoftwareVersion := map[string]string{
@@ -5662,7 +5635,6 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	}
 	m.Address = f.GetAddress()
 	m.Coordinates = f.GetCoordinates()
-	m.NodesPerAz = f.GetNodesPerAz()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
@@ -5676,7 +5648,6 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 	f.Address = m1.Address
 	f.Coordinates = m1.Coordinates
-	f.NodesPerAz = m1.NodesPerAz
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion

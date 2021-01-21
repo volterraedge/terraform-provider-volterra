@@ -6,8 +6,10 @@
 
 	It is generated from these files:
 		ves.io/schema/site/object.proto
+		ves.io/schema/site/public_config_kubconfig.proto
 		ves.io/schema/site/public_crudapi.proto
 		ves.io/schema/site/public_customapi.proto
+		ves.io/schema/site/public_uam_kubeconfig.proto
 		ves.io/schema/site/public_upgradeapi.proto
 		ves.io/schema/site/site_status_info.proto
 		ves.io/schema/site/types.proto
@@ -65,31 +67,26 @@
 		USBDevice
 		SiteStatusMetricsFieldData
 		SiteStatusMetricsData
+		GetKubeConfigReq
+		ListKubeConfigReq
+		ListKubeConfigRspItem
+		ListKubeConfigRsp
 */
 package site
 
-import (
-	proto "github.com/gogo/protobuf/proto"
-	golang_proto "github.com/golang/protobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
+import golang_proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 
-	fmt "fmt"
+import strings "strings"
+import reflect "reflect"
 
-	math "math"
-
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal

@@ -3,34 +3,22 @@
 
 package service_policy_set
 
-import (
-	proto "github.com/gogo/protobuf/proto"
-	golang_proto "github.com/golang/protobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
+import golang_proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
+import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 
-	fmt "fmt"
+import strings "strings"
+import reflect "reflect"
 
-	math "math"
-
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
-
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -761,7 +749,7 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 		}
 	}
 	this.Type = ves_io_schema_policy.PolicySetType([]int32{0, 1, 2, 3}[r.Intn(4)])
-	this.DefaultAction = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3}[r.Intn(4)])
+	this.DefaultAction = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
 	if r.Intn(10) != 0 {
 		this.DenyInfo = ves_io_schema_policy.NewPopulatedDenyInformation(r, easy)
 	}
@@ -781,7 +769,7 @@ func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 		}
 	}
 	this.Type = ves_io_schema_policy.PolicySetType([]int32{0, 1, 2, 3}[r.Intn(4)])
-	this.DefaultAction = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3}[r.Intn(4)])
+	this.DefaultAction = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
 	if r.Intn(10) != 0 {
 		this.DenyInfo = ves_io_schema_policy.NewPopulatedDenyInformation(r, easy)
 	}
@@ -801,7 +789,7 @@ func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 		}
 	}
 	this.Type = ves_io_schema_policy.PolicySetType([]int32{0, 1, 2, 3}[r.Intn(4)])
-	this.DefaultAction = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3}[r.Intn(4)])
+	this.DefaultAction = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
 	if r.Intn(10) != 0 {
 		this.DenyInfo = ves_io_schema_policy.NewPopulatedDenyInformation(r, easy)
 	}
@@ -821,7 +809,7 @@ func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 		}
 	}
 	this.Type = ves_io_schema_policy.PolicySetType([]int32{0, 1, 2, 3}[r.Intn(4)])
-	this.DefaultAction = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3}[r.Intn(4)])
+	this.DefaultAction = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
 	if r.Intn(10) != 0 {
 		this.DenyInfo = ves_io_schema_policy.NewPopulatedDenyInformation(r, easy)
 	}

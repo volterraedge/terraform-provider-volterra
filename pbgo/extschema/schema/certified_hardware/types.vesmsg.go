@@ -80,10 +80,10 @@ func (v *ValidateAws) Validate(ctx context.Context, pm interface{}, opts ...db.V
 
 	switch m.GetImage().(type) {
 	case *Aws_ImageId:
-		if fv, exists := v.FldValidators["Image.image_id"]; exists {
+		if fv, exists := v.FldValidators["image.image_id"]; exists {
 			val := m.GetImage().(*Aws_ImageId).ImageId
 			vOpts := append(opts,
-				db.WithValidateField("Image"),
+				db.WithValidateField("image"),
 				db.WithValidateField("image_id"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -251,10 +251,10 @@ func (v *ValidateAzure) Validate(ctx context.Context, pm interface{}, opts ...db
 
 	switch m.GetImage().(type) {
 	case *Azure_Marketplace:
-		if fv, exists := v.FldValidators["Image.marketplace"]; exists {
+		if fv, exists := v.FldValidators["image.marketplace"]; exists {
 			val := m.GetImage().(*Azure_Marketplace).Marketplace
 			vOpts := append(opts,
-				db.WithValidateField("Image"),
+				db.WithValidateField("image"),
 				db.WithValidateField("marketplace"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -262,10 +262,10 @@ func (v *ValidateAzure) Validate(ctx context.Context, pm interface{}, opts ...db
 			}
 		}
 	case *Azure_ImageId:
-		if fv, exists := v.FldValidators["Image.image_id"]; exists {
+		if fv, exists := v.FldValidators["image.image_id"]; exists {
 			val := m.GetImage().(*Azure_ImageId).ImageId
 			vOpts := append(opts,
-				db.WithValidateField("Image"),
+				db.WithValidateField("image"),
 				db.WithValidateField("image_id"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -628,10 +628,10 @@ func (v *ValidateGcp) Validate(ctx context.Context, pm interface{}, opts ...db.V
 
 	switch m.GetImage().(type) {
 	case *Gcp_ImageId:
-		if fv, exists := v.FldValidators["Image.image_id"]; exists {
+		if fv, exists := v.FldValidators["image.image_id"]; exists {
 			val := m.GetImage().(*Gcp_ImageId).ImageId
 			vOpts := append(opts,
-				db.WithValidateField("Image"),
+				db.WithValidateField("image"),
 				db.WithValidateField("image_id"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -1183,10 +1183,10 @@ func (v *ValidateImageType) Validate(ctx context.Context, pm interface{}, opts .
 
 	switch m.GetCloudProvider().(type) {
 	case *ImageType_Azure:
-		if fv, exists := v.FldValidators["CloudProvider.azure"]; exists {
+		if fv, exists := v.FldValidators["cloud_provider.azure"]; exists {
 			val := m.GetCloudProvider().(*ImageType_Azure).Azure
 			vOpts := append(opts,
-				db.WithValidateField("CloudProvider"),
+				db.WithValidateField("cloud_provider"),
 				db.WithValidateField("azure"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -1194,10 +1194,10 @@ func (v *ValidateImageType) Validate(ctx context.Context, pm interface{}, opts .
 			}
 		}
 	case *ImageType_Aws:
-		if fv, exists := v.FldValidators["CloudProvider.aws"]; exists {
+		if fv, exists := v.FldValidators["cloud_provider.aws"]; exists {
 			val := m.GetCloudProvider().(*ImageType_Aws).Aws
 			vOpts := append(opts,
-				db.WithValidateField("CloudProvider"),
+				db.WithValidateField("cloud_provider"),
 				db.WithValidateField("aws"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -1205,10 +1205,10 @@ func (v *ValidateImageType) Validate(ctx context.Context, pm interface{}, opts .
 			}
 		}
 	case *ImageType_Gcp:
-		if fv, exists := v.FldValidators["CloudProvider.gcp"]; exists {
+		if fv, exists := v.FldValidators["cloud_provider.gcp"]; exists {
 			val := m.GetCloudProvider().(*ImageType_Gcp).Gcp
 			vOpts := append(opts,
-				db.WithValidateField("CloudProvider"),
+				db.WithValidateField("cloud_provider"),
 				db.WithValidateField("gcp"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {

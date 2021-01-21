@@ -7,6 +7,7 @@
 	It is generated from these files:
 		ves.io/schema/virtual_k8s/object.proto
 		ves.io/schema/virtual_k8s/public_crudapi.proto
+		ves.io/schema/virtual_k8s/public_custom_data_api.proto
 		ves.io/schema/virtual_k8s/types.proto
 
 	It has these top-level messages:
@@ -23,6 +24,10 @@
 		ListResponseItem
 		ListResponse
 		DeleteRequest
+		PVCMetricsRequest
+		PVCMetricsResponse
+		PVCMetricTypeData
+		PVCMetricData
 		GlobalSpecType
 		CreateSpecType
 		ReplaceSpecType
@@ -30,28 +35,19 @@
 */
 package virtual_k8s
 
-import (
-	proto "github.com/gogo/protobuf/proto"
-	golang_proto "github.com/golang/protobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
+import golang_proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 
-	fmt "fmt"
+import strings "strings"
+import reflect "reflect"
 
-	math "math"
-
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal

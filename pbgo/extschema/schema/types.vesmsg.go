@@ -2734,14 +2734,14 @@ type ValidateHostIdentifier struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateHostIdentifier) HostnameOrIPIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateHostIdentifier) HostnameOrIpIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_Ip, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
 	}
 	return oValidatorFn_Ip, nil
 }
-func (v *ValidateHostIdentifier) HostnameOrIPHostnameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateHostIdentifier) HostnameOrIpHostnameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_Hostname, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for hostname")
@@ -2763,12 +2763,12 @@ func (v *ValidateHostIdentifier) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
-	switch m.GetHostnameOrIP().(type) {
+	switch m.GetHostnameOrIp().(type) {
 	case *HostIdentifier_Ip:
-		if fv, exists := v.FldValidators["HostnameOrIP.ip"]; exists {
-			val := m.GetHostnameOrIP().(*HostIdentifier_Ip).Ip
+		if fv, exists := v.FldValidators["hostname_or_ip.ip"]; exists {
+			val := m.GetHostnameOrIp().(*HostIdentifier_Ip).Ip
 			vOpts := append(opts,
-				db.WithValidateField("HostnameOrIP"),
+				db.WithValidateField("hostname_or_ip"),
 				db.WithValidateField("ip"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -2776,10 +2776,10 @@ func (v *ValidateHostIdentifier) Validate(ctx context.Context, pm interface{}, o
 			}
 		}
 	case *HostIdentifier_Hostname:
-		if fv, exists := v.FldValidators["HostnameOrIP.hostname"]; exists {
-			val := m.GetHostnameOrIP().(*HostIdentifier_Hostname).Hostname
+		if fv, exists := v.FldValidators["hostname_or_ip.hostname"]; exists {
+			val := m.GetHostnameOrIp().(*HostIdentifier_Hostname).Hostname
 			vOpts := append(opts,
-				db.WithValidateField("HostnameOrIP"),
+				db.WithValidateField("hostname_or_ip"),
 				db.WithValidateField("hostname"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -2804,28 +2804,28 @@ var DefaultHostIdentifierValidator = func() *ValidateHostIdentifier {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhHostnameOrIPIp := v.HostnameOrIPIpValidationRuleHandler
-	rulesHostnameOrIPIp := map[string]string{
+	vrhHostnameOrIpIp := v.HostnameOrIpIpValidationRuleHandler
+	rulesHostnameOrIpIp := map[string]string{
 		"ves.io.schema.rules.string.ip": "true",
 	}
-	vFnMap["HostnameOrIP.ip"], err = vrhHostnameOrIPIp(rulesHostnameOrIPIp)
+	vFnMap["hostname_or_ip.ip"], err = vrhHostnameOrIpIp(rulesHostnameOrIpIp)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field HostIdentifier.HostnameOrIP_ip: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field HostIdentifier.hostname_or_ip_ip: %s", err)
 		panic(errMsg)
 	}
-	vrhHostnameOrIPHostname := v.HostnameOrIPHostnameValidationRuleHandler
-	rulesHostnameOrIPHostname := map[string]string{
+	vrhHostnameOrIpHostname := v.HostnameOrIpHostnameValidationRuleHandler
+	rulesHostnameOrIpHostname := map[string]string{
 		"ves.io.schema.rules.string.hostname": "true",
 		"ves.io.schema.rules.string.max_len":  "256",
 	}
-	vFnMap["HostnameOrIP.hostname"], err = vrhHostnameOrIPHostname(rulesHostnameOrIPHostname)
+	vFnMap["hostname_or_ip.hostname"], err = vrhHostnameOrIpHostname(rulesHostnameOrIpHostname)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field HostIdentifier.HostnameOrIP_hostname: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field HostIdentifier.hostname_or_ip_hostname: %s", err)
 		panic(errMsg)
 	}
 
-	v.FldValidators["HostnameOrIP.ip"] = vFnMap["HostnameOrIP.ip"]
-	v.FldValidators["HostnameOrIP.hostname"] = vFnMap["HostnameOrIP.hostname"]
+	v.FldValidators["hostname_or_ip.ip"] = vFnMap["hostname_or_ip.ip"]
+	v.FldValidators["hostname_or_ip.hostname"] = vFnMap["hostname_or_ip.hostname"]
 
 	return v
 }()
@@ -3067,10 +3067,10 @@ func (v *ValidateInterfaceIdentifier) Validate(ctx context.Context, pm interface
 
 	switch m.GetInterfaceChoice().(type) {
 	case *InterfaceIdentifier_AnyIntf:
-		if fv, exists := v.FldValidators["InterfaceChoice.any_intf"]; exists {
+		if fv, exists := v.FldValidators["interface_choice.any_intf"]; exists {
 			val := m.GetInterfaceChoice().(*InterfaceIdentifier_AnyIntf).AnyIntf
 			vOpts := append(opts,
-				db.WithValidateField("InterfaceChoice"),
+				db.WithValidateField("interface_choice"),
 				db.WithValidateField("any_intf"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -3078,10 +3078,10 @@ func (v *ValidateInterfaceIdentifier) Validate(ctx context.Context, pm interface
 			}
 		}
 	case *InterfaceIdentifier_Intf:
-		if fv, exists := v.FldValidators["InterfaceChoice.intf"]; exists {
+		if fv, exists := v.FldValidators["interface_choice.intf"]; exists {
 			val := m.GetInterfaceChoice().(*InterfaceIdentifier_Intf).Intf
 			vOpts := append(opts,
-				db.WithValidateField("InterfaceChoice"),
+				db.WithValidateField("interface_choice"),
 				db.WithValidateField("intf"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -3111,13 +3111,13 @@ var DefaultInterfaceIdentifierValidator = func() *ValidateInterfaceIdentifier {
 		"ves.io.schema.rules.string.max_len": "256",
 		"ves.io.schema.rules.string.min_len": "1",
 	}
-	vFnMap["InterfaceChoice.intf"], err = vrhInterfaceChoiceIntf(rulesInterfaceChoiceIntf)
+	vFnMap["interface_choice.intf"], err = vrhInterfaceChoiceIntf(rulesInterfaceChoiceIntf)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field InterfaceIdentifier.InterfaceChoice_intf: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field InterfaceIdentifier.interface_choice_intf: %s", err)
 		panic(errMsg)
 	}
 
-	v.FldValidators["InterfaceChoice.intf"] = vFnMap["InterfaceChoice.intf"]
+	v.FldValidators["interface_choice.intf"] = vFnMap["interface_choice.intf"]
 
 	return v
 }()
@@ -3218,10 +3218,10 @@ func (v *ValidateInterfaceOrNetwork) Validate(ctx context.Context, pm interface{
 
 	switch m.GetInterfaceChoice().(type) {
 	case *InterfaceOrNetwork_Intf:
-		if fv, exists := v.FldValidators["InterfaceChoice.intf"]; exists {
+		if fv, exists := v.FldValidators["interface_choice.intf"]; exists {
 			val := m.GetInterfaceChoice().(*InterfaceOrNetwork_Intf).Intf
 			vOpts := append(opts,
-				db.WithValidateField("InterfaceChoice"),
+				db.WithValidateField("interface_choice"),
 				db.WithValidateField("intf"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -3229,10 +3229,10 @@ func (v *ValidateInterfaceOrNetwork) Validate(ctx context.Context, pm interface{
 			}
 		}
 	case *InterfaceOrNetwork_Pod:
-		if fv, exists := v.FldValidators["InterfaceChoice.pod"]; exists {
+		if fv, exists := v.FldValidators["interface_choice.pod"]; exists {
 			val := m.GetInterfaceChoice().(*InterfaceOrNetwork_Pod).Pod
 			vOpts := append(opts,
-				db.WithValidateField("InterfaceChoice"),
+				db.WithValidateField("interface_choice"),
 				db.WithValidateField("pod"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -3240,10 +3240,10 @@ func (v *ValidateInterfaceOrNetwork) Validate(ctx context.Context, pm interface{
 			}
 		}
 	case *InterfaceOrNetwork_VnType:
-		if fv, exists := v.FldValidators["InterfaceChoice.vn_type"]; exists {
+		if fv, exists := v.FldValidators["interface_choice.vn_type"]; exists {
 			val := m.GetInterfaceChoice().(*InterfaceOrNetwork_VnType).VnType
 			vOpts := append(opts,
-				db.WithValidateField("InterfaceChoice"),
+				db.WithValidateField("interface_choice"),
 				db.WithValidateField("vn_type"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -3251,10 +3251,10 @@ func (v *ValidateInterfaceOrNetwork) Validate(ctx context.Context, pm interface{
 			}
 		}
 	case *InterfaceOrNetwork_Vn:
-		if fv, exists := v.FldValidators["InterfaceChoice.vn"]; exists {
+		if fv, exists := v.FldValidators["interface_choice.vn"]; exists {
 			val := m.GetInterfaceChoice().(*InterfaceOrNetwork_Vn).Vn
 			vOpts := append(opts,
-				db.WithValidateField("InterfaceChoice"),
+				db.WithValidateField("interface_choice"),
 				db.WithValidateField("vn"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -3284,9 +3284,9 @@ var DefaultInterfaceOrNetworkValidator = func() *ValidateInterfaceOrNetwork {
 		"ves.io.schema.rules.string.max_len": "256",
 		"ves.io.schema.rules.string.min_len": "1",
 	}
-	vFnMap["InterfaceChoice.intf"], err = vrhInterfaceChoiceIntf(rulesInterfaceChoiceIntf)
+	vFnMap["interface_choice.intf"], err = vrhInterfaceChoiceIntf(rulesInterfaceChoiceIntf)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field InterfaceOrNetwork.InterfaceChoice_intf: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field InterfaceOrNetwork.interface_choice_intf: %s", err)
 		panic(errMsg)
 	}
 	vrhInterfaceChoicePod := v.InterfaceChoicePodValidationRuleHandler
@@ -3294,18 +3294,18 @@ var DefaultInterfaceOrNetworkValidator = func() *ValidateInterfaceOrNetwork {
 		"ves.io.schema.rules.string.max_len": "256",
 		"ves.io.schema.rules.string.min_len": "1",
 	}
-	vFnMap["InterfaceChoice.pod"], err = vrhInterfaceChoicePod(rulesInterfaceChoicePod)
+	vFnMap["interface_choice.pod"], err = vrhInterfaceChoicePod(rulesInterfaceChoicePod)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field InterfaceOrNetwork.InterfaceChoice_pod: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field InterfaceOrNetwork.interface_choice_pod: %s", err)
 		panic(errMsg)
 	}
 	vrhInterfaceChoiceVnType := v.InterfaceChoiceVnTypeValidationRuleHandler
 	rulesInterfaceChoiceVnType := map[string]string{
 		"ves.io.schema.rules.enum.in": "[0,1,3]",
 	}
-	vFnMap["InterfaceChoice.vn_type"], err = vrhInterfaceChoiceVnType(rulesInterfaceChoiceVnType)
+	vFnMap["interface_choice.vn_type"], err = vrhInterfaceChoiceVnType(rulesInterfaceChoiceVnType)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field InterfaceOrNetwork.InterfaceChoice_vn_type: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field InterfaceOrNetwork.interface_choice_vn_type: %s", err)
 		panic(errMsg)
 	}
 	vrhInterfaceChoiceVn := v.InterfaceChoiceVnValidationRuleHandler
@@ -3313,16 +3313,16 @@ var DefaultInterfaceOrNetworkValidator = func() *ValidateInterfaceOrNetwork {
 		"ves.io.schema.rules.string.max_len": "256",
 		"ves.io.schema.rules.string.min_len": "1",
 	}
-	vFnMap["InterfaceChoice.vn"], err = vrhInterfaceChoiceVn(rulesInterfaceChoiceVn)
+	vFnMap["interface_choice.vn"], err = vrhInterfaceChoiceVn(rulesInterfaceChoiceVn)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field InterfaceOrNetwork.InterfaceChoice_vn: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field InterfaceOrNetwork.interface_choice_vn: %s", err)
 		panic(errMsg)
 	}
 
-	v.FldValidators["InterfaceChoice.intf"] = vFnMap["InterfaceChoice.intf"]
-	v.FldValidators["InterfaceChoice.pod"] = vFnMap["InterfaceChoice.pod"]
-	v.FldValidators["InterfaceChoice.vn_type"] = vFnMap["InterfaceChoice.vn_type"]
-	v.FldValidators["InterfaceChoice.vn"] = vFnMap["InterfaceChoice.vn"]
+	v.FldValidators["interface_choice.intf"] = vFnMap["interface_choice.intf"]
+	v.FldValidators["interface_choice.pod"] = vFnMap["interface_choice.pod"]
+	v.FldValidators["interface_choice.vn_type"] = vFnMap["interface_choice.vn_type"]
+	v.FldValidators["interface_choice.vn"] = vFnMap["interface_choice.vn"]
 
 	return v
 }()
@@ -4662,10 +4662,10 @@ func (v *ValidateNetworkSiteRefSelector) Validate(ctx context.Context, pm interf
 
 	switch m.GetRefOrSelector().(type) {
 	case *NetworkSiteRefSelector_VirtualNetwork:
-		if fv, exists := v.FldValidators["RefOrSelector.virtual_network"]; exists {
+		if fv, exists := v.FldValidators["ref_or_selector.virtual_network"]; exists {
 			val := m.GetRefOrSelector().(*NetworkSiteRefSelector_VirtualNetwork).VirtualNetwork
 			vOpts := append(opts,
-				db.WithValidateField("RefOrSelector"),
+				db.WithValidateField("ref_or_selector"),
 				db.WithValidateField("virtual_network"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -4673,10 +4673,10 @@ func (v *ValidateNetworkSiteRefSelector) Validate(ctx context.Context, pm interf
 			}
 		}
 	case *NetworkSiteRefSelector_Site:
-		if fv, exists := v.FldValidators["RefOrSelector.site"]; exists {
+		if fv, exists := v.FldValidators["ref_or_selector.site"]; exists {
 			val := m.GetRefOrSelector().(*NetworkSiteRefSelector_Site).Site
 			vOpts := append(opts,
-				db.WithValidateField("RefOrSelector"),
+				db.WithValidateField("ref_or_selector"),
 				db.WithValidateField("site"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -4684,10 +4684,10 @@ func (v *ValidateNetworkSiteRefSelector) Validate(ctx context.Context, pm interf
 			}
 		}
 	case *NetworkSiteRefSelector_VirtualSite:
-		if fv, exists := v.FldValidators["RefOrSelector.virtual_site"]; exists {
+		if fv, exists := v.FldValidators["ref_or_selector.virtual_site"]; exists {
 			val := m.GetRefOrSelector().(*NetworkSiteRefSelector_VirtualSite).VirtualSite
 			vOpts := append(opts,
-				db.WithValidateField("RefOrSelector"),
+				db.WithValidateField("ref_or_selector"),
 				db.WithValidateField("virtual_site"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -4704,9 +4704,9 @@ func (v *ValidateNetworkSiteRefSelector) Validate(ctx context.Context, pm interf
 var DefaultNetworkSiteRefSelectorValidator = func() *ValidateNetworkSiteRefSelector {
 	v := &ValidateNetworkSiteRefSelector{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["RefOrSelector.virtual_network"] = NetworkRefTypeValidator().Validate
-	v.FldValidators["RefOrSelector.site"] = SiteRefTypeValidator().Validate
-	v.FldValidators["RefOrSelector.virtual_site"] = VSiteRefTypeValidator().Validate
+	v.FldValidators["ref_or_selector.virtual_network"] = NetworkRefTypeValidator().Validate
+	v.FldValidators["ref_or_selector.site"] = SiteRefTypeValidator().Validate
+	v.FldValidators["ref_or_selector.virtual_site"] = VSiteRefTypeValidator().Validate
 
 	return v
 }()
@@ -7801,10 +7801,10 @@ func (v *ValidateSiteVirtualSiteRefSelector) Validate(ctx context.Context, pm in
 
 	switch m.GetRefOrSelector().(type) {
 	case *SiteVirtualSiteRefSelector_Site:
-		if fv, exists := v.FldValidators["RefOrSelector.site"]; exists {
+		if fv, exists := v.FldValidators["ref_or_selector.site"]; exists {
 			val := m.GetRefOrSelector().(*SiteVirtualSiteRefSelector_Site).Site
 			vOpts := append(opts,
-				db.WithValidateField("RefOrSelector"),
+				db.WithValidateField("ref_or_selector"),
 				db.WithValidateField("site"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -7812,10 +7812,10 @@ func (v *ValidateSiteVirtualSiteRefSelector) Validate(ctx context.Context, pm in
 			}
 		}
 	case *SiteVirtualSiteRefSelector_VirtualSite:
-		if fv, exists := v.FldValidators["RefOrSelector.virtual_site"]; exists {
+		if fv, exists := v.FldValidators["ref_or_selector.virtual_site"]; exists {
 			val := m.GetRefOrSelector().(*SiteVirtualSiteRefSelector_VirtualSite).VirtualSite
 			vOpts := append(opts,
-				db.WithValidateField("RefOrSelector"),
+				db.WithValidateField("ref_or_selector"),
 				db.WithValidateField("virtual_site"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -7832,8 +7832,8 @@ func (v *ValidateSiteVirtualSiteRefSelector) Validate(ctx context.Context, pm in
 var DefaultSiteVirtualSiteRefSelectorValidator = func() *ValidateSiteVirtualSiteRefSelector {
 	v := &ValidateSiteVirtualSiteRefSelector{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["RefOrSelector.site"] = SiteRefTypeValidator().Validate
-	v.FldValidators["RefOrSelector.virtual_site"] = VSiteRefTypeValidator().Validate
+	v.FldValidators["ref_or_selector.site"] = SiteRefTypeValidator().Validate
+	v.FldValidators["ref_or_selector.virtual_site"] = VSiteRefTypeValidator().Validate
 
 	return v
 }()

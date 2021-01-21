@@ -20,29 +20,16 @@ resource "volterra_http_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
-  advertise_on_public_default_vip = true
+  // One of the arguments from this list "advertise_on_public advertise_custom do_not_advertise advertise_on_public_default_vip" must be set
+  do_not_advertise = true
 
-  // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
+  // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
+  no_challenge = true
 
-  js_challenge {
-    cookie_expiry       = "cookie_expiry"
-    custom_page         = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-    enable_js_challenge = true
-    js_script_delay     = "js_script_delay"
-  }
   domains = ["www.foo.com"]
 
-  // One of the arguments from this list "source_ip_stickiness cookie_stickiness ring_hash round_robin least_active random" must be set
-
-  ring_hash {
-    hash_policy {
-      // One of the arguments from this list "header_name cookie source_ip" must be set
-      source_ip = true
-
-      terminal = true
-    }
-  }
+  // One of the arguments from this list "cookie_stickiness ring_hash round_robin least_active random source_ip_stickiness" must be set
+  source_ip_stickiness = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
@@ -52,7 +39,7 @@ resource "volterra_http_loadbalancer" "example" {
   // One of the arguments from this list "disable_rate_limit rate_limit" must be set
   disable_rate_limit = true
 
-  // One of the arguments from this list "active_service_policies service_policies_from_namespace no_service_policies" must be set
+  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
 
   active_service_policies {
     policies {
@@ -61,8 +48,14 @@ resource "volterra_http_loadbalancer" "example" {
       tenant    = "acmecorp"
     }
   }
+
   // One of the arguments from this list "disable_waf waf waf_rule" must be set
-  disable_waf = true
+
+  waf_rule {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 }
 
 ```
@@ -96,11 +89,15 @@ Argument Reference
 
 `do_not_advertise` - (Optional) Do not advertise this loadbalancer (bool).
 
+`blocked_clients` - (Optional) Rules that specify the clients to be blocked. See [Blocked Clients ](#blocked-clients) below for details.
+
 `captcha_challenge` - (Optional) Configure Captcha challenge on this load balancer. See [Captcha Challenge ](#captcha-challenge) below for details.
 
 `js_challenge` - (Optional) Configure Javascript challenge on this load balancer. See [Js Challenge ](#js-challenge) below for details.
 
 `no_challenge` - (Optional) No challenge is enabled for this load balancer (bool).
+
+`policy_based_challenge` - (Optional) Specifies the settings for policy rule based challenge. See [Policy Based Challenge ](#policy-based-challenge) below for details.
 
 `cors_policy` - (Optional) resources from a server at a different origin. See [Cors Policy ](#cors-policy) below for details.
 
@@ -142,6 +139,8 @@ Argument Reference
 
 `service_policies_from_namespace` - (Optional) Apply the service policies configured as part of the namespace service policy set (bool).
 
+`trusted_clients` - (Optional) WAF processing is skipped for trusted clients. See [Trusted Clients ](#trusted-clients) below for details.
+
 `user_identification` - (Optional) The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.. See [ref](#ref) below for details.
 
 `disable_waf` - (Optional) No WAF configuration for this load balancer (bool).
@@ -150,7 +149,7 @@ Argument Reference
 
 `waf_rule` - (Optional) Reference to WAF Rules configuration object. See [ref](#ref) below for details.
 
-`waf_exclusion_rules` - (Optional) Rules that specify the match conditions and the corresponding WAF_RULE_IDs which should be excluded from WAF evaluation . See [Waf Exclusion Rules ](#waf-exclusion-rules) below for details.
+`waf_exclusion_rules` - (Optional) Rules that specify the match conditions and the corresponding WAF_RULE_IDs which should be excluded from WAF evaluation. See [Waf Exclusion Rules ](#waf-exclusion-rules) below for details.
 
 ### Active Service Policies
 
@@ -240,9 +239,37 @@ Where should this load balancer be available.
 
 `use_default_port` - (Optional) For HTTP, default is 80. For HTTPS/SNI, default is 443. (bool).
 
+### Always Enable Captcha
+
+Policy rules can be used to disable the challenge for subset of requests that match the conditions specified in the rules..
+
+### Always Enable Js Challenge
+
+Policy rules can be used to disable the challenge for subset of requests that match the conditions specified in the rules..
+
+### Any Client
+
+any_client.
+
 ### Any Domain
 
 Apply this waf exclusion rule for any domain.
+
+### Arg Matchers
+
+arg_matchers.
+
+`invert_matcher` - (Optional) Invert Match of the expression defined (`Bool`).
+
+`check_not_present` - (Optional) Check that the argument is not present. (bool).
+
+`check_present` - (Optional) Check that the argument is present. (bool).
+
+`item` - (Optional) Criteria for matching the values for the Arg. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Item ](#item) below for details.
+
+`presence` - (Optional) Check if the arg is present or absent. (`Bool`).
+
+`name` - (Required) A case-sensitive JSON path in the HTTP request body. (`String`).
 
 ### Auto Host Rewrite
 
@@ -276,6 +303,30 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
+### Blocked Clients
+
+Rules that specify the clients to be blocked.
+
+`as_number` - (Required) RFC 6793 defined 4-byte AS number (`Int`).
+
+`ip_prefix` - (Required) IPv4 prefix string. (`String`).
+
+`description` - (Optional) Description (`String`).
+
+`expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
+
+`name` - (Required) rule name (`String`).
+
+### Body Matcher
+
+body_matcher.
+
+`exact_values` - (Optional) A list of exact values to match the input against. (`String`).
+
+`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
+
+`transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
+
 ### Buffer Policy
 
 specify the maximum buffer size and buffer interval with this config..
@@ -296,6 +347,24 @@ Configure Captcha challenge on this load balancer.
 
 `enable_captcha_challenge` - (Optional) Turn this configuration knob to enable Captcha Challenge (`Bool`).
 
+### Captcha Challenge Parameters
+
+Configure captcha challenge parameters.
+
+`cookie_expiry` - (Optional) Default cookie expiry is set as 1 hour (`Int`).
+
+`custom_page` - (Optional) E.g. "<p> Please Wait </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4=" (`String`).
+
+`enable_captcha_challenge` - (Optional) Turn this configuration knob to enable Captcha Challenge (`Bool`).
+
+### Check Not Present
+
+Check that the argument is not present..
+
+### Check Present
+
+Check that the argument is present..
+
 ### Clear Secret Info
 
 Clear Secret is used for the secrets that are not encrypted .
@@ -303,6 +372,22 @@ Clear Secret is used for the secrets that are not encrypted .
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+
+### Client Name Matcher
+
+client_name_matcher.
+
+`exact_values` - (Optional) A list of exact values to match the input against. (`String`).
+
+`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
+
+`transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
+
+### Client Selector
+
+client_selector.
+
+`expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
 ### Common Buffering
 
@@ -333,6 +418,22 @@ Hash based on cookie.
 `path` - (Optional) will be set for the cookie (`String`).
 
 `ttl` - (Optional) be a session cookie. TTL value is in milliseconds (`Int`).
+
+### Cookie Matchers
+
+cookie_matchers.
+
+`invert_matcher` - (Optional) Invert Match of the expression defined (`Bool`).
+
+`check_not_present` - (Optional) Check that the cookie is not present. (bool).
+
+`check_present` - (Optional) Check that the cookie is present. (bool).
+
+`item` - (Optional) Criteria for matching the values for the cookie. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Item ](#item) below for details.
+
+`presence` - (Optional) Check if the cookie is present or absent. (`Bool`).
+
+`name` - (Required) A case-sensitive cookie name. (`String`).
 
 ### Cookie Stickiness
 
@@ -368,7 +469,7 @@ resources from a server at a different origin.
 
 ### Custom Ip Allowed List
 
-IP Allowed list using existing ip_prefix_set objects.
+IP Allowed list using existing ip_prefix_set objects..
 
 `rate_limiter_allowed_prefixes` - (Required) Requests from source IP addresses that are covered by one of the allowed IP Prefixes are not subjected to rate limiting.. See [ref](#ref) below for details.
 
@@ -387,6 +488,18 @@ Custom selection of TLS versions and cipher suites.
 `max_version` - (Optional) Maximum TLS protocol version. (`String`).
 
 `min_version` - (Optional) Minimum TLS protocol version. (`String`).
+
+### Default Captcha Challenge Parameters
+
+Use default parameters.
+
+### Default Js Challenge Parameters
+
+Use default parameters.
+
+### Default Mitigation Settings
+
+Use default parameters.
 
 ### Default Retry Policy
 
@@ -408,6 +521,10 @@ Origin Pools used when no route is specified (default route).
 
 TLS v1.2+ with PFS ciphers with strong crypto algorithms..
 
+### Default Temporary Blocking Parameters
+
+Use default parameters.
+
 ### Direct Response Route
 
 A direct response route matches on path and/or HTTP method and responds directly to the matching traffic.
@@ -417,6 +534,10 @@ A direct response route matches on path and/or HTTP method and responds directly
 `path` - (Optional) URI path of route. See [Path ](#path) below for details.
 
 `route_direct_response` - (Optional) Send direct response. See [Route Direct Response ](#route-direct-response) below for details.
+
+### Disable Challenge
+
+Disable the challenge type selected in PolicyBasedChallenge.
 
 ### Disable Host Rewrite
 
@@ -442,6 +563,22 @@ No WAF configuration for this load balancer.
 
 Websocket upgrade is disabled.
 
+### Domain Matcher
+
+domain_matcher.
+
+`exact_values` - (Optional) A list of exact values to match the input against. (`String`).
+
+`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
+
+### Enable Captcha Challenge
+
+Enable captcha challenge.
+
+### Enable Javascript Challenge
+
+Enable javascript challenge.
+
 ### Enable Spdy
 
 SPDY upgrade is enabled.
@@ -458,11 +595,35 @@ route the request.
 
 `terminal` - (Optional) Specify if its a terminal policy (`Bool`).
 
+### Headers
+
+headers.
+
+`invert_matcher` - (Optional) Invert the match result. (`Bool`).
+
+`check_not_present` - (Optional) Check that the header is not present. (bool).
+
+`check_present` - (Optional) Check that the header is present. (bool).
+
+`item` - (Optional) Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Item ](#item) below for details.
+
+`presence` - (Optional) Check if the header is present or absent. (`Bool`).
+
+`name` - (Required) A case-insensitive HTTP header name. (`String`).
+
 ### Http
 
 HTTP Load balancer..
 
 `dns_volterra_managed` - (Optional) This requires the domain to be delegated to Volterra using the Delegated Domain feature. (`Bool`).
+
+### Http Method
+
+http_method.
+
+`invert_matcher` - (Optional) Invert the match result. (`Bool`).
+
+`methods` - (Optional) x-example: "['GET', 'POST', 'DELETE']" (`List of Strings`).
 
 ### Https
 
@@ -472,7 +633,7 @@ User is responsible for managing DNS to this Load Balancer..
 
 `http_redirect` - (Optional) Redirect HTTP traffic to corresponding HTTPS (`Bool`).
 
-`tls_parameters` - (Optional) TLS parameters for downstream connections. . See [Tls Parameters ](#tls-parameters) below for details.
+`tls_parameters` - (Optional) TLS parameters for downstream connections.. See [Tls Parameters ](#tls-parameters) below for details.
 
 ### Https Auto Cert
 
@@ -486,9 +647,27 @@ DNS records will be managed by Volterra..
 
 ### Ip Allowed List
 
-List of IP(s) for which rate limiting will be disabled.
+List of IP(s) for which rate limiting will be disabled..
 
-`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
+`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
+
+### Ip Prefix List
+
+ip_prefix_list.
+
+`invert_match` - (Optional) Invert the match result. (`Bool`).
+
+`ip_prefixes` - (Required) List of IPv4 prefix strings. (`String`).
+
+### Item
+
+Criteria for matching the values for the Arg. The match is successful if any of the values in the input satisfies the criteria in the matcher..
+
+`exact_values` - (Optional) A list of exact values to match the input against. (`String`).
+
+`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
+
+`transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
 
 ### Javascript Info
 
@@ -512,6 +691,18 @@ Configure Javascript challenge on this load balancer.
 
 `js_script_delay` - (Optional) Default delay is 5 seconds (`Int`).
 
+### Js Challenge Parameters
+
+Configure Javascript challenge parameters.
+
+`cookie_expiry` - (Optional) Default cookie expiry is set as 1 hour (`Int`).
+
+`custom_page` - (Optional) E.g. "<p> Please Wait </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4=" (`String`).
+
+`enable_js_challenge` - (Optional) Turn this configuration knob to enable Javascript Challenge (`Bool`).
+
+`js_script_delay` - (Optional) Default delay is 5 seconds (`Int`).
+
 ### Low Security
 
 Low Security chooses TLS v1.0+ including non-PFS ciphers and weak crypto algorithms..
@@ -519,6 +710,16 @@ Low Security chooses TLS v1.0+ including non-PFS ciphers and weak crypto algorit
 ### Medium Security
 
 Medium Security chooses TLS v1.0+ with only PFS ciphers and medium strength crypto algorithms..
+
+### Metadata
+
+Common attributes for the rule including name and description..
+
+`description` - (Optional) Human readable description for the object that corresponds to the containing message. (`String`).
+
+`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).
+
+`name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
 ### Mirror Policy
 
@@ -538,6 +739,8 @@ More options like header manipulation, compression etc..
 
 `custom_errors` - (Optional) matches for a request. (`String`).
 
+`disable_default_error_pages` - (Optional) An option to specify the use of default Volterra error pages (`Bool`).
+
 `idle_timeout` - (Optional) The default if not specified is 1 minute. (`Int`).
 
 `javascript_info` - (Optional) Custom JavaScript Configuration. Custom JavaScript code can be executed at various stages of request processing.. See [Javascript Info ](#javascript-info) below for details.
@@ -556,11 +759,15 @@ More options like header manipulation, compression etc..
 
 ### No Ip Allowed List
 
-There is no ip allowed list for rate limiting, all clients go thru rate limiting.
+There is no ip allowed list for rate limiting, all clients go through rate limiting..
 
 ### No Mtls
 
 MTLS with clients is not enabled.
+
+### No Policies
+
+Do not apply additional rate limiter policies..
 
 ### Origin Pools
 
@@ -576,13 +783,15 @@ Origin Pools for this route.
 
 ### Path
 
-URI path of route.
+path.
 
-`path` - (Optional) path : /logout (`String`).
+`exact_values` - (Optional) A list of exact path values to match the input HTTP path against. (`String`).
 
-`prefix` - (Optional) prefix : /register/ (`String`).
+`prefix_values` - (Optional) A list of path prefix values to match the input HTTP path against. (`String`).
 
-`regex` - (Optional) regex : /b[io]t (`String`).
+`regex_values` - (Optional) A list of regular expressions to match the input HTTP path against. (`String`).
+
+`transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
 
 ### Percent
 
@@ -591,6 +800,40 @@ Percentage of requests to be mirrored.
 `denominator` - (Required) Samples per denominator. numerator part per 100 or 10000 ro 1000000 (`String`).
 
 `numerator` - (Required) sampled parts per denominator. If denominator was 10000, then value of 5 will be 5 in 10000 (`Int`).
+
+### Policies
+
+to the action configured in the rule. If there's no match, the rate limiting configuration for the HTTP loadbalancer is honored..
+
+`policies` - (Required) Ordered list of rate limiter policies.. See [ref](#ref) below for details.
+
+### Policy Based Challenge
+
+Specifies the settings for policy rule based challenge.
+
+`captcha_challenge_parameters` - (Optional) Configure captcha challenge parameters. See [Captcha Challenge Parameters ](#captcha-challenge-parameters) below for details.
+
+`default_captcha_challenge_parameters` - (Optional) Use default parameters (bool).
+
+`always_enable_captcha` - (Optional) Policy rules can be used to disable the challenge for subset of requests that match the conditions specified in the rules. (bool).
+
+`always_enable_js_challenge` - (Optional) Policy rules can be used to disable the challenge for subset of requests that match the conditions specified in the rules. (bool).
+
+`rule_based_challenge` - (Optional) Enables rule based challenge. When selected, the match conditions and challenge type to be launched is determined using a policy rule. (bool).
+
+`default_js_challenge_parameters` - (Optional) Use default parameters (bool).
+
+`js_challenge_parameters` - (Optional) Configure Javascript challenge parameters. See [Js Challenge Parameters ](#js-challenge-parameters) below for details.
+
+`default_mitigation_settings` - (Optional) Use default parameters (bool).
+
+`malicious_user_mitigation` - (Optional) The settings defined in malicious user mitigation specify what mitigation actions to take for users determined to be at different threat levels.. See [ref](#ref) below for details.
+
+`rule_list` - (Optional) list challenge rules to be used in policy based challenge. See [Rule List ](#rule-list) below for details.
+
+`default_temporary_blocking_parameters` - (Optional) Use default parameters (bool).
+
+`temporary_user_blocking` - (Optional) Specifies configuration for temporary user blocking resulting from malicious user detection. See [Temporary User Blocking ](#temporary-user-blocking) below for details.
 
 ### Private Key
 
@@ -608,15 +851,35 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
+### Query Params
+
+query_params.
+
+`invert_matcher` - (Optional) Invert the match result. (`Bool`).
+
+`key` - (Required) A case-sensitive HTTP query parameter name. (`String`).
+
+`check_not_present` - (Optional) Check that the query parameter is not present. (bool).
+
+`check_present` - (Optional) Check that the query parameter is present. (bool).
+
+`item` - (Optional) criteria in the matcher.. See [Item ](#item) below for details.
+
+`presence` - (Optional) Check if the query parameter is present or absent. (`Bool`).
+
 ### Rate Limit
 
 Rate limiting parameters for this loadbalancer.
 
-`custom_ip_allowed_list` - (Optional) IP Allowed list using existing ip_prefix_set objects. See [Custom Ip Allowed List ](#custom-ip-allowed-list) below for details.
+`custom_ip_allowed_list` - (Optional) IP Allowed list using existing ip_prefix_set objects.. See [Custom Ip Allowed List ](#custom-ip-allowed-list) below for details.
 
-`ip_allowed_list` - (Optional) List of IP(s) for which rate limiting will be disabled. See [Ip Allowed List ](#ip-allowed-list) below for details.
+`ip_allowed_list` - (Optional) List of IP(s) for which rate limiting will be disabled.. See [Ip Allowed List ](#ip-allowed-list) below for details.
 
-`no_ip_allowed_list` - (Optional) There is no ip allowed list for rate limiting, all clients go thru rate limiting (bool).
+`no_ip_allowed_list` - (Optional) There is no ip allowed list for rate limiting, all clients go through rate limiting. (bool).
+
+`no_policies` - (Optional) Do not apply additional rate limiter policies. (bool).
+
+`policies` - (Optional) to the action configured in the rule. If there's no match, the rate limiting configuration for the HTTP loadbalancer is honored.. See [Policies ](#policies) below for details.
 
 `rate_limiter` - (Optional) Requests to the virtual_host are rate limited based on the parameters specified in the rate_limiter.. See [Rate Limiter ](#rate-limiter) below for details.
 
@@ -708,6 +971,12 @@ Send direct response.
 
 Send redirect response.
 
+`host_redirect` - (Optional) swap host part of incoming URL in redirect URL (`String`).
+
+`path_redirect` - (Optional) swap path part of incoming URL in redirect URL (`String`).
+
+`proto_redirect` - (Optional)swap proto part of incoming URL in redirect URL (`String`).
+
 `all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).
 
 `remove_all_params` - (Optional) Remove all query parameters (bool).
@@ -715,12 +984,6 @@ Send redirect response.
 `retain_all_params` - (Optional) Retain all query parameters (bool).
 
 `strip_query_params` - (Optional) Specifies the list of query params to be removed. Not supported. See [Strip Query Params ](#strip-query-params) below for details.
-
-`host_redirect` - (Optional) swap host part of incoming URL in redirect URL (`String`).
-
-`path_redirect` - (Optional) swap path part of incoming URL in redirect URL (`String`).
-
-`proto_redirect` - (Optional)swap proto part of incoming URL in redirect URL (`String`).
 
 `response_code` - (Optional) code is MOVED_PERMANENTLY (301). (`Int`).
 
@@ -736,17 +999,35 @@ Routes for this loadbalancer.
 
 `simple_route` - (Optional) A simple route matches on path and/or HTTP method and forwards the matching traffic to the associated pools. See [Simple Route ](#simple-route) below for details.
 
+### Rule Based Challenge
+
+Enables rule based challenge. When selected, the match conditions and challenge type to be launched is determined using a policy rule..
+
+### Rule List
+
+list challenge rules to be used in policy based challenge.
+
+`rules` - (Optional) these rules can be used to disable challenge or launch a different challenge for requests that match the specified conditions. See [Rules ](#rules) below for details.
+
+### Rules
+
+these rules can be used to disable challenge or launch a different challenge for requests that match the specified conditions.
+
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
+`spec` - (Required) Specification for the rule including match predicates and actions.. See [Spec ](#spec) below for details.
+
 ### Simple Route
 
 A simple route matches on path and/or HTTP method and forwards the matching traffic to the associated pools.
+
+`advanced_options` - (Optional) Configure Advanced per route options. See [Advanced Options ](#advanced-options) below for details.
 
 `auto_host_rewrite` - (Optional) Host header will be swapped with hostname of upstream host chosen by the cluster (bool).
 
 `disable_host_rewrite` - (Optional) Host header is not modified (bool).
 
 `host_rewrite` - (Optional) Host header will be swapped with this value (`String`).
-
-`advanced_options` - (Optional) Configure Advanced per route options. See [Advanced Options ](#advanced-options) below for details.
 
 `http_method` - (Optional) The name of the HTTP Method (GET, PUT, POST, etc) (`String`).
 
@@ -764,6 +1045,46 @@ Advertise on a customer site and a given network. .
 
 `site` - (Required) Reference to site object. See [ref](#ref) below for details.
 
+### Spec
+
+Specification for the rule including match predicates and actions..
+
+`arg_matchers` - (Optional)arg_matchers. See [Arg Matchers ](#arg-matchers) below for details.
+
+`body_matcher` - (Optional)body_matcher. See [Body Matcher ](#body-matcher) below for details.
+
+`disable_challenge` - (Optional) Disable the challenge type selected in PolicyBasedChallenge (bool).
+
+`enable_captcha_challenge` - (Optional) Enable captcha challenge (bool).
+
+`enable_javascript_challenge` - (Optional) Enable javascript challenge (bool).
+
+`any_client` - (Optional)any_client (bool).
+
+`client_name` - (Optional)client_name (`String`).
+
+`client_name_matcher` - (Optional)client_name_matcher. See [Client Name Matcher ](#client-name-matcher) below for details.
+
+`client_selector` - (Optional)client_selector. See [Client Selector ](#client-selector) below for details.
+
+`cookie_matchers` - (Optional)cookie_matchers. See [Cookie Matchers ](#cookie-matchers) below for details.
+
+`domain_matcher` - (Optional)domain_matcher. See [Domain Matcher ](#domain-matcher) below for details.
+
+`expiration_timestamp` - (Optional)expiration_timestamp (`String`).
+
+`headers` - (Optional)headers. See [Headers ](#headers) below for details.
+
+`http_method` - (Optional)http_method. See [Http Method ](#http-method) below for details.
+
+`ip_prefix_list` - (Optional)ip_prefix_list. See [Ip Prefix List ](#ip-prefix-list) below for details.
+
+`path` - (Optional)path. See [Path ](#path) below for details.
+
+`query_params` - (Optional)query_params. See [Query Params ](#query-params) below for details.
+
+`tls_fingerprint_matcher` - (Optional)tls_fingerprint_matcher. See [Tls Fingerprint Matcher ](#tls-fingerprint-matcher) below for details.
+
 ### Specific Hash Policy
 
 Configure hash policy specific for this route.
@@ -775,6 +1096,12 @@ Configure hash policy specific for this route.
 Specifies the list of query params to be removed. Not supported.
 
 `query_params` - (Optional) Query params keys to strip while manipulating the HTTP request (`String`).
+
+### Temporary User Blocking
+
+Specifies configuration for temporary user blocking resulting from malicious user detection.
+
+`custom_page` - (Optional) E.g. "<p> Blocked </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4=" (`String`).
 
 ### Tls Certificates
 
@@ -798,9 +1125,19 @@ Configuration for TLS parameters such as min/max TLS version and ciphers.
 
 `medium_security` - (Optional) Medium Security chooses TLS v1.0+ with only PFS ciphers and medium strength crypto algorithms. (bool).
 
+### Tls Fingerprint Matcher
+
+tls_fingerprint_matcher.
+
+`classes` - (Optional) A list of known classes of TLS fingerprints to match the input TLS JA3 fingerprint against. (`List of Strings`).
+
+`exact_values` - (Optional) A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against. (`String`).
+
+`excluded_values` - (Optional) or more known TLS fingerprint classes in the enclosing matcher. (`String`).
+
 ### Tls Parameters
 
-TLS parameters for downstream connections. .
+TLS parameters for downstream connections..
 
 `no_mtls` - (Optional) MTLS with clients is not enabled (bool).
 
@@ -809,6 +1146,20 @@ TLS parameters for downstream connections. .
 `tls_certificates` - (Required) Set of TLS certificates. See [Tls Certificates ](#tls-certificates) below for details.
 
 `tls_config` - (Optional) Configuration for TLS parameters such as min/max TLS version and ciphers. See [Tls Config ](#tls-config) below for details.
+
+### Trusted Clients
+
+WAF processing is skipped for trusted clients.
+
+`as_number` - (Required) RFC 6793 defined 4-byte AS number (`Int`).
+
+`ip_prefix` - (Required) IPv4 prefix string. (`String`).
+
+`description` - (Optional) Description (`String`).
+
+`expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
+
+`name` - (Required) rule name (`String`).
 
 ### Use Default Port
 
@@ -852,7 +1203,7 @@ Advertise on vK8s Service Network on RE..
 
 ### Waf Exclusion Rules
 
-Rules that specify the match conditions and the corresponding WAF_RULE_IDs which should be excluded from WAF evaluation .
+Rules that specify the match conditions and the corresponding WAF_RULE_IDs which should be excluded from WAF evaluation.
 
 `description` - (Optional) Description (`String`).
 

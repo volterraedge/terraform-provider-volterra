@@ -17,6 +17,7 @@ import (
 	google_protobuf "github.com/gogo/protobuf/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	multierror "github.com/hashicorp/go-multierror"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -1010,7 +1011,10 @@ func (s *APISrv) Create(ctx context.Context, req *ObjectCreateReq) (*ObjectCreat
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.endpoint.crudapi.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.endpoint.crudapi.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1040,7 +1044,10 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.endpoint.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.endpoint.crudapi.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1143,7 +1150,10 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.endpoint.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				if !server.NoReqValidateFromContext(ctx) {
+					return nil, errors.Wrap(err, "Validating private create request")
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.endpoint.crudapi.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -2279,13 +2289,13 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "endpointDnsNameAdvanceType": {
+        "endpointDnsNameAdvancedType": {
             "type": "object",
             "description": "Specifies name and TTL used for DNS resolution.",
-            "title": "DnsNameAdvanceType",
-            "x-displayname": "DNS Name Advance Type",
+            "title": "DnsNameAdvancedType",
+            "x-displayname": "DNS Name Advanced Type",
             "x-ves-oneof-field-ttl_choice": "[\"refresh_interval\",\"strict_ttl\"]",
-            "x-ves-proto-message": "ves.io.schema.endpoint.DnsNameAdvanceType",
+            "x-ves-proto-message": "ves.io.schema.endpoint.DnsNameAdvancedType",
             "properties": {
                 "name": {
                     "type": "string",
@@ -2312,18 +2322,18 @@ var APISwaggerJSON string = `{
             "description": "Configuration specification for Endpoint",
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
-            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advance\",\"ip\",\"serverless_service_name\",\"service_info\"]",
+            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advanced\",\"ip\",\"k8s_cluster_api_server\",\"serverless_service_name\",\"service_info\"]",
             "x-ves-proto-message": "ves.io.schema.endpoint.GlobalSpecType",
             "properties": {
                 "dns_name": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name_advance ip serverless_service_name service_info]\nx-displayName: \"Endpoint Name\"\nx-example: \"ves.io\"\nEndpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.",
+                    "description": "Exclusive with [dns_name_advanced ip k8s_cluster_api_server serverless_service_name service_info]\nx-displayName: \"Endpoint Name\"\nx-example: \"ves.io\"\nEndpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.",
                     "title": "dns_name"
                 },
-                "dns_name_advance": {
-                    "description": "Exclusive with [dns_name ip serverless_service_name service_info]\nx-displayName: \"Endpoint Name (Advanced)\"\nSpecifies name and TTL used for DNS resolution.",
-                    "title": "dns_name_advance",
-                    "$ref": "#/definitions/endpointDnsNameAdvanceType"
+                "dns_name_advanced": {
+                    "description": "Exclusive with [dns_name ip k8s_cluster_api_server serverless_service_name service_info]\nx-displayName: \"Endpoint Name (Advanced)\"\nSpecifies name and TTL used for DNS resolution.",
+                    "title": "dns_name_advanced",
+                    "$ref": "#/definitions/endpointDnsNameAdvancedType"
                 },
                 "health_check_port": {
                     "type": "integer",
@@ -2335,8 +2345,13 @@ var APISwaggerJSON string = `{
                 },
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name dns_name_advance serverless_service_name service_info]\nx-displayName: \"Endpoint IP Address\"\nx-example: \"10.5.2.4\"\nEndpoint is reachable at the given ip address",
+                    "description": "Exclusive with [dns_name dns_name_advanced k8s_cluster_api_server serverless_service_name service_info]\nx-displayName: \"Endpoint IP Address\"\nx-example: \"10.5.2.4\"\nEndpoint is reachable at the given ip address",
                     "title": "Endpoint IP Address"
+                },
+                "k8s_cluster_api_server": {
+                    "description": "Exclusive with [dns_name dns_name_advanced ip serverless_service_name service_info]\nx-displayName: \"Local K8s Cluster API Server\"\nUsed internally to refer local in cluster  k8s api server",
+                    "title": "Local K8s Cluster API Server",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "port": {
                     "type": "integer",
@@ -2355,11 +2370,11 @@ var APISwaggerJSON string = `{
                 },
                 "serverless_service_name": {
                     "type": "string",
-                    "description": "Exclusive with [dns_name dns_name_advance ip service_info]\nx-displayName: \"Serverless Service Name\"\nx-example: \"simpleservice\"\nNot supported",
+                    "description": "Exclusive with [dns_name dns_name_advanced ip k8s_cluster_api_server service_info]\nx-displayName: \"Serverless Service Name\"\nx-example: \"simpleservice\"\nNot supported",
                     "title": "serverless_service_name"
                 },
                 "service_info": {
-                    "description": "Exclusive with [dns_name dns_name_advance ip serverless_service_name]\nx-displayName: \"Service Selector Info\"\nIt contains information about how the service is selected (either by service name or\nlabel selector) and where the service is discovered (either in K8s or Consul)\n\n  Service Name.\n\n    String represent name of the service. System will perform discovery based on the\n    discovery method.\n\n    In case of K8S, System will watch K8s API server and automatically discover services and\n    endpoints of interest.\n    In case Virtual K8s cluster, system already has access to it.\n    In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n    In case of Consul, System will watch the consul server and automatically discover the\n    services and endpoints of interest.\n\n  Label selector for selecting the services\n\n    Label selector expression for selecting services or serverless functions\n    to automatically discover services and endpoint of interest.\n\n    discovery_type specifies where endpoint will be discovered\n\n    Endpoint can be discovered in K8S or Consul\n    In case of K8S, labels on the service is matched against service_selector\n    In case of Consul, tags on the service is matched against service_selector",
+                    "description": "Exclusive with [dns_name dns_name_advanced ip k8s_cluster_api_server serverless_service_name]\nx-displayName: \"Service Selector Info\"\nIt contains information about how the service is selected (either by service name or\nlabel selector) and where the service is discovered (either in K8s or Consul)\n\n  Service Name.\n\n    String represent name of the service. System will perform discovery based on the\n    discovery method.\n\n    In case of K8S, System will watch K8s API server and automatically discover services and\n    endpoints of interest.\n    In case Virtual K8s cluster, system already has access to it.\n    In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n    In case of Consul, System will watch the consul server and automatically discover the\n    services and endpoints of interest.\n\n  Label selector for selecting the services\n\n    Label selector expression for selecting services or serverless functions\n    to automatically discover services and endpoint of interest.\n\n    discovery_type specifies where endpoint will be discovered\n\n    Endpoint can be discovered in K8S or Consul\n    In case of K8S, labels on the service is matched against service_selector\n    In case of Consul, tags on the service is matched against service_selector",
                     "title": "Service Selector Info",
                     "$ref": "#/definitions/endpointServiceInfoType"
                 },
@@ -2789,7 +2804,7 @@ var APISwaggerJSON string = `{
             "description": "NetworkSiteRefSelector defines a union of reference to site or reference to virtual_network  or reference to virtual_site\nIt is used to determine virtual network using following rules\n * Direct reference to virtual_network object\n * Site local network when refering to site object\n * All site local networks for sites selected by refering to virtual_site object",
             "title": "NetworkSiteRefSelector",
             "x-displayname": "Network or Site Reference",
-            "x-ves-oneof-field-reforselector": "[\"site\",\"virtual_network\",\"virtual_site\"]",
+            "x-ves-oneof-field-ref_or_selector": "[\"site\",\"virtual_network\",\"virtual_site\"]",
             "x-ves-proto-message": "ves.io.schema.NetworkSiteRefSelector",
             "properties": {
                 "site": {

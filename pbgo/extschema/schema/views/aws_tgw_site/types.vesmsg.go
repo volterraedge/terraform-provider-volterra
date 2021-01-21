@@ -30,6 +30,145 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AWSTGWInfoConfigType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSTGWInfoConfigType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSTGWInfoConfigType) DeepCopy() *AWSTGWInfoConfigType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSTGWInfoConfigType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSTGWInfoConfigType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSTGWInfoConfigType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSTGWInfoConfigTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSTGWInfoConfigType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSTGWInfoConfigType) TgwIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSTGWInfoConfigType) VpcIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vpc_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSTGWInfoConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSTGWInfoConfigType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSTGWInfoConfigType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["tgw_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_id"))
+		if err := fv(ctx, m.GetTgwId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vpc_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vpc_id"))
+		if err := fv(ctx, m.GetVpcId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSTGWInfoConfigTypeValidator = func() *ValidateAWSTGWInfoConfigType {
+	v := &ValidateAWSTGWInfoConfigType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTgwId := v.TgwIdValidationRuleHandler
+	rulesTgwId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.pattern":   "^(tgw-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFn, err = vrhTgwId(rulesTgwId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSTGWInfoConfigType.tgw_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tgw_id"] = vFn
+
+	vrhVpcId := v.VpcIdValidationRuleHandler
+	rulesVpcId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.pattern":   "^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFn, err = vrhVpcId(rulesVpcId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSTGWInfoConfigType.vpc_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vpc_id"] = vFn
+
+	return v
+}()
+
+func AWSTGWInfoConfigTypeValidator() db.Validator {
+	return DefaultAWSTGWInfoConfigTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AWSVPNTunnelConfigType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1009,6 +1148,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["tgw_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_info"))
+		if err := fv(ctx, m.GetTgwInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tgw_security"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tgw_security"))
@@ -1146,6 +1294,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["vn_config"] = VnConfigurationValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
+
+	v.FldValidators["tgw_info"] = AWSTGWInfoConfigTypeValidator().Validate
 
 	v.FldValidators["tunnels"] = AWSVPNTunnelConfigTypeValidator().Validate
 
@@ -1525,6 +1675,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["tgw_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_info"))
+		if err := fv(ctx, m.GetTgwInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tgw_security"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tgw_security"))
@@ -1671,6 +1830,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["vn_config"] = VnConfigurationValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
+
+	v.FldValidators["tgw_info"] = AWSTGWInfoConfigTypeValidator().Validate
 
 	v.FldValidators["tunnels"] = AWSVPNTunnelConfigTypeValidator().Validate
 
@@ -2811,6 +2972,7 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 
 	vrhNodesPerAz := v.NodesPerAzValidationRuleHandler
 	rulesNodesPerAz := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
 		"ves.io.schema.rules.uint32.lte": "21",
 	}
 	vFn, err = vrhNodesPerAz(rulesNodesPerAz)
@@ -3933,6 +4095,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.AwsParameters = f.GetAwsParameters()
 	m.Coordinates = f.GetCoordinates()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
+	m.TgwInfo = f.GetTgwInfo()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.Tunnels = f.GetTunnels()
 	m.UserModificationTimestamp = f.GetUserModificationTimestamp()
@@ -3952,6 +4115,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.AwsParameters = m1.AwsParameters
 	f.Coordinates = m1.Coordinates
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
+	f.TgwInfo = m1.TgwInfo
 	f.TgwSecurity = m1.TgwSecurity
 	f.Tunnels = m1.Tunnels
 	f.UserModificationTimestamp = m1.UserModificationTimestamp

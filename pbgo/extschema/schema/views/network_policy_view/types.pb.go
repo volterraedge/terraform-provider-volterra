@@ -3,949 +3,30 @@
 
 package network_policy_view
 
-import (
-	proto "github.com/gogo/protobuf/proto"
-	golang_proto "github.com/golang/protobuf/proto"
+import proto "github.com/gogo/protobuf/proto"
+import golang_proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema_network_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
-	fmt "fmt"
+import strings "strings"
+import reflect "reflect"
 
-	math "math"
-
-	_ "github.com/gogo/protobuf/gogoproto"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	ves_io_schema_network_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_rule"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-
-	strconv "strconv"
-
-	strings "strings"
-
-	reflect "reflect"
-
-	io "io"
-)
+import io "io"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-
-// Applications
-//
-// x-displayName: "Applications"
-// Application protocols like HTTP, SNMP
-type ApplicationEnumType int32
-
-const (
-	// x-displayName: "HTTP"
-	APPLICATION_HTTP ApplicationEnumType = 0
-	// x-displayName: "HTTPS"
-	APPLICATION_HTTPS ApplicationEnumType = 1
-	// x-displayName: "SNMP"
-	APPLICATION_SNMP ApplicationEnumType = 2
-	// x-displayName: "DNS"
-	APPLICATION_DNS ApplicationEnumType = 3
-)
-
-var ApplicationEnumType_name = map[int32]string{
-	0: "APPLICATION_HTTP",
-	1: "APPLICATION_HTTPS",
-	2: "APPLICATION_SNMP",
-	3: "APPLICATION_DNS",
-}
-var ApplicationEnumType_value = map[string]int32{
-	"APPLICATION_HTTP":  0,
-	"APPLICATION_HTTPS": 1,
-	"APPLICATION_SNMP":  2,
-	"APPLICATION_DNS":   3,
-}
-
-func (ApplicationEnumType) EnumDescriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
-
-// Endpoint Choice
-//
-// x-displayName: "Endpoint Choice"
-// Shape of the endpoint choices for a view
-type EndpointChoiceType struct {
-	// Choose Endpoint
-	//
-	// x-displayName: "Select Endpoint"
-	// Select endpoint for policy. Ingress and egress rules are written from the point of view of this Endpoint.
-	// Endpoint can be a particular endpoint or set of endpoints.
-	//
-	// Types that are valid to be assigned to EndpointChoice:
-	//	*EndpointChoiceType_PrefixList
-	//	*EndpointChoiceType_Any
-	//	*EndpointChoiceType_OutsideEndpoints
-	//	*EndpointChoiceType_InsideEndpoints
-	//	*EndpointChoiceType_Interface
-	//	*EndpointChoiceType_Namespace
-	//	*EndpointChoiceType_LabelSelector
-	EndpointChoice isEndpointChoiceType_EndpointChoice `protobuf_oneof:"endpoint_choice"`
-}
-
-func (m *EndpointChoiceType) Reset()                    { *m = EndpointChoiceType{} }
-func (*EndpointChoiceType) ProtoMessage()               {}
-func (*EndpointChoiceType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
-
-type isEndpointChoiceType_EndpointChoice interface {
-	isEndpointChoiceType_EndpointChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type EndpointChoiceType_PrefixList struct {
-	PrefixList *ves_io_schema_views.PrefixStringListType `protobuf:"bytes,1,opt,name=prefix_list,json=prefixList,oneof"`
-}
-type EndpointChoiceType_Any struct {
-	Any *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=any,oneof"`
-}
-type EndpointChoiceType_OutsideEndpoints struct {
-	OutsideEndpoints *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=outside_endpoints,json=outsideEndpoints,oneof"`
-}
-type EndpointChoiceType_InsideEndpoints struct {
-	InsideEndpoints *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=inside_endpoints,json=insideEndpoints,oneof"`
-}
-type EndpointChoiceType_Interface struct {
-	Interface *ves_io_schema_views.ObjectRefType `protobuf:"bytes,5,opt,name=interface,oneof"`
-}
-type EndpointChoiceType_Namespace struct {
-	Namespace string `protobuf:"bytes,6,opt,name=namespace,proto3,oneof"`
-}
-type EndpointChoiceType_LabelSelector struct {
-	LabelSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,9,opt,name=label_selector,json=labelSelector,oneof"`
-}
-
-func (*EndpointChoiceType_PrefixList) isEndpointChoiceType_EndpointChoice()       {}
-func (*EndpointChoiceType_Any) isEndpointChoiceType_EndpointChoice()              {}
-func (*EndpointChoiceType_OutsideEndpoints) isEndpointChoiceType_EndpointChoice() {}
-func (*EndpointChoiceType_InsideEndpoints) isEndpointChoiceType_EndpointChoice()  {}
-func (*EndpointChoiceType_Interface) isEndpointChoiceType_EndpointChoice()        {}
-func (*EndpointChoiceType_Namespace) isEndpointChoiceType_EndpointChoice()        {}
-func (*EndpointChoiceType_LabelSelector) isEndpointChoiceType_EndpointChoice()    {}
-
-func (m *EndpointChoiceType) GetEndpointChoice() isEndpointChoiceType_EndpointChoice {
-	if m != nil {
-		return m.EndpointChoice
-	}
-	return nil
-}
-
-func (m *EndpointChoiceType) GetPrefixList() *ves_io_schema_views.PrefixStringListType {
-	if x, ok := m.GetEndpointChoice().(*EndpointChoiceType_PrefixList); ok {
-		return x.PrefixList
-	}
-	return nil
-}
-
-func (m *EndpointChoiceType) GetAny() *ves_io_schema4.Empty {
-	if x, ok := m.GetEndpointChoice().(*EndpointChoiceType_Any); ok {
-		return x.Any
-	}
-	return nil
-}
-
-func (m *EndpointChoiceType) GetOutsideEndpoints() *ves_io_schema4.Empty {
-	if x, ok := m.GetEndpointChoice().(*EndpointChoiceType_OutsideEndpoints); ok {
-		return x.OutsideEndpoints
-	}
-	return nil
-}
-
-func (m *EndpointChoiceType) GetInsideEndpoints() *ves_io_schema4.Empty {
-	if x, ok := m.GetEndpointChoice().(*EndpointChoiceType_InsideEndpoints); ok {
-		return x.InsideEndpoints
-	}
-	return nil
-}
-
-func (m *EndpointChoiceType) GetInterface() *ves_io_schema_views.ObjectRefType {
-	if x, ok := m.GetEndpointChoice().(*EndpointChoiceType_Interface); ok {
-		return x.Interface
-	}
-	return nil
-}
-
-func (m *EndpointChoiceType) GetNamespace() string {
-	if x, ok := m.GetEndpointChoice().(*EndpointChoiceType_Namespace); ok {
-		return x.Namespace
-	}
-	return ""
-}
-
-func (m *EndpointChoiceType) GetLabelSelector() *ves_io_schema4.LabelSelectorType {
-	if x, ok := m.GetEndpointChoice().(*EndpointChoiceType_LabelSelector); ok {
-		return x.LabelSelector
-	}
-	return nil
-}
-
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*EndpointChoiceType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _EndpointChoiceType_OneofMarshaler, _EndpointChoiceType_OneofUnmarshaler, _EndpointChoiceType_OneofSizer, []interface{}{
-		(*EndpointChoiceType_PrefixList)(nil),
-		(*EndpointChoiceType_Any)(nil),
-		(*EndpointChoiceType_OutsideEndpoints)(nil),
-		(*EndpointChoiceType_InsideEndpoints)(nil),
-		(*EndpointChoiceType_Interface)(nil),
-		(*EndpointChoiceType_Namespace)(nil),
-		(*EndpointChoiceType_LabelSelector)(nil),
-	}
-}
-
-func _EndpointChoiceType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*EndpointChoiceType)
-	// endpoint_choice
-	switch x := m.EndpointChoice.(type) {
-	case *EndpointChoiceType_PrefixList:
-		_ = b.EncodeVarint(1<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.PrefixList); err != nil {
-			return err
-		}
-	case *EndpointChoiceType_Any:
-		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Any); err != nil {
-			return err
-		}
-	case *EndpointChoiceType_OutsideEndpoints:
-		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OutsideEndpoints); err != nil {
-			return err
-		}
-	case *EndpointChoiceType_InsideEndpoints:
-		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.InsideEndpoints); err != nil {
-			return err
-		}
-	case *EndpointChoiceType_Interface:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Interface); err != nil {
-			return err
-		}
-	case *EndpointChoiceType_Namespace:
-		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Namespace)
-	case *EndpointChoiceType_LabelSelector:
-		_ = b.EncodeVarint(9<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LabelSelector); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("EndpointChoiceType.EndpointChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _EndpointChoiceType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*EndpointChoiceType)
-	switch tag {
-	case 1: // endpoint_choice.prefix_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.PrefixStringListType)
-		err := b.DecodeMessage(msg)
-		m.EndpointChoice = &EndpointChoiceType_PrefixList{msg}
-		return true, err
-	case 2: // endpoint_choice.any
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.EndpointChoice = &EndpointChoiceType_Any{msg}
-		return true, err
-	case 3: // endpoint_choice.outside_endpoints
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.EndpointChoice = &EndpointChoiceType_OutsideEndpoints{msg}
-		return true, err
-	case 4: // endpoint_choice.inside_endpoints
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.EndpointChoice = &EndpointChoiceType_InsideEndpoints{msg}
-		return true, err
-	case 5: // endpoint_choice.interface
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.ObjectRefType)
-		err := b.DecodeMessage(msg)
-		m.EndpointChoice = &EndpointChoiceType_Interface{msg}
-		return true, err
-	case 6: // endpoint_choice.namespace
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.EndpointChoice = &EndpointChoiceType_Namespace{x}
-		return true, err
-	case 9: // endpoint_choice.label_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.EndpointChoice = &EndpointChoiceType_LabelSelector{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _EndpointChoiceType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*EndpointChoiceType)
-	// endpoint_choice
-	switch x := m.EndpointChoice.(type) {
-	case *EndpointChoiceType_PrefixList:
-		s := proto.Size(x.PrefixList)
-		n += proto.SizeVarint(1<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *EndpointChoiceType_Any:
-		s := proto.Size(x.Any)
-		n += proto.SizeVarint(2<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *EndpointChoiceType_OutsideEndpoints:
-		s := proto.Size(x.OutsideEndpoints)
-		n += proto.SizeVarint(3<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *EndpointChoiceType_InsideEndpoints:
-		s := proto.Size(x.InsideEndpoints)
-		n += proto.SizeVarint(4<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *EndpointChoiceType_Interface:
-		s := proto.Size(x.Interface)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *EndpointChoiceType_Namespace:
-		n += proto.SizeVarint(6<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.Namespace)))
-		n += len(x.Namespace)
-	case *EndpointChoiceType_LabelSelector:
-		s := proto.Size(x.LabelSelector)
-		n += proto.SizeVarint(9<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
-
-// Applications
-//
-// x-displayName: "Applications"
-// Application protocols like HTTP, SNMP
-type ApplicationsType struct {
-	// Applications
-	//
-	// x-displayName: "Application Protocols"
-	// Application protocols like HTTP, SNMP
-	Applications []ApplicationEnumType `protobuf:"varint,1,rep,packed,name=applications,enum=ves.io.schema.views.network_policy_view.ApplicationEnumType" json:"applications,omitempty"`
-}
-
-func (m *ApplicationsType) Reset()                    { *m = ApplicationsType{} }
-func (*ApplicationsType) ProtoMessage()               {}
-func (*ApplicationsType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
-
-func (m *ApplicationsType) GetApplications() []ApplicationEnumType {
-	if m != nil {
-		return m.Applications
-	}
-	return nil
-}
-
-// Protocol and Port
-//
-// x-displayName: "Protocol and Port"
-// Protocol and Port ranges
-type ProtocolPortType struct {
-	// protocol
-	//
-	// x-displayName: "Protocol"
-	// Protocol in IP packet to be used as match criteria
-	// Values are tcp, udp, and icmp
-	Protocol string `protobuf:"bytes,1,opt,name=protocol,proto3" json:"protocol,omitempty"`
-	// ports
-	//
-	// x-displayName: "List of Port Ranges"
-	// x-example: "100-200"
-	// List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192
-	PortRanges []string `protobuf:"bytes,2,rep,name=port_ranges,json=portRanges" json:"port_ranges,omitempty"`
-}
-
-func (m *ProtocolPortType) Reset()                    { *m = ProtocolPortType{} }
-func (*ProtocolPortType) ProtoMessage()               {}
-func (*ProtocolPortType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
-
-func (m *ProtocolPortType) GetProtocol() string {
-	if m != nil {
-		return m.Protocol
-	}
-	return ""
-}
-
-func (m *ProtocolPortType) GetPortRanges() []string {
-	if m != nil {
-		return m.PortRanges
-	}
-	return nil
-}
-
-// Network Policy Rule
-//
-// x-displayName: "Network Policy Rule"
-// Shape of Network Policy Rule
-type NetworkPolicyRuleType struct {
-	// action
-	//
-	// x-displayName: "Action"
-	// Action to be taken at rule match. Currently supported actions are Allow and  Deny
-	Action ves_io_schema_network_policy_rule.NetworkPolicyRuleAction `protobuf:"varint,1,opt,name=action,proto3,enum=ves.io.schema.network_policy_rule.NetworkPolicyRuleAction" json:"action,omitempty"`
-	// Other Endpoint
-	//
-	// x-displayName: "Select Other Endpoint"
-	// Other endpoint of ingress or egress session with policy endpoint of network policy.
-	// If network policy rule is a ingress rule in network policy then other
-	// endpoint indicates the source endpoint from  which session is initiated. If network policy rule
-	// is a egress rule in network policy then other endpoint indicates the destination endpoint to which
-	// session is initiated from policy endpoint.
-	//
-	// Types that are valid to be assigned to OtherEndpoint:
-	//	*NetworkPolicyRuleType_Any
-	//	*NetworkPolicyRuleType_PrefixList
-	//	*NetworkPolicyRuleType_OutsideEndpoints
-	//	*NetworkPolicyRuleType_InsideEndpoints
-	//	*NetworkPolicyRuleType_Namespace
-	//	*NetworkPolicyRuleType_LabelSelector
-	//	*NetworkPolicyRuleType_IpPrefixSet
-	OtherEndpoint isNetworkPolicyRuleType_OtherEndpoint `protobuf_oneof:"other_endpoint"`
-	// Traffic Type
-	//
-	// x-displayName: "Select Type of Traffic to Match"
-	// Select type of traffic to match
-	//
-	// Types that are valid to be assigned to TrafficChoice:
-	//	*NetworkPolicyRuleType_AllTraffic
-	//	*NetworkPolicyRuleType_AllTcpTraffic
-	//	*NetworkPolicyRuleType_AllUdpTraffic
-	//	*NetworkPolicyRuleType_Applications
-	//	*NetworkPolicyRuleType_ProtocolPortRange
-	TrafficChoice isNetworkPolicyRuleType_TrafficChoice `protobuf_oneof:"traffic_choice"`
-	// label matcher
-	//
-	// x-displayName: "Keys for Label Match"
-	// x-example: "['site']"
-	// list of label keys to be for which label values will be matched
-	// Keys are "site" and rule lets "web" talk to "db", site in (abc, xyz) then "web" in site "abc"
-	// can talk to "db" in site "abc" and can not talk to "db" in site "xyz"
-	Keys []string `protobuf:"bytes,23,rep,name=keys" json:"keys,omitempty"`
-	// Name
-	//
-	// x-displayName: "Name"
-	// x-required
-	// x-example: "mypolicy-allow-htpp"
-	// Rule Name that will be used to query metrics for this rule.
-	RuleName string `protobuf:"bytes,10,opt,name=rule_name,json=ruleName,proto3" json:"rule_name,omitempty"`
-	// Description
-	//
-	// x-displayName: "Description"
-	// x-example: "Rule to block outside ip"
-	// Human readable description for the rule
-	RuleDescription string `protobuf:"bytes,24,opt,name=rule_description,json=ruleDescription,proto3" json:"rule_description,omitempty"`
-}
-
-func (m *NetworkPolicyRuleType) Reset()                    { *m = NetworkPolicyRuleType{} }
-func (*NetworkPolicyRuleType) ProtoMessage()               {}
-func (*NetworkPolicyRuleType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
-
-type isNetworkPolicyRuleType_OtherEndpoint interface {
-	isNetworkPolicyRuleType_OtherEndpoint()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isNetworkPolicyRuleType_TrafficChoice interface {
-	isNetworkPolicyRuleType_TrafficChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type NetworkPolicyRuleType_Any struct {
-	Any *ves_io_schema4.Empty `protobuf:"bytes,11,opt,name=any,oneof"`
-}
-type NetworkPolicyRuleType_PrefixList struct {
-	PrefixList *ves_io_schema_views.PrefixStringListType `protobuf:"bytes,12,opt,name=prefix_list,json=prefixList,oneof"`
-}
-type NetworkPolicyRuleType_OutsideEndpoints struct {
-	OutsideEndpoints *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=outside_endpoints,json=outsideEndpoints,oneof"`
-}
-type NetworkPolicyRuleType_InsideEndpoints struct {
-	InsideEndpoints *ves_io_schema4.Empty `protobuf:"bytes,14,opt,name=inside_endpoints,json=insideEndpoints,oneof"`
-}
-type NetworkPolicyRuleType_Namespace struct {
-	Namespace string `protobuf:"bytes,15,opt,name=namespace,proto3,oneof"`
-}
-type NetworkPolicyRuleType_LabelSelector struct {
-	LabelSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,16,opt,name=label_selector,json=labelSelector,oneof"`
-}
-type NetworkPolicyRuleType_IpPrefixSet struct {
-	IpPrefixSet *ves_io_schema4.IpPrefixSetRefType `protobuf:"bytes,5,opt,name=ip_prefix_set,json=ipPrefixSet,oneof"`
-}
-type NetworkPolicyRuleType_AllTraffic struct {
-	AllTraffic *ves_io_schema4.Empty `protobuf:"bytes,18,opt,name=all_traffic,json=allTraffic,oneof"`
-}
-type NetworkPolicyRuleType_AllTcpTraffic struct {
-	AllTcpTraffic *ves_io_schema4.Empty `protobuf:"bytes,19,opt,name=all_tcp_traffic,json=allTcpTraffic,oneof"`
-}
-type NetworkPolicyRuleType_AllUdpTraffic struct {
-	AllUdpTraffic *ves_io_schema4.Empty `protobuf:"bytes,20,opt,name=all_udp_traffic,json=allUdpTraffic,oneof"`
-}
-type NetworkPolicyRuleType_Applications struct {
-	Applications *ApplicationsType `protobuf:"bytes,21,opt,name=applications,oneof"`
-}
-type NetworkPolicyRuleType_ProtocolPortRange struct {
-	ProtocolPortRange *ProtocolPortType `protobuf:"bytes,22,opt,name=protocol_port_range,json=protocolPortRange,oneof"`
-}
-
-func (*NetworkPolicyRuleType_Any) isNetworkPolicyRuleType_OtherEndpoint()               {}
-func (*NetworkPolicyRuleType_PrefixList) isNetworkPolicyRuleType_OtherEndpoint()        {}
-func (*NetworkPolicyRuleType_OutsideEndpoints) isNetworkPolicyRuleType_OtherEndpoint()  {}
-func (*NetworkPolicyRuleType_InsideEndpoints) isNetworkPolicyRuleType_OtherEndpoint()   {}
-func (*NetworkPolicyRuleType_Namespace) isNetworkPolicyRuleType_OtherEndpoint()         {}
-func (*NetworkPolicyRuleType_LabelSelector) isNetworkPolicyRuleType_OtherEndpoint()     {}
-func (*NetworkPolicyRuleType_IpPrefixSet) isNetworkPolicyRuleType_OtherEndpoint()       {}
-func (*NetworkPolicyRuleType_AllTraffic) isNetworkPolicyRuleType_TrafficChoice()        {}
-func (*NetworkPolicyRuleType_AllTcpTraffic) isNetworkPolicyRuleType_TrafficChoice()     {}
-func (*NetworkPolicyRuleType_AllUdpTraffic) isNetworkPolicyRuleType_TrafficChoice()     {}
-func (*NetworkPolicyRuleType_Applications) isNetworkPolicyRuleType_TrafficChoice()      {}
-func (*NetworkPolicyRuleType_ProtocolPortRange) isNetworkPolicyRuleType_TrafficChoice() {}
-
-func (m *NetworkPolicyRuleType) GetOtherEndpoint() isNetworkPolicyRuleType_OtherEndpoint {
-	if m != nil {
-		return m.OtherEndpoint
-	}
-	return nil
-}
-func (m *NetworkPolicyRuleType) GetTrafficChoice() isNetworkPolicyRuleType_TrafficChoice {
-	if m != nil {
-		return m.TrafficChoice
-	}
-	return nil
-}
-
-func (m *NetworkPolicyRuleType) GetAction() ves_io_schema_network_policy_rule.NetworkPolicyRuleAction {
-	if m != nil {
-		return m.Action
-	}
-	return ves_io_schema_network_policy_rule.DENY
-}
-
-func (m *NetworkPolicyRuleType) GetAny() *ves_io_schema4.Empty {
-	if x, ok := m.GetOtherEndpoint().(*NetworkPolicyRuleType_Any); ok {
-		return x.Any
-	}
-	return nil
-}
-
-func (m *NetworkPolicyRuleType) GetPrefixList() *ves_io_schema_views.PrefixStringListType {
-	if x, ok := m.GetOtherEndpoint().(*NetworkPolicyRuleType_PrefixList); ok {
-		return x.PrefixList
-	}
-	return nil
-}
-
-func (m *NetworkPolicyRuleType) GetOutsideEndpoints() *ves_io_schema4.Empty {
-	if x, ok := m.GetOtherEndpoint().(*NetworkPolicyRuleType_OutsideEndpoints); ok {
-		return x.OutsideEndpoints
-	}
-	return nil
-}
-
-func (m *NetworkPolicyRuleType) GetInsideEndpoints() *ves_io_schema4.Empty {
-	if x, ok := m.GetOtherEndpoint().(*NetworkPolicyRuleType_InsideEndpoints); ok {
-		return x.InsideEndpoints
-	}
-	return nil
-}
-
-func (m *NetworkPolicyRuleType) GetNamespace() string {
-	if x, ok := m.GetOtherEndpoint().(*NetworkPolicyRuleType_Namespace); ok {
-		return x.Namespace
-	}
-	return ""
-}
-
-func (m *NetworkPolicyRuleType) GetLabelSelector() *ves_io_schema4.LabelSelectorType {
-	if x, ok := m.GetOtherEndpoint().(*NetworkPolicyRuleType_LabelSelector); ok {
-		return x.LabelSelector
-	}
-	return nil
-}
-
-func (m *NetworkPolicyRuleType) GetIpPrefixSet() *ves_io_schema4.IpPrefixSetRefType {
-	if x, ok := m.GetOtherEndpoint().(*NetworkPolicyRuleType_IpPrefixSet); ok {
-		return x.IpPrefixSet
-	}
-	return nil
-}
-
-func (m *NetworkPolicyRuleType) GetAllTraffic() *ves_io_schema4.Empty {
-	if x, ok := m.GetTrafficChoice().(*NetworkPolicyRuleType_AllTraffic); ok {
-		return x.AllTraffic
-	}
-	return nil
-}
-
-func (m *NetworkPolicyRuleType) GetAllTcpTraffic() *ves_io_schema4.Empty {
-	if x, ok := m.GetTrafficChoice().(*NetworkPolicyRuleType_AllTcpTraffic); ok {
-		return x.AllTcpTraffic
-	}
-	return nil
-}
-
-func (m *NetworkPolicyRuleType) GetAllUdpTraffic() *ves_io_schema4.Empty {
-	if x, ok := m.GetTrafficChoice().(*NetworkPolicyRuleType_AllUdpTraffic); ok {
-		return x.AllUdpTraffic
-	}
-	return nil
-}
-
-func (m *NetworkPolicyRuleType) GetApplications() *ApplicationsType {
-	if x, ok := m.GetTrafficChoice().(*NetworkPolicyRuleType_Applications); ok {
-		return x.Applications
-	}
-	return nil
-}
-
-func (m *NetworkPolicyRuleType) GetProtocolPortRange() *ProtocolPortType {
-	if x, ok := m.GetTrafficChoice().(*NetworkPolicyRuleType_ProtocolPortRange); ok {
-		return x.ProtocolPortRange
-	}
-	return nil
-}
-
-func (m *NetworkPolicyRuleType) GetKeys() []string {
-	if m != nil {
-		return m.Keys
-	}
-	return nil
-}
-
-func (m *NetworkPolicyRuleType) GetRuleName() string {
-	if m != nil {
-		return m.RuleName
-	}
-	return ""
-}
-
-func (m *NetworkPolicyRuleType) GetRuleDescription() string {
-	if m != nil {
-		return m.RuleDescription
-	}
-	return ""
-}
-
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*NetworkPolicyRuleType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _NetworkPolicyRuleType_OneofMarshaler, _NetworkPolicyRuleType_OneofUnmarshaler, _NetworkPolicyRuleType_OneofSizer, []interface{}{
-		(*NetworkPolicyRuleType_Any)(nil),
-		(*NetworkPolicyRuleType_PrefixList)(nil),
-		(*NetworkPolicyRuleType_OutsideEndpoints)(nil),
-		(*NetworkPolicyRuleType_InsideEndpoints)(nil),
-		(*NetworkPolicyRuleType_Namespace)(nil),
-		(*NetworkPolicyRuleType_LabelSelector)(nil),
-		(*NetworkPolicyRuleType_IpPrefixSet)(nil),
-		(*NetworkPolicyRuleType_AllTraffic)(nil),
-		(*NetworkPolicyRuleType_AllTcpTraffic)(nil),
-		(*NetworkPolicyRuleType_AllUdpTraffic)(nil),
-		(*NetworkPolicyRuleType_Applications)(nil),
-		(*NetworkPolicyRuleType_ProtocolPortRange)(nil),
-	}
-}
-
-func _NetworkPolicyRuleType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*NetworkPolicyRuleType)
-	// other_endpoint
-	switch x := m.OtherEndpoint.(type) {
-	case *NetworkPolicyRuleType_Any:
-		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Any); err != nil {
-			return err
-		}
-	case *NetworkPolicyRuleType_PrefixList:
-		_ = b.EncodeVarint(12<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.PrefixList); err != nil {
-			return err
-		}
-	case *NetworkPolicyRuleType_OutsideEndpoints:
-		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.OutsideEndpoints); err != nil {
-			return err
-		}
-	case *NetworkPolicyRuleType_InsideEndpoints:
-		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.InsideEndpoints); err != nil {
-			return err
-		}
-	case *NetworkPolicyRuleType_Namespace:
-		_ = b.EncodeVarint(15<<3 | proto.WireBytes)
-		_ = b.EncodeStringBytes(x.Namespace)
-	case *NetworkPolicyRuleType_LabelSelector:
-		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.LabelSelector); err != nil {
-			return err
-		}
-	case *NetworkPolicyRuleType_IpPrefixSet:
-		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.IpPrefixSet); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("NetworkPolicyRuleType.OtherEndpoint has unexpected type %T", x)
-	}
-	// traffic_choice
-	switch x := m.TrafficChoice.(type) {
-	case *NetworkPolicyRuleType_AllTraffic:
-		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AllTraffic); err != nil {
-			return err
-		}
-	case *NetworkPolicyRuleType_AllTcpTraffic:
-		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AllTcpTraffic); err != nil {
-			return err
-		}
-	case *NetworkPolicyRuleType_AllUdpTraffic:
-		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.AllUdpTraffic); err != nil {
-			return err
-		}
-	case *NetworkPolicyRuleType_Applications:
-		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.Applications); err != nil {
-			return err
-		}
-	case *NetworkPolicyRuleType_ProtocolPortRange:
-		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.ProtocolPortRange); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("NetworkPolicyRuleType.TrafficChoice has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _NetworkPolicyRuleType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*NetworkPolicyRuleType)
-	switch tag {
-	case 11: // other_endpoint.any
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.OtherEndpoint = &NetworkPolicyRuleType_Any{msg}
-		return true, err
-	case 12: // other_endpoint.prefix_list
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema_views.PrefixStringListType)
-		err := b.DecodeMessage(msg)
-		m.OtherEndpoint = &NetworkPolicyRuleType_PrefixList{msg}
-		return true, err
-	case 13: // other_endpoint.outside_endpoints
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.OtherEndpoint = &NetworkPolicyRuleType_OutsideEndpoints{msg}
-		return true, err
-	case 14: // other_endpoint.inside_endpoints
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.OtherEndpoint = &NetworkPolicyRuleType_InsideEndpoints{msg}
-		return true, err
-	case 15: // other_endpoint.namespace
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.OtherEndpoint = &NetworkPolicyRuleType_Namespace{x}
-		return true, err
-	case 16: // other_endpoint.label_selector
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.LabelSelectorType)
-		err := b.DecodeMessage(msg)
-		m.OtherEndpoint = &NetworkPolicyRuleType_LabelSelector{msg}
-		return true, err
-	case 5: // other_endpoint.ip_prefix_set
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.IpPrefixSetRefType)
-		err := b.DecodeMessage(msg)
-		m.OtherEndpoint = &NetworkPolicyRuleType_IpPrefixSet{msg}
-		return true, err
-	case 18: // traffic_choice.all_traffic
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.TrafficChoice = &NetworkPolicyRuleType_AllTraffic{msg}
-		return true, err
-	case 19: // traffic_choice.all_tcp_traffic
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.TrafficChoice = &NetworkPolicyRuleType_AllTcpTraffic{msg}
-		return true, err
-	case 20: // traffic_choice.all_udp_traffic
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ves_io_schema4.Empty)
-		err := b.DecodeMessage(msg)
-		m.TrafficChoice = &NetworkPolicyRuleType_AllUdpTraffic{msg}
-		return true, err
-	case 21: // traffic_choice.applications
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ApplicationsType)
-		err := b.DecodeMessage(msg)
-		m.TrafficChoice = &NetworkPolicyRuleType_Applications{msg}
-		return true, err
-	case 22: // traffic_choice.protocol_port_range
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(ProtocolPortType)
-		err := b.DecodeMessage(msg)
-		m.TrafficChoice = &NetworkPolicyRuleType_ProtocolPortRange{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _NetworkPolicyRuleType_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*NetworkPolicyRuleType)
-	// other_endpoint
-	switch x := m.OtherEndpoint.(type) {
-	case *NetworkPolicyRuleType_Any:
-		s := proto.Size(x.Any)
-		n += proto.SizeVarint(11<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *NetworkPolicyRuleType_PrefixList:
-		s := proto.Size(x.PrefixList)
-		n += proto.SizeVarint(12<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *NetworkPolicyRuleType_OutsideEndpoints:
-		s := proto.Size(x.OutsideEndpoints)
-		n += proto.SizeVarint(13<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *NetworkPolicyRuleType_InsideEndpoints:
-		s := proto.Size(x.InsideEndpoints)
-		n += proto.SizeVarint(14<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *NetworkPolicyRuleType_Namespace:
-		n += proto.SizeVarint(15<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(len(x.Namespace)))
-		n += len(x.Namespace)
-	case *NetworkPolicyRuleType_LabelSelector:
-		s := proto.Size(x.LabelSelector)
-		n += proto.SizeVarint(16<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *NetworkPolicyRuleType_IpPrefixSet:
-		s := proto.Size(x.IpPrefixSet)
-		n += proto.SizeVarint(5<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	// traffic_choice
-	switch x := m.TrafficChoice.(type) {
-	case *NetworkPolicyRuleType_AllTraffic:
-		s := proto.Size(x.AllTraffic)
-		n += proto.SizeVarint(18<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *NetworkPolicyRuleType_AllTcpTraffic:
-		s := proto.Size(x.AllTcpTraffic)
-		n += proto.SizeVarint(19<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *NetworkPolicyRuleType_AllUdpTraffic:
-		s := proto.Size(x.AllUdpTraffic)
-		n += proto.SizeVarint(20<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *NetworkPolicyRuleType_Applications:
-		s := proto.Size(x.Applications)
-		n += proto.SizeVarint(21<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case *NetworkPolicyRuleType_ProtocolPortRange:
-		s := proto.Size(x.ProtocolPortRange)
-		n += proto.SizeVarint(22<<3 | proto.WireBytes)
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
-}
 
 // GlobalSpecType
 //
@@ -956,17 +37,17 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Endpoint(s)"
 	// Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.
-	Endpoint *EndpointChoiceType `protobuf:"bytes,1,opt,name=endpoint" json:"endpoint,omitempty"`
+	Endpoint *ves_io_schema_network_policy.EndpointChoiceType `protobuf:"bytes,1,opt,name=endpoint" json:"endpoint,omitempty"`
 	// Ingress Rules
 	//
 	// x-displayName: "Ingress Rules"
 	// Ordered list of rules applied to connections to policy endpoints.
-	IngressRules []*NetworkPolicyRuleType `protobuf:"bytes,2,rep,name=ingress_rules,json=ingressRules" json:"ingress_rules,omitempty"`
+	IngressRules []*ves_io_schema_network_policy.NetworkPolicyRuleType `protobuf:"bytes,2,rep,name=ingress_rules,json=ingressRules" json:"ingress_rules,omitempty"`
 	// Egress Rules
 	//
 	// x-displayName: "Egress Rules"
 	// Ordered list of rules applied to connections from policy endpoints.
-	EgressRules []*NetworkPolicyRuleType `protobuf:"bytes,3,rep,name=egress_rules,json=egressRules" json:"egress_rules,omitempty"`
+	EgressRules []*ves_io_schema_network_policy.NetworkPolicyRuleType `protobuf:"bytes,3,rep,name=egress_rules,json=egressRules" json:"egress_rules,omitempty"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
@@ -976,23 +57,23 @@ type GlobalSpecType struct {
 
 func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
 
-func (m *GlobalSpecType) GetEndpoint() *EndpointChoiceType {
+func (m *GlobalSpecType) GetEndpoint() *ves_io_schema_network_policy.EndpointChoiceType {
 	if m != nil {
 		return m.Endpoint
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetIngressRules() []*NetworkPolicyRuleType {
+func (m *GlobalSpecType) GetIngressRules() []*ves_io_schema_network_policy.NetworkPolicyRuleType {
 	if m != nil {
 		return m.IngressRules
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetEgressRules() []*NetworkPolicyRuleType {
+func (m *GlobalSpecType) GetEgressRules() []*ves_io_schema_network_policy.NetworkPolicyRuleType {
 	if m != nil {
 		return m.EgressRules
 	}
@@ -1011,30 +92,30 @@ func (m *GlobalSpecType) GetViewInternal() *ves_io_schema_views.ObjectRefType {
 // x-displayName: "Create Network policy View"
 // Shape of the Network policy view specification
 type CreateSpecType struct {
-	Endpoint     *EndpointChoiceType      `protobuf:"bytes,1,opt,name=endpoint" json:"endpoint,omitempty"`
-	IngressRules []*NetworkPolicyRuleType `protobuf:"bytes,2,rep,name=ingress_rules,json=ingressRules" json:"ingress_rules,omitempty"`
-	EgressRules  []*NetworkPolicyRuleType `protobuf:"bytes,3,rep,name=egress_rules,json=egressRules" json:"egress_rules,omitempty"`
+	Endpoint     *ves_io_schema_network_policy.EndpointChoiceType      `protobuf:"bytes,1,opt,name=endpoint" json:"endpoint,omitempty"`
+	IngressRules []*ves_io_schema_network_policy.NetworkPolicyRuleType `protobuf:"bytes,2,rep,name=ingress_rules,json=ingressRules" json:"ingress_rules,omitempty"`
+	EgressRules  []*ves_io_schema_network_policy.NetworkPolicyRuleType `protobuf:"bytes,3,rep,name=egress_rules,json=egressRules" json:"egress_rules,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{1} }
 
-func (m *CreateSpecType) GetEndpoint() *EndpointChoiceType {
+func (m *CreateSpecType) GetEndpoint() *ves_io_schema_network_policy.EndpointChoiceType {
 	if m != nil {
 		return m.Endpoint
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetIngressRules() []*NetworkPolicyRuleType {
+func (m *CreateSpecType) GetIngressRules() []*ves_io_schema_network_policy.NetworkPolicyRuleType {
 	if m != nil {
 		return m.IngressRules
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetEgressRules() []*NetworkPolicyRuleType {
+func (m *CreateSpecType) GetEgressRules() []*ves_io_schema_network_policy.NetworkPolicyRuleType {
 	if m != nil {
 		return m.EgressRules
 	}
@@ -1046,30 +127,30 @@ func (m *CreateSpecType) GetEgressRules() []*NetworkPolicyRuleType {
 // x-displayName: "Replace Network policy View"
 // Shape of the Network policy view replace specification
 type ReplaceSpecType struct {
-	Endpoint     *EndpointChoiceType      `protobuf:"bytes,1,opt,name=endpoint" json:"endpoint,omitempty"`
-	IngressRules []*NetworkPolicyRuleType `protobuf:"bytes,2,rep,name=ingress_rules,json=ingressRules" json:"ingress_rules,omitempty"`
-	EgressRules  []*NetworkPolicyRuleType `protobuf:"bytes,3,rep,name=egress_rules,json=egressRules" json:"egress_rules,omitempty"`
+	Endpoint     *ves_io_schema_network_policy.EndpointChoiceType      `protobuf:"bytes,1,opt,name=endpoint" json:"endpoint,omitempty"`
+	IngressRules []*ves_io_schema_network_policy.NetworkPolicyRuleType `protobuf:"bytes,2,rep,name=ingress_rules,json=ingressRules" json:"ingress_rules,omitempty"`
+	EgressRules  []*ves_io_schema_network_policy.NetworkPolicyRuleType `protobuf:"bytes,3,rep,name=egress_rules,json=egressRules" json:"egress_rules,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
 
-func (m *ReplaceSpecType) GetEndpoint() *EndpointChoiceType {
+func (m *ReplaceSpecType) GetEndpoint() *ves_io_schema_network_policy.EndpointChoiceType {
 	if m != nil {
 		return m.Endpoint
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetIngressRules() []*NetworkPolicyRuleType {
+func (m *ReplaceSpecType) GetIngressRules() []*ves_io_schema_network_policy.NetworkPolicyRuleType {
 	if m != nil {
 		return m.IngressRules
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetEgressRules() []*NetworkPolicyRuleType {
+func (m *ReplaceSpecType) GetEgressRules() []*ves_io_schema_network_policy.NetworkPolicyRuleType {
 	if m != nil {
 		return m.EgressRules
 	}
@@ -1081,30 +162,30 @@ func (m *ReplaceSpecType) GetEgressRules() []*NetworkPolicyRuleType {
 // x-displayName: "Get Network policy View"
 // Shape of the Network policy view specification
 type GetSpecType struct {
-	Endpoint     *EndpointChoiceType      `protobuf:"bytes,1,opt,name=endpoint" json:"endpoint,omitempty"`
-	IngressRules []*NetworkPolicyRuleType `protobuf:"bytes,2,rep,name=ingress_rules,json=ingressRules" json:"ingress_rules,omitempty"`
-	EgressRules  []*NetworkPolicyRuleType `protobuf:"bytes,3,rep,name=egress_rules,json=egressRules" json:"egress_rules,omitempty"`
+	Endpoint     *ves_io_schema_network_policy.EndpointChoiceType      `protobuf:"bytes,1,opt,name=endpoint" json:"endpoint,omitempty"`
+	IngressRules []*ves_io_schema_network_policy.NetworkPolicyRuleType `protobuf:"bytes,2,rep,name=ingress_rules,json=ingressRules" json:"ingress_rules,omitempty"`
+	EgressRules  []*ves_io_schema_network_policy.NetworkPolicyRuleType `protobuf:"bytes,3,rep,name=egress_rules,json=egressRules" json:"egress_rules,omitempty"`
 }
 
 func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
 
-func (m *GetSpecType) GetEndpoint() *EndpointChoiceType {
+func (m *GetSpecType) GetEndpoint() *ves_io_schema_network_policy.EndpointChoiceType {
 	if m != nil {
 		return m.Endpoint
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetIngressRules() []*NetworkPolicyRuleType {
+func (m *GetSpecType) GetIngressRules() []*ves_io_schema_network_policy.NetworkPolicyRuleType {
 	if m != nil {
 		return m.IngressRules
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetEgressRules() []*NetworkPolicyRuleType {
+func (m *GetSpecType) GetEgressRules() []*ves_io_schema_network_policy.NetworkPolicyRuleType {
 	if m != nil {
 		return m.EgressRules
 	}
@@ -1112,14 +193,6 @@ func (m *GetSpecType) GetEgressRules() []*NetworkPolicyRuleType {
 }
 
 func init() {
-	proto.RegisterType((*EndpointChoiceType)(nil), "ves.io.schema.views.network_policy_view.EndpointChoiceType")
-	golang_proto.RegisterType((*EndpointChoiceType)(nil), "ves.io.schema.views.network_policy_view.EndpointChoiceType")
-	proto.RegisterType((*ApplicationsType)(nil), "ves.io.schema.views.network_policy_view.ApplicationsType")
-	golang_proto.RegisterType((*ApplicationsType)(nil), "ves.io.schema.views.network_policy_view.ApplicationsType")
-	proto.RegisterType((*ProtocolPortType)(nil), "ves.io.schema.views.network_policy_view.ProtocolPortType")
-	golang_proto.RegisterType((*ProtocolPortType)(nil), "ves.io.schema.views.network_policy_view.ProtocolPortType")
-	proto.RegisterType((*NetworkPolicyRuleType)(nil), "ves.io.schema.views.network_policy_view.NetworkPolicyRuleType")
-	golang_proto.RegisterType((*NetworkPolicyRuleType)(nil), "ves.io.schema.views.network_policy_view.NetworkPolicyRuleType")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.network_policy_view.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.network_policy_view.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.views.network_policy_view.CreateSpecType")
@@ -1128,618 +201,6 @@ func init() {
 	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.views.network_policy_view.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.views.network_policy_view.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.views.network_policy_view.GetSpecType")
-	proto.RegisterEnum("ves.io.schema.views.network_policy_view.ApplicationEnumType", ApplicationEnumType_name, ApplicationEnumType_value)
-	golang_proto.RegisterEnum("ves.io.schema.views.network_policy_view.ApplicationEnumType", ApplicationEnumType_name, ApplicationEnumType_value)
-}
-func (x ApplicationEnumType) String() string {
-	s, ok := ApplicationEnumType_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (this *EndpointChoiceType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndpointChoiceType)
-	if !ok {
-		that2, ok := that.(EndpointChoiceType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.EndpointChoice == nil {
-		if this.EndpointChoice != nil {
-			return false
-		}
-	} else if this.EndpointChoice == nil {
-		return false
-	} else if !this.EndpointChoice.Equal(that1.EndpointChoice) {
-		return false
-	}
-	return true
-}
-func (this *EndpointChoiceType_PrefixList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndpointChoiceType_PrefixList)
-	if !ok {
-		that2, ok := that.(EndpointChoiceType_PrefixList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.PrefixList.Equal(that1.PrefixList) {
-		return false
-	}
-	return true
-}
-func (this *EndpointChoiceType_Any) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndpointChoiceType_Any)
-	if !ok {
-		that2, ok := that.(EndpointChoiceType_Any)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Any.Equal(that1.Any) {
-		return false
-	}
-	return true
-}
-func (this *EndpointChoiceType_OutsideEndpoints) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndpointChoiceType_OutsideEndpoints)
-	if !ok {
-		that2, ok := that.(EndpointChoiceType_OutsideEndpoints)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OutsideEndpoints.Equal(that1.OutsideEndpoints) {
-		return false
-	}
-	return true
-}
-func (this *EndpointChoiceType_InsideEndpoints) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndpointChoiceType_InsideEndpoints)
-	if !ok {
-		that2, ok := that.(EndpointChoiceType_InsideEndpoints)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.InsideEndpoints.Equal(that1.InsideEndpoints) {
-		return false
-	}
-	return true
-}
-func (this *EndpointChoiceType_Interface) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndpointChoiceType_Interface)
-	if !ok {
-		that2, ok := that.(EndpointChoiceType_Interface)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Interface.Equal(that1.Interface) {
-		return false
-	}
-	return true
-}
-func (this *EndpointChoiceType_Namespace) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndpointChoiceType_Namespace)
-	if !ok {
-		that2, ok := that.(EndpointChoiceType_Namespace)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Namespace != that1.Namespace {
-		return false
-	}
-	return true
-}
-func (this *EndpointChoiceType_LabelSelector) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*EndpointChoiceType_LabelSelector)
-	if !ok {
-		that2, ok := that.(EndpointChoiceType_LabelSelector)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LabelSelector.Equal(that1.LabelSelector) {
-		return false
-	}
-	return true
-}
-func (this *ApplicationsType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ApplicationsType)
-	if !ok {
-		that2, ok := that.(ApplicationsType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Applications) != len(that1.Applications) {
-		return false
-	}
-	for i := range this.Applications {
-		if this.Applications[i] != that1.Applications[i] {
-			return false
-		}
-	}
-	return true
-}
-func (this *ProtocolPortType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProtocolPortType)
-	if !ok {
-		that2, ok := that.(ProtocolPortType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Protocol != that1.Protocol {
-		return false
-	}
-	if len(this.PortRanges) != len(that1.PortRanges) {
-		return false
-	}
-	for i := range this.PortRanges {
-		if this.PortRanges[i] != that1.PortRanges[i] {
-			return false
-		}
-	}
-	return true
-}
-func (this *NetworkPolicyRuleType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkPolicyRuleType)
-	if !ok {
-		that2, ok := that.(NetworkPolicyRuleType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Action != that1.Action {
-		return false
-	}
-	if that1.OtherEndpoint == nil {
-		if this.OtherEndpoint != nil {
-			return false
-		}
-	} else if this.OtherEndpoint == nil {
-		return false
-	} else if !this.OtherEndpoint.Equal(that1.OtherEndpoint) {
-		return false
-	}
-	if that1.TrafficChoice == nil {
-		if this.TrafficChoice != nil {
-			return false
-		}
-	} else if this.TrafficChoice == nil {
-		return false
-	} else if !this.TrafficChoice.Equal(that1.TrafficChoice) {
-		return false
-	}
-	if len(this.Keys) != len(that1.Keys) {
-		return false
-	}
-	for i := range this.Keys {
-		if this.Keys[i] != that1.Keys[i] {
-			return false
-		}
-	}
-	if this.RuleName != that1.RuleName {
-		return false
-	}
-	if this.RuleDescription != that1.RuleDescription {
-		return false
-	}
-	return true
-}
-func (this *NetworkPolicyRuleType_Any) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkPolicyRuleType_Any)
-	if !ok {
-		that2, ok := that.(NetworkPolicyRuleType_Any)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Any.Equal(that1.Any) {
-		return false
-	}
-	return true
-}
-func (this *NetworkPolicyRuleType_PrefixList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkPolicyRuleType_PrefixList)
-	if !ok {
-		that2, ok := that.(NetworkPolicyRuleType_PrefixList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.PrefixList.Equal(that1.PrefixList) {
-		return false
-	}
-	return true
-}
-func (this *NetworkPolicyRuleType_OutsideEndpoints) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkPolicyRuleType_OutsideEndpoints)
-	if !ok {
-		that2, ok := that.(NetworkPolicyRuleType_OutsideEndpoints)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OutsideEndpoints.Equal(that1.OutsideEndpoints) {
-		return false
-	}
-	return true
-}
-func (this *NetworkPolicyRuleType_InsideEndpoints) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkPolicyRuleType_InsideEndpoints)
-	if !ok {
-		that2, ok := that.(NetworkPolicyRuleType_InsideEndpoints)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.InsideEndpoints.Equal(that1.InsideEndpoints) {
-		return false
-	}
-	return true
-}
-func (this *NetworkPolicyRuleType_Namespace) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkPolicyRuleType_Namespace)
-	if !ok {
-		that2, ok := that.(NetworkPolicyRuleType_Namespace)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Namespace != that1.Namespace {
-		return false
-	}
-	return true
-}
-func (this *NetworkPolicyRuleType_LabelSelector) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkPolicyRuleType_LabelSelector)
-	if !ok {
-		that2, ok := that.(NetworkPolicyRuleType_LabelSelector)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.LabelSelector.Equal(that1.LabelSelector) {
-		return false
-	}
-	return true
-}
-func (this *NetworkPolicyRuleType_IpPrefixSet) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkPolicyRuleType_IpPrefixSet)
-	if !ok {
-		that2, ok := that.(NetworkPolicyRuleType_IpPrefixSet)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.IpPrefixSet.Equal(that1.IpPrefixSet) {
-		return false
-	}
-	return true
-}
-func (this *NetworkPolicyRuleType_AllTraffic) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkPolicyRuleType_AllTraffic)
-	if !ok {
-		that2, ok := that.(NetworkPolicyRuleType_AllTraffic)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AllTraffic.Equal(that1.AllTraffic) {
-		return false
-	}
-	return true
-}
-func (this *NetworkPolicyRuleType_AllTcpTraffic) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkPolicyRuleType_AllTcpTraffic)
-	if !ok {
-		that2, ok := that.(NetworkPolicyRuleType_AllTcpTraffic)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AllTcpTraffic.Equal(that1.AllTcpTraffic) {
-		return false
-	}
-	return true
-}
-func (this *NetworkPolicyRuleType_AllUdpTraffic) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkPolicyRuleType_AllUdpTraffic)
-	if !ok {
-		that2, ok := that.(NetworkPolicyRuleType_AllUdpTraffic)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AllUdpTraffic.Equal(that1.AllUdpTraffic) {
-		return false
-	}
-	return true
-}
-func (this *NetworkPolicyRuleType_Applications) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkPolicyRuleType_Applications)
-	if !ok {
-		that2, ok := that.(NetworkPolicyRuleType_Applications)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Applications.Equal(that1.Applications) {
-		return false
-	}
-	return true
-}
-func (this *NetworkPolicyRuleType_ProtocolPortRange) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*NetworkPolicyRuleType_ProtocolPortRange)
-	if !ok {
-		that2, ok := that.(NetworkPolicyRuleType_ProtocolPortRange)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ProtocolPortRange.Equal(that1.ProtocolPortRange) {
-		return false
-	}
-	return true
 }
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
@@ -1904,210 +365,6 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *EndpointChoiceType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 11)
-	s = append(s, "&network_policy_view.EndpointChoiceType{")
-	if this.EndpointChoice != nil {
-		s = append(s, "EndpointChoice: "+fmt.Sprintf("%#v", this.EndpointChoice)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *EndpointChoiceType_PrefixList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.EndpointChoiceType_PrefixList{` +
-		`PrefixList:` + fmt.Sprintf("%#v", this.PrefixList) + `}`}, ", ")
-	return s
-}
-func (this *EndpointChoiceType_Any) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.EndpointChoiceType_Any{` +
-		`Any:` + fmt.Sprintf("%#v", this.Any) + `}`}, ", ")
-	return s
-}
-func (this *EndpointChoiceType_OutsideEndpoints) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.EndpointChoiceType_OutsideEndpoints{` +
-		`OutsideEndpoints:` + fmt.Sprintf("%#v", this.OutsideEndpoints) + `}`}, ", ")
-	return s
-}
-func (this *EndpointChoiceType_InsideEndpoints) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.EndpointChoiceType_InsideEndpoints{` +
-		`InsideEndpoints:` + fmt.Sprintf("%#v", this.InsideEndpoints) + `}`}, ", ")
-	return s
-}
-func (this *EndpointChoiceType_Interface) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.EndpointChoiceType_Interface{` +
-		`Interface:` + fmt.Sprintf("%#v", this.Interface) + `}`}, ", ")
-	return s
-}
-func (this *EndpointChoiceType_Namespace) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.EndpointChoiceType_Namespace{` +
-		`Namespace:` + fmt.Sprintf("%#v", this.Namespace) + `}`}, ", ")
-	return s
-}
-func (this *EndpointChoiceType_LabelSelector) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.EndpointChoiceType_LabelSelector{` +
-		`LabelSelector:` + fmt.Sprintf("%#v", this.LabelSelector) + `}`}, ", ")
-	return s
-}
-func (this *ApplicationsType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&network_policy_view.ApplicationsType{")
-	s = append(s, "Applications: "+fmt.Sprintf("%#v", this.Applications)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *ProtocolPortType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&network_policy_view.ProtocolPortType{")
-	s = append(s, "Protocol: "+fmt.Sprintf("%#v", this.Protocol)+",\n")
-	s = append(s, "PortRanges: "+fmt.Sprintf("%#v", this.PortRanges)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *NetworkPolicyRuleType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 20)
-	s = append(s, "&network_policy_view.NetworkPolicyRuleType{")
-	s = append(s, "Action: "+fmt.Sprintf("%#v", this.Action)+",\n")
-	if this.OtherEndpoint != nil {
-		s = append(s, "OtherEndpoint: "+fmt.Sprintf("%#v", this.OtherEndpoint)+",\n")
-	}
-	if this.TrafficChoice != nil {
-		s = append(s, "TrafficChoice: "+fmt.Sprintf("%#v", this.TrafficChoice)+",\n")
-	}
-	s = append(s, "Keys: "+fmt.Sprintf("%#v", this.Keys)+",\n")
-	s = append(s, "RuleName: "+fmt.Sprintf("%#v", this.RuleName)+",\n")
-	s = append(s, "RuleDescription: "+fmt.Sprintf("%#v", this.RuleDescription)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *NetworkPolicyRuleType_Any) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.NetworkPolicyRuleType_Any{` +
-		`Any:` + fmt.Sprintf("%#v", this.Any) + `}`}, ", ")
-	return s
-}
-func (this *NetworkPolicyRuleType_PrefixList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.NetworkPolicyRuleType_PrefixList{` +
-		`PrefixList:` + fmt.Sprintf("%#v", this.PrefixList) + `}`}, ", ")
-	return s
-}
-func (this *NetworkPolicyRuleType_OutsideEndpoints) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.NetworkPolicyRuleType_OutsideEndpoints{` +
-		`OutsideEndpoints:` + fmt.Sprintf("%#v", this.OutsideEndpoints) + `}`}, ", ")
-	return s
-}
-func (this *NetworkPolicyRuleType_InsideEndpoints) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.NetworkPolicyRuleType_InsideEndpoints{` +
-		`InsideEndpoints:` + fmt.Sprintf("%#v", this.InsideEndpoints) + `}`}, ", ")
-	return s
-}
-func (this *NetworkPolicyRuleType_Namespace) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.NetworkPolicyRuleType_Namespace{` +
-		`Namespace:` + fmt.Sprintf("%#v", this.Namespace) + `}`}, ", ")
-	return s
-}
-func (this *NetworkPolicyRuleType_LabelSelector) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.NetworkPolicyRuleType_LabelSelector{` +
-		`LabelSelector:` + fmt.Sprintf("%#v", this.LabelSelector) + `}`}, ", ")
-	return s
-}
-func (this *NetworkPolicyRuleType_IpPrefixSet) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.NetworkPolicyRuleType_IpPrefixSet{` +
-		`IpPrefixSet:` + fmt.Sprintf("%#v", this.IpPrefixSet) + `}`}, ", ")
-	return s
-}
-func (this *NetworkPolicyRuleType_AllTraffic) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.NetworkPolicyRuleType_AllTraffic{` +
-		`AllTraffic:` + fmt.Sprintf("%#v", this.AllTraffic) + `}`}, ", ")
-	return s
-}
-func (this *NetworkPolicyRuleType_AllTcpTraffic) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.NetworkPolicyRuleType_AllTcpTraffic{` +
-		`AllTcpTraffic:` + fmt.Sprintf("%#v", this.AllTcpTraffic) + `}`}, ", ")
-	return s
-}
-func (this *NetworkPolicyRuleType_AllUdpTraffic) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.NetworkPolicyRuleType_AllUdpTraffic{` +
-		`AllUdpTraffic:` + fmt.Sprintf("%#v", this.AllUdpTraffic) + `}`}, ", ")
-	return s
-}
-func (this *NetworkPolicyRuleType_Applications) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.NetworkPolicyRuleType_Applications{` +
-		`Applications:` + fmt.Sprintf("%#v", this.Applications) + `}`}, ", ")
-	return s
-}
-func (this *NetworkPolicyRuleType_ProtocolPortRange) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&network_policy_view.NetworkPolicyRuleType_ProtocolPortRange{` +
-		`ProtocolPortRange:` + fmt.Sprintf("%#v", this.ProtocolPortRange) + `}`}, ", ")
-	return s
-}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -2191,439 +448,6 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
 }
-func (m *EndpointChoiceType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *EndpointChoiceType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.EndpointChoice != nil {
-		nn1, err := m.EndpointChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn1
-	}
-	return i, nil
-}
-
-func (m *EndpointChoiceType_PrefixList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.PrefixList != nil {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PrefixList.Size()))
-		n2, err := m.PrefixList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n2
-	}
-	return i, nil
-}
-func (m *EndpointChoiceType_Any) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.Any != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Any.Size()))
-		n3, err := m.Any.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n3
-	}
-	return i, nil
-}
-func (m *EndpointChoiceType_OutsideEndpoints) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.OutsideEndpoints != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OutsideEndpoints.Size()))
-		n4, err := m.OutsideEndpoints.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n4
-	}
-	return i, nil
-}
-func (m *EndpointChoiceType_InsideEndpoints) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.InsideEndpoints != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.InsideEndpoints.Size()))
-		n5, err := m.InsideEndpoints.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n5
-	}
-	return i, nil
-}
-func (m *EndpointChoiceType_Interface) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.Interface != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Interface.Size()))
-		n6, err := m.Interface.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n6
-	}
-	return i, nil
-}
-func (m *EndpointChoiceType_Namespace) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x32
-	i++
-	i = encodeVarintTypes(dAtA, i, uint64(len(m.Namespace)))
-	i += copy(dAtA[i:], m.Namespace)
-	return i, nil
-}
-func (m *EndpointChoiceType_LabelSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.LabelSelector != nil {
-		dAtA[i] = 0x4a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LabelSelector.Size()))
-		n7, err := m.LabelSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n7
-	}
-	return i, nil
-}
-func (m *ApplicationsType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ApplicationsType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.Applications) > 0 {
-		dAtA9 := make([]byte, len(m.Applications)*10)
-		var j8 int
-		for _, num := range m.Applications {
-			for num >= 1<<7 {
-				dAtA9[j8] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j8++
-			}
-			dAtA9[j8] = uint8(num)
-			j8++
-		}
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(j8))
-		i += copy(dAtA[i:], dAtA9[:j8])
-	}
-	return i, nil
-}
-
-func (m *ProtocolPortType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ProtocolPortType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.Protocol) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Protocol)))
-		i += copy(dAtA[i:], m.Protocol)
-	}
-	if len(m.PortRanges) > 0 {
-		for _, s := range m.PortRanges {
-			dAtA[i] = 0x12
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
-		}
-	}
-	return i, nil
-}
-
-func (m *NetworkPolicyRuleType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *NetworkPolicyRuleType) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.Action != 0 {
-		dAtA[i] = 0x8
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Action))
-	}
-	if m.OtherEndpoint != nil {
-		nn10, err := m.OtherEndpoint.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn10
-	}
-	if len(m.RuleName) > 0 {
-		dAtA[i] = 0x52
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.RuleName)))
-		i += copy(dAtA[i:], m.RuleName)
-	}
-	if m.TrafficChoice != nil {
-		nn11, err := m.TrafficChoice.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += nn11
-	}
-	if len(m.Keys) > 0 {
-		for _, s := range m.Keys {
-			dAtA[i] = 0xba
-			i++
-			dAtA[i] = 0x1
-			i++
-			l = len(s)
-			for l >= 1<<7 {
-				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
-				l >>= 7
-				i++
-			}
-			dAtA[i] = uint8(l)
-			i++
-			i += copy(dAtA[i:], s)
-		}
-	}
-	if len(m.RuleDescription) > 0 {
-		dAtA[i] = 0xc2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.RuleDescription)))
-		i += copy(dAtA[i:], m.RuleDescription)
-	}
-	return i, nil
-}
-
-func (m *NetworkPolicyRuleType_IpPrefixSet) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.IpPrefixSet != nil {
-		dAtA[i] = 0x2a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.IpPrefixSet.Size()))
-		n12, err := m.IpPrefixSet.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n12
-	}
-	return i, nil
-}
-func (m *NetworkPolicyRuleType_Any) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.Any != nil {
-		dAtA[i] = 0x5a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Any.Size()))
-		n13, err := m.Any.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n13
-	}
-	return i, nil
-}
-func (m *NetworkPolicyRuleType_PrefixList) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.PrefixList != nil {
-		dAtA[i] = 0x62
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.PrefixList.Size()))
-		n14, err := m.PrefixList.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n14
-	}
-	return i, nil
-}
-func (m *NetworkPolicyRuleType_OutsideEndpoints) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.OutsideEndpoints != nil {
-		dAtA[i] = 0x6a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.OutsideEndpoints.Size()))
-		n15, err := m.OutsideEndpoints.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n15
-	}
-	return i, nil
-}
-func (m *NetworkPolicyRuleType_InsideEndpoints) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.InsideEndpoints != nil {
-		dAtA[i] = 0x72
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.InsideEndpoints.Size()))
-		n16, err := m.InsideEndpoints.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n16
-	}
-	return i, nil
-}
-func (m *NetworkPolicyRuleType_Namespace) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	dAtA[i] = 0x7a
-	i++
-	i = encodeVarintTypes(dAtA, i, uint64(len(m.Namespace)))
-	i += copy(dAtA[i:], m.Namespace)
-	return i, nil
-}
-func (m *NetworkPolicyRuleType_LabelSelector) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.LabelSelector != nil {
-		dAtA[i] = 0x82
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.LabelSelector.Size()))
-		n17, err := m.LabelSelector.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n17
-	}
-	return i, nil
-}
-func (m *NetworkPolicyRuleType_AllTraffic) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.AllTraffic != nil {
-		dAtA[i] = 0x92
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllTraffic.Size()))
-		n18, err := m.AllTraffic.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n18
-	}
-	return i, nil
-}
-func (m *NetworkPolicyRuleType_AllTcpTraffic) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.AllTcpTraffic != nil {
-		dAtA[i] = 0x9a
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllTcpTraffic.Size()))
-		n19, err := m.AllTcpTraffic.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n19
-	}
-	return i, nil
-}
-func (m *NetworkPolicyRuleType_AllUdpTraffic) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.AllUdpTraffic != nil {
-		dAtA[i] = 0xa2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.AllUdpTraffic.Size()))
-		n20, err := m.AllUdpTraffic.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n20
-	}
-	return i, nil
-}
-func (m *NetworkPolicyRuleType_Applications) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.Applications != nil {
-		dAtA[i] = 0xaa
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.Applications.Size()))
-		n21, err := m.Applications.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n21
-	}
-	return i, nil
-}
-func (m *NetworkPolicyRuleType_ProtocolPortRange) MarshalTo(dAtA []byte) (int, error) {
-	i := 0
-	if m.ProtocolPortRange != nil {
-		dAtA[i] = 0xb2
-		i++
-		dAtA[i] = 0x1
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.ProtocolPortRange.Size()))
-		n22, err := m.ProtocolPortRange.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n22
-	}
-	return i, nil
-}
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2643,11 +467,11 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Endpoint.Size()))
-		n23, err := m.Endpoint.MarshalTo(dAtA[i:])
+		n1, err := m.Endpoint.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n23
+		i += n1
 	}
 	if len(m.IngressRules) > 0 {
 		for _, msg := range m.IngressRules {
@@ -2679,11 +503,11 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3e
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ViewInternal.Size()))
-		n24, err := m.ViewInternal.MarshalTo(dAtA[i:])
+		n2, err := m.ViewInternal.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n24
+		i += n2
 	}
 	return i, nil
 }
@@ -2707,11 +531,11 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Endpoint.Size()))
-		n25, err := m.Endpoint.MarshalTo(dAtA[i:])
+		n3, err := m.Endpoint.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n25
+		i += n3
 	}
 	if len(m.IngressRules) > 0 {
 		for _, msg := range m.IngressRules {
@@ -2759,11 +583,11 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Endpoint.Size()))
-		n26, err := m.Endpoint.MarshalTo(dAtA[i:])
+		n4, err := m.Endpoint.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n26
+		i += n4
 	}
 	if len(m.IngressRules) > 0 {
 		for _, msg := range m.IngressRules {
@@ -2811,11 +635,11 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Endpoint.Size()))
-		n27, err := m.Endpoint.MarshalTo(dAtA[i:])
+		n5, err := m.Endpoint.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n27
+		i += n5
 	}
 	if len(m.IngressRules) > 0 {
 		for _, msg := range m.IngressRules {
@@ -2853,212 +677,23 @@ func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return offset + 1
 }
-func NewPopulatedEndpointChoiceType(r randyTypes, easy bool) *EndpointChoiceType {
-	this := &EndpointChoiceType{}
-	oneofNumber_EndpointChoice := []int32{1, 2, 3, 4, 5, 6, 9}[r.Intn(7)]
-	switch oneofNumber_EndpointChoice {
-	case 1:
-		this.EndpointChoice = NewPopulatedEndpointChoiceType_PrefixList(r, easy)
-	case 2:
-		this.EndpointChoice = NewPopulatedEndpointChoiceType_Any(r, easy)
-	case 3:
-		this.EndpointChoice = NewPopulatedEndpointChoiceType_OutsideEndpoints(r, easy)
-	case 4:
-		this.EndpointChoice = NewPopulatedEndpointChoiceType_InsideEndpoints(r, easy)
-	case 5:
-		this.EndpointChoice = NewPopulatedEndpointChoiceType_Interface(r, easy)
-	case 6:
-		this.EndpointChoice = NewPopulatedEndpointChoiceType_Namespace(r, easy)
-	case 9:
-		this.EndpointChoice = NewPopulatedEndpointChoiceType_LabelSelector(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedEndpointChoiceType_PrefixList(r randyTypes, easy bool) *EndpointChoiceType_PrefixList {
-	this := &EndpointChoiceType_PrefixList{}
-	this.PrefixList = ves_io_schema_views.NewPopulatedPrefixStringListType(r, easy)
-	return this
-}
-func NewPopulatedEndpointChoiceType_Any(r randyTypes, easy bool) *EndpointChoiceType_Any {
-	this := &EndpointChoiceType_Any{}
-	this.Any = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedEndpointChoiceType_OutsideEndpoints(r randyTypes, easy bool) *EndpointChoiceType_OutsideEndpoints {
-	this := &EndpointChoiceType_OutsideEndpoints{}
-	this.OutsideEndpoints = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedEndpointChoiceType_InsideEndpoints(r randyTypes, easy bool) *EndpointChoiceType_InsideEndpoints {
-	this := &EndpointChoiceType_InsideEndpoints{}
-	this.InsideEndpoints = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedEndpointChoiceType_Interface(r randyTypes, easy bool) *EndpointChoiceType_Interface {
-	this := &EndpointChoiceType_Interface{}
-	this.Interface = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
-	return this
-}
-func NewPopulatedEndpointChoiceType_Namespace(r randyTypes, easy bool) *EndpointChoiceType_Namespace {
-	this := &EndpointChoiceType_Namespace{}
-	this.Namespace = string(randStringTypes(r))
-	return this
-}
-func NewPopulatedEndpointChoiceType_LabelSelector(r randyTypes, easy bool) *EndpointChoiceType_LabelSelector {
-	this := &EndpointChoiceType_LabelSelector{}
-	this.LabelSelector = ves_io_schema4.NewPopulatedLabelSelectorType(r, easy)
-	return this
-}
-func NewPopulatedApplicationsType(r randyTypes, easy bool) *ApplicationsType {
-	this := &ApplicationsType{}
-	v1 := r.Intn(10)
-	this.Applications = make([]ApplicationEnumType, v1)
-	for i := 0; i < v1; i++ {
-		this.Applications[i] = ApplicationEnumType([]int32{0, 1, 2, 3}[r.Intn(4)])
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedProtocolPortType(r randyTypes, easy bool) *ProtocolPortType {
-	this := &ProtocolPortType{}
-	this.Protocol = string(randStringTypes(r))
-	v2 := r.Intn(10)
-	this.PortRanges = make([]string, v2)
-	for i := 0; i < v2; i++ {
-		this.PortRanges[i] = string(randStringTypes(r))
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedNetworkPolicyRuleType(r randyTypes, easy bool) *NetworkPolicyRuleType {
-	this := &NetworkPolicyRuleType{}
-	this.Action = ves_io_schema_network_policy_rule.NetworkPolicyRuleAction([]int32{0, 1}[r.Intn(2)])
-	oneofNumber_OtherEndpoint := []int32{5, 11, 12, 13, 14, 15, 16}[r.Intn(7)]
-	switch oneofNumber_OtherEndpoint {
-	case 5:
-		this.OtherEndpoint = NewPopulatedNetworkPolicyRuleType_IpPrefixSet(r, easy)
-	case 11:
-		this.OtherEndpoint = NewPopulatedNetworkPolicyRuleType_Any(r, easy)
-	case 12:
-		this.OtherEndpoint = NewPopulatedNetworkPolicyRuleType_PrefixList(r, easy)
-	case 13:
-		this.OtherEndpoint = NewPopulatedNetworkPolicyRuleType_OutsideEndpoints(r, easy)
-	case 14:
-		this.OtherEndpoint = NewPopulatedNetworkPolicyRuleType_InsideEndpoints(r, easy)
-	case 15:
-		this.OtherEndpoint = NewPopulatedNetworkPolicyRuleType_Namespace(r, easy)
-	case 16:
-		this.OtherEndpoint = NewPopulatedNetworkPolicyRuleType_LabelSelector(r, easy)
-	}
-	this.RuleName = string(randStringTypes(r))
-	oneofNumber_TrafficChoice := []int32{18, 19, 20, 21, 22}[r.Intn(5)]
-	switch oneofNumber_TrafficChoice {
-	case 18:
-		this.TrafficChoice = NewPopulatedNetworkPolicyRuleType_AllTraffic(r, easy)
-	case 19:
-		this.TrafficChoice = NewPopulatedNetworkPolicyRuleType_AllTcpTraffic(r, easy)
-	case 20:
-		this.TrafficChoice = NewPopulatedNetworkPolicyRuleType_AllUdpTraffic(r, easy)
-	case 21:
-		this.TrafficChoice = NewPopulatedNetworkPolicyRuleType_Applications(r, easy)
-	case 22:
-		this.TrafficChoice = NewPopulatedNetworkPolicyRuleType_ProtocolPortRange(r, easy)
-	}
-	v3 := r.Intn(10)
-	this.Keys = make([]string, v3)
-	for i := 0; i < v3; i++ {
-		this.Keys[i] = string(randStringTypes(r))
-	}
-	this.RuleDescription = string(randStringTypes(r))
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedNetworkPolicyRuleType_IpPrefixSet(r randyTypes, easy bool) *NetworkPolicyRuleType_IpPrefixSet {
-	this := &NetworkPolicyRuleType_IpPrefixSet{}
-	this.IpPrefixSet = ves_io_schema4.NewPopulatedIpPrefixSetRefType(r, easy)
-	return this
-}
-func NewPopulatedNetworkPolicyRuleType_Any(r randyTypes, easy bool) *NetworkPolicyRuleType_Any {
-	this := &NetworkPolicyRuleType_Any{}
-	this.Any = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedNetworkPolicyRuleType_PrefixList(r randyTypes, easy bool) *NetworkPolicyRuleType_PrefixList {
-	this := &NetworkPolicyRuleType_PrefixList{}
-	this.PrefixList = ves_io_schema_views.NewPopulatedPrefixStringListType(r, easy)
-	return this
-}
-func NewPopulatedNetworkPolicyRuleType_OutsideEndpoints(r randyTypes, easy bool) *NetworkPolicyRuleType_OutsideEndpoints {
-	this := &NetworkPolicyRuleType_OutsideEndpoints{}
-	this.OutsideEndpoints = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedNetworkPolicyRuleType_InsideEndpoints(r randyTypes, easy bool) *NetworkPolicyRuleType_InsideEndpoints {
-	this := &NetworkPolicyRuleType_InsideEndpoints{}
-	this.InsideEndpoints = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedNetworkPolicyRuleType_Namespace(r randyTypes, easy bool) *NetworkPolicyRuleType_Namespace {
-	this := &NetworkPolicyRuleType_Namespace{}
-	this.Namespace = string(randStringTypes(r))
-	return this
-}
-func NewPopulatedNetworkPolicyRuleType_LabelSelector(r randyTypes, easy bool) *NetworkPolicyRuleType_LabelSelector {
-	this := &NetworkPolicyRuleType_LabelSelector{}
-	this.LabelSelector = ves_io_schema4.NewPopulatedLabelSelectorType(r, easy)
-	return this
-}
-func NewPopulatedNetworkPolicyRuleType_AllTraffic(r randyTypes, easy bool) *NetworkPolicyRuleType_AllTraffic {
-	this := &NetworkPolicyRuleType_AllTraffic{}
-	this.AllTraffic = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedNetworkPolicyRuleType_AllTcpTraffic(r randyTypes, easy bool) *NetworkPolicyRuleType_AllTcpTraffic {
-	this := &NetworkPolicyRuleType_AllTcpTraffic{}
-	this.AllTcpTraffic = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedNetworkPolicyRuleType_AllUdpTraffic(r randyTypes, easy bool) *NetworkPolicyRuleType_AllUdpTraffic {
-	this := &NetworkPolicyRuleType_AllUdpTraffic{}
-	this.AllUdpTraffic = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedNetworkPolicyRuleType_Applications(r randyTypes, easy bool) *NetworkPolicyRuleType_Applications {
-	this := &NetworkPolicyRuleType_Applications{}
-	this.Applications = NewPopulatedApplicationsType(r, easy)
-	return this
-}
-func NewPopulatedNetworkPolicyRuleType_ProtocolPortRange(r randyTypes, easy bool) *NetworkPolicyRuleType_ProtocolPortRange {
-	this := &NetworkPolicyRuleType_ProtocolPortRange{}
-	this.ProtocolPortRange = NewPopulatedProtocolPortType(r, easy)
-	return this
-}
 func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 	this := &GlobalSpecType{}
 	if r.Intn(10) != 0 {
-		this.Endpoint = NewPopulatedEndpointChoiceType(r, easy)
+		this.Endpoint = ves_io_schema_network_policy.NewPopulatedEndpointChoiceType(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v4 := r.Intn(5)
-		this.IngressRules = make([]*NetworkPolicyRuleType, v4)
-		for i := 0; i < v4; i++ {
-			this.IngressRules[i] = NewPopulatedNetworkPolicyRuleType(r, easy)
+		v1 := r.Intn(5)
+		this.IngressRules = make([]*ves_io_schema_network_policy.NetworkPolicyRuleType, v1)
+		for i := 0; i < v1; i++ {
+			this.IngressRules[i] = ves_io_schema_network_policy.NewPopulatedNetworkPolicyRuleType(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v5 := r.Intn(5)
-		this.EgressRules = make([]*NetworkPolicyRuleType, v5)
-		for i := 0; i < v5; i++ {
-			this.EgressRules[i] = NewPopulatedNetworkPolicyRuleType(r, easy)
+		v2 := r.Intn(5)
+		this.EgressRules = make([]*ves_io_schema_network_policy.NetworkPolicyRuleType, v2)
+		for i := 0; i < v2; i++ {
+			this.EgressRules[i] = ves_io_schema_network_policy.NewPopulatedNetworkPolicyRuleType(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
@@ -3072,20 +707,20 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 	this := &CreateSpecType{}
 	if r.Intn(10) != 0 {
-		this.Endpoint = NewPopulatedEndpointChoiceType(r, easy)
+		this.Endpoint = ves_io_schema_network_policy.NewPopulatedEndpointChoiceType(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v6 := r.Intn(5)
-		this.IngressRules = make([]*NetworkPolicyRuleType, v6)
-		for i := 0; i < v6; i++ {
-			this.IngressRules[i] = NewPopulatedNetworkPolicyRuleType(r, easy)
+		v3 := r.Intn(5)
+		this.IngressRules = make([]*ves_io_schema_network_policy.NetworkPolicyRuleType, v3)
+		for i := 0; i < v3; i++ {
+			this.IngressRules[i] = ves_io_schema_network_policy.NewPopulatedNetworkPolicyRuleType(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v7 := r.Intn(5)
-		this.EgressRules = make([]*NetworkPolicyRuleType, v7)
-		for i := 0; i < v7; i++ {
-			this.EgressRules[i] = NewPopulatedNetworkPolicyRuleType(r, easy)
+		v4 := r.Intn(5)
+		this.EgressRules = make([]*ves_io_schema_network_policy.NetworkPolicyRuleType, v4)
+		for i := 0; i < v4; i++ {
+			this.EgressRules[i] = ves_io_schema_network_policy.NewPopulatedNetworkPolicyRuleType(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -3096,20 +731,20 @@ func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 	this := &ReplaceSpecType{}
 	if r.Intn(10) != 0 {
-		this.Endpoint = NewPopulatedEndpointChoiceType(r, easy)
+		this.Endpoint = ves_io_schema_network_policy.NewPopulatedEndpointChoiceType(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v8 := r.Intn(5)
-		this.IngressRules = make([]*NetworkPolicyRuleType, v8)
-		for i := 0; i < v8; i++ {
-			this.IngressRules[i] = NewPopulatedNetworkPolicyRuleType(r, easy)
+		v5 := r.Intn(5)
+		this.IngressRules = make([]*ves_io_schema_network_policy.NetworkPolicyRuleType, v5)
+		for i := 0; i < v5; i++ {
+			this.IngressRules[i] = ves_io_schema_network_policy.NewPopulatedNetworkPolicyRuleType(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v9 := r.Intn(5)
-		this.EgressRules = make([]*NetworkPolicyRuleType, v9)
-		for i := 0; i < v9; i++ {
-			this.EgressRules[i] = NewPopulatedNetworkPolicyRuleType(r, easy)
+		v6 := r.Intn(5)
+		this.EgressRules = make([]*ves_io_schema_network_policy.NetworkPolicyRuleType, v6)
+		for i := 0; i < v6; i++ {
+			this.EgressRules[i] = ves_io_schema_network_policy.NewPopulatedNetworkPolicyRuleType(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -3120,20 +755,20 @@ func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 	this := &GetSpecType{}
 	if r.Intn(10) != 0 {
-		this.Endpoint = NewPopulatedEndpointChoiceType(r, easy)
+		this.Endpoint = ves_io_schema_network_policy.NewPopulatedEndpointChoiceType(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v10 := r.Intn(5)
-		this.IngressRules = make([]*NetworkPolicyRuleType, v10)
-		for i := 0; i < v10; i++ {
-			this.IngressRules[i] = NewPopulatedNetworkPolicyRuleType(r, easy)
+		v7 := r.Intn(5)
+		this.IngressRules = make([]*ves_io_schema_network_policy.NetworkPolicyRuleType, v7)
+		for i := 0; i < v7; i++ {
+			this.IngressRules[i] = ves_io_schema_network_policy.NewPopulatedNetworkPolicyRuleType(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
-		v11 := r.Intn(5)
-		this.EgressRules = make([]*NetworkPolicyRuleType, v11)
-		for i := 0; i < v11; i++ {
-			this.EgressRules[i] = NewPopulatedNetworkPolicyRuleType(r, easy)
+		v8 := r.Intn(5)
+		this.EgressRules = make([]*ves_io_schema_network_policy.NetworkPolicyRuleType, v8)
+		for i := 0; i < v8; i++ {
+			this.EgressRules[i] = ves_io_schema_network_policy.NewPopulatedNetworkPolicyRuleType(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
@@ -3160,9 +795,9 @@ func randUTF8RuneTypes(r randyTypes) rune {
 	return rune(ru + 61)
 }
 func randStringTypes(r randyTypes) string {
-	v12 := r.Intn(100)
-	tmps := make([]rune, v12)
-	for i := 0; i < v12; i++ {
+	v9 := r.Intn(100)
+	tmps := make([]rune, v9)
+	for i := 0; i < v9; i++ {
 		tmps[i] = randUTF8RuneTypes(r)
 	}
 	return string(tmps)
@@ -3184,11 +819,11 @@ func randFieldTypes(dAtA []byte, r randyTypes, fieldNumber int, wire int) []byte
 	switch wire {
 	case 0:
 		dAtA = encodeVarintPopulateTypes(dAtA, uint64(key))
-		v13 := r.Int63()
+		v10 := r.Int63()
 		if r.Intn(2) == 0 {
-			v13 *= -1
+			v10 *= -1
 		}
-		dAtA = encodeVarintPopulateTypes(dAtA, uint64(v13))
+		dAtA = encodeVarintPopulateTypes(dAtA, uint64(v10))
 	case 1:
 		dAtA = encodeVarintPopulateTypes(dAtA, uint64(key))
 		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -3212,240 +847,6 @@ func encodeVarintPopulateTypes(dAtA []byte, v uint64) []byte {
 	}
 	dAtA = append(dAtA, uint8(v))
 	return dAtA
-}
-func (m *EndpointChoiceType) Size() (n int) {
-	var l int
-	_ = l
-	if m.EndpointChoice != nil {
-		n += m.EndpointChoice.Size()
-	}
-	return n
-}
-
-func (m *EndpointChoiceType_PrefixList) Size() (n int) {
-	var l int
-	_ = l
-	if m.PrefixList != nil {
-		l = m.PrefixList.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *EndpointChoiceType_Any) Size() (n int) {
-	var l int
-	_ = l
-	if m.Any != nil {
-		l = m.Any.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *EndpointChoiceType_OutsideEndpoints) Size() (n int) {
-	var l int
-	_ = l
-	if m.OutsideEndpoints != nil {
-		l = m.OutsideEndpoints.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *EndpointChoiceType_InsideEndpoints) Size() (n int) {
-	var l int
-	_ = l
-	if m.InsideEndpoints != nil {
-		l = m.InsideEndpoints.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *EndpointChoiceType_Interface) Size() (n int) {
-	var l int
-	_ = l
-	if m.Interface != nil {
-		l = m.Interface.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *EndpointChoiceType_Namespace) Size() (n int) {
-	var l int
-	_ = l
-	l = len(m.Namespace)
-	n += 1 + l + sovTypes(uint64(l))
-	return n
-}
-func (m *EndpointChoiceType_LabelSelector) Size() (n int) {
-	var l int
-	_ = l
-	if m.LabelSelector != nil {
-		l = m.LabelSelector.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ApplicationsType) Size() (n int) {
-	var l int
-	_ = l
-	if len(m.Applications) > 0 {
-		l = 0
-		for _, e := range m.Applications {
-			l += sovTypes(uint64(e))
-		}
-		n += 1 + sovTypes(uint64(l)) + l
-	}
-	return n
-}
-
-func (m *ProtocolPortType) Size() (n int) {
-	var l int
-	_ = l
-	l = len(m.Protocol)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if len(m.PortRanges) > 0 {
-		for _, s := range m.PortRanges {
-			l = len(s)
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *NetworkPolicyRuleType) Size() (n int) {
-	var l int
-	_ = l
-	if m.Action != 0 {
-		n += 1 + sovTypes(uint64(m.Action))
-	}
-	if m.OtherEndpoint != nil {
-		n += m.OtherEndpoint.Size()
-	}
-	l = len(m.RuleName)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.TrafficChoice != nil {
-		n += m.TrafficChoice.Size()
-	}
-	if len(m.Keys) > 0 {
-		for _, s := range m.Keys {
-			l = len(s)
-			n += 2 + l + sovTypes(uint64(l))
-		}
-	}
-	l = len(m.RuleDescription)
-	if l > 0 {
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *NetworkPolicyRuleType_IpPrefixSet) Size() (n int) {
-	var l int
-	_ = l
-	if m.IpPrefixSet != nil {
-		l = m.IpPrefixSet.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *NetworkPolicyRuleType_Any) Size() (n int) {
-	var l int
-	_ = l
-	if m.Any != nil {
-		l = m.Any.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *NetworkPolicyRuleType_PrefixList) Size() (n int) {
-	var l int
-	_ = l
-	if m.PrefixList != nil {
-		l = m.PrefixList.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *NetworkPolicyRuleType_OutsideEndpoints) Size() (n int) {
-	var l int
-	_ = l
-	if m.OutsideEndpoints != nil {
-		l = m.OutsideEndpoints.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *NetworkPolicyRuleType_InsideEndpoints) Size() (n int) {
-	var l int
-	_ = l
-	if m.InsideEndpoints != nil {
-		l = m.InsideEndpoints.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *NetworkPolicyRuleType_Namespace) Size() (n int) {
-	var l int
-	_ = l
-	l = len(m.Namespace)
-	n += 1 + l + sovTypes(uint64(l))
-	return n
-}
-func (m *NetworkPolicyRuleType_LabelSelector) Size() (n int) {
-	var l int
-	_ = l
-	if m.LabelSelector != nil {
-		l = m.LabelSelector.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *NetworkPolicyRuleType_AllTraffic) Size() (n int) {
-	var l int
-	_ = l
-	if m.AllTraffic != nil {
-		l = m.AllTraffic.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *NetworkPolicyRuleType_AllTcpTraffic) Size() (n int) {
-	var l int
-	_ = l
-	if m.AllTcpTraffic != nil {
-		l = m.AllTcpTraffic.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *NetworkPolicyRuleType_AllUdpTraffic) Size() (n int) {
-	var l int
-	_ = l
-	if m.AllUdpTraffic != nil {
-		l = m.AllUdpTraffic.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *NetworkPolicyRuleType_Applications) Size() (n int) {
-	var l int
-	_ = l
-	if m.Applications != nil {
-		l = m.Applications.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *NetworkPolicyRuleType_ProtocolPortRange) Size() (n int) {
-	var l int
-	_ = l
-	if m.ProtocolPortRange != nil {
-		l = m.ProtocolPortRange.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
 }
 func (m *GlobalSpecType) Size() (n int) {
 	var l int
@@ -3552,250 +953,14 @@ func sovTypes(x uint64) (n int) {
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (this *EndpointChoiceType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EndpointChoiceType{`,
-		`EndpointChoice:` + fmt.Sprintf("%v", this.EndpointChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EndpointChoiceType_PrefixList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EndpointChoiceType_PrefixList{`,
-		`PrefixList:` + strings.Replace(fmt.Sprintf("%v", this.PrefixList), "PrefixStringListType", "ves_io_schema_views.PrefixStringListType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EndpointChoiceType_Any) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EndpointChoiceType_Any{`,
-		`Any:` + strings.Replace(fmt.Sprintf("%v", this.Any), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EndpointChoiceType_OutsideEndpoints) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EndpointChoiceType_OutsideEndpoints{`,
-		`OutsideEndpoints:` + strings.Replace(fmt.Sprintf("%v", this.OutsideEndpoints), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EndpointChoiceType_InsideEndpoints) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EndpointChoiceType_InsideEndpoints{`,
-		`InsideEndpoints:` + strings.Replace(fmt.Sprintf("%v", this.InsideEndpoints), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EndpointChoiceType_Interface) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EndpointChoiceType_Interface{`,
-		`Interface:` + strings.Replace(fmt.Sprintf("%v", this.Interface), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EndpointChoiceType_Namespace) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EndpointChoiceType_Namespace{`,
-		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *EndpointChoiceType_LabelSelector) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&EndpointChoiceType_LabelSelector{`,
-		`LabelSelector:` + strings.Replace(fmt.Sprintf("%v", this.LabelSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ApplicationsType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ApplicationsType{`,
-		`Applications:` + fmt.Sprintf("%v", this.Applications) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProtocolPortType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ProtocolPortType{`,
-		`Protocol:` + fmt.Sprintf("%v", this.Protocol) + `,`,
-		`PortRanges:` + fmt.Sprintf("%v", this.PortRanges) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkPolicyRuleType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkPolicyRuleType{`,
-		`Action:` + fmt.Sprintf("%v", this.Action) + `,`,
-		`OtherEndpoint:` + fmt.Sprintf("%v", this.OtherEndpoint) + `,`,
-		`RuleName:` + fmt.Sprintf("%v", this.RuleName) + `,`,
-		`TrafficChoice:` + fmt.Sprintf("%v", this.TrafficChoice) + `,`,
-		`Keys:` + fmt.Sprintf("%v", this.Keys) + `,`,
-		`RuleDescription:` + fmt.Sprintf("%v", this.RuleDescription) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkPolicyRuleType_IpPrefixSet) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkPolicyRuleType_IpPrefixSet{`,
-		`IpPrefixSet:` + strings.Replace(fmt.Sprintf("%v", this.IpPrefixSet), "IpPrefixSetRefType", "ves_io_schema4.IpPrefixSetRefType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkPolicyRuleType_Any) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkPolicyRuleType_Any{`,
-		`Any:` + strings.Replace(fmt.Sprintf("%v", this.Any), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkPolicyRuleType_PrefixList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkPolicyRuleType_PrefixList{`,
-		`PrefixList:` + strings.Replace(fmt.Sprintf("%v", this.PrefixList), "PrefixStringListType", "ves_io_schema_views.PrefixStringListType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkPolicyRuleType_OutsideEndpoints) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkPolicyRuleType_OutsideEndpoints{`,
-		`OutsideEndpoints:` + strings.Replace(fmt.Sprintf("%v", this.OutsideEndpoints), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkPolicyRuleType_InsideEndpoints) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkPolicyRuleType_InsideEndpoints{`,
-		`InsideEndpoints:` + strings.Replace(fmt.Sprintf("%v", this.InsideEndpoints), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkPolicyRuleType_Namespace) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkPolicyRuleType_Namespace{`,
-		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkPolicyRuleType_LabelSelector) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkPolicyRuleType_LabelSelector{`,
-		`LabelSelector:` + strings.Replace(fmt.Sprintf("%v", this.LabelSelector), "LabelSelectorType", "ves_io_schema4.LabelSelectorType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkPolicyRuleType_AllTraffic) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkPolicyRuleType_AllTraffic{`,
-		`AllTraffic:` + strings.Replace(fmt.Sprintf("%v", this.AllTraffic), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkPolicyRuleType_AllTcpTraffic) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkPolicyRuleType_AllTcpTraffic{`,
-		`AllTcpTraffic:` + strings.Replace(fmt.Sprintf("%v", this.AllTcpTraffic), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkPolicyRuleType_AllUdpTraffic) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkPolicyRuleType_AllUdpTraffic{`,
-		`AllUdpTraffic:` + strings.Replace(fmt.Sprintf("%v", this.AllUdpTraffic), "Empty", "ves_io_schema4.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkPolicyRuleType_Applications) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkPolicyRuleType_Applications{`,
-		`Applications:` + strings.Replace(fmt.Sprintf("%v", this.Applications), "ApplicationsType", "ApplicationsType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *NetworkPolicyRuleType_ProtocolPortRange) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&NetworkPolicyRuleType_ProtocolPortRange{`,
-		`ProtocolPortRange:` + strings.Replace(fmt.Sprintf("%v", this.ProtocolPortRange), "ProtocolPortType", "ProtocolPortType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType{`,
-		`Endpoint:` + strings.Replace(fmt.Sprintf("%v", this.Endpoint), "EndpointChoiceType", "EndpointChoiceType", 1) + `,`,
-		`IngressRules:` + strings.Replace(fmt.Sprintf("%v", this.IngressRules), "NetworkPolicyRuleType", "NetworkPolicyRuleType", 1) + `,`,
-		`EgressRules:` + strings.Replace(fmt.Sprintf("%v", this.EgressRules), "NetworkPolicyRuleType", "NetworkPolicyRuleType", 1) + `,`,
+		`Endpoint:` + strings.Replace(fmt.Sprintf("%v", this.Endpoint), "EndpointChoiceType", "ves_io_schema_network_policy.EndpointChoiceType", 1) + `,`,
+		`IngressRules:` + strings.Replace(fmt.Sprintf("%v", this.IngressRules), "NetworkPolicyRuleType", "ves_io_schema_network_policy.NetworkPolicyRuleType", 1) + `,`,
+		`EgressRules:` + strings.Replace(fmt.Sprintf("%v", this.EgressRules), "NetworkPolicyRuleType", "ves_io_schema_network_policy.NetworkPolicyRuleType", 1) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
@@ -3806,9 +971,9 @@ func (this *CreateSpecType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType{`,
-		`Endpoint:` + strings.Replace(fmt.Sprintf("%v", this.Endpoint), "EndpointChoiceType", "EndpointChoiceType", 1) + `,`,
-		`IngressRules:` + strings.Replace(fmt.Sprintf("%v", this.IngressRules), "NetworkPolicyRuleType", "NetworkPolicyRuleType", 1) + `,`,
-		`EgressRules:` + strings.Replace(fmt.Sprintf("%v", this.EgressRules), "NetworkPolicyRuleType", "NetworkPolicyRuleType", 1) + `,`,
+		`Endpoint:` + strings.Replace(fmt.Sprintf("%v", this.Endpoint), "EndpointChoiceType", "ves_io_schema_network_policy.EndpointChoiceType", 1) + `,`,
+		`IngressRules:` + strings.Replace(fmt.Sprintf("%v", this.IngressRules), "NetworkPolicyRuleType", "ves_io_schema_network_policy.NetworkPolicyRuleType", 1) + `,`,
+		`EgressRules:` + strings.Replace(fmt.Sprintf("%v", this.EgressRules), "NetworkPolicyRuleType", "ves_io_schema_network_policy.NetworkPolicyRuleType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3818,9 +983,9 @@ func (this *ReplaceSpecType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType{`,
-		`Endpoint:` + strings.Replace(fmt.Sprintf("%v", this.Endpoint), "EndpointChoiceType", "EndpointChoiceType", 1) + `,`,
-		`IngressRules:` + strings.Replace(fmt.Sprintf("%v", this.IngressRules), "NetworkPolicyRuleType", "NetworkPolicyRuleType", 1) + `,`,
-		`EgressRules:` + strings.Replace(fmt.Sprintf("%v", this.EgressRules), "NetworkPolicyRuleType", "NetworkPolicyRuleType", 1) + `,`,
+		`Endpoint:` + strings.Replace(fmt.Sprintf("%v", this.Endpoint), "EndpointChoiceType", "ves_io_schema_network_policy.EndpointChoiceType", 1) + `,`,
+		`IngressRules:` + strings.Replace(fmt.Sprintf("%v", this.IngressRules), "NetworkPolicyRuleType", "ves_io_schema_network_policy.NetworkPolicyRuleType", 1) + `,`,
+		`EgressRules:` + strings.Replace(fmt.Sprintf("%v", this.EgressRules), "NetworkPolicyRuleType", "ves_io_schema_network_policy.NetworkPolicyRuleType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3830,9 +995,9 @@ func (this *GetSpecType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType{`,
-		`Endpoint:` + strings.Replace(fmt.Sprintf("%v", this.Endpoint), "EndpointChoiceType", "EndpointChoiceType", 1) + `,`,
-		`IngressRules:` + strings.Replace(fmt.Sprintf("%v", this.IngressRules), "NetworkPolicyRuleType", "NetworkPolicyRuleType", 1) + `,`,
-		`EgressRules:` + strings.Replace(fmt.Sprintf("%v", this.EgressRules), "NetworkPolicyRuleType", "NetworkPolicyRuleType", 1) + `,`,
+		`Endpoint:` + strings.Replace(fmt.Sprintf("%v", this.Endpoint), "EndpointChoiceType", "ves_io_schema_network_policy.EndpointChoiceType", 1) + `,`,
+		`IngressRules:` + strings.Replace(fmt.Sprintf("%v", this.IngressRules), "NetworkPolicyRuleType", "ves_io_schema_network_policy.NetworkPolicyRuleType", 1) + `,`,
+		`EgressRules:` + strings.Replace(fmt.Sprintf("%v", this.EgressRules), "NetworkPolicyRuleType", "ves_io_schema_network_policy.NetworkPolicyRuleType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3844,1034 +1009,6 @@ func valueToStringTypes(v interface{}) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
-}
-func (m *EndpointChoiceType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: EndpointChoiceType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: EndpointChoiceType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PrefixList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema_views.PrefixStringListType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.EndpointChoice = &EndpointChoiceType_PrefixList{v}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Any", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.EndpointChoice = &EndpointChoiceType_Any{v}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OutsideEndpoints", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.EndpointChoice = &EndpointChoiceType_OutsideEndpoints{v}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field InsideEndpoints", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.EndpointChoice = &EndpointChoiceType_InsideEndpoints{v}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Interface", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema_views.ObjectRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.EndpointChoice = &EndpointChoiceType_Interface{v}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.EndpointChoice = &EndpointChoiceType_Namespace{string(dAtA[iNdEx:postIndex])}
-			iNdEx = postIndex
-		case 9:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LabelSelector", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.LabelSelectorType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.EndpointChoice = &EndpointChoiceType_LabelSelector{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ApplicationsType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ApplicationsType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ApplicationsType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType == 0 {
-				var v ApplicationEnumType
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= (ApplicationEnumType(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				m.Applications = append(m.Applications, v)
-			} else if wireType == 2 {
-				var packedLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					packedLen |= (int(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if packedLen < 0 {
-					return ErrInvalidLengthTypes
-				}
-				postIndex := iNdEx + packedLen
-				if postIndex > l {
-					return io.ErrUnexpectedEOF
-				}
-				for iNdEx < postIndex {
-					var v ApplicationEnumType
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTypes
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= (ApplicationEnumType(b) & 0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					m.Applications = append(m.Applications, v)
-				}
-			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field Applications", wireType)
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ProtocolPortType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ProtocolPortType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ProtocolPortType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Protocol", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Protocol = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PortRanges", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PortRanges = append(m.PortRanges, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *NetworkPolicyRuleType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: NetworkPolicyRuleType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: NetworkPolicyRuleType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Action", wireType)
-			}
-			m.Action = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Action |= (ves_io_schema_network_policy_rule.NetworkPolicyRuleAction(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IpPrefixSet", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.IpPrefixSetRefType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.OtherEndpoint = &NetworkPolicyRuleType_IpPrefixSet{v}
-			iNdEx = postIndex
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuleName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.RuleName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 11:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Any", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.OtherEndpoint = &NetworkPolicyRuleType_Any{v}
-			iNdEx = postIndex
-		case 12:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PrefixList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema_views.PrefixStringListType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.OtherEndpoint = &NetworkPolicyRuleType_PrefixList{v}
-			iNdEx = postIndex
-		case 13:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OutsideEndpoints", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.OtherEndpoint = &NetworkPolicyRuleType_OutsideEndpoints{v}
-			iNdEx = postIndex
-		case 14:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field InsideEndpoints", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.OtherEndpoint = &NetworkPolicyRuleType_InsideEndpoints{v}
-			iNdEx = postIndex
-		case 15:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.OtherEndpoint = &NetworkPolicyRuleType_Namespace{string(dAtA[iNdEx:postIndex])}
-			iNdEx = postIndex
-		case 16:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LabelSelector", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.LabelSelectorType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.OtherEndpoint = &NetworkPolicyRuleType_LabelSelector{v}
-			iNdEx = postIndex
-		case 18:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllTraffic", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.TrafficChoice = &NetworkPolicyRuleType_AllTraffic{v}
-			iNdEx = postIndex
-		case 19:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllTcpTraffic", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.TrafficChoice = &NetworkPolicyRuleType_AllTcpTraffic{v}
-			iNdEx = postIndex
-		case 20:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllUdpTraffic", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ves_io_schema4.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.TrafficChoice = &NetworkPolicyRuleType_AllUdpTraffic{v}
-			iNdEx = postIndex
-		case 21:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Applications", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ApplicationsType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.TrafficChoice = &NetworkPolicyRuleType_Applications{v}
-			iNdEx = postIndex
-		case 22:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProtocolPortRange", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ProtocolPortType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.TrafficChoice = &NetworkPolicyRuleType_ProtocolPortRange{v}
-			iNdEx = postIndex
-		case 23:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Keys", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Keys = append(m.Keys, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		case 24:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RuleDescription", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.RuleDescription = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
 }
 func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -4929,7 +1066,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Endpoint == nil {
-				m.Endpoint = &EndpointChoiceType{}
+				m.Endpoint = &ves_io_schema_network_policy.EndpointChoiceType{}
 			}
 			if err := m.Endpoint.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -4961,7 +1098,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.IngressRules = append(m.IngressRules, &NetworkPolicyRuleType{})
+			m.IngressRules = append(m.IngressRules, &ves_io_schema_network_policy.NetworkPolicyRuleType{})
 			if err := m.IngressRules[len(m.IngressRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4992,7 +1129,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.EgressRules = append(m.EgressRules, &NetworkPolicyRuleType{})
+			m.EgressRules = append(m.EgressRules, &ves_io_schema_network_policy.NetworkPolicyRuleType{})
 			if err := m.EgressRules[len(m.EgressRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5107,7 +1244,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Endpoint == nil {
-				m.Endpoint = &EndpointChoiceType{}
+				m.Endpoint = &ves_io_schema_network_policy.EndpointChoiceType{}
 			}
 			if err := m.Endpoint.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -5139,7 +1276,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.IngressRules = append(m.IngressRules, &NetworkPolicyRuleType{})
+			m.IngressRules = append(m.IngressRules, &ves_io_schema_network_policy.NetworkPolicyRuleType{})
 			if err := m.IngressRules[len(m.IngressRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5170,7 +1307,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.EgressRules = append(m.EgressRules, &NetworkPolicyRuleType{})
+			m.EgressRules = append(m.EgressRules, &ves_io_schema_network_policy.NetworkPolicyRuleType{})
 			if err := m.EgressRules[len(m.EgressRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5252,7 +1389,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Endpoint == nil {
-				m.Endpoint = &EndpointChoiceType{}
+				m.Endpoint = &ves_io_schema_network_policy.EndpointChoiceType{}
 			}
 			if err := m.Endpoint.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -5284,7 +1421,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.IngressRules = append(m.IngressRules, &NetworkPolicyRuleType{})
+			m.IngressRules = append(m.IngressRules, &ves_io_schema_network_policy.NetworkPolicyRuleType{})
 			if err := m.IngressRules[len(m.IngressRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5315,7 +1452,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.EgressRules = append(m.EgressRules, &NetworkPolicyRuleType{})
+			m.EgressRules = append(m.EgressRules, &ves_io_schema_network_policy.NetworkPolicyRuleType{})
 			if err := m.EgressRules[len(m.EgressRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5397,7 +1534,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Endpoint == nil {
-				m.Endpoint = &EndpointChoiceType{}
+				m.Endpoint = &ves_io_schema_network_policy.EndpointChoiceType{}
 			}
 			if err := m.Endpoint.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -5429,7 +1566,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.IngressRules = append(m.IngressRules, &NetworkPolicyRuleType{})
+			m.IngressRules = append(m.IngressRules, &ves_io_schema_network_policy.NetworkPolicyRuleType{})
 			if err := m.IngressRules[len(m.IngressRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5460,7 +1597,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.EgressRules = append(m.EgressRules, &NetworkPolicyRuleType{})
+			m.EgressRules = append(m.EgressRules, &ves_io_schema_network_policy.NetworkPolicyRuleType{})
 			if err := m.EgressRules[len(m.EgressRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -5599,96 +1736,44 @@ func init() {
 }
 
 var fileDescriptorTypes = []byte{
-	// 1453 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xcf, 0x6f, 0xdb, 0x54,
-	0x1c, 0xcf, 0x8b, 0xdd, 0x36, 0x79, 0x69, 0x13, 0xd7, 0xed, 0x98, 0x5b, 0x90, 0x97, 0x45, 0x03,
-	0x0a, 0xb8, 0xc9, 0xec, 0xae, 0xfb, 0xd1, 0xa1, 0x8a, 0xa6, 0xfb, 0xd1, 0x56, 0x5d, 0x17, 0xb9,
-	0x9d, 0x90, 0x10, 0x60, 0x5c, 0xe7, 0x25, 0x35, 0x75, 0xfc, 0x2c, 0xdb, 0xe9, 0x56, 0xa4, 0x49,
-	0xfb, 0x13, 0xd0, 0x8e, 0xbb, 0x80, 0xb8, 0x80, 0x76, 0xe2, 0x88, 0x30, 0x87, 0x32, 0x81, 0x84,
-	0x38, 0xf5, 0x38, 0x71, 0xa2, 0xd9, 0xa5, 0xdc, 0xa6, 0x9d, 0x38, 0x22, 0xbf, 0x38, 0x89, 0xe3,
-	0x46, 0x5d, 0xb7, 0xd1, 0xdb, 0x6e, 0xf6, 0xf7, 0x7d, 0x3e, 0x9f, 0xf7, 0x7d, 0x5f, 0x7f, 0xbf,
-	0x9f, 0xbc, 0x16, 0x4e, 0x6d, 0x21, 0x27, 0xaf, 0xe3, 0x82, 0xa3, 0x6d, 0xa0, 0x9a, 0x5a, 0xd8,
-	0xd2, 0xd1, 0x6d, 0xa7, 0x60, 0x22, 0xf7, 0x36, 0xb6, 0x37, 0x15, 0x0b, 0x1b, 0xba, 0xb6, 0xad,
-	0xf8, 0xc1, 0x82, 0xbb, 0x6d, 0x21, 0x27, 0x6f, 0xd9, 0xd8, 0xc5, 0xec, 0xbb, 0x4d, 0x52, 0xbe,
-	0x49, 0xca, 0x13, 0x52, 0xbe, 0x07, 0x69, 0x7c, 0xb2, 0xaa, 0xbb, 0x1b, 0xf5, 0xf5, 0xbc, 0x86,
-	0x6b, 0x85, 0x2a, 0xae, 0xe2, 0x02, 0xe1, 0xaf, 0xd7, 0x2b, 0xe4, 0x8d, 0xbc, 0x90, 0xa7, 0xa6,
-	0xee, 0xf8, 0xc9, 0xee, 0x64, 0x4c, 0xe4, 0x06, 0x0b, 0x93, 0x07, 0x16, 0xc2, 0x5b, 0xd9, 0x75,
-	0x03, 0x85, 0xf3, 0x1b, 0x7f, 0xb3, 0x1b, 0x8e, 0x2d, 0x57, 0xc7, 0x66, 0x6b, 0x71, 0xac, 0x7b,
-	0x31, 0xcc, 0x7b, 0x2b, 0x52, 0x0c, 0xd5, 0xd0, 0xcb, 0xaa, 0x8b, 0x82, 0xd5, 0xec, 0xc1, 0x52,
-	0x29, 0xdd, 0xd2, 0x67, 0x7a, 0x15, 0xd3, 0xd1, 0x5d, 0xa4, 0x84, 0x77, 0x39, 0xd5, 0x0b, 0x15,
-	0x02, 0xe4, 0xbe, 0xa7, 0x21, 0x7b, 0xd5, 0x2c, 0x5b, 0x58, 0x37, 0xdd, 0xf9, 0x0d, 0xac, 0x6b,
-	0x68, 0x6d, 0xdb, 0x42, 0xec, 0x32, 0x4c, 0x59, 0x36, 0xaa, 0xe8, 0x77, 0x14, 0x43, 0x77, 0x5c,
-	0x0e, 0x64, 0xc1, 0x44, 0x4a, 0x7a, 0x2f, 0xdf, 0xeb, 0x5b, 0x94, 0x08, 0x6e, 0xd5, 0xb5, 0x75,
-	0xb3, 0xba, 0xac, 0x3b, 0xae, 0xcf, 0x5f, 0x88, 0xc9, 0xb0, 0xc9, 0xf7, 0x23, 0xec, 0x04, 0xa4,
-	0x54, 0x73, 0x9b, 0x8b, 0x13, 0x95, 0xd1, 0x88, 0xca, 0xd5, 0x9a, 0xe5, 0x6e, 0x2f, 0xc4, 0x64,
-	0x1f, 0xc2, 0xce, 0xc3, 0x61, 0x5c, 0x77, 0x1d, 0xbd, 0x8c, 0x14, 0x14, 0x64, 0xe5, 0x70, 0xd4,
-	0xa1, 0x3c, 0x26, 0x20, 0xb4, 0x4e, 0xe1, 0xb0, 0x73, 0x90, 0xd1, 0xcd, 0x88, 0x06, 0x7d, 0xa8,
-	0x46, 0xa6, 0x89, 0xef, 0x48, 0x7c, 0x0a, 0x93, 0xba, 0xe9, 0x22, 0xbb, 0xa2, 0x6a, 0x88, 0xeb,
-	0x23, 0xdc, 0x5c, 0xcf, 0xd3, 0xdf, 0x5c, 0xff, 0x12, 0x69, 0xae, 0x8c, 0x2a, 0xfe, 0xb1, 0x8b,
-	0xdc, 0xc3, 0xbb, 0xc3, 0xad, 0x86, 0x69, 0xf3, 0xf7, 0x3d, 0x00, 0x16, 0x62, 0x72, 0x47, 0x90,
-	0x3d, 0x03, 0x93, 0xa6, 0x5a, 0x43, 0x8e, 0xe5, 0xab, 0xf7, 0x67, 0xc1, 0x44, 0xb2, 0x48, 0xb7,
-	0x50, 0xed, 0x05, 0x56, 0x86, 0x69, 0x43, 0x5d, 0x47, 0x86, 0xe2, 0x20, 0x03, 0x69, 0x2e, 0xb6,
-	0xb9, 0x24, 0x49, 0x24, 0x1b, 0x49, 0x64, 0xd9, 0x07, 0xad, 0x06, 0x18, 0x92, 0xc6, 0xc0, 0x83,
-	0x5f, 0x00, 0x05, 0x89, 0xde, 0x90, 0x11, 0x5e, 0x9d, 0xe9, 0x7b, 0x36, 0x1b, 0x17, 0xcf, 0x16,
-	0x05, 0x98, 0x69, 0x95, 0x46, 0xd1, 0xc8, 0x57, 0x67, 0xc7, 0x76, 0x3c, 0x00, 0x76, 0x3d, 0x00,
-	0x1b, 0x1e, 0x18, 0x12, 0x05, 0x49, 0x98, 0x12, 0xce, 0x09, 0xd3, 0xc2, 0x79, 0xe1, 0xd2, 0x12,
-	0x9d, 0x80, 0x4c, 0x2a, 0xf7, 0x15, 0x64, 0xe6, 0x2c, 0xcb, 0xd0, 0x35, 0x95, 0xb4, 0x21, 0x69,
-	0x93, 0x2f, 0xe0, 0xa0, 0x1a, 0x8a, 0x71, 0x20, 0x4b, 0x4d, 0xa4, 0xa5, 0x0f, 0xf3, 0x47, 0x9c,
-	0xd9, 0x7c, 0x48, 0xf0, 0xaa, 0x59, 0xaf, 0xf9, 0x9a, 0x72, 0x97, 0xe2, 0x0c, 0xfd, 0x6c, 0x16,
-	0x88, 0xb9, 0x07, 0x00, 0x32, 0x25, 0xbf, 0x5f, 0x35, 0x6c, 0x94, 0xb0, 0x4d, 0x7a, 0x8c, 0x9d,
-	0x83, 0x09, 0x2b, 0x88, 0x91, 0x06, 0x4d, 0x16, 0xdf, 0xfe, 0xcb, 0x03, 0xd4, 0xdc, 0xf2, 0xf2,
-	0xcf, 0xff, 0xec, 0x50, 0x63, 0xf6, 0x49, 0x39, 0x26, 0xfb, 0x6f, 0x32, 0xb5, 0x36, 0x5f, 0x92,
-	0xa9, 0x5b, 0x57, 0x4a, 0x32, 0xbd, 0x38, 0x7f, 0xa3, 0x24, 0xb7, 0x69, 0xec, 0x65, 0x98, 0xb2,
-	0xb0, 0xed, 0x2a, 0xb6, 0x6a, 0x56, 0x91, 0xc3, 0xc5, 0xb3, 0xd4, 0x44, 0xb2, 0x38, 0xee, 0xd3,
-	0xe1, 0x7d, 0x30, 0x90, 0xeb, 0xb3, 0xa9, 0x1f, 0x01, 0xf0, 0x5f, 0xfb, 0xef, 0x03, 0x8a, 0xb9,
-	0x07, 0x64, 0xe8, 0xc3, 0x65, 0x82, 0x9e, 0xe9, 0x7f, 0x36, 0x4b, 0x89, 0x82, 0x94, 0xdb, 0x4f,
-	0xc2, 0x13, 0x2b, 0xcd, 0xc3, 0x95, 0xc8, 0xd9, 0xe4, 0xba, 0xd1, 0x9c, 0x22, 0x19, 0xf6, 0xab,
-	0x9a, 0x7f, 0x0e, 0x92, 0x5f, 0x5a, 0x9a, 0x89, 0x14, 0xa6, 0x87, 0xb7, 0xe4, 0x0f, 0x28, 0xcd,
-	0x11, 0x05, 0x39, 0x50, 0x62, 0xaf, 0xc3, 0x21, 0xdd, 0x52, 0x82, 0xe1, 0x74, 0x90, 0x1b, 0x74,
-	0xe7, 0xe9, 0x88, 0xf4, 0xa2, 0x15, 0xcc, 0x25, 0x6a, 0x35, 0xe7, 0x42, 0x4c, 0x4e, 0xe9, 0x9d,
-	0x28, 0xfb, 0x01, 0x4c, 0xfa, 0x1b, 0x2a, 0x7e, 0xc3, 0x71, 0x90, 0xd4, 0x2f, 0xed, 0x1f, 0x35,
-	0x69, 0x0f, 0x30, 0x80, 0xfb, 0xe8, 0xdb, 0x38, 0x90, 0x13, 0x3e, 0x60, 0x45, 0xad, 0xa1, 0xd6,
-	0x04, 0xa7, 0x9e, 0x3f, 0xc1, 0x11, 0xe7, 0x18, 0x7c, 0x35, 0xe7, 0xe8, 0xe9, 0x07, 0x43, 0xff,
-	0x83, 0x1f, 0xa4, 0x5f, 0xcc, 0x0f, 0xba, 0x26, 0x36, 0x73, 0xf4, 0x89, 0x65, 0x5e, 0x75, 0x62,
-	0xd9, 0x0b, 0x30, 0xa5, 0x1a, 0x86, 0xe2, 0xda, 0x6a, 0xa5, 0xa2, 0x6b, 0x1c, 0x7b, 0x48, 0xde,
-	0x40, 0x86, 0xaa, 0x61, 0xac, 0x35, 0x91, 0xec, 0x2c, 0xcc, 0x10, 0xa2, 0x66, 0xb5, 0xc9, 0x23,
-	0x87, 0x92, 0x87, 0x7c, 0xb2, 0x66, 0x45, 0xf8, 0xf5, 0x72, 0x87, 0x3f, 0xfa, 0x5c, 0xfe, 0xad,
-	0x72, 0x9b, 0xaf, 0x44, 0xbc, 0xe1, 0x04, 0x21, 0x5f, 0x7a, 0x19, 0x6f, 0x20, 0x66, 0xb3, 0x00,
-	0xba, 0xad, 0x81, 0xdd, 0x84, 0x23, 0xad, 0x41, 0x56, 0x3a, 0x53, 0xcc, 0xbd, 0xf1, 0x82, 0xfb,
-	0x44, 0x7d, 0x65, 0x01, 0xc8, 0xc3, 0x56, 0x28, 0x46, 0xa6, 0x9d, 0x9d, 0x80, 0xf4, 0x26, 0xda,
-	0x76, 0xb8, 0x93, 0xc4, 0x22, 0x46, 0xfd, 0x41, 0xe9, 0xbb, 0x0f, 0xe2, 0x0c, 0xd3, 0x7a, 0xe2,
-	0x80, 0x4c, 0x10, 0xec, 0x34, 0x64, 0xc8, 0x5c, 0x95, 0x91, 0xa3, 0xd9, 0x3a, 0xf9, 0xcd, 0xe6,
-	0x38, 0xd2, 0x31, 0x90, 0x60, 0x6d, 0x8a, 0xbb, 0x17, 0x97, 0x33, 0x3e, 0xe6, 0x4a, 0x07, 0x32,
-	0xc3, 0x3f, 0xf2, 0xc0, 0x38, 0xe4, 0x60, 0x9f, 0x3f, 0xf3, 0x0e, 0x9b, 0x11, 0xcf, 0x0a, 0xd2,
-	0x39, 0x41, 0x14, 0x2e, 0x0a, 0xe2, 0x05, 0x41, 0x9a, 0x2a, 0x8a, 0x30, 0x8d, 0xdd, 0x0d, 0x64,
-	0xb7, 0x7b, 0x98, 0x3d, 0xb5, 0xe3, 0x81, 0xd4, 0xae, 0x07, 0x12, 0x0d, 0x0f, 0x8c, 0x88, 0xa2,
-	0x20, 0x4a, 0x82, 0x38, 0x25, 0x88, 0xe7, 0x04, 0x71, 0x5a, 0x10, 0xcf, 0x0b, 0xd3, 0x45, 0x01,
-	0xa6, 0x83, 0x2f, 0xd7, 0x32, 0xf9, 0xf1, 0x1d, 0x0f, 0xb0, 0xbb, 0x1e, 0x18, 0x6e, 0x78, 0x20,
-	0x2d, 0x5e, 0x14, 0xc4, 0x4b, 0x82, 0x74, 0x56, 0x90, 0x44, 0x41, 0x92, 0x96, 0xe8, 0x04, 0xcd,
-	0xf4, 0x2d, 0xd1, 0x89, 0x38, 0x43, 0x2d, 0xd1, 0x89, 0x04, 0x93, 0x5c, 0xa2, 0x13, 0xfd, 0xcc,
-	0xc0, 0x12, 0x9d, 0x18, 0x66, 0xd8, 0x25, 0x3a, 0x31, 0xc0, 0x24, 0x72, 0xdf, 0xd1, 0x30, 0x7d,
-	0xdd, 0xc0, 0xeb, 0xaa, 0xb1, 0x6a, 0x21, 0x8d, 0x78, 0xdc, 0xc7, 0x30, 0xd1, 0xca, 0x28, 0xb8,
-	0x26, 0x5c, 0x3e, 0x72, 0xe9, 0x0f, 0x5e, 0x3c, 0xe4, 0xb6, 0x18, 0xeb, 0xc2, 0x21, 0xdd, 0xac,
-	0xda, 0xc8, 0x71, 0x88, 0x31, 0x36, 0xdd, 0x39, 0x25, 0xcd, 0x1e, 0x59, 0xbd, 0xa7, 0x27, 0x17,
-	0x33, 0xbb, 0x5e, 0xb7, 0xa5, 0x0f, 0x06, 0xbb, 0x34, 0xeb, 0x6e, 0xc3, 0x41, 0x14, 0xde, 0x94,
-	0x3a, 0x9e, 0x4d, 0x53, 0x28, 0xb4, 0xe7, 0xe7, 0x70, 0x88, 0x5c, 0xf0, 0xc8, 0x05, 0xc1, 0x54,
-	0x0d, 0x6e, 0x7f, 0xe0, 0xc8, 0x37, 0x8e, 0xd1, 0x87, 0x77, 0xbb, 0xc9, 0xbe, 0x2b, 0xc9, 0x83,
-	0x7e, 0x68, 0x31, 0x88, 0xcc, 0xd4, 0x1e, 0x79, 0x40, 0x87, 0x63, 0x70, 0xb4, 0x99, 0x55, 0xf6,
-	0x1a, 0xb6, 0xb3, 0x1d, 0x6b, 0x03, 0x22, 0x3c, 0x03, 0x4f, 0xcd, 0x63, 0xd3, 0x44, 0xe4, 0x17,
-	0xc6, 0xc9, 0xae, 0xe1, 0x6c, 0x80, 0x0c, 0xa1, 0x24, 0xf8, 0x0e, 0x3c, 0x1d, 0x46, 0x5d, 0xb3,
-	0x71, 0xad, 0x07, 0x6e, 0x2a, 0xf7, 0x5b, 0x1c, 0xa6, 0xe7, 0x6d, 0xa4, 0xba, 0xe8, 0xf8, 0x9b,
-	0x44, 0x3b, 0x96, 0x26, 0x89, 0xf4, 0x84, 0x7a, 0x1c, 0x3d, 0xd1, 0xd5, 0x02, 0x33, 0xc3, 0x7f,
-	0xce, 0x46, 0x06, 0x2b, 0xf7, 0x7b, 0x1c, 0x66, 0x64, 0x64, 0x19, 0xaa, 0xf6, 0xba, 0x8e, 0xaf,
-	0x52, 0xc7, 0x5f, 0xe3, 0x30, 0x75, 0x1d, 0xb9, 0xaf, 0x6b, 0xf8, 0xf2, 0x35, 0x7c, 0xbf, 0x06,
-	0x47, 0x7a, 0x5c, 0xd5, 0xd9, 0x51, 0xc8, 0xcc, 0x95, 0x4a, 0xcb, 0x8b, 0xf3, 0x73, 0x6b, 0x8b,
-	0x37, 0x57, 0x94, 0x85, 0xb5, 0xb5, 0x12, 0x13, 0x63, 0x4f, 0xc0, 0xe1, 0x68, 0x74, 0x95, 0x01,
-	0x51, 0xf0, 0xea, 0xca, 0x8d, 0x12, 0x13, 0x67, 0x47, 0x60, 0x26, 0x1c, 0xbd, 0xb2, 0xb2, 0xca,
-	0x50, 0xc5, 0x6f, 0xc0, 0xee, 0x1e, 0x1f, 0x7b, 0xbc, 0xc7, 0xc7, 0x9e, 0xee, 0xf1, 0xe0, 0xdf,
-	0x3d, 0x1e, 0xdc, 0x6b, 0xf0, 0xe0, 0x87, 0x06, 0x0f, 0x7e, 0x6a, 0xf0, 0x60, 0xa7, 0xc1, 0x83,
-	0x3f, 0x1a, 0x3c, 0xd8, 0x6d, 0xf0, 0xe0, 0x71, 0x83, 0x07, 0x7f, 0x37, 0x78, 0xb0, 0xdf, 0xe0,
-	0x63, 0x4f, 0x1b, 0x3c, 0xf8, 0xfa, 0x09, 0x1f, 0xdb, 0x79, 0xc2, 0x83, 0x4f, 0x3e, 0xab, 0x62,
-	0x6b, 0xb3, 0x9a, 0xdf, 0xc2, 0x86, 0x8b, 0x6c, 0x5b, 0xcd, 0xd7, 0x9d, 0x02, 0x79, 0xa8, 0x60,
-	0xbb, 0x36, 0x69, 0xd9, 0x78, 0x4b, 0x2f, 0x23, 0x7b, 0xb2, 0xb5, 0x5c, 0xb0, 0xd6, 0xab, 0xb8,
-	0x80, 0xee, 0xb8, 0xc1, 0xdf, 0xc9, 0xcf, 0xfb, 0x0f, 0xc5, 0x7a, 0x3f, 0xb9, 0x21, 0x4c, 0xfd,
-	0x17, 0x00, 0x00, 0xff, 0xff, 0x57, 0x95, 0x18, 0x96, 0xd3, 0x10, 0x00, 0x00,
+	// 612 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x55, 0xb1, 0x4f, 0x14, 0x4f,
+	0x14, 0xbe, 0x77, 0xf7, 0xfb, 0xa1, 0x99, 0x03, 0xd4, 0x0b, 0x89, 0x80, 0x66, 0x58, 0x2f, 0x44,
+	0x69, 0xd8, 0x45, 0xae, 0xa3, 0xb0, 0x80, 0x08, 0x31, 0x31, 0x6a, 0x56, 0x62, 0x8c, 0x89, 0x5e,
+	0x76, 0x97, 0xc7, 0x32, 0xb2, 0xb7, 0xb3, 0xce, 0xcc, 0x1d, 0x52, 0x98, 0xf0, 0x27, 0x18, 0x12,
+	0x6b, 0x4d, 0xb4, 0x30, 0xfe, 0x05, 0x46, 0x1a, 0x62, 0x65, 0xac, 0x28, 0x29, 0xbd, 0xa5, 0x39,
+	0x3b, 0x4a, 0x4b, 0x73, 0x73, 0x7b, 0x66, 0xf7, 0x38, 0xb1, 0x81, 0x8e, 0x6e, 0xde, 0xbc, 0xef,
+	0x7b, 0xdf, 0xe4, 0x7b, 0x6f, 0xf2, 0x48, 0xa5, 0x81, 0xd2, 0x64, 0xdc, 0x92, 0xde, 0x1a, 0xd6,
+	0x1c, 0xab, 0xc1, 0x70, 0x43, 0x5a, 0x21, 0xaa, 0x0d, 0x2e, 0xd6, 0xab, 0x11, 0x0f, 0x98, 0xb7,
+	0x59, 0x6d, 0x5f, 0x5a, 0x6a, 0x33, 0x42, 0x69, 0x46, 0x82, 0x2b, 0x5e, 0xba, 0xd1, 0x21, 0x99,
+	0x1d, 0x92, 0xa9, 0x49, 0x66, 0x1f, 0xd2, 0xf8, 0xb4, 0xcf, 0xd4, 0x5a, 0xdd, 0x35, 0x3d, 0x5e,
+	0xb3, 0x7c, 0xee, 0x73, 0x4b, 0xf3, 0xdd, 0xfa, 0xaa, 0x8e, 0x74, 0xa0, 0x4f, 0x9d, 0xba, 0xe3,
+	0x97, 0xb3, 0x8f, 0x09, 0x51, 0x25, 0x89, 0xa9, 0x23, 0x89, 0x94, 0x54, 0xfa, 0x69, 0xe3, 0x57,
+	0xb2, 0x48, 0x1e, 0x29, 0xc6, 0xc3, 0x6e, 0x72, 0x2c, 0x9b, 0x4c, 0xf3, 0xae, 0xf6, 0xf8, 0xe0,
+	0x04, 0x6c, 0xc5, 0x51, 0x98, 0x64, 0x8d, 0xa3, 0x2e, 0x55, 0xb3, 0xa5, 0x27, 0xfb, 0xf9, 0x28,
+	0x99, 0xc2, 0x6a, 0x5a, 0x65, 0xa2, 0x1f, 0x2a, 0x05, 0x28, 0xbf, 0xf9, 0x8f, 0x0c, 0x2f, 0x05,
+	0xdc, 0x75, 0x82, 0x87, 0x11, 0x7a, 0xcb, 0x9b, 0x11, 0x96, 0xee, 0x92, 0xf3, 0x18, 0xae, 0x44,
+	0x9c, 0x85, 0x6a, 0x14, 0x0c, 0x98, 0x2a, 0xce, 0xce, 0x98, 0x59, 0xff, 0xb3, 0x76, 0x98, 0xb7,
+	0x13, 0xf4, 0xc2, 0x1a, 0x67, 0x1e, 0xb6, 0x6b, 0xd8, 0x7f, 0x2a, 0x94, 0x24, 0x19, 0x62, 0xa1,
+	0x2f, 0x50, 0xca, 0xaa, 0xa8, 0x07, 0x28, 0x47, 0xf3, 0x46, 0x61, 0xaa, 0x38, 0x5b, 0x39, 0xbe,
+	0xe4, 0xbd, 0x4e, 0xf8, 0x40, 0x47, 0x76, 0x3d, 0xd0, 0x55, 0xe7, 0xc7, 0xf6, 0x76, 0x00, 0xbe,
+	0xfc, 0xdc, 0x2d, 0x0c, 0x6c, 0x43, 0xe1, 0xe2, 0x96, 0x3e, 0xfe, 0xbf, 0x0d, 0xf9, 0x19, 0xb0,
+	0x07, 0x13, 0x91, 0x36, 0x56, 0x96, 0x5e, 0x90, 0x41, 0x4c, 0x6b, 0x16, 0x4e, 0x45, 0xb3, 0x88,
+	0x29, 0xc9, 0x67, 0x64, 0x48, 0x77, 0x89, 0x85, 0x0a, 0x45, 0xe8, 0x04, 0xa3, 0xad, 0x73, 0xda,
+	0xbb, 0xb2, 0xd9, 0x6f, 0x76, 0xef, 0xbb, 0xcf, 0xd1, 0x53, 0x36, 0xae, 0x6a, 0x8d, 0x91, 0x4f,
+	0xaf, 0xb2, 0xe4, 0xd6, 0x0e, 0x80, 0x3d, 0xd8, 0xbe, 0xba, 0x93, 0xdc, 0xcc, 0xd5, 0xbe, 0xee,
+	0x00, 0x23, 0x63, 0x64, 0xa4, 0xf3, 0x3e, 0x63, 0x91, 0x0b, 0xa3, 0x6b, 0xbc, 0x2c, 0xc1, 0x4d,
+	0x32, 0x49, 0x26, 0x16, 0x78, 0x18, 0xa2, 0xa7, 0xa7, 0xc4, 0x58, 0xe6, 0x46, 0x82, 0x4c, 0xa1,
+	0x66, 0xc9, 0x75, 0x72, 0x2d, 0x8d, 0x5a, 0x14, 0xbc, 0xd6, 0x07, 0x57, 0x29, 0xbf, 0xcf, 0x93,
+	0xe1, 0x05, 0x81, 0x8e, 0xc2, 0x53, 0x9a, 0x8b, 0xc7, 0x27, 0x37, 0x17, 0x3d, 0xcd, 0x7f, 0x74,
+	0x62, 0xcd, 0xcf, 0x74, 0x78, 0xee, 0xd2, 0xf7, 0x5b, 0x3d, 0x5f, 0xa5, 0xfc, 0x21, 0x4f, 0x2e,
+	0xd8, 0x18, 0x05, 0x8e, 0x77, 0x66, 0xd3, 0x31, 0x36, 0xbd, 0xcb, 0x93, 0xe2, 0x12, 0xaa, 0x33,
+	0x8b, 0xfe, 0x6a, 0xd1, 0xfc, 0x5b, 0xd8, 0x6b, 0xd2, 0xdc, 0x7e, 0x93, 0xe6, 0x0e, 0x9b, 0x14,
+	0x7e, 0x35, 0x29, 0x6c, 0xc5, 0x14, 0x3e, 0xc6, 0x14, 0x3e, 0xc7, 0x14, 0x76, 0x63, 0x0a, 0xdf,
+	0x62, 0x0a, 0x7b, 0x31, 0x85, 0xfd, 0x98, 0xc2, 0x8f, 0x98, 0x42, 0x2b, 0xa6, 0xb9, 0xc3, 0x98,
+	0xc2, 0xeb, 0x03, 0x9a, 0xdb, 0x3d, 0xa0, 0xf0, 0xe4, 0xa9, 0xcf, 0xa3, 0x75, 0xdf, 0x6c, 0xf0,
+	0x40, 0xa1, 0x10, 0x8e, 0x59, 0x97, 0x96, 0x3e, 0xac, 0x72, 0x51, 0x9b, 0x8e, 0x04, 0x6f, 0xb0,
+	0x15, 0x14, 0xd3, 0xdd, 0xb4, 0x15, 0xb9, 0x3e, 0xb7, 0xf0, 0xa5, 0x4a, 0x56, 0xc3, 0xbf, 0xf6,
+	0xb1, 0x3b, 0xa0, 0x17, 0x46, 0xe5, 0x77, 0x00, 0x00, 0x00, 0xff, 0xff, 0xfb, 0xd0, 0xde, 0xc9,
+	0xc1, 0x07, 0x00, 0x00,
 }

@@ -494,8 +494,8 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		if err != nil {
 			return errors.Wrap(err, "RestClient Replace")
 		}
-		namespace = rReq.Metadata.Namespace
-		name = rReq.Metadata.Name
+		namespace = rReq.GetMetadata().GetNamespace()
+		name = rReq.GetMetadata().GetName()
 	} else {
 		jsn = cco.ReplaceJSONReq
 		reqMap := make(map[string]interface{})
@@ -1116,8 +1116,11 @@ func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateRespons
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_policy.API.Create"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.network_policy.API.Create"), zap.Error(err))
 			}
 		}
 	}
@@ -1169,8 +1172,11 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_policy.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.network_policy.API.Replace"), zap.Error(err))
 			}
 		}
 	}
@@ -1287,8 +1293,11 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_policy.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
+				if !server.NoReqValidateFromContext(ctx) {
+					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
+					return nil, server.GRPCStatusFromError(err).Err()
+				}
+				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.network_policy.API.Delete"), zap.Error(err))
 			}
 		}
 	}
@@ -1302,6 +1311,7 @@ func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protob
 	tenant := server.TenantFromContext(ctx)
 	key := fmt.Sprintf("%s/%s/%s", tenant, req.GetNamespace(), req.GetName())
 	rsrcReq := &server.ResourceDeleteRequest{Key: key}
+	rsrcReq.FailIfReferred = req.FailIfReferred
 	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
 		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
@@ -1576,7 +1586,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Network Policy object",
-        "description": "Network Policy is applied to all IP packets to and from a given endpoint (called \"local_endpoint\").\n\nLocal endpoint can be,\n\n prefix : list of ip prefixes representing local endpoint \n\n prefix_selector: Prefix selector is more convenient way of representing a set of IP Address. Prefix label selector selects all ip prefixes that have labels that match configured label expression.\n\nLabel preference\n  An IP Address or IP Prefix is assigned with labels based on following rules in decreasing order of preference,\n\n   Labels from the interface for the address\n   Labels from POD or Service for the address\n   Labels from Virtual Network for the address\n   Labels from Namespace for the address\n\nNetwork Policy Rules are applied from local_endpoint point of view. Egress rules are applied for packets transmitted from local_endpoint to endpoint specified in network policy rule. Ingress rules are applied for packets received on local_endpoint from endpoint specified in network policy rule\n\nExamples of local_endpoint are, containers, hosts on site-local or site-local-inside network\n\nPrefix selector labels (BNF grammar):\n\n \u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\n \u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\n \u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\n \u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\n \u003cexclusion\u003e               ::= \"notin\"\n\n \u003cinclusion\u003e               ::= \"in\"\n\n \u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\n \u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\n \u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE\n\nKEY is a sequence of one or more characters. Max length is 63 characters. VALUE is a sequence of zero or more characters \"([A-Za-z0-9_-\\.])\". Max length is 63 characters. Delimiter is white space: (' ', '\\t')\n\nx-example: \"app == web, site in (abc, xyz)\"\n\nNote:\n\n (1) Inclusion - \" in \" - denotes that the KEY exists and is equal to any of the VALUE's in its requirement\n\n (2) Exclusion - \" notin \" - denotes that the KEY is not equal to any of the VALUE's in its requirement or does not exist\n\n (3) The empty string is a valid VALUE\n\n (4) A requirement with just a KEY - as in \"y\" above - denotes that the KEY exists and can be any VALUE.\n\n (5) A requirement with just !KEY requires that the KEY not exist.",
+        "description": "Network Policy is applied to all IP packets to and from a given endpoint (called \"local_endpoint\").\n\nLocal endpoint can be,\n\n prefix : list of ip prefixes representing local endpoint\n\n prefix_selector: Prefix selector is more convenient way of representing a set of IP Address. Prefix label selector selects all ip prefixes that have labels that match configured label expression.\n\nLabel preference\n  An IP Address or IP Prefix is assigned with labels based on following rules in decreasing order of preference,\n\n   Labels from the interface for the address\n   Labels from POD or Service for the address\n   Labels from Virtual Network for the address\n   Labels from Namespace for the address\n\nNetwork Policy Rules are applied from local_endpoint point of view. Egress rules are applied for packets transmitted from local_endpoint to endpoint specified in network policy rule. Ingress rules are applied for packets received on local_endpoint from endpoint specified in network policy rule\n\nExamples of local_endpoint are, containers, hosts on site-local or site-local-inside network\n\nPrefix selector labels (BNF grammar):\n\n \u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\n \u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\n \u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\n \u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\n \u003cexclusion\u003e               ::= \"notin\"\n\n \u003cinclusion\u003e               ::= \"in\"\n\n \u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\n \u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\n \u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE\n\nKEY is a sequence of one or more characters. Max length is 63 characters. VALUE is a sequence of zero or more characters \"([A-Za-z0-9_-\\.])\". Max length is 63 characters. Delimiter is white space: (' ', '\\t')\n\nx-example: \"app == web, site in (abc, xyz)\"\n\nNote:\n\n (1) Inclusion - \" in \" - denotes that the KEY exists and is equal to any of the VALUE's in its requirement\n\n (2) Exclusion - \" notin \" - denotes that the KEY is not equal to any of the VALUE's in its requirement or does not exist\n\n (3) The empty string is a valid VALUE\n\n (4) A requirement with just a KEY - as in \"y\" above - denotes that the KEY exists and can be any VALUE.\n\n (5) A requirement with just !KEY requires that the KEY not exist.",
         "version": "version not set"
     },
     "schemes": [
@@ -2061,6 +2071,14 @@ var APISwaggerJSON string = `{
                         "in": "path",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/network_policyDeleteRequest"
+                        }
                     }
                 ],
                 "tags": [
@@ -2082,6 +2100,13 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "service Foo {\n      rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n    }\n\nThe JSON representation for -Empty- is empty JSON object -{}-.",
             "title": "A generic empty message that you can re-use to avoid defining duplicated\nempty messages in your APIs. A typical example is to use it as the request\nor the response type of an API method. For instance:"
+        },
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "ioschemaObjectRefType": {
             "type": "object",
@@ -2127,6 +2152,39 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "network_policyApplicationEnumType": {
+            "type": "string",
+            "description": "Application protocols like HTTP, SNMP\n",
+            "title": "Applications",
+            "enum": [
+                "APPLICATION_HTTP",
+                "APPLICATION_HTTPS",
+                "APPLICATION_SNMP",
+                "APPLICATION_DNS"
+            ],
+            "default": "APPLICATION_HTTP",
+            "x-displayname": "Applications",
+            "x-ves-proto-enum": "ves.io.schema.network_policy.ApplicationEnumType"
+        },
+        "network_policyApplicationsType": {
+            "type": "object",
+            "description": "Application protocols like HTTP, SNMP",
+            "title": "Applications",
+            "x-displayname": "Applications",
+            "x-ves-displayorder": "1",
+            "x-ves-proto-message": "ves.io.schema.network_policy.ApplicationsType",
+            "properties": {
+                "applications": {
+                    "type": "array",
+                    "description": " Application protocols like HTTP, SNMP",
+                    "title": "Applications",
+                    "items": {
+                        "$ref": "#/definitions/network_policyApplicationEnumType"
+                    },
+                    "x-displayname": "Application Protocols"
+                }
+            }
+        },
         "network_policyCreateRequest": {
             "type": "object",
             "description": "This is the input message of the 'Create' RPC",
@@ -2143,7 +2201,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the network policy",
                     "title": "spec",
-                    "$ref": "#/definitions/network_policyCreateSpecType",
+                    "$ref": "#/definitions/schemanetwork_policyCreateSpecType",
                     "x-displayname": "Spec"
                 }
             }
@@ -2161,7 +2219,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the network policy",
                     "title": "spec",
-                    "$ref": "#/definitions/network_policyGetSpecType",
+                    "$ref": "#/definitions/schemanetwork_policyGetSpecType",
                     "x-displayname": "Spec"
                 },
                 "system_metadata": {
@@ -2172,37 +2230,79 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "network_policyCreateSpecType": {
+        "network_policyDeleteRequest": {
             "type": "object",
-            "description": "Creates a new network policy with configured parameters in specified namespace",
-            "title": "Create Network Policy",
-            "x-displayname": "Create Network Policy",
-            "x-ves-oneof-field-local_endpoint": "[\"prefix\",\"prefix_selector\"]",
-            "x-ves-proto-message": "ves.io.schema.network_policy.CreateSpecType",
+            "description": "This is the input message of the 'Delete' RPC.",
+            "title": "DeleteRequest is used to delete a network_policy",
+            "x-displayname": "Delete Request",
+            "x-ves-proto-message": "ves.io.schema.network_policy.DeleteRequest",
             "properties": {
-                "egress_rules": {
-                    "type": "array",
-                    "description": " List of network policy rules that apply to outgoing session from local endpoint\n Sequence in which rule is configured (in repeated egress rules) is the sequence in which egress rules are applied\n If egress rules are not specified or is empty list, then policy will assume default deny and to ANY destination from local endpoint",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Egress Rules"
+                "fail_if_referred": {
+                    "type": "boolean",
+                    "description": " Fail the delete operation if this object is being referred by other objects",
+                    "title": "fail_if_referred",
+                    "format": "boolean",
+                    "x-displayname": "Fail-If-Referred"
                 },
-                "ingress_rules": {
-                    "type": "array",
-                    "description": " List of network policy rules that apply to incoming session for local endpoint\n Sequence in which rule is configured (in repeated ingress rules) is the sequence in which ingress rules are applied\n If ingress rules are not specified or is empty list, then policy will assume default deny and from ANY destination to local endpoint",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Ingress Rules"
+                "name": {
+                    "type": "string",
+                    "description": " Name of the configuration object\n\nExample: - \"name\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
                 },
-                "prefix": {
-                    "description": "Exclusive with [prefix_selector]\n",
-                    "$ref": "#/definitions/schemaPrefixListType"
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the configuration object is present\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                }
+            }
+        },
+        "network_policyEndpointChoiceType": {
+            "type": "object",
+            "description": "Shape of the endpoint choices for a view",
+            "title": "Endpoint Choice",
+            "x-displayname": "Endpoint Choice",
+            "x-ves-displayorder": "10",
+            "x-ves-oneof-field-endpoint_choice": "[\"any\",\"inside_endpoints\",\"interface\",\"label_selector\",\"namespace\",\"outside_endpoints\",\"prefix_list\"]",
+            "x-ves-proto-message": "ves.io.schema.network_policy.EndpointChoiceType",
+            "properties": {
+                "any": {
+                    "description": "Exclusive with [inside_endpoints interface label_selector namespace outside_endpoints prefix_list]\nx-displayName: \"Any Endpoint\"\nAny Endpoint that matches 0/0 ip prefix",
+                    "title": "Any Endpoint",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
-                "prefix_selector": {
-                    "description": "Exclusive with [prefix]\n",
+                "inside_endpoints": {
+                    "description": "Exclusive with [any interface label_selector namespace outside_endpoints prefix_list]\nx-displayName: \"Endpoints Reachable via all Inside Interfaces\"\nAll ip prefixes that are reachable via inside interfaces are chosen as Endpoints",
+                    "title": "All Endpoints Reachable via all inside interfaces",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "interface": {
+                    "description": "Exclusive with [any inside_endpoints label_selector namespace outside_endpoints prefix_list]\nx-displayName: \"Endpoints Reachable via an Interfaces\"\nAll ip prefixes that are reachable via an interfaces are chosen as Endpoints",
+                    "title": "All Endpoints Reachable via an interfaces",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "label_selector": {
+                    "description": "Exclusive with [any inside_endpoints interface namespace outside_endpoints prefix_list]\nx-displayName: \"Label Selector\"\nx-example: \"app != web\"\nlocal end point is set of prefixes determined by label selector expression",
+                    "title": "prefix Label selector",
                     "$ref": "#/definitions/schemaLabelSelectorType"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": "Exclusive with [any inside_endpoints interface label_selector outside_endpoints prefix_list]\nx-displayName: \"Endpoints of a Namespace\"\nAll ip prefixes that are of a namespace are chosen as Endpoints",
+                    "title": "All Endpoints of a Namespace"
+                },
+                "outside_endpoints": {
+                    "description": "Exclusive with [any inside_endpoints interface label_selector namespace prefix_list]\nx-displayName: \"Endpoints Reachable via all Outside Interfaces\"\nAll ip prefixes that are reachable via outside interfaces are chosen as Endpoints",
+                    "title": "All Endpoints Reachable via all outside interfaces",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "prefix_list": {
+                    "description": "Exclusive with [any inside_endpoints interface label_selector namespace outside_endpoints]\nx-displayName: \"IPv4 Prefix List\"\nx-example: \"192.168.20.0/24\"\nList of ip prefixes that are representing endpoint\nFor egress rules: from this endpoints to remote endpoints these ip prefixes are source ip.\nFor Ingress rules: To this endpoints from remote endpoints these ip prefixes are destination ip.",
+                    "title": "ipv4 prefix list",
+                    "$ref": "#/definitions/viewsPrefixStringListType"
                 }
             }
         },
@@ -2246,7 +2346,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the network policy",
                     "title": "spec",
-                    "$ref": "#/definitions/network_policyGetSpecType",
+                    "$ref": "#/definitions/schemanetwork_policyGetSpecType",
                     "x-displayname": "Spec"
                 },
                 "status": {
@@ -2279,17 +2379,17 @@ var APISwaggerJSON string = `{
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
-        "network_policyGetSpecType": {
+        "network_policyLegacyNetworkPolicyRuleChoice": {
             "type": "object",
-            "description": "Gets Network Policy parameters in specified namespace",
-            "title": "Get Network Policy",
-            "x-displayname": "Get Network Policy",
-            "x-ves-oneof-field-local_endpoint": "[\"prefix\",\"prefix_selector\"]",
-            "x-ves-proto-message": "ves.io.schema.network_policy.GetSpecType",
+            "description": "Shape of Legacy Network Policy Rule Choice",
+            "title": "Legacy Rule Choice",
+            "x-displayname": "Legacy Rule Choice",
+            "x-ves-proto-message": "ves.io.schema.network_policy.LegacyNetworkPolicyRuleChoice",
             "properties": {
                 "egress_rules": {
                     "type": "array",
                     "description": " List of network policy rules that apply to outgoing session from local endpoint\n Sequence in which rule is configured (in repeated egress rules) is the sequence in which egress rules are applied\n If egress rules are not specified or is empty list, then policy will assume default deny and to ANY destination from local endpoint",
+                    "title": "Egress rules",
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
@@ -2298,65 +2398,11 @@ var APISwaggerJSON string = `{
                 "ingress_rules": {
                     "type": "array",
                     "description": " List of network policy rules that apply to incoming session for local endpoint\n Sequence in which rule is configured (in repeated ingress rules) is the sequence in which ingress rules are applied\n If ingress rules are not specified or is empty list, then policy will assume default deny and from ANY destination to local endpoint",
+                    "title": "Ingress rules",
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Ingress Rules"
-                },
-                "prefix": {
-                    "description": "Exclusive with [prefix_selector]\n",
-                    "$ref": "#/definitions/schemaPrefixListType"
-                },
-                "prefix_selector": {
-                    "description": "Exclusive with [prefix]\n",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
-                }
-            }
-        },
-        "network_policyGlobalSpecType": {
-            "type": "object",
-            "description": "Desired state for Network policy",
-            "title": "Network policy specification",
-            "x-displayname": "Specification",
-            "x-ves-oneof-field-local_endpoint": "[\"prefix\",\"prefix_selector\"]",
-            "x-ves-proto-message": "ves.io.schema.network_policy.GlobalSpecType",
-            "properties": {
-                "egress_rules": {
-                    "type": "array",
-                    "description": " List of network policy rules that apply to outgoing session from local endpoint\n Sequence in which rule is configured (in repeated egress rules) is the sequence in which egress rules are applied\n If egress rules are not specified or is empty list, then policy will assume default deny and to ANY destination from local endpoint",
-                    "title": "egress rules",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Egress Rules"
-                },
-                "forwarding_class": {
-                    "type": "array",
-                    "description": " Ordered list of forwarding class to use for traffic that match any rules\n Action valid only when policy is part of PBR.",
-                    "title": "Default Forwarding Classes",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Default Forwarding Classes"
-                },
-                "ingress_rules": {
-                    "type": "array",
-                    "description": " List of network policy rules that apply to incoming session for local endpoint\n Sequence in which rule is configured (in repeated ingress rules) is the sequence in which ingress rules are applied\n If ingress rules are not specified or is empty list, then policy will assume default deny and from ANY destination to local endpoint",
-                    "title": "ingress rules",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Ingress Rules"
-                },
-                "prefix": {
-                    "description": "Exclusive with [prefix_selector]\nx-displayName: \"Prefix\"\nx-example: \"192.168.20.0/24\"\nlist of ip prefixes that are member of set representing local endpoint\nprefix is the list of ip addresses to match\nFor egress rules these ip prefixes are source\nFor ingress rules these ip prefixes are destination",
-                    "title": "prefix",
-                    "$ref": "#/definitions/schemaPrefixListType"
-                },
-                "prefix_selector": {
-                    "description": "Exclusive with [prefix]\nx-displayName: \"Label Selector\"\nx-example: \"app != web\"\nlocal end point is set of prefixes determined by label selector expression\nLabels can be specified in BNF grammar format\n Constraint \nMultiple repeated expressions are not supported, only first expression is evaluated",
-                    "title": "prefix selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
                 }
             }
         },
@@ -2407,7 +2453,7 @@ var APISwaggerJSON string = `{
                 "get_spec": {
                     "description": " If ListRequest has any specified report_fields, it will appear in object",
                     "title": "get_spec",
-                    "$ref": "#/definitions/network_policyGetSpecType",
+                    "$ref": "#/definitions/schemanetwork_policyGetSpecType",
                     "x-displayname": "Get Specification"
                 },
                 "labels": {
@@ -2479,6 +2525,141 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "network_policyNetworkPolicyRuleChoice": {
+            "type": "object",
+            "description": "Shape of Network Policy Rule Choice",
+            "title": "Rule Choice",
+            "x-displayname": "Rule Choice",
+            "x-ves-proto-message": "ves.io.schema.network_policy.NetworkPolicyRuleChoice",
+            "properties": {
+                "egress_rules": {
+                    "type": "array",
+                    "description": " Ordered list of rules applied to connections from policy endpoints.",
+                    "title": "Egress Rules",
+                    "items": {
+                        "$ref": "#/definitions/network_policyNetworkPolicyRuleType"
+                    },
+                    "x-displayname": "Egress Rules"
+                },
+                "ingress_rules": {
+                    "type": "array",
+                    "description": " Ordered list of rules applied to connections to policy endpoints.",
+                    "title": "Ingress Rules",
+                    "items": {
+                        "$ref": "#/definitions/network_policyNetworkPolicyRuleType"
+                    },
+                    "x-displayname": "Ingress Rules"
+                }
+            }
+        },
+        "network_policyNetworkPolicyRuleType": {
+            "type": "object",
+            "description": "Shape of Network Policy Rule",
+            "title": "Network Policy Rule",
+            "x-displayname": "Network Policy Rule",
+            "x-ves-oneof-field-other_endpoint": "[\"any\",\"inside_endpoints\",\"ip_prefix_set\",\"label_selector\",\"namespace\",\"outside_endpoints\",\"prefix_list\"]",
+            "x-ves-oneof-field-traffic_choice": "[\"all_tcp_traffic\",\"all_traffic\",\"all_udp_traffic\",\"applications\",\"protocol_port_range\"]",
+            "x-ves-proto-message": "ves.io.schema.network_policy.NetworkPolicyRuleType",
+            "properties": {
+                "action": {
+                    "description": " Action to be taken at rule match. Currently supported actions are Allow and  Deny",
+                    "title": "action",
+                    "$ref": "#/definitions/network_policy_ruleNetworkPolicyRuleAction",
+                    "x-displayname": "Action"
+                },
+                "all_tcp_traffic": {
+                    "description": "Exclusive with [all_traffic all_udp_traffic applications protocol_port_range]\nx-displayName: \"Match All TCP Traffic\"\nSelect all TCP traffic to match",
+                    "title": "All TCP Traffic",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "all_traffic": {
+                    "description": "Exclusive with [all_tcp_traffic all_udp_traffic applications protocol_port_range]\nx-displayName: \"Match All Traffic\"\nSelect all traffic to match",
+                    "title": "All Traffic",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "all_udp_traffic": {
+                    "description": "Exclusive with [all_tcp_traffic all_traffic applications protocol_port_range]\nx-displayName: \"Match All UDP Traffic\"\nSelect all UDP traffic to match",
+                    "title": "All UDP Traffic",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "any": {
+                    "description": "Exclusive with [inside_endpoints ip_prefix_set label_selector namespace outside_endpoints prefix_list]\nx-displayName: \"Any Endpoint\"\nAny Endpoint that matches 0/0 ip prefix",
+                    "title": "Any Endpoint",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "applications": {
+                    "description": "Exclusive with [all_tcp_traffic all_traffic all_udp_traffic protocol_port_range]\nx-displayName: \"Match Application Traffic\"\nSelect Application traffic to match",
+                    "title": "Specific Applications",
+                    "$ref": "#/definitions/network_policyApplicationsType"
+                },
+                "inside_endpoints": {
+                    "description": "Exclusive with [any ip_prefix_set label_selector namespace outside_endpoints prefix_list]\nx-displayName: \"Endpoints Reachable via all Inside Interfaces\"\nAll ip prefixes that are reachable via inside interfaces are chosen as Endpoints",
+                    "title": "All Endpoints Reachable via all inside interfaces",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "ip_prefix_set": {
+                    "description": "Exclusive with [any inside_endpoints label_selector namespace outside_endpoints prefix_list]\nx-displayName: \"List IP Prefix Set\"\nReference to object which represents list of IP prefixes that will be referred as remote endpoint",
+                    "title": "ip prefix set",
+                    "$ref": "#/definitions/schemaIpPrefixSetRefType"
+                },
+                "keys": {
+                    "type": "array",
+                    "description": " list of label keys to be for which label values will be matched\n Keys are \"site\" and rule lets \"web\" talk to \"db\", site in (abc, xyz) then \"web\" in site \"abc\"\n can talk to \"db\" in site \"abc\" and can not talk to \"db\" in site \"xyz\"\n\nExample: - \"['site']\"-",
+                    "title": "label matcher",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Keys for Label Match",
+                    "x-ves-example": "['site']"
+                },
+                "label_selector": {
+                    "description": "Exclusive with [any inside_endpoints ip_prefix_set namespace outside_endpoints prefix_list]\nx-displayName: \"Label Selector\"\nx-example: \"app != web\"\nlocal end point is set of prefixes determined by label selector expression",
+                    "title": "prefix Label selector",
+                    "$ref": "#/definitions/schemaLabelSelectorType"
+                },
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\nRequired: YES",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": "Exclusive with [any inside_endpoints ip_prefix_set label_selector outside_endpoints prefix_list]\nx-displayName: \"Endpoints of a Namespace\"\nAll ip prefixes that are of a namespace are chosen as Endpoints",
+                    "title": "All Endpoints of a Namespace"
+                },
+                "outside_endpoints": {
+                    "description": "Exclusive with [any inside_endpoints ip_prefix_set label_selector namespace prefix_list]\nx-displayName: \"Endpoints Reachable via all Outside Interfaces\"\nAll ip prefixes that are reachable via outside interfaces are chosen as Endpoints",
+                    "title": "All Endpoints Reachable via all outside interfaces",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "prefix_list": {
+                    "description": "Exclusive with [any inside_endpoints ip_prefix_set label_selector namespace outside_endpoints]\nx-displayName: \"IPv4 Prefix List\"\nx-example: \"192.168.20.0/24\"\nlist of ip prefixes that are representing endpoint\nFor Egress rules: from these endpoints to remote endpoints these ip prefixes are source IPs.\nFor Ingress rules: To these endpoints from remote endpoints these ip prefixes are destination IPs.",
+                    "title": "ipv4 prefix list",
+                    "$ref": "#/definitions/viewsPrefixStringListType"
+                },
+                "protocol_port_range": {
+                    "description": "Exclusive with [all_tcp_traffic all_traffic all_udp_traffic applications]\nx-displayName: \"Match Protocol and Port Ranges\"\nSelect specific protocol and port ranges traffic to match",
+                    "title": "Protocol and Port Ranges",
+                    "$ref": "#/definitions/network_policyProtocolPortType"
+                },
+                "rule_description": {
+                    "type": "string",
+                    "description": " Human readable description for the rule\n\nExample: - \"Rule to block outside ip\"-",
+                    "title": "Description",
+                    "x-displayname": "Description",
+                    "x-ves-example": "Rule to block outside ip"
+                },
+                "rule_name": {
+                    "type": "string",
+                    "description": " Rule Name that will be used to query metrics for this rule.\n\nExample: - \"mypolicy-allow-htpp\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "mypolicy-allow-htpp"
+                }
+            }
+        },
         "network_policyObject": {
             "type": "object",
             "description": "Network policy object",
@@ -2506,6 +2687,32 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "network_policyProtocolPortType": {
+            "type": "object",
+            "description": "Protocol and Port ranges",
+            "title": "Protocol and Port",
+            "x-displayname": "Protocol and Port",
+            "x-ves-displayorder": "1,2",
+            "x-ves-proto-message": "ves.io.schema.network_policy.ProtocolPortType",
+            "properties": {
+                "port_ranges": {
+                    "type": "array",
+                    "description": " List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192\n\nExample: - \"100-200\"-",
+                    "title": "ports",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "List of Port Ranges",
+                    "x-ves-example": "100-200"
+                },
+                "protocol": {
+                    "type": "string",
+                    "description": " Protocol in IP packet to be used as match criteria\n Values are tcp, udp, and icmp",
+                    "title": "protocol",
+                    "x-displayname": "Protocol"
+                }
+            }
+        },
         "network_policyReplaceRequest": {
             "type": "object",
             "description": "This is the input message of the 'Replace' RPC",
@@ -2529,7 +2736,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the network policy",
                     "title": "spec",
-                    "$ref": "#/definitions/network_policyReplaceSpecType",
+                    "$ref": "#/definitions/schemanetwork_policyReplaceSpecType",
                     "x-displayname": "Spec"
                 }
             }
@@ -2537,40 +2744,6 @@ var APISwaggerJSON string = `{
         "network_policyReplaceResponse": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.network_policy.ReplaceResponse"
-        },
-        "network_policyReplaceSpecType": {
-            "type": "object",
-            "description": "Replaces configured Network Policy with new set of parameters in specified namespace",
-            "title": "Replace Network Policy",
-            "x-displayname": "Replace Network Policy",
-            "x-ves-oneof-field-local_endpoint": "[\"prefix\",\"prefix_selector\"]",
-            "x-ves-proto-message": "ves.io.schema.network_policy.ReplaceSpecType",
-            "properties": {
-                "egress_rules": {
-                    "type": "array",
-                    "description": " List of network policy rules that apply to outgoing session from local endpoint\n Sequence in which rule is configured (in repeated egress rules) is the sequence in which egress rules are applied\n If egress rules are not specified or is empty list, then policy will assume default deny and to ANY destination from local endpoint",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Egress Rules"
-                },
-                "ingress_rules": {
-                    "type": "array",
-                    "description": " List of network policy rules that apply to incoming session for local endpoint\n Sequence in which rule is configured (in repeated ingress rules) is the sequence in which ingress rules are applied\n If ingress rules are not specified or is empty list, then policy will assume default deny and from ANY destination to local endpoint",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Ingress Rules"
-                },
-                "prefix": {
-                    "description": "Exclusive with [prefix_selector]\n",
-                    "$ref": "#/definitions/schemaPrefixListType"
-                },
-                "prefix_selector": {
-                    "description": "Exclusive with [prefix]\n",
-                    "$ref": "#/definitions/schemaLabelSelectorType"
-                }
-            }
         },
         "network_policySpecType": {
             "type": "object",
@@ -2581,7 +2754,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "gc_spec": {
                     "title": "gc_spec",
-                    "$ref": "#/definitions/network_policyGlobalSpecType",
+                    "$ref": "#/definitions/schemanetwork_policyGlobalSpecType",
                     "x-displayname": "GC Spec"
                 }
             }
@@ -2618,6 +2791,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Config Object"
                 }
             }
+        },
+        "network_policy_ruleNetworkPolicyRuleAction": {
+            "type": "string",
+            "description": "Network policy rule action configures the action to be taken on rule match\n\n - DENY: Apply deny action on rule match\n - ALLOW: Apply allow action on rule match",
+            "title": "Network Policy Rule Action",
+            "enum": [
+                "DENY",
+                "ALLOW"
+            ],
+            "default": "DENY",
+            "x-displayname": "Network Policy Rule Action",
+            "x-ves-proto-enum": "ves.io.schema.network_policy_rule.NetworkPolicyRuleAction"
         },
         "schemaConditionType": {
             "type": "object",
@@ -2707,6 +2892,24 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaIpPrefixSetRefType": {
+            "type": "object",
+            "description": "A list of references to ip_prefix_set objects.",
+            "title": "IpPrefixSetRefType",
+            "x-displayname": "IP Prefix Set Reference",
+            "x-ves-proto-message": "ves.io.schema.IpPrefixSetRefType",
+            "properties": {
+                "ref": {
+                    "type": "array",
+                    "description": " A list of references to ip_prefix_set objects.",
+                    "title": "ref",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Reference"
+                }
+            }
+        },
         "schemaLabelSelectorType": {
             "type": "object",
             "description": "This type can be used to establish a 'selector reference' from one object(called selector) to \na set of other objects(called selectees) based on the value of expresssions. \nA label selector is a label query over a set of resources. An empty label selector matches all objects. \nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression. \nEach string has \",\" seperated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
@@ -2723,6 +2926,38 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Selector Expression",
                     "x-ves-example": "region in (us-west1, us-west2),tier in (staging)",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "schemaMessageMetaType": {
+            "type": "object",
+            "description": "MessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
+            "title": "MessageMetaType",
+            "x-displayname": "Message Metadata",
+            "x-ves-proto-message": "ves.io.schema.MessageMetaType",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " Human readable description for the object that corresponds to the containing message.\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "title": "description",
+                    "x-displayname": "Description",
+                    "x-ves-example": "Virtual Host for acmecorp website"
+                },
+                "disable": {
+                    "type": "boolean",
+                    "description": " A value of true will administratively disable the object that corresponds to the containing message.\n\nExample: - \"true\"-",
+                    "title": "disable",
+                    "format": "boolean",
+                    "x-displayname": "Disable",
+                    "x-ves-example": "true"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " This is the name of the message.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "acmecorp-web",
                     "x-ves-required": "true"
                 }
             }
@@ -3283,6 +3518,200 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
+                }
+            }
+        },
+        "schemanetwork_policyCreateSpecType": {
+            "type": "object",
+            "description": "Creates a new network policy with configured parameters in specified namespace",
+            "title": "Create Network Policy",
+            "x-displayname": "Create Network Policy",
+            "x-ves-proto-message": "ves.io.schema.network_policy.CreateSpecType",
+            "properties": {
+                "endpoint": {
+                    "description": " Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.",
+                    "title": "Policy Endpoint",
+                    "$ref": "#/definitions/network_policyEndpointChoiceType",
+                    "x-displayname": "Endpoint(s)"
+                },
+                "rules": {
+                    "description": "Network Policy Rules\nRequired: YES",
+                    "title": "Rules",
+                    "$ref": "#/definitions/network_policyNetworkPolicyRuleChoice",
+                    "x-displayname": "Rules",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "schemanetwork_policyGetSpecType": {
+            "type": "object",
+            "description": "Gets Network Policy parameters in specified namespace",
+            "title": "Get Network Policy",
+            "x-displayname": "Get Network Policy",
+            "x-ves-oneof-field-rule_choice": "[\"legacy_rules\",\"rules\"]",
+            "x-ves-proto-message": "ves.io.schema.network_policy.GetSpecType",
+            "properties": {
+                "endpoint": {
+                    "description": " Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.",
+                    "title": "Policy Endpoint",
+                    "$ref": "#/definitions/network_policyEndpointChoiceType",
+                    "x-displayname": "Endpoint(s)"
+                },
+                "legacy_rules": {
+                    "description": "Exclusive with [rules]\nx-displayName: \"Legacy Rule Choice\"\nNetwork Policy Legacy Rule Choice",
+                    "title": "Legacy Rule Choice",
+                    "$ref": "#/definitions/network_policyLegacyNetworkPolicyRuleChoice"
+                },
+                "rules": {
+                    "description": "Exclusive with [legacy_rules]\nx-displayName: \"Rule Choice\"\nNetwork Policy Rule Choice",
+                    "title": "Rule Choice",
+                    "$ref": "#/definitions/network_policyNetworkPolicyRuleChoice"
+                }
+            }
+        },
+        "schemanetwork_policyGlobalSpecType": {
+            "type": "object",
+            "description": "Desired state for Network policy",
+            "title": "Network policy specification",
+            "x-displayname": "Specification",
+            "x-ves-oneof-field-local_endpoint": "[\"prefix\",\"prefix_selector\"]",
+            "x-ves-oneof-field-rule_choice": "[\"legacy_rules\",\"rules\"]",
+            "x-ves-proto-message": "ves.io.schema.network_policy.GlobalSpecType",
+            "properties": {
+                "egress_rules": {
+                    "type": "array",
+                    "description": " List of network policy rules that apply to outgoing session from local endpoint\n Sequence in which rule is configured (in repeated egress rules) is the sequence in which egress rules are applied\n If egress rules are not specified or is empty list, then policy will assume default deny and to ANY destination from local endpoint",
+                    "title": "egress rules",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Egress Rules"
+                },
+                "endpoint": {
+                    "description": " Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.",
+                    "title": "Policy Endpoint",
+                    "$ref": "#/definitions/network_policyEndpointChoiceType",
+                    "x-displayname": "Endpoint(s)"
+                },
+                "forwarding_class": {
+                    "type": "array",
+                    "description": " Ordered list of forwarding class to use for traffic that match any rules\n Action valid only when policy is part of PBR.",
+                    "title": "Default Forwarding Classes",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Default Forwarding Classes"
+                },
+                "ingress_rules": {
+                    "type": "array",
+                    "description": " List of network policy rules that apply to incoming session for local endpoint\n Sequence in which rule is configured (in repeated ingress rules) is the sequence in which ingress rules are applied\n If ingress rules are not specified or is empty list, then policy will assume default deny and from ANY destination to local endpoint",
+                    "title": "ingress rules",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Ingress Rules"
+                },
+                "legacy_rules": {
+                    "description": "Exclusive with [rules]\nx-displayName: \"Legacy Rule Choice\"\nNetwork Policy Legacy Rule Choice",
+                    "title": "Legacy Rule Choice",
+                    "$ref": "#/definitions/network_policyLegacyNetworkPolicyRuleChoice"
+                },
+                "prefix": {
+                    "description": "Exclusive with [prefix_selector]\nx-displayName: \"Prefix\"\nx-example: \"192.168.20.0/24\"\nlist of ip prefixes that are member of set representing local endpoint\nprefix is the list of ip addresses to match\nFor egress rules these ip prefixes are source\nFor ingress rules these ip prefixes are destination",
+                    "title": "prefix",
+                    "$ref": "#/definitions/schemaPrefixListType"
+                },
+                "prefix_selector": {
+                    "description": "Exclusive with [prefix]\nx-displayName: \"Label Selector\"\nx-example: \"app != web\"\nlocal end point is set of prefixes determined by label selector expression\nLabels can be specified in BNF grammar format",
+                    "title": "prefix selector",
+                    "$ref": "#/definitions/schemaLabelSelectorType"
+                },
+                "rules": {
+                    "description": "Exclusive with [legacy_rules]\nx-displayName: \"Rule Choice\"\nNetwork Policy Rule Choice",
+                    "title": "Rule Choice",
+                    "$ref": "#/definitions/network_policyNetworkPolicyRuleChoice"
+                },
+                "view_internal": {
+                    "description": " Reference to view internal object",
+                    "title": "view_internal",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "View Internal"
+                }
+            }
+        },
+        "schemanetwork_policyReplaceSpecType": {
+            "type": "object",
+            "description": "Replaces configured Network Policy with new set of parameters in specified namespace",
+            "title": "Replace Network Policy",
+            "x-displayname": "Replace Network Policy",
+            "x-ves-oneof-field-rule_choice": "[\"legacy_rules\",\"rules\"]",
+            "x-ves-proto-message": "ves.io.schema.network_policy.ReplaceSpecType",
+            "properties": {
+                "endpoint": {
+                    "description": " Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.",
+                    "title": "Policy Endpoint",
+                    "$ref": "#/definitions/network_policyEndpointChoiceType",
+                    "x-displayname": "Endpoint(s)"
+                },
+                "legacy_rules": {
+                    "description": "Exclusive with [rules]\nx-displayName: \"Legacy Rule Choice\"\nNetwork Policy Legacy Rule Choice",
+                    "title": "Legacy Rule Choice",
+                    "$ref": "#/definitions/network_policyLegacyNetworkPolicyRuleChoice"
+                },
+                "rules": {
+                    "description": "Exclusive with [legacy_rules]\nx-displayName: \"Rule Choice\"\nNetwork Policy Rule Choice",
+                    "title": "Rule Choice",
+                    "$ref": "#/definitions/network_policyNetworkPolicyRuleChoice"
+                }
+            }
+        },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                }
+            }
+        },
+        "viewsPrefixStringListType": {
+            "type": "object",
+            "description": "x-example: \"192.168.20.0/24\"\nList of IPv4 prefixes that represent an endpoint",
+            "title": "ipv4 prefix list",
+            "x-displayname": "IPv4 Prefix List",
+            "x-ves-proto-message": "ves.io.schema.views.PrefixStringListType",
+            "properties": {
+                "prefixes": {
+                    "type": "array",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-",
+                    "title": "ipv4 prefix list",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv4 Prefix List",
+                    "x-ves-example": "192.168.20.0/24"
                 }
             }
         }

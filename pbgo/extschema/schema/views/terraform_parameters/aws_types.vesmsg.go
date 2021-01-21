@@ -67,6 +67,16 @@ type ValidateAWSInstanceType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateAWSInstanceType) EbsVolumeSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ebs_volume_size")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSInstanceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AWSInstanceType)
 	if !ok {
@@ -94,6 +104,24 @@ func (v *ValidateAWSInstanceType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("disk_size"))
 		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ebs_volume_az"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ebs_volume_az"))
+		if err := fv(ctx, m.GetEbsVolumeAz(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ebs_volume_size"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ebs_volume_size"))
+		if err := fv(ctx, m.GetEbsVolumeSize(), vOpts...); err != nil {
 			return err
 		}
 
@@ -159,6 +187,26 @@ func (v *ValidateAWSInstanceType) Validate(ctx context.Context, pm interface{}, 
 // Well-known symbol for default validator implementation
 var DefaultAWSInstanceTypeValidator = func() *ValidateAWSInstanceType {
 	v := &ValidateAWSInstanceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhEbsVolumeSize := v.EbsVolumeSizeValidationRuleHandler
+	rulesEbsVolumeSize := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "1024",
+	}
+	vFn, err = vrhEbsVolumeSize(rulesEbsVolumeSize)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSInstanceType.ebs_volume_size: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ebs_volume_size"] = vFn
 
 	return v
 }()
@@ -737,6 +785,8 @@ var DefaultAWSTGWTypeValidator = func() *ValidateAWSTGWType {
 
 	v.FldValidators["subnets"] = SubnetTypeValidator().Validate
 
+	v.FldValidators["master_nodes"] = AWSInstanceTypeValidator().Validate
+
 	v.FldValidators["tunnel_information"] = AWSTGWTunnelInfoTypeValidator().Validate
 
 	return v
@@ -1014,6 +1064,8 @@ var DefaultAWSVPCTypeValidator = func() *ValidateAWSVPCType {
 	v.FldValidators["vpc"] = AWSVPCInfoTypeValidator().Validate
 
 	v.FldValidators["subnets"] = SubnetTypeValidator().Validate
+
+	v.FldValidators["master_nodes"] = AWSInstanceTypeValidator().Validate
 
 	return v
 }()

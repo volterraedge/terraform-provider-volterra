@@ -580,7 +580,7 @@ var DefaultFieldAggregationValidator = func() *ValidateFieldAggregation {
 
 	vrhTopk := v.TopkValidationRuleHandler
 	rulesTopk := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.gte": "0",
 		"ves.io.schema.rules.uint32.lte": "100",
 	}
 	vFn, err = vrhTopk(rulesTopk)
