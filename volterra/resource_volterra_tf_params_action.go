@@ -213,6 +213,9 @@ func resourceVolterraTFParamsRunActionDelete(d *schema.ResourceData, meta interf
 	if v, ok := d.GetOk("site_kind"); ok {
 		actionParams.siteKind = v.(string)
 	}
+	if v, ok := d.GetOk("wait_for_action"); ok {
+		actionParams.waitForAction = v.(bool)
+	}
 
 	actionVal, ok := ves_io_schema_tf_params.RunAction_value["DESTROY"]
 	if !ok {
