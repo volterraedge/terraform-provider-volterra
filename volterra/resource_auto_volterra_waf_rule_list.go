@@ -51,11 +51,13 @@ func resourceVolterraWafRuleList() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"rule_ids": {
@@ -124,6 +126,7 @@ func resourceVolterraWafRuleListCreate(d *schema.ResourceData, meta interface{})
 			v.(string)
 	}
 
+	//rule_ids
 	if v, ok := d.GetOk("rule_ids"); ok && !isIntfNil(v) {
 
 		rule_idsList := []ves_io_schema_waf_rule_list.WafRuleID{}

@@ -51,11 +51,13 @@ func resourceVolterraAlertPolicy() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"notification_parameters": {
@@ -424,13 +426,13 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 			v.(string)
 	}
 
+	//notification_parameters
 	if v, ok := d.GetOk("notification_parameters"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		notificationParameters := &ves_io_schema_alert_policy.NotificationParameters{}
 		createSpec.NotificationParameters = notificationParameters
 		for _, set := range sl {
-
 			notificationParametersMapStrToI := set.(map[string]interface{})
 
 			groupByTypeFound := false
@@ -512,6 +514,7 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//receivers
 	if v, ok := d.GetOk("receivers"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -544,6 +547,7 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//routes
 	if v, ok := d.GetOk("routes"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -551,7 +555,6 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 		createSpec.Routes = routes
 		for i, set := range sl {
 			routes[i] = &ves_io_schema_alert_policy.Route{}
-
 			routesMapStrToI := set.(map[string]interface{})
 
 			actionTypeFound := false
@@ -633,7 +636,6 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 						alertname := &ves_io_schema_alert_policy.LabelMatcher{}
 						matcherInt.Custom.Alertname = alertname
 						for _, set := range sl {
-
 							alertnameMapStrToI := set.(map[string]interface{})
 
 							matcherTypeTypeFound := false
@@ -670,7 +672,6 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 						group := &ves_io_schema_alert_policy.LabelMatcher{}
 						matcherInt.Custom.Group = group
 						for _, set := range sl {
-
 							groupMapStrToI := set.(map[string]interface{})
 
 							matcherTypeTypeFound := false
@@ -707,7 +708,6 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 						severity := &ves_io_schema_alert_policy.LabelMatcher{}
 						matcherInt.Custom.Severity = severity
 						for _, set := range sl {
-
 							severityMapStrToI := set.(map[string]interface{})
 
 							matcherTypeTypeFound := false
@@ -798,7 +798,6 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 				notificationParameters := &ves_io_schema_alert_policy.NotificationParameters{}
 				routes[i].NotificationParameters = notificationParameters
 				for _, set := range sl {
-
 					notificationParametersMapStrToI := set.(map[string]interface{})
 
 					groupByTypeFound := false
@@ -988,7 +987,6 @@ func resourceVolterraAlertPolicyUpdate(d *schema.ResourceData, meta interface{})
 		notificationParameters := &ves_io_schema_alert_policy.NotificationParameters{}
 		updateSpec.NotificationParameters = notificationParameters
 		for _, set := range sl {
-
 			notificationParametersMapStrToI := set.(map[string]interface{})
 
 			groupByTypeFound := false
@@ -1109,7 +1107,6 @@ func resourceVolterraAlertPolicyUpdate(d *schema.ResourceData, meta interface{})
 		updateSpec.Routes = routes
 		for i, set := range sl {
 			routes[i] = &ves_io_schema_alert_policy.Route{}
-
 			routesMapStrToI := set.(map[string]interface{})
 
 			actionTypeFound := false
@@ -1191,7 +1188,6 @@ func resourceVolterraAlertPolicyUpdate(d *schema.ResourceData, meta interface{})
 						alertname := &ves_io_schema_alert_policy.LabelMatcher{}
 						matcherInt.Custom.Alertname = alertname
 						for _, set := range sl {
-
 							alertnameMapStrToI := set.(map[string]interface{})
 
 							matcherTypeTypeFound := false
@@ -1228,7 +1224,6 @@ func resourceVolterraAlertPolicyUpdate(d *schema.ResourceData, meta interface{})
 						group := &ves_io_schema_alert_policy.LabelMatcher{}
 						matcherInt.Custom.Group = group
 						for _, set := range sl {
-
 							groupMapStrToI := set.(map[string]interface{})
 
 							matcherTypeTypeFound := false
@@ -1265,7 +1260,6 @@ func resourceVolterraAlertPolicyUpdate(d *schema.ResourceData, meta interface{})
 						severity := &ves_io_schema_alert_policy.LabelMatcher{}
 						matcherInt.Custom.Severity = severity
 						for _, set := range sl {
-
 							severityMapStrToI := set.(map[string]interface{})
 
 							matcherTypeTypeFound := false
@@ -1356,7 +1350,6 @@ func resourceVolterraAlertPolicyUpdate(d *schema.ResourceData, meta interface{})
 				notificationParameters := &ves_io_schema_alert_policy.NotificationParameters{}
 				routes[i].NotificationParameters = notificationParameters
 				for _, set := range sl {
-
 					notificationParametersMapStrToI := set.(map[string]interface{})
 
 					groupByTypeFound := false

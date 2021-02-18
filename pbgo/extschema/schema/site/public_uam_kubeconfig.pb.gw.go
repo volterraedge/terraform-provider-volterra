@@ -28,9 +28,15 @@ var _ status.Status
 var _ = runtime.String
 var _ = utilities.NewDoubleArray
 
-func request_UamKubeConfigAPI_GetGlobalKubeConfig_0(ctx context.Context, marshaler runtime.Marshaler, client UamKubeConfigAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetKubeConfigReq
+func request_UamKubeConfigAPI_CreateGlobalKubeConfig_0(ctx context.Context, marshaler runtime.Marshaler, client UamKubeConfigAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq CreateKubeConfigReq
 	var metadata runtime.ServerMetadata
+
+	if req.ContentLength > 0 {
+		if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil {
+			return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+		}
+	}
 
 	var (
 		val string
@@ -61,7 +67,7 @@ func request_UamKubeConfigAPI_GetGlobalKubeConfig_0(ctx context.Context, marshal
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
 	}
 
-	msg, err := client.GetGlobalKubeConfig(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.CreateGlobalKubeConfig(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
@@ -142,7 +148,7 @@ func RegisterUamKubeConfigAPIHandler(ctx context.Context, mux *runtime.ServeMux,
 // "UamKubeConfigAPIClient" to call the correct interceptors.
 func RegisterUamKubeConfigAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, client UamKubeConfigAPIClient) error {
 
-	mux.Handle("GET", pattern_UamKubeConfigAPI_GetGlobalKubeConfig_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_UamKubeConfigAPI_CreateGlobalKubeConfig_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		if cn, ok := w.(http.CloseNotifier); ok {
@@ -160,14 +166,14 @@ func RegisterUamKubeConfigAPIHandlerClient(ctx context.Context, mux *runtime.Ser
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_UamKubeConfigAPI_GetGlobalKubeConfig_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_UamKubeConfigAPI_CreateGlobalKubeConfig_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_UamKubeConfigAPI_GetGlobalKubeConfig_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_UamKubeConfigAPI_CreateGlobalKubeConfig_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -204,13 +210,13 @@ func RegisterUamKubeConfigAPIHandlerClient(ctx context.Context, mux *runtime.Ser
 }
 
 var (
-	pattern_UamKubeConfigAPI_GetGlobalKubeConfig_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"public", "namespaces", "namespace", "sites", "name", "global-kubeconfig"}, ""))
+	pattern_UamKubeConfigAPI_CreateGlobalKubeConfig_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"public", "namespaces", "namespace", "sites", "name", "global-kubeconfig"}, ""))
 
 	pattern_UamKubeConfigAPI_ListGlobalKubeConfig_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"public", "namespaces", "namespace", "sites", "name", "global-kubeconfigs"}, ""))
 )
 
 var (
-	forward_UamKubeConfigAPI_GetGlobalKubeConfig_0 = runtime.ForwardResponseMessage
+	forward_UamKubeConfigAPI_CreateGlobalKubeConfig_0 = runtime.ForwardResponseMessage
 
 	forward_UamKubeConfigAPI_ListGlobalKubeConfig_0 = runtime.ForwardResponseMessage
 )

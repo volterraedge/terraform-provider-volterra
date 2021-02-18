@@ -20,7 +20,7 @@ resource "volterra_http_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "advertise_on_public advertise_custom do_not_advertise advertise_on_public_default_vip" must be set
+  // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
   do_not_advertise = true
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
@@ -28,8 +28,8 @@ resource "volterra_http_loadbalancer" "example" {
 
   domains = ["www.foo.com"]
 
-  // One of the arguments from this list "cookie_stickiness ring_hash round_robin least_active random source_ip_stickiness" must be set
-  source_ip_stickiness = true
+  // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
+  random = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
@@ -38,20 +38,12 @@ resource "volterra_http_loadbalancer" "example" {
   }
   // One of the arguments from this list "disable_rate_limit rate_limit" must be set
   disable_rate_limit = true
-
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-
-  active_service_policies {
-    policies {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  service_policies_from_namespace = true
 
   // One of the arguments from this list "disable_waf waf waf_rule" must be set
 
-  waf_rule {
+  waf {
     name      = "test1"
     namespace = "staging"
     tenant    = "acmecorp"
@@ -229,6 +221,8 @@ Advertise this loadbalancer on public network.
 
 Where should this load balancer be available.
 
+`private_network` - (Optional) Advertise on a VoltADN private network. See [Private Network ](#private-network) below for details.
+
 `site` - (Optional) Advertise on a customer site and a given network. . See [Site ](#site) below for details.
 
 `virtual_site` - (Optional) Advertise on a customer virtual site and a given network.. See [Virtual Site ](#virtual-site) below for details.
@@ -239,13 +233,17 @@ Where should this load balancer be available.
 
 `use_default_port` - (Optional) For HTTP, default is 80. For HTTPS/SNI, default is 443. (bool).
 
-### Always Enable Captcha
+### Always Enable Captcha Challenge
 
-Policy rules can be used to disable the challenge for subset of requests that match the conditions specified in the rules..
+Challenge rules can be used to selectively disable Captcha challenge or enable Javascript challenge for some requests..
 
 ### Always Enable Js Challenge
 
-Policy rules can be used to disable the challenge for subset of requests that match the conditions specified in the rules..
+Challenge rules can be used to selectively disable Javascript challenge or enable Captcha challenge for some requests..
+
+### Any Asn
+
+any_asn.
 
 ### Any Client
 
@@ -254,6 +252,10 @@ any_client.
 ### Any Domain
 
 Apply this waf exclusion rule for any domain.
+
+### Any Ip
+
+any_ip.
 
 ### Arg Matchers
 
@@ -270,6 +272,18 @@ arg_matchers.
 `presence` - (Optional) Check if the arg is present or absent. (`Bool`).
 
 `name` - (Required) A case-sensitive JSON path in the HTTP request body. (`String`).
+
+### Asn List
+
+asn_list.
+
+`as_numbers` - (Optional) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+
+### Asn Matcher
+
+asn_matcher.
+
+`asn_sets` - (Required) A list of references to bgp_asn_set objects.. See [ref](#ref) below for details.
 
 ### Auto Host Rewrite
 
@@ -314,6 +328,8 @@ Rules that specify the clients to be blocked.
 `description` - (Optional) Description (`String`).
 
 `expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
+
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
 
 `name` - (Required) rule name (`String`).
 
@@ -525,6 +541,10 @@ TLS v1.2+ with PFS ciphers with strong crypto algorithms..
 
 Use default parameters.
 
+### Default Vip
+
+Use the default VIP, system allocated or configured in the VoltADN Private Network.
+
 ### Direct Response Route
 
 A direct response route matches on path and/or HTTP method and responds directly to the matching traffic.
@@ -643,6 +663,10 @@ DNS records will be managed by Volterra..
 
 `http_redirect` - (Optional) Redirect HTTP traffic to corresponding HTTPS (`Bool`).
 
+`no_mtls` - (Optional) mTLS with clients is not enabled (bool).
+
+`use_mtls` - (Optional) mTLS with clients is enabled. See [Use Mtls ](#use-mtls) below for details.
+
 `tls_config` - (Optional) Configuration for TLS parameters such as min/max TLS version and ciphers. See [Tls Config ](#tls-config) below for details.
 
 ### Ip Allowed List
@@ -650,6 +674,14 @@ DNS records will be managed by Volterra..
 List of IP(s) for which rate limiting will be disabled..
 
 `prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
+
+### Ip Matcher
+
+ip_matcher.
+
+`invert_matcher` - (Optional) Invert the match result. (`Bool`).
+
+`prefix_sets` - (Required) A list of references to ip_prefix_set objects.. See [ref](#ref) below for details.
 
 ### Ip Prefix List
 
@@ -757,13 +789,17 @@ More options like header manipulation, compression etc..
 
 `response_headers_to_remove` - (Optional) List of keys of Headers to be removed from the HTTP response being sent towards downstream. (`String`).
 
+### No Challenge
+
+Challenge rules can be used to selectively enable Javascript or Captcha challenge for some requests..
+
 ### No Ip Allowed List
 
 There is no ip allowed list for rate limiting, all clients go through rate limiting..
 
 ### No Mtls
 
-MTLS with clients is not enabled.
+mTLS with clients is not enabled.
 
 ### No Policies
 
@@ -815,11 +851,11 @@ Specifies the settings for policy rule based challenge.
 
 `default_captcha_challenge_parameters` - (Optional) Use default parameters (bool).
 
-`always_enable_captcha` - (Optional) Policy rules can be used to disable the challenge for subset of requests that match the conditions specified in the rules. (bool).
+`always_enable_captcha_challenge` - (Optional) Challenge rules can be used to selectively disable Captcha challenge or enable Javascript challenge for some requests. (bool).
 
-`always_enable_js_challenge` - (Optional) Policy rules can be used to disable the challenge for subset of requests that match the conditions specified in the rules. (bool).
+`always_enable_js_challenge` - (Optional) Challenge rules can be used to selectively disable Javascript challenge or enable Captcha challenge for some requests. (bool).
 
-`rule_based_challenge` - (Optional) Enables rule based challenge. When selected, the match conditions and challenge type to be launched is determined using a policy rule. (bool).
+`no_challenge` - (Optional) Challenge rules can be used to selectively enable Javascript or Captcha challenge for some requests. (bool).
 
 `default_js_challenge_parameters` - (Optional) Use default parameters (bool).
 
@@ -850,6 +886,16 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+
+### Private Network
+
+Advertise on a VoltADN private network.
+
+`private_network` - (Required) Select VoltADN private network reference. See [ref](#ref) below for details.
+
+`default_vip` - (Optional) Use the default VIP, system allocated or configured in the VoltADN Private Network (bool).
+
+`specific_vip` - (Optional) Use given IP address as VIP on VoltADN private Network (`String`).
 
 ### Query Params
 
@@ -999,10 +1045,6 @@ Routes for this loadbalancer.
 
 `simple_route` - (Optional) A simple route matches on path and/or HTTP method and forwards the matching traffic to the associated pools. See [Simple Route ](#simple-route) below for details.
 
-### Rule Based Challenge
-
-Enables rule based challenge. When selected, the match conditions and challenge type to be launched is determined using a policy rule..
-
 ### Rule List
 
 list challenge rules to be used in policy based challenge.
@@ -1051,6 +1093,12 @@ Specification for the rule including match predicates and actions..
 
 `arg_matchers` - (Optional)arg_matchers. See [Arg Matchers ](#arg-matchers) below for details.
 
+`any_asn` - (Optional)any_asn (bool).
+
+`asn_list` - (Optional)asn_list. See [Asn List ](#asn-list) below for details.
+
+`asn_matcher` - (Optional)asn_matcher. See [Asn Matcher ](#asn-matcher) below for details.
+
 `body_matcher` - (Optional)body_matcher. See [Body Matcher ](#body-matcher) below for details.
 
 `disable_challenge` - (Optional) Disable the challenge type selected in PolicyBasedChallenge (bool).
@@ -1076,6 +1124,10 @@ Specification for the rule including match predicates and actions..
 `headers` - (Optional)headers. See [Headers ](#headers) below for details.
 
 `http_method` - (Optional)http_method. See [Http Method ](#http-method) below for details.
+
+`any_ip` - (Optional)any_ip (bool).
+
+`ip_matcher` - (Optional)ip_matcher. See [Ip Matcher ](#ip-matcher) below for details.
 
 `ip_prefix_list` - (Optional)ip_prefix_list. See [Ip Prefix List ](#ip-prefix-list) below for details.
 
@@ -1139,9 +1191,9 @@ tls_fingerprint_matcher.
 
 TLS parameters for downstream connections..
 
-`no_mtls` - (Optional) MTLS with clients is not enabled (bool).
+`no_mtls` - (Optional) mTLS with clients is not enabled (bool).
 
-`use_mtls` - (Optional) MTLS with clients is enabled. See [Use Mtls ](#use-mtls) below for details.
+`use_mtls` - (Optional) mTLS with clients is enabled. See [Use Mtls ](#use-mtls) below for details.
 
 `tls_certificates` - (Required) Set of TLS certificates. See [Tls Certificates ](#tls-certificates) below for details.
 
@@ -1159,6 +1211,8 @@ WAF processing is skipped for trusted clients.
 
 `expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
 
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
 `name` - (Required) rule name (`String`).
 
 ### Use Default Port
@@ -1167,7 +1221,7 @@ For HTTP, default is 80. For HTTPS/SNI, default is 443..
 
 ### Use Mtls
 
-MTLS with clients is enabled.
+mTLS with clients is enabled.
 
 `trusted_ca_url` - (Required) The URL for a trust store (`String`).
 
@@ -1214,6 +1268,8 @@ Rules that specify the match conditions and the corresponding WAF_RULE_IDs which
 `exclude_rule_ids` - (Required) WAF Rules to be excluded when match conditions are met (`List of Strings`).
 
 `expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
+
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
 
 `methods` - (Optional) methods to be matched (`List of Strings`).
 

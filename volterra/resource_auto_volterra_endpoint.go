@@ -51,11 +51,13 @@ func resourceVolterraEndpoint() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"dns_name": {
@@ -343,6 +345,8 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 			v.(string)
 	}
 
+	//endpoint_address
+
 	endpointAddressTypeFound := false
 
 	if v, ok := d.GetOk("dns_name"); ok && !endpointAddressTypeFound {
@@ -472,31 +476,34 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 
 	}
 
+	//health_check_port
 	if v, ok := d.GetOk("health_check_port"); ok && !isIntfNil(v) {
 
 		createSpec.HealthCheckPort =
 			uint32(v.(int))
 	}
 
+	//port
 	if v, ok := d.GetOk("port"); ok && !isIntfNil(v) {
 
 		createSpec.Port =
 			uint32(v.(int))
 	}
 
+	//protocol
 	if v, ok := d.GetOk("protocol"); ok && !isIntfNil(v) {
 
 		createSpec.Protocol =
 			v.(string)
 	}
 
+	//where
 	if v, ok := d.GetOk("where"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		where := &ves_io_schema.NetworkSiteRefSelector{}
 		createSpec.Where = where
 		for _, set := range sl {
-
 			whereMapStrToI := set.(map[string]interface{})
 
 			refOrSelectorTypeFound := false
@@ -909,7 +916,6 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 		where := &ves_io_schema.NetworkSiteRefSelector{}
 		updateSpec.Where = where
 		for _, set := range sl {
-
 			whereMapStrToI := set.(map[string]interface{})
 
 			refOrSelectorTypeFound := false

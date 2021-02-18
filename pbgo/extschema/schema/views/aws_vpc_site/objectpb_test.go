@@ -7,6 +7,7 @@ Package aws_vpc_site is a generated protocol buffer package.
 It is generated from these files:
 	ves.io/schema/views/aws_vpc_site/object.proto
 	ves.io/schema/views/aws_vpc_site/public_crudapi.proto
+	ves.io/schema/views/aws_vpc_site/public_customapi.proto
 	ves.io/schema/views/aws_vpc_site/types.proto
 
 It has these top-level messages:
@@ -23,6 +24,8 @@ It has these top-level messages:
 	ListResponseItem
 	ListResponse
 	DeleteRequest
+	SetVPCK8SHostnamesRequest
+	SetVPCK8SHostnamesResponse
 	AWSVPCIngressGwType
 	AWSVPCIngressEgressGwType
 	AWSVPCVoltstackClusterType
@@ -49,7 +52,6 @@ import _ "github.com/gogo/protobuf/gogoproto"
 import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
-import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
 // Reference imports to suppress errors if they are not otherwise used.

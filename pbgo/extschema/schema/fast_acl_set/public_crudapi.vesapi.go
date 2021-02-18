@@ -1603,8 +1603,8 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{metadata.namespace}/fast_acl_sets": {
             "post": {
-                "summary": "Create fast ACL Set",
-                "description": "Create fast ACL Set in a given namespace. If one already exist it will give a error.",
+                "summary": "Create Fast ACL Set",
+                "description": "Create Fast ACL Set in a given namespace. If one already exist it will give a error.",
                 "operationId": "ves.io.schema.fast_acl_set.API.Create",
                 "responses": {
                     "200": {
@@ -1689,8 +1689,8 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{metadata.namespace}/fast_acl_sets/{metadata.name}": {
             "put": {
-                "summary": "Replace fast ACL Set",
-                "description": "Replace fast ACL Set in a given namespace.",
+                "summary": "Replace Fast ACL Set",
+                "description": "Replace Fast ACL Set in a given namespace.",
                 "operationId": "ves.io.schema.fast_acl_set.API.Replace",
                 "responses": {
                     "200": {
@@ -1889,8 +1889,8 @@ var APISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/fast_acl_sets/{name}": {
             "get": {
-                "summary": "Get fast ACL Set",
-                "description": "Get fast ACL set in a given namespace.",
+                "summary": "Get Fast ACL Set",
+                "description": "Get Fast ACL set in a given namespace.",
                 "operationId": "ves.io.schema.fast_acl_set.API.Get",
                 "responses": {
                     "200": {
@@ -2090,7 +2090,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the fast ACL set",
+                    "description": " Specification of the desired behavior of the Fast ACL set",
                     "title": "spec",
                     "$ref": "#/definitions/fast_acl_setCreateSpecType",
                     "x-displayname": "Spec"
@@ -2108,7 +2108,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the fast ACL set",
+                    "description": " Specification of the desired behavior of the Fast ACL set",
                     "title": "spec",
                     "$ref": "#/definitions/fast_acl_setGetSpecType",
                     "x-displayname": "Spec"
@@ -2123,14 +2123,14 @@ var APISwaggerJSON string = `{
         },
         "fast_acl_setCreateSpecType": {
             "type": "object",
-            "description": "Create fast ACL Set in a given namespace. If one already exist it will give a error.",
-            "title": "Create fast ACL Set",
+            "description": "Create Fast ACL Set in a given namespace. If one already exist it will give a error.",
+            "title": "Create Fast ACL Set",
             "x-displayname": "Create Fast ACL Set",
             "x-ves-proto-message": "ves.io.schema.fast_acl_set.CreateSpecType",
             "properties": {
                 "acl_list": {
                     "type": "array",
-                    "description": " Ordered list of references to the fast ACL that make up this fast ACL set.",
+                    "description": " Ordered list of references to the Fast ACL that make up this Fast ACL set.",
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
@@ -2206,7 +2206,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "42"
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the fast ACL set",
+                    "description": " Specification of the desired behavior of the Fast ACL set",
                     "title": "spec",
                     "$ref": "#/definitions/fast_acl_setGetSpecType",
                     "x-displayname": "Spec"
@@ -2243,14 +2243,14 @@ var APISwaggerJSON string = `{
         },
         "fast_acl_setGetSpecType": {
             "type": "object",
-            "description": "Get fast ACL set in a given namespace.",
-            "title": "Get fast ACL Set",
+            "description": "Get Fast ACL set in a given namespace.",
+            "title": "Get Fast ACL Set",
             "x-displayname": "Get Fast ACL Set",
             "x-ves-proto-message": "ves.io.schema.fast_acl_set.GetSpecType",
             "properties": {
                 "acl_list": {
                     "type": "array",
-                    "description": " Ordered list of references to the fast ACL that make up this fast ACL set.",
+                    "description": " Ordered list of references to the Fast ACL that make up this Fast ACL set.",
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
@@ -2260,14 +2260,14 @@ var APISwaggerJSON string = `{
         },
         "fast_acl_setGlobalSpecType": {
             "type": "object",
-            "description": "Desired state of fast ACL set",
-            "title": "fast ACL set specification",
+            "description": "Desired state of Fast ACL set",
+            "title": "Fast ACL set specification",
             "x-displayname": "Specification",
             "x-ves-proto-message": "ves.io.schema.fast_acl_set.GlobalSpecType",
             "properties": {
                 "acl_list": {
                     "type": "array",
-                    "description": " Ordered list of references to the fast ACL that make up this fast ACL set.",
+                    "description": " Ordered list of references to the Fast ACL that make up this Fast ACL set.",
                     "title": "Acl list",
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
@@ -2409,7 +2409,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the fast ACL set",
+                    "description": " Specification of the desired behavior of the Fast ACL set",
                     "title": "spec",
                     "$ref": "#/definitions/fast_acl_setSpecType",
                     "x-displayname": "Spec"
@@ -2443,7 +2443,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "42"
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the fast ACL set",
+                    "description": " Specification of the desired behavior of the Fast ACL set",
                     "title": "spec",
                     "$ref": "#/definitions/fast_acl_setReplaceSpecType",
                     "x-displayname": "Spec"
@@ -2456,14 +2456,14 @@ var APISwaggerJSON string = `{
         },
         "fast_acl_setReplaceSpecType": {
             "type": "object",
-            "description": "Replace fast ACL Set in a given namespace.",
-            "title": "Replace fast ACL Set",
+            "description": "Replace Fast ACL Set in a given namespace.",
+            "title": "Replace Fast ACL Set",
             "x-displayname": "Replace Fast ACL Set",
             "x-ves-proto-message": "ves.io.schema.fast_acl_set.ReplaceSpecType",
             "properties": {
                 "acl_list": {
                     "type": "array",
-                    "description": " Ordered list of references to the fast ACL that make up this fast ACL set.",
+                    "description": " Ordered list of references to the Fast ACL that make up this Fast ACL set.",
                     "items": {
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
@@ -2488,7 +2488,7 @@ var APISwaggerJSON string = `{
         "fast_acl_setStatusObject": {
             "type": "object",
             "description": "Most recently observed status of object",
-            "title": "Status of fast ACL set",
+            "title": "Status of Fast ACL set",
             "x-displayname": "Status",
             "x-ves-proto-message": "ves.io.schema.fast_acl_set.StatusObject",
             "properties": {

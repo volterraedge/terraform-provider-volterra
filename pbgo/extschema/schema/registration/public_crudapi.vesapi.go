@@ -2547,7 +2547,7 @@ var APISwaggerJSON string = `{
             "description": "Passport stores information about identification and node configuration provided by CE during registration. It can be manually updated by user during approval.",
             "title": "Passport",
             "x-displayname": "Passport",
-            "x-ves-displayorder": "1,2,9,7,8,4,5,6,10,3",
+            "x-ves-displayorder": "1,2,9,7,8,4,5,6,10,3,11",
             "x-ves-proto-message": "ves.io.schema.registration.Passport",
             "properties": {
                 "cluster_name": {
@@ -2574,13 +2574,6 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "ce",
                     "x-ves-required": "true"
                 },
-                "customer_route": {
-                    "type": "string",
-                    "description": "\n\nExample: - \"192.168.36.0/24\"-",
-                    "title": "Customer route",
-                    "x-displayname": "Customer Route",
-                    "x-ves-example": "192.168.36.0/24"
-                },
                 "latitude": {
                     "type": "number",
                     "description": " Geographic location of this site\n\nExample: - \"49.3156733\"-",
@@ -2597,19 +2590,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Longitude",
                     "x-ves-example": "14.2484333"
                 },
-                "private_default_gw": {
+                "private_network_name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"192.168.33.1\"-",
-                    "title": "Private default GW",
-                    "x-displayname": "Private Default Gateway",
-                    "x-ves-example": "192.168.33.1"
-                },
-                "private_vn_prefix": {
-                    "type": "string",
-                    "description": "\n\nExample: - \"192.168.33.1\"-",
-                    "title": "Private VN prefix",
-                    "x-displayname": "Private VN Prefix",
-                    "x-ves-example": "192.168.33.1"
+                    "description": " Private Network name for private access connectivity to Volterra ADN.\n It is used for PrivateLink, CloudLink and L3VPN.\n\nExample: - \"private-ntw\"-",
+                    "title": "Private Network Name",
+                    "x-displayname": "Private Network Name",
+                    "x-ves-example": "private-ntw"
                 },
                 "vpm_version": {
                     "type": "string",
@@ -2981,13 +2967,12 @@ var APISwaggerJSON string = `{
         },
         "schemaSiteToSiteTunnelType": {
             "type": "string",
-            "description": "Tunnel encapsulation to be used between sites\n\nSite to site tunnel can operate in both ipsec and ssl\nipsec takes precedence over ssl\nSite to site tunnel is of type ipsec\nSite to site tunnel is of type ssl\nSite to site tunnel is of type clear, i.e. no tunnel type",
+            "description": "Tunnel encapsulation to be used between sites\n\nSite to site tunnel can operate in both ipsec and ssl\nipsec takes precedence over ssl\nSite to site tunnel is of type ipsec\nSite to site tunnel is of type ssl",
             "title": "Site to site tunnel type",
             "enum": [
                 "SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL",
                 "SITE_TO_SITE_TUNNEL_IPSEC",
-                "SITE_TO_SITE_TUNNEL_SSL",
-                "SITE_TO_SITE_CLEAR"
+                "SITE_TO_SITE_TUNNEL_SSL"
             ],
             "default": "SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL",
             "x-displayname": "Tunnel type",

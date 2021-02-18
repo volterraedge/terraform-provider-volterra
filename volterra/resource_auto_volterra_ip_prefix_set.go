@@ -51,11 +51,13 @@ func resourceVolterraIpPrefixSet() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"prefix": {
@@ -124,6 +126,7 @@ func resourceVolterraIpPrefixSetCreate(d *schema.ResourceData, meta interface{})
 			v.(string)
 	}
 
+	//prefix
 	if v, ok := d.GetOk("prefix"); ok && !isIntfNil(v) {
 
 		ls := make([]string, len(v.([]interface{})))

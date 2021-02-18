@@ -21,15 +21,19 @@ var (
 )
 
 const (
-	approvalResource = "volterra_registration_approval"
-	modifySite       = "volterra_modify_site"
-	apiCredential    = "volterra_api_credential"
-	publicIP         = "volterra_public_ip"
-	siteState        = "volterra_site_state"
-	setVPCIPPrefixes = "volterra_tgw_vpc_ip_prefixes"
-	setVPNTunnels    = "volterra_tgw_vpn_tunnels"
-	setTGWInfo       = "volterra_tgw_info"
-	tfParamsAction   = "volterra_tf_params_action"
+	activeNetworkPolicies     = "volterra_active_network_policies"
+	activeServicePolicies     = "volterra_active_service_policies"
+	setFastACLForInternetVIPs = "volterra_fast_acl_for_internet_vips"
+	approvalResource          = "volterra_registration_approval"
+	modifySite                = "volterra_modify_site"
+	apiCredential             = "volterra_api_credential"
+	publicIP                  = "volterra_public_ip"
+	siteState                 = "volterra_site_state"
+	setVPCK8SHostnames        = "volterra_vpc_k8s_hostnames"
+	setVPCIPPrefixes          = "volterra_tgw_vpc_ip_prefixes"
+	setVPNTunnels             = "volterra_tgw_vpn_tunnels"
+	setTGWInfo                = "volterra_tgw_info"
+	tfParamsAction            = "volterra_tf_params_action"
 )
 
 // Provider returns a terraform.ResourceProvider.
@@ -170,11 +174,15 @@ func getResourceMap() map[string]*schema.Resource {
 	// auto generated resource map
 	resourceMap := getVolterraResourceMap()
 	// add custom respurce map
+	resourceMap[activeNetworkPolicies] = resourceVolterraActiveNetworkPolicies()
+	resourceMap[activeServicePolicies] = resourceVolterraActiveServicePolicies()
 	resourceMap[apiCredential] = resourceVolterraAPICredential()
 	resourceMap[approvalResource] = resourceVolterraRegistrationApproval()
 	resourceMap[modifySite] = resourceVolterraModifySite()
 	resourceMap[publicIP] = resourceVolterraPublicIp()
+	resourceMap[setFastACLForInternetVIPs] = resourceVolterraAFastACLsForInternetVIPs()
 	resourceMap[siteState] = resourceVolterraSiteState()
+	resourceMap[setVPCK8SHostnames] = resourceVolterraSetVpcK8SHostnames()
 	resourceMap[setVPCIPPrefixes] = resourceVolterraSetVpcIPPrefixes()
 	resourceMap[setVPNTunnels] = resourceVolterraSetVPNTunnels()
 	resourceMap[setTGWInfo] = resourceVolterraSetTGWInfo()

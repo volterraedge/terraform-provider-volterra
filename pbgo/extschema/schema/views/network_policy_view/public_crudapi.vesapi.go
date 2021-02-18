@@ -2221,7 +2221,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_policy.NetworkPolicyRuleType",
             "properties": {
                 "action": {
-                    "description": " Action to be taken at rule match. Currently supported actions are Allow and  Deny",
+                    "description": " Action to be taken at rule match. Currently supported actions are Allow and Deny",
                     "title": "action",
                     "$ref": "#/definitions/network_policy_ruleNetworkPolicyRuleAction",
                     "x-displayname": "Action"
@@ -3491,9 +3491,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Egress Rules"
                 },
                 "endpoint": {
-                    "description": " Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.",
+                    "description": " Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.\nRequired: YES",
                     "$ref": "#/definitions/network_policyEndpointChoiceType",
-                    "x-displayname": "Endpoint(s)"
+                    "x-displayname": "Endpoint(s)",
+                    "x-ves-required": "true"
                 },
                 "ingress_rules": {
                     "type": "array",
@@ -3521,9 +3522,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Egress Rules"
                 },
                 "endpoint": {
-                    "description": " Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.",
+                    "description": " Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.\nRequired: YES",
                     "$ref": "#/definitions/network_policyEndpointChoiceType",
-                    "x-displayname": "Endpoint(s)"
+                    "x-displayname": "Endpoint(s)",
+                    "x-ves-required": "true"
                 },
                 "ingress_rules": {
                     "type": "array",
@@ -3552,10 +3554,11 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Egress Rules"
                 },
                 "endpoint": {
-                    "description": " Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.",
+                    "description": " Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.\nRequired: YES",
                     "title": "Policy Endpoint",
                     "$ref": "#/definitions/network_policyEndpointChoiceType",
-                    "x-displayname": "Endpoint(s)"
+                    "x-displayname": "Endpoint(s)",
+                    "x-ves-required": "true"
                 },
                 "ingress_rules": {
                     "type": "array",
@@ -3590,9 +3593,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Egress Rules"
                 },
                 "endpoint": {
-                    "description": " Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.",
+                    "description": " Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.\nRequired: YES",
                     "$ref": "#/definitions/network_policyEndpointChoiceType",
-                    "x-displayname": "Endpoint(s)"
+                    "x-displayname": "Endpoint(s)",
+                    "x-ves-required": "true"
                 },
                 "ingress_rules": {
                     "type": "array",

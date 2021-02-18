@@ -1176,9 +1176,7 @@ var (
 )
 
 func init() { proto.RegisterFile("ves.io/schema/bgp_asn_set/object.proto", fileDescriptorObject) }
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/bgp_asn_set/object.proto", fileDescriptorObject)
-}
+func init() { golang_proto.RegisterFile("ves.io/schema/bgp_asn_set/object.proto", fileDescriptorObject) }
 
 var fileDescriptorObject = []byte{
 	// 512 bytes of a gzipped FileDescriptorProto

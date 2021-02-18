@@ -52,11 +52,13 @@ func resourceVolterraNetworkInterface() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"dedicated_interface": {
@@ -327,11 +329,14 @@ func resourceVolterraNetworkInterface() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
 												"interface_ip_map": {
+
 													Type:     schema.TypeSet,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
+
 															"name": {
 																Type:     schema.TypeString,
 																Required: true,
@@ -341,6 +346,7 @@ func resourceVolterraNetworkInterface() *schema.Resource {
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
+
 																		"default_gw": {
 																			Type:     schema.TypeString,
 																			Optional: true,
@@ -869,6 +875,7 @@ func resourceVolterraNetworkInterface() *schema.Resource {
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
+
 															"name": {
 																Type:     schema.TypeString,
 																Required: true,
@@ -878,6 +885,7 @@ func resourceVolterraNetworkInterface() *schema.Resource {
 																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
+
 																		"default_gw": {
 																			Type:     schema.TypeString,
 																			Optional: true,
@@ -1055,6 +1063,8 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 			v.(string)
 	}
 
+	//interface_choice
+
 	interfaceChoiceTypeFound := false
 
 	if v, ok := d.GetOk("dedicated_interface"); ok && !interfaceChoiceTypeFound {
@@ -1068,10 +1078,14 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			// device
+
 			if v, ok := cs["device"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.DedicatedInterface.Device = v.(string)
 			}
+
+			// monitoring_choice
 
 			monitoringChoiceTypeFound := false
 
@@ -1093,10 +1107,14 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// mtu
+
 			if v, ok := cs["mtu"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.DedicatedInterface.Mtu = uint32(v.(int))
 			}
+
+			// node_choice
 
 			nodeChoiceTypeFound := false
 
@@ -1122,6 +1140,8 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 				nodeChoiceInt.Node = v.(string)
 
 			}
+
+			// primary_choice
 
 			primaryChoiceTypeFound := false
 
@@ -1149,6 +1169,8 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// priority
+
 			if v, ok := cs["priority"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.DedicatedInterface.Priority = uint32(v.(int))
@@ -1169,15 +1191,21 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			// device
+
 			if v, ok := cs["device"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.DedicatedManagementInterface.Device = v.(string)
 			}
 
+			// mtu
+
 			if v, ok := cs["mtu"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.DedicatedManagementInterface.Mtu = uint32(v.(int))
 			}
+
+			// node_choice
 
 			nodeChoiceTypeFound := false
 
@@ -1219,6 +1247,8 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			// address_choice
+
 			addressChoiceTypeFound := false
 
 			if v, ok := cs["dhcp_client"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
@@ -1244,6 +1274,8 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					// dhcp_networks
+
 					if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
 
 						sl := v.([]interface{})
@@ -1251,8 +1283,9 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 						addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
 						for i, set := range sl {
 							dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-
 							dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+							// dns_choice
 
 							dnsChoiceTypeFound := false
 
@@ -1278,6 +1311,8 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 								}
 
 							}
+
+							// gateway_choice
 
 							gatewayChoiceTypeFound := false
 
@@ -1316,6 +1351,8 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 							}
 
+							// network_prefix_choice
+
 							networkPrefixChoiceTypeFound := false
 
 							if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
@@ -1340,15 +1377,21 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 								for _, set := range sl {
 									cs := set.(map[string]interface{})
 
+									// name
+
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
 									}
 
+									// namespace
+
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
 									}
+
+									// tenant
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
@@ -1359,11 +1402,15 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 							}
 
+							// pool_settings
+
 							if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 								dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
 
 							}
+
+							// pools
 
 							if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
 
@@ -1372,16 +1419,21 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 								dhcpNetworks[i].Pools = pools
 								for i, set := range sl {
 									pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-
 									poolsMapStrToI := set.(map[string]interface{})
+
+									// end_ip
 
 									if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 										pools[i].EndIp = w.(string)
 									}
 
+									// exclude
+
 									if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
 										pools[i].Exclude = w.(bool)
 									}
+
+									// start_ip
 
 									if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
 										pools[i].StartIp = w.(string)
@@ -1395,10 +1447,14 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 					}
 
+					// dhcp_option82_tag
+
 					if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
 
 						addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
 					}
+
+					// fixed_ip_map
 
 					if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
 
@@ -1408,6 +1464,8 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 						}
 						addressChoiceInt.DhcpServer.FixedIpMap = ms
 					}
+
+					// interfaces_addressing_choice
 
 					interfacesAddressingChoiceTypeFound := false
 
@@ -1446,6 +1504,8 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							// interface_ip_map
+
 							if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
 
 								ms := map[string]string{}
@@ -1474,6 +1534,8 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					// network_prefix_choice
+
 					networkPrefixChoiceTypeFound := false
 
 					if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
@@ -1487,36 +1549,41 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							// interface_ip_map
+
 							if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
 
 								sl := v.(*schema.Set).List()
 								interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
 								networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
 								for _, set := range sl {
-
 									interfaceIpMapMapStrToI := set.(map[string]interface{})
 									key, ok := interfaceIpMapMapStrToI["name"]
 									if ok && !isIntfNil(key) {
 										interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
 										val, _ := interfaceIpMapMapStrToI["value"]
-										staticIPMapVals := val.(*schema.Set).List()
-										for _, staticIP := range staticIPMapVals {
-											staticIPMapStrToI := staticIP.(map[string]interface{})
-											if s, ok := staticIPMapStrToI["default_gw"]; ok && !isIntfNil(s) {
-												interfaceIpMap[key.(string)].DefaultGw = s.(string)
-											}
-											if s, ok := staticIPMapStrToI["dns_server"]; ok && !isIntfNil(s) {
-												interfaceIpMap[key.(string)].DnsServer = s.(string)
+
+										interfaceIpMapVals := val.(*schema.Set).List()
+										for _, intVal := range interfaceIpMapVals {
+
+											interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+											if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+												interfaceIpMap[key.(string)].DefaultGw = w.(string)
 											}
 
-											if s, ok := staticIPMapStrToI["ip_address"]; ok && !isIntfNil(s) {
-												interfaceIpMap[key.(string)].IpAddress = s.(string)
+											if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+												interfaceIpMap[key.(string)].DnsServer = w.(string)
 											}
+
+											if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+												interfaceIpMap[key.(string)].IpAddress = w.(string)
+											}
+
 											// break after one loop
 											break
 										}
 									}
-
 								}
 
 							}
@@ -1536,15 +1603,21 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							// default_gw
+
 							if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 								networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
 							}
 
+							// dns_server
+
 							if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
 
 								networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
 							}
+
+							// network_prefix_allocator
 
 							if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
 
@@ -1580,15 +1653,21 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							// default_gw
+
 							if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 								networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
 							}
 
+							// dns_server
+
 							if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
 
 								networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
 							}
+
+							// ip_address
 
 							if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
@@ -1603,10 +1682,14 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// device
+
 			if v, ok := cs["device"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.EthernetInterface.Device = v.(string)
 			}
+
+			// monitoring_choice
 
 			monitoringChoiceTypeFound := false
 
@@ -1628,10 +1711,14 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// mtu
+
 			if v, ok := cs["mtu"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.EthernetInterface.Mtu = uint32(v.(int))
 			}
+
+			// network_choice
 
 			networkChoiceTypeFound := false
 
@@ -1646,15 +1733,21 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					// name
+
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						networkChoiceInt.InsideNetwork.Name = v.(string)
 					}
 
+					// namespace
+
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						networkChoiceInt.InsideNetwork.Namespace = v.(string)
 					}
+
+					// tenant
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
@@ -1701,6 +1794,8 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// node_choice
+
 			nodeChoiceTypeFound := false
 
 			if v, ok := cs["cluster"]; ok && !isIntfNil(v) && !nodeChoiceTypeFound {
@@ -1725,6 +1820,8 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 				nodeChoiceInt.Node = v.(string)
 
 			}
+
+			// primary_choice
 
 			primaryChoiceTypeFound := false
 
@@ -1752,10 +1849,14 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// priority
+
 			if v, ok := cs["priority"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.EthernetInterface.Priority = uint32(v.(int))
 			}
+
+			// vlan_choice
 
 			vlanChoiceTypeFound := false
 
@@ -1798,11 +1899,15 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			// DHCP_server
+
 			if v, ok := cs["dhcp_server"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.LegacyInterface.DHCPServer = ves_io_schema_network_interface.NetworkInterfaceDHCPServer(ves_io_schema_network_interface.NetworkInterfaceDHCPServer_value[v.(string)])
 
 			}
+
+			// DNS_server
 
 			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
 
@@ -1810,14 +1915,17 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 				dnsServer := &ves_io_schema_network_interface.NetworkInterfaceDNS{}
 				interfaceChoiceInt.LegacyInterface.DNSServer = dnsServer
 				for _, set := range sl {
-
 					dnsServerMapStrToI := set.(map[string]interface{})
+
+					// dns_mode
 
 					if v, ok := dnsServerMapStrToI["dns_mode"]; ok && !isIntfNil(v) {
 
 						dnsServer.DnsMode = ves_io_schema_network_interface.NetworkInterfaceDNSMode(ves_io_schema_network_interface.NetworkInterfaceDNSMode_value[v.(string)])
 
 					}
+
+					// dns_server
 
 					if v, ok := dnsServerMapStrToI["dns_server"]; ok && !isIntfNil(v) {
 
@@ -1826,8 +1934,9 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 						dnsServer.DnsServer = dnsServerIpv4s
 						for i, set := range sl {
 							dnsServerIpv4s[i] = &ves_io_schema.Ipv4AddressType{}
-
 							dnsServerMapStrToI := set.(map[string]interface{})
+
+							// addr
 
 							if w, ok := dnsServerMapStrToI["addr"]; ok && !isIntfNil(w) {
 								dnsServerIpv4s[i].Addr = w.(string)
@@ -1840,6 +1949,8 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 				}
 
 			}
+
+			// address_allocator
 
 			if v, ok := cs["address_allocator"]; ok && !isIntfNil(v) {
 
@@ -1873,14 +1984,17 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// default_gateway
+
 			if v, ok := cs["default_gateway"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
 				defaultGateway := &ves_io_schema_network_interface.NetworkInterfaceDFGW{}
 				interfaceChoiceInt.LegacyInterface.DefaultGateway = defaultGateway
 				for _, set := range sl {
-
 					defaultGatewayMapStrToI := set.(map[string]interface{})
+
+					// default_gateway_address
 
 					if v, ok := defaultGatewayMapStrToI["default_gateway_address"]; ok && !isIntfNil(v) {
 
@@ -1888,8 +2002,9 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 						defaultGatewayAddress := &ves_io_schema.Ipv4AddressType{}
 						defaultGateway.DefaultGatewayAddress = defaultGatewayAddress
 						for _, set := range sl {
-
 							defaultGatewayAddressMapStrToI := set.(map[string]interface{})
+
+							// addr
 
 							if w, ok := defaultGatewayAddressMapStrToI["addr"]; ok && !isIntfNil(w) {
 								defaultGatewayAddress.Addr = w.(string)
@@ -1898,6 +2013,8 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 						}
 
 					}
+
+					// default_gateway_mode
 
 					if v, ok := defaultGatewayMapStrToI["default_gateway_mode"]; ok && !isIntfNil(v) {
 
@@ -1909,16 +2026,22 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// device_name
+
 			if v, ok := cs["device_name"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.LegacyInterface.DeviceName = v.(string)
 			}
+
+			// dhcp_address
 
 			if v, ok := cs["dhcp_address"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.LegacyInterface.DhcpAddress = ves_io_schema_network_interface.NetworkInterfaceDHCP(ves_io_schema_network_interface.NetworkInterfaceDHCP_value[v.(string)])
 
 			}
+
+			// monitoring_choice
 
 			monitoringChoiceTypeFound := false
 
@@ -1940,15 +2063,21 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// mtu
+
 			if v, ok := cs["mtu"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.LegacyInterface.Mtu = uint32(v.(int))
 			}
 
+			// priority
+
 			if v, ok := cs["priority"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.LegacyInterface.Priority = uint32(v.(int))
 			}
+
+			// static_addresses
 
 			if v, ok := cs["static_addresses"]; ok && !isIntfNil(v) {
 
@@ -1957,12 +2086,15 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 				interfaceChoiceInt.LegacyInterface.StaticAddresses = staticAddresses
 				for i, set := range sl {
 					staticAddresses[i] = &ves_io_schema.Ipv4SubnetType{}
-
 					staticAddressesMapStrToI := set.(map[string]interface{})
+
+					// plen
 
 					if w, ok := staticAddressesMapStrToI["plen"]; ok && !isIntfNil(w) {
 						staticAddresses[i].Plen = uint32(w.(int))
 					}
+
+					// prefix
 
 					if w, ok := staticAddressesMapStrToI["prefix"]; ok && !isIntfNil(w) {
 						staticAddresses[i].Prefix = w.(string)
@@ -1972,14 +2104,17 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// tunnel
+
 			if v, ok := cs["tunnel"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
 				tunnel := &ves_io_schema_network_interface.NetworkInterfaceTunnel{}
 				interfaceChoiceInt.LegacyInterface.Tunnel = tunnel
 				for _, set := range sl {
-
 					tunnelMapStrToI := set.(map[string]interface{})
+
+					// tunnel
 
 					if v, ok := tunnelMapStrToI["tunnel"]; ok && !isIntfNil(v) {
 
@@ -2017,11 +2152,15 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// type
+
 			if v, ok := cs["type"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.LegacyInterface.Type = ves_io_schema_network_interface.NetworkInterfaceType(ves_io_schema_network_interface.NetworkInterfaceType_value[v.(string)])
 
 			}
+
+			// virtual_network
 
 			if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
 
@@ -2055,10 +2194,14 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// vlan_tag
+
 			if v, ok := cs["vlan_tag"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.LegacyInterface.VlanTag = uint32(v.(int))
 			}
+
+			// vlan_tagging
 
 			if v, ok := cs["vlan_tagging"]; ok && !isIntfNil(v) {
 
@@ -2081,10 +2224,14 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			// mtu
+
 			if v, ok := cs["mtu"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.TunnelInterface.Mtu = uint32(v.(int))
 			}
+
+			// network_choice
 
 			networkChoiceTypeFound := false
 
@@ -2099,15 +2246,21 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					// name
+
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						networkChoiceInt.InsideNetwork.Name = v.(string)
 					}
 
+					// namespace
+
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						networkChoiceInt.InsideNetwork.Namespace = v.(string)
 					}
+
+					// tenant
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
@@ -2142,6 +2295,8 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// node_choice
+
 			nodeChoiceTypeFound := false
 
 			if v, ok := cs["cluster"]; ok && !isIntfNil(v) && !nodeChoiceTypeFound {
@@ -2167,10 +2322,14 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// priority
+
 			if v, ok := cs["priority"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.TunnelInterface.Priority = uint32(v.(int))
 			}
+
+			// static_ip
 
 			if v, ok := cs["static_ip"]; ok && !isIntfNil(v) {
 
@@ -2178,8 +2337,9 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 				staticIp := &ves_io_schema_network_interface.StaticIPParametersType{}
 				interfaceChoiceInt.TunnelInterface.StaticIp = staticIp
 				for _, set := range sl {
-
 					staticIpMapStrToI := set.(map[string]interface{})
+
+					// network_prefix_choice
 
 					networkPrefixChoiceTypeFound := false
 
@@ -2194,36 +2354,41 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							// interface_ip_map
+
 							if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
 
 								sl := v.(*schema.Set).List()
 								interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
 								networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
 								for _, set := range sl {
-
 									interfaceIpMapMapStrToI := set.(map[string]interface{})
 									key, ok := interfaceIpMapMapStrToI["name"]
 									if ok && !isIntfNil(key) {
 										interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
 										val, _ := interfaceIpMapMapStrToI["value"]
-										staticIPMapVals := val.(*schema.Set).List()
-										for _, staticIP := range staticIPMapVals {
-											staticIPMapStrToI := staticIP.(map[string]interface{})
-											if s, ok := staticIPMapStrToI["default_gw"]; ok && !isIntfNil(s) {
-												interfaceIpMap[key.(string)].DefaultGw = s.(string)
-											}
-											if s, ok := staticIPMapStrToI["dns_server"]; ok && !isIntfNil(s) {
-												interfaceIpMap[key.(string)].DnsServer = s.(string)
+
+										interfaceIpMapVals := val.(*schema.Set).List()
+										for _, intVal := range interfaceIpMapVals {
+
+											interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+											if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+												interfaceIpMap[key.(string)].DefaultGw = w.(string)
 											}
 
-											if s, ok := staticIPMapStrToI["ip_address"]; ok && !isIntfNil(s) {
-												interfaceIpMap[key.(string)].IpAddress = s.(string)
+											if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+												interfaceIpMap[key.(string)].DnsServer = w.(string)
 											}
+
+											if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+												interfaceIpMap[key.(string)].IpAddress = w.(string)
+											}
+
 											// break after one loop
 											break
 										}
 									}
-
 								}
 
 							}
@@ -2243,15 +2408,21 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							// default_gw
+
 							if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 								networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
 							}
 
+							// dns_server
+
 							if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
 
 								networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
 							}
+
+							// network_prefix_allocator
 
 							if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
 
@@ -2287,15 +2458,21 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							// default_gw
+
 							if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 								networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
 							}
 
+							// dns_server
+
 							if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
 
 								networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
 							}
+
+							// ip_address
 
 							if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
@@ -2309,6 +2486,8 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 				}
 
 			}
+
+			// tunnel
 
 			if v, ok := cs["tunnel"]; ok && !isIntfNil(v) {
 
@@ -2444,10 +2623,14 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			// device
+
 			if v, ok := cs["device"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.DedicatedInterface.Device = v.(string)
 			}
+
+			// monitoring_choice
 
 			monitoringChoiceTypeFound := false
 
@@ -2469,10 +2652,14 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// mtu
+
 			if v, ok := cs["mtu"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.DedicatedInterface.Mtu = uint32(v.(int))
 			}
+
+			// node_choice
 
 			nodeChoiceTypeFound := false
 
@@ -2498,6 +2685,8 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 				nodeChoiceInt.Node = v.(string)
 
 			}
+
+			// primary_choice
 
 			primaryChoiceTypeFound := false
 
@@ -2525,6 +2714,8 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// priority
+
 			if v, ok := cs["priority"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.DedicatedInterface.Priority = uint32(v.(int))
@@ -2545,15 +2736,21 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			// device
+
 			if v, ok := cs["device"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.DedicatedManagementInterface.Device = v.(string)
 			}
 
+			// mtu
+
 			if v, ok := cs["mtu"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.DedicatedManagementInterface.Mtu = uint32(v.(int))
 			}
+
+			// node_choice
 
 			nodeChoiceTypeFound := false
 
@@ -2595,6 +2792,8 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			// address_choice
+
 			addressChoiceTypeFound := false
 
 			if v, ok := cs["dhcp_client"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
@@ -2620,6 +2819,8 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					// dhcp_networks
+
 					if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
 
 						sl := v.([]interface{})
@@ -2627,8 +2828,9 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 						addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
 						for i, set := range sl {
 							dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-
 							dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+							// dns_choice
 
 							dnsChoiceTypeFound := false
 
@@ -2654,6 +2856,8 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 								}
 
 							}
+
+							// gateway_choice
 
 							gatewayChoiceTypeFound := false
 
@@ -2692,6 +2896,8 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
+							// network_prefix_choice
+
 							networkPrefixChoiceTypeFound := false
 
 							if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
@@ -2716,15 +2922,21 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 								for _, set := range sl {
 									cs := set.(map[string]interface{})
 
+									// name
+
 									if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 										networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
 									}
 
+									// namespace
+
 									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 										networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
 									}
+
+									// tenant
 
 									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
@@ -2735,11 +2947,15 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
+							// pool_settings
+
 							if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 								dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
 
 							}
+
+							// pools
 
 							if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
 
@@ -2748,16 +2964,21 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 								dhcpNetworks[i].Pools = pools
 								for i, set := range sl {
 									pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-
 									poolsMapStrToI := set.(map[string]interface{})
+
+									// end_ip
 
 									if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 										pools[i].EndIp = w.(string)
 									}
 
+									// exclude
+
 									if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
 										pools[i].Exclude = w.(bool)
 									}
+
+									// start_ip
 
 									if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
 										pools[i].StartIp = w.(string)
@@ -2771,10 +2992,14 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 					}
 
+					// dhcp_option82_tag
+
 					if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
 
 						addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
 					}
+
+					// fixed_ip_map
 
 					if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
 
@@ -2784,6 +3009,8 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 						}
 						addressChoiceInt.DhcpServer.FixedIpMap = ms
 					}
+
+					// interfaces_addressing_choice
 
 					interfacesAddressingChoiceTypeFound := false
 
@@ -2822,6 +3049,8 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							// interface_ip_map
+
 							if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
 
 								ms := map[string]string{}
@@ -2850,6 +3079,8 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					// network_prefix_choice
+
 					networkPrefixChoiceTypeFound := false
 
 					if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
@@ -2863,36 +3094,41 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							// interface_ip_map
+
 							if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
 
 								sl := v.(*schema.Set).List()
 								interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
 								networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
 								for _, set := range sl {
-
 									interfaceIpMapMapStrToI := set.(map[string]interface{})
 									key, ok := interfaceIpMapMapStrToI["name"]
 									if ok && !isIntfNil(key) {
 										interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
 										val, _ := interfaceIpMapMapStrToI["value"]
-										staticIPMapVals := val.(*schema.Set).List()
-										for _, staticIP := range staticIPMapVals {
-											staticIPMapStrToI := staticIP.(map[string]interface{})
-											if s, ok := staticIPMapStrToI["default_gw"]; ok && !isIntfNil(s) {
-												interfaceIpMap[key.(string)].DefaultGw = s.(string)
-											}
-											if s, ok := staticIPMapStrToI["dns_server"]; ok && !isIntfNil(s) {
-												interfaceIpMap[key.(string)].DnsServer = s.(string)
+
+										interfaceIpMapVals := val.(*schema.Set).List()
+										for _, intVal := range interfaceIpMapVals {
+
+											interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+											if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+												interfaceIpMap[key.(string)].DefaultGw = w.(string)
 											}
 
-											if s, ok := staticIPMapStrToI["ip_address"]; ok && !isIntfNil(s) {
-												interfaceIpMap[key.(string)].IpAddress = s.(string)
+											if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+												interfaceIpMap[key.(string)].DnsServer = w.(string)
 											}
+
+											if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+												interfaceIpMap[key.(string)].IpAddress = w.(string)
+											}
+
 											// break after one loop
 											break
 										}
 									}
-
 								}
 
 							}
@@ -2912,15 +3148,21 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							// default_gw
+
 							if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 								networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
 							}
 
+							// dns_server
+
 							if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
 
 								networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
 							}
+
+							// network_prefix_allocator
 
 							if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
 
@@ -2956,15 +3198,21 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							// default_gw
+
 							if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 								networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
 							}
 
+							// dns_server
+
 							if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
 
 								networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
 							}
+
+							// ip_address
 
 							if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
@@ -2979,10 +3227,14 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// device
+
 			if v, ok := cs["device"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.EthernetInterface.Device = v.(string)
 			}
+
+			// monitoring_choice
 
 			monitoringChoiceTypeFound := false
 
@@ -3004,10 +3256,14 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// mtu
+
 			if v, ok := cs["mtu"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.EthernetInterface.Mtu = uint32(v.(int))
 			}
+
+			// network_choice
 
 			networkChoiceTypeFound := false
 
@@ -3022,15 +3278,21 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					// name
+
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						networkChoiceInt.InsideNetwork.Name = v.(string)
 					}
 
+					// namespace
+
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						networkChoiceInt.InsideNetwork.Namespace = v.(string)
 					}
+
+					// tenant
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
@@ -3077,6 +3339,8 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// node_choice
+
 			nodeChoiceTypeFound := false
 
 			if v, ok := cs["cluster"]; ok && !isIntfNil(v) && !nodeChoiceTypeFound {
@@ -3101,6 +3365,8 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 				nodeChoiceInt.Node = v.(string)
 
 			}
+
+			// primary_choice
 
 			primaryChoiceTypeFound := false
 
@@ -3128,10 +3394,14 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// priority
+
 			if v, ok := cs["priority"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.EthernetInterface.Priority = uint32(v.(int))
 			}
+
+			// vlan_choice
 
 			vlanChoiceTypeFound := false
 
@@ -3174,11 +3444,15 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			// DHCP_server
+
 			if v, ok := cs["dhcp_server"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.LegacyInterface.DHCPServer = ves_io_schema_network_interface.NetworkInterfaceDHCPServer(ves_io_schema_network_interface.NetworkInterfaceDHCPServer_value[v.(string)])
 
 			}
+
+			// DNS_server
 
 			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
 
@@ -3186,14 +3460,17 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 				dnsServer := &ves_io_schema_network_interface.NetworkInterfaceDNS{}
 				interfaceChoiceInt.LegacyInterface.DNSServer = dnsServer
 				for _, set := range sl {
-
 					dnsServerMapStrToI := set.(map[string]interface{})
+
+					// dns_mode
 
 					if v, ok := dnsServerMapStrToI["dns_mode"]; ok && !isIntfNil(v) {
 
 						dnsServer.DnsMode = ves_io_schema_network_interface.NetworkInterfaceDNSMode(ves_io_schema_network_interface.NetworkInterfaceDNSMode_value[v.(string)])
 
 					}
+
+					// dns_server
 
 					if v, ok := dnsServerMapStrToI["dns_server"]; ok && !isIntfNil(v) {
 
@@ -3202,8 +3479,9 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 						dnsServer.DnsServer = dnsServerIpv4s
 						for i, set := range sl {
 							dnsServerIpv4s[i] = &ves_io_schema.Ipv4AddressType{}
-
 							dnsServerMapStrToI := set.(map[string]interface{})
+
+							// addr
 
 							if w, ok := dnsServerMapStrToI["addr"]; ok && !isIntfNil(w) {
 								dnsServerIpv4s[i].Addr = w.(string)
@@ -3216,6 +3494,8 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 				}
 
 			}
+
+			// address_allocator
 
 			if v, ok := cs["address_allocator"]; ok && !isIntfNil(v) {
 
@@ -3249,14 +3529,17 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// default_gateway
+
 			if v, ok := cs["default_gateway"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
 				defaultGateway := &ves_io_schema_network_interface.NetworkInterfaceDFGW{}
 				interfaceChoiceInt.LegacyInterface.DefaultGateway = defaultGateway
 				for _, set := range sl {
-
 					defaultGatewayMapStrToI := set.(map[string]interface{})
+
+					// default_gateway_address
 
 					if v, ok := defaultGatewayMapStrToI["default_gateway_address"]; ok && !isIntfNil(v) {
 
@@ -3264,8 +3547,9 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 						defaultGatewayAddress := &ves_io_schema.Ipv4AddressType{}
 						defaultGateway.DefaultGatewayAddress = defaultGatewayAddress
 						for _, set := range sl {
-
 							defaultGatewayAddressMapStrToI := set.(map[string]interface{})
+
+							// addr
 
 							if w, ok := defaultGatewayAddressMapStrToI["addr"]; ok && !isIntfNil(w) {
 								defaultGatewayAddress.Addr = w.(string)
@@ -3274,6 +3558,8 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 						}
 
 					}
+
+					// default_gateway_mode
 
 					if v, ok := defaultGatewayMapStrToI["default_gateway_mode"]; ok && !isIntfNil(v) {
 
@@ -3285,16 +3571,22 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// device_name
+
 			if v, ok := cs["device_name"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.LegacyInterface.DeviceName = v.(string)
 			}
+
+			// dhcp_address
 
 			if v, ok := cs["dhcp_address"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.LegacyInterface.DhcpAddress = ves_io_schema_network_interface.NetworkInterfaceDHCP(ves_io_schema_network_interface.NetworkInterfaceDHCP_value[v.(string)])
 
 			}
+
+			// monitoring_choice
 
 			monitoringChoiceTypeFound := false
 
@@ -3316,15 +3608,21 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// mtu
+
 			if v, ok := cs["mtu"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.LegacyInterface.Mtu = uint32(v.(int))
 			}
 
+			// priority
+
 			if v, ok := cs["priority"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.LegacyInterface.Priority = uint32(v.(int))
 			}
+
+			// static_addresses
 
 			if v, ok := cs["static_addresses"]; ok && !isIntfNil(v) {
 
@@ -3333,12 +3631,15 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 				interfaceChoiceInt.LegacyInterface.StaticAddresses = staticAddresses
 				for i, set := range sl {
 					staticAddresses[i] = &ves_io_schema.Ipv4SubnetType{}
-
 					staticAddressesMapStrToI := set.(map[string]interface{})
+
+					// plen
 
 					if w, ok := staticAddressesMapStrToI["plen"]; ok && !isIntfNil(w) {
 						staticAddresses[i].Plen = uint32(w.(int))
 					}
+
+					// prefix
 
 					if w, ok := staticAddressesMapStrToI["prefix"]; ok && !isIntfNil(w) {
 						staticAddresses[i].Prefix = w.(string)
@@ -3348,14 +3649,17 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// tunnel
+
 			if v, ok := cs["tunnel"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
 				tunnel := &ves_io_schema_network_interface.NetworkInterfaceTunnel{}
 				interfaceChoiceInt.LegacyInterface.Tunnel = tunnel
 				for _, set := range sl {
-
 					tunnelMapStrToI := set.(map[string]interface{})
+
+					// tunnel
 
 					if v, ok := tunnelMapStrToI["tunnel"]; ok && !isIntfNil(v) {
 
@@ -3393,11 +3697,15 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// type
+
 			if v, ok := cs["type"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.LegacyInterface.Type = ves_io_schema_network_interface.NetworkInterfaceType(ves_io_schema_network_interface.NetworkInterfaceType_value[v.(string)])
 
 			}
+
+			// virtual_network
 
 			if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
 
@@ -3431,10 +3739,14 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// vlan_tag
+
 			if v, ok := cs["vlan_tag"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.LegacyInterface.VlanTag = uint32(v.(int))
 			}
+
+			// vlan_tagging
 
 			if v, ok := cs["vlan_tagging"]; ok && !isIntfNil(v) {
 
@@ -3457,10 +3769,14 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			// mtu
+
 			if v, ok := cs["mtu"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.TunnelInterface.Mtu = uint32(v.(int))
 			}
+
+			// network_choice
 
 			networkChoiceTypeFound := false
 
@@ -3475,15 +3791,21 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					// name
+
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						networkChoiceInt.InsideNetwork.Name = v.(string)
 					}
 
+					// namespace
+
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						networkChoiceInt.InsideNetwork.Namespace = v.(string)
 					}
+
+					// tenant
 
 					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
@@ -3518,6 +3840,8 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// node_choice
+
 			nodeChoiceTypeFound := false
 
 			if v, ok := cs["cluster"]; ok && !isIntfNil(v) && !nodeChoiceTypeFound {
@@ -3543,10 +3867,14 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			// priority
+
 			if v, ok := cs["priority"]; ok && !isIntfNil(v) {
 
 				interfaceChoiceInt.TunnelInterface.Priority = uint32(v.(int))
 			}
+
+			// static_ip
 
 			if v, ok := cs["static_ip"]; ok && !isIntfNil(v) {
 
@@ -3554,8 +3882,9 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 				staticIp := &ves_io_schema_network_interface.StaticIPParametersType{}
 				interfaceChoiceInt.TunnelInterface.StaticIp = staticIp
 				for _, set := range sl {
-
 					staticIpMapStrToI := set.(map[string]interface{})
+
+					// network_prefix_choice
 
 					networkPrefixChoiceTypeFound := false
 
@@ -3570,36 +3899,41 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							// interface_ip_map
+
 							if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
 
 								sl := v.(*schema.Set).List()
 								interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
 								networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
 								for _, set := range sl {
-
 									interfaceIpMapMapStrToI := set.(map[string]interface{})
 									key, ok := interfaceIpMapMapStrToI["name"]
 									if ok && !isIntfNil(key) {
 										interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
 										val, _ := interfaceIpMapMapStrToI["value"]
-										staticIPMapVals := val.(*schema.Set).List()
-										for _, staticIP := range staticIPMapVals {
-											staticIPMapStrToI := staticIP.(map[string]interface{})
-											if s, ok := staticIPMapStrToI["default_gw"]; ok && !isIntfNil(s) {
-												interfaceIpMap[key.(string)].DefaultGw = s.(string)
-											}
-											if s, ok := staticIPMapStrToI["dns_server"]; ok && !isIntfNil(s) {
-												interfaceIpMap[key.(string)].DnsServer = s.(string)
+
+										interfaceIpMapVals := val.(*schema.Set).List()
+										for _, intVal := range interfaceIpMapVals {
+
+											interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+											if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+												interfaceIpMap[key.(string)].DefaultGw = w.(string)
 											}
 
-											if s, ok := staticIPMapStrToI["ip_address"]; ok && !isIntfNil(s) {
-												interfaceIpMap[key.(string)].IpAddress = s.(string)
+											if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+												interfaceIpMap[key.(string)].DnsServer = w.(string)
 											}
+
+											if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+												interfaceIpMap[key.(string)].IpAddress = w.(string)
+											}
+
 											// break after one loop
 											break
 										}
 									}
-
 								}
 
 							}
@@ -3619,15 +3953,21 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							// default_gw
+
 							if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 								networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
 							}
 
+							// dns_server
+
 							if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
 
 								networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
 							}
+
+							// network_prefix_allocator
 
 							if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
 
@@ -3663,15 +4003,21 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							// default_gw
+
 							if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 								networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
 							}
 
+							// dns_server
+
 							if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
 
 								networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
 							}
+
+							// ip_address
 
 							if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
@@ -3685,6 +4031,8 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 				}
 
 			}
+
+			// tunnel
 
 			if v, ok := cs["tunnel"]; ok && !isIntfNil(v) {
 

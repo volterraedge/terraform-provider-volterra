@@ -51,11 +51,13 @@ func resourceVolterraWaf() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"app_profile": {
@@ -179,13 +181,13 @@ func resourceVolterraWafCreate(d *schema.ResourceData, meta interface{}) error {
 			v.(string)
 	}
 
+	//app_profile
 	if v, ok := d.GetOk("app_profile"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		appProfile := &ves_io_schema_waf.AppProfile{}
 		createSpec.AppProfile = appProfile
 		for _, set := range sl {
-
 			appProfileMapStrToI := set.(map[string]interface{})
 
 			if v, ok := appProfileMapStrToI["cms"]; ok && !isIntfNil(v) {
@@ -222,13 +224,13 @@ func resourceVolterraWafCreate(d *schema.ResourceData, meta interface{}) error {
 
 	}
 
+	//disabled_detection_tags
 	if v, ok := d.GetOk("disabled_detection_tags"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		disabledDetectionTags := &ves_io_schema_waf.DisabledDetectionTags{}
 		createSpec.DisabledDetectionTags = disabledDetectionTags
 		for _, set := range sl {
-
 			disabledDetectionTagsMapStrToI := set.(map[string]interface{})
 
 			if v, ok := disabledDetectionTagsMapStrToI["detection_tag_type"]; ok && !isIntfNil(v) {
@@ -245,6 +247,7 @@ func resourceVolterraWafCreate(d *schema.ResourceData, meta interface{}) error {
 
 	}
 
+	//mode
 	if v, ok := d.GetOk("mode"); ok && !isIntfNil(v) {
 
 		createSpec.Mode = ves_io_schema.WafModeType(ves_io_schema.WafModeType_value[v.(string)])
@@ -355,7 +358,6 @@ func resourceVolterraWafUpdate(d *schema.ResourceData, meta interface{}) error {
 		appProfile := &ves_io_schema_waf.AppProfile{}
 		updateSpec.AppProfile = appProfile
 		for _, set := range sl {
-
 			appProfileMapStrToI := set.(map[string]interface{})
 
 			if v, ok := appProfileMapStrToI["cms"]; ok && !isIntfNil(v) {
@@ -398,7 +400,6 @@ func resourceVolterraWafUpdate(d *schema.ResourceData, meta interface{}) error {
 		disabledDetectionTags := &ves_io_schema_waf.DisabledDetectionTags{}
 		updateSpec.DisabledDetectionTags = disabledDetectionTags
 		for _, set := range sl {
-
 			disabledDetectionTagsMapStrToI := set.(map[string]interface{})
 
 			if v, ok := disabledDetectionTagsMapStrToI["detection_tag_type"]; ok && !isIntfNil(v) {

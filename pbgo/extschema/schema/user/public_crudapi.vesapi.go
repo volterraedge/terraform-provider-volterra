@@ -2636,6 +2636,21 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "userFSMState": {
+            "type": "string",
+            "description": "States describes possible states for user.\n\n - StateUndefined: StateUndefined\n\nUser state when it was created without any state.\n - StateCreating: StateCreating\n\nUser state during initial creation. It includes registering in IDM, creating user-settings object, etc...\n - StateCreateFailed: StateCreateFailed\n\nUser state when initial creation was failed by some reason and must be retried\nafter issue is solved.\n - StateActive: StateActive\n\nUser state of completely created and available to use user.\n - StateDisabled: StateDisabled\n\nUser is currently disabled, login is not possible for this user, but it may become active again in the future.",
+            "title": "States",
+            "enum": [
+                "StateUndefined",
+                "StateCreating",
+                "StateCreateFailed",
+                "StateActive",
+                "StateDisabled"
+            ],
+            "default": "StateUndefined",
+            "x-displayname": "States",
+            "x-ves-proto-enum": "ves.io.schema.user.FSMState"
+        },
         "userGetResponse": {
             "type": "object",
             "description": "This is the output message of the 'Get' RPC",
@@ -2810,6 +2825,12 @@ var APISwaggerJSON string = `{
                     "title": "locale",
                     "x-displayname": "Locale",
                     "x-ves-example": "value"
+                },
+                "state": {
+                    "description": " State of the user.",
+                    "title": "State",
+                    "$ref": "#/definitions/userFSMState",
+                    "x-displayname": "State"
                 },
                 "tos_accepted": {
                     "type": "string",

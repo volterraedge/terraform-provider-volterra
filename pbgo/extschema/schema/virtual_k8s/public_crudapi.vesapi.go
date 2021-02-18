@@ -3242,6 +3242,11 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-service_isolation_choice": "[\"disabled\",\"isolated\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_k8s.ReplaceSpecType",
             "properties": {
+                "default_flavor_ref": {
+                    "description": " Default workfload flavor for all workloads launched in this Virtual K8s",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Default Workload Flavor"
+                },
                 "disabled": {
                     "description": "Exclusive with [isolated]\n",
                     "$ref": "#/definitions/ioschemaEmpty"

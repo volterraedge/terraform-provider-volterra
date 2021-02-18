@@ -2342,15 +2342,15 @@ var APISwaggerJSON string = `{
         },
         "policyChallengeAction": {
             "type": "string",
-            "description": "The challenge options to use when a policy based challenge is configured.\n\n - NO_CHALLENGE: NO_CHALLENGE\n\nNo challenge.\n - ENABLE_JAVASCRIPT_CHALLENGE: ENABLE_JAVASCRIPT_CHALLENGE\n\nEnable javascript challenge.\n - ENABLE_CAPTCHA_CHALLENGE: ENABLE_CAPTCHA_CHALLENGE\n\nCaptcha challenge.\n - DISABLE_CHALLENGE: DISABLE_CHALLENGE\n\nDisable challenge",
+            "description": "The challenge options to use when a policy based challenge is configured.\n\n - DEFAULT_CHALLENGE: DEFAULT_CHALLENGE\n\nDefault challenge.\n - ENABLE_JAVASCRIPT_CHALLENGE: ENABLE_JAVASCRIPT_CHALLENGE\n\nEnable javascript challenge.\n - ENABLE_CAPTCHA_CHALLENGE: ENABLE_CAPTCHA_CHALLENGE\n\nCaptcha challenge.\n - DISABLE_CHALLENGE: DISABLE_CHALLENGE\n\nDisable challenge",
             "title": "Challenge Action",
             "enum": [
-                "NO_CHALLENGE",
+                "DEFAULT_CHALLENGE",
                 "ENABLE_JAVASCRIPT_CHALLENGE",
                 "ENABLE_CAPTCHA_CHALLENGE",
                 "DISABLE_CHALLENGE"
             ],
-            "default": "NO_CHALLENGE",
+            "default": "DEFAULT_CHALLENGE",
             "x-displayname": "Challenge Action",
             "x-ves-proto-enum": "ves.io.schema.policy.ChallengeAction"
         },
@@ -2643,14 +2643,15 @@ var APISwaggerJSON string = `{
         },
         "policyRuleAction": {
             "type": "string",
-            "description": "The rule action determines the disposition of the input request API. If a policy matches a rule with an ALLOW action, the processing of the request proceeds\nforward. If it matches a rule with a DENY action, the processing of the request is terminated and an appropriate message/code returned to the originator. If\nit matches a rule with a NEXT_POLICY_SET action, evaluation of the current policy set terminates and evaluation of the next policy set in the chain begins.\n\n - DENY: DENY\n\nDeny the request.\n - ALLOW: ALLOW\n\nAllow the request to proceed.\n - NEXT_POLICY_SET: NEXT_POLICY_SET\n\nTerminate evaluation of the current policy set and begin evaluating the next policy set in the chain. Note that the evaluation of any remaining policies\nin the current policy set is skipped.\n - NEXT_POLICY: NEXT_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the next policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.\n - LAST_POLICY: LAST_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the last policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.",
+            "description": "The rule action determines the disposition of the input request API. If a policy matches a rule with an ALLOW action, the processing of the request proceeds\nforward. If it matches a rule with a DENY action, the processing of the request is terminated and an appropriate message/code returned to the originator. If\nit matches a rule with a NEXT_POLICY_SET action, evaluation of the current policy set terminates and evaluation of the next policy set in the chain begins.\n\n - DENY: DENY\n\nDeny the request.\n - ALLOW: ALLOW\n\nAllow the request to proceed.\n - NEXT_POLICY_SET: NEXT_POLICY_SET\n\nTerminate evaluation of the current policy set and begin evaluating the next policy set in the chain. Note that the evaluation of any remaining policies\nin the current policy set is skipped.\n - NEXT_POLICY: NEXT_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the next policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.\n - LAST_POLICY: LAST_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the last policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.\n - GOTO_POLICY: GOTO_POLICY\n\nTerminate evaluation of the current policy and begin evaluating a specific policy in the policy set. The policy is specified using the goto_policy field in\nthe rule and must be after the current policy in the policy set.",
             "title": "Rule Action",
             "enum": [
                 "DENY",
                 "ALLOW",
                 "NEXT_POLICY_SET",
                 "NEXT_POLICY",
-                "LAST_POLICY"
+                "LAST_POLICY",
+                "GOTO_POLICY"
             ],
             "default": "DENY",
             "x-displayname": "Rule Action",
@@ -3865,6 +3866,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Expiration Timestamp",
                     "x-ves-example": "2019-12-31:44:34.171543432Z"
                 },
+                "goto_policy": {
+                    "type": "array",
+                    "description": " A reference to a service_policy object.\n Target of the GOTO_POLICY action.\n The target policy must be part of the current policy set and must be after the current policy in the policy set.",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Goto Policy"
+                },
                 "headers": {
                     "type": "array",
                     "description": " A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType\n instances. The actual HTTP header values are extracted from the request API as a list of strings for each HTTP header type.\n Note that all specified header predicates must evaluate to true.",
@@ -4092,6 +4101,14 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Expiration Timestamp",
                     "x-ves-example": "2019-12-31:44:34.171543432Z"
+                },
+                "goto_policy": {
+                    "type": "array",
+                    "description": " A reference to a service_policy object.\n Target of the GOTO_POLICY action.\n The target policy must be part of the current policy set and must be after the current policy in the policy set.",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Goto Policy"
                 },
                 "headers": {
                     "type": "array",
@@ -4353,6 +4370,15 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Forwarding Classes"
                 },
+                "goto_policy": {
+                    "type": "array",
+                    "description": " A reference to a service_policy object.\n Target of the GOTO_POLICY action.\n The target policy must be part of the current policy set and must be after the current policy in the policy set.",
+                    "title": "goto_policy",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Goto Policy"
+                },
                 "headers": {
                     "type": "array",
                     "description": " A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType\n instances. The actual HTTP header values are extracted from the request API as a list of strings for each HTTP header type.\n Note that all specified header predicates must evaluate to true.",
@@ -4598,6 +4624,14 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Expiration Timestamp",
                     "x-ves-example": "2019-12-31:44:34.171543432Z"
+                },
+                "goto_policy": {
+                    "type": "array",
+                    "description": " A reference to a service_policy object.\n Target of the GOTO_POLICY action.\n The target policy must be part of the current policy set and must be after the current policy in the policy set.",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Goto Policy"
                 },
                 "headers": {
                     "type": "array",

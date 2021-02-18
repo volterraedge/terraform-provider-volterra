@@ -375,7 +375,7 @@ func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
 // Create Fast ACL rule
 //
 // x-displayName: "Create Fast ACL Rule"
-// Create a new fast ACL rule, `fast_acl_rule` has specification to match source IP, source port and action to apply
+// Create a new Fast ACL rule, `fast_acl_rule` has specification to match source IP, source port and action to apply
 type CreateSpecType struct {
 	Action *FastAclRuleAction              `protobuf:"bytes,1,opt,name=action" json:"action,omitempty"`
 	Port   []*ves_io_schema4.PortValueType `protobuf:"bytes,3,rep,name=port" json:"port,omitempty"`
@@ -518,7 +518,7 @@ func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
 // Replace Fast ACL rule
 //
 // x-displayName: "Replace Fast ACL Rule"
-// Replace a given fast ACL rule, `fast_acl_rule` has specification to match source IP, source port, protocol and action to apply
+// Replace a given Fast ACL rule, `fast_acl_rule` has specification to match source IP, source port, protocol and action to apply
 type ReplaceSpecType struct {
 	Action *FastAclRuleAction              `protobuf:"bytes,1,opt,name=action" json:"action,omitempty"`
 	Port   []*ves_io_schema4.PortValueType `protobuf:"bytes,3,rep,name=port" json:"port,omitempty"`
@@ -661,7 +661,7 @@ func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
 // Get Fast ACL rule
 //
 // x-displayName: "Get Fast ACL Rule"
-// Get a fast ACL rule
+// Get a Fast ACL rule
 type GetSpecType struct {
 	Action *FastAclRuleAction              `protobuf:"bytes,1,opt,name=action" json:"action,omitempty"`
 	Port   []*ves_io_schema4.PortValueType `protobuf:"bytes,3,rep,name=port" json:"port,omitempty"`
@@ -3392,9 +3392,7 @@ var (
 )
 
 func init() { proto.RegisterFile("ves.io/schema/fast_acl_rule/types.proto", fileDescriptorTypes) }
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/fast_acl_rule/types.proto", fileDescriptorTypes)
-}
+func init() { golang_proto.RegisterFile("ves.io/schema/fast_acl_rule/types.proto", fileDescriptorTypes) }
 
 var fileDescriptorTypes = []byte{
 	// 678 bytes of a gzipped FileDescriptorProto

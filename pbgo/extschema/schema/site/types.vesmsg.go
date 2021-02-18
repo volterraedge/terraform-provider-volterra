@@ -709,6 +709,147 @@ func CpuValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CreateKubeConfigReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CreateKubeConfigReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CreateKubeConfigReq) DeepCopy() *CreateKubeConfigReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CreateKubeConfigReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CreateKubeConfigReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CreateKubeConfigReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CreateKubeConfigReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCreateKubeConfigReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateKubeConfigReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateKubeConfigReq) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateKubeConfigReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CreateKubeConfigReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CreateKubeConfigReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCreateKubeConfigReqValidator = func() *ValidateCreateKubeConfigReq {
+	v := &ValidateCreateKubeConfigReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateKubeConfigReq.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateKubeConfigReq.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	return v
+}()
+
+func CreateKubeConfigReqValidator() db.Validator {
+	return DefaultCreateKubeConfigReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1335,147 +1476,6 @@ var DefaultDeploymentStateValidator = func() *ValidateDeploymentState {
 
 func DeploymentStateValidator() db.Validator {
 	return DefaultDeploymentStateValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *GetKubeConfigReq) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *GetKubeConfigReq) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *GetKubeConfigReq) DeepCopy() *GetKubeConfigReq {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &GetKubeConfigReq{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *GetKubeConfigReq) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *GetKubeConfigReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return GetKubeConfigReqValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateGetKubeConfigReq struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateGetKubeConfigReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateGetKubeConfigReq) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateGetKubeConfigReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*GetKubeConfigReq)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *GetKubeConfigReq got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("name"))
-		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["namespace"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("namespace"))
-		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultGetKubeConfigReqValidator = func() *ValidateGetKubeConfigReq {
-	v := &ValidateGetKubeConfigReq{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhNamespace := v.NamespaceValidationRuleHandler
-	rulesNamespace := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_bytes": "64",
-		"ves.io.schema.rules.string.min_bytes": "1",
-	}
-	vFn, err = vrhNamespace(rulesNamespace)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetKubeConfigReq.namespace: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["namespace"] = vFn
-
-	vrhName := v.NameValidationRuleHandler
-	rulesName := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_bytes": "64",
-		"ves.io.schema.rules.string.min_bytes": "1",
-	}
-	vFn, err = vrhName(rulesName)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetKubeConfigReq.name: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["name"] = vFn
-
-	return v
-}()
-
-func GetKubeConfigReqValidator() db.Validator {
-	return DefaultGetKubeConfigReqValidator
 }
 
 // augmented methods on protoc/std generated struct

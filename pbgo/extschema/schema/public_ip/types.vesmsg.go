@@ -400,6 +400,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["do_not_advertise"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("do_not_advertise"))
+		if err := fv(ctx, m.GetDoNotAdvertise(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ip"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("ip"))

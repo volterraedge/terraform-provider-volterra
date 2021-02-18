@@ -3003,15 +3003,15 @@ func BenchmarkSiteStatusMetricsDataProtoUnmarshal(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func TestGetKubeConfigReqProto(t *testing.T) {
+func TestCreateKubeConfigReqProto(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGetKubeConfigReq(popr, false)
+	p := NewPopulatedCreateKubeConfigReq(popr, false)
 	dAtA, err := proto.Marshal(p)
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
-	msg := &GetKubeConfigReq{}
+	msg := &CreateKubeConfigReq{}
 	if err := proto.Unmarshal(dAtA, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -3034,10 +3034,10 @@ func TestGetKubeConfigReqProto(t *testing.T) {
 	}
 }
 
-func TestGetKubeConfigReqMarshalTo(t *testing.T) {
+func TestCreateKubeConfigReqMarshalTo(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGetKubeConfigReq(popr, false)
+	p := NewPopulatedCreateKubeConfigReq(popr, false)
 	size := p.Size()
 	dAtA := make([]byte, size)
 	for i := range dAtA {
@@ -3047,7 +3047,7 @@ func TestGetKubeConfigReqMarshalTo(t *testing.T) {
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
-	msg := &GetKubeConfigReq{}
+	msg := &CreateKubeConfigReq{}
 	if err := proto.Unmarshal(dAtA, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -3059,12 +3059,12 @@ func TestGetKubeConfigReqMarshalTo(t *testing.T) {
 	}
 }
 
-func BenchmarkGetKubeConfigReqProtoMarshal(b *testing.B) {
+func BenchmarkCreateKubeConfigReqProtoMarshal(b *testing.B) {
 	popr := rand.New(rand.NewSource(616))
 	total := 0
-	pops := make([]*GetKubeConfigReq, 10000)
+	pops := make([]*CreateKubeConfigReq, 10000)
 	for i := 0; i < 10000; i++ {
-		pops[i] = NewPopulatedGetKubeConfigReq(popr, false)
+		pops[i] = NewPopulatedCreateKubeConfigReq(popr, false)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -3077,18 +3077,18 @@ func BenchmarkGetKubeConfigReqProtoMarshal(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func BenchmarkGetKubeConfigReqProtoUnmarshal(b *testing.B) {
+func BenchmarkCreateKubeConfigReqProtoUnmarshal(b *testing.B) {
 	popr := rand.New(rand.NewSource(616))
 	total := 0
 	datas := make([][]byte, 10000)
 	for i := 0; i < 10000; i++ {
-		dAtA, err := proto.Marshal(NewPopulatedGetKubeConfigReq(popr, false))
+		dAtA, err := proto.Marshal(NewPopulatedCreateKubeConfigReq(popr, false))
 		if err != nil {
 			panic(err)
 		}
 		datas[i] = dAtA
 	}
-	msg := &GetKubeConfigReq{}
+	msg := &CreateKubeConfigReq{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		total += len(datas[i%10000])
@@ -3945,16 +3945,16 @@ func TestSiteStatusMetricsDataJSON(t *testing.T) {
 		t.Fatalf("seed = %d, %#v !Json Equal %#v", seed, msg, p)
 	}
 }
-func TestGetKubeConfigReqJSON(t *testing.T) {
+func TestCreateKubeConfigReqJSON(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGetKubeConfigReq(popr, true)
+	p := NewPopulatedCreateKubeConfigReq(popr, true)
 	marshaler := jsonpb.Marshaler{}
 	jsondata, err := marshaler.MarshalToString(p)
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
-	msg := &GetKubeConfigReq{}
+	msg := &CreateKubeConfigReq{}
 	err = jsonpb.UnmarshalString(jsondata, msg)
 	if err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
@@ -4885,12 +4885,12 @@ func TestSiteStatusMetricsDataProtoCompactText(t *testing.T) {
 	}
 }
 
-func TestGetKubeConfigReqProtoText(t *testing.T) {
+func TestCreateKubeConfigReqProtoText(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGetKubeConfigReq(popr, true)
+	p := NewPopulatedCreateKubeConfigReq(popr, true)
 	dAtA := proto.MarshalTextString(p)
-	msg := &GetKubeConfigReq{}
+	msg := &CreateKubeConfigReq{}
 	if err := proto.UnmarshalText(dAtA, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -4899,12 +4899,12 @@ func TestGetKubeConfigReqProtoText(t *testing.T) {
 	}
 }
 
-func TestGetKubeConfigReqProtoCompactText(t *testing.T) {
+func TestCreateKubeConfigReqProtoCompactText(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGetKubeConfigReq(popr, true)
+	p := NewPopulatedCreateKubeConfigReq(popr, true)
 	dAtA := proto.CompactTextString(p)
-	msg := &GetKubeConfigReq{}
+	msg := &CreateKubeConfigReq{}
 	if err := proto.UnmarshalText(dAtA, msg); err != nil {
 		t.Fatalf("seed = %d, err = %v", seed, err)
 	}
@@ -5400,9 +5400,9 @@ func TestSiteStatusMetricsDataGoString(t *testing.T) {
 		t.Fatal(err)
 	}
 }
-func TestGetKubeConfigReqGoString(t *testing.T) {
+func TestCreateKubeConfigReqGoString(t *testing.T) {
 	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedGetKubeConfigReq(popr, false)
+	p := NewPopulatedCreateKubeConfigReq(popr, false)
 	s1 := p.GoString()
 	s2 := fmt.Sprintf("%#v", p)
 	if s1 != s2 {
@@ -6568,10 +6568,10 @@ func BenchmarkSiteStatusMetricsDataSize(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func TestGetKubeConfigReqSize(t *testing.T) {
+func TestCreateKubeConfigReqSize(t *testing.T) {
 	seed := time.Now().UnixNano()
 	popr := rand.New(rand.NewSource(seed))
-	p := NewPopulatedGetKubeConfigReq(popr, true)
+	p := NewPopulatedCreateKubeConfigReq(popr, true)
 	size2 := proto.Size(p)
 	dAtA, err := proto.Marshal(p)
 	if err != nil {
@@ -6590,12 +6590,12 @@ func TestGetKubeConfigReqSize(t *testing.T) {
 	}
 }
 
-func BenchmarkGetKubeConfigReqSize(b *testing.B) {
+func BenchmarkCreateKubeConfigReqSize(b *testing.B) {
 	popr := rand.New(rand.NewSource(616))
 	total := 0
-	pops := make([]*GetKubeConfigReq, 1000)
+	pops := make([]*CreateKubeConfigReq, 1000)
 	for i := 0; i < 1000; i++ {
-		pops[i] = NewPopulatedGetKubeConfigReq(popr, false)
+		pops[i] = NewPopulatedCreateKubeConfigReq(popr, false)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -6991,9 +6991,9 @@ func TestSiteStatusMetricsDataStringer(t *testing.T) {
 		t.Fatalf("String want %v got %v", s1, s2)
 	}
 }
-func TestGetKubeConfigReqStringer(t *testing.T) {
+func TestCreateKubeConfigReqStringer(t *testing.T) {
 	popr := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := NewPopulatedGetKubeConfigReq(popr, false)
+	p := NewPopulatedCreateKubeConfigReq(popr, false)
 	s1 := p.String()
 	s2 := fmt.Sprintf("%v", p)
 	if s1 != s2 {

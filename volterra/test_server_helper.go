@@ -23,6 +23,7 @@ import (
 	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	ves_io_schema_aws_tgw_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
+	ves_io_schema_aws_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
 	ves_io_schema_tf_params "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/terraform_parameters"
 	ves_io_schema_vh "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 )
@@ -145,6 +146,23 @@ var _ ves_io_schema_ns.CustomAPIServer = &nsCustomAPIServer{}
 
 // ves.io.schema.namespace.CustomAPI handling - end
 
+// ves.io.schema.views.aws_vpc_site.CustomAPI handling - start
+type vpcCustomAPIServer struct {
+	sf svcfw.Service
+}
+
+func newVPCCustomAPIServer(sf svcfw.Service) server.APIHandler {
+	return &vpcCustomAPIServer{sf: sf}
+}
+
+func (t *vpcCustomAPIServer) SetVPCK8SHostnames(context.Context,
+	*ves_io_schema_aws_vpc_site.SetVPCK8SHostnamesRequest) (*ves_io_schema_aws_vpc_site.SetVPCK8SHostnamesResponse, error) {
+	return &ves_io_schema_aws_vpc_site.SetVPCK8SHostnamesResponse{}, nil
+
+}
+
+var _ ves_io_schema_aws_vpc_site.CustomAPIServer = &vpcCustomAPIServer{}
+
 // ves.io.schema.views.aws_tgw_site.CustomAPI handling - start
 type tgwCustomAPIServer struct {
 	sf svcfw.Service
@@ -215,6 +233,43 @@ var _ ves_io_schema_tf_params.CustomActionAPIServer = &tfCustomActionAPIServer{}
 
 // ves.io.schema.views.terraform_parameters.CustomAPI handling - end
 
+// ves.io.schema.namespace.NamespaceCustomAPI handling - start
+type namespaceCustomAPIServer struct {
+	sf svcfw.Service
+}
+
+func newNamespaceCustomAPIServer(sf svcfw.Service) server.APIHandler {
+	return &namespaceCustomAPIServer{sf: sf}
+}
+
+func (t *namespaceCustomAPIServer) SetFastACLsForInternetVIPs(ctx context.Context, req *ves_io_schema_ns.SetFastACLsForInternetVIPsRequest) (*ves_io_schema_ns.SetFastACLsForInternetVIPsResponse, error) {
+	return &ves_io_schema_ns.SetFastACLsForInternetVIPsResponse{}, nil
+
+}
+func (t *namespaceCustomAPIServer) GetFastACLsForInternetVIPs(ctx context.Context, req *ves_io_schema_ns.GetFastACLsForInternetVIPsRequest) (*ves_io_schema_ns.GetFastACLsForInternetVIPsResponse, error) {
+	return &ves_io_schema_ns.GetFastACLsForInternetVIPsResponse{}, nil
+}
+
+func (t *namespaceCustomAPIServer) SetActiveServicePolicies(ctx context.Context, req *ves_io_schema_ns.SetActiveServicePoliciesRequest) (*ves_io_schema_ns.SetActiveServicePoliciesResponse, error) {
+	return &ves_io_schema_ns.SetActiveServicePoliciesResponse{}, nil
+
+}
+func (t *namespaceCustomAPIServer) GetActiveServicePolicies(ctx context.Context, req *ves_io_schema_ns.GetActiveServicePoliciesRequest) (*ves_io_schema_ns.GetActiveServicePoliciesResponse, error) {
+	return &ves_io_schema_ns.GetActiveServicePoliciesResponse{}, nil
+}
+
+func (t *namespaceCustomAPIServer) SetActiveNetworkPolicies(ctx context.Context, req *ves_io_schema_ns.SetActiveNetworkPoliciesRequest) (*ves_io_schema_ns.SetActiveNetworkPoliciesResponse, error) {
+	return &ves_io_schema_ns.SetActiveNetworkPoliciesResponse{}, nil
+
+}
+func (t *namespaceCustomAPIServer) GetActiveNetworkPolicies(ctx context.Context, req *ves_io_schema_ns.GetActiveNetworkPoliciesRequest) (*ves_io_schema_ns.GetActiveNetworkPoliciesResponse, error) {
+	return &ves_io_schema_ns.GetActiveNetworkPoliciesResponse{}, nil
+}
+
+var _ ves_io_schema_ns.NamespaceCustomAPIServer = &namespaceCustomAPIServer{}
+
+// ves.io.schema.namespace.NamespaceCustomAPI handling - end
+
 func getFixtureOpts(noTLS bool) []generic.ConfigOpt {
 	fcOpts := append(generic.GetFixtureTLSOpts(noTLS, tdRoot),
 		generic.WithCfgSTFConfigOpts(
@@ -272,8 +327,10 @@ func makeCustomTestServer(t *testing.T, objectTypes []string) (*generic.Fixture,
 		"ves.io.schema.virtual_host.CustomAPI":                     newVHCustomAPIServer,
 		"ves.io.schema.site.CustomStateAPI":                        newSiteCustomAPIServer,
 		"ves.io.schema.views.aws_tgw_site.CustomAPI":               newTGWCustomAPIServer,
+		"ves.io.schema.views.aws_vpc_site.CustomAPI":               newVPCCustomAPIServer,
 		"ves.io.schema.views.terraform_parameters.CustomAPI":       newTFCustomAPIServer,
 		"ves.io.schema.views.terraform_parameters.CustomActionAPI": newTFCustomActionAPIServer,
+		"ves.io.schema.namespace.NamespaceCustomAPI":               newNamespaceCustomAPIServer,
 	}
 
 	// bail if there isn't a handler for every possible public custom API defined in schema repo

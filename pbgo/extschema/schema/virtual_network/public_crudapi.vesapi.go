@@ -2361,6 +2361,26 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaLabelSelectorType": {
+            "type": "object",
+            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to \na set of other objects(called selectees) based on the value of expresssions. \nA label selector is a label query over a set of resources. An empty label selector matches all objects. \nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression. \nEach string has \",\" seperated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
+            "title": "LabelSelectorType",
+            "x-displayname": "Label Selector",
+            "x-ves-proto-message": "ves.io.schema.LabelSelectorType",
+            "properties": {
+                "expressions": {
+                    "type": "array",
+                    "description": " expressions contains the kubernetes style label expression for selections.\n\nExample: - \"region in (us-west1, us-west2),tier in (staging)\"-\nRequired: YES",
+                    "title": "expressions",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Selector Expression",
+                    "x-ves-example": "region in (us-west1, us-west2),tier in (staging)",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "schemaNextHopType": {
             "type": "object",
             "description": "Identifies the next-hop for a route",
@@ -2393,13 +2413,14 @@ var APISwaggerJSON string = `{
         },
         "schemaNextHopTypes": {
             "type": "string",
-            "description": "Defines types of next-hop\n\nUse default gateway on the local interface as gateway for route.\nAssumes there is only one local interface on the virtual network.\nUse the specified address as nexthop\nUse the network interface as nexthop\nDiscard nexthop, used when attr type is Advertise",
+            "description": "Defines types of next-hop\n\nUse default gateway on the local interface as gateway for route.\nAssumes there is only one local interface on the virtual network.\nUse the specified address as nexthop\nUse the network interface as nexthop\nDiscard nexthop, used when attr type is Advertise\nUsed in VoltADN private virtual network.",
             "title": "Nexthop Types",
             "enum": [
                 "NEXT_HOP_DEFAULT_GATEWAY",
                 "NEXT_HOP_USE_CONFIGURED",
                 "NEXT_HOP_NETWORK_INTERFACE",
-                "NEXT_HOP_DISCARD"
+                "NEXT_HOP_DISCARD",
+                "NEXT_HOP_SNAT_TO_PUBLIC"
             ],
             "default": "NEXT_HOP_DEFAULT_GATEWAY",
             "x-displayname": "Nexthop Types",
@@ -3002,7 +3023,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -3013,7 +3034,9 @@ var APISwaggerJSON string = `{
                 "VIRTUAL_NETWORK_SITE_SERVICE",
                 "VIRTUAL_NETWORK_VER_INTERNAL",
                 "VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE",
-                "VIRTUAL_NETWORK_IP_AUTO"
+                "VIRTUAL_NETWORK_IP_AUTO",
+                "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
+                "VIRTUAL_NETWORK_SRV6_NETWORK"
             ],
             "default": "VIRTUAL_NETWORK_SITE_LOCAL",
             "x-displayname": "Virtual Network Type",
@@ -3100,24 +3123,28 @@ var APISwaggerJSON string = `{
             "description": "Create virtual network in given namespace",
             "title": "Create virtual network",
             "x-displayname": "Create Virtual Network",
-            "x-ves-oneof-field-network_choice": "[\"global_network\",\"legacy_type\",\"site_local_inside_network\",\"site_local_network\"]",
+            "x-ves-oneof-field-network_choice": "[\"global_network\",\"legacy_type\",\"site_local_inside_network\",\"site_local_network\",\"srv6_network\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_network.CreateSpecType",
             "properties": {
                 "global_network": {
-                    "description": "Exclusive with [legacy_type site_local_inside_network site_local_network]\n",
+                    "description": "Exclusive with [legacy_type site_local_inside_network site_local_network srv6_network]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "legacy_type": {
-                    "description": "Exclusive with [global_network site_local_inside_network site_local_network]\n",
+                    "description": "Exclusive with [global_network site_local_inside_network site_local_network srv6_network]\n",
                     "$ref": "#/definitions/schemaVirtualNetworkType"
                 },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_network]\n",
+                    "description": "Exclusive with [global_network legacy_type site_local_network srv6_network]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_inside_network]\n",
+                    "description": "Exclusive with [global_network legacy_type site_local_inside_network srv6_network]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "srv6_network": {
+                    "description": "Exclusive with [global_network legacy_type site_local_inside_network site_local_network]\n",
+                    "$ref": "#/definitions/virtual_networkPerSiteSrv6NetworkType"
                 },
                 "static_routes": {
                     "type": "array",
@@ -3127,6 +3154,24 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/virtual_networkStaticRouteViewType"
                     },
                     "x-displayname": "Static Routes"
+                }
+            }
+        },
+        "virtual_networkDNSServersList": {
+            "type": "object",
+            "description": "List DNS server ip addresses",
+            "title": "List of DNS server IP(s)",
+            "x-displayname": "List of DNS Server IP(s)",
+            "x-ves-proto-message": "ves.io.schema.virtual_network.DNSServersList",
+            "properties": {
+                "dns_ip": {
+                    "type": "array",
+                    "description": " List DNS server ip addresses",
+                    "title": "List of DNS server IP(s)",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "List of DNS Server IP(s)"
                 }
             }
         },
@@ -3238,24 +3283,32 @@ var APISwaggerJSON string = `{
             "description": "Gets virtual network in given namespace",
             "title": "Get virtual network",
             "x-displayname": "Get Virtual Network",
-            "x-ves-oneof-field-network_choice": "[\"global_network\",\"legacy_type\",\"site_local_inside_network\",\"site_local_network\"]",
+            "x-ves-oneof-field-network_choice": "[\"global_network\",\"legacy_type\",\"private_network\",\"site_local_inside_network\",\"site_local_network\",\"srv6_network\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_network.GetSpecType",
             "properties": {
                 "global_network": {
-                    "description": "Exclusive with [legacy_type site_local_inside_network site_local_network]\n",
+                    "description": "Exclusive with [legacy_type private_network site_local_inside_network site_local_network srv6_network]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "legacy_type": {
-                    "description": "Exclusive with [global_network site_local_inside_network site_local_network]\n",
+                    "description": "Exclusive with [global_network private_network site_local_inside_network site_local_network srv6_network]\n",
                     "$ref": "#/definitions/schemaVirtualNetworkType"
                 },
+                "private_network": {
+                    "description": "Exclusive with [global_network legacy_type site_local_inside_network site_local_network srv6_network]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_network]\n",
+                    "description": "Exclusive with [global_network legacy_type private_network site_local_network srv6_network]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_inside_network]\n",
+                    "description": "Exclusive with [global_network legacy_type private_network site_local_inside_network srv6_network]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "srv6_network": {
+                    "description": "Exclusive with [global_network legacy_type private_network site_local_inside_network site_local_network]\n",
+                    "$ref": "#/definitions/virtual_networkPerSiteSrv6NetworkType"
                 },
                 "static_routes": {
                     "type": "array",
@@ -3273,33 +3326,49 @@ var APISwaggerJSON string = `{
             "description": "Virtual Network specification",
             "title": "Global Specification",
             "x-displayname": "Global Specification",
-            "x-ves-oneof-field-network_choice": "[\"global_network\",\"inside_network\",\"legacy_type\",\"site_local_inside_network\",\"site_local_network\"]",
+            "x-ves-oneof-field-network_choice": "[\"global_network\",\"inside_network\",\"legacy_type\",\"private_network\",\"site_local_inside_network\",\"site_local_network\",\"srv6_network\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_network.GlobalSpecType",
             "properties": {
                 "global_network": {
-                    "description": "Exclusive with [inside_network legacy_type site_local_inside_network site_local_network]\nx-displayName: \"Global Network\"\nGlobal network can extend to multiple sites.",
+                    "description": "Exclusive with [inside_network legacy_type private_network site_local_inside_network site_local_network srv6_network]\nx-displayName: \"Global Network\"\nGlobal network can extend to multiple sites.",
                     "title": "Global Network",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "inside_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_inside_network site_local_network]\nx-displayName: \"Inside Network\"\nAdditional Inside network on site",
-                    "title": "Inside Network",
+                    "description": "Exclusive with [global_network legacy_type private_network site_local_inside_network site_local_network srv6_network]\nx-displayName: \"Per Site Network\"\nAdditional networks on site",
+                    "title": "Per Site Network",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "legacy_type": {
-                    "description": "Exclusive with [global_network inside_network site_local_inside_network site_local_network]\nx-displayName: \"Legacy Network Config\"\nType of virtual network",
+                    "description": "Exclusive with [global_network inside_network private_network site_local_inside_network site_local_network srv6_network]\nx-displayName: \"Legacy Network Config\"\nType of virtual network",
                     "title": "Legacy Network config",
                     "$ref": "#/definitions/schemaVirtualNetworkType"
                 },
+                "private_network": {
+                    "description": "Exclusive with [global_network inside_network legacy_type site_local_inside_network site_local_network srv6_network]\nx-displayName: \"VoltADN Private Network\"\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket",
+                    "title": "VoltADN Private Network",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "private_network_parameters": {
+                    "description": " Network parameters configured buy SRE,  after opening a support ticket",
+                    "title": "VoltADN Private Network Parameters",
+                    "$ref": "#/definitions/virtual_networkVoltADNPrivateNetworkType",
+                    "x-displayname": "VoltADN Private Network Parameters"
+                },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [global_network inside_network legacy_type site_local_network]\nx-displayName: \"Site Local Inside Network\"\nSite local Inside network, also known as inside network",
+                    "description": "Exclusive with [global_network inside_network legacy_type private_network site_local_network srv6_network]\nx-displayName: \"Site Local Inside Network\"\nSite local Inside network, also known as inside network",
                     "title": "Site Local Inside Network",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [global_network inside_network legacy_type site_local_inside_network]\nx-displayName: \"Site Local (Outside) Network\"\nSite local network, also known as outside network",
+                    "description": "Exclusive with [global_network inside_network legacy_type private_network site_local_inside_network srv6_network]\nx-displayName: \"Site Local (Outside) Network\"\nSite local network, also known as outside network",
                     "title": "Site Local Network (outside)",
                     "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "srv6_network": {
+                    "description": "Exclusive with [global_network inside_network legacy_type private_network site_local_inside_network site_local_network]\nx-displayName: \"Per Site Srv6 Network\"\nConfigure a per site srv6 network",
+                    "title": "Per Site Srv6 Network",
+                    "$ref": "#/definitions/virtual_networkPerSiteSrv6NetworkType"
                 },
                 "static_routes": {
                     "type": "array",
@@ -3474,6 +3543,26 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "virtual_networkPerSiteSrv6NetworkType": {
+            "type": "object",
+            "description": "Per site network parameters",
+            "title": "Per Site Srv6 Network",
+            "x-displayname": "Per Site Srv6 Network",
+            "x-ves-oneof-field-namespace_choice": "[\"no_namespace_network\",\"srv6_network_ns_params\"]",
+            "x-ves-proto-message": "ves.io.schema.virtual_network.PerSiteSrv6NetworkType",
+            "properties": {
+                "no_namespace_network": {
+                    "description": "Exclusive with [srv6_network_ns_params]\nx-displayName: \"Namespace Network Not Connected\"\nNamespace network is not connected to this network",
+                    "title": "Namespace Network Not Connected",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "srv6_network_ns_params": {
+                    "description": "Exclusive with [no_namespace_network]\nx-displayName: \"Namespace Network to be Connected\"\nName of namespace whose network is connected",
+                    "title": "Namespace Network to be Connected",
+                    "$ref": "#/definitions/virtual_networkSrv6NetworkNsParametersType"
+                }
+            }
+        },
         "virtual_networkReplaceRequest": {
             "type": "object",
             "description": "This is the input message of the 'Replace' RPC",
@@ -3511,24 +3600,32 @@ var APISwaggerJSON string = `{
             "description": "Replace given virtual network in given namespace",
             "title": "Replace virtual network",
             "x-displayname": "Replace Virtual Network",
-            "x-ves-oneof-field-network_choice": "[\"global_network\",\"legacy_type\",\"site_local_inside_network\",\"site_local_network\"]",
+            "x-ves-oneof-field-network_choice": "[\"global_network\",\"legacy_type\",\"private_network\",\"site_local_inside_network\",\"site_local_network\",\"srv6_network\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_network.ReplaceSpecType",
             "properties": {
                 "global_network": {
-                    "description": "Exclusive with [legacy_type site_local_inside_network site_local_network]\n",
+                    "description": "Exclusive with [legacy_type private_network site_local_inside_network site_local_network srv6_network]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "legacy_type": {
-                    "description": "Exclusive with [global_network site_local_inside_network site_local_network]\n",
+                    "description": "Exclusive with [global_network private_network site_local_inside_network site_local_network srv6_network]\n",
                     "$ref": "#/definitions/schemaVirtualNetworkType"
                 },
+                "private_network": {
+                    "description": "Exclusive with [global_network legacy_type site_local_inside_network site_local_network srv6_network]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_network]\n",
+                    "description": "Exclusive with [global_network legacy_type private_network site_local_network srv6_network]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [global_network legacy_type site_local_inside_network]\n",
+                    "description": "Exclusive with [global_network legacy_type private_network site_local_inside_network srv6_network]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "srv6_network": {
+                    "description": "Exclusive with [global_network legacy_type private_network site_local_inside_network site_local_network]\n",
+                    "$ref": "#/definitions/virtual_networkPerSiteSrv6NetworkType"
                 },
                 "static_routes": {
                     "type": "array",
@@ -3552,6 +3649,22 @@ var APISwaggerJSON string = `{
                     "title": "gc_spec",
                     "$ref": "#/definitions/virtual_networkGlobalSpecType",
                     "x-displayname": "GC Spec"
+                }
+            }
+        },
+        "virtual_networkSrv6NetworkNsParametersType": {
+            "type": "object",
+            "description": "Configure the how namespace network is connected to srv6 network",
+            "title": "Srv6 Network Namespace Parameters",
+            "x-displayname": "Srv6 Network Namespace Parameters",
+            "x-ves-proto-message": "ves.io.schema.virtual_network.Srv6NetworkNsParametersType",
+            "properties": {
+                "namespace": {
+                    "type": "string",
+                    "description": " Name of namespace that is connected to srv6 Network\n\nExample: - \"production\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "production"
                 }
             }
         },
@@ -3628,6 +3741,108 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                }
+            }
+        },
+        "virtual_networkVoltADNPrivateNetworkReInfoType": {
+            "type": "object",
+            "description": "x-displayName: \"VoltADN Private Network RE Info\"\nPer RE information VoltADN private network",
+            "title": "VoltADN Private Network RE Info",
+            "properties": {
+                "node_selector": {
+                    "description": "x-displayName: \"Node Label Expression\"\nthis expression is used if ver node should own this network or not.\nIf RE specific expression is nil, then common expression is used.",
+                    "title": "Label expression to select Node",
+                    "$ref": "#/definitions/schemaLabelSelectorType"
+                },
+                "vlan": {
+                    "type": "integer",
+                    "description": "x-displayName: \"VLAN ID\"\nx-example: \"700\"\nVLAN id of for vlan interface for handoff from infrastructure",
+                    "title": "VLAN ID",
+                    "format": "int64"
+                }
+            }
+        },
+        "virtual_networkVoltADNPrivateNetworkTenantInfoType": {
+            "type": "object",
+            "description": "x-displayName: \"VoltADN Private Network Tenant Info\"\nPer Tenant information VoltADN private network",
+            "title": "VoltADN Private Network Tenant Info",
+            "properties": {
+                "default_private_vip": {
+                    "type": "string",
+                    "description": "x-displayName: \"Default Tenant Private VIP\"\nx-example: \"10.200.2.1\"\nDefault tenant private VIP to be used when not specified in advertise policy",
+                    "title": "Default Tenant Private VIP"
+                },
+                "final_default_private_vip": {
+                    "type": "string",
+                    "description": "x-displayName: \"Final Default Tenant Private VIP\"\nx-example: \"10.200.2.1\"\nFinal Default tenant private VIP to be used when not specified in advertise policy\nVega will use this to create Listener",
+                    "title": "Final Default Tenant Private VIP"
+                }
+            }
+        },
+        "virtual_networkVoltADNPrivateNetworkType": {
+            "type": "object",
+            "description": "Specification VoltADN private network",
+            "title": "VoltADN Private Network",
+            "x-displayname": "VoltADN Private Network",
+            "x-ves-oneof-field-dedicated_vip_choice": "[\"advertise_dedicated_vips\",\"no_advertise_dedicated_vips\"]",
+            "x-ves-oneof-field-dns_choice": "[\"no_private_dns\",\"private_dns\"]",
+            "x-ves-oneof-field-private_access_choice": "[\"no_private_access\",\"private_access_enabled\"]",
+            "x-ves-proto-message": "ves.io.schema.virtual_network.VoltADNPrivateNetworkType",
+            "properties": {
+                "advertise_dedicated_vips": {
+                    "description": "Exclusive with [no_advertise_dedicated_vips]\nx-displayName: \"Dedicated VIP(s) are advertised\"\nDedicated public VIP(s) are available via internet and private network",
+                    "title": "Dedicated VIP(s) are advertised",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "common_node_selector": {
+                    "description": " If RE specific expression is nil, then common expression is used.",
+                    "title": "Common Label expression to select Node",
+                    "$ref": "#/definitions/schemaLabelSelectorType",
+                    "x-displayname": "Common Node Label Expression"
+                },
+                "no_advertise_dedicated_vips": {
+                    "description": "Exclusive with [advertise_dedicated_vips]\nx-displayName: \"Dedicated VIP(s) not advertised\"\nDedicated public VIP(s) are available only via internet",
+                    "title": "Dedicated VIP(s) are not advertised",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_private_access": {
+                    "description": "Exclusive with [private_access_enabled]\nx-displayName: \"Private Access Not Enabled\"\nCE sites do not need private access",
+                    "title": "Private Access Not Enabled",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_private_dns": {
+                    "description": "Exclusive with [private_dns]\nx-displayName: \"Use Global DNS\"\nUse Global DNS, there is not private DNS on this network",
+                    "title": "Use Global DNS",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "owner_tenant_id": {
+                    "type": "string",
+                    "description": " Tenant ID of tenant that first requested creation of this network\nRequired: YES",
+                    "title": "Owner Tenant",
+                    "x-displayname": "Owner Tenant",
+                    "x-ves-required": "true"
+                },
+                "private_access_enabled": {
+                    "description": "Exclusive with [no_private_access]\nx-displayName: \"Private Access Enabled\"\nCE sites need private access using this network",
+                    "title": "Private Access Enabled",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "private_dns": {
+                    "description": "Exclusive with [no_private_dns]\nx-displayName: \"Use Private DNS\"\nUse Private DNS server IP for endpoint discovery in this network",
+                    "title": "Use Private DNS",
+                    "$ref": "#/definitions/virtual_networkDNSServersList"
+                },
+                "re_info_map": {
+                    "type": "object",
+                    "description": " Map of re name to re info map, Key:RE name, Value: RE info",
+                    "title": "RE name  to Re info mao",
+                    "x-displayname": "RE name to Re info mapping"
+                },
+                "tenant_info_map": {
+                    "type": "object",
+                    "description": " Per tenant information for the private network",
+                    "title": "Per Tenant Information",
+                    "x-displayname": "Per Tenant Information"
                 }
             }
         }

@@ -39,6 +39,7 @@ It has these top-level messages:
 	StorageClassOpenebsEnterpriseType
 	ObjectRefType
 	SiteLocator
+	WherePrivateNetwork
 	WhereSite
 	WhereVirtualSite
 	WhereVK8SService

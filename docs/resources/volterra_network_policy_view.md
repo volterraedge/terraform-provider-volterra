@@ -19,6 +19,14 @@ Example Usage
 resource "volterra_network_policy_view" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
+
+  endpoint {
+    // One of the arguments from this list "namespace label_selector prefix_list any outside_endpoints inside_endpoints interface" must be set
+
+    label_selector {
+      expressions = ["region in (us-west1, us-west2),tier in (staging)"]
+    }
+  }
 }
 
 ```
@@ -44,7 +52,7 @@ Argument Reference
 
 `egress_rules` - (Optional) Ordered list of rules applied to connections from policy endpoints.. See [Egress Rules ](#egress-rules) below for details.
 
-`endpoint` - (Optional) Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.. See [Endpoint ](#endpoint) below for details.
+`endpoint` - (Required) Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.. See [Endpoint ](#endpoint) below for details.
 
 `ingress_rules` - (Optional) Ordered list of rules applied to connections to policy endpoints.. See [Ingress Rules ](#ingress-rules) below for details.
 

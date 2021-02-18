@@ -51,11 +51,13 @@ func resourceVolterraProtocolPolicer() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"protocol_policer": {
@@ -220,6 +222,7 @@ func resourceVolterraProtocolPolicerCreate(d *schema.ResourceData, meta interfac
 			v.(string)
 	}
 
+	//protocol_policer
 	if v, ok := d.GetOk("protocol_policer"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -227,7 +230,6 @@ func resourceVolterraProtocolPolicerCreate(d *schema.ResourceData, meta interfac
 		createSpec.ProtocolPolicer = protocolPolicer
 		for i, set := range sl {
 			protocolPolicer[i] = &ves_io_schema_protocol_policer.ProtocolPolicerType{}
-
 			protocolPolicerMapStrToI := set.(map[string]interface{})
 
 			if v, ok := protocolPolicerMapStrToI["policer"]; ok && !isIntfNil(v) {
@@ -268,7 +270,6 @@ func resourceVolterraProtocolPolicerCreate(d *schema.ResourceData, meta interfac
 				protocol := &ves_io_schema_protocol_policer.ProtocolType{}
 				protocolPolicer[i].Protocol = protocol
 				for _, set := range sl {
-
 					protocolMapStrToI := set.(map[string]interface{})
 
 					typeTypeFound := false
@@ -448,7 +449,6 @@ func resourceVolterraProtocolPolicerUpdate(d *schema.ResourceData, meta interfac
 		updateSpec.ProtocolPolicer = protocolPolicer
 		for i, set := range sl {
 			protocolPolicer[i] = &ves_io_schema_protocol_policer.ProtocolPolicerType{}
-
 			protocolPolicerMapStrToI := set.(map[string]interface{})
 
 			if v, ok := protocolPolicerMapStrToI["policer"]; ok && !isIntfNil(v) {
@@ -489,7 +489,6 @@ func resourceVolterraProtocolPolicerUpdate(d *schema.ResourceData, meta interfac
 				protocol := &ves_io_schema_protocol_policer.ProtocolType{}
 				protocolPolicer[i].Protocol = protocol
 				for _, set := range sl {
-
 					protocolMapStrToI := set.(map[string]interface{})
 
 					typeTypeFound := false

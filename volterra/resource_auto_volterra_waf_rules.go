@@ -52,11 +52,13 @@ func resourceVolterraWafRules() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"anomaly_score_threshold": {
@@ -145,24 +147,28 @@ func resourceVolterraWafRulesCreate(d *schema.ResourceData, meta interface{}) er
 			v.(string)
 	}
 
+	//anomaly_score_threshold
 	if v, ok := d.GetOk("anomaly_score_threshold"); ok && !isIntfNil(v) {
 
 		createSpec.AnomalyScoreThreshold =
 			uint32(v.(int))
 	}
 
+	//mode
 	if v, ok := d.GetOk("mode"); ok && !isIntfNil(v) {
 
 		createSpec.Mode = ves_io_schema.WafModeType(ves_io_schema.WafModeType_value[v.(string)])
 
 	}
 
+	//paranoia_level
 	if v, ok := d.GetOk("paranoia_level"); ok && !isIntfNil(v) {
 
 		createSpec.ParanoiaLevel =
 			uint32(v.(int))
 	}
 
+	//rule_ids
 	if v, ok := d.GetOk("rule_ids"); ok && !isIntfNil(v) {
 
 		rule_idsList := []ves_io_schema_waf_rule_list.WafRuleID{}
@@ -173,6 +179,7 @@ func resourceVolterraWafRulesCreate(d *schema.ResourceData, meta interface{}) er
 
 	}
 
+	//rule_list_type
 	if v, ok := d.GetOk("rule_list_type"); ok && !isIntfNil(v) {
 
 		createSpec.RuleListType = ves_io_schema_waf_rules.RuleModeType(ves_io_schema_waf_rules.RuleModeType_value[v.(string)])

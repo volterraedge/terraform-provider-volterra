@@ -454,6 +454,7 @@ type OpenebsMayastorPoolType struct {
 	// Mayastor Pool Name
 	//
 	// x-displayName: "Mayastor Pool Name"
+	// x-example: "maya-pool-01"
 	// x-required
 	// Enter Mayastor Pool Name
 	PoolName string `protobuf:"bytes,1,opt,name=pool_name,json=poolName,proto3" json:"pool_name,omitempty"`
@@ -597,8 +598,7 @@ type StorageDeviceDellIsilonF800Type_ApiServerIpAddress struct {
 
 func (*StorageDeviceDellIsilonF800Type_SecureNetwork) isStorageDeviceDellIsilonF800Type_HttpsChoice() {
 }
-func (*StorageDeviceDellIsilonF800Type_TrustedCaUrl) isStorageDeviceDellIsilonF800Type_HttpsChoice() {
-}
+func (*StorageDeviceDellIsilonF800Type_TrustedCaUrl) isStorageDeviceDellIsilonF800Type_HttpsChoice() {}
 func (*StorageDeviceDellIsilonF800Type_ApiServerName) isStorageDeviceDellIsilonF800Type_AddressChoice() {
 }
 func (*StorageDeviceDellIsilonF800Type_ApiServerIpAddress) isStorageDeviceDellIsilonF800Type_AddressChoice() {
@@ -3029,11 +3029,9 @@ type FleetStorageDeviceListType struct {
 	StorageDevices []*FleetStorageDeviceType `protobuf:"bytes,1,rep,name=storage_devices,json=storageDevices" json:"storage_devices,omitempty"`
 }
 
-func (m *FleetStorageDeviceListType) Reset()      { *m = FleetStorageDeviceListType{} }
-func (*FleetStorageDeviceListType) ProtoMessage() {}
-func (*FleetStorageDeviceListType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{22}
-}
+func (m *FleetStorageDeviceListType) Reset()                    { *m = FleetStorageDeviceListType{} }
+func (*FleetStorageDeviceListType) ProtoMessage()               {}
+func (*FleetStorageDeviceListType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{22} }
 
 func (m *FleetStorageDeviceListType) GetStorageDevices() []*FleetStorageDeviceType {
 	if m != nil {

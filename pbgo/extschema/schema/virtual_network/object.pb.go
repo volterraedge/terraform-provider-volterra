@@ -23,6 +23,12 @@
 		ListResponseItem
 		ListResponse
 		DeleteRequest
+		VoltADNPrivateNetworkReInfoType
+		VoltADNPrivateNetworkTenantInfoType
+		DNSServersList
+		VoltADNPrivateNetworkType
+		Srv6NetworkNsParametersType
+		PerSiteSrv6NetworkType
 		NextHopInterfaceList
 		StaticRouteViewType
 		ActivePBRPoliciesType

@@ -51,11 +51,13 @@ func resourceVolterraCluster() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"circuit_breaker": {
@@ -570,13 +572,13 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 			v.(string)
 	}
 
+	//circuit_breaker
 	if v, ok := d.GetOk("circuit_breaker"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		circuitBreaker := &ves_io_schema_cluster.CircuitBreaker{}
 		createSpec.CircuitBreaker = circuitBreaker
 		for _, set := range sl {
-
 			circuitBreakerMapStrToI := set.(map[string]interface{})
 
 			if w, ok := circuitBreakerMapStrToI["connection_limit"]; ok && !isIntfNil(w) {
@@ -605,12 +607,14 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 	}
 
+	//connection_timeout
 	if v, ok := d.GetOk("connection_timeout"); ok && !isIntfNil(v) {
 
 		createSpec.ConnectionTimeout =
 			uint32(v.(int))
 	}
 
+	//default_subset
 	if v, ok := d.GetOk("default_subset"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -620,12 +624,14 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 		createSpec.DefaultSubset = ms
 	}
 
+	//endpoint_selection
 	if v, ok := d.GetOk("endpoint_selection"); ok && !isIntfNil(v) {
 
 		createSpec.EndpointSelection = ves_io_schema_cluster.EndpointSelectionPolicy(ves_io_schema_cluster.EndpointSelectionPolicy_value[v.(string)])
 
 	}
 
+	//endpoint_subsets
 	if v, ok := d.GetOk("endpoint_subsets"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -633,7 +639,6 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 		createSpec.EndpointSubsets = endpointSubsets
 		for i, set := range sl {
 			endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
-
 			endpointSubsetsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := endpointSubsetsMapStrToI["keys"]; ok && !isIntfNil(w) {
@@ -648,6 +653,7 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 	}
 
+	//endpoints
 	if v, ok := d.GetOk("endpoints"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -680,12 +686,14 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 	}
 
+	//fallback_policy
 	if v, ok := d.GetOk("fallback_policy"); ok && !isIntfNil(v) {
 
 		createSpec.FallbackPolicy = ves_io_schema_cluster.SubsetFallbackPolicy(ves_io_schema_cluster.SubsetFallbackPolicy_value[v.(string)])
 
 	}
 
+	//health_checks
 	if v, ok := d.GetOk("health_checks"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -718,13 +726,13 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 	}
 
+	//http2_options
 	if v, ok := d.GetOk("http2_options"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		http2Options := &ves_io_schema_cluster.Http2ProtocolOptions{}
 		createSpec.Http2Options = http2Options
 		for _, set := range sl {
-
 			http2OptionsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := http2OptionsMapStrToI["enabled"]; ok && !isIntfNil(w) {
@@ -735,25 +743,27 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 	}
 
+	//http_idle_timeout
 	if v, ok := d.GetOk("http_idle_timeout"); ok && !isIntfNil(v) {
 
 		createSpec.HttpIdleTimeout =
 			uint32(v.(int))
 	}
 
+	//loadbalancer_algorithm
 	if v, ok := d.GetOk("loadbalancer_algorithm"); ok && !isIntfNil(v) {
 
 		createSpec.LoadbalancerAlgorithm = ves_io_schema_cluster.LoadbalancerAlgorithm(ves_io_schema_cluster.LoadbalancerAlgorithm_value[v.(string)])
 
 	}
 
+	//outlier_detection
 	if v, ok := d.GetOk("outlier_detection"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		outlierDetection := &ves_io_schema_cluster.OutlierDetectionType{}
 		createSpec.OutlierDetection = outlierDetection
 		for _, set := range sl {
-
 			outlierDetectionMapStrToI := set.(map[string]interface{})
 
 			if w, ok := outlierDetectionMapStrToI["base_ejection_time"]; ok && !isIntfNil(w) {
@@ -779,6 +789,8 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 		}
 
 	}
+
+	//panic_threshold_type
 
 	panicThresholdTypeTypeFound := false
 
@@ -806,13 +818,13 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 	}
 
+	//tls_parameters
 	if v, ok := d.GetOk("tls_parameters"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		tlsParameters := &ves_io_schema.UpstreamTlsParamsType{}
 		createSpec.TlsParameters = tlsParameters
 		for _, set := range sl {
-
 			tlsParametersMapStrToI := set.(map[string]interface{})
 
 			if v, ok := tlsParametersMapStrToI["common_params"]; ok && !isIntfNil(v) {
@@ -821,7 +833,6 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 				commonParams := &ves_io_schema.TlsParamsType{}
 				tlsParameters.CommonParams = commonParams
 				for _, set := range sl {
-
 					commonParamsMapStrToI := set.(map[string]interface{})
 
 					if w, ok := commonParamsMapStrToI["cipher_suites"]; ok && !isIntfNil(w) {
@@ -851,7 +862,6 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 						commonParams.TlsCertificates = tlsCertificates
 						for i, set := range sl {
 							tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
-
 							tlsCertificatesMapStrToI := set.(map[string]interface{})
 
 							if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
@@ -868,7 +878,6 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 								privateKey := &ves_io_schema.SecretType{}
 								tlsCertificates[i].PrivateKey = privateKey
 								for _, set := range sl {
-
 									privateKeyMapStrToI := set.(map[string]interface{})
 
 									if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -877,7 +886,6 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 										privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
-
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1038,7 +1046,6 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 						validationParams := &ves_io_schema.TlsValidationParamsType{}
 						commonParams.ValidationParams = validationParams
 						for _, set := range sl {
-
 							validationParamsMapStrToI := set.(map[string]interface{})
 
 							if w, ok := validationParamsMapStrToI["skip_hostname_verification"]; ok && !isIntfNil(w) {
@@ -1214,7 +1221,6 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 		circuitBreaker := &ves_io_schema_cluster.CircuitBreaker{}
 		updateSpec.CircuitBreaker = circuitBreaker
 		for _, set := range sl {
-
 			circuitBreakerMapStrToI := set.(map[string]interface{})
 
 			if w, ok := circuitBreakerMapStrToI["connection_limit"]; ok && !isIntfNil(w) {
@@ -1271,7 +1277,6 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 		updateSpec.EndpointSubsets = endpointSubsets
 		for i, set := range sl {
 			endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
-
 			endpointSubsetsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := endpointSubsetsMapStrToI["keys"]; ok && !isIntfNil(w) {
@@ -1362,7 +1367,6 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 		http2Options := &ves_io_schema_cluster.Http2ProtocolOptions{}
 		updateSpec.Http2Options = http2Options
 		for _, set := range sl {
-
 			http2OptionsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := http2OptionsMapStrToI["enabled"]; ok && !isIntfNil(w) {
@@ -1391,7 +1395,6 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 		outlierDetection := &ves_io_schema_cluster.OutlierDetectionType{}
 		updateSpec.OutlierDetection = outlierDetection
 		for _, set := range sl {
-
 			outlierDetectionMapStrToI := set.(map[string]interface{})
 
 			if w, ok := outlierDetectionMapStrToI["base_ejection_time"]; ok && !isIntfNil(w) {
@@ -1450,7 +1453,6 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 		tlsParameters := &ves_io_schema.UpstreamTlsParamsType{}
 		updateSpec.TlsParameters = tlsParameters
 		for _, set := range sl {
-
 			tlsParametersMapStrToI := set.(map[string]interface{})
 
 			if v, ok := tlsParametersMapStrToI["common_params"]; ok && !isIntfNil(v) {
@@ -1459,7 +1461,6 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 				commonParams := &ves_io_schema.TlsParamsType{}
 				tlsParameters.CommonParams = commonParams
 				for _, set := range sl {
-
 					commonParamsMapStrToI := set.(map[string]interface{})
 
 					if w, ok := commonParamsMapStrToI["cipher_suites"]; ok && !isIntfNil(w) {
@@ -1489,7 +1490,6 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 						commonParams.TlsCertificates = tlsCertificates
 						for i, set := range sl {
 							tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
-
 							tlsCertificatesMapStrToI := set.(map[string]interface{})
 
 							if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
@@ -1506,7 +1506,6 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 								privateKey := &ves_io_schema.SecretType{}
 								tlsCertificates[i].PrivateKey = privateKey
 								for _, set := range sl {
-
 									privateKeyMapStrToI := set.(map[string]interface{})
 
 									if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1515,7 +1514,6 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 										privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
-
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1676,7 +1674,6 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 						validationParams := &ves_io_schema.TlsValidationParamsType{}
 						commonParams.ValidationParams = validationParams
 						for _, set := range sl {
-
 							validationParamsMapStrToI := set.(map[string]interface{})
 
 							if w, ok := validationParamsMapStrToI["skip_hostname_verification"]; ok && !isIntfNil(w) {

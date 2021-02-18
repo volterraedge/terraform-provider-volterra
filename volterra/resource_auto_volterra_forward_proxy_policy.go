@@ -53,11 +53,13 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"any_proxy": {
@@ -920,6 +922,8 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 			v.(string)
 	}
 
+	//proxy_choice
+
 	proxyChoiceTypeFound := false
 
 	if v, ok := d.GetOk("any_proxy"); ok && !proxyChoiceTypeFound {
@@ -1001,6 +1005,8 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 	}
 
+	//rule_choice
+
 	ruleChoiceTypeFound := false
 
 	if v, ok := d.GetOk("allow_all"); ok && !ruleChoiceTypeFound {
@@ -1071,7 +1077,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 				ruleChoiceInt.AllowList.DestList = destList
 				for i, set := range sl {
 					destList[i] = &ves_io_schema.L4DestType{}
-
 					destListMapStrToI := set.(map[string]interface{})
 
 					if w, ok := destListMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
@@ -1097,7 +1102,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 				ruleChoiceInt.AllowList.HttpList = httpList
 				for i, set := range sl {
 					httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
-
 					httpListMapStrToI := set.(map[string]interface{})
 
 					domainChoiceTypeFound := false
@@ -1192,7 +1196,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 				metadata := &ves_io_schema.MessageMetaType{}
 				ruleChoiceInt.AllowList.Metadata = metadata
 				for _, set := range sl {
-
 					metadataMapStrToI := set.(map[string]interface{})
 
 					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
@@ -1228,7 +1231,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 				ruleChoiceInt.AllowList.TlsList = tlsList
 				for i, set := range sl {
 					tlsList[i] = &ves_io_schema.DomainType{}
-
 					tlsListMapStrToI := set.(map[string]interface{})
 
 					domainChoiceTypeFound := false
@@ -1330,7 +1332,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 				ruleChoiceInt.DenyList.DestList = destList
 				for i, set := range sl {
 					destList[i] = &ves_io_schema.L4DestType{}
-
 					destListMapStrToI := set.(map[string]interface{})
 
 					if w, ok := destListMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
@@ -1356,7 +1357,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 				ruleChoiceInt.DenyList.HttpList = httpList
 				for i, set := range sl {
 					httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
-
 					httpListMapStrToI := set.(map[string]interface{})
 
 					domainChoiceTypeFound := false
@@ -1451,7 +1451,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 				metadata := &ves_io_schema.MessageMetaType{}
 				ruleChoiceInt.DenyList.Metadata = metadata
 				for _, set := range sl {
-
 					metadataMapStrToI := set.(map[string]interface{})
 
 					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
@@ -1487,7 +1486,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 				ruleChoiceInt.DenyList.TlsList = tlsList
 				for i, set := range sl {
 					tlsList[i] = &ves_io_schema.DomainType{}
-
 					tlsListMapStrToI := set.(map[string]interface{})
 
 					domainChoiceTypeFound := false
@@ -1551,7 +1549,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 				ruleChoiceInt.RuleList.Rules = rules
 				for i, set := range sl {
 					rules[i] = &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType{}
-
 					rulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := rulesMapStrToI["action"]; ok && !isIntfNil(v) {
@@ -1728,7 +1725,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 								destinationChoiceInt.HttpList.HttpList = httpList
 								for i, set := range sl {
 									httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
-
 									httpListMapStrToI := set.(map[string]interface{})
 
 									domainChoiceTypeFound := false
@@ -1839,7 +1835,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 								destinationChoiceInt.TlsList.TlsList = tlsList
 								for i, set := range sl {
 									tlsList[i] = &ves_io_schema.DomainType{}
-
 									tlsListMapStrToI := set.(map[string]interface{})
 
 									domainChoiceTypeFound := false
@@ -1935,7 +1930,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 						metadata := &ves_io_schema.MessageMetaType{}
 						rules[i].Metadata = metadata
 						for _, set := range sl {
-
 							metadataMapStrToI := set.(map[string]interface{})
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
@@ -2366,7 +2360,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 				ruleChoiceInt.AllowList.DestList = destList
 				for i, set := range sl {
 					destList[i] = &ves_io_schema.L4DestType{}
-
 					destListMapStrToI := set.(map[string]interface{})
 
 					if w, ok := destListMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
@@ -2392,7 +2385,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 				ruleChoiceInt.AllowList.HttpList = httpList
 				for i, set := range sl {
 					httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
-
 					httpListMapStrToI := set.(map[string]interface{})
 
 					domainChoiceTypeFound := false
@@ -2487,7 +2479,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 				metadata := &ves_io_schema.MessageMetaType{}
 				ruleChoiceInt.AllowList.Metadata = metadata
 				for _, set := range sl {
-
 					metadataMapStrToI := set.(map[string]interface{})
 
 					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
@@ -2523,7 +2514,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 				ruleChoiceInt.AllowList.TlsList = tlsList
 				for i, set := range sl {
 					tlsList[i] = &ves_io_schema.DomainType{}
-
 					tlsListMapStrToI := set.(map[string]interface{})
 
 					domainChoiceTypeFound := false
@@ -2625,7 +2615,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 				ruleChoiceInt.DenyList.DestList = destList
 				for i, set := range sl {
 					destList[i] = &ves_io_schema.L4DestType{}
-
 					destListMapStrToI := set.(map[string]interface{})
 
 					if w, ok := destListMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
@@ -2651,7 +2640,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 				ruleChoiceInt.DenyList.HttpList = httpList
 				for i, set := range sl {
 					httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
-
 					httpListMapStrToI := set.(map[string]interface{})
 
 					domainChoiceTypeFound := false
@@ -2746,7 +2734,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 				metadata := &ves_io_schema.MessageMetaType{}
 				ruleChoiceInt.DenyList.Metadata = metadata
 				for _, set := range sl {
-
 					metadataMapStrToI := set.(map[string]interface{})
 
 					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
@@ -2782,7 +2769,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 				ruleChoiceInt.DenyList.TlsList = tlsList
 				for i, set := range sl {
 					tlsList[i] = &ves_io_schema.DomainType{}
-
 					tlsListMapStrToI := set.(map[string]interface{})
 
 					domainChoiceTypeFound := false
@@ -2846,7 +2832,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 				ruleChoiceInt.RuleList.Rules = rules
 				for i, set := range sl {
 					rules[i] = &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType{}
-
 					rulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := rulesMapStrToI["action"]; ok && !isIntfNil(v) {
@@ -3023,7 +3008,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 								destinationChoiceInt.HttpList.HttpList = httpList
 								for i, set := range sl {
 									httpList[i] = &ves_io_schema_views_forward_proxy_policy.URLType{}
-
 									httpListMapStrToI := set.(map[string]interface{})
 
 									domainChoiceTypeFound := false
@@ -3134,7 +3118,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 								destinationChoiceInt.TlsList.TlsList = tlsList
 								for i, set := range sl {
 									tlsList[i] = &ves_io_schema.DomainType{}
-
 									tlsListMapStrToI := set.(map[string]interface{})
 
 									domainChoiceTypeFound := false
@@ -3230,7 +3213,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 						metadata := &ves_io_schema.MessageMetaType{}
 						rules[i].Metadata = metadata
 						for _, set := range sl {
-
 							metadataMapStrToI := set.(map[string]interface{})
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {

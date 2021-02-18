@@ -26,6 +26,8 @@ It has these top-level messages:
 	OriginServerPublicName
 	OriginServerPrivateIP
 	OriginServerPrivateName
+	OriginServerVoltADNPrivateIP
+	OriginServerVoltADNPrivateName
 	OriginServerK8SService
 	OriginServerConsulService
 	OriginServerCustomEndpoint

@@ -51,11 +51,13 @@ func resourceVolterraAppType() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"business_logic_markup_setting": {
@@ -151,13 +153,13 @@ func resourceVolterraAppTypeCreate(d *schema.ResourceData, meta interface{}) err
 			v.(string)
 	}
 
+	//business_logic_markup_setting
 	if v, ok := d.GetOk("business_logic_markup_setting"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		businessLogicMarkupSetting := &ves_io_schema_app_type.BusinessLogicMarkupSetting{}
 		createSpec.BusinessLogicMarkupSetting = businessLogicMarkupSetting
 		for _, set := range sl {
-
 			businessLogicMarkupSettingMapStrToI := set.(map[string]interface{})
 
 			learnFromRedirectTrafficTypeFound := false
@@ -190,6 +192,7 @@ func resourceVolterraAppTypeCreate(d *schema.ResourceData, meta interface{}) err
 
 	}
 
+	//features
 	if v, ok := d.GetOk("features"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -197,7 +200,6 @@ func resourceVolterraAppTypeCreate(d *schema.ResourceData, meta interface{}) err
 		createSpec.Features = features
 		for i, set := range sl {
 			features[i] = &ves_io_schema_app_type.Feature{}
-
 			featuresMapStrToI := set.(map[string]interface{})
 
 			if v, ok := featuresMapStrToI["type"]; ok && !isIntfNil(v) {
@@ -314,7 +316,6 @@ func resourceVolterraAppTypeUpdate(d *schema.ResourceData, meta interface{}) err
 		businessLogicMarkupSetting := &ves_io_schema_app_type.BusinessLogicMarkupSetting{}
 		updateSpec.BusinessLogicMarkupSetting = businessLogicMarkupSetting
 		for _, set := range sl {
-
 			businessLogicMarkupSettingMapStrToI := set.(map[string]interface{})
 
 			learnFromRedirectTrafficTypeFound := false
@@ -354,7 +355,6 @@ func resourceVolterraAppTypeUpdate(d *schema.ResourceData, meta interface{}) err
 		updateSpec.Features = features
 		for i, set := range sl {
 			features[i] = &ves_io_schema_app_type.Feature{}
-
 			featuresMapStrToI := set.(map[string]interface{})
 
 			if v, ok := featuresMapStrToI["type"]; ok && !isIntfNil(v) {

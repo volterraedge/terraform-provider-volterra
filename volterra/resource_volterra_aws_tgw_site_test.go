@@ -82,9 +82,11 @@ func testAWSTGWSiteConfig(resourceName, name string) string {
 				  system_generated = true
 			  }
 			}
+			logs_streaming_disabled = true
 			tgw_security {
 			  no_network_policy = true
 			  no_forward_proxy = true
+			  no_east_west_policy = true
 			}
 			vn_config {
 			  no_global_network = true

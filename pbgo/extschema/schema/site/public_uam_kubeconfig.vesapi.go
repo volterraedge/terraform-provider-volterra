@@ -37,12 +37,12 @@ type UamKubeConfigAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
-func (c *UamKubeConfigAPIGrpcClient) doRPCGetGlobalKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &GetKubeConfigReq{}
+func (c *UamKubeConfigAPIGrpcClient) doRPCCreateGlobalKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &CreateKubeConfigReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.GetKubeConfigReq", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.CreateKubeConfigReq", yamlReq)
 	}
-	rsp, err := c.grpcClient.GetGlobalKubeConfig(ctx, req, opts...)
+	rsp, err := c.grpcClient.CreateGlobalKubeConfig(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -73,6 +73,9 @@ func (c *UamKubeConfigAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts
 	if err != nil {
 		return nil, errors.Wrap(err, "Doing custom RPC using GRPC")
 	}
+	if cco.OutCallResponse != nil {
+		cco.OutCallResponse.ProtoMsg = rsp
+	}
 	return rsp, nil
 }
 
@@ -82,7 +85,7 @@ func NewUamKubeConfigAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewUamKubeConfigAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
-	rpcFns["GetGlobalKubeConfig"] = ccl.doRPCGetGlobalKubeConfig
+	rpcFns["CreateGlobalKubeConfig"] = ccl.doRPCCreateGlobalKubeConfig
 
 	rpcFns["ListGlobalKubeConfig"] = ccl.doRPCListGlobalKubeConfig
 
@@ -99,16 +102,16 @@ type UamKubeConfigAPIRestClient struct {
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
 }
 
-func (c *UamKubeConfigAPIRestClient) doRPCGetGlobalKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+func (c *UamKubeConfigAPIRestClient) doRPCCreateGlobalKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &GetKubeConfigReq{}
+	req := &CreateKubeConfigReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.GetKubeConfigReq: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.CreateKubeConfigReq: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -167,6 +170,10 @@ func (c *UamKubeConfigAPIRestClient) doRPCGetGlobalKubeConfig(ctx context.Contex
 	pbRsp := &google_api.HttpBody{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *google.api.HttpBody", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
 	}
 	return pbRsp, nil
 }
@@ -240,6 +247,10 @@ func (c *UamKubeConfigAPIRestClient) doRPCListGlobalKubeConfig(ctx context.Conte
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.site.ListKubeConfigRsp", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -267,7 +278,7 @@ func NewUamKubeConfigAPIRestClient(baseURL string, hc http.Client) server.Custom
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
-	rpcFns["GetGlobalKubeConfig"] = ccl.doRPCGetGlobalKubeConfig
+	rpcFns["CreateGlobalKubeConfig"] = ccl.doRPCCreateGlobalKubeConfig
 
 	rpcFns["ListGlobalKubeConfig"] = ccl.doRPCListGlobalKubeConfig
 
@@ -283,7 +294,7 @@ type UamKubeConfigAPIInprocClient struct {
 	svc svcfw.Service
 }
 
-func (c *UamKubeConfigAPIInprocClient) GetGlobalKubeConfig(ctx context.Context, in *GetKubeConfigReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
+func (c *UamKubeConfigAPIInprocClient) CreateGlobalKubeConfig(ctx context.Context, in *CreateKubeConfigReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.site.UamKubeConfigAPI")
 	cah, ok := ah.(UamKubeConfigAPIServer)
 	if !ok {
@@ -295,12 +306,12 @@ func (c *UamKubeConfigAPIInprocClient) GetGlobalKubeConfig(ctx context.Context, 
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.GetKubeConfigReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.CreateKubeConfigReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
-		userMsg := "The 'UamKubeConfigAPI.GetGlobalKubeConfig' operation on 'site'"
+		userMsg := "The 'UamKubeConfigAPI.CreateGlobalKubeConfig' operation on 'site'"
 		if err == nil {
 			userMsg += " was successfully performed."
 		} else {
@@ -310,7 +321,7 @@ func (c *UamKubeConfigAPIInprocClient) GetGlobalKubeConfig(ctx context.Context, 
 	}()
 
 	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.UamKubeConfigAPI.GetGlobalKubeConfig"); rvFn != nil {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.UamKubeConfigAPI.CreateGlobalKubeConfig"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -318,7 +329,7 @@ func (c *UamKubeConfigAPIInprocClient) GetGlobalKubeConfig(ctx context.Context, 
 		}
 	}
 
-	rsp, err = cah.GetGlobalKubeConfig(ctx, in)
+	rsp, err = cah.CreateGlobalKubeConfig(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
@@ -389,8 +400,8 @@ func RegisterGwUamKubeConfigAPIHandler(ctx context.Context, mux *runtime.ServeMu
 var UamKubeConfigAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
-        "title": "Site upgrade custom API",
-        "description": "These API provide a way to upgrade site's volterra software and OS",
+        "title": "Site UAM KubeConfig custom API",
+        "description": "API for manage kube configs.",
         "version": "version not set"
     },
     "schemes": [
@@ -406,10 +417,10 @@ var UamKubeConfigAPISwaggerJSON string = `{
     "tags": null,
     "paths": {
         "/public/namespaces/{namespace}/sites/{name}/global-kubeconfig": {
-            "get": {
-                "summary": "Get K8s Cluster Global Kube Config",
+            "post": {
+                "summary": "Create K8s Cluster Global Kube Config",
                 "description": "Down load kube config for global k8s cluster access",
-                "operationId": "ves.io.schema.site.UamKubeConfigAPI.GetGlobalKubeConfig",
+                "operationId": "ves.io.schema.site.UamKubeConfigAPI.CreateGlobalKubeConfig",
                 "responses": {
                     "200": {
                         "description": "",
@@ -478,6 +489,14 @@ var UamKubeConfigAPISwaggerJSON string = `{
                         "in": "path",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/siteCreateKubeConfigReq"
+                        }
                     }
                 ],
                 "tags": [
@@ -485,17 +504,17 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-UamKubeConfigAPI-GetGlobalKubeConfig"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-UamKubeConfigAPI-CreateGlobalKubeConfig"
                 },
-                "x-ves-proto-rpc": "ves.io.schema.site.UamKubeConfigAPI.GetGlobalKubeConfig"
+                "x-ves-proto-rpc": "ves.io.schema.site.UamKubeConfigAPI.CreateGlobalKubeConfig"
             },
-            "x-displayname": "Site Upgrade",
+            "x-displayname": "Global KubeConfig",
             "x-ves-proto-service": "ves.io.schema.site.UamKubeConfigAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
         "/public/namespaces/{namespace}/sites/{name}/global-kubeconfigs": {
             "get": {
-                "summary": "List Global Kube Configs",
+                "summary": "List Local Kube Configs",
                 "description": "Returns list of all global active kubeconfig minted for this site",
                 "operationId": "ves.io.schema.site.UamKubeConfigAPI.ListGlobalKubeConfig",
                 "responses": {
@@ -577,7 +596,7 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.UamKubeConfigAPI.ListGlobalKubeConfig"
             },
-            "x-displayname": "Site Upgrade",
+            "x-displayname": "Global KubeConfig",
             "x-ves-proto-service": "ves.io.schema.site.UamKubeConfigAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
@@ -617,6 +636,31 @@ var UamKubeConfigAPISwaggerJSON string = `{
                     "type": "string",
                     "description": "Must be a valid serialized protocol buffer of the above specified type.",
                     "format": "byte"
+                }
+            }
+        },
+        "siteCreateKubeConfigReq": {
+            "type": "object",
+            "description": "Create kubeconfig request parameters",
+            "title": "Create Kube Config Request",
+            "x-displayname": "Create Kube Config Request",
+            "x-ves-proto-message": "ves.io.schema.site.CreateKubeConfigReq",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " K8s Cluster name\n\nExample: - \"ce398\"-\nRequired: YES",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "ce398",
+                    "x-ves-required": "true"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " K8s Cluster namespace\n\nExample: - \"system\"-\nRequired: YES",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "system",
+                    "x-ves-required": "true"
                 }
             }
         },

@@ -20,8 +20,8 @@ resource "volterra_virtual_network" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "site_local_network site_local_inside_network legacy_type global_network" must be set
-  site_local_inside_network = true
+  // One of the arguments from this list "srv6_network global_network site_local_network site_local_inside_network legacy_type" must be set
+  site_local_network = true
 }
 
 ```
@@ -53,11 +53,17 @@ Argument Reference
 
 `site_local_network` - (Optional) Site local network, also known as outside network (bool).
 
+`srv6_network` - (Optional) Configure a per site srv6 network. See [Srv6 Network ](#srv6-network) below for details.
+
 `static_routes` - (Optional) List of static routes on the virtual network. See [Static Routes ](#static-routes) below for details.
 
 ### Default Gateway
 
 Traffic matching the ip prefixes is sent to default gateway .
+
+### No Namespace Network
+
+Namespace network is not connected to this network.
 
 ### Ref
 
@@ -68,6 +74,20 @@ name - (Required) then name will hold the referred object's(e.g. route's) name. 
 namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
+
+### Srv6 Network
+
+Configure a per site srv6 network.
+
+`no_namespace_network` - (Optional) Namespace network is not connected to this network (bool).
+
+`srv6_network_ns_params` - (Optional) Name of namespace whose network is connected. See [Srv6 Network Ns Params ](#srv6-network-ns-params) below for details.
+
+### Srv6 Network Ns Params
+
+Name of namespace whose network is connected.
+
+`namespace` - (Optional) Name of namespace that is connected to srv6 Network (`String`).
 
 ### Static Routes
 

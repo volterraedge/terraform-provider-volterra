@@ -51,11 +51,13 @@ func resourceVolterraMaliciousUserMitigation() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"captcha_challenge_settings": {
@@ -262,13 +264,13 @@ func resourceVolterraMaliciousUserMitigationCreate(d *schema.ResourceData, meta 
 			v.(string)
 	}
 
+	//captcha_challenge_settings
 	if v, ok := d.GetOk("captcha_challenge_settings"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		captchaChallengeSettings := &ves_io_schema_malicious_user_mitigation.CaptchaChallengeSettings{}
 		createSpec.CaptchaChallengeSettings = captchaChallengeSettings
 		for _, set := range sl {
-
 			captchaChallengeSettingsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := captchaChallengeSettingsMapStrToI["cookie_expiry"]; ok && !isIntfNil(w) {
@@ -283,13 +285,13 @@ func resourceVolterraMaliciousUserMitigationCreate(d *schema.ResourceData, meta 
 
 	}
 
+	//javascript_challenge_settings
 	if v, ok := d.GetOk("javascript_challenge_settings"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		javascriptChallengeSettings := &ves_io_schema_malicious_user_mitigation.JavascriptChallengeSettings{}
 		createSpec.JavascriptChallengeSettings = javascriptChallengeSettings
 		for _, set := range sl {
-
 			javascriptChallengeSettingsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := javascriptChallengeSettingsMapStrToI["cookie_expiry"]; ok && !isIntfNil(w) {
@@ -308,13 +310,13 @@ func resourceVolterraMaliciousUserMitigationCreate(d *schema.ResourceData, meta 
 
 	}
 
+	//mitigation_type
 	if v, ok := d.GetOk("mitigation_type"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		mitigationType := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationType{}
 		createSpec.MitigationType = mitigationType
 		for _, set := range sl {
-
 			mitigationTypeMapStrToI := set.(map[string]interface{})
 
 			if v, ok := mitigationTypeMapStrToI["rules"]; ok && !isIntfNil(v) {
@@ -324,7 +326,6 @@ func resourceVolterraMaliciousUserMitigationCreate(d *schema.ResourceData, meta 
 				mitigationType.Rules = rules
 				for i, set := range sl {
 					rules[i] = &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationRule{}
-
 					rulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := rulesMapStrToI["mitigation_action"]; ok && !isIntfNil(v) {
@@ -333,7 +334,6 @@ func resourceVolterraMaliciousUserMitigationCreate(d *schema.ResourceData, meta 
 						mitigationAction := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction{}
 						rules[i].MitigationAction = mitigationAction
 						for _, set := range sl {
-
 							mitigationActionMapStrToI := set.(map[string]interface{})
 
 							mitigationActionTypeFound := false
@@ -408,7 +408,6 @@ func resourceVolterraMaliciousUserMitigationCreate(d *schema.ResourceData, meta 
 						threatLevel := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel{}
 						rules[i].ThreatLevel = threatLevel
 						for _, set := range sl {
-
 							threatLevelMapStrToI := set.(map[string]interface{})
 
 							threatLevelTypeFound := false
@@ -461,13 +460,13 @@ func resourceVolterraMaliciousUserMitigationCreate(d *schema.ResourceData, meta 
 
 	}
 
+	//temporary_blocking_settings
 	if v, ok := d.GetOk("temporary_blocking_settings"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		temporaryBlockingSettings := &ves_io_schema_malicious_user_mitigation.TemporaryBlockingSettings{}
 		createSpec.TemporaryBlockingSettings = temporaryBlockingSettings
 		for _, set := range sl {
-
 			temporaryBlockingSettingsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := temporaryBlockingSettingsMapStrToI["custom_page"]; ok && !isIntfNil(w) {
@@ -582,7 +581,6 @@ func resourceVolterraMaliciousUserMitigationUpdate(d *schema.ResourceData, meta 
 		captchaChallengeSettings := &ves_io_schema_malicious_user_mitigation.CaptchaChallengeSettings{}
 		updateSpec.CaptchaChallengeSettings = captchaChallengeSettings
 		for _, set := range sl {
-
 			captchaChallengeSettingsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := captchaChallengeSettingsMapStrToI["cookie_expiry"]; ok && !isIntfNil(w) {
@@ -603,7 +601,6 @@ func resourceVolterraMaliciousUserMitigationUpdate(d *schema.ResourceData, meta 
 		javascriptChallengeSettings := &ves_io_schema_malicious_user_mitigation.JavascriptChallengeSettings{}
 		updateSpec.JavascriptChallengeSettings = javascriptChallengeSettings
 		for _, set := range sl {
-
 			javascriptChallengeSettingsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := javascriptChallengeSettingsMapStrToI["cookie_expiry"]; ok && !isIntfNil(w) {
@@ -628,7 +625,6 @@ func resourceVolterraMaliciousUserMitigationUpdate(d *schema.ResourceData, meta 
 		mitigationType := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationType{}
 		updateSpec.MitigationType = mitigationType
 		for _, set := range sl {
-
 			mitigationTypeMapStrToI := set.(map[string]interface{})
 
 			if v, ok := mitigationTypeMapStrToI["rules"]; ok && !isIntfNil(v) {
@@ -638,7 +634,6 @@ func resourceVolterraMaliciousUserMitigationUpdate(d *schema.ResourceData, meta 
 				mitigationType.Rules = rules
 				for i, set := range sl {
 					rules[i] = &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationRule{}
-
 					rulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := rulesMapStrToI["mitigation_action"]; ok && !isIntfNil(v) {
@@ -647,7 +642,6 @@ func resourceVolterraMaliciousUserMitigationUpdate(d *schema.ResourceData, meta 
 						mitigationAction := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction{}
 						rules[i].MitigationAction = mitigationAction
 						for _, set := range sl {
-
 							mitigationActionMapStrToI := set.(map[string]interface{})
 
 							mitigationActionTypeFound := false
@@ -722,7 +716,6 @@ func resourceVolterraMaliciousUserMitigationUpdate(d *schema.ResourceData, meta 
 						threatLevel := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel{}
 						rules[i].ThreatLevel = threatLevel
 						for _, set := range sl {
-
 							threatLevelMapStrToI := set.(map[string]interface{})
 
 							threatLevelTypeFound := false
@@ -781,7 +774,6 @@ func resourceVolterraMaliciousUserMitigationUpdate(d *schema.ResourceData, meta 
 		temporaryBlockingSettings := &ves_io_schema_malicious_user_mitigation.TemporaryBlockingSettings{}
 		updateSpec.TemporaryBlockingSettings = temporaryBlockingSettings
 		for _, set := range sl {
-
 			temporaryBlockingSettingsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := temporaryBlockingSettingsMapStrToI["custom_page"]; ok && !isIntfNil(w) {

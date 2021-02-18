@@ -1252,6 +1252,16 @@ func (v *ValidatePassport) ClusterSizeValidationRuleHandler(rules map[string]str
 	return validatorFn, nil
 }
 
+func (v *ValidatePassport) PrivateNetworkNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for private_network_name")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidatePassport) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*Passport)
 	if !ok {
@@ -1293,15 +1303,6 @@ func (v *ValidatePassport) Validate(ctx context.Context, pm interface{}, opts ..
 
 	}
 
-	if fv, exists := v.FldValidators["customer_route"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("customer_route"))
-		if err := fv(ctx, m.GetCustomerRoute(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["latitude"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("latitude"))
@@ -1320,19 +1321,10 @@ func (v *ValidatePassport) Validate(ctx context.Context, pm interface{}, opts ..
 
 	}
 
-	if fv, exists := v.FldValidators["private_default_gw"]; exists {
+	if fv, exists := v.FldValidators["private_network_name"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("private_default_gw"))
-		if err := fv(ctx, m.GetPrivateDefaultGw(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["private_vn_prefix"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("private_vn_prefix"))
-		if err := fv(ctx, m.GetPrivateVnPrefix(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("private_network_name"))
+		if err := fv(ctx, m.GetPrivateNetworkName(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1418,6 +1410,17 @@ var DefaultPassportValidator = func() *ValidatePassport {
 		panic(errMsg)
 	}
 	v.FldValidators["cluster_size"] = vFn
+
+	vrhPrivateNetworkName := v.PrivateNetworkNameValidationRuleHandler
+	rulesPrivateNetworkName := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "64",
+	}
+	vFn, err = vrhPrivateNetworkName(rulesPrivateNetworkName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Passport.private_network_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["private_network_name"] = vFn
 
 	return v
 }()

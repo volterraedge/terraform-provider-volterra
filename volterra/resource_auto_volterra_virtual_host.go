@@ -53,11 +53,13 @@ func resourceVolterraVirtualHost() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"add_location": {
@@ -986,6 +988,30 @@ func resourceVolterraVirtualHost() *schema.Resource {
 				},
 			},
 
+			"append_server_name": {
+
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+
+			"default_header": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"pass_through": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"server_name": {
+
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+
 			"temporary_user_blocking": {
 
 				Type:     schema.TypeSet,
@@ -1411,12 +1437,14 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 			v.(string)
 	}
 
+	//add_location
 	if v, ok := d.GetOk("add_location"); ok && !isIntfNil(v) {
 
 		createSpec.AddLocation =
 			v.(bool)
 	}
 
+	//advertise_policies
 	if v, ok := d.GetOk("advertise_policies"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -1448,6 +1476,8 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 		}
 
 	}
+
+	//authentication_choice
 
 	authenticationChoiceTypeFound := false
 
@@ -1536,7 +1566,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 								primKey := &ves_io_schema.SecretType{}
 								secretChoiceInt.AuthHmac.PrimKey = primKey
 								for _, set := range sl {
-
 									primKeyMapStrToI := set.(map[string]interface{})
 
 									if v, ok := primKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1545,7 +1574,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 										primKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
-
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1707,7 +1735,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 								secKey := &ves_io_schema.SecretType{}
 								secretChoiceInt.AuthHmac.SecKey = secKey
 								for _, set := range sl {
-
 									secKeyMapStrToI := set.(map[string]interface{})
 
 									if v, ok := secKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1716,7 +1743,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 										secKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
-
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1889,19 +1915,22 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 							if v, ok := cs["auth_hmac_kms"]; ok && !isIntfNil(v) {
 
+								sl := v.(*schema.Set).List()
 								authHmacKmsInt := &ves_io_schema_views.ObjectRefType{}
 								secretChoiceInt.KmsKeyHmac.AuthHmacKms = authHmacKmsInt
 
-								ahkMapToStrVal := v.(map[string]interface{})
-								if val, ok := ahkMapToStrVal["name"]; ok && !isIntfNil(v) {
-									authHmacKmsInt.Name = val.(string)
-								}
-								if val, ok := ahkMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-									authHmacKmsInt.Namespace = val.(string)
-								}
+								for _, set := range sl {
+									ahkMapToStrVal := set.(map[string]interface{})
+									if val, ok := ahkMapToStrVal["name"]; ok && !isIntfNil(v) {
+										authHmacKmsInt.Name = val.(string)
+									}
+									if val, ok := ahkMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										authHmacKmsInt.Namespace = val.(string)
+									}
 
-								if val, ok := ahkMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-									authHmacKmsInt.Tenant = val.(string)
+									if val, ok := ahkMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										authHmacKmsInt.Tenant = val.(string)
+									}
 								}
 
 							}
@@ -1972,13 +2001,13 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//buffer_policy
 	if v, ok := d.GetOk("buffer_policy"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		bufferPolicy := &ves_io_schema.BufferConfigType{}
 		createSpec.BufferPolicy = bufferPolicy
 		for _, set := range sl {
-
 			bufferPolicyMapStrToI := set.(map[string]interface{})
 
 			if w, ok := bufferPolicyMapStrToI["disabled"]; ok && !isIntfNil(w) {
@@ -1996,6 +2025,8 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 		}
 
 	}
+
+	//challenge_type
 
 	challengeTypeTypeFound := false
 
@@ -2076,13 +2107,13 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//compression_params
 	if v, ok := d.GetOk("compression_params"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		compressionParams := &ves_io_schema_virtual_host.CompressionType{}
 		createSpec.CompressionParams = compressionParams
 		for _, set := range sl {
-
 			compressionParamsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := compressionParamsMapStrToI["content_length"]; ok && !isIntfNil(w) {
@@ -2109,13 +2140,13 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//cors_policy
 	if v, ok := d.GetOk("cors_policy"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		corsPolicy := &ves_io_schema.CorsPolicy{}
 		createSpec.CorsPolicy = corsPolicy
 		for _, set := range sl {
-
 			corsPolicyMapStrToI := set.(map[string]interface{})
 
 			if w, ok := corsPolicyMapStrToI["allow_credentials"]; ok && !isIntfNil(w) {
@@ -2166,18 +2197,23 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//custom_errors
+
+	//disable_default_error_pages
 	if v, ok := d.GetOk("disable_default_error_pages"); ok && !isIntfNil(v) {
 
 		createSpec.DisableDefaultErrorPages =
 			v.(bool)
 	}
 
+	//disable_dns_resolve
 	if v, ok := d.GetOk("disable_dns_resolve"); ok && !isIntfNil(v) {
 
 		createSpec.DisableDnsResolve =
 			v.(bool)
 	}
 
+	//domains
 	if v, ok := d.GetOk("domains"); ok && !isIntfNil(v) {
 
 		ls := make([]string, len(v.([]interface{})))
@@ -2188,13 +2224,13 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//dynamic_reverse_proxy
 	if v, ok := d.GetOk("dynamic_reverse_proxy"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		dynamicReverseProxy := &ves_io_schema_virtual_host.DynamicReverseProxyType{}
 		createSpec.DynamicReverseProxy = dynamicReverseProxy
 		for _, set := range sl {
-
 			dynamicReverseProxyMapStrToI := set.(map[string]interface{})
 
 			if v, ok := dynamicReverseProxyMapStrToI["resolution_network"]; ok && !isIntfNil(v) {
@@ -2243,24 +2279,28 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//idle_timeout
 	if v, ok := d.GetOk("idle_timeout"); ok && !isIntfNil(v) {
 
 		createSpec.IdleTimeout =
 			uint32(v.(int))
 	}
 
+	//max_request_header_size
 	if v, ok := d.GetOk("max_request_header_size"); ok && !isIntfNil(v) {
 
 		createSpec.MaxRequestHeaderSize =
 			uint32(v.(int))
 	}
 
+	//proxy
 	if v, ok := d.GetOk("proxy"); ok && !isIntfNil(v) {
 
 		createSpec.Proxy = ves_io_schema_virtual_host.ProxyType(ves_io_schema_virtual_host.ProxyType_value[v.(string)])
 
 	}
 
+	//rate_limiter
 	if v, ok := d.GetOk("rate_limiter"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -2293,6 +2333,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//rate_limiter_allowed_prefixes
 	if v, ok := d.GetOk("rate_limiter_allowed_prefixes"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -2325,6 +2366,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//request_headers_to_add
 	if v, ok := d.GetOk("request_headers_to_add"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -2332,7 +2374,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 		createSpec.RequestHeadersToAdd = requestHeadersToAdd
 		for i, set := range sl {
 			requestHeadersToAdd[i] = &ves_io_schema.HeaderManipulationOptionType{}
-
 			requestHeadersToAddMapStrToI := set.(map[string]interface{})
 
 			if w, ok := requestHeadersToAddMapStrToI["append"]; ok && !isIntfNil(w) {
@@ -2351,6 +2392,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//request_headers_to_remove
 	if v, ok := d.GetOk("request_headers_to_remove"); ok && !isIntfNil(v) {
 
 		ls := make([]string, len(v.([]interface{})))
@@ -2361,6 +2403,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//response_headers_to_add
 	if v, ok := d.GetOk("response_headers_to_add"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -2368,7 +2411,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 		createSpec.ResponseHeadersToAdd = responseHeadersToAdd
 		for i, set := range sl {
 			responseHeadersToAdd[i] = &ves_io_schema.HeaderManipulationOptionType{}
-
 			responseHeadersToAddMapStrToI := set.(map[string]interface{})
 
 			if w, ok := responseHeadersToAddMapStrToI["append"]; ok && !isIntfNil(w) {
@@ -2387,6 +2429,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//response_headers_to_remove
 	if v, ok := d.GetOk("response_headers_to_remove"); ok && !isIntfNil(v) {
 
 		ls := make([]string, len(v.([]interface{})))
@@ -2397,13 +2440,13 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//retry_policy
 	if v, ok := d.GetOk("retry_policy"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		retryPolicy := &ves_io_schema.RetryPolicyType{}
 		createSpec.RetryPolicy = retryPolicy
 		for _, set := range sl {
-
 			retryPolicyMapStrToI := set.(map[string]interface{})
 
 			if v, ok := retryPolicyMapStrToI["back_off"]; ok && !isIntfNil(v) {
@@ -2412,7 +2455,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 				backOff := &ves_io_schema.RetryBackOff{}
 				retryPolicy.BackOff = backOff
 				for _, set := range sl {
-
 					backOffMapStrToI := set.(map[string]interface{})
 
 					if w, ok := backOffMapStrToI["base_interval"]; ok && !isIntfNil(w) {
@@ -2452,6 +2494,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//routes
 	if v, ok := d.GetOk("routes"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -2484,13 +2527,63 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//server_header_choice
+
+	serverHeaderChoiceTypeFound := false
+
+	if v, ok := d.GetOk("append_server_name"); ok && !serverHeaderChoiceTypeFound {
+
+		serverHeaderChoiceTypeFound = true
+		serverHeaderChoiceInt := &ves_io_schema_virtual_host.CreateSpecType_AppendServerName{}
+
+		createSpec.ServerHeaderChoice = serverHeaderChoiceInt
+
+		serverHeaderChoiceInt.AppendServerName = v.(string)
+
+	}
+
+	if v, ok := d.GetOk("default_header"); ok && !serverHeaderChoiceTypeFound {
+
+		serverHeaderChoiceTypeFound = true
+
+		if v.(bool) {
+			serverHeaderChoiceInt := &ves_io_schema_virtual_host.CreateSpecType_DefaultHeader{}
+			serverHeaderChoiceInt.DefaultHeader = &ves_io_schema.Empty{}
+			createSpec.ServerHeaderChoice = serverHeaderChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("pass_through"); ok && !serverHeaderChoiceTypeFound {
+
+		serverHeaderChoiceTypeFound = true
+
+		if v.(bool) {
+			serverHeaderChoiceInt := &ves_io_schema_virtual_host.CreateSpecType_PassThrough{}
+			serverHeaderChoiceInt.PassThrough = &ves_io_schema.Empty{}
+			createSpec.ServerHeaderChoice = serverHeaderChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("server_name"); ok && !serverHeaderChoiceTypeFound {
+
+		serverHeaderChoiceTypeFound = true
+		serverHeaderChoiceInt := &ves_io_schema_virtual_host.CreateSpecType_ServerName{}
+
+		createSpec.ServerHeaderChoice = serverHeaderChoiceInt
+
+		serverHeaderChoiceInt.ServerName = v.(string)
+
+	}
+
+	//temporary_user_blocking
 	if v, ok := d.GetOk("temporary_user_blocking"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		temporaryUserBlocking := &ves_io_schema_virtual_host.TemporaryUserBlockingType{}
 		createSpec.TemporaryUserBlocking = temporaryUserBlocking
 		for _, set := range sl {
-
 			temporaryUserBlockingMapStrToI := set.(map[string]interface{})
 
 			if w, ok := temporaryUserBlockingMapStrToI["custom_page"]; ok && !isIntfNil(w) {
@@ -2501,13 +2594,13 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//tls_parameters
 	if v, ok := d.GetOk("tls_parameters"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		tlsParameters := &ves_io_schema.DownstreamTlsParamsType{}
 		createSpec.TlsParameters = tlsParameters
 		for _, set := range sl {
-
 			tlsParametersMapStrToI := set.(map[string]interface{})
 
 			if v, ok := tlsParametersMapStrToI["common_params"]; ok && !isIntfNil(v) {
@@ -2516,7 +2609,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 				commonParams := &ves_io_schema.TlsParamsType{}
 				tlsParameters.CommonParams = commonParams
 				for _, set := range sl {
-
 					commonParamsMapStrToI := set.(map[string]interface{})
 
 					if w, ok := commonParamsMapStrToI["cipher_suites"]; ok && !isIntfNil(w) {
@@ -2546,7 +2638,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 						commonParams.TlsCertificates = tlsCertificates
 						for i, set := range sl {
 							tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
-
 							tlsCertificatesMapStrToI := set.(map[string]interface{})
 
 							if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
@@ -2563,7 +2654,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 								privateKey := &ves_io_schema.SecretType{}
 								tlsCertificates[i].PrivateKey = privateKey
 								for _, set := range sl {
-
 									privateKeyMapStrToI := set.(map[string]interface{})
 
 									if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -2572,7 +2662,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 										privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
-
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -2733,7 +2822,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 						validationParams := &ves_io_schema.TlsValidationParamsType{}
 						commonParams.ValidationParams = validationParams
 						for _, set := range sl {
-
 							validationParamsMapStrToI := set.(map[string]interface{})
 
 							if w, ok := validationParamsMapStrToI["skip_hostname_verification"]; ok && !isIntfNil(w) {
@@ -2772,6 +2860,7 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//user_identification
 	if v, ok := d.GetOk("user_identification"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -2804,13 +2893,13 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//waf_type
 	if v, ok := d.GetOk("waf_type"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		wafType := &ves_io_schema.WafType{}
 		createSpec.WafType = wafType
 		for _, set := range sl {
-
 			wafTypeMapStrToI := set.(map[string]interface{})
 
 			refTypeTypeFound := false
@@ -3136,7 +3225,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 								primKey := &ves_io_schema.SecretType{}
 								secretChoiceInt.AuthHmac.PrimKey = primKey
 								for _, set := range sl {
-
 									primKeyMapStrToI := set.(map[string]interface{})
 
 									if v, ok := primKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -3145,7 +3233,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 										primKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
-
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -3307,7 +3394,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 								secKey := &ves_io_schema.SecretType{}
 								secretChoiceInt.AuthHmac.SecKey = secKey
 								for _, set := range sl {
-
 									secKeyMapStrToI := set.(map[string]interface{})
 
 									if v, ok := secKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -3316,7 +3402,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 										secKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
-
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -3489,19 +3574,22 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 							if v, ok := cs["auth_hmac_kms"]; ok && !isIntfNil(v) {
 
+								sl := v.(*schema.Set).List()
 								authHmacKmsInt := &ves_io_schema_views.ObjectRefType{}
 								secretChoiceInt.KmsKeyHmac.AuthHmacKms = authHmacKmsInt
 
-								ahkMapToStrVal := v.(map[string]interface{})
-								if val, ok := ahkMapToStrVal["name"]; ok && !isIntfNil(v) {
-									authHmacKmsInt.Name = val.(string)
-								}
-								if val, ok := ahkMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-									authHmacKmsInt.Namespace = val.(string)
-								}
+								for _, set := range sl {
+									ahkMapToStrVal := set.(map[string]interface{})
+									if val, ok := ahkMapToStrVal["name"]; ok && !isIntfNil(v) {
+										authHmacKmsInt.Name = val.(string)
+									}
+									if val, ok := ahkMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										authHmacKmsInt.Namespace = val.(string)
+									}
 
-								if val, ok := ahkMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-									authHmacKmsInt.Tenant = val.(string)
+									if val, ok := ahkMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										authHmacKmsInt.Tenant = val.(string)
+									}
 								}
 
 							}
@@ -3578,7 +3666,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 		bufferPolicy := &ves_io_schema.BufferConfigType{}
 		updateSpec.BufferPolicy = bufferPolicy
 		for _, set := range sl {
-
 			bufferPolicyMapStrToI := set.(map[string]interface{})
 
 			if w, ok := bufferPolicyMapStrToI["disabled"]; ok && !isIntfNil(w) {
@@ -3682,7 +3769,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 		compressionParams := &ves_io_schema_virtual_host.CompressionType{}
 		updateSpec.CompressionParams = compressionParams
 		for _, set := range sl {
-
 			compressionParamsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := compressionParamsMapStrToI["content_length"]; ok && !isIntfNil(w) {
@@ -3715,7 +3801,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 		corsPolicy := &ves_io_schema.CorsPolicy{}
 		updateSpec.CorsPolicy = corsPolicy
 		for _, set := range sl {
-
 			corsPolicyMapStrToI := set.(map[string]interface{})
 
 			if w, ok := corsPolicyMapStrToI["allow_credentials"]; ok && !isIntfNil(w) {
@@ -3794,7 +3879,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 		dynamicReverseProxy := &ves_io_schema_virtual_host.DynamicReverseProxyType{}
 		updateSpec.DynamicReverseProxy = dynamicReverseProxy
 		for _, set := range sl {
-
 			dynamicReverseProxyMapStrToI := set.(map[string]interface{})
 
 			if v, ok := dynamicReverseProxyMapStrToI["resolution_network"]; ok && !isIntfNil(v) {
@@ -3932,7 +4016,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 		updateSpec.RequestHeadersToAdd = requestHeadersToAdd
 		for i, set := range sl {
 			requestHeadersToAdd[i] = &ves_io_schema.HeaderManipulationOptionType{}
-
 			requestHeadersToAddMapStrToI := set.(map[string]interface{})
 
 			if w, ok := requestHeadersToAddMapStrToI["append"]; ok && !isIntfNil(w) {
@@ -3968,7 +4051,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 		updateSpec.ResponseHeadersToAdd = responseHeadersToAdd
 		for i, set := range sl {
 			responseHeadersToAdd[i] = &ves_io_schema.HeaderManipulationOptionType{}
-
 			responseHeadersToAddMapStrToI := set.(map[string]interface{})
 
 			if w, ok := responseHeadersToAddMapStrToI["append"]; ok && !isIntfNil(w) {
@@ -4003,7 +4085,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 		retryPolicy := &ves_io_schema.RetryPolicyType{}
 		updateSpec.RetryPolicy = retryPolicy
 		for _, set := range sl {
-
 			retryPolicyMapStrToI := set.(map[string]interface{})
 
 			if v, ok := retryPolicyMapStrToI["back_off"]; ok && !isIntfNil(v) {
@@ -4012,7 +4093,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 				backOff := &ves_io_schema.RetryBackOff{}
 				retryPolicy.BackOff = backOff
 				for _, set := range sl {
-
 					backOffMapStrToI := set.(map[string]interface{})
 
 					if w, ok := backOffMapStrToI["base_interval"]; ok && !isIntfNil(w) {
@@ -4084,13 +4164,60 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	serverHeaderChoiceTypeFound := false
+
+	if v, ok := d.GetOk("append_server_name"); ok && !serverHeaderChoiceTypeFound {
+
+		serverHeaderChoiceTypeFound = true
+		serverHeaderChoiceInt := &ves_io_schema_virtual_host.ReplaceSpecType_AppendServerName{}
+
+		updateSpec.ServerHeaderChoice = serverHeaderChoiceInt
+
+		serverHeaderChoiceInt.AppendServerName = v.(string)
+
+	}
+
+	if v, ok := d.GetOk("default_header"); ok && !serverHeaderChoiceTypeFound {
+
+		serverHeaderChoiceTypeFound = true
+
+		if v.(bool) {
+			serverHeaderChoiceInt := &ves_io_schema_virtual_host.ReplaceSpecType_DefaultHeader{}
+			serverHeaderChoiceInt.DefaultHeader = &ves_io_schema.Empty{}
+			updateSpec.ServerHeaderChoice = serverHeaderChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("pass_through"); ok && !serverHeaderChoiceTypeFound {
+
+		serverHeaderChoiceTypeFound = true
+
+		if v.(bool) {
+			serverHeaderChoiceInt := &ves_io_schema_virtual_host.ReplaceSpecType_PassThrough{}
+			serverHeaderChoiceInt.PassThrough = &ves_io_schema.Empty{}
+			updateSpec.ServerHeaderChoice = serverHeaderChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("server_name"); ok && !serverHeaderChoiceTypeFound {
+
+		serverHeaderChoiceTypeFound = true
+		serverHeaderChoiceInt := &ves_io_schema_virtual_host.ReplaceSpecType_ServerName{}
+
+		updateSpec.ServerHeaderChoice = serverHeaderChoiceInt
+
+		serverHeaderChoiceInt.ServerName = v.(string)
+
+	}
+
 	if v, ok := d.GetOk("temporary_user_blocking"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		temporaryUserBlocking := &ves_io_schema_virtual_host.TemporaryUserBlockingType{}
 		updateSpec.TemporaryUserBlocking = temporaryUserBlocking
 		for _, set := range sl {
-
 			temporaryUserBlockingMapStrToI := set.(map[string]interface{})
 
 			if w, ok := temporaryUserBlockingMapStrToI["custom_page"]; ok && !isIntfNil(w) {
@@ -4107,7 +4234,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 		tlsParameters := &ves_io_schema.DownstreamTlsParamsType{}
 		updateSpec.TlsParameters = tlsParameters
 		for _, set := range sl {
-
 			tlsParametersMapStrToI := set.(map[string]interface{})
 
 			if v, ok := tlsParametersMapStrToI["common_params"]; ok && !isIntfNil(v) {
@@ -4116,7 +4242,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 				commonParams := &ves_io_schema.TlsParamsType{}
 				tlsParameters.CommonParams = commonParams
 				for _, set := range sl {
-
 					commonParamsMapStrToI := set.(map[string]interface{})
 
 					if w, ok := commonParamsMapStrToI["cipher_suites"]; ok && !isIntfNil(w) {
@@ -4146,7 +4271,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 						commonParams.TlsCertificates = tlsCertificates
 						for i, set := range sl {
 							tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
-
 							tlsCertificatesMapStrToI := set.(map[string]interface{})
 
 							if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
@@ -4163,7 +4287,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 								privateKey := &ves_io_schema.SecretType{}
 								tlsCertificates[i].PrivateKey = privateKey
 								for _, set := range sl {
-
 									privateKeyMapStrToI := set.(map[string]interface{})
 
 									if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -4172,7 +4295,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 										privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
-
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -4333,7 +4455,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 						validationParams := &ves_io_schema.TlsValidationParamsType{}
 						commonParams.ValidationParams = validationParams
 						for _, set := range sl {
-
 							validationParamsMapStrToI := set.(map[string]interface{})
 
 							if w, ok := validationParamsMapStrToI["skip_hostname_verification"]; ok && !isIntfNil(w) {
@@ -4410,7 +4531,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 		wafType := &ves_io_schema.WafType{}
 		updateSpec.WafType = wafType
 		for _, set := range sl {
-
 			wafTypeMapStrToI := set.(map[string]interface{})
 
 			refTypeTypeFound := false

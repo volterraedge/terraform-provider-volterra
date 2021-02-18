@@ -2862,6 +2862,7 @@ var APISwaggerJSON string = `{
             "title": "CreateSpecType",
             "x-displayname": "Create TCP Loadbalancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
+            "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.CreateSpecType",
             "properties": {
                 "advertise_custom": {
@@ -2894,6 +2895,22 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Domains",
                     "x-ves-example": "www.foo.com"
+                },
+                "hash_policy_choice_least_active": {
+                    "description": "Exclusive with [hash_policy_choice_random hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "hash_policy_choice_random": {
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "hash_policy_choice_round_robin": {
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "hash_policy_choice_source_ip_stickiness": {
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_round_robin]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "listen_port": {
                     "type": "integer",
@@ -3028,6 +3045,7 @@ var APISwaggerJSON string = `{
             "title": "GetSpecType",
             "x-displayname": "Get TCP Loadbalancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
+            "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.GetSpecType",
             "properties": {
                 "advertise_custom": {
@@ -3068,6 +3086,22 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Domains",
                     "x-ves-example": "www.foo.com"
+                },
+                "hash_policy_choice_least_active": {
+                    "description": "Exclusive with [hash_policy_choice_random hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "hash_policy_choice_random": {
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "hash_policy_choice_round_robin": {
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "hash_policy_choice_source_ip_stickiness": {
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_round_robin]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "host_name": {
                     "type": "string",
@@ -3264,6 +3298,7 @@ var APISwaggerJSON string = `{
             "title": "ReplaceSpecType",
             "x-displayname": "Replace TCP Loadbalancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
+            "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.ReplaceSpecType",
             "properties": {
                 "advertise_custom": {
@@ -3296,6 +3331,22 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Domains",
                     "x-ves-example": "www.foo.com"
+                },
+                "hash_policy_choice_least_active": {
+                    "description": "Exclusive with [hash_policy_choice_random hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "hash_policy_choice_random": {
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "hash_policy_choice_round_robin": {
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "hash_policy_choice_source_ip_stickiness": {
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_round_robin]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "listen_port": {
                     "type": "integer",
@@ -3443,6 +3494,34 @@ var APISwaggerJSON string = `{
             "x-displayname": "Site Network",
             "x-ves-proto-enum": "ves.io.schema.views.SiteNetwork"
         },
+        "viewsWherePrivateNetwork": {
+            "type": "object",
+            "description": "Parameters to advertise on a Given VoltADN Private Network",
+            "title": "WherePrivateNetwork",
+            "x-displayname": "VoltADN Private Network",
+            "x-ves-displayorder": "1,2",
+            "x-ves-oneof-field-vip_choice": "[\"default_vip\",\"specific_vip\"]",
+            "x-ves-proto-message": "ves.io.schema.views.WherePrivateNetwork",
+            "properties": {
+                "default_vip": {
+                    "description": "Exclusive with [specific_vip]\nx-displayName: \"Default VIP for VoltADN Private Network\"\nUse the default VIP, system allocated or configured in the VoltADN Private Network",
+                    "title": "Default VIP for VoltADN Private Network",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "private_network": {
+                    "description": " Select VoltADN private network reference\nRequired: YES",
+                    "title": "VoltADN Private Network",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "VoltADN Private Network",
+                    "x-ves-required": "true"
+                },
+                "specific_vip": {
+                    "type": "string",
+                    "description": "Exclusive with [default_vip]\nx-displayName: \"Specific VIP\"\nUse given IP address as VIP on VoltADN private Network",
+                    "title": "Specific VIP"
+                }
+            }
+        },
         "viewsWhereSite": {
             "type": "object",
             "description": "This defines a reference to a CE site along with network type and an optional ip address where a load balancer could be advertised",
@@ -3478,8 +3557,8 @@ var APISwaggerJSON string = `{
             "description": "This defines various options where a Loadbalancer could be advertised",
             "title": "WhereType",
             "x-displayname": "Select Where to Advertise",
-            "x-ves-displayorder": "4",
-            "x-ves-oneof-field-choice": "[\"site\",\"virtual_site\",\"vk8s_service\"]",
+            "x-ves-displayorder": "4,5",
+            "x-ves-oneof-field-choice": "[\"private_network\",\"site\",\"virtual_site\",\"vk8s_service\"]",
             "x-ves-oneof-field-port_choice": "[\"port\",\"use_default_port\"]",
             "x-ves-proto-message": "ves.io.schema.views.WhereType",
             "properties": {
@@ -3489,8 +3568,13 @@ var APISwaggerJSON string = `{
                     "title": "TCP port to listen",
                     "format": "int64"
                 },
+                "private_network": {
+                    "description": "Exclusive with [site virtual_site vk8s_service]\nx-displayName: \"VoltADN Private Network\"\nAdvertise on a VoltADN private network",
+                    "title": "VoltADN Private Network",
+                    "$ref": "#/definitions/viewsWherePrivateNetwork"
+                },
                 "site": {
-                    "description": "Exclusive with [virtual_site vk8s_service]\nx-displayName: \"Site\"\nAdvertise on a customer site and a given network.",
+                    "description": "Exclusive with [private_network virtual_site vk8s_service]\nx-displayName: \"Site\"\nAdvertise on a customer site and a given network.",
                     "title": "Site",
                     "$ref": "#/definitions/viewsWhereSite"
                 },
@@ -3500,12 +3584,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [site vk8s_service]\nx-displayName: \"Virtual Site\"\nAdvertise on a customer virtual site and a given network.",
+                    "description": "Exclusive with [private_network site vk8s_service]\nx-displayName: \"Virtual Site\"\nAdvertise on a customer virtual site and a given network.",
                     "title": "Virtual Site",
                     "$ref": "#/definitions/viewsWhereVirtualSite"
                 },
                 "vk8s_service": {
-                    "description": "Exclusive with [site virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vK8s Service Network on RE.",
+                    "description": "Exclusive with [private_network site virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vK8s Service Network on RE.",
                     "title": "vK8s services network",
                     "$ref": "#/definitions/viewsWhereVK8SService"
                 }
@@ -3562,6 +3646,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "View Specification",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
+            "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.GlobalSpecType",
             "properties": {
                 "advertise_custom": {
@@ -3609,6 +3694,26 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Domains",
                     "x-ves-example": "www.foo.com"
+                },
+                "hash_policy_choice_least_active": {
+                    "description": "Exclusive with [hash_policy_choice_random hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\nx-displayName: \"Least Active Connections\"\nConnections are sent to origin server that has least active connections",
+                    "title": "Least Active Connections",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "hash_policy_choice_random": {
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\nx-displayName: \"Random\"\nConnections are sent to all eligible origin servers in random fashion",
+                    "title": "Random",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "hash_policy_choice_round_robin": {
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness]\nx-displayName: \"Round Robin\"\nConnections are sent to all eligible origin servers in round robin fashion",
+                    "title": "Round Robin",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "hash_policy_choice_source_ip_stickiness": {
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_round_robin]\nx-displayName: \"Source IP Stickiness\"\nConnections are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
+                    "title": "Source IP Stickiness",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "host_name": {
                     "type": "string",

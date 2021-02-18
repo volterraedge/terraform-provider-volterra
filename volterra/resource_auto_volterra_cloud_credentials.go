@@ -51,11 +51,13 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"aws_secret_key": {
@@ -734,6 +736,8 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 			v.(string)
 	}
 
+	//cloud
+
 	cloudTypeFound := false
 
 	if v, ok := d.GetOk("aws_secret_key"); ok && !cloudTypeFound {
@@ -758,7 +762,6 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 				secretKey := &ves_io_schema.SecretType{}
 				cloudInt.AwsSecretKey.SecretKey = secretKey
 				for _, set := range sl {
-
 					secretKeyMapStrToI := set.(map[string]interface{})
 
 					if v, ok := secretKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -767,7 +770,6 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 						secretKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 						for _, set := range sl {
-
 							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -940,7 +942,6 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 				clientSecret := &ves_io_schema.SecretType{}
 				cloudInt.AzureClientSecret.ClientSecret = clientSecret
 				for _, set := range sl {
-
 					clientSecretMapStrToI := set.(map[string]interface{})
 
 					if v, ok := clientSecretMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -949,7 +950,6 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 						clientSecret.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 						for _, set := range sl {
-
 							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1137,7 +1137,6 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 				password := &ves_io_schema.SecretType{}
 				cloudInt.AzurePfxCertificate.Password = password
 				for _, set := range sl {
-
 					passwordMapStrToI := set.(map[string]interface{})
 
 					if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1146,7 +1145,6 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 						password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 						for _, set := range sl {
-
 							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1324,7 +1322,6 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 				credentialFile := &ves_io_schema.SecretType{}
 				cloudInt.GcpCredFile.CredentialFile = credentialFile
 				for _, set := range sl {
-
 					credentialFileMapStrToI := set.(map[string]interface{})
 
 					if v, ok := credentialFileMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1333,7 +1330,6 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 						credentialFile.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 						for _, set := range sl {
-
 							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1606,7 +1602,6 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 				secretKey := &ves_io_schema.SecretType{}
 				cloudInt.AwsSecretKey.SecretKey = secretKey
 				for _, set := range sl {
-
 					secretKeyMapStrToI := set.(map[string]interface{})
 
 					if v, ok := secretKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1615,7 +1610,6 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 						secretKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 						for _, set := range sl {
-
 							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1788,7 +1782,6 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 				clientSecret := &ves_io_schema.SecretType{}
 				cloudInt.AzureClientSecret.ClientSecret = clientSecret
 				for _, set := range sl {
-
 					clientSecretMapStrToI := set.(map[string]interface{})
 
 					if v, ok := clientSecretMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1797,7 +1790,6 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 						clientSecret.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 						for _, set := range sl {
-
 							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1985,7 +1977,6 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 				password := &ves_io_schema.SecretType{}
 				cloudInt.AzurePfxCertificate.Password = password
 				for _, set := range sl {
-
 					passwordMapStrToI := set.(map[string]interface{})
 
 					if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1994,7 +1985,6 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 						password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 						for _, set := range sl {
-
 							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -2172,7 +2162,6 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 				credentialFile := &ves_io_schema.SecretType{}
 				cloudInt.GcpCredFile.CredentialFile = credentialFile
 				for _, set := range sl {
-
 					credentialFileMapStrToI := set.(map[string]interface{})
 
 					if v, ok := credentialFileMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -2181,7 +2170,6 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 						credentialFile.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 						for _, set := range sl {
-
 							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {

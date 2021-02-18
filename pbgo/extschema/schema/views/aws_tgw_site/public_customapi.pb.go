@@ -181,11 +181,9 @@ type SetTGWInfoRequest struct {
 	TgwInfo *AWSTGWInfoConfigType `protobuf:"bytes,3,opt,name=tgw_info,json=tgwInfo" json:"tgw_info,omitempty"`
 }
 
-func (m *SetTGWInfoRequest) Reset()      { *m = SetTGWInfoRequest{} }
-func (*SetTGWInfoRequest) ProtoMessage() {}
-func (*SetTGWInfoRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicCustomapi, []int{4}
-}
+func (m *SetTGWInfoRequest) Reset()                    { *m = SetTGWInfoRequest{} }
+func (*SetTGWInfoRequest) ProtoMessage()               {}
+func (*SetTGWInfoRequest) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{4} }
 
 func (m *SetTGWInfoRequest) GetNamespace() string {
 	if m != nil {

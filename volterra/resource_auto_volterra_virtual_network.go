@@ -52,11 +52,13 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"global_network": {
@@ -81,6 +83,37 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 				Type:     schema.TypeBool,
 				Optional: true,
+			},
+
+			"srv6_network": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"no_namespace_network": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"srv6_network_ns_params": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 
 			"static_routes": {
@@ -204,6 +237,8 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 			v.(string)
 	}
 
+	//network_choice
+
 	networkChoiceTypeFound := false
 
 	if v, ok := d.GetOk("global_network"); ok && !networkChoiceTypeFound {
@@ -253,6 +288,56 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 
 	}
 
+	if v, ok := d.GetOk("srv6_network"); ok && !networkChoiceTypeFound {
+
+		networkChoiceTypeFound = true
+		networkChoiceInt := &ves_io_schema_virtual_network.CreateSpecType_Srv6Network{}
+		networkChoiceInt.Srv6Network = &ves_io_schema_virtual_network.PerSiteSrv6NetworkType{}
+		createSpec.NetworkChoice = networkChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			namespaceChoiceTypeFound := false
+
+			if v, ok := cs["no_namespace_network"]; ok && !isIntfNil(v) && !namespaceChoiceTypeFound {
+
+				namespaceChoiceTypeFound = true
+
+				if v.(bool) {
+					namespaceChoiceInt := &ves_io_schema_virtual_network.PerSiteSrv6NetworkType_NoNamespaceNetwork{}
+					namespaceChoiceInt.NoNamespaceNetwork = &ves_io_schema.Empty{}
+					networkChoiceInt.Srv6Network.NamespaceChoice = namespaceChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["srv6_network_ns_params"]; ok && !isIntfNil(v) && !namespaceChoiceTypeFound {
+
+				namespaceChoiceTypeFound = true
+				namespaceChoiceInt := &ves_io_schema_virtual_network.PerSiteSrv6NetworkType_Srv6NetworkNsParams{}
+				namespaceChoiceInt.Srv6NetworkNsParams = &ves_io_schema_virtual_network.Srv6NetworkNsParametersType{}
+				networkChoiceInt.Srv6Network.NamespaceChoice = namespaceChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						namespaceChoiceInt.Srv6NetworkNsParams.Namespace = v.(string)
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	//static_routes
 	if v, ok := d.GetOk("static_routes"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -260,7 +345,6 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 		createSpec.StaticRoutes = staticRoutes
 		for i, set := range sl {
 			staticRoutes[i] = &ves_io_schema_virtual_network.StaticRouteViewType{}
-
 			staticRoutesMapStrToI := set.(map[string]interface{})
 
 			if v, ok := staticRoutesMapStrToI["attrs"]; ok && !isIntfNil(v) {
@@ -463,6 +547,18 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 
 	}
 
+	if v, ok := d.GetOk("private_network"); ok && !networkChoiceTypeFound {
+
+		networkChoiceTypeFound = true
+
+		if v.(bool) {
+			networkChoiceInt := &ves_io_schema_virtual_network.ReplaceSpecType_PrivateNetwork{}
+			networkChoiceInt.PrivateNetwork = &ves_io_schema.Empty{}
+			updateSpec.NetworkChoice = networkChoiceInt
+		}
+
+	}
+
 	if v, ok := d.GetOk("site_local_inside_network"); ok && !networkChoiceTypeFound {
 
 		networkChoiceTypeFound = true
@@ -487,6 +583,55 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 
 	}
 
+	if v, ok := d.GetOk("srv6_network"); ok && !networkChoiceTypeFound {
+
+		networkChoiceTypeFound = true
+		networkChoiceInt := &ves_io_schema_virtual_network.ReplaceSpecType_Srv6Network{}
+		networkChoiceInt.Srv6Network = &ves_io_schema_virtual_network.PerSiteSrv6NetworkType{}
+		updateSpec.NetworkChoice = networkChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			namespaceChoiceTypeFound := false
+
+			if v, ok := cs["no_namespace_network"]; ok && !isIntfNil(v) && !namespaceChoiceTypeFound {
+
+				namespaceChoiceTypeFound = true
+
+				if v.(bool) {
+					namespaceChoiceInt := &ves_io_schema_virtual_network.PerSiteSrv6NetworkType_NoNamespaceNetwork{}
+					namespaceChoiceInt.NoNamespaceNetwork = &ves_io_schema.Empty{}
+					networkChoiceInt.Srv6Network.NamespaceChoice = namespaceChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["srv6_network_ns_params"]; ok && !isIntfNil(v) && !namespaceChoiceTypeFound {
+
+				namespaceChoiceTypeFound = true
+				namespaceChoiceInt := &ves_io_schema_virtual_network.PerSiteSrv6NetworkType_Srv6NetworkNsParams{}
+				namespaceChoiceInt.Srv6NetworkNsParams = &ves_io_schema_virtual_network.Srv6NetworkNsParametersType{}
+				networkChoiceInt.Srv6Network.NamespaceChoice = namespaceChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						namespaceChoiceInt.Srv6NetworkNsParams.Namespace = v.(string)
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	if v, ok := d.GetOk("static_routes"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -494,7 +639,6 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 		updateSpec.StaticRoutes = staticRoutes
 		for i, set := range sl {
 			staticRoutes[i] = &ves_io_schema_virtual_network.StaticRouteViewType{}
-
 			staticRoutesMapStrToI := set.(map[string]interface{})
 
 			if v, ok := staticRoutesMapStrToI["attrs"]; ok && !isIntfNil(v) {

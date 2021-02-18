@@ -20,7 +20,7 @@ resource "volterra_network_interface" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "dedicated_management_interface dedicated_interface ethernet_interface tunnel_interface legacy_interface" must be set
+  // One of the arguments from this list "legacy_interface dedicated_management_interface dedicated_interface ethernet_interface tunnel_interface" must be set
 
   dedicated_interface {
     device = "eth0"

@@ -1604,7 +1604,7 @@ var APISwaggerJSON string = `{
         "/public/namespaces/{metadata.namespace}/fast_acl_rules": {
             "post": {
                 "summary": "Create Fast ACL rule",
-                "description": "Create a new fast ACL rule, -fast_acl_rule- has specification to match source IP, source port and action to apply",
+                "description": "Create a new Fast ACL rule, -fast_acl_rule- has specification to match source IP, source port and action to apply",
                 "operationId": "ves.io.schema.fast_acl_rule.API.Create",
                 "responses": {
                     "200": {
@@ -1694,7 +1694,7 @@ var APISwaggerJSON string = `{
         "/public/namespaces/{metadata.namespace}/fast_acl_rules/{metadata.name}": {
             "put": {
                 "summary": "Replace Fast ACL rule",
-                "description": "Replace a given fast ACL rule, -fast_acl_rule- has specification to match source IP, source port, protocol and action to apply",
+                "description": "Replace a given Fast ACL rule, -fast_acl_rule- has specification to match source IP, source port, protocol and action to apply",
                 "operationId": "ves.io.schema.fast_acl_rule.API.Replace",
                 "responses": {
                     "200": {
@@ -1902,7 +1902,7 @@ var APISwaggerJSON string = `{
         "/public/namespaces/{namespace}/fast_acl_rules/{name}": {
             "get": {
                 "summary": "Get Fast ACL rule",
-                "description": "Get a fast ACL rule",
+                "description": "Get a Fast ACL rule",
                 "operationId": "ves.io.schema.fast_acl_rule.API.Get",
                 "responses": {
                     "200": {
@@ -2110,7 +2110,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the fast ACL rule",
+                    "description": " Specification of the desired behavior of the Fast ACL rule",
                     "title": "spec",
                     "$ref": "#/definitions/fast_acl_ruleCreateSpecType",
                     "x-displayname": "Spec"
@@ -2128,7 +2128,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the fast ACL rule",
+                    "description": " Specification of the desired behavior of the Fast ACL rule",
                     "title": "spec",
                     "$ref": "#/definitions/fast_acl_ruleGetSpecType",
                     "x-displayname": "Spec"
@@ -2143,7 +2143,7 @@ var APISwaggerJSON string = `{
         },
         "fast_acl_ruleCreateSpecType": {
             "type": "object",
-            "description": "Create a new fast ACL rule, -fast_acl_rule- has specification to match source IP, source port and action to apply",
+            "description": "Create a new Fast ACL rule, -fast_acl_rule- has specification to match source IP, source port and action to apply",
             "title": "Create Fast ACL rule",
             "x-displayname": "Create Fast ACL Rule",
             "x-ves-oneof-field-source": "[\"ip_prefix_set\",\"prefix\"]",
@@ -2277,7 +2277,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "42"
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the fast ACL rule",
+                    "description": " Specification of the desired behavior of the Fast ACL rule",
                     "title": "spec",
                     "$ref": "#/definitions/fast_acl_ruleGetSpecType",
                     "x-displayname": "Spec"
@@ -2314,7 +2314,7 @@ var APISwaggerJSON string = `{
         },
         "fast_acl_ruleGetSpecType": {
             "type": "object",
-            "description": "Get a fast ACL rule",
+            "description": "Get a Fast ACL rule",
             "title": "Get Fast ACL rule",
             "x-displayname": "Get Fast ACL Rule",
             "x-ves-oneof-field-source": "[\"ip_prefix_set\",\"prefix\"]",
@@ -2515,7 +2515,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the fast ACL rule",
+                    "description": " Specification of the desired behavior of the Fast ACL rule",
                     "title": "spec",
                     "$ref": "#/definitions/fast_acl_ruleSpecType",
                     "x-displayname": "Spec"
@@ -2549,7 +2549,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "42"
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the fast ACL rule",
+                    "description": " Specification of the desired behavior of the Fast ACL rule",
                     "title": "spec",
                     "$ref": "#/definitions/fast_acl_ruleReplaceSpecType",
                     "x-displayname": "Spec"
@@ -2562,7 +2562,7 @@ var APISwaggerJSON string = `{
         },
         "fast_acl_ruleReplaceSpecType": {
             "type": "object",
-            "description": "Replace a given fast ACL rule, -fast_acl_rule- has specification to match source IP, source port, protocol and action to apply",
+            "description": "Replace a given Fast ACL rule, -fast_acl_rule- has specification to match source IP, source port, protocol and action to apply",
             "title": "Replace Fast ACL rule",
             "x-displayname": "Replace Fast ACL Rule",
             "x-ves-oneof-field-source": "[\"ip_prefix_set\",\"prefix\"]",

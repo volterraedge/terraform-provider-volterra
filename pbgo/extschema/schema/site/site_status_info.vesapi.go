@@ -63,6 +63,9 @@ func (c *CustomSiteStatusAPIGrpcClient) DoRPC(ctx context.Context, rpc string, o
 	if err != nil {
 		return nil, errors.Wrap(err, "Doing custom RPC using GRPC")
 	}
+	if cco.OutCallResponse != nil {
+		cco.OutCallResponse.ProtoMsg = rsp
+	}
 	return rsp, nil
 }
 
@@ -159,6 +162,10 @@ func (c *CustomSiteStatusAPIRestClient) doRPCSiteStatusMetrics(ctx context.Conte
 	pbRsp := &SiteStatusMetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.site.SiteStatusMetricsResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
 	}
 	return pbRsp, nil
 }

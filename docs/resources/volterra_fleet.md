@@ -20,46 +20,27 @@ resource "volterra_fleet" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "no_bond_devices bond_device_list" must be set
+  // One of the arguments from this list "bond_device_list no_bond_devices" must be set
+  no_bond_devices = true
 
-  bond_device_list {
-    bond_devices {
-      devices = ["devices"]
-
-      // One of the arguments from this list "lacp active_backup" must be set
-
-      lacp {
-        rate = "30"
-      }
-      link_polling_interval = "1000"
-      link_up_delay         = "200"
-      name                  = "bond0"
-    }
-  }
   // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
-  no_dc_cluster_group = true
-  fleet_label         = ["sfo"]
+
+  dc_cluster_group {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+  fleet_label = ["sfo"]
   // One of the arguments from this list "disable_gpu enable_gpu" must be set
   disable_gpu = true
 
   // One of the arguments from this list "interface_list default_config device_list" must be set
 
-  device_list {
-    devices {
-      // One of the arguments from this list "network_device" must be set
-
-      network_device {
-        interface {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        use = "use"
-      }
-
-      name  = "name"
-      owner = "owner"
+  interface_list {
+    interfaces {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
     }
   }
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
@@ -78,30 +59,26 @@ resource "volterra_fleet" "example" {
       // One of the arguments from this list "netapp_trident pure_service_orchestrator openebs_enterprise" must be set
 
       netapp_trident {
-        // One of the arguments from this list "netapp_backend_ontap_nas netapp_backend_ontap_san" must be set
+        // One of the arguments from this list "netapp_backend_ontap_san netapp_backend_ontap_nas" must be set
 
-        netapp_backend_ontap_nas {
-          auto_export_cidrs {
-            prefixes = ["192.168.20.0/24"]
-          }
-
-          auto_export_policy = true
-          backend_name       = "backend_name"
+        netapp_backend_ontap_san {
+          // One of the arguments from this list "no_chap use_chap" must be set
+          no_chap = true
 
           // One of the arguments from this list "data_lif_ip data_lif_dns_name" must be set
           data_lif_ip = "10.5.2.4"
+
+          igroup_name = "igroup_name"
 
           labels = {
             "key1" = "value1"
           }
 
-          limit_aggregate_usage = "80%"
-          limit_volume_size     = "50Gi"
+          limit_aggregate_usage = "80"
+          limit_volume_size     = "50"
 
-          // One of the arguments from this list "management_lif_ip management_lif_dns_name" must be set
-          management_lif_ip = "10.5.2.4"
-
-          nfs_mount_options = "nfsvers=4"
+          // One of the arguments from this list "management_lif_dns_name management_lif_ip" must be set
+          management_lif_dns_name = "storage.local"
 
           password {
             blindfold_secret_info_internal {
@@ -112,11 +89,12 @@ resource "volterra_fleet" "example" {
 
             secret_encoding_type = "secret_encoding_type"
 
-            // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+            // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
 
-            clear_secret_info {
-              provider = "box-provider"
-              url      = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+            blindfold_secret_info {
+              decryption_provider = "decryption_provider"
+              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+              store_provider      = "store_provider"
             }
           }
 
@@ -165,9 +143,9 @@ resource "volterra_fleet" "example" {
       storage_device = "storage_device"
     }
   }
-  // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
+  // One of the arguments from this list "storage_interface_list no_storage_interfaces" must be set
   no_storage_interfaces = true
-  // One of the arguments from this list "storage_static_routes no_storage_static_routes" must be set
+  // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
   no_storage_static_routes = true
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
   deny_all_usb = true

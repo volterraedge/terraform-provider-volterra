@@ -20,50 +20,9 @@ resource "volterra_network_policy" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  rules {
-    egress_rules {
-      action = "action"
-
-      keys = ["['site']"]
-
-      metadata {
-        description = "Virtual Host for acmecorp website"
-        disable     = true
-        name        = "acmecorp-web"
-      }
-
-      // One of the arguments from this list "prefix_list outside_endpoints inside_endpoints namespace label_selector ip_prefix_set any" must be set
-      outside_endpoints = true
-      rule_description  = "Rule to block outside ip"
-      rule_name         = "mypolicy-allow-htpp"
-
-      // One of the arguments from this list "all_traffic all_tcp_traffic all_udp_traffic applications protocol_port_range" must be set
-      all_traffic = true
-    }
-
-    ingress_rules {
-      action = "action"
-
-      keys = ["['site']"]
-
-      metadata {
-        description = "Virtual Host for acmecorp website"
-        disable     = true
-        name        = "acmecorp-web"
-      }
-
-      // One of the arguments from this list "prefix_list outside_endpoints inside_endpoints namespace label_selector ip_prefix_set any" must be set
-      namespace = "namespace"
-
-      rule_description = "Rule to block outside ip"
-      rule_name        = "mypolicy-allow-htpp"
-
-      // One of the arguments from this list "applications protocol_port_range all_traffic all_tcp_traffic all_udp_traffic" must be set
-
-      applications {
-        applications = ["applications"]
-      }
-    }
+  endpoint {
+    // One of the arguments from this list "prefix_list any outside_endpoints inside_endpoints interface namespace label_selector" must be set
+    outside_endpoints = true
   }
 }
 
@@ -88,9 +47,9 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`endpoint` - (Optional) Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.. See [Endpoint ](#endpoint) below for details.
+`endpoint` - (Required) Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.. See [Endpoint ](#endpoint) below for details.
 
-`rules` - (Required) Network Policy Rules. See [Rules ](#rules) below for details.
+`rules` - (Optional) Network Policy Rules. See [Rules ](#rules) below for details.
 
 ### All Tcp Traffic
 

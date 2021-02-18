@@ -73,6 +73,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetSimpleRulesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 }
 
@@ -132,6 +138,35 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 	case *CreateSpecType_InternallyGenerated:
 
+	case *CreateSpecType_AllowAllRequests:
+
+	case *CreateSpecType_DenyAllRequests:
+
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetSimpleRulesDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.SimpleRules == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	for idx, e := range m.SimpleRules {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, dri := range driSet {
+			dri.DRField = fmt.Sprintf("simple_rules[%v].%s", idx, dri.DRField)
+			drInfos = append(drInfos, dri)
+		}
 	}
 
 	return drInfos, err
@@ -176,6 +211,46 @@ func (v *ValidateCreateSpecType) AlgoValidationRuleHandler(rules map[string]stri
 	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema_policy.RuleCombiningAlgorithm_name, conv)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for algo")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) SimpleRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*SimpleRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := SimpleRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for simple_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*SimpleRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*SimpleRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated simple_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items simple_rules")
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -279,6 +354,28 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_AllowAllRequests:
+		if fv, exists := v.FldValidators["rule_choice.allow_all_requests"]; exists {
+			val := m.GetRuleChoice().(*CreateSpecType_AllowAllRequests).AllowAllRequests
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("allow_all_requests"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DenyAllRequests:
+		if fv, exists := v.FldValidators["rule_choice.deny_all_requests"]; exists {
+			val := m.GetRuleChoice().(*CreateSpecType_DenyAllRequests).DenyAllRequests
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("deny_all_requests"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -336,6 +433,14 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["simple_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("simple_rules"))
+		if err := fv(ctx, m.GetSimpleRules(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -399,6 +504,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["algo"] = vFn
+
+	vrhSimpleRules := v.SimpleRulesValidationRuleHandler
+	rulesSimpleRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1024",
+	}
+	vFn, err = vrhSimpleRules(rulesSimpleRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.simple_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["simple_rules"] = vFn
 
 	v.FldValidators["rule_choice.allow_list"] = SourceListValidator().Validate
 	v.FldValidators["rule_choice.deny_list"] = SourceListValidator().Validate
@@ -532,6 +648,10 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 
 	case *GetSpecType_InternallyGenerated:
+
+	case *GetSpecType_AllowAllRequests:
+
+	case *GetSpecType_DenyAllRequests:
 
 	}
 
@@ -821,6 +941,28 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("rule_choice"),
 				db.WithValidateField("internally_generated"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_AllowAllRequests:
+		if fv, exists := v.FldValidators["rule_choice.allow_all_requests"]; exists {
+			val := m.GetRuleChoice().(*GetSpecType_AllowAllRequests).AllowAllRequests
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("allow_all_requests"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DenyAllRequests:
+		if fv, exists := v.FldValidators["rule_choice.deny_all_requests"]; exists {
+			val := m.GetRuleChoice().(*GetSpecType_DenyAllRequests).DenyAllRequests
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("deny_all_requests"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1170,6 +1312,10 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 
 	case *GlobalSpecType_InternallyGenerated:
+
+	case *GlobalSpecType_AllowAllRequests:
+
+	case *GlobalSpecType_DenyAllRequests:
 
 	}
 
@@ -1575,6 +1721,28 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("rule_choice"),
 				db.WithValidateField("internally_generated"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_AllowAllRequests:
+		if fv, exists := v.FldValidators["rule_choice.allow_all_requests"]; exists {
+			val := m.GetRuleChoice().(*GlobalSpecType_AllowAllRequests).AllowAllRequests
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("allow_all_requests"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DenyAllRequests:
+		if fv, exists := v.FldValidators["rule_choice.deny_all_requests"]; exists {
+			val := m.GetRuleChoice().(*GlobalSpecType_DenyAllRequests).DenyAllRequests
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("deny_all_requests"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -2015,6 +2183,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetSimpleRulesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 }
 
@@ -2074,6 +2248,35 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 	case *ReplaceSpecType_InternallyGenerated:
 
+	case *ReplaceSpecType_AllowAllRequests:
+
+	case *ReplaceSpecType_DenyAllRequests:
+
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetSimpleRulesDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.SimpleRules == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	for idx, e := range m.SimpleRules {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, dri := range driSet {
+			dri.DRField = fmt.Sprintf("simple_rules[%v].%s", idx, dri.DRField)
+			drInfos = append(drInfos, dri)
+		}
 	}
 
 	return drInfos, err
@@ -2118,6 +2321,46 @@ func (v *ValidateReplaceSpecType) AlgoValidationRuleHandler(rules map[string]str
 	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema_policy.RuleCombiningAlgorithm_name, conv)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for algo")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) SimpleRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*SimpleRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := SimpleRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for simple_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*SimpleRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*SimpleRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated simple_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items simple_rules")
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -2221,6 +2464,28 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_AllowAllRequests:
+		if fv, exists := v.FldValidators["rule_choice.allow_all_requests"]; exists {
+			val := m.GetRuleChoice().(*ReplaceSpecType_AllowAllRequests).AllowAllRequests
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("allow_all_requests"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DenyAllRequests:
+		if fv, exists := v.FldValidators["rule_choice.deny_all_requests"]; exists {
+			val := m.GetRuleChoice().(*ReplaceSpecType_DenyAllRequests).DenyAllRequests
+			vOpts := append(opts,
+				db.WithValidateField("rule_choice"),
+				db.WithValidateField("deny_all_requests"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2278,6 +2543,14 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["simple_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("simple_rules"))
+		if err := fv(ctx, m.GetSimpleRules(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -2341,6 +2614,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["algo"] = vFn
+
+	vrhSimpleRules := v.SimpleRulesValidationRuleHandler
+	rulesSimpleRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1024",
+	}
+	vFn, err = vrhSimpleRules(rulesSimpleRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.simple_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["simple_rules"] = vFn
 
 	v.FldValidators["rule_choice.allow_list"] = SourceListValidator().Validate
 	v.FldValidators["rule_choice.deny_list"] = SourceListValidator().Validate
@@ -2962,10 +3246,28 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["api_group_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_group_matcher"))
+		if err := fv(ctx, m.GetApiGroupMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["asn_list"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("asn_list"))
 		if err := fv(ctx, m.GetAsnList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["client_role"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_role"))
+		if err := fv(ctx, m.GetClientRole(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3215,6 +3517,10 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
 
 	v.FldValidators["asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
+
+	v.FldValidators["api_group_matcher"] = ves_io_schema_policy.StringMatcherTypeValidator().Validate
+
+	v.FldValidators["client_role"] = ves_io_schema_policy.RoleMatcherTypeValidator().Validate
 
 	return v
 }()
@@ -3834,8 +4140,14 @@ func (r *CreateSpecType) SetRuleChoiceToGlobalSpecType(o *GlobalSpecType) error 
 	case nil:
 		o.RuleChoice = nil
 
+	case *CreateSpecType_AllowAllRequests:
+		o.RuleChoice = &GlobalSpecType_AllowAllRequests{AllowAllRequests: of.AllowAllRequests}
+
 	case *CreateSpecType_AllowList:
 		o.RuleChoice = &GlobalSpecType_AllowList{AllowList: of.AllowList}
+
+	case *CreateSpecType_DenyAllRequests:
+		o.RuleChoice = &GlobalSpecType_DenyAllRequests{DenyAllRequests: of.DenyAllRequests}
 
 	case *CreateSpecType_DenyList:
 		o.RuleChoice = &GlobalSpecType_DenyList{DenyList: of.DenyList}
@@ -3860,8 +4172,14 @@ func (r *CreateSpecType) GetRuleChoiceFromGlobalSpecType(o *GlobalSpecType) erro
 	case nil:
 		r.RuleChoice = nil
 
+	case *GlobalSpecType_AllowAllRequests:
+		r.RuleChoice = &CreateSpecType_AllowAllRequests{AllowAllRequests: of.AllowAllRequests}
+
 	case *GlobalSpecType_AllowList:
 		r.RuleChoice = &CreateSpecType_AllowList{AllowList: of.AllowList}
+
+	case *GlobalSpecType_DenyAllRequests:
+		r.RuleChoice = &CreateSpecType_DenyAllRequests{DenyAllRequests: of.DenyAllRequests}
 
 	case *GlobalSpecType_DenyList:
 		r.RuleChoice = &CreateSpecType_DenyList{DenyList: of.DenyList}
@@ -3936,6 +4254,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.PortMatcher = f.GetPortMatcher()
 	m.GetRuleChoiceFromGlobalSpecType(f)
 	m.GetServerChoiceFromGlobalSpecType(f)
+	m.SimpleRules = f.GetSimpleRules()
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -3948,6 +4267,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.PortMatcher = m1.PortMatcher
 	m1.SetRuleChoiceToGlobalSpecType(f)
 	m1.SetServerChoiceToGlobalSpecType(f)
+	f.SimpleRules = m1.SimpleRules
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -3956,8 +4276,14 @@ func (r *GetSpecType) SetRuleChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	case nil:
 		o.RuleChoice = nil
 
+	case *GetSpecType_AllowAllRequests:
+		o.RuleChoice = &GlobalSpecType_AllowAllRequests{AllowAllRequests: of.AllowAllRequests}
+
 	case *GetSpecType_AllowList:
 		o.RuleChoice = &GlobalSpecType_AllowList{AllowList: of.AllowList}
+
+	case *GetSpecType_DenyAllRequests:
+		o.RuleChoice = &GlobalSpecType_DenyAllRequests{DenyAllRequests: of.DenyAllRequests}
 
 	case *GetSpecType_DenyList:
 		o.RuleChoice = &GlobalSpecType_DenyList{DenyList: of.DenyList}
@@ -3982,8 +4308,14 @@ func (r *GetSpecType) GetRuleChoiceFromGlobalSpecType(o *GlobalSpecType) error {
 	case nil:
 		r.RuleChoice = nil
 
+	case *GlobalSpecType_AllowAllRequests:
+		r.RuleChoice = &GetSpecType_AllowAllRequests{AllowAllRequests: of.AllowAllRequests}
+
 	case *GlobalSpecType_AllowList:
 		r.RuleChoice = &GetSpecType_AllowList{AllowList: of.AllowList}
+
+	case *GlobalSpecType_DenyAllRequests:
+		r.RuleChoice = &GetSpecType_DenyAllRequests{DenyAllRequests: of.DenyAllRequests}
 
 	case *GlobalSpecType_DenyList:
 		r.RuleChoice = &GetSpecType_DenyList{DenyList: of.DenyList}
@@ -4082,8 +4414,14 @@ func (r *ReplaceSpecType) SetRuleChoiceToGlobalSpecType(o *GlobalSpecType) error
 	case nil:
 		o.RuleChoice = nil
 
+	case *ReplaceSpecType_AllowAllRequests:
+		o.RuleChoice = &GlobalSpecType_AllowAllRequests{AllowAllRequests: of.AllowAllRequests}
+
 	case *ReplaceSpecType_AllowList:
 		o.RuleChoice = &GlobalSpecType_AllowList{AllowList: of.AllowList}
+
+	case *ReplaceSpecType_DenyAllRequests:
+		o.RuleChoice = &GlobalSpecType_DenyAllRequests{DenyAllRequests: of.DenyAllRequests}
 
 	case *ReplaceSpecType_DenyList:
 		o.RuleChoice = &GlobalSpecType_DenyList{DenyList: of.DenyList}
@@ -4108,8 +4446,14 @@ func (r *ReplaceSpecType) GetRuleChoiceFromGlobalSpecType(o *GlobalSpecType) err
 	case nil:
 		r.RuleChoice = nil
 
+	case *GlobalSpecType_AllowAllRequests:
+		r.RuleChoice = &ReplaceSpecType_AllowAllRequests{AllowAllRequests: of.AllowAllRequests}
+
 	case *GlobalSpecType_AllowList:
 		r.RuleChoice = &ReplaceSpecType_AllowList{AllowList: of.AllowList}
+
+	case *GlobalSpecType_DenyAllRequests:
+		r.RuleChoice = &ReplaceSpecType_DenyAllRequests{DenyAllRequests: of.DenyAllRequests}
 
 	case *GlobalSpecType_DenyList:
 		r.RuleChoice = &ReplaceSpecType_DenyList{DenyList: of.DenyList}
@@ -4184,6 +4528,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.PortMatcher = f.GetPortMatcher()
 	m.GetRuleChoiceFromGlobalSpecType(f)
 	m.GetServerChoiceFromGlobalSpecType(f)
+	m.SimpleRules = f.GetSimpleRules()
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -4196,4 +4541,5 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.PortMatcher = m1.PortMatcher
 	m1.SetRuleChoiceToGlobalSpecType(f)
 	m1.SetServerChoiceToGlobalSpecType(f)
+	f.SimpleRules = m1.SimpleRules
 }

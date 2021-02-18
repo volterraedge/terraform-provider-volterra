@@ -183,6 +183,15 @@ func (v *ValidateAPIEndpointLearntSchemaRsp) Validate(ctx context.Context, pm in
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["last_updated_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_updated_time"))
+		if err := fv(ctx, m.GetLastUpdatedTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["learnt_schema"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("learnt_schema"))

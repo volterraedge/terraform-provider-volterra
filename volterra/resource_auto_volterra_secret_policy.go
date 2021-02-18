@@ -52,11 +52,13 @@ func resourceVolterraSecretPolicy() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"algo": {
@@ -153,18 +155,21 @@ func resourceVolterraSecretPolicyCreate(d *schema.ResourceData, meta interface{}
 			v.(string)
 	}
 
+	//algo
 	if v, ok := d.GetOk("algo"); ok && !isIntfNil(v) {
 
 		createSpec.Algo = ves_io_schema_policy.RuleCombiningAlgorithm(ves_io_schema_policy.RuleCombiningAlgorithm_value[v.(string)])
 
 	}
 
+	//allow_volterra
 	if v, ok := d.GetOk("allow_volterra"); ok && !isIntfNil(v) {
 
 		createSpec.AllowVolterra =
 			v.(bool)
 	}
 
+	//rules
 	if v, ok := d.GetOk("rules"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})

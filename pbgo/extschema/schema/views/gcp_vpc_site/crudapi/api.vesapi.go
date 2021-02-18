@@ -68,6 +68,7 @@ func (r *ObjectReplaceReq) ToEntry(e db.Entry) {
 // create setters in response from object for oneof fields
 
 // CLIENT side
+
 func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r := &ObjectCreateReq{}
 	if e == nil {
@@ -120,6 +121,7 @@ type crudAPIGrpcClient struct {
 }
 
 func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	req, err := NewObjectCreateReq(e)
 	if err != nil {
 		return nil, errors.Wrap(err, "Creating new create request")
@@ -141,9 +143,11 @@ func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...serv
 		return o, err
 	}
 	return nil, err
+
 }
 
 func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
+
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -161,6 +165,7 @@ func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
+
 }
 
 func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
@@ -186,6 +191,7 @@ func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -193,9 +199,11 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
+
 }
 
 func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
+
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if err != nil {
@@ -212,9 +220,11 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 		merr = multierror.Append(merr, err)
 	}
 	return &respDetail, errors.ErrOrNil(merr)
+
 }
 
 func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
+
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -224,9 +234,11 @@ func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
+
 }
 
 func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
+
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -236,6 +248,7 @@ func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
+
 }
 
 func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
@@ -272,6 +285,7 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 }
 
 func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
+
 	req := NewObjectListReq()
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -296,9 +310,11 @@ func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDC
 	}
 	lc := &crudAPIGrpcListStreamClient{stream}
 	return lc, nil
+
 }
 
 func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
+
 	req := NewObjectDeleteReq(key)
 
 	cco := server.NewCRUDCallOpts()
@@ -312,6 +328,7 @@ func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
+
 }
 
 func NewCRUDAPIGrpcClient(cc *grpc.ClientConn) server.CRUDClient {
@@ -354,6 +371,7 @@ type crudAPIRestClient struct {
 }
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	req, err := NewObjectCreateReq(e)
 	if err != nil {
 		return nil, errors.Wrap(err, "Creating new create request")
@@ -405,9 +423,11 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	o := object.NewDBObject(nil)
 	rspo.ToObject(o)
 	return o, nil
+
 }
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
+
 	rReq, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -483,6 +503,7 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
+
 }
 
 func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
@@ -533,6 +554,7 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
 		o := object.NewDBObject(nil)
@@ -540,9 +562,11 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
+
 }
 
 func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
+
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -560,9 +584,11 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	}
 
 	return nil, errors.ErrOrNil(merr)
+
 }
 
 func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
+
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -572,9 +598,11 @@ func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
+
 }
 
 func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
+
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -584,6 +612,7 @@ func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
+
 }
 
 func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
@@ -663,6 +692,7 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 }
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
+
 	dReq := NewObjectDeleteReq(key)
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -706,6 +736,7 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
+
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
@@ -783,6 +814,7 @@ type crudAPIInprocClient struct {
 }
 
 func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.gcp_vpc_site.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
@@ -809,9 +841,11 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return o, err
 	}
 	return nil, err
+
 }
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
+
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.gcp_vpc_site.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
@@ -833,6 +867,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
+
 }
 
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
@@ -861,6 +896,7 @@ func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...se
 }
 
 func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -868,9 +904,11 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 		return o, err
 	}
 	return nil, err
+
 }
 
 func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
+
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -888,9 +926,11 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	}
 
 	return nil, errors.ErrOrNil(merr)
+
 }
 
 func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
+
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -900,9 +940,11 @@ func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCa
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
+
 }
 
 func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
+
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -912,6 +954,7 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
+
 }
 
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
@@ -956,6 +999,7 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 }
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
+
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.gcp_vpc_site.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
@@ -973,6 +1017,7 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
+
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
@@ -2272,10 +2317,10 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
                 },
                 "inside_network": {
-                    "description": " Network Subnets for the inside interface of the node",
+                    "description": " Network for the inside interface of the node",
                     "title": "Network",
                     "$ref": "#/definitions/viewsGCPVPCNetworkChoiceType",
-                    "x-displayname": "GCP VPC Network for Inside Interface"
+                    "x-displayname": "VPC Network for Inside Interface"
                 },
                 "inside_static_routes": {
                     "description": "Exclusive with [no_inside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for inside network.",
@@ -2283,7 +2328,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType"
                 },
                 "inside_subnet": {
-                    "description": " Subnets for the inside interface of the node, should be in inside network",
+                    "description": " Subnet for the inside interface of the node.",
                     "title": "Subnet",
                     "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
                     "x-displayname": "Subnet for Inside Interface"
@@ -2315,16 +2360,16 @@ var APISwaggerJSON string = `{
                 },
                 "node_number": {
                     "type": "integer",
-                    "description": " Number of nodes to created, 1 or 3 supported",
+                    "description": " Number of nodes to create, either 1 or 3.",
                     "title": "Number of nodes",
                     "format": "int64",
                     "x-displayname": "Number of nodes"
                 },
                 "outside_network": {
-                    "description": " Network Subnets for the outside interface of the node",
+                    "description": " Network for the outside interface of the node",
                     "title": "Network",
                     "$ref": "#/definitions/viewsGCPVPCNetworkChoiceType",
-                    "x-displayname": "GCP VPC Network for Outside Interface"
+                    "x-displayname": "VPC Network for Outside Interface"
                 },
                 "outside_static_routes": {
                     "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
@@ -2332,7 +2377,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType"
                 },
                 "outside_subnet": {
-                    "description": " Subnets for the outside interface of the node, should be in outside network",
+                    "description": " Subnet for the outside interface of the node.",
                     "title": "Subnet",
                     "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
                     "x-displayname": "Subnet for Outside Interface"
@@ -2367,20 +2412,20 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "local_network": {
-                    "description": " Network Subnets for the local interface of the node",
+                    "description": " Network for the local interface of the node",
                     "title": "Network",
                     "$ref": "#/definitions/viewsGCPVPCNetworkChoiceType",
-                    "x-displayname": "GCP VPC Network for Local Interface"
+                    "x-displayname": "VPC Network for Local Interface"
                 },
                 "local_subnet": {
-                    "description": " Subnets for the local interface of the node, should be in local network",
+                    "description": " Subnet for the local interface of the node.",
                     "title": "Subnet",
                     "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
-                    "x-displayname": "Subnet for local Interface"
+                    "x-displayname": "Subnet for Local Interface"
                 },
                 "node_number": {
                     "type": "integer",
-                    "description": " Number of nodes to created, 1 or 3 supported",
+                    "description": " Number of nodes to create, either 1 or 3.",
                     "title": "Number of nodes",
                     "format": "int64",
                     "x-displayname": "Number of nodes"
@@ -2459,10 +2504,10 @@ var APISwaggerJSON string = `{
                 },
                 "node_number": {
                     "type": "integer",
-                    "description": " Number of nodes to created, 1 or 3 supported",
+                    "description": " Number of nodes to create, either 1 or 3.",
                     "title": "Number of nodes",
                     "format": "int64",
-                    "x-displayname": "Number of nodes"
+                    "x-displayname": "Number of Nodes"
                 },
                 "outside_static_routes": {
                     "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
@@ -2470,16 +2515,16 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType"
                 },
                 "site_local_network": {
-                    "description": " Network for the site local interface of the node",
+                    "description": " Network for the local interface of the node",
                     "title": "Network",
                     "$ref": "#/definitions/viewsGCPVPCNetworkChoiceType",
-                    "x-displayname": "GCP VPC Network for Site Local Interface"
+                    "x-displayname": "VPC Network for Local Interface"
                 },
                 "site_local_subnet": {
-                    "description": " Subnet for the site local interface of the node.",
+                    "description": " Subnet for the local interface of the node.",
                     "title": "Subnet",
                     "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
-                    "x-displayname": "GCP subnet for Site Local Interface"
+                    "x-displayname": "Subnet for Local Interface"
                 }
             }
         },
@@ -3023,13 +3068,14 @@ var APISwaggerJSON string = `{
         },
         "schemaNextHopTypes": {
             "type": "string",
-            "description": "Defines types of next-hop\n\nUse default gateway on the local interface as gateway for route.\nAssumes there is only one local interface on the virtual network.\nUse the specified address as nexthop\nUse the network interface as nexthop\nDiscard nexthop, used when attr type is Advertise",
+            "description": "Defines types of next-hop\n\nUse default gateway on the local interface as gateway for route.\nAssumes there is only one local interface on the virtual network.\nUse the specified address as nexthop\nUse the network interface as nexthop\nDiscard nexthop, used when attr type is Advertise\nUsed in VoltADN private virtual network.",
             "title": "Nexthop Types",
             "enum": [
                 "NEXT_HOP_DEFAULT_GATEWAY",
                 "NEXT_HOP_USE_CONFIGURED",
                 "NEXT_HOP_NETWORK_INTERFACE",
-                "NEXT_HOP_DISCARD"
+                "NEXT_HOP_DISCARD",
+                "NEXT_HOP_SNAT_TO_PUBLIC"
             ],
             "default": "NEXT_HOP_DEFAULT_GATEWAY",
             "x-displayname": "Nexthop Types",
@@ -3747,17 +3793,17 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.GCPVPCNetworkChoiceType",
             "properties": {
                 "existing_network": {
-                    "description": "Exclusive with [new_network new_network_autogenerate]\nx-displayName: \"Existing VPC Network\"\nInformation about existing VPC network",
+                    "description": "Exclusive with [new_network new_network_autogenerate]\nx-displayName: \"Existing VPC Network\"\nName of existing VPC network.",
                     "title": "Existing VPC",
                     "$ref": "#/definitions/viewsGCPVPCNetworkType"
                 },
                 "new_network": {
-                    "description": "Exclusive with [existing_network new_network_autogenerate]\nx-displayName: \"New VPC Network Parameters\"\nParameters for creating new VPC network",
+                    "description": "Exclusive with [existing_network new_network_autogenerate]\nx-displayName: \"Specify VPC Network Name\"\nCreate new VPC network with specified name.",
                     "title": "New VPC",
                     "$ref": "#/definitions/viewsGCPVPCNetworkParamsType"
                 },
                 "new_network_autogenerate": {
-                    "description": "Exclusive with [existing_network new_network]\nx-displayName: \"New VPC Network autogenerate name\"\nAutogenerate parameters for creating new VPC network",
+                    "description": "Exclusive with [existing_network new_network]\nx-displayName: \"Autogenerate VPC Network Name\"\nCreate new VPC network with autogenerated name.",
                     "title": "New VPC Autogenerate",
                     "$ref": "#/definitions/viewsGCPVPCNetworkAutogenerateParamsType"
                 }
@@ -3807,12 +3853,12 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.GCPVPCSubnetChoiceType",
             "properties": {
                 "existing_subnet": {
-                    "description": "Exclusive with [new_subnet]\nx-displayName: \"Existing Subnet\"\nInformation about existing subnet",
+                    "description": "Exclusive with [new_subnet]\nx-displayName: \"Existing Subnet\"\nName of existing VPC subnet.",
                     "title": "Existing VPC",
                     "$ref": "#/definitions/viewsGCPSubnetType"
                 },
                 "new_subnet": {
-                    "description": "Exclusive with [existing_subnet]\nx-displayName: \"New Subnet Parameters\"\nParameters for creating new subnet",
+                    "description": "Exclusive with [existing_subnet]\nx-displayName: \"New Subnet Parameters\"\nParameters for creating a new VPC Subnet",
                     "title": "New VPC",
                     "$ref": "#/definitions/viewsGCPSubnetParamsType"
                 }
@@ -3929,6 +3975,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-deployment": "[\"assisted\",\"cloud_credentials\"]",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GlobalSpecType",
             "properties": {
@@ -3988,6 +4035,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "GCP Instance Type for Node",
                     "x-ves-example": "n1-standard-4",
                     "x-ves-required": "true"
+                },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\nx-displayName: \"Enable Logs Streaming\"\nSelect log receiver for logs streaming",
+                    "title": "Disable Logs Streaming",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\nx-displayName: \"Disable Logs Streaming\"\nLogs Streaming is disabled",
+                    "title": "Disable Logs Receiver",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "nodes_per_az": {
                     "type": "integer",

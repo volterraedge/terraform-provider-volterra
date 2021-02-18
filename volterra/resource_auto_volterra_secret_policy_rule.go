@@ -52,11 +52,13 @@ func resourceVolterraSecretPolicyRule() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"action": {
@@ -196,11 +198,14 @@ func resourceVolterraSecretPolicyRuleCreate(d *schema.ResourceData, meta interfa
 			v.(string)
 	}
 
+	//action
 	if v, ok := d.GetOk("action"); ok && !isIntfNil(v) {
 
 		createSpec.Action = ves_io_schema_policy.RuleAction(ves_io_schema_policy.RuleAction_value[v.(string)])
 
 	}
+
+	//client_choice
 
 	clientChoiceTypeFound := false
 
@@ -275,13 +280,13 @@ func resourceVolterraSecretPolicyRuleCreate(d *schema.ResourceData, meta interfa
 
 	}
 
+	//label_matcher
 	if v, ok := d.GetOk("label_matcher"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		labelMatcher := &ves_io_schema.LabelMatcherType{}
 		createSpec.LabelMatcher = labelMatcher
 		for _, set := range sl {
-
 			labelMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
@@ -479,7 +484,6 @@ func resourceVolterraSecretPolicyRuleUpdate(d *schema.ResourceData, meta interfa
 		labelMatcher := &ves_io_schema.LabelMatcherType{}
 		updateSpec.LabelMatcher = labelMatcher
 		for _, set := range sl {
-
 			labelMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {

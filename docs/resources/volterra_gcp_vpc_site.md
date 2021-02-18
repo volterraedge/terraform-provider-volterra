@@ -20,7 +20,7 @@ resource "volterra_gcp_vpc_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "assisted cloud_credentials" must be set
+  // One of the arguments from this list "cloud_credentials assisted" must be set
 
   cloud_credentials {
     name      = "test1"
@@ -29,6 +29,8 @@ resource "volterra_gcp_vpc_site" "example" {
   }
   gcp_region    = ["us-west1"]
   instance_type = ["n1-standard-4"]
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  logs_streaming_disabled = true
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
@@ -38,7 +40,7 @@ resource "volterra_gcp_vpc_site" "example" {
     gcp_zone_names = ["us-west1-a, us-west1-b, us-west1-c"]
 
     local_network {
-      // One of the arguments from this list "existing_network new_network_autogenerate new_network" must be set
+      // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
 
       new_network_autogenerate {
         autogenerate = true
@@ -92,6 +94,10 @@ Argument Reference
 `gcp_region` - (Required) Name for GCP Region. (`String`).
 
 `instance_type` - (Required) n1-standard-16 (16 x vCPU, 64GB RAM) very high performance (`String`).
+
+`log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
+
+`logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
 `nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
 
@@ -221,13 +227,13 @@ Enable Interception.
 
 ### Existing Network
 
-Information about existing VPC network.
+Name of existing VPC network..
 
 `name` - (Required) Name for your GCP VPC Network (`String`).
 
 ### Existing Subnet
 
-Information about existing subnet.
+Name of existing VPC subnet..
 
 `subnet_name` - (Required) Name of your subnet in VPC network (`String`).
 
@@ -271,27 +277,27 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_global_network` - (Optional) No global network to connect (bool).
 
-`inside_network` - (Optional) Network Subnets for the inside interface of the node. See [Inside Network ](#inside-network) below for details.
+`inside_network` - (Optional) Network for the inside interface of the node. See [Inside Network ](#inside-network) below for details.
 
 `inside_static_routes` - (Optional) Manage static routes for inside network.. See [Inside Static Routes ](#inside-static-routes) below for details.
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
 
-`inside_subnet` - (Optional) Subnets for the inside interface of the node, should be in inside network. See [Inside Subnet ](#inside-subnet) below for details.
+`inside_subnet` - (Optional) Subnet for the inside interface of the node.. See [Inside Subnet ](#inside-subnet) below for details.
 
 `active_network_policies` - (Optional) Network Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
 `no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
 
-`node_number` - (Optional) Number of nodes to created, 1 or 3 supported (`Int`).
+`node_number` - (Optional) Number of nodes to create, either 1 or 3. (`Int`).
 
-`outside_network` - (Optional) Network Subnets for the outside interface of the node. See [Outside Network ](#outside-network) below for details.
+`outside_network` - (Optional) Network for the outside interface of the node. See [Outside Network ](#outside-network) below for details.
 
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
 
-`outside_subnet` - (Optional) Subnets for the outside interface of the node, should be in outside network. See [Outside Subnet ](#outside-subnet) below for details.
+`outside_subnet` - (Optional) Subnet for the outside interface of the node.. See [Outside Subnet ](#outside-subnet) below for details.
 
 ### Ingress Gw
 
@@ -301,21 +307,21 @@ One interface site is useful when site is only used as ingress gateway to the VP
 
 `gcp_zone_names` - (Required) List of zones when instances will be created, needs to match with region selected. (`String`).
 
-`local_network` - (Optional) Network Subnets for the local interface of the node. See [Local Network ](#local-network) below for details.
+`local_network` - (Optional) Network for the local interface of the node. See [Local Network ](#local-network) below for details.
 
-`local_subnet` - (Optional) Subnets for the local interface of the node, should be in local network. See [Local Subnet ](#local-subnet) below for details.
+`local_subnet` - (Optional) Subnet for the local interface of the node.. See [Local Subnet ](#local-subnet) below for details.
 
-`node_number` - (Optional) Number of nodes to created, 1 or 3 supported (`Int`).
+`node_number` - (Optional) Number of nodes to create, either 1 or 3. (`Int`).
 
 ### Inside Network
 
-Network Subnets for the inside interface of the node.
+Network for the inside interface of the node.
 
-`existing_network` - (Optional) Information about existing VPC network. See [Existing Network ](#existing-network) below for details.
+`existing_network` - (Optional) Name of existing VPC network.. See [Existing Network ](#existing-network) below for details.
 
-`new_network` - (Optional) Parameters for creating new VPC network. See [New Network ](#new-network) below for details.
+`new_network` - (Optional) Create new VPC network with specified name.. See [New Network ](#new-network) below for details.
 
-`new_network_autogenerate` - (Optional) Autogenerate parameters for creating new VPC network. See [New Network Autogenerate ](#new-network-autogenerate) below for details.
+`new_network_autogenerate` - (Optional) Create new VPC network with autogenerated name.. See [New Network Autogenerate ](#new-network-autogenerate) below for details.
 
 ### Inside Static Routes
 
@@ -325,11 +331,11 @@ Manage static routes for inside network..
 
 ### Inside Subnet
 
-Subnets for the inside interface of the node, should be in inside network.
+Subnet for the inside interface of the node..
 
-`existing_subnet` - (Optional) Information about existing subnet. See [Existing Subnet ](#existing-subnet) below for details.
+`existing_subnet` - (Optional) Name of existing VPC subnet.. See [Existing Subnet ](#existing-subnet) below for details.
 
-`new_subnet` - (Optional) Parameters for creating new subnet. See [New Subnet ](#new-subnet) below for details.
+`new_subnet` - (Optional) Parameters for creating a new VPC Subnet. See [New Subnet ](#new-subnet) below for details.
 
 ### Interception Rules
 
@@ -355,37 +361,37 @@ IPv6 Address.
 
 ### Local Network
 
-Network Subnets for the local interface of the node.
+Network for the local interface of the node.
 
-`existing_network` - (Optional) Information about existing VPC network. See [Existing Network ](#existing-network) below for details.
+`existing_network` - (Optional) Name of existing VPC network.. See [Existing Network ](#existing-network) below for details.
 
-`new_network` - (Optional) Parameters for creating new VPC network. See [New Network ](#new-network) below for details.
+`new_network` - (Optional) Create new VPC network with specified name.. See [New Network ](#new-network) below for details.
 
-`new_network_autogenerate` - (Optional) Autogenerate parameters for creating new VPC network. See [New Network Autogenerate ](#new-network-autogenerate) below for details.
+`new_network_autogenerate` - (Optional) Create new VPC network with autogenerated name.. See [New Network Autogenerate ](#new-network-autogenerate) below for details.
 
 ### Local Subnet
 
-Subnets for the local interface of the node, should be in local network.
+Subnet for the local interface of the node..
 
-`existing_subnet` - (Optional) Information about existing subnet. See [Existing Subnet ](#existing-subnet) below for details.
+`existing_subnet` - (Optional) Name of existing VPC subnet.. See [Existing Subnet ](#existing-subnet) below for details.
 
-`new_subnet` - (Optional) Parameters for creating new subnet. See [New Subnet ](#new-subnet) below for details.
+`new_subnet` - (Optional) Parameters for creating a new VPC Subnet. See [New Subnet ](#new-subnet) below for details.
 
 ### New Network
 
-Parameters for creating new VPC network.
+Create new VPC network with specified name..
 
 `name` - (Required) Name for your GCP VPC Network (`String`).
 
 ### New Network Autogenerate
 
-Autogenerate parameters for creating new VPC network.
+Create new VPC network with autogenerated name..
 
 `autogenerate` - (Optional) Name for your GCP VPC Network will be autogenerated (`Bool`).
 
 ### New Subnet
 
-Parameters for creating new subnet.
+Parameters for creating a new VPC Subnet.
 
 `primary_ipv4` - (Required) IPv4 prefix for this Subnet. It has to be private address space. (`String`).
 
@@ -435,13 +441,13 @@ Static Routes disabled for outside network..
 
 ### Outside Network
 
-Network Subnets for the outside interface of the node.
+Network for the outside interface of the node.
 
-`existing_network` - (Optional) Information about existing VPC network. See [Existing Network ](#existing-network) below for details.
+`existing_network` - (Optional) Name of existing VPC network.. See [Existing Network ](#existing-network) below for details.
 
-`new_network` - (Optional) Parameters for creating new VPC network. See [New Network ](#new-network) below for details.
+`new_network` - (Optional) Create new VPC network with specified name.. See [New Network ](#new-network) below for details.
 
-`new_network_autogenerate` - (Optional) Autogenerate parameters for creating new VPC network. See [New Network Autogenerate ](#new-network-autogenerate) below for details.
+`new_network_autogenerate` - (Optional) Create new VPC network with autogenerated name.. See [New Network Autogenerate ](#new-network-autogenerate) below for details.
 
 ### Outside Static Routes
 
@@ -451,11 +457,11 @@ Manage static routes for outside network..
 
 ### Outside Subnet
 
-Subnets for the outside interface of the node, should be in outside network.
+Subnet for the outside interface of the node..
 
-`existing_subnet` - (Optional) Information about existing subnet. See [Existing Subnet ](#existing-subnet) below for details.
+`existing_subnet` - (Optional) Name of existing VPC subnet.. See [Existing Subnet ](#existing-subnet) below for details.
 
-`new_subnet` - (Optional) Parameters for creating new subnet. See [New Subnet ](#new-subnet) below for details.
+`new_subnet` - (Optional) Parameters for creating a new VPC Subnet. See [New Subnet ](#new-subnet) below for details.
 
 ### Policy
 
@@ -491,21 +497,21 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 ### Site Local Network
 
-Network for the site local interface of the node.
+Network for the local interface of the node.
 
-`existing_network` - (Optional) Information about existing VPC network. See [Existing Network ](#existing-network) below for details.
+`existing_network` - (Optional) Name of existing VPC network.. See [Existing Network ](#existing-network) below for details.
 
-`new_network` - (Optional) Parameters for creating new VPC network. See [New Network ](#new-network) below for details.
+`new_network` - (Optional) Create new VPC network with specified name.. See [New Network ](#new-network) below for details.
 
-`new_network_autogenerate` - (Optional) Autogenerate parameters for creating new VPC network. See [New Network Autogenerate ](#new-network-autogenerate) below for details.
+`new_network_autogenerate` - (Optional) Create new VPC network with autogenerated name.. See [New Network Autogenerate ](#new-network-autogenerate) below for details.
 
 ### Site Local Subnet
 
-Subnet for the site local interface of the node..
+Subnet for the local interface of the node..
 
-`existing_subnet` - (Optional) Information about existing subnet. See [Existing Subnet ](#existing-subnet) below for details.
+`existing_subnet` - (Optional) Name of existing VPC subnet.. See [Existing Subnet ](#existing-subnet) below for details.
 
-`new_subnet` - (Optional) Parameters for creating new subnet. See [New Subnet ](#new-subnet) below for details.
+`new_subnet` - (Optional) Parameters for creating a new VPC Subnet. See [New Subnet ](#new-subnet) below for details.
 
 ### Sli To Global Dr
 
@@ -595,15 +601,15 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_network_policy` - (Optional) Network Policy is disabled for this site. (bool).
 
-`node_number` - (Optional) Number of nodes to created, 1 or 3 supported (`Int`).
+`node_number` - (Optional) Number of nodes to create, either 1 or 3. (`Int`).
 
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
 
-`site_local_network` - (Optional) Network for the site local interface of the node. See [Site Local Network ](#site-local-network) below for details.
+`site_local_network` - (Optional) Network for the local interface of the node. See [Site Local Network ](#site-local-network) below for details.
 
-`site_local_subnet` - (Optional) Subnet for the site local interface of the node.. See [Site Local Subnet ](#site-local-subnet) below for details.
+`site_local_subnet` - (Optional) Subnet for the local interface of the node.. See [Site Local Subnet ](#site-local-subnet) below for details.
 
 ### Wingman Secret Info
 

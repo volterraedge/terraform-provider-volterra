@@ -51,11 +51,13 @@ func resourceVolterraUser() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"contacts": {
@@ -167,6 +169,7 @@ func resourceVolterraUserCreate(d *schema.ResourceData, meta interface{}) error 
 			v.(string)
 	}
 
+	//contacts
 	if v, ok := d.GetOk("contacts"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -199,30 +202,35 @@ func resourceVolterraUserCreate(d *schema.ResourceData, meta interface{}) error 
 
 	}
 
+	//email
 	if v, ok := d.GetOk("email"); ok && !isIntfNil(v) {
 
 		createSpec.Email =
 			v.(string)
 	}
 
+	//first_name
 	if v, ok := d.GetOk("first_name"); ok && !isIntfNil(v) {
 
 		createSpec.FirstName =
 			v.(string)
 	}
 
+	//last_name
 	if v, ok := d.GetOk("last_name"); ok && !isIntfNil(v) {
 
 		createSpec.LastName =
 			v.(string)
 	}
 
+	//locale
 	if v, ok := d.GetOk("locale"); ok && !isIntfNil(v) {
 
 		createSpec.Locale =
 			v.(string)
 	}
 
+	//type
 	if v, ok := d.GetOk("type"); ok && !isIntfNil(v) {
 
 		createSpec.Type = ves_io_schema_user.UserType(ves_io_schema_user.UserType_value[v.(string)])

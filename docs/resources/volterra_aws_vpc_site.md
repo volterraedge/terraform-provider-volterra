@@ -21,11 +21,18 @@ resource "volterra_aws_vpc_site" "example" {
   namespace  = "staging"
   aws_region = ["us-east-1"]
 
-  // One of the arguments from this list "assisted aws_cred" must be set
-  assisted      = true
-  instance_type = ["a1.xlarge"]
+  // One of the arguments from this list "aws_cred assisted" must be set
 
-  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
+  aws_cred {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+  instance_type = ["a1.xlarge"]
+  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
+  logs_streaming_disabled = true
+
+  // One of the arguments from this list "voltstack_cluster ingress_gw ingress_egress_gw" must be set
 
   ingress_gw {
     aws_certified_hw = "aws-byol-voltmesh"
@@ -36,11 +43,7 @@ resource "volterra_aws_vpc_site" "example" {
 
       local_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
-
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
+        existing_subnet_id = "subnet-12345678901234567"
       }
     }
   }
@@ -80,6 +83,10 @@ Argument Reference
 `disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
 
 `instance_type` - (Required) m5.4xlarge (16 x vCPU, 64GB RAM) very high performance (`String`).
+
+`log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
+
+`logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
 `nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
 

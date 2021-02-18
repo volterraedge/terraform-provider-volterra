@@ -593,7 +593,7 @@ type ReACLType struct {
 	//
 	// x-displayName: "Select VIP(s)"
 	// x-required
-	// Select VIP(s) where  fast ACL will be applied. Will give error if shared VIP is selected
+	// Select VIP(s) where Fast ACL will be applied. Fast ACL with shared VIP not supported.
 	//
 	// Types that are valid to be assigned to VipChoice:
 	//	*ReACLType_AllPublicVips
@@ -1056,7 +1056,7 @@ type LegacyACLType struct {
 	// Source Rules
 	//
 	// x-displayName: "Source Rules"
-	// List of fast ACL rules to be applied to received packets on this site
+	// List of Fast ACL rules to be applied to received packets on this site
 	SourceRules []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,3,rep,name=source_rules,json=sourceRules" json:"source_rules,omitempty"`
 }
 
@@ -1111,7 +1111,7 @@ type GlobalSpecType struct {
 	// Source Rules
 	//
 	// x-displayName: "Source Rules"
-	// List of fast ACL rules to be applied to received packets on this site
+	// List of Fast ACL rules to be applied to received packets on this site
 	SourceRules []*ves_io_schema4.ObjectRefType `protobuf:"bytes,10,rep,name=source_rules,json=sourceRules" json:"source_rules,omitempty"`
 	// Default protocol policer
 	//

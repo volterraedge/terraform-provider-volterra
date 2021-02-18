@@ -24,15 +24,15 @@ var _ = golang_proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-// fast ACL set specification
+// Fast ACL set specification
 //
 // x-displayName: "Specification"
-// Desired state of fast ACL set
+// Desired state of Fast ACL set
 type GlobalSpecType struct {
 	// Acl list
 	//
 	// x-displayName: "Acl List"
-	// Ordered list of references to the fast ACL that make up this fast ACL set.
+	// Ordered list of references to the Fast ACL that make up this Fast ACL set.
 	AclList []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=acl_list,json=aclList" json:"acl_list,omitempty"`
 }
 
@@ -47,10 +47,10 @@ func (m *GlobalSpecType) GetAclList() []*ves_io_schema4.ObjectRefType {
 	return nil
 }
 
-// Create fast ACL Set
+// Create Fast ACL Set
 //
 // x-displayName: "Create Fast ACL Set"
-// Create fast ACL Set in a given namespace. If one already exist it will give a error.
+// Create Fast ACL Set in a given namespace. If one already exist it will give a error.
 type CreateSpecType struct {
 	AclList []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=acl_list,json=aclList" json:"acl_list,omitempty"`
 }
@@ -66,10 +66,10 @@ func (m *CreateSpecType) GetAclList() []*ves_io_schema4.ObjectRefType {
 	return nil
 }
 
-// Replace fast ACL Set
+// Replace Fast ACL Set
 //
 // x-displayName: "Replace Fast ACL Set"
-// Replace fast ACL Set in a given namespace.
+// Replace Fast ACL Set in a given namespace.
 type ReplaceSpecType struct {
 	AclList []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=acl_list,json=aclList" json:"acl_list,omitempty"`
 }
@@ -85,10 +85,10 @@ func (m *ReplaceSpecType) GetAclList() []*ves_io_schema4.ObjectRefType {
 	return nil
 }
 
-// Get fast ACL Set
+// Get Fast ACL Set
 //
 // x-displayName: "Get Fast ACL Set"
-// Get fast ACL set in a given namespace.
+// Get Fast ACL set in a given namespace.
 type GetSpecType struct {
 	AclList []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1,rep,name=acl_list,json=aclList" json:"acl_list,omitempty"`
 }

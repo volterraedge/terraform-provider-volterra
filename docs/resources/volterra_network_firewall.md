@@ -20,20 +20,24 @@ resource "volterra_network_firewall" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "fast_acl_set disable_fast_acl active_fast_acls" must be set
+  // One of the arguments from this list "disable_fast_acl active_fast_acls fast_acl_set" must be set
   disable_fast_acl = true
 
   // One of the arguments from this list "disable_forward_proxy_policy active_forward_proxy_policies forward_proxy_policy_set" must be set
 
-  active_forward_proxy_policies {
-    forward_proxy_policies {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
+  forward_proxy_policy_set {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
   }
+
   // One of the arguments from this list "disable_network_policy active_network_policies network_policy_set" must be set
-  disable_network_policy = true
+
+  network_policy_set {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 }
 
 ```

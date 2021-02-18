@@ -21,7 +21,13 @@ resource "volterra_virtual_host" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
-  no_challenge = true
+
+  js_challenge {
+    cookie_expiry       = "cookie_expiry"
+    custom_page         = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+    enable_js_challenge = true
+    js_script_delay     = "js_script_delay"
+  }
 }
 
 ```
@@ -96,6 +102,14 @@ Argument Reference
 `retry_policy` - (Optional) Indicates that the virtual_host has a retry policy.. See [Retry Policy ](#retry-policy) below for details.
 
 `routes` - (Optional) VirtualHosts cannot have DirectResponse or Redirect as actions.. See [ref](#ref) below for details.
+
+`append_server_name` - (Optional) If Server Header is already present it is not overwritten. It is just passed. (`String`).
+
+`default_header` - (Optional) Specifies that the default value of "volt-adc" should be used for Server Header (bool).
+
+`pass_through` - (Optional) appended. (bool).
+
+`server_name` - (Optional) This will overwrite existing values if any for Server Header (`String`).
 
 `temporary_user_blocking` - (Optional) Specifies configuration for temporary user blocking resulting from malicious user detection. See [Temporary User Blocking ](#temporary-user-blocking) below for details.
 

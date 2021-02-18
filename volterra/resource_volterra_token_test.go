@@ -9,16 +9,19 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
+	"github.com/stretchr/testify/assert"
+	"gopkg.volterra.us/stdlib/client"
+	"gopkg.volterra.us/stdlib/db"
+	"gopkg.volterra.us/stdlib/server"
+	"gopkg.volterra.us/stdlib/svcfw/test/generic"
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_token "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/token"
-	"gopkg.volterra.us/stdlib/client"
-	"gopkg.volterra.us/stdlib/server"
 )
 
 // TestAccToken token creation test
 func TestAccToken(t *testing.T) {
 	name := generateResourceName()
-	testURL, stopFunc := createTokenTestServer(t)
+	f, testURL, stopFunc := createTokenTestServer(t)
 	resourceName := fmt.Sprintf("volterra_token.%s", name)
 	defer stopFunc()
 	os.Setenv("VOLT_API_TEST", "true")
@@ -38,6 +41,9 @@ func TestAccToken(t *testing.T) {
 			},
 		},
 	})
+	// validate if token exists
+	entry := f.MustFindEntry(ves_io_schema_token.ObjectDefTblName, "", db.WithFindUsingNSIndex("ves-io", systemNS, "token"))
+	assert.NotNil(t, entry)
 }
 
 func testConfigToken(resourceName, name, namespace string) string {
@@ -50,14 +56,14 @@ func testConfigToken(resourceName, name, namespace string) string {
 		`, resourceName, name, namespace)
 }
 
-func createTokenTestServer(t *testing.T) (string, func()) {
+func createTokenTestServer(t *testing.T) (*generic.Fixture, string, func()) {
 
 	f, stop := makeTestServer(t, ves_io_schema_token.ObjectType)
-	siteObj := mkDBObjToken(systemNS, "token")
+	tokenObj := mkDBObjToken(systemNS, "token")
 	ctx := client.NewContextWithHeaders(nil, client.WithTenant("ves-io"))
-	f.MustCreateEntry(siteObj, server.WithCtx(ctx))
+	f.MustCreateEntry(tokenObj, server.WithCtx(ctx))
 
-	return fmt.Sprintf("https://localhost:%d", f.Svc.RestServerTLSPort()), stop
+	return f, fmt.Sprintf("https://localhost:%d", f.Svc.RestServerTLSPort()), stop
 }
 
 func mkDBObjToken(namespace, name string) *ves_io_schema_token.DBObject {

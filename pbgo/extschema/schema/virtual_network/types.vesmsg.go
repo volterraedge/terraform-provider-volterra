@@ -547,6 +547,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_Srv6Network:
+		if fv, exists := v.FldValidators["network_choice.srv6_network"]; exists {
+			val := m.GetNetworkChoice().(*CreateSpecType_Srv6Network).Srv6Network
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("srv6_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -608,11 +619,153 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["static_routes"] = vFn
 
+	v.FldValidators["network_choice.srv6_network"] = PerSiteSrv6NetworkTypeValidator().Validate
+
 	return v
 }()
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DNSServersList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSServersList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSServersList) DeepCopy() *DNSServersList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSServersList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSServersList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSServersList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSServersListValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSServersList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSServersList) DnsIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for dns_ip")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for dns_ip")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated dns_ip")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items dns_ip")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSServersList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSServersList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSServersList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_ip"]; exists {
+		vOpts := append(opts, db.WithValidateField("dns_ip"))
+		if err := fv(ctx, m.GetDnsIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSServersListValidator = func() *ValidateDNSServersList {
+	v := &ValidateDNSServersList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDnsIp := v.DnsIpValidationRuleHandler
+	rulesDnsIp := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.ip": "true",
+		"ves.io.schema.rules.repeated.max_items":       "4",
+		"ves.io.schema.rules.repeated.min_items":       "1",
+	}
+	vFn, err = vrhDnsIp(rulesDnsIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSServersList.dns_ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dns_ip"] = vFn
+
+	return v
+}()
+
+func DNSServersListValidator() db.Validator {
+	return DefaultDNSServersListValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -822,6 +975,28 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_PrivateNetwork:
+		if fv, exists := v.FldValidators["network_choice.private_network"]; exists {
+			val := m.GetNetworkChoice().(*GetSpecType_PrivateNetwork).PrivateNetwork
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("private_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_Srv6Network:
+		if fv, exists := v.FldValidators["network_choice.srv6_network"]; exists {
+			val := m.GetNetworkChoice().(*GetSpecType_Srv6Network).Srv6Network
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("srv6_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -882,6 +1057,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["static_routes"] = vFn
+
+	v.FldValidators["network_choice.srv6_network"] = PerSiteSrv6NetworkTypeValidator().Validate
 
 	return v
 }()
@@ -1164,6 +1341,37 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_PrivateNetwork:
+		if fv, exists := v.FldValidators["network_choice.private_network"]; exists {
+			val := m.GetNetworkChoice().(*GlobalSpecType_PrivateNetwork).PrivateNetwork
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("private_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_Srv6Network:
+		if fv, exists := v.FldValidators["network_choice.srv6_network"]; exists {
+			val := m.GetNetworkChoice().(*GlobalSpecType_Srv6Network).Srv6Network
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("srv6_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["private_network_parameters"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("private_network_parameters"))
+		if err := fv(ctx, m.GetPrivateNetworkParameters(), vOpts...); err != nil {
+			return err
+		}
 
 	}
 
@@ -1243,7 +1451,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhType := v.TypeValidationRuleHandler
 	rulesType := map[string]string{
-		"ves.io.schema.rules.enum.in":          "[0,1,2,3,4,7]",
+		"ves.io.schema.rules.enum.in":          "[0,1,2,3,4,7,9,10]",
 		"ves.io.schema.rules.message.required": "true",
 	}
 	vFn, err = vrhType(rulesType)
@@ -1264,6 +1472,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["static_routes"] = vFn
+
+	v.FldValidators["network_choice.srv6_network"] = PerSiteSrv6NetworkTypeValidator().Validate
+
+	v.FldValidators["private_network_parameters"] = VoltADNPrivateNetworkTypeValidator().Validate
 
 	return v
 }()
@@ -1474,6 +1686,138 @@ func NextHopInterfaceListValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *PerSiteSrv6NetworkType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PerSiteSrv6NetworkType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PerSiteSrv6NetworkType) DeepCopy() *PerSiteSrv6NetworkType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PerSiteSrv6NetworkType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PerSiteSrv6NetworkType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PerSiteSrv6NetworkType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PerSiteSrv6NetworkTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePerSiteSrv6NetworkType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePerSiteSrv6NetworkType) NamespaceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidatePerSiteSrv6NetworkType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PerSiteSrv6NetworkType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PerSiteSrv6NetworkType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace_choice"]; exists {
+		val := m.GetNamespaceChoice()
+		vOpts := append(opts,
+			db.WithValidateField("namespace_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetNamespaceChoice().(type) {
+	case *PerSiteSrv6NetworkType_NoNamespaceNetwork:
+		if fv, exists := v.FldValidators["namespace_choice.no_namespace_network"]; exists {
+			val := m.GetNamespaceChoice().(*PerSiteSrv6NetworkType_NoNamespaceNetwork).NoNamespaceNetwork
+			vOpts := append(opts,
+				db.WithValidateField("namespace_choice"),
+				db.WithValidateField("no_namespace_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PerSiteSrv6NetworkType_Srv6NetworkNsParams:
+		if fv, exists := v.FldValidators["namespace_choice.srv6_network_ns_params"]; exists {
+			val := m.GetNamespaceChoice().(*PerSiteSrv6NetworkType_Srv6NetworkNsParams).Srv6NetworkNsParams
+			vOpts := append(opts,
+				db.WithValidateField("namespace_choice"),
+				db.WithValidateField("srv6_network_ns_params"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPerSiteSrv6NetworkTypeValidator = func() *ValidatePerSiteSrv6NetworkType {
+	v := &ValidatePerSiteSrv6NetworkType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespaceChoice := v.NamespaceChoiceValidationRuleHandler
+	rulesNamespaceChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNamespaceChoice(rulesNamespaceChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PerSiteSrv6NetworkType.namespace_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace_choice"] = vFn
+
+	return v
+}()
+
+func PerSiteSrv6NetworkTypeValidator() db.Validator {
+	return DefaultPerSiteSrv6NetworkTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ReplaceSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1679,6 +2023,28 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_PrivateNetwork:
+		if fv, exists := v.FldValidators["network_choice.private_network"]; exists {
+			val := m.GetNetworkChoice().(*ReplaceSpecType_PrivateNetwork).PrivateNetwork
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("private_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_Srv6Network:
+		if fv, exists := v.FldValidators["network_choice.srv6_network"]; exists {
+			val := m.GetNetworkChoice().(*ReplaceSpecType_Srv6Network).Srv6Network
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("srv6_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1740,11 +2106,91 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["static_routes"] = vFn
 
+	v.FldValidators["network_choice.srv6_network"] = PerSiteSrv6NetworkTypeValidator().Validate
+
 	return v
 }()
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *Srv6NetworkNsParametersType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Srv6NetworkNsParametersType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Srv6NetworkNsParametersType) DeepCopy() *Srv6NetworkNsParametersType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Srv6NetworkNsParametersType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Srv6NetworkNsParametersType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Srv6NetworkNsParametersType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return Srv6NetworkNsParametersTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSrv6NetworkNsParametersType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSrv6NetworkNsParametersType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Srv6NetworkNsParametersType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Srv6NetworkNsParametersType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSrv6NetworkNsParametersTypeValidator = func() *ValidateSrv6NetworkNsParametersType {
+	v := &ValidateSrv6NetworkNsParametersType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func Srv6NetworkNsParametersTypeValidator() db.Validator {
+	return DefaultSrv6NetworkNsParametersTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2120,6 +2566,671 @@ func StaticRouteViewTypeValidator() db.Validator {
 	return DefaultStaticRouteViewTypeValidator
 }
 
+// augmented methods on protoc/std generated struct
+
+func (m *VoltADNPrivateNetworkReInfoType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VoltADNPrivateNetworkReInfoType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VoltADNPrivateNetworkReInfoType) DeepCopy() *VoltADNPrivateNetworkReInfoType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VoltADNPrivateNetworkReInfoType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VoltADNPrivateNetworkReInfoType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VoltADNPrivateNetworkReInfoType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VoltADNPrivateNetworkReInfoTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVoltADNPrivateNetworkReInfoType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVoltADNPrivateNetworkReInfoType) VlanValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vlan")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVoltADNPrivateNetworkReInfoType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VoltADNPrivateNetworkReInfoType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VoltADNPrivateNetworkReInfoType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["node_selector"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_selector"))
+		if err := fv(ctx, m.GetNodeSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vlan"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vlan"))
+		if err := fv(ctx, m.GetVlan(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVoltADNPrivateNetworkReInfoTypeValidator = func() *ValidateVoltADNPrivateNetworkReInfoType {
+	v := &ValidateVoltADNPrivateNetworkReInfoType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVlan := v.VlanValidationRuleHandler
+	rulesVlan := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "4094",
+	}
+	vFn, err = vrhVlan(rulesVlan)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VoltADNPrivateNetworkReInfoType.vlan: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vlan"] = vFn
+
+	v.FldValidators["node_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+
+	return v
+}()
+
+func VoltADNPrivateNetworkReInfoTypeValidator() db.Validator {
+	return DefaultVoltADNPrivateNetworkReInfoTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VoltADNPrivateNetworkTenantInfoType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VoltADNPrivateNetworkTenantInfoType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VoltADNPrivateNetworkTenantInfoType) DeepCopy() *VoltADNPrivateNetworkTenantInfoType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VoltADNPrivateNetworkTenantInfoType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VoltADNPrivateNetworkTenantInfoType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VoltADNPrivateNetworkTenantInfoType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VoltADNPrivateNetworkTenantInfoTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVoltADNPrivateNetworkTenantInfoType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVoltADNPrivateNetworkTenantInfoType) DefaultPrivateVipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for default_private_vip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVoltADNPrivateNetworkTenantInfoType) FinalDefaultPrivateVipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for final_default_private_vip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVoltADNPrivateNetworkTenantInfoType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VoltADNPrivateNetworkTenantInfoType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VoltADNPrivateNetworkTenantInfoType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["default_private_vip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_private_vip"))
+		if err := fv(ctx, m.GetDefaultPrivateVip(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["final_default_private_vip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("final_default_private_vip"))
+		if err := fv(ctx, m.GetFinalDefaultPrivateVip(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVoltADNPrivateNetworkTenantInfoTypeValidator = func() *ValidateVoltADNPrivateNetworkTenantInfoType {
+	v := &ValidateVoltADNPrivateNetworkTenantInfoType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDefaultPrivateVip := v.DefaultPrivateVipValidationRuleHandler
+	rulesDefaultPrivateVip := map[string]string{
+		"ves.io.schema.rules.string.ip": "true",
+	}
+	vFn, err = vrhDefaultPrivateVip(rulesDefaultPrivateVip)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VoltADNPrivateNetworkTenantInfoType.default_private_vip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["default_private_vip"] = vFn
+
+	vrhFinalDefaultPrivateVip := v.FinalDefaultPrivateVipValidationRuleHandler
+	rulesFinalDefaultPrivateVip := map[string]string{
+		"ves.io.schema.rules.string.ip": "true",
+	}
+	vFn, err = vrhFinalDefaultPrivateVip(rulesFinalDefaultPrivateVip)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VoltADNPrivateNetworkTenantInfoType.final_default_private_vip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["final_default_private_vip"] = vFn
+
+	return v
+}()
+
+func VoltADNPrivateNetworkTenantInfoTypeValidator() db.Validator {
+	return DefaultVoltADNPrivateNetworkTenantInfoTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VoltADNPrivateNetworkType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VoltADNPrivateNetworkType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VoltADNPrivateNetworkType) DeepCopy() *VoltADNPrivateNetworkType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VoltADNPrivateNetworkType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VoltADNPrivateNetworkType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VoltADNPrivateNetworkType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VoltADNPrivateNetworkTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVoltADNPrivateNetworkType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVoltADNPrivateNetworkType) DedicatedVipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for dedicated_vip_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateVoltADNPrivateNetworkType) DnsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateVoltADNPrivateNetworkType) PrivateAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for private_access_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateVoltADNPrivateNetworkType) ReInfoMapValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for re_info_map")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]*VoltADNPrivateNetworkReInfoType, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := VoltADNPrivateNetworkReInfoTypeValidator().Validate(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for re_info_map")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]*VoltADNPrivateNetworkReInfoType)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]*VoltADNPrivateNetworkReInfoType, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map re_info_map")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items re_info_map")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVoltADNPrivateNetworkType) OwnerTenantIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for owner_tenant_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVoltADNPrivateNetworkType) TenantInfoMapValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for tenant_info_map")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]*VoltADNPrivateNetworkTenantInfoType, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := VoltADNPrivateNetworkTenantInfoTypeValidator().Validate(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for tenant_info_map")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]*VoltADNPrivateNetworkTenantInfoType)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]*VoltADNPrivateNetworkTenantInfoType, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map tenant_info_map")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items tenant_info_map")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVoltADNPrivateNetworkType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VoltADNPrivateNetworkType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VoltADNPrivateNetworkType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["common_node_selector"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("common_node_selector"))
+		if err := fv(ctx, m.GetCommonNodeSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dedicated_vip_choice"]; exists {
+		val := m.GetDedicatedVipChoice()
+		vOpts := append(opts,
+			db.WithValidateField("dedicated_vip_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDedicatedVipChoice().(type) {
+	case *VoltADNPrivateNetworkType_NoAdvertiseDedicatedVips:
+		if fv, exists := v.FldValidators["dedicated_vip_choice.no_advertise_dedicated_vips"]; exists {
+			val := m.GetDedicatedVipChoice().(*VoltADNPrivateNetworkType_NoAdvertiseDedicatedVips).NoAdvertiseDedicatedVips
+			vOpts := append(opts,
+				db.WithValidateField("dedicated_vip_choice"),
+				db.WithValidateField("no_advertise_dedicated_vips"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *VoltADNPrivateNetworkType_AdvertiseDedicatedVips:
+		if fv, exists := v.FldValidators["dedicated_vip_choice.advertise_dedicated_vips"]; exists {
+			val := m.GetDedicatedVipChoice().(*VoltADNPrivateNetworkType_AdvertiseDedicatedVips).AdvertiseDedicatedVips
+			vOpts := append(opts,
+				db.WithValidateField("dedicated_vip_choice"),
+				db.WithValidateField("advertise_dedicated_vips"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_choice"]; exists {
+		val := m.GetDnsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("dns_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDnsChoice().(type) {
+	case *VoltADNPrivateNetworkType_NoPrivateDns:
+		if fv, exists := v.FldValidators["dns_choice.no_private_dns"]; exists {
+			val := m.GetDnsChoice().(*VoltADNPrivateNetworkType_NoPrivateDns).NoPrivateDns
+			vOpts := append(opts,
+				db.WithValidateField("dns_choice"),
+				db.WithValidateField("no_private_dns"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *VoltADNPrivateNetworkType_PrivateDns:
+		if fv, exists := v.FldValidators["dns_choice.private_dns"]; exists {
+			val := m.GetDnsChoice().(*VoltADNPrivateNetworkType_PrivateDns).PrivateDns
+			vOpts := append(opts,
+				db.WithValidateField("dns_choice"),
+				db.WithValidateField("private_dns"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["owner_tenant_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("owner_tenant_id"))
+		if err := fv(ctx, m.GetOwnerTenantId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["private_access_choice"]; exists {
+		val := m.GetPrivateAccessChoice()
+		vOpts := append(opts,
+			db.WithValidateField("private_access_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPrivateAccessChoice().(type) {
+	case *VoltADNPrivateNetworkType_NoPrivateAccess:
+		if fv, exists := v.FldValidators["private_access_choice.no_private_access"]; exists {
+			val := m.GetPrivateAccessChoice().(*VoltADNPrivateNetworkType_NoPrivateAccess).NoPrivateAccess
+			vOpts := append(opts,
+				db.WithValidateField("private_access_choice"),
+				db.WithValidateField("no_private_access"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *VoltADNPrivateNetworkType_PrivateAccessEnabled:
+		if fv, exists := v.FldValidators["private_access_choice.private_access_enabled"]; exists {
+			val := m.GetPrivateAccessChoice().(*VoltADNPrivateNetworkType_PrivateAccessEnabled).PrivateAccessEnabled
+			vOpts := append(opts,
+				db.WithValidateField("private_access_choice"),
+				db.WithValidateField("private_access_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["re_info_map"]; exists {
+		vOpts := append(opts, db.WithValidateField("re_info_map"))
+		if err := fv(ctx, m.GetReInfoMap(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant_info_map"]; exists {
+		vOpts := append(opts, db.WithValidateField("tenant_info_map"))
+		if err := fv(ctx, m.GetTenantInfoMap(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVoltADNPrivateNetworkTypeValidator = func() *ValidateVoltADNPrivateNetworkType {
+	v := &ValidateVoltADNPrivateNetworkType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDedicatedVipChoice := v.DedicatedVipChoiceValidationRuleHandler
+	rulesDedicatedVipChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDedicatedVipChoice(rulesDedicatedVipChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VoltADNPrivateNetworkType.dedicated_vip_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dedicated_vip_choice"] = vFn
+
+	vrhDnsChoice := v.DnsChoiceValidationRuleHandler
+	rulesDnsChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDnsChoice(rulesDnsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VoltADNPrivateNetworkType.dns_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dns_choice"] = vFn
+
+	vrhPrivateAccessChoice := v.PrivateAccessChoiceValidationRuleHandler
+	rulesPrivateAccessChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPrivateAccessChoice(rulesPrivateAccessChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VoltADNPrivateNetworkType.private_access_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["private_access_choice"] = vFn
+
+	vrhReInfoMap := v.ReInfoMapValidationRuleHandler
+	rulesReInfoMap := map[string]string{
+		"ves.io.schema.rules.map.keys.string.max_len": "64",
+		"ves.io.schema.rules.map.keys.string.min_len": "1",
+		"ves.io.schema.rules.map.max_pairs":           "64",
+	}
+	vFn, err = vrhReInfoMap(rulesReInfoMap)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VoltADNPrivateNetworkType.re_info_map: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["re_info_map"] = vFn
+
+	vrhOwnerTenantId := v.OwnerTenantIdValidationRuleHandler
+	rulesOwnerTenantId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "64",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhOwnerTenantId(rulesOwnerTenantId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VoltADNPrivateNetworkType.owner_tenant_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["owner_tenant_id"] = vFn
+
+	vrhTenantInfoMap := v.TenantInfoMapValidationRuleHandler
+	rulesTenantInfoMap := map[string]string{
+		"ves.io.schema.rules.map.keys.string.max_len": "64",
+		"ves.io.schema.rules.map.keys.string.min_len": "1",
+		"ves.io.schema.rules.map.max_pairs":           "64",
+	}
+	vFn, err = vrhTenantInfoMap(rulesTenantInfoMap)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VoltADNPrivateNetworkType.tenant_info_map: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tenant_info_map"] = vFn
+
+	v.FldValidators["dns_choice.private_dns"] = DNSServersListValidator().Validate
+
+	v.FldValidators["common_node_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+
+	return v
+}()
+
+func VoltADNPrivateNetworkTypeValidator() db.Validator {
+	return DefaultVoltADNPrivateNetworkTypeValidator
+}
+
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetNetworkChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.NetworkChoice.(type) {
@@ -2137,6 +3248,9 @@ func (r *CreateSpecType) SetNetworkChoiceToGlobalSpecType(o *GlobalSpecType) err
 
 	case *CreateSpecType_SiteLocalNetwork:
 		o.NetworkChoice = &GlobalSpecType_SiteLocalNetwork{SiteLocalNetwork: of.SiteLocalNetwork}
+
+	case *CreateSpecType_Srv6Network:
+		o.NetworkChoice = &GlobalSpecType_Srv6Network{Srv6Network: of.Srv6Network}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -2160,6 +3274,9 @@ func (r *CreateSpecType) GetNetworkChoiceFromGlobalSpecType(o *GlobalSpecType) e
 
 	case *GlobalSpecType_SiteLocalNetwork:
 		r.NetworkChoice = &CreateSpecType_SiteLocalNetwork{SiteLocalNetwork: of.SiteLocalNetwork}
+
+	case *GlobalSpecType_Srv6Network:
+		r.NetworkChoice = &CreateSpecType_Srv6Network{Srv6Network: of.Srv6Network}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -2197,11 +3314,17 @@ func (r *GetSpecType) SetNetworkChoiceToGlobalSpecType(o *GlobalSpecType) error 
 	case *GetSpecType_LegacyType:
 		o.NetworkChoice = &GlobalSpecType_LegacyType{LegacyType: of.LegacyType}
 
+	case *GetSpecType_PrivateNetwork:
+		o.NetworkChoice = &GlobalSpecType_PrivateNetwork{PrivateNetwork: of.PrivateNetwork}
+
 	case *GetSpecType_SiteLocalInsideNetwork:
 		o.NetworkChoice = &GlobalSpecType_SiteLocalInsideNetwork{SiteLocalInsideNetwork: of.SiteLocalInsideNetwork}
 
 	case *GetSpecType_SiteLocalNetwork:
 		o.NetworkChoice = &GlobalSpecType_SiteLocalNetwork{SiteLocalNetwork: of.SiteLocalNetwork}
+
+	case *GetSpecType_Srv6Network:
+		o.NetworkChoice = &GlobalSpecType_Srv6Network{Srv6Network: of.Srv6Network}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -2220,11 +3343,17 @@ func (r *GetSpecType) GetNetworkChoiceFromGlobalSpecType(o *GlobalSpecType) erro
 	case *GlobalSpecType_LegacyType:
 		r.NetworkChoice = &GetSpecType_LegacyType{LegacyType: of.LegacyType}
 
+	case *GlobalSpecType_PrivateNetwork:
+		r.NetworkChoice = &GetSpecType_PrivateNetwork{PrivateNetwork: of.PrivateNetwork}
+
 	case *GlobalSpecType_SiteLocalInsideNetwork:
 		r.NetworkChoice = &GetSpecType_SiteLocalInsideNetwork{SiteLocalInsideNetwork: of.SiteLocalInsideNetwork}
 
 	case *GlobalSpecType_SiteLocalNetwork:
 		r.NetworkChoice = &GetSpecType_SiteLocalNetwork{SiteLocalNetwork: of.SiteLocalNetwork}
+
+	case *GlobalSpecType_Srv6Network:
+		r.NetworkChoice = &GetSpecType_Srv6Network{Srv6Network: of.Srv6Network}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -2262,11 +3391,17 @@ func (r *ReplaceSpecType) SetNetworkChoiceToGlobalSpecType(o *GlobalSpecType) er
 	case *ReplaceSpecType_LegacyType:
 		o.NetworkChoice = &GlobalSpecType_LegacyType{LegacyType: of.LegacyType}
 
+	case *ReplaceSpecType_PrivateNetwork:
+		o.NetworkChoice = &GlobalSpecType_PrivateNetwork{PrivateNetwork: of.PrivateNetwork}
+
 	case *ReplaceSpecType_SiteLocalInsideNetwork:
 		o.NetworkChoice = &GlobalSpecType_SiteLocalInsideNetwork{SiteLocalInsideNetwork: of.SiteLocalInsideNetwork}
 
 	case *ReplaceSpecType_SiteLocalNetwork:
 		o.NetworkChoice = &GlobalSpecType_SiteLocalNetwork{SiteLocalNetwork: of.SiteLocalNetwork}
+
+	case *ReplaceSpecType_Srv6Network:
+		o.NetworkChoice = &GlobalSpecType_Srv6Network{Srv6Network: of.Srv6Network}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -2285,11 +3420,17 @@ func (r *ReplaceSpecType) GetNetworkChoiceFromGlobalSpecType(o *GlobalSpecType) 
 	case *GlobalSpecType_LegacyType:
 		r.NetworkChoice = &ReplaceSpecType_LegacyType{LegacyType: of.LegacyType}
 
+	case *GlobalSpecType_PrivateNetwork:
+		r.NetworkChoice = &ReplaceSpecType_PrivateNetwork{PrivateNetwork: of.PrivateNetwork}
+
 	case *GlobalSpecType_SiteLocalInsideNetwork:
 		r.NetworkChoice = &ReplaceSpecType_SiteLocalInsideNetwork{SiteLocalInsideNetwork: of.SiteLocalInsideNetwork}
 
 	case *GlobalSpecType_SiteLocalNetwork:
 		r.NetworkChoice = &ReplaceSpecType_SiteLocalNetwork{SiteLocalNetwork: of.SiteLocalNetwork}
+
+	case *GlobalSpecType_Srv6Network:
+		r.NetworkChoice = &ReplaceSpecType_Srv6Network{Srv6Network: of.Srv6Network}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)

@@ -992,6 +992,7 @@ type VPCAttachmentType struct {
 	//
 	// x-displayName: "Labels For VPC ID"
 	// Add Labels for each of the VPC ID, these labels can be used in network policy
+	// These labels used must be from known key and label defined in shared namespace
 	Labels map[string]string `protobuf:"bytes,2,rep,name=labels" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
@@ -1061,6 +1062,29 @@ func (m *VPCAttachmentListType) GetVpcList() []*VPCAttachmentType {
 	return nil
 }
 
+// Active Service Policies
+//
+// x-displayName: "Active Service Policies"
+// Active service policies for the east-west  proxy
+type ActiveServicePoliciesType struct {
+	// service_policies
+	//
+	// x-displayName: "Service Policies"
+	// A list of references to service_policy objects.
+	ServicePolicies []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,rep,name=service_policies,json=servicePolicies" json:"service_policies,omitempty"`
+}
+
+func (m *ActiveServicePoliciesType) Reset()                    { *m = ActiveServicePoliciesType{} }
+func (*ActiveServicePoliciesType) ProtoMessage()               {}
+func (*ActiveServicePoliciesType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
+
+func (m *ActiveServicePoliciesType) GetServicePolicies() []*ves_io_schema_views.ObjectRefType {
+	if m != nil {
+		return m.ServicePolicies
+	}
+	return nil
+}
+
 // TGW Security Configuration
 //
 // x-displayName: "TGW Security Configuration"
@@ -1077,6 +1101,17 @@ type SecurityConfigType struct {
 	//	*SecurityConfigType_ActiveForwardProxyPolicies
 	//	*SecurityConfigType_ForwardProxyAllowAll
 	ForwardProxyChoice isSecurityConfigType_ForwardProxyChoice `protobuf_oneof:"forward_proxy_choice"`
+	// Manage East-West Service Policy
+	//
+	// x-displayName: "Manage East-West Service Policy"
+	// x-required
+	// Select service policy between east-west traffic between spoke VPC(s), traffic goes via proxy when service policy is enabled.
+	//
+	// Types that are valid to be assigned to EastWestServicePolicyChoice:
+	//	*SecurityConfigType_NoEastWestPolicy
+	//	*SecurityConfigType_ActiveEastWestServicePolicies
+	//	*SecurityConfigType_EastWestServicePolicyAllowAll
+	EastWestServicePolicyChoice isSecurityConfigType_EastWestServicePolicyChoice `protobuf_oneof:"east_west_service_policy_choice"`
 	// Manage Network Policy
 	//
 	// x-displayName: "Manage Network Policy"
@@ -1091,10 +1126,16 @@ type SecurityConfigType struct {
 
 func (m *SecurityConfigType) Reset()                    { *m = SecurityConfigType{} }
 func (*SecurityConfigType) ProtoMessage()               {}
-func (*SecurityConfigType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
+func (*SecurityConfigType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
 
 type isSecurityConfigType_ForwardProxyChoice interface {
 	isSecurityConfigType_ForwardProxyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isSecurityConfigType_EastWestServicePolicyChoice interface {
+	isSecurityConfigType_EastWestServicePolicyChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -1115,6 +1156,15 @@ type SecurityConfigType_ActiveForwardProxyPolicies struct {
 type SecurityConfigType_ForwardProxyAllowAll struct {
 	ForwardProxyAllowAll *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=forward_proxy_allow_all,json=forwardProxyAllowAll,oneof"`
 }
+type SecurityConfigType_NoEastWestPolicy struct {
+	NoEastWestPolicy *ves_io_schema4.Empty `protobuf:"bytes,9,opt,name=no_east_west_policy,json=noEastWestPolicy,oneof"`
+}
+type SecurityConfigType_ActiveEastWestServicePolicies struct {
+	ActiveEastWestServicePolicies *ActiveServicePoliciesType `protobuf:"bytes,10,opt,name=active_east_west_service_policies,json=activeEastWestServicePolicies,oneof"`
+}
+type SecurityConfigType_EastWestServicePolicyAllowAll struct {
+	EastWestServicePolicyAllowAll *ves_io_schema4.Empty `protobuf:"bytes,11,opt,name=east_west_service_policy_allow_all,json=eastWestServicePolicyAllowAll,oneof"`
+}
 type SecurityConfigType_NoNetworkPolicy struct {
 	NoNetworkPolicy *ves_io_schema4.Empty `protobuf:"bytes,5,opt,name=no_network_policy,json=noNetworkPolicy,oneof"`
 }
@@ -1125,12 +1175,23 @@ type SecurityConfigType_ActiveNetworkPolicies struct {
 func (*SecurityConfigType_NoForwardProxy) isSecurityConfigType_ForwardProxyChoice()             {}
 func (*SecurityConfigType_ActiveForwardProxyPolicies) isSecurityConfigType_ForwardProxyChoice() {}
 func (*SecurityConfigType_ForwardProxyAllowAll) isSecurityConfigType_ForwardProxyChoice()       {}
-func (*SecurityConfigType_NoNetworkPolicy) isSecurityConfigType_NetworkPolicyChoice()           {}
-func (*SecurityConfigType_ActiveNetworkPolicies) isSecurityConfigType_NetworkPolicyChoice()     {}
+func (*SecurityConfigType_NoEastWestPolicy) isSecurityConfigType_EastWestServicePolicyChoice()  {}
+func (*SecurityConfigType_ActiveEastWestServicePolicies) isSecurityConfigType_EastWestServicePolicyChoice() {
+}
+func (*SecurityConfigType_EastWestServicePolicyAllowAll) isSecurityConfigType_EastWestServicePolicyChoice() {
+}
+func (*SecurityConfigType_NoNetworkPolicy) isSecurityConfigType_NetworkPolicyChoice()       {}
+func (*SecurityConfigType_ActiveNetworkPolicies) isSecurityConfigType_NetworkPolicyChoice() {}
 
 func (m *SecurityConfigType) GetForwardProxyChoice() isSecurityConfigType_ForwardProxyChoice {
 	if m != nil {
 		return m.ForwardProxyChoice
+	}
+	return nil
+}
+func (m *SecurityConfigType) GetEastWestServicePolicyChoice() isSecurityConfigType_EastWestServicePolicyChoice {
+	if m != nil {
+		return m.EastWestServicePolicyChoice
 	}
 	return nil
 }
@@ -1162,6 +1223,27 @@ func (m *SecurityConfigType) GetForwardProxyAllowAll() *ves_io_schema4.Empty {
 	return nil
 }
 
+func (m *SecurityConfigType) GetNoEastWestPolicy() *ves_io_schema4.Empty {
+	if x, ok := m.GetEastWestServicePolicyChoice().(*SecurityConfigType_NoEastWestPolicy); ok {
+		return x.NoEastWestPolicy
+	}
+	return nil
+}
+
+func (m *SecurityConfigType) GetActiveEastWestServicePolicies() *ActiveServicePoliciesType {
+	if x, ok := m.GetEastWestServicePolicyChoice().(*SecurityConfigType_ActiveEastWestServicePolicies); ok {
+		return x.ActiveEastWestServicePolicies
+	}
+	return nil
+}
+
+func (m *SecurityConfigType) GetEastWestServicePolicyAllowAll() *ves_io_schema4.Empty {
+	if x, ok := m.GetEastWestServicePolicyChoice().(*SecurityConfigType_EastWestServicePolicyAllowAll); ok {
+		return x.EastWestServicePolicyAllowAll
+	}
+	return nil
+}
+
 func (m *SecurityConfigType) GetNoNetworkPolicy() *ves_io_schema4.Empty {
 	if x, ok := m.GetNetworkPolicyChoice().(*SecurityConfigType_NoNetworkPolicy); ok {
 		return x.NoNetworkPolicy
@@ -1182,6 +1264,9 @@ func (*SecurityConfigType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Bu
 		(*SecurityConfigType_NoForwardProxy)(nil),
 		(*SecurityConfigType_ActiveForwardProxyPolicies)(nil),
 		(*SecurityConfigType_ForwardProxyAllowAll)(nil),
+		(*SecurityConfigType_NoEastWestPolicy)(nil),
+		(*SecurityConfigType_ActiveEastWestServicePolicies)(nil),
+		(*SecurityConfigType_EastWestServicePolicyAllowAll)(nil),
 		(*SecurityConfigType_NoNetworkPolicy)(nil),
 		(*SecurityConfigType_ActiveNetworkPolicies)(nil),
 	}
@@ -1209,6 +1294,27 @@ func _SecurityConfigType_OneofMarshaler(msg proto.Message, b *proto.Buffer) erro
 	case nil:
 	default:
 		return fmt.Errorf("SecurityConfigType.ForwardProxyChoice has unexpected type %T", x)
+	}
+	// east_west_service_policy_choice
+	switch x := m.EastWestServicePolicyChoice.(type) {
+	case *SecurityConfigType_NoEastWestPolicy:
+		_ = b.EncodeVarint(9<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.NoEastWestPolicy); err != nil {
+			return err
+		}
+	case *SecurityConfigType_ActiveEastWestServicePolicies:
+		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.ActiveEastWestServicePolicies); err != nil {
+			return err
+		}
+	case *SecurityConfigType_EastWestServicePolicyAllowAll:
+		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.EastWestServicePolicyAllowAll); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("SecurityConfigType.EastWestServicePolicyChoice has unexpected type %T", x)
 	}
 	// network_policy_choice
 	switch x := m.NetworkPolicyChoice.(type) {
@@ -1256,6 +1362,30 @@ func _SecurityConfigType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *p
 		err := b.DecodeMessage(msg)
 		m.ForwardProxyChoice = &SecurityConfigType_ForwardProxyAllowAll{msg}
 		return true, err
+	case 9: // east_west_service_policy_choice.no_east_west_policy
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.EastWestServicePolicyChoice = &SecurityConfigType_NoEastWestPolicy{msg}
+		return true, err
+	case 10: // east_west_service_policy_choice.active_east_west_service_policies
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ActiveServicePoliciesType)
+		err := b.DecodeMessage(msg)
+		m.EastWestServicePolicyChoice = &SecurityConfigType_ActiveEastWestServicePolicies{msg}
+		return true, err
+	case 11: // east_west_service_policy_choice.east_west_service_policy_allow_all
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.EastWestServicePolicyChoice = &SecurityConfigType_EastWestServicePolicyAllowAll{msg}
+		return true, err
 	case 5: // network_policy_choice.no_network_policy
 		if wire != proto.WireBytes {
 			return true, proto.ErrInternalBadWireType
@@ -1294,6 +1424,27 @@ func _SecurityConfigType_OneofSizer(msg proto.Message) (n int) {
 	case *SecurityConfigType_ForwardProxyAllowAll:
 		s := proto.Size(x.ForwardProxyAllowAll)
 		n += proto.SizeVarint(7<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	// east_west_service_policy_choice
+	switch x := m.EastWestServicePolicyChoice.(type) {
+	case *SecurityConfigType_NoEastWestPolicy:
+		s := proto.Size(x.NoEastWestPolicy)
+		n += proto.SizeVarint(9<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *SecurityConfigType_ActiveEastWestServicePolicies:
+		s := proto.Size(x.ActiveEastWestServicePolicies)
+		n += proto.SizeVarint(10<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *SecurityConfigType_EastWestServicePolicyAllowAll:
+		s := proto.Size(x.EastWestServicePolicyAllowAll)
+		n += proto.SizeVarint(11<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(s))
 		n += s
 	case nil:
@@ -1349,7 +1500,7 @@ type AWSVPNTunnelConfigType struct {
 
 func (m *AWSVPNTunnelConfigType) Reset()                    { *m = AWSVPNTunnelConfigType{} }
 func (*AWSVPNTunnelConfigType) ProtoMessage()               {}
-func (*AWSVPNTunnelConfigType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
+func (*AWSVPNTunnelConfigType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
 
 func (m *AWSVPNTunnelConfigType) GetNodeName() string {
 	if m != nil {
@@ -1395,7 +1546,7 @@ type AWSTGWInfoConfigType struct {
 
 func (m *AWSTGWInfoConfigType) Reset()                    { *m = AWSTGWInfoConfigType{} }
 func (*AWSTGWInfoConfigType) ProtoMessage()               {}
-func (*AWSTGWInfoConfigType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
+func (*AWSTGWInfoConfigType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
 
 func (m *AWSTGWInfoConfigType) GetTgwId() string {
 	if m != nil {
@@ -1476,6 +1627,16 @@ type GlobalSpecType struct {
 	// x-displayName: "TGW Site Information"
 	// TGW Site information obtained after creating the site and TGW
 	TgwInfo *AWSTGWInfoConfigType `protobuf:"bytes,11,opt,name=tgw_info,json=tgwInfo" json:"tgw_info,omitempty"`
+	// Logs Streaming
+	//
+	// x-displayName: "Logs Streaming"
+	// x-required
+	// Select Logs receiver for logs streaming
+	//
+	// Types that are valid to be assigned to LogsReceiverChoice:
+	//	*GlobalSpecType_LogsStreamingDisabled
+	//	*GlobalSpecType_LogReceiver
+	LogsReceiverChoice isGlobalSpecType_LogsReceiverChoice `protobuf_oneof:"logs_receiver_choice"`
 	// AWS VPN tunnel config
 	//
 	// x-displayName: "AWS VPN Tunnel Config"
@@ -1495,7 +1656,31 @@ type GlobalSpecType struct {
 
 func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
+func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
+
+type isGlobalSpecType_LogsReceiverChoice interface {
+	isGlobalSpecType_LogsReceiverChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GlobalSpecType_LogsStreamingDisabled struct {
+	LogsStreamingDisabled *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,oneof"`
+}
+type GlobalSpecType_LogReceiver struct {
+	LogReceiver *ves_io_schema_views.ObjectRefType `protobuf:"bytes,14,opt,name=log_receiver,json=logReceiver,oneof"`
+}
+
+func (*GlobalSpecType_LogsStreamingDisabled) isGlobalSpecType_LogsReceiverChoice() {}
+func (*GlobalSpecType_LogReceiver) isGlobalSpecType_LogsReceiverChoice()           {}
+
+func (m *GlobalSpecType) GetLogsReceiverChoice() isGlobalSpecType_LogsReceiverChoice {
+	if m != nil {
+		return m.LogsReceiverChoice
+	}
+	return nil
+}
 
 func (m *GlobalSpecType) GetAwsParameters() *ServicesVPCType {
 	if m != nil {
@@ -1574,6 +1759,20 @@ func (m *GlobalSpecType) GetTgwInfo() *AWSTGWInfoConfigType {
 	return nil
 }
 
+func (m *GlobalSpecType) GetLogsStreamingDisabled() *ves_io_schema4.Empty {
+	if x, ok := m.GetLogsReceiverChoice().(*GlobalSpecType_LogsStreamingDisabled); ok {
+		return x.LogsStreamingDisabled
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetLogReceiver() *ves_io_schema_views.ObjectRefType {
+	if x, ok := m.GetLogsReceiverChoice().(*GlobalSpecType_LogReceiver); ok {
+		return x.LogReceiver
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetTunnels() []*AWSVPNTunnelConfigType {
 	if m != nil {
 		return m.Tunnels
@@ -1595,6 +1794,80 @@ func (m *GlobalSpecType) GetViewInternal() *ves_io_schema_views.ObjectRefType {
 	return nil
 }
 
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
+		(*GlobalSpecType_LogsStreamingDisabled)(nil),
+		(*GlobalSpecType_LogReceiver)(nil),
+	}
+}
+
+func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*GlobalSpecType)
+	// logs_receiver_choice
+	switch x := m.LogsReceiverChoice.(type) {
+	case *GlobalSpecType_LogsStreamingDisabled:
+		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.LogsStreamingDisabled); err != nil {
+			return err
+		}
+	case *GlobalSpecType_LogReceiver:
+		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.LogReceiver); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("GlobalSpecType.LogsReceiverChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*GlobalSpecType)
+	switch tag {
+	case 13: // logs_receiver_choice.logs_streaming_disabled
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.LogsReceiverChoice = &GlobalSpecType_LogsStreamingDisabled{msg}
+		return true, err
+	case 14: // logs_receiver_choice.log_receiver
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema_views.ObjectRefType)
+		err := b.DecodeMessage(msg)
+		m.LogsReceiverChoice = &GlobalSpecType_LogReceiver{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*GlobalSpecType)
+	// logs_receiver_choice
+	switch x := m.LogsReceiverChoice.(type) {
+	case *GlobalSpecType_LogsStreamingDisabled:
+		s := proto.Size(x.LogsStreamingDisabled)
+		n += proto.SizeVarint(13<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GlobalSpecType_LogReceiver:
+		s := proto.Size(x.LogReceiver)
+		n += proto.SizeVarint(14<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
 // CreateSpecType
 //
 // x-displayName: "Create AWS TGW site"
@@ -1608,11 +1881,39 @@ type CreateSpecType struct {
 	OperatingSystemVersion  string                          `protobuf:"bytes,5,opt,name=operating_system_version,json=operatingSystemVersion,proto3" json:"operating_system_version,omitempty"`
 	Address                 string                          `protobuf:"bytes,8,opt,name=address,proto3" json:"address,omitempty"`
 	Coordinates             *ves_io_schema_site.Coordinates `protobuf:"bytes,9,opt,name=coordinates" json:"coordinates,omitempty"`
+	// Types that are valid to be assigned to LogsReceiverChoice:
+	//	*CreateSpecType_LogsStreamingDisabled
+	//	*CreateSpecType_LogReceiver
+	LogsReceiverChoice isCreateSpecType_LogsReceiverChoice `protobuf_oneof:"logs_receiver_choice"`
 }
 
 func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
+func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{13} }
+
+type isCreateSpecType_LogsReceiverChoice interface {
+	isCreateSpecType_LogsReceiverChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CreateSpecType_LogsStreamingDisabled struct {
+	LogsStreamingDisabled *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,oneof"`
+}
+type CreateSpecType_LogReceiver struct {
+	LogReceiver *ves_io_schema_views.ObjectRefType `protobuf:"bytes,14,opt,name=log_receiver,json=logReceiver,oneof"`
+}
+
+func (*CreateSpecType_LogsStreamingDisabled) isCreateSpecType_LogsReceiverChoice() {}
+func (*CreateSpecType_LogReceiver) isCreateSpecType_LogsReceiverChoice()           {}
+
+func (m *CreateSpecType) GetLogsReceiverChoice() isCreateSpecType_LogsReceiverChoice {
+	if m != nil {
+		return m.LogsReceiverChoice
+	}
+	return nil
+}
 
 func (m *CreateSpecType) GetAwsParameters() *ServicesVPCType {
 	if m != nil {
@@ -1670,6 +1971,94 @@ func (m *CreateSpecType) GetCoordinates() *ves_io_schema_site.Coordinates {
 	return nil
 }
 
+func (m *CreateSpecType) GetLogsStreamingDisabled() *ves_io_schema4.Empty {
+	if x, ok := m.GetLogsReceiverChoice().(*CreateSpecType_LogsStreamingDisabled); ok {
+		return x.LogsStreamingDisabled
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetLogReceiver() *ves_io_schema_views.ObjectRefType {
+	if x, ok := m.GetLogsReceiverChoice().(*CreateSpecType_LogReceiver); ok {
+		return x.LogReceiver
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
+		(*CreateSpecType_LogsStreamingDisabled)(nil),
+		(*CreateSpecType_LogReceiver)(nil),
+	}
+}
+
+func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*CreateSpecType)
+	// logs_receiver_choice
+	switch x := m.LogsReceiverChoice.(type) {
+	case *CreateSpecType_LogsStreamingDisabled:
+		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.LogsStreamingDisabled); err != nil {
+			return err
+		}
+	case *CreateSpecType_LogReceiver:
+		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.LogReceiver); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("CreateSpecType.LogsReceiverChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*CreateSpecType)
+	switch tag {
+	case 13: // logs_receiver_choice.logs_streaming_disabled
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.LogsReceiverChoice = &CreateSpecType_LogsStreamingDisabled{msg}
+		return true, err
+	case 14: // logs_receiver_choice.log_receiver
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema_views.ObjectRefType)
+		err := b.DecodeMessage(msg)
+		m.LogsReceiverChoice = &CreateSpecType_LogReceiver{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*CreateSpecType)
+	// logs_receiver_choice
+	switch x := m.LogsReceiverChoice.(type) {
+	case *CreateSpecType_LogsStreamingDisabled:
+		s := proto.Size(x.LogsStreamingDisabled)
+		n += proto.SizeVarint(13<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *CreateSpecType_LogReceiver:
+		s := proto.Size(x.LogReceiver)
+		n += proto.SizeVarint(14<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
 // ReplaceSpecType
 //
 // x-displayName: "Replace AWS TGW site"
@@ -1682,11 +2071,39 @@ type ReplaceSpecType struct {
 	OperatingSystemVersion  string                          `protobuf:"bytes,5,opt,name=operating_system_version,json=operatingSystemVersion,proto3" json:"operating_system_version,omitempty"`
 	Address                 string                          `protobuf:"bytes,8,opt,name=address,proto3" json:"address,omitempty"`
 	Coordinates             *ves_io_schema_site.Coordinates `protobuf:"bytes,9,opt,name=coordinates" json:"coordinates,omitempty"`
+	// Types that are valid to be assigned to LogsReceiverChoice:
+	//	*ReplaceSpecType_LogsStreamingDisabled
+	//	*ReplaceSpecType_LogReceiver
+	LogsReceiverChoice isReplaceSpecType_LogsReceiverChoice `protobuf_oneof:"logs_receiver_choice"`
 }
 
 func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{13} }
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{14} }
+
+type isReplaceSpecType_LogsReceiverChoice interface {
+	isReplaceSpecType_LogsReceiverChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ReplaceSpecType_LogsStreamingDisabled struct {
+	LogsStreamingDisabled *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,oneof"`
+}
+type ReplaceSpecType_LogReceiver struct {
+	LogReceiver *ves_io_schema_views.ObjectRefType `protobuf:"bytes,14,opt,name=log_receiver,json=logReceiver,oneof"`
+}
+
+func (*ReplaceSpecType_LogsStreamingDisabled) isReplaceSpecType_LogsReceiverChoice() {}
+func (*ReplaceSpecType_LogReceiver) isReplaceSpecType_LogsReceiverChoice()           {}
+
+func (m *ReplaceSpecType) GetLogsReceiverChoice() isReplaceSpecType_LogsReceiverChoice {
+	if m != nil {
+		return m.LogsReceiverChoice
+	}
+	return nil
+}
 
 func (m *ReplaceSpecType) GetVpcAttachments() *VPCAttachmentListType {
 	if m != nil {
@@ -1737,6 +2154,94 @@ func (m *ReplaceSpecType) GetCoordinates() *ves_io_schema_site.Coordinates {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetLogsStreamingDisabled() *ves_io_schema4.Empty {
+	if x, ok := m.GetLogsReceiverChoice().(*ReplaceSpecType_LogsStreamingDisabled); ok {
+		return x.LogsStreamingDisabled
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetLogReceiver() *ves_io_schema_views.ObjectRefType {
+	if x, ok := m.GetLogsReceiverChoice().(*ReplaceSpecType_LogReceiver); ok {
+		return x.LogReceiver
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
+		(*ReplaceSpecType_LogsStreamingDisabled)(nil),
+		(*ReplaceSpecType_LogReceiver)(nil),
+	}
+}
+
+func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*ReplaceSpecType)
+	// logs_receiver_choice
+	switch x := m.LogsReceiverChoice.(type) {
+	case *ReplaceSpecType_LogsStreamingDisabled:
+		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.LogsStreamingDisabled); err != nil {
+			return err
+		}
+	case *ReplaceSpecType_LogReceiver:
+		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.LogReceiver); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("ReplaceSpecType.LogsReceiverChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*ReplaceSpecType)
+	switch tag {
+	case 13: // logs_receiver_choice.logs_streaming_disabled
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.LogsReceiverChoice = &ReplaceSpecType_LogsStreamingDisabled{msg}
+		return true, err
+	case 14: // logs_receiver_choice.log_receiver
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema_views.ObjectRefType)
+		err := b.DecodeMessage(msg)
+		m.LogsReceiverChoice = &ReplaceSpecType_LogReceiver{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*ReplaceSpecType)
+	// logs_receiver_choice
+	switch x := m.LogsReceiverChoice.(type) {
+	case *ReplaceSpecType_LogsStreamingDisabled:
+		s := proto.Size(x.LogsStreamingDisabled)
+		n += proto.SizeVarint(13<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *ReplaceSpecType_LogReceiver:
+		s := proto.Size(x.LogReceiver)
+		n += proto.SizeVarint(14<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
 // GetSpecType
 //
 // x-displayName: "Get AWS TGW site"
@@ -1754,11 +2259,39 @@ type GetSpecType struct {
 	Coordinates               *ves_io_schema_site.Coordinates `protobuf:"bytes,9,opt,name=coordinates" json:"coordinates,omitempty"`
 	UserModificationTimestamp *google_protobuf1.Timestamp     `protobuf:"bytes,10,opt,name=user_modification_timestamp,json=userModificationTimestamp" json:"user_modification_timestamp,omitempty"`
 	TgwInfo                   *AWSTGWInfoConfigType           `protobuf:"bytes,11,opt,name=tgw_info,json=tgwInfo" json:"tgw_info,omitempty"`
+	// Types that are valid to be assigned to LogsReceiverChoice:
+	//	*GetSpecType_LogsStreamingDisabled
+	//	*GetSpecType_LogReceiver
+	LogsReceiverChoice isGetSpecType_LogsReceiverChoice `protobuf_oneof:"logs_receiver_choice"`
 }
 
 func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{14} }
+func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{15} }
+
+type isGetSpecType_LogsReceiverChoice interface {
+	isGetSpecType_LogsReceiverChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GetSpecType_LogsStreamingDisabled struct {
+	LogsStreamingDisabled *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=logs_streaming_disabled,json=logsStreamingDisabled,oneof"`
+}
+type GetSpecType_LogReceiver struct {
+	LogReceiver *ves_io_schema_views.ObjectRefType `protobuf:"bytes,14,opt,name=log_receiver,json=logReceiver,oneof"`
+}
+
+func (*GetSpecType_LogsStreamingDisabled) isGetSpecType_LogsReceiverChoice() {}
+func (*GetSpecType_LogReceiver) isGetSpecType_LogsReceiverChoice()           {}
+
+func (m *GetSpecType) GetLogsReceiverChoice() isGetSpecType_LogsReceiverChoice {
+	if m != nil {
+		return m.LogsReceiverChoice
+	}
+	return nil
+}
 
 func (m *GetSpecType) GetAwsParameters() *ServicesVPCType {
 	if m != nil {
@@ -1844,6 +2377,94 @@ func (m *GetSpecType) GetTgwInfo() *AWSTGWInfoConfigType {
 	return nil
 }
 
+func (m *GetSpecType) GetLogsStreamingDisabled() *ves_io_schema4.Empty {
+	if x, ok := m.GetLogsReceiverChoice().(*GetSpecType_LogsStreamingDisabled); ok {
+		return x.LogsStreamingDisabled
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetLogReceiver() *ves_io_schema_views.ObjectRefType {
+	if x, ok := m.GetLogsReceiverChoice().(*GetSpecType_LogReceiver); ok {
+		return x.LogReceiver
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _GetSpecType_OneofMarshaler, _GetSpecType_OneofUnmarshaler, _GetSpecType_OneofSizer, []interface{}{
+		(*GetSpecType_LogsStreamingDisabled)(nil),
+		(*GetSpecType_LogReceiver)(nil),
+	}
+}
+
+func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*GetSpecType)
+	// logs_receiver_choice
+	switch x := m.LogsReceiverChoice.(type) {
+	case *GetSpecType_LogsStreamingDisabled:
+		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.LogsStreamingDisabled); err != nil {
+			return err
+		}
+	case *GetSpecType_LogReceiver:
+		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.LogReceiver); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("GetSpecType.LogsReceiverChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*GetSpecType)
+	switch tag {
+	case 13: // logs_receiver_choice.logs_streaming_disabled
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.LogsReceiverChoice = &GetSpecType_LogsStreamingDisabled{msg}
+		return true, err
+	case 14: // logs_receiver_choice.log_receiver
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema_views.ObjectRefType)
+		err := b.DecodeMessage(msg)
+		m.LogsReceiverChoice = &GetSpecType_LogReceiver{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*GetSpecType)
+	// logs_receiver_choice
+	switch x := m.LogsReceiverChoice.(type) {
+	case *GetSpecType_LogsStreamingDisabled:
+		s := proto.Size(x.LogsStreamingDisabled)
+		n += proto.SizeVarint(13<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GetSpecType_LogReceiver:
+		s := proto.Size(x.LogReceiver)
+		n += proto.SizeVarint(14<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
 func init() {
 	proto.RegisterType((*TGWAssignedASNType)(nil), "ves.io.schema.views.aws_tgw_site.TGWAssignedASNType")
 	golang_proto.RegisterType((*TGWAssignedASNType)(nil), "ves.io.schema.views.aws_tgw_site.TGWAssignedASNType")
@@ -1861,6 +2482,8 @@ func init() {
 	golang_proto.RegisterType((*VPCIpPrefixesType)(nil), "ves.io.schema.views.aws_tgw_site.VPCIpPrefixesType")
 	proto.RegisterType((*VPCAttachmentListType)(nil), "ves.io.schema.views.aws_tgw_site.VPCAttachmentListType")
 	golang_proto.RegisterType((*VPCAttachmentListType)(nil), "ves.io.schema.views.aws_tgw_site.VPCAttachmentListType")
+	proto.RegisterType((*ActiveServicePoliciesType)(nil), "ves.io.schema.views.aws_tgw_site.ActiveServicePoliciesType")
+	golang_proto.RegisterType((*ActiveServicePoliciesType)(nil), "ves.io.schema.views.aws_tgw_site.ActiveServicePoliciesType")
 	proto.RegisterType((*SecurityConfigType)(nil), "ves.io.schema.views.aws_tgw_site.SecurityConfigType")
 	golang_proto.RegisterType((*SecurityConfigType)(nil), "ves.io.schema.views.aws_tgw_site.SecurityConfigType")
 	proto.RegisterType((*AWSVPNTunnelConfigType)(nil), "ves.io.schema.views.aws_tgw_site.AWSVPNTunnelConfigType")
@@ -2511,6 +3134,35 @@ func (this *VPCAttachmentListType) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ActiveServicePoliciesType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ActiveServicePoliciesType)
+	if !ok {
+		that2, ok := that.(ActiveServicePoliciesType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.ServicePolicies) != len(that1.ServicePolicies) {
+		return false
+	}
+	for i := range this.ServicePolicies {
+		if !this.ServicePolicies[i].Equal(that1.ServicePolicies[i]) {
+			return false
+		}
+	}
+	return true
+}
 func (this *SecurityConfigType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2537,6 +3189,15 @@ func (this *SecurityConfigType) Equal(that interface{}) bool {
 	} else if this.ForwardProxyChoice == nil {
 		return false
 	} else if !this.ForwardProxyChoice.Equal(that1.ForwardProxyChoice) {
+		return false
+	}
+	if that1.EastWestServicePolicyChoice == nil {
+		if this.EastWestServicePolicyChoice != nil {
+			return false
+		}
+	} else if this.EastWestServicePolicyChoice == nil {
+		return false
+	} else if !this.EastWestServicePolicyChoice.Equal(that1.EastWestServicePolicyChoice) {
 		return false
 	}
 	if that1.NetworkPolicyChoice == nil {
@@ -2618,6 +3279,78 @@ func (this *SecurityConfigType_ForwardProxyAllowAll) Equal(that interface{}) boo
 		return false
 	}
 	if !this.ForwardProxyAllowAll.Equal(that1.ForwardProxyAllowAll) {
+		return false
+	}
+	return true
+}
+func (this *SecurityConfigType_NoEastWestPolicy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SecurityConfigType_NoEastWestPolicy)
+	if !ok {
+		that2, ok := that.(SecurityConfigType_NoEastWestPolicy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoEastWestPolicy.Equal(that1.NoEastWestPolicy) {
+		return false
+	}
+	return true
+}
+func (this *SecurityConfigType_ActiveEastWestServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SecurityConfigType_ActiveEastWestServicePolicies)
+	if !ok {
+		that2, ok := that.(SecurityConfigType_ActiveEastWestServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ActiveEastWestServicePolicies.Equal(that1.ActiveEastWestServicePolicies) {
+		return false
+	}
+	return true
+}
+func (this *SecurityConfigType_EastWestServicePolicyAllowAll) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SecurityConfigType_EastWestServicePolicyAllowAll)
+	if !ok {
+		that2, ok := that.(SecurityConfigType_EastWestServicePolicyAllowAll)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EastWestServicePolicyAllowAll.Equal(that1.EastWestServicePolicyAllowAll) {
 		return false
 	}
 	return true
@@ -2789,6 +3522,15 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if !this.TgwInfo.Equal(that1.TgwInfo) {
 		return false
 	}
+	if that1.LogsReceiverChoice == nil {
+		if this.LogsReceiverChoice != nil {
+			return false
+		}
+	} else if this.LogsReceiverChoice == nil {
+		return false
+	} else if !this.LogsReceiverChoice.Equal(that1.LogsReceiverChoice) {
+		return false
+	}
 	if len(this.Tunnels) != len(that1.Tunnels) {
 		return false
 	}
@@ -2801,6 +3543,54 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.ViewInternal.Equal(that1.ViewInternal) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_LogsStreamingDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_LogsStreamingDisabled)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_LogsStreamingDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.LogsStreamingDisabled.Equal(that1.LogsStreamingDisabled) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_LogReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_LogReceiver)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_LogReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.LogReceiver.Equal(that1.LogReceiver) {
 		return false
 	}
 	return true
@@ -2848,6 +3638,63 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if !this.Coordinates.Equal(that1.Coordinates) {
 		return false
 	}
+	if that1.LogsReceiverChoice == nil {
+		if this.LogsReceiverChoice != nil {
+			return false
+		}
+	} else if this.LogsReceiverChoice == nil {
+		return false
+	} else if !this.LogsReceiverChoice.Equal(that1.LogsReceiverChoice) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_LogsStreamingDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_LogsStreamingDisabled)
+	if !ok {
+		that2, ok := that.(CreateSpecType_LogsStreamingDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.LogsStreamingDisabled.Equal(that1.LogsStreamingDisabled) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_LogReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_LogReceiver)
+	if !ok {
+		that2, ok := that.(CreateSpecType_LogReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.LogReceiver.Equal(that1.LogReceiver) {
+		return false
+	}
 	return true
 }
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
@@ -2888,6 +3735,63 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.Coordinates.Equal(that1.Coordinates) {
+		return false
+	}
+	if that1.LogsReceiverChoice == nil {
+		if this.LogsReceiverChoice != nil {
+			return false
+		}
+	} else if this.LogsReceiverChoice == nil {
+		return false
+	} else if !this.LogsReceiverChoice.Equal(that1.LogsReceiverChoice) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_LogsStreamingDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_LogsStreamingDisabled)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_LogsStreamingDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.LogsStreamingDisabled.Equal(that1.LogsStreamingDisabled) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_LogReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_LogReceiver)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_LogReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.LogReceiver.Equal(that1.LogReceiver) {
 		return false
 	}
 	return true
@@ -2955,6 +3859,63 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.TgwInfo.Equal(that1.TgwInfo) {
+		return false
+	}
+	if that1.LogsReceiverChoice == nil {
+		if this.LogsReceiverChoice != nil {
+			return false
+		}
+	} else if this.LogsReceiverChoice == nil {
+		return false
+	} else if !this.LogsReceiverChoice.Equal(that1.LogsReceiverChoice) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_LogsStreamingDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_LogsStreamingDisabled)
+	if !ok {
+		that2, ok := that.(GetSpecType_LogsStreamingDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.LogsStreamingDisabled.Equal(that1.LogsStreamingDisabled) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_LogReceiver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_LogReceiver)
+	if !ok {
+		that2, ok := that.(GetSpecType_LogReceiver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.LogReceiver.Equal(that1.LogReceiver) {
 		return false
 	}
 	return true
@@ -3196,14 +4157,29 @@ func (this *VPCAttachmentListType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *ActiveServicePoliciesType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&aws_tgw_site.ActiveServicePoliciesType{")
+	if this.ServicePolicies != nil {
+		s = append(s, "ServicePolicies: "+fmt.Sprintf("%#v", this.ServicePolicies)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *SecurityConfigType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 12)
 	s = append(s, "&aws_tgw_site.SecurityConfigType{")
 	if this.ForwardProxyChoice != nil {
 		s = append(s, "ForwardProxyChoice: "+fmt.Sprintf("%#v", this.ForwardProxyChoice)+",\n")
+	}
+	if this.EastWestServicePolicyChoice != nil {
+		s = append(s, "EastWestServicePolicyChoice: "+fmt.Sprintf("%#v", this.EastWestServicePolicyChoice)+",\n")
 	}
 	if this.NetworkPolicyChoice != nil {
 		s = append(s, "NetworkPolicyChoice: "+fmt.Sprintf("%#v", this.NetworkPolicyChoice)+",\n")
@@ -3233,6 +4209,30 @@ func (this *SecurityConfigType_ForwardProxyAllowAll) GoString() string {
 	}
 	s := strings.Join([]string{`&aws_tgw_site.SecurityConfigType_ForwardProxyAllowAll{` +
 		`ForwardProxyAllowAll:` + fmt.Sprintf("%#v", this.ForwardProxyAllowAll) + `}`}, ", ")
+	return s
+}
+func (this *SecurityConfigType_NoEastWestPolicy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.SecurityConfigType_NoEastWestPolicy{` +
+		`NoEastWestPolicy:` + fmt.Sprintf("%#v", this.NoEastWestPolicy) + `}`}, ", ")
+	return s
+}
+func (this *SecurityConfigType_ActiveEastWestServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.SecurityConfigType_ActiveEastWestServicePolicies{` +
+		`ActiveEastWestServicePolicies:` + fmt.Sprintf("%#v", this.ActiveEastWestServicePolicies) + `}`}, ", ")
+	return s
+}
+func (this *SecurityConfigType_EastWestServicePolicyAllowAll) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.SecurityConfigType_EastWestServicePolicyAllowAll{` +
+		`EastWestServicePolicyAllowAll:` + fmt.Sprintf("%#v", this.EastWestServicePolicyAllowAll) + `}`}, ", ")
 	return s
 }
 func (this *SecurityConfigType_NoNetworkPolicy) GoString() string {
@@ -3278,7 +4278,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 18)
+	s := make([]string, 0, 20)
 	s = append(s, "&aws_tgw_site.GlobalSpecType{")
 	if this.AwsParameters != nil {
 		s = append(s, "AwsParameters: "+fmt.Sprintf("%#v", this.AwsParameters)+",\n")
@@ -3317,6 +4317,9 @@ func (this *GlobalSpecType) GoString() string {
 	if this.TgwInfo != nil {
 		s = append(s, "TgwInfo: "+fmt.Sprintf("%#v", this.TgwInfo)+",\n")
 	}
+	if this.LogsReceiverChoice != nil {
+		s = append(s, "LogsReceiverChoice: "+fmt.Sprintf("%#v", this.LogsReceiverChoice)+",\n")
+	}
 	if this.Tunnels != nil {
 		s = append(s, "Tunnels: "+fmt.Sprintf("%#v", this.Tunnels)+",\n")
 	}
@@ -3329,11 +4332,27 @@ func (this *GlobalSpecType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *GlobalSpecType_LogsStreamingDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.GlobalSpecType_LogsStreamingDisabled{` +
+		`LogsStreamingDisabled:` + fmt.Sprintf("%#v", this.LogsStreamingDisabled) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_LogReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.GlobalSpecType_LogReceiver{` +
+		`LogReceiver:` + fmt.Sprintf("%#v", this.LogReceiver) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 12)
+	s := make([]string, 0, 14)
 	s = append(s, "&aws_tgw_site.CreateSpecType{")
 	if this.AwsParameters != nil {
 		s = append(s, "AwsParameters: "+fmt.Sprintf("%#v", this.AwsParameters)+",\n")
@@ -3353,14 +4372,33 @@ func (this *CreateSpecType) GoString() string {
 	if this.Coordinates != nil {
 		s = append(s, "Coordinates: "+fmt.Sprintf("%#v", this.Coordinates)+",\n")
 	}
+	if this.LogsReceiverChoice != nil {
+		s = append(s, "LogsReceiverChoice: "+fmt.Sprintf("%#v", this.LogsReceiverChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *CreateSpecType_LogsStreamingDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.CreateSpecType_LogsStreamingDisabled{` +
+		`LogsStreamingDisabled:` + fmt.Sprintf("%#v", this.LogsStreamingDisabled) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_LogReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.CreateSpecType_LogReceiver{` +
+		`LogReceiver:` + fmt.Sprintf("%#v", this.LogReceiver) + `}`}, ", ")
+	return s
 }
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 13)
 	s = append(s, "&aws_tgw_site.ReplaceSpecType{")
 	if this.VpcAttachments != nil {
 		s = append(s, "VpcAttachments: "+fmt.Sprintf("%#v", this.VpcAttachments)+",\n")
@@ -3377,14 +4415,33 @@ func (this *ReplaceSpecType) GoString() string {
 	if this.Coordinates != nil {
 		s = append(s, "Coordinates: "+fmt.Sprintf("%#v", this.Coordinates)+",\n")
 	}
+	if this.LogsReceiverChoice != nil {
+		s = append(s, "LogsReceiverChoice: "+fmt.Sprintf("%#v", this.LogsReceiverChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *ReplaceSpecType_LogsStreamingDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.ReplaceSpecType_LogsStreamingDisabled{` +
+		`LogsStreamingDisabled:` + fmt.Sprintf("%#v", this.LogsStreamingDisabled) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_LogReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.ReplaceSpecType_LogReceiver{` +
+		`LogReceiver:` + fmt.Sprintf("%#v", this.LogReceiver) + `}`}, ", ")
+	return s
 }
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 16)
+	s := make([]string, 0, 18)
 	s = append(s, "&aws_tgw_site.GetSpecType{")
 	if this.AwsParameters != nil {
 		s = append(s, "AwsParameters: "+fmt.Sprintf("%#v", this.AwsParameters)+",\n")
@@ -3426,8 +4483,27 @@ func (this *GetSpecType) GoString() string {
 	if this.TgwInfo != nil {
 		s = append(s, "TgwInfo: "+fmt.Sprintf("%#v", this.TgwInfo)+",\n")
 	}
+	if this.LogsReceiverChoice != nil {
+		s = append(s, "LogsReceiverChoice: "+fmt.Sprintf("%#v", this.LogsReceiverChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *GetSpecType_LogsStreamingDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.GetSpecType_LogsStreamingDisabled{` +
+		`LogsStreamingDisabled:` + fmt.Sprintf("%#v", this.LogsStreamingDisabled) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_LogReceiver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&aws_tgw_site.GetSpecType_LogReceiver{` +
+		`LogReceiver:` + fmt.Sprintf("%#v", this.LogReceiver) + `}`}, ", ")
+	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
@@ -3949,6 +5025,36 @@ func (m *VPCAttachmentListType) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *ActiveServicePoliciesType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ActiveServicePoliciesType) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.ServicePolicies) > 0 {
+		for _, msg := range m.ServicePolicies {
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
 func (m *SecurityConfigType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3978,6 +5084,13 @@ func (m *SecurityConfigType) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += nn22
 	}
+	if m.EastWestServicePolicyChoice != nil {
+		nn23, err := m.EastWestServicePolicyChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn23
+	}
 	return i, nil
 }
 
@@ -3987,11 +5100,11 @@ func (m *SecurityConfigType_NoForwardProxy) MarshalTo(dAtA []byte) (int, error) 
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.NoForwardProxy.Size()))
-		n23, err := m.NoForwardProxy.MarshalTo(dAtA[i:])
+		n24, err := m.NoForwardProxy.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n23
+		i += n24
 	}
 	return i, nil
 }
@@ -4001,11 +5114,11 @@ func (m *SecurityConfigType_ActiveForwardProxyPolicies) MarshalTo(dAtA []byte) (
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveForwardProxyPolicies.Size()))
-		n24, err := m.ActiveForwardProxyPolicies.MarshalTo(dAtA[i:])
+		n25, err := m.ActiveForwardProxyPolicies.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n24
+		i += n25
 	}
 	return i, nil
 }
@@ -4015,11 +5128,11 @@ func (m *SecurityConfigType_NoNetworkPolicy) MarshalTo(dAtA []byte) (int, error)
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.NoNetworkPolicy.Size()))
-		n25, err := m.NoNetworkPolicy.MarshalTo(dAtA[i:])
+		n26, err := m.NoNetworkPolicy.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n25
+		i += n26
 	}
 	return i, nil
 }
@@ -4029,11 +5142,11 @@ func (m *SecurityConfigType_ActiveNetworkPolicies) MarshalTo(dAtA []byte) (int, 
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveNetworkPolicies.Size()))
-		n26, err := m.ActiveNetworkPolicies.MarshalTo(dAtA[i:])
+		n27, err := m.ActiveNetworkPolicies.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n26
+		i += n27
 	}
 	return i, nil
 }
@@ -4043,11 +5156,53 @@ func (m *SecurityConfigType_ForwardProxyAllowAll) MarshalTo(dAtA []byte) (int, e
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ForwardProxyAllowAll.Size()))
-		n27, err := m.ForwardProxyAllowAll.MarshalTo(dAtA[i:])
+		n28, err := m.ForwardProxyAllowAll.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n27
+		i += n28
+	}
+	return i, nil
+}
+func (m *SecurityConfigType_NoEastWestPolicy) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.NoEastWestPolicy != nil {
+		dAtA[i] = 0x4a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.NoEastWestPolicy.Size()))
+		n29, err := m.NoEastWestPolicy.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n29
+	}
+	return i, nil
+}
+func (m *SecurityConfigType_ActiveEastWestServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.ActiveEastWestServicePolicies != nil {
+		dAtA[i] = 0x52
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.ActiveEastWestServicePolicies.Size()))
+		n30, err := m.ActiveEastWestServicePolicies.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n30
+	}
+	return i, nil
+}
+func (m *SecurityConfigType_EastWestServicePolicyAllowAll) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.EastWestServicePolicyAllowAll != nil {
+		dAtA[i] = 0x5a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.EastWestServicePolicyAllowAll.Size()))
+		n31, err := m.EastWestServicePolicyAllowAll.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n31
 	}
 	return i, nil
 }
@@ -4145,31 +5300,31 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AwsParameters.Size()))
-		n28, err := m.AwsParameters.MarshalTo(dAtA[i:])
+		n32, err := m.AwsParameters.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n28
+		i += n32
 	}
 	if m.VpcAttachments != nil {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.VpcAttachments.Size()))
-		n29, err := m.VpcAttachments.MarshalTo(dAtA[i:])
+		n33, err := m.VpcAttachments.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n29
+		i += n33
 	}
 	if m.TgwSecurity != nil {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.TgwSecurity.Size()))
-		n30, err := m.TgwSecurity.MarshalTo(dAtA[i:])
+		n34, err := m.TgwSecurity.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n30
+		i += n34
 	}
 	if len(m.VolterraSoftwareVersion) > 0 {
 		dAtA[i] = 0x22
@@ -4208,11 +5363,11 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 				dAtA[i] = 0x12
 				i++
 				i = encodeVarintTypes(dAtA, i, uint64(v.Size()))
-				n31, err := v.MarshalTo(dAtA[i:])
+				n35, err := v.MarshalTo(dAtA[i:])
 				if err != nil {
 					return 0, err
 				}
-				i += n31
+				i += n35
 			}
 		}
 	}
@@ -4220,11 +5375,11 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.VnConfig.Size()))
-		n32, err := m.VnConfig.MarshalTo(dAtA[i:])
+		n36, err := m.VnConfig.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n32
+		i += n36
 	}
 	if len(m.Address) > 0 {
 		dAtA[i] = 0x42
@@ -4236,31 +5391,38 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x4a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Coordinates.Size()))
-		n33, err := m.Coordinates.MarshalTo(dAtA[i:])
+		n37, err := m.Coordinates.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n33
+		i += n37
 	}
 	if m.UserModificationTimestamp != nil {
 		dAtA[i] = 0x52
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.UserModificationTimestamp.Size()))
-		n34, err := m.UserModificationTimestamp.MarshalTo(dAtA[i:])
+		n38, err := m.UserModificationTimestamp.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n34
+		i += n38
 	}
 	if m.TgwInfo != nil {
 		dAtA[i] = 0x5a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.TgwInfo.Size()))
-		n35, err := m.TgwInfo.MarshalTo(dAtA[i:])
+		n39, err := m.TgwInfo.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n35
+		i += n39
+	}
+	if m.LogsReceiverChoice != nil {
+		nn40, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn40
 	}
 	if len(m.Tunnels) > 0 {
 		for _, msg := range m.Tunnels {
@@ -4282,11 +5444,11 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3e
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.TfParams.Size()))
-		n36, err := m.TfParams.MarshalTo(dAtA[i:])
+		n41, err := m.TfParams.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n36
+		i += n41
 	}
 	if m.ViewInternal != nil {
 		dAtA[i] = 0xc2
@@ -4294,15 +5456,43 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3e
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ViewInternal.Size()))
-		n37, err := m.ViewInternal.MarshalTo(dAtA[i:])
+		n42, err := m.ViewInternal.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n37
+		i += n42
 	}
 	return i, nil
 }
 
+func (m *GlobalSpecType_LogsStreamingDisabled) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.LogsStreamingDisabled != nil {
+		dAtA[i] = 0x6a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.LogsStreamingDisabled.Size()))
+		n43, err := m.LogsStreamingDisabled.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n43
+	}
+	return i, nil
+}
+func (m *GlobalSpecType_LogReceiver) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.LogReceiver != nil {
+		dAtA[i] = 0x72
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.LogReceiver.Size()))
+		n44, err := m.LogReceiver.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n44
+	}
+	return i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4322,31 +5512,31 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AwsParameters.Size()))
-		n38, err := m.AwsParameters.MarshalTo(dAtA[i:])
+		n45, err := m.AwsParameters.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n38
+		i += n45
 	}
 	if m.VpcAttachments != nil {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.VpcAttachments.Size()))
-		n39, err := m.VpcAttachments.MarshalTo(dAtA[i:])
+		n46, err := m.VpcAttachments.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n39
+		i += n46
 	}
 	if m.TgwSecurity != nil {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.TgwSecurity.Size()))
-		n40, err := m.TgwSecurity.MarshalTo(dAtA[i:])
+		n47, err := m.TgwSecurity.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n40
+		i += n47
 	}
 	if len(m.VolterraSoftwareVersion) > 0 {
 		dAtA[i] = 0x22
@@ -4364,11 +5554,11 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.VnConfig.Size()))
-		n41, err := m.VnConfig.MarshalTo(dAtA[i:])
+		n48, err := m.VnConfig.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n41
+		i += n48
 	}
 	if len(m.Address) > 0 {
 		dAtA[i] = 0x42
@@ -4380,15 +5570,50 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x4a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Coordinates.Size()))
-		n42, err := m.Coordinates.MarshalTo(dAtA[i:])
+		n49, err := m.Coordinates.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n42
+		i += n49
+	}
+	if m.LogsReceiverChoice != nil {
+		nn50, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn50
 	}
 	return i, nil
 }
 
+func (m *CreateSpecType_LogsStreamingDisabled) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.LogsStreamingDisabled != nil {
+		dAtA[i] = 0x6a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.LogsStreamingDisabled.Size()))
+		n51, err := m.LogsStreamingDisabled.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n51
+	}
+	return i, nil
+}
+func (m *CreateSpecType_LogReceiver) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.LogReceiver != nil {
+		dAtA[i] = 0x72
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.LogReceiver.Size()))
+		n52, err := m.LogReceiver.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n52
+	}
+	return i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4408,21 +5633,21 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.VpcAttachments.Size()))
-		n43, err := m.VpcAttachments.MarshalTo(dAtA[i:])
+		n53, err := m.VpcAttachments.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n43
+		i += n53
 	}
 	if m.TgwSecurity != nil {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.TgwSecurity.Size()))
-		n44, err := m.TgwSecurity.MarshalTo(dAtA[i:])
+		n54, err := m.TgwSecurity.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n44
+		i += n54
 	}
 	if len(m.VolterraSoftwareVersion) > 0 {
 		dAtA[i] = 0x22
@@ -4440,11 +5665,11 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.VnConfig.Size()))
-		n45, err := m.VnConfig.MarshalTo(dAtA[i:])
+		n55, err := m.VnConfig.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n45
+		i += n55
 	}
 	if len(m.Address) > 0 {
 		dAtA[i] = 0x42
@@ -4456,15 +5681,50 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x4a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Coordinates.Size()))
-		n46, err := m.Coordinates.MarshalTo(dAtA[i:])
+		n56, err := m.Coordinates.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n46
+		i += n56
+	}
+	if m.LogsReceiverChoice != nil {
+		nn57, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn57
 	}
 	return i, nil
 }
 
+func (m *ReplaceSpecType_LogsStreamingDisabled) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.LogsStreamingDisabled != nil {
+		dAtA[i] = 0x6a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.LogsStreamingDisabled.Size()))
+		n58, err := m.LogsStreamingDisabled.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n58
+	}
+	return i, nil
+}
+func (m *ReplaceSpecType_LogReceiver) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.LogReceiver != nil {
+		dAtA[i] = 0x72
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.LogReceiver.Size()))
+		n59, err := m.LogReceiver.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n59
+	}
+	return i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4484,31 +5744,31 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AwsParameters.Size()))
-		n47, err := m.AwsParameters.MarshalTo(dAtA[i:])
+		n60, err := m.AwsParameters.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n47
+		i += n60
 	}
 	if m.VpcAttachments != nil {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.VpcAttachments.Size()))
-		n48, err := m.VpcAttachments.MarshalTo(dAtA[i:])
+		n61, err := m.VpcAttachments.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n48
+		i += n61
 	}
 	if m.TgwSecurity != nil {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.TgwSecurity.Size()))
-		n49, err := m.TgwSecurity.MarshalTo(dAtA[i:])
+		n62, err := m.TgwSecurity.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n49
+		i += n62
 	}
 	if len(m.VolterraSoftwareVersion) > 0 {
 		dAtA[i] = 0x22
@@ -4547,11 +5807,11 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 				dAtA[i] = 0x12
 				i++
 				i = encodeVarintTypes(dAtA, i, uint64(v.Size()))
-				n50, err := v.MarshalTo(dAtA[i:])
+				n63, err := v.MarshalTo(dAtA[i:])
 				if err != nil {
 					return 0, err
 				}
-				i += n50
+				i += n63
 			}
 		}
 	}
@@ -4559,11 +5819,11 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.VnConfig.Size()))
-		n51, err := m.VnConfig.MarshalTo(dAtA[i:])
+		n64, err := m.VnConfig.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n51
+		i += n64
 	}
 	if len(m.Address) > 0 {
 		dAtA[i] = 0x42
@@ -4575,31 +5835,38 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x4a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Coordinates.Size()))
-		n52, err := m.Coordinates.MarshalTo(dAtA[i:])
+		n65, err := m.Coordinates.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n52
+		i += n65
 	}
 	if m.UserModificationTimestamp != nil {
 		dAtA[i] = 0x52
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.UserModificationTimestamp.Size()))
-		n53, err := m.UserModificationTimestamp.MarshalTo(dAtA[i:])
+		n66, err := m.UserModificationTimestamp.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n53
+		i += n66
 	}
 	if m.TgwInfo != nil {
 		dAtA[i] = 0x5a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.TgwInfo.Size()))
-		n54, err := m.TgwInfo.MarshalTo(dAtA[i:])
+		n67, err := m.TgwInfo.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n54
+		i += n67
+	}
+	if m.LogsReceiverChoice != nil {
+		nn68, err := m.LogsReceiverChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn68
 	}
 	if len(m.Tunnels) > 0 {
 		for _, msg := range m.Tunnels {
@@ -4618,6 +5885,34 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *GetSpecType_LogsStreamingDisabled) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.LogsStreamingDisabled != nil {
+		dAtA[i] = 0x6a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.LogsStreamingDisabled.Size()))
+		n69, err := m.LogsStreamingDisabled.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n69
+	}
+	return i, nil
+}
+func (m *GetSpecType_LogReceiver) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.LogReceiver != nil {
+		dAtA[i] = 0x72
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.LogReceiver.Size()))
+		n70, err := m.LogReceiver.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n70
+	}
+	return i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
@@ -4840,6 +6135,20 @@ func NewPopulatedVPCAttachmentListType(r randyTypes, easy bool) *VPCAttachmentLi
 	return this
 }
 
+func NewPopulatedActiveServicePoliciesType(r randyTypes, easy bool) *ActiveServicePoliciesType {
+	this := &ActiveServicePoliciesType{}
+	if r.Intn(10) != 0 {
+		v5 := r.Intn(5)
+		this.ServicePolicies = make([]*ves_io_schema_views.ObjectRefType, v5)
+		for i := 0; i < v5; i++ {
+			this.ServicePolicies[i] = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
 func NewPopulatedSecurityConfigType(r randyTypes, easy bool) *SecurityConfigType {
 	this := &SecurityConfigType{}
 	oneofNumber_ForwardProxyChoice := []int32{2, 3, 7}[r.Intn(3)]
@@ -4857,6 +6166,15 @@ func NewPopulatedSecurityConfigType(r randyTypes, easy bool) *SecurityConfigType
 		this.NetworkPolicyChoice = NewPopulatedSecurityConfigType_NoNetworkPolicy(r, easy)
 	case 6:
 		this.NetworkPolicyChoice = NewPopulatedSecurityConfigType_ActiveNetworkPolicies(r, easy)
+	}
+	oneofNumber_EastWestServicePolicyChoice := []int32{9, 10, 11}[r.Intn(3)]
+	switch oneofNumber_EastWestServicePolicyChoice {
+	case 9:
+		this.EastWestServicePolicyChoice = NewPopulatedSecurityConfigType_NoEastWestPolicy(r, easy)
+	case 10:
+		this.EastWestServicePolicyChoice = NewPopulatedSecurityConfigType_ActiveEastWestServicePolicies(r, easy)
+	case 11:
+		this.EastWestServicePolicyChoice = NewPopulatedSecurityConfigType_EastWestServicePolicyAllowAll(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -4888,12 +6206,27 @@ func NewPopulatedSecurityConfigType_ForwardProxyAllowAll(r randyTypes, easy bool
 	this.ForwardProxyAllowAll = ves_io_schema4.NewPopulatedEmpty(r, easy)
 	return this
 }
+func NewPopulatedSecurityConfigType_NoEastWestPolicy(r randyTypes, easy bool) *SecurityConfigType_NoEastWestPolicy {
+	this := &SecurityConfigType_NoEastWestPolicy{}
+	this.NoEastWestPolicy = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedSecurityConfigType_ActiveEastWestServicePolicies(r randyTypes, easy bool) *SecurityConfigType_ActiveEastWestServicePolicies {
+	this := &SecurityConfigType_ActiveEastWestServicePolicies{}
+	this.ActiveEastWestServicePolicies = NewPopulatedActiveServicePoliciesType(r, easy)
+	return this
+}
+func NewPopulatedSecurityConfigType_EastWestServicePolicyAllowAll(r randyTypes, easy bool) *SecurityConfigType_EastWestServicePolicyAllowAll {
+	this := &SecurityConfigType_EastWestServicePolicyAllowAll{}
+	this.EastWestServicePolicyAllowAll = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
 func NewPopulatedAWSVPNTunnelConfigType(r randyTypes, easy bool) *AWSVPNTunnelConfigType {
 	this := &AWSVPNTunnelConfigType{}
 	this.NodeName = string(randStringTypes(r))
-	v5 := r.Intn(10)
-	this.TunnelRemoteIp = make([]string, v5)
-	for i := 0; i < v5; i++ {
+	v6 := r.Intn(10)
+	this.TunnelRemoteIp = make([]string, v6)
+	for i := 0; i < v6; i++ {
 		this.TunnelRemoteIp[i] = string(randStringTypes(r))
 	}
 	this.NodeId = string(randStringTypes(r))
@@ -4925,9 +6258,9 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 	this.VolterraSoftwareVersion = string(randStringTypes(r))
 	this.OperatingSystemVersion = string(randStringTypes(r))
 	if r.Intn(10) != 0 {
-		v6 := r.Intn(10)
+		v7 := r.Intn(10)
 		this.VpcIpPrefixes = make(map[string]*VPCIpPrefixesType)
-		for i := 0; i < v6; i++ {
+		for i := 0; i < v7; i++ {
 			this.VpcIpPrefixes[randStringTypes(r)] = NewPopulatedVPCIpPrefixesType(r, easy)
 		}
 	}
@@ -4944,10 +6277,17 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 	if r.Intn(10) != 0 {
 		this.TgwInfo = NewPopulatedAWSTGWInfoConfigType(r, easy)
 	}
+	oneofNumber_LogsReceiverChoice := []int32{13, 14}[r.Intn(2)]
+	switch oneofNumber_LogsReceiverChoice {
+	case 13:
+		this.LogsReceiverChoice = NewPopulatedGlobalSpecType_LogsStreamingDisabled(r, easy)
+	case 14:
+		this.LogsReceiverChoice = NewPopulatedGlobalSpecType_LogReceiver(r, easy)
+	}
 	if r.Intn(10) != 0 {
-		v7 := r.Intn(5)
-		this.Tunnels = make([]*AWSVPNTunnelConfigType, v7)
-		for i := 0; i < v7; i++ {
+		v8 := r.Intn(5)
+		this.Tunnels = make([]*AWSVPNTunnelConfigType, v8)
+		for i := 0; i < v8; i++ {
 			this.Tunnels[i] = NewPopulatedAWSVPNTunnelConfigType(r, easy)
 		}
 	}
@@ -4962,6 +6302,16 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 	return this
 }
 
+func NewPopulatedGlobalSpecType_LogsStreamingDisabled(r randyTypes, easy bool) *GlobalSpecType_LogsStreamingDisabled {
+	this := &GlobalSpecType_LogsStreamingDisabled{}
+	this.LogsStreamingDisabled = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedGlobalSpecType_LogReceiver(r randyTypes, easy bool) *GlobalSpecType_LogReceiver {
+	this := &GlobalSpecType_LogReceiver{}
+	this.LogReceiver = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
+	return this
+}
 func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 	this := &CreateSpecType{}
 	if r.Intn(10) != 0 {
@@ -4982,11 +6332,28 @@ func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 	if r.Intn(10) != 0 {
 		this.Coordinates = ves_io_schema_site.NewPopulatedCoordinates(r, easy)
 	}
+	oneofNumber_LogsReceiverChoice := []int32{13, 14}[r.Intn(2)]
+	switch oneofNumber_LogsReceiverChoice {
+	case 13:
+		this.LogsReceiverChoice = NewPopulatedCreateSpecType_LogsStreamingDisabled(r, easy)
+	case 14:
+		this.LogsReceiverChoice = NewPopulatedCreateSpecType_LogReceiver(r, easy)
+	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
+func NewPopulatedCreateSpecType_LogsStreamingDisabled(r randyTypes, easy bool) *CreateSpecType_LogsStreamingDisabled {
+	this := &CreateSpecType_LogsStreamingDisabled{}
+	this.LogsStreamingDisabled = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedCreateSpecType_LogReceiver(r randyTypes, easy bool) *CreateSpecType_LogReceiver {
+	this := &CreateSpecType_LogReceiver{}
+	this.LogReceiver = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
+	return this
+}
 func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 	this := &ReplaceSpecType{}
 	if r.Intn(10) != 0 {
@@ -5004,11 +6371,28 @@ func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 	if r.Intn(10) != 0 {
 		this.Coordinates = ves_io_schema_site.NewPopulatedCoordinates(r, easy)
 	}
+	oneofNumber_LogsReceiverChoice := []int32{13, 14}[r.Intn(2)]
+	switch oneofNumber_LogsReceiverChoice {
+	case 13:
+		this.LogsReceiverChoice = NewPopulatedReplaceSpecType_LogsStreamingDisabled(r, easy)
+	case 14:
+		this.LogsReceiverChoice = NewPopulatedReplaceSpecType_LogReceiver(r, easy)
+	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
+func NewPopulatedReplaceSpecType_LogsStreamingDisabled(r randyTypes, easy bool) *ReplaceSpecType_LogsStreamingDisabled {
+	this := &ReplaceSpecType_LogsStreamingDisabled{}
+	this.LogsStreamingDisabled = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedReplaceSpecType_LogReceiver(r randyTypes, easy bool) *ReplaceSpecType_LogReceiver {
+	this := &ReplaceSpecType_LogReceiver{}
+	this.LogReceiver = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
+	return this
+}
 func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 	this := &GetSpecType{}
 	if r.Intn(10) != 0 {
@@ -5023,9 +6407,9 @@ func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 	this.VolterraSoftwareVersion = string(randStringTypes(r))
 	this.OperatingSystemVersion = string(randStringTypes(r))
 	if r.Intn(10) != 0 {
-		v8 := r.Intn(10)
+		v9 := r.Intn(10)
 		this.VpcIpPrefixes = make(map[string]*VPCIpPrefixesType)
-		for i := 0; i < v8; i++ {
+		for i := 0; i < v9; i++ {
 			this.VpcIpPrefixes[randStringTypes(r)] = NewPopulatedVPCIpPrefixesType(r, easy)
 		}
 	}
@@ -5042,15 +6426,33 @@ func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 	if r.Intn(10) != 0 {
 		this.TgwInfo = NewPopulatedAWSTGWInfoConfigType(r, easy)
 	}
+	oneofNumber_LogsReceiverChoice := []int32{13, 14}[r.Intn(2)]
+	switch oneofNumber_LogsReceiverChoice {
+	case 13:
+		this.LogsReceiverChoice = NewPopulatedGetSpecType_LogsStreamingDisabled(r, easy)
+	case 14:
+		this.LogsReceiverChoice = NewPopulatedGetSpecType_LogReceiver(r, easy)
+	}
 	if r.Intn(10) != 0 {
-		v9 := r.Intn(5)
-		this.Tunnels = make([]*AWSVPNTunnelConfigType, v9)
-		for i := 0; i < v9; i++ {
+		v10 := r.Intn(5)
+		this.Tunnels = make([]*AWSVPNTunnelConfigType, v10)
+		for i := 0; i < v10; i++ {
 			this.Tunnels[i] = NewPopulatedAWSVPNTunnelConfigType(r, easy)
 		}
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
+	return this
+}
+
+func NewPopulatedGetSpecType_LogsStreamingDisabled(r randyTypes, easy bool) *GetSpecType_LogsStreamingDisabled {
+	this := &GetSpecType_LogsStreamingDisabled{}
+	this.LogsStreamingDisabled = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedGetSpecType_LogReceiver(r randyTypes, easy bool) *GetSpecType_LogReceiver {
+	this := &GetSpecType_LogReceiver{}
+	this.LogReceiver = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 	return this
 }
 
@@ -5073,9 +6475,9 @@ func randUTF8RuneTypes(r randyTypes) rune {
 	return rune(ru + 61)
 }
 func randStringTypes(r randyTypes) string {
-	v10 := r.Intn(100)
-	tmps := make([]rune, v10)
-	for i := 0; i < v10; i++ {
+	v11 := r.Intn(100)
+	tmps := make([]rune, v11)
+	for i := 0; i < v11; i++ {
 		tmps[i] = randUTF8RuneTypes(r)
 	}
 	return string(tmps)
@@ -5097,11 +6499,11 @@ func randFieldTypes(dAtA []byte, r randyTypes, fieldNumber int, wire int) []byte
 	switch wire {
 	case 0:
 		dAtA = encodeVarintPopulateTypes(dAtA, uint64(key))
-		v11 := r.Int63()
+		v12 := r.Int63()
 		if r.Intn(2) == 0 {
-			v11 *= -1
+			v12 *= -1
 		}
-		dAtA = encodeVarintPopulateTypes(dAtA, uint64(v11))
+		dAtA = encodeVarintPopulateTypes(dAtA, uint64(v12))
 	case 1:
 		dAtA = encodeVarintPopulateTypes(dAtA, uint64(key))
 		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
@@ -5387,6 +6789,18 @@ func (m *VPCAttachmentListType) Size() (n int) {
 	return n
 }
 
+func (m *ActiveServicePoliciesType) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.ServicePolicies) > 0 {
+		for _, e := range m.ServicePolicies {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *SecurityConfigType) Size() (n int) {
 	var l int
 	_ = l
@@ -5395,6 +6809,9 @@ func (m *SecurityConfigType) Size() (n int) {
 	}
 	if m.NetworkPolicyChoice != nil {
 		n += m.NetworkPolicyChoice.Size()
+	}
+	if m.EastWestServicePolicyChoice != nil {
+		n += m.EastWestServicePolicyChoice.Size()
 	}
 	return n
 }
@@ -5440,6 +6857,33 @@ func (m *SecurityConfigType_ForwardProxyAllowAll) Size() (n int) {
 	_ = l
 	if m.ForwardProxyAllowAll != nil {
 		l = m.ForwardProxyAllowAll.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SecurityConfigType_NoEastWestPolicy) Size() (n int) {
+	var l int
+	_ = l
+	if m.NoEastWestPolicy != nil {
+		l = m.NoEastWestPolicy.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SecurityConfigType_ActiveEastWestServicePolicies) Size() (n int) {
+	var l int
+	_ = l
+	if m.ActiveEastWestServicePolicies != nil {
+		l = m.ActiveEastWestServicePolicies.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SecurityConfigType_EastWestServicePolicyAllowAll) Size() (n int) {
+	var l int
+	_ = l
+	if m.EastWestServicePolicyAllowAll != nil {
+		l = m.EastWestServicePolicyAllowAll.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -5534,6 +6978,9 @@ func (m *GlobalSpecType) Size() (n int) {
 		l = m.TgwInfo.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.LogsReceiverChoice != nil {
+		n += m.LogsReceiverChoice.Size()
+	}
 	if len(m.Tunnels) > 0 {
 		for _, e := range m.Tunnels {
 			l = e.Size()
@@ -5551,6 +6998,24 @@ func (m *GlobalSpecType) Size() (n int) {
 	return n
 }
 
+func (m *GlobalSpecType_LogsStreamingDisabled) Size() (n int) {
+	var l int
+	_ = l
+	if m.LogsStreamingDisabled != nil {
+		l = m.LogsStreamingDisabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_LogReceiver) Size() (n int) {
+	var l int
+	_ = l
+	if m.LogReceiver != nil {
+		l = m.LogReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -5586,9 +7051,30 @@ func (m *CreateSpecType) Size() (n int) {
 		l = m.Coordinates.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.LogsReceiverChoice != nil {
+		n += m.LogsReceiverChoice.Size()
+	}
 	return n
 }
 
+func (m *CreateSpecType_LogsStreamingDisabled) Size() (n int) {
+	var l int
+	_ = l
+	if m.LogsStreamingDisabled != nil {
+		l = m.LogsStreamingDisabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_LogReceiver) Size() (n int) {
+	var l int
+	_ = l
+	if m.LogReceiver != nil {
+		l = m.LogReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -5620,9 +7106,30 @@ func (m *ReplaceSpecType) Size() (n int) {
 		l = m.Coordinates.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.LogsReceiverChoice != nil {
+		n += m.LogsReceiverChoice.Size()
+	}
 	return n
 }
 
+func (m *ReplaceSpecType_LogsStreamingDisabled) Size() (n int) {
+	var l int
+	_ = l
+	if m.LogsStreamingDisabled != nil {
+		l = m.LogsStreamingDisabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_LogReceiver) Size() (n int) {
+	var l int
+	_ = l
+	if m.LogReceiver != nil {
+		l = m.LogReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -5679,11 +7186,33 @@ func (m *GetSpecType) Size() (n int) {
 		l = m.TgwInfo.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.LogsReceiverChoice != nil {
+		n += m.LogsReceiverChoice.Size()
+	}
 	if len(m.Tunnels) > 0 {
 		for _, e := range m.Tunnels {
 			l = e.Size()
 			n += 2 + l + sovTypes(uint64(l))
 		}
+	}
+	return n
+}
+
+func (m *GetSpecType_LogsStreamingDisabled) Size() (n int) {
+	var l int
+	_ = l
+	if m.LogsStreamingDisabled != nil {
+		l = m.LogsStreamingDisabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_LogReceiver) Size() (n int) {
+	var l int
+	_ = l
+	if m.LogReceiver != nil {
+		l = m.LogReceiver.Size()
+		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -5946,6 +7475,16 @@ func (this *VPCAttachmentListType) String() string {
 	}, "")
 	return s
 }
+func (this *ActiveServicePoliciesType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ActiveServicePoliciesType{`,
+		`ServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.ServicePolicies), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *SecurityConfigType) String() string {
 	if this == nil {
 		return "nil"
@@ -5953,6 +7492,7 @@ func (this *SecurityConfigType) String() string {
 	s := strings.Join([]string{`&SecurityConfigType{`,
 		`ForwardProxyChoice:` + fmt.Sprintf("%v", this.ForwardProxyChoice) + `,`,
 		`NetworkPolicyChoice:` + fmt.Sprintf("%v", this.NetworkPolicyChoice) + `,`,
+		`EastWestServicePolicyChoice:` + fmt.Sprintf("%v", this.EastWestServicePolicyChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6007,6 +7547,36 @@ func (this *SecurityConfigType_ForwardProxyAllowAll) String() string {
 	}, "")
 	return s
 }
+func (this *SecurityConfigType_NoEastWestPolicy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SecurityConfigType_NoEastWestPolicy{`,
+		`NoEastWestPolicy:` + strings.Replace(fmt.Sprintf("%v", this.NoEastWestPolicy), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SecurityConfigType_ActiveEastWestServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SecurityConfigType_ActiveEastWestServicePolicies{`,
+		`ActiveEastWestServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveEastWestServicePolicies), "ActiveServicePoliciesType", "ActiveServicePoliciesType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SecurityConfigType_EastWestServicePolicyAllowAll) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SecurityConfigType_EastWestServicePolicyAllowAll{`,
+		`EastWestServicePolicyAllowAll:` + strings.Replace(fmt.Sprintf("%v", this.EastWestServicePolicyAllowAll), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AWSVPNTunnelConfigType) String() string {
 	if this == nil {
 		return "nil"
@@ -6056,9 +7626,30 @@ func (this *GlobalSpecType) String() string {
 		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "ves_io_schema_site.Coordinates", 1) + `,`,
 		`UserModificationTimestamp:` + strings.Replace(fmt.Sprintf("%v", this.UserModificationTimestamp), "Timestamp", "google_protobuf1.Timestamp", 1) + `,`,
 		`TgwInfo:` + strings.Replace(fmt.Sprintf("%v", this.TgwInfo), "AWSTGWInfoConfigType", "AWSTGWInfoConfigType", 1) + `,`,
+		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
 		`Tunnels:` + strings.Replace(fmt.Sprintf("%v", this.Tunnels), "AWSVPNTunnelConfigType", "AWSVPNTunnelConfigType", 1) + `,`,
 		`TfParams:` + strings.Replace(fmt.Sprintf("%v", this.TfParams), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_LogsStreamingDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_LogsStreamingDisabled{`,
+		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_LogReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_LogReceiver{`,
+		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6076,6 +7667,27 @@ func (this *CreateSpecType) String() string {
 		`VnConfig:` + strings.Replace(fmt.Sprintf("%v", this.VnConfig), "VnConfiguration", "VnConfiguration", 1) + `,`,
 		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
 		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "ves_io_schema_site.Coordinates", 1) + `,`,
+		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_LogsStreamingDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_LogsStreamingDisabled{`,
+		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_LogReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_LogReceiver{`,
+		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6092,6 +7704,27 @@ func (this *ReplaceSpecType) String() string {
 		`VnConfig:` + strings.Replace(fmt.Sprintf("%v", this.VnConfig), "VnConfiguration", "VnConfiguration", 1) + `,`,
 		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
 		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "ves_io_schema_site.Coordinates", 1) + `,`,
+		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_LogsStreamingDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_LogsStreamingDisabled{`,
+		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_LogReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_LogReceiver{`,
+		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6122,7 +7755,28 @@ func (this *GetSpecType) String() string {
 		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "ves_io_schema_site.Coordinates", 1) + `,`,
 		`UserModificationTimestamp:` + strings.Replace(fmt.Sprintf("%v", this.UserModificationTimestamp), "Timestamp", "google_protobuf1.Timestamp", 1) + `,`,
 		`TgwInfo:` + strings.Replace(fmt.Sprintf("%v", this.TgwInfo), "AWSTGWInfoConfigType", "AWSTGWInfoConfigType", 1) + `,`,
+		`LogsReceiverChoice:` + fmt.Sprintf("%v", this.LogsReceiverChoice) + `,`,
 		`Tunnels:` + strings.Replace(fmt.Sprintf("%v", this.Tunnels), "AWSVPNTunnelConfigType", "AWSVPNTunnelConfigType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_LogsStreamingDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_LogsStreamingDisabled{`,
+		`LogsStreamingDisabled:` + strings.Replace(fmt.Sprintf("%v", this.LogsStreamingDisabled), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_LogReceiver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_LogReceiver{`,
+		`LogReceiver:` + strings.Replace(fmt.Sprintf("%v", this.LogReceiver), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -7477,6 +9131,87 @@ func (m *VPCAttachmentListType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *ActiveServicePoliciesType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ActiveServicePoliciesType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ActiveServicePoliciesType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ServicePolicies = append(m.ServicePolicies, &ves_io_schema_views.ObjectRefType{})
+			if err := m.ServicePolicies[len(m.ServicePolicies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *SecurityConfigType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -7665,6 +9400,102 @@ func (m *SecurityConfigType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.ForwardProxyChoice = &SecurityConfigType_ForwardProxyAllowAll{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoEastWestPolicy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EastWestServicePolicyChoice = &SecurityConfigType_NoEastWestPolicy{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveEastWestServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ActiveServicePoliciesType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EastWestServicePolicyChoice = &SecurityConfigType_ActiveEastWestServicePolicies{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EastWestServicePolicyAllowAll", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EastWestServicePolicyChoice = &SecurityConfigType_EastWestServicePolicyAllowAll{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -8402,6 +10233,70 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LogsStreamingDisabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogsReceiverChoice = &GlobalSpecType_LogsStreamingDisabled{v}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LogReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema_views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogsReceiverChoice = &GlobalSpecType_LogReceiver{v}
+			iNdEx = postIndex
 		case 998:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Tunnels", wireType)
@@ -8801,6 +10696,70 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LogsStreamingDisabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogsReceiverChoice = &CreateSpecType_LogsStreamingDisabled{v}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LogReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema_views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogsReceiverChoice = &CreateSpecType_LogReceiver{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -9069,6 +11028,70 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.Coordinates.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LogsStreamingDisabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogsReceiverChoice = &ReplaceSpecType_LogsStreamingDisabled{v}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LogReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema_views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogsReceiverChoice = &ReplaceSpecType_LogReceiver{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -9561,6 +11584,70 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LogsStreamingDisabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogsReceiverChoice = &GetSpecType_LogsStreamingDisabled{v}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LogReceiver", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema_views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.LogsReceiverChoice = &GetSpecType_LogReceiver{v}
+			iNdEx = postIndex
 		case 998:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Tunnels", wireType)
@@ -9724,194 +11811,215 @@ func init() {
 }
 
 var fileDescriptorTypes = []byte{
-	// 3017 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0x4f, 0x6c, 0x1b, 0xc7,
-	0xb9, 0xd7, 0xf0, 0xef, 0x72, 0xf4, 0x8f, 0x5a, 0x51, 0x32, 0x2d, 0xbf, 0xd0, 0x1b, 0x3e, 0xe7,
-	0x45, 0x76, 0x48, 0xca, 0xa4, 0x64, 0x5b, 0xf6, 0xc3, 0xcb, 0x33, 0xa9, 0xe4, 0xe9, 0xcf, 0x4b,
-	0x1c, 0x65, 0xa5, 0x48, 0x6d, 0xd2, 0x64, 0xb3, 0x5a, 0x0e, 0xa9, 0x8d, 0xc9, 0x9d, 0xc5, 0xce,
-	0x90, 0x34, 0x9d, 0x1a, 0x30, 0xd0, 0x4b, 0x61, 0x14, 0x68, 0xe1, 0x53, 0x91, 0x43, 0x8f, 0x45,
-	0x91, 0x5b, 0x81, 0xa2, 0x28, 0x4a, 0x03, 0x75, 0x0d, 0xb4, 0x08, 0x7a, 0xf2, 0xa1, 0x87, 0x20,
-	0xbd, 0xc4, 0x4c, 0xd1, 0xa6, 0x41, 0x0f, 0x39, 0xb4, 0x80, 0x81, 0x02, 0x4d, 0x31, 0xb3, 0xbb,
-	0xe4, 0x92, 0xa2, 0xfe, 0xc4, 0x35, 0xd0, 0xa6, 0xcd, 0xc5, 0x98, 0xe5, 0xf7, 0x77, 0xbe, 0xf9,
-	0xe6, 0xf7, 0x7d, 0xdf, 0x58, 0x30, 0x55, 0x47, 0x24, 0xa3, 0xe3, 0x39, 0xa2, 0xed, 0xa2, 0xaa,
-	0x3a, 0x57, 0xd7, 0x51, 0x83, 0xcc, 0xa9, 0x0d, 0xa2, 0xd0, 0x72, 0x43, 0x21, 0x3a, 0x45, 0x73,
-	0xb4, 0x69, 0x22, 0x92, 0x31, 0x2d, 0x4c, 0xb1, 0x28, 0xd9, 0xdc, 0x19, 0x9b, 0x3b, 0xc3, 0xb9,
-	0x33, 0x5e, 0xee, 0x99, 0x74, 0x59, 0xa7, 0xbb, 0xb5, 0x9d, 0x8c, 0x86, 0xab, 0x73, 0x65, 0x5c,
-	0xc6, 0x73, 0x5c, 0x70, 0xa7, 0x56, 0xe2, 0x5f, 0xfc, 0x83, 0xaf, 0x6c, 0x85, 0x33, 0x27, 0xcb,
-	0x18, 0x97, 0x2b, 0xa8, 0xcb, 0x45, 0xf5, 0x2a, 0x22, 0x54, 0xad, 0x9a, 0x0e, 0xc3, 0x99, 0x5e,
-	0xff, 0x0c, 0x44, 0x1b, 0xd8, 0xba, 0xaa, 0x94, 0x74, 0x0b, 0x35, 0xd4, 0x4a, 0xc5, 0xeb, 0xdd,
-	0xcc, 0x89, 0x5e, 0x5e, 0x6c, 0x52, 0x1d, 0x1b, 0x2e, 0x31, 0xd1, 0x4b, 0xec, 0xdf, 0xda, 0xcc,
-	0xf1, 0x5e, 0xba, 0x97, 0xf4, 0x1f, 0x7d, 0x31, 0x52, 0x2b, 0x7a, 0x51, 0xa5, 0xc8, 0xa1, 0x4a,
-	0x7b, 0x23, 0xa8, 0xf4, 0x9a, 0x3e, 0x35, 0x28, 0xc6, 0xcc, 0x01, 0xc5, 0x6b, 0xe5, 0xe4, 0x20,
-	0x2e, 0x0f, 0x43, 0xb2, 0x01, 0xc5, 0xcd, 0xe5, 0xed, 0x3c, 0x21, 0x7a, 0xd9, 0x40, 0xc5, 0xfc,
-	0xc6, 0x95, 0xcd, 0xa6, 0x89, 0xc4, 0x59, 0x18, 0x66, 0xc1, 0x57, 0x89, 0x11, 0x07, 0x12, 0x98,
-	0x1d, 0x2d, 0x8c, 0xff, 0xf4, 0x0f, 0x77, 0xfd, 0xf0, 0x8c, 0x10, 0xff, 0xeb, 0x67, 0x7e, 0xe9,
-	0xe6, 0x43, 0xbf, 0x1c, 0xa2, 0xe5, 0x46, 0x9e, 0x18, 0xe2, 0x05, 0x38, 0x51, 0xc7, 0x15, 0x8a,
-	0x2c, 0x4b, 0xe5, 0x67, 0xc5, 0x65, 0x7c, 0x5c, 0x66, 0x98, 0xc9, 0x84, 0xce, 0x04, 0xe2, 0x9f,
-	0x7d, 0xe6, 0x97, 0xc7, 0x5d, 0xae, 0x0d, 0x9d, 0xa2, 0x3c, 0x31, 0x92, 0x3f, 0x07, 0x70, 0xfc,
-	0xf9, 0x6b, 0x3a, 0xa1, 0xba, 0x51, 0xde, 0x5c, 0xde, 0xe6, 0x66, 0x5f, 0x82, 0x4c, 0xad, 0xa2,
-	0x17, 0xb9, 0xd5, 0x48, 0x61, 0xf1, 0x61, 0x0b, 0x0c, 0x31, 0x2d, 0x01, 0xcb, 0x17, 0xbf, 0xcc,
-	0x16, 0xff, 0x65, 0x9d, 0xca, 0x25, 0xdf, 0x98, 0xa5, 0xe5, 0x46, 0xfa, 0xf4, 0xec, 0x6b, 0x6a,
-	0xfa, 0xfa, 0xd9, 0xf4, 0xc5, 0xd7, 0xdf, 0x5e, 0xbc, 0xf1, 0xf5, 0xce, 0x3a, 0x7b, 0xe1, 0xc6,
-	0xe9, 0x53, 0x72, 0x90, 0x96, 0x1b, 0xab, 0x45, 0xf1, 0x54, 0x77, 0x1f, 0x03, 0x7c, 0x3a, 0x70,
-	0x0f, 0xfe, 0x23, 0xec, 0xe1, 0xd7, 0x00, 0x8e, 0x6e, 0x2e, 0x6f, 0xaf, 0xab, 0x96, 0x5a, 0x25,
-	0x7c, 0x07, 0x79, 0x18, 0x25, 0x4d, 0x42, 0x51, 0x55, 0x29, 0x23, 0x03, 0x59, 0x2a, 0x45, 0x45,
-	0x6e, 0x79, 0x38, 0x17, 0xcb, 0xf4, 0xa6, 0xf9, 0xf3, 0x55, 0x93, 0x36, 0x57, 0x86, 0xe4, 0x71,
-	0x9b, 0x7f, 0xd9, 0x65, 0x17, 0x5f, 0x83, 0xa3, 0x35, 0x82, 0x2c, 0x45, 0x75, 0xce, 0x84, 0x7b,
-	0x32, 0x9c, 0x5b, 0xc8, 0x1c, 0x76, 0x4d, 0x32, 0x7b, 0x0f, 0x72, 0x65, 0x48, 0x1e, 0x61, 0xca,
-	0xdc, 0x9f, 0x0b, 0x4f, 0x40, 0xa8, 0x12, 0x43, 0xd1, 0x76, 0xb1, 0xae, 0x21, 0x71, 0xfc, 0x6e,
-	0x0b, 0xf8, 0xee, 0xb7, 0x00, 0x68, 0xb7, 0x80, 0x3f, 0x97, 0x9a, 0x5f, 0x0b, 0x08, 0x20, 0xea,
-	0x4b, 0xfe, 0x79, 0x18, 0x8e, 0x6f, 0x20, 0xab, 0xae, 0x6b, 0x88, 0x6c, 0xad, 0x2f, 0xf1, 0x8d,
-	0xbd, 0x03, 0x20, 0x64, 0xc6, 0x2c, 0x54, 0xd6, 0xb1, 0xe1, 0x9c, 0xcf, 0xdb, 0xee, 0xf9, 0x58,
-	0x96, 0x29, 0x8f, 0xa9, 0x66, 0xda, 0xc0, 0x16, 0xdd, 0x45, 0x2a, 0xa1, 0xe9, 0x2c, 0xff, 0x26,
-	0xb8, 0xd6, 0xf9, 0x1e, 0x41, 0xb5, 0xb4, 0x86, 0x0c, 0x6a, 0xa9, 0x95, 0x74, 0x56, 0x8e, 0xa0,
-	0x5a, 0xba, 0x81, 0x38, 0xa1, 0xb3, 0x9c, 0x97, 0x23, 0x44, 0x4d, 0x3b, 0xec, 0x91, 0x1a, 0xd9,
-	0xb3, 0xcc, 0xf1, 0x25, 0xe7, 0xcd, 0xc9, 0x11, 0xb5, 0x41, 0x64, 0xee, 0x8d, 0x78, 0x19, 0x86,
-	0x0d, 0xd4, 0x50, 0xea, 0xa6, 0xe6, 0x04, 0xeb, 0xa9, 0x81, 0xc1, 0xca, 0x6f, 0x6f, 0x6c, 0xad,
-	0x2f, 0x75, 0x4f, 0x6b, 0x65, 0x48, 0x0e, 0x19, 0xa8, 0xb1, 0x65, 0x6a, 0xe2, 0xcb, 0x30, 0x54,
-	0x37, 0x35, 0x96, 0x79, 0x81, 0x83, 0x33, 0xaf, 0x6e, 0x6a, 0x07, 0x66, 0xde, 0xca, 0x90, 0x1c,
-	0xac, 0x9b, 0xda, 0x6a, 0x51, 0x5c, 0xb3, 0x9d, 0xa2, 0xe5, 0x46, 0x3c, 0xc4, 0x9d, 0x9a, 0x3b,
-	0xd2, 0x09, 0x7a, 0xdc, 0x03, 0xdc, 0xbd, 0xcd, 0x72, 0x43, 0xdc, 0x82, 0x23, 0xc8, 0xb9, 0x2b,
-	0x5c, 0x61, 0x98, 0x2b, 0xcc, 0x1e, 0xae, 0xb0, 0xef, 0x86, 0xad, 0x00, 0x79, 0xd8, 0x55, 0xc4,
-	0xf4, 0x12, 0x18, 0x65, 0xec, 0x1a, 0xb2, 0xa8, 0x5e, 0xd2, 0x51, 0x51, 0xd9, 0x6d, 0xc4, 0x05,
-	0x1e, 0x80, 0xd5, 0x0f, 0x5a, 0xe0, 0x84, 0xda, 0x20, 0xe9, 0x9d, 0x26, 0xae, 0xa4, 0xab, 0xb5,
-	0x0a, 0xd5, 0xd3, 0x86, 0xae, 0xa5, 0xd9, 0x15, 0xa8, 0x22, 0xb2, 0xeb, 0xc6, 0xe7, 0x49, 0xeb,
-	0x64, 0xfc, 0xb2, 0x7c, 0x10, 0xa7, 0x3c, 0xa6, 0x36, 0xc8, 0x92, 0x6b, 0x61, 0xa5, 0x21, 0xde,
-	0xf6, 0xc1, 0x51, 0xdd, 0x20, 0x54, 0x35, 0x34, 0x1b, 0xac, 0xe2, 0x11, 0x6e, 0xf2, 0x8f, 0xe0,
-	0x83, 0x16, 0x88, 0xd0, 0xf9, 0xcc, 0xb5, 0x8a, 0x6a, 0x95, 0x51, 0xbb, 0x05, 0xfe, 0x13, 0x76,
-	0x3f, 0x21, 0xa4, 0xf3, 0x99, 0x9c, 0xbb, 0xae, 0x9e, 0xcb, 0x2c, 0xd8, 0x6b, 0xe6, 0xc8, 0xed,
-	0x3b, 0xe0, 0xfb, 0x00, 0x2e, 0x78, 0xb8, 0xc5, 0xa7, 0x67, 0x17, 0xa4, 0x6b, 0x52, 0x7d, 0x69,
-	0xfd, 0x95, 0x94, 0x94, 0x3d, 0xbf, 0x5c, 0x90, 0xe4, 0xfc, 0x8b, 0xa7, 0xa5, 0x2a, 0x2a, 0xea,
-	0xb5, 0xaa, 0x64, 0x22, 0xab, 0x84, 0xad, 0x2a, 0x73, 0x00, 0xce, 0x7b, 0x15, 0x8b, 0x4f, 0xcd,
-	0x2e, 0x76, 0xc4, 0xe6, 0x73, 0xae, 0xd8, 0xae, 0x5e, 0xde, 0xed, 0x11, 0xba, 0xe8, 0xf5, 0x40,
-	0x7c, 0x66, 0x36, 0x7b, 0xbe, 0x23, 0x75, 0x7e, 0xc1, 0x95, 0xaa, 0x23, 0xab, 0xb9, 0x47, 0xb4,
-	0x93, 0x53, 0xf2, 0x88, 0x1b, 0x03, 0x7e, 0xbf, 0x9e, 0x86, 0x61, 0x42, 0x76, 0x95, 0xab, 0xa8,
-	0x19, 0x87, 0x3c, 0x1a, 0x63, 0x0f, 0x5b, 0xc0, 0xcf, 0xb8, 0x83, 0x96, 0x3f, 0x7e, 0xf3, 0xb2,
-	0x1c, 0x22, 0x64, 0xf7, 0xff, 0x51, 0x53, 0xfc, 0x2a, 0x14, 0xd4, 0xeb, 0x8a, 0x81, 0x8b, 0x88,
-	0xc4, 0x87, 0x25, 0xff, 0xbe, 0x79, 0x65, 0x27, 0xfb, 0x66, 0x03, 0xaf, 0x1a, 0x14, 0x59, 0x25,
-	0x55, 0x43, 0x57, 0x70, 0x91, 0xdb, 0x2a, 0x8c, 0x32, 0xb5, 0xc2, 0x6d, 0x10, 0x3c, 0xe3, 0xcf,
-	0xa6, 0xe6, 0xe5, 0xb0, 0x7a, 0x9d, 0x91, 0x88, 0xb8, 0x08, 0x47, 0xb8, 0x5e, 0xc5, 0x64, 0xf0,
-	0x73, 0x3d, 0x3e, 0xc2, 0x21, 0x70, 0xfa, 0x6e, 0x0b, 0xb0, 0x93, 0x01, 0x67, 0x3b, 0x77, 0xe2,
-	0x8c, 0x2f, 0x3e, 0x25, 0x43, 0xce, 0xbb, 0x8e, 0xac, 0xfc, 0x75, 0xf1, 0x15, 0x28, 0xf0, 0x3c,
-	0xb2, 0x50, 0x31, 0x3e, 0xc6, 0x73, 0x33, 0x39, 0xd0, 0xa9, 0x97, 0x76, 0xde, 0x42, 0x1a, 0x95,
-	0x51, 0x89, 0xfb, 0x11, 0x7b, 0xf7, 0xc6, 0x84, 0x56, 0xc1, 0xb5, 0x22, 0x17, 0x44, 0x06, 0xd5,
-	0xd5, 0x0a, 0x59, 0xf1, 0xc9, 0x61, 0x96, 0x30, 0x16, 0x2a, 0x8a, 0x39, 0x28, 0x30, 0x14, 0x24,
-	0x0c, 0x45, 0xc7, 0x0f, 0x40, 0x51, 0x9f, 0xdc, 0xe1, 0x13, 0xcf, 0xc2, 0x48, 0x51, 0x27, 0x57,
-	0x15, 0xa2, 0x5f, 0x47, 0xf1, 0x69, 0xbe, 0x83, 0x49, 0xb6, 0x03, 0xd7, 0x79, 0x06, 0xe6, 0x37,
-	0xff, 0xe4, 0x97, 0x05, 0xc6, 0xb5, 0xa1, 0x5f, 0x47, 0x97, 0xde, 0xba, 0xd7, 0x02, 0x25, 0x38,
-	0x09, 0x47, 0x5c, 0xcc, 0x93, 0xb6, 0xd6, 0x97, 0x44, 0x7f, 0x36, 0x95, 0x83, 0x31, 0x38, 0xbe,
-	0x69, 0xa9, 0x06, 0xd1, 0xa9, 0xb4, 0xac, 0x52, 0xd4, 0x50, 0x9b, 0x22, 0x38, 0x07, 0x9f, 0x86,
-	0x31, 0x56, 0x01, 0x24, 0x16, 0x35, 0x89, 0xdf, 0x57, 0x44, 0x91, 0x45, 0xc4, 0xf1, 0xc5, 0xd4,
-	0xc5, 0x54, 0xf6, 0x6c, 0x2a, 0x9b, 0x4d, 0x65, 0x73, 0xa9, 0x5c, 0x0e, 0x46, 0x21, 0x7c, 0x0e,
-	0x99, 0x15, 0xdc, 0xac, 0x22, 0x83, 0x8a, 0xbe, 0xec, 0x7c, 0xe1, 0x29, 0x28, 0x12, 0xdb, 0x0a,
-	0x43, 0x2b, 0x2f, 0x0e, 0xfb, 0xef, 0xb7, 0x80, 0x8f, 0xe1, 0xf0, 0x7c, 0x6a, 0x81, 0xc1, 0x34,
-	0xbb, 0xc2, 0x1e, 0x72, 0xe8, 0x7e, 0x0b, 0x04, 0x19, 0xf9, 0x7c, 0xea, 0x42, 0xe1, 0x24, 0x84,
-	0xc5, 0xae, 0xde, 0x89, 0xbb, 0x2d, 0x30, 0x76, 0xbf, 0x05, 0x46, 0xdb, 0x2d, 0x10, 0xcc, 0x2e,
-	0xa4, 0xb2, 0xe7, 0xd6, 0x02, 0x82, 0x2f, 0xea, 0x5f, 0x0b, 0x08, 0xc1, 0x68, 0x68, 0x2d, 0x20,
-	0x8c, 0x46, 0xc7, 0xd6, 0x02, 0x42, 0x34, 0x3a, 0xb1, 0x16, 0x10, 0x26, 0xa2, 0xe2, 0x5a, 0x40,
-	0x10, 0xa3, 0x93, 0x6b, 0x01, 0x61, 0x32, 0x1a, 0x5b, 0x0b, 0x08, 0xb1, 0xe8, 0xd4, 0x5a, 0x40,
-	0x98, 0x8a, 0x4e, 0x27, 0x7f, 0x1b, 0x84, 0xe3, 0x5b, 0xc6, 0x12, 0x36, 0x4a, 0x7a, 0xb9, 0x66,
-	0xa9, 0xac, 0xdb, 0x10, 0x37, 0xe0, 0x31, 0x03, 0x2b, 0xba, 0x41, 0xf4, 0x22, 0x52, 0x08, 0x55,
-	0xa9, 0xae, 0x29, 0x16, 0xae, 0x51, 0x44, 0x0e, 0xaa, 0x6b, 0x85, 0x00, 0x0b, 0xf9, 0xca, 0x90,
-	0x1c, 0x33, 0xf0, 0x2a, 0x97, 0xdd, 0xe0, 0xa2, 0x32, 0x97, 0x14, 0xcb, 0x30, 0x36, 0x50, 0xa3,
-	0x0d, 0xde, 0xe9, 0x81, 0xa9, 0xc3, 0x22, 0xee, 0x55, 0xf2, 0x82, 0x4e, 0x28, 0xcf, 0x22, 0xd7,
-	0x94, 0xa8, 0xef, 0x35, 0xf4, 0x0a, 0x8c, 0x1b, 0x58, 0xc1, 0x35, 0x3a, 0xc0, 0x58, 0xf0, 0x50,
-	0xf7, 0x81, 0x3c, 0x65, 0xe0, 0x97, 0x6c, 0xe1, 0x1e, 0xb5, 0x3a, 0x9c, 0x1a, 0xac, 0x33, 0xf4,
-	0xe8, 0x1b, 0x00, 0xf2, 0x24, 0x1e, 0x60, 0xaa, 0x00, 0x27, 0x0c, 0xac, 0x94, 0x2b, 0x78, 0x47,
-	0xad, 0x28, 0x4e, 0xa3, 0xca, 0x21, 0x7a, 0xff, 0xbb, 0x30, 0x6e, 0xe0, 0x65, 0xce, 0x7f, 0xc5,
-	0x66, 0x17, 0x4b, 0x70, 0xb2, 0x57, 0x81, 0x52, 0xd1, 0x09, 0xe5, 0xa8, 0xbb, 0x5f, 0x5f, 0xd1,
-	0xa3, 0x60, 0x09, 0x1b, 0x06, 0xd2, 0x58, 0x3a, 0xb8, 0x3e, 0xaf, 0xf8, 0xe4, 0x89, 0xb2, 0x97,
-	0x85, 0x11, 0x0a, 0x59, 0x38, 0x33, 0xe0, 0x58, 0xdd, 0x2c, 0x66, 0xb7, 0xd0, 0xf7, 0x5e, 0x0b,
-	0x00, 0x4f, 0xc3, 0x51, 0xc8, 0xc1, 0x13, 0x83, 0x22, 0xe9, 0x95, 0x09, 0x3a, 0x32, 0x01, 0x26,
-	0x73, 0x2e, 0x75, 0xbe, 0x90, 0x82, 0x53, 0x7d, 0xdb, 0xf1, 0x70, 0x0b, 0x0e, 0x77, 0x98, 0x71,
-	0x2f, 0xa6, 0x2e, 0xda, 0x2d, 0xcd, 0x5a, 0x40, 0x08, 0x44, 0x83, 0x6b, 0x01, 0x21, 0x1c, 0x15,
-	0x92, 0xdf, 0xf2, 0xc1, 0x89, 0xad, 0xf5, 0xa5, 0x3c, 0xa5, 0xaa, 0xb6, 0xcb, 0x6e, 0x90, 0xdb,
-	0x7b, 0x3a, 0x1d, 0x00, 0xf8, 0xfb, 0x3a, 0x00, 0xb7, 0xfe, 0x5f, 0x85, 0xa1, 0x8a, 0xba, 0x83,
-	0x2a, 0xec, 0xa2, 0x30, 0x98, 0xfe, 0xdf, 0xc3, 0xab, 0xf5, 0x1e, 0xaf, 0x32, 0x2f, 0x70, 0x0d,
-	0xcf, 0x1b, 0xd4, 0x6a, 0x16, 0xc4, 0x77, 0xee, 0x00, 0x3f, 0x04, 0xa0, 0xfd, 0xe1, 0x2f, 0xfc,
-	0xa1, 0x5b, 0x77, 0x80, 0x4f, 0x18, 0x92, 0x1d, 0x13, 0x33, 0x17, 0xe1, 0xb0, 0x87, 0x55, 0x8c,
-	0x42, 0x3f, 0xab, 0x24, 0x7c, 0x27, 0x32, 0x5b, 0x8a, 0x31, 0x18, 0xac, 0xab, 0x95, 0x1a, 0xe2,
-	0xb7, 0x36, 0x22, 0xdb, 0x1f, 0x97, 0x7c, 0x8b, 0x20, 0xa9, 0xf0, 0x68, 0xac, 0x9a, 0xeb, 0x16,
-	0x2a, 0xe9, 0xd7, 0x90, 0xdd, 0xc7, 0xae, 0x41, 0xc1, 0x74, 0xbe, 0xe3, 0x40, 0xf2, 0xcf, 0x46,
-	0x0a, 0x19, 0x3e, 0x01, 0xdc, 0x06, 0xe1, 0x64, 0xd0, 0xf2, 0x3f, 0x04, 0x80, 0x63, 0xe9, 0x6d,
-	0xe0, 0x8f, 0xde, 0x14, 0x78, 0x95, 0xba, 0x0d, 0x7c, 0x02, 0x70, 0x57, 0x71, 0x20, 0x77, 0xe4,
-	0x93, 0xdf, 0x03, 0x70, 0xaa, 0x67, 0x67, 0x6e, 0x16, 0x89, 0x08, 0x0a, 0x2c, 0xe6, 0x3c, 0x1b,
-	0x01, 0x0f, 0xd2, 0xfc, 0x23, 0x04, 0xa9, 0x30, 0xd5, 0xf5, 0xa5, 0xe3, 0x81, 0x30, 0x24, 0x87,
-	0xeb, 0xa6, 0xc6, 0x4c, 0x5d, 0x4a, 0xdc, 0x6b, 0x81, 0x19, 0x18, 0x87, 0x93, 0xf9, 0xed, 0x0d,
-	0x86, 0xed, 0x92, 0xda, 0x91, 0x27, 0x22, 0xc8, 0x26, 0xff, 0x12, 0x80, 0xe2, 0x06, 0xd2, 0x6a,
-	0x96, 0x4e, 0x9b, 0x36, 0xfa, 0x71, 0xef, 0x2e, 0xc3, 0xa8, 0x81, 0x95, 0x12, 0xb6, 0x1a, 0xaa,
-	0x55, 0x54, 0x4c, 0x0b, 0x5f, 0x6b, 0x1e, 0xd2, 0xcb, 0x8f, 0x19, 0xf8, 0xff, 0x6c, 0xf6, 0x75,
-	0xc6, 0x2d, 0x7e, 0x03, 0xc0, 0x27, 0x54, 0x8d, 0xea, 0x75, 0xd4, 0xab, 0x46, 0x31, 0x71, 0x45,
-	0xd7, 0xf4, 0x0e, 0xe2, 0x3d, 0xdb, 0xa7, 0xaf, 0x7f, 0x20, 0xcd, 0xe4, 0xb9, 0x12, 0xaf, 0xee,
-	0x75, 0x47, 0x83, 0xd3, 0xc7, 0xce, 0xa8, 0xfb, 0x72, 0x38, 0x10, 0xe2, 0xea, 0xe4, 0xa6, 0x9b,
-	0x07, 0xa1, 0xdf, 0x0a, 0x60, 0x10, 0xe2, 0x5c, 0x6c, 0xae, 0xa5, 0x29, 0x12, 0x78, 0xcc, 0xd9,
-	0x48, 0x8f, 0x1e, 0xbd, 0x83, 0x79, 0x17, 0x8f, 0xb6, 0x05, 0xaf, 0x56, 0xd7, 0x7b, 0x20, 0x4f,
-	0xa9, 0x83, 0x88, 0xe2, 0x8b, 0xf0, 0x58, 0x6f, 0xd8, 0xd4, 0x4a, 0x05, 0x37, 0xd8, 0xbf, 0x4e,
-	0x03, 0xbc, 0xdf, 0x39, 0xc4, 0x4a, 0x9e, 0x38, 0xe4, 0x99, 0x50, 0xbe, 0x52, 0xb9, 0xb4, 0x70,
-	0xaf, 0x05, 0xce, 0xc2, 0xe3, 0x30, 0xe6, 0x44, 0x49, 0xe2, 0x64, 0xc9, 0xd9, 0x21, 0xc8, 0xc2,
-	0x49, 0x38, 0xe6, 0xb8, 0xd0, 0xf9, 0x71, 0xa1, 0x70, 0x1a, 0xc6, 0x7a, 0x9d, 0x70, 0xc0, 0x66,
-	0xc2, 0x33, 0x3b, 0x05, 0x73, 0xa9, 0x0b, 0xa9, 0xf9, 0xc2, 0x2c, 0x9c, 0xea, 0x8d, 0xb2, 0xb7,
-	0x80, 0x07, 0x3d, 0x10, 0xe6, 0x05, 0xa5, 0xe4, 0x8f, 0x01, 0x9c, 0xe6, 0xcd, 0xda, 0x95, 0xcd,
-	0x9a, 0x61, 0xa0, 0x8a, 0x27, 0x03, 0x67, 0x61, 0x84, 0x35, 0x59, 0x8a, 0xa1, 0x56, 0x91, 0x03,
-	0x4b, 0xf6, 0x40, 0x6a, 0x05, 0xa2, 0x20, 0x7e, 0x59, 0x16, 0x18, 0xf5, 0x8a, 0x5a, 0x45, 0xe2,
-	0x0b, 0x30, 0x4a, 0xb9, 0xb4, 0x62, 0xa1, 0x2a, 0xa6, 0x48, 0xd1, 0x4d, 0x0e, 0x3b, 0x91, 0x42,
-	0x92, 0x09, 0x44, 0x6e, 0x83, 0x50, 0x32, 0x60, 0xf9, 0xae, 0x75, 0xee, 0x47, 0xd4, 0xd7, 0xbd,
-	0xb5, 0xf2, 0x98, 0x2d, 0x2b, 0x73, 0xd1, 0x55, 0x93, 0x8d, 0xcd, 0xdc, 0xae, 0x6e, 0x0f, 0x9f,
-	0x7d, 0x56, 0x43, 0x8c, 0xb6, 0x5a, 0x64, 0xf7, 0x3a, 0x96, 0xdf, 0xde, 0xd8, 0x5c, 0xde, 0x5e,
-	0x35, 0x4a, 0xd8, 0xe3, 0x76, 0xa1, 0x6f, 0x8c, 0x7f, 0xe6, 0x11, 0x26, 0xf7, 0x42, 0x07, 0x8e,
-	0x7d, 0x7b, 0x74, 0x1c, 0x11, 0x81, 0x93, 0x3f, 0x1c, 0x85, 0x63, 0x76, 0x21, 0xdb, 0x30, 0x91,
-	0xc6, 0x5d, 0x7b, 0x03, 0xb2, 0x69, 0x44, 0x31, 0x3b, 0x4d, 0x1b, 0x77, 0xf1, 0x48, 0xa3, 0x54,
-	0xdf, 0x44, 0x5c, 0x08, 0xb0, 0xc3, 0x97, 0x47, 0xd5, 0x06, 0xf1, 0xb4, 0x80, 0x25, 0x38, 0xce,
-	0xdc, 0xf6, 0x00, 0x8c, 0x03, 0x19, 0x17, 0x3e, 0x27, 0xb0, 0x75, 0xbb, 0x03, 0x6e, 0x66, 0xac,
-	0x6e, 0x6a, 0x79, 0x0f, 0x6a, 0xbd, 0x0e, 0x47, 0xb8, 0x9c, 0x83, 0x5a, 0x47, 0x7f, 0x23, 0xd8,
-	0x8b, 0x73, 0x8e, 0x85, 0x61, 0x5a, 0x6e, 0xb8, 0x44, 0x71, 0x1d, 0x1e, 0xef, 0xbe, 0x88, 0xe0,
-	0x12, 0x6d, 0xa8, 0x16, 0x52, 0xea, 0xc8, 0x22, 0x6c, 0xf6, 0xb7, 0x27, 0xe4, 0xd8, 0xfb, 0x37,
-	0xc0, 0xc7, 0x9e, 0xbe, 0xda, 0x1e, 0x6a, 0x8e, 0x75, 0x9e, 0x48, 0x1c, 0xa9, 0x2d, 0x5b, 0x48,
-	0xbc, 0x02, 0xe3, 0xd8, 0x44, 0xac, 0xa9, 0x34, 0xca, 0x8a, 0xf3, 0x44, 0xe2, 0x2a, 0x0c, 0x1e,
-	0xa0, 0x70, 0xba, 0x23, 0xb5, 0xc1, 0x85, 0x5c, 0x7d, 0x3f, 0xf2, 0xd9, 0x91, 0xd6, 0x4d, 0xa5,
-	0x53, 0xa8, 0x42, 0xbc, 0x84, 0x2c, 0x1d, 0x1e, 0x84, 0xde, 0xa4, 0xc8, 0x6c, 0x99, 0x5a, 0xb7,
-	0xfc, 0xd9, 0xb5, 0xf6, 0x97, 0xc0, 0xf1, 0x86, 0x15, 0xdb, 0xd8, 0xad, 0x3b, 0x20, 0x2a, 0x8e,
-	0x7d, 0xd2, 0x02, 0xd0, 0xad, 0x20, 0xab, 0xcf, 0x79, 0x08, 0xed, 0x3d, 0x04, 0x78, 0xeb, 0x0e,
-	0x08, 0x89, 0x81, 0xf7, 0x5a, 0x60, 0xa8, 0x5b, 0xad, 0xb9, 0xae, 0xfc, 0xad, 0x3b, 0xe0, 0x7f,
-	0x66, 0xfe, 0xfb, 0x93, 0x16, 0xb8, 0xb0, 0x41, 0x2d, 0xdd, 0x28, 0x4b, 0x16, 0x32, 0x2d, 0x44,
-	0xd8, 0xf4, 0x63, 0x94, 0x25, 0x64, 0x59, 0xd8, 0x92, 0x2c, 0x44, 0x4c, 0x6c, 0x10, 0x94, 0x92,
-	0x6a, 0xa4, 0xa6, 0x56, 0x2a, 0x4d, 0x49, 0x95, 0x76, 0x69, 0xb5, 0x22, 0x69, 0xb8, 0x88, 0x98,
-	0x96, 0xd9, 0x5b, 0x77, 0xc0, 0xa9, 0x99, 0x64, 0xbb, 0x05, 0x12, 0x2c, 0x51, 0x24, 0x5c, 0x92,
-	0x48, 0x6d, 0xc7, 0x40, 0x94, 0x48, 0xba, 0x21, 0xa9, 0x52, 0x59, 0xaf, 0x23, 0x83, 0xf9, 0x23,
-	0x8f, 0xd6, 0xbd, 0x9b, 0x13, 0x37, 0x61, 0xa4, 0x6e, 0x28, 0x1a, 0x3f, 0xfc, 0xa3, 0xbf, 0x22,
-	0xf4, 0x0d, 0x05, 0x4e, 0xc6, 0x08, 0x75, 0xe7, 0x67, 0x71, 0x16, 0x86, 0xd5, 0x62, 0xd1, 0x42,
-	0x84, 0x38, 0xaf, 0x07, 0x63, 0xac, 0xa5, 0xed, 0x0c, 0xaf, 0x6c, 0xa2, 0xb3, 0xc9, 0xe2, 0x32,
-	0x1c, 0xd6, 0x30, 0xb6, 0x8a, 0xba, 0xa1, 0xb2, 0x7e, 0xd9, 0x6e, 0x41, 0x4f, 0xf6, 0x79, 0xc0,
-	0x6d, 0x2e, 0x75, 0xd9, 0xec, 0x0e, 0x59, 0xf6, 0x4a, 0x8a, 0xaf, 0xc2, 0x13, 0xfc, 0x95, 0xac,
-	0x8a, 0x8b, 0x7a, 0x49, 0xd7, 0xb8, 0x5f, 0x4a, 0xe7, 0x9d, 0x97, 0xcf, 0xd0, 0xc3, 0xb9, 0x99,
-	0x8c, 0xfd, 0x12, 0x9c, 0x71, 0x5f, 0x82, 0x33, 0x9b, 0x2e, 0x87, 0x7c, 0x9c, 0x89, 0xbf, 0xe8,
-	0x91, 0xee, 0x90, 0xc4, 0x97, 0xa1, 0xc0, 0xf1, 0xcb, 0x28, 0xe1, 0xf8, 0x30, 0x57, 0x74, 0xfe,
-	0xf0, 0x18, 0x0d, 0x42, 0x42, 0x39, 0xcc, 0xc0, 0xcc, 0x28, 0x61, 0xf1, 0x6b, 0x30, 0x6c, 0x63,
-	0x2c, 0x89, 0xff, 0x2e, 0xcc, 0xd3, 0x74, 0xf1, 0x48, 0x2a, 0x07, 0x54, 0x85, 0x42, 0xd8, 0x49,
-	0x4d, 0xd9, 0x55, 0x29, 0xbe, 0x09, 0x23, 0xb4, 0x64, 0x83, 0x1a, 0x89, 0xff, 0x3e, 0x7c, 0xe4,
-	0x01, 0x3c, 0xf1, 0xee, 0x8d, 0x18, 0xbf, 0xad, 0x25, 0x6c, 0x55, 0x3d, 0xa0, 0xe8, 0x1a, 0x10,
-	0x68, 0xc9, 0x7e, 0x8e, 0x12, 0xdf, 0x80, 0xa3, 0xfc, 0x0d, 0x5a, 0x37, 0x28, 0xb2, 0x0c, 0xb5,
-	0x12, 0xff, 0x38, 0xfc, 0x79, 0xc6, 0xfc, 0x5e, 0x61, 0xae, 0x7b, 0x84, 0xfd, 0xb4, 0xea, 0xfc,
-	0x32, 0x53, 0x83, 0xe2, 0xde, 0x5b, 0x38, 0xa0, 0x8d, 0x5d, 0xf5, 0xb6, 0xb1, 0x47, 0x6d, 0x17,
-	0x7b, 0x7b, 0x5b, 0x4f, 0xef, 0x7b, 0xe9, 0xdb, 0xe0, 0x5e, 0x0b, 0xdc, 0x02, 0x70, 0x1a, 0x4e,
-	0xb0, 0x0b, 0xdc, 0x3b, 0xfa, 0x82, 0x2c, 0x9b, 0xff, 0xf7, 0xf4, 0x8b, 0x39, 0x38, 0x03, 0xa7,
-	0xdc, 0x3e, 0xa1, 0x4f, 0xe2, 0x02, 0x3c, 0x01, 0xa7, 0x5d, 0x14, 0xed, 0x27, 0xce, 0xc3, 0x27,
-	0xe1, 0xb4, 0x8b, 0x8b, 0x7d, 0xc4, 0xf0, 0x42, 0xea, 0x5c, 0x6a, 0x31, 0x75, 0x31, 0xf9, 0x9b,
-	0x00, 0x1c, 0x5b, 0xb2, 0x90, 0x4a, 0x51, 0xa7, 0x66, 0x7d, 0xe5, 0xb1, 0xd5, 0xac, 0xfe, 0x6a,
-	0xf5, 0xe6, 0xe3, 0xae, 0x56, 0x7b, 0xea, 0xd4, 0xf6, 0xe3, 0xab, 0x53, 0xbd, 0x15, 0xea, 0xd2,
-	0xa1, 0x15, 0x6a, 0xff, 0x5a, 0xb4, 0x78, 0x58, 0x2d, 0xda, 0xb7, 0xea, 0x5c, 0x79, 0x1c, 0xf0,
-	0xe9, 0x01, 0xce, 0x78, 0x1f, 0x70, 0x76, 0x81, 0x32, 0xff, 0x28, 0x40, 0xd9, 0x03, 0x91, 0x97,
-	0x26, 0x7e, 0xf5, 0x6c, 0x5f, 0xfb, 0x93, 0xfc, 0x66, 0x00, 0x8e, 0xcb, 0xc8, 0xac, 0xa8, 0x5a,
-	0x37, 0xbd, 0xbe, 0x4c, 0x82, 0x7f, 0xaf, 0x24, 0x70, 0xfe, 0x93, 0xe7, 0x26, 0x84, 0xc3, 0xcb,
-	0x88, 0x7e, 0x89, 0x32, 0xff, 0x7c, 0x09, 0xf6, 0xee, 0xbe, 0xbd, 0xed, 0xe5, 0x23, 0xf4, 0xb6,
-	0xdd, 0x33, 0x1d, 0xd4, 0xd8, 0xfe, 0xec, 0x5f, 0xad, 0xa3, 0xfd, 0x22, 0xdd, 0xc6, 0x2f, 0x5a,
-	0xd7, 0xba, 0xf1, 0xf8, 0xba, 0xd6, 0x4e, 0xb3, 0xfa, 0x8f, 0x6a, 0xf5, 0xf6, 0x02, 0x61, 0xe1,
-	0xbb, 0xe0, 0xfe, 0x83, 0xc4, 0xd0, 0xfb, 0x0f, 0x12, 0x43, 0x9f, 0x3e, 0x48, 0x80, 0x87, 0x0f,
-	0x12, 0xe0, 0x66, 0x3b, 0x01, 0x7e, 0xd0, 0x4e, 0x80, 0x9f, 0xb4, 0x13, 0xe0, 0x6e, 0x3b, 0x01,
-	0xde, 0x6b, 0x27, 0xc0, 0xfd, 0x76, 0x02, 0xbc, 0xdf, 0x4e, 0x80, 0x0f, 0xdb, 0x09, 0xf0, 0x71,
-	0x3b, 0x31, 0xf4, 0x69, 0x3b, 0x01, 0xbe, 0xf3, 0x51, 0x62, 0xe8, 0xee, 0x47, 0x09, 0xf0, 0xea,
-	0x56, 0x19, 0x9b, 0x57, 0xcb, 0x19, 0x17, 0x03, 0x32, 0x35, 0x32, 0xd7, 0x69, 0xa8, 0xd3, 0xa6,
-	0x85, 0xeb, 0x7a, 0x11, 0x59, 0x69, 0x97, 0x3c, 0x67, 0xee, 0x94, 0xf1, 0x1c, 0xba, 0x46, 0xdd,
-	0xbf, 0x17, 0xd9, 0xef, 0xef, 0x63, 0x76, 0x42, 0xfc, 0xec, 0xe7, 0xff, 0x16, 0x00, 0x00, 0xff,
-	0xff, 0x74, 0xaf, 0xca, 0x59, 0x4a, 0x23, 0x00, 0x00,
+	// 3356 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0x4d, 0x6c, 0x1b, 0xd7,
+	0x76, 0xd6, 0xe5, 0xef, 0xf0, 0xea, 0x87, 0xd4, 0x88, 0x92, 0x69, 0xf9, 0x85, 0x9e, 0xb0, 0x76,
+	0x23, 0xfb, 0x91, 0x94, 0x49, 0xc9, 0xb6, 0xec, 0x87, 0xbe, 0x9a, 0x54, 0x5c, 0xfd, 0x34, 0x51,
+	0xf4, 0x46, 0x8a, 0xf4, 0xfa, 0x7e, 0x32, 0x19, 0x0d, 0x2f, 0x47, 0x13, 0x0f, 0xe7, 0x0e, 0xe6,
+	0x0e, 0x49, 0xd3, 0xad, 0x01, 0xa3, 0x59, 0xb4, 0x30, 0xba, 0x68, 0xbd, 0x2a, 0xba, 0xe8, 0xb2,
+	0x08, 0x0c, 0x74, 0x57, 0x14, 0x41, 0xe9, 0xa2, 0xae, 0x81, 0x16, 0x41, 0x57, 0x5e, 0x74, 0x11,
+	0x64, 0x15, 0x33, 0x45, 0x9b, 0x06, 0x2d, 0x90, 0x45, 0x17, 0x46, 0x0b, 0x24, 0xc5, 0xbd, 0x33,
+	0x43, 0x0e, 0x29, 0xea, 0x27, 0xae, 0x81, 0xbe, 0x04, 0xd9, 0x08, 0x33, 0x73, 0xcf, 0xdf, 0x3d,
+	0xf7, 0x9c, 0xf3, 0x9d, 0x73, 0x29, 0x98, 0x6d, 0x20, 0x92, 0xd7, 0xf0, 0x3c, 0x51, 0xf6, 0x51,
+	0x4d, 0x9e, 0x6f, 0x68, 0xa8, 0x49, 0xe6, 0xe5, 0x26, 0x91, 0x6c, 0xb5, 0x29, 0x11, 0xcd, 0x46,
+	0xf3, 0x76, 0xcb, 0x44, 0x24, 0x6f, 0x5a, 0xd8, 0xc6, 0xbc, 0xe0, 0x50, 0xe7, 0x1d, 0xea, 0x3c,
+	0xa3, 0xce, 0xfb, 0xa9, 0x67, 0x73, 0xaa, 0x66, 0xef, 0xd7, 0xf7, 0xf2, 0x0a, 0xae, 0xcd, 0xab,
+	0x58, 0xc5, 0xf3, 0x8c, 0x71, 0xaf, 0x5e, 0x65, 0x6f, 0xec, 0x85, 0x3d, 0x39, 0x02, 0x67, 0xcf,
+	0xaa, 0x18, 0xab, 0x3a, 0xea, 0x51, 0xd9, 0x5a, 0x0d, 0x11, 0x5b, 0xae, 0x99, 0x2e, 0xc1, 0xc5,
+	0x7e, 0xfb, 0x0c, 0x64, 0x37, 0xb1, 0x75, 0x4b, 0xaa, 0x6a, 0x16, 0x6a, 0xca, 0xba, 0xee, 0xb7,
+	0x6e, 0xf6, 0x4c, 0x3f, 0x2d, 0x36, 0x6d, 0x0d, 0x1b, 0xde, 0x62, 0xba, 0x7f, 0x71, 0x70, 0x6b,
+	0xb3, 0xa7, 0xfb, 0xd7, 0xfd, 0x4b, 0x3f, 0x18, 0xf0, 0x91, 0xac, 0x6b, 0x15, 0xd9, 0x46, 0xee,
+	0xaa, 0x70, 0xd0, 0x83, 0x52, 0xbf, 0xea, 0x73, 0xc3, 0x7c, 0x4c, 0x0d, 0x90, 0xfc, 0x5a, 0xce,
+	0x0e, 0xa3, 0xf2, 0x11, 0x64, 0x9a, 0x90, 0xdf, 0x5e, 0xd9, 0x2d, 0x11, 0xa2, 0xa9, 0x06, 0xaa,
+	0x94, 0xb6, 0x36, 0xb6, 0x5b, 0x26, 0xe2, 0xe7, 0x60, 0x94, 0x3a, 0x5f, 0x26, 0x46, 0x0a, 0x08,
+	0x60, 0x6e, 0xbc, 0x1c, 0xff, 0x9b, 0x7f, 0x7f, 0x1c, 0x84, 0x17, 0xb9, 0xd4, 0x57, 0x5f, 0x07,
+	0x85, 0x7b, 0xcf, 0x83, 0x62, 0xc4, 0x56, 0x9b, 0x25, 0x62, 0xf0, 0x57, 0xe1, 0x64, 0x03, 0xeb,
+	0x36, 0xb2, 0x2c, 0x99, 0x9d, 0x15, 0xe3, 0x09, 0x30, 0x9e, 0x51, 0xca, 0x13, 0xb9, 0x18, 0x4a,
+	0x7d, 0xfd, 0x75, 0x50, 0x8c, 0x7b, 0x54, 0x5b, 0x9a, 0x8d, 0x4a, 0xc4, 0xc8, 0xfc, 0x3d, 0x80,
+	0xf1, 0x9b, 0xb7, 0x35, 0x62, 0x6b, 0x86, 0xba, 0xbd, 0xb2, 0xcb, 0xd4, 0xbe, 0x05, 0xa9, 0x58,
+	0x49, 0xab, 0x30, 0xad, 0xb1, 0xf2, 0xd2, 0xf3, 0x36, 0x18, 0xa1, 0x52, 0x42, 0x56, 0x20, 0x75,
+	0x83, 0x3e, 0xfc, 0xba, 0x75, 0xae, 0x98, 0x79, 0x67, 0xce, 0x56, 0x9b, 0xb9, 0x0b, 0x73, 0x3f,
+	0x97, 0x73, 0x77, 0x2e, 0xe5, 0xae, 0xfd, 0xf2, 0x77, 0x97, 0xee, 0xfe, 0x5e, 0xf7, 0xb9, 0x70,
+	0xf5, 0xee, 0x85, 0x73, 0x62, 0xd8, 0x56, 0x9b, 0x6b, 0x15, 0xfe, 0x5c, 0x6f, 0x1f, 0x43, 0x6c,
+	0x3a, 0x72, 0x0f, 0xc1, 0x13, 0xec, 0xe1, 0x9f, 0x01, 0x1c, 0xdf, 0x5e, 0xd9, 0xdd, 0x94, 0x2d,
+	0xb9, 0x46, 0xd8, 0x0e, 0x4a, 0x30, 0x41, 0x5a, 0xc4, 0x46, 0x35, 0x49, 0x45, 0x06, 0xb2, 0x64,
+	0x1b, 0x55, 0x98, 0xe6, 0xd1, 0x62, 0x32, 0xdf, 0x1f, 0xe6, 0x37, 0x6b, 0xa6, 0xdd, 0x5a, 0x1d,
+	0x11, 0xe3, 0x0e, 0xfd, 0x8a, 0x47, 0xce, 0xff, 0x1c, 0x8e, 0xd7, 0x09, 0xb2, 0x24, 0xd9, 0x3d,
+	0x13, 0x66, 0xc9, 0x68, 0x71, 0x31, 0x7f, 0x5c, 0x9a, 0xe4, 0x0f, 0x1e, 0xe4, 0xea, 0x88, 0x38,
+	0x46, 0x85, 0x79, 0x9f, 0xcb, 0xaf, 0x40, 0x28, 0x13, 0x43, 0x52, 0xf6, 0xb1, 0xa6, 0x20, 0x3e,
+	0xfe, 0xb8, 0x0d, 0x02, 0x4f, 0xdb, 0x00, 0x74, 0xda, 0x20, 0x58, 0xcc, 0x2e, 0xac, 0x87, 0x38,
+	0x90, 0x08, 0x64, 0xde, 0x1f, 0x87, 0xf1, 0x2d, 0x64, 0x35, 0x34, 0x05, 0x91, 0x9d, 0xcd, 0x65,
+	0xb6, 0xb1, 0x0f, 0x02, 0x10, 0x52, 0x65, 0x16, 0x52, 0x35, 0x6c, 0xb8, 0xe7, 0xf3, 0x87, 0x01,
+	0xef, 0x80, 0xbe, 0x02, 0xd6, 0xff, 0x00, 0x71, 0x42, 0x36, 0x73, 0x06, 0xb6, 0xec, 0x7d, 0x24,
+	0x13, 0x3b, 0x57, 0x60, 0xef, 0x04, 0xd7, 0xbb, 0xef, 0x63, 0xa8, 0x9e, 0x53, 0x90, 0x61, 0x5b,
+	0xb2, 0x9e, 0x2b, 0x88, 0x31, 0x54, 0xcf, 0x35, 0x11, 0x5b, 0xe8, 0x3e, 0x2e, 0x88, 0x31, 0x22,
+	0xe7, 0x5c, 0xf2, 0x58, 0x9d, 0x1c, 0x78, 0x2c, 0xb2, 0x47, 0x46, 0x5b, 0x14, 0xc7, 0x14, 0xd9,
+	0x27, 0x0f, 0xca, 0x55, 0x47, 0x1b, 0xa5, 0x97, 0x4d, 0x8f, 0x15, 0x7a, 0x46, 0xb8, 0x06, 0xf5,
+	0x0c, 0x2c, 0x0e, 0x18, 0x58, 0x14, 0x21, 0xaa, 0x77, 0x69, 0xe9, 0x33, 0xa3, 0xf5, 0xdb, 0x57,
+	0x14, 0x61, 0x0d, 0xf5, 0xb4, 0x78, 0xa6, 0x50, 0x85, 0x4d, 0x22, 0x32, 0xdf, 0xf0, 0x37, 0x60,
+	0xd4, 0x40, 0x4d, 0xa9, 0x61, 0x2a, 0xee, 0xd1, 0x9d, 0x1f, 0x7a, 0x74, 0xa5, 0xdd, 0xad, 0x9d,
+	0xcd, 0xe5, 0x5e, 0xec, 0xac, 0x8e, 0x88, 0x11, 0x03, 0x35, 0x77, 0x4c, 0x85, 0xff, 0x09, 0x8c,
+	0x34, 0x4c, 0x85, 0xe6, 0x41, 0xe8, 0xe8, 0x3c, 0x68, 0x98, 0xca, 0x91, 0x79, 0xb0, 0x3a, 0x22,
+	0x86, 0x1b, 0xa6, 0xb2, 0x56, 0xe1, 0xd7, 0x1d, 0xa3, 0x6c, 0xb5, 0x99, 0x8a, 0x30, 0xa3, 0xe6,
+	0x4f, 0x14, 0x4f, 0x3e, 0xf3, 0x00, 0x33, 0x6f, 0x5b, 0x6d, 0xf2, 0x3b, 0x70, 0x0c, 0xb9, 0x99,
+	0xcb, 0x04, 0x46, 0x99, 0xc0, 0xc2, 0xf1, 0x02, 0x07, 0xf2, 0x7d, 0x15, 0x88, 0xa3, 0x9e, 0x20,
+	0x2a, 0x97, 0xc0, 0x04, 0x25, 0x57, 0x90, 0x65, 0x6b, 0x55, 0x0d, 0x55, 0xa4, 0xfd, 0x66, 0x8a,
+	0x63, 0x0e, 0x58, 0xfb, 0xa4, 0x0d, 0xce, 0xc8, 0x4d, 0x92, 0xdb, 0x6b, 0x61, 0x3d, 0x57, 0xab,
+	0xeb, 0xb6, 0x96, 0x33, 0x34, 0x25, 0x47, 0x13, 0xb2, 0x86, 0xc8, 0xbe, 0xe7, 0x9f, 0x57, 0xad,
+	0xb3, 0xa9, 0x1b, 0xe2, 0x51, 0x94, 0xe2, 0x84, 0xdc, 0x24, 0xcb, 0x9e, 0x86, 0xd5, 0x26, 0xff,
+	0x20, 0x00, 0xc7, 0x35, 0x83, 0xd8, 0xb2, 0xa1, 0x38, 0xa5, 0x33, 0x15, 0x63, 0x2a, 0xff, 0x03,
+	0x7c, 0xd2, 0x06, 0x31, 0x7b, 0x21, 0x7f, 0x5b, 0x97, 0x2d, 0x15, 0x75, 0xda, 0xe0, 0xd7, 0x60,
+	0xef, 0x15, 0x42, 0x7b, 0x21, 0x5f, 0xf4, 0x9e, 0x6b, 0x97, 0xf3, 0x8b, 0xce, 0x33, 0x35, 0xe4,
+	0xc1, 0x23, 0xf0, 0x17, 0x00, 0x2e, 0xfa, 0xa8, 0xf9, 0xd7, 0xe6, 0x16, 0x85, 0xdb, 0x42, 0x63,
+	0x79, 0xf3, 0xed, 0xac, 0x50, 0xb8, 0xb2, 0x52, 0x16, 0xc4, 0xd2, 0x9b, 0x17, 0x84, 0x1a, 0xaa,
+	0x68, 0xf5, 0x9a, 0x60, 0x22, 0xab, 0x8a, 0xad, 0x1a, 0x35, 0x00, 0x2e, 0xf8, 0x05, 0xf3, 0xe7,
+	0xe7, 0x96, 0xba, 0x6c, 0x0b, 0x45, 0x8f, 0x6d, 0x5f, 0x53, 0xf7, 0xfb, 0x98, 0xae, 0xf9, 0x2d,
+	0xe0, 0x7f, 0x38, 0x57, 0xb8, 0xd2, 0xe5, 0xba, 0xb2, 0xe8, 0x71, 0x35, 0x90, 0xd5, 0x3a, 0xc0,
+	0xda, 0x8d, 0x29, 0x71, 0xcc, 0xf3, 0x01, 0xcb, 0xf6, 0xd7, 0x60, 0x94, 0x90, 0x7d, 0xe9, 0x16,
+	0x6a, 0xa5, 0x20, 0xf3, 0xc6, 0xc4, 0xf3, 0x36, 0x08, 0x52, 0xea, 0xb0, 0x15, 0x4c, 0xdd, 0xbb,
+	0x21, 0x46, 0x08, 0xd9, 0xff, 0x6d, 0xd4, 0xe2, 0x7f, 0x07, 0x72, 0xf2, 0x1d, 0xc9, 0xc0, 0x15,
+	0x44, 0x52, 0xa3, 0x42, 0xf0, 0xd0, 0xb8, 0x72, 0x82, 0x7d, 0xbb, 0x89, 0xd7, 0x0c, 0x1b, 0x59,
+	0x55, 0x59, 0x41, 0x1b, 0xb8, 0xc2, 0x74, 0x95, 0xc7, 0xa9, 0x58, 0xee, 0x01, 0x08, 0x5f, 0x0c,
+	0x16, 0xb2, 0x0b, 0x62, 0x54, 0xbe, 0x43, 0x97, 0x08, 0xbf, 0x04, 0xc7, 0x98, 0x5c, 0xc9, 0xa4,
+	0xc5, 0xf0, 0x4e, 0x6a, 0x8c, 0x15, 0xe4, 0x99, 0xc7, 0x6d, 0x40, 0x4f, 0x06, 0x5c, 0xea, 0xe6,
+	0xc4, 0xc5, 0x40, 0x6a, 0x5a, 0x84, 0x8c, 0x76, 0x13, 0x59, 0xa5, 0x3b, 0xfc, 0xdb, 0x90, 0x63,
+	0x71, 0x64, 0xa1, 0x4a, 0x6a, 0x82, 0xc5, 0x66, 0x66, 0xa8, 0x51, 0x6f, 0xed, 0xbd, 0x87, 0x14,
+	0x5b, 0x44, 0x55, 0x66, 0x47, 0xf2, 0xe1, 0xdd, 0x49, 0x45, 0xc7, 0xf5, 0x0a, 0x63, 0x44, 0x86,
+	0xad, 0xc9, 0x3a, 0x59, 0x0d, 0x88, 0x51, 0x1a, 0x30, 0x16, 0xaa, 0xf0, 0x45, 0xc8, 0xd1, 0x9a,
+	0x4c, 0x68, 0x4d, 0x8f, 0x1f, 0x51, 0xd3, 0x03, 0x62, 0x97, 0x8e, 0xbf, 0x04, 0x63, 0x15, 0x8d,
+	0xdc, 0x92, 0x88, 0x76, 0x07, 0xa5, 0x66, 0xd8, 0x0e, 0xa6, 0xe8, 0x0e, 0x3c, 0xe3, 0x29, 0xb4,
+	0xdc, 0xfb, 0xaf, 0xa0, 0xc8, 0x51, 0xaa, 0x2d, 0xed, 0x0e, 0xba, 0xfe, 0xde, 0x93, 0x36, 0xa8,
+	0xc2, 0x29, 0x38, 0xe6, 0x55, 0x60, 0x61, 0x67, 0x73, 0x99, 0x0f, 0x16, 0xb2, 0x45, 0x98, 0x84,
+	0xf1, 0x6d, 0x4b, 0x36, 0x88, 0x66, 0x0b, 0x2b, 0xb2, 0x8d, 0x9a, 0x72, 0x8b, 0x07, 0x97, 0xe1,
+	0x6b, 0x30, 0x49, 0xf1, 0x48, 0xa0, 0x5e, 0x13, 0x58, 0xbe, 0x22, 0x1b, 0x59, 0x84, 0x8f, 0x2f,
+	0x65, 0xaf, 0x65, 0x0b, 0x97, 0xb2, 0x85, 0x42, 0xb6, 0x50, 0xcc, 0x16, 0x8b, 0x30, 0x01, 0xe1,
+	0xeb, 0xc8, 0xd4, 0x71, 0xab, 0x86, 0x0c, 0x9b, 0x0f, 0x14, 0x16, 0xca, 0xe7, 0x21, 0x4f, 0x1c,
+	0x2d, 0xb4, 0x5a, 0xf9, 0x51, 0x21, 0xf8, 0xb4, 0x0d, 0x02, 0x14, 0x15, 0x16, 0xb2, 0x8b, 0x14,
+	0x34, 0x68, 0x0a, 0xfb, 0x96, 0x23, 0x4f, 0xdb, 0x20, 0x4c, 0x97, 0xaf, 0x64, 0xaf, 0x96, 0xcf,
+	0x42, 0x58, 0xe9, 0xc9, 0x9d, 0x7c, 0xdc, 0x06, 0x13, 0x4f, 0xdb, 0x60, 0xbc, 0xd3, 0x06, 0xe1,
+	0xc2, 0x62, 0xb6, 0x70, 0x79, 0x3d, 0xc4, 0x05, 0x12, 0xc1, 0xf5, 0x10, 0x17, 0x4e, 0x44, 0xd6,
+	0x43, 0xdc, 0x78, 0x62, 0x62, 0x3d, 0xc4, 0x25, 0x12, 0x93, 0xeb, 0x21, 0x6e, 0x32, 0xc1, 0xaf,
+	0x87, 0x38, 0x3e, 0x31, 0xb5, 0x1e, 0xe2, 0xa6, 0x12, 0xc9, 0xf5, 0x10, 0x97, 0x4c, 0x4c, 0xaf,
+	0x87, 0xb8, 0xe9, 0xc4, 0x4c, 0xe6, 0x5f, 0xc2, 0x30, 0xbe, 0x63, 0x2c, 0x63, 0xa3, 0xaa, 0xa9,
+	0x75, 0x4b, 0xa6, 0xbd, 0x0f, 0xbf, 0x05, 0x4f, 0x19, 0x58, 0xd2, 0x0c, 0xa2, 0x55, 0x90, 0x44,
+	0x6c, 0xd9, 0xd6, 0x14, 0xc9, 0xc2, 0x75, 0x1b, 0x91, 0xa3, 0x50, 0xb6, 0x1c, 0xa2, 0x2e, 0x5f,
+	0x1d, 0x11, 0x93, 0x06, 0x5e, 0x63, 0xbc, 0x5b, 0x8c, 0x55, 0x64, 0x9c, 0xbc, 0x0a, 0x93, 0x43,
+	0x25, 0x3a, 0xc5, 0x3b, 0x37, 0x34, 0x74, 0xa8, 0xc7, 0xfd, 0x42, 0xde, 0xd0, 0x88, 0xcd, 0xa2,
+	0xc8, 0x53, 0xc5, 0x6b, 0x07, 0x15, 0xbd, 0x0d, 0x53, 0x06, 0x96, 0x70, 0xdd, 0x1e, 0xa2, 0x2c,
+	0x7c, 0xac, 0xf9, 0x40, 0x9c, 0x36, 0xf0, 0x5b, 0x0e, 0x73, 0x9f, 0x58, 0x0d, 0x4e, 0x0f, 0x97,
+	0x19, 0x79, 0xf1, 0x0d, 0x00, 0x71, 0x0a, 0x0f, 0x51, 0x55, 0x86, 0x93, 0x06, 0x96, 0x54, 0x1d,
+	0xef, 0xc9, 0xba, 0xe4, 0xb6, 0xcd, 0xac, 0x44, 0x1f, 0x9e, 0x0b, 0x71, 0x03, 0xaf, 0x30, 0xfa,
+	0x0d, 0x87, 0x9c, 0xaf, 0xc2, 0xa9, 0x7e, 0x01, 0x92, 0xae, 0x11, 0x9b, 0x55, 0xdd, 0xc3, 0xba,
+	0x9c, 0x3e, 0x01, 0xcb, 0xd8, 0x30, 0x90, 0x42, 0xc3, 0xc1, 0xb3, 0x79, 0x35, 0x20, 0x4e, 0xaa,
+	0x7e, 0x12, 0xba, 0x50, 0x2e, 0xc0, 0xd9, 0x21, 0xc7, 0xea, 0x45, 0x31, 0xcd, 0xc2, 0xc0, 0x47,
+	0x6d, 0x00, 0x7c, 0xed, 0x4f, 0xb9, 0x08, 0xcf, 0x0c, 0xf3, 0xa4, 0x9f, 0x27, 0xec, 0xf2, 0x84,
+	0x28, 0xcf, 0xe5, 0xec, 0x95, 0x72, 0x16, 0x4e, 0x0f, 0x6c, 0xc7, 0x47, 0xcd, 0xb9, 0xd4, 0x51,
+	0x4a, 0xbd, 0x94, 0xbd, 0xe6, 0x34, 0x58, 0xeb, 0x21, 0x2e, 0x94, 0x08, 0xaf, 0x87, 0xb8, 0x68,
+	0x82, 0xcb, 0xfc, 0x51, 0x00, 0x4e, 0xee, 0x6c, 0x2e, 0x97, 0x6c, 0x5b, 0x56, 0xf6, 0x69, 0x06,
+	0x79, 0x9d, 0xb0, 0xdb, 0x01, 0x80, 0xff, 0x5b, 0x07, 0xe0, 0xe1, 0xff, 0x2d, 0x18, 0xd1, 0xe5,
+	0x3d, 0xa4, 0xd3, 0x44, 0xa1, 0x65, 0xfa, 0x37, 0x8f, 0x47, 0xeb, 0x03, 0x56, 0xe5, 0xdf, 0x60,
+	0x12, 0x6e, 0x1a, 0xb6, 0xd5, 0x2a, 0xf3, 0x7f, 0xf6, 0x08, 0x04, 0x21, 0x00, 0x9d, 0x4f, 0xff,
+	0x21, 0x18, 0xb9, 0xff, 0x08, 0x04, 0xb8, 0x11, 0xd1, 0x55, 0x31, 0x7b, 0x0d, 0x8e, 0xfa, 0x48,
+	0xf9, 0x04, 0x0c, 0x52, 0x24, 0x61, 0x3b, 0x11, 0xe9, 0x23, 0x9f, 0x84, 0xe1, 0x86, 0xac, 0xd7,
+	0x11, 0xcb, 0xda, 0x98, 0xe8, 0xbc, 0x5c, 0x0f, 0x2c, 0x81, 0x8c, 0xc4, 0xbc, 0xb1, 0x66, 0x6e,
+	0x5a, 0xa8, 0xaa, 0xdd, 0x46, 0x4e, 0x57, 0xbd, 0x0e, 0x39, 0xd3, 0x7d, 0x4f, 0x01, 0x21, 0x38,
+	0x17, 0x2b, 0xe7, 0xd9, 0x3c, 0xf2, 0x00, 0x44, 0x33, 0x61, 0x2b, 0xf8, 0x1c, 0x00, 0x56, 0x4b,
+	0x1f, 0x80, 0x60, 0xe2, 0x1e, 0xc7, 0x50, 0xea, 0x01, 0x08, 0x70, 0xc0, 0x7b, 0x4a, 0x01, 0xb1,
+	0xcb, 0x9f, 0xf9, 0x73, 0x00, 0xa7, 0xfb, 0x76, 0xe6, 0x45, 0x11, 0x8f, 0x20, 0x47, 0x7d, 0xce,
+	0xa2, 0x11, 0x30, 0x27, 0x2d, 0xbc, 0x80, 0x93, 0xca, 0xd3, 0x3d, 0x5b, 0xba, 0x16, 0x70, 0x23,
+	0x62, 0xb4, 0x61, 0x2a, 0x54, 0xd5, 0xf5, 0xf4, 0x93, 0x36, 0x98, 0x85, 0x29, 0x38, 0x55, 0xda,
+	0xdd, 0xa2, 0xb5, 0x5d, 0x90, 0xbb, 0xfc, 0x84, 0x07, 0x85, 0xcc, 0x9f, 0x00, 0x78, 0xba, 0xa4,
+	0xd8, 0x5a, 0x03, 0xb9, 0x08, 0xb0, 0x89, 0x75, 0x4d, 0xd1, 0x5c, 0x57, 0xd8, 0x30, 0xe1, 0x95,
+	0x6c, 0xd3, 0xfd, 0xee, 0x1a, 0x7b, 0x12, 0x8c, 0x3b, 0xff, 0xf0, 0xee, 0x44, 0x1f, 0x7b, 0xcb,
+	0xb3, 0x30, 0x21, 0xf8, 0xbc, 0x15, 0x27, 0xfd, 0x9a, 0x33, 0xff, 0x19, 0x85, 0xfc, 0x16, 0x52,
+	0xea, 0x96, 0x66, 0xb7, 0x9c, 0x8a, 0xcc, 0x8c, 0xb9, 0x01, 0x13, 0x06, 0x96, 0xaa, 0xd8, 0x6a,
+	0xca, 0x56, 0x45, 0x32, 0x2d, 0x7c, 0xbb, 0x75, 0xcc, 0xb4, 0x33, 0x61, 0xe0, 0xdf, 0x72, 0xc8,
+	0x37, 0x29, 0x35, 0xff, 0x3e, 0x80, 0xaf, 0xc8, 0x6c, 0xb3, 0xfd, 0x62, 0x7a, 0x9b, 0x73, 0xaa,
+	0xf0, 0x8f, 0x07, 0xe4, 0x0d, 0x8e, 0xec, 0x79, 0xc7, 0x63, 0x7e, 0xd9, 0x7e, 0xb7, 0xad, 0x8e,
+	0x88, 0xb3, 0xf2, 0xa1, 0x14, 0x6e, 0x59, 0xf3, 0x64, 0x3a, 0x8e, 0x39, 0xaa, 0x22, 0x3b, 0x65,
+	0xcd, 0x2d, 0x36, 0x4c, 0x4a, 0x8b, 0x27, 0xf0, 0x94, 0xbb, 0x91, 0x3e, 0x39, 0x5a, 0xb7, 0x0e,
+	0x5f, 0x3b, 0xd9, 0x16, 0xfc, 0x52, 0x3d, 0xeb, 0x03, 0xe2, 0xb4, 0x3c, 0x6c, 0x91, 0x7f, 0x13,
+	0x9e, 0xea, 0x77, 0x9b, 0xac, 0xeb, 0xb8, 0x49, 0xff, 0xba, 0x4d, 0xf9, 0x61, 0xe7, 0x90, 0xac,
+	0xfa, 0xfc, 0x50, 0xa2, 0x4c, 0x25, 0x5d, 0xe7, 0x6f, 0xc2, 0x29, 0x03, 0x4b, 0x74, 0x16, 0x92,
+	0xe8, 0x58, 0xe3, 0x79, 0x22, 0x76, 0x84, 0x28, 0x20, 0x26, 0x0c, 0x7c, 0x53, 0x26, 0xf6, 0x2e,
+	0x22, 0xb6, 0xeb, 0x8a, 0x3f, 0x00, 0xf0, 0x55, 0xd7, 0x17, 0x3d, 0x59, 0x07, 0xa2, 0x16, 0x32,
+	0xa9, 0x3f, 0x3a, 0x3e, 0xc5, 0x0e, 0x4d, 0x86, 0x55, 0x20, 0xba, 0xc1, 0xe3, 0x19, 0x30, 0x40,
+	0xc4, 0xcb, 0x30, 0x73, 0x88, 0x05, 0x7e, 0x57, 0x8d, 0x1e, 0xb9, 0xbf, 0x57, 0xd0, 0x10, 0xe1,
+	0x5d, 0x9f, 0x5d, 0x5f, 0x7c, 0xd2, 0x06, 0x97, 0xe0, 0x69, 0x98, 0x74, 0x23, 0x4b, 0x60, 0x2e,
+	0x15, 0x5c, 0x57, 0x80, 0x02, 0x9c, 0x82, 0x13, 0xee, 0xb1, 0x75, 0x3f, 0x2e, 0x96, 0x2f, 0xc0,
+	0x64, 0xff, 0xc1, 0xb9, 0xa0, 0x31, 0xe9, 0x9b, 0xc8, 0xc3, 0xc5, 0xec, 0xd5, 0xec, 0x42, 0xf9,
+	0x0a, 0x3c, 0x7b, 0xe8, 0x1e, 0x7c, 0x50, 0x13, 0x7b, 0xda, 0x06, 0x5c, 0xa7, 0x0d, 0xa2, 0x6e,
+	0xd3, 0x57, 0x9e, 0x83, 0xd3, 0xfd, 0x11, 0xed, 0x6f, 0xe0, 0xc2, 0x3e, 0x08, 0xeb, 0x82, 0x12,
+	0x97, 0x88, 0x39, 0xd0, 0x94, 0xf9, 0x6b, 0x00, 0x67, 0x58, 0xcb, 0xbe, 0xb1, 0x5d, 0x37, 0x0c,
+	0xa4, 0xfb, 0x72, 0x7e, 0x0e, 0xc6, 0x68, 0xab, 0x2d, 0x19, 0x72, 0x0d, 0xb9, 0xe0, 0xe4, 0x5c,
+	0x92, 0x58, 0xa1, 0x04, 0x48, 0xdd, 0x10, 0x39, 0xba, 0xba, 0x21, 0xd7, 0x10, 0xff, 0x06, 0x4c,
+	0xd8, 0x8c, 0x5b, 0xb2, 0x50, 0x0d, 0xdb, 0x48, 0xd2, 0x4c, 0x06, 0x3e, 0xb1, 0x72, 0x86, 0x32,
+	0xc4, 0x1e, 0x80, 0x48, 0x26, 0x64, 0x05, 0x6e, 0x77, 0xab, 0x64, 0x22, 0xd0, 0xab, 0xdd, 0xe2,
+	0x84, 0xc3, 0x2b, 0x32, 0xd6, 0x35, 0x93, 0x3f, 0x07, 0xa3, 0x4c, 0xaf, 0xe6, 0x5c, 0x88, 0x0c,
+	0x68, 0x8d, 0xd0, 0xb5, 0xb5, 0x0a, 0xad, 0xee, 0xc9, 0xd2, 0xee, 0xd6, 0xf6, 0xca, 0xee, 0x9a,
+	0x51, 0xc5, 0x3e, 0xb3, 0xcb, 0x03, 0x57, 0x4b, 0x3f, 0x7c, 0x81, 0xdb, 0xa4, 0x72, 0x17, 0x94,
+	0x03, 0x07, 0x64, 0x9c, 0x10, 0x87, 0x33, 0x1f, 0xc6, 0xe1, 0x84, 0xd3, 0xce, 0x6c, 0x99, 0x48,
+	0x61, 0xa6, 0xbd, 0x03, 0xe9, 0x4c, 0x2a, 0x99, 0xdd, 0xd6, 0x9d, 0x99, 0x78, 0xa2, 0x81, 0x7a,
+	0xe0, 0x96, 0xa6, 0x1c, 0xa2, 0xa1, 0x23, 0x8e, 0xcb, 0x4d, 0xe2, 0x1b, 0x04, 0xaa, 0x30, 0x4e,
+	0xcd, 0xf6, 0xc1, 0x8c, 0x5b, 0xa4, 0xaf, 0x7e, 0x43, 0x78, 0xeb, 0xf5, 0x88, 0x4c, 0xcd, 0x44,
+	0xc3, 0x54, 0x4a, 0x3e, 0xec, 0xfa, 0x25, 0x1c, 0x63, 0x7c, 0x2e, 0x4e, 0x9c, 0xfc, 0xde, 0xea,
+	0x20, 0xb2, 0xb8, 0x1a, 0x46, 0x6d, 0xb5, 0xe9, 0x2d, 0xf2, 0x9b, 0xf0, 0x74, 0xef, 0x96, 0x0e,
+	0x57, 0xed, 0xa6, 0x6c, 0x21, 0xa9, 0x81, 0x2c, 0xa2, 0x61, 0xc3, 0xbd, 0x27, 0x49, 0x7e, 0x7c,
+	0x17, 0x7c, 0xee, 0x9b, 0xae, 0x9c, 0xd1, 0xf6, 0x54, 0xf7, 0xda, 0xce, 0xe5, 0xda, 0x71, 0x98,
+	0xf8, 0x0d, 0x98, 0xc2, 0x26, 0xa2, 0xa3, 0x85, 0xa1, 0x4a, 0xee, 0xb5, 0x9d, 0x27, 0x30, 0x7c,
+	0x84, 0xc0, 0x99, 0x2e, 0xd7, 0x16, 0x63, 0xf2, 0xe4, 0xfd, 0x55, 0xc0, 0xf1, 0xb4, 0x66, 0x4a,
+	0xdd, 0x76, 0x25, 0xc2, 0xb0, 0x79, 0xf9, 0x78, 0x27, 0xf4, 0x07, 0x45, 0x7e, 0xc7, 0x54, 0x7a,
+	0x4d, 0x90, 0xd3, 0x71, 0xfd, 0x23, 0x70, 0xad, 0xa1, 0x2d, 0x57, 0xf2, 0xfe, 0x23, 0x90, 0xe0,
+	0x27, 0xbe, 0x68, 0x03, 0xe8, 0xf5, 0x11, 0x6b, 0xaf, 0xfb, 0x16, 0x3a, 0x07, 0x16, 0xe0, 0xfd,
+	0x47, 0x20, 0xc2, 0x87, 0x3e, 0x6a, 0x83, 0x91, 0x5e, 0xcf, 0xc6, 0x64, 0x95, 0xee, 0x3f, 0x02,
+	0xbf, 0x31, 0xfb, 0xa3, 0x2f, 0xda, 0xe0, 0xea, 0x96, 0x6d, 0x69, 0x86, 0x2a, 0x58, 0xc8, 0xb4,
+	0x10, 0xa1, 0x33, 0xb0, 0xa1, 0x0a, 0xc8, 0xb2, 0xb0, 0x25, 0x58, 0x88, 0x98, 0xd8, 0x20, 0x28,
+	0x2b, 0xd4, 0x49, 0x5d, 0xd6, 0xf5, 0x96, 0x20, 0x0b, 0xfb, 0x76, 0x4d, 0x17, 0x14, 0x5c, 0x41,
+	0x54, 0xca, 0xdc, 0xfd, 0x47, 0xe0, 0xdc, 0x6c, 0xa6, 0xd3, 0x06, 0x69, 0x1a, 0x28, 0x02, 0xae,
+	0x0a, 0xa4, 0xbe, 0x67, 0x20, 0x9b, 0x08, 0x9a, 0x21, 0xc8, 0x82, 0xaa, 0x35, 0x90, 0x41, 0xed,
+	0x11, 0xc7, 0x1b, 0xfe, 0xcd, 0xf1, 0xdb, 0x30, 0xd6, 0x30, 0x24, 0x85, 0x1d, 0xfe, 0xc9, 0xef,
+	0x92, 0x06, 0x46, 0x43, 0x37, 0x62, 0xb8, 0x86, 0xfb, 0x99, 0x9f, 0x83, 0x51, 0xb9, 0x52, 0xb1,
+	0x10, 0x21, 0xee, 0x1d, 0xd2, 0x04, 0x1d, 0x6c, 0xba, 0x57, 0x18, 0x74, 0xae, 0x77, 0x96, 0xf9,
+	0x15, 0x38, 0xaa, 0x60, 0x6c, 0x55, 0x34, 0x43, 0xa6, 0x53, 0x93, 0x83, 0x76, 0x67, 0x07, 0x2c,
+	0x60, 0x3a, 0x97, 0x7b, 0x64, 0xce, 0x9c, 0x24, 0xfa, 0x39, 0xf9, 0x9f, 0xc1, 0x33, 0xec, 0xe6,
+	0xb6, 0x86, 0x2b, 0x5a, 0x55, 0x53, 0x98, 0x5d, 0x52, 0xf7, 0xb7, 0x07, 0x17, 0xf0, 0x66, 0xf3,
+	0xce, 0xaf, 0x13, 0x79, 0xef, 0xd7, 0x89, 0xfc, 0xb6, 0x47, 0x21, 0x9e, 0xa6, 0xec, 0x6f, 0xfa,
+	0xb8, 0xbb, 0x4b, 0xfc, 0x4f, 0x20, 0xc7, 0xea, 0x97, 0x51, 0xc5, 0x2e, 0x5e, 0x5d, 0x39, 0x01,
+	0x72, 0x0e, 0xa9, 0x84, 0x62, 0x94, 0x16, 0x33, 0xa3, 0x8a, 0xf9, 0x6d, 0x78, 0x4a, 0xc7, 0x2a,
+	0x91, 0x88, 0x6d, 0x21, 0xb9, 0x46, 0x73, 0xa0, 0xa2, 0x11, 0x79, 0x4f, 0x47, 0x95, 0xd4, 0xf8,
+	0x09, 0x86, 0xe9, 0x69, 0xca, 0xbc, 0xe5, 0xf1, 0xbe, 0xee, 0xb2, 0xf2, 0xbf, 0x80, 0x63, 0x3a,
+	0x56, 0x25, 0x0b, 0x29, 0x48, 0x6b, 0x20, 0xeb, 0x1b, 0x5c, 0xc0, 0x4c, 0x3d, 0xbc, 0xdb, 0xc7,
+	0xea, 0xea, 0x19, 0xd5, 0xb1, 0x2a, 0xba, 0x9f, 0xf8, 0x5f, 0xc0, 0xa8, 0x83, 0x0b, 0x24, 0xf5,
+	0xaf, 0x51, 0x96, 0x5a, 0x4b, 0x27, 0x72, 0xc3, 0x10, 0x24, 0x2b, 0x47, 0xdd, 0x74, 0x12, 0x3d,
+	0x91, 0xfc, 0xbb, 0x30, 0x66, 0x57, 0x9d, 0x42, 0x4c, 0x52, 0xff, 0x16, 0x3d, 0xb1, 0xe5, 0xe9,
+	0x87, 0x77, 0x93, 0xac, 0xc2, 0x54, 0xb1, 0x55, 0xf3, 0x15, 0x72, 0x4f, 0x01, 0x67, 0x57, 0x9d,
+	0x8b, 0x54, 0xfe, 0x1d, 0x38, 0xce, 0x7e, 0xcb, 0xd1, 0x0c, 0x1b, 0x59, 0x86, 0xac, 0xa7, 0x3e,
+	0x8f, 0x7e, 0x93, 0x0b, 0xaa, 0x7e, 0x66, 0x26, 0x7b, 0x8c, 0x7e, 0x5a, 0x73, 0xbf, 0xcc, 0xd6,
+	0x21, 0x7f, 0xb0, 0x72, 0x0c, 0x19, 0xc0, 0xd6, 0xfc, 0x03, 0xd8, 0x49, 0x07, 0x9d, 0xfe, 0xa9,
+	0xcc, 0x37, 0xb5, 0x5d, 0xff, 0x4b, 0xf0, 0xa4, 0x0d, 0x3e, 0x00, 0x70, 0x06, 0x4e, 0xd2, 0xa2,
+	0xd3, 0x7f, 0x69, 0x03, 0x0a, 0x30, 0x09, 0xe3, 0x07, 0x26, 0x9d, 0x22, 0x9c, 0x85, 0xd3, 0x5e,
+	0x67, 0x34, 0xc0, 0x71, 0x15, 0x9e, 0x81, 0x33, 0x5e, 0xe5, 0x1f, 0x5c, 0x5c, 0x80, 0xaf, 0xc2,
+	0x19, 0xaf, 0x96, 0x0f, 0x2c, 0x46, 0x17, 0xb3, 0x97, 0xb3, 0x4b, 0xd9, 0x6b, 0xf0, 0x07, 0x70,
+	0xa6, 0x54, 0x69, 0xc8, 0x86, 0x82, 0x2a, 0x03, 0x24, 0x81, 0x42, 0xb1, 0x9c, 0x83, 0x49, 0x16,
+	0xfa, 0x5e, 0xa8, 0x79, 0xad, 0xd1, 0xf4, 0xe3, 0x36, 0x18, 0x77, 0x67, 0xf6, 0x31, 0x76, 0x81,
+	0xb5, 0x90, 0x2d, 0x2c, 0xae, 0x87, 0xb8, 0xb1, 0xc4, 0x78, 0xe6, 0x6f, 0x23, 0x70, 0x62, 0xd9,
+	0x42, 0xb2, 0x8d, 0xba, 0xd0, 0xfd, 0xd3, 0x97, 0x06, 0xdd, 0x83, 0xa0, 0xfd, 0xee, 0xcb, 0x06,
+	0xed, 0x03, 0x70, 0xbd, 0xfb, 0xf2, 0xe0, 0xba, 0x1f, 0xa8, 0xaf, 0x1f, 0x0b, 0xd4, 0x87, 0x43,
+	0xf2, 0xd2, 0x71, 0x90, 0x7c, 0x28, 0xf8, 0x6e, 0xbc, 0x0c, 0x14, 0xf1, 0xe1, 0x47, 0x6a, 0x00,
+	0x3f, 0x7a, 0x78, 0x51, 0x7a, 0x11, 0xbc, 0xe8, 0x47, 0x8a, 0x8d, 0x17, 0x2a, 0xbd, 0x87, 0x17,
+	0xdd, 0x9f, 0xbe, 0x70, 0xd1, 0x8d, 0x0f, 0x14, 0xdd, 0x81, 0x82, 0x7b, 0x7d, 0xf2, 0x9f, 0x7e,
+	0x3c, 0xd0, 0xaf, 0x96, 0x2f, 0x1d, 0x92, 0x3c, 0xa9, 0xdf, 0xff, 0x6f, 0x30, 0x74, 0xc5, 0xcd,
+	0x9f, 0x2f, 0xc2, 0x30, 0x2e, 0x22, 0x53, 0x97, 0x95, 0x5e, 0x02, 0x7d, 0x1f, 0xe6, 0xdf, 0x87,
+	0xf9, 0x77, 0x28, 0xcc, 0x9d, 0x39, 0x9a, 0x06, 0x7b, 0x67, 0x14, 0x8e, 0xae, 0x20, 0xfb, 0x7b,
+	0xa4, 0xf8, 0xd5, 0x4b, 0xa1, 0x87, 0x87, 0x8e, 0x69, 0x37, 0x4e, 0x30, 0xa6, 0xf5, 0xce, 0x74,
+	0xd8, 0x8c, 0xf6, 0x77, 0xdf, 0xb5, 0xe1, 0xec, 0x5b, 0x55, 0x6f, 0xbe, 0x65, 0x03, 0xd8, 0xb7,
+	0xa6, 0x3c, 0xf2, 0x5b, 0x2f, 0x6f, 0xec, 0xea, 0x4e, 0x5b, 0xff, 0x5f, 0xb3, 0xca, 0xcb, 0xeb,
+	0x68, 0xca, 0x7f, 0x0a, 0x9e, 0x3e, 0x4b, 0x8f, 0x7c, 0xfc, 0x2c, 0x3d, 0xf2, 0xe5, 0xb3, 0x34,
+	0x78, 0xfe, 0x2c, 0x0d, 0xee, 0x75, 0xd2, 0xe0, 0x83, 0x4e, 0x1a, 0x7c, 0xd8, 0x49, 0x83, 0xc7,
+	0x9d, 0x34, 0xf8, 0xa8, 0x93, 0x06, 0x4f, 0x3b, 0x69, 0xf0, 0x71, 0x27, 0x0d, 0x3e, 0xed, 0xa4,
+	0xc1, 0xe7, 0x9d, 0xf4, 0xc8, 0x97, 0x9d, 0x34, 0xf8, 0xe3, 0xcf, 0xd2, 0x23, 0x8f, 0x3f, 0x4b,
+	0x83, 0x9f, 0xed, 0xa8, 0xd8, 0xbc, 0xa5, 0xe6, 0xbd, 0x2a, 0x97, 0xaf, 0x93, 0xf9, 0xee, 0x24,
+	0x99, 0x33, 0x2d, 0xdc, 0xd0, 0x2a, 0xc8, 0xca, 0x79, 0xcb, 0xf3, 0xe6, 0x9e, 0x8a, 0xe7, 0xd1,
+	0x6d, 0xdb, 0xfb, 0x87, 0xc3, 0xc3, 0xfe, 0xc1, 0x72, 0x2f, 0xc2, 0xa2, 0x7b, 0xe1, 0x7f, 0x03,
+	0x00, 0x00, 0xff, 0xff, 0x49, 0x91, 0x90, 0x66, 0x8b, 0x29, 0x00, 0x00,
 }

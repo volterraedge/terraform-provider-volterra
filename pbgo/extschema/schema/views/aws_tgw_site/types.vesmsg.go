@@ -374,6 +374,205 @@ func AWSVPNTunnelConfigTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ActiveServicePoliciesType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ActiveServicePoliciesType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ActiveServicePoliciesType) DeepCopy() *ActiveServicePoliciesType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ActiveServicePoliciesType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ActiveServicePoliciesType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ActiveServicePoliciesType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ActiveServicePoliciesTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ActiveServicePoliciesType) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetServicePoliciesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *ActiveServicePoliciesType) GetServicePoliciesDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, vref := range m.GetServicePolicies() {
+		if vref == nil {
+			return nil, fmt.Errorf("ActiveServicePoliciesType.service_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("service_policy.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "service_policies",
+			Ref:        vdRef,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetServicePoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ActiveServicePoliciesType) GetServicePoliciesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "service_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: service_policy")
+	}
+	for i, vref := range m.GetServicePolicies() {
+		if vref == nil {
+			return nil, fmt.Errorf("ActiveServicePoliciesType.service_policies[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "service_policy.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateActiveServicePoliciesType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateActiveServicePoliciesType) ServicePoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for service_policies")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated service_policies")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items service_policies")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateActiveServicePoliciesType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ActiveServicePoliciesType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ActiveServicePoliciesType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["service_policies"]; exists {
+		vOpts := append(opts, db.WithValidateField("service_policies"))
+		if err := fv(ctx, m.GetServicePolicies(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultActiveServicePoliciesTypeValidator = func() *ValidateActiveServicePoliciesType {
+	v := &ValidateActiveServicePoliciesType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhServicePolicies := v.ServicePoliciesValidationRuleHandler
+	rulesServicePolicies := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhServicePolicies(rulesServicePolicies)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ActiveServicePoliciesType.service_policies: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_policies"] = vFn
+
+	return v
+}()
+
+func ActiveServicePoliciesTypeValidator() db.Validator {
+	return DefaultActiveServicePoliciesTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -431,6 +630,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetTgwSecurityDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -467,6 +672,71 @@ func (m *CreateSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, err
+}
+
+func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var odrInfos []db.DRefInfo
+
+	switch m.GetLogsReceiverChoice().(type) {
+	case *CreateSpecType_LogsStreamingDisabled:
+
+	case *CreateSpecType_LogReceiver:
+
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("log_receiver.Object")
+		odri := db.DRefInfo{
+			RefdType:   "log_receiver.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "log_receiver",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
+	}
+
+	return odrInfos, nil
+}
+
+// GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CreateSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetLogsReceiverChoice().(type) {
+	case *CreateSpecType_LogsStreamingDisabled:
+
+	case *CreateSpecType_LogReceiver:
+		refdType, err := d.TypeForEntryKind("", "", "log_receiver.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: log_receiver")
+		}
+
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "log_receiver.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -517,6 +787,14 @@ func (m *CreateSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateCreateSpecType) AwsParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -611,6 +889,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
+		val := m.GetLogsReceiverChoice()
+		vOpts := append(opts,
+			db.WithValidateField("logs_receiver_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLogsReceiverChoice().(type) {
+	case *CreateSpecType_LogsStreamingDisabled:
+		if fv, exists := v.FldValidators["logs_receiver_choice.logs_streaming_disabled"]; exists {
+			val := m.GetLogsReceiverChoice().(*CreateSpecType_LogsStreamingDisabled).LogsStreamingDisabled
+			vOpts := append(opts,
+				db.WithValidateField("logs_receiver_choice"),
+				db.WithValidateField("logs_streaming_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_LogReceiver:
+		if fv, exists := v.FldValidators["logs_receiver_choice.log_receiver"]; exists {
+			val := m.GetLogsReceiverChoice().(*CreateSpecType_LogReceiver).LogReceiver
+			vOpts := append(opts,
+				db.WithValidateField("logs_receiver_choice"),
+				db.WithValidateField("log_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
@@ -671,6 +985,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
+	rulesLogsReceiverChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhLogsReceiverChoice(rulesLogsReceiverChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.logs_receiver_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["logs_receiver_choice"] = vFn
+
 	vrhAwsParameters := v.AwsParametersValidationRuleHandler
 	rulesAwsParameters := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -714,6 +1039,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
+
+	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
 
@@ -959,6 +1286,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetTgwSecurityDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -995,6 +1328,71 @@ func (m *GetSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, err
+}
+
+func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var odrInfos []db.DRefInfo
+
+	switch m.GetLogsReceiverChoice().(type) {
+	case *GetSpecType_LogsStreamingDisabled:
+
+	case *GetSpecType_LogReceiver:
+
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("log_receiver.Object")
+		odri := db.DRefInfo{
+			RefdType:   "log_receiver.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "log_receiver",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
+	}
+
+	return odrInfos, nil
+}
+
+// GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetLogsReceiverChoice().(type) {
+	case *GetSpecType_LogsStreamingDisabled:
+
+	case *GetSpecType_LogReceiver:
+		refdType, err := d.TypeForEntryKind("", "", "log_receiver.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: log_receiver")
+		}
+
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "log_receiver.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -1045,6 +1443,14 @@ func (m *GetSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateGetSpecType) AwsParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -1135,6 +1541,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
+		val := m.GetLogsReceiverChoice()
+		vOpts := append(opts,
+			db.WithValidateField("logs_receiver_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLogsReceiverChoice().(type) {
+	case *GetSpecType_LogsStreamingDisabled:
+		if fv, exists := v.FldValidators["logs_receiver_choice.logs_streaming_disabled"]; exists {
+			val := m.GetLogsReceiverChoice().(*GetSpecType_LogsStreamingDisabled).LogsStreamingDisabled
+			vOpts := append(opts,
+				db.WithValidateField("logs_receiver_choice"),
+				db.WithValidateField("logs_streaming_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_LogReceiver:
+		if fv, exists := v.FldValidators["logs_receiver_choice.log_receiver"]; exists {
+			val := m.GetLogsReceiverChoice().(*GetSpecType_LogReceiver).LogReceiver
+			vOpts := append(opts,
+				db.WithValidateField("logs_receiver_choice"),
+				db.WithValidateField("log_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1241,6 +1683,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
+	rulesLogsReceiverChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhLogsReceiverChoice(rulesLogsReceiverChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.logs_receiver_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["logs_receiver_choice"] = vFn
+
 	vrhAwsParameters := v.AwsParametersValidationRuleHandler
 	rulesAwsParameters := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -1284,6 +1737,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
+
+	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
 
@@ -1365,6 +1820,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetTfParamsDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -1413,6 +1874,71 @@ func (m *GlobalSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, err
+}
+
+func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var odrInfos []db.DRefInfo
+
+	switch m.GetLogsReceiverChoice().(type) {
+	case *GlobalSpecType_LogsStreamingDisabled:
+
+	case *GlobalSpecType_LogReceiver:
+
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("log_receiver.Object")
+		odri := db.DRefInfo{
+			RefdType:   "log_receiver.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "log_receiver",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
+	}
+
+	return odrInfos, nil
+}
+
+// GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetLogsReceiverChoice().(type) {
+	case *GlobalSpecType_LogsStreamingDisabled:
+
+	case *GlobalSpecType_LogReceiver:
+		refdType, err := d.TypeForEntryKind("", "", "log_receiver.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: log_receiver")
+		}
+
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "log_receiver.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
 }
 
 func (m *GlobalSpecType) GetTfParamsDRefInfo() ([]db.DRefInfo, error) {
@@ -1565,6 +2091,14 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) AwsParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -1653,6 +2187,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
+		val := m.GetLogsReceiverChoice()
+		vOpts := append(opts,
+			db.WithValidateField("logs_receiver_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLogsReceiverChoice().(type) {
+	case *GlobalSpecType_LogsStreamingDisabled:
+		if fv, exists := v.FldValidators["logs_receiver_choice.logs_streaming_disabled"]; exists {
+			val := m.GetLogsReceiverChoice().(*GlobalSpecType_LogsStreamingDisabled).LogsStreamingDisabled
+			vOpts := append(opts,
+				db.WithValidateField("logs_receiver_choice"),
+				db.WithValidateField("logs_streaming_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_LogReceiver:
+		if fv, exists := v.FldValidators["logs_receiver_choice.log_receiver"]; exists {
+			val := m.GetLogsReceiverChoice().(*GlobalSpecType_LogReceiver).LogReceiver
+			vOpts := append(opts,
+				db.WithValidateField("logs_receiver_choice"),
+				db.WithValidateField("log_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1777,6 +2347,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
+	rulesLogsReceiverChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhLogsReceiverChoice(rulesLogsReceiverChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.logs_receiver_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["logs_receiver_choice"] = vFn
+
 	vrhAwsParameters := v.AwsParametersValidationRuleHandler
 	rulesAwsParameters := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -1820,6 +2401,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
+
+	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
 
@@ -1899,6 +2482,12 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetTgwSecurityDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -1912,6 +2501,71 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+}
+
+func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var odrInfos []db.DRefInfo
+
+	switch m.GetLogsReceiverChoice().(type) {
+	case *ReplaceSpecType_LogsStreamingDisabled:
+
+	case *ReplaceSpecType_LogReceiver:
+
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("log_receiver.Object")
+		odri := db.DRefInfo{
+			RefdType:   "log_receiver.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "log_receiver",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
+	}
+
+	return odrInfos, nil
+}
+
+// GetLogsReceiverChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ReplaceSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetLogsReceiverChoice().(type) {
+	case *ReplaceSpecType_LogsStreamingDisabled:
+
+	case *ReplaceSpecType_LogReceiver:
+		refdType, err := d.TypeForEntryKind("", "", "log_receiver.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: log_receiver")
+		}
+
+		vref := m.GetLogReceiver()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "log_receiver.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -1962,6 +2616,14 @@ func (m *ReplaceSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateReplaceSpecType) VolterraSoftwareVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -2026,6 +2688,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
+		val := m.GetLogsReceiverChoice()
+		vOpts := append(opts,
+			db.WithValidateField("logs_receiver_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLogsReceiverChoice().(type) {
+	case *ReplaceSpecType_LogsStreamingDisabled:
+		if fv, exists := v.FldValidators["logs_receiver_choice.logs_streaming_disabled"]; exists {
+			val := m.GetLogsReceiverChoice().(*ReplaceSpecType_LogsStreamingDisabled).LogsStreamingDisabled
+			vOpts := append(opts,
+				db.WithValidateField("logs_receiver_choice"),
+				db.WithValidateField("logs_streaming_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_LogReceiver:
+		if fv, exists := v.FldValidators["logs_receiver_choice.log_receiver"]; exists {
+			val := m.GetLogsReceiverChoice().(*ReplaceSpecType_LogReceiver).LogReceiver
+			vOpts := append(opts,
+				db.WithValidateField("logs_receiver_choice"),
+				db.WithValidateField("log_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
@@ -2086,6 +2784,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
+	rulesLogsReceiverChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhLogsReceiverChoice(rulesLogsReceiverChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.logs_receiver_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["logs_receiver_choice"] = vFn
+
 	vrhVolterraSoftwareVersion := v.VolterraSoftwareVersionValidationRuleHandler
 	rulesVolterraSoftwareVersion := map[string]string{
 		"ves.io.schema.rules.string.max_len": "64",
@@ -2118,6 +2827,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
+
+	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
 
@@ -2173,6 +2884,12 @@ func (m *SecurityConfigType) Validate(ctx context.Context, opts ...db.ValidateOp
 
 func (m *SecurityConfigType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetEastWestServicePolicyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -2186,6 +2903,39 @@ func (m *SecurityConfigType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *SecurityConfigType) GetEastWestServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.EastWestServicePolicyChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetEastWestServicePolicyChoice().(type) {
+	case *SecurityConfigType_NoEastWestPolicy:
+
+	case *SecurityConfigType_ActiveEastWestServicePolicies:
+		odrInfos, err = m.GetActiveEastWestServicePolicies().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "active_east_west_service_policies." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *SecurityConfigType_EastWestServicePolicyAllowAll:
+
+	}
+
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -2256,6 +3006,14 @@ type ValidateSecurityConfigType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateSecurityConfigType) EastWestServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for east_west_service_policy_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateSecurityConfigType) ForwardProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2284,6 +3042,53 @@ func (v *ValidateSecurityConfigType) Validate(ctx context.Context, pm interface{
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["east_west_service_policy_choice"]; exists {
+		val := m.GetEastWestServicePolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("east_west_service_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEastWestServicePolicyChoice().(type) {
+	case *SecurityConfigType_NoEastWestPolicy:
+		if fv, exists := v.FldValidators["east_west_service_policy_choice.no_east_west_policy"]; exists {
+			val := m.GetEastWestServicePolicyChoice().(*SecurityConfigType_NoEastWestPolicy).NoEastWestPolicy
+			vOpts := append(opts,
+				db.WithValidateField("east_west_service_policy_choice"),
+				db.WithValidateField("no_east_west_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SecurityConfigType_ActiveEastWestServicePolicies:
+		if fv, exists := v.FldValidators["east_west_service_policy_choice.active_east_west_service_policies"]; exists {
+			val := m.GetEastWestServicePolicyChoice().(*SecurityConfigType_ActiveEastWestServicePolicies).ActiveEastWestServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("east_west_service_policy_choice"),
+				db.WithValidateField("active_east_west_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SecurityConfigType_EastWestServicePolicyAllowAll:
+		if fv, exists := v.FldValidators["east_west_service_policy_choice.east_west_service_policy_allow_all"]; exists {
+			val := m.GetEastWestServicePolicyChoice().(*SecurityConfigType_EastWestServicePolicyAllowAll).EastWestServicePolicyAllowAll
+			vOpts := append(opts,
+				db.WithValidateField("east_west_service_policy_choice"),
+				db.WithValidateField("east_west_service_policy_allow_all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
@@ -2384,6 +3189,17 @@ var DefaultSecurityConfigTypeValidator = func() *ValidateSecurityConfigType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhEastWestServicePolicyChoice := v.EastWestServicePolicyChoiceValidationRuleHandler
+	rulesEastWestServicePolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhEastWestServicePolicyChoice(rulesEastWestServicePolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SecurityConfigType.east_west_service_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["east_west_service_policy_choice"] = vFn
+
 	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
 	rulesForwardProxyChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -2405,6 +3221,8 @@ var DefaultSecurityConfigTypeValidator = func() *ValidateSecurityConfigType {
 		panic(errMsg)
 	}
 	v.FldValidators["network_policy_choice"] = vFn
+
+	v.FldValidators["east_west_service_policy_choice.active_east_west_service_policies"] = ActiveServicePoliciesTypeValidator().Validate
 
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
@@ -2914,7 +3732,7 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 	vrhAwsRegion := v.AwsRegionValidationRuleHandler
 	rulesAwsRegion := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"ap-northeast-1\",\"ap-southeast-1\",\"eu-central-1\",\"eu-west-1\",\"eu-west-3\",\"sa-east-1\",\"us-east-1\",\"us-east-2\",\"us-west-2\"]",
+		"ves.io.schema.rules.string.in":        "[\"ap-northeast-1\",\"ap-southeast-1\",\"eu-central-1\",\"eu-west-1\",\"eu-west-3\",\"sa-east-1\",\"us-east-1\",\"us-east-2\",\"us-west-2\",\"ca-central-1\",\"af-south-1\",\"ap-east-1\",\"ap-south-1\",\"ap-northeast-2\",\"ap-southeast-2\",\"eu-south-1\",\"eu-north-1\",\"eu-west-2\",\"me-south-1\",\"us-west-1\"]",
 	}
 	vFn, err = vrhAwsRegion(rulesAwsRegion)
 	if err != nil {
@@ -4057,6 +4875,41 @@ func VnConfigurationValidator() db.Validator {
 	return DefaultVnConfigurationValidator
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetLogsReceiverChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.LogsReceiverChoice.(type) {
+	case nil:
+		o.LogsReceiverChoice = nil
+
+	case *CreateSpecType_LogReceiver:
+		o.LogsReceiverChoice = &GlobalSpecType_LogReceiver{LogReceiver: of.LogReceiver}
+
+	case *CreateSpecType_LogsStreamingDisabled:
+		o.LogsReceiverChoice = &GlobalSpecType_LogsStreamingDisabled{LogsStreamingDisabled: of.LogsStreamingDisabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.LogsReceiverChoice.(type) {
+	case nil:
+		r.LogsReceiverChoice = nil
+
+	case *GlobalSpecType_LogReceiver:
+		r.LogsReceiverChoice = &CreateSpecType_LogReceiver{LogReceiver: of.LogReceiver}
+
+	case *GlobalSpecType_LogsStreamingDisabled:
+		r.LogsReceiverChoice = &CreateSpecType_LogsStreamingDisabled{LogsStreamingDisabled: of.LogsStreamingDisabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -4064,6 +4917,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Address = f.GetAddress()
 	m.AwsParameters = f.GetAwsParameters()
 	m.Coordinates = f.GetCoordinates()
+	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.VnConfig = f.GetVnConfig()
@@ -4080,11 +4934,47 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Address = m1.Address
 	f.AwsParameters = m1.AwsParameters
 	f.Coordinates = m1.Coordinates
+	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.TgwSecurity = m1.TgwSecurity
 	f.VnConfig = m1.VnConfig
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 	f.VpcAttachments = m1.VpcAttachments
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetLogsReceiverChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.LogsReceiverChoice.(type) {
+	case nil:
+		o.LogsReceiverChoice = nil
+
+	case *GetSpecType_LogReceiver:
+		o.LogsReceiverChoice = &GlobalSpecType_LogReceiver{LogReceiver: of.LogReceiver}
+
+	case *GetSpecType_LogsStreamingDisabled:
+		o.LogsReceiverChoice = &GlobalSpecType_LogsStreamingDisabled{LogsStreamingDisabled: of.LogsStreamingDisabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.LogsReceiverChoice.(type) {
+	case nil:
+		r.LogsReceiverChoice = nil
+
+	case *GlobalSpecType_LogReceiver:
+		r.LogsReceiverChoice = &GetSpecType_LogReceiver{LogReceiver: of.LogReceiver}
+
+	case *GlobalSpecType_LogsStreamingDisabled:
+		r.LogsReceiverChoice = &GetSpecType_LogsStreamingDisabled{LogsStreamingDisabled: of.LogsStreamingDisabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -4094,6 +4984,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Address = f.GetAddress()
 	m.AwsParameters = f.GetAwsParameters()
 	m.Coordinates = f.GetCoordinates()
+	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.TgwInfo = f.GetTgwInfo()
 	m.TgwSecurity = f.GetTgwSecurity()
@@ -4114,6 +5005,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Address = m1.Address
 	f.AwsParameters = m1.AwsParameters
 	f.Coordinates = m1.Coordinates
+	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.TgwInfo = m1.TgwInfo
 	f.TgwSecurity = m1.TgwSecurity
@@ -4125,12 +5017,48 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.VpcIpPrefixes = m1.VpcIpPrefixes
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetLogsReceiverChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.LogsReceiverChoice.(type) {
+	case nil:
+		o.LogsReceiverChoice = nil
+
+	case *ReplaceSpecType_LogReceiver:
+		o.LogsReceiverChoice = &GlobalSpecType_LogReceiver{LogReceiver: of.LogReceiver}
+
+	case *ReplaceSpecType_LogsStreamingDisabled:
+		o.LogsReceiverChoice = &GlobalSpecType_LogsStreamingDisabled{LogsStreamingDisabled: of.LogsStreamingDisabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.LogsReceiverChoice.(type) {
+	case nil:
+		r.LogsReceiverChoice = nil
+
+	case *GlobalSpecType_LogReceiver:
+		r.LogsReceiverChoice = &ReplaceSpecType_LogReceiver{LogReceiver: of.LogReceiver}
+
+	case *GlobalSpecType_LogsStreamingDisabled:
+		r.LogsReceiverChoice = &ReplaceSpecType_LogsStreamingDisabled{LogsStreamingDisabled: of.LogsStreamingDisabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
 	m.Address = f.GetAddress()
 	m.Coordinates = f.GetCoordinates()
+	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.VnConfig = f.GetVnConfig()
@@ -4146,6 +5074,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	}
 	f.Address = m1.Address
 	f.Coordinates = m1.Coordinates
+	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.TgwSecurity = m1.TgwSecurity
 	f.VnConfig = m1.VnConfig

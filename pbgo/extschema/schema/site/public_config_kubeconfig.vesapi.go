@@ -37,12 +37,12 @@ type ConfigKubeConfigAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
-func (c *ConfigKubeConfigAPIGrpcClient) doRPCGetLocalKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &GetKubeConfigReq{}
+func (c *ConfigKubeConfigAPIGrpcClient) doRPCCreateLocalKubeConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &CreateKubeConfigReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.GetKubeConfigReq", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.CreateKubeConfigReq", yamlReq)
 	}
-	rsp, err := c.grpcClient.GetLocalKubeConfig(ctx, req, opts...)
+	rsp, err := c.grpcClient.CreateLocalKubeConfig(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -73,6 +73,9 @@ func (c *ConfigKubeConfigAPIGrpcClient) DoRPC(ctx context.Context, rpc string, o
 	if err != nil {
 		return nil, errors.Wrap(err, "Doing custom RPC using GRPC")
 	}
+	if cco.OutCallResponse != nil {
+		cco.OutCallResponse.ProtoMsg = rsp
+	}
 	return rsp, nil
 }
 
@@ -82,7 +85,7 @@ func NewConfigKubeConfigAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewConfigKubeConfigAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
-	rpcFns["GetLocalKubeConfig"] = ccl.doRPCGetLocalKubeConfig
+	rpcFns["CreateLocalKubeConfig"] = ccl.doRPCCreateLocalKubeConfig
 
 	rpcFns["ListLocalKubeConfig"] = ccl.doRPCListLocalKubeConfig
 
@@ -99,16 +102,16 @@ type ConfigKubeConfigAPIRestClient struct {
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
 }
 
-func (c *ConfigKubeConfigAPIRestClient) doRPCGetLocalKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+func (c *ConfigKubeConfigAPIRestClient) doRPCCreateLocalKubeConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &GetKubeConfigReq{}
+	req := &CreateKubeConfigReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.GetKubeConfigReq: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.CreateKubeConfigReq: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -167,6 +170,10 @@ func (c *ConfigKubeConfigAPIRestClient) doRPCGetLocalKubeConfig(ctx context.Cont
 	pbRsp := &google_api.HttpBody{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *google.api.HttpBody", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
 	}
 	return pbRsp, nil
 }
@@ -240,6 +247,10 @@ func (c *ConfigKubeConfigAPIRestClient) doRPCListLocalKubeConfig(ctx context.Con
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.site.ListKubeConfigRsp", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -267,7 +278,7 @@ func NewConfigKubeConfigAPIRestClient(baseURL string, hc http.Client) server.Cus
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
-	rpcFns["GetLocalKubeConfig"] = ccl.doRPCGetLocalKubeConfig
+	rpcFns["CreateLocalKubeConfig"] = ccl.doRPCCreateLocalKubeConfig
 
 	rpcFns["ListLocalKubeConfig"] = ccl.doRPCListLocalKubeConfig
 
@@ -283,7 +294,7 @@ type ConfigKubeConfigAPIInprocClient struct {
 	svc svcfw.Service
 }
 
-func (c *ConfigKubeConfigAPIInprocClient) GetLocalKubeConfig(ctx context.Context, in *GetKubeConfigReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
+func (c *ConfigKubeConfigAPIInprocClient) CreateLocalKubeConfig(ctx context.Context, in *CreateKubeConfigReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.site.ConfigKubeConfigAPI")
 	cah, ok := ah.(ConfigKubeConfigAPIServer)
 	if !ok {
@@ -295,12 +306,12 @@ func (c *ConfigKubeConfigAPIInprocClient) GetLocalKubeConfig(ctx context.Context
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.GetKubeConfigReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.CreateKubeConfigReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
-		userMsg := "The 'ConfigKubeConfigAPI.GetLocalKubeConfig' operation on 'site'"
+		userMsg := "The 'ConfigKubeConfigAPI.CreateLocalKubeConfig' operation on 'site'"
 		if err == nil {
 			userMsg += " was successfully performed."
 		} else {
@@ -310,7 +321,7 @@ func (c *ConfigKubeConfigAPIInprocClient) GetLocalKubeConfig(ctx context.Context
 	}()
 
 	if c.svc.Config().EnableAPIValidation {
-		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.ConfigKubeConfigAPI.GetLocalKubeConfig"); rvFn != nil {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.ConfigKubeConfigAPI.CreateLocalKubeConfig"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -318,7 +329,7 @@ func (c *ConfigKubeConfigAPIInprocClient) GetLocalKubeConfig(ctx context.Context
 		}
 	}
 
-	rsp, err = cah.GetLocalKubeConfig(ctx, in)
+	rsp, err = cah.CreateLocalKubeConfig(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
@@ -389,8 +400,8 @@ func RegisterGwConfigKubeConfigAPIHandler(ctx context.Context, mux *runtime.Serv
 var ConfigKubeConfigAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
-        "title": "Site upgrade custom API",
-        "description": "These API provide a way to upgrade site's volterra software and OS",
+        "title": "Site KubeConfig custom API",
+        "description": "API for manage kube configs.",
         "version": "version not set"
     },
     "schemes": [
@@ -406,10 +417,10 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
     "tags": null,
     "paths": {
         "/public/namespaces/{namespace}/sites/{name}/local-kubeconfig": {
-            "get": {
-                "summary": "Get K8s Cluster Local Kube Config",
+            "post": {
+                "summary": "Create K8s Cluster Local Kube Config",
                 "description": "Down load kube config for local k8s cluster access",
-                "operationId": "ves.io.schema.site.ConfigKubeConfigAPI.GetLocalKubeConfig",
+                "operationId": "ves.io.schema.site.ConfigKubeConfigAPI.CreateLocalKubeConfig",
                 "responses": {
                     "200": {
                         "description": "",
@@ -478,6 +489,14 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
                         "in": "path",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/siteCreateKubeConfigReq"
+                        }
                     }
                 ],
                 "tags": [
@@ -485,11 +504,11 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-ConfigKubeConfigAPI-GetLocalKubeConfig"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-ConfigKubeConfigAPI-CreateLocalKubeConfig"
                 },
-                "x-ves-proto-rpc": "ves.io.schema.site.ConfigKubeConfigAPI.GetLocalKubeConfig"
+                "x-ves-proto-rpc": "ves.io.schema.site.ConfigKubeConfigAPI.CreateLocalKubeConfig"
             },
-            "x-displayname": "Site Upgrade",
+            "x-displayname": "Local KubeConfig API",
             "x-ves-proto-service": "ves.io.schema.site.ConfigKubeConfigAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
@@ -577,7 +596,7 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.ConfigKubeConfigAPI.ListLocalKubeConfig"
             },
-            "x-displayname": "Site Upgrade",
+            "x-displayname": "Local KubeConfig API",
             "x-ves-proto-service": "ves.io.schema.site.ConfigKubeConfigAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
@@ -617,6 +636,31 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
                     "type": "string",
                     "description": "Must be a valid serialized protocol buffer of the above specified type.",
                     "format": "byte"
+                }
+            }
+        },
+        "siteCreateKubeConfigReq": {
+            "type": "object",
+            "description": "Create kubeconfig request parameters",
+            "title": "Create Kube Config Request",
+            "x-displayname": "Create Kube Config Request",
+            "x-ves-proto-message": "ves.io.schema.site.CreateKubeConfigReq",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " K8s Cluster name\n\nExample: - \"ce398\"-\nRequired: YES",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "ce398",
+                    "x-ves-required": "true"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " K8s Cluster namespace\n\nExample: - \"system\"-\nRequired: YES",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "system",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -677,5 +721,5 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
         }
     },
     "x-displayname": "Site",
-    "x-ves-proto-file": "ves.io/schema/site/public_config_kubconfig.proto"
+    "x-ves-proto-file": "ves.io/schema/site/public_config_kubeconfig.proto"
 }`

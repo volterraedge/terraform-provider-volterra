@@ -40,11 +40,9 @@ type CustomListRequest struct {
 	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
 }
 
-func (m *CustomListRequest) Reset()      { *m = CustomListRequest{} }
-func (*CustomListRequest) ProtoMessage() {}
-func (*CustomListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicCustomapi, []int{0}
-}
+func (m *CustomListRequest) Reset()                    { *m = CustomListRequest{} }
+func (*CustomListRequest) ProtoMessage()               {}
+func (*CustomListRequest) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{0} }
 
 func (m *CustomListRequest) GetNamespace() string {
 	if m != nil {
@@ -235,11 +233,9 @@ type CustomGetResponse struct {
 	ApiGroups []string `protobuf:"bytes,2,rep,name=api_groups,json=apiGroups" json:"api_groups,omitempty"`
 }
 
-func (m *CustomGetResponse) Reset()      { *m = CustomGetResponse{} }
-func (*CustomGetResponse) ProtoMessage() {}
-func (*CustomGetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptorPublicCustomapi, []int{4}
-}
+func (m *CustomGetResponse) Reset()                    { *m = CustomGetResponse{} }
+func (*CustomGetResponse) ProtoMessage()               {}
+func (*CustomGetResponse) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{4} }
 
 func (m *CustomGetResponse) GetObject() *Object {
 	if m != nil {

@@ -20,7 +20,7 @@ resource "volterra_fast_acl" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "legacy_acl site_acl re_acl" must be set
+  // One of the arguments from this list "site_acl re_acl legacy_acl" must be set
 
   site_acl {
     fast_acl_rules {
@@ -39,7 +39,7 @@ resource "volterra_fast_acl" "example" {
 
       port {
         // One of the arguments from this list "all user_defined dns" must be set
-        user_defined = "user_defined"
+        dns = true
       }
 
       // One of the arguments from this list "prefix ip_prefix_set" must be set
@@ -110,7 +110,7 @@ Matches all port.
 
 ### All Public Vips
 
-Apply this fast ACL to all public vips.
+Apply this Fast ACL to all public vips.
 
 ### All Services
 
@@ -118,7 +118,7 @@ Regional Edge: Applies the configuration to all the VIPs assigned to tenant.
 
 ### Default Tenant Vip
 
-Apply this fast ACL to Default(dedicated) Tenant VIP.
+Apply this Fast ACL to Default(dedicated) Tenant VIP.
 
 ### Destination Ip Address
 
@@ -200,7 +200,7 @@ ACL may be applied at regional edge sites or customer edge sites. Not recommende
 
 `network_type` - (Required) CE applies Fast ACLs with network type selector as "site_local" and "site_local_inside" only. See [Network Type ](#network-type) below for details.
 
-`source_rules` - (Optional) List of fast ACL rules to be applied to received packets on this site. See [ref](#ref) below for details.
+`source_rules` - (Optional) List of Fast ACL rules to be applied to received packets on this site. See [ref](#ref) below for details.
 
 ### Metadata
 
@@ -274,11 +274,11 @@ ACL will be applied at regional edge sites.
 
 `fast_acl_rules` - (Optional) Fast ACL rules to match . See [Fast Acl Rules ](#fast-acl-rules) below for details.
 
-`all_public_vips` - (Optional) Apply this fast ACL to all public vips (bool).
+`all_public_vips` - (Optional) Apply this Fast ACL to all public vips (bool).
 
-`default_tenant_vip` - (Optional) Apply this fast ACL to Default(dedicated) Tenant VIP (bool).
+`default_tenant_vip` - (Optional) Apply this Fast ACL to Default(dedicated) Tenant VIP (bool).
 
-`selected_tenant_vip` - (Optional) Apply this fast ACL to List of some selected public VIP(s). See [Selected Tenant Vip ](#selected-tenant-vip) below for details.
+`selected_tenant_vip` - (Optional) Apply this Fast ACL to List of some selected public VIP(s). See [Selected Tenant Vip ](#selected-tenant-vip) below for details.
 
 ### Ref
 
@@ -292,7 +292,7 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 ### Selected Tenant Vip
 
-Apply this fast ACL to List of some selected public VIP(s).
+Apply this Fast ACL to List of some selected public VIP(s).
 
 `default_tenant_vip` - (Optional) Include tenant vip in list of specific VIP(s) (`Bool`).
 

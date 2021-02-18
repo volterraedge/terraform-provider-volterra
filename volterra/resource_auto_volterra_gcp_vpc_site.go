@@ -54,11 +54,13 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"address": {
@@ -128,6 +130,35 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 			"instance_type": {
 				Type:     schema.TypeString,
 				Required: true,
+			},
+
+			"log_receiver": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"namespace": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"tenant": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
+			"logs_streaming_disabled": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
 			},
 
 			"nodes_per_az": {
@@ -2240,19 +2271,20 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 			v.(string)
 	}
 
+	//address
 	if v, ok := d.GetOk("address"); ok && !isIntfNil(v) {
 
 		createSpec.Address =
 			v.(string)
 	}
 
+	//coordinates
 	if v, ok := d.GetOk("coordinates"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		coordinates := &ves_io_schema_site.Coordinates{}
 		createSpec.Coordinates = coordinates
 		for _, set := range sl {
-
 			coordinatesMapStrToI := set.(map[string]interface{})
 
 			if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
@@ -2266,6 +2298,8 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 		}
 
 	}
+
+	//deployment
 
 	deploymentTypeFound := false
 
@@ -2311,35 +2345,88 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//disk_size
 	if v, ok := d.GetOk("disk_size"); ok && !isIntfNil(v) {
 
 		createSpec.DiskSize =
 			uint32(v.(int))
 	}
 
+	//gcp_region
 	if v, ok := d.GetOk("gcp_region"); ok && !isIntfNil(v) {
 
 		createSpec.GcpRegion =
 			v.(string)
 	}
 
+	//instance_type
 	if v, ok := d.GetOk("instance_type"); ok && !isIntfNil(v) {
 
 		createSpec.InstanceType =
 			v.(string)
 	}
 
+	//logs_receiver_choice
+
+	logsReceiverChoiceTypeFound := false
+
+	if v, ok := d.GetOk("log_receiver"); ok && !logsReceiverChoiceTypeFound {
+
+		logsReceiverChoiceTypeFound = true
+		logsReceiverChoiceInt := &ves_io_schema_views_gcp_vpc_site.CreateSpecType_LogReceiver{}
+		logsReceiverChoiceInt.LogReceiver = &ves_io_schema_views.ObjectRefType{}
+		createSpec.LogsReceiverChoice = logsReceiverChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Name = v.(string)
+			}
+
+			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Namespace = v.(string)
+			}
+
+			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Tenant = v.(string)
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("logs_streaming_disabled"); ok && !logsReceiverChoiceTypeFound {
+
+		logsReceiverChoiceTypeFound = true
+
+		if v.(bool) {
+			logsReceiverChoiceInt := &ves_io_schema_views_gcp_vpc_site.CreateSpecType_LogsStreamingDisabled{}
+			logsReceiverChoiceInt.LogsStreamingDisabled = &ves_io_schema.Empty{}
+			createSpec.LogsReceiverChoice = logsReceiverChoiceInt
+		}
+
+	}
+
+	//nodes_per_az
 	if v, ok := d.GetOk("nodes_per_az"); ok && !isIntfNil(v) {
 
 		createSpec.NodesPerAz =
 			uint32(v.(int))
 	}
 
+	//operating_system_version
 	if v, ok := d.GetOk("operating_system_version"); ok && !isIntfNil(v) {
 
 		createSpec.OperatingSystemVersion =
 			v.(string)
 	}
+
+	//site_type
 
 	siteTypeTypeFound := false
 
@@ -2456,7 +2543,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 						globalNetworkChoiceInt.GlobalNetworkList.GlobalNetworkConnections = globalNetworkConnections
 						for i, set := range sl {
 							globalNetworkConnections[i] = &ves_io_schema_views.GlobalNetworkConnectionType{}
-
 							globalNetworkConnectionsMapStrToI := set.(map[string]interface{})
 
 							connectionChoiceTypeFound := false
@@ -2478,7 +2564,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 										globalVn := &ves_io_schema_views.ObjectRefType{}
 										connectionChoiceInt.SliToGlobalDr.GlobalVn = globalVn
 										for _, set := range sl {
-
 											globalVnMapStrToI := set.(map[string]interface{})
 
 											if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -2518,7 +2603,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 										globalVn := &ves_io_schema_views.ObjectRefType{}
 										connectionChoiceInt.SloToGlobalDr.GlobalVn = globalVn
 										for _, set := range sl {
-
 											globalVnMapStrToI := set.(map[string]interface{})
 
 											if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -2633,7 +2717,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 														interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
 														for i, set := range sl {
 															interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-
 															interceptionRulesMapStrToI := set.(map[string]interface{})
 
 															if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
@@ -2642,7 +2725,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 																domainMatch := &ves_io_schema.DomainType{}
 																interceptionRules[i].DomainMatch = domainMatch
 																for _, set := range sl {
-
 																	domainMatchMapStrToI := set.(map[string]interface{})
 
 																	domainChoiceTypeFound := false
@@ -2747,7 +2829,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 														privateKey := &ves_io_schema.SecretType{}
 														signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
 														for _, set := range sl {
-
 															privateKeyMapStrToI := set.(map[string]interface{})
 
 															if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -2756,7 +2837,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 																blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 																privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 																for _, set := range sl {
-
 																	blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 																	if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -2999,7 +3079,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 				insideNetwork := &ves_io_schema_views.GCPVPCNetworkChoiceType{}
 				siteTypeInt.IngressEgressGw.InsideNetwork = insideNetwork
 				for _, set := range sl {
-
 					insideNetworkMapStrToI := set.(map[string]interface{})
 
 					choiceTypeFound := false
@@ -3088,7 +3167,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 						insideStaticRouteChoiceInt.InsideStaticRoutes.StaticRouteList = staticRouteList
 						for i, set := range sl {
 							staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
-
 							staticRouteListMapStrToI := set.(map[string]interface{})
 
 							configModeChoiceTypeFound := false
@@ -3129,7 +3207,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 										nexthop := &ves_io_schema.NextHopType{}
 										configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
 										for _, set := range sl {
-
 											nexthopMapStrToI := set.(map[string]interface{})
 
 											if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
@@ -3170,7 +3247,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 												nexthopAddress := &ves_io_schema.IpAddressType{}
 												nexthop.NexthopAddress = nexthopAddress
 												for _, set := range sl {
-
 													nexthopAddressMapStrToI := set.(map[string]interface{})
 
 													verTypeFound := false
@@ -3236,7 +3312,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 										configModeChoiceInt.CustomStaticRoute.Subnets = subnets
 										for i, set := range sl {
 											subnets[i] = &ves_io_schema.IpSubnetType{}
-
 											subnetsMapStrToI := set.(map[string]interface{})
 
 											verTypeFound := false
@@ -3336,7 +3411,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 				insideSubnet := &ves_io_schema_views.GCPVPCSubnetChoiceType{}
 				siteTypeInt.IngressEgressGw.InsideSubnet = insideSubnet
 				for _, set := range sl {
-
 					insideSubnetMapStrToI := set.(map[string]interface{})
 
 					choiceTypeFound := false
@@ -3456,7 +3530,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 				outsideNetwork := &ves_io_schema_views.GCPVPCNetworkChoiceType{}
 				siteTypeInt.IngressEgressGw.OutsideNetwork = outsideNetwork
 				for _, set := range sl {
-
 					outsideNetworkMapStrToI := set.(map[string]interface{})
 
 					choiceTypeFound := false
@@ -3557,7 +3630,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 						outsideStaticRouteChoiceInt.OutsideStaticRoutes.StaticRouteList = staticRouteList
 						for i, set := range sl {
 							staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
-
 							staticRouteListMapStrToI := set.(map[string]interface{})
 
 							configModeChoiceTypeFound := false
@@ -3598,7 +3670,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 										nexthop := &ves_io_schema.NextHopType{}
 										configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
 										for _, set := range sl {
-
 											nexthopMapStrToI := set.(map[string]interface{})
 
 											if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
@@ -3639,7 +3710,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 												nexthopAddress := &ves_io_schema.IpAddressType{}
 												nexthop.NexthopAddress = nexthopAddress
 												for _, set := range sl {
-
 													nexthopAddressMapStrToI := set.(map[string]interface{})
 
 													verTypeFound := false
@@ -3705,7 +3775,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 										configModeChoiceInt.CustomStaticRoute.Subnets = subnets
 										for i, set := range sl {
 											subnets[i] = &ves_io_schema.IpSubnetType{}
-
 											subnetsMapStrToI := set.(map[string]interface{})
 
 											verTypeFound := false
@@ -3793,7 +3862,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 				outsideSubnet := &ves_io_schema_views.GCPVPCSubnetChoiceType{}
 				siteTypeInt.IngressEgressGw.OutsideSubnet = outsideSubnet
 				for _, set := range sl {
-
 					outsideSubnetMapStrToI := set.(map[string]interface{})
 
 					choiceTypeFound := false
@@ -3883,7 +3951,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 				localNetwork := &ves_io_schema_views.GCPVPCNetworkChoiceType{}
 				siteTypeInt.IngressGw.LocalNetwork = localNetwork
 				for _, set := range sl {
-
 					localNetworkMapStrToI := set.(map[string]interface{})
 
 					choiceTypeFound := false
@@ -3958,7 +4025,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 				localSubnet := &ves_io_schema_views.GCPVPCSubnetChoiceType{}
 				siteTypeInt.IngressGw.LocalSubnet = localSubnet
 				for _, set := range sl {
-
 					localSubnetMapStrToI := set.(map[string]interface{})
 
 					choiceTypeFound := false
@@ -4134,7 +4200,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 						globalNetworkChoiceInt.GlobalNetworkList.GlobalNetworkConnections = globalNetworkConnections
 						for i, set := range sl {
 							globalNetworkConnections[i] = &ves_io_schema_views.GlobalNetworkConnectionType{}
-
 							globalNetworkConnectionsMapStrToI := set.(map[string]interface{})
 
 							connectionChoiceTypeFound := false
@@ -4156,7 +4221,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 										globalVn := &ves_io_schema_views.ObjectRefType{}
 										connectionChoiceInt.SliToGlobalDr.GlobalVn = globalVn
 										for _, set := range sl {
-
 											globalVnMapStrToI := set.(map[string]interface{})
 
 											if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -4196,7 +4260,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 										globalVn := &ves_io_schema_views.ObjectRefType{}
 										connectionChoiceInt.SloToGlobalDr.GlobalVn = globalVn
 										for _, set := range sl {
-
 											globalVnMapStrToI := set.(map[string]interface{})
 
 											if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -4311,7 +4374,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 														interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
 														for i, set := range sl {
 															interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-
 															interceptionRulesMapStrToI := set.(map[string]interface{})
 
 															if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
@@ -4320,7 +4382,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 																domainMatch := &ves_io_schema.DomainType{}
 																interceptionRules[i].DomainMatch = domainMatch
 																for _, set := range sl {
-
 																	domainMatchMapStrToI := set.(map[string]interface{})
 
 																	domainChoiceTypeFound := false
@@ -4425,7 +4486,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 														privateKey := &ves_io_schema.SecretType{}
 														signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
 														for _, set := range sl {
-
 															privateKeyMapStrToI := set.(map[string]interface{})
 
 															if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -4434,7 +4494,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 																blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 																privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 																for _, set := range sl {
-
 																	blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 																	if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -4763,7 +4822,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 						outsideStaticRouteChoiceInt.OutsideStaticRoutes.StaticRouteList = staticRouteList
 						for i, set := range sl {
 							staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
-
 							staticRouteListMapStrToI := set.(map[string]interface{})
 
 							configModeChoiceTypeFound := false
@@ -4804,7 +4862,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 										nexthop := &ves_io_schema.NextHopType{}
 										configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
 										for _, set := range sl {
-
 											nexthopMapStrToI := set.(map[string]interface{})
 
 											if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
@@ -4845,7 +4902,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 												nexthopAddress := &ves_io_schema.IpAddressType{}
 												nexthop.NexthopAddress = nexthopAddress
 												for _, set := range sl {
-
 													nexthopAddressMapStrToI := set.(map[string]interface{})
 
 													verTypeFound := false
@@ -4911,7 +4967,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 										configModeChoiceInt.CustomStaticRoute.Subnets = subnets
 										for i, set := range sl {
 											subnets[i] = &ves_io_schema.IpSubnetType{}
-
 											subnetsMapStrToI := set.(map[string]interface{})
 
 											verTypeFound := false
@@ -4999,7 +5054,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 				siteLocalNetwork := &ves_io_schema_views.GCPVPCNetworkChoiceType{}
 				siteTypeInt.VoltstackCluster.SiteLocalNetwork = siteLocalNetwork
 				for _, set := range sl {
-
 					siteLocalNetworkMapStrToI := set.(map[string]interface{})
 
 					choiceTypeFound := false
@@ -5074,7 +5128,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 				siteLocalSubnet := &ves_io_schema_views.GCPVPCSubnetChoiceType{}
 				siteTypeInt.VoltstackCluster.SiteLocalSubnet = siteLocalSubnet
 				for _, set := range sl {
-
 					siteLocalSubnetMapStrToI := set.(map[string]interface{})
 
 					choiceTypeFound := false
@@ -5132,12 +5185,14 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//ssh_key
 	if v, ok := d.GetOk("ssh_key"); ok && !isIntfNil(v) {
 
 		createSpec.SshKey =
 			v.(string)
 	}
 
+	//volterra_software_version
 	if v, ok := d.GetOk("volterra_software_version"); ok && !isIntfNil(v) {
 
 		createSpec.VolterraSoftwareVersion =
@@ -5254,7 +5309,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 		coordinates := &ves_io_schema_site.Coordinates{}
 		updateSpec.Coordinates = coordinates
 		for _, set := range sl {
-
 			coordinatesMapStrToI := set.(map[string]interface{})
 
 			if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
@@ -5265,6 +5319,50 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 				coordinates.Longitude = w.(float32)
 			}
 
+		}
+
+	}
+
+	logsReceiverChoiceTypeFound := false
+
+	if v, ok := d.GetOk("log_receiver"); ok && !logsReceiverChoiceTypeFound {
+
+		logsReceiverChoiceTypeFound = true
+		logsReceiverChoiceInt := &ves_io_schema_views_gcp_vpc_site.ReplaceSpecType_LogReceiver{}
+		logsReceiverChoiceInt.LogReceiver = &ves_io_schema_views.ObjectRefType{}
+		updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Name = v.(string)
+			}
+
+			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Namespace = v.(string)
+			}
+
+			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Tenant = v.(string)
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("logs_streaming_disabled"); ok && !logsReceiverChoiceTypeFound {
+
+		logsReceiverChoiceTypeFound = true
+
+		if v.(bool) {
+			logsReceiverChoiceInt := &ves_io_schema_views_gcp_vpc_site.ReplaceSpecType_LogsStreamingDisabled{}
+			logsReceiverChoiceInt.LogsStreamingDisabled = &ves_io_schema.Empty{}
+			updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
 
 	}
@@ -5375,7 +5473,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 						globalNetworkChoiceInt.GlobalNetworkList.GlobalNetworkConnections = globalNetworkConnections
 						for i, set := range sl {
 							globalNetworkConnections[i] = &ves_io_schema_views.GlobalNetworkConnectionType{}
-
 							globalNetworkConnectionsMapStrToI := set.(map[string]interface{})
 
 							connectionChoiceTypeFound := false
@@ -5397,7 +5494,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 										globalVn := &ves_io_schema_views.ObjectRefType{}
 										connectionChoiceInt.SliToGlobalDr.GlobalVn = globalVn
 										for _, set := range sl {
-
 											globalVnMapStrToI := set.(map[string]interface{})
 
 											if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -5437,7 +5533,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 										globalVn := &ves_io_schema_views.ObjectRefType{}
 										connectionChoiceInt.SloToGlobalDr.GlobalVn = globalVn
 										for _, set := range sl {
-
 											globalVnMapStrToI := set.(map[string]interface{})
 
 											if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -5552,7 +5647,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 														interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
 														for i, set := range sl {
 															interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-
 															interceptionRulesMapStrToI := set.(map[string]interface{})
 
 															if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
@@ -5561,7 +5655,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 																domainMatch := &ves_io_schema.DomainType{}
 																interceptionRules[i].DomainMatch = domainMatch
 																for _, set := range sl {
-
 																	domainMatchMapStrToI := set.(map[string]interface{})
 
 																	domainChoiceTypeFound := false
@@ -5666,7 +5759,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 														privateKey := &ves_io_schema.SecretType{}
 														signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
 														for _, set := range sl {
-
 															privateKeyMapStrToI := set.(map[string]interface{})
 
 															if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -5675,7 +5767,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 																blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 																privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 																for _, set := range sl {
-
 																	blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 																	if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -5932,7 +6023,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 						insideStaticRouteChoiceInt.InsideStaticRoutes.StaticRouteList = staticRouteList
 						for i, set := range sl {
 							staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
-
 							staticRouteListMapStrToI := set.(map[string]interface{})
 
 							configModeChoiceTypeFound := false
@@ -5973,7 +6063,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 										nexthop := &ves_io_schema.NextHopType{}
 										configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
 										for _, set := range sl {
-
 											nexthopMapStrToI := set.(map[string]interface{})
 
 											if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
@@ -6014,7 +6103,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 												nexthopAddress := &ves_io_schema.IpAddressType{}
 												nexthop.NexthopAddress = nexthopAddress
 												for _, set := range sl {
-
 													nexthopAddressMapStrToI := set.(map[string]interface{})
 
 													verTypeFound := false
@@ -6080,7 +6168,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 										configModeChoiceInt.CustomStaticRoute.Subnets = subnets
 										for i, set := range sl {
 											subnets[i] = &ves_io_schema.IpSubnetType{}
-
 											subnetsMapStrToI := set.(map[string]interface{})
 
 											verTypeFound := false
@@ -6261,7 +6348,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 						outsideStaticRouteChoiceInt.OutsideStaticRoutes.StaticRouteList = staticRouteList
 						for i, set := range sl {
 							staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
-
 							staticRouteListMapStrToI := set.(map[string]interface{})
 
 							configModeChoiceTypeFound := false
@@ -6302,7 +6388,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 										nexthop := &ves_io_schema.NextHopType{}
 										configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
 										for _, set := range sl {
-
 											nexthopMapStrToI := set.(map[string]interface{})
 
 											if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
@@ -6343,7 +6428,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 												nexthopAddress := &ves_io_schema.IpAddressType{}
 												nexthop.NexthopAddress = nexthopAddress
 												for _, set := range sl {
-
 													nexthopAddressMapStrToI := set.(map[string]interface{})
 
 													verTypeFound := false
@@ -6409,7 +6493,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 										configModeChoiceInt.CustomStaticRoute.Subnets = subnets
 										for i, set := range sl {
 											subnets[i] = &ves_io_schema.IpSubnetType{}
-
 											subnetsMapStrToI := set.(map[string]interface{})
 
 											verTypeFound := false
@@ -6599,7 +6682,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 						globalNetworkChoiceInt.GlobalNetworkList.GlobalNetworkConnections = globalNetworkConnections
 						for i, set := range sl {
 							globalNetworkConnections[i] = &ves_io_schema_views.GlobalNetworkConnectionType{}
-
 							globalNetworkConnectionsMapStrToI := set.(map[string]interface{})
 
 							connectionChoiceTypeFound := false
@@ -6621,7 +6703,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 										globalVn := &ves_io_schema_views.ObjectRefType{}
 										connectionChoiceInt.SliToGlobalDr.GlobalVn = globalVn
 										for _, set := range sl {
-
 											globalVnMapStrToI := set.(map[string]interface{})
 
 											if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -6661,7 +6742,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 										globalVn := &ves_io_schema_views.ObjectRefType{}
 										connectionChoiceInt.SloToGlobalDr.GlobalVn = globalVn
 										for _, set := range sl {
-
 											globalVnMapStrToI := set.(map[string]interface{})
 
 											if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -6776,7 +6856,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 														interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
 														for i, set := range sl {
 															interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-
 															interceptionRulesMapStrToI := set.(map[string]interface{})
 
 															if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
@@ -6785,7 +6864,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 																domainMatch := &ves_io_schema.DomainType{}
 																interceptionRules[i].DomainMatch = domainMatch
 																for _, set := range sl {
-
 																	domainMatchMapStrToI := set.(map[string]interface{})
 
 																	domainChoiceTypeFound := false
@@ -6890,7 +6968,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 														privateKey := &ves_io_schema.SecretType{}
 														signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
 														for _, set := range sl {
-
 															privateKeyMapStrToI := set.(map[string]interface{})
 
 															if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -6899,7 +6976,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 																blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 																privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 																for _, set := range sl {
-
 																	blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 																	if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -7223,7 +7299,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 						outsideStaticRouteChoiceInt.OutsideStaticRoutes.StaticRouteList = staticRouteList
 						for i, set := range sl {
 							staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
-
 							staticRouteListMapStrToI := set.(map[string]interface{})
 
 							configModeChoiceTypeFound := false
@@ -7264,7 +7339,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 										nexthop := &ves_io_schema.NextHopType{}
 										configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
 										for _, set := range sl {
-
 											nexthopMapStrToI := set.(map[string]interface{})
 
 											if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
@@ -7305,7 +7379,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 												nexthopAddress := &ves_io_schema.IpAddressType{}
 												nexthop.NexthopAddress = nexthopAddress
 												for _, set := range sl {
-
 													nexthopAddressMapStrToI := set.(map[string]interface{})
 
 													verTypeFound := false
@@ -7371,7 +7444,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 										configModeChoiceInt.CustomStaticRoute.Subnets = subnets
 										for i, set := range sl {
 											subnets[i] = &ves_io_schema.IpSubnetType{}
-
 											subnetsMapStrToI := set.(map[string]interface{})
 
 											verTypeFound := false
