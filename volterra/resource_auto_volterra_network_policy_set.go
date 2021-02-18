@@ -51,11 +51,13 @@ func resourceVolterraNetworkPolicySet() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"policies": {
@@ -142,6 +144,7 @@ func resourceVolterraNetworkPolicySetCreate(d *schema.ResourceData, meta interfa
 			v.(string)
 	}
 
+	//policies
 	if v, ok := d.GetOk("policies"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})

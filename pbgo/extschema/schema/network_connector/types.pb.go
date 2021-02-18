@@ -431,11 +431,9 @@ type DynamicReverseProxyListType struct {
 	Drps []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,rep,name=drps" json:"drps,omitempty"`
 }
 
-func (m *DynamicReverseProxyListType) Reset()      { *m = DynamicReverseProxyListType{} }
-func (*DynamicReverseProxyListType) ProtoMessage() {}
-func (*DynamicReverseProxyListType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{2}
-}
+func (m *DynamicReverseProxyListType) Reset()                    { *m = DynamicReverseProxyListType{} }
+func (*DynamicReverseProxyListType) ProtoMessage()               {}
+func (*DynamicReverseProxyListType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
 
 func (m *DynamicReverseProxyListType) GetDrps() []*ves_io_schema_views.ObjectRefType {
 	if m != nil {
@@ -3943,7 +3941,7 @@ func NewPopulatedDynamicReverseProxyListType(r randyTypes, easy bool) *DynamicRe
 func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 	this := &GlobalSpecType{}
 	this.ConnectorType = NetworkConnectorType([]int32{0, 1, 2}[r.Intn(3)])
-	this.OutsideNetworkType = ves_io_schema3.VirtualNetworkType([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8}[r.Intn(9)])
+	this.OutsideNetworkType = ves_io_schema3.VirtualNetworkType([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}[r.Intn(11)])
 	if r.Intn(10) != 0 {
 		v2 := r.Intn(5)
 		this.OutsideNetwork = make([]*ves_io_schema4.ObjectRefType, v2)
@@ -3951,7 +3949,7 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 			this.OutsideNetwork[i] = ves_io_schema4.NewPopulatedObjectRefType(r, easy)
 		}
 	}
-	this.InsideNetworkType = ves_io_schema3.VirtualNetworkType([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8}[r.Intn(9)])
+	this.InsideNetworkType = ves_io_schema3.VirtualNetworkType([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}[r.Intn(11)])
 	if r.Intn(10) != 0 {
 		v3 := r.Intn(5)
 		this.InsideNetwork = make([]*ves_io_schema4.ObjectRefType, v3)

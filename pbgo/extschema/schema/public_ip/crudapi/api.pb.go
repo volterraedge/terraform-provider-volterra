@@ -4849,9 +4849,7 @@ var (
 )
 
 func init() { proto.RegisterFile("ves.io/schema/public_ip/crudapi/api.proto", fileDescriptorApi) }
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/public_ip/crudapi/api.proto", fileDescriptorApi)
-}
+func init() { golang_proto.RegisterFile("ves.io/schema/public_ip/crudapi/api.proto", fileDescriptorApi) }
 
 var fileDescriptorApi = []byte{
 	// 1275 bytes of a gzipped FileDescriptorProto

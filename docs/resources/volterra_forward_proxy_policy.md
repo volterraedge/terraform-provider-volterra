@@ -23,7 +23,7 @@ resource "volterra_forward_proxy_policy" "example" {
   // One of the arguments from this list "any_proxy network_connector proxy_label_selector drp_http_connect" must be set
   any_proxy = true
 
-  // One of the arguments from this list "allow_all allow_list deny_list rule_list" must be set
+  // One of the arguments from this list "deny_list rule_list allow_all allow_list" must be set
   allow_all = true
 }
 

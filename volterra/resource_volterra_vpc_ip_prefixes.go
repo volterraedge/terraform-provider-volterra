@@ -101,7 +101,7 @@ func resourceVolterraSetVpcIPPrefixesCreate(d *schema.ResourceData, meta interfa
 		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
 	}
 
-	log.Printf("[INFO] Setting Volterra VPC IPPrefixes struct: %+v", req)
+	log.Printf("[DEBUG] Setting Volterra VPC IPPrefixes struct: %+v", req)
 	_, err = client.CustomAPI(context.Background(), http.MethodPost, fmt.Sprintf(setVpcIPPrefixesURI, namespace, name), setVpcIPPrefixesRPCFQN, yamlReq)
 	if err != nil {
 		return fmt.Errorf("Error Setting Volterra VPC IPPrefixes: %s", err)
@@ -155,7 +155,7 @@ func resourceVolterraSetVpcIPPrefixesUpdate(d *schema.ResourceData, meta interfa
 		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
 	}
 
-	log.Printf("[INFO] Setting Volterra VPC IPPrefixes struct: %+v", req)
+	log.Printf("[DEBUG] Setting Volterra VPC IPPrefixes struct: %+v", req)
 	_, err = client.CustomAPI(context.Background(), http.MethodPost, fmt.Sprintf(setVpcIPPrefixesURI, namespace, name), setVpcIPPrefixesRPCFQN, yamlReq)
 	if err != nil {
 		return fmt.Errorf("Error Setting Volterra VPC IPPrefixeses: %s", err)
@@ -185,7 +185,7 @@ func resourceVolterraSetVpcIPPrefixesDelete(d *schema.ResourceData, meta interfa
 		log.Printf("Ignored: Error marshalling rpc response to yaml: %s", err)
 	}
 
-	log.Printf("[INFO] Setting Volterra VPC IPPrefixes as empty: %+v", req)
+	log.Printf("[DEBUG] Setting Volterra VPC IPPrefixes as empty: %+v", req)
 	_, err = client.CustomAPI(context.Background(), http.MethodPost, fmt.Sprintf(setVpcIPPrefixesURI, namespace, name), setVpcIPPrefixesRPCFQN, yamlReq)
 	if err != nil {
 		log.Printf("Ignored: Error Setting Volterra VPC IPPrefixes: %s", err)

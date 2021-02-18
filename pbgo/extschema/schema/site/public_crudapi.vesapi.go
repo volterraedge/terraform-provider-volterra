@@ -14,7 +14,6 @@ import (
 	"net/http"
 	"strings"
 
-	google_protobuf "github.com/gogo/protobuf/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	multierror "github.com/hashicorp/go-multierror"
 	"go.uber.org/zap"
@@ -56,16 +55,6 @@ const (
 	DeleteResponseFQN = "ves.io.schema.site.DeleteResponse"
 )
 
-// CLIENT side
-func NewCreateRequest(e db.Entry) (*CreateRequest, error) {
-	r := &CreateRequest{}
-	if e == nil {
-		return r, nil
-	}
-	r.FromObject(e)
-	return r, nil
-}
-
 func NewReplaceRequest(e db.Entry) (*ReplaceRequest, error) {
 	r := &ReplaceRequest{}
 	if e == nil {
@@ -88,8 +77,6 @@ func NewGetRequest(key string, opts ...server.CRUDCallOpt) (*GetRequest, error) 
 	switch ccOpts.ResponseFormat {
 	case server.DefaultForm:
 		rspFmt = GET_RSP_FORMAT_DEFAULT
-	case server.CreateRequestForm:
-		rspFmt = GET_RSP_FORMAT_FOR_CREATE
 	case server.ReplaceRequestForm:
 		rspFmt = GET_RSP_FORMAT_FOR_REPLACE
 	case server.StatusForm:
@@ -113,14 +100,6 @@ func NewListRequest(opts ...server.CRUDCallOpt) *ListRequest {
 	return &ListRequest{Namespace: ccOpts.Namespace}
 }
 
-func NewDeleteRequest(key string) (*DeleteRequest, error) {
-	strs := strings.Split(key, "/")
-	if len(strs) != 2 {
-		return nil, fmt.Errorf("key must have namespace and name separated by /, but found %s", key)
-	}
-	return &DeleteRequest{Namespace: strs[0], Name: strs[1]}, nil
-}
-
 // GRPC Client
 type crudAPIGrpcClient struct {
 	conn       *grpc.ClientConn
@@ -129,48 +108,7 @@ type crudAPIGrpcClient struct {
 
 func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
-	}
-
-	var req *CreateRequest
-	if cco.RequestProto != nil {
-		r, ok := cco.RequestProto.(*CreateRequest)
-		if !ok {
-			return nil, fmt.Errorf("%T is not *CreateRequest", cco.RequestProto)
-		}
-		req = r
-	} else {
-		r, err := NewCreateRequest(e)
-		if err != nil {
-			return nil, errors.Wrap(err, "Create")
-		}
-		req = r
-		if cco.ObjToMsgConverter != nil {
-			if err := cco.ObjToMsgConverter(e, req); err != nil {
-				return nil, err
-			}
-		}
-	}
-
-	ctx = client.AddHdrsToCtx(cco.Headers, ctx)
-
-	rsp, err := c.grpcClient.Create(ctx, req, cco.GrpcCallOpts...)
-	if err != nil {
-		return nil, err
-	}
-	if cco.OutCallResponse != nil {
-		cco.OutCallResponse.ProtoMsg = rsp
-	}
-	obj := NewDBObject(nil)
-	rsp.ToObject(obj)
-	if cco.MsgToObjConverter != nil {
-		if err := cco.MsgToObjConverter(rsp, obj); err != nil {
-			return nil, err
-		}
-	}
-	return obj, nil
+	return nil, fmt.Errorf("Not implemented")
 
 }
 
@@ -334,22 +272,7 @@ func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	req, err := NewDeleteRequest(key)
-	if err != nil {
-		return errors.Wrap(err, "Delete")
-	}
-
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
-	}
-	ctx = client.AddHdrsToCtx(cco.Headers, ctx)
-
-	rsp, err := c.grpcClient.Delete(ctx, req, cco.GrpcCallOpts...)
-	if cco.OutCallResponse != nil {
-		cco.OutCallResponse.ProtoMsg = rsp
-	}
-	return err
+	return fmt.Errorf("Not implemented")
 
 }
 
@@ -366,78 +289,7 @@ type crudAPIRestClient struct {
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
-	}
-
-	var req *CreateRequest
-	if cco.RequestProto != nil {
-		r, ok := cco.RequestProto.(*CreateRequest)
-		if !ok {
-			return nil, fmt.Errorf("%T is not *CreateRequest", cco.RequestProto)
-		}
-		req = r
-	} else {
-		r, err := NewCreateRequest(e)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new create request")
-		}
-		req = r
-		if cco.ObjToMsgConverter != nil {
-			if err := cco.ObjToMsgConverter(e, req); err != nil {
-				return nil, err
-			}
-		}
-	}
-
-	url := fmt.Sprintf("%s/public/namespaces/%s/sites", c.baseURL, req.Metadata.GetNamespace())
-	jsn, err := req.ToJSON()
-	if err != nil {
-		return nil, errors.Wrap(err, "RestClient Create")
-	}
-
-	hReq, err := http.NewRequest("POST", url, bytes.NewBuffer([]byte(jsn)))
-	if err != nil {
-		return nil, err
-	}
-	hReq = hReq.WithContext(ctx)
-
-	client.AddHdrsToReq(cco.Headers, hReq)
-	hReq.Header.Set("Content-Type", "application/json")
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return nil, err
-	}
-	defer rsp.Body.Close()
-	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
-	}
-	body, err := ioutil.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "RestClient create")
-	}
-
-	rspo := &CreateResponse{}
-	if err := codec.FromJSON(string(body), rspo); err != nil {
-		return nil, errors.Wrap(err, "Converting json to response protobuf message")
-	}
-	configapi.TranscribeCall(ctx, req, rspo)
-	if cco.OutCallResponse != nil {
-		cco.OutCallResponse.ProtoMsg = rspo
-		cco.OutCallResponse.JSON = string(body)
-	}
-
-	obj := NewDBObject(nil)
-	rspo.ToObject(obj)
-	if cco.MsgToObjConverter != nil {
-		if err := cco.MsgToObjConverter(rspo, obj); err != nil {
-			return nil, err
-		}
-	}
-	return obj, nil
+	return nil, fmt.Errorf("Not implemented")
 
 }
 
@@ -723,42 +575,7 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
-	if err != nil {
-		return errors.Wrap(err, "Delete")
-	}
-
-	url := fmt.Sprintf("%s/public/namespaces/%s/sites/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
-	}
-	client.AddHdrsToReq(cco.Headers, hReq)
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return err
-	}
-	defer rsp.Body.Close()
-
-	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
-	}
-
-	_, err = ioutil.ReadAll(rsp.Body)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	configapi.TranscribeCall(ctx, dReq, nil)
-
-	return nil
+	return fmt.Errorf("Not implemented")
 
 }
 
@@ -770,21 +587,6 @@ func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
 // INPROC Client (satisfying APIClient interface)
 type APIInprocClient struct {
 	crudCl *crudAPIInprocClient
-}
-
-func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.site.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		err := fmt.Errorf("No CRUD Server for ves.io.schema.site")
-		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-
-	rsp, err := oah.Create(ctx, req)
-	if err != nil {
-		return rsp, err
-	}
-	return rsp, nil
 }
 
 func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error) {
@@ -828,20 +630,6 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 	return rsp, nil
 }
 
-func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf.Empty, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.site.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		err := fmt.Errorf("No CRUD Server for ves.io.schema.site")
-		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-	rsp, err := oah.Delete(ctx, req)
-	if err != nil {
-		return rsp, err
-	}
-	return rsp, nil
-}
-
 func NewAPIInprocClient(svc svcfw.Service) APIClient {
 	crudCl := newCRUDAPIInprocClient(svc)
 	return &APIInprocClient{crudCl}
@@ -854,43 +642,7 @@ type crudAPIInprocClient struct {
 
 func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.site")
-	}
-
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
-	}
-
-	req, err := NewCreateRequest(e)
-	if err != nil {
-		return nil, errors.Wrap(err, "Creating new create request")
-	}
-	if cco.ObjToMsgConverter != nil {
-		if err := cco.ObjToMsgConverter(e, req); err != nil {
-			return nil, err
-		}
-	}
-
-	rsp, err := oah.Create(ctx, req)
-
-	if cco.OutCallResponse != nil {
-		cco.OutCallResponse.ProtoMsg = rsp
-	}
-	if err != nil {
-		return nil, err
-	}
-	obj := NewDBObject(nil)
-	rsp.ToObject(obj)
-	if cco.MsgToObjConverter != nil {
-		if err := cco.MsgToObjConverter(rsp, obj); err != nil {
-			return nil, err
-		}
-	}
-	return obj, nil
+	return nil, fmt.Errorf("Not implemented")
 
 }
 
@@ -1053,28 +805,7 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.site.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.site")
-	}
-
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
-	}
-
-	req, err := NewDeleteRequest(key)
-	if err != nil {
-		return errors.Wrap(err, "Delete")
-	}
-
-	rsp, err := oah.Delete(ctx, req)
-
-	if cco.OutCallResponse != nil {
-		cco.OutCallResponse.ProtoMsg = rsp
-	}
-	return err
+	return fmt.Errorf("Not implemented")
 
 }
 
@@ -1107,58 +838,6 @@ func (s *APISrv) validateTransport(ctx context.Context) error {
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
-}
-
-func (s *APISrv) Create(ctx context.Context, req *CreateRequest) (*CreateResponse, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
-	if s.sf.Config().EnableAPIValidation {
-		if rvFn := s.sf.GetRPCValidator("ves.io.schema.site.API.Create"); rvFn != nil {
-			if err := rvFn(ctx, req); err != nil {
-				if !server.NoReqValidateFromContext(ctx) {
-					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-					return nil, server.GRPCStatusFromError(err).Err()
-				}
-				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.site.API.Create"), zap.Error(err))
-			}
-		}
-	}
-	reqMsgFQN := "ves.io.schema.site.CreateRequest"
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, reqMsgFQN, req)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-	}()
-
-	obj := NewDBObject(nil)
-	req.ToObject(obj)
-	if conv, exists := s.sf.Config().MsgToObjConverters[reqMsgFQN]; exists {
-		if err := conv(req, obj); err != nil {
-			return nil, err
-		}
-	}
-	obj.SystemMetadata = &ves_io_schema.SystemObjectMetaType{}
-	rsrcReq := &server.ResourceCreateRequest{Entry: obj}
-	rsrcRsp, err := s.opts.RsrcHandler.CreateFn(ctx, rsrcReq, s.apiWrapper)
-	if err != nil {
-		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResource"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-	rsp, err := NewObjectCreateRsp(rsrcRsp.Entry)
-	if err != nil {
-		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "CreateResponse"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-	rspMsgFQN := "ves.io.schema.site.CreateResponse"
-	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
-		if err := conv(rsrcRsp.Entry, rsp); err != nil {
-			return nil, err
-		}
-	}
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.sf, "ves.io.schema.site.API.CreateResponse", rsp)...)
-	return rsp, nil
 }
 
 func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResponse, error) {
@@ -1217,8 +896,6 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	tenant := server.TenantFromContext(ctx)
 	rsrcReq := &server.ResourceGetRequest{IsPublic: true, Tenant: tenant, Namespace: req.GetNamespace(), Name: req.GetName()}
 	switch req.ResponseFormat {
-	case GET_RSP_FORMAT_FOR_CREATE:
-		rsrcReq.RspInCreateForm = true
 
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		rsrcReq.RspInReplaceForm = true
@@ -1286,40 +963,6 @@ func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, err
 	return rsp, nil
 }
 
-func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protobuf.Empty, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
-	if s.sf.Config().EnableAPIValidation {
-		if rvFn := s.sf.GetRPCValidator("ves.io.schema.site.API.Delete"); rvFn != nil {
-			if err := rvFn(ctx, req); err != nil {
-				if !server.NoReqValidateFromContext(ctx) {
-					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-					return nil, server.GRPCStatusFromError(err).Err()
-				}
-				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.site.API.Delete"), zap.Error(err))
-			}
-		}
-	}
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.site.API.DeleteRequest", req)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-	}()
-
-	tenant := server.TenantFromContext(ctx)
-	key := fmt.Sprintf("%s/%s/%s", tenant, req.GetNamespace(), req.GetName())
-	rsrcReq := &server.ResourceDeleteRequest{Key: key}
-	rsrcReq.FailIfReferred = req.FailIfReferred
-	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
-	if err != nil {
-		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-	return &google_protobuf.Empty{}, nil
-}
-
 // Assert that APISrv implements the generated gRPC APIServer interface
 var _ APIServer = &APISrv{}
 
@@ -1383,18 +1026,6 @@ func (l *ListResponseItem) GetObjLabels() map[string]string {
 	return l.Labels
 }
 
-func NewObjectCreateRsp(e db.Entry) (*CreateResponse, error) {
-	switch e.(type) {
-	case nil:
-		return nil, nil
-	case *DBObject:
-		rsp := &CreateResponse{}
-		rsp.FromObject(e)
-		return rsp, nil
-	}
-	return nil, fmt.Errorf("Entry not of type *DBObject in NewObjectCreateRsp")
-}
-
 func NewObjectReplaceRsp(e db.Entry) (*ReplaceResponse, error) {
 	return &ReplaceResponse{}, nil
 }
@@ -1436,15 +1067,6 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 	_ = buildStatusForm
 
 	switch req.ResponseFormat {
-
-	case GET_RSP_FORMAT_FOR_CREATE:
-		createReq, err := NewCreateRequest(e)
-		if err != nil {
-			return nil, errors.Wrap(err, "Building CreateRequest from entry")
-		}
-		// Name has to be specified for a new create
-		createReq.Metadata.Name = ""
-		rsp.CreateForm = createReq
 
 	case GET_RSP_FORMAT_FOR_REPLACE:
 		replaceReq, err := NewReplaceRequest(e)
@@ -1601,96 +1223,6 @@ var APISwaggerJSON string = `{
     ],
     "tags": null,
     "paths": {
-        "/public/namespaces/{metadata.namespace}/sites": {
-            "post": {
-                "summary": "Create Site",
-                "description": "Sites are created automatically once user approves addition of sites in the system.",
-                "operationId": "ves.io.schema.site.API.Create",
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/siteCreateResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "metadata.namespace",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/siteCreateRequest"
-                        }
-                    }
-                ],
-                "tags": [
-                    "API"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-API-Create"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.site.API.Create"
-            },
-            "x-displayname": "Site",
-            "x-ves-proto-service": "ves.io.schema.site.API",
-            "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
-        },
         "/public/namespaces/{metadata.namespace}/sites/{metadata.name}": {
             "put": {
                 "summary": "Replace Site",
@@ -1975,13 +1507,12 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
                         "in": "query",
                         "required": false,
                         "type": "string",
                         "enum": [
                             "GET_RSP_FORMAT_DEFAULT",
-                            "GET_RSP_FORMAT_FOR_CREATE",
                             "GET_RSP_FORMAT_FOR_REPLACE",
                             "GET_RSP_FORMAT_STATUS",
                             "GET_RSP_FORMAT_READ"
@@ -1999,108 +1530,12 @@ var APISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.API.Get"
             },
-            "delete": {
-                "summary": "Delete",
-                "description": "Delete the specified site",
-                "operationId": "ves.io.schema.site.API.Delete",
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/googleprotobufEmpty"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "namespace",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "name",
-                        "in": "path",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/siteDeleteRequest"
-                        }
-                    }
-                ],
-                "tags": [
-                    "API"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-API-Delete"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.site.API.Delete"
-            },
             "x-displayname": "Site",
             "x-ves-proto-service": "ves.io.schema.site.API",
             "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
         }
     },
     "definitions": {
-        "googleprotobufEmpty": {
-            "type": "object",
-            "description": "service Foo {\n      rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n    }\n\nThe JSON representation for -Empty- is empty JSON object -{}-.",
-            "title": "A generic empty message that you can re-use to avoid defining duplicated\nempty messages in your APIs. A typical example is to use it as the request\nor the response type of an API method. For instance:"
-        },
         "schemaConditionType": {
             "type": "object",
             "description": "Conditions are used in the object status to describe the current state of the\nobject, e.g. Ready, Succeeded, etc.",
@@ -2254,56 +1689,6 @@ var APISwaggerJSON string = `{
                     "title": "Prefix",
                     "x-displayname": "Prefix",
                     "x-ves-example": "2001:db8:0:0:0:0:2:0"
-                }
-            }
-        },
-        "schemaObjectCreateMetaType": {
-            "type": "object",
-            "description": "ObjectCreateMetaType is metadata that can be specified in Create request of an object.",
-            "title": "ObjectCreateMetaType",
-            "x-displayname": "Create Metadata",
-            "x-ves-proto-message": "ves.io.schema.ObjectCreateMetaType",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-",
-                    "title": "annotations",
-                    "x-displayname": "Annotation"
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
-                    "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created. \n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "staging"
                 }
             }
         },
@@ -2547,13 +1932,12 @@ var APISwaggerJSON string = `{
         },
         "schemaSiteToSiteTunnelType": {
             "type": "string",
-            "description": "Tunnel encapsulation to be used between sites\n\nSite to site tunnel can operate in both ipsec and ssl\nipsec takes precedence over ssl\nSite to site tunnel is of type ipsec\nSite to site tunnel is of type ssl\nSite to site tunnel is of type clear, i.e. no tunnel type",
+            "description": "Tunnel encapsulation to be used between sites\n\nSite to site tunnel can operate in both ipsec and ssl\nipsec takes precedence over ssl\nSite to site tunnel is of type ipsec\nSite to site tunnel is of type ssl",
             "title": "Site to site tunnel type",
             "enum": [
                 "SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL",
                 "SITE_TO_SITE_TUNNEL_IPSEC",
-                "SITE_TO_SITE_TUNNEL_SSL",
-                "SITE_TO_SITE_CLEAR"
+                "SITE_TO_SITE_TUNNEL_SSL"
             ],
             "default": "SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL",
             "x-displayname": "Tunnel type",
@@ -2916,7 +2300,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -2927,7 +2311,9 @@ var APISwaggerJSON string = `{
                 "VIRTUAL_NETWORK_SITE_SERVICE",
                 "VIRTUAL_NETWORK_VER_INTERNAL",
                 "VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE",
-                "VIRTUAL_NETWORK_IP_AUTO"
+                "VIRTUAL_NETWORK_IP_AUTO",
+                "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
+                "VIRTUAL_NETWORK_SRV6_NETWORK"
             ],
             "default": "VIRTUAL_NETWORK_SITE_LOCAL",
             "x-displayname": "Virtual Network Type",
@@ -3179,199 +2565,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "siteCreateRequest": {
-            "type": "object",
-            "description": "This is the input message of the 'Create' RPC",
-            "title": "CreateRequest is used to create an instance of site",
-            "x-displayname": "Create Request",
-            "x-ves-proto-message": "ves.io.schema.site.CreateRequest",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectCreateMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the site",
-                    "title": "spec",
-                    "$ref": "#/definitions/siteCreateSpecType",
-                    "x-displayname": "Spec"
-                }
-            }
-        },
-        "siteCreateResponse": {
-            "type": "object",
-            "x-ves-proto-message": "ves.io.schema.site.CreateResponse",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectGetMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the site",
-                    "title": "spec",
-                    "$ref": "#/definitions/siteGetSpecType",
-                    "x-displayname": "Spec"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system metadata",
-                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
-                    "x-displayname": "System Metadata"
-                }
-            }
-        },
-        "siteCreateSpecType": {
-            "type": "object",
-            "description": "Sites are created automatically once user approves addition of sites in the system.",
-            "title": "Create Site",
-            "x-displayname": "Create Site",
-            "x-ves-proto-message": "ves.io.schema.site.CreateSpecType",
-            "properties": {
-                "address": {
-                    "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-",
-                    "x-displayname": "Geographical Address",
-                    "x-ves-example": "123 Street, city, country, postal code"
-                },
-                "bgp_peer_address": {
-                    "type": "string",
-                    "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured \n to fetch BGP peer address from site Object. This can be used to change peer addres per site in fleet.\n\nExample: - \"10.1.1.1\"-",
-                    "x-displayname": "BGP Peer Address",
-                    "x-ves-example": "10.1.1.1"
-                },
-                "bgp_router_id": {
-                    "type": "string",
-                    "description": " Optional bgp router id that can be used as parameter for BGP configuration when BGP is configurred to\n fetch BGP router ID from site object. This can be used to change router id per site in a fleet.\n\nExample: - \"10.1.1.1\"-",
-                    "x-displayname": "BGP Router ID",
-                    "x-ves-example": "10.1.1.1"
-                },
-                "ce_site_mode": {
-                    "description": " Customer Eddge Mode. Defines how the CE is being deployed. Invalid for RE Site",
-                    "$ref": "#/definitions/siteCeSiteMode",
-                    "x-displayname": "CE Site Mode"
-                },
-                "coordinates": {
-                    "description": " Site longitude and latitude co-ordinates",
-                    "$ref": "#/definitions/siteCoordinates",
-                    "x-displayname": "Co-ordinates"
-                },
-                "desired_pool_count": {
-                    "type": "integer",
-                    "description": " Desired pool count represent desired number of worker(non master) nodes\n for manual scaling of public cloud(AWS, GCP, Azure) sites. The desired count\n must be less than or equal to the maximum size of the scaling group for a\n given public cloud. One may also have to increase maximum scaling group size to\n effectively increase desired pool count.\n\nExample: - \"0\"-",
-                    "format": "int32",
-                    "x-displayname": "Desired Pool Count",
-                    "x-ves-example": "0"
-                },
-                "inside_nameserver": {
-                    "type": "string",
-                    "description": " Optional DNS server IP to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-",
-                    "x-displayname": "DNS Server for Inside Network",
-                    "x-ves-example": "10.1.1.1"
-                },
-                "inside_vip": {
-                    "type": "string",
-                    "description": " Optional Virtual IP to be used as automatic VIP for site local inside network.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP is used.\n When configured, this is used as VIP (depending on advertise policy configuration).\n When not configured, site local inside interface ip will be used as VIP.\n\nExample: - \"10.1.1.1\"-",
-                    "x-displayname": "Inside VIP",
-                    "x-ves-example": "10.1.1.1"
-                },
-                "operating_system_version": {
-                    "type": "string",
-                    "description": " Desired Operating System version for this site.\n\nExample: - \"value\"-",
-                    "x-displayname": "Operating System Version",
-                    "x-ves-example": "value"
-                },
-                "outside_nameserver": {
-                    "type": "string",
-                    "description": " Optional DNS server IP to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-",
-                    "x-displayname": "DNS Server for Outside Network",
-                    "x-ves-example": "10.1.1.1"
-                },
-                "outside_vip": {
-                    "type": "string",
-                    "description": " Optional Virtual IP to be used as automatic VIP for site local outside network.\n See documentation for \"VIP\" in advertise policy to see when Outside VIP is used.\n When configured, this is used as VIP (depending on advertise policy configuration).\n When not configured, site local interface ip will be used as VIP.\n\nExample: - \"10.1.1.1\"-",
-                    "x-displayname": "Outside VIP",
-                    "x-ves-example": "10.1.1.1"
-                },
-                "region": {
-                    "type": "string",
-                    "description": " Cloud Region. A region is a set of datacenters deployed within a latency-defined perimeter and connected through a dedicated regional low-latency network\n\nExample: - \"east-us-2\"-",
-                    "x-displayname": "Region",
-                    "x-ves-example": "east-us-2"
-                },
-                "site_to_site_network_type": {
-                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup. \n Must be specified for CE site mesh group configuration",
-                    "$ref": "#/definitions/schemaVirtualNetworkType",
-                    "x-displayname": "Site To Site Network Type"
-                },
-                "site_to_site_tunnel_ip": {
-                    "type": "string",
-                    "description": " Optionsl, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.\n\nExample: - \"10.1.1.1\"-",
-                    "x-displayname": "Site To Site Tunnel IP",
-                    "x-ves-example": "10.1.1.1"
-                },
-                "site_type": {
-                    "description": " Site type which specifies whether it is RE or CE",
-                    "$ref": "#/definitions/siteSiteType",
-                    "x-displayname": "Site Type"
-                },
-                "tunnel_dead_timeout": {
-                    "type": "integer",
-                    "description": " Time interval, in millisec, within which any ipsec / ssl connection from the site going down is detected.\n When not set (== 0), a default value of 10000 msec will be used.\n\nExample: - \"0\"-",
-                    "format": "int64",
-                    "x-displayname": "Tunnel Dead Timeout (msec)",
-                    "x-ves-example": "0"
-                },
-                "tunnel_type": {
-                    "description": " Tunnel type specifies type of tunnels enabled from this site. The tunnel type is used for automatic tunnels\n created between regional-edge sites or between regional-edge and customer-edge sites\n\n A tunnel connects two sites. The tunnel types enabled for tunnel results from intersection of tunnel types\n enabled for the two sites. IPSec gets priority over SSL when both are enabled\n\n Note: Tunnels can also be configured via SiteMeshGroup. Tunnel type is not used for SiteMeshGroup tunnels",
-                    "$ref": "#/definitions/schemaSiteToSiteTunnelType",
-                    "x-displayname": "Site Tunnel Type"
-                },
-                "vip_vrrp_mode": {
-                    "description": " Optional VIP VRRP advertisement mode. This controls the ARP behavior for \"Outside VIP\" and \"Inside VIP\"\n addresses, when they are configured. When turned on, the Master VER would advertise gratuitous ARPs and\n would respond to ARP queries for these addresses. When turned off, ARP responses are not given by VER.\n\n If BGP is configured, the Inside VIP and outside VIP addresses will be advertised by BGP. This is\n irrespective of the vrrp mode.\n\n When Outside VIP / Inside VIP are configured, it is recommended to turn on vrrp and also configure BGP.",
-                    "$ref": "#/definitions/schemaVipVrrpType",
-                    "x-displayname": "VIP Advertisement Mode"
-                },
-                "volterra_software_overide": {
-                    "description": " Policy to pick Volterra software version between verion given in site and corresponding fleet object.",
-                    "$ref": "#/definitions/siteSiteSoftwareOverrideType",
-                    "x-displayname": "Site Software Version Override"
-                }
-            }
-        },
-        "siteDeleteRequest": {
-            "type": "object",
-            "description": "This is the input message of the 'Delete' RPC.",
-            "title": "DeleteRequest is used to delete a site",
-            "x-displayname": "Delete Request",
-            "x-ves-proto-message": "ves.io.schema.site.DeleteRequest",
-            "properties": {
-                "fail_if_referred": {
-                    "type": "boolean",
-                    "description": " Fail the delete operation if this object is being referred by other objects",
-                    "title": "fail_if_referred",
-                    "format": "boolean",
-                    "x-displayname": "Fail-If-Referred"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " Name of the configuration object\n\nExample: - \"name\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "name"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " Namespace in which the configuration object is present\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                }
-            }
-        },
         "siteDeploymentState": {
             "type": "object",
             "description": "Details of Deployment",
@@ -3419,12 +2612,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get Response",
             "x-ves-proto-message": "ves.io.schema.site.GetResponse",
             "properties": {
-                "create_form": {
-                    "description": "Format used to create a new similar object",
-                    "title": "create_form",
-                    "$ref": "#/definitions/siteCreateRequest",
-                    "x-displayname": "CreateRequest Format"
-                },
                 "metadata": {
                     "description": " Standard object's metadata",
                     "title": "metadata",
@@ -3474,11 +2661,10 @@ var APISwaggerJSON string = `{
         },
         "siteGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
-                "GET_RSP_FORMAT_FOR_CREATE",
                 "GET_RSP_FORMAT_FOR_REPLACE",
                 "GET_RSP_FORMAT_STATUS",
                 "GET_RSP_FORMAT_READ"

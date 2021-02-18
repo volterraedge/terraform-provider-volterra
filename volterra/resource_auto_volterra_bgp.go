@@ -51,11 +51,13 @@ func resourceVolterraBgp() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"bgp_parameters": {
@@ -378,13 +380,13 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 			v.(string)
 	}
 
+	//bgp_parameters
 	if v, ok := d.GetOk("bgp_parameters"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		bgpParameters := &ves_io_schema_bgp.BgpParameters{}
 		createSpec.BgpParameters = bgpParameters
 		for _, set := range sl {
-
 			bgpParametersMapStrToI := set.(map[string]interface{})
 
 			if w, ok := bgpParametersMapStrToI["asn"]; ok && !isIntfNil(w) {
@@ -397,7 +399,6 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 				bgpRouterId := &ves_io_schema.IpAddressType{}
 				bgpParameters.BgpRouterId = bgpRouterId
 				for _, set := range sl {
-
 					bgpRouterIdMapStrToI := set.(map[string]interface{})
 
 					verTypeFound := false
@@ -460,6 +461,7 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 
 	}
 
+	//bgp_peers
 	if v, ok := d.GetOk("bgp_peers"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -467,7 +469,6 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 		createSpec.BgpPeers = bgpPeers
 		for i, set := range sl {
 			bgpPeers[i] = &ves_io_schema_bgp.BgpPeer{}
-
 			bgpPeersMapStrToI := set.(map[string]interface{})
 
 			if w, ok := bgpPeersMapStrToI["asn"]; ok && !isIntfNil(w) {
@@ -480,7 +481,6 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 				bgpPeerAddress := &ves_io_schema.IpAddressType{}
 				bgpPeers[i].BgpPeerAddress = bgpPeerAddress
 				for _, set := range sl {
-
 					bgpPeerAddressMapStrToI := set.(map[string]interface{})
 
 					verTypeFound := false
@@ -551,6 +551,7 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 
 	}
 
+	//network_interface
 	if v, ok := d.GetOk("network_interface"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -583,13 +584,13 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 
 	}
 
+	//where
 	if v, ok := d.GetOk("where"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		where := &ves_io_schema.SiteVirtualSiteRefSelector{}
 		createSpec.Where = where
 		for _, set := range sl {
-
 			whereMapStrToI := set.(map[string]interface{})
 
 			refOrSelectorTypeFound := false
@@ -808,7 +809,6 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 		bgpParameters := &ves_io_schema_bgp.BgpParameters{}
 		updateSpec.BgpParameters = bgpParameters
 		for _, set := range sl {
-
 			bgpParametersMapStrToI := set.(map[string]interface{})
 
 			if w, ok := bgpParametersMapStrToI["asn"]; ok && !isIntfNil(w) {
@@ -821,7 +821,6 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 				bgpRouterId := &ves_io_schema.IpAddressType{}
 				bgpParameters.BgpRouterId = bgpRouterId
 				for _, set := range sl {
-
 					bgpRouterIdMapStrToI := set.(map[string]interface{})
 
 					verTypeFound := false
@@ -891,7 +890,6 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 		updateSpec.BgpPeers = bgpPeers
 		for i, set := range sl {
 			bgpPeers[i] = &ves_io_schema_bgp.BgpPeer{}
-
 			bgpPeersMapStrToI := set.(map[string]interface{})
 
 			if w, ok := bgpPeersMapStrToI["asn"]; ok && !isIntfNil(w) {
@@ -904,7 +902,6 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 				bgpPeerAddress := &ves_io_schema.IpAddressType{}
 				bgpPeers[i].BgpPeerAddress = bgpPeerAddress
 				for _, set := range sl {
-
 					bgpPeerAddressMapStrToI := set.(map[string]interface{})
 
 					verTypeFound := false
@@ -1013,7 +1010,6 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 		where := &ves_io_schema.SiteVirtualSiteRefSelector{}
 		updateSpec.Where = where
 		for _, set := range sl {
-
 			whereMapStrToI := set.(map[string]interface{})
 
 			refOrSelectorTypeFound := false

@@ -164,6 +164,27 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for endpoint")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_network_policy.EndpointChoiceTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_network_policy.NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
@@ -298,6 +319,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhEndpoint := v.EndpointValidationRuleHandler
+	rulesEndpoint := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhEndpoint(rulesEndpoint)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.endpoint: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["endpoint"] = vFn
+
 	vrhIngressRules := v.IngressRulesValidationRuleHandler
 	rulesIngressRules := map[string]string{
 		"ves.io.schema.rules.repeated.max_items":            "128",
@@ -321,8 +353,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["egress_rules"] = vFn
-
-	v.FldValidators["endpoint"] = ves_io_schema_network_policy.EndpointChoiceTypeValidator().Validate
 
 	return v
 }()
@@ -468,6 +498,27 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for endpoint")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_network_policy.EndpointChoiceTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_network_policy.NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
@@ -602,6 +653,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhEndpoint := v.EndpointValidationRuleHandler
+	rulesEndpoint := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhEndpoint(rulesEndpoint)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.endpoint: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["endpoint"] = vFn
+
 	vrhIngressRules := v.IngressRulesValidationRuleHandler
 	rulesIngressRules := map[string]string{
 		"ves.io.schema.rules.repeated.max_items":            "128",
@@ -625,8 +687,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["egress_rules"] = vFn
-
-	v.FldValidators["endpoint"] = ves_io_schema_network_policy.EndpointChoiceTypeValidator().Validate
 
 	return v
 }()
@@ -828,6 +888,27 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for endpoint")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_network_policy.EndpointChoiceTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_network_policy.NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
@@ -971,6 +1052,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhEndpoint := v.EndpointValidationRuleHandler
+	rulesEndpoint := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhEndpoint(rulesEndpoint)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.endpoint: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["endpoint"] = vFn
+
 	vrhIngressRules := v.IngressRulesValidationRuleHandler
 	rulesIngressRules := map[string]string{
 		"ves.io.schema.rules.repeated.max_items":            "128",
@@ -994,8 +1086,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["egress_rules"] = vFn
-
-	v.FldValidators["endpoint"] = ves_io_schema_network_policy.EndpointChoiceTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -1143,6 +1233,27 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for endpoint")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_network_policy.EndpointChoiceTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) IngressRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_network_policy.NetworkPolicyRuleType, opts ...db.ValidateOpt) error {
@@ -1277,6 +1388,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhEndpoint := v.EndpointValidationRuleHandler
+	rulesEndpoint := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhEndpoint(rulesEndpoint)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.endpoint: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["endpoint"] = vFn
+
 	vrhIngressRules := v.IngressRulesValidationRuleHandler
 	rulesIngressRules := map[string]string{
 		"ves.io.schema.rules.repeated.max_items":            "128",
@@ -1300,8 +1422,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["egress_rules"] = vFn
-
-	v.FldValidators["endpoint"] = ves_io_schema_network_policy.EndpointChoiceTypeValidator().Validate
 
 	return v
 }()

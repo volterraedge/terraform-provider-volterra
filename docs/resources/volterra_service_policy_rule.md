@@ -25,17 +25,14 @@ resource "volterra_service_policy_rule" "example" {
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "client_name_matcher any_client client_name client_selector" must be set
+  // One of the arguments from this list "any_client client_name client_selector client_name_matcher" must be set
+  any_client = true
 
-  client_name_matcher {
-    exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-    regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-  }
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
   any_ip = true
+
   waf_action {
-    // One of the arguments from this list "waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode none" must be set
+    // One of the arguments from this list "waf_in_monitoring_mode none waf_skip_processing waf_rule_control waf_inline_rule_control" must be set
 
     waf_inline_rule_control {
       exclude_rule_ids = ["exclude_rule_ids"]
@@ -108,6 +105,8 @@ Argument Reference
 `dst_ip_prefix_list` - (Optional) The predicate evaluates to true if the destination address is covered by one or more of the IPv4 Prefixes from the list.. See [Dst Ip Prefix List ](#dst-ip-prefix-list) below for details.
 
 `expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
+
+`goto_policy` - (Optional) The target policy must be part of the current policy set and must be after the current policy in the policy set.. See [ref](#ref) below for details.
 
 `headers` - (Optional) Note that all specified header predicates must evaluate to true.. See [Headers ](#headers) below for details.
 

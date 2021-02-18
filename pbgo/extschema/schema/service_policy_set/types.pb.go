@@ -749,7 +749,7 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 		}
 	}
 	this.Type = ves_io_schema_policy.PolicySetType([]int32{0, 1, 2, 3}[r.Intn(4)])
-	this.DefaultAction = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
+	this.DefaultAction = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4, 5}[r.Intn(6)])
 	if r.Intn(10) != 0 {
 		this.DenyInfo = ves_io_schema_policy.NewPopulatedDenyInformation(r, easy)
 	}
@@ -769,7 +769,7 @@ func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 		}
 	}
 	this.Type = ves_io_schema_policy.PolicySetType([]int32{0, 1, 2, 3}[r.Intn(4)])
-	this.DefaultAction = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
+	this.DefaultAction = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4, 5}[r.Intn(6)])
 	if r.Intn(10) != 0 {
 		this.DenyInfo = ves_io_schema_policy.NewPopulatedDenyInformation(r, easy)
 	}
@@ -789,7 +789,7 @@ func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 		}
 	}
 	this.Type = ves_io_schema_policy.PolicySetType([]int32{0, 1, 2, 3}[r.Intn(4)])
-	this.DefaultAction = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
+	this.DefaultAction = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4, 5}[r.Intn(6)])
 	if r.Intn(10) != 0 {
 		this.DenyInfo = ves_io_schema_policy.NewPopulatedDenyInformation(r, easy)
 	}
@@ -809,7 +809,7 @@ func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 		}
 	}
 	this.Type = ves_io_schema_policy.PolicySetType([]int32{0, 1, 2, 3}[r.Intn(4)])
-	this.DefaultAction = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
+	this.DefaultAction = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4, 5}[r.Intn(6)])
 	if r.Intn(10) != 0 {
 		this.DenyInfo = ves_io_schema_policy.NewPopulatedDenyInformation(r, easy)
 	}

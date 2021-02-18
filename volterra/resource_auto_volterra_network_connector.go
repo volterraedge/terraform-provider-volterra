@@ -52,11 +52,13 @@ func resourceVolterraNetworkConnector() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"sli_to_global_dr": {
@@ -735,6 +737,8 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 			v.(string)
 	}
 
+	//connector_choice
+
 	connectorChoiceTypeFound := false
 
 	if v, ok := d.GetOk("sli_to_global_dr"); ok && !connectorChoiceTypeFound {
@@ -754,7 +758,6 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 				globalVn := &ves_io_schema_views.ObjectRefType{}
 				connectorChoiceInt.SliToGlobalDr.GlobalVn = globalVn
 				for _, set := range sl {
-
 					globalVnMapStrToI := set.(map[string]interface{})
 
 					if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -790,19 +793,22 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 
 			if v, ok := cs["global_vn"]; ok && !isIntfNil(v) {
 
+				sl := v.(*schema.Set).List()
 				globalVnInt := &ves_io_schema_views.ObjectRefType{}
 				connectorChoiceInt.SliToGlobalSnat.GlobalVn = globalVnInt
 
-				gvMapToStrVal := v.(map[string]interface{})
-				if val, ok := gvMapToStrVal["name"]; ok && !isIntfNil(v) {
-					globalVnInt.Name = val.(string)
-				}
-				if val, ok := gvMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-					globalVnInt.Namespace = val.(string)
-				}
+				for _, set := range sl {
+					gvMapToStrVal := set.(map[string]interface{})
+					if val, ok := gvMapToStrVal["name"]; ok && !isIntfNil(v) {
+						globalVnInt.Name = val.(string)
+					}
+					if val, ok := gvMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						globalVnInt.Namespace = val.(string)
+					}
 
-				if val, ok := gvMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-					globalVnInt.Tenant = val.(string)
+					if val, ok := gvMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						globalVnInt.Tenant = val.(string)
+					}
 				}
 
 			}
@@ -813,7 +819,6 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 				snatConfig := &ves_io_schema_network_connector.SnatConnectorType{}
 				connectorChoiceInt.SliToGlobalSnat.SnatConfig = snatConfig
 				for _, set := range sl {
-
 					snatConfigMapStrToI := set.(map[string]interface{})
 
 					poolChoiceTypeFound := false
@@ -1030,7 +1035,6 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 				globalVn := &ves_io_schema_views.ObjectRefType{}
 				connectorChoiceInt.SloToGlobalDr.GlobalVn = globalVn
 				for _, set := range sl {
-
 					globalVnMapStrToI := set.(map[string]interface{})
 
 					if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -1066,19 +1070,22 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 
 			if v, ok := cs["global_vn"]; ok && !isIntfNil(v) {
 
+				sl := v.(*schema.Set).List()
 				globalVnInt := &ves_io_schema_views.ObjectRefType{}
 				connectorChoiceInt.SloToGlobalSnat.GlobalVn = globalVnInt
 
-				gvMapToStrVal := v.(map[string]interface{})
-				if val, ok := gvMapToStrVal["name"]; ok && !isIntfNil(v) {
-					globalVnInt.Name = val.(string)
-				}
-				if val, ok := gvMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-					globalVnInt.Namespace = val.(string)
-				}
+				for _, set := range sl {
+					gvMapToStrVal := set.(map[string]interface{})
+					if val, ok := gvMapToStrVal["name"]; ok && !isIntfNil(v) {
+						globalVnInt.Name = val.(string)
+					}
+					if val, ok := gvMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						globalVnInt.Namespace = val.(string)
+					}
 
-				if val, ok := gvMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-					globalVnInt.Tenant = val.(string)
+					if val, ok := gvMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						globalVnInt.Tenant = val.(string)
+					}
 				}
 
 			}
@@ -1089,7 +1096,6 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 				snatConfig := &ves_io_schema_network_connector.SnatConnectorType{}
 				connectorChoiceInt.SloToGlobalSnat.SnatConfig = snatConfig
 				for _, set := range sl {
-
 					snatConfigMapStrToI := set.(map[string]interface{})
 
 					poolChoiceTypeFound := false
@@ -1180,6 +1186,8 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 		}
 
 	}
+
+	//forward_proxy_choice
 
 	forwardProxyChoiceTypeFound := false
 
@@ -1273,7 +1281,6 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 								interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
 								for i, set := range sl {
 									interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-
 									interceptionRulesMapStrToI := set.(map[string]interface{})
 
 									if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
@@ -1282,7 +1289,6 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 										domainMatch := &ves_io_schema.DomainType{}
 										interceptionRules[i].DomainMatch = domainMatch
 										for _, set := range sl {
-
 											domainMatchMapStrToI := set.(map[string]interface{})
 
 											domainChoiceTypeFound := false
@@ -1387,7 +1393,6 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 								privateKey := &ves_io_schema.SecretType{}
 								signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
 								for _, set := range sl {
-
 									privateKeyMapStrToI := set.(map[string]interface{})
 
 									if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1396,7 +1401,6 @@ func resourceVolterraNetworkConnectorCreate(d *schema.ResourceData, meta interfa
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 										privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
-
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1730,7 +1734,6 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 				globalVn := &ves_io_schema_views.ObjectRefType{}
 				connectorChoiceInt.SliToGlobalDr.GlobalVn = globalVn
 				for _, set := range sl {
-
 					globalVnMapStrToI := set.(map[string]interface{})
 
 					if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -1766,19 +1769,22 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 
 			if v, ok := cs["global_vn"]; ok && !isIntfNil(v) {
 
+				sl := v.(*schema.Set).List()
 				globalVnInt := &ves_io_schema_views.ObjectRefType{}
 				connectorChoiceInt.SliToGlobalSnat.GlobalVn = globalVnInt
 
-				gvMapToStrVal := v.(map[string]interface{})
-				if val, ok := gvMapToStrVal["name"]; ok && !isIntfNil(v) {
-					globalVnInt.Name = val.(string)
-				}
-				if val, ok := gvMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-					globalVnInt.Namespace = val.(string)
-				}
+				for _, set := range sl {
+					gvMapToStrVal := set.(map[string]interface{})
+					if val, ok := gvMapToStrVal["name"]; ok && !isIntfNil(v) {
+						globalVnInt.Name = val.(string)
+					}
+					if val, ok := gvMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						globalVnInt.Namespace = val.(string)
+					}
 
-				if val, ok := gvMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-					globalVnInt.Tenant = val.(string)
+					if val, ok := gvMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						globalVnInt.Tenant = val.(string)
+					}
 				}
 
 			}
@@ -1789,7 +1795,6 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 				snatConfig := &ves_io_schema_network_connector.SnatConnectorType{}
 				connectorChoiceInt.SliToGlobalSnat.SnatConfig = snatConfig
 				for _, set := range sl {
-
 					snatConfigMapStrToI := set.(map[string]interface{})
 
 					poolChoiceTypeFound := false
@@ -2006,7 +2011,6 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 				globalVn := &ves_io_schema_views.ObjectRefType{}
 				connectorChoiceInt.SloToGlobalDr.GlobalVn = globalVn
 				for _, set := range sl {
-
 					globalVnMapStrToI := set.(map[string]interface{})
 
 					if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -2042,19 +2046,22 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 
 			if v, ok := cs["global_vn"]; ok && !isIntfNil(v) {
 
+				sl := v.(*schema.Set).List()
 				globalVnInt := &ves_io_schema_views.ObjectRefType{}
 				connectorChoiceInt.SloToGlobalSnat.GlobalVn = globalVnInt
 
-				gvMapToStrVal := v.(map[string]interface{})
-				if val, ok := gvMapToStrVal["name"]; ok && !isIntfNil(v) {
-					globalVnInt.Name = val.(string)
-				}
-				if val, ok := gvMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-					globalVnInt.Namespace = val.(string)
-				}
+				for _, set := range sl {
+					gvMapToStrVal := set.(map[string]interface{})
+					if val, ok := gvMapToStrVal["name"]; ok && !isIntfNil(v) {
+						globalVnInt.Name = val.(string)
+					}
+					if val, ok := gvMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						globalVnInt.Namespace = val.(string)
+					}
 
-				if val, ok := gvMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-					globalVnInt.Tenant = val.(string)
+					if val, ok := gvMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						globalVnInt.Tenant = val.(string)
+					}
 				}
 
 			}
@@ -2065,7 +2072,6 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 				snatConfig := &ves_io_schema_network_connector.SnatConnectorType{}
 				connectorChoiceInt.SloToGlobalSnat.SnatConfig = snatConfig
 				for _, set := range sl {
-
 					snatConfigMapStrToI := set.(map[string]interface{})
 
 					poolChoiceTypeFound := false
@@ -2249,7 +2255,6 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 								interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
 								for i, set := range sl {
 									interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-
 									interceptionRulesMapStrToI := set.(map[string]interface{})
 
 									if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
@@ -2258,7 +2263,6 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 										domainMatch := &ves_io_schema.DomainType{}
 										interceptionRules[i].DomainMatch = domainMatch
 										for _, set := range sl {
-
 											domainMatchMapStrToI := set.(map[string]interface{})
 
 											domainChoiceTypeFound := false
@@ -2363,7 +2367,6 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 								privateKey := &ves_io_schema.SecretType{}
 								signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
 								for _, set := range sl {
-
 									privateKeyMapStrToI := set.(map[string]interface{})
 
 									if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -2372,7 +2375,6 @@ func resourceVolterraNetworkConnectorUpdate(d *schema.ResourceData, meta interfa
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 										privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
-
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {

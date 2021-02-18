@@ -1180,9 +1180,7 @@ var (
 	ErrIntOverflowObject   = fmt.Errorf("proto: integer overflow")
 )
 
-func init() {
-	proto.RegisterFile("ves.io/schema/views/gcp_vpc_site/object.proto", fileDescriptorObject)
-}
+func init() { proto.RegisterFile("ves.io/schema/views/gcp_vpc_site/object.proto", fileDescriptorObject) }
 func init() {
 	golang_proto.RegisterFile("ves.io/schema/views/gcp_vpc_site/object.proto", fileDescriptorObject)
 }

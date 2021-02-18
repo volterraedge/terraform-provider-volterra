@@ -61,7 +61,7 @@ resource "volterra_bgp" "example" {
   where {
     // One of the arguments from this list "site virtual_site" must be set
 
-    virtual_site {
+    site {
       network_type = "network_type"
 
       ref {

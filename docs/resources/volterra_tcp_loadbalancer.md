@@ -20,8 +20,11 @@ resource "volterra_tcp_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "advertise_on_public advertise_custom do_not_advertise advertise_on_public_default_vip" must be set
-  do_not_advertise = true
+  // One of the arguments from this list "advertise_custom do_not_advertise advertise_on_public_default_vip advertise_on_public" must be set
+  advertise_on_public_default_vip = true
+
+  // One of the arguments from this list "hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness hash_policy_choice_round_robin" must be set
+  hash_policy_choice_round_robin = true
 }
 
 ```
@@ -57,6 +60,14 @@ Argument Reference
 
 `domains` - (Optional) Domains also indicate the list of names for which DNS resolution will be done by VER (`List of String`).
 
+`hash_policy_choice_least_active` - (Optional) Connections are sent to origin server that has least active connections (bool).
+
+`hash_policy_choice_random` - (Optional) Connections are sent to all eligible origin servers in random fashion (bool).
+
+`hash_policy_choice_round_robin` - (Optional) Connections are sent to all eligible origin servers in round robin fashion (bool).
+
+`hash_policy_choice_source_ip_stickiness` - (Optional) Connections are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server (bool).
+
 `listen_port` - (Optional) Listen Port for this TCP proxy (`Int`).
 
 `origin_pools_weights` - (Optional) Origin pools and weights used for this loadbalancer.. See [Origin Pools Weights ](#origin-pools-weights) below for details.
@@ -79,6 +90,8 @@ Advertise this loadbalancer on public network.
 
 Where should this load balancer be available.
 
+`private_network` - (Optional) Advertise on a VoltADN private network. See [Private Network ](#private-network) below for details.
+
 `site` - (Optional) Advertise on a customer site and a given network. . See [Site ](#site) below for details.
 
 `virtual_site` - (Optional) Advertise on a customer virtual site and a given network.. See [Virtual Site ](#virtual-site) below for details.
@@ -88,6 +101,10 @@ Where should this load balancer be available.
 `port` - (Optional) TCP port to Listen. (`Int`).
 
 `use_default_port` - (Optional) For HTTP, default is 80. For HTTPS/SNI, default is 443. (bool).
+
+### Default Vip
+
+Use the default VIP, system allocated or configured in the VoltADN Private Network.
 
 ### Origin Pools Weights
 
@@ -100,6 +117,16 @@ Origin pools and weights used for this loadbalancer..
 `pool` - (Required) Simple, commonly used pool parameters with origin pool. See [ref](#ref) below for details.
 
 `weight` - (Optional) Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool (`Int`).
+
+### Private Network
+
+Advertise on a VoltADN private network.
+
+`private_network` - (Required) Select VoltADN private network reference. See [ref](#ref) below for details.
+
+`default_vip` - (Optional) Use the default VIP, system allocated or configured in the VoltADN Private Network (bool).
+
+`specific_vip` - (Optional) Use given IP address as VIP on VoltADN private Network (`String`).
 
 ### Ref
 

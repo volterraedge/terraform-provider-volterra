@@ -38,6 +38,7 @@ It has these top-level messages:
 	VPCAttachmentType
 	VPCIpPrefixesType
 	VPCAttachmentListType
+	ActiveServicePoliciesType
 	SecurityConfigType
 	AWSVPNTunnelConfigType
 	AWSTGWInfoConfigType

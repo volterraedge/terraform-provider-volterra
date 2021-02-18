@@ -52,11 +52,13 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"advertise_custom": {
@@ -72,6 +74,56 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
+
+									"private_network": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"private_network": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"default_vip": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"specific_vip": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
 
 									"site": {
 
@@ -313,6 +365,30 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 				},
 			},
 
+			"hash_policy_choice_least_active": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"hash_policy_choice_random": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"hash_policy_choice_round_robin": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"hash_policy_choice_source_ip_stickiness": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"listen_port": {
 				Type:     schema.TypeInt,
 				Optional: true,
@@ -455,6 +531,8 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 			v.(string)
 	}
 
+	//advertise_choice
+
 	advertiseChoiceTypeFound := false
 
 	if v, ok := d.GetOk("advertise_custom"); ok && !advertiseChoiceTypeFound {
@@ -475,10 +553,73 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 				advertiseChoiceInt.AdvertiseCustom.AdvertiseWhere = advertiseWhere
 				for i, set := range sl {
 					advertiseWhere[i] = &ves_io_schema_views.WhereType{}
-
 					advertiseWhereMapStrToI := set.(map[string]interface{})
 
 					choiceTypeFound := false
+
+					if v, ok := advertiseWhereMapStrToI["private_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.WhereType_PrivateNetwork{}
+						choiceInt.PrivateNetwork = &ves_io_schema_views.WherePrivateNetwork{}
+						advertiseWhere[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								privateNetwork := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.PrivateNetwork.PrivateNetwork = privateNetwork
+								for _, set := range sl {
+									privateNetworkMapStrToI := set.(map[string]interface{})
+
+									if w, ok := privateNetworkMapStrToI["name"]; ok && !isIntfNil(w) {
+										privateNetwork.Name = w.(string)
+									}
+
+									if w, ok := privateNetworkMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										privateNetwork.Namespace = w.(string)
+									}
+
+									if w, ok := privateNetworkMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										privateNetwork.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+							vipChoiceTypeFound := false
+
+							if v, ok := cs["default_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+
+								vipChoiceTypeFound = true
+
+								if v.(bool) {
+									vipChoiceInt := &ves_io_schema_views.WherePrivateNetwork_DefaultVip{}
+									vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
+									choiceInt.PrivateNetwork.VipChoice = vipChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+
+								vipChoiceTypeFound = true
+								vipChoiceInt := &ves_io_schema_views.WherePrivateNetwork_SpecificVip{}
+
+								choiceInt.PrivateNetwork.VipChoice = vipChoiceInt
+
+								vipChoiceInt.SpecificVip = v.(string)
+
+							}
+
+						}
+
+					}
 
 					if v, ok := advertiseWhereMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
@@ -508,7 +649,6 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 								site := &ves_io_schema_views.ObjectRefType{}
 								choiceInt.Site.Site = site
 								for _, set := range sl {
-
 									siteMapStrToI := set.(map[string]interface{})
 
 									if w, ok := siteMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -554,7 +694,6 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 								virtualSite := &ves_io_schema_views.ObjectRefType{}
 								choiceInt.VirtualSite.VirtualSite = virtualSite
 								for _, set := range sl {
-
 									virtualSiteMapStrToI := set.(map[string]interface{})
 
 									if w, ok := virtualSiteMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -705,7 +844,6 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 				publicIp := &ves_io_schema_views.ObjectRefType{}
 				advertiseChoiceInt.AdvertiseOnPublic.PublicIp = publicIp
 				for _, set := range sl {
-
 					publicIpMapStrToI := set.(map[string]interface{})
 
 					if w, ok := publicIpMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -752,12 +890,14 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 	}
 
+	//dns_volterra_managed
 	if v, ok := d.GetOk("dns_volterra_managed"); ok && !isIntfNil(v) {
 
 		createSpec.DnsVolterraManaged =
 			v.(bool)
 	}
 
+	//domains
 	if v, ok := d.GetOk("domains"); ok && !isIntfNil(v) {
 
 		ls := make([]string, len(v.([]interface{})))
@@ -768,12 +908,66 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 	}
 
+	//hash_policy_choice
+
+	hashPolicyChoiceTypeFound := false
+
+	if v, ok := d.GetOk("hash_policy_choice_least_active"); ok && !hashPolicyChoiceTypeFound {
+
+		hashPolicyChoiceTypeFound = true
+
+		if v.(bool) {
+			hashPolicyChoiceInt := &ves_io_schema_views_tcp_loadbalancer.CreateSpecType_HashPolicyChoiceLeastActive{}
+			hashPolicyChoiceInt.HashPolicyChoiceLeastActive = &ves_io_schema.Empty{}
+			createSpec.HashPolicyChoice = hashPolicyChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("hash_policy_choice_random"); ok && !hashPolicyChoiceTypeFound {
+
+		hashPolicyChoiceTypeFound = true
+
+		if v.(bool) {
+			hashPolicyChoiceInt := &ves_io_schema_views_tcp_loadbalancer.CreateSpecType_HashPolicyChoiceRandom{}
+			hashPolicyChoiceInt.HashPolicyChoiceRandom = &ves_io_schema.Empty{}
+			createSpec.HashPolicyChoice = hashPolicyChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("hash_policy_choice_round_robin"); ok && !hashPolicyChoiceTypeFound {
+
+		hashPolicyChoiceTypeFound = true
+
+		if v.(bool) {
+			hashPolicyChoiceInt := &ves_io_schema_views_tcp_loadbalancer.CreateSpecType_HashPolicyChoiceRoundRobin{}
+			hashPolicyChoiceInt.HashPolicyChoiceRoundRobin = &ves_io_schema.Empty{}
+			createSpec.HashPolicyChoice = hashPolicyChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("hash_policy_choice_source_ip_stickiness"); ok && !hashPolicyChoiceTypeFound {
+
+		hashPolicyChoiceTypeFound = true
+
+		if v.(bool) {
+			hashPolicyChoiceInt := &ves_io_schema_views_tcp_loadbalancer.CreateSpecType_HashPolicyChoiceSourceIpStickiness{}
+			hashPolicyChoiceInt.HashPolicyChoiceSourceIpStickiness = &ves_io_schema.Empty{}
+			createSpec.HashPolicyChoice = hashPolicyChoiceInt
+		}
+
+	}
+
+	//listen_port
 	if v, ok := d.GetOk("listen_port"); ok && !isIntfNil(v) {
 
 		createSpec.ListenPort =
 			uint32(v.(int))
 	}
 
+	//origin_pools_weights
 	if v, ok := d.GetOk("origin_pools_weights"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -781,7 +975,6 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 		createSpec.OriginPoolsWeights = originPoolsWeights
 		for i, set := range sl {
 			originPoolsWeights[i] = &ves_io_schema_views.OriginPoolWithWeight{}
-
 			originPoolsWeightsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := originPoolsWeightsMapStrToI["endpoint_subsets"]; ok && !isIntfNil(w) {
@@ -862,6 +1055,7 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 	}
 
+	//with_sni
 	if v, ok := d.GetOk("with_sni"); ok && !isIntfNil(v) {
 
 		createSpec.WithSni =
@@ -986,10 +1180,73 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 				advertiseChoiceInt.AdvertiseCustom.AdvertiseWhere = advertiseWhere
 				for i, set := range sl {
 					advertiseWhere[i] = &ves_io_schema_views.WhereType{}
-
 					advertiseWhereMapStrToI := set.(map[string]interface{})
 
 					choiceTypeFound := false
+
+					if v, ok := advertiseWhereMapStrToI["private_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.WhereType_PrivateNetwork{}
+						choiceInt.PrivateNetwork = &ves_io_schema_views.WherePrivateNetwork{}
+						advertiseWhere[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								privateNetwork := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.PrivateNetwork.PrivateNetwork = privateNetwork
+								for _, set := range sl {
+									privateNetworkMapStrToI := set.(map[string]interface{})
+
+									if w, ok := privateNetworkMapStrToI["name"]; ok && !isIntfNil(w) {
+										privateNetwork.Name = w.(string)
+									}
+
+									if w, ok := privateNetworkMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										privateNetwork.Namespace = w.(string)
+									}
+
+									if w, ok := privateNetworkMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										privateNetwork.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+							vipChoiceTypeFound := false
+
+							if v, ok := cs["default_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+
+								vipChoiceTypeFound = true
+
+								if v.(bool) {
+									vipChoiceInt := &ves_io_schema_views.WherePrivateNetwork_DefaultVip{}
+									vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
+									choiceInt.PrivateNetwork.VipChoice = vipChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+
+								vipChoiceTypeFound = true
+								vipChoiceInt := &ves_io_schema_views.WherePrivateNetwork_SpecificVip{}
+
+								choiceInt.PrivateNetwork.VipChoice = vipChoiceInt
+
+								vipChoiceInt.SpecificVip = v.(string)
+
+							}
+
+						}
+
+					}
 
 					if v, ok := advertiseWhereMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
@@ -1019,7 +1276,6 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 								site := &ves_io_schema_views.ObjectRefType{}
 								choiceInt.Site.Site = site
 								for _, set := range sl {
-
 									siteMapStrToI := set.(map[string]interface{})
 
 									if w, ok := siteMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -1065,7 +1321,6 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 								virtualSite := &ves_io_schema_views.ObjectRefType{}
 								choiceInt.VirtualSite.VirtualSite = virtualSite
 								for _, set := range sl {
-
 									virtualSiteMapStrToI := set.(map[string]interface{})
 
 									if w, ok := virtualSiteMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -1216,7 +1471,6 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 				publicIp := &ves_io_schema_views.ObjectRefType{}
 				advertiseChoiceInt.AdvertiseOnPublic.PublicIp = publicIp
 				for _, set := range sl {
-
 					publicIpMapStrToI := set.(map[string]interface{})
 
 					if w, ok := publicIpMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -1279,6 +1533,56 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 	}
 
+	hashPolicyChoiceTypeFound := false
+
+	if v, ok := d.GetOk("hash_policy_choice_least_active"); ok && !hashPolicyChoiceTypeFound {
+
+		hashPolicyChoiceTypeFound = true
+
+		if v.(bool) {
+			hashPolicyChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ReplaceSpecType_HashPolicyChoiceLeastActive{}
+			hashPolicyChoiceInt.HashPolicyChoiceLeastActive = &ves_io_schema.Empty{}
+			updateSpec.HashPolicyChoice = hashPolicyChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("hash_policy_choice_random"); ok && !hashPolicyChoiceTypeFound {
+
+		hashPolicyChoiceTypeFound = true
+
+		if v.(bool) {
+			hashPolicyChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ReplaceSpecType_HashPolicyChoiceRandom{}
+			hashPolicyChoiceInt.HashPolicyChoiceRandom = &ves_io_schema.Empty{}
+			updateSpec.HashPolicyChoice = hashPolicyChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("hash_policy_choice_round_robin"); ok && !hashPolicyChoiceTypeFound {
+
+		hashPolicyChoiceTypeFound = true
+
+		if v.(bool) {
+			hashPolicyChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ReplaceSpecType_HashPolicyChoiceRoundRobin{}
+			hashPolicyChoiceInt.HashPolicyChoiceRoundRobin = &ves_io_schema.Empty{}
+			updateSpec.HashPolicyChoice = hashPolicyChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("hash_policy_choice_source_ip_stickiness"); ok && !hashPolicyChoiceTypeFound {
+
+		hashPolicyChoiceTypeFound = true
+
+		if v.(bool) {
+			hashPolicyChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ReplaceSpecType_HashPolicyChoiceSourceIpStickiness{}
+			hashPolicyChoiceInt.HashPolicyChoiceSourceIpStickiness = &ves_io_schema.Empty{}
+			updateSpec.HashPolicyChoice = hashPolicyChoiceInt
+		}
+
+	}
+
 	if v, ok := d.GetOk("listen_port"); ok && !isIntfNil(v) {
 
 		updateSpec.ListenPort =
@@ -1318,7 +1622,6 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 		updateSpec.OriginPoolsWeights = originPoolsWeights
 		for i, set := range sl {
 			originPoolsWeights[i] = &ves_io_schema_views.OriginPoolWithWeight{}
-
 			originPoolsWeightsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := originPoolsWeightsMapStrToI["endpoint_subsets"]; ok && !isIntfNil(w) {

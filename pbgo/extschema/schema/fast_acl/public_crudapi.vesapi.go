@@ -2110,7 +2110,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the fast ACL rule",
+                    "description": " Specification of the desired behavior of the Fast ACL rule",
                     "title": "spec",
                     "$ref": "#/definitions/schemafast_aclCreateSpecType",
                     "x-displayname": "Spec"
@@ -2128,7 +2128,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the fast ACL rule",
+                    "description": " Specification of the desired behavior of the Fast ACL rule",
                     "title": "spec",
                     "$ref": "#/definitions/schemafast_aclGetSpecType",
                     "x-displayname": "Spec"
@@ -2332,7 +2332,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "42"
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the fast ACL rule",
+                    "description": " Specification of the desired behavior of the Fast ACL rule",
                     "title": "spec",
                     "$ref": "#/definitions/schemafast_aclGetSpecType",
                     "x-displayname": "Spec"
@@ -2390,7 +2390,7 @@ var APISwaggerJSON string = `{
                 },
                 "source_rules": {
                     "type": "array",
-                    "description": " List of fast ACL rules to be applied to received packets on this site",
+                    "description": " List of Fast ACL rules to be applied to received packets on this site",
                     "title": "Source Rules",
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
@@ -2533,7 +2533,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Metadata"
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the fast ACL rule",
+                    "description": " Specification of the desired behavior of the Fast ACL rule",
                     "title": "spec",
                     "$ref": "#/definitions/fast_aclSpecType",
                     "x-displayname": "Spec"
@@ -2555,12 +2555,12 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fast_acl.ReACLType",
             "properties": {
                 "all_public_vips": {
-                    "description": "Exclusive with [default_tenant_vip selected_tenant_vip]\nx-displayName: \"ALL Public VIP(s)\"\nApply this fast ACL to all public vips",
+                    "description": "Exclusive with [default_tenant_vip selected_tenant_vip]\nx-displayName: \"ALL Public VIP(s)\"\nApply this Fast ACL to all public vips",
                     "title": "All Public VIP(s)",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "default_tenant_vip": {
-                    "description": "Exclusive with [all_public_vips selected_tenant_vip]\nx-displayName: \"Default Tenant VIP\"\nApply this fast ACL to Default(dedicated) Tenant VIP",
+                    "description": "Exclusive with [all_public_vips selected_tenant_vip]\nx-displayName: \"Default Tenant VIP\"\nApply this Fast ACL to Default(dedicated) Tenant VIP",
                     "title": "Default Tenant VIP(s)",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
@@ -2574,7 +2574,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Rules"
                 },
                 "selected_tenant_vip": {
-                    "description": "Exclusive with [all_public_vips default_tenant_vip]\nx-displayName: \"List of Specific VIP(s)\"\nDo not apply to dedicated Tenant VIP\nApply this fast ACL to List of some selected public VIP(s)",
+                    "description": "Exclusive with [all_public_vips default_tenant_vip]\nx-displayName: \"List of Specific VIP(s)\"\nDo not apply to dedicated Tenant VIP\nApply this Fast ACL to List of some selected public VIP(s)",
                     "title": "Chose Specific VIP(s)",
                     "$ref": "#/definitions/fast_aclSelectedTenantVIPsType"
                 }
@@ -2601,7 +2601,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "42"
                 },
                 "spec": {
-                    "description": " Specification of the desired behavior of the fast ACL rule",
+                    "description": " Specification of the desired behavior of the Fast ACL rule",
                     "title": "spec",
                     "$ref": "#/definitions/schemafast_aclReplaceSpecType",
                     "x-displayname": "Spec"
@@ -3792,7 +3792,7 @@ var APISwaggerJSON string = `{
                 },
                 "source_rules": {
                     "type": "array",
-                    "description": " List of fast ACL rules to be applied to received packets on this site",
+                    "description": " List of Fast ACL rules to be applied to received packets on this site",
                     "title": "Source Rules",
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"

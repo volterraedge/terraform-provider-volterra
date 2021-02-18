@@ -706,11 +706,9 @@ type ConsulHttpBasicAuthInfoType struct {
 	PasswdUrl *ves_io_schema4.SecretType `protobuf:"bytes,2,opt,name=passwd_url,json=passwdUrl" json:"passwd_url,omitempty"`
 }
 
-func (m *ConsulHttpBasicAuthInfoType) Reset()      { *m = ConsulHttpBasicAuthInfoType{} }
-func (*ConsulHttpBasicAuthInfoType) ProtoMessage() {}
-func (*ConsulHttpBasicAuthInfoType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{6}
-}
+func (m *ConsulHttpBasicAuthInfoType) Reset()                    { *m = ConsulHttpBasicAuthInfoType{} }
+func (*ConsulHttpBasicAuthInfoType) ProtoMessage()               {}
+func (*ConsulHttpBasicAuthInfoType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
 
 func (m *ConsulHttpBasicAuthInfoType) GetUserName() string {
 	if m != nil {
@@ -1119,11 +1117,9 @@ type ConsulVipDiscoveryInfoType struct {
 	PublishChoice isConsulVipDiscoveryInfoType_PublishChoice `protobuf_oneof:"publish_choice"`
 }
 
-func (m *ConsulVipDiscoveryInfoType) Reset()      { *m = ConsulVipDiscoveryInfoType{} }
-func (*ConsulVipDiscoveryInfoType) ProtoMessage() {}
-func (*ConsulVipDiscoveryInfoType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{12}
-}
+func (m *ConsulVipDiscoveryInfoType) Reset()                    { *m = ConsulVipDiscoveryInfoType{} }
+func (*ConsulVipDiscoveryInfoType) ProtoMessage()               {}
+func (*ConsulVipDiscoveryInfoType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
 
 type isConsulVipDiscoveryInfoType_PublishChoice interface {
 	isConsulVipDiscoveryInfoType_PublishChoice()

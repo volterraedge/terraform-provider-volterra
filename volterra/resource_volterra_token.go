@@ -255,16 +255,21 @@ func resourceVolterraTokenDelete(d *schema.ResourceData, meta interface{}) error
 	name := d.Get("name").(string)
 	namespace := d.Get("namespace").(string)
 
-	_, err := client.GetObject(context.Background(), ves_io_schema_token.ObjectType, namespace, name)
-	if err != nil {
-		if strings.Contains(err.Error(), "status code 404") {
-			log.Printf("[INFO] Token %s no longer exists", d.Id())
-			d.SetId("")
-			return nil
+	createdHere := d.Get("created_by_tf").(bool)
+	if createdHere {
+		_, err := client.GetObject(context.Background(), ves_io_schema_token.ObjectType, namespace, name)
+		if err != nil {
+			if strings.Contains(err.Error(), "status code 404") {
+				log.Printf("[INFO] Token %s no longer exists", d.Id())
+				d.SetId("")
+				return nil
+			}
+			return fmt.Errorf("Error finding Volterra Token before deleting %q: %s", d.Id(), err)
 		}
-		return fmt.Errorf("Error finding Volterra Token before deleting %q: %s", d.Id(), err)
-	}
 
-	log.Printf("[DEBUG] Deleting Volterra Token obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_token.ObjectType, namespace, name)
+		log.Printf("[DEBUG] Deleting Volterra Token obj with name %+v in namespace %+v", name, namespace)
+		return client.DeleteObject(context.Background(), ves_io_schema_token.ObjectType, namespace, name)
+	}
+	log.Printf("[DEBUG] Ignoring deletion of the token as it was not created by this resources")
+	return nil
 }

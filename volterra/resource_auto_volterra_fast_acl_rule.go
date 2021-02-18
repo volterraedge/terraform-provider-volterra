@@ -51,11 +51,13 @@ func resourceVolterraFastAclRule() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"action": {
@@ -292,13 +294,13 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 			v.(string)
 	}
 
+	//action
 	if v, ok := d.GetOk("action"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		action := &ves_io_schema_fast_acl_rule.FastAclRuleAction{}
 		createSpec.Action = action
 		for _, set := range sl {
-
 			actionMapStrToI := set.(map[string]interface{})
 
 			actionTypeFound := false
@@ -412,6 +414,7 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//port
 	if v, ok := d.GetOk("port"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -419,7 +422,6 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 		createSpec.Port = port
 		for i, set := range sl {
 			port[i] = &ves_io_schema.PortValueType{}
-
 			portMapStrToI := set.(map[string]interface{})
 
 			portValueTypeChoiceTypeFound := false
@@ -463,6 +465,8 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 		}
 
 	}
+
+	//source
 
 	sourceTypeFound := false
 
@@ -642,7 +646,6 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 		action := &ves_io_schema_fast_acl_rule.FastAclRuleAction{}
 		updateSpec.Action = action
 		for _, set := range sl {
-
 			actionMapStrToI := set.(map[string]interface{})
 
 			actionTypeFound := false
@@ -763,7 +766,6 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 		updateSpec.Port = port
 		for i, set := range sl {
 			port[i] = &ves_io_schema.PortValueType{}
-
 			portMapStrToI := set.(map[string]interface{})
 
 			portValueTypeChoiceTypeFound := false

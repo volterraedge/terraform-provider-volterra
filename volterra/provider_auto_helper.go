@@ -20,6 +20,7 @@ import (
 	ves_io_schema_bgp_asn_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp_asn_set"
 	ves_io_schema_cloud_credentials "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials"
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
+	ves_io_schema_dc_cluster_group "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dc_cluster_group"
 	ves_io_schema_discovery "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/discovery"
 	ves_io_schema_endpoint "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/endpoint"
 	ves_io_schema_fast_acl "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl"
@@ -28,6 +29,10 @@ import (
 	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	ves_io_schema_healthcheck "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/healthcheck"
 	ves_io_schema_ip_prefix_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ip_prefix_set"
+	ves_io_schema_k8s_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster"
+	ves_io_schema_k8s_cluster_role "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role"
+	ves_io_schema_k8s_cluster_role_binding "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role_binding"
+	ves_io_schema_k8s_pod_security_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_pod_security_policy"
 	ves_io_schema_malicious_user_mitigation "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation"
 	ves_io_schema_network_connector "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_connector"
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
@@ -56,6 +61,7 @@ import (
 	ves_io_schema_network_policy_view "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/network_policy_view"
 	ves_io_schema_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 	ves_io_schema_tcp_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer"
+	ves_io_schema_voltstack_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/voltstack_site"
 	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 	ves_io_schema_virtual_k8s "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_k8s"
 	ves_io_schema_virtual_network "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_network"
@@ -77,6 +83,7 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_bgp_asn_set":               resourceVolterraBgpAsnSet(),
 		"volterra_cloud_credentials":         resourceVolterraCloudCredentials(),
 		"volterra_cluster":                   resourceVolterraCluster(),
+		"volterra_dc_cluster_group":          resourceVolterraDcClusterGroup(),
 		"volterra_discovery":                 resourceVolterraDiscovery(),
 		"volterra_endpoint":                  resourceVolterraEndpoint(),
 		"volterra_fast_acl":                  resourceVolterraFastAcl(),
@@ -85,6 +92,10 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_fleet":                     resourceVolterraFleet(),
 		"volterra_healthcheck":               resourceVolterraHealthcheck(),
 		"volterra_ip_prefix_set":             resourceVolterraIpPrefixSet(),
+		"volterra_k8s_cluster":               resourceVolterraK8SCluster(),
+		"volterra_k8s_cluster_role":          resourceVolterraK8SClusterRole(),
+		"volterra_k8s_cluster_role_binding":  resourceVolterraK8SClusterRoleBinding(),
+		"volterra_k8s_pod_security_policy":   resourceVolterraK8SPodSecurityPolicy(),
 		"volterra_malicious_user_mitigation": resourceVolterraMaliciousUserMitigation(),
 		"volterra_network_connector":         resourceVolterraNetworkConnector(),
 		"volterra_network_firewall":          resourceVolterraNetworkFirewall(),
@@ -113,6 +124,7 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_network_policy_view":       resourceVolterraNetworkPolicyView(),
 		"volterra_origin_pool":               resourceVolterraOriginPool(),
 		"volterra_tcp_loadbalancer":          resourceVolterraTcpLoadbalancer(),
+		"volterra_voltstack_site":            resourceVolterraVoltstackSite(),
 		"volterra_virtual_host":              resourceVolterraVirtualHost(),
 		"volterra_virtual_k8s":               resourceVolterraVirtualK8S(),
 		"volterra_virtual_network":           resourceVolterraVirtualNetwork(),
@@ -136,6 +148,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_bgp_asn_set.ObjectType,
 		ves_io_schema_cloud_credentials.ObjectType,
 		ves_io_schema_cluster.ObjectType,
+		ves_io_schema_dc_cluster_group.ObjectType,
 		ves_io_schema_discovery.ObjectType,
 		ves_io_schema_endpoint.ObjectType,
 		ves_io_schema_fast_acl.ObjectType,
@@ -144,6 +157,10 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_fleet.ObjectType,
 		ves_io_schema_healthcheck.ObjectType,
 		ves_io_schema_ip_prefix_set.ObjectType,
+		ves_io_schema_k8s_cluster.ObjectType,
+		ves_io_schema_k8s_cluster_role.ObjectType,
+		ves_io_schema_k8s_cluster_role_binding.ObjectType,
+		ves_io_schema_k8s_pod_security_policy.ObjectType,
 		ves_io_schema_malicious_user_mitigation.ObjectType,
 		ves_io_schema_network_connector.ObjectType,
 		ves_io_schema_network_firewall.ObjectType,
@@ -172,6 +189,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_network_policy_view.ObjectType,
 		ves_io_schema_origin_pool.ObjectType,
 		ves_io_schema_tcp_loadbalancer.ObjectType,
+		ves_io_schema_voltstack_site.ObjectType,
 		ves_io_schema_virtual_host.ObjectType,
 		ves_io_schema_virtual_k8s.ObjectType,
 		ves_io_schema_virtual_network.ObjectType,

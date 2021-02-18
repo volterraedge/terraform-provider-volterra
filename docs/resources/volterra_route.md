@@ -30,7 +30,7 @@ resource "volterra_route" "example" {
         name         = "Content-Type"
 
         // One of the arguments from this list "exact regex presence" must be set
-        regex = "regex"
+        presence = true
       }
 
       http_method = "http_method"
@@ -107,7 +107,12 @@ resource "volterra_route" "example" {
 
       hash_policy {
         // One of the arguments from this list "header_name cookie source_ip" must be set
-        header_name = "host"
+
+        cookie {
+          name = "userid"
+          path = "/Users/userid/browser/cookies"
+          ttl  = "ttl"
+        }
 
         terminal = true
       }

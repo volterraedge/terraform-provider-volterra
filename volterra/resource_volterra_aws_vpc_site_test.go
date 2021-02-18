@@ -105,6 +105,7 @@ func testAWSVPCSiteIEConfig(resourceName, cloudCred, name string) string {
 			no_outside_static_routes = true
 			no_forward_proxy = true
 		  }
+		  logs_streaming_disabled = true
 		  ssh_key = "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAD5sRjpKVBvf5afxhysXd4GyvEFaiDOnPhKQcK8SHNUxkGkjhRV6xMFpBBApNctQ73yaHweV//OhBHurwzUodKOWAEyH+ay0V2BAOpx2aiQHxiMh7b0CGYVxv4lRZ4IPZ1Da9Siz1Sz19RYBjVM7v6Dvo2UlYftUyauKPIDPnd19iN10g=="
 
 		}`, resourceName, name, cloudCred)
@@ -139,6 +140,7 @@ func testAWSVPCSiteIConfig(resourceName, cloudCred, name string) string {
 		    }
 		  }
 		}
+		logs_streaming_disabled = true
 	  }`, resourceName, name, cloudCred)
 }
 

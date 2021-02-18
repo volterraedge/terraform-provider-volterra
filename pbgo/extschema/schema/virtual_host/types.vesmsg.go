@@ -1215,6 +1215,21 @@ func (v *ValidateCreateSpecType) ChallengeTypeValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) ServerHeaderChoiceServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ServerName, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
+	}
+	return oValidatorFn_ServerName, nil
+}
+func (v *ValidateCreateSpecType) ServerHeaderChoiceAppendServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AppendServerName, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for append_server_name")
+	}
+	return oValidatorFn_AppendServerName, nil
+}
+
 func (v *ValidateCreateSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -1758,6 +1773,54 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetServerHeaderChoice().(type) {
+	case *CreateSpecType_DefaultHeader:
+		if fv, exists := v.FldValidators["server_header_choice.default_header"]; exists {
+			val := m.GetServerHeaderChoice().(*CreateSpecType_DefaultHeader).DefaultHeader
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("default_header"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ServerName:
+		if fv, exists := v.FldValidators["server_header_choice.server_name"]; exists {
+			val := m.GetServerHeaderChoice().(*CreateSpecType_ServerName).ServerName
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("server_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_AppendServerName:
+		if fv, exists := v.FldValidators["server_header_choice.append_server_name"]; exists {
+			val := m.GetServerHeaderChoice().(*CreateSpecType_AppendServerName).AppendServerName
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("append_server_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_PassThrough:
+		if fv, exists := v.FldValidators["server_header_choice.pass_through"]; exists {
+			val := m.GetServerHeaderChoice().(*CreateSpecType_PassThrough).PassThrough
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("pass_through"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["temporary_user_blocking"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("temporary_user_blocking"))
@@ -1819,6 +1882,28 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["challenge_type"] = vFn
 
+	vrhServerHeaderChoiceServerName := v.ServerHeaderChoiceServerNameValidationRuleHandler
+	rulesServerHeaderChoiceServerName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFnMap["server_header_choice.server_name"], err = vrhServerHeaderChoiceServerName(rulesServerHeaderChoiceServerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.server_header_choice_server_name: %s", err)
+		panic(errMsg)
+	}
+	vrhServerHeaderChoiceAppendServerName := v.ServerHeaderChoiceAppendServerNameValidationRuleHandler
+	rulesServerHeaderChoiceAppendServerName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFnMap["server_header_choice.append_server_name"], err = vrhServerHeaderChoiceAppendServerName(rulesServerHeaderChoiceAppendServerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.server_header_choice_append_server_name: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["server_header_choice.server_name"] = vFnMap["server_header_choice.server_name"]
+	v.FldValidators["server_header_choice.append_server_name"] = vFnMap["server_header_choice.append_server_name"]
+
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
@@ -1848,7 +1933,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
 		"ves.io.schema.rules.map.keys.uint32.lte":       "599",
 		"ves.io.schema.rules.map.max_pairs":             "16",
-		"ves.io.schema.rules.map.values.string.max_len": "8192",
+		"ves.io.schema.rules.map.values.string.max_len": "16384",
 		"ves.io.schema.rules.map.values.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomErrors(rulesCustomErrors)
@@ -2485,6 +2570,21 @@ func (v *ValidateGetSpecType) ChallengeTypeValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) ServerHeaderChoiceServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ServerName, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
+	}
+	return oValidatorFn_ServerName, nil
+}
+func (v *ValidateGetSpecType) ServerHeaderChoiceAppendServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AppendServerName, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for append_server_name")
+	}
+	return oValidatorFn_AppendServerName, nil
+}
+
 func (v *ValidateGetSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -3067,6 +3167,54 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	switch m.GetServerHeaderChoice().(type) {
+	case *GetSpecType_DefaultHeader:
+		if fv, exists := v.FldValidators["server_header_choice.default_header"]; exists {
+			val := m.GetServerHeaderChoice().(*GetSpecType_DefaultHeader).DefaultHeader
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("default_header"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ServerName:
+		if fv, exists := v.FldValidators["server_header_choice.server_name"]; exists {
+			val := m.GetServerHeaderChoice().(*GetSpecType_ServerName).ServerName
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("server_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_AppendServerName:
+		if fv, exists := v.FldValidators["server_header_choice.append_server_name"]; exists {
+			val := m.GetServerHeaderChoice().(*GetSpecType_AppendServerName).AppendServerName
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("append_server_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_PassThrough:
+		if fv, exists := v.FldValidators["server_header_choice.pass_through"]; exists {
+			val := m.GetServerHeaderChoice().(*GetSpecType_PassThrough).PassThrough
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("pass_through"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("state"))
@@ -3146,6 +3294,28 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["challenge_type"] = vFn
 
+	vrhServerHeaderChoiceServerName := v.ServerHeaderChoiceServerNameValidationRuleHandler
+	rulesServerHeaderChoiceServerName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFnMap["server_header_choice.server_name"], err = vrhServerHeaderChoiceServerName(rulesServerHeaderChoiceServerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.server_header_choice_server_name: %s", err)
+		panic(errMsg)
+	}
+	vrhServerHeaderChoiceAppendServerName := v.ServerHeaderChoiceAppendServerNameValidationRuleHandler
+	rulesServerHeaderChoiceAppendServerName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFnMap["server_header_choice.append_server_name"], err = vrhServerHeaderChoiceAppendServerName(rulesServerHeaderChoiceAppendServerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.server_header_choice_append_server_name: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["server_header_choice.server_name"] = vFnMap["server_header_choice.server_name"]
+	v.FldValidators["server_header_choice.append_server_name"] = vFnMap["server_header_choice.append_server_name"]
+
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
@@ -3175,7 +3345,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
 		"ves.io.schema.rules.map.keys.uint32.lte":       "599",
 		"ves.io.schema.rules.map.max_pairs":             "16",
-		"ves.io.schema.rules.map.values.string.max_len": "8192",
+		"ves.io.schema.rules.map.values.string.max_len": "16384",
 		"ves.io.schema.rules.map.values.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomErrors(rulesCustomErrors)
@@ -3894,6 +4064,21 @@ func (v *ValidateGlobalSpecType) ChallengeTypeValidationRuleHandler(rules map[st
 		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_type")
 	}
 	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ServerHeaderChoiceServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ServerName, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
+	}
+	return oValidatorFn_ServerName, nil
+}
+func (v *ValidateGlobalSpecType) ServerHeaderChoiceAppendServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AppendServerName, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for append_server_name")
+	}
+	return oValidatorFn_AppendServerName, nil
 }
 
 func (v *ValidateGlobalSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -4715,6 +4900,54 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetServerHeaderChoice().(type) {
+	case *GlobalSpecType_DefaultHeader:
+		if fv, exists := v.FldValidators["server_header_choice.default_header"]; exists {
+			val := m.GetServerHeaderChoice().(*GlobalSpecType_DefaultHeader).DefaultHeader
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("default_header"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ServerName:
+		if fv, exists := v.FldValidators["server_header_choice.server_name"]; exists {
+			val := m.GetServerHeaderChoice().(*GlobalSpecType_ServerName).ServerName
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("server_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_AppendServerName:
+		if fv, exists := v.FldValidators["server_header_choice.append_server_name"]; exists {
+			val := m.GetServerHeaderChoice().(*GlobalSpecType_AppendServerName).AppendServerName
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("append_server_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_PassThrough:
+		if fv, exists := v.FldValidators["server_header_choice.pass_through"]; exists {
+			val := m.GetServerHeaderChoice().(*GlobalSpecType_PassThrough).PassThrough
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("pass_through"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["service_policy_sets"]; exists {
 		vOpts := append(opts, db.WithValidateField("service_policy_sets"))
 		if err := fv(ctx, m.GetServicePolicySets(), vOpts...); err != nil {
@@ -4819,6 +5052,28 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["challenge_type"] = vFn
 
+	vrhServerHeaderChoiceServerName := v.ServerHeaderChoiceServerNameValidationRuleHandler
+	rulesServerHeaderChoiceServerName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFnMap["server_header_choice.server_name"], err = vrhServerHeaderChoiceServerName(rulesServerHeaderChoiceServerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.server_header_choice_server_name: %s", err)
+		panic(errMsg)
+	}
+	vrhServerHeaderChoiceAppendServerName := v.ServerHeaderChoiceAppendServerNameValidationRuleHandler
+	rulesServerHeaderChoiceAppendServerName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFnMap["server_header_choice.append_server_name"], err = vrhServerHeaderChoiceAppendServerName(rulesServerHeaderChoiceAppendServerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.server_header_choice_append_server_name: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["server_header_choice.server_name"] = vFnMap["server_header_choice.server_name"]
+	v.FldValidators["server_header_choice.append_server_name"] = vFnMap["server_header_choice.append_server_name"]
+
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
@@ -4848,7 +5103,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
 		"ves.io.schema.rules.map.keys.uint32.lte":       "599",
 		"ves.io.schema.rules.map.max_pairs":             "16",
-		"ves.io.schema.rules.map.values.string.max_len": "8192",
+		"ves.io.schema.rules.map.values.string.max_len": "16384",
 		"ves.io.schema.rules.map.values.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomErrors(rulesCustomErrors)
@@ -5349,10 +5604,10 @@ type ValidatePolicyBasedChallenge struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidatePolicyBasedChallenge) EnableChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidatePolicyBasedChallenge) ChallengeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for enable_choice")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_choice")
 	}
 	return validatorFn, nil
 }
@@ -5420,45 +5675,45 @@ func (v *ValidatePolicyBasedChallenge) Validate(ctx context.Context, pm interfac
 
 	}
 
-	if fv, exists := v.FldValidators["enable_choice"]; exists {
-		val := m.GetEnableChoice()
+	if fv, exists := v.FldValidators["challenge_choice"]; exists {
+		val := m.GetChallengeChoice()
 		vOpts := append(opts,
-			db.WithValidateField("enable_choice"),
+			db.WithValidateField("challenge_choice"),
 		)
 		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
 		}
 	}
 
-	switch m.GetEnableChoice().(type) {
-	case *PolicyBasedChallenge_RuleBasedChallenge:
-		if fv, exists := v.FldValidators["enable_choice.rule_based_challenge"]; exists {
-			val := m.GetEnableChoice().(*PolicyBasedChallenge_RuleBasedChallenge).RuleBasedChallenge
+	switch m.GetChallengeChoice().(type) {
+	case *PolicyBasedChallenge_NoChallenge:
+		if fv, exists := v.FldValidators["challenge_choice.no_challenge"]; exists {
+			val := m.GetChallengeChoice().(*PolicyBasedChallenge_NoChallenge).NoChallenge
 			vOpts := append(opts,
-				db.WithValidateField("enable_choice"),
-				db.WithValidateField("rule_based_challenge"),
+				db.WithValidateField("challenge_choice"),
+				db.WithValidateField("no_challenge"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
 	case *PolicyBasedChallenge_AlwaysEnableJsChallenge:
-		if fv, exists := v.FldValidators["enable_choice.always_enable_js_challenge"]; exists {
-			val := m.GetEnableChoice().(*PolicyBasedChallenge_AlwaysEnableJsChallenge).AlwaysEnableJsChallenge
+		if fv, exists := v.FldValidators["challenge_choice.always_enable_js_challenge"]; exists {
+			val := m.GetChallengeChoice().(*PolicyBasedChallenge_AlwaysEnableJsChallenge).AlwaysEnableJsChallenge
 			vOpts := append(opts,
-				db.WithValidateField("enable_choice"),
+				db.WithValidateField("challenge_choice"),
 				db.WithValidateField("always_enable_js_challenge"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *PolicyBasedChallenge_AlwaysEnableCaptcha:
-		if fv, exists := v.FldValidators["enable_choice.always_enable_captcha"]; exists {
-			val := m.GetEnableChoice().(*PolicyBasedChallenge_AlwaysEnableCaptcha).AlwaysEnableCaptcha
+	case *PolicyBasedChallenge_AlwaysEnableCaptchaChallenge:
+		if fv, exists := v.FldValidators["challenge_choice.always_enable_captcha_challenge"]; exists {
+			val := m.GetChallengeChoice().(*PolicyBasedChallenge_AlwaysEnableCaptchaChallenge).AlwaysEnableCaptchaChallenge
 			vOpts := append(opts,
-				db.WithValidateField("enable_choice"),
-				db.WithValidateField("always_enable_captcha"),
+				db.WithValidateField("challenge_choice"),
+				db.WithValidateField("always_enable_captcha_challenge"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -5508,16 +5763,16 @@ var DefaultPolicyBasedChallengeValidator = func() *ValidatePolicyBasedChallenge 
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhEnableChoice := v.EnableChoiceValidationRuleHandler
-	rulesEnableChoice := map[string]string{
+	vrhChallengeChoice := v.ChallengeChoiceValidationRuleHandler
+	rulesChallengeChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhEnableChoice(rulesEnableChoice)
+	vFn, err = vrhChallengeChoice(rulesChallengeChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for PolicyBasedChallenge.enable_choice: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PolicyBasedChallenge.challenge_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["enable_choice"] = vFn
+	v.FldValidators["challenge_choice"] = vFn
 
 	vrhMaliciousUserMitigation := v.MaliciousUserMitigationValidationRuleHandler
 	rulesMaliciousUserMitigation := map[string]string{
@@ -5943,6 +6198,21 @@ func (v *ValidateReplaceSpecType) ChallengeTypeValidationRuleHandler(rules map[s
 		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_type")
 	}
 	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ServerHeaderChoiceServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ServerName, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
+	}
+	return oValidatorFn_ServerName, nil
+}
+func (v *ValidateReplaceSpecType) ServerHeaderChoiceAppendServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AppendServerName, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for append_server_name")
+	}
+	return oValidatorFn_AppendServerName, nil
 }
 
 func (v *ValidateReplaceSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -6488,6 +6758,54 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	switch m.GetServerHeaderChoice().(type) {
+	case *ReplaceSpecType_DefaultHeader:
+		if fv, exists := v.FldValidators["server_header_choice.default_header"]; exists {
+			val := m.GetServerHeaderChoice().(*ReplaceSpecType_DefaultHeader).DefaultHeader
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("default_header"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ServerName:
+		if fv, exists := v.FldValidators["server_header_choice.server_name"]; exists {
+			val := m.GetServerHeaderChoice().(*ReplaceSpecType_ServerName).ServerName
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("server_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_AppendServerName:
+		if fv, exists := v.FldValidators["server_header_choice.append_server_name"]; exists {
+			val := m.GetServerHeaderChoice().(*ReplaceSpecType_AppendServerName).AppendServerName
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("append_server_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_PassThrough:
+		if fv, exists := v.FldValidators["server_header_choice.pass_through"]; exists {
+			val := m.GetServerHeaderChoice().(*ReplaceSpecType_PassThrough).PassThrough
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("pass_through"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["temporary_user_blocking"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("temporary_user_blocking"))
@@ -6549,6 +6867,28 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["challenge_type"] = vFn
 
+	vrhServerHeaderChoiceServerName := v.ServerHeaderChoiceServerNameValidationRuleHandler
+	rulesServerHeaderChoiceServerName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFnMap["server_header_choice.server_name"], err = vrhServerHeaderChoiceServerName(rulesServerHeaderChoiceServerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.server_header_choice_server_name: %s", err)
+		panic(errMsg)
+	}
+	vrhServerHeaderChoiceAppendServerName := v.ServerHeaderChoiceAppendServerNameValidationRuleHandler
+	rulesServerHeaderChoiceAppendServerName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFnMap["server_header_choice.append_server_name"], err = vrhServerHeaderChoiceAppendServerName(rulesServerHeaderChoiceAppendServerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.server_header_choice_append_server_name: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["server_header_choice.server_name"] = vFnMap["server_header_choice.server_name"]
+	v.FldValidators["server_header_choice.append_server_name"] = vFnMap["server_header_choice.append_server_name"]
+
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
@@ -6578,7 +6918,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
 		"ves.io.schema.rules.map.keys.uint32.lte":       "599",
 		"ves.io.schema.rules.map.max_pairs":             "16",
-		"ves.io.schema.rules.map.values.string.max_len": "8192",
+		"ves.io.schema.rules.map.values.string.max_len": "16384",
 		"ves.io.schema.rules.map.values.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomErrors(rulesCustomErrors)
@@ -6846,6 +7186,53 @@ func (r *CreateSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) e
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetServerHeaderChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ServerHeaderChoice.(type) {
+	case nil:
+		o.ServerHeaderChoice = nil
+
+	case *CreateSpecType_AppendServerName:
+		o.ServerHeaderChoice = &GlobalSpecType_AppendServerName{AppendServerName: of.AppendServerName}
+
+	case *CreateSpecType_DefaultHeader:
+		o.ServerHeaderChoice = &GlobalSpecType_DefaultHeader{DefaultHeader: of.DefaultHeader}
+
+	case *CreateSpecType_PassThrough:
+		o.ServerHeaderChoice = &GlobalSpecType_PassThrough{PassThrough: of.PassThrough}
+
+	case *CreateSpecType_ServerName:
+		o.ServerHeaderChoice = &GlobalSpecType_ServerName{ServerName: of.ServerName}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetServerHeaderChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ServerHeaderChoice.(type) {
+	case nil:
+		r.ServerHeaderChoice = nil
+
+	case *GlobalSpecType_AppendServerName:
+		r.ServerHeaderChoice = &CreateSpecType_AppendServerName{AppendServerName: of.AppendServerName}
+
+	case *GlobalSpecType_DefaultHeader:
+		r.ServerHeaderChoice = &CreateSpecType_DefaultHeader{DefaultHeader: of.DefaultHeader}
+
+	case *GlobalSpecType_PassThrough:
+		r.ServerHeaderChoice = &CreateSpecType_PassThrough{PassThrough: of.PassThrough}
+
+	case *GlobalSpecType_ServerName:
+		r.ServerHeaderChoice = &CreateSpecType_ServerName{ServerName: of.ServerName}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -6873,6 +7260,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.ResponseHeadersToRemove = f.GetResponseHeadersToRemove()
 	m.RetryPolicy = f.GetRetryPolicy()
 	m.Routes = f.GetRoutes()
+	m.GetServerHeaderChoiceFromGlobalSpecType(f)
 	m.TemporaryUserBlocking = f.GetTemporaryUserBlocking()
 	m.TlsParameters = f.GetTlsParameters()
 	m.UserIdentification = f.GetUserIdentification()
@@ -6908,6 +7296,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.ResponseHeadersToRemove = m1.ResponseHeadersToRemove
 	f.RetryPolicy = m1.RetryPolicy
 	f.Routes = m1.Routes
+	m1.SetServerHeaderChoiceToGlobalSpecType(f)
 	f.TemporaryUserBlocking = m1.TemporaryUserBlocking
 	f.TlsParameters = m1.TlsParameters
 	f.UserIdentification = m1.UserIdentification
@@ -6990,6 +7379,53 @@ func (r *GetSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) erro
 	return nil
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetServerHeaderChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ServerHeaderChoice.(type) {
+	case nil:
+		o.ServerHeaderChoice = nil
+
+	case *GetSpecType_AppendServerName:
+		o.ServerHeaderChoice = &GlobalSpecType_AppendServerName{AppendServerName: of.AppendServerName}
+
+	case *GetSpecType_DefaultHeader:
+		o.ServerHeaderChoice = &GlobalSpecType_DefaultHeader{DefaultHeader: of.DefaultHeader}
+
+	case *GetSpecType_PassThrough:
+		o.ServerHeaderChoice = &GlobalSpecType_PassThrough{PassThrough: of.PassThrough}
+
+	case *GetSpecType_ServerName:
+		o.ServerHeaderChoice = &GlobalSpecType_ServerName{ServerName: of.ServerName}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetServerHeaderChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ServerHeaderChoice.(type) {
+	case nil:
+		r.ServerHeaderChoice = nil
+
+	case *GlobalSpecType_AppendServerName:
+		r.ServerHeaderChoice = &GetSpecType_AppendServerName{AppendServerName: of.AppendServerName}
+
+	case *GlobalSpecType_DefaultHeader:
+		r.ServerHeaderChoice = &GetSpecType_DefaultHeader{DefaultHeader: of.DefaultHeader}
+
+	case *GlobalSpecType_PassThrough:
+		r.ServerHeaderChoice = &GetSpecType_PassThrough{PassThrough: of.PassThrough}
+
+	case *GlobalSpecType_ServerName:
+		r.ServerHeaderChoice = &GetSpecType_ServerName{ServerName: of.ServerName}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -7021,6 +7457,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.ResponseHeadersToRemove = f.GetResponseHeadersToRemove()
 	m.RetryPolicy = f.GetRetryPolicy()
 	m.Routes = f.GetRoutes()
+	m.GetServerHeaderChoiceFromGlobalSpecType(f)
 	m.State = f.GetState()
 	m.TemporaryUserBlocking = f.GetTemporaryUserBlocking()
 	m.TlsParameters = f.GetTlsParameters()
@@ -7062,6 +7499,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.ResponseHeadersToRemove = m1.ResponseHeadersToRemove
 	f.RetryPolicy = m1.RetryPolicy
 	f.Routes = m1.Routes
+	m1.SetServerHeaderChoiceToGlobalSpecType(f)
 	f.State = m1.State
 	f.TemporaryUserBlocking = m1.TemporaryUserBlocking
 	f.TlsParameters = m1.TlsParameters
@@ -7146,6 +7584,53 @@ func (r *ReplaceSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) 
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetServerHeaderChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ServerHeaderChoice.(type) {
+	case nil:
+		o.ServerHeaderChoice = nil
+
+	case *ReplaceSpecType_AppendServerName:
+		o.ServerHeaderChoice = &GlobalSpecType_AppendServerName{AppendServerName: of.AppendServerName}
+
+	case *ReplaceSpecType_DefaultHeader:
+		o.ServerHeaderChoice = &GlobalSpecType_DefaultHeader{DefaultHeader: of.DefaultHeader}
+
+	case *ReplaceSpecType_PassThrough:
+		o.ServerHeaderChoice = &GlobalSpecType_PassThrough{PassThrough: of.PassThrough}
+
+	case *ReplaceSpecType_ServerName:
+		o.ServerHeaderChoice = &GlobalSpecType_ServerName{ServerName: of.ServerName}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetServerHeaderChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ServerHeaderChoice.(type) {
+	case nil:
+		r.ServerHeaderChoice = nil
+
+	case *GlobalSpecType_AppendServerName:
+		r.ServerHeaderChoice = &ReplaceSpecType_AppendServerName{AppendServerName: of.AppendServerName}
+
+	case *GlobalSpecType_DefaultHeader:
+		r.ServerHeaderChoice = &ReplaceSpecType_DefaultHeader{DefaultHeader: of.DefaultHeader}
+
+	case *GlobalSpecType_PassThrough:
+		r.ServerHeaderChoice = &ReplaceSpecType_PassThrough{PassThrough: of.PassThrough}
+
+	case *GlobalSpecType_ServerName:
+		r.ServerHeaderChoice = &ReplaceSpecType_ServerName{ServerName: of.ServerName}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -7173,6 +7658,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.ResponseHeadersToRemove = f.GetResponseHeadersToRemove()
 	m.RetryPolicy = f.GetRetryPolicy()
 	m.Routes = f.GetRoutes()
+	m.GetServerHeaderChoiceFromGlobalSpecType(f)
 	m.TemporaryUserBlocking = f.GetTemporaryUserBlocking()
 	m.TlsParameters = f.GetTlsParameters()
 	m.UserIdentification = f.GetUserIdentification()
@@ -7208,6 +7694,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.ResponseHeadersToRemove = m1.ResponseHeadersToRemove
 	f.RetryPolicy = m1.RetryPolicy
 	f.Routes = m1.Routes
+	m1.SetServerHeaderChoiceToGlobalSpecType(f)
 	f.TemporaryUserBlocking = m1.TemporaryUserBlocking
 	f.TlsParameters = m1.TlsParameters
 	f.UserIdentification = m1.UserIdentification

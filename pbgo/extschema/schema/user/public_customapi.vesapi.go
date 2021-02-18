@@ -135,6 +135,9 @@ func (c *CustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...ser
 	if err != nil {
 		return nil, errors.Wrap(err, "Doing custom RPC using GRPC")
 	}
+	if cco.OutCallResponse != nil {
+		cco.OutCallResponse.ProtoMsg = rsp
+	}
 	return rsp, nil
 }
 
@@ -244,6 +247,10 @@ func (c *CustomAPIRestClient) doRPCAcceptTOS(ctx context.Context, callOpts *serv
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.AcceptTOSResponse", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -317,6 +324,10 @@ func (c *CustomAPIRestClient) doRPCAssignRole(ctx context.Context, callOpts *ser
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Empty", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -388,6 +399,10 @@ func (c *CustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, callOpts *
 	pbRsp := &CascadeDeleteResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.CascadeDeleteResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
 	}
 	return pbRsp, nil
 }
@@ -467,6 +482,10 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Object", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -537,6 +556,10 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	pbRsp := &GetUserRoleResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.GetUserRoleResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
 	}
 	return pbRsp, nil
 }
@@ -609,6 +632,10 @@ func (c *CustomAPIRestClient) doRPCGetTOS(ctx context.Context, callOpts *server.
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.GetTOSResponse", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -679,6 +706,10 @@ func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.Cu
 	pbRsp := &ListUserRoleResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.ListUserRoleResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
 	}
 	return pbRsp, nil
 }
@@ -758,6 +789,10 @@ func (c *CustomAPIRestClient) doRPCReplace(ctx context.Context, callOpts *server
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Object", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -829,6 +864,10 @@ func (c *CustomAPIRestClient) doRPCSendPasswordEmail(ctx context.Context, callOp
 	pbRsp := &SendPasswordEmailResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.SendPasswordEmailResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
 	}
 	return pbRsp, nil
 }
@@ -2767,6 +2806,21 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "userFSMState": {
+            "type": "string",
+            "description": "States describes possible states for user.\n\n - StateUndefined: StateUndefined\n\nUser state when it was created without any state.\n - StateCreating: StateCreating\n\nUser state during initial creation. It includes registering in IDM, creating user-settings object, etc...\n - StateCreateFailed: StateCreateFailed\n\nUser state when initial creation was failed by some reason and must be retried\nafter issue is solved.\n - StateActive: StateActive\n\nUser state of completely created and available to use user.\n - StateDisabled: StateDisabled\n\nUser is currently disabled, login is not possible for this user, but it may become active again in the future.",
+            "title": "States",
+            "enum": [
+                "StateUndefined",
+                "StateCreating",
+                "StateCreateFailed",
+                "StateActive",
+                "StateDisabled"
+            ],
+            "default": "StateUndefined",
+            "x-displayname": "States",
+            "x-ves-proto-enum": "ves.io.schema.user.FSMState"
+        },
         "userFeatureFlagType": {
             "type": "object",
             "title": "FeatureFlagType\nx-displayName: \"Feature and its Status for the Tenant's Plan\"",
@@ -3024,6 +3078,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "locale",
                     "x-displayname": "Locale",
                     "x-ves-example": "value"
+                },
+                "state": {
+                    "description": " State of the user.",
+                    "title": "State",
+                    "$ref": "#/definitions/userFSMState",
+                    "x-displayname": "State"
                 },
                 "tos_accepted": {
                     "type": "string",

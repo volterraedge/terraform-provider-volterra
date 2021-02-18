@@ -72,6 +72,9 @@ func (c *CustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...ser
 	if err != nil {
 		return nil, errors.Wrap(err, "Doing custom RPC using GRPC")
 	}
+	if cco.OutCallResponse != nil {
+		cco.OutCallResponse.ProtoMsg = rsp
+	}
 	return rsp, nil
 }
 
@@ -168,6 +171,10 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.GetResponse", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -240,6 +247,10 @@ func (c *CustomAPIRestClient) doRPCGetStatus(ctx context.Context, callOpts *serv
 	pbRsp := &GetStatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.GetStatusResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
 	}
 	return pbRsp, nil
 }
@@ -1284,6 +1295,9 @@ func (c *CustomActionAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts 
 	if err != nil {
 		return nil, errors.Wrap(err, "Doing custom RPC using GRPC")
 	}
+	if cco.OutCallResponse != nil {
+		cco.OutCallResponse.ProtoMsg = rsp
+	}
 	return rsp, nil
 }
 
@@ -1380,6 +1394,10 @@ func (c *CustomActionAPIRestClient) doRPCForceDelete(ctx context.Context, callOp
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.ForceDeleteResponse", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -1453,6 +1471,10 @@ func (c *CustomActionAPIRestClient) doRPCRun(ctx context.Context, callOpts *serv
 	pbRsp := &RunResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.RunResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
 	}
 	return pbRsp, nil
 }

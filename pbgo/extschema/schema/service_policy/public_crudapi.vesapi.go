@@ -2342,15 +2342,15 @@ var APISwaggerJSON string = `{
         },
         "policyChallengeAction": {
             "type": "string",
-            "description": "The challenge options to use when a policy based challenge is configured.\n\n - NO_CHALLENGE: NO_CHALLENGE\n\nNo challenge.\n - ENABLE_JAVASCRIPT_CHALLENGE: ENABLE_JAVASCRIPT_CHALLENGE\n\nEnable javascript challenge.\n - ENABLE_CAPTCHA_CHALLENGE: ENABLE_CAPTCHA_CHALLENGE\n\nCaptcha challenge.\n - DISABLE_CHALLENGE: DISABLE_CHALLENGE\n\nDisable challenge",
+            "description": "The challenge options to use when a policy based challenge is configured.\n\n - DEFAULT_CHALLENGE: DEFAULT_CHALLENGE\n\nDefault challenge.\n - ENABLE_JAVASCRIPT_CHALLENGE: ENABLE_JAVASCRIPT_CHALLENGE\n\nEnable javascript challenge.\n - ENABLE_CAPTCHA_CHALLENGE: ENABLE_CAPTCHA_CHALLENGE\n\nCaptcha challenge.\n - DISABLE_CHALLENGE: DISABLE_CHALLENGE\n\nDisable challenge",
             "title": "Challenge Action",
             "enum": [
-                "NO_CHALLENGE",
+                "DEFAULT_CHALLENGE",
                 "ENABLE_JAVASCRIPT_CHALLENGE",
                 "ENABLE_CAPTCHA_CHALLENGE",
                 "DISABLE_CHALLENGE"
             ],
-            "default": "NO_CHALLENGE",
+            "default": "DEFAULT_CHALLENGE",
             "x-displayname": "Challenge Action",
             "x-ves-proto-enum": "ves.io.schema.policy.ChallengeAction"
         },
@@ -2930,14 +2930,15 @@ var APISwaggerJSON string = `{
         },
         "policyRuleAction": {
             "type": "string",
-            "description": "The rule action determines the disposition of the input request API. If a policy matches a rule with an ALLOW action, the processing of the request proceeds\nforward. If it matches a rule with a DENY action, the processing of the request is terminated and an appropriate message/code returned to the originator. If\nit matches a rule with a NEXT_POLICY_SET action, evaluation of the current policy set terminates and evaluation of the next policy set in the chain begins.\n\n - DENY: DENY\n\nDeny the request.\n - ALLOW: ALLOW\n\nAllow the request to proceed.\n - NEXT_POLICY_SET: NEXT_POLICY_SET\n\nTerminate evaluation of the current policy set and begin evaluating the next policy set in the chain. Note that the evaluation of any remaining policies\nin the current policy set is skipped.\n - NEXT_POLICY: NEXT_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the next policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.\n - LAST_POLICY: LAST_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the last policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.",
+            "description": "The rule action determines the disposition of the input request API. If a policy matches a rule with an ALLOW action, the processing of the request proceeds\nforward. If it matches a rule with a DENY action, the processing of the request is terminated and an appropriate message/code returned to the originator. If\nit matches a rule with a NEXT_POLICY_SET action, evaluation of the current policy set terminates and evaluation of the next policy set in the chain begins.\n\n - DENY: DENY\n\nDeny the request.\n - ALLOW: ALLOW\n\nAllow the request to proceed.\n - NEXT_POLICY_SET: NEXT_POLICY_SET\n\nTerminate evaluation of the current policy set and begin evaluating the next policy set in the chain. Note that the evaluation of any remaining policies\nin the current policy set is skipped.\n - NEXT_POLICY: NEXT_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the next policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.\n - LAST_POLICY: LAST_POLICY\n\nTerminate evaluation of the current policy and begin evaluating the last policy in the policy set. Note that the evaluation of any remaining rules in the\ncurrent policy is skipped.\n - GOTO_POLICY: GOTO_POLICY\n\nTerminate evaluation of the current policy and begin evaluating a specific policy in the policy set. The policy is specified using the goto_policy field in\nthe rule and must be after the current policy in the policy set.",
             "title": "Rule Action",
             "enum": [
                 "DENY",
                 "ALLOW",
                 "NEXT_POLICY_SET",
                 "NEXT_POLICY",
-                "LAST_POLICY"
+                "LAST_POLICY",
+                "GOTO_POLICY"
             ],
             "default": "DENY",
             "x-displayname": "Rule Action",
@@ -4079,7 +4080,7 @@ var APISwaggerJSON string = `{
             "description": "Create service_policy creates a new object in the storage backend for metadata.namespace.",
             "title": "Create service policy",
             "x-displayname": "Create Service Policy",
-            "x-ves-oneof-field-rule_choice": "[\"allow_list\",\"deny_list\",\"internally_generated\",\"legacy_rule_list\",\"rule_list\"]",
+            "x-ves-oneof-field-rule_choice": "[\"allow_all_requests\",\"allow_list\",\"deny_all_requests\",\"deny_list\",\"internally_generated\",\"legacy_rule_list\",\"rule_list\"]",
             "x-ves-oneof-field-server_choice": "[\"any_server\",\"server_name\",\"server_name_matcher\",\"server_selector\"]",
             "x-ves-proto-message": "ves.io.schema.service_policy.CreateSpecType",
             "properties": {
@@ -4089,24 +4090,32 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Rule Combining Algorithm",
                     "x-ves-required": "true"
                 },
+                "allow_all_requests": {
+                    "description": "Exclusive with [allow_list deny_all_requests deny_list internally_generated legacy_rule_list rule_list]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "allow_list": {
-                    "description": "Exclusive with [deny_list internally_generated legacy_rule_list rule_list]\n",
+                    "description": "Exclusive with [allow_all_requests deny_all_requests deny_list internally_generated legacy_rule_list rule_list]\n",
                     "$ref": "#/definitions/service_policySourceList"
                 },
                 "any_server": {
                     "description": "Exclusive with [server_name server_name_matcher server_selector]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "deny_all_requests": {
+                    "description": "Exclusive with [allow_all_requests allow_list deny_list internally_generated legacy_rule_list rule_list]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "deny_list": {
-                    "description": "Exclusive with [allow_list internally_generated legacy_rule_list rule_list]\n",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests internally_generated legacy_rule_list rule_list]\n",
                     "$ref": "#/definitions/service_policySourceList"
                 },
                 "internally_generated": {
-                    "description": "Exclusive with [allow_list deny_list legacy_rule_list rule_list]\n",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list rule_list]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "legacy_rule_list": {
-                    "description": "Exclusive with [allow_list deny_list internally_generated rule_list]\n",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list internally_generated rule_list]\n",
                     "$ref": "#/definitions/service_policyLegacyRuleList"
                 },
                 "port_matcher": {
@@ -4115,7 +4124,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Port Matcher"
                 },
                 "rule_list": {
-                    "description": "Exclusive with [allow_list deny_list internally_generated legacy_rule_list]\n",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list internally_generated legacy_rule_list]\n",
                     "$ref": "#/definitions/service_policyRuleList"
                 },
                 "server_name": {
@@ -4129,6 +4138,14 @@ var APISwaggerJSON string = `{
                 "server_selector": {
                     "description": "Exclusive with [any_server server_name server_name_matcher]\n",
                     "$ref": "#/definitions/schemaLabelSelectorType"
+                },
+                "simple_rules": {
+                    "type": "array",
+                    "description": " A list of SimpleRules.\n The order of evaluation of the simple rules depends on the rule combining algorithm.\n This is mutually exclusive with the rules field and is for internal use only.",
+                    "items": {
+                        "$ref": "#/definitions/service_policySimpleRule"
+                    },
+                    "x-displayname": "Simple Rules"
                 }
             }
         },
@@ -4137,7 +4154,7 @@ var APISwaggerJSON string = `{
             "description": "Get service_policy reads a given object from storage backend for metadata.namespace.",
             "title": "Get service policy",
             "x-displayname": "Get Service Policy",
-            "x-ves-oneof-field-rule_choice": "[\"allow_list\",\"deny_list\",\"internally_generated\",\"legacy_rule_list\",\"rule_list\"]",
+            "x-ves-oneof-field-rule_choice": "[\"allow_all_requests\",\"allow_list\",\"deny_all_requests\",\"deny_list\",\"internally_generated\",\"legacy_rule_list\",\"rule_list\"]",
             "x-ves-oneof-field-server_choice": "[\"any_server\",\"server_name\",\"server_name_matcher\",\"server_selector\"]",
             "x-ves-proto-message": "ves.io.schema.service_policy.GetSpecType",
             "properties": {
@@ -4147,24 +4164,32 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Rule Combining Algorithm",
                     "x-ves-required": "true"
                 },
+                "allow_all_requests": {
+                    "description": "Exclusive with [allow_list deny_all_requests deny_list internally_generated legacy_rule_list rule_list]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "allow_list": {
-                    "description": "Exclusive with [deny_list internally_generated legacy_rule_list rule_list]\n",
+                    "description": "Exclusive with [allow_all_requests deny_all_requests deny_list internally_generated legacy_rule_list rule_list]\n",
                     "$ref": "#/definitions/service_policySourceList"
                 },
                 "any_server": {
                     "description": "Exclusive with [server_name server_name_matcher server_selector]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "deny_all_requests": {
+                    "description": "Exclusive with [allow_all_requests allow_list deny_list internally_generated legacy_rule_list rule_list]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "deny_list": {
-                    "description": "Exclusive with [allow_list internally_generated legacy_rule_list rule_list]\n",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests internally_generated legacy_rule_list rule_list]\n",
                     "$ref": "#/definitions/service_policySourceList"
                 },
                 "internally_generated": {
-                    "description": "Exclusive with [allow_list deny_list legacy_rule_list rule_list]\n",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list rule_list]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "legacy_rule_list": {
-                    "description": "Exclusive with [allow_list deny_list internally_generated rule_list]\n",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list internally_generated rule_list]\n",
                     "$ref": "#/definitions/service_policyLegacyRuleList"
                 },
                 "port_matcher": {
@@ -4173,7 +4198,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Port Matcher"
                 },
                 "rule_list": {
-                    "description": "Exclusive with [allow_list deny_list internally_generated legacy_rule_list]\n",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list internally_generated legacy_rule_list]\n",
                     "$ref": "#/definitions/service_policyRuleList"
                 },
                 "rules": {
@@ -4211,7 +4236,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of service_policy in the storage backend.",
             "title": "GlobalSpecType",
             "x-displayname": "Specification",
-            "x-ves-oneof-field-rule_choice": "[\"allow_list\",\"deny_list\",\"internally_generated\",\"legacy_rule_list\",\"rule_list\"]",
+            "x-ves-oneof-field-rule_choice": "[\"allow_all_requests\",\"allow_list\",\"deny_all_requests\",\"deny_list\",\"internally_generated\",\"legacy_rule_list\",\"rule_list\"]",
             "x-ves-oneof-field-server_choice": "[\"any_server\",\"server_name\",\"server_name_matcher\",\"server_selector\"]",
             "x-ves-proto-message": "ves.io.schema.service_policy.GlobalSpecType",
             "properties": {
@@ -4222,8 +4247,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Rule Combining Algorithm",
                     "x-ves-required": "true"
                 },
+                "allow_all_requests": {
+                    "description": "Exclusive with [allow_list deny_all_requests deny_list internally_generated legacy_rule_list rule_list]\nx-displayName: \"Allow All Requests\"\nAllow all requests",
+                    "title": "allow_all_requests",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "allow_list": {
-                    "description": "Exclusive with [deny_list internally_generated legacy_rule_list rule_list]\nx-displayName: \"Allowed Sources\"\nList of allowed sources for requests",
+                    "description": "Exclusive with [allow_all_requests deny_all_requests deny_list internally_generated legacy_rule_list rule_list]\nx-displayName: \"Allowed Sources\"\nList of allowed sources for requests",
                     "title": "allow_list",
                     "$ref": "#/definitions/service_policySourceList"
                 },
@@ -4241,6 +4271,11 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Default Forwarding Classes"
                 },
+                "deny_all_requests": {
+                    "description": "Exclusive with [allow_all_requests allow_list deny_list internally_generated legacy_rule_list rule_list]\nx-displayName: \"Deny All Requests\"\nDeny all requests",
+                    "title": "deny_all_requests",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "deny_info": {
                     "description": " Detailed information including HTTP response code and error message to be sent when the policy action is DENY.",
                     "title": "deny_info",
@@ -4248,17 +4283,17 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Deny Information"
                 },
                 "deny_list": {
-                    "description": "Exclusive with [allow_list internally_generated legacy_rule_list rule_list]\nx-displayName: \"Denied Sources\"\nList of denied sources for requests",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests internally_generated legacy_rule_list rule_list]\nx-displayName: \"Denied Sources\"\nList of denied sources for requests",
                     "title": "deny_list",
                     "$ref": "#/definitions/service_policySourceList"
                 },
                 "internally_generated": {
-                    "description": "Exclusive with [allow_list deny_list legacy_rule_list rule_list]\nx-displayName: \"Interally Generated\"\nPlaceholder that's used for internally generated service_policy objects to satisy the validation check that rule_choice is non-nil.",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list rule_list]\nx-displayName: \"Interally Generated\"\nPlaceholder that's used for internally generated service_policy objects to satisy the validation check that rule_choice is non-nil.",
                     "title": "internally_generated",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "legacy_rule_list": {
-                    "description": "Exclusive with [allow_list deny_list internally_generated rule_list]\nx-displayName: \"Legacy Rule List\"\nList of references to service_policy_rule objects",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list internally_generated rule_list]\nx-displayName: \"Legacy Rule List\"\nList of references to service_policy_rule objects",
                     "title": "legacy_rule_list",
                     "$ref": "#/definitions/service_policyLegacyRuleList"
                 },
@@ -4275,7 +4310,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Role"
                 },
                 "rule_list": {
-                    "description": "Exclusive with [allow_list deny_list internally_generated legacy_rule_list]\nx-displayName: \"Custom Rule List\"\nList of custom rules",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list internally_generated legacy_rule_list]\nx-displayName: \"Custom Rule List\"\nList of custom rules",
                     "title": "rule_list",
                     "$ref": "#/definitions/service_policyRuleList"
                 },
@@ -4325,7 +4360,7 @@ var APISwaggerJSON string = `{
             "description": "Replace service_policy replaces an existing object in the storage backend for metadata.namespace.",
             "title": "Replace service policy",
             "x-displayname": "Replace Service Policy",
-            "x-ves-oneof-field-rule_choice": "[\"allow_list\",\"deny_list\",\"internally_generated\",\"legacy_rule_list\",\"rule_list\"]",
+            "x-ves-oneof-field-rule_choice": "[\"allow_all_requests\",\"allow_list\",\"deny_all_requests\",\"deny_list\",\"internally_generated\",\"legacy_rule_list\",\"rule_list\"]",
             "x-ves-oneof-field-server_choice": "[\"any_server\",\"server_name\",\"server_name_matcher\",\"server_selector\"]",
             "x-ves-proto-message": "ves.io.schema.service_policy.ReplaceSpecType",
             "properties": {
@@ -4335,24 +4370,32 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Rule Combining Algorithm",
                     "x-ves-required": "true"
                 },
+                "allow_all_requests": {
+                    "description": "Exclusive with [allow_list deny_all_requests deny_list internally_generated legacy_rule_list rule_list]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "allow_list": {
-                    "description": "Exclusive with [deny_list internally_generated legacy_rule_list rule_list]\n",
+                    "description": "Exclusive with [allow_all_requests deny_all_requests deny_list internally_generated legacy_rule_list rule_list]\n",
                     "$ref": "#/definitions/service_policySourceList"
                 },
                 "any_server": {
                     "description": "Exclusive with [server_name server_name_matcher server_selector]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "deny_all_requests": {
+                    "description": "Exclusive with [allow_all_requests allow_list deny_list internally_generated legacy_rule_list rule_list]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "deny_list": {
-                    "description": "Exclusive with [allow_list internally_generated legacy_rule_list rule_list]\n",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests internally_generated legacy_rule_list rule_list]\n",
                     "$ref": "#/definitions/service_policySourceList"
                 },
                 "internally_generated": {
-                    "description": "Exclusive with [allow_list deny_list legacy_rule_list rule_list]\n",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list rule_list]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "legacy_rule_list": {
-                    "description": "Exclusive with [allow_list deny_list internally_generated rule_list]\n",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list internally_generated rule_list]\n",
                     "$ref": "#/definitions/service_policyLegacyRuleList"
                 },
                 "port_matcher": {
@@ -4361,7 +4404,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Port Matcher"
                 },
                 "rule_list": {
-                    "description": "Exclusive with [allow_list deny_list internally_generated legacy_rule_list]\n",
+                    "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list internally_generated legacy_rule_list]\n",
                     "$ref": "#/definitions/service_policyRuleList"
                 },
                 "server_name": {
@@ -4375,6 +4418,14 @@ var APISwaggerJSON string = `{
                 "server_selector": {
                     "description": "Exclusive with [any_server server_name server_name_matcher]\n",
                     "$ref": "#/definitions/schemaLabelSelectorType"
+                },
+                "simple_rules": {
+                    "type": "array",
+                    "description": " A list of SimpleRules.\n The order of evaluation of the simple rules depends on the rule combining algorithm.\n This is mutually exclusive with the rules field and is for internal use only.",
+                    "items": {
+                        "$ref": "#/definitions/service_policySimpleRule"
+                    },
+                    "x-displayname": "Simple Rules"
                 }
             }
         },
@@ -4532,6 +4583,15 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Forwarding Classes"
+                },
+                "goto_policy": {
+                    "type": "array",
+                    "description": " A reference to a service_policy object.\n Target of the GOTO_POLICY action.\n The target policy must be part of the current policy set and must be after the current policy in the policy set.",
+                    "title": "goto_policy",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Goto Policy"
                 },
                 "headers": {
                     "type": "array",
@@ -5086,11 +5146,23 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Action",
                     "x-ves-required": "true"
                 },
+                "api_group_matcher": {
+                    "description": " The list of expected API group names to which the request API belongs. The actual list of API group names for the request API is determined from the api\n group and api group element configuration objects using the HTTP method and the HTTP path as inputs.\n The predicate evaluates to true if any of the actual API group names for the request is equal to any of the values in the api group matcher.",
+                    "title": "api group matcher",
+                    "$ref": "#/definitions/policyStringMatcherType",
+                    "x-displayname": "API Group Matcher"
+                },
                 "asn_list": {
                     "description": " List of 4-byte ASN values.\n The predicate evaluates to true if the origin ASN is present in the ASN list.",
                     "title": "asn list",
                     "$ref": "#/definitions/policyAsnMatchList",
                     "x-displayname": "ASN List"
+                },
+                "client_role": {
+                    "description": " The expected role(s) of the client invoking the request API. The actual roles for the client are derived from the user and namespace information in the\n API request.\n The predicate evaluates to true if any of the client's roles match the value(s) specified in client role.",
+                    "title": "client role",
+                    "$ref": "#/definitions/policyRoleMatcherType",
+                    "x-displayname": "Client Role"
                 },
                 "description": {
                     "type": "string",

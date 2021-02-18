@@ -51,11 +51,13 @@ func resourceVolterraBgpAsnSet() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"as_numbers": {
@@ -124,6 +126,7 @@ func resourceVolterraBgpAsnSetCreate(d *schema.ResourceData, meta interface{}) e
 			v.(string)
 	}
 
+	//as_numbers
 	if v, ok := d.GetOk("as_numbers"); ok && !isIntfNil(v) {
 
 		ls := make([]uint32, len(v.([]interface{})))

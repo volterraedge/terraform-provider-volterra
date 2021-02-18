@@ -3238,13 +3238,14 @@ var APISwaggerJSON string = `{
         },
         "schemaNextHopTypes": {
             "type": "string",
-            "description": "Defines types of next-hop\n\nUse default gateway on the local interface as gateway for route.\nAssumes there is only one local interface on the virtual network.\nUse the specified address as nexthop\nUse the network interface as nexthop\nDiscard nexthop, used when attr type is Advertise",
+            "description": "Defines types of next-hop\n\nUse default gateway on the local interface as gateway for route.\nAssumes there is only one local interface on the virtual network.\nUse the specified address as nexthop\nUse the network interface as nexthop\nDiscard nexthop, used when attr type is Advertise\nUsed in VoltADN private virtual network.",
             "title": "Nexthop Types",
             "enum": [
                 "NEXT_HOP_DEFAULT_GATEWAY",
                 "NEXT_HOP_USE_CONFIGURED",
                 "NEXT_HOP_NETWORK_INTERFACE",
-                "NEXT_HOP_DISCARD"
+                "NEXT_HOP_DISCARD",
+                "NEXT_HOP_SNAT_TO_PUBLIC"
             ],
             "default": "NEXT_HOP_DEFAULT_GATEWAY",
             "x-displayname": "Nexthop Types",
@@ -4458,6 +4459,7 @@ var APISwaggerJSON string = `{
             "title": "CreateSpecType",
             "x-displayname": "Create Azure Vnet site",
             "x-ves-oneof-field-deployment": "[\"assisted\",\"azure_cred\"]",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.CreateSpecType",
             "properties": {
@@ -4501,6 +4503,14 @@ var APISwaggerJSON string = `{
                 "ingress_gw": {
                     "description": "Exclusive with [ingress_egress_gw voltstack_cluster]\n",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwType"
+                },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "machine_type": {
                     "type": "string",
@@ -4558,6 +4568,7 @@ var APISwaggerJSON string = `{
             "title": "GetSpecType",
             "x-displayname": "Get Azure Vnet site",
             "x-ves-oneof-field-deployment": "[\"assisted\",\"azure_cred\"]",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.GetSpecType",
             "properties": {
@@ -4601,6 +4612,14 @@ var APISwaggerJSON string = `{
                 "ingress_gw": {
                     "description": "Exclusive with [ingress_egress_gw voltstack_cluster]\n",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwType"
+                },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "machine_type": {
                     "type": "string",
@@ -4658,6 +4677,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-deployment": "[\"assisted\",\"azure_cred\"]",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.GlobalSpecType",
             "properties": {
@@ -4709,6 +4729,16 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [ingress_egress_gw voltstack_cluster]\nx-displayName: \"Ingress Gateway (One Interface)\"\nOne interface site is useful when site is only used as ingress gateway to the Vnet.",
                     "title": "Ingress Gateway",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwType"
+                },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\nx-displayName: \"Enable Logs Streaming\"\nSelect log receiver for logs streaming",
+                    "title": "Disable Logs Streaming",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\nx-displayName: \"Disable Logs Streaming\"\nLogs Streaming is disabled",
+                    "title": "Disable Logs Receiver",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "machine_type": {
                     "type": "string",
@@ -4785,6 +4815,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the Azure Vnet site replace specification",
             "title": "ReplaceSpecType",
             "x-displayname": "Replace Azure Vnet site",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.ReplaceSpecType",
             "properties": {
@@ -4808,6 +4839,14 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [ingress_egress_gw voltstack_cluster]\nx-displayName: \"Ingress Gateway\"\nIngress gateway choice can not be changed (no config available for editing)",
                     "title": "Ingress Gateway",
                     "$ref": "#/definitions/azure_vnet_siteAzureVnetIngressGwReplaceType"
+                },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "nodes_per_az": {
                     "type": "integer",

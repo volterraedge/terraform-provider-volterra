@@ -3873,6 +3873,26 @@ func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			drInfos = append(drInfos, odri)
 		}
 
+	case *OriginServerType_VoltadnPrivateIp:
+		odrInfos, err = m.GetVoltadnPrivateIp().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "voltadn_private_ip." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *OriginServerType_VoltadnPrivateName:
+		odrInfos, err = m.GetVoltadnPrivateName().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "voltadn_private_name." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
 	}
 
 	return drInfos, err
@@ -3992,6 +4012,28 @@ func (v *ValidateOriginServerType) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
+	case *OriginServerType_VoltadnPrivateIp:
+		if fv, exists := v.FldValidators["choice.voltadn_private_ip"]; exists {
+			val := m.GetChoice().(*OriginServerType_VoltadnPrivateIp).VoltadnPrivateIp
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltadn_private_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OriginServerType_VoltadnPrivateName:
+		if fv, exists := v.FldValidators["choice.voltadn_private_name"]; exists {
+			val := m.GetChoice().(*OriginServerType_VoltadnPrivateName).VoltadnPrivateName
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltadn_private_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -4040,12 +4082,433 @@ var DefaultOriginServerTypeValidator = func() *ValidateOriginServerType {
 	v.FldValidators["choice.k8s_service"] = OriginServerK8SServiceValidator().Validate
 	v.FldValidators["choice.consul_service"] = OriginServerConsulServiceValidator().Validate
 	v.FldValidators["choice.custom_endpoint_object"] = OriginServerCustomEndpointValidator().Validate
+	v.FldValidators["choice.voltadn_private_ip"] = OriginServerVoltADNPrivateIPValidator().Validate
+	v.FldValidators["choice.voltadn_private_name"] = OriginServerVoltADNPrivateNameValidator().Validate
 
 	return v
 }()
 
 func OriginServerTypeValidator() db.Validator {
 	return DefaultOriginServerTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *OriginServerVoltADNPrivateIP) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OriginServerVoltADNPrivateIP) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OriginServerVoltADNPrivateIP) DeepCopy() *OriginServerVoltADNPrivateIP {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OriginServerVoltADNPrivateIP{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OriginServerVoltADNPrivateIP) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OriginServerVoltADNPrivateIP) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OriginServerVoltADNPrivateIPValidator().Validate(ctx, m, opts...)
+}
+
+func (m *OriginServerVoltADNPrivateIP) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetPrivateNetworkDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *OriginServerVoltADNPrivateIP) GetPrivateNetworkDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+
+	vref := m.GetPrivateNetwork()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_network.Object")
+	drInfos = append(drInfos, db.DRefInfo{
+		RefdType:   "virtual_network.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "private_network",
+		Ref:        vdRef,
+	})
+
+	return drInfos, nil
+}
+
+// GetPrivateNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *OriginServerVoltADNPrivateIP) GetPrivateNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "virtual_network.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_network")
+	}
+
+	vref := m.GetPrivateNetwork()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "virtual_network.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateOriginServerVoltADNPrivateIP struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOriginServerVoltADNPrivateIP) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginServerVoltADNPrivateIP) PrivateNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_network")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginServerVoltADNPrivateIP) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OriginServerVoltADNPrivateIP)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OriginServerVoltADNPrivateIP got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip"))
+		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["private_network"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("private_network"))
+		if err := fv(ctx, m.GetPrivateNetwork(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOriginServerVoltADNPrivateIPValidator = func() *ValidateOriginServerVoltADNPrivateIP {
+	v := &ValidateOriginServerVoltADNPrivateIP{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIp := v.IpValidationRuleHandler
+	rulesIp := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ip":        "true",
+	}
+	vFn, err = vrhIp(rulesIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerVoltADNPrivateIP.ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip"] = vFn
+
+	vrhPrivateNetwork := v.PrivateNetworkValidationRuleHandler
+	rulesPrivateNetwork := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPrivateNetwork(rulesPrivateNetwork)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerVoltADNPrivateIP.private_network: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["private_network"] = vFn
+
+	return v
+}()
+
+func OriginServerVoltADNPrivateIPValidator() db.Validator {
+	return DefaultOriginServerVoltADNPrivateIPValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *OriginServerVoltADNPrivateName) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OriginServerVoltADNPrivateName) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OriginServerVoltADNPrivateName) DeepCopy() *OriginServerVoltADNPrivateName {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OriginServerVoltADNPrivateName{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OriginServerVoltADNPrivateName) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OriginServerVoltADNPrivateName) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OriginServerVoltADNPrivateNameValidator().Validate(ctx, m, opts...)
+}
+
+func (m *OriginServerVoltADNPrivateName) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetPrivateNetworkDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *OriginServerVoltADNPrivateName) GetPrivateNetworkDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+
+	vref := m.GetPrivateNetwork()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_network.Object")
+	drInfos = append(drInfos, db.DRefInfo{
+		RefdType:   "virtual_network.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "private_network",
+		Ref:        vdRef,
+	})
+
+	return drInfos, nil
+}
+
+// GetPrivateNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *OriginServerVoltADNPrivateName) GetPrivateNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "virtual_network.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_network")
+	}
+
+	vref := m.GetPrivateNetwork()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "virtual_network.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateOriginServerVoltADNPrivateName struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOriginServerVoltADNPrivateName) DnsNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginServerVoltADNPrivateName) PrivateNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_network")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginServerVoltADNPrivateName) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OriginServerVoltADNPrivateName)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OriginServerVoltADNPrivateName got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_name"))
+		if err := fv(ctx, m.GetDnsName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["private_network"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("private_network"))
+		if err := fv(ctx, m.GetPrivateNetwork(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOriginServerVoltADNPrivateNameValidator = func() *ValidateOriginServerVoltADNPrivateName {
+	v := &ValidateOriginServerVoltADNPrivateName{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDnsName := v.DnsNameValidationRuleHandler
+	rulesDnsName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDnsName(rulesDnsName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerVoltADNPrivateName.dns_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dns_name"] = vFn
+
+	vrhPrivateNetwork := v.PrivateNetworkValidationRuleHandler
+	rulesPrivateNetwork := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPrivateNetwork(rulesPrivateNetwork)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerVoltADNPrivateName.private_network: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["private_network"] = vFn
+
+	return v
+}()
+
+func OriginServerVoltADNPrivateNameValidator() db.Validator {
+	return DefaultOriginServerVoltADNPrivateNameValidator
 }
 
 // augmented methods on protoc/std generated struct

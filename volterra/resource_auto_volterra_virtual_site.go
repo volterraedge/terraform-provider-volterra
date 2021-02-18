@@ -52,11 +52,13 @@ func resourceVolterraVirtualSite() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"site_selector": {
@@ -140,13 +142,13 @@ func resourceVolterraVirtualSiteCreate(d *schema.ResourceData, meta interface{})
 			v.(string)
 	}
 
+	//site_selector
 	if v, ok := d.GetOk("site_selector"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		siteSelector := &ves_io_schema.LabelSelectorType{}
 		createSpec.SiteSelector = siteSelector
 		for _, set := range sl {
-
 			siteSelectorMapStrToI := set.(map[string]interface{})
 
 			if w, ok := siteSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
@@ -161,6 +163,7 @@ func resourceVolterraVirtualSiteCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//site_type
 	if v, ok := d.GetOk("site_type"); ok && !isIntfNil(v) {
 
 		createSpec.SiteType = ves_io_schema_site.SiteType(ves_io_schema_site.SiteType_value[v.(string)])

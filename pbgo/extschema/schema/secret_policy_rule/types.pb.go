@@ -1649,7 +1649,7 @@ func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 }
 func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 	this := &GlobalSpecType{}
-	this.Action = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
+	this.Action = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4, 5}[r.Intn(6)])
 	oneofNumber_ClientChoice := []int32{2, 3, 4}[r.Intn(3)]
 	switch oneofNumber_ClientChoice {
 	case 2:
@@ -1684,7 +1684,7 @@ func NewPopulatedGlobalSpecType_ClientNameMatcher(r randyTypes, easy bool) *Glob
 }
 func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 	this := &CreateSpecType{}
-	this.Action = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
+	this.Action = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4, 5}[r.Intn(6)])
 	oneofNumber_ClientChoice := []int32{2, 3, 4}[r.Intn(3)]
 	switch oneofNumber_ClientChoice {
 	case 2:
@@ -1719,7 +1719,7 @@ func NewPopulatedCreateSpecType_ClientNameMatcher(r randyTypes, easy bool) *Crea
 }
 func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 	this := &ReplaceSpecType{}
-	this.Action = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
+	this.Action = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4, 5}[r.Intn(6)])
 	oneofNumber_ClientChoice := []int32{2, 3, 4}[r.Intn(3)]
 	switch oneofNumber_ClientChoice {
 	case 2:
@@ -1754,7 +1754,7 @@ func NewPopulatedReplaceSpecType_ClientNameMatcher(r randyTypes, easy bool) *Rep
 }
 func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 	this := &GetSpecType{}
-	this.Action = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
+	this.Action = ves_io_schema_policy.RuleAction([]int32{0, 1, 2, 3, 4, 5}[r.Intn(6)])
 	oneofNumber_ClientChoice := []int32{2, 3, 4}[r.Intn(3)]
 	switch oneofNumber_ClientChoice {
 	case 2:

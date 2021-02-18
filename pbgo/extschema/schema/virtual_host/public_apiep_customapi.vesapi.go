@@ -90,6 +90,9 @@ func (c *ApiepCustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts .
 	if err != nil {
 		return nil, errors.Wrap(err, "Doing custom RPC using GRPC")
 	}
+	if cco.OutCallResponse != nil {
+		cco.OutCallResponse.ProtoMsg = rsp
+	}
 	return rsp, nil
 }
 
@@ -191,6 +194,10 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointLearntSchema(ctx context.C
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointLearntSchemaRsp", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -265,6 +272,10 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointPDF(ctx context.Context, c
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointPDFRsp", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -338,6 +349,10 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpoints(ctx context.Context, cal
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointsRsp", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -409,6 +424,10 @@ func (c *ApiepCustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, call
 	pbRsp := &SwaggerSpecRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.virtual_host.SwaggerSpecRsp", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
 	}
 	return pbRsp, nil
 }
@@ -1320,6 +1339,14 @@ var ApiepCustomAPISwaggerJSON string = `{
             "x-displayname": "Req Body Schema Response",
             "x-ves-proto-message": "ves.io.schema.virtual_host.APIEndpointLearntSchemaRsp",
             "properties": {
+                "last_updated_time": {
+                    "type": "string",
+                    "description": "Last Updated Time for request API endpoint. The time updated when the APIEP file is uploaded to Azure/AWS.\n\nExample: - \"2021-01-22 15:46:23.767649\"-",
+                    "title": "Last Updated Time",
+                    "format": "date-time",
+                    "x-displayname": "Last Updated Time",
+                    "x-ves-example": "2021-01-22 15:46:23.767649"
+                },
                 "learnt_schema": {
                     "type": "string",
                     "description": "Learnt Schema for request API endpoint.\n\nExample: - \"{\\\"example\\\":\\\"{\\\\\\\"country\\\\\\\"\\\\\\\"dummy\\\\\\\", \\\\\\\"fullName\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"mobileNum\\\\\\\": 1234567890, \\\\\\\"zipCode\\\\\\\": \\\\\\\"121\\\\\\\", \\\\\\\"streetAddress\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"city\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"state\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"test\\\\\\\": \\\\\\\"Hello, \\\\\\\\u4e16\\\\\\\\u754c\\\\\\\"}\\\",\\\"properties\\\":{\\\"city\\\":{\\\"description\\\":\\\"Word\\\",\\\"pattern\\\":\\\"[a-z0-9-]+\\\",\\\"type\\\":\\\"string\\\"},\\\"country\\\":{\\\"description\\\":\\\"Word\\\",\\\"pattern\\\":\\\"[a-z0-9-]+\\\",\\\"type\\\":\\\"string\\\"},\\\"fullName\\\":{\\\"description\\\":\\\"Word\\\",\\\"pattern\\\":\\\"[a-z0-9-]+\\\",\\\"type\\\":\\\"string\\\"},\\\"mobileNum\\\":{\\\"type\\\":\\\"integer\\\"},\\\"state\\\":{\\\"description\\\":\\\"Word\\\",\\\"pattern\\\":\\\"[a-z0-9-]+\\\",\\\"type\\\":\\\"string\\\"},\\\"streetAddress\\\":{\\\"description\\\":\\\"Word\\\",\\\"pattern\\\":\\\"[a-z0-9-]+\\\",\\\"type\\\":\\\"string\\\"},\\\"test\\\":{\\\"type\\\":\\\"string\\\"},\\\"zipCode\\\":{\\\"description\\\":\\\"Integer\\\",\\\"pattern\\\":\\\"-?\\\\\\\\d+\\\",\\\"type\\\":\\\"string\\\"}},\\\"required\\\":[\\\"fullName\\\",\\\"mobileNum\\\",\\\"city\\\",\\\"test\\\",\\\"zipCode\\\",\\\"state\\\",\\\"streetAddress\\\",\\\"country\\\"],\\\"type\\\":\\\"object\\\"}\"-",

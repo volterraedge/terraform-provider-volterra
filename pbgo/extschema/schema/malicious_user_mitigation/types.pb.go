@@ -439,11 +439,9 @@ type MaliciousUserMitigationRule struct {
 	MitigationAction *MaliciousUserMitigationAction `protobuf:"bytes,2,opt,name=mitigation_action,json=mitigationAction" json:"mitigation_action,omitempty"`
 }
 
-func (m *MaliciousUserMitigationRule) Reset()      { *m = MaliciousUserMitigationRule{} }
-func (*MaliciousUserMitigationRule) ProtoMessage() {}
-func (*MaliciousUserMitigationRule) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{2}
-}
+func (m *MaliciousUserMitigationRule) Reset()                    { *m = MaliciousUserMitigationRule{} }
+func (*MaliciousUserMitigationRule) ProtoMessage()               {}
+func (*MaliciousUserMitigationRule) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
 
 func (m *MaliciousUserMitigationRule) GetThreatLevel() *MaliciousUserThreatLevel {
 	if m != nil {
@@ -493,11 +491,9 @@ type JavascriptChallengeSettings struct {
 	CustomPage string `protobuf:"bytes,4,opt,name=custom_page,json=customPage,proto3" json:"custom_page,omitempty"`
 }
 
-func (m *JavascriptChallengeSettings) Reset()      { *m = JavascriptChallengeSettings{} }
-func (*JavascriptChallengeSettings) ProtoMessage() {}
-func (*JavascriptChallengeSettings) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{3}
-}
+func (m *JavascriptChallengeSettings) Reset()                    { *m = JavascriptChallengeSettings{} }
+func (*JavascriptChallengeSettings) ProtoMessage()               {}
+func (*JavascriptChallengeSettings) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
 
 func (m *JavascriptChallengeSettings) GetJsScriptDelay() uint32 {
 	if m != nil {
@@ -608,11 +604,9 @@ type MaliciousUserMitigationType struct {
 	Rules []*MaliciousUserMitigationRule `protobuf:"bytes,1,rep,name=rules" json:"rules,omitempty"`
 }
 
-func (m *MaliciousUserMitigationType) Reset()      { *m = MaliciousUserMitigationType{} }
-func (*MaliciousUserMitigationType) ProtoMessage() {}
-func (*MaliciousUserMitigationType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{6}
-}
+func (m *MaliciousUserMitigationType) Reset()                    { *m = MaliciousUserMitigationType{} }
+func (*MaliciousUserMitigationType) ProtoMessage()               {}
+func (*MaliciousUserMitigationType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
 
 func (m *MaliciousUserMitigationType) GetRules() []*MaliciousUserMitigationRule {
 	if m != nil {

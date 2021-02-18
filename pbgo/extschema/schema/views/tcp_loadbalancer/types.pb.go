@@ -80,6 +80,18 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_AdvertiseOnPublic
 	//	*GlobalSpecType_AdvertiseCustom
 	AdvertiseChoice isGlobalSpecType_AdvertiseChoice `protobuf_oneof:"advertise_choice"`
+	// Load Balancing Control
+	//
+	// x-displayName: "Load Balancing Control"
+	// x-required
+	// Select how the connections are load-balanced
+	//
+	// Types that are valid to be assigned to HashPolicyChoice:
+	//	*GlobalSpecType_HashPolicyChoiceRoundRobin
+	//	*GlobalSpecType_HashPolicyChoiceLeastActive
+	//	*GlobalSpecType_HashPolicyChoiceRandom
+	//	*GlobalSpecType_HashPolicyChoiceSourceIpStickiness
+	HashPolicyChoice isGlobalSpecType_HashPolicyChoice `protobuf_oneof:"hash_policy_choice"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
@@ -108,6 +120,12 @@ type isGlobalSpecType_AdvertiseChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGlobalSpecType_HashPolicyChoice interface {
+	isGlobalSpecType_HashPolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GlobalSpecType_DoNotAdvertise struct {
 	DoNotAdvertise *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=do_not_advertise,json=doNotAdvertise,oneof"`
@@ -121,15 +139,37 @@ type GlobalSpecType_AdvertiseOnPublic struct {
 type GlobalSpecType_AdvertiseCustom struct {
 	AdvertiseCustom *ves_io_schema_views.AdvertiseCustom `protobuf:"bytes,6,opt,name=advertise_custom,json=advertiseCustom,oneof"`
 }
+type GlobalSpecType_HashPolicyChoiceRoundRobin struct {
+	HashPolicyChoiceRoundRobin *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=hash_policy_choice_round_robin,json=hashPolicyChoiceRoundRobin,oneof"`
+}
+type GlobalSpecType_HashPolicyChoiceLeastActive struct {
+	HashPolicyChoiceLeastActive *ves_io_schema4.Empty `protobuf:"bytes,14,opt,name=hash_policy_choice_least_active,json=hashPolicyChoiceLeastActive,oneof"`
+}
+type GlobalSpecType_HashPolicyChoiceRandom struct {
+	HashPolicyChoiceRandom *ves_io_schema4.Empty `protobuf:"bytes,15,opt,name=hash_policy_choice_random,json=hashPolicyChoiceRandom,oneof"`
+}
+type GlobalSpecType_HashPolicyChoiceSourceIpStickiness struct {
+	HashPolicyChoiceSourceIpStickiness *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=hash_policy_choice_source_ip_stickiness,json=hashPolicyChoiceSourceIpStickiness,oneof"`
+}
 
-func (*GlobalSpecType_DoNotAdvertise) isGlobalSpecType_AdvertiseChoice()              {}
-func (*GlobalSpecType_AdvertiseOnPublicDefaultVip) isGlobalSpecType_AdvertiseChoice() {}
-func (*GlobalSpecType_AdvertiseOnPublic) isGlobalSpecType_AdvertiseChoice()           {}
-func (*GlobalSpecType_AdvertiseCustom) isGlobalSpecType_AdvertiseChoice()             {}
+func (*GlobalSpecType_DoNotAdvertise) isGlobalSpecType_AdvertiseChoice()                      {}
+func (*GlobalSpecType_AdvertiseOnPublicDefaultVip) isGlobalSpecType_AdvertiseChoice()         {}
+func (*GlobalSpecType_AdvertiseOnPublic) isGlobalSpecType_AdvertiseChoice()                   {}
+func (*GlobalSpecType_AdvertiseCustom) isGlobalSpecType_AdvertiseChoice()                     {}
+func (*GlobalSpecType_HashPolicyChoiceRoundRobin) isGlobalSpecType_HashPolicyChoice()         {}
+func (*GlobalSpecType_HashPolicyChoiceLeastActive) isGlobalSpecType_HashPolicyChoice()        {}
+func (*GlobalSpecType_HashPolicyChoiceRandom) isGlobalSpecType_HashPolicyChoice()             {}
+func (*GlobalSpecType_HashPolicyChoiceSourceIpStickiness) isGlobalSpecType_HashPolicyChoice() {}
 
 func (m *GlobalSpecType) GetAdvertiseChoice() isGlobalSpecType_AdvertiseChoice {
 	if m != nil {
 		return m.AdvertiseChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetHashPolicyChoice() isGlobalSpecType_HashPolicyChoice {
+	if m != nil {
+		return m.HashPolicyChoice
 	}
 	return nil
 }
@@ -204,6 +244,34 @@ func (m *GlobalSpecType) GetAdvertiseCustom() *ves_io_schema_views.AdvertiseCust
 	return nil
 }
 
+func (m *GlobalSpecType) GetHashPolicyChoiceRoundRobin() *ves_io_schema4.Empty {
+	if x, ok := m.GetHashPolicyChoice().(*GlobalSpecType_HashPolicyChoiceRoundRobin); ok {
+		return x.HashPolicyChoiceRoundRobin
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetHashPolicyChoiceLeastActive() *ves_io_schema4.Empty {
+	if x, ok := m.GetHashPolicyChoice().(*GlobalSpecType_HashPolicyChoiceLeastActive); ok {
+		return x.HashPolicyChoiceLeastActive
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetHashPolicyChoiceRandom() *ves_io_schema4.Empty {
+	if x, ok := m.GetHashPolicyChoice().(*GlobalSpecType_HashPolicyChoiceRandom); ok {
+		return x.HashPolicyChoiceRandom
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetHashPolicyChoiceSourceIpStickiness() *ves_io_schema4.Empty {
+	if x, ok := m.GetHashPolicyChoice().(*GlobalSpecType_HashPolicyChoiceSourceIpStickiness); ok {
+		return x.HashPolicyChoiceSourceIpStickiness
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetViewInternal() *ves_io_schema_views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
@@ -232,6 +300,10 @@ func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 		(*GlobalSpecType_AdvertiseOnPublicDefaultVip)(nil),
 		(*GlobalSpecType_AdvertiseOnPublic)(nil),
 		(*GlobalSpecType_AdvertiseCustom)(nil),
+		(*GlobalSpecType_HashPolicyChoiceRoundRobin)(nil),
+		(*GlobalSpecType_HashPolicyChoiceLeastActive)(nil),
+		(*GlobalSpecType_HashPolicyChoiceRandom)(nil),
+		(*GlobalSpecType_HashPolicyChoiceSourceIpStickiness)(nil),
 	}
 }
 
@@ -262,6 +334,32 @@ func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("GlobalSpecType.AdvertiseChoice has unexpected type %T", x)
+	}
+	// hash_policy_choice
+	switch x := m.HashPolicyChoice.(type) {
+	case *GlobalSpecType_HashPolicyChoiceRoundRobin:
+		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HashPolicyChoiceRoundRobin); err != nil {
+			return err
+		}
+	case *GlobalSpecType_HashPolicyChoiceLeastActive:
+		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HashPolicyChoiceLeastActive); err != nil {
+			return err
+		}
+	case *GlobalSpecType_HashPolicyChoiceRandom:
+		_ = b.EncodeVarint(15<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HashPolicyChoiceRandom); err != nil {
+			return err
+		}
+	case *GlobalSpecType_HashPolicyChoiceSourceIpStickiness:
+		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HashPolicyChoiceSourceIpStickiness); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("GlobalSpecType.HashPolicyChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -301,6 +399,38 @@ func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto
 		err := b.DecodeMessage(msg)
 		m.AdvertiseChoice = &GlobalSpecType_AdvertiseCustom{msg}
 		return true, err
+	case 13: // hash_policy_choice.hash_policy_choice_round_robin
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceRoundRobin{msg}
+		return true, err
+	case 14: // hash_policy_choice.hash_policy_choice_least_active
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceLeastActive{msg}
+		return true, err
+	case 15: // hash_policy_choice.hash_policy_choice_random
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceRandom{msg}
+		return true, err
+	case 16: // hash_policy_choice.hash_policy_choice_source_ip_stickiness
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceSourceIpStickiness{msg}
+		return true, err
 	default:
 		return false, nil
 	}
@@ -334,6 +464,32 @@ func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
+	// hash_policy_choice
+	switch x := m.HashPolicyChoice.(type) {
+	case *GlobalSpecType_HashPolicyChoiceRoundRobin:
+		s := proto.Size(x.HashPolicyChoiceRoundRobin)
+		n += proto.SizeVarint(13<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GlobalSpecType_HashPolicyChoiceLeastActive:
+		s := proto.Size(x.HashPolicyChoiceLeastActive)
+		n += proto.SizeVarint(14<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GlobalSpecType_HashPolicyChoiceRandom:
+		s := proto.Size(x.HashPolicyChoiceRandom)
+		n += proto.SizeVarint(15<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GlobalSpecType_HashPolicyChoiceSourceIpStickiness:
+		s := proto.Size(x.HashPolicyChoiceSourceIpStickiness)
+		n += proto.SizeVarint(16<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
 	return n
 }
 
@@ -353,6 +509,12 @@ type CreateSpecType struct {
 	//	*CreateSpecType_AdvertiseOnPublic
 	//	*CreateSpecType_AdvertiseCustom
 	AdvertiseChoice isCreateSpecType_AdvertiseChoice `protobuf_oneof:"advertise_choice"`
+	// Types that are valid to be assigned to HashPolicyChoice:
+	//	*CreateSpecType_HashPolicyChoiceRoundRobin
+	//	*CreateSpecType_HashPolicyChoiceLeastActive
+	//	*CreateSpecType_HashPolicyChoiceRandom
+	//	*CreateSpecType_HashPolicyChoiceSourceIpStickiness
+	HashPolicyChoice isCreateSpecType_HashPolicyChoice `protobuf_oneof:"hash_policy_choice"`
 }
 
 func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
@@ -361,6 +523,12 @@ func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes
 
 type isCreateSpecType_AdvertiseChoice interface {
 	isCreateSpecType_AdvertiseChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isCreateSpecType_HashPolicyChoice interface {
+	isCreateSpecType_HashPolicyChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -378,15 +546,37 @@ type CreateSpecType_AdvertiseOnPublic struct {
 type CreateSpecType_AdvertiseCustom struct {
 	AdvertiseCustom *ves_io_schema_views.AdvertiseCustom `protobuf:"bytes,6,opt,name=advertise_custom,json=advertiseCustom,oneof"`
 }
+type CreateSpecType_HashPolicyChoiceRoundRobin struct {
+	HashPolicyChoiceRoundRobin *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=hash_policy_choice_round_robin,json=hashPolicyChoiceRoundRobin,oneof"`
+}
+type CreateSpecType_HashPolicyChoiceLeastActive struct {
+	HashPolicyChoiceLeastActive *ves_io_schema4.Empty `protobuf:"bytes,14,opt,name=hash_policy_choice_least_active,json=hashPolicyChoiceLeastActive,oneof"`
+}
+type CreateSpecType_HashPolicyChoiceRandom struct {
+	HashPolicyChoiceRandom *ves_io_schema4.Empty `protobuf:"bytes,15,opt,name=hash_policy_choice_random,json=hashPolicyChoiceRandom,oneof"`
+}
+type CreateSpecType_HashPolicyChoiceSourceIpStickiness struct {
+	HashPolicyChoiceSourceIpStickiness *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=hash_policy_choice_source_ip_stickiness,json=hashPolicyChoiceSourceIpStickiness,oneof"`
+}
 
-func (*CreateSpecType_DoNotAdvertise) isCreateSpecType_AdvertiseChoice()              {}
-func (*CreateSpecType_AdvertiseOnPublicDefaultVip) isCreateSpecType_AdvertiseChoice() {}
-func (*CreateSpecType_AdvertiseOnPublic) isCreateSpecType_AdvertiseChoice()           {}
-func (*CreateSpecType_AdvertiseCustom) isCreateSpecType_AdvertiseChoice()             {}
+func (*CreateSpecType_DoNotAdvertise) isCreateSpecType_AdvertiseChoice()                      {}
+func (*CreateSpecType_AdvertiseOnPublicDefaultVip) isCreateSpecType_AdvertiseChoice()         {}
+func (*CreateSpecType_AdvertiseOnPublic) isCreateSpecType_AdvertiseChoice()                   {}
+func (*CreateSpecType_AdvertiseCustom) isCreateSpecType_AdvertiseChoice()                     {}
+func (*CreateSpecType_HashPolicyChoiceRoundRobin) isCreateSpecType_HashPolicyChoice()         {}
+func (*CreateSpecType_HashPolicyChoiceLeastActive) isCreateSpecType_HashPolicyChoice()        {}
+func (*CreateSpecType_HashPolicyChoiceRandom) isCreateSpecType_HashPolicyChoice()             {}
+func (*CreateSpecType_HashPolicyChoiceSourceIpStickiness) isCreateSpecType_HashPolicyChoice() {}
 
 func (m *CreateSpecType) GetAdvertiseChoice() isCreateSpecType_AdvertiseChoice {
 	if m != nil {
 		return m.AdvertiseChoice
+	}
+	return nil
+}
+func (m *CreateSpecType) GetHashPolicyChoice() isCreateSpecType_HashPolicyChoice {
+	if m != nil {
+		return m.HashPolicyChoice
 	}
 	return nil
 }
@@ -454,6 +644,34 @@ func (m *CreateSpecType) GetAdvertiseCustom() *ves_io_schema_views.AdvertiseCust
 	return nil
 }
 
+func (m *CreateSpecType) GetHashPolicyChoiceRoundRobin() *ves_io_schema4.Empty {
+	if x, ok := m.GetHashPolicyChoice().(*CreateSpecType_HashPolicyChoiceRoundRobin); ok {
+		return x.HashPolicyChoiceRoundRobin
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetHashPolicyChoiceLeastActive() *ves_io_schema4.Empty {
+	if x, ok := m.GetHashPolicyChoice().(*CreateSpecType_HashPolicyChoiceLeastActive); ok {
+		return x.HashPolicyChoiceLeastActive
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetHashPolicyChoiceRandom() *ves_io_schema4.Empty {
+	if x, ok := m.GetHashPolicyChoice().(*CreateSpecType_HashPolicyChoiceRandom); ok {
+		return x.HashPolicyChoiceRandom
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetHashPolicyChoiceSourceIpStickiness() *ves_io_schema4.Empty {
+	if x, ok := m.GetHashPolicyChoice().(*CreateSpecType_HashPolicyChoiceSourceIpStickiness); ok {
+		return x.HashPolicyChoiceSourceIpStickiness
+	}
+	return nil
+}
+
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
@@ -461,6 +679,10 @@ func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 		(*CreateSpecType_AdvertiseOnPublicDefaultVip)(nil),
 		(*CreateSpecType_AdvertiseOnPublic)(nil),
 		(*CreateSpecType_AdvertiseCustom)(nil),
+		(*CreateSpecType_HashPolicyChoiceRoundRobin)(nil),
+		(*CreateSpecType_HashPolicyChoiceLeastActive)(nil),
+		(*CreateSpecType_HashPolicyChoiceRandom)(nil),
+		(*CreateSpecType_HashPolicyChoiceSourceIpStickiness)(nil),
 	}
 }
 
@@ -491,6 +713,32 @@ func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("CreateSpecType.AdvertiseChoice has unexpected type %T", x)
+	}
+	// hash_policy_choice
+	switch x := m.HashPolicyChoice.(type) {
+	case *CreateSpecType_HashPolicyChoiceRoundRobin:
+		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HashPolicyChoiceRoundRobin); err != nil {
+			return err
+		}
+	case *CreateSpecType_HashPolicyChoiceLeastActive:
+		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HashPolicyChoiceLeastActive); err != nil {
+			return err
+		}
+	case *CreateSpecType_HashPolicyChoiceRandom:
+		_ = b.EncodeVarint(15<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HashPolicyChoiceRandom); err != nil {
+			return err
+		}
+	case *CreateSpecType_HashPolicyChoiceSourceIpStickiness:
+		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HashPolicyChoiceSourceIpStickiness); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("CreateSpecType.HashPolicyChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -530,6 +778,38 @@ func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto
 		err := b.DecodeMessage(msg)
 		m.AdvertiseChoice = &CreateSpecType_AdvertiseCustom{msg}
 		return true, err
+	case 13: // hash_policy_choice.hash_policy_choice_round_robin
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceRoundRobin{msg}
+		return true, err
+	case 14: // hash_policy_choice.hash_policy_choice_least_active
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceLeastActive{msg}
+		return true, err
+	case 15: // hash_policy_choice.hash_policy_choice_random
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceRandom{msg}
+		return true, err
+	case 16: // hash_policy_choice.hash_policy_choice_source_ip_stickiness
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceSourceIpStickiness{msg}
+		return true, err
 	default:
 		return false, nil
 	}
@@ -563,6 +843,32 @@ func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
+	// hash_policy_choice
+	switch x := m.HashPolicyChoice.(type) {
+	case *CreateSpecType_HashPolicyChoiceRoundRobin:
+		s := proto.Size(x.HashPolicyChoiceRoundRobin)
+		n += proto.SizeVarint(13<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *CreateSpecType_HashPolicyChoiceLeastActive:
+		s := proto.Size(x.HashPolicyChoiceLeastActive)
+		n += proto.SizeVarint(14<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *CreateSpecType_HashPolicyChoiceRandom:
+		s := proto.Size(x.HashPolicyChoiceRandom)
+		n += proto.SizeVarint(15<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *CreateSpecType_HashPolicyChoiceSourceIpStickiness:
+		s := proto.Size(x.HashPolicyChoiceSourceIpStickiness)
+		n += proto.SizeVarint(16<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
 	return n
 }
 
@@ -583,6 +889,12 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_AdvertiseOnPublic
 	//	*ReplaceSpecType_AdvertiseCustom
 	AdvertiseChoice isReplaceSpecType_AdvertiseChoice `protobuf_oneof:"advertise_choice"`
+	// Types that are valid to be assigned to HashPolicyChoice:
+	//	*ReplaceSpecType_HashPolicyChoiceRoundRobin
+	//	*ReplaceSpecType_HashPolicyChoiceLeastActive
+	//	*ReplaceSpecType_HashPolicyChoiceRandom
+	//	*ReplaceSpecType_HashPolicyChoiceSourceIpStickiness
+	HashPolicyChoice isReplaceSpecType_HashPolicyChoice `protobuf_oneof:"hash_policy_choice"`
 }
 
 func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
@@ -591,6 +903,12 @@ func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorType
 
 type isReplaceSpecType_AdvertiseChoice interface {
 	isReplaceSpecType_AdvertiseChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isReplaceSpecType_HashPolicyChoice interface {
+	isReplaceSpecType_HashPolicyChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -608,15 +926,37 @@ type ReplaceSpecType_AdvertiseOnPublic struct {
 type ReplaceSpecType_AdvertiseCustom struct {
 	AdvertiseCustom *ves_io_schema_views.AdvertiseCustom `protobuf:"bytes,6,opt,name=advertise_custom,json=advertiseCustom,oneof"`
 }
+type ReplaceSpecType_HashPolicyChoiceRoundRobin struct {
+	HashPolicyChoiceRoundRobin *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=hash_policy_choice_round_robin,json=hashPolicyChoiceRoundRobin,oneof"`
+}
+type ReplaceSpecType_HashPolicyChoiceLeastActive struct {
+	HashPolicyChoiceLeastActive *ves_io_schema4.Empty `protobuf:"bytes,14,opt,name=hash_policy_choice_least_active,json=hashPolicyChoiceLeastActive,oneof"`
+}
+type ReplaceSpecType_HashPolicyChoiceRandom struct {
+	HashPolicyChoiceRandom *ves_io_schema4.Empty `protobuf:"bytes,15,opt,name=hash_policy_choice_random,json=hashPolicyChoiceRandom,oneof"`
+}
+type ReplaceSpecType_HashPolicyChoiceSourceIpStickiness struct {
+	HashPolicyChoiceSourceIpStickiness *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=hash_policy_choice_source_ip_stickiness,json=hashPolicyChoiceSourceIpStickiness,oneof"`
+}
 
-func (*ReplaceSpecType_DoNotAdvertise) isReplaceSpecType_AdvertiseChoice()              {}
-func (*ReplaceSpecType_AdvertiseOnPublicDefaultVip) isReplaceSpecType_AdvertiseChoice() {}
-func (*ReplaceSpecType_AdvertiseOnPublic) isReplaceSpecType_AdvertiseChoice()           {}
-func (*ReplaceSpecType_AdvertiseCustom) isReplaceSpecType_AdvertiseChoice()             {}
+func (*ReplaceSpecType_DoNotAdvertise) isReplaceSpecType_AdvertiseChoice()                      {}
+func (*ReplaceSpecType_AdvertiseOnPublicDefaultVip) isReplaceSpecType_AdvertiseChoice()         {}
+func (*ReplaceSpecType_AdvertiseOnPublic) isReplaceSpecType_AdvertiseChoice()                   {}
+func (*ReplaceSpecType_AdvertiseCustom) isReplaceSpecType_AdvertiseChoice()                     {}
+func (*ReplaceSpecType_HashPolicyChoiceRoundRobin) isReplaceSpecType_HashPolicyChoice()         {}
+func (*ReplaceSpecType_HashPolicyChoiceLeastActive) isReplaceSpecType_HashPolicyChoice()        {}
+func (*ReplaceSpecType_HashPolicyChoiceRandom) isReplaceSpecType_HashPolicyChoice()             {}
+func (*ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) isReplaceSpecType_HashPolicyChoice() {}
 
 func (m *ReplaceSpecType) GetAdvertiseChoice() isReplaceSpecType_AdvertiseChoice {
 	if m != nil {
 		return m.AdvertiseChoice
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetHashPolicyChoice() isReplaceSpecType_HashPolicyChoice {
+	if m != nil {
+		return m.HashPolicyChoice
 	}
 	return nil
 }
@@ -691,6 +1031,34 @@ func (m *ReplaceSpecType) GetAdvertiseCustom() *ves_io_schema_views.AdvertiseCus
 	return nil
 }
 
+func (m *ReplaceSpecType) GetHashPolicyChoiceRoundRobin() *ves_io_schema4.Empty {
+	if x, ok := m.GetHashPolicyChoice().(*ReplaceSpecType_HashPolicyChoiceRoundRobin); ok {
+		return x.HashPolicyChoiceRoundRobin
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetHashPolicyChoiceLeastActive() *ves_io_schema4.Empty {
+	if x, ok := m.GetHashPolicyChoice().(*ReplaceSpecType_HashPolicyChoiceLeastActive); ok {
+		return x.HashPolicyChoiceLeastActive
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetHashPolicyChoiceRandom() *ves_io_schema4.Empty {
+	if x, ok := m.GetHashPolicyChoice().(*ReplaceSpecType_HashPolicyChoiceRandom); ok {
+		return x.HashPolicyChoiceRandom
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetHashPolicyChoiceSourceIpStickiness() *ves_io_schema4.Empty {
+	if x, ok := m.GetHashPolicyChoice().(*ReplaceSpecType_HashPolicyChoiceSourceIpStickiness); ok {
+		return x.HashPolicyChoiceSourceIpStickiness
+	}
+	return nil
+}
+
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
@@ -698,6 +1066,10 @@ func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffe
 		(*ReplaceSpecType_AdvertiseOnPublicDefaultVip)(nil),
 		(*ReplaceSpecType_AdvertiseOnPublic)(nil),
 		(*ReplaceSpecType_AdvertiseCustom)(nil),
+		(*ReplaceSpecType_HashPolicyChoiceRoundRobin)(nil),
+		(*ReplaceSpecType_HashPolicyChoiceLeastActive)(nil),
+		(*ReplaceSpecType_HashPolicyChoiceRandom)(nil),
+		(*ReplaceSpecType_HashPolicyChoiceSourceIpStickiness)(nil),
 	}
 }
 
@@ -728,6 +1100,32 @@ func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("ReplaceSpecType.AdvertiseChoice has unexpected type %T", x)
+	}
+	// hash_policy_choice
+	switch x := m.HashPolicyChoice.(type) {
+	case *ReplaceSpecType_HashPolicyChoiceRoundRobin:
+		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HashPolicyChoiceRoundRobin); err != nil {
+			return err
+		}
+	case *ReplaceSpecType_HashPolicyChoiceLeastActive:
+		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HashPolicyChoiceLeastActive); err != nil {
+			return err
+		}
+	case *ReplaceSpecType_HashPolicyChoiceRandom:
+		_ = b.EncodeVarint(15<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HashPolicyChoiceRandom); err != nil {
+			return err
+		}
+	case *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness:
+		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HashPolicyChoiceSourceIpStickiness); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("ReplaceSpecType.HashPolicyChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -767,6 +1165,38 @@ func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *prot
 		err := b.DecodeMessage(msg)
 		m.AdvertiseChoice = &ReplaceSpecType_AdvertiseCustom{msg}
 		return true, err
+	case 13: // hash_policy_choice.hash_policy_choice_round_robin
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceRoundRobin{msg}
+		return true, err
+	case 14: // hash_policy_choice.hash_policy_choice_least_active
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceLeastActive{msg}
+		return true, err
+	case 15: // hash_policy_choice.hash_policy_choice_random
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceRandom{msg}
+		return true, err
+	case 16: // hash_policy_choice.hash_policy_choice_source_ip_stickiness
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceSourceIpStickiness{msg}
+		return true, err
 	default:
 		return false, nil
 	}
@@ -800,6 +1230,32 @@ func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
+	// hash_policy_choice
+	switch x := m.HashPolicyChoice.(type) {
+	case *ReplaceSpecType_HashPolicyChoiceRoundRobin:
+		s := proto.Size(x.HashPolicyChoiceRoundRobin)
+		n += proto.SizeVarint(13<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *ReplaceSpecType_HashPolicyChoiceLeastActive:
+		s := proto.Size(x.HashPolicyChoiceLeastActive)
+		n += proto.SizeVarint(14<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *ReplaceSpecType_HashPolicyChoiceRandom:
+		s := proto.Size(x.HashPolicyChoiceRandom)
+		n += proto.SizeVarint(15<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness:
+		s := proto.Size(x.HashPolicyChoiceSourceIpStickiness)
+		n += proto.SizeVarint(16<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
 	return n
 }
 
@@ -819,9 +1275,15 @@ type GetSpecType struct {
 	//	*GetSpecType_AdvertiseOnPublicDefaultVip
 	//	*GetSpecType_AdvertiseOnPublic
 	//	*GetSpecType_AdvertiseCustom
-	AdvertiseChoice isGetSpecType_AdvertiseChoice                  `protobuf_oneof:"advertise_choice"`
-	HostName        string                                         `protobuf:"bytes,1001,opt,name=host_name,json=hostName,proto3" json:"host_name,omitempty"`
-	DnsInfo         []*ves_io_schema_virtual_host_dns_info.DnsInfo `protobuf:"bytes,1002,rep,name=dns_info,json=dnsInfo" json:"dns_info,omitempty"`
+	AdvertiseChoice isGetSpecType_AdvertiseChoice `protobuf_oneof:"advertise_choice"`
+	// Types that are valid to be assigned to HashPolicyChoice:
+	//	*GetSpecType_HashPolicyChoiceRoundRobin
+	//	*GetSpecType_HashPolicyChoiceLeastActive
+	//	*GetSpecType_HashPolicyChoiceRandom
+	//	*GetSpecType_HashPolicyChoiceSourceIpStickiness
+	HashPolicyChoice isGetSpecType_HashPolicyChoice                 `protobuf_oneof:"hash_policy_choice"`
+	HostName         string                                         `protobuf:"bytes,1001,opt,name=host_name,json=hostName,proto3" json:"host_name,omitempty"`
+	DnsInfo          []*ves_io_schema_virtual_host_dns_info.DnsInfo `protobuf:"bytes,1002,rep,name=dns_info,json=dnsInfo" json:"dns_info,omitempty"`
 }
 
 func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
@@ -830,6 +1292,12 @@ func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, [
 
 type isGetSpecType_AdvertiseChoice interface {
 	isGetSpecType_AdvertiseChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isGetSpecType_HashPolicyChoice interface {
+	isGetSpecType_HashPolicyChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -847,15 +1315,37 @@ type GetSpecType_AdvertiseOnPublic struct {
 type GetSpecType_AdvertiseCustom struct {
 	AdvertiseCustom *ves_io_schema_views.AdvertiseCustom `protobuf:"bytes,6,opt,name=advertise_custom,json=advertiseCustom,oneof"`
 }
+type GetSpecType_HashPolicyChoiceRoundRobin struct {
+	HashPolicyChoiceRoundRobin *ves_io_schema4.Empty `protobuf:"bytes,13,opt,name=hash_policy_choice_round_robin,json=hashPolicyChoiceRoundRobin,oneof"`
+}
+type GetSpecType_HashPolicyChoiceLeastActive struct {
+	HashPolicyChoiceLeastActive *ves_io_schema4.Empty `protobuf:"bytes,14,opt,name=hash_policy_choice_least_active,json=hashPolicyChoiceLeastActive,oneof"`
+}
+type GetSpecType_HashPolicyChoiceRandom struct {
+	HashPolicyChoiceRandom *ves_io_schema4.Empty `protobuf:"bytes,15,opt,name=hash_policy_choice_random,json=hashPolicyChoiceRandom,oneof"`
+}
+type GetSpecType_HashPolicyChoiceSourceIpStickiness struct {
+	HashPolicyChoiceSourceIpStickiness *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=hash_policy_choice_source_ip_stickiness,json=hashPolicyChoiceSourceIpStickiness,oneof"`
+}
 
-func (*GetSpecType_DoNotAdvertise) isGetSpecType_AdvertiseChoice()              {}
-func (*GetSpecType_AdvertiseOnPublicDefaultVip) isGetSpecType_AdvertiseChoice() {}
-func (*GetSpecType_AdvertiseOnPublic) isGetSpecType_AdvertiseChoice()           {}
-func (*GetSpecType_AdvertiseCustom) isGetSpecType_AdvertiseChoice()             {}
+func (*GetSpecType_DoNotAdvertise) isGetSpecType_AdvertiseChoice()                      {}
+func (*GetSpecType_AdvertiseOnPublicDefaultVip) isGetSpecType_AdvertiseChoice()         {}
+func (*GetSpecType_AdvertiseOnPublic) isGetSpecType_AdvertiseChoice()                   {}
+func (*GetSpecType_AdvertiseCustom) isGetSpecType_AdvertiseChoice()                     {}
+func (*GetSpecType_HashPolicyChoiceRoundRobin) isGetSpecType_HashPolicyChoice()         {}
+func (*GetSpecType_HashPolicyChoiceLeastActive) isGetSpecType_HashPolicyChoice()        {}
+func (*GetSpecType_HashPolicyChoiceRandom) isGetSpecType_HashPolicyChoice()             {}
+func (*GetSpecType_HashPolicyChoiceSourceIpStickiness) isGetSpecType_HashPolicyChoice() {}
 
 func (m *GetSpecType) GetAdvertiseChoice() isGetSpecType_AdvertiseChoice {
 	if m != nil {
 		return m.AdvertiseChoice
+	}
+	return nil
+}
+func (m *GetSpecType) GetHashPolicyChoice() isGetSpecType_HashPolicyChoice {
+	if m != nil {
+		return m.HashPolicyChoice
 	}
 	return nil
 }
@@ -930,6 +1420,34 @@ func (m *GetSpecType) GetAdvertiseCustom() *ves_io_schema_views.AdvertiseCustom 
 	return nil
 }
 
+func (m *GetSpecType) GetHashPolicyChoiceRoundRobin() *ves_io_schema4.Empty {
+	if x, ok := m.GetHashPolicyChoice().(*GetSpecType_HashPolicyChoiceRoundRobin); ok {
+		return x.HashPolicyChoiceRoundRobin
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetHashPolicyChoiceLeastActive() *ves_io_schema4.Empty {
+	if x, ok := m.GetHashPolicyChoice().(*GetSpecType_HashPolicyChoiceLeastActive); ok {
+		return x.HashPolicyChoiceLeastActive
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetHashPolicyChoiceRandom() *ves_io_schema4.Empty {
+	if x, ok := m.GetHashPolicyChoice().(*GetSpecType_HashPolicyChoiceRandom); ok {
+		return x.HashPolicyChoiceRandom
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetHashPolicyChoiceSourceIpStickiness() *ves_io_schema4.Empty {
+	if x, ok := m.GetHashPolicyChoice().(*GetSpecType_HashPolicyChoiceSourceIpStickiness); ok {
+		return x.HashPolicyChoiceSourceIpStickiness
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetHostName() string {
 	if m != nil {
 		return m.HostName
@@ -951,6 +1469,10 @@ func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) e
 		(*GetSpecType_AdvertiseOnPublicDefaultVip)(nil),
 		(*GetSpecType_AdvertiseOnPublic)(nil),
 		(*GetSpecType_AdvertiseCustom)(nil),
+		(*GetSpecType_HashPolicyChoiceRoundRobin)(nil),
+		(*GetSpecType_HashPolicyChoiceLeastActive)(nil),
+		(*GetSpecType_HashPolicyChoiceRandom)(nil),
+		(*GetSpecType_HashPolicyChoiceSourceIpStickiness)(nil),
 	}
 }
 
@@ -981,6 +1503,32 @@ func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("GetSpecType.AdvertiseChoice has unexpected type %T", x)
+	}
+	// hash_policy_choice
+	switch x := m.HashPolicyChoice.(type) {
+	case *GetSpecType_HashPolicyChoiceRoundRobin:
+		_ = b.EncodeVarint(13<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HashPolicyChoiceRoundRobin); err != nil {
+			return err
+		}
+	case *GetSpecType_HashPolicyChoiceLeastActive:
+		_ = b.EncodeVarint(14<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HashPolicyChoiceLeastActive); err != nil {
+			return err
+		}
+	case *GetSpecType_HashPolicyChoiceRandom:
+		_ = b.EncodeVarint(15<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HashPolicyChoiceRandom); err != nil {
+			return err
+		}
+	case *GetSpecType_HashPolicyChoiceSourceIpStickiness:
+		_ = b.EncodeVarint(16<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HashPolicyChoiceSourceIpStickiness); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("GetSpecType.HashPolicyChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -1020,6 +1568,38 @@ func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Bu
 		err := b.DecodeMessage(msg)
 		m.AdvertiseChoice = &GetSpecType_AdvertiseCustom{msg}
 		return true, err
+	case 13: // hash_policy_choice.hash_policy_choice_round_robin
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.HashPolicyChoice = &GetSpecType_HashPolicyChoiceRoundRobin{msg}
+		return true, err
+	case 14: // hash_policy_choice.hash_policy_choice_least_active
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.HashPolicyChoice = &GetSpecType_HashPolicyChoiceLeastActive{msg}
+		return true, err
+	case 15: // hash_policy_choice.hash_policy_choice_random
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.HashPolicyChoice = &GetSpecType_HashPolicyChoiceRandom{msg}
+		return true, err
+	case 16: // hash_policy_choice.hash_policy_choice_source_ip_stickiness
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.HashPolicyChoice = &GetSpecType_HashPolicyChoiceSourceIpStickiness{msg}
+		return true, err
 	default:
 		return false, nil
 	}
@@ -1047,6 +1627,32 @@ func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
 	case *GetSpecType_AdvertiseCustom:
 		s := proto.Size(x.AdvertiseCustom)
 		n += proto.SizeVarint(6<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	// hash_policy_choice
+	switch x := m.HashPolicyChoice.(type) {
+	case *GetSpecType_HashPolicyChoiceRoundRobin:
+		s := proto.Size(x.HashPolicyChoiceRoundRobin)
+		n += proto.SizeVarint(13<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GetSpecType_HashPolicyChoiceLeastActive:
+		s := proto.Size(x.HashPolicyChoiceLeastActive)
+		n += proto.SizeVarint(14<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GetSpecType_HashPolicyChoiceRandom:
+		s := proto.Size(x.HashPolicyChoiceRandom)
+		n += proto.SizeVarint(15<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GetSpecType_HashPolicyChoiceSourceIpStickiness:
+		s := proto.Size(x.HashPolicyChoiceSourceIpStickiness)
+		n += proto.SizeVarint(16<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(s))
 		n += s
 	case nil:
@@ -1125,6 +1731,15 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if this.AdvertiseChoice == nil {
 		return false
 	} else if !this.AdvertiseChoice.Equal(that1.AdvertiseChoice) {
+		return false
+	}
+	if that1.HashPolicyChoice == nil {
+		if this.HashPolicyChoice != nil {
+			return false
+		}
+	} else if this.HashPolicyChoice == nil {
+		return false
+	} else if !this.HashPolicyChoice.Equal(that1.HashPolicyChoice) {
 		return false
 	}
 	if !this.ViewInternal.Equal(that1.ViewInternal) {
@@ -1239,6 +1854,102 @@ func (this *GlobalSpecType_AdvertiseCustom) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_HashPolicyChoiceRoundRobin) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_HashPolicyChoiceRoundRobin)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_HashPolicyChoiceRoundRobin)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HashPolicyChoiceRoundRobin.Equal(that1.HashPolicyChoiceRoundRobin) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_HashPolicyChoiceLeastActive) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_HashPolicyChoiceLeastActive)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_HashPolicyChoiceLeastActive)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HashPolicyChoiceLeastActive.Equal(that1.HashPolicyChoiceLeastActive) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_HashPolicyChoiceRandom) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_HashPolicyChoiceRandom)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_HashPolicyChoiceRandom)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HashPolicyChoiceRandom.Equal(that1.HashPolicyChoiceRandom) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_HashPolicyChoiceSourceIpStickiness) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_HashPolicyChoiceSourceIpStickiness)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_HashPolicyChoiceSourceIpStickiness)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HashPolicyChoiceSourceIpStickiness.Equal(that1.HashPolicyChoiceSourceIpStickiness) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1290,6 +2001,15 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this.AdvertiseChoice == nil {
 		return false
 	} else if !this.AdvertiseChoice.Equal(that1.AdvertiseChoice) {
+		return false
+	}
+	if that1.HashPolicyChoice == nil {
+		if this.HashPolicyChoice != nil {
+			return false
+		}
+	} else if this.HashPolicyChoice == nil {
+		return false
+	} else if !this.HashPolicyChoice.Equal(that1.HashPolicyChoice) {
 		return false
 	}
 	return true
@@ -1390,6 +2110,102 @@ func (this *CreateSpecType_AdvertiseCustom) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_HashPolicyChoiceRoundRobin) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_HashPolicyChoiceRoundRobin)
+	if !ok {
+		that2, ok := that.(CreateSpecType_HashPolicyChoiceRoundRobin)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HashPolicyChoiceRoundRobin.Equal(that1.HashPolicyChoiceRoundRobin) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_HashPolicyChoiceLeastActive) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_HashPolicyChoiceLeastActive)
+	if !ok {
+		that2, ok := that.(CreateSpecType_HashPolicyChoiceLeastActive)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HashPolicyChoiceLeastActive.Equal(that1.HashPolicyChoiceLeastActive) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_HashPolicyChoiceRandom) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_HashPolicyChoiceRandom)
+	if !ok {
+		that2, ok := that.(CreateSpecType_HashPolicyChoiceRandom)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HashPolicyChoiceRandom.Equal(that1.HashPolicyChoiceRandom) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_HashPolicyChoiceSourceIpStickiness) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_HashPolicyChoiceSourceIpStickiness)
+	if !ok {
+		that2, ok := that.(CreateSpecType_HashPolicyChoiceSourceIpStickiness)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HashPolicyChoiceSourceIpStickiness.Equal(that1.HashPolicyChoiceSourceIpStickiness) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1449,6 +2265,15 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if this.AdvertiseChoice == nil {
 		return false
 	} else if !this.AdvertiseChoice.Equal(that1.AdvertiseChoice) {
+		return false
+	}
+	if that1.HashPolicyChoice == nil {
+		if this.HashPolicyChoice != nil {
+			return false
+		}
+	} else if this.HashPolicyChoice == nil {
+		return false
+	} else if !this.HashPolicyChoice.Equal(that1.HashPolicyChoice) {
 		return false
 	}
 	return true
@@ -1549,6 +2374,102 @@ func (this *ReplaceSpecType_AdvertiseCustom) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_HashPolicyChoiceRoundRobin) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_HashPolicyChoiceRoundRobin)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_HashPolicyChoiceRoundRobin)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HashPolicyChoiceRoundRobin.Equal(that1.HashPolicyChoiceRoundRobin) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_HashPolicyChoiceLeastActive) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_HashPolicyChoiceLeastActive)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_HashPolicyChoiceLeastActive)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HashPolicyChoiceLeastActive.Equal(that1.HashPolicyChoiceLeastActive) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_HashPolicyChoiceRandom) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_HashPolicyChoiceRandom)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_HashPolicyChoiceRandom)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HashPolicyChoiceRandom.Equal(that1.HashPolicyChoiceRandom) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_HashPolicyChoiceSourceIpStickiness)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_HashPolicyChoiceSourceIpStickiness)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HashPolicyChoiceSourceIpStickiness.Equal(that1.HashPolicyChoiceSourceIpStickiness) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1608,6 +2529,15 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if this.AdvertiseChoice == nil {
 		return false
 	} else if !this.AdvertiseChoice.Equal(that1.AdvertiseChoice) {
+		return false
+	}
+	if that1.HashPolicyChoice == nil {
+		if this.HashPolicyChoice != nil {
+			return false
+		}
+	} else if this.HashPolicyChoice == nil {
+		return false
+	} else if !this.HashPolicyChoice.Equal(that1.HashPolicyChoice) {
 		return false
 	}
 	if this.HostName != that1.HostName {
@@ -1719,11 +2649,107 @@ func (this *GetSpecType_AdvertiseCustom) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_HashPolicyChoiceRoundRobin) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_HashPolicyChoiceRoundRobin)
+	if !ok {
+		that2, ok := that.(GetSpecType_HashPolicyChoiceRoundRobin)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HashPolicyChoiceRoundRobin.Equal(that1.HashPolicyChoiceRoundRobin) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_HashPolicyChoiceLeastActive) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_HashPolicyChoiceLeastActive)
+	if !ok {
+		that2, ok := that.(GetSpecType_HashPolicyChoiceLeastActive)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HashPolicyChoiceLeastActive.Equal(that1.HashPolicyChoiceLeastActive) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_HashPolicyChoiceRandom) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_HashPolicyChoiceRandom)
+	if !ok {
+		that2, ok := that.(GetSpecType_HashPolicyChoiceRandom)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HashPolicyChoiceRandom.Equal(that1.HashPolicyChoiceRandom) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_HashPolicyChoiceSourceIpStickiness) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_HashPolicyChoiceSourceIpStickiness)
+	if !ok {
+		that2, ok := that.(GetSpecType_HashPolicyChoiceSourceIpStickiness)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HashPolicyChoiceSourceIpStickiness.Equal(that1.HashPolicyChoiceSourceIpStickiness) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 17)
+	s := make([]string, 0, 21)
 	s = append(s, "&tcp_loadbalancer.GlobalSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	s = append(s, "ListenPort: "+fmt.Sprintf("%#v", this.ListenPort)+",\n")
@@ -1737,6 +2763,9 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	if this.AdvertiseChoice != nil {
 		s = append(s, "AdvertiseChoice: "+fmt.Sprintf("%#v", this.AdvertiseChoice)+",\n")
+	}
+	if this.HashPolicyChoice != nil {
+		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
 	}
 	if this.ViewInternal != nil {
 		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
@@ -1780,11 +2809,43 @@ func (this *GlobalSpecType_AdvertiseCustom) GoString() string {
 		`AdvertiseCustom:` + fmt.Sprintf("%#v", this.AdvertiseCustom) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_HashPolicyChoiceRoundRobin) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GlobalSpecType_HashPolicyChoiceRoundRobin{` +
+		`HashPolicyChoiceRoundRobin:` + fmt.Sprintf("%#v", this.HashPolicyChoiceRoundRobin) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_HashPolicyChoiceLeastActive) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GlobalSpecType_HashPolicyChoiceLeastActive{` +
+		`HashPolicyChoiceLeastActive:` + fmt.Sprintf("%#v", this.HashPolicyChoiceLeastActive) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_HashPolicyChoiceRandom) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GlobalSpecType_HashPolicyChoiceRandom{` +
+		`HashPolicyChoiceRandom:` + fmt.Sprintf("%#v", this.HashPolicyChoiceRandom) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_HashPolicyChoiceSourceIpStickiness) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GlobalSpecType_HashPolicyChoiceSourceIpStickiness{` +
+		`HashPolicyChoiceSourceIpStickiness:` + fmt.Sprintf("%#v", this.HashPolicyChoiceSourceIpStickiness) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 13)
+	s := make([]string, 0, 17)
 	s = append(s, "&tcp_loadbalancer.CreateSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	s = append(s, "ListenPort: "+fmt.Sprintf("%#v", this.ListenPort)+",\n")
@@ -1795,6 +2856,9 @@ func (this *CreateSpecType) GoString() string {
 	}
 	if this.AdvertiseChoice != nil {
 		s = append(s, "AdvertiseChoice: "+fmt.Sprintf("%#v", this.AdvertiseChoice)+",\n")
+	}
+	if this.HashPolicyChoice != nil {
+		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1831,11 +2895,43 @@ func (this *CreateSpecType_AdvertiseCustom) GoString() string {
 		`AdvertiseCustom:` + fmt.Sprintf("%#v", this.AdvertiseCustom) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_HashPolicyChoiceRoundRobin) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.CreateSpecType_HashPolicyChoiceRoundRobin{` +
+		`HashPolicyChoiceRoundRobin:` + fmt.Sprintf("%#v", this.HashPolicyChoiceRoundRobin) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_HashPolicyChoiceLeastActive) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.CreateSpecType_HashPolicyChoiceLeastActive{` +
+		`HashPolicyChoiceLeastActive:` + fmt.Sprintf("%#v", this.HashPolicyChoiceLeastActive) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_HashPolicyChoiceRandom) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.CreateSpecType_HashPolicyChoiceRandom{` +
+		`HashPolicyChoiceRandom:` + fmt.Sprintf("%#v", this.HashPolicyChoiceRandom) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_HashPolicyChoiceSourceIpStickiness) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.CreateSpecType_HashPolicyChoiceSourceIpStickiness{` +
+		`HashPolicyChoiceSourceIpStickiness:` + fmt.Sprintf("%#v", this.HashPolicyChoiceSourceIpStickiness) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 14)
+	s := make([]string, 0, 18)
 	s = append(s, "&tcp_loadbalancer.ReplaceSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	s = append(s, "ListenPort: "+fmt.Sprintf("%#v", this.ListenPort)+",\n")
@@ -1849,6 +2945,9 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	if this.AdvertiseChoice != nil {
 		s = append(s, "AdvertiseChoice: "+fmt.Sprintf("%#v", this.AdvertiseChoice)+",\n")
+	}
+	if this.HashPolicyChoice != nil {
+		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1885,11 +2984,43 @@ func (this *ReplaceSpecType_AdvertiseCustom) GoString() string {
 		`AdvertiseCustom:` + fmt.Sprintf("%#v", this.AdvertiseCustom) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_HashPolicyChoiceRoundRobin) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.ReplaceSpecType_HashPolicyChoiceRoundRobin{` +
+		`HashPolicyChoiceRoundRobin:` + fmt.Sprintf("%#v", this.HashPolicyChoiceRoundRobin) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_HashPolicyChoiceLeastActive) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.ReplaceSpecType_HashPolicyChoiceLeastActive{` +
+		`HashPolicyChoiceLeastActive:` + fmt.Sprintf("%#v", this.HashPolicyChoiceLeastActive) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_HashPolicyChoiceRandom) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.ReplaceSpecType_HashPolicyChoiceRandom{` +
+		`HashPolicyChoiceRandom:` + fmt.Sprintf("%#v", this.HashPolicyChoiceRandom) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.ReplaceSpecType_HashPolicyChoiceSourceIpStickiness{` +
+		`HashPolicyChoiceSourceIpStickiness:` + fmt.Sprintf("%#v", this.HashPolicyChoiceSourceIpStickiness) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 16)
+	s := make([]string, 0, 20)
 	s = append(s, "&tcp_loadbalancer.GetSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	s = append(s, "ListenPort: "+fmt.Sprintf("%#v", this.ListenPort)+",\n")
@@ -1903,6 +3034,9 @@ func (this *GetSpecType) GoString() string {
 	}
 	if this.AdvertiseChoice != nil {
 		s = append(s, "AdvertiseChoice: "+fmt.Sprintf("%#v", this.AdvertiseChoice)+",\n")
+	}
+	if this.HashPolicyChoice != nil {
+		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
 	}
 	s = append(s, "HostName: "+fmt.Sprintf("%#v", this.HostName)+",\n")
 	if this.DnsInfo != nil {
@@ -1941,6 +3075,38 @@ func (this *GetSpecType_AdvertiseCustom) GoString() string {
 	}
 	s := strings.Join([]string{`&tcp_loadbalancer.GetSpecType_AdvertiseCustom{` +
 		`AdvertiseCustom:` + fmt.Sprintf("%#v", this.AdvertiseCustom) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_HashPolicyChoiceRoundRobin) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GetSpecType_HashPolicyChoiceRoundRobin{` +
+		`HashPolicyChoiceRoundRobin:` + fmt.Sprintf("%#v", this.HashPolicyChoiceRoundRobin) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_HashPolicyChoiceLeastActive) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GetSpecType_HashPolicyChoiceLeastActive{` +
+		`HashPolicyChoiceLeastActive:` + fmt.Sprintf("%#v", this.HashPolicyChoiceLeastActive) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_HashPolicyChoiceRandom) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GetSpecType_HashPolicyChoiceRandom{` +
+		`HashPolicyChoiceRandom:` + fmt.Sprintf("%#v", this.HashPolicyChoiceRandom) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_HashPolicyChoiceSourceIpStickiness) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GetSpecType_HashPolicyChoiceSourceIpStickiness{` +
+		`HashPolicyChoiceSourceIpStickiness:` + fmt.Sprintf("%#v", this.HashPolicyChoiceSourceIpStickiness) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -2037,17 +3203,24 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i++
 	}
+	if m.HashPolicyChoice != nil {
+		nn2, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn2
+	}
 	if m.ViewInternal != nil {
 		dAtA[i] = 0xc2
 		i++
 		dAtA[i] = 0x3e
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ViewInternal.Size()))
-		n2, err := m.ViewInternal.MarshalTo(dAtA[i:])
+		n3, err := m.ViewInternal.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n2
+		i += n3
 	}
 	if len(m.HostName) > 0 {
 		dAtA[i] = 0xca
@@ -2080,11 +3253,11 @@ func (m *GlobalSpecType_AdvertiseOnPublic) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublic.Size()))
-		n3, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
+		n4, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n4
 	}
 	return i, nil
 }
@@ -2094,11 +3267,11 @@ func (m *GlobalSpecType_AdvertiseCustom) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseCustom.Size()))
-		n4, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
+		n5, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n4
+		i += n5
 	}
 	return i, nil
 }
@@ -2108,11 +3281,11 @@ func (m *GlobalSpecType_DoNotAdvertise) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotAdvertise.Size()))
-		n5, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
+		n6, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n5
+		i += n6
 	}
 	return i, nil
 }
@@ -2122,11 +3295,69 @@ func (m *GlobalSpecType_AdvertiseOnPublicDefaultVip) MarshalTo(dAtA []byte) (int
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublicDefaultVip.Size()))
-		n6, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
+		n7, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n6
+		i += n7
+	}
+	return i, nil
+}
+func (m *GlobalSpecType_HashPolicyChoiceRoundRobin) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.HashPolicyChoiceRoundRobin != nil {
+		dAtA[i] = 0x6a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRoundRobin.Size()))
+		n8, err := m.HashPolicyChoiceRoundRobin.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n8
+	}
+	return i, nil
+}
+func (m *GlobalSpecType_HashPolicyChoiceLeastActive) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.HashPolicyChoiceLeastActive != nil {
+		dAtA[i] = 0x72
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceLeastActive.Size()))
+		n9, err := m.HashPolicyChoiceLeastActive.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n9
+	}
+	return i, nil
+}
+func (m *GlobalSpecType_HashPolicyChoiceRandom) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.HashPolicyChoiceRandom != nil {
+		dAtA[i] = 0x7a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRandom.Size()))
+		n10, err := m.HashPolicyChoiceRandom.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n10
+	}
+	return i, nil
+}
+func (m *GlobalSpecType_HashPolicyChoiceSourceIpStickiness) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.HashPolicyChoiceSourceIpStickiness != nil {
+		dAtA[i] = 0x82
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceSourceIpStickiness.Size()))
+		n11, err := m.HashPolicyChoiceSourceIpStickiness.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n11
 	}
 	return i, nil
 }
@@ -2176,11 +3407,11 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i++
 	}
 	if m.AdvertiseChoice != nil {
-		nn7, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
+		nn12, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn7
+		i += nn12
 	}
 	if len(m.OriginPoolsWeights) > 0 {
 		for _, msg := range m.OriginPoolsWeights {
@@ -2204,6 +3435,13 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i++
 	}
+	if m.HashPolicyChoice != nil {
+		nn13, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn13
+	}
 	return i, nil
 }
 
@@ -2213,11 +3451,11 @@ func (m *CreateSpecType_AdvertiseOnPublic) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublic.Size()))
-		n8, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
+		n14, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n8
+		i += n14
 	}
 	return i, nil
 }
@@ -2227,11 +3465,11 @@ func (m *CreateSpecType_AdvertiseCustom) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseCustom.Size()))
-		n9, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
+		n15, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n9
+		i += n15
 	}
 	return i, nil
 }
@@ -2241,11 +3479,11 @@ func (m *CreateSpecType_DoNotAdvertise) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotAdvertise.Size()))
-		n10, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
+		n16, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n10
+		i += n16
 	}
 	return i, nil
 }
@@ -2255,11 +3493,69 @@ func (m *CreateSpecType_AdvertiseOnPublicDefaultVip) MarshalTo(dAtA []byte) (int
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublicDefaultVip.Size()))
-		n11, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
+		n17, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n11
+		i += n17
+	}
+	return i, nil
+}
+func (m *CreateSpecType_HashPolicyChoiceRoundRobin) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.HashPolicyChoiceRoundRobin != nil {
+		dAtA[i] = 0x6a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRoundRobin.Size()))
+		n18, err := m.HashPolicyChoiceRoundRobin.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n18
+	}
+	return i, nil
+}
+func (m *CreateSpecType_HashPolicyChoiceLeastActive) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.HashPolicyChoiceLeastActive != nil {
+		dAtA[i] = 0x72
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceLeastActive.Size()))
+		n19, err := m.HashPolicyChoiceLeastActive.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n19
+	}
+	return i, nil
+}
+func (m *CreateSpecType_HashPolicyChoiceRandom) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.HashPolicyChoiceRandom != nil {
+		dAtA[i] = 0x7a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRandom.Size()))
+		n20, err := m.HashPolicyChoiceRandom.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n20
+	}
+	return i, nil
+}
+func (m *CreateSpecType_HashPolicyChoiceSourceIpStickiness) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.HashPolicyChoiceSourceIpStickiness != nil {
+		dAtA[i] = 0x82
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceSourceIpStickiness.Size()))
+		n21, err := m.HashPolicyChoiceSourceIpStickiness.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n21
 	}
 	return i, nil
 }
@@ -2321,11 +3617,11 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.AdvertiseChoice != nil {
-		nn12, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
+		nn22, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn12
+		i += nn22
 	}
 	if len(m.OriginPoolsWeights) > 0 {
 		for _, msg := range m.OriginPoolsWeights {
@@ -2349,6 +3645,13 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i++
 	}
+	if m.HashPolicyChoice != nil {
+		nn23, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn23
+	}
 	return i, nil
 }
 
@@ -2358,11 +3661,11 @@ func (m *ReplaceSpecType_AdvertiseOnPublic) MarshalTo(dAtA []byte) (int, error) 
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublic.Size()))
-		n13, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
+		n24, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n13
+		i += n24
 	}
 	return i, nil
 }
@@ -2372,11 +3675,11 @@ func (m *ReplaceSpecType_AdvertiseCustom) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseCustom.Size()))
-		n14, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
+		n25, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n14
+		i += n25
 	}
 	return i, nil
 }
@@ -2386,11 +3689,11 @@ func (m *ReplaceSpecType_DoNotAdvertise) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotAdvertise.Size()))
-		n15, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
+		n26, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n15
+		i += n26
 	}
 	return i, nil
 }
@@ -2400,11 +3703,69 @@ func (m *ReplaceSpecType_AdvertiseOnPublicDefaultVip) MarshalTo(dAtA []byte) (in
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublicDefaultVip.Size()))
-		n16, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
+		n27, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n16
+		i += n27
+	}
+	return i, nil
+}
+func (m *ReplaceSpecType_HashPolicyChoiceRoundRobin) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.HashPolicyChoiceRoundRobin != nil {
+		dAtA[i] = 0x6a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRoundRobin.Size()))
+		n28, err := m.HashPolicyChoiceRoundRobin.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n28
+	}
+	return i, nil
+}
+func (m *ReplaceSpecType_HashPolicyChoiceLeastActive) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.HashPolicyChoiceLeastActive != nil {
+		dAtA[i] = 0x72
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceLeastActive.Size()))
+		n29, err := m.HashPolicyChoiceLeastActive.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n29
+	}
+	return i, nil
+}
+func (m *ReplaceSpecType_HashPolicyChoiceRandom) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.HashPolicyChoiceRandom != nil {
+		dAtA[i] = 0x7a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRandom.Size()))
+		n30, err := m.HashPolicyChoiceRandom.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n30
+	}
+	return i, nil
+}
+func (m *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.HashPolicyChoiceSourceIpStickiness != nil {
+		dAtA[i] = 0x82
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceSourceIpStickiness.Size()))
+		n31, err := m.HashPolicyChoiceSourceIpStickiness.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n31
 	}
 	return i, nil
 }
@@ -2466,11 +3827,11 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.AdvertiseChoice != nil {
-		nn17, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
+		nn32, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn17
+		i += nn32
 	}
 	if len(m.OriginPoolsWeights) > 0 {
 		for _, msg := range m.OriginPoolsWeights {
@@ -2493,6 +3854,13 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 			dAtA[i] = 0
 		}
 		i++
+	}
+	if m.HashPolicyChoice != nil {
+		nn33, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn33
 	}
 	if len(m.HostName) > 0 {
 		dAtA[i] = 0xca
@@ -2525,11 +3893,11 @@ func (m *GetSpecType_AdvertiseOnPublic) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublic.Size()))
-		n18, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
+		n34, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n18
+		i += n34
 	}
 	return i, nil
 }
@@ -2539,11 +3907,11 @@ func (m *GetSpecType_AdvertiseCustom) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseCustom.Size()))
-		n19, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
+		n35, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n19
+		i += n35
 	}
 	return i, nil
 }
@@ -2553,11 +3921,11 @@ func (m *GetSpecType_DoNotAdvertise) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotAdvertise.Size()))
-		n20, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
+		n36, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n20
+		i += n36
 	}
 	return i, nil
 }
@@ -2567,11 +3935,69 @@ func (m *GetSpecType_AdvertiseOnPublicDefaultVip) MarshalTo(dAtA []byte) (int, e
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublicDefaultVip.Size()))
-		n21, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
+		n37, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n21
+		i += n37
+	}
+	return i, nil
+}
+func (m *GetSpecType_HashPolicyChoiceRoundRobin) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.HashPolicyChoiceRoundRobin != nil {
+		dAtA[i] = 0x6a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRoundRobin.Size()))
+		n38, err := m.HashPolicyChoiceRoundRobin.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n38
+	}
+	return i, nil
+}
+func (m *GetSpecType_HashPolicyChoiceLeastActive) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.HashPolicyChoiceLeastActive != nil {
+		dAtA[i] = 0x72
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceLeastActive.Size()))
+		n39, err := m.HashPolicyChoiceLeastActive.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n39
+	}
+	return i, nil
+}
+func (m *GetSpecType_HashPolicyChoiceRandom) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.HashPolicyChoiceRandom != nil {
+		dAtA[i] = 0x7a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRandom.Size()))
+		n40, err := m.HashPolicyChoiceRandom.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n40
+	}
+	return i, nil
+}
+func (m *GetSpecType_HashPolicyChoiceSourceIpStickiness) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.HashPolicyChoiceSourceIpStickiness != nil {
+		dAtA[i] = 0x82
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceSourceIpStickiness.Size()))
+		n41, err := m.HashPolicyChoiceSourceIpStickiness.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n41
 	}
 	return i, nil
 }
@@ -2619,6 +4045,17 @@ func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
 		}
 	}
 	this.DnsVolterraManaged = bool(bool(r.Intn(2) == 0))
+	oneofNumber_HashPolicyChoice := []int32{13, 14, 15, 16}[r.Intn(4)]
+	switch oneofNumber_HashPolicyChoice {
+	case 13:
+		this.HashPolicyChoice = NewPopulatedGlobalSpecType_HashPolicyChoiceRoundRobin(r, easy)
+	case 14:
+		this.HashPolicyChoice = NewPopulatedGlobalSpecType_HashPolicyChoiceLeastActive(r, easy)
+	case 15:
+		this.HashPolicyChoice = NewPopulatedGlobalSpecType_HashPolicyChoiceRandom(r, easy)
+	case 16:
+		this.HashPolicyChoice = NewPopulatedGlobalSpecType_HashPolicyChoiceSourceIpStickiness(r, easy)
+	}
 	if r.Intn(10) != 0 {
 		this.ViewInternal = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
 	}
@@ -2655,6 +4092,26 @@ func NewPopulatedGlobalSpecType_AdvertiseOnPublicDefaultVip(r randyTypes, easy b
 	this.AdvertiseOnPublicDefaultVip = ves_io_schema4.NewPopulatedEmpty(r, easy)
 	return this
 }
+func NewPopulatedGlobalSpecType_HashPolicyChoiceRoundRobin(r randyTypes, easy bool) *GlobalSpecType_HashPolicyChoiceRoundRobin {
+	this := &GlobalSpecType_HashPolicyChoiceRoundRobin{}
+	this.HashPolicyChoiceRoundRobin = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedGlobalSpecType_HashPolicyChoiceLeastActive(r randyTypes, easy bool) *GlobalSpecType_HashPolicyChoiceLeastActive {
+	this := &GlobalSpecType_HashPolicyChoiceLeastActive{}
+	this.HashPolicyChoiceLeastActive = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedGlobalSpecType_HashPolicyChoiceRandom(r randyTypes, easy bool) *GlobalSpecType_HashPolicyChoiceRandom {
+	this := &GlobalSpecType_HashPolicyChoiceRandom{}
+	this.HashPolicyChoiceRandom = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedGlobalSpecType_HashPolicyChoiceSourceIpStickiness(r randyTypes, easy bool) *GlobalSpecType_HashPolicyChoiceSourceIpStickiness {
+	this := &GlobalSpecType_HashPolicyChoiceSourceIpStickiness{}
+	this.HashPolicyChoiceSourceIpStickiness = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
 func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 	this := &CreateSpecType{}
 	v5 := r.Intn(10)
@@ -2683,6 +4140,17 @@ func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
 		}
 	}
 	this.DnsVolterraManaged = bool(bool(r.Intn(2) == 0))
+	oneofNumber_HashPolicyChoice := []int32{13, 14, 15, 16}[r.Intn(4)]
+	switch oneofNumber_HashPolicyChoice {
+	case 13:
+		this.HashPolicyChoice = NewPopulatedCreateSpecType_HashPolicyChoiceRoundRobin(r, easy)
+	case 14:
+		this.HashPolicyChoice = NewPopulatedCreateSpecType_HashPolicyChoiceLeastActive(r, easy)
+	case 15:
+		this.HashPolicyChoice = NewPopulatedCreateSpecType_HashPolicyChoiceRandom(r, easy)
+	case 16:
+		this.HashPolicyChoice = NewPopulatedCreateSpecType_HashPolicyChoiceSourceIpStickiness(r, easy)
+	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -2706,6 +4174,26 @@ func NewPopulatedCreateSpecType_DoNotAdvertise(r randyTypes, easy bool) *CreateS
 func NewPopulatedCreateSpecType_AdvertiseOnPublicDefaultVip(r randyTypes, easy bool) *CreateSpecType_AdvertiseOnPublicDefaultVip {
 	this := &CreateSpecType_AdvertiseOnPublicDefaultVip{}
 	this.AdvertiseOnPublicDefaultVip = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedCreateSpecType_HashPolicyChoiceRoundRobin(r randyTypes, easy bool) *CreateSpecType_HashPolicyChoiceRoundRobin {
+	this := &CreateSpecType_HashPolicyChoiceRoundRobin{}
+	this.HashPolicyChoiceRoundRobin = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedCreateSpecType_HashPolicyChoiceLeastActive(r randyTypes, easy bool) *CreateSpecType_HashPolicyChoiceLeastActive {
+	this := &CreateSpecType_HashPolicyChoiceLeastActive{}
+	this.HashPolicyChoiceLeastActive = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedCreateSpecType_HashPolicyChoiceRandom(r randyTypes, easy bool) *CreateSpecType_HashPolicyChoiceRandom {
+	this := &CreateSpecType_HashPolicyChoiceRandom{}
+	this.HashPolicyChoiceRandom = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedCreateSpecType_HashPolicyChoiceSourceIpStickiness(r randyTypes, easy bool) *CreateSpecType_HashPolicyChoiceSourceIpStickiness {
+	this := &CreateSpecType_HashPolicyChoiceSourceIpStickiness{}
+	this.HashPolicyChoiceSourceIpStickiness = ves_io_schema4.NewPopulatedEmpty(r, easy)
 	return this
 }
 func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
@@ -2743,6 +4231,17 @@ func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
 		}
 	}
 	this.DnsVolterraManaged = bool(bool(r.Intn(2) == 0))
+	oneofNumber_HashPolicyChoice := []int32{13, 14, 15, 16}[r.Intn(4)]
+	switch oneofNumber_HashPolicyChoice {
+	case 13:
+		this.HashPolicyChoice = NewPopulatedReplaceSpecType_HashPolicyChoiceRoundRobin(r, easy)
+	case 14:
+		this.HashPolicyChoice = NewPopulatedReplaceSpecType_HashPolicyChoiceLeastActive(r, easy)
+	case 15:
+		this.HashPolicyChoice = NewPopulatedReplaceSpecType_HashPolicyChoiceRandom(r, easy)
+	case 16:
+		this.HashPolicyChoice = NewPopulatedReplaceSpecType_HashPolicyChoiceSourceIpStickiness(r, easy)
+	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -2766,6 +4265,26 @@ func NewPopulatedReplaceSpecType_DoNotAdvertise(r randyTypes, easy bool) *Replac
 func NewPopulatedReplaceSpecType_AdvertiseOnPublicDefaultVip(r randyTypes, easy bool) *ReplaceSpecType_AdvertiseOnPublicDefaultVip {
 	this := &ReplaceSpecType_AdvertiseOnPublicDefaultVip{}
 	this.AdvertiseOnPublicDefaultVip = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedReplaceSpecType_HashPolicyChoiceRoundRobin(r randyTypes, easy bool) *ReplaceSpecType_HashPolicyChoiceRoundRobin {
+	this := &ReplaceSpecType_HashPolicyChoiceRoundRobin{}
+	this.HashPolicyChoiceRoundRobin = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedReplaceSpecType_HashPolicyChoiceLeastActive(r randyTypes, easy bool) *ReplaceSpecType_HashPolicyChoiceLeastActive {
+	this := &ReplaceSpecType_HashPolicyChoiceLeastActive{}
+	this.HashPolicyChoiceLeastActive = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedReplaceSpecType_HashPolicyChoiceRandom(r randyTypes, easy bool) *ReplaceSpecType_HashPolicyChoiceRandom {
+	this := &ReplaceSpecType_HashPolicyChoiceRandom{}
+	this.HashPolicyChoiceRandom = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedReplaceSpecType_HashPolicyChoiceSourceIpStickiness(r randyTypes, easy bool) *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness {
+	this := &ReplaceSpecType_HashPolicyChoiceSourceIpStickiness{}
+	this.HashPolicyChoiceSourceIpStickiness = ves_io_schema4.NewPopulatedEmpty(r, easy)
 	return this
 }
 func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
@@ -2803,6 +4322,17 @@ func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
 		}
 	}
 	this.DnsVolterraManaged = bool(bool(r.Intn(2) == 0))
+	oneofNumber_HashPolicyChoice := []int32{13, 14, 15, 16}[r.Intn(4)]
+	switch oneofNumber_HashPolicyChoice {
+	case 13:
+		this.HashPolicyChoice = NewPopulatedGetSpecType_HashPolicyChoiceRoundRobin(r, easy)
+	case 14:
+		this.HashPolicyChoice = NewPopulatedGetSpecType_HashPolicyChoiceLeastActive(r, easy)
+	case 15:
+		this.HashPolicyChoice = NewPopulatedGetSpecType_HashPolicyChoiceRandom(r, easy)
+	case 16:
+		this.HashPolicyChoice = NewPopulatedGetSpecType_HashPolicyChoiceSourceIpStickiness(r, easy)
+	}
 	this.HostName = string(randStringTypes(r))
 	if r.Intn(10) != 0 {
 		v13 := r.Intn(5)
@@ -2834,6 +4364,26 @@ func NewPopulatedGetSpecType_DoNotAdvertise(r randyTypes, easy bool) *GetSpecTyp
 func NewPopulatedGetSpecType_AdvertiseOnPublicDefaultVip(r randyTypes, easy bool) *GetSpecType_AdvertiseOnPublicDefaultVip {
 	this := &GetSpecType_AdvertiseOnPublicDefaultVip{}
 	this.AdvertiseOnPublicDefaultVip = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedGetSpecType_HashPolicyChoiceRoundRobin(r randyTypes, easy bool) *GetSpecType_HashPolicyChoiceRoundRobin {
+	this := &GetSpecType_HashPolicyChoiceRoundRobin{}
+	this.HashPolicyChoiceRoundRobin = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedGetSpecType_HashPolicyChoiceLeastActive(r randyTypes, easy bool) *GetSpecType_HashPolicyChoiceLeastActive {
+	this := &GetSpecType_HashPolicyChoiceLeastActive{}
+	this.HashPolicyChoiceLeastActive = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedGetSpecType_HashPolicyChoiceRandom(r randyTypes, easy bool) *GetSpecType_HashPolicyChoiceRandom {
+	this := &GetSpecType_HashPolicyChoiceRandom{}
+	this.HashPolicyChoiceRandom = ves_io_schema4.NewPopulatedEmpty(r, easy)
+	return this
+}
+func NewPopulatedGetSpecType_HashPolicyChoiceSourceIpStickiness(r randyTypes, easy bool) *GetSpecType_HashPolicyChoiceSourceIpStickiness {
+	this := &GetSpecType_HashPolicyChoiceSourceIpStickiness{}
+	this.HashPolicyChoiceSourceIpStickiness = ves_io_schema4.NewPopulatedEmpty(r, easy)
 	return this
 }
 
@@ -2942,6 +4492,9 @@ func (m *GlobalSpecType) Size() (n int) {
 	if m.DnsVolterraManaged {
 		n += 2
 	}
+	if m.HashPolicyChoice != nil {
+		n += m.HashPolicyChoice.Size()
+	}
 	if m.ViewInternal != nil {
 		l = m.ViewInternal.Size()
 		n += 2 + l + sovTypes(uint64(l))
@@ -2995,6 +4548,42 @@ func (m *GlobalSpecType_AdvertiseOnPublicDefaultVip) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_HashPolicyChoiceRoundRobin) Size() (n int) {
+	var l int
+	_ = l
+	if m.HashPolicyChoiceRoundRobin != nil {
+		l = m.HashPolicyChoiceRoundRobin.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_HashPolicyChoiceLeastActive) Size() (n int) {
+	var l int
+	_ = l
+	if m.HashPolicyChoiceLeastActive != nil {
+		l = m.HashPolicyChoiceLeastActive.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_HashPolicyChoiceRandom) Size() (n int) {
+	var l int
+	_ = l
+	if m.HashPolicyChoiceRandom != nil {
+		l = m.HashPolicyChoiceRandom.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_HashPolicyChoiceSourceIpStickiness) Size() (n int) {
+	var l int
+	_ = l
+	if m.HashPolicyChoiceSourceIpStickiness != nil {
+		l = m.HashPolicyChoiceSourceIpStickiness.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -3021,6 +4610,9 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	if m.DnsVolterraManaged {
 		n += 2
+	}
+	if m.HashPolicyChoice != nil {
+		n += m.HashPolicyChoice.Size()
 	}
 	return n
 }
@@ -3061,6 +4653,42 @@ func (m *CreateSpecType_AdvertiseOnPublicDefaultVip) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_HashPolicyChoiceRoundRobin) Size() (n int) {
+	var l int
+	_ = l
+	if m.HashPolicyChoiceRoundRobin != nil {
+		l = m.HashPolicyChoiceRoundRobin.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_HashPolicyChoiceLeastActive) Size() (n int) {
+	var l int
+	_ = l
+	if m.HashPolicyChoiceLeastActive != nil {
+		l = m.HashPolicyChoiceLeastActive.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_HashPolicyChoiceRandom) Size() (n int) {
+	var l int
+	_ = l
+	if m.HashPolicyChoiceRandom != nil {
+		l = m.HashPolicyChoiceRandom.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_HashPolicyChoiceSourceIpStickiness) Size() (n int) {
+	var l int
+	_ = l
+	if m.HashPolicyChoiceSourceIpStickiness != nil {
+		l = m.HashPolicyChoiceSourceIpStickiness.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -3093,6 +4721,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	if m.DnsVolterraManaged {
 		n += 2
+	}
+	if m.HashPolicyChoice != nil {
+		n += m.HashPolicyChoice.Size()
 	}
 	return n
 }
@@ -3133,6 +4764,42 @@ func (m *ReplaceSpecType_AdvertiseOnPublicDefaultVip) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_HashPolicyChoiceRoundRobin) Size() (n int) {
+	var l int
+	_ = l
+	if m.HashPolicyChoiceRoundRobin != nil {
+		l = m.HashPolicyChoiceRoundRobin.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_HashPolicyChoiceLeastActive) Size() (n int) {
+	var l int
+	_ = l
+	if m.HashPolicyChoiceLeastActive != nil {
+		l = m.HashPolicyChoiceLeastActive.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_HashPolicyChoiceRandom) Size() (n int) {
+	var l int
+	_ = l
+	if m.HashPolicyChoiceRandom != nil {
+		l = m.HashPolicyChoiceRandom.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) Size() (n int) {
+	var l int
+	_ = l
+	if m.HashPolicyChoiceSourceIpStickiness != nil {
+		l = m.HashPolicyChoiceSourceIpStickiness.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -3165,6 +4832,9 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.DnsVolterraManaged {
 		n += 2
+	}
+	if m.HashPolicyChoice != nil {
+		n += m.HashPolicyChoice.Size()
 	}
 	l = len(m.HostName)
 	if l > 0 {
@@ -3215,6 +4885,42 @@ func (m *GetSpecType_AdvertiseOnPublicDefaultVip) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_HashPolicyChoiceRoundRobin) Size() (n int) {
+	var l int
+	_ = l
+	if m.HashPolicyChoiceRoundRobin != nil {
+		l = m.HashPolicyChoiceRoundRobin.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_HashPolicyChoiceLeastActive) Size() (n int) {
+	var l int
+	_ = l
+	if m.HashPolicyChoiceLeastActive != nil {
+		l = m.HashPolicyChoiceLeastActive.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_HashPolicyChoiceRandom) Size() (n int) {
+	var l int
+	_ = l
+	if m.HashPolicyChoiceRandom != nil {
+		l = m.HashPolicyChoiceRandom.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_HashPolicyChoiceSourceIpStickiness) Size() (n int) {
+	var l int
+	_ = l
+	if m.HashPolicyChoiceSourceIpStickiness != nil {
+		l = m.HashPolicyChoiceSourceIpStickiness.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	for {
@@ -3241,6 +4947,7 @@ func (this *GlobalSpecType) String() string {
 		`AdvertiseChoice:` + fmt.Sprintf("%v", this.AdvertiseChoice) + `,`,
 		`OriginPoolsWeights:` + strings.Replace(fmt.Sprintf("%v", this.OriginPoolsWeights), "OriginPoolWithWeight", "ves_io_schema_views.OriginPoolWithWeight", 1) + `,`,
 		`DnsVolterraManaged:` + fmt.Sprintf("%v", this.DnsVolterraManaged) + `,`,
+		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
 		`DnsInfo:` + strings.Replace(fmt.Sprintf("%v", this.DnsInfo), "DnsInfo", "ves_io_schema_virtual_host_dns_info.DnsInfo", 1) + `,`,
@@ -3288,6 +4995,46 @@ func (this *GlobalSpecType_AdvertiseOnPublicDefaultVip) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_HashPolicyChoiceRoundRobin) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_HashPolicyChoiceRoundRobin{`,
+		`HashPolicyChoiceRoundRobin:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRoundRobin), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_HashPolicyChoiceLeastActive) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_HashPolicyChoiceLeastActive{`,
+		`HashPolicyChoiceLeastActive:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceLeastActive), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_HashPolicyChoiceRandom) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_HashPolicyChoiceRandom{`,
+		`HashPolicyChoiceRandom:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRandom), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_HashPolicyChoiceSourceIpStickiness) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_HashPolicyChoiceSourceIpStickiness{`,
+		`HashPolicyChoiceSourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceSourceIpStickiness), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -3299,6 +5046,7 @@ func (this *CreateSpecType) String() string {
 		`AdvertiseChoice:` + fmt.Sprintf("%v", this.AdvertiseChoice) + `,`,
 		`OriginPoolsWeights:` + strings.Replace(fmt.Sprintf("%v", this.OriginPoolsWeights), "OriginPoolWithWeight", "ves_io_schema_views.OriginPoolWithWeight", 1) + `,`,
 		`DnsVolterraManaged:` + fmt.Sprintf("%v", this.DnsVolterraManaged) + `,`,
+		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3343,6 +5091,46 @@ func (this *CreateSpecType_AdvertiseOnPublicDefaultVip) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_HashPolicyChoiceRoundRobin) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_HashPolicyChoiceRoundRobin{`,
+		`HashPolicyChoiceRoundRobin:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRoundRobin), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_HashPolicyChoiceLeastActive) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_HashPolicyChoiceLeastActive{`,
+		`HashPolicyChoiceLeastActive:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceLeastActive), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_HashPolicyChoiceRandom) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_HashPolicyChoiceRandom{`,
+		`HashPolicyChoiceRandom:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRandom), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_HashPolicyChoiceSourceIpStickiness) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_HashPolicyChoiceSourceIpStickiness{`,
+		`HashPolicyChoiceSourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceSourceIpStickiness), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -3355,6 +5143,7 @@ func (this *ReplaceSpecType) String() string {
 		`AdvertiseChoice:` + fmt.Sprintf("%v", this.AdvertiseChoice) + `,`,
 		`OriginPoolsWeights:` + strings.Replace(fmt.Sprintf("%v", this.OriginPoolsWeights), "OriginPoolWithWeight", "ves_io_schema_views.OriginPoolWithWeight", 1) + `,`,
 		`DnsVolterraManaged:` + fmt.Sprintf("%v", this.DnsVolterraManaged) + `,`,
+		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3399,6 +5188,46 @@ func (this *ReplaceSpecType_AdvertiseOnPublicDefaultVip) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_HashPolicyChoiceRoundRobin) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_HashPolicyChoiceRoundRobin{`,
+		`HashPolicyChoiceRoundRobin:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRoundRobin), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_HashPolicyChoiceLeastActive) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_HashPolicyChoiceLeastActive{`,
+		`HashPolicyChoiceLeastActive:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceLeastActive), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_HashPolicyChoiceRandom) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_HashPolicyChoiceRandom{`,
+		`HashPolicyChoiceRandom:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRandom), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_HashPolicyChoiceSourceIpStickiness{`,
+		`HashPolicyChoiceSourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceSourceIpStickiness), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -3411,6 +5240,7 @@ func (this *GetSpecType) String() string {
 		`AdvertiseChoice:` + fmt.Sprintf("%v", this.AdvertiseChoice) + `,`,
 		`OriginPoolsWeights:` + strings.Replace(fmt.Sprintf("%v", this.OriginPoolsWeights), "OriginPoolWithWeight", "ves_io_schema_views.OriginPoolWithWeight", 1) + `,`,
 		`DnsVolterraManaged:` + fmt.Sprintf("%v", this.DnsVolterraManaged) + `,`,
+		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
 		`DnsInfo:` + strings.Replace(fmt.Sprintf("%v", this.DnsInfo), "DnsInfo", "ves_io_schema_virtual_host_dns_info.DnsInfo", 1) + `,`,
 		`}`,
@@ -3453,6 +5283,46 @@ func (this *GetSpecType_AdvertiseOnPublicDefaultVip) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_AdvertiseOnPublicDefaultVip{`,
 		`AdvertiseOnPublicDefaultVip:` + strings.Replace(fmt.Sprintf("%v", this.AdvertiseOnPublicDefaultVip), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_HashPolicyChoiceRoundRobin) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_HashPolicyChoiceRoundRobin{`,
+		`HashPolicyChoiceRoundRobin:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRoundRobin), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_HashPolicyChoiceLeastActive) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_HashPolicyChoiceLeastActive{`,
+		`HashPolicyChoiceLeastActive:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceLeastActive), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_HashPolicyChoiceRandom) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_HashPolicyChoiceRandom{`,
+		`HashPolicyChoiceRandom:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceRandom), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_HashPolicyChoiceSourceIpStickiness) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_HashPolicyChoiceSourceIpStickiness{`,
+		`HashPolicyChoiceSourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceSourceIpStickiness), "Empty", "ves_io_schema4.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3772,6 +5642,134 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.DnsVolterraManaged = bool(v != 0)
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicyChoiceRoundRobin", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceRoundRobin{v}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicyChoiceLeastActive", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceLeastActive{v}
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicyChoiceRandom", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceRandom{v}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicyChoiceSourceIpStickiness", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceSourceIpStickiness{v}
+			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ViewInternal", wireType)
@@ -4162,6 +6160,134 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.DnsVolterraManaged = bool(v != 0)
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicyChoiceRoundRobin", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceRoundRobin{v}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicyChoiceLeastActive", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceLeastActive{v}
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicyChoiceRandom", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceRandom{v}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicyChoiceSourceIpStickiness", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceSourceIpStickiness{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -4490,6 +6616,134 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.DnsVolterraManaged = bool(v != 0)
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicyChoiceRoundRobin", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceRoundRobin{v}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicyChoiceLeastActive", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceLeastActive{v}
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicyChoiceRandom", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceRandom{v}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicyChoiceSourceIpStickiness", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceSourceIpStickiness{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -4818,6 +7072,134 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.DnsVolterraManaged = bool(v != 0)
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicyChoiceRoundRobin", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HashPolicyChoice = &GetSpecType_HashPolicyChoiceRoundRobin{v}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicyChoiceLeastActive", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HashPolicyChoice = &GetSpecType_HashPolicyChoiceLeastActive{v}
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicyChoiceRandom", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HashPolicyChoice = &GetSpecType_HashPolicyChoiceRandom{v}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HashPolicyChoiceSourceIpStickiness", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.HashPolicyChoice = &GetSpecType_HashPolicyChoiceSourceIpStickiness{v}
+			iNdEx = postIndex
 		case 1001:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field HostName", wireType)
@@ -5012,65 +7394,77 @@ func init() {
 }
 
 var fileDescriptorTypes = []byte{
-	// 949 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0x4d, 0x6f, 0x1b, 0x45,
-	0x18, 0xf6, 0x24, 0x71, 0x6c, 0x8f, 0x5b, 0xc7, 0x9d, 0xe4, 0xb0, 0x4d, 0xab, 0x8d, 0x65, 0x15,
-	0x30, 0xd2, 0x66, 0x37, 0x49, 0xf9, 0x6a, 0x85, 0x90, 0x70, 0x0a, 0x4d, 0x91, 0x68, 0xa3, 0x2d,
-	0x34, 0x22, 0x54, 0x5a, 0x8d, 0x77, 0xc7, 0xeb, 0xa1, 0xeb, 0x99, 0xd5, 0xee, 0xd8, 0x21, 0x87,
-	0x4a, 0xa8, 0xbf, 0x00, 0xf5, 0xcc, 0x19, 0xa1, 0xfe, 0x02, 0x84, 0x2f, 0x16, 0x27, 0xc4, 0x29,
-	0xc7, 0x1e, 0xc9, 0xf6, 0xd2, 0x72, 0xea, 0x11, 0x71, 0x40, 0x68, 0x67, 0x6d, 0xd7, 0x5f, 0xa0,
-	0x0a, 0x25, 0xa8, 0x07, 0xdf, 0xe6, 0xdd, 0x77, 0x9e, 0x67, 0x3e, 0xde, 0xe7, 0x99, 0xd9, 0x81,
-	0x1b, 0x6d, 0x12, 0xea, 0x94, 0x1b, 0xa1, 0xdd, 0x20, 0x4d, 0x6c, 0xb4, 0x29, 0x39, 0x08, 0x0d,
-	0x61, 0xfb, 0x96, 0xc7, 0xb1, 0x53, 0xc3, 0x1e, 0x66, 0x36, 0x09, 0x0c, 0x71, 0xe8, 0x93, 0x50,
-	0xf7, 0x03, 0x2e, 0x38, 0xba, 0x94, 0x20, 0xf4, 0x04, 0xa1, 0x4b, 0x84, 0x3e, 0x8e, 0x58, 0x5d,
-	0x77, 0xa9, 0x68, 0xb4, 0x6a, 0xba, 0xcd, 0x9b, 0x86, 0xcb, 0x5d, 0x6e, 0x48, 0x70, 0xad, 0x55,
-	0x97, 0x91, 0x0c, 0x64, 0x2b, 0x21, 0x5d, 0xbd, 0x30, 0x3a, 0x0d, 0xee, 0x0b, 0xca, 0x59, 0x6f,
-	0xc4, 0xd5, 0xf3, 0xa3, 0xc9, 0xa1, 0xc9, 0xac, 0x5e, 0x1c, 0x9b, 0x3e, 0xf6, 0xa8, 0x83, 0x05,
-	0xe9, 0x65, 0x4b, 0x93, 0x8b, 0xb3, 0x46, 0xa9, 0xd7, 0xa6, 0x2e, 0x7f, 0x68, 0x80, 0x89, 0xfd,
-	0x09, 0x44, 0x0b, 0x7b, 0x56, 0x83, 0x87, 0xc2, 0x72, 0x58, 0x68, 0x51, 0x56, 0xe7, 0x06, 0xaf,
-	0x7d, 0x45, 0x6c, 0x91, 0x20, 0xca, 0x0f, 0xb2, 0xb0, 0x70, 0xdd, 0xe3, 0x35, 0xec, 0xdd, 0xf6,
-	0x89, 0xfd, 0xd9, 0xa1, 0x4f, 0xd0, 0xfb, 0x30, 0xe3, 0xf0, 0x26, 0xa6, 0x2c, 0x54, 0x40, 0x69,
-	0xbe, 0x92, 0xab, 0x96, 0x7f, 0x7a, 0xd6, 0x9d, 0xcf, 0x3d, 0x04, 0x8b, 0xe5, 0x85, 0x60, 0xae,
-	0x01, 0xe2, 0x28, 0xfd, 0x10, 0xcc, 0x15, 0x8b, 0xfd, 0x96, 0x02, 0xcc, 0x3e, 0x04, 0xad, 0xc1,
-	0xbc, 0x47, 0x43, 0x41, 0x98, 0xe5, 0xf3, 0x40, 0x28, 0x73, 0x25, 0x50, 0x39, 0x6b, 0xc2, 0xe4,
-	0xd3, 0x2e, 0x0f, 0x04, 0x3a, 0x0f, 0xb3, 0x07, 0x54, 0x34, 0xac, 0x90, 0x51, 0x65, 0xbe, 0x04,
-	0x2a, 0x59, 0x33, 0x13, 0xc7, 0xb7, 0x19, 0x45, 0x5f, 0xc0, 0x33, 0x3c, 0xa0, 0x2e, 0x8d, 0xb1,
-	0xdc, 0x0b, 0x95, 0x85, 0xd2, 0x7c, 0x25, 0xbf, 0x55, 0xd6, 0xa7, 0xd5, 0xf0, 0x96, 0x5c, 0x85,
-	0x49, 0xea, 0xf1, 0x9c, 0xab, 0xe8, 0xd1, 0xfd, 0xfc, 0x10, 0xb4, 0xdb, 0x01, 0xc0, 0xec, 0x7d,
-	0xd8, 0x8d, 0xa9, 0xd0, 0x5d, 0xb8, 0x8c, 0x9d, 0x36, 0x09, 0x04, 0x0d, 0x89, 0xc5, 0x99, 0xe5,
-	0xb7, 0x6a, 0x1e, 0xb5, 0x95, 0x74, 0x09, 0x54, 0xf2, 0x5b, 0x97, 0xa6, 0x8e, 0xf0, 0x61, 0xbf,
-	0xff, 0xae, 0xec, 0x5b, 0x5d, 0x88, 0x59, 0x77, 0x52, 0xe6, 0xb9, 0x01, 0xd1, 0x2d, 0x96, 0xa4,
-	0xd0, 0x1e, 0x2c, 0xbe, 0x60, 0xb7, 0x5b, 0xa1, 0xe0, 0x4d, 0x65, 0xf1, 0x65, 0xa8, 0xb7, 0x65,
-	0xdf, 0xea, 0xc2, 0x51, 0x42, 0xbd, 0x84, 0x47, 0x13, 0xe8, 0x63, 0x58, 0x74, 0xb8, 0xc5, 0xb8,
-	0xb0, 0x06, 0x19, 0x25, 0x23, 0x89, 0x57, 0xc6, 0x88, 0x3f, 0x6a, 0xfa, 0xe2, 0x70, 0x30, 0xc7,
-	0x82, 0xc3, 0x6f, 0x72, 0x31, 0x18, 0x06, 0xdd, 0x85, 0x6b, 0x53, 0x96, 0x6f, 0x39, 0xa4, 0x8e,
-	0x5b, 0x9e, 0xb0, 0xda, 0xd4, 0x57, 0xb2, 0xff, 0x4c, 0xbb, 0x93, 0x32, 0x2f, 0x4c, 0x2c, 0xfa,
-	0x5a, 0x82, 0xbd, 0x43, 0x7d, 0x74, 0x0f, 0xae, 0x0c, 0xd7, 0xcd, 0x3a, 0x20, 0xd4, 0x6d, 0x88,
-	0x50, 0x81, 0xb2, 0x7e, 0x6f, 0x4e, 0xaf, 0xdf, 0xa0, 0x38, 0x7b, 0x54, 0x34, 0xf6, 0x24, 0xa2,
-	0x5a, 0x88, 0xf7, 0xe1, 0x85, 0xbe, 0x4c, 0x34, 0x54, 0xc2, 0xa4, 0x4b, 0x88, 0x36, 0xe0, 0x4a,
-	0x2c, 0xe5, 0x36, 0xf7, 0x04, 0x09, 0x02, 0x6c, 0x35, 0x31, 0xc3, 0x2e, 0x71, 0x94, 0xbc, 0xd4,
-	0x12, 0x72, 0x58, 0x78, 0xa7, 0x97, 0xfa, 0x34, 0xc9, 0xa0, 0x7d, 0x78, 0x56, 0x9a, 0x89, 0x32,
-	0x41, 0x02, 0x86, 0x3d, 0xe5, 0x69, 0xb2, 0x85, 0x2f, 0x23, 0xac, 0xe2, 0xa3, 0xfb, 0xa3, 0x60,
-	0xf3, 0x4c, 0x1c, 0xde, 0xe8, 0x45, 0xe8, 0x22, 0xcc, 0x49, 0x77, 0x31, 0xdc, 0x24, 0xca, 0xb3,
-	0x98, 0x37, 0x67, 0x66, 0xe3, 0x2f, 0x37, 0x71, 0x93, 0xa0, 0x1d, 0x98, 0xed, 0xdb, 0x4e, 0xf9,
-	0x3d, 0x23, 0x77, 0x43, 0x9b, 0x18, 0x74, 0x8a, 0x47, 0xf5, 0x6b, 0x2c, 0xbc, 0xc1, 0xea, 0xdc,
-	0xcc, 0x38, 0x49, 0xe3, 0xaa, 0xf6, 0x73, 0x07, 0x54, 0xe0, 0xeb, 0x70, 0xb9, 0x8a, 0x43, 0x6a,
-	0x97, 0xb6, 0x39, 0xab, 0x53, 0xb7, 0x15, 0xe0, 0xf8, 0x78, 0x40, 0x4b, 0x9b, 0xda, 0x96, 0x76,
-	0x59, 0xdb, 0xdc, 0xd4, 0x36, 0x37, 0xb4, 0x2b, 0xda, 0x5b, 0xd5, 0x37, 0x46, 0xf4, 0xd8, 0xe0,
-	0xd4, 0x26, 0x68, 0xb9, 0xdb, 0x01, 0xd9, 0xa3, 0x0e, 0xc8, 0x45, 0x1d, 0x90, 0x79, 0x4f, 0x7b,
-	0x5b, 0x7b, 0x57, 0x7b, 0xe7, 0x93, 0x85, 0x6c, 0xae, 0x08, 0xcb, 0xdf, 0xa7, 0x61, 0x61, 0x3b,
-	0x20, 0x58, 0x90, 0xc1, 0x21, 0xa0, 0x8c, 0x1d, 0x02, 0x27, 0x63, 0xf0, 0x99, 0x0b, 0x4f, 0xd1,
-	0x85, 0x5f, 0x9e, 0x90, 0x0b, 0x4f, 0xc6, 0x75, 0x57, 0xcf, 0xfd, 0xfa, 0xc1, 0xd8, 0xcd, 0x52,
-	0xbd, 0x32, 0x45, 0x96, 0xaf, 0x0d, 0xc9, 0x32, 0x2d, 0x45, 0xf9, 0xe0, 0x4f, 0x30, 0xd1, 0xad,
-	0x27, 0xd4, 0xbf, 0xd2, 0x70, 0xc9, 0x24, 0xbe, 0x87, 0xed, 0xd3, 0x56, 0xea, 0xe7, 0xff, 0xf9,
-	0x2a, 0x2a, 0x8c, 0x5e, 0x45, 0xb3, 0x6b, 0x68, 0x66, 0x80, 0x93, 0x33, 0x40, 0xb4, 0x08, 0xf3,
-	0xd7, 0x89, 0x98, 0x89, 0x7f, 0x26, 0xfe, 0x57, 0x5a, 0xfc, 0xff, 0xdb, 0x7f, 0xd1, 0x29, 0x98,
-	0xac, 0xfa, 0x1d, 0x38, 0x3a, 0x56, 0x53, 0x8f, 0x8f, 0xd5, 0xd4, 0xf3, 0x63, 0x15, 0xfc, 0x71,
-	0xac, 0x82, 0x6f, 0x22, 0x15, 0xfc, 0x10, 0xa9, 0xe0, 0xc7, 0x48, 0x05, 0xdd, 0x48, 0x05, 0xbf,
-	0x44, 0x2a, 0x38, 0x8a, 0x54, 0xf0, 0x38, 0x52, 0xc1, 0x6f, 0x91, 0x0a, 0x9e, 0x46, 0x6a, 0xea,
-	0x79, 0xa4, 0x82, 0x6f, 0x9f, 0xa8, 0xa9, 0xee, 0x13, 0x15, 0xec, 0xef, 0xbb, 0xdc, 0xbf, 0xe7,
-	0xea, 0xfd, 0x0d, 0xd3, 0x5b, 0xa1, 0x21, 0x1b, 0x75, 0x1e, 0x34, 0xd7, 0xfd, 0x80, 0xb7, 0xa9,
-	0x43, 0x82, 0xf5, 0x7e, 0xda, 0xf0, 0x6b, 0x2e, 0x37, 0xc8, 0xd7, 0xa2, 0xf7, 0x6e, 0xfb, 0xd7,
-	0xe7, 0x6d, 0x6d, 0x51, 0xbe, 0xdc, 0x2e, 0xff, 0x1d, 0x00, 0x00, 0xff, 0xff, 0x30, 0x88, 0x08,
-	0xb6, 0x0d, 0x0f, 0x00, 0x00,
+	// 1152 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x98, 0x4d, 0x6f, 0x13, 0x47,
+	0x18, 0xc7, 0x33, 0x49, 0x20, 0xf6, 0x38, 0x2f, 0x66, 0x40, 0x74, 0x09, 0x68, 0xb1, 0x2c, 0x5a,
+	0x52, 0x69, 0x63, 0xe3, 0xf0, 0xd2, 0x82, 0xaa, 0x4a, 0x6c, 0x28, 0x6f, 0xa2, 0x90, 0x6e, 0x5a,
+	0x50, 0x53, 0xa4, 0xd5, 0x78, 0x77, 0x6c, 0x4f, 0xb3, 0x9e, 0x59, 0xed, 0x8c, 0x9d, 0xe6, 0x80,
+	0x54, 0xf1, 0x09, 0x10, 0xe7, 0x7e, 0x80, 0x0a, 0xf5, 0x03, 0x54, 0xf5, 0xc5, 0xea, 0xa9, 0xea,
+	0xa5, 0x39, 0xf4, 0xc0, 0xb1, 0x59, 0x2e, 0xd0, 0x13, 0xc7, 0x8a, 0x53, 0xb5, 0xb3, 0xb6, 0xf1,
+	0xcb, 0x36, 0x42, 0x15, 0x54, 0xad, 0xea, 0xdb, 0xcc, 0x3c, 0xf3, 0xff, 0xcf, 0x33, 0xf3, 0x4c,
+	0x7e, 0x19, 0x2f, 0x3c, 0xd5, 0x24, 0xa2, 0x40, 0x79, 0x51, 0x38, 0x35, 0x52, 0xc7, 0xc5, 0x26,
+	0x25, 0x5b, 0xa2, 0x28, 0x1d, 0xdf, 0xf6, 0x38, 0x76, 0xcb, 0xd8, 0xc3, 0xcc, 0x21, 0x41, 0x51,
+	0x6e, 0xfb, 0x44, 0x14, 0xfc, 0x80, 0x4b, 0x8e, 0x4e, 0xc4, 0x8a, 0x42, 0xac, 0x28, 0x28, 0x45,
+	0x61, 0x58, 0xb1, 0xb8, 0x5c, 0xa5, 0xb2, 0xd6, 0x28, 0x17, 0x1c, 0x5e, 0x2f, 0x56, 0x79, 0x95,
+	0x17, 0x95, 0xb8, 0xdc, 0xa8, 0xa8, 0x9e, 0xea, 0xa8, 0x56, 0x6c, 0xba, 0x78, 0x74, 0x30, 0x0d,
+	0xee, 0x4b, 0xca, 0x59, 0x67, 0xc5, 0xc5, 0x23, 0x83, 0xc1, 0xbe, 0x64, 0x16, 0x8f, 0x0d, 0xa5,
+	0x8f, 0x3d, 0xea, 0x62, 0x49, 0x3a, 0xd1, 0xdc, 0xe8, 0xe6, 0xec, 0x41, 0xeb, 0xe3, 0x89, 0xdb,
+	0xef, 0x5b, 0x60, 0xe4, 0x7c, 0x02, 0xd9, 0xc0, 0x9e, 0x5d, 0xe3, 0x42, 0xda, 0x2e, 0x13, 0x36,
+	0x65, 0x15, 0x5e, 0xe4, 0xe5, 0x2f, 0x89, 0x23, 0x63, 0x45, 0xfe, 0x97, 0x0c, 0x9c, 0xbf, 0xe2,
+	0xf1, 0x32, 0xf6, 0xd6, 0x7d, 0xe2, 0x7c, 0xba, 0xed, 0x13, 0xf4, 0x01, 0x9c, 0x71, 0x79, 0x1d,
+	0x53, 0x26, 0x34, 0x90, 0x9b, 0x5a, 0x4a, 0x9b, 0xf9, 0x1f, 0x9e, 0xb5, 0xa7, 0xd2, 0x0f, 0xc1,
+	0xfe, 0xfc, 0x74, 0x30, 0x59, 0x03, 0x51, 0x6f, 0xdf, 0x43, 0x30, 0x99, 0xcd, 0x76, 0x5b, 0x1a,
+	0xb0, 0xba, 0x12, 0x74, 0x1c, 0x66, 0x3c, 0x2a, 0x24, 0x61, 0xb6, 0xcf, 0x03, 0xa9, 0x4d, 0xe6,
+	0xc0, 0xd2, 0x9c, 0x05, 0xe3, 0xa1, 0x35, 0x1e, 0x48, 0x74, 0x04, 0xa6, 0xb6, 0xa8, 0xac, 0xd9,
+	0x82, 0x51, 0x6d, 0x2a, 0x07, 0x96, 0x52, 0xd6, 0x4c, 0xd4, 0x5f, 0x67, 0x14, 0x7d, 0x0e, 0x67,
+	0x79, 0x40, 0xab, 0x34, 0xd2, 0x72, 0x4f, 0x68, 0xd3, 0xb9, 0xa9, 0xa5, 0xcc, 0x4a, 0xbe, 0x90,
+	0x54, 0xc3, 0x5b, 0x6a, 0x17, 0x16, 0xa9, 0x44, 0x39, 0x9b, 0xe8, 0xd1, 0xbd, 0x4c, 0x9f, 0xb4,
+	0xdd, 0x02, 0xc0, 0xea, 0x0c, 0xac, 0x45, 0x56, 0xe8, 0x2e, 0x3c, 0x88, 0xdd, 0x26, 0x09, 0x24,
+	0x15, 0xc4, 0xe6, 0xcc, 0xf6, 0x1b, 0x65, 0x8f, 0x3a, 0xda, 0xbe, 0x1c, 0x58, 0xca, 0xac, 0x9c,
+	0x48, 0x5c, 0xe1, 0x62, 0x77, 0xfe, 0x9a, 0x9a, 0x6b, 0x4e, 0x47, 0xae, 0x57, 0x27, 0xac, 0x03,
+	0x3d, 0xa3, 0x5b, 0x2c, 0x0e, 0xa1, 0x3b, 0x30, 0xfb, 0xd2, 0xdd, 0x69, 0x08, 0xc9, 0xeb, 0xda,
+	0xfe, 0x57, 0xb1, 0x5e, 0x55, 0x73, 0xcd, 0xe9, 0x9d, 0xd8, 0x7a, 0x01, 0x0f, 0x06, 0xd0, 0x65,
+	0x98, 0x75, 0xb9, 0xcd, 0xb8, 0xb4, 0x7b, 0x11, 0x6d, 0x46, 0x19, 0x1f, 0x1a, 0x32, 0xfe, 0xa8,
+	0xee, 0xcb, 0xed, 0x5e, 0x8e, 0xf3, 0x2e, 0xbf, 0xc9, 0x65, 0x6f, 0x19, 0x74, 0x17, 0x1e, 0x4f,
+	0xd8, 0xbe, 0xed, 0x92, 0x0a, 0x6e, 0x78, 0xd2, 0x6e, 0x52, 0x5f, 0x4b, 0xfd, 0xb5, 0xed, 0xd5,
+	0x09, 0xeb, 0xe8, 0xc8, 0xa6, 0x2f, 0xc5, 0xda, 0xdb, 0xd4, 0x47, 0x9b, 0xf0, 0x50, 0x7f, 0xdd,
+	0xec, 0x2d, 0x42, 0xab, 0x35, 0x29, 0x34, 0xa8, 0xea, 0xf7, 0x6e, 0x72, 0xfd, 0x7a, 0xc5, 0xb9,
+	0x43, 0x65, 0xed, 0x8e, 0x52, 0x98, 0xf3, 0xd1, 0x39, 0xbc, 0xbc, 0x5f, 0x16, 0xea, 0x2b, 0x61,
+	0x3c, 0x45, 0xa0, 0x53, 0xf0, 0x50, 0x74, 0x95, 0x9b, 0xdc, 0x93, 0x24, 0x08, 0xb0, 0x5d, 0xc7,
+	0x0c, 0x57, 0x89, 0xab, 0x65, 0xd4, 0x5d, 0x42, 0x2e, 0x13, 0xb7, 0x3b, 0xa1, 0x8f, 0xe3, 0x08,
+	0xda, 0x80, 0x7a, 0x0d, 0x8b, 0x9a, 0xed, 0x73, 0x8f, 0x3a, 0xdb, 0xb6, 0x53, 0xe3, 0xd4, 0x21,
+	0x76, 0xc0, 0x1b, 0xcc, 0xb5, 0x03, 0x5e, 0xa6, 0x4c, 0x9b, 0xdb, 0x63, 0xef, 0xc0, 0x5a, 0x8c,
+	0xd4, 0x6b, 0x4a, 0xbc, 0xaa, 0xb4, 0x56, 0x24, 0xb5, 0x22, 0x65, 0x74, 0xb0, 0x09, 0xde, 0x1e,
+	0xc1, 0x42, 0xda, 0xd8, 0x91, 0xb4, 0x49, 0xb4, 0xf9, 0x3d, 0xcd, 0x8f, 0x0e, 0x9b, 0xdf, 0x88,
+	0xb4, 0x17, 0x95, 0x14, 0x7d, 0x02, 0x8f, 0x24, 0x65, 0x8e, 0x99, 0xcb, 0xeb, 0xda, 0xc2, 0x9e,
+	0xbe, 0x87, 0x47, 0x92, 0x56, 0x2a, 0xb4, 0x09, 0x4f, 0x26, 0x58, 0x0a, 0xde, 0x08, 0x1c, 0x62,
+	0x53, 0xdf, 0x16, 0x92, 0x3a, 0x9b, 0x94, 0x11, 0x21, 0xb4, 0xec, 0x9e, 0x0b, 0xe4, 0x87, 0x17,
+	0x58, 0x57, 0x1e, 0xd7, 0xfc, 0xf5, 0x9e, 0x03, 0xda, 0x80, 0x73, 0x0a, 0x63, 0x94, 0x49, 0x12,
+	0x30, 0xec, 0x69, 0x4f, 0xe3, 0xcb, 0xfb, 0x2a, 0x7f, 0xd2, 0xd9, 0x47, 0xf7, 0x06, 0xc5, 0xd6,
+	0x6c, 0xd4, 0xbd, 0xd6, 0xe9, 0xa1, 0x63, 0x30, 0xad, 0xb8, 0xc6, 0x70, 0x9d, 0x68, 0xcf, 0x22,
+	0xdf, 0xb4, 0x95, 0x8a, 0x46, 0x6e, 0xe2, 0x3a, 0x41, 0x57, 0x61, 0xaa, 0x0b, 0x3c, 0xed, 0xf7,
+	0x19, 0x75, 0x0f, 0x8d, 0x91, 0x45, 0x13, 0xe8, 0x58, 0xb8, 0xc4, 0xc4, 0x35, 0x56, 0xe1, 0xd6,
+	0x8c, 0x1b, 0x37, 0x2e, 0x5c, 0xff, 0xb1, 0x05, 0x2e, 0xc3, 0x77, 0xe0, 0x41, 0x13, 0x0b, 0xea,
+	0xe4, 0x56, 0x39, 0xab, 0xd0, 0x6a, 0x23, 0xc0, 0x11, 0x98, 0xd1, 0x42, 0xc9, 0x58, 0x31, 0x4e,
+	0x1b, 0xa5, 0x92, 0x51, 0x3a, 0x65, 0x9c, 0x37, 0xce, 0xc0, 0x63, 0xf0, 0xf0, 0x0d, 0x8e, 0xdd,
+	0x9c, 0xa9, 0xfe, 0xb5, 0x50, 0x56, 0x8d, 0x04, 0x32, 0xe0, 0x1e, 0x9a, 0x2c, 0xad, 0x98, 0x27,
+	0x07, 0x38, 0xa1, 0x4e, 0x0d, 0x1d, 0x6c, 0xb7, 0x40, 0x6a, 0xa7, 0x05, 0xd2, 0x61, 0x0b, 0xcc,
+	0xbc, 0x6f, 0x9c, 0x35, 0xde, 0x33, 0xce, 0x99, 0xcb, 0x10, 0x8d, 0x56, 0x09, 0xbd, 0xd5, 0x6e,
+	0x81, 0xb9, 0x9d, 0x16, 0x98, 0x0d, 0x5b, 0x20, 0x53, 0x3a, 0x6d, 0x94, 0xce, 0x18, 0xa5, 0xb3,
+	0x46, 0xe9, 0xdc, 0xf5, 0xe9, 0x54, 0x3a, 0x0b, 0xaf, 0x4f, 0xa7, 0x66, 0xb3, 0x73, 0xf9, 0x5f,
+	0x53, 0x70, 0x7e, 0x35, 0x20, 0x58, 0x92, 0x1e, 0xd1, 0xb5, 0x21, 0xa2, 0xbf, 0x1e, 0x5a, 0x8f,
+	0x91, 0xfa, 0x06, 0x91, 0xfa, 0xc5, 0x6b, 0x42, 0xea, 0x18, 0xa1, 0xff, 0x6d, 0x84, 0x5e, 0x38,
+	0xf0, 0xf3, 0x87, 0x43, 0x0f, 0x34, 0xf3, 0x7c, 0x02, 0x45, 0xde, 0xee, 0xa3, 0xc8, 0x3e, 0xc5,
+	0x90, 0xfb, 0x2f, 0xc0, 0xc8, 0x34, 0xd3, 0x48, 0xe4, 0xca, 0xe1, 0xfb, 0x2f, 0x40, 0xc2, 0xf8,
+	0x00, 0x56, 0xbe, 0x4b, 0xc3, 0x05, 0x8b, 0xf8, 0x1e, 0x76, 0xde, 0x34, 0x57, 0x3e, 0xfb, 0xdb,
+	0xaf, 0xc0, 0xf9, 0xc1, 0x57, 0xe0, 0xf8, 0x05, 0x38, 0xc6, 0xd5, 0x18, 0x57, 0xff, 0x4f, 0x5c,
+	0x3d, 0x80, 0x30, 0x73, 0x85, 0xc8, 0x31, 0xaa, 0xc6, 0xa8, 0x1a, 0xa3, 0x6a, 0x8c, 0xaa, 0xa4,
+	0x1f, 0xa7, 0xff, 0xd4, 0x0f, 0xc8, 0x7f, 0x09, 0x12, 0xcd, 0x6f, 0xc0, 0xce, 0xae, 0x3e, 0xf1,
+	0x78, 0x57, 0x9f, 0x78, 0xbe, 0xab, 0x83, 0x3f, 0x76, 0x75, 0xf0, 0x75, 0xa8, 0x83, 0x6f, 0x43,
+	0x1d, 0x7c, 0x1f, 0xea, 0xa0, 0x1d, 0xea, 0xe0, 0xa7, 0x50, 0x07, 0x3b, 0xa1, 0x0e, 0x1e, 0x87,
+	0x3a, 0xf8, 0x2d, 0xd4, 0xc1, 0xd3, 0x50, 0x9f, 0x78, 0x1e, 0xea, 0xe0, 0xc1, 0x13, 0x7d, 0xa2,
+	0xfd, 0x44, 0x07, 0x1b, 0x1b, 0x55, 0xee, 0x6f, 0x56, 0x0b, 0xdd, 0xeb, 0x5d, 0x68, 0x88, 0xa2,
+	0x6a, 0x54, 0x78, 0x50, 0x5f, 0xf6, 0x03, 0xde, 0xa4, 0x2e, 0x09, 0x96, 0xbb, 0xe1, 0xa2, 0x5f,
+	0xae, 0xf2, 0x22, 0xf9, 0x4a, 0x76, 0x3e, 0x47, 0xee, 0xf9, 0xd5, 0xb6, 0xbc, 0x5f, 0x7d, 0x90,
+	0x3c, 0xfd, 0x67, 0x00, 0x00, 0x00, 0xff, 0xff, 0xd6, 0x0e, 0xff, 0x52, 0xe4, 0x15, 0x00, 0x00,
 }

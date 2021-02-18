@@ -52,11 +52,13 @@ func resourceVolterraFleet() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"bond_device_list": {
@@ -2429,6 +2431,8 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 			v.(string)
 	}
 
+	//bond_choice
+
 	bondChoiceTypeFound := false
 
 	if v, ok := d.GetOk("bond_device_list"); ok && !bondChoiceTypeFound {
@@ -2449,7 +2453,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 				bondChoiceInt.BondDeviceList.BondDevices = bondDevices
 				for i, set := range sl {
 					bondDevices[i] = &ves_io_schema_fleet.FleetBondDeviceType{}
-
 					bondDevicesMapStrToI := set.(map[string]interface{})
 
 					if w, ok := bondDevicesMapStrToI["devices"]; ok && !isIntfNil(w) {
@@ -2526,6 +2529,8 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 	}
 
+	//dc_cluster_group_choice
+
 	dcClusterGroupChoiceTypeFound := false
 
 	if v, ok := d.GetOk("dc_cluster_group"); ok && !dcClusterGroupChoiceTypeFound {
@@ -2600,17 +2605,21 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 	}
 
+	//enable_default_fleet_config_download
 	if v, ok := d.GetOk("enable_default_fleet_config_download"); ok && !isIntfNil(v) {
 
 		createSpec.EnableDefaultFleetConfigDownload =
 			v.(bool)
 	}
 
+	//fleet_label
 	if v, ok := d.GetOk("fleet_label"); ok && !isIntfNil(v) {
 
 		createSpec.FleetLabel =
 			v.(string)
 	}
+
+	//gpu_choice
 
 	gpuChoiceTypeFound := false
 
@@ -2638,6 +2647,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 	}
 
+	//inside_virtual_network
 	if v, ok := d.GetOk("inside_virtual_network"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -2669,6 +2679,8 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 		}
 
 	}
+
+	//interface_choice
 
 	interfaceChoiceTypeFound := false
 
@@ -2702,7 +2714,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 				interfaceChoiceInt.DeviceList.Devices = devices
 				for i, set := range sl {
 					devices[i] = &ves_io_schema_fleet.DeviceInstanceType{}
-
 					devicesMapStrToI := set.(map[string]interface{})
 
 					deviceInstanceTypeFound := false
@@ -2819,6 +2830,8 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 	}
 
+	//logs_receiver_choice
+
 	logsReceiverChoiceTypeFound := false
 
 	if v, ok := d.GetOk("log_receiver"); ok && !logsReceiverChoiceTypeFound {
@@ -2863,6 +2876,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 	}
 
+	//network_connectors
 	if v, ok := d.GetOk("network_connectors"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -2895,6 +2909,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 	}
 
+	//network_firewall
 	if v, ok := d.GetOk("network_firewall"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -2927,12 +2942,14 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 	}
 
+	//operating_system_version
 	if v, ok := d.GetOk("operating_system_version"); ok && !isIntfNil(v) {
 
 		createSpec.OperatingSystemVersion =
 			v.(string)
 	}
 
+	//outside_virtual_network
 	if v, ok := d.GetOk("outside_virtual_network"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -2964,6 +2981,8 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 		}
 
 	}
+
+	//storage_class_choice
 
 	storageClassChoiceTypeFound := false
 
@@ -2997,7 +3016,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 				storageClassChoiceInt.StorageClassList.StorageClasses = storageClasses
 				for i, set := range sl {
 					storageClasses[i] = &ves_io_schema_fleet.FleetStorageClassType{}
-
 					storageClassesMapStrToI := set.(map[string]interface{})
 
 					if w, ok := storageClassesMapStrToI["advanced_storage_parameters"]; ok && !isIntfNil(w) {
@@ -3103,6 +3121,8 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 	}
 
+	//storage_device_choice
+
 	storageDeviceChoiceTypeFound := false
 
 	if v, ok := d.GetOk("no_storage_device"); ok && !storageDeviceChoiceTypeFound {
@@ -3135,7 +3155,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 				storageDeviceChoiceInt.StorageDeviceList.StorageDevices = storageDevices
 				for i, set := range sl {
 					storageDevices[i] = &ves_io_schema_fleet.FleetStorageDeviceType{}
-
 					storageDevicesMapStrToI := set.(map[string]interface{})
 
 					if w, ok := storageDevicesMapStrToI["advanced_advanced_parameters"]; ok && !isIntfNil(w) {
@@ -3178,7 +3197,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 										autoExportCidrs := &ves_io_schema_views.PrefixStringListType{}
 										backendChoiceInt.NetappBackendOntapNas.AutoExportCidrs = autoExportCidrs
 										for _, set := range sl {
-
 											autoExportCidrsMapStrToI := set.(map[string]interface{})
 
 											if w, ok := autoExportCidrsMapStrToI["prefixes"]; ok && !isIntfNil(w) {
@@ -3281,7 +3299,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 										password := &ves_io_schema.SecretType{}
 										backendChoiceInt.NetappBackendOntapNas.Password = password
 										for _, set := range sl {
-
 											passwordMapStrToI := set.(map[string]interface{})
 
 											if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -3290,7 +3307,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 												password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 												for _, set := range sl {
-
 													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -3449,7 +3465,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 										backendChoiceInt.NetappBackendOntapNas.Storage = storage
 										for i, set := range sl {
 											storage[i] = &ves_io_schema_fleet.OntapVirtualStoragePoolType{}
-
 											storageMapStrToI := set.(map[string]interface{})
 
 											if w, ok := storageMapStrToI["labels"]; ok && !isIntfNil(w) {
@@ -3466,7 +3481,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 												volumeDefaults := &ves_io_schema_fleet.OntapVolumeDefaults{}
 												storage[i].VolumeDefaults = volumeDefaults
 												for _, set := range sl {
-
 													volumeDefaultsMapStrToI := set.(map[string]interface{})
 
 													if w, ok := volumeDefaultsMapStrToI["encryption"]; ok && !isIntfNil(w) {
@@ -3547,7 +3561,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 										volumeDefaults := &ves_io_schema_fleet.OntapVolumeDefaults{}
 										backendChoiceInt.NetappBackendOntapNas.VolumeDefaults = volumeDefaults
 										for _, set := range sl {
-
 											volumeDefaultsMapStrToI := set.(map[string]interface{})
 
 											if w, ok := volumeDefaultsMapStrToI["encryption"]; ok && !isIntfNil(w) {
@@ -3640,7 +3653,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 												chapInitiatorSecret := &ves_io_schema.SecretType{}
 												chapChoiceInt.UseChap.ChapInitiatorSecret = chapInitiatorSecret
 												for _, set := range sl {
-
 													chapInitiatorSecretMapStrToI := set.(map[string]interface{})
 
 													if v, ok := chapInitiatorSecretMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -3649,7 +3661,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 														chapInitiatorSecret.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 														for _, set := range sl {
-
 															blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 															if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -3802,7 +3813,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 												chapTargetInitiatorSecret := &ves_io_schema.SecretType{}
 												chapChoiceInt.UseChap.ChapTargetInitiatorSecret = chapTargetInitiatorSecret
 												for _, set := range sl {
-
 													chapTargetInitiatorSecretMapStrToI := set.(map[string]interface{})
 
 													if v, ok := chapTargetInitiatorSecretMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -3811,7 +3821,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 														chapTargetInitiatorSecret.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 														for _, set := range sl {
-
 															blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 															if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -4050,7 +4059,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 										password := &ves_io_schema.SecretType{}
 										backendChoiceInt.NetappBackendOntapSan.Password = password
 										for _, set := range sl {
-
 											passwordMapStrToI := set.(map[string]interface{})
 
 											if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -4059,7 +4067,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 												password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 												for _, set := range sl {
-
 													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -4218,7 +4225,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 										backendChoiceInt.NetappBackendOntapSan.Storage = storage
 										for i, set := range sl {
 											storage[i] = &ves_io_schema_fleet.OntapVirtualStoragePoolType{}
-
 											storageMapStrToI := set.(map[string]interface{})
 
 											if w, ok := storageMapStrToI["labels"]; ok && !isIntfNil(w) {
@@ -4235,7 +4241,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 												volumeDefaults := &ves_io_schema_fleet.OntapVolumeDefaults{}
 												storage[i].VolumeDefaults = volumeDefaults
 												for _, set := range sl {
-
 													volumeDefaultsMapStrToI := set.(map[string]interface{})
 
 													if w, ok := volumeDefaultsMapStrToI["encryption"]; ok && !isIntfNil(w) {
@@ -4316,7 +4321,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 										volumeDefaults := &ves_io_schema_fleet.OntapVolumeDefaults{}
 										backendChoiceInt.NetappBackendOntapSan.VolumeDefaults = volumeDefaults
 										for _, set := range sl {
-
 											volumeDefaultsMapStrToI := set.(map[string]interface{})
 
 											if w, ok := volumeDefaultsMapStrToI["encryption"]; ok && !isIntfNil(w) {
@@ -4389,7 +4393,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 								deviceChoiceInt.OpenebsEnterprise.MayastorPools = mayastorPools
 								for i, set := range sl {
 									mayastorPools[i] = &ves_io_schema_fleet.OpenebsMayastorPoolType{}
-
 									mayastorPoolsMapStrToI := set.(map[string]interface{})
 
 									if w, ok := mayastorPoolsMapStrToI["node"]; ok && !isIntfNil(w) {
@@ -4433,7 +4436,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 								arrays := &ves_io_schema_fleet.PsoArrayConfiguration{}
 								deviceChoiceInt.PureServiceOrchestrator.Arrays = arrays
 								for _, set := range sl {
-
 									arraysMapStrToI := set.(map[string]interface{})
 
 									if v, ok := arraysMapStrToI["flash_array"]; ok && !isIntfNil(v) {
@@ -4442,7 +4444,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 										flashArray := &ves_io_schema_fleet.FlashArrayType{}
 										arrays.FlashArray = flashArray
 										for _, set := range sl {
-
 											flashArrayMapStrToI := set.(map[string]interface{})
 
 											if w, ok := flashArrayMapStrToI["default_fs_opt"]; ok && !isIntfNil(w) {
@@ -4472,7 +4473,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 												flashArray.FlashArrays = flashArrays
 												for i, set := range sl {
 													flashArrays[i] = &ves_io_schema_fleet.FlashArrayEndpoint{}
-
 													flashArraysMapStrToI := set.(map[string]interface{})
 
 													if v, ok := flashArraysMapStrToI["api_token"]; ok && !isIntfNil(v) {
@@ -4481,7 +4481,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 														apiToken := &ves_io_schema.SecretType{}
 														flashArrays[i].ApiToken = apiToken
 														for _, set := range sl {
-
 															apiTokenMapStrToI := set.(map[string]interface{})
 
 															if v, ok := apiTokenMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -4490,7 +4489,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 																blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 																apiToken.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 																for _, set := range sl {
-
 																	blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 																	if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -4691,7 +4689,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 										flashBlade := &ves_io_schema_fleet.FlashBladeType{}
 										arrays.FlashBlade = flashBlade
 										for _, set := range sl {
-
 											flashBladeMapStrToI := set.(map[string]interface{})
 
 											if w, ok := flashBladeMapStrToI["enable_snapshot_directory"]; ok && !isIntfNil(w) {
@@ -4709,7 +4706,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 												flashBlade.FlashBlades = flashBlades
 												for i, set := range sl {
 													flashBlades[i] = &ves_io_schema_fleet.FlashBladeEndpoint{}
-
 													flashBladesMapStrToI := set.(map[string]interface{})
 
 													if v, ok := flashBladesMapStrToI["api_token"]; ok && !isIntfNil(v) {
@@ -4718,7 +4714,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 														apiToken := &ves_io_schema.SecretType{}
 														flashBlades[i].ApiToken = apiToken
 														for _, set := range sl {
-
 															apiTokenMapStrToI := set.(map[string]interface{})
 
 															if v, ok := apiTokenMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -4727,7 +4722,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 																blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 																apiToken.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 																for _, set := range sl {
-
 																	blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 																	if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -4973,6 +4967,8 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 	}
 
+	//storage_interface_choice
+
 	storageInterfaceChoiceTypeFound := false
 
 	if v, ok := d.GetOk("no_storage_interfaces"); ok && !storageInterfaceChoiceTypeFound {
@@ -5028,6 +5024,8 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 	}
 
+	//storage_static_routes_choice
+
 	storageStaticRoutesChoiceTypeFound := false
 
 	if v, ok := d.GetOk("no_storage_static_routes"); ok && !storageStaticRoutesChoiceTypeFound {
@@ -5060,7 +5058,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 				storageStaticRoutesChoiceInt.StorageStaticRoutes.StorageRoutes = storageRoutes
 				for i, set := range sl {
 					storageRoutes[i] = &ves_io_schema.StaticRouteType{}
-
 					storageRoutesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := storageRoutesMapStrToI["attrs"]; ok && !isIntfNil(v) {
@@ -5087,7 +5084,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 						nexthop := &ves_io_schema.NextHopType{}
 						storageRoutes[i].Nexthop = nexthop
 						for _, set := range sl {
-
 							nexthopMapStrToI := set.(map[string]interface{})
 
 							if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
@@ -5128,7 +5124,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 								nexthopAddress := &ves_io_schema.IpAddressType{}
 								nexthop.NexthopAddress = nexthopAddress
 								for _, set := range sl {
-
 									nexthopAddressMapStrToI := set.(map[string]interface{})
 
 									verTypeFound := false
@@ -5194,7 +5189,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 						storageRoutes[i].Subnets = subnets
 						for i, set := range sl {
 							subnets[i] = &ves_io_schema.IpSubnetType{}
-
 							subnetsMapStrToI := set.(map[string]interface{})
 
 							verTypeFound := false
@@ -5261,6 +5255,8 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 	}
 
+	//usb_policy_choice
+
 	usbPolicyChoiceTypeFound := false
 
 	if v, ok := d.GetOk("allow_all_usb"); ok && !usbPolicyChoiceTypeFound {
@@ -5317,6 +5313,7 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 	}
 
+	//volterra_software_version
 	if v, ok := d.GetOk("volterra_software_version"); ok && !isIntfNil(v) {
 
 		createSpec.VolterraSoftwareVersion =
@@ -5441,7 +5438,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 				bondChoiceInt.BondDeviceList.BondDevices = bondDevices
 				for i, set := range sl {
 					bondDevices[i] = &ves_io_schema_fleet.FleetBondDeviceType{}
-
 					bondDevicesMapStrToI := set.(map[string]interface{})
 
 					if w, ok := bondDevicesMapStrToI["devices"]; ok && !isIntfNil(w) {
@@ -5688,7 +5684,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 				interfaceChoiceInt.DeviceList.Devices = devices
 				for i, set := range sl {
 					devices[i] = &ves_io_schema_fleet.DeviceInstanceType{}
-
 					devicesMapStrToI := set.(map[string]interface{})
 
 					deviceInstanceTypeFound := false
@@ -5983,7 +5978,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 				storageClassChoiceInt.StorageClassList.StorageClasses = storageClasses
 				for i, set := range sl {
 					storageClasses[i] = &ves_io_schema_fleet.FleetStorageClassType{}
-
 					storageClassesMapStrToI := set.(map[string]interface{})
 
 					if w, ok := storageClassesMapStrToI["advanced_storage_parameters"]; ok && !isIntfNil(w) {
@@ -6121,7 +6115,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 				storageDeviceChoiceInt.StorageDeviceList.StorageDevices = storageDevices
 				for i, set := range sl {
 					storageDevices[i] = &ves_io_schema_fleet.FleetStorageDeviceType{}
-
 					storageDevicesMapStrToI := set.(map[string]interface{})
 
 					if w, ok := storageDevicesMapStrToI["advanced_advanced_parameters"]; ok && !isIntfNil(w) {
@@ -6164,7 +6157,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 										autoExportCidrs := &ves_io_schema_views.PrefixStringListType{}
 										backendChoiceInt.NetappBackendOntapNas.AutoExportCidrs = autoExportCidrs
 										for _, set := range sl {
-
 											autoExportCidrsMapStrToI := set.(map[string]interface{})
 
 											if w, ok := autoExportCidrsMapStrToI["prefixes"]; ok && !isIntfNil(w) {
@@ -6267,7 +6259,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 										password := &ves_io_schema.SecretType{}
 										backendChoiceInt.NetappBackendOntapNas.Password = password
 										for _, set := range sl {
-
 											passwordMapStrToI := set.(map[string]interface{})
 
 											if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -6276,7 +6267,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 												password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 												for _, set := range sl {
-
 													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -6435,7 +6425,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 										backendChoiceInt.NetappBackendOntapNas.Storage = storage
 										for i, set := range sl {
 											storage[i] = &ves_io_schema_fleet.OntapVirtualStoragePoolType{}
-
 											storageMapStrToI := set.(map[string]interface{})
 
 											if w, ok := storageMapStrToI["labels"]; ok && !isIntfNil(w) {
@@ -6452,7 +6441,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 												volumeDefaults := &ves_io_schema_fleet.OntapVolumeDefaults{}
 												storage[i].VolumeDefaults = volumeDefaults
 												for _, set := range sl {
-
 													volumeDefaultsMapStrToI := set.(map[string]interface{})
 
 													if w, ok := volumeDefaultsMapStrToI["encryption"]; ok && !isIntfNil(w) {
@@ -6533,7 +6521,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 										volumeDefaults := &ves_io_schema_fleet.OntapVolumeDefaults{}
 										backendChoiceInt.NetappBackendOntapNas.VolumeDefaults = volumeDefaults
 										for _, set := range sl {
-
 											volumeDefaultsMapStrToI := set.(map[string]interface{})
 
 											if w, ok := volumeDefaultsMapStrToI["encryption"]; ok && !isIntfNil(w) {
@@ -6626,7 +6613,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 												chapInitiatorSecret := &ves_io_schema.SecretType{}
 												chapChoiceInt.UseChap.ChapInitiatorSecret = chapInitiatorSecret
 												for _, set := range sl {
-
 													chapInitiatorSecretMapStrToI := set.(map[string]interface{})
 
 													if v, ok := chapInitiatorSecretMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -6635,7 +6621,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 														chapInitiatorSecret.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 														for _, set := range sl {
-
 															blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 															if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -6788,7 +6773,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 												chapTargetInitiatorSecret := &ves_io_schema.SecretType{}
 												chapChoiceInt.UseChap.ChapTargetInitiatorSecret = chapTargetInitiatorSecret
 												for _, set := range sl {
-
 													chapTargetInitiatorSecretMapStrToI := set.(map[string]interface{})
 
 													if v, ok := chapTargetInitiatorSecretMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -6797,7 +6781,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 														chapTargetInitiatorSecret.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 														for _, set := range sl {
-
 															blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 															if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -7036,7 +7019,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 										password := &ves_io_schema.SecretType{}
 										backendChoiceInt.NetappBackendOntapSan.Password = password
 										for _, set := range sl {
-
 											passwordMapStrToI := set.(map[string]interface{})
 
 											if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -7045,7 +7027,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 												password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 												for _, set := range sl {
-
 													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -7204,7 +7185,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 										backendChoiceInt.NetappBackendOntapSan.Storage = storage
 										for i, set := range sl {
 											storage[i] = &ves_io_schema_fleet.OntapVirtualStoragePoolType{}
-
 											storageMapStrToI := set.(map[string]interface{})
 
 											if w, ok := storageMapStrToI["labels"]; ok && !isIntfNil(w) {
@@ -7221,7 +7201,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 												volumeDefaults := &ves_io_schema_fleet.OntapVolumeDefaults{}
 												storage[i].VolumeDefaults = volumeDefaults
 												for _, set := range sl {
-
 													volumeDefaultsMapStrToI := set.(map[string]interface{})
 
 													if w, ok := volumeDefaultsMapStrToI["encryption"]; ok && !isIntfNil(w) {
@@ -7302,7 +7281,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 										volumeDefaults := &ves_io_schema_fleet.OntapVolumeDefaults{}
 										backendChoiceInt.NetappBackendOntapSan.VolumeDefaults = volumeDefaults
 										for _, set := range sl {
-
 											volumeDefaultsMapStrToI := set.(map[string]interface{})
 
 											if w, ok := volumeDefaultsMapStrToI["encryption"]; ok && !isIntfNil(w) {
@@ -7375,7 +7353,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 								deviceChoiceInt.OpenebsEnterprise.MayastorPools = mayastorPools
 								for i, set := range sl {
 									mayastorPools[i] = &ves_io_schema_fleet.OpenebsMayastorPoolType{}
-
 									mayastorPoolsMapStrToI := set.(map[string]interface{})
 
 									if w, ok := mayastorPoolsMapStrToI["node"]; ok && !isIntfNil(w) {
@@ -7419,7 +7396,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 								arrays := &ves_io_schema_fleet.PsoArrayConfiguration{}
 								deviceChoiceInt.PureServiceOrchestrator.Arrays = arrays
 								for _, set := range sl {
-
 									arraysMapStrToI := set.(map[string]interface{})
 
 									if v, ok := arraysMapStrToI["flash_array"]; ok && !isIntfNil(v) {
@@ -7428,7 +7404,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 										flashArray := &ves_io_schema_fleet.FlashArrayType{}
 										arrays.FlashArray = flashArray
 										for _, set := range sl {
-
 											flashArrayMapStrToI := set.(map[string]interface{})
 
 											if w, ok := flashArrayMapStrToI["default_fs_opt"]; ok && !isIntfNil(w) {
@@ -7458,7 +7433,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 												flashArray.FlashArrays = flashArrays
 												for i, set := range sl {
 													flashArrays[i] = &ves_io_schema_fleet.FlashArrayEndpoint{}
-
 													flashArraysMapStrToI := set.(map[string]interface{})
 
 													if v, ok := flashArraysMapStrToI["api_token"]; ok && !isIntfNil(v) {
@@ -7467,7 +7441,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 														apiToken := &ves_io_schema.SecretType{}
 														flashArrays[i].ApiToken = apiToken
 														for _, set := range sl {
-
 															apiTokenMapStrToI := set.(map[string]interface{})
 
 															if v, ok := apiTokenMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -7476,7 +7449,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 																blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 																apiToken.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 																for _, set := range sl {
-
 																	blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 																	if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -7677,7 +7649,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 										flashBlade := &ves_io_schema_fleet.FlashBladeType{}
 										arrays.FlashBlade = flashBlade
 										for _, set := range sl {
-
 											flashBladeMapStrToI := set.(map[string]interface{})
 
 											if w, ok := flashBladeMapStrToI["enable_snapshot_directory"]; ok && !isIntfNil(w) {
@@ -7695,7 +7666,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 												flashBlade.FlashBlades = flashBlades
 												for i, set := range sl {
 													flashBlades[i] = &ves_io_schema_fleet.FlashBladeEndpoint{}
-
 													flashBladesMapStrToI := set.(map[string]interface{})
 
 													if v, ok := flashBladesMapStrToI["api_token"]; ok && !isIntfNil(v) {
@@ -7704,7 +7674,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 														apiToken := &ves_io_schema.SecretType{}
 														flashBlades[i].ApiToken = apiToken
 														for _, set := range sl {
-
 															apiTokenMapStrToI := set.(map[string]interface{})
 
 															if v, ok := apiTokenMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -7713,7 +7682,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 																blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 																apiToken.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 																for _, set := range sl {
-
 																	blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 																	if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -8046,7 +8014,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 				storageStaticRoutesChoiceInt.StorageStaticRoutes.StorageRoutes = storageRoutes
 				for i, set := range sl {
 					storageRoutes[i] = &ves_io_schema.StaticRouteType{}
-
 					storageRoutesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := storageRoutesMapStrToI["attrs"]; ok && !isIntfNil(v) {
@@ -8073,7 +8040,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 						nexthop := &ves_io_schema.NextHopType{}
 						storageRoutes[i].Nexthop = nexthop
 						for _, set := range sl {
-
 							nexthopMapStrToI := set.(map[string]interface{})
 
 							if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
@@ -8114,7 +8080,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 								nexthopAddress := &ves_io_schema.IpAddressType{}
 								nexthop.NexthopAddress = nexthopAddress
 								for _, set := range sl {
-
 									nexthopAddressMapStrToI := set.(map[string]interface{})
 
 									verTypeFound := false
@@ -8180,7 +8145,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 						storageRoutes[i].Subnets = subnets
 						for i, set := range sl {
 							subnets[i] = &ves_io_schema.IpSubnetType{}
-
 							subnetsMapStrToI := set.(map[string]interface{})
 
 							verTypeFound := false

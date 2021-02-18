@@ -23,23 +23,10 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "consul_service custom_endpoint_object public_ip public_name private_ip private_name k8s_service" must be set
+    // One of the arguments from this list "voltadn_private_ip voltadn_private_name public_name private_ip k8s_service custom_endpoint_object public_ip private_name consul_service" must be set
 
-    private_ip {
+    public_ip {
       ip = "ip"
-
-      // One of the arguments from this list "inside_network outside_network" must be set
-      inside_network = true
-
-      site_locator {
-        // One of the arguments from this list "site virtual_site" must be set
-
-        site {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-      }
     }
 
     labels = {
@@ -300,6 +287,10 @@ List of origin servers in this pool.
 
 `public_name` - (Optional) Specify origin server with public DNS name. See [Public Name ](#public-name) below for details.
 
+`voltadn_private_ip` - (Optional) Specify origin server IP address on VoltADN private network. See [Voltadn Private Ip ](#voltadn-private-ip) below for details.
+
+`voltadn_private_name` - (Optional) Specify origin server name on VoltADN private network. See [Voltadn Private Name ](#voltadn-private-name) below for details.
+
 `labels` - (Optional) Add Labels for this origin server, these labels can be used to form subset. (`String`).
 
 ### Outlier Detection
@@ -471,6 +462,22 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 ### Vk8s Networks
 
 origin server are on vK8s network on the site.
+
+### Voltadn Private Ip
+
+Specify origin server IP address on VoltADN private network.
+
+`ip` - (Required) IP address (`String`).
+
+`private_network` - (Required) VoltADN Private Network where this IP will be present. See [ref](#ref) below for details.
+
+### Voltadn Private Name
+
+Specify origin server name on VoltADN private network.
+
+`dns_name` - (Required) DNS Name (`String`).
+
+`private_network` - (Required) VoltADN Private Network where this Name will be present. See [ref](#ref) below for details.
 
 ### Volterra Trusted Ca
 

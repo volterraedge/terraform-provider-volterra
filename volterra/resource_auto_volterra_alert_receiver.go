@@ -51,11 +51,13 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"email": {
@@ -594,6 +596,8 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 			v.(string)
 	}
 
+	//receiver
+
 	receiverTypeFound := false
 
 	if v, ok := d.GetOk("email"); ok && !receiverTypeFound {
@@ -633,7 +637,6 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 				apiKey := &ves_io_schema.SecretType{}
 				receiverInt.Opsgenie.ApiKey = apiKey
 				for _, set := range sl {
-
 					apiKeyMapStrToI := set.(map[string]interface{})
 
 					if v, ok := apiKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -642,7 +645,6 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 						apiKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 						for _, set := range sl {
-
 							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -815,7 +817,6 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 				routingKey := &ves_io_schema.SecretType{}
 				receiverInt.Pagerduty.RoutingKey = routingKey
 				for _, set := range sl {
-
 					routingKeyMapStrToI := set.(map[string]interface{})
 
 					if v, ok := routingKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -824,7 +825,6 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 						routingKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 						for _, set := range sl {
-
 							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1002,7 +1002,6 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 				url := &ves_io_schema.SecretType{}
 				receiverInt.Slack.Url = url
 				for _, set := range sl {
-
 					urlMapStrToI := set.(map[string]interface{})
 
 					if v, ok := urlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1011,7 +1010,6 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 						url.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 						for _, set := range sl {
-
 							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1319,7 +1317,6 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 				apiKey := &ves_io_schema.SecretType{}
 				receiverInt.Opsgenie.ApiKey = apiKey
 				for _, set := range sl {
-
 					apiKeyMapStrToI := set.(map[string]interface{})
 
 					if v, ok := apiKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1328,7 +1325,6 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 						apiKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 						for _, set := range sl {
-
 							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1501,7 +1497,6 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 				routingKey := &ves_io_schema.SecretType{}
 				receiverInt.Pagerduty.RoutingKey = routingKey
 				for _, set := range sl {
-
 					routingKeyMapStrToI := set.(map[string]interface{})
 
 					if v, ok := routingKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1510,7 +1505,6 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 						routingKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 						for _, set := range sl {
-
 							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1688,7 +1682,6 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 				url := &ves_io_schema.SecretType{}
 				receiverInt.Slack.Url = url
 				for _, set := range sl {
-
 					urlMapStrToI := set.(map[string]interface{})
 
 					if v, ok := urlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1697,7 +1690,6 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 						url.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 						for _, set := range sl {
-
 							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {

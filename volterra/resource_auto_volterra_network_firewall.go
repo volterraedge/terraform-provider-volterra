@@ -52,11 +52,13 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"active_fast_acls": {
@@ -301,6 +303,8 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 			v.(string)
 	}
 
+	//fast_acl_choice
+
 	fastAclChoiceTypeFound := false
 
 	if v, ok := d.GetOk("active_fast_acls"); ok && !fastAclChoiceTypeFound {
@@ -386,6 +390,8 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 
 	}
 
+	//forward_proxy_policy_choice
+
 	forwardProxyPolicyChoiceTypeFound := false
 
 	if v, ok := d.GetOk("active_forward_proxy_policies"); ok && !forwardProxyPolicyChoiceTypeFound {
@@ -470,6 +476,8 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 		}
 
 	}
+
+	//network_policy_choice
 
 	networkPolicyChoiceTypeFound := false
 

@@ -2157,6 +2157,24 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "aws_tgw_siteActiveServicePoliciesType": {
+            "type": "object",
+            "description": "Active service policies for the east-west  proxy",
+            "title": "Active Service Policies",
+            "x-displayname": "Active Service Policies",
+            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.ActiveServicePoliciesType",
+            "properties": {
+                "service_policies": {
+                    "type": "array",
+                    "description": " A list of references to service_policy objects.",
+                    "title": "service_policies",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Service Policies"
+                }
+            }
+        },
         "aws_tgw_siteCreateRequest": {
             "type": "object",
             "description": "This is the input message of the 'Create' RPC",
@@ -2520,10 +2538,16 @@ var APISwaggerJSON string = `{
             "description": "Security Configuration for transit gateway",
             "title": "TGW Security Configuration",
             "x-displayname": "TGW Security Configuration",
+            "x-ves-oneof-field-east_west_service_policy_choice": "[\"active_east_west_service_policies\",\"east_west_service_policy_allow_all\",\"no_east_west_policy\"]",
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.SecurityConfigType",
             "properties": {
+                "active_east_west_service_policies": {
+                    "description": "Exclusive with [east_west_service_policy_allow_all no_east_west_policy]\nx-displayName: \"Enable East-West Service Policy\"\nEnable service policy so east-west traffic goes via proxy",
+                    "title": "Enable East-West Service Policy",
+                    "$ref": "#/definitions/aws_tgw_siteActiveServicePoliciesType"
+                },
                 "active_forward_proxy_policies": {
                     "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\nx-displayName: \"Enable Forward Proxy and Manage Policies\"\nEnable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
@@ -2534,9 +2558,19 @@ var APISwaggerJSON string = `{
                     "title": "Manage Network Policy",
                     "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType"
                 },
+                "east_west_service_policy_allow_all": {
+                    "description": "Exclusive with [active_east_west_service_policies no_east_west_policy]\nx-displayName: \"Enable East-West traffic Proxy with Allow All Policy\"\nEnable service policy with allow all so east-west traffic goes via proxy for monitoring",
+                    "title": "Enable East-West traffic Proxy with Allow All Policy",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "forward_proxy_allow_all": {
                     "description": "Exclusive with [active_forward_proxy_policies no_forward_proxy]\nx-displayName: \"Enable Forward Proxy with Allow All Policy\"\nEnable Forward Proxy for this site and allow all requests.",
                     "title": "Enable Forward Proxy with Allow All Policy",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_east_west_policy": {
+                    "description": "Exclusive with [active_east_west_service_policies east_west_service_policy_allow_all]\nx-displayName: \"Disable East-West Service Policy\"\nDisable service policy so that east-west traffic does not go via proxy",
+                    "title": "Disable East-West Service Policy",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "no_forward_proxy": {
@@ -2763,7 +2797,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "labels": {
                     "type": "object",
-                    "description": " Add Labels for each of the VPC ID, these labels can be used in network policy",
+                    "description": " Add Labels for each of the VPC ID, these labels can be used in network policy\n These labels used must be from known key and label defined in shared namespace",
                     "title": "Labels For VPC ID",
                     "x-displayname": "Labels For VPC ID"
                 },
@@ -3303,13 +3337,14 @@ var APISwaggerJSON string = `{
         },
         "schemaNextHopTypes": {
             "type": "string",
-            "description": "Defines types of next-hop\n\nUse default gateway on the local interface as gateway for route.\nAssumes there is only one local interface on the virtual network.\nUse the specified address as nexthop\nUse the network interface as nexthop\nDiscard nexthop, used when attr type is Advertise",
+            "description": "Defines types of next-hop\n\nUse default gateway on the local interface as gateway for route.\nAssumes there is only one local interface on the virtual network.\nUse the specified address as nexthop\nUse the network interface as nexthop\nDiscard nexthop, used when attr type is Advertise\nUsed in VoltADN private virtual network.",
             "title": "Nexthop Types",
             "enum": [
                 "NEXT_HOP_DEFAULT_GATEWAY",
                 "NEXT_HOP_USE_CONFIGURED",
                 "NEXT_HOP_NETWORK_INTERFACE",
-                "NEXT_HOP_DISCARD"
+                "NEXT_HOP_DISCARD",
+                "NEXT_HOP_SNAT_TO_PUBLIC"
             ],
             "default": "NEXT_HOP_DEFAULT_GATEWAY",
             "x-displayname": "Nexthop Types",
@@ -4439,6 +4474,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the AWS TGW site specification",
             "title": "CreateSpecType",
             "x-displayname": "Create AWS TGW site",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.CreateSpecType",
             "properties": {
                 "address": {
@@ -4457,6 +4493,14 @@ var APISwaggerJSON string = `{
                     "description": " Site longitude and latitude co-ordinates",
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
+                },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "operating_system_version": {
                     "type": "string",
@@ -4492,6 +4536,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the AWS TGW site specification",
             "title": "GetSpecType",
             "x-displayname": "Get AWS TGW site",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.GetSpecType",
             "properties": {
                 "address": {
@@ -4510,6 +4555,14 @@ var APISwaggerJSON string = `{
                     "description": " Site longitude and latitude co-ordinates",
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
+                },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "operating_system_version": {
                     "type": "string",
@@ -4569,6 +4622,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the AWS TGW site specification",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.GlobalSpecType",
             "properties": {
                 "address": {
@@ -4590,6 +4644,16 @@ var APISwaggerJSON string = `{
                     "title": "coordinates",
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
+                },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\nx-displayName: \"Enable Logs Streaming\"\nSelect log receiver for logs streaming",
+                    "title": "Disable Logs Streaming",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\nx-displayName: \"Disable Logs Streaming\"\nLogs Streaming is disabled",
+                    "title": "Disable Logs Receiver",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "operating_system_version": {
                     "type": "string",
@@ -4670,6 +4734,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the AWS TGW site replace specification",
             "title": "ReplaceSpecType",
             "x-displayname": "Replace AWS TGW site",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.ReplaceSpecType",
             "properties": {
                 "address": {
@@ -4682,6 +4747,14 @@ var APISwaggerJSON string = `{
                     "description": " Site longitude and latitude co-ordinates",
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
+                },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "operating_system_version": {
                     "type": "string",

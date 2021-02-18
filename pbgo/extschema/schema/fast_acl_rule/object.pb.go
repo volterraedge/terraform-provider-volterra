@@ -75,7 +75,7 @@ type Object struct {
 	// spec
 	//
 	// x-displayName: "Spec"
-	// Specification of the desired behavior of the fast ACL rule
+	// Specification of the desired behavior of the Fast ACL rule
 	Spec *SpecType `protobuf:"bytes,3,opt,name=spec" json:"spec,omitempty"`
 }
 

@@ -51,11 +51,13 @@ func resourceVolterraFastAclSet() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"acl_list": {
@@ -142,6 +144,7 @@ func resourceVolterraFastAclSetCreate(d *schema.ResourceData, meta interface{}) 
 			v.(string)
 	}
 
+	//acl_list
 	if v, ok := d.GetOk("acl_list"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})

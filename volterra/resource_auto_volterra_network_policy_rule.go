@@ -51,11 +51,13 @@ func resourceVolterraNetworkPolicyRule() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"action": {
@@ -247,19 +249,20 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 			v.(string)
 	}
 
+	//action
 	if v, ok := d.GetOk("action"); ok && !isIntfNil(v) {
 
 		createSpec.Action = ves_io_schema_network_policy_rule.NetworkPolicyRuleAction(ves_io_schema_network_policy_rule.NetworkPolicyRuleAction_value[v.(string)])
 
 	}
 
+	//advanced_action
 	if v, ok := d.GetOk("advanced_action"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		advancedAction := &ves_io_schema_network_policy_rule.NetworkPolicyRuleAdvancedAction{}
 		createSpec.AdvancedAction = advancedAction
 		for _, set := range sl {
-
 			advancedActionMapStrToI := set.(map[string]interface{})
 
 			if v, ok := advancedActionMapStrToI["action"]; ok && !isIntfNil(v) {
@@ -272,13 +275,13 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//label_matcher
 	if v, ok := d.GetOk("label_matcher"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		labelMatcher := &ves_io_schema.LabelMatcherType{}
 		createSpec.LabelMatcher = labelMatcher
 		for _, set := range sl {
-
 			labelMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
@@ -293,6 +296,7 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//ports
 	if v, ok := d.GetOk("ports"); ok && !isIntfNil(v) {
 
 		ls := make([]string, len(v.([]interface{})))
@@ -303,11 +307,14 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//protocol
 	if v, ok := d.GetOk("protocol"); ok && !isIntfNil(v) {
 
 		createSpec.Protocol =
 			v.(string)
 	}
+
+	//remote_endpoint
 
 	remoteEndpointTypeFound := false
 
@@ -518,7 +525,6 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 		advancedAction := &ves_io_schema_network_policy_rule.NetworkPolicyRuleAdvancedAction{}
 		updateSpec.AdvancedAction = advancedAction
 		for _, set := range sl {
-
 			advancedActionMapStrToI := set.(map[string]interface{})
 
 			if v, ok := advancedActionMapStrToI["action"]; ok && !isIntfNil(v) {
@@ -537,7 +543,6 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 		labelMatcher := &ves_io_schema.LabelMatcherType{}
 		updateSpec.LabelMatcher = labelMatcher
 		for _, set := range sl {
-
 			labelMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {

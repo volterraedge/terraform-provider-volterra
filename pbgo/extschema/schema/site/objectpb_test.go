@@ -6,7 +6,7 @@ Package site is a generated protocol buffer package.
 
 It is generated from these files:
 	ves.io/schema/site/object.proto
-	ves.io/schema/site/public_config_kubconfig.proto
+	ves.io/schema/site/public_config_kubeconfig.proto
 	ves.io/schema/site/public_crudapi.proto
 	ves.io/schema/site/public_customapi.proto
 	ves.io/schema/site/public_uam_kubeconfig.proto
@@ -18,8 +18,6 @@ It has these top-level messages:
 	Object
 	SpecType
 	StatusObject
-	CreateRequest
-	CreateResponse
 	ReplaceRequest
 	ReplaceResponse
 	GetRequest
@@ -27,7 +25,6 @@ It has these top-level messages:
 	ListRequest
 	ListResponseItem
 	ListResponse
-	DeleteRequest
 	SetStateReq
 	SetStateResp
 	UpgradeSWRequest
@@ -67,7 +64,7 @@ It has these top-level messages:
 	USBDevice
 	SiteStatusMetricsFieldData
 	SiteStatusMetricsData
-	GetKubeConfigReq
+	CreateKubeConfigReq
 	ListKubeConfigReq
 	ListKubeConfigRspItem
 	ListKubeConfigRsp

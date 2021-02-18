@@ -161,6 +161,14 @@ func (v *ValidateCreateSpecType) AdvertiseChoiceValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) HashPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for hash_policy_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -332,6 +340,64 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["hash_policy_choice"]; exists {
+		val := m.GetHashPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("hash_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHashPolicyChoice().(type) {
+	case *CreateSpecType_HashPolicyChoiceRoundRobin:
+		if fv, exists := v.FldValidators["hash_policy_choice.hash_policy_choice_round_robin"]; exists {
+			val := m.GetHashPolicyChoice().(*CreateSpecType_HashPolicyChoiceRoundRobin).HashPolicyChoiceRoundRobin
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("hash_policy_choice_round_robin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_HashPolicyChoiceLeastActive:
+		if fv, exists := v.FldValidators["hash_policy_choice.hash_policy_choice_least_active"]; exists {
+			val := m.GetHashPolicyChoice().(*CreateSpecType_HashPolicyChoiceLeastActive).HashPolicyChoiceLeastActive
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("hash_policy_choice_least_active"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_HashPolicyChoiceRandom:
+		if fv, exists := v.FldValidators["hash_policy_choice.hash_policy_choice_random"]; exists {
+			val := m.GetHashPolicyChoice().(*CreateSpecType_HashPolicyChoiceRandom).HashPolicyChoiceRandom
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("hash_policy_choice_random"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_HashPolicyChoiceSourceIpStickiness:
+		if fv, exists := v.FldValidators["hash_policy_choice.hash_policy_choice_source_ip_stickiness"]; exists {
+			val := m.GetHashPolicyChoice().(*CreateSpecType_HashPolicyChoiceSourceIpStickiness).HashPolicyChoiceSourceIpStickiness
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("hash_policy_choice_source_ip_stickiness"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["listen_port"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("listen_port"))
@@ -383,6 +449,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["advertise_choice"] = vFn
+
+	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
+	rulesHashPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.hash_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hash_policy_choice"] = vFn
 
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
@@ -609,6 +686,14 @@ func (v *ValidateGetSpecType) AdvertiseChoiceValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) HashPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for hash_policy_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -792,6 +877,64 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["hash_policy_choice"]; exists {
+		val := m.GetHashPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("hash_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHashPolicyChoice().(type) {
+	case *GetSpecType_HashPolicyChoiceRoundRobin:
+		if fv, exists := v.FldValidators["hash_policy_choice.hash_policy_choice_round_robin"]; exists {
+			val := m.GetHashPolicyChoice().(*GetSpecType_HashPolicyChoiceRoundRobin).HashPolicyChoiceRoundRobin
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("hash_policy_choice_round_robin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_HashPolicyChoiceLeastActive:
+		if fv, exists := v.FldValidators["hash_policy_choice.hash_policy_choice_least_active"]; exists {
+			val := m.GetHashPolicyChoice().(*GetSpecType_HashPolicyChoiceLeastActive).HashPolicyChoiceLeastActive
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("hash_policy_choice_least_active"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_HashPolicyChoiceRandom:
+		if fv, exists := v.FldValidators["hash_policy_choice.hash_policy_choice_random"]; exists {
+			val := m.GetHashPolicyChoice().(*GetSpecType_HashPolicyChoiceRandom).HashPolicyChoiceRandom
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("hash_policy_choice_random"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_HashPolicyChoiceSourceIpStickiness:
+		if fv, exists := v.FldValidators["hash_policy_choice.hash_policy_choice_source_ip_stickiness"]; exists {
+			val := m.GetHashPolicyChoice().(*GetSpecType_HashPolicyChoiceSourceIpStickiness).HashPolicyChoiceSourceIpStickiness
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("hash_policy_choice_source_ip_stickiness"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["host_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("host_name"))
@@ -864,6 +1007,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["advertise_choice"] = vFn
+
+	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
+	rulesHashPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.hash_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hash_policy_choice"] = vFn
 
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
@@ -1150,6 +1304,14 @@ func (v *ValidateGlobalSpecType) AdvertiseChoiceValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) HashPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for hash_policy_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -1333,6 +1495,64 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["hash_policy_choice"]; exists {
+		val := m.GetHashPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("hash_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHashPolicyChoice().(type) {
+	case *GlobalSpecType_HashPolicyChoiceRoundRobin:
+		if fv, exists := v.FldValidators["hash_policy_choice.hash_policy_choice_round_robin"]; exists {
+			val := m.GetHashPolicyChoice().(*GlobalSpecType_HashPolicyChoiceRoundRobin).HashPolicyChoiceRoundRobin
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("hash_policy_choice_round_robin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_HashPolicyChoiceLeastActive:
+		if fv, exists := v.FldValidators["hash_policy_choice.hash_policy_choice_least_active"]; exists {
+			val := m.GetHashPolicyChoice().(*GlobalSpecType_HashPolicyChoiceLeastActive).HashPolicyChoiceLeastActive
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("hash_policy_choice_least_active"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_HashPolicyChoiceRandom:
+		if fv, exists := v.FldValidators["hash_policy_choice.hash_policy_choice_random"]; exists {
+			val := m.GetHashPolicyChoice().(*GlobalSpecType_HashPolicyChoiceRandom).HashPolicyChoiceRandom
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("hash_policy_choice_random"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_HashPolicyChoiceSourceIpStickiness:
+		if fv, exists := v.FldValidators["hash_policy_choice.hash_policy_choice_source_ip_stickiness"]; exists {
+			val := m.GetHashPolicyChoice().(*GlobalSpecType_HashPolicyChoiceSourceIpStickiness).HashPolicyChoiceSourceIpStickiness
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("hash_policy_choice_source_ip_stickiness"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["host_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("host_name"))
@@ -1414,6 +1634,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["advertise_choice"] = vFn
+
+	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
+	rulesHashPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.hash_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hash_policy_choice"] = vFn
 
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
@@ -1646,6 +1877,14 @@ func (v *ValidateReplaceSpecType) AdvertiseChoiceValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) HashPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for hash_policy_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -1817,6 +2056,64 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["hash_policy_choice"]; exists {
+		val := m.GetHashPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("hash_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetHashPolicyChoice().(type) {
+	case *ReplaceSpecType_HashPolicyChoiceRoundRobin:
+		if fv, exists := v.FldValidators["hash_policy_choice.hash_policy_choice_round_robin"]; exists {
+			val := m.GetHashPolicyChoice().(*ReplaceSpecType_HashPolicyChoiceRoundRobin).HashPolicyChoiceRoundRobin
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("hash_policy_choice_round_robin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_HashPolicyChoiceLeastActive:
+		if fv, exists := v.FldValidators["hash_policy_choice.hash_policy_choice_least_active"]; exists {
+			val := m.GetHashPolicyChoice().(*ReplaceSpecType_HashPolicyChoiceLeastActive).HashPolicyChoiceLeastActive
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("hash_policy_choice_least_active"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_HashPolicyChoiceRandom:
+		if fv, exists := v.FldValidators["hash_policy_choice.hash_policy_choice_random"]; exists {
+			val := m.GetHashPolicyChoice().(*ReplaceSpecType_HashPolicyChoiceRandom).HashPolicyChoiceRandom
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("hash_policy_choice_random"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness:
+		if fv, exists := v.FldValidators["hash_policy_choice.hash_policy_choice_source_ip_stickiness"]; exists {
+			val := m.GetHashPolicyChoice().(*ReplaceSpecType_HashPolicyChoiceSourceIpStickiness).HashPolicyChoiceSourceIpStickiness
+			vOpts := append(opts,
+				db.WithValidateField("hash_policy_choice"),
+				db.WithValidateField("hash_policy_choice_source_ip_stickiness"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["listen_port"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("listen_port"))
@@ -1880,6 +2177,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["advertise_choice"] = vFn
+
+	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
+	rulesHashPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.hash_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hash_policy_choice"] = vFn
 
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
@@ -1964,6 +2272,53 @@ func (r *CreateSpecType) GetAdvertiseChoiceFromGlobalSpecType(o *GlobalSpecType)
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetHashPolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.HashPolicyChoice.(type) {
+	case nil:
+		o.HashPolicyChoice = nil
+
+	case *CreateSpecType_HashPolicyChoiceLeastActive:
+		o.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceLeastActive{HashPolicyChoiceLeastActive: of.HashPolicyChoiceLeastActive}
+
+	case *CreateSpecType_HashPolicyChoiceRandom:
+		o.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceRandom{HashPolicyChoiceRandom: of.HashPolicyChoiceRandom}
+
+	case *CreateSpecType_HashPolicyChoiceRoundRobin:
+		o.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceRoundRobin{HashPolicyChoiceRoundRobin: of.HashPolicyChoiceRoundRobin}
+
+	case *CreateSpecType_HashPolicyChoiceSourceIpStickiness:
+		o.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceSourceIpStickiness{HashPolicyChoiceSourceIpStickiness: of.HashPolicyChoiceSourceIpStickiness}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetHashPolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.HashPolicyChoice.(type) {
+	case nil:
+		r.HashPolicyChoice = nil
+
+	case *GlobalSpecType_HashPolicyChoiceLeastActive:
+		r.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceLeastActive{HashPolicyChoiceLeastActive: of.HashPolicyChoiceLeastActive}
+
+	case *GlobalSpecType_HashPolicyChoiceRandom:
+		r.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceRandom{HashPolicyChoiceRandom: of.HashPolicyChoiceRandom}
+
+	case *GlobalSpecType_HashPolicyChoiceRoundRobin:
+		r.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceRoundRobin{HashPolicyChoiceRoundRobin: of.HashPolicyChoiceRoundRobin}
+
+	case *GlobalSpecType_HashPolicyChoiceSourceIpStickiness:
+		r.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceSourceIpStickiness{HashPolicyChoiceSourceIpStickiness: of.HashPolicyChoiceSourceIpStickiness}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -1971,6 +2326,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetAdvertiseChoiceFromGlobalSpecType(f)
 	m.DnsVolterraManaged = f.GetDnsVolterraManaged()
 	m.Domains = f.GetDomains()
+	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.ListenPort = f.GetListenPort()
 	m.OriginPoolsWeights = f.GetOriginPoolsWeights()
 	m.WithSni = f.GetWithSni()
@@ -1985,6 +2341,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetAdvertiseChoiceToGlobalSpecType(f)
 	f.DnsVolterraManaged = m1.DnsVolterraManaged
 	f.Domains = m1.Domains
+	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	f.ListenPort = m1.ListenPort
 	f.OriginPoolsWeights = m1.OriginPoolsWeights
 	f.WithSni = m1.WithSni
@@ -2037,6 +2394,53 @@ func (r *GetSpecType) GetAdvertiseChoiceFromGlobalSpecType(o *GlobalSpecType) er
 	return nil
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetHashPolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.HashPolicyChoice.(type) {
+	case nil:
+		o.HashPolicyChoice = nil
+
+	case *GetSpecType_HashPolicyChoiceLeastActive:
+		o.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceLeastActive{HashPolicyChoiceLeastActive: of.HashPolicyChoiceLeastActive}
+
+	case *GetSpecType_HashPolicyChoiceRandom:
+		o.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceRandom{HashPolicyChoiceRandom: of.HashPolicyChoiceRandom}
+
+	case *GetSpecType_HashPolicyChoiceRoundRobin:
+		o.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceRoundRobin{HashPolicyChoiceRoundRobin: of.HashPolicyChoiceRoundRobin}
+
+	case *GetSpecType_HashPolicyChoiceSourceIpStickiness:
+		o.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceSourceIpStickiness{HashPolicyChoiceSourceIpStickiness: of.HashPolicyChoiceSourceIpStickiness}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetHashPolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.HashPolicyChoice.(type) {
+	case nil:
+		r.HashPolicyChoice = nil
+
+	case *GlobalSpecType_HashPolicyChoiceLeastActive:
+		r.HashPolicyChoice = &GetSpecType_HashPolicyChoiceLeastActive{HashPolicyChoiceLeastActive: of.HashPolicyChoiceLeastActive}
+
+	case *GlobalSpecType_HashPolicyChoiceRandom:
+		r.HashPolicyChoice = &GetSpecType_HashPolicyChoiceRandom{HashPolicyChoiceRandom: of.HashPolicyChoiceRandom}
+
+	case *GlobalSpecType_HashPolicyChoiceRoundRobin:
+		r.HashPolicyChoice = &GetSpecType_HashPolicyChoiceRoundRobin{HashPolicyChoiceRoundRobin: of.HashPolicyChoiceRoundRobin}
+
+	case *GlobalSpecType_HashPolicyChoiceSourceIpStickiness:
+		r.HashPolicyChoice = &GetSpecType_HashPolicyChoiceSourceIpStickiness{HashPolicyChoiceSourceIpStickiness: of.HashPolicyChoiceSourceIpStickiness}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -2045,6 +2449,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.DnsInfo = f.GetDnsInfo()
 	m.DnsVolterraManaged = f.GetDnsVolterraManaged()
 	m.Domains = f.GetDomains()
+	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.HostName = f.GetHostName()
 	m.ListenPort = f.GetListenPort()
 	m.OriginPools = f.GetOriginPools()
@@ -2062,6 +2467,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.DnsInfo = m1.DnsInfo
 	f.DnsVolterraManaged = m1.DnsVolterraManaged
 	f.Domains = m1.Domains
+	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	f.HostName = m1.HostName
 	f.ListenPort = m1.ListenPort
 	f.OriginPools = m1.OriginPools
@@ -2116,6 +2522,53 @@ func (r *ReplaceSpecType) GetAdvertiseChoiceFromGlobalSpecType(o *GlobalSpecType
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetHashPolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.HashPolicyChoice.(type) {
+	case nil:
+		o.HashPolicyChoice = nil
+
+	case *ReplaceSpecType_HashPolicyChoiceLeastActive:
+		o.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceLeastActive{HashPolicyChoiceLeastActive: of.HashPolicyChoiceLeastActive}
+
+	case *ReplaceSpecType_HashPolicyChoiceRandom:
+		o.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceRandom{HashPolicyChoiceRandom: of.HashPolicyChoiceRandom}
+
+	case *ReplaceSpecType_HashPolicyChoiceRoundRobin:
+		o.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceRoundRobin{HashPolicyChoiceRoundRobin: of.HashPolicyChoiceRoundRobin}
+
+	case *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness:
+		o.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceSourceIpStickiness{HashPolicyChoiceSourceIpStickiness: of.HashPolicyChoiceSourceIpStickiness}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetHashPolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.HashPolicyChoice.(type) {
+	case nil:
+		r.HashPolicyChoice = nil
+
+	case *GlobalSpecType_HashPolicyChoiceLeastActive:
+		r.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceLeastActive{HashPolicyChoiceLeastActive: of.HashPolicyChoiceLeastActive}
+
+	case *GlobalSpecType_HashPolicyChoiceRandom:
+		r.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceRandom{HashPolicyChoiceRandom: of.HashPolicyChoiceRandom}
+
+	case *GlobalSpecType_HashPolicyChoiceRoundRobin:
+		r.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceRoundRobin{HashPolicyChoiceRoundRobin: of.HashPolicyChoiceRoundRobin}
+
+	case *GlobalSpecType_HashPolicyChoiceSourceIpStickiness:
+		r.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceSourceIpStickiness{HashPolicyChoiceSourceIpStickiness: of.HashPolicyChoiceSourceIpStickiness}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
@@ -2123,6 +2576,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetAdvertiseChoiceFromGlobalSpecType(f)
 	m.DnsVolterraManaged = f.GetDnsVolterraManaged()
 	m.Domains = f.GetDomains()
+	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.ListenPort = f.GetListenPort()
 	m.OriginPools = f.GetOriginPools()
 	m.OriginPoolsWeights = f.GetOriginPoolsWeights()
@@ -2138,6 +2592,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetAdvertiseChoiceToGlobalSpecType(f)
 	f.DnsVolterraManaged = m1.DnsVolterraManaged
 	f.Domains = m1.Domains
+	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	f.ListenPort = m1.ListenPort
 	f.OriginPools = m1.OriginPools
 	f.OriginPoolsWeights = m1.OriginPoolsWeights

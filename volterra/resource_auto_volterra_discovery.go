@@ -51,11 +51,13 @@ func resourceVolterraDiscovery() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"discovery_consul": {
@@ -1565,6 +1567,8 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 			v.(string)
 	}
 
+	//discovery_choice
+
 	discoveryChoiceTypeFound := false
 
 	if v, ok := d.GetOk("discovery_consul"); ok && !discoveryChoiceTypeFound {
@@ -1584,7 +1588,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 				accessInfo := &ves_io_schema_discovery.ConsulAccessInfo{}
 				discoveryChoiceInt.DiscoveryConsul.AccessInfo = accessInfo
 				for _, set := range sl {
-
 					accessInfoMapStrToI := set.(map[string]interface{})
 
 					if v, ok := accessInfoMapStrToI["connection_info"]; ok && !isIntfNil(v) {
@@ -1593,7 +1596,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 						connectionInfo := &ves_io_schema_discovery.RestConfigType{}
 						accessInfo.ConnectionInfo = connectionInfo
 						for _, set := range sl {
-
 							connectionInfoMapStrToI := set.(map[string]interface{})
 
 							if w, ok := connectionInfoMapStrToI["api_server"]; ok && !isIntfNil(w) {
@@ -1606,7 +1608,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 								tlsInfo := &ves_io_schema_discovery.TLSClientConfigType{}
 								connectionInfo.TlsInfo = tlsInfo
 								for _, set := range sl {
-
 									tlsInfoMapStrToI := set.(map[string]interface{})
 
 									if v, ok := tlsInfoMapStrToI["ca_certificate_url"]; ok && !isIntfNil(v) {
@@ -1615,7 +1616,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 										caCertificateUrl := &ves_io_schema.SecretType{}
 										tlsInfo.CaCertificateUrl = caCertificateUrl
 										for _, set := range sl {
-
 											caCertificateUrlMapStrToI := set.(map[string]interface{})
 
 											if v, ok := caCertificateUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1624,7 +1624,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 												caCertificateUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 												for _, set := range sl {
-
 													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1781,7 +1780,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 										certificateUrl := &ves_io_schema.SecretType{}
 										tlsInfo.CertificateUrl = certificateUrl
 										for _, set := range sl {
-
 											certificateUrlMapStrToI := set.(map[string]interface{})
 
 											if v, ok := certificateUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1790,7 +1788,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 												certificateUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 												for _, set := range sl {
-
 													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1943,7 +1940,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 										keyUrl := &ves_io_schema.SecretType{}
 										tlsInfo.KeyUrl = keyUrl
 										for _, set := range sl {
-
 											keyUrlMapStrToI := set.(map[string]interface{})
 
 											if v, ok := keyUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1952,7 +1948,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 												keyUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 												for _, set := range sl {
-
 													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -2121,7 +2116,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 						httpBasicAuthInfo := &ves_io_schema_discovery.ConsulHttpBasicAuthInfoType{}
 						accessInfo.HttpBasicAuthInfo = httpBasicAuthInfo
 						for _, set := range sl {
-
 							httpBasicAuthInfoMapStrToI := set.(map[string]interface{})
 
 							if v, ok := httpBasicAuthInfoMapStrToI["passwd_url"]; ok && !isIntfNil(v) {
@@ -2130,7 +2124,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 								passwdUrl := &ves_io_schema.SecretType{}
 								httpBasicAuthInfo.PasswdUrl = passwdUrl
 								for _, set := range sl {
-
 									passwdUrlMapStrToI := set.(map[string]interface{})
 
 									if v, ok := passwdUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -2139,7 +2132,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 										passwdUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
-
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -2310,7 +2302,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 				publishInfo := &ves_io_schema_discovery.ConsulVipDiscoveryInfoType{}
 				discoveryChoiceInt.DiscoveryConsul.PublishInfo = publishInfo
 				for _, set := range sl {
-
 					publishInfoMapStrToI := set.(map[string]interface{})
 
 					publishChoiceTypeFound := false
@@ -2364,7 +2355,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 				accessInfo := &ves_io_schema_discovery.K8SAccessInfo{}
 				discoveryChoiceInt.DiscoveryK8S.AccessInfo = accessInfo
 				for _, set := range sl {
-
 					accessInfoMapStrToI := set.(map[string]interface{})
 
 					configTypeTypeFound := false
@@ -2391,7 +2381,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 								tlsInfo := &ves_io_schema_discovery.TLSClientConfigType{}
 								configTypeInt.ConnectionInfo.TlsInfo = tlsInfo
 								for _, set := range sl {
-
 									tlsInfoMapStrToI := set.(map[string]interface{})
 
 									if v, ok := tlsInfoMapStrToI["ca_certificate_url"]; ok && !isIntfNil(v) {
@@ -2400,7 +2389,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 										caCertificateUrl := &ves_io_schema.SecretType{}
 										tlsInfo.CaCertificateUrl = caCertificateUrl
 										for _, set := range sl {
-
 											caCertificateUrlMapStrToI := set.(map[string]interface{})
 
 											if v, ok := caCertificateUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -2409,7 +2397,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 												caCertificateUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 												for _, set := range sl {
-
 													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -2566,7 +2553,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 										certificateUrl := &ves_io_schema.SecretType{}
 										tlsInfo.CertificateUrl = certificateUrl
 										for _, set := range sl {
-
 											certificateUrlMapStrToI := set.(map[string]interface{})
 
 											if v, ok := certificateUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -2575,7 +2561,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 												certificateUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 												for _, set := range sl {
-
 													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -2728,7 +2713,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 										keyUrl := &ves_io_schema.SecretType{}
 										tlsInfo.KeyUrl = keyUrl
 										for _, set := range sl {
-
 											keyUrlMapStrToI := set.(map[string]interface{})
 
 											if v, ok := keyUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -2737,7 +2721,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 												keyUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 												for _, set := range sl {
-
 													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -2929,7 +2912,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 								configTypeInt.KubeconfigUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 								for _, set := range sl {
-
 									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -3112,7 +3094,6 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 				publishInfo := &ves_io_schema_discovery.K8SVipDiscoveryInfoType{}
 				discoveryChoiceInt.DiscoveryK8S.PublishInfo = publishInfo
 				for _, set := range sl {
-
 					publishInfoMapStrToI := set.(map[string]interface{})
 
 					publishChoiceTypeFound := false
@@ -3195,13 +3176,13 @@ func resourceVolterraDiscoveryCreate(d *schema.ResourceData, meta interface{}) e
 
 	}
 
+	//where
 	if v, ok := d.GetOk("where"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		where := &ves_io_schema.NetworkSiteRefSelector{}
 		createSpec.Where = where
 		for _, set := range sl {
-
 			whereMapStrToI := set.(map[string]interface{})
 
 			refOrSelectorTypeFound := false
@@ -3480,7 +3461,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 				accessInfo := &ves_io_schema_discovery.ConsulAccessInfo{}
 				discoveryChoiceInt.DiscoveryConsul.AccessInfo = accessInfo
 				for _, set := range sl {
-
 					accessInfoMapStrToI := set.(map[string]interface{})
 
 					if v, ok := accessInfoMapStrToI["connection_info"]; ok && !isIntfNil(v) {
@@ -3489,7 +3469,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 						connectionInfo := &ves_io_schema_discovery.RestConfigType{}
 						accessInfo.ConnectionInfo = connectionInfo
 						for _, set := range sl {
-
 							connectionInfoMapStrToI := set.(map[string]interface{})
 
 							if w, ok := connectionInfoMapStrToI["api_server"]; ok && !isIntfNil(w) {
@@ -3502,7 +3481,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 								tlsInfo := &ves_io_schema_discovery.TLSClientConfigType{}
 								connectionInfo.TlsInfo = tlsInfo
 								for _, set := range sl {
-
 									tlsInfoMapStrToI := set.(map[string]interface{})
 
 									if v, ok := tlsInfoMapStrToI["ca_certificate_url"]; ok && !isIntfNil(v) {
@@ -3511,7 +3489,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 										caCertificateUrl := &ves_io_schema.SecretType{}
 										tlsInfo.CaCertificateUrl = caCertificateUrl
 										for _, set := range sl {
-
 											caCertificateUrlMapStrToI := set.(map[string]interface{})
 
 											if v, ok := caCertificateUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -3520,7 +3497,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 												caCertificateUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 												for _, set := range sl {
-
 													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -3677,7 +3653,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 										certificateUrl := &ves_io_schema.SecretType{}
 										tlsInfo.CertificateUrl = certificateUrl
 										for _, set := range sl {
-
 											certificateUrlMapStrToI := set.(map[string]interface{})
 
 											if v, ok := certificateUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -3686,7 +3661,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 												certificateUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 												for _, set := range sl {
-
 													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -3839,7 +3813,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 										keyUrl := &ves_io_schema.SecretType{}
 										tlsInfo.KeyUrl = keyUrl
 										for _, set := range sl {
-
 											keyUrlMapStrToI := set.(map[string]interface{})
 
 											if v, ok := keyUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -3848,7 +3821,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 												keyUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 												for _, set := range sl {
-
 													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -4017,7 +3989,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 						httpBasicAuthInfo := &ves_io_schema_discovery.ConsulHttpBasicAuthInfoType{}
 						accessInfo.HttpBasicAuthInfo = httpBasicAuthInfo
 						for _, set := range sl {
-
 							httpBasicAuthInfoMapStrToI := set.(map[string]interface{})
 
 							if v, ok := httpBasicAuthInfoMapStrToI["passwd_url"]; ok && !isIntfNil(v) {
@@ -4026,7 +3997,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 								passwdUrl := &ves_io_schema.SecretType{}
 								httpBasicAuthInfo.PasswdUrl = passwdUrl
 								for _, set := range sl {
-
 									passwdUrlMapStrToI := set.(map[string]interface{})
 
 									if v, ok := passwdUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -4035,7 +4005,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 										passwdUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
-
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -4206,7 +4175,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 				publishInfo := &ves_io_schema_discovery.ConsulVipDiscoveryInfoType{}
 				discoveryChoiceInt.DiscoveryConsul.PublishInfo = publishInfo
 				for _, set := range sl {
-
 					publishInfoMapStrToI := set.(map[string]interface{})
 
 					publishChoiceTypeFound := false
@@ -4260,7 +4228,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 				accessInfo := &ves_io_schema_discovery.K8SAccessInfo{}
 				discoveryChoiceInt.DiscoveryK8S.AccessInfo = accessInfo
 				for _, set := range sl {
-
 					accessInfoMapStrToI := set.(map[string]interface{})
 
 					configTypeTypeFound := false
@@ -4287,7 +4254,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 								tlsInfo := &ves_io_schema_discovery.TLSClientConfigType{}
 								configTypeInt.ConnectionInfo.TlsInfo = tlsInfo
 								for _, set := range sl {
-
 									tlsInfoMapStrToI := set.(map[string]interface{})
 
 									if v, ok := tlsInfoMapStrToI["ca_certificate_url"]; ok && !isIntfNil(v) {
@@ -4296,7 +4262,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 										caCertificateUrl := &ves_io_schema.SecretType{}
 										tlsInfo.CaCertificateUrl = caCertificateUrl
 										for _, set := range sl {
-
 											caCertificateUrlMapStrToI := set.(map[string]interface{})
 
 											if v, ok := caCertificateUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -4305,7 +4270,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 												caCertificateUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 												for _, set := range sl {
-
 													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -4462,7 +4426,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 										certificateUrl := &ves_io_schema.SecretType{}
 										tlsInfo.CertificateUrl = certificateUrl
 										for _, set := range sl {
-
 											certificateUrlMapStrToI := set.(map[string]interface{})
 
 											if v, ok := certificateUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -4471,7 +4434,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 												certificateUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 												for _, set := range sl {
-
 													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -4624,7 +4586,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 										keyUrl := &ves_io_schema.SecretType{}
 										tlsInfo.KeyUrl = keyUrl
 										for _, set := range sl {
-
 											keyUrlMapStrToI := set.(map[string]interface{})
 
 											if v, ok := keyUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -4633,7 +4594,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 												keyUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 												for _, set := range sl {
-
 													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -4825,7 +4785,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 								configTypeInt.KubeconfigUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 								for _, set := range sl {
-
 									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -5008,7 +4967,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 				publishInfo := &ves_io_schema_discovery.K8SVipDiscoveryInfoType{}
 				discoveryChoiceInt.DiscoveryK8S.PublishInfo = publishInfo
 				for _, set := range sl {
-
 					publishInfoMapStrToI := set.(map[string]interface{})
 
 					publishChoiceTypeFound := false
@@ -5097,7 +5055,6 @@ func resourceVolterraDiscoveryUpdate(d *schema.ResourceData, meta interface{}) e
 		where := &ves_io_schema.NetworkSiteRefSelector{}
 		updateSpec.Where = where
 		for _, set := range sl {
-
 			whereMapStrToI := set.(map[string]interface{})
 
 			refOrSelectorTypeFound := false

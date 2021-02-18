@@ -72,6 +72,9 @@ func (c *UpgradeAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...se
 	if err != nil {
 		return nil, errors.Wrap(err, "Doing custom RPC using GRPC")
 	}
+	if cco.OutCallResponse != nil {
+		cco.OutCallResponse.ProtoMsg = rsp
+	}
 	return rsp, nil
 }
 
@@ -168,6 +171,10 @@ func (c *UpgradeAPIRestClient) doRPCUpgradeOS(ctx context.Context, callOpts *ser
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.site.UpgradeOSResponse", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -240,6 +247,10 @@ func (c *UpgradeAPIRestClient) doRPCUpgradeSW(ctx context.Context, callOpts *ser
 	pbRsp := &UpgradeSWResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.site.UpgradeSWResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
 	}
 	return pbRsp, nil
 }

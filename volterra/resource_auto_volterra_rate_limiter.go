@@ -51,11 +51,13 @@ func resourceVolterraRateLimiter() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"limits": {
@@ -162,6 +164,7 @@ func resourceVolterraRateLimiterCreate(d *schema.ResourceData, meta interface{})
 			v.(string)
 	}
 
+	//limits
 	if v, ok := d.GetOk("limits"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -169,7 +172,6 @@ func resourceVolterraRateLimiterCreate(d *schema.ResourceData, meta interface{})
 		createSpec.Limits = limits
 		for i, set := range sl {
 			limits[i] = &ves_io_schema_rate_limiter.RateLimitValue{}
-
 			limitsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := limitsMapStrToI["total_number"]; ok && !isIntfNil(w) {
@@ -186,6 +188,7 @@ func resourceVolterraRateLimiterCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//user_identification
 	if v, ok := d.GetOk("user_identification"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -323,7 +326,6 @@ func resourceVolterraRateLimiterUpdate(d *schema.ResourceData, meta interface{})
 		updateSpec.Limits = limits
 		for i, set := range sl {
 			limits[i] = &ves_io_schema_rate_limiter.RateLimitValue{}
-
 			limitsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := limitsMapStrToI["total_number"]; ok && !isIntfNil(w) {

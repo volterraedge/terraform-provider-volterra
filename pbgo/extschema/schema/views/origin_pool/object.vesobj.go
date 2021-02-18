@@ -217,13 +217,13 @@ func (e *DBObject) Sample(r *rand.Rand) (db.Entry, error) {
 	uid := uuid.New().String()
 	o := &Object{
 		Metadata: &ves_io_schema.ObjectMetaType{
-			Name:      string(randStringObject(r)),
-			Namespace: string(randStringObject(r)),
+			Name:      uuid.New().String(),
+			Namespace: uuid.New().String(),
 			Uid:       uid,
 		},
 		SystemMetadata: &ves_io_schema.SystemObjectMetaType{
 			Uid:    uid,
-			Tenant: string(randStringObject(r)),
+			Tenant: uuid.New().String(),
 		},
 		Spec: &SpecType{},
 	}

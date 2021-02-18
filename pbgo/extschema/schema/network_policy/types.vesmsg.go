@@ -218,27 +218,6 @@ func (v *ValidateCreateSpecType) EndpointValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for rules")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := NetworkPolicyRuleChoiceValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -295,16 +274,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["endpoint"] = vFn
 
-	vrhRules := v.RulesValidationRuleHandler
-	rulesRules := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhRules(rulesRules)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.rules: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["rules"] = vFn
+	v.FldValidators["rules"] = NetworkPolicyRuleChoiceValidator().Validate
 
 	return v
 }()
@@ -446,6 +416,14 @@ type ValidateEndpointChoiceType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateEndpointChoiceType) EndpointChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for endpoint_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateEndpointChoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*EndpointChoiceType)
 	if !ok {
@@ -458,6 +436,16 @@ func (v *ValidateEndpointChoiceType) Validate(ctx context.Context, pm interface{
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["endpoint_choice"]; exists {
+		val := m.GetEndpointChoice()
+		vOpts := append(opts,
+			db.WithValidateField("endpoint_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetEndpointChoice().(type) {
@@ -547,6 +535,25 @@ func (v *ValidateEndpointChoiceType) Validate(ctx context.Context, pm interface{
 // Well-known symbol for default validator implementation
 var DefaultEndpointChoiceTypeValidator = func() *ValidateEndpointChoiceType {
 	v := &ValidateEndpointChoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhEndpointChoice := v.EndpointChoiceValidationRuleHandler
+	rulesEndpointChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhEndpointChoice(rulesEndpointChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for EndpointChoiceType.endpoint_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["endpoint_choice"] = vFn
 
 	v.FldValidators["endpoint_choice.prefix_list"] = ves_io_schema_views.PrefixStringListTypeValidator().Validate
 	v.FldValidators["endpoint_choice.interface"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -734,14 +741,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
 
 	v.FldValidators["rule_choice.rules"] = NetworkPolicyRuleChoiceValidator().Validate
 	v.FldValidators["rule_choice.legacy_rules"] = LegacyNetworkPolicyRuleChoiceValidator().Validate
@@ -2617,6 +2616,13 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn := EndpointChoiceTypeValidator().Validate
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -2681,10 +2687,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhEndpoint := v.EndpointValidationRuleHandler
+	rulesEndpoint := map[string]string{}
+	vFn, err = vrhEndpoint(rulesEndpoint)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.endpoint: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["endpoint"] = vFn
+
 	v.FldValidators["rule_choice.rules"] = NetworkPolicyRuleChoiceValidator().Validate
 	v.FldValidators["rule_choice.legacy_rules"] = LegacyNetworkPolicyRuleChoiceValidator().Validate
-
-	v.FldValidators["endpoint"] = EndpointChoiceTypeValidator().Validate
 
 	return v
 }()

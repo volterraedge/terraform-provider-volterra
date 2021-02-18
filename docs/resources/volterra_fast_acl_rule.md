@@ -22,17 +22,10 @@ resource "volterra_fast_acl_rule" "example" {
 
   action {
     // One of the arguments from this list "simple_action policer_action protocol_policer_action" must be set
-
-    protocol_policer_action {
-      ref {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
+    simple_action = "simple_action"
   }
 
-  // One of the arguments from this list "prefix ip_prefix_set" must be set
+  // One of the arguments from this list "ip_prefix_set prefix" must be set
 
   prefix {
     prefix = ["[192.168.1.0/24, 192.168.2.0/24]\" or \"[2001:db8::1::/112, 2001::db8::2::/112]"]

@@ -30,7 +30,7 @@ resource "volterra_alert_policy" "example" {
     // One of the arguments from this list "send dont_send" must be set
     send = true
 
-    // One of the arguments from this list "custom any severity group alertname alertname_regex" must be set
+    // One of the arguments from this list "any severity group alertname alertname_regex custom" must be set
     alertname = "alertname"
 
     notification_parameters {

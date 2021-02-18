@@ -2741,9 +2741,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.SpecType",
             "properties": {
                 "gc_spec": {
+                    "description": " The specification of Object",
                     "title": "gc_spec",
                     "$ref": "#/definitions/viewsaws_vpc_siteGlobalSpecType",
-                    "x-displayname": "GC Spec"
+                    "x-displayname": "Global Spec"
                 }
             }
         },
@@ -3250,13 +3251,14 @@ var APISwaggerJSON string = `{
         },
         "schemaNextHopTypes": {
             "type": "string",
-            "description": "Defines types of next-hop\n\nUse default gateway on the local interface as gateway for route.\nAssumes there is only one local interface on the virtual network.\nUse the specified address as nexthop\nUse the network interface as nexthop\nDiscard nexthop, used when attr type is Advertise",
+            "description": "Defines types of next-hop\n\nUse default gateway on the local interface as gateway for route.\nAssumes there is only one local interface on the virtual network.\nUse the specified address as nexthop\nUse the network interface as nexthop\nDiscard nexthop, used when attr type is Advertise\nUsed in VoltADN private virtual network.",
             "title": "Nexthop Types",
             "enum": [
                 "NEXT_HOP_DEFAULT_GATEWAY",
                 "NEXT_HOP_USE_CONFIGURED",
                 "NEXT_HOP_NETWORK_INTERFACE",
-                "NEXT_HOP_DISCARD"
+                "NEXT_HOP_DISCARD",
+                "NEXT_HOP_SNAT_TO_PUBLIC"
             ],
             "default": "NEXT_HOP_DEFAULT_GATEWAY",
             "x-displayname": "Nexthop Types",
@@ -4510,6 +4512,7 @@ var APISwaggerJSON string = `{
             "title": "CreateSpecType",
             "x-displayname": "Create AWS VPC site",
             "x-ves-oneof-field-deployment": "[\"assisted\",\"aws_cred\"]",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.CreateSpecType",
             "properties": {
@@ -4561,6 +4564,14 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "a1.xlarge",
                     "x-ves-required": "true"
                 },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "nodes_per_az": {
                     "type": "integer",
                     "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
@@ -4603,6 +4614,7 @@ var APISwaggerJSON string = `{
             "title": "GetSpecType",
             "x-displayname": "Get AWS VPC site",
             "x-ves-oneof-field-deployment": "[\"assisted\",\"aws_cred\"]",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.GetSpecType",
             "properties": {
@@ -4654,6 +4666,14 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "a1.xlarge",
                     "x-ves-required": "true"
                 },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "nodes_per_az": {
                     "type": "integer",
                     "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
@@ -4696,6 +4716,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-deployment": "[\"assisted\",\"aws_cred\"]",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.GlobalSpecType",
             "properties": {
@@ -4756,6 +4777,16 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "a1.xlarge",
                     "x-ves-required": "true"
                 },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\nx-displayName: \"Enable Logs Streaming\"\nSelect log receiver for logs streaming",
+                    "title": "Disable Logs Streaming",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\nx-displayName: \"Disable Logs Streaming\"\nLogs Streaming is disabled",
+                    "title": "Disable Logs Receiver",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "nodes_per_az": {
                     "type": "integer",
                     "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
@@ -4815,6 +4846,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the AWS VPC site replace specification",
             "title": "ReplaceSpecType",
             "x-displayname": "Replace AWS VPC site",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.ReplaceSpecType",
             "properties": {
@@ -4838,6 +4870,14 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [ingress_egress_gw voltstack_cluster]\nx-displayName: \"Ingress Gateway\"\nIngress gateway choice can not be changed (no config available for editing)",
                     "title": "Ingress Gateway",
                     "$ref": "#/definitions/aws_vpc_siteAWSVPCIngressGwReplaceType"
+                },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "nodes_per_az": {
                     "type": "integer",

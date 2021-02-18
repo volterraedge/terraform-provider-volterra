@@ -1072,9 +1072,7 @@ var (
 )
 
 func init() { proto.RegisterFile("ves.io/schema/ip_prefix_set/types.proto", fileDescriptorTypes) }
-func init() {
-	golang_proto.RegisterFile("ves.io/schema/ip_prefix_set/types.proto", fileDescriptorTypes)
-}
+func init() { golang_proto.RegisterFile("ves.io/schema/ip_prefix_set/types.proto", fileDescriptorTypes) }
 
 var fileDescriptorTypes = []byte{
 	// 382 bytes of a gzipped FileDescriptorProto

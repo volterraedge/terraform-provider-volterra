@@ -42,7 +42,7 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`acl_list` - (Optional) Ordered list of references to the fast ACL that make up this fast ACL set.. See [ref](#ref) below for details.
+`acl_list` - (Optional) Ordered list of references to the Fast ACL that make up this Fast ACL set.. See [ref](#ref) below for details.
 
 ### Ref
 

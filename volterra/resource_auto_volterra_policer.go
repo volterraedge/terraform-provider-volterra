@@ -51,11 +51,13 @@ func resourceVolterraPolicer() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"burst_size": {
@@ -134,24 +136,28 @@ func resourceVolterraPolicerCreate(d *schema.ResourceData, meta interface{}) err
 			v.(string)
 	}
 
+	//burst_size
 	if v, ok := d.GetOk("burst_size"); ok && !isIntfNil(v) {
 
 		createSpec.BurstSize =
 			uint32(v.(int))
 	}
 
+	//committed_information_rate
 	if v, ok := d.GetOk("committed_information_rate"); ok && !isIntfNil(v) {
 
 		createSpec.CommittedInformationRate =
 			uint32(v.(int))
 	}
 
+	//policer_mode
 	if v, ok := d.GetOk("policer_mode"); ok && !isIntfNil(v) {
 
 		createSpec.PolicerMode = ves_io_schema_policer.PolicerMode(ves_io_schema_policer.PolicerMode_value[v.(string)])
 
 	}
 
+	//policer_type
 	if v, ok := d.GetOk("policer_type"); ok && !isIntfNil(v) {
 
 		createSpec.PolicerType = ves_io_schema_policer.PolicerType(ves_io_schema_policer.PolicerType_value[v.(string)])

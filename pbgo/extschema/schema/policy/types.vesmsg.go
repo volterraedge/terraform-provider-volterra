@@ -346,7 +346,6 @@ var DefaultAsnMatchListValidator = func() *ValidateAsnMatchList {
 	vrhAsNumbers := v.AsNumbersValidationRuleHandler
 	rulesAsNumbers := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "16",
-		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhAsNumbers(rulesAsNumbers)
@@ -3181,6 +3180,27 @@ func (v *ValidateSimpleWafExclusionRule) ExcludeRuleIdsValidationRuleHandler(rul
 	return validatorFn, nil
 }
 
+func (v *ValidateSimpleWafExclusionRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateSimpleWafExclusionRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SimpleWafExclusionRule)
 	if !ok {
@@ -3252,6 +3272,15 @@ func (v *ValidateSimpleWafExclusionRule) Validate(ctx context.Context, pm interf
 
 		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
 		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3382,6 +3411,17 @@ var DefaultSimpleWafExclusionRuleValidator = func() *ValidateSimpleWafExclusionR
 		panic(errMsg)
 	}
 	v.FldValidators["exclude_rule_ids"] = vFn
+
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMetadata(rulesMetadata)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleWafExclusionRule.metadata: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metadata"] = vFn
 
 	return v
 }()

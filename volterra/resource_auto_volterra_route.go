@@ -51,11 +51,13 @@ func resourceVolterraRoute() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"routes": {
@@ -886,6 +888,7 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 			v.(string)
 	}
 
+	//routes
 	if v, ok := d.GetOk("routes"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -893,7 +896,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 		createSpec.Routes = routes
 		for i, set := range sl {
 			routes[i] = &ves_io_schema_route.RouteType{}
-
 			routesMapStrToI := set.(map[string]interface{})
 
 			if w, ok := routesMapStrToI["disable_custom_script"]; ok && !isIntfNil(w) {
@@ -911,7 +913,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 				routes[i].Match = match
 				for i, set := range sl {
 					match[i] = &ves_io_schema.RouteMatch{}
-
 					matchMapStrToI := set.(map[string]interface{})
 
 					if v, ok := matchMapStrToI["headers"]; ok && !isIntfNil(v) {
@@ -921,7 +922,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 						match[i].Headers = headers
 						for i, set := range sl {
 							headers[i] = &ves_io_schema.HeaderMatcherType{}
-
 							headersMapStrToI := set.(map[string]interface{})
 
 							if w, ok := headersMapStrToI["invert_match"]; ok && !isIntfNil(w) {
@@ -984,7 +984,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 						path := &ves_io_schema.PathMatcherType{}
 						match[i].Path = path
 						for _, set := range sl {
-
 							pathMapStrToI := set.(map[string]interface{})
 
 							pathMatchTypeFound := false
@@ -1033,7 +1032,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 						match[i].QueryParams = queryParams
 						for i, set := range sl {
 							queryParams[i] = &ves_io_schema.QueryParameterMatcherType{}
-
 							queryParamsMapStrToI := set.(map[string]interface{})
 
 							if w, ok := queryParamsMapStrToI["key"]; ok && !isIntfNil(w) {
@@ -1079,7 +1077,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 				routes[i].RequestHeadersToAdd = requestHeadersToAdd
 				for i, set := range sl {
 					requestHeadersToAdd[i] = &ves_io_schema.HeaderManipulationOptionType{}
-
 					requestHeadersToAddMapStrToI := set.(map[string]interface{})
 
 					if w, ok := requestHeadersToAddMapStrToI["append"]; ok && !isIntfNil(w) {
@@ -1113,7 +1110,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 				routes[i].ResponseHeadersToAdd = responseHeadersToAdd
 				for i, set := range sl {
 					responseHeadersToAdd[i] = &ves_io_schema.HeaderManipulationOptionType{}
-
 					responseHeadersToAddMapStrToI := set.(map[string]interface{})
 
 					if w, ok := responseHeadersToAddMapStrToI["append"]; ok && !isIntfNil(w) {
@@ -1159,7 +1155,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 						bufferPolicy := &ves_io_schema.BufferConfigType{}
 						routeActionInt.RouteDestination.BufferPolicy = bufferPolicy
 						for _, set := range sl {
-
 							bufferPolicyMapStrToI := set.(map[string]interface{})
 
 							if w, ok := bufferPolicyMapStrToI["disabled"]; ok && !isIntfNil(w) {
@@ -1184,7 +1179,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 						corsPolicy := &ves_io_schema.CorsPolicy{}
 						routeActionInt.RouteDestination.CorsPolicy = corsPolicy
 						for _, set := range sl {
-
 							corsPolicyMapStrToI := set.(map[string]interface{})
 
 							if w, ok := corsPolicyMapStrToI["allow_credentials"]; ok && !isIntfNil(w) {
@@ -1242,7 +1236,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 						routeActionInt.RouteDestination.Destinations = destinations
 						for i, set := range sl {
 							destinations[i] = &ves_io_schema_route.RouteDestination{}
-
 							destinationsMapStrToI := set.(map[string]interface{})
 
 							if v, ok := destinationsMapStrToI["cluster"]; ok && !isIntfNil(v) {
@@ -1309,7 +1302,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 						routeActionInt.RouteDestination.HashPolicy = hashPolicy
 						for i, set := range sl {
 							hashPolicy[i] = &ves_io_schema_route.HashPolicyType{}
-
 							hashPolicyMapStrToI := set.(map[string]interface{})
 
 							policySpecifierTypeFound := false
@@ -1406,7 +1398,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 						mirrorPolicy := &ves_io_schema_route.MirrorPolicyType{}
 						routeActionInt.RouteDestination.MirrorPolicy = mirrorPolicy
 						for _, set := range sl {
-
 							mirrorPolicyMapStrToI := set.(map[string]interface{})
 
 							if v, ok := mirrorPolicyMapStrToI["cluster"]; ok && !isIntfNil(v) {
@@ -1447,7 +1438,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 								percent := &ves_io_schema.FractionalPercent{}
 								mirrorPolicy.Percent = percent
 								for _, set := range sl {
-
 									percentMapStrToI := set.(map[string]interface{})
 
 									if v, ok := percentMapStrToI["denominator"]; ok && !isIntfNil(v) {
@@ -1485,7 +1475,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 						retryPolicy := &ves_io_schema.RetryPolicyType{}
 						routeActionInt.RouteDestination.RetryPolicy = retryPolicy
 						for _, set := range sl {
-
 							retryPolicyMapStrToI := set.(map[string]interface{})
 
 							if v, ok := retryPolicyMapStrToI["back_off"]; ok && !isIntfNil(v) {
@@ -1494,7 +1483,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 								backOff := &ves_io_schema.RetryBackOff{}
 								retryPolicy.BackOff = backOff
 								for _, set := range sl {
-
 									backOffMapStrToI := set.(map[string]interface{})
 
 									if w, ok := backOffMapStrToI["base_interval"]; ok && !isIntfNil(w) {
@@ -1540,7 +1528,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 						spdyConfig := &ves_io_schema_route.SpdyConfigType{}
 						routeActionInt.RouteDestination.SpdyConfig = spdyConfig
 						for _, set := range sl {
-
 							spdyConfigMapStrToI := set.(map[string]interface{})
 
 							if w, ok := spdyConfigMapStrToI["use_spdy"]; ok && !isIntfNil(w) {
@@ -1562,7 +1549,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 						webSocketConfig := &ves_io_schema_route.WebsocketConfigType{}
 						routeActionInt.RouteDestination.WebSocketConfig = webSocketConfig
 						for _, set := range sl {
-
 							webSocketConfigMapStrToI := set.(map[string]interface{})
 
 							if w, ok := webSocketConfigMapStrToI["idle_timeout"]; ok && !isIntfNil(w) {
@@ -1714,7 +1700,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 				servicePolicy := &ves_io_schema_route.ServicePolicyInfo{}
 				routes[i].ServicePolicy = servicePolicy
 				for _, set := range sl {
-
 					servicePolicyMapStrToI := set.(map[string]interface{})
 
 					if w, ok := servicePolicyMapStrToI["disable"]; ok && !isIntfNil(w) {
@@ -1731,7 +1716,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 				wafType := &ves_io_schema.WafType{}
 				routes[i].WafType = wafType
 				for _, set := range sl {
-
 					wafTypeMapStrToI := set.(map[string]interface{})
 
 					refTypeTypeFound := false
@@ -1943,7 +1927,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 		updateSpec.Routes = routes
 		for i, set := range sl {
 			routes[i] = &ves_io_schema_route.RouteType{}
-
 			routesMapStrToI := set.(map[string]interface{})
 
 			if w, ok := routesMapStrToI["disable_custom_script"]; ok && !isIntfNil(w) {
@@ -1961,7 +1944,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 				routes[i].Match = match
 				for i, set := range sl {
 					match[i] = &ves_io_schema.RouteMatch{}
-
 					matchMapStrToI := set.(map[string]interface{})
 
 					if v, ok := matchMapStrToI["headers"]; ok && !isIntfNil(v) {
@@ -1971,7 +1953,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 						match[i].Headers = headers
 						for i, set := range sl {
 							headers[i] = &ves_io_schema.HeaderMatcherType{}
-
 							headersMapStrToI := set.(map[string]interface{})
 
 							if w, ok := headersMapStrToI["invert_match"]; ok && !isIntfNil(w) {
@@ -2034,7 +2015,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 						path := &ves_io_schema.PathMatcherType{}
 						match[i].Path = path
 						for _, set := range sl {
-
 							pathMapStrToI := set.(map[string]interface{})
 
 							pathMatchTypeFound := false
@@ -2083,7 +2063,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 						match[i].QueryParams = queryParams
 						for i, set := range sl {
 							queryParams[i] = &ves_io_schema.QueryParameterMatcherType{}
-
 							queryParamsMapStrToI := set.(map[string]interface{})
 
 							if w, ok := queryParamsMapStrToI["key"]; ok && !isIntfNil(w) {
@@ -2129,7 +2108,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 				routes[i].RequestHeadersToAdd = requestHeadersToAdd
 				for i, set := range sl {
 					requestHeadersToAdd[i] = &ves_io_schema.HeaderManipulationOptionType{}
-
 					requestHeadersToAddMapStrToI := set.(map[string]interface{})
 
 					if w, ok := requestHeadersToAddMapStrToI["append"]; ok && !isIntfNil(w) {
@@ -2163,7 +2141,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 				routes[i].ResponseHeadersToAdd = responseHeadersToAdd
 				for i, set := range sl {
 					responseHeadersToAdd[i] = &ves_io_schema.HeaderManipulationOptionType{}
-
 					responseHeadersToAddMapStrToI := set.(map[string]interface{})
 
 					if w, ok := responseHeadersToAddMapStrToI["append"]; ok && !isIntfNil(w) {
@@ -2209,7 +2186,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 						bufferPolicy := &ves_io_schema.BufferConfigType{}
 						routeActionInt.RouteDestination.BufferPolicy = bufferPolicy
 						for _, set := range sl {
-
 							bufferPolicyMapStrToI := set.(map[string]interface{})
 
 							if w, ok := bufferPolicyMapStrToI["disabled"]; ok && !isIntfNil(w) {
@@ -2234,7 +2210,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 						corsPolicy := &ves_io_schema.CorsPolicy{}
 						routeActionInt.RouteDestination.CorsPolicy = corsPolicy
 						for _, set := range sl {
-
 							corsPolicyMapStrToI := set.(map[string]interface{})
 
 							if w, ok := corsPolicyMapStrToI["allow_credentials"]; ok && !isIntfNil(w) {
@@ -2292,7 +2267,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 						routeActionInt.RouteDestination.Destinations = destinations
 						for i, set := range sl {
 							destinations[i] = &ves_io_schema_route.RouteDestination{}
-
 							destinationsMapStrToI := set.(map[string]interface{})
 
 							if v, ok := destinationsMapStrToI["cluster"]; ok && !isIntfNil(v) {
@@ -2359,7 +2333,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 						routeActionInt.RouteDestination.HashPolicy = hashPolicy
 						for i, set := range sl {
 							hashPolicy[i] = &ves_io_schema_route.HashPolicyType{}
-
 							hashPolicyMapStrToI := set.(map[string]interface{})
 
 							policySpecifierTypeFound := false
@@ -2456,7 +2429,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 						mirrorPolicy := &ves_io_schema_route.MirrorPolicyType{}
 						routeActionInt.RouteDestination.MirrorPolicy = mirrorPolicy
 						for _, set := range sl {
-
 							mirrorPolicyMapStrToI := set.(map[string]interface{})
 
 							if v, ok := mirrorPolicyMapStrToI["cluster"]; ok && !isIntfNil(v) {
@@ -2497,7 +2469,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 								percent := &ves_io_schema.FractionalPercent{}
 								mirrorPolicy.Percent = percent
 								for _, set := range sl {
-
 									percentMapStrToI := set.(map[string]interface{})
 
 									if v, ok := percentMapStrToI["denominator"]; ok && !isIntfNil(v) {
@@ -2535,7 +2506,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 						retryPolicy := &ves_io_schema.RetryPolicyType{}
 						routeActionInt.RouteDestination.RetryPolicy = retryPolicy
 						for _, set := range sl {
-
 							retryPolicyMapStrToI := set.(map[string]interface{})
 
 							if v, ok := retryPolicyMapStrToI["back_off"]; ok && !isIntfNil(v) {
@@ -2544,7 +2514,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 								backOff := &ves_io_schema.RetryBackOff{}
 								retryPolicy.BackOff = backOff
 								for _, set := range sl {
-
 									backOffMapStrToI := set.(map[string]interface{})
 
 									if w, ok := backOffMapStrToI["base_interval"]; ok && !isIntfNil(w) {
@@ -2590,7 +2559,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 						spdyConfig := &ves_io_schema_route.SpdyConfigType{}
 						routeActionInt.RouteDestination.SpdyConfig = spdyConfig
 						for _, set := range sl {
-
 							spdyConfigMapStrToI := set.(map[string]interface{})
 
 							if w, ok := spdyConfigMapStrToI["use_spdy"]; ok && !isIntfNil(w) {
@@ -2612,7 +2580,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 						webSocketConfig := &ves_io_schema_route.WebsocketConfigType{}
 						routeActionInt.RouteDestination.WebSocketConfig = webSocketConfig
 						for _, set := range sl {
-
 							webSocketConfigMapStrToI := set.(map[string]interface{})
 
 							if w, ok := webSocketConfigMapStrToI["idle_timeout"]; ok && !isIntfNil(w) {
@@ -2764,7 +2731,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 				servicePolicy := &ves_io_schema_route.ServicePolicyInfo{}
 				routes[i].ServicePolicy = servicePolicy
 				for _, set := range sl {
-
 					servicePolicyMapStrToI := set.(map[string]interface{})
 
 					if w, ok := servicePolicyMapStrToI["disable"]; ok && !isIntfNil(w) {
@@ -2781,7 +2747,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 				wafType := &ves_io_schema.WafType{}
 				routes[i].WafType = wafType
 				for _, set := range sl {
-
 					wafTypeMapStrToI := set.(map[string]interface{})
 
 					refTypeTypeFound := false

@@ -3717,9 +3717,10 @@ var APISwaggerJSON string = `{
                 },
                 "pool_name": {
                     "type": "string",
-                    "description": " Enter Mayastor Pool Name\nRequired: YES",
+                    "description": " Enter Mayastor Pool Name\n\nExample: - \"maya-pool-01\"-\nRequired: YES",
                     "title": "Mayastor Pool Name",
                     "x-displayname": "Mayastor Pool Name",
+                    "x-ves-example": "maya-pool-01",
                     "x-ves-required": "true"
                 }
             }
@@ -4744,13 +4745,14 @@ var APISwaggerJSON string = `{
         },
         "schemaNextHopTypes": {
             "type": "string",
-            "description": "Defines types of next-hop\n\nUse default gateway on the local interface as gateway for route.\nAssumes there is only one local interface on the virtual network.\nUse the specified address as nexthop\nUse the network interface as nexthop\nDiscard nexthop, used when attr type is Advertise",
+            "description": "Defines types of next-hop\n\nUse default gateway on the local interface as gateway for route.\nAssumes there is only one local interface on the virtual network.\nUse the specified address as nexthop\nUse the network interface as nexthop\nDiscard nexthop, used when attr type is Advertise\nUsed in VoltADN private virtual network.",
             "title": "Nexthop Types",
             "enum": [
                 "NEXT_HOP_DEFAULT_GATEWAY",
                 "NEXT_HOP_USE_CONFIGURED",
                 "NEXT_HOP_NETWORK_INTERFACE",
-                "NEXT_HOP_DISCARD"
+                "NEXT_HOP_DISCARD",
+                "NEXT_HOP_SNAT_TO_PUBLIC"
             ],
             "default": "NEXT_HOP_DEFAULT_GATEWAY",
             "x-displayname": "Nexthop Types",

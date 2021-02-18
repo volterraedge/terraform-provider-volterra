@@ -108,6 +108,9 @@ func (c *NamespaceCustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, op
 	if err != nil {
 		return nil, errors.Wrap(err, "Doing custom RPC using GRPC")
 	}
+	if cco.OutCallResponse != nil {
+		cco.OutCallResponse.ProtoMsg = rsp
+	}
 	return rsp, nil
 }
 
@@ -210,6 +213,10 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetActiveNetworkPolicies(ctx context
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.GetActiveNetworkPoliciesResponse", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -281,6 +288,10 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetActiveServicePolicies(ctx context
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.GetActiveServicePoliciesResponse", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -351,6 +362,10 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetFastACLsForInternetVIPs(ctx conte
 	pbRsp := &GetFastACLsForInternetVIPsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.GetFastACLsForInternetVIPsResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
 	}
 	return pbRsp, nil
 }
@@ -424,6 +439,10 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetActiveNetworkPolicies(ctx context
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.SetActiveNetworkPoliciesResponse", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -496,6 +515,10 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetActiveServicePolicies(ctx context
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.SetActiveServicePoliciesResponse", body)
 	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
 	return pbRsp, nil
 }
 
@@ -567,6 +590,10 @@ func (c *NamespaceCustomAPIRestClient) doRPCSetFastACLsForInternetVIPs(ctx conte
 	pbRsp := &SetFastACLsForInternetVIPsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.SetFastACLsForInternetVIPsResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
 	}
 	return pbRsp, nil
 }

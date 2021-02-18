@@ -22,42 +22,63 @@ resource "volterra_azure_vnet_site" "example" {
   azure_region = ["East US"]
 
   // One of the arguments from this list "assisted azure_cred" must be set
+  assisted = true
 
-  azure_cred {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
-  resource_group = ["my-resources"]
+  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
+  logs_streaming_disabled = true
+  resource_group          = ["my-resources"]
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
-  ingress_gw {
+  voltstack_cluster {
     az_nodes {
       azure_az  = "1"
       disk_size = "disk_size"
 
       local_subnet {
-        // One of the arguments from this list "subnet_param subnet" must be set
+        // One of the arguments from this list "subnet subnet_param" must be set
 
-        subnet {
-          // One of the arguments from this list "subnet_resource_grp vnet_resource_group" must be set
-          subnet_resource_grp = "subnet_resource_grp"
-
-          subnet_name = "MySubnet"
+        subnet_param {
+          ipv4 = "10.1.2.0/24"
+          ipv6 = "1234:568:abcd:9100::/64"
         }
       }
     }
 
-    azure_certified_hw = "azure-byol-voltmesh"
+    azure_certified_hw = "azure-byol-voltstack-combo"
+
+    // One of the arguments from this list "forward_proxy_allow_all no_forward_proxy active_forward_proxy_policies" must be set
+    forward_proxy_allow_all = true
+
+    // One of the arguments from this list "no_global_network global_network_list" must be set
+
+    global_network_list {
+      global_network_connections {
+        // One of the arguments from this list "sli_to_global_dr slo_to_global_dr" must be set
+
+        sli_to_global_dr {
+          global_vn {
+            name      = "test1"
+            namespace = "staging"
+            tenant    = "acmecorp"
+          }
+        }
+
+        // One of the arguments from this list "disable_forward_proxy enable_forward_proxy" must be set
+        disable_forward_proxy = true
+      }
+    }
+    // One of the arguments from this list "active_network_policies no_network_policy" must be set
+    no_network_policy = true
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+    no_outside_static_routes = true
   }
   vnet {
     // One of the arguments from this list "new_vnet existing_vnet" must be set
 
     new_vnet {
       // One of the arguments from this list "name autogenerate" must be set
-      name = "name"
-
+      autogenerate = true
       primary_ipv4 = "10.1.0.0/16"
     }
   }
@@ -95,6 +116,10 @@ Argument Reference
 `azure_cred` - (Optional) Reference to Azure credentials for automatic deployment. See [ref](#ref) below for details.
 
 `disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
+
+`log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
+
+`logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
 `machine_type` - (Optional) Standard_D5_v2 (16 x vCPU, 56GB RAM) very high performance (`String`).
 

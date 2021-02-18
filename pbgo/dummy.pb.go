@@ -1045,9 +1045,7 @@ var (
 	ErrIntOverflowDummy   = fmt.Errorf("proto: integer overflow")
 )
 
-func init() {
-	proto.RegisterFile("ves.io/terraform-provider-volterra/dummy.proto", fileDescriptorDummy)
-}
+func init() { proto.RegisterFile("ves.io/terraform-provider-volterra/dummy.proto", fileDescriptorDummy) }
 
 var fileDescriptorDummy = []byte{
 	// 510 bytes of a gzipped FileDescriptorProto

@@ -63,6 +63,9 @@ func (c *CustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...ser
 	if err != nil {
 		return nil, errors.Wrap(err, "Doing custom RPC using GRPC")
 	}
+	if cco.OutCallResponse != nil {
+		cco.OutCallResponse.ProtoMsg = rsp
+	}
 	return rsp, nil
 }
 
@@ -155,6 +158,10 @@ func (c *CustomAPIRestClient) doRPCGetDnsInfo(ctx context.Context, callOpts *ser
 	pbRsp := &GetDnsInfoResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.tcp_loadbalancer.GetDnsInfoResponse", body)
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
 	}
 	return pbRsp, nil
 }

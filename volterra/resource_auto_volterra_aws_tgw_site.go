@@ -54,11 +54,13 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"address": {
@@ -388,6 +390,35 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 				},
 			},
 
+			"log_receiver": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"namespace": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"tenant": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
+			"logs_streaming_disabled": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"operating_system_version": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -399,6 +430,51 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"active_east_west_service_policies": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"service_policies": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"east_west_service_policy_allow_all": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"no_east_west_policy": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 
 						"active_forward_proxy_policies": {
 
@@ -1371,19 +1447,20 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 			v.(string)
 	}
 
+	//address
 	if v, ok := d.GetOk("address"); ok && !isIntfNil(v) {
 
 		createSpec.Address =
 			v.(string)
 	}
 
+	//aws_parameters
 	if v, ok := d.GetOk("aws_parameters"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		awsParameters := &ves_io_schema_views_aws_tgw_site.ServicesVPCType{}
 		createSpec.AwsParameters = awsParameters
 		for _, set := range sl {
-
 			awsParametersMapStrToI := set.(map[string]interface{})
 
 			if w, ok := awsParametersMapStrToI["aws_certified_hw"]; ok && !isIntfNil(w) {
@@ -1401,7 +1478,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 				awsParameters.AzNodes = azNodes
 				for i, set := range sl {
 					azNodes[i] = &ves_io_schema_views.AWSVPCTwoInterfaceNodeType{}
-
 					azNodesMapStrToI := set.(map[string]interface{})
 
 					if w, ok := azNodesMapStrToI["aws_az_name"]; ok && !isIntfNil(w) {
@@ -1485,7 +1561,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 						outsideSubnet := &ves_io_schema_views.CloudSubnetType{}
 						azNodes[i].OutsideSubnet = outsideSubnet
 						for _, set := range sl {
-
 							outsideSubnetMapStrToI := set.(map[string]interface{})
 
 							choiceTypeFound := false
@@ -1536,7 +1611,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 						workloadSubnet := &ves_io_schema_views.CloudSubnetType{}
 						azNodes[i].WorkloadSubnet = workloadSubnet
 						for _, set := range sl {
-
 							workloadSubnetMapStrToI := set.(map[string]interface{})
 
 							choiceTypeFound := false
@@ -1798,13 +1872,13 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//coordinates
 	if v, ok := d.GetOk("coordinates"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		coordinates := &ves_io_schema_site.Coordinates{}
 		createSpec.Coordinates = coordinates
 		for _, set := range sl {
-
 			coordinatesMapStrToI := set.(map[string]interface{})
 
 			if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
@@ -1819,20 +1893,134 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//logs_receiver_choice
+
+	logsReceiverChoiceTypeFound := false
+
+	if v, ok := d.GetOk("log_receiver"); ok && !logsReceiverChoiceTypeFound {
+
+		logsReceiverChoiceTypeFound = true
+		logsReceiverChoiceInt := &ves_io_schema_views_aws_tgw_site.CreateSpecType_LogReceiver{}
+		logsReceiverChoiceInt.LogReceiver = &ves_io_schema_views.ObjectRefType{}
+		createSpec.LogsReceiverChoice = logsReceiverChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Name = v.(string)
+			}
+
+			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Namespace = v.(string)
+			}
+
+			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Tenant = v.(string)
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("logs_streaming_disabled"); ok && !logsReceiverChoiceTypeFound {
+
+		logsReceiverChoiceTypeFound = true
+
+		if v.(bool) {
+			logsReceiverChoiceInt := &ves_io_schema_views_aws_tgw_site.CreateSpecType_LogsStreamingDisabled{}
+			logsReceiverChoiceInt.LogsStreamingDisabled = &ves_io_schema.Empty{}
+			createSpec.LogsReceiverChoice = logsReceiverChoiceInt
+		}
+
+	}
+
+	//operating_system_version
 	if v, ok := d.GetOk("operating_system_version"); ok && !isIntfNil(v) {
 
 		createSpec.OperatingSystemVersion =
 			v.(string)
 	}
 
+	//tgw_security
 	if v, ok := d.GetOk("tgw_security"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		tgwSecurity := &ves_io_schema_views_aws_tgw_site.SecurityConfigType{}
 		createSpec.TgwSecurity = tgwSecurity
 		for _, set := range sl {
-
 			tgwSecurityMapStrToI := set.(map[string]interface{})
+
+			eastWestServicePolicyChoiceTypeFound := false
+
+			if v, ok := tgwSecurityMapStrToI["active_east_west_service_policies"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
+
+				eastWestServicePolicyChoiceTypeFound = true
+				eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveEastWestServicePolicies{}
+				eastWestServicePolicyChoiceInt.ActiveEastWestServicePolicies = &ves_io_schema_views_aws_tgw_site.ActiveServicePoliciesType{}
+				tgwSecurity.EastWestServicePolicyChoice = eastWestServicePolicyChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["service_policies"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						servicePoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						eastWestServicePolicyChoiceInt.ActiveEastWestServicePolicies.ServicePolicies = servicePoliciesInt
+						for i, ps := range sl {
+
+							spMapToStrVal := ps.(map[string]interface{})
+							servicePoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := spMapToStrVal["name"]; ok && !isIntfNil(v) {
+								servicePoliciesInt[i].Name = v.(string)
+							}
+
+							if v, ok := spMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								servicePoliciesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := spMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								servicePoliciesInt[i].Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := tgwSecurityMapStrToI["east_west_service_policy_allow_all"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
+
+				eastWestServicePolicyChoiceTypeFound = true
+
+				if v.(bool) {
+					eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_EastWestServicePolicyAllowAll{}
+					eastWestServicePolicyChoiceInt.EastWestServicePolicyAllowAll = &ves_io_schema.Empty{}
+					tgwSecurity.EastWestServicePolicyChoice = eastWestServicePolicyChoiceInt
+				}
+
+			}
+
+			if v, ok := tgwSecurityMapStrToI["no_east_west_policy"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
+
+				eastWestServicePolicyChoiceTypeFound = true
+
+				if v.(bool) {
+					eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_NoEastWestPolicy{}
+					eastWestServicePolicyChoiceInt.NoEastWestPolicy = &ves_io_schema.Empty{}
+					tgwSecurity.EastWestServicePolicyChoice = eastWestServicePolicyChoiceInt
+				}
+
+			}
 
 			forwardProxyChoiceTypeFound := false
 
@@ -1960,13 +2148,13 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//vn_config
 	if v, ok := d.GetOk("vn_config"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		vnConfig := &ves_io_schema_views_aws_tgw_site.VnConfiguration{}
 		createSpec.VnConfig = vnConfig
 		for _, set := range sl {
-
 			vnConfigMapStrToI := set.(map[string]interface{})
 
 			globalNetworkChoiceTypeFound := false
@@ -1989,7 +2177,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 						globalNetworkChoiceInt.GlobalNetworkList.GlobalNetworkConnections = globalNetworkConnections
 						for i, set := range sl {
 							globalNetworkConnections[i] = &ves_io_schema_views.GlobalNetworkConnectionType{}
-
 							globalNetworkConnectionsMapStrToI := set.(map[string]interface{})
 
 							connectionChoiceTypeFound := false
@@ -2011,7 +2198,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 										globalVn := &ves_io_schema_views.ObjectRefType{}
 										connectionChoiceInt.SliToGlobalDr.GlobalVn = globalVn
 										for _, set := range sl {
-
 											globalVnMapStrToI := set.(map[string]interface{})
 
 											if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -2051,7 +2237,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 										globalVn := &ves_io_schema_views.ObjectRefType{}
 										connectionChoiceInt.SloToGlobalDr.GlobalVn = globalVn
 										for _, set := range sl {
-
 											globalVnMapStrToI := set.(map[string]interface{})
 
 											if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -2166,7 +2351,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 														interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
 														for i, set := range sl {
 															interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-
 															interceptionRulesMapStrToI := set.(map[string]interface{})
 
 															if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
@@ -2175,7 +2359,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 																domainMatch := &ves_io_schema.DomainType{}
 																interceptionRules[i].DomainMatch = domainMatch
 																for _, set := range sl {
-
 																	domainMatchMapStrToI := set.(map[string]interface{})
 
 																	domainChoiceTypeFound := false
@@ -2280,7 +2463,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 														privateKey := &ves_io_schema.SecretType{}
 														signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
 														for _, set := range sl {
-
 															privateKeyMapStrToI := set.(map[string]interface{})
 
 															if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -2289,7 +2471,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 																blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 																privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 																for _, set := range sl {
-
 																	blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 																	if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -2546,7 +2727,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 						insideStaticRouteChoiceInt.InsideStaticRoutes.StaticRouteList = staticRouteList
 						for i, set := range sl {
 							staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
-
 							staticRouteListMapStrToI := set.(map[string]interface{})
 
 							configModeChoiceTypeFound := false
@@ -2587,7 +2767,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 										nexthop := &ves_io_schema.NextHopType{}
 										configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
 										for _, set := range sl {
-
 											nexthopMapStrToI := set.(map[string]interface{})
 
 											if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
@@ -2628,7 +2807,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 												nexthopAddress := &ves_io_schema.IpAddressType{}
 												nexthop.NexthopAddress = nexthopAddress
 												for _, set := range sl {
-
 													nexthopAddressMapStrToI := set.(map[string]interface{})
 
 													verTypeFound := false
@@ -2694,7 +2872,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 										configModeChoiceInt.CustomStaticRoute.Subnets = subnets
 										for i, set := range sl {
 											subnets[i] = &ves_io_schema.IpSubnetType{}
-
 											subnetsMapStrToI := set.(map[string]interface{})
 
 											verTypeFound := false
@@ -2820,7 +2997,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 						outsideStaticRouteChoiceInt.OutsideStaticRoutes.StaticRouteList = staticRouteList
 						for i, set := range sl {
 							staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
-
 							staticRouteListMapStrToI := set.(map[string]interface{})
 
 							configModeChoiceTypeFound := false
@@ -2861,7 +3037,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 										nexthop := &ves_io_schema.NextHopType{}
 										configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
 										for _, set := range sl {
-
 											nexthopMapStrToI := set.(map[string]interface{})
 
 											if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
@@ -2902,7 +3077,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 												nexthopAddress := &ves_io_schema.IpAddressType{}
 												nexthop.NexthopAddress = nexthopAddress
 												for _, set := range sl {
-
 													nexthopAddressMapStrToI := set.(map[string]interface{})
 
 													verTypeFound := false
@@ -2968,7 +3142,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 										configModeChoiceInt.CustomStaticRoute.Subnets = subnets
 										for i, set := range sl {
 											subnets[i] = &ves_io_schema.IpSubnetType{}
-
 											subnetsMapStrToI := set.(map[string]interface{})
 
 											verTypeFound := false
@@ -3054,19 +3227,20 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//volterra_software_version
 	if v, ok := d.GetOk("volterra_software_version"); ok && !isIntfNil(v) {
 
 		createSpec.VolterraSoftwareVersion =
 			v.(string)
 	}
 
+	//vpc_attachments
 	if v, ok := d.GetOk("vpc_attachments"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		vpcAttachments := &ves_io_schema_views_aws_tgw_site.VPCAttachmentListType{}
 		createSpec.VpcAttachments = vpcAttachments
 		for _, set := range sl {
-
 			vpcAttachmentsMapStrToI := set.(map[string]interface{})
 
 			if v, ok := vpcAttachmentsMapStrToI["vpc_list"]; ok && !isIntfNil(v) {
@@ -3076,7 +3250,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 				vpcAttachments.VpcList = vpcList
 				for i, set := range sl {
 					vpcList[i] = &ves_io_schema_views_aws_tgw_site.VPCAttachmentType{}
-
 					vpcListMapStrToI := set.(map[string]interface{})
 
 					if w, ok := vpcListMapStrToI["labels"]; ok && !isIntfNil(w) {
@@ -3209,7 +3382,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 		coordinates := &ves_io_schema_site.Coordinates{}
 		updateSpec.Coordinates = coordinates
 		for _, set := range sl {
-
 			coordinatesMapStrToI := set.(map[string]interface{})
 
 			if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
@@ -3220,6 +3392,50 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 				coordinates.Longitude = w.(float32)
 			}
 
+		}
+
+	}
+
+	logsReceiverChoiceTypeFound := false
+
+	if v, ok := d.GetOk("log_receiver"); ok && !logsReceiverChoiceTypeFound {
+
+		logsReceiverChoiceTypeFound = true
+		logsReceiverChoiceInt := &ves_io_schema_views_aws_tgw_site.ReplaceSpecType_LogReceiver{}
+		logsReceiverChoiceInt.LogReceiver = &ves_io_schema_views.ObjectRefType{}
+		updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Name = v.(string)
+			}
+
+			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Namespace = v.(string)
+			}
+
+			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+				logsReceiverChoiceInt.LogReceiver.Tenant = v.(string)
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("logs_streaming_disabled"); ok && !logsReceiverChoiceTypeFound {
+
+		logsReceiverChoiceTypeFound = true
+
+		if v.(bool) {
+			logsReceiverChoiceInt := &ves_io_schema_views_aws_tgw_site.ReplaceSpecType_LogsStreamingDisabled{}
+			logsReceiverChoiceInt.LogsStreamingDisabled = &ves_io_schema.Empty{}
+			updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
 
 	}
@@ -3236,8 +3452,74 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 		tgwSecurity := &ves_io_schema_views_aws_tgw_site.SecurityConfigType{}
 		updateSpec.TgwSecurity = tgwSecurity
 		for _, set := range sl {
-
 			tgwSecurityMapStrToI := set.(map[string]interface{})
+
+			eastWestServicePolicyChoiceTypeFound := false
+
+			if v, ok := tgwSecurityMapStrToI["active_east_west_service_policies"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
+
+				eastWestServicePolicyChoiceTypeFound = true
+				eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_ActiveEastWestServicePolicies{}
+				eastWestServicePolicyChoiceInt.ActiveEastWestServicePolicies = &ves_io_schema_views_aws_tgw_site.ActiveServicePoliciesType{}
+				tgwSecurity.EastWestServicePolicyChoice = eastWestServicePolicyChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["service_policies"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						servicePoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						eastWestServicePolicyChoiceInt.ActiveEastWestServicePolicies.ServicePolicies = servicePoliciesInt
+						for i, ps := range sl {
+
+							spMapToStrVal := ps.(map[string]interface{})
+							servicePoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := spMapToStrVal["name"]; ok && !isIntfNil(v) {
+								servicePoliciesInt[i].Name = v.(string)
+							}
+
+							if v, ok := spMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								servicePoliciesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := spMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								servicePoliciesInt[i].Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := tgwSecurityMapStrToI["east_west_service_policy_allow_all"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
+
+				eastWestServicePolicyChoiceTypeFound = true
+
+				if v.(bool) {
+					eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_EastWestServicePolicyAllowAll{}
+					eastWestServicePolicyChoiceInt.EastWestServicePolicyAllowAll = &ves_io_schema.Empty{}
+					tgwSecurity.EastWestServicePolicyChoice = eastWestServicePolicyChoiceInt
+				}
+
+			}
+
+			if v, ok := tgwSecurityMapStrToI["no_east_west_policy"]; ok && !isIntfNil(v) && !eastWestServicePolicyChoiceTypeFound {
+
+				eastWestServicePolicyChoiceTypeFound = true
+
+				if v.(bool) {
+					eastWestServicePolicyChoiceInt := &ves_io_schema_views_aws_tgw_site.SecurityConfigType_NoEastWestPolicy{}
+					eastWestServicePolicyChoiceInt.NoEastWestPolicy = &ves_io_schema.Empty{}
+					tgwSecurity.EastWestServicePolicyChoice = eastWestServicePolicyChoiceInt
+				}
+
+			}
 
 			forwardProxyChoiceTypeFound := false
 
@@ -3371,7 +3653,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 		vnConfig := &ves_io_schema_views_aws_tgw_site.VnConfiguration{}
 		updateSpec.VnConfig = vnConfig
 		for _, set := range sl {
-
 			vnConfigMapStrToI := set.(map[string]interface{})
 
 			globalNetworkChoiceTypeFound := false
@@ -3394,7 +3675,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 						globalNetworkChoiceInt.GlobalNetworkList.GlobalNetworkConnections = globalNetworkConnections
 						for i, set := range sl {
 							globalNetworkConnections[i] = &ves_io_schema_views.GlobalNetworkConnectionType{}
-
 							globalNetworkConnectionsMapStrToI := set.(map[string]interface{})
 
 							connectionChoiceTypeFound := false
@@ -3416,7 +3696,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 										globalVn := &ves_io_schema_views.ObjectRefType{}
 										connectionChoiceInt.SliToGlobalDr.GlobalVn = globalVn
 										for _, set := range sl {
-
 											globalVnMapStrToI := set.(map[string]interface{})
 
 											if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -3456,7 +3735,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 										globalVn := &ves_io_schema_views.ObjectRefType{}
 										connectionChoiceInt.SloToGlobalDr.GlobalVn = globalVn
 										for _, set := range sl {
-
 											globalVnMapStrToI := set.(map[string]interface{})
 
 											if w, ok := globalVnMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -3571,7 +3849,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 														interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
 														for i, set := range sl {
 															interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-
 															interceptionRulesMapStrToI := set.(map[string]interface{})
 
 															if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
@@ -3580,7 +3857,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 																domainMatch := &ves_io_schema.DomainType{}
 																interceptionRules[i].DomainMatch = domainMatch
 																for _, set := range sl {
-
 																	domainMatchMapStrToI := set.(map[string]interface{})
 
 																	domainChoiceTypeFound := false
@@ -3685,7 +3961,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 														privateKey := &ves_io_schema.SecretType{}
 														signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
 														for _, set := range sl {
-
 															privateKeyMapStrToI := set.(map[string]interface{})
 
 															if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -3694,7 +3969,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 																blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 																privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 																for _, set := range sl {
-
 																	blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 																	if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -3951,7 +4225,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 						insideStaticRouteChoiceInt.InsideStaticRoutes.StaticRouteList = staticRouteList
 						for i, set := range sl {
 							staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
-
 							staticRouteListMapStrToI := set.(map[string]interface{})
 
 							configModeChoiceTypeFound := false
@@ -3992,7 +4265,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 										nexthop := &ves_io_schema.NextHopType{}
 										configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
 										for _, set := range sl {
-
 											nexthopMapStrToI := set.(map[string]interface{})
 
 											if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
@@ -4033,7 +4305,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 												nexthopAddress := &ves_io_schema.IpAddressType{}
 												nexthop.NexthopAddress = nexthopAddress
 												for _, set := range sl {
-
 													nexthopAddressMapStrToI := set.(map[string]interface{})
 
 													verTypeFound := false
@@ -4099,7 +4370,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 										configModeChoiceInt.CustomStaticRoute.Subnets = subnets
 										for i, set := range sl {
 											subnets[i] = &ves_io_schema.IpSubnetType{}
-
 											subnetsMapStrToI := set.(map[string]interface{})
 
 											verTypeFound := false
@@ -4225,7 +4495,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 						outsideStaticRouteChoiceInt.OutsideStaticRoutes.StaticRouteList = staticRouteList
 						for i, set := range sl {
 							staticRouteList[i] = &ves_io_schema_views.SiteStaticRoutesType{}
-
 							staticRouteListMapStrToI := set.(map[string]interface{})
 
 							configModeChoiceTypeFound := false
@@ -4266,7 +4535,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 										nexthop := &ves_io_schema.NextHopType{}
 										configModeChoiceInt.CustomStaticRoute.Nexthop = nexthop
 										for _, set := range sl {
-
 											nexthopMapStrToI := set.(map[string]interface{})
 
 											if v, ok := nexthopMapStrToI["interface"]; ok && !isIntfNil(v) {
@@ -4307,7 +4575,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 												nexthopAddress := &ves_io_schema.IpAddressType{}
 												nexthop.NexthopAddress = nexthopAddress
 												for _, set := range sl {
-
 													nexthopAddressMapStrToI := set.(map[string]interface{})
 
 													verTypeFound := false
@@ -4373,7 +4640,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 										configModeChoiceInt.CustomStaticRoute.Subnets = subnets
 										for i, set := range sl {
 											subnets[i] = &ves_io_schema.IpSubnetType{}
-
 											subnetsMapStrToI := set.(map[string]interface{})
 
 											verTypeFound := false
@@ -4471,7 +4737,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 		vpcAttachments := &ves_io_schema_views_aws_tgw_site.VPCAttachmentListType{}
 		updateSpec.VpcAttachments = vpcAttachments
 		for _, set := range sl {
-
 			vpcAttachmentsMapStrToI := set.(map[string]interface{})
 
 			if v, ok := vpcAttachmentsMapStrToI["vpc_list"]; ok && !isIntfNil(v) {
@@ -4481,7 +4746,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 				vpcAttachments.VpcList = vpcList
 				for i, set := range sl {
 					vpcList[i] = &ves_io_schema_views_aws_tgw_site.VPCAttachmentType{}
-
 					vpcListMapStrToI := set.(map[string]interface{})
 
 					if w, ok := vpcListMapStrToI["labels"]; ok && !isIntfNil(w) {

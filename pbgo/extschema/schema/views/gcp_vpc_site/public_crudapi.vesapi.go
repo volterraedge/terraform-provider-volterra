@@ -2272,10 +2272,10 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsGlobalNetworkConnectionListType"
                 },
                 "inside_network": {
-                    "description": " Network Subnets for the inside interface of the node",
+                    "description": " Network for the inside interface of the node",
                     "title": "Network",
                     "$ref": "#/definitions/viewsGCPVPCNetworkChoiceType",
-                    "x-displayname": "GCP VPC Network for Inside Interface"
+                    "x-displayname": "VPC Network for Inside Interface"
                 },
                 "inside_static_routes": {
                     "description": "Exclusive with [no_inside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for inside network.",
@@ -2283,7 +2283,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType"
                 },
                 "inside_subnet": {
-                    "description": " Subnets for the inside interface of the node, should be in inside network",
+                    "description": " Subnet for the inside interface of the node.",
                     "title": "Subnet",
                     "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
                     "x-displayname": "Subnet for Inside Interface"
@@ -2315,16 +2315,16 @@ var APISwaggerJSON string = `{
                 },
                 "node_number": {
                     "type": "integer",
-                    "description": " Number of nodes to created, 1 or 3 supported",
+                    "description": " Number of nodes to create, either 1 or 3.",
                     "title": "Number of nodes",
                     "format": "int64",
                     "x-displayname": "Number of nodes"
                 },
                 "outside_network": {
-                    "description": " Network Subnets for the outside interface of the node",
+                    "description": " Network for the outside interface of the node",
                     "title": "Network",
                     "$ref": "#/definitions/viewsGCPVPCNetworkChoiceType",
-                    "x-displayname": "GCP VPC Network for Outside Interface"
+                    "x-displayname": "VPC Network for Outside Interface"
                 },
                 "outside_static_routes": {
                     "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
@@ -2332,7 +2332,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType"
                 },
                 "outside_subnet": {
-                    "description": " Subnets for the outside interface of the node, should be in outside network",
+                    "description": " Subnet for the outside interface of the node.",
                     "title": "Subnet",
                     "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
                     "x-displayname": "Subnet for Outside Interface"
@@ -2374,20 +2374,20 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "local_network": {
-                    "description": " Network Subnets for the local interface of the node",
+                    "description": " Network for the local interface of the node",
                     "title": "Network",
                     "$ref": "#/definitions/viewsGCPVPCNetworkChoiceType",
-                    "x-displayname": "GCP VPC Network for Local Interface"
+                    "x-displayname": "VPC Network for Local Interface"
                 },
                 "local_subnet": {
-                    "description": " Subnets for the local interface of the node, should be in local network",
+                    "description": " Subnet for the local interface of the node.",
                     "title": "Subnet",
                     "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
-                    "x-displayname": "Subnet for local Interface"
+                    "x-displayname": "Subnet for Local Interface"
                 },
                 "node_number": {
                     "type": "integer",
-                    "description": " Number of nodes to created, 1 or 3 supported",
+                    "description": " Number of nodes to create, either 1 or 3.",
                     "title": "Number of nodes",
                     "format": "int64",
                     "x-displayname": "Number of nodes"
@@ -2524,10 +2524,10 @@ var APISwaggerJSON string = `{
                 },
                 "node_number": {
                     "type": "integer",
-                    "description": " Number of nodes to created, 1 or 3 supported",
+                    "description": " Number of nodes to create, either 1 or 3.",
                     "title": "Number of nodes",
                     "format": "int64",
-                    "x-displayname": "Number of nodes"
+                    "x-displayname": "Number of Nodes"
                 },
                 "outside_static_routes": {
                     "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
@@ -2535,16 +2535,16 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType"
                 },
                 "site_local_network": {
-                    "description": " Network for the site local interface of the node",
+                    "description": " Network for the local interface of the node",
                     "title": "Network",
                     "$ref": "#/definitions/viewsGCPVPCNetworkChoiceType",
-                    "x-displayname": "GCP VPC Network for Site Local Interface"
+                    "x-displayname": "VPC Network for Local Interface"
                 },
                 "site_local_subnet": {
-                    "description": " Subnet for the site local interface of the node.",
+                    "description": " Subnet for the local interface of the node.",
                     "title": "Subnet",
                     "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
-                    "x-displayname": "GCP subnet for Site Local Interface"
+                    "x-displayname": "Subnet for Local Interface"
                 }
             }
         },
@@ -3313,13 +3313,14 @@ var APISwaggerJSON string = `{
         },
         "schemaNextHopTypes": {
             "type": "string",
-            "description": "Defines types of next-hop\n\nUse default gateway on the local interface as gateway for route.\nAssumes there is only one local interface on the virtual network.\nUse the specified address as nexthop\nUse the network interface as nexthop\nDiscard nexthop, used when attr type is Advertise",
+            "description": "Defines types of next-hop\n\nUse default gateway on the local interface as gateway for route.\nAssumes there is only one local interface on the virtual network.\nUse the specified address as nexthop\nUse the network interface as nexthop\nDiscard nexthop, used when attr type is Advertise\nUsed in VoltADN private virtual network.",
             "title": "Nexthop Types",
             "enum": [
                 "NEXT_HOP_DEFAULT_GATEWAY",
                 "NEXT_HOP_USE_CONFIGURED",
                 "NEXT_HOP_NETWORK_INTERFACE",
-                "NEXT_HOP_DISCARD"
+                "NEXT_HOP_DISCARD",
+                "NEXT_HOP_SNAT_TO_PUBLIC"
             ],
             "default": "NEXT_HOP_DEFAULT_GATEWAY",
             "x-displayname": "Nexthop Types",
@@ -4277,17 +4278,17 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.GCPVPCNetworkChoiceType",
             "properties": {
                 "existing_network": {
-                    "description": "Exclusive with [new_network new_network_autogenerate]\nx-displayName: \"Existing VPC Network\"\nInformation about existing VPC network",
+                    "description": "Exclusive with [new_network new_network_autogenerate]\nx-displayName: \"Existing VPC Network\"\nName of existing VPC network.",
                     "title": "Existing VPC",
                     "$ref": "#/definitions/viewsGCPVPCNetworkType"
                 },
                 "new_network": {
-                    "description": "Exclusive with [existing_network new_network_autogenerate]\nx-displayName: \"New VPC Network Parameters\"\nParameters for creating new VPC network",
+                    "description": "Exclusive with [existing_network new_network_autogenerate]\nx-displayName: \"Specify VPC Network Name\"\nCreate new VPC network with specified name.",
                     "title": "New VPC",
                     "$ref": "#/definitions/viewsGCPVPCNetworkParamsType"
                 },
                 "new_network_autogenerate": {
-                    "description": "Exclusive with [existing_network new_network]\nx-displayName: \"New VPC Network autogenerate name\"\nAutogenerate parameters for creating new VPC network",
+                    "description": "Exclusive with [existing_network new_network]\nx-displayName: \"Autogenerate VPC Network Name\"\nCreate new VPC network with autogenerated name.",
                     "title": "New VPC Autogenerate",
                     "$ref": "#/definitions/viewsGCPVPCNetworkAutogenerateParamsType"
                 }
@@ -4337,12 +4338,12 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.GCPVPCSubnetChoiceType",
             "properties": {
                 "existing_subnet": {
-                    "description": "Exclusive with [new_subnet]\nx-displayName: \"Existing Subnet\"\nInformation about existing subnet",
+                    "description": "Exclusive with [new_subnet]\nx-displayName: \"Existing Subnet\"\nName of existing VPC subnet.",
                     "title": "Existing VPC",
                     "$ref": "#/definitions/viewsGCPSubnetType"
                 },
                 "new_subnet": {
-                    "description": "Exclusive with [existing_subnet]\nx-displayName: \"New Subnet Parameters\"\nParameters for creating new subnet",
+                    "description": "Exclusive with [existing_subnet]\nx-displayName: \"New Subnet Parameters\"\nParameters for creating a new VPC Subnet",
                     "title": "New VPC",
                     "$ref": "#/definitions/viewsGCPSubnetParamsType"
                 }
@@ -4459,6 +4460,7 @@ var APISwaggerJSON string = `{
             "title": "CreateSpecType",
             "x-displayname": "Create GCP VPC site",
             "x-ves-oneof-field-deployment": "[\"assisted\",\"cloud_credentials\"]",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.CreateSpecType",
             "properties": {
@@ -4510,6 +4512,14 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "n1-standard-4",
                     "x-ves-required": "true"
                 },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "nodes_per_az": {
                     "type": "integer",
                     "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
@@ -4547,6 +4557,7 @@ var APISwaggerJSON string = `{
             "title": "GetSpecType",
             "x-displayname": "Get GCP VPC site",
             "x-ves-oneof-field-deployment": "[\"assisted\",\"cloud_credentials\"]",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GetSpecType",
             "properties": {
@@ -4598,6 +4609,14 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "n1-standard-4",
                     "x-ves-required": "true"
                 },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "nodes_per_az": {
                     "type": "integer",
                     "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
@@ -4635,6 +4654,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-deployment": "[\"assisted\",\"cloud_credentials\"]",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GlobalSpecType",
             "properties": {
@@ -4695,6 +4715,16 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "n1-standard-4",
                     "x-ves-required": "true"
                 },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\nx-displayName: \"Enable Logs Streaming\"\nSelect log receiver for logs streaming",
+                    "title": "Disable Logs Streaming",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\nx-displayName: \"Disable Logs Streaming\"\nLogs Streaming is disabled",
+                    "title": "Disable Logs Receiver",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "nodes_per_az": {
                     "type": "integer",
                     "description": " Desired Worker Nodes Per AZ. Max limit is up to 21\n\nExample: - \"2\"-",
@@ -4748,6 +4778,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of the GCP VPC site replace specification",
             "title": "ReplaceSpecType",
             "x-displayname": "Replace GCP VPC site",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.ReplaceSpecType",
             "properties": {
@@ -4771,6 +4802,14 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [ingress_egress_gw voltstack_cluster]\nx-displayName: \"Ingress Gateway\"\nIngress gateway choice can not be changed (no config available for editing)",
                     "title": "Ingress Gateway",
                     "$ref": "#/definitions/gcp_vpc_siteGCPVPCIngressGwReplaceType"
+                },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "operating_system_version": {
                     "type": "string",

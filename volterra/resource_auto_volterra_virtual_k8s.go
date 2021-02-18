@@ -52,11 +52,13 @@ func resourceVolterraVirtualK8S() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"default_flavor_ref": {
@@ -178,24 +180,30 @@ func resourceVolterraVirtualK8SCreate(d *schema.ResourceData, meta interface{}) 
 			v.(string)
 	}
 
+	//default_flavor_ref
 	if v, ok := d.GetOk("default_flavor_ref"); ok && !isIntfNil(v) {
 
+		sl := v.(*schema.Set).List()
 		defaultFlavorRefInt := &ves_io_schema_views.ObjectRefType{}
 		createSpec.DefaultFlavorRef = defaultFlavorRefInt
 
-		dfrMapToStrVal := v.(map[string]interface{})
-		if val, ok := dfrMapToStrVal["name"]; ok && !isIntfNil(v) {
-			defaultFlavorRefInt.Name = val.(string)
-		}
-		if val, ok := dfrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-			defaultFlavorRefInt.Namespace = val.(string)
-		}
+		for _, set := range sl {
+			dfrMapToStrVal := set.(map[string]interface{})
+			if val, ok := dfrMapToStrVal["name"]; ok && !isIntfNil(v) {
+				defaultFlavorRefInt.Name = val.(string)
+			}
+			if val, ok := dfrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+				defaultFlavorRefInt.Namespace = val.(string)
+			}
 
-		if val, ok := dfrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-			defaultFlavorRefInt.Tenant = val.(string)
+			if val, ok := dfrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+				defaultFlavorRefInt.Tenant = val.(string)
+			}
 		}
 
 	}
+
+	//service_isolation_choice
 
 	serviceIsolationChoiceTypeFound := false
 
@@ -223,6 +231,7 @@ func resourceVolterraVirtualK8SCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//vsite_refs
 	if v, ok := d.GetOk("vsite_refs"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -351,6 +360,28 @@ func resourceVolterraVirtualK8SUpdate(d *schema.ResourceData, meta interface{}) 
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		updateMeta.Namespace =
 			v.(string)
+	}
+
+	if v, ok := d.GetOk("default_flavor_ref"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		defaultFlavorRefInt := &ves_io_schema_views.ObjectRefType{}
+		updateSpec.DefaultFlavorRef = defaultFlavorRefInt
+
+		for _, set := range sl {
+			dfrMapToStrVal := set.(map[string]interface{})
+			if val, ok := dfrMapToStrVal["name"]; ok && !isIntfNil(v) {
+				defaultFlavorRefInt.Name = val.(string)
+			}
+			if val, ok := dfrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+				defaultFlavorRefInt.Namespace = val.(string)
+			}
+
+			if val, ok := dfrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+				defaultFlavorRefInt.Tenant = val.(string)
+			}
+		}
+
 	}
 
 	serviceIsolationChoiceTypeFound := false

@@ -51,11 +51,13 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"address": {
@@ -536,24 +538,28 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 			v.(string)
 	}
 
+	//address
 	if v, ok := d.GetOk("address"); ok && !isIntfNil(v) {
 
 		createSpec.Address =
 			v.(string)
 	}
 
+	//port
 	if v, ok := d.GetOk("port"); ok && !isIntfNil(v) {
 
 		createSpec.Port =
 			uint32(v.(int))
 	}
 
+	//protocol
 	if v, ok := d.GetOk("protocol"); ok && !isIntfNil(v) {
 
 		createSpec.Protocol =
 			v.(string)
 	}
 
+	//public_ip
 	if v, ok := d.GetOk("public_ip"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -586,19 +592,20 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 
 	}
 
+	//skip_xff_append
 	if v, ok := d.GetOk("skip_xff_append"); ok && !isIntfNil(v) {
 
 		createSpec.SkipXffAppend =
 			v.(bool)
 	}
 
+	//tls_parameters
 	if v, ok := d.GetOk("tls_parameters"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		tlsParameters := &ves_io_schema.DownstreamTlsParamsType{}
 		createSpec.TlsParameters = tlsParameters
 		for _, set := range sl {
-
 			tlsParametersMapStrToI := set.(map[string]interface{})
 
 			if v, ok := tlsParametersMapStrToI["common_params"]; ok && !isIntfNil(v) {
@@ -607,7 +614,6 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 				commonParams := &ves_io_schema.TlsParamsType{}
 				tlsParameters.CommonParams = commonParams
 				for _, set := range sl {
-
 					commonParamsMapStrToI := set.(map[string]interface{})
 
 					if w, ok := commonParamsMapStrToI["cipher_suites"]; ok && !isIntfNil(w) {
@@ -637,7 +643,6 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 						commonParams.TlsCertificates = tlsCertificates
 						for i, set := range sl {
 							tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
-
 							tlsCertificatesMapStrToI := set.(map[string]interface{})
 
 							if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
@@ -654,7 +659,6 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 								privateKey := &ves_io_schema.SecretType{}
 								tlsCertificates[i].PrivateKey = privateKey
 								for _, set := range sl {
-
 									privateKeyMapStrToI := set.(map[string]interface{})
 
 									if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -663,7 +667,6 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 										privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
-
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -824,7 +827,6 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 						validationParams := &ves_io_schema.TlsValidationParamsType{}
 						commonParams.ValidationParams = validationParams
 						for _, set := range sl {
-
 							validationParamsMapStrToI := set.(map[string]interface{})
 
 							if w, ok := validationParamsMapStrToI["skip_hostname_verification"]; ok && !isIntfNil(w) {
@@ -863,13 +865,13 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 
 	}
 
+	//where
 	if v, ok := d.GetOk("where"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		where := &ves_io_schema.NetworkSiteRefSelector{}
 		createSpec.Where = where
 		for _, set := range sl {
-
 			whereMapStrToI := set.(map[string]interface{})
 
 			refOrSelectorTypeFound := false
@@ -1191,7 +1193,6 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 		tlsParameters := &ves_io_schema.DownstreamTlsParamsType{}
 		updateSpec.TlsParameters = tlsParameters
 		for _, set := range sl {
-
 			tlsParametersMapStrToI := set.(map[string]interface{})
 
 			if v, ok := tlsParametersMapStrToI["common_params"]; ok && !isIntfNil(v) {
@@ -1200,7 +1201,6 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 				commonParams := &ves_io_schema.TlsParamsType{}
 				tlsParameters.CommonParams = commonParams
 				for _, set := range sl {
-
 					commonParamsMapStrToI := set.(map[string]interface{})
 
 					if w, ok := commonParamsMapStrToI["cipher_suites"]; ok && !isIntfNil(w) {
@@ -1230,7 +1230,6 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 						commonParams.TlsCertificates = tlsCertificates
 						for i, set := range sl {
 							tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
-
 							tlsCertificatesMapStrToI := set.(map[string]interface{})
 
 							if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
@@ -1247,7 +1246,6 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 								privateKey := &ves_io_schema.SecretType{}
 								tlsCertificates[i].PrivateKey = privateKey
 								for _, set := range sl {
-
 									privateKeyMapStrToI := set.(map[string]interface{})
 
 									if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -1256,7 +1254,6 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 										privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
-
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -1417,7 +1414,6 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 						validationParams := &ves_io_schema.TlsValidationParamsType{}
 						commonParams.ValidationParams = validationParams
 						for _, set := range sl {
-
 							validationParamsMapStrToI := set.(map[string]interface{})
 
 							if w, ok := validationParamsMapStrToI["skip_hostname_verification"]; ok && !isIntfNil(w) {
@@ -1462,7 +1458,6 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 		where := &ves_io_schema.NetworkSiteRefSelector{}
 		updateSpec.Where = where
 		for _, set := range sl {
-
 			whereMapStrToI := set.(map[string]interface{})
 
 			refOrSelectorTypeFound := false

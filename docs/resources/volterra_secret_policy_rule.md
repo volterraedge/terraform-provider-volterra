@@ -22,12 +22,7 @@ resource "volterra_secret_policy_rule" "example" {
   action    = ["action"]
 
   // One of the arguments from this list "client_name client_selector client_name_matcher" must be set
-
-  client_name_matcher {
-    exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-    regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-  }
+  client_name = "ver.re01.int.ves.io"
 }
 
 ```

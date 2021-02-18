@@ -53,11 +53,13 @@ func resourceVolterraOriginPool() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"advanced_options": {
@@ -745,6 +747,82 @@ func resourceVolterraOriginPool() *schema.Resource {
 							},
 						},
 
+						"voltadn_private_ip": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"ip": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"private_network": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"voltadn_private_name": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"dns_name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"private_network": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
 						"labels": {
 							Type:     schema.TypeMap,
 							Optional: true,
@@ -1104,13 +1182,13 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 			v.(string)
 	}
 
+	//advanced_options
 	if v, ok := d.GetOk("advanced_options"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		advancedOptions := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions{}
 		createSpec.AdvancedOptions = advancedOptions
 		for _, set := range sl {
-
 			advancedOptionsMapStrToI := set.(map[string]interface{})
 
 			circuitBreakerChoiceTypeFound := false
@@ -1178,7 +1256,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 				http2Options := &ves_io_schema_cluster.Http2ProtocolOptions{}
 				advancedOptions.Http2Options = http2Options
 				for _, set := range sl {
-
 					http2OptionsMapStrToI := set.(map[string]interface{})
 
 					if w, ok := http2OptionsMapStrToI["enabled"]; ok && !isIntfNil(w) {
@@ -1305,7 +1382,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 						subsetChoiceInt.EnableSubsets.EndpointSubsets = endpointSubsets
 						for i, set := range sl {
 							endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
-
 							endpointSubsetsMapStrToI := set.(map[string]interface{})
 
 							if w, ok := endpointSubsetsMapStrToI["keys"]; ok && !isIntfNil(w) {
@@ -1378,11 +1454,14 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//endpoint_selection
 	if v, ok := d.GetOk("endpoint_selection"); ok && !isIntfNil(v) {
 
 		createSpec.EndpointSelection = ves_io_schema_cluster.EndpointSelectionPolicy(ves_io_schema_cluster.EndpointSelectionPolicy_value[v.(string)])
 
 	}
+
+	//health_check_port_choice
 
 	healthCheckPortChoiceTypeFound := false
 
@@ -1410,6 +1489,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//healthcheck
 	if v, ok := d.GetOk("healthcheck"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -1436,12 +1516,14 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//loadbalancer_algorithm
 	if v, ok := d.GetOk("loadbalancer_algorithm"); ok && !isIntfNil(v) {
 
 		createSpec.LoadbalancerAlgorithm = ves_io_schema_cluster.LoadbalancerAlgorithm(ves_io_schema_cluster.LoadbalancerAlgorithm_value[v.(string)])
 
 	}
 
+	//origin_servers
 	if v, ok := d.GetOk("origin_servers"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -1449,7 +1531,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 		createSpec.OriginServers = originServers
 		for i, set := range sl {
 			originServers[i] = &ves_io_schema_views_origin_pool.OriginServerType{}
-
 			originServersMapStrToI := set.(map[string]interface{})
 
 			choiceTypeFound := false
@@ -1502,7 +1583,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 						siteLocator := &ves_io_schema_views.SiteLocator{}
 						choiceInt.ConsulService.SiteLocator = siteLocator
 						for _, set := range sl {
-
 							siteLocatorMapStrToI := set.(map[string]interface{})
 
 							choiceTypeFound := false
@@ -1588,19 +1668,22 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 					if v, ok := cs["endpoint"]; ok && !isIntfNil(v) {
 
+						sl := v.(*schema.Set).List()
 						endpointInt := &ves_io_schema_views.ObjectRefType{}
 						choiceInt.CustomEndpointObject.Endpoint = endpointInt
 
-						eMapToStrVal := v.(map[string]interface{})
-						if val, ok := eMapToStrVal["name"]; ok && !isIntfNil(v) {
-							endpointInt.Name = val.(string)
-						}
-						if val, ok := eMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							endpointInt.Namespace = val.(string)
-						}
+						for _, set := range sl {
+							eMapToStrVal := set.(map[string]interface{})
+							if val, ok := eMapToStrVal["name"]; ok && !isIntfNil(v) {
+								endpointInt.Name = val.(string)
+							}
+							if val, ok := eMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								endpointInt.Namespace = val.(string)
+							}
 
-						if val, ok := eMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							endpointInt.Tenant = val.(string)
+							if val, ok := eMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								endpointInt.Tenant = val.(string)
+							}
 						}
 
 					}
@@ -1669,7 +1752,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 						siteLocator := &ves_io_schema_views.SiteLocator{}
 						choiceInt.K8SService.SiteLocator = siteLocator
 						for _, set := range sl {
-
 							siteLocatorMapStrToI := set.(map[string]interface{})
 
 							choiceTypeFound := false
@@ -1790,7 +1872,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 						siteLocator := &ves_io_schema_views.SiteLocator{}
 						choiceInt.PrivateIp.SiteLocator = siteLocator
 						for _, set := range sl {
-
 							siteLocatorMapStrToI := set.(map[string]interface{})
 
 							choiceTypeFound := false
@@ -1911,7 +1992,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 						siteLocator := &ves_io_schema_views.SiteLocator{}
 						choiceInt.PrivateName.SiteLocator = siteLocator
 						for _, set := range sl {
-
 							siteLocatorMapStrToI := set.(map[string]interface{})
 
 							choiceTypeFound := false
@@ -2024,6 +2104,90 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := originServersMapStrToI["voltadn_private_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+				choiceTypeFound = true
+				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_VoltadnPrivateIp{}
+				choiceInt.VoltadnPrivateIp = &ves_io_schema_views_origin_pool.OriginServerVoltADNPrivateIP{}
+				originServers[i].Choice = choiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+						choiceInt.VoltadnPrivateIp.Ip = v.(string)
+					}
+
+					if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						privateNetworkInt := &ves_io_schema_views.ObjectRefType{}
+						choiceInt.VoltadnPrivateIp.PrivateNetwork = privateNetworkInt
+
+						for _, set := range sl {
+							pnMapToStrVal := set.(map[string]interface{})
+							if val, ok := pnMapToStrVal["name"]; ok && !isIntfNil(v) {
+								privateNetworkInt.Name = val.(string)
+							}
+							if val, ok := pnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								privateNetworkInt.Namespace = val.(string)
+							}
+
+							if val, ok := pnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								privateNetworkInt.Tenant = val.(string)
+							}
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := originServersMapStrToI["voltadn_private_name"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+				choiceTypeFound = true
+				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_VoltadnPrivateName{}
+				choiceInt.VoltadnPrivateName = &ves_io_schema_views_origin_pool.OriginServerVoltADNPrivateName{}
+				originServers[i].Choice = choiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
+
+						choiceInt.VoltadnPrivateName.DnsName = v.(string)
+					}
+
+					if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						privateNetworkInt := &ves_io_schema_views.ObjectRefType{}
+						choiceInt.VoltadnPrivateName.PrivateNetwork = privateNetworkInt
+
+						for _, set := range sl {
+							pnMapToStrVal := set.(map[string]interface{})
+							if val, ok := pnMapToStrVal["name"]; ok && !isIntfNil(v) {
+								privateNetworkInt.Name = val.(string)
+							}
+							if val, ok := pnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								privateNetworkInt.Namespace = val.(string)
+							}
+
+							if val, ok := pnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								privateNetworkInt.Tenant = val.(string)
+							}
+						}
+
+					}
+
+				}
+
+			}
+
 			if w, ok := originServersMapStrToI["labels"]; ok && !isIntfNil(w) {
 				ms := map[string]string{}
 				for k, v := range w.(map[string]interface{}) {
@@ -2036,11 +2200,14 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//port
 	if v, ok := d.GetOk("port"); ok && !isIntfNil(v) {
 
 		createSpec.Port =
 			uint32(v.(int))
 	}
+
+	//tls_choice
 
 	tlsChoiceTypeFound := false
 
@@ -2099,7 +2266,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 						mtlsChoiceInt.UseMtls.TlsCertificates = tlsCertificates
 						for i, set := range sl {
 							tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
-
 							tlsCertificatesMapStrToI := set.(map[string]interface{})
 
 							if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
@@ -2116,7 +2282,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 								privateKey := &ves_io_schema.SecretType{}
 								tlsCertificates[i].PrivateKey = privateKey
 								for _, set := range sl {
-
 									privateKeyMapStrToI := set.(map[string]interface{})
 
 									if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -2125,7 +2290,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 										privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
-
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -2369,7 +2533,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 				tlsConfig := &ves_io_schema_views.TlsConfig{}
 				tlsChoiceInt.UseTls.TlsConfig = tlsConfig
 				for _, set := range sl {
-
 					tlsConfigMapStrToI := set.(map[string]interface{})
 
 					choiceTypeFound := false
@@ -2559,7 +2722,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 		advancedOptions := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions{}
 		updateSpec.AdvancedOptions = advancedOptions
 		for _, set := range sl {
-
 			advancedOptionsMapStrToI := set.(map[string]interface{})
 
 			circuitBreakerChoiceTypeFound := false
@@ -2627,7 +2789,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 				http2Options := &ves_io_schema_cluster.Http2ProtocolOptions{}
 				advancedOptions.Http2Options = http2Options
 				for _, set := range sl {
-
 					http2OptionsMapStrToI := set.(map[string]interface{})
 
 					if w, ok := http2OptionsMapStrToI["enabled"]; ok && !isIntfNil(w) {
@@ -2754,7 +2915,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 						subsetChoiceInt.EnableSubsets.EndpointSubsets = endpointSubsets
 						for i, set := range sl {
 							endpointSubsets[i] = &ves_io_schema_cluster.EndpointSubsetSelectorType{}
-
 							endpointSubsetsMapStrToI := set.(map[string]interface{})
 
 							if w, ok := endpointSubsetsMapStrToI["keys"]; ok && !isIntfNil(w) {
@@ -2898,7 +3058,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 		updateSpec.OriginServers = originServers
 		for i, set := range sl {
 			originServers[i] = &ves_io_schema_views_origin_pool.OriginServerType{}
-
 			originServersMapStrToI := set.(map[string]interface{})
 
 			choiceTypeFound := false
@@ -2951,7 +3110,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 						siteLocator := &ves_io_schema_views.SiteLocator{}
 						choiceInt.ConsulService.SiteLocator = siteLocator
 						for _, set := range sl {
-
 							siteLocatorMapStrToI := set.(map[string]interface{})
 
 							choiceTypeFound := false
@@ -3037,19 +3195,22 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 					if v, ok := cs["endpoint"]; ok && !isIntfNil(v) {
 
+						sl := v.(*schema.Set).List()
 						endpointInt := &ves_io_schema_views.ObjectRefType{}
 						choiceInt.CustomEndpointObject.Endpoint = endpointInt
 
-						eMapToStrVal := v.(map[string]interface{})
-						if val, ok := eMapToStrVal["name"]; ok && !isIntfNil(v) {
-							endpointInt.Name = val.(string)
-						}
-						if val, ok := eMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							endpointInt.Namespace = val.(string)
-						}
+						for _, set := range sl {
+							eMapToStrVal := set.(map[string]interface{})
+							if val, ok := eMapToStrVal["name"]; ok && !isIntfNil(v) {
+								endpointInt.Name = val.(string)
+							}
+							if val, ok := eMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								endpointInt.Namespace = val.(string)
+							}
 
-						if val, ok := eMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							endpointInt.Tenant = val.(string)
+							if val, ok := eMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								endpointInt.Tenant = val.(string)
+							}
 						}
 
 					}
@@ -3118,7 +3279,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 						siteLocator := &ves_io_schema_views.SiteLocator{}
 						choiceInt.K8SService.SiteLocator = siteLocator
 						for _, set := range sl {
-
 							siteLocatorMapStrToI := set.(map[string]interface{})
 
 							choiceTypeFound := false
@@ -3239,7 +3399,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 						siteLocator := &ves_io_schema_views.SiteLocator{}
 						choiceInt.PrivateIp.SiteLocator = siteLocator
 						for _, set := range sl {
-
 							siteLocatorMapStrToI := set.(map[string]interface{})
 
 							choiceTypeFound := false
@@ -3360,7 +3519,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 						siteLocator := &ves_io_schema_views.SiteLocator{}
 						choiceInt.PrivateName.SiteLocator = siteLocator
 						for _, set := range sl {
-
 							siteLocatorMapStrToI := set.(map[string]interface{})
 
 							choiceTypeFound := false
@@ -3473,6 +3631,90 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := originServersMapStrToI["voltadn_private_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+				choiceTypeFound = true
+				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_VoltadnPrivateIp{}
+				choiceInt.VoltadnPrivateIp = &ves_io_schema_views_origin_pool.OriginServerVoltADNPrivateIP{}
+				originServers[i].Choice = choiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+						choiceInt.VoltadnPrivateIp.Ip = v.(string)
+					}
+
+					if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						privateNetworkInt := &ves_io_schema_views.ObjectRefType{}
+						choiceInt.VoltadnPrivateIp.PrivateNetwork = privateNetworkInt
+
+						for _, set := range sl {
+							pnMapToStrVal := set.(map[string]interface{})
+							if val, ok := pnMapToStrVal["name"]; ok && !isIntfNil(v) {
+								privateNetworkInt.Name = val.(string)
+							}
+							if val, ok := pnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								privateNetworkInt.Namespace = val.(string)
+							}
+
+							if val, ok := pnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								privateNetworkInt.Tenant = val.(string)
+							}
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := originServersMapStrToI["voltadn_private_name"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+				choiceTypeFound = true
+				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_VoltadnPrivateName{}
+				choiceInt.VoltadnPrivateName = &ves_io_schema_views_origin_pool.OriginServerVoltADNPrivateName{}
+				originServers[i].Choice = choiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
+
+						choiceInt.VoltadnPrivateName.DnsName = v.(string)
+					}
+
+					if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						privateNetworkInt := &ves_io_schema_views.ObjectRefType{}
+						choiceInt.VoltadnPrivateName.PrivateNetwork = privateNetworkInt
+
+						for _, set := range sl {
+							pnMapToStrVal := set.(map[string]interface{})
+							if val, ok := pnMapToStrVal["name"]; ok && !isIntfNil(v) {
+								privateNetworkInt.Name = val.(string)
+							}
+							if val, ok := pnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								privateNetworkInt.Namespace = val.(string)
+							}
+
+							if val, ok := pnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								privateNetworkInt.Tenant = val.(string)
+							}
+						}
+
+					}
+
+				}
+
+			}
+
 			if w, ok := originServersMapStrToI["labels"]; ok && !isIntfNil(w) {
 				ms := map[string]string{}
 				for k, v := range w.(map[string]interface{}) {
@@ -3548,7 +3790,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 						mtlsChoiceInt.UseMtls.TlsCertificates = tlsCertificates
 						for i, set := range sl {
 							tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
-
 							tlsCertificatesMapStrToI := set.(map[string]interface{})
 
 							if w, ok := tlsCertificatesMapStrToI["certificate_url"]; ok && !isIntfNil(w) {
@@ -3565,7 +3806,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 								privateKey := &ves_io_schema.SecretType{}
 								tlsCertificates[i].PrivateKey = privateKey
 								for _, set := range sl {
-
 									privateKeyMapStrToI := set.(map[string]interface{})
 
 									if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
@@ -3574,7 +3814,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
 										privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
-
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
 											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
@@ -3818,7 +4057,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 				tlsConfig := &ves_io_schema_views.TlsConfig{}
 				tlsChoiceInt.UseTls.TlsConfig = tlsConfig
 				for _, set := range sl {
-
 					tlsConfigMapStrToI := set.(map[string]interface{})
 
 					choiceTypeFound := false

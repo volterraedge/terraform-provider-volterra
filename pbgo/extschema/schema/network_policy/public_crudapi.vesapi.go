@@ -2562,7 +2562,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_policy.NetworkPolicyRuleType",
             "properties": {
                 "action": {
-                    "description": " Action to be taken at rule match. Currently supported actions are Allow and  Deny",
+                    "description": " Action to be taken at rule match. Currently supported actions are Allow and Deny",
                     "title": "action",
                     "$ref": "#/definitions/network_policy_ruleNetworkPolicyRuleAction",
                     "x-displayname": "Action"
@@ -3535,11 +3535,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Endpoint(s)"
                 },
                 "rules": {
-                    "description": "Network Policy Rules\nRequired: YES",
+                    "description": "Network Policy Rules",
                     "title": "Rules",
                     "$ref": "#/definitions/network_policyNetworkPolicyRuleChoice",
-                    "x-displayname": "Rules",
-                    "x-ves-required": "true"
+                    "x-displayname": "Rules"
                 }
             }
         },
@@ -3553,18 +3552,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "endpoint": {
                     "description": " Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.",
-                    "title": "Policy Endpoint",
                     "$ref": "#/definitions/network_policyEndpointChoiceType",
                     "x-displayname": "Endpoint(s)"
                 },
                 "legacy_rules": {
-                    "description": "Exclusive with [rules]\nx-displayName: \"Legacy Rule Choice\"\nNetwork Policy Legacy Rule Choice",
-                    "title": "Legacy Rule Choice",
+                    "description": "Exclusive with [rules]\n",
                     "$ref": "#/definitions/network_policyLegacyNetworkPolicyRuleChoice"
                 },
                 "rules": {
-                    "description": "Exclusive with [legacy_rules]\nx-displayName: \"Rule Choice\"\nNetwork Policy Rule Choice",
-                    "title": "Rule Choice",
+                    "description": "Exclusive with [legacy_rules]\n",
                     "$ref": "#/definitions/network_policyNetworkPolicyRuleChoice"
                 }
             }
@@ -3612,8 +3608,8 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Ingress Rules"
                 },
                 "legacy_rules": {
-                    "description": "Exclusive with [rules]\nx-displayName: \"Legacy Rule Choice\"\nNetwork Policy Legacy Rule Choice",
-                    "title": "Legacy Rule Choice",
+                    "description": "Exclusive with [rules]\nx-displayName: \"Legacy Rules\"\nConfigure Network Policy Legacy Rule",
+                    "title": "Legacy Rules",
                     "$ref": "#/definitions/network_policyLegacyNetworkPolicyRuleChoice"
                 },
                 "prefix": {
@@ -3627,8 +3623,8 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaLabelSelectorType"
                 },
                 "rules": {
-                    "description": "Exclusive with [legacy_rules]\nx-displayName: \"Rule Choice\"\nNetwork Policy Rule Choice",
-                    "title": "Rule Choice",
+                    "description": "Exclusive with [legacy_rules]\nx-displayName: \"Rules\"\nConfigure Network Policy Rules",
+                    "title": "Rules",
                     "$ref": "#/definitions/network_policyNetworkPolicyRuleChoice"
                 },
                 "view_internal": {
@@ -3654,13 +3650,11 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Endpoint(s)"
                 },
                 "legacy_rules": {
-                    "description": "Exclusive with [rules]\nx-displayName: \"Legacy Rule Choice\"\nNetwork Policy Legacy Rule Choice",
-                    "title": "Legacy Rule Choice",
+                    "description": "Exclusive with [rules]\n",
                     "$ref": "#/definitions/network_policyLegacyNetworkPolicyRuleChoice"
                 },
                 "rules": {
-                    "description": "Exclusive with [legacy_rules]\nx-displayName: \"Rule Choice\"\nNetwork Policy Rule Choice",
-                    "title": "Rule Choice",
+                    "description": "Exclusive with [legacy_rules]\n",
                     "$ref": "#/definitions/network_policyNetworkPolicyRuleChoice"
                 }
             }

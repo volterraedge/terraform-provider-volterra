@@ -1621,6 +1621,14 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Configuration Specification",
             "x-ves-proto-message": "ves.io.schema.public_ip.GlobalSpecType",
             "properties": {
+                "do_not_advertise": {
+                    "type": "boolean",
+                    "description": " Is this public ip should not be advertised to infra.\n\nExample: - \"true\"-",
+                    "title": "Do Not Advertise",
+                    "format": "boolean",
+                    "x-displayname": "Do Not Advertise",
+                    "x-ves-example": "true"
+                },
                 "ip": {
                     "type": "string",
                     "description": " IP address for this object\n\nExample: - \"10.1.1.1\"-",

@@ -52,11 +52,13 @@ func resourceVolterraServicePolicySet() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"default_action": {
@@ -178,19 +180,20 @@ func resourceVolterraServicePolicySetCreate(d *schema.ResourceData, meta interfa
 			v.(string)
 	}
 
+	//default_action
 	if v, ok := d.GetOk("default_action"); ok && !isIntfNil(v) {
 
 		createSpec.DefaultAction = ves_io_schema_policy.RuleAction(ves_io_schema_policy.RuleAction_value[v.(string)])
 
 	}
 
+	//deny_info
 	if v, ok := d.GetOk("deny_info"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		denyInfo := &ves_io_schema_policy.DenyInformation{}
 		createSpec.DenyInfo = denyInfo
 		for _, set := range sl {
-
 			denyInfoMapStrToI := set.(map[string]interface{})
 
 			if w, ok := denyInfoMapStrToI["error_message"]; ok && !isIntfNil(w) {
@@ -205,6 +208,7 @@ func resourceVolterraServicePolicySetCreate(d *schema.ResourceData, meta interfa
 
 	}
 
+	//policies
 	if v, ok := d.GetOk("policies"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -237,12 +241,14 @@ func resourceVolterraServicePolicySetCreate(d *schema.ResourceData, meta interfa
 
 	}
 
+	//scope
 	if v, ok := d.GetOk("scope"); ok && !isIntfNil(v) {
 
 		createSpec.Scope = ves_io_schema_policy.PolicySetScope(ves_io_schema_policy.PolicySetScope_value[v.(string)])
 
 	}
 
+	//type
 	if v, ok := d.GetOk("type"); ok && !isIntfNil(v) {
 
 		createSpec.Type = ves_io_schema_policy.PolicySetType(ves_io_schema_policy.PolicySetType_value[v.(string)])
@@ -359,7 +365,6 @@ func resourceVolterraServicePolicySetUpdate(d *schema.ResourceData, meta interfa
 		denyInfo := &ves_io_schema_policy.DenyInformation{}
 		updateSpec.DenyInfo = denyInfo
 		for _, set := range sl {
-
 			denyInfoMapStrToI := set.(map[string]interface{})
 
 			if w, ok := denyInfoMapStrToI["error_message"]; ok && !isIntfNil(w) {

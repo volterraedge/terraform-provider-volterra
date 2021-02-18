@@ -53,11 +53,13 @@ func resourceVolterraFastAcl() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"protocol_policer": {
@@ -903,24 +905,30 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 			v.(string)
 	}
 
+	//protocol_policer
 	if v, ok := d.GetOk("protocol_policer"); ok && !isIntfNil(v) {
 
+		sl := v.(*schema.Set).List()
 		protocolPolicerInt := &ves_io_schema_views.ObjectRefType{}
 		createSpec.ProtocolPolicer = protocolPolicerInt
 
-		ppMapToStrVal := v.(map[string]interface{})
-		if val, ok := ppMapToStrVal["name"]; ok && !isIntfNil(v) {
-			protocolPolicerInt.Name = val.(string)
-		}
-		if val, ok := ppMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-			protocolPolicerInt.Namespace = val.(string)
-		}
+		for _, set := range sl {
+			ppMapToStrVal := set.(map[string]interface{})
+			if val, ok := ppMapToStrVal["name"]; ok && !isIntfNil(v) {
+				protocolPolicerInt.Name = val.(string)
+			}
+			if val, ok := ppMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+				protocolPolicerInt.Namespace = val.(string)
+			}
 
-		if val, ok := ppMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-			protocolPolicerInt.Tenant = val.(string)
+			if val, ok := ppMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+				protocolPolicerInt.Tenant = val.(string)
+			}
 		}
 
 	}
+
+	//site_choice
 
 	siteChoiceTypeFound := false
 
@@ -941,7 +949,6 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 				destinationType := &ves_io_schema_fast_acl.DestinationType{}
 				siteChoiceInt.LegacyAcl.DestinationType = destinationType
 				for _, set := range sl {
-
 					destinationTypeMapStrToI := set.(map[string]interface{})
 
 					destinationTypeChoiceTypeFound := false
@@ -976,7 +983,6 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 								destinationTypeChoiceInt.DestinationIpAddress.Address = address
 								for i, set := range sl {
 									address[i] = &ves_io_schema.IpAddressType{}
-
 									addressMapStrToI := set.(map[string]interface{})
 
 									verTypeFound := false
@@ -1032,7 +1038,6 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 								destinationTypeChoiceInt.DestinationIpAddress.Ports = ports
 								for i, set := range sl {
 									ports[i] = &ves_io_schema.PortValueType{}
-
 									portsMapStrToI := set.(map[string]interface{})
 
 									portValueTypeChoiceTypeFound := false
@@ -1116,7 +1121,6 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 								destinationTypeChoiceInt.SelectedVipAddress.Address = address
 								for i, set := range sl {
 									address[i] = &ves_io_schema.IpAddressType{}
-
 									addressMapStrToI := set.(map[string]interface{})
 
 									verTypeFound := false
@@ -1203,7 +1207,6 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 				networkType := &ves_io_schema.VirtualNetworkSelectorType{}
 				siteChoiceInt.LegacyAcl.NetworkType = networkType
 				for _, set := range sl {
-
 					networkTypeMapStrToI := set.(map[string]interface{})
 
 					vnTypeChoiceTypeFound := false
@@ -1296,7 +1299,6 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 				siteChoiceInt.ReAcl.FastAclRules = fastAclRules
 				for i, set := range sl {
 					fastAclRules[i] = &ves_io_schema_fast_acl.FastACLRuleType{}
-
 					fastAclRulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := fastAclRulesMapStrToI["action"]; ok && !isIntfNil(v) {
@@ -1305,7 +1307,6 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 						action := &ves_io_schema_fast_acl_rule.FastAclRuleAction{}
 						fastAclRules[i].Action = action
 						for _, set := range sl {
-
 							actionMapStrToI := set.(map[string]interface{})
 
 							actionTypeFound := false
@@ -1425,7 +1426,6 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 						metadata := &ves_io_schema.MessageMetaType{}
 						fastAclRules[i].Metadata = metadata
 						for _, set := range sl {
-
 							metadataMapStrToI := set.(map[string]interface{})
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
@@ -1455,7 +1455,6 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 						fastAclRules[i].Port = port
 						for i, set := range sl {
 							port[i] = &ves_io_schema.PortValueType{}
-
 							portMapStrToI := set.(map[string]interface{})
 
 							portValueTypeChoiceTypeFound := false
@@ -1672,7 +1671,6 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 				siteChoiceInt.SiteAcl.FastAclRules = fastAclRules
 				for i, set := range sl {
 					fastAclRules[i] = &ves_io_schema_fast_acl.FastACLRuleType{}
-
 					fastAclRulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := fastAclRulesMapStrToI["action"]; ok && !isIntfNil(v) {
@@ -1681,7 +1679,6 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 						action := &ves_io_schema_fast_acl_rule.FastAclRuleAction{}
 						fastAclRules[i].Action = action
 						for _, set := range sl {
-
 							actionMapStrToI := set.(map[string]interface{})
 
 							actionTypeFound := false
@@ -1801,7 +1798,6 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 						metadata := &ves_io_schema.MessageMetaType{}
 						fastAclRules[i].Metadata = metadata
 						for _, set := range sl {
-
 							metadataMapStrToI := set.(map[string]interface{})
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
@@ -1831,7 +1827,6 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 						fastAclRules[i].Port = port
 						for i, set := range sl {
 							port[i] = &ves_io_schema.PortValueType{}
-
 							portMapStrToI := set.(map[string]interface{})
 
 							portValueTypeChoiceTypeFound := false
@@ -2122,19 +2117,22 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 
 	if v, ok := d.GetOk("protocol_policer"); ok && !isIntfNil(v) {
 
+		sl := v.(*schema.Set).List()
 		protocolPolicerInt := &ves_io_schema_views.ObjectRefType{}
 		updateSpec.ProtocolPolicer = protocolPolicerInt
 
-		ppMapToStrVal := v.(map[string]interface{})
-		if val, ok := ppMapToStrVal["name"]; ok && !isIntfNil(v) {
-			protocolPolicerInt.Name = val.(string)
-		}
-		if val, ok := ppMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-			protocolPolicerInt.Namespace = val.(string)
-		}
+		for _, set := range sl {
+			ppMapToStrVal := set.(map[string]interface{})
+			if val, ok := ppMapToStrVal["name"]; ok && !isIntfNil(v) {
+				protocolPolicerInt.Name = val.(string)
+			}
+			if val, ok := ppMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+				protocolPolicerInt.Namespace = val.(string)
+			}
 
-		if val, ok := ppMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-			protocolPolicerInt.Tenant = val.(string)
+			if val, ok := ppMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+				protocolPolicerInt.Tenant = val.(string)
+			}
 		}
 
 	}
@@ -2158,7 +2156,6 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 				destinationType := &ves_io_schema_fast_acl.DestinationType{}
 				siteChoiceInt.LegacyAcl.DestinationType = destinationType
 				for _, set := range sl {
-
 					destinationTypeMapStrToI := set.(map[string]interface{})
 
 					destinationTypeChoiceTypeFound := false
@@ -2193,7 +2190,6 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 								destinationTypeChoiceInt.DestinationIpAddress.Address = address
 								for i, set := range sl {
 									address[i] = &ves_io_schema.IpAddressType{}
-
 									addressMapStrToI := set.(map[string]interface{})
 
 									verTypeFound := false
@@ -2249,7 +2245,6 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 								destinationTypeChoiceInt.DestinationIpAddress.Ports = ports
 								for i, set := range sl {
 									ports[i] = &ves_io_schema.PortValueType{}
-
 									portsMapStrToI := set.(map[string]interface{})
 
 									portValueTypeChoiceTypeFound := false
@@ -2333,7 +2328,6 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 								destinationTypeChoiceInt.SelectedVipAddress.Address = address
 								for i, set := range sl {
 									address[i] = &ves_io_schema.IpAddressType{}
-
 									addressMapStrToI := set.(map[string]interface{})
 
 									verTypeFound := false
@@ -2420,7 +2414,6 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 				networkType := &ves_io_schema.VirtualNetworkSelectorType{}
 				siteChoiceInt.LegacyAcl.NetworkType = networkType
 				for _, set := range sl {
-
 					networkTypeMapStrToI := set.(map[string]interface{})
 
 					vnTypeChoiceTypeFound := false
@@ -2513,7 +2506,6 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 				siteChoiceInt.ReAcl.FastAclRules = fastAclRules
 				for i, set := range sl {
 					fastAclRules[i] = &ves_io_schema_fast_acl.FastACLRuleType{}
-
 					fastAclRulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := fastAclRulesMapStrToI["action"]; ok && !isIntfNil(v) {
@@ -2522,7 +2514,6 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 						action := &ves_io_schema_fast_acl_rule.FastAclRuleAction{}
 						fastAclRules[i].Action = action
 						for _, set := range sl {
-
 							actionMapStrToI := set.(map[string]interface{})
 
 							actionTypeFound := false
@@ -2642,7 +2633,6 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 						metadata := &ves_io_schema.MessageMetaType{}
 						fastAclRules[i].Metadata = metadata
 						for _, set := range sl {
-
 							metadataMapStrToI := set.(map[string]interface{})
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
@@ -2672,7 +2662,6 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 						fastAclRules[i].Port = port
 						for i, set := range sl {
 							port[i] = &ves_io_schema.PortValueType{}
-
 							portMapStrToI := set.(map[string]interface{})
 
 							portValueTypeChoiceTypeFound := false
@@ -2889,7 +2878,6 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 				siteChoiceInt.SiteAcl.FastAclRules = fastAclRules
 				for i, set := range sl {
 					fastAclRules[i] = &ves_io_schema_fast_acl.FastACLRuleType{}
-
 					fastAclRulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := fastAclRulesMapStrToI["action"]; ok && !isIntfNil(v) {
@@ -2898,7 +2886,6 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 						action := &ves_io_schema_fast_acl_rule.FastAclRuleAction{}
 						fastAclRules[i].Action = action
 						for _, set := range sl {
-
 							actionMapStrToI := set.(map[string]interface{})
 
 							actionTypeFound := false
@@ -3018,7 +3005,6 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 						metadata := &ves_io_schema.MessageMetaType{}
 						fastAclRules[i].Metadata = metadata
 						for _, set := range sl {
-
 							metadataMapStrToI := set.(map[string]interface{})
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
@@ -3048,7 +3034,6 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 						fastAclRules[i].Port = port
 						for i, set := range sl {
 							port[i] = &ves_io_schema.PortValueType{}
-
 							portMapStrToI := set.(map[string]interface{})
 
 							portValueTypeChoiceTypeFound := false

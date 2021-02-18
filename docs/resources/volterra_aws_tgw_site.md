@@ -41,7 +41,7 @@ resource "volterra_aws_tgw_site" "example" {
       }
 
       workload_subnet {
-        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
+        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -80,6 +80,9 @@ resource "volterra_aws_tgw_site" "example" {
       system_generated = true
     }
   }
+
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  logs_streaming_disabled = true
 }
 
 ```
@@ -109,6 +112,10 @@ Argument Reference
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
+`log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
+
+`logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
+
 `operating_system_version` - (Optional) Desired Operating System version for this site. (`String`).
 
 `tgw_security` - (Optional) Security Configuration for transit gateway. See [Tgw Security ](#tgw-security) below for details.
@@ -118,6 +125,12 @@ Argument Reference
 `volterra_software_version` - (Optional) Desired Volterra software version for this site, a string matching released set of software components. (`String`).
 
 `vpc_attachments` - (Optional) VPC attachments to transit gateway. See [Vpc Attachments ](#vpc-attachments) below for details.
+
+### Active East West Service Policies
+
+Enable service policy so east-west traffic goes via proxy.
+
+`service_policies` - (Optional) A list of references to service_policy objects.. See [ref](#ref) below for details.
 
 ### Active Forward Proxy Policies
 
@@ -261,6 +274,10 @@ Domain value or regular expression to match.
 
 `suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
 
+### East West Service Policy Allow All
+
+Enable service policy with allow all so east-west traffic goes via proxy for monitoring.
+
 ### Enable For All Domains
 
 Enable interception for all domains.
@@ -391,6 +408,10 @@ Nexthop address when type is "Use-Configured".
 
 `ipv6` - (Optional) IPv6 Address. See [Ipv6 ](#ipv6) below for details.
 
+### No East West Policy
+
+Disable service policy so that east-west traffic does not go via proxy.
+
 ### No Forward Proxy
 
 Disable Forward Proxy for this site.
@@ -509,6 +530,12 @@ Volterra will automatically assign a private ASN for TGW and Volterra Site.
 
 Security Configuration for transit gateway.
 
+`active_east_west_service_policies` - (Optional) Enable service policy so east-west traffic goes via proxy. See [Active East West Service Policies ](#active-east-west-service-policies) below for details.
+
+`east_west_service_policy_allow_all` - (Optional) Enable service policy with allow all so east-west traffic goes via proxy for monitoring (bool).
+
+`no_east_west_policy` - (Optional) Disable service policy so that east-west traffic does not go via proxy (bool).
+
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Active Forward Proxy Policies ](#active-forward-proxy-policies) below for details.
 
 `forward_proxy_allow_all` - (Optional) Enable Forward Proxy for this site and allow all requests. (bool).
@@ -591,7 +618,7 @@ VPC attachments to transit gateway.
 
 List of VPC attachments to transit gateway.
 
-`labels` - (Optional) Add Labels for each of the VPC ID, these labels can be used in network policy (`String`).
+`labels` - (Optional) These labels used must be from known key and label defined in shared namespace (`String`).
 
 `vpc_id` - (Optional) Information about existing VPC (`String`).
 

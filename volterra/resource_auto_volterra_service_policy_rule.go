@@ -54,11 +54,13 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"action": {
@@ -604,6 +606,34 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 			"expiration_timestamp": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+
+			"goto_policy": {
+
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"kind": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"namespace": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"tenant": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
 			},
 
 			"headers": {
@@ -1424,19 +1454,20 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 			v.(string)
 	}
 
+	//action
 	if v, ok := d.GetOk("action"); ok && !isIntfNil(v) {
 
 		createSpec.Action = ves_io_schema_policy.RuleAction(ves_io_schema_policy.RuleAction_value[v.(string)])
 
 	}
 
+	//api_group_matcher
 	if v, ok := d.GetOk("api_group_matcher"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		apiGroupMatcher := &ves_io_schema_policy.StringMatcherType{}
 		createSpec.ApiGroupMatcher = apiGroupMatcher
 		for _, set := range sl {
-
 			apiGroupMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := apiGroupMatcherMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -1455,6 +1486,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//arg_matchers
 	if v, ok := d.GetOk("arg_matchers"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -1462,7 +1494,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 		createSpec.ArgMatchers = argMatchers
 		for i, set := range sl {
 			argMatchers[i] = &ves_io_schema_policy.ArgMatcherType{}
-
 			argMatchersMapStrToI := set.(map[string]interface{})
 
 			if w, ok := argMatchersMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -1560,6 +1591,8 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//asn_choice
+
 	asnChoiceTypeFound := false
 
 	if v, ok := d.GetOk("any_asn"); ok && !asnChoiceTypeFound {
@@ -1647,13 +1680,13 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//body_matcher
 	if v, ok := d.GetOk("body_matcher"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		bodyMatcher := &ves_io_schema_policy.MatcherType{}
 		createSpec.BodyMatcher = bodyMatcher
 		for _, set := range sl {
-
 			bodyMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := bodyMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
@@ -1686,11 +1719,14 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//challenge_action
 	if v, ok := d.GetOk("challenge_action"); ok && !isIntfNil(v) {
 
 		createSpec.ChallengeAction = ves_io_schema_policy.ChallengeAction(ves_io_schema_policy.ChallengeAction_value[v.(string)])
 
 	}
+
+	//client_choice
 
 	clientChoiceTypeFound := false
 
@@ -1777,13 +1813,13 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//client_role
 	if v, ok := d.GetOk("client_role"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		clientRole := &ves_io_schema_policy.RoleMatcherType{}
 		createSpec.ClientRole = clientRole
 		for _, set := range sl {
-
 			clientRoleMapStrToI := set.(map[string]interface{})
 
 			if w, ok := clientRoleMapStrToI["match"]; ok && !isIntfNil(w) {
@@ -1794,6 +1830,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//cookie_matchers
 	if v, ok := d.GetOk("cookie_matchers"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -1801,7 +1838,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 		createSpec.CookieMatchers = cookieMatchers
 		for i, set := range sl {
 			cookieMatchers[i] = &ves_io_schema_policy.CookieMatcherType{}
-
 			cookieMatchersMapStrToI := set.(map[string]interface{})
 
 			if w, ok := cookieMatchersMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -1899,13 +1935,13 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//domain_matcher
 	if v, ok := d.GetOk("domain_matcher"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		domainMatcher := &ves_io_schema_policy.MatcherTypeBasic{}
 		createSpec.DomainMatcher = domainMatcher
 		for _, set := range sl {
-
 			domainMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := domainMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
@@ -1927,6 +1963,8 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 		}
 
 	}
+
+	//dst_asn_choice
 
 	dstAsnChoiceTypeFound := false
 
@@ -2014,6 +2052,8 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 		}
 
 	}
+
+	//dst_ip_choice
 
 	dstIpChoiceTypeFound := false
 
@@ -2111,6 +2151,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//expiration_timestamp
 	if v, ok := d.GetOk("expiration_timestamp"); ok && !isIntfNil(v) {
 
 		ts, err := parseTime(v.(string))
@@ -2121,6 +2162,40 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//goto_policy
+	if v, ok := d.GetOk("goto_policy"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		gotoPolicyInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+		createSpec.GotoPolicy = gotoPolicyInt
+		for i, ps := range sl {
+
+			gpMapToStrVal := ps.(map[string]interface{})
+			gotoPolicyInt[i] = &ves_io_schema.ObjectRefType{}
+
+			gotoPolicyInt[i].Kind = "service_policy"
+
+			if v, ok := gpMapToStrVal["name"]; ok && !isIntfNil(v) {
+				gotoPolicyInt[i].Name = v.(string)
+			}
+
+			if v, ok := gpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+				gotoPolicyInt[i].Namespace = v.(string)
+			}
+
+			if v, ok := gpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+				gotoPolicyInt[i].Tenant = v.(string)
+			}
+
+			if v, ok := gpMapToStrVal["uid"]; ok && !isIntfNil(v) {
+				gotoPolicyInt[i].Uid = v.(string)
+			}
+
+		}
+
+	}
+
+	//headers
 	if v, ok := d.GetOk("headers"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -2128,7 +2203,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 		createSpec.Headers = headers
 		for i, set := range sl {
 			headers[i] = &ves_io_schema_policy.HeaderMatcherType{}
-
 			headersMapStrToI := set.(map[string]interface{})
 
 			if w, ok := headersMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -2226,13 +2300,13 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//http_method
 	if v, ok := d.GetOk("http_method"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		httpMethod := &ves_io_schema_policy.HttpMethodMatcherType{}
 		createSpec.HttpMethod = httpMethod
 		for _, set := range sl {
-
 			httpMethodMapStrToI := set.(map[string]interface{})
 
 			if w, ok := httpMethodMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -2252,6 +2326,8 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 		}
 
 	}
+
+	//ip_choice
 
 	ipChoiceTypeFound := false
 
@@ -2349,13 +2425,13 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//l4_dest_matcher
 	if v, ok := d.GetOk("l4_dest_matcher"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		l4DestMatcher := &ves_io_schema_policy.L4DestMatcherType{}
 		createSpec.L4DestMatcher = l4DestMatcher
 		for _, set := range sl {
-
 			l4DestMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := l4DestMatcherMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -2369,7 +2445,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				l4DestMatcher.L4Dests = l4Dests
 				for i, set := range sl {
 					l4Dests[i] = &ves_io_schema.L4DestType{}
-
 					l4DestsMapStrToI := set.(map[string]interface{})
 
 					if w, ok := l4DestsMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
@@ -2392,13 +2467,13 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//label_matcher
 	if v, ok := d.GetOk("label_matcher"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		labelMatcher := &ves_io_schema.LabelMatcherType{}
 		createSpec.LabelMatcher = labelMatcher
 		for _, set := range sl {
-
 			labelMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
@@ -2413,13 +2488,13 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//malicious_user_mitigation
 	if v, ok := d.GetOk("malicious_user_mitigation"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		maliciousUserMitigation := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationType{}
 		createSpec.MaliciousUserMitigation = maliciousUserMitigation
 		for _, set := range sl {
-
 			maliciousUserMitigationMapStrToI := set.(map[string]interface{})
 
 			if v, ok := maliciousUserMitigationMapStrToI["rules"]; ok && !isIntfNil(v) {
@@ -2429,7 +2504,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				maliciousUserMitigation.Rules = rules
 				for i, set := range sl {
 					rules[i] = &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationRule{}
-
 					rulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := rulesMapStrToI["mitigation_action"]; ok && !isIntfNil(v) {
@@ -2438,7 +2512,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 						mitigationAction := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction{}
 						rules[i].MitigationAction = mitigationAction
 						for _, set := range sl {
-
 							mitigationActionMapStrToI := set.(map[string]interface{})
 
 							mitigationActionTypeFound := false
@@ -2513,7 +2586,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 						threatLevel := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel{}
 						rules[i].ThreatLevel = threatLevel
 						for _, set := range sl {
-
 							threatLevelMapStrToI := set.(map[string]interface{})
 
 							threatLevelTypeFound := false
@@ -2566,6 +2638,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//malicious_user_mitigation_bypass
 	if v, ok := d.GetOk("malicious_user_mitigation_bypass"); ok && !isIntfNil(v) {
 
 		if v.(bool) {
@@ -2574,13 +2647,13 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//path
 	if v, ok := d.GetOk("path"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		path := &ves_io_schema_policy.PathMatcherType{}
 		createSpec.Path = path
 		for _, set := range sl {
-
 			pathMapStrToI := set.(map[string]interface{})
 
 			if w, ok := pathMapStrToI["exact_values"]; ok && !isIntfNil(w) {
@@ -2621,13 +2694,13 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//port_matcher
 	if v, ok := d.GetOk("port_matcher"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		portMatcher := &ves_io_schema_policy.PortMatcherType{}
 		createSpec.PortMatcher = portMatcher
 		for _, set := range sl {
-
 			portMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := portMatcherMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -2646,6 +2719,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//query_params
 	if v, ok := d.GetOk("query_params"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -2653,7 +2727,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 		createSpec.QueryParams = queryParams
 		for i, set := range sl {
 			queryParams[i] = &ves_io_schema_policy.QueryParameterMatcherType{}
-
 			queryParamsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := queryParamsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -2751,6 +2824,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//rate_limiter
 	if v, ok := d.GetOk("rate_limiter"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -2783,6 +2857,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//scheme
 	if v, ok := d.GetOk("scheme"); ok && !isIntfNil(v) {
 
 		ls := make([]string, len(v.([]interface{})))
@@ -2793,13 +2868,13 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//server_selector
 	if v, ok := d.GetOk("server_selector"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		serverSelector := &ves_io_schema.LabelSelectorType{}
 		createSpec.ServerSelector = serverSelector
 		for _, set := range sl {
-
 			serverSelectorMapStrToI := set.(map[string]interface{})
 
 			if w, ok := serverSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
@@ -2814,13 +2889,13 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//tls_fingerprint_matcher
 	if v, ok := d.GetOk("tls_fingerprint_matcher"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		tlsFingerprintMatcher := &ves_io_schema_policy.TlsFingerprintMatcherType{}
 		createSpec.TlsFingerprintMatcher = tlsFingerprintMatcher
 		for _, set := range sl {
-
 			tlsFingerprintMatcherMapStrToI := set.(map[string]interface{})
 
 			if v, ok := tlsFingerprintMatcherMapStrToI["classes"]; ok && !isIntfNil(v) {
@@ -2853,13 +2928,13 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//url_matcher
 	if v, ok := d.GetOk("url_matcher"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		urlMatcher := &ves_io_schema_policy.URLMatcherType{}
 		createSpec.UrlMatcher = urlMatcher
 		for _, set := range sl {
-
 			urlMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := urlMatcherMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -2873,7 +2948,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				urlMatcher.UrlItems = urlItems
 				for i, set := range sl {
 					urlItems[i] = &ves_io_schema_policy.URLItem{}
-
 					urlItemsMapStrToI := set.(map[string]interface{})
 
 					domainChoiceTypeFound := false
@@ -2943,13 +3017,13 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//virtual_host_matcher
 	if v, ok := d.GetOk("virtual_host_matcher"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		virtualHostMatcher := &ves_io_schema_policy.MatcherTypeBasic{}
 		createSpec.VirtualHostMatcher = virtualHostMatcher
 		for _, set := range sl {
-
 			virtualHostMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := virtualHostMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
@@ -2972,13 +3046,13 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//waf_action
 	if v, ok := d.GetOk("waf_action"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		wafAction := &ves_io_schema_policy.WafAction{}
 		createSpec.WafAction = wafAction
 		for _, set := range sl {
-
 			wafActionMapStrToI := set.(map[string]interface{})
 
 			actionTypeTypeFound := false
@@ -3215,7 +3289,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		apiGroupMatcher := &ves_io_schema_policy.StringMatcherType{}
 		updateSpec.ApiGroupMatcher = apiGroupMatcher
 		for _, set := range sl {
-
 			apiGroupMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := apiGroupMatcherMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -3241,7 +3314,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		updateSpec.ArgMatchers = argMatchers
 		for i, set := range sl {
 			argMatchers[i] = &ves_io_schema_policy.ArgMatcherType{}
-
 			argMatchersMapStrToI := set.(map[string]interface{})
 
 			if w, ok := argMatchersMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -3432,7 +3504,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		bodyMatcher := &ves_io_schema_policy.MatcherType{}
 		updateSpec.BodyMatcher = bodyMatcher
 		for _, set := range sl {
-
 			bodyMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := bodyMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
@@ -3562,7 +3633,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		clientRole := &ves_io_schema_policy.RoleMatcherType{}
 		updateSpec.ClientRole = clientRole
 		for _, set := range sl {
-
 			clientRoleMapStrToI := set.(map[string]interface{})
 
 			if w, ok := clientRoleMapStrToI["match"]; ok && !isIntfNil(w) {
@@ -3580,7 +3650,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		updateSpec.CookieMatchers = cookieMatchers
 		for i, set := range sl {
 			cookieMatchers[i] = &ves_io_schema_policy.CookieMatcherType{}
-
 			cookieMatchersMapStrToI := set.(map[string]interface{})
 
 			if w, ok := cookieMatchersMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -3684,7 +3753,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		domainMatcher := &ves_io_schema_policy.MatcherTypeBasic{}
 		updateSpec.DomainMatcher = domainMatcher
 		for _, set := range sl {
-
 			domainMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := domainMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
@@ -3900,6 +3968,38 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
+	if v, ok := d.GetOk("goto_policy"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		gotoPolicyInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+		updateSpec.GotoPolicy = gotoPolicyInt
+		for i, ps := range sl {
+
+			gpMapToStrVal := ps.(map[string]interface{})
+			gotoPolicyInt[i] = &ves_io_schema.ObjectRefType{}
+
+			gotoPolicyInt[i].Kind = "service_policy"
+
+			if v, ok := gpMapToStrVal["name"]; ok && !isIntfNil(v) {
+				gotoPolicyInt[i].Name = v.(string)
+			}
+
+			if v, ok := gpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+				gotoPolicyInt[i].Namespace = v.(string)
+			}
+
+			if v, ok := gpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+				gotoPolicyInt[i].Tenant = v.(string)
+			}
+
+			if v, ok := gpMapToStrVal["uid"]; ok && !isIntfNil(v) {
+				gotoPolicyInt[i].Uid = v.(string)
+			}
+
+		}
+
+	}
+
 	if v, ok := d.GetOk("headers"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -3907,7 +4007,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		updateSpec.Headers = headers
 		for i, set := range sl {
 			headers[i] = &ves_io_schema_policy.HeaderMatcherType{}
-
 			headersMapStrToI := set.(map[string]interface{})
 
 			if w, ok := headersMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -4011,7 +4110,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		httpMethod := &ves_io_schema_policy.HttpMethodMatcherType{}
 		updateSpec.HttpMethod = httpMethod
 		for _, set := range sl {
-
 			httpMethodMapStrToI := set.(map[string]interface{})
 
 			if w, ok := httpMethodMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -4134,7 +4232,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		l4DestMatcher := &ves_io_schema_policy.L4DestMatcherType{}
 		updateSpec.L4DestMatcher = l4DestMatcher
 		for _, set := range sl {
-
 			l4DestMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := l4DestMatcherMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -4148,7 +4245,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				l4DestMatcher.L4Dests = l4Dests
 				for i, set := range sl {
 					l4Dests[i] = &ves_io_schema.L4DestType{}
-
 					l4DestsMapStrToI := set.(map[string]interface{})
 
 					if w, ok := l4DestsMapStrToI["port_ranges"]; ok && !isIntfNil(w) {
@@ -4177,7 +4273,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		labelMatcher := &ves_io_schema.LabelMatcherType{}
 		updateSpec.LabelMatcher = labelMatcher
 		for _, set := range sl {
-
 			labelMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
@@ -4198,7 +4293,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		maliciousUserMitigation := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationType{}
 		updateSpec.MaliciousUserMitigation = maliciousUserMitigation
 		for _, set := range sl {
-
 			maliciousUserMitigationMapStrToI := set.(map[string]interface{})
 
 			if v, ok := maliciousUserMitigationMapStrToI["rules"]; ok && !isIntfNil(v) {
@@ -4208,7 +4302,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				maliciousUserMitigation.Rules = rules
 				for i, set := range sl {
 					rules[i] = &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationRule{}
-
 					rulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := rulesMapStrToI["mitigation_action"]; ok && !isIntfNil(v) {
@@ -4217,7 +4310,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 						mitigationAction := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction{}
 						rules[i].MitigationAction = mitigationAction
 						for _, set := range sl {
-
 							mitigationActionMapStrToI := set.(map[string]interface{})
 
 							mitigationActionTypeFound := false
@@ -4292,7 +4384,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 						threatLevel := &ves_io_schema_malicious_user_mitigation.MaliciousUserThreatLevel{}
 						rules[i].ThreatLevel = threatLevel
 						for _, set := range sl {
-
 							threatLevelMapStrToI := set.(map[string]interface{})
 
 							threatLevelTypeFound := false
@@ -4359,7 +4450,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		path := &ves_io_schema_policy.PathMatcherType{}
 		updateSpec.Path = path
 		for _, set := range sl {
-
 			pathMapStrToI := set.(map[string]interface{})
 
 			if w, ok := pathMapStrToI["exact_values"]; ok && !isIntfNil(w) {
@@ -4406,7 +4496,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		portMatcher := &ves_io_schema_policy.PortMatcherType{}
 		updateSpec.PortMatcher = portMatcher
 		for _, set := range sl {
-
 			portMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := portMatcherMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -4432,7 +4521,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		updateSpec.QueryParams = queryParams
 		for i, set := range sl {
 			queryParams[i] = &ves_io_schema_policy.QueryParameterMatcherType{}
-
 			queryParamsMapStrToI := set.(map[string]interface{})
 
 			if w, ok := queryParamsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -4578,7 +4666,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		serverSelector := &ves_io_schema.LabelSelectorType{}
 		updateSpec.ServerSelector = serverSelector
 		for _, set := range sl {
-
 			serverSelectorMapStrToI := set.(map[string]interface{})
 
 			if w, ok := serverSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
@@ -4599,7 +4686,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		tlsFingerprintMatcher := &ves_io_schema_policy.TlsFingerprintMatcherType{}
 		updateSpec.TlsFingerprintMatcher = tlsFingerprintMatcher
 		for _, set := range sl {
-
 			tlsFingerprintMatcherMapStrToI := set.(map[string]interface{})
 
 			if v, ok := tlsFingerprintMatcherMapStrToI["classes"]; ok && !isIntfNil(v) {
@@ -4638,7 +4724,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		urlMatcher := &ves_io_schema_policy.URLMatcherType{}
 		updateSpec.UrlMatcher = urlMatcher
 		for _, set := range sl {
-
 			urlMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := urlMatcherMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
@@ -4652,7 +4737,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				urlMatcher.UrlItems = urlItems
 				for i, set := range sl {
 					urlItems[i] = &ves_io_schema_policy.URLItem{}
-
 					urlItemsMapStrToI := set.(map[string]interface{})
 
 					domainChoiceTypeFound := false
@@ -4728,7 +4812,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		virtualHostMatcher := &ves_io_schema_policy.MatcherTypeBasic{}
 		updateSpec.VirtualHostMatcher = virtualHostMatcher
 		for _, set := range sl {
-
 			virtualHostMatcherMapStrToI := set.(map[string]interface{})
 
 			if w, ok := virtualHostMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
@@ -4757,7 +4840,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		wafAction := &ves_io_schema_policy.WafAction{}
 		updateSpec.WafAction = wafAction
 		for _, set := range sl {
-
 			wafActionMapStrToI := set.(map[string]interface{})
 
 			actionTypeTypeFound := false

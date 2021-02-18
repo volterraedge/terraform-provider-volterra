@@ -53,11 +53,13 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"endpoint": {
@@ -673,13 +675,13 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 			v.(string)
 	}
 
+	//endpoint
 	if v, ok := d.GetOk("endpoint"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		endpoint := &ves_io_schema_network_policy.EndpointChoiceType{}
 		createSpec.Endpoint = endpoint
 		for _, set := range sl {
-
 			endpointMapStrToI := set.(map[string]interface{})
 
 			endpointChoiceTypeFound := false
@@ -815,13 +817,13 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 
 	}
 
+	//rules
 	if v, ok := d.GetOk("rules"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
 		rules := &ves_io_schema_network_policy.NetworkPolicyRuleChoice{}
 		createSpec.Rules = rules
 		for _, set := range sl {
-
 			rulesMapStrToI := set.(map[string]interface{})
 
 			if v, ok := rulesMapStrToI["egress_rules"]; ok && !isIntfNil(v) {
@@ -831,7 +833,6 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 				rules.EgressRules = egressRules
 				for i, set := range sl {
 					egressRules[i] = &ves_io_schema_network_policy.NetworkPolicyRuleType{}
-
 					egressRulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := egressRulesMapStrToI["action"]; ok && !isIntfNil(v) {
@@ -854,7 +855,6 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 						metadata := &ves_io_schema.MessageMetaType{}
 						egressRules[i].Metadata = metadata
 						for _, set := range sl {
-
 							metadataMapStrToI := set.(map[string]interface{})
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
@@ -1131,7 +1131,6 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 				rules.IngressRules = ingressRules
 				for i, set := range sl {
 					ingressRules[i] = &ves_io_schema_network_policy.NetworkPolicyRuleType{}
-
 					ingressRulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := ingressRulesMapStrToI["action"]; ok && !isIntfNil(v) {
@@ -1154,7 +1153,6 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 						metadata := &ves_io_schema.MessageMetaType{}
 						ingressRules[i].Metadata = metadata
 						for _, set := range sl {
-
 							metadataMapStrToI := set.(map[string]interface{})
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
@@ -1532,7 +1530,6 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 		endpoint := &ves_io_schema_network_policy.EndpointChoiceType{}
 		updateSpec.Endpoint = endpoint
 		for _, set := range sl {
-
 			endpointMapStrToI := set.(map[string]interface{})
 
 			endpointChoiceTypeFound := false
@@ -1767,7 +1764,6 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 				ruleChoiceInt.Rules.EgressRules = egressRules
 				for i, set := range sl {
 					egressRules[i] = &ves_io_schema_network_policy.NetworkPolicyRuleType{}
-
 					egressRulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := egressRulesMapStrToI["action"]; ok && !isIntfNil(v) {
@@ -1790,7 +1786,6 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 						metadata := &ves_io_schema.MessageMetaType{}
 						egressRules[i].Metadata = metadata
 						for _, set := range sl {
-
 							metadataMapStrToI := set.(map[string]interface{})
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
@@ -2067,7 +2062,6 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 				ruleChoiceInt.Rules.IngressRules = ingressRules
 				for i, set := range sl {
 					ingressRules[i] = &ves_io_schema_network_policy.NetworkPolicyRuleType{}
-
 					ingressRulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := ingressRulesMapStrToI["action"]; ok && !isIntfNil(v) {
@@ -2090,7 +2084,6 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 						metadata := &ves_io_schema.MessageMetaType{}
 						ingressRules[i].Metadata = metadata
 						for _, set := range sl {
-
 							metadataMapStrToI := set.(map[string]interface{})
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {

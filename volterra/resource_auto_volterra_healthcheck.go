@@ -51,11 +51,13 @@ func resourceVolterraHealthcheck() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"namespace": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 			},
 
 			"http_health_check": {
@@ -206,6 +208,8 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 			v.(string)
 	}
 
+	//health_check
+
 	healthCheckTypeFound := false
 
 	if v, ok := d.GetOk("http_health_check"); ok && !healthCheckTypeFound {
@@ -302,30 +306,35 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//healthy_threshold
 	if v, ok := d.GetOk("healthy_threshold"); ok && !isIntfNil(v) {
 
 		createSpec.HealthyThreshold =
 			uint32(v.(int))
 	}
 
+	//interval
 	if v, ok := d.GetOk("interval"); ok && !isIntfNil(v) {
 
 		createSpec.Interval =
 			uint32(v.(int))
 	}
 
+	//jitter_percent
 	if v, ok := d.GetOk("jitter_percent"); ok && !isIntfNil(v) {
 
 		createSpec.JitterPercent =
 			uint32(v.(int))
 	}
 
+	//timeout
 	if v, ok := d.GetOk("timeout"); ok && !isIntfNil(v) {
 
 		createSpec.Timeout =
 			uint32(v.(int))
 	}
 
+	//unhealthy_threshold
 	if v, ok := d.GetOk("unhealthy_threshold"); ok && !isIntfNil(v) {
 
 		createSpec.UnhealthyThreshold =

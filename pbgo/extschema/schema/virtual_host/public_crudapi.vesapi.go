@@ -3588,7 +3588,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in Volterra domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -3599,7 +3599,9 @@ var APISwaggerJSON string = `{
                 "VIRTUAL_NETWORK_SITE_SERVICE",
                 "VIRTUAL_NETWORK_VER_INTERNAL",
                 "VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE",
-                "VIRTUAL_NETWORK_IP_AUTO"
+                "VIRTUAL_NETWORK_IP_AUTO",
+                "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
+                "VIRTUAL_NETWORK_SRV6_NETWORK"
             ],
             "default": "VIRTUAL_NETWORK_SITE_LOCAL",
             "x-displayname": "Virtual Network Type",
@@ -3717,6 +3719,7 @@ var APISwaggerJSON string = `{
             "x-ves-displayorder": "15,2,3,5,9,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
+            "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.CreateSpecType",
             "properties": {
                 "add_location": {
@@ -3733,6 +3736,10 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Advertise Policies"
+                },
+                "append_server_name": {
+                    "type": "string",
+                    "description": "Exclusive with [default_header pass_through server_name]\n"
                 },
                 "authentication": {
                     "description": "Exclusive with [no_authentication]\n",
@@ -3762,6 +3769,10 @@ var APISwaggerJSON string = `{
                     "description": "\n Map of integer error codes as keys and string values that can be used to provide custom\n http pages for each error code.\n Key of the map can be either response code class or HTTP Error code. Response code classes\n for key is configured as follows\n 3 -- for 3xx response code class\n 4 -- for 4xx response code class\n 5 -- for 5xx response code class\n Value is the uri_ref. Currently supported URL schemes is string:///.\n For string:/// scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Access Denied\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Access Denied \u003c/p\u003e\". Base64 encoded string for this html is \"PHA+IEFjY2VzcyBEZW5pZWQgPC9wPg==\"\n Specific response code takes preference when both response code and response code class\n matches for a request.\n\n The configured custom errors are only applicable for loadbalancer generated errors.\n Errors returned from upstream server is propagated as is.\n\n Volterra provides default error pages for the errors generated by the loadbalancer. Content of\n these pages are not editable. User has an option to disable the use of default Volterra error pages\n\nExample: - \"value\"-",
                     "x-displayname": "Custom Error Responses",
                     "x-ves-example": "value"
+                },
+                "default_header": {
+                    "description": "Exclusive with [append_server_name pass_through server_name]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "disable_default_error_pages": {
                     "type": "boolean",
@@ -3815,6 +3826,10 @@ var APISwaggerJSON string = `{
                 },
                 "no_challenge": {
                     "description": "Exclusive with [captcha_challenge js_challenge]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "pass_through": {
+                    "description": "Exclusive with [append_server_name default_header server_name]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "proxy": {
@@ -3885,6 +3900,10 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Routes"
                 },
+                "server_name": {
+                    "type": "string",
+                    "description": "Exclusive with [append_server_name default_header pass_through]\n"
+                },
                 "temporary_user_blocking": {
                     "description": " Specifies configuration for temporary user blocking resulting from malicious user detection",
                     "$ref": "#/definitions/virtual_hostTemporaryUserBlockingType",
@@ -3918,6 +3937,7 @@ var APISwaggerJSON string = `{
             "x-ves-displayorder": "10,15,2,3,5,9,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
+            "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.GetSpecType",
             "properties": {
                 "add_location": {
@@ -3934,6 +3954,10 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Advertise Policies"
+                },
+                "append_server_name": {
+                    "type": "string",
+                    "description": "Exclusive with [default_header pass_through server_name]\n"
                 },
                 "authentication": {
                     "description": "Exclusive with [no_authentication]\n",
@@ -3973,6 +3997,10 @@ var APISwaggerJSON string = `{
                     "description": "\n Map of integer error codes as keys and string values that can be used to provide custom\n http pages for each error code.\n Key of the map can be either response code class or HTTP Error code. Response code classes\n for key is configured as follows\n 3 -- for 3xx response code class\n 4 -- for 4xx response code class\n 5 -- for 5xx response code class\n Value is the uri_ref. Currently supported URL schemes is string:///.\n For string:/// scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Access Denied\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Access Denied \u003c/p\u003e\". Base64 encoded string for this html is \"PHA+IEFjY2VzcyBEZW5pZWQgPC9wPg==\"\n Specific response code takes preference when both response code and response code class\n matches for a request.\n\n The configured custom errors are only applicable for loadbalancer generated errors.\n Errors returned from upstream server is propagated as is.\n\n Volterra provides default error pages for the errors generated by the loadbalancer. Content of\n these pages are not editable. User has an option to disable the use of default Volterra error pages\n\nExample: - \"value\"-",
                     "x-displayname": "Custom Error Responses",
                     "x-ves-example": "value"
+                },
+                "default_header": {
+                    "description": "Exclusive with [append_server_name pass_through server_name]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "disable_default_error_pages": {
                     "type": "boolean",
@@ -4042,6 +4070,10 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [captcha_challenge js_challenge]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "pass_through": {
+                    "description": "Exclusive with [append_server_name default_header server_name]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "proxy": {
                     "description": " Indicates whether the type of proxy is HTTP/HTTPS/TCP/UDP/Secret Management Access",
                     "$ref": "#/definitions/virtual_hostProxyType",
@@ -4110,6 +4142,10 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Routes"
                 },
+                "server_name": {
+                    "type": "string",
+                    "description": "Exclusive with [append_server_name default_header pass_through]\n"
+                },
                 "state": {
                     "description": " State of the virtual host",
                     "$ref": "#/definitions/virtual_hostVirtualHostState",
@@ -4152,6 +4188,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Configuration Specification",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
+            "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.GlobalSpecType",
             "properties": {
                 "add_location": {
@@ -4170,6 +4207,11 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Advertise Policies"
+                },
+                "append_server_name": {
+                    "type": "string",
+                    "description": "Exclusive with [default_header pass_through server_name]\nx-displayName: \"Append Server Name if absent\"\nSpecifies the value to be used for Server header if it is not already present.\nIf Server Header is already present it is not overwritten. It is just passed.",
+                    "title": "append_server_name"
                 },
                 "authentication": {
                     "description": "Exclusive with [no_authentication]\nx-displayName: \"Enable Authentication\"\nConfigure authentication details",
@@ -4224,6 +4266,11 @@ var APISwaggerJSON string = `{
                     "title": "Custom Errors",
                     "x-displayname": "Custom Error Responses",
                     "x-ves-example": "value"
+                },
+                "default_header": {
+                    "description": "Exclusive with [append_server_name pass_through server_name]\nx-displayName: \"Default value for Server header\"\nSpecifies that the default value of \"volt-adc\" should be used for Server Header",
+                    "title": "default_header",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "disable_default_error_pages": {
                     "type": "boolean",
@@ -4350,6 +4397,11 @@ var APISwaggerJSON string = `{
                     "title": "No Challenge",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "pass_through": {
+                    "description": "Exclusive with [append_server_name default_header server_name]\nx-displayName: \"Pass existing Server header\"\nPasses existing Server Header as is. If server header is absent, nothing is\nappended.",
+                    "title": "pass_through",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "policy_based_challenge": {
                     "description": "Exclusive with [captcha_challenge js_challenge no_challenge]\nx-displayName: \"Policy Based Challenge\"\nSpecifies the settings for policy rule based challenge",
                     "title": "policy based challenge",
@@ -4431,6 +4483,11 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Routes"
+                },
+                "server_name": {
+                    "type": "string",
+                    "description": "Exclusive with [append_server_name default_header pass_through]\nx-displayName: \"Server Name\"\nSpecifies the value to be used for Server header inserted in responses.\nThis will overwrite existing values if any for Server Header",
+                    "title": "server_name"
                 },
                 "service_policy_sets": {
                     "type": "array",
@@ -4531,6 +4588,7 @@ var APISwaggerJSON string = `{
             "x-ves-displayorder": "15,2,3,5,9,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
+            "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.ReplaceSpecType",
             "properties": {
                 "add_location": {
@@ -4547,6 +4605,10 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Advertise Policies"
+                },
+                "append_server_name": {
+                    "type": "string",
+                    "description": "Exclusive with [default_header pass_through server_name]\n"
                 },
                 "authentication": {
                     "description": "Exclusive with [no_authentication]\n",
@@ -4576,6 +4638,10 @@ var APISwaggerJSON string = `{
                     "description": "\n Map of integer error codes as keys and string values that can be used to provide custom\n http pages for each error code.\n Key of the map can be either response code class or HTTP Error code. Response code classes\n for key is configured as follows\n 3 -- for 3xx response code class\n 4 -- for 4xx response code class\n 5 -- for 5xx response code class\n Value is the uri_ref. Currently supported URL schemes is string:///.\n For string:/// scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Access Denied\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Access Denied \u003c/p\u003e\". Base64 encoded string for this html is \"PHA+IEFjY2VzcyBEZW5pZWQgPC9wPg==\"\n Specific response code takes preference when both response code and response code class\n matches for a request.\n\n The configured custom errors are only applicable for loadbalancer generated errors.\n Errors returned from upstream server is propagated as is.\n\n Volterra provides default error pages for the errors generated by the loadbalancer. Content of\n these pages are not editable. User has an option to disable the use of default Volterra error pages\n\nExample: - \"value\"-",
                     "x-displayname": "Custom Error Responses",
                     "x-ves-example": "value"
+                },
+                "default_header": {
+                    "description": "Exclusive with [append_server_name pass_through server_name]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "disable_default_error_pages": {
                     "type": "boolean",
@@ -4629,6 +4695,10 @@ var APISwaggerJSON string = `{
                 },
                 "no_challenge": {
                     "description": "Exclusive with [captcha_challenge js_challenge]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "pass_through": {
+                    "description": "Exclusive with [append_server_name default_header server_name]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "proxy": {
@@ -4698,6 +4768,10 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Routes"
+                },
+                "server_name": {
+                    "type": "string",
+                    "description": "Exclusive with [append_server_name default_header pass_through]\n"
                 },
                 "temporary_user_blocking": {
                     "description": " Specifies configuration for temporary user blocking resulting from malicious user detection",
@@ -5276,16 +5350,16 @@ var APISwaggerJSON string = `{
             "description": "Specifies the settings for policy rule based challenge",
             "title": "policy based challenge",
             "x-displayname": "Policy Based Challenge",
-            "x-ves-oneof-field-enable_choice": "[\"always_enable_captcha\",\"always_enable_js_challenge\",\"rule_based_challenge\"]",
+            "x-ves-oneof-field-challenge_choice": "[\"always_enable_captcha_challenge\",\"always_enable_js_challenge\",\"no_challenge\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.PolicyBasedChallenge",
             "properties": {
-                "always_enable_captcha": {
-                    "description": "Exclusive with [always_enable_js_challenge rule_based_challenge]\nx-displayName: \"Always enable captcha challenge\"\nWhen selected, enables captcha challenge for all requests. \nPolicy rules can be used to disable the challenge for subset of requests that match the conditions specified in the rules.",
+                "always_enable_captcha_challenge": {
+                    "description": "Exclusive with [always_enable_js_challenge no_challenge]\nx-displayName: \"Always enable Captcha Challenge\"\nEnable Captcha challenge for all requests.\nChallenge rules can be used to selectively disable Captcha challenge or enable JS challenge for some requests.",
                     "title": "always enable captcha challenge",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "always_enable_js_challenge": {
-                    "description": "Exclusive with [always_enable_captcha rule_based_challenge]\nx-displayName: \"Always enable JS challenge\"\nWhen selected, enables JS challenge for all requests. \nPolicy rules can be used to disable the challenge for subset of requests that match the conditions specified in the rules.",
+                    "description": "Exclusive with [always_enable_captcha_challenge no_challenge]\nx-displayName: \"Always enable JS Challenge\"\nEnable JS challenge for all requests.\nChallenge rules can be used to selectively disable JS challenge or enable Captcha challenge for some requests.",
                     "title": "always enable JS challenge",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
@@ -5310,9 +5384,9 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Malicious User Mitigation"
                 },
-                "rule_based_challenge": {
-                    "description": "Exclusive with [always_enable_captcha always_enable_js_challenge]\nx-displayName: \"Rule based challenge\"\nEnables rule based challenge. When selected, the match conditions and challenge type to be launched is determined using a policy rule.",
-                    "title": "rule based challenge",
+                "no_challenge": {
+                    "description": "Exclusive with [always_enable_captcha_challenge always_enable_js_challenge]\nx-displayName: \"No Challenge\"\nDisable JS and Captcha challenge for all requests.\nChallenge rules can be used to selectively enable JS or Captcha challenge for some requests.",
+                    "title": "no_challenge",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "temporary_user_blocking": {

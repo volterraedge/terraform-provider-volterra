@@ -68,6 +68,7 @@ func (r *ObjectReplaceReq) ToEntry(e db.Entry) {
 // create setters in response from object for oneof fields
 
 // CLIENT side
+
 func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r := &ObjectCreateReq{}
 	if e == nil {
@@ -120,6 +121,7 @@ type crudAPIGrpcClient struct {
 }
 
 func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	req, err := NewObjectCreateReq(e)
 	if err != nil {
 		return nil, errors.Wrap(err, "Creating new create request")
@@ -141,9 +143,11 @@ func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...serv
 		return o, err
 	}
 	return nil, err
+
 }
 
 func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
+
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -161,6 +165,7 @@ func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
+
 }
 
 func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
@@ -186,6 +191,7 @@ func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -193,9 +199,11 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
+
 }
 
 func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
+
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if err != nil {
@@ -212,9 +220,11 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 		merr = multierror.Append(merr, err)
 	}
 	return &respDetail, errors.ErrOrNil(merr)
+
 }
 
 func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
+
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -224,9 +234,11 @@ func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
+
 }
 
 func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
+
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -236,6 +248,7 @@ func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
+
 }
 
 func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
@@ -272,6 +285,7 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 }
 
 func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
+
 	req := NewObjectListReq()
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -296,9 +310,11 @@ func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDC
 	}
 	lc := &crudAPIGrpcListStreamClient{stream}
 	return lc, nil
+
 }
 
 func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
+
 	req := NewObjectDeleteReq(key)
 
 	cco := server.NewCRUDCallOpts()
@@ -312,6 +328,7 @@ func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
+
 }
 
 func NewCRUDAPIGrpcClient(cc *grpc.ClientConn) server.CRUDClient {
@@ -354,6 +371,7 @@ type crudAPIRestClient struct {
 }
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	req, err := NewObjectCreateReq(e)
 	if err != nil {
 		return nil, errors.Wrap(err, "Creating new create request")
@@ -405,9 +423,11 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	o := object.NewDBObject(nil)
 	rspo.ToObject(o)
 	return o, nil
+
 }
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
+
 	rReq, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -483,6 +503,7 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
+
 }
 
 func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
@@ -533,6 +554,7 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
 		o := object.NewDBObject(nil)
@@ -540,9 +562,11 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
+
 }
 
 func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
+
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -560,9 +584,11 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	}
 
 	return nil, errors.ErrOrNil(merr)
+
 }
 
 func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
+
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -572,9 +598,11 @@ func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
+
 }
 
 func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
+
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -584,6 +612,7 @@ func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
+
 }
 
 func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
@@ -663,6 +692,7 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 }
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
+
 	dReq := NewObjectDeleteReq(key)
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -706,6 +736,7 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
+
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
@@ -783,6 +814,7 @@ type crudAPIInprocClient struct {
 }
 
 func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.tcp_loadbalancer.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
@@ -809,9 +841,11 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return o, err
 	}
 	return nil, err
+
 }
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
+
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.tcp_loadbalancer.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
@@ -833,6 +867,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
+
 }
 
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
@@ -861,6 +896,7 @@ func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...se
 }
 
 func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -868,9 +904,11 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 		return o, err
 	}
 	return nil, err
+
 }
 
 func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
+
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -888,9 +926,11 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	}
 
 	return nil, errors.ErrOrNil(merr)
+
 }
 
 func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
+
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -900,9 +940,11 @@ func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCa
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
+
 }
 
 func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
+
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -912,6 +954,7 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
+
 }
 
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
@@ -956,6 +999,7 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 }
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
+
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.tcp_loadbalancer.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
@@ -973,6 +1017,7 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
+
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
@@ -2835,6 +2880,34 @@ var APISwaggerJSON string = `{
             "x-displayname": "Site Network",
             "x-ves-proto-enum": "ves.io.schema.views.SiteNetwork"
         },
+        "viewsWherePrivateNetwork": {
+            "type": "object",
+            "description": "Parameters to advertise on a Given VoltADN Private Network",
+            "title": "WherePrivateNetwork",
+            "x-displayname": "VoltADN Private Network",
+            "x-ves-displayorder": "1,2",
+            "x-ves-oneof-field-vip_choice": "[\"default_vip\",\"specific_vip\"]",
+            "x-ves-proto-message": "ves.io.schema.views.WherePrivateNetwork",
+            "properties": {
+                "default_vip": {
+                    "description": "Exclusive with [specific_vip]\nx-displayName: \"Default VIP for VoltADN Private Network\"\nUse the default VIP, system allocated or configured in the VoltADN Private Network",
+                    "title": "Default VIP for VoltADN Private Network",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "private_network": {
+                    "description": " Select VoltADN private network reference\nRequired: YES",
+                    "title": "VoltADN Private Network",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "VoltADN Private Network",
+                    "x-ves-required": "true"
+                },
+                "specific_vip": {
+                    "type": "string",
+                    "description": "Exclusive with [default_vip]\nx-displayName: \"Specific VIP\"\nUse given IP address as VIP on VoltADN private Network",
+                    "title": "Specific VIP"
+                }
+            }
+        },
         "viewsWhereSite": {
             "type": "object",
             "description": "This defines a reference to a CE site along with network type and an optional ip address where a load balancer could be advertised",
@@ -2870,8 +2943,8 @@ var APISwaggerJSON string = `{
             "description": "This defines various options where a Loadbalancer could be advertised",
             "title": "WhereType",
             "x-displayname": "Select Where to Advertise",
-            "x-ves-displayorder": "4",
-            "x-ves-oneof-field-choice": "[\"site\",\"virtual_site\",\"vk8s_service\"]",
+            "x-ves-displayorder": "4,5",
+            "x-ves-oneof-field-choice": "[\"private_network\",\"site\",\"virtual_site\",\"vk8s_service\"]",
             "x-ves-oneof-field-port_choice": "[\"port\",\"use_default_port\"]",
             "x-ves-proto-message": "ves.io.schema.views.WhereType",
             "properties": {
@@ -2881,8 +2954,13 @@ var APISwaggerJSON string = `{
                     "title": "TCP port to listen",
                     "format": "int64"
                 },
+                "private_network": {
+                    "description": "Exclusive with [site virtual_site vk8s_service]\nx-displayName: \"VoltADN Private Network\"\nAdvertise on a VoltADN private network",
+                    "title": "VoltADN Private Network",
+                    "$ref": "#/definitions/viewsWherePrivateNetwork"
+                },
                 "site": {
-                    "description": "Exclusive with [virtual_site vk8s_service]\nx-displayName: \"Site\"\nAdvertise on a customer site and a given network.",
+                    "description": "Exclusive with [private_network virtual_site vk8s_service]\nx-displayName: \"Site\"\nAdvertise on a customer site and a given network.",
                     "title": "Site",
                     "$ref": "#/definitions/viewsWhereSite"
                 },
@@ -2892,12 +2970,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [site vk8s_service]\nx-displayName: \"Virtual Site\"\nAdvertise on a customer virtual site and a given network.",
+                    "description": "Exclusive with [private_network site vk8s_service]\nx-displayName: \"Virtual Site\"\nAdvertise on a customer virtual site and a given network.",
                     "title": "Virtual Site",
                     "$ref": "#/definitions/viewsWhereVirtualSite"
                 },
                 "vk8s_service": {
-                    "description": "Exclusive with [site virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vK8s Service Network on RE.",
+                    "description": "Exclusive with [private_network site virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vK8s Service Network on RE.",
                     "title": "vK8s services network",
                     "$ref": "#/definitions/viewsWhereVK8SService"
                 }
@@ -2954,6 +3032,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "View Specification",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
+            "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.GlobalSpecType",
             "properties": {
                 "advertise_custom": {
@@ -3001,6 +3080,26 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Domains",
                     "x-ves-example": "www.foo.com"
+                },
+                "hash_policy_choice_least_active": {
+                    "description": "Exclusive with [hash_policy_choice_random hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\nx-displayName: \"Least Active Connections\"\nConnections are sent to origin server that has least active connections",
+                    "title": "Least Active Connections",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "hash_policy_choice_random": {
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\nx-displayName: \"Random\"\nConnections are sent to all eligible origin servers in random fashion",
+                    "title": "Random",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "hash_policy_choice_round_robin": {
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness]\nx-displayName: \"Round Robin\"\nConnections are sent to all eligible origin servers in round robin fashion",
+                    "title": "Round Robin",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "hash_policy_choice_source_ip_stickiness": {
+                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_round_robin]\nx-displayName: \"Source IP Stickiness\"\nConnections are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
+                    "title": "Source IP Stickiness",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "host_name": {
                     "type": "string",

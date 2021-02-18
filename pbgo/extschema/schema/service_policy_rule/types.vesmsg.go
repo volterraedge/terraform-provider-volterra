@@ -65,6 +65,89 @@ func (m *ChallengeRuleSpec) Validate(ctx context.Context, opts ...db.ValidateOpt
 	return ChallengeRuleSpecValidator().Validate(ctx, m, opts...)
 }
 
+func (m *ChallengeRuleSpec) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAsnChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetIpChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *ChallengeRuleSpec) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.AsnChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetAsnChoice().(type) {
+	case *ChallengeRuleSpec_AnyAsn:
+
+	case *ChallengeRuleSpec_AsnList:
+
+	case *ChallengeRuleSpec_AsnMatcher:
+		odrInfos, err = m.GetAsnMatcher().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "asn_matcher." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *ChallengeRuleSpec) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.IpChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetIpChoice().(type) {
+	case *ChallengeRuleSpec_AnyIp:
+
+	case *ChallengeRuleSpec_IpPrefixList:
+
+	case *ChallengeRuleSpec_IpMatcher:
+		odrInfos, err = m.GetIpMatcher().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "ip_matcher." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
 type ValidateChallengeRuleSpec struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -267,6 +350,43 @@ func (v *ValidateChallengeRuleSpec) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	switch m.GetAsnChoice().(type) {
+	case *ChallengeRuleSpec_AnyAsn:
+		if fv, exists := v.FldValidators["asn_choice.any_asn"]; exists {
+			val := m.GetAsnChoice().(*ChallengeRuleSpec_AnyAsn).AnyAsn
+			vOpts := append(opts,
+				db.WithValidateField("asn_choice"),
+				db.WithValidateField("any_asn"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ChallengeRuleSpec_AsnList:
+		if fv, exists := v.FldValidators["asn_choice.asn_list"]; exists {
+			val := m.GetAsnChoice().(*ChallengeRuleSpec_AsnList).AsnList
+			vOpts := append(opts,
+				db.WithValidateField("asn_choice"),
+				db.WithValidateField("asn_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ChallengeRuleSpec_AsnMatcher:
+		if fv, exists := v.FldValidators["asn_choice.asn_matcher"]; exists {
+			val := m.GetAsnChoice().(*ChallengeRuleSpec_AsnMatcher).AsnMatcher
+			vOpts := append(opts,
+				db.WithValidateField("asn_choice"),
+				db.WithValidateField("asn_matcher"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["body_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("body_matcher"))
@@ -414,11 +534,39 @@ func (v *ValidateChallengeRuleSpec) Validate(ctx context.Context, pm interface{}
 
 	}
 
-	if fv, exists := v.FldValidators["ip_prefix_list"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("ip_prefix_list"))
-		if err := fv(ctx, m.GetIpPrefixList(), vOpts...); err != nil {
-			return err
+	switch m.GetIpChoice().(type) {
+	case *ChallengeRuleSpec_AnyIp:
+		if fv, exists := v.FldValidators["ip_choice.any_ip"]; exists {
+			val := m.GetIpChoice().(*ChallengeRuleSpec_AnyIp).AnyIp
+			vOpts := append(opts,
+				db.WithValidateField("ip_choice"),
+				db.WithValidateField("any_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ChallengeRuleSpec_IpPrefixList:
+		if fv, exists := v.FldValidators["ip_choice.ip_prefix_list"]; exists {
+			val := m.GetIpChoice().(*ChallengeRuleSpec_IpPrefixList).IpPrefixList
+			vOpts := append(opts,
+				db.WithValidateField("ip_choice"),
+				db.WithValidateField("ip_prefix_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ChallengeRuleSpec_IpMatcher:
+		if fv, exists := v.FldValidators["ip_choice.ip_matcher"]; exists {
+			val := m.GetIpChoice().(*ChallengeRuleSpec_IpMatcher).IpMatcher
+			vOpts := append(opts,
+				db.WithValidateField("ip_choice"),
+				db.WithValidateField("ip_matcher"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -531,16 +679,20 @@ var DefaultChallengeRuleSpecValidator = func() *ValidateChallengeRuleSpec {
 	}
 	v.FldValidators["cookie_matchers"] = vFn
 
+	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
+	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
+
 	v.FldValidators["client_choice.client_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["client_choice.client_name_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
+
+	v.FldValidators["ip_choice.ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
+	v.FldValidators["ip_choice.ip_matcher"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
 
 	v.FldValidators["domain_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 
 	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
 
 	v.FldValidators["http_method"] = ves_io_schema_policy.HttpMethodMatcherTypeValidator().Validate
-
-	v.FldValidators["ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
 
 	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
 
@@ -605,6 +757,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	if fdrInfos, err := m.GetDstIpChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetGotoPolicyDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -728,6 +886,47 @@ func (m *CreateSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, err
+}
+
+func (m *CreateSpecType) GetGotoPolicyDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, ref := range m.GetGotoPolicy() {
+		if ref == nil {
+			return nil, fmt.Errorf("CreateSpecType.goto_policy[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "goto_policy",
+			Ref:        ref,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetGotoPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CreateSpecType) GetGotoPolicyDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "service_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: service_policy")
+	}
+	for _, ref := range m.GetGotoPolicy() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -1158,6 +1357,46 @@ func (v *ValidateCreateSpecType) ChallengeActionValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) GotoPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for goto_policy")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated goto_policy")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items goto_policy")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -1425,6 +1664,14 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
 		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["goto_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("goto_policy"))
+		if err := fv(ctx, m.GetGotoPolicy(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1778,6 +2025,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["challenge_action"] = vFn
 
+	vrhGotoPolicy := v.GotoPolicyValidationRuleHandler
+	rulesGotoPolicy := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhGotoPolicy(rulesGotoPolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.goto_policy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["goto_policy"] = vFn
+
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
 
@@ -1880,6 +2138,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	if fdrInfos, err := m.GetDstIpChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetGotoPolicyDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -2003,6 +2267,47 @@ func (m *GetSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, err
+}
+
+func (m *GetSpecType) GetGotoPolicyDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, ref := range m.GetGotoPolicy() {
+		if ref == nil {
+			return nil, fmt.Errorf("GetSpecType.goto_policy[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "goto_policy",
+			Ref:        ref,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetGotoPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetSpecType) GetGotoPolicyDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "service_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: service_policy")
+	}
+	for _, ref := range m.GetGotoPolicy() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -2433,6 +2738,46 @@ func (v *ValidateGetSpecType) ChallengeActionValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) GotoPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for goto_policy")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated goto_policy")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items goto_policy")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -2700,6 +3045,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
 		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["goto_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("goto_policy"))
+		if err := fv(ctx, m.GetGotoPolicy(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3053,6 +3406,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["challenge_action"] = vFn
 
+	vrhGotoPolicy := v.GotoPolicyValidationRuleHandler
+	rulesGotoPolicy := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhGotoPolicy(rulesGotoPolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.goto_policy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["goto_policy"] = vFn
+
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
 
@@ -3161,6 +3525,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	if fdrInfos, err := m.GetForwardingClassDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetGotoPolicyDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -3315,6 +3685,47 @@ func (m *GlobalSpecType) GetForwardingClassDBEntries(ctx context.Context, d db.I
 		return nil, errors.Wrap(err, "Cannot find type for kind: forwarding_class")
 	}
 	for _, ref := range m.GetForwardingClass() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *GlobalSpecType) GetGotoPolicyDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, ref := range m.GetGotoPolicy() {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.goto_policy[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "goto_policy",
+			Ref:        ref,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetGotoPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetGotoPolicyDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "service_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: service_policy")
+	}
+	for _, ref := range m.GetGotoPolicy() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -3795,6 +4206,46 @@ func (v *ValidateGlobalSpecType) ChallengeActionValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) GotoPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for goto_policy")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated goto_policy")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items goto_policy")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -4070,6 +4521,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["forwarding_class"]; exists {
 		vOpts := append(opts, db.WithValidateField("forwarding_class"))
 		if err := fv(ctx, m.GetForwardingClass(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["goto_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("goto_policy"))
+		if err := fv(ctx, m.GetGotoPolicy(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4433,6 +4892,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["challenge_action"] = vFn
+
+	vrhGotoPolicy := v.GotoPolicyValidationRuleHandler
+	rulesGotoPolicy := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhGotoPolicy(rulesGotoPolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.goto_policy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["goto_policy"] = vFn
 
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
@@ -4859,6 +5329,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetGotoPolicyDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetIpChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -4977,6 +5453,47 @@ func (m *ReplaceSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, err
+}
+
+func (m *ReplaceSpecType) GetGotoPolicyDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, ref := range m.GetGotoPolicy() {
+		if ref == nil {
+			return nil, fmt.Errorf("ReplaceSpecType.goto_policy[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "goto_policy",
+			Ref:        ref,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetGotoPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ReplaceSpecType) GetGotoPolicyDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "service_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: service_policy")
+	}
+	for _, ref := range m.GetGotoPolicy() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -5407,6 +5924,46 @@ func (v *ValidateReplaceSpecType) ChallengeActionValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) GotoPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for goto_policy")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated goto_policy")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items goto_policy")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -5674,6 +6231,14 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
 		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["goto_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("goto_policy"))
+		if err := fv(ctx, m.GetGotoPolicy(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6027,6 +6592,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["challenge_action"] = vFn
 
+	vrhGotoPolicy := v.GotoPolicyValidationRuleHandler
+	rulesGotoPolicy := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhGotoPolicy(rulesGotoPolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.goto_policy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["goto_policy"] = vFn
+
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
 
@@ -6078,6 +6654,47 @@ func ReplaceSpecTypeValidator() db.Validator {
 }
 
 // create setters in ChallengeRuleSpec from GlobalSpecType for oneof fields
+func (r *ChallengeRuleSpec) SetAsnChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.AsnChoice.(type) {
+	case nil:
+		o.AsnChoice = nil
+
+	case *ChallengeRuleSpec_AnyAsn:
+		o.AsnChoice = &GlobalSpecType_AnyAsn{AnyAsn: of.AnyAsn}
+
+	case *ChallengeRuleSpec_AsnList:
+		o.AsnChoice = &GlobalSpecType_AsnList{AsnList: of.AsnList}
+
+	case *ChallengeRuleSpec_AsnMatcher:
+		o.AsnChoice = &GlobalSpecType_AsnMatcher{AsnMatcher: of.AsnMatcher}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ChallengeRuleSpec) GetAsnChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.AsnChoice.(type) {
+	case nil:
+		r.AsnChoice = nil
+
+	case *GlobalSpecType_AnyAsn:
+		r.AsnChoice = &ChallengeRuleSpec_AnyAsn{AnyAsn: of.AnyAsn}
+
+	case *GlobalSpecType_AsnList:
+		r.AsnChoice = &ChallengeRuleSpec_AsnList{AsnList: of.AsnList}
+
+	case *GlobalSpecType_AsnMatcher:
+		r.AsnChoice = &ChallengeRuleSpec_AsnMatcher{AsnMatcher: of.AsnMatcher}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ChallengeRuleSpec from GlobalSpecType for oneof fields
 func (r *ChallengeRuleSpec) SetClientChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.ClientChoice.(type) {
 	case nil:
@@ -6124,11 +6741,53 @@ func (r *ChallengeRuleSpec) GetClientChoiceFromGlobalSpecType(o *GlobalSpecType)
 	return nil
 }
 
+// create setters in ChallengeRuleSpec from GlobalSpecType for oneof fields
+func (r *ChallengeRuleSpec) SetIpChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.IpChoice.(type) {
+	case nil:
+		o.IpChoice = nil
+
+	case *ChallengeRuleSpec_AnyIp:
+		o.IpChoice = &GlobalSpecType_AnyIp{AnyIp: of.AnyIp}
+
+	case *ChallengeRuleSpec_IpMatcher:
+		o.IpChoice = &GlobalSpecType_IpMatcher{IpMatcher: of.IpMatcher}
+
+	case *ChallengeRuleSpec_IpPrefixList:
+		o.IpChoice = &GlobalSpecType_IpPrefixList{IpPrefixList: of.IpPrefixList}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ChallengeRuleSpec) GetIpChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.IpChoice.(type) {
+	case nil:
+		r.IpChoice = nil
+
+	case *GlobalSpecType_AnyIp:
+		r.IpChoice = &ChallengeRuleSpec_AnyIp{AnyIp: of.AnyIp}
+
+	case *GlobalSpecType_IpMatcher:
+		r.IpChoice = &ChallengeRuleSpec_IpMatcher{IpMatcher: of.IpMatcher}
+
+	case *GlobalSpecType_IpPrefixList:
+		r.IpChoice = &ChallengeRuleSpec_IpPrefixList{IpPrefixList: of.IpPrefixList}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ChallengeRuleSpec) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
 	m.ArgMatchers = f.GetArgMatchers()
+	m.GetAsnChoiceFromGlobalSpecType(f)
 	m.BodyMatcher = f.GetBodyMatcher()
 
 	m.GetClientChoiceFromGlobalSpecType(f)
@@ -6146,7 +6805,7 @@ func (m *ChallengeRuleSpec) FromGlobalSpecType(f *GlobalSpecType) {
 	m.ExpirationTimestamp = f.GetExpirationTimestamp()
 	m.Headers = f.GetHeaders()
 	m.HttpMethod = f.GetHttpMethod()
-
+	m.GetIpChoiceFromGlobalSpecType(f)
 	m.Path = f.GetPath()
 	m.QueryParams = f.GetQueryParams()
 	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
@@ -6159,6 +6818,7 @@ func (m *ChallengeRuleSpec) ToGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	f.ArgMatchers = m1.ArgMatchers
+	m1.SetAsnChoiceToGlobalSpecType(f)
 	f.BodyMatcher = m1.BodyMatcher
 
 	m1.SetClientChoiceToGlobalSpecType(f)
@@ -6179,7 +6839,7 @@ func (m *ChallengeRuleSpec) ToGlobalSpecType(f *GlobalSpecType) {
 	f.ExpirationTimestamp = m1.ExpirationTimestamp
 	f.Headers = m1.Headers
 	f.HttpMethod = m1.HttpMethod
-
+	m1.SetIpChoiceToGlobalSpecType(f)
 	f.Path = m1.Path
 	f.QueryParams = m1.QueryParams
 	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
@@ -6431,6 +7091,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetDstAsnChoiceFromGlobalSpecType(f)
 	m.GetDstIpChoiceFromGlobalSpecType(f)
 	m.ExpirationTimestamp = f.GetExpirationTimestamp()
+	m.GotoPolicy = f.GetGotoPolicy()
 	m.Headers = f.GetHeaders()
 	m.HttpMethod = f.GetHttpMethod()
 	m.GetIpChoiceFromGlobalSpecType(f)
@@ -6490,6 +7151,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetDstAsnChoiceToGlobalSpecType(f)
 	m1.SetDstIpChoiceToGlobalSpecType(f)
 	f.ExpirationTimestamp = m1.ExpirationTimestamp
+	f.GotoPolicy = m1.GotoPolicy
 	f.Headers = m1.Headers
 	f.HttpMethod = m1.HttpMethod
 	m1.SetIpChoiceToGlobalSpecType(f)
@@ -6767,6 +7429,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetDstAsnChoiceFromGlobalSpecType(f)
 	m.GetDstIpChoiceFromGlobalSpecType(f)
 	m.ExpirationTimestamp = f.GetExpirationTimestamp()
+	m.GotoPolicy = f.GetGotoPolicy()
 	m.Headers = f.GetHeaders()
 	m.HttpMethod = f.GetHttpMethod()
 	m.GetIpChoiceFromGlobalSpecType(f)
@@ -6826,6 +7489,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetDstAsnChoiceToGlobalSpecType(f)
 	m1.SetDstIpChoiceToGlobalSpecType(f)
 	f.ExpirationTimestamp = m1.ExpirationTimestamp
+	f.GotoPolicy = m1.GotoPolicy
 	f.Headers = m1.Headers
 	f.HttpMethod = m1.HttpMethod
 	m1.SetIpChoiceToGlobalSpecType(f)
@@ -7146,6 +7810,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetDstAsnChoiceFromGlobalSpecType(f)
 	m.GetDstIpChoiceFromGlobalSpecType(f)
 	m.ExpirationTimestamp = f.GetExpirationTimestamp()
+	m.GotoPolicy = f.GetGotoPolicy()
 	m.Headers = f.GetHeaders()
 	m.HttpMethod = f.GetHttpMethod()
 	m.GetIpChoiceFromGlobalSpecType(f)
@@ -7205,6 +7870,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetDstAsnChoiceToGlobalSpecType(f)
 	m1.SetDstIpChoiceToGlobalSpecType(f)
 	f.ExpirationTimestamp = m1.ExpirationTimestamp
+	f.GotoPolicy = m1.GotoPolicy
 	f.Headers = m1.Headers
 	f.HttpMethod = m1.HttpMethod
 	m1.SetIpChoiceToGlobalSpecType(f)

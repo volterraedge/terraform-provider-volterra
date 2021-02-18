@@ -38,6 +38,7 @@
 		VPCAttachmentType
 		VPCIpPrefixesType
 		VPCAttachmentListType
+		ActiveServicePoliciesType
 		SecurityConfigType
 		AWSVPNTunnelConfigType
 		AWSTGWInfoConfigType
@@ -1192,9 +1193,7 @@ var (
 	ErrIntOverflowObject   = fmt.Errorf("proto: integer overflow")
 )
 
-func init() {
-	proto.RegisterFile("ves.io/schema/views/aws_tgw_site/object.proto", fileDescriptorObject)
-}
+func init() { proto.RegisterFile("ves.io/schema/views/aws_tgw_site/object.proto", fileDescriptorObject) }
 func init() {
 	golang_proto.RegisterFile("ves.io/schema/views/aws_tgw_site/object.proto", fileDescriptorObject)
 }

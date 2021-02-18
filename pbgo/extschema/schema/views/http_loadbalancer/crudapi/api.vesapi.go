@@ -68,6 +68,7 @@ func (r *ObjectReplaceReq) ToEntry(e db.Entry) {
 // create setters in response from object for oneof fields
 
 // CLIENT side
+
 func NewObjectCreateReq(e db.Entry) (*ObjectCreateReq, error) {
 	r := &ObjectCreateReq{}
 	if e == nil {
@@ -120,6 +121,7 @@ type crudAPIGrpcClient struct {
 }
 
 func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	req, err := NewObjectCreateReq(e)
 	if err != nil {
 		return nil, errors.Wrap(err, "Creating new create request")
@@ -141,9 +143,11 @@ func (c *crudAPIGrpcClient) Create(ctx context.Context, e db.Entry, opts ...serv
 		return o, err
 	}
 	return nil, err
+
 }
 
 func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
+
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -161,6 +165,7 @@ func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
+
 }
 
 func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
@@ -186,6 +191,7 @@ func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -193,9 +199,11 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
+
 }
 
 func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
+
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if err != nil {
@@ -212,9 +220,11 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 		merr = multierror.Append(merr, err)
 	}
 	return &respDetail, errors.ErrOrNil(merr)
+
 }
 
 func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
+
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -224,9 +234,11 @@ func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
+
 }
 
 func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
+
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -236,6 +248,7 @@ func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
+
 }
 
 func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
@@ -272,6 +285,7 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 }
 
 func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
+
 	req := NewObjectListReq()
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -296,9 +310,11 @@ func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDC
 	}
 	lc := &crudAPIGrpcListStreamClient{stream}
 	return lc, nil
+
 }
 
 func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
+
 	req := NewObjectDeleteReq(key)
 
 	cco := server.NewCRUDCallOpts()
@@ -312,6 +328,7 @@ func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
+
 }
 
 func NewCRUDAPIGrpcClient(cc *grpc.ClientConn) server.CRUDClient {
@@ -354,6 +371,7 @@ type crudAPIRestClient struct {
 }
 
 func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	req, err := NewObjectCreateReq(e)
 	if err != nil {
 		return nil, errors.Wrap(err, "Creating new create request")
@@ -405,9 +423,11 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	o := object.NewDBObject(nil)
 	rspo.ToObject(o)
 	return o, nil
+
 }
 
 func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
+
 	rReq, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -483,6 +503,7 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
+
 }
 
 func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
@@ -533,6 +554,7 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 }
 
 func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
 		o := object.NewDBObject(nil)
@@ -540,9 +562,11 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 		return o, err
 	}
 	return nil, err
+
 }
 
 func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
+
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -560,9 +584,11 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	}
 
 	return nil, errors.ErrOrNil(merr)
+
 }
 
 func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
+
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -572,9 +598,11 @@ func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCall
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
+
 }
 
 func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
+
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -584,6 +612,7 @@ func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCa
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
+
 }
 
 func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
@@ -663,6 +692,7 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 }
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
+
 	dReq := NewObjectDeleteReq(key)
 
 	// convert ves.io.examplesvc.objectone.crudapi to ves.io.examplesvc.objectone
@@ -706,6 +736,7 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		cco.OutCallResponse.JSON = string(body)
 	}
 	return nil
+
 }
 
 func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
@@ -783,6 +814,7 @@ type crudAPIInprocClient struct {
 }
 
 func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
@@ -809,9 +841,11 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return o, err
 	}
 	return nil, err
+
 }
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
+
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
@@ -833,6 +867,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
+
 }
 
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
@@ -861,6 +896,7 @@ func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...se
 }
 
 func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
+
 	rsp, err := c.GetRaw(ctx, key, opts...)
 	if rsp != nil {
 		o := object.NewDBObject(nil)
@@ -868,9 +904,11 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 		return o, err
 	}
 	return nil, err
+
 }
 
 func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
+
 	var merr *multierror.Error
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
@@ -888,9 +926,11 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	}
 
 	return nil, errors.ErrOrNil(merr)
+
 }
 
 func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
+
 	idSet := []string{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -900,9 +940,11 @@ func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCa
 		idSet = append(idSet, li.GetObjectUid())
 	}
 	return idSet, err
+
 }
 
 func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
+
 	sliSet := []server.ListItem{}
 	listRsp, err := c.List(ctx, opts...)
 	if listRsp == nil {
@@ -912,6 +954,7 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 		sliSet = append(sliSet, li)
 	}
 	return sliSet, err
+
 }
 
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
@@ -956,6 +999,7 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 }
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
+
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
@@ -973,6 +1017,7 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	return err
+
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
@@ -2469,7 +2514,8 @@ var APISwaggerJSON string = `{
             "description": "Choice for selecting HTTP proxy with bring your own certificates",
             "title": "HTTPS with Auto Certs Choice",
             "x-displayname": "HTTPS with Auto Certs Choice",
-            "x-ves-displayorder": "1,2,3",
+            "x-ves-displayorder": "1,2,4,3",
+            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ProxyTypeHttpsAutoCerts",
             "properties": {
                 "add_hsts": {
@@ -2486,11 +2532,21 @@ var APISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "HTTP Redirect to HTTPS"
                 },
+                "no_mtls": {
+                    "description": "Exclusive with [use_mtls]\nx-displayName: \"No mTLS\"\nmTLS with clients is not enabled",
+                    "title": "No mTLS",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "tls_config": {
                     "description": " Configuration for TLS parameters such as min/max TLS version and ciphers",
                     "title": "TLS Config",
                     "$ref": "#/definitions/viewsTlsConfig",
                     "x-displayname": "TLS Config"
+                },
+                "use_mtls": {
+                    "description": "Exclusive with [no_mtls]\nx-displayName: \"mTLS\"\nmTLS with clients is enabled",
+                    "title": "Use mTLS",
+                    "$ref": "#/definitions/http_loadbalancerDownstreamTlsValidationContext"
                 }
             }
         },
@@ -2879,6 +2935,13 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [as_number]\nx-displayName: \"IP Prefix\"\nx-example: \"192.168.20.0/24\"\nx-required\nIPv4 prefix string.",
                     "title": "ip prefix"
                 },
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\nRequired: YES",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true"
+                },
                 "name": {
                     "type": "string",
                     "description": " rule name\n\nExample: - \"block-223.226.31.151-for-30-mins\"-\nRequired: YES",
@@ -3039,6 +3102,45 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyAsnMatchList": {
+            "type": "object",
+            "description": "An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.",
+            "title": "Asn Match List",
+            "x-displayname": "ASN Match List",
+            "x-ves-proto-message": "ves.io.schema.policy.AsnMatchList",
+            "properties": {
+                "as_numbers": {
+                    "type": "array",
+                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-",
+                    "title": "as numbers",
+                    "items": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "x-displayname": "AS Numbers",
+                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]"
+                }
+            }
+        },
+        "policyAsnMatcherType": {
+            "type": "object",
+            "description": "Match any AS number contained in the list of bgp_asn_sets.",
+            "title": "asn matcher type",
+            "x-displayname": "ASN Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.AsnMatcherType",
+            "properties": {
+                "asn_sets": {
+                    "type": "array",
+                    "description": " A list of references to bgp_asn_set objects.\nRequired: YES",
+                    "title": "asn_sets",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "BGP ASN Sets",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "policyCookieMatcherType": {
             "type": "object",
             "description": "A cookie matcher specifies the name of a single cookie and the criteria to match it. The input has a list of values for each\ncookie in the request.\nA cookie matcher can check for one of the following:\n* Presence or absence of the cookie\n* At least one of the values for the cookie in the request satisfies the MatcherType item",
@@ -3109,6 +3211,32 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Method List",
                     "x-ves-example": "['GET', 'POST', 'DELETE']"
+                }
+            }
+        },
+        "policyIpMatcherType": {
+            "type": "object",
+            "description": "Match any ip prefix contained in the list of ip_prefix_sets.\nThe result of the match is inverted if invert_matcher is true.",
+            "title": "ip matcher type",
+            "x-displayname": "IP Prefix Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.IpMatcherType",
+            "properties": {
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert the match result.",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert IP Matcher"
+                },
+                "prefix_sets": {
+                    "type": "array",
+                    "description": " A list of references to ip_prefix_set objects.\nRequired: YES",
+                    "title": "prefix_sets",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "IP Prefix Sets",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -3273,6 +3401,13 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Expiration Timestamp",
                     "x-ves-example": "2019-12-31:44:34.171543432Z"
+                },
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\nRequired: YES",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true"
                 },
                 "methods": {
                     "type": "array",
@@ -4827,12 +4962,22 @@ var APISwaggerJSON string = `{
             "description": "A Challenge Rule consists of an unordered list of predicates and an action. The predicates are evaluated against a set of input fields that are extracted from\nor derived from an L7 request API. A request API is considered to match the rule if all predicates in the rule evaluate to true for that request. Any\npredicates that are not specified in a rule are implicitly considered to be true. If a request API matches a challenge rule, the configured challenge is\nenforced.",
             "title": "Challenge Rule Spec",
             "x-displayname": "Challenge Rule Specification",
+            "x-ves-oneof-field-asn_choice": "[\"any_asn\",\"asn_list\",\"asn_matcher\"]",
             "x-ves-oneof-field-challenge_action": "[\"disable_challenge\",\"enable_captcha_challenge\",\"enable_javascript_challenge\"]",
             "x-ves-oneof-field-client_choice": "[\"any_client\",\"client_name\",\"client_name_matcher\",\"client_selector\"]",
+            "x-ves-oneof-field-ip_choice": "[\"any_ip\",\"ip_matcher\",\"ip_prefix_list\"]",
             "x-ves-proto-message": "ves.io.schema.service_policy_rule.ChallengeRuleSpec",
             "properties": {
+                "any_asn": {
+                    "description": "Exclusive with [asn_list asn_matcher]\n",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "any_client": {
                     "description": "Exclusive with [client_name client_name_matcher client_selector]\n",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "any_ip": {
+                    "description": "Exclusive with [ip_matcher ip_prefix_list]\n",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "arg_matchers": {
@@ -4841,6 +4986,14 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/policyArgMatcherType"
                     }
+                },
+                "asn_list": {
+                    "description": "Exclusive with [any_asn asn_matcher]\n",
+                    "$ref": "#/definitions/policyAsnMatchList"
+                },
+                "asn_matcher": {
+                    "description": "Exclusive with [any_asn asn_list]\n",
+                    "$ref": "#/definitions/policyAsnMatcherType"
                 },
                 "body_matcher": {
                     "description": " Predicate for matching the request body string. The criteria for matching the request body is described in MatcherType.\n The actual request body value is extracted from the request API as a string.",
@@ -4900,7 +5053,12 @@ var APISwaggerJSON string = `{
                     "description": " The list of expected values for the HTTP method in the request API. The actual value of the HTTP method is extracted from the HTTP request.\n The predicate evaluates to true if the actual HTTP method belongs is present in the list of expected values.",
                     "$ref": "#/definitions/policyHttpMethodMatcherType"
                 },
+                "ip_matcher": {
+                    "description": "Exclusive with [any_ip ip_prefix_list]\n",
+                    "$ref": "#/definitions/policyIpMatcherType"
+                },
                 "ip_prefix_list": {
+                    "description": "Exclusive with [any_ip ip_matcher]\n",
                     "$ref": "#/definitions/policyPrefixMatchList"
                 },
                 "path": {
@@ -5083,6 +5241,34 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsWherePrivateNetwork": {
+            "type": "object",
+            "description": "Parameters to advertise on a Given VoltADN Private Network",
+            "title": "WherePrivateNetwork",
+            "x-displayname": "VoltADN Private Network",
+            "x-ves-displayorder": "1,2",
+            "x-ves-oneof-field-vip_choice": "[\"default_vip\",\"specific_vip\"]",
+            "x-ves-proto-message": "ves.io.schema.views.WherePrivateNetwork",
+            "properties": {
+                "default_vip": {
+                    "description": "Exclusive with [specific_vip]\nx-displayName: \"Default VIP for VoltADN Private Network\"\nUse the default VIP, system allocated or configured in the VoltADN Private Network",
+                    "title": "Default VIP for VoltADN Private Network",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "private_network": {
+                    "description": " Select VoltADN private network reference\nRequired: YES",
+                    "title": "VoltADN Private Network",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "VoltADN Private Network",
+                    "x-ves-required": "true"
+                },
+                "specific_vip": {
+                    "type": "string",
+                    "description": "Exclusive with [default_vip]\nx-displayName: \"Specific VIP\"\nUse given IP address as VIP on VoltADN private Network",
+                    "title": "Specific VIP"
+                }
+            }
+        },
         "viewsWhereSite": {
             "type": "object",
             "description": "This defines a reference to a CE site along with network type and an optional ip address where a load balancer could be advertised",
@@ -5118,8 +5304,8 @@ var APISwaggerJSON string = `{
             "description": "This defines various options where a Loadbalancer could be advertised",
             "title": "WhereType",
             "x-displayname": "Select Where to Advertise",
-            "x-ves-displayorder": "4",
-            "x-ves-oneof-field-choice": "[\"site\",\"virtual_site\",\"vk8s_service\"]",
+            "x-ves-displayorder": "4,5",
+            "x-ves-oneof-field-choice": "[\"private_network\",\"site\",\"virtual_site\",\"vk8s_service\"]",
             "x-ves-oneof-field-port_choice": "[\"port\",\"use_default_port\"]",
             "x-ves-proto-message": "ves.io.schema.views.WhereType",
             "properties": {
@@ -5129,8 +5315,13 @@ var APISwaggerJSON string = `{
                     "title": "TCP port to listen",
                     "format": "int64"
                 },
+                "private_network": {
+                    "description": "Exclusive with [site virtual_site vk8s_service]\nx-displayName: \"VoltADN Private Network\"\nAdvertise on a VoltADN private network",
+                    "title": "VoltADN Private Network",
+                    "$ref": "#/definitions/viewsWherePrivateNetwork"
+                },
                 "site": {
-                    "description": "Exclusive with [virtual_site vk8s_service]\nx-displayName: \"Site\"\nAdvertise on a customer site and a given network.",
+                    "description": "Exclusive with [private_network virtual_site vk8s_service]\nx-displayName: \"Site\"\nAdvertise on a customer site and a given network.",
                     "title": "Site",
                     "$ref": "#/definitions/viewsWhereSite"
                 },
@@ -5140,12 +5331,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [site vk8s_service]\nx-displayName: \"Virtual Site\"\nAdvertise on a customer virtual site and a given network.",
+                    "description": "Exclusive with [private_network site vk8s_service]\nx-displayName: \"Virtual Site\"\nAdvertise on a customer virtual site and a given network.",
                     "title": "Virtual Site",
                     "$ref": "#/definitions/viewsWhereVirtualSite"
                 },
                 "vk8s_service": {
-                    "description": "Exclusive with [site virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vK8s Service Network on RE.",
+                    "description": "Exclusive with [private_network site virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vK8s Service Network on RE.",
                     "title": "vK8s services network",
                     "$ref": "#/definitions/viewsWhereVK8SService"
                 }
@@ -5205,8 +5396,8 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.DownstreamTlsParamsType",
             "properties": {
                 "no_mtls": {
-                    "description": "Exclusive with [use_mtls]\nx-displayName: \"No MTLS\"\nMTLS with clients is not enabled",
-                    "title": "No MTLS",
+                    "description": "Exclusive with [use_mtls]\nx-displayName: \"No mTLS\"\nmTLS with clients is not enabled",
+                    "title": "No mTLS",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "tls_certificates": {
@@ -5226,8 +5417,8 @@ var APISwaggerJSON string = `{
                     "x-displayname": "TLS Config"
                 },
                 "use_mtls": {
-                    "description": "Exclusive with [no_mtls]\nx-displayName: \"MTLS\"\nMTLS with clients is enabled",
-                    "title": "Use MTLS",
+                    "description": "Exclusive with [no_mtls]\nx-displayName: \"mTLS\"\nmTLS with clients is enabled",
+                    "title": "Use mTLS",
                     "$ref": "#/definitions/http_loadbalancerDownstreamTlsValidationContext"
                 }
             }
@@ -5546,19 +5737,19 @@ var APISwaggerJSON string = `{
             "title": "policy based challenge",
             "x-displayname": "Policy Based Challenge",
             "x-ves-oneof-field-captcha_challenge_parameters_choice": "[\"captcha_challenge_parameters\",\"default_captcha_challenge_parameters\"]",
-            "x-ves-oneof-field-enable_choice": "[\"always_enable_captcha\",\"always_enable_js_challenge\",\"rule_based_challenge\"]",
+            "x-ves-oneof-field-challenge_choice": "[\"always_enable_captcha_challenge\",\"always_enable_js_challenge\",\"no_challenge\"]",
             "x-ves-oneof-field-js_challenge_parameters_choice": "[\"default_js_challenge_parameters\",\"js_challenge_parameters\"]",
             "x-ves-oneof-field-malicious_user_mitigation_choice": "[\"default_mitigation_settings\",\"malicious_user_mitigation\"]",
             "x-ves-oneof-field-temporary_blocking_parameters_choice": "[\"default_temporary_blocking_parameters\",\"temporary_user_blocking\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.PolicyBasedChallenge",
             "properties": {
-                "always_enable_captcha": {
-                    "description": "Exclusive with [always_enable_js_challenge rule_based_challenge]\nx-displayName: \"Always enable captcha challenge\"\nWhen selected, enables captcha challenge for all requests.\nPolicy rules can be used to disable the challenge for subset of requests that match the conditions specified in the rules.",
+                "always_enable_captcha_challenge": {
+                    "description": "Exclusive with [always_enable_js_challenge no_challenge]\nx-displayName: \"Always enable Captcha Challenge\"\nEnable Captcha challenge for all requests.\nChallenge rules can be used to selectively disable Captcha challenge or enable Javascript challenge for some requests.",
                     "title": "always enable captcha challenge",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "always_enable_js_challenge": {
-                    "description": "Exclusive with [always_enable_captcha rule_based_challenge]\nx-displayName: \"Always enable JS challenge\"\nWhen selected, enables JS challenge for all requests.\nPolicy rules can be used to disable the challenge for subset of requests that match the conditions specified in the rules.",
+                    "description": "Exclusive with [always_enable_captcha_challenge no_challenge]\nx-displayName: \"Always enable JS Challenge\"\nEnable Javascript challenge for all requests.\nChallenge rules can be used to selectively disable Javascript challenge or enable Captcha challenge for some requests.",
                     "title": "always enable JS challenge",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -5597,9 +5788,9 @@ var APISwaggerJSON string = `{
                     "title": "Malicious User Mitigation",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
-                "rule_based_challenge": {
-                    "description": "Exclusive with [always_enable_captcha always_enable_js_challenge]\nx-displayName: \"Rule based challenge\"\nEnables rule based challenge. When selected, the match conditions and challenge type to be launched is determined using a policy rule.",
-                    "title": "rule based challenge",
+                "no_challenge": {
+                    "description": "Exclusive with [always_enable_captcha_challenge always_enable_js_challenge]\nx-displayName: \"No Challenge\"\nDisable Javascript and Captcha challenge for all requests.\nChallenge rules can be used to selectively enable Javascript or Captcha challenge for some requests.",
+                    "title": "no_challenge",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "rule_list": {
