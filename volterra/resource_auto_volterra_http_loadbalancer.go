@@ -1711,6 +1711,30 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 						},
 
+						"append_server_name": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"default_header": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"pass_through": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"server_name": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
 						"tls_parameters": {
 
 							Type:     schema.TypeSet,
@@ -1994,6 +2018,30 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									},
 								},
 							},
+						},
+
+						"append_server_name": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"default_header": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"pass_through": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"server_name": {
+
+							Type:     schema.TypeString,
+							Optional: true,
 						},
 
 						"tls_config": {
@@ -5689,6 +5737,54 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				loadbalancerTypeInt.Https.HttpRedirect = v.(bool)
 			}
 
+			serverHeaderChoiceTypeFound := false
+
+			if v, ok := cs["append_server_name"]; ok && !isIntfNil(v) && !serverHeaderChoiceTypeFound {
+
+				serverHeaderChoiceTypeFound = true
+				serverHeaderChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_AppendServerName{}
+
+				loadbalancerTypeInt.Https.ServerHeaderChoice = serverHeaderChoiceInt
+
+				serverHeaderChoiceInt.AppendServerName = v.(string)
+
+			}
+
+			if v, ok := cs["default_header"]; ok && !isIntfNil(v) && !serverHeaderChoiceTypeFound {
+
+				serverHeaderChoiceTypeFound = true
+
+				if v.(bool) {
+					serverHeaderChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_DefaultHeader{}
+					serverHeaderChoiceInt.DefaultHeader = &ves_io_schema.Empty{}
+					loadbalancerTypeInt.Https.ServerHeaderChoice = serverHeaderChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["pass_through"]; ok && !isIntfNil(v) && !serverHeaderChoiceTypeFound {
+
+				serverHeaderChoiceTypeFound = true
+
+				if v.(bool) {
+					serverHeaderChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_PassThrough{}
+					serverHeaderChoiceInt.PassThrough = &ves_io_schema.Empty{}
+					loadbalancerTypeInt.Https.ServerHeaderChoice = serverHeaderChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["server_name"]; ok && !isIntfNil(v) && !serverHeaderChoiceTypeFound {
+
+				serverHeaderChoiceTypeFound = true
+				serverHeaderChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_ServerName{}
+
+				loadbalancerTypeInt.Https.ServerHeaderChoice = serverHeaderChoiceInt
+
+				serverHeaderChoiceInt.ServerName = v.(string)
+
+			}
+
 			if v, ok := cs["tls_parameters"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
@@ -6059,6 +6155,54 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					}
 
 				}
+
+			}
+
+			serverHeaderChoiceTypeFound := false
+
+			if v, ok := cs["append_server_name"]; ok && !isIntfNil(v) && !serverHeaderChoiceTypeFound {
+
+				serverHeaderChoiceTypeFound = true
+				serverHeaderChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_AppendServerName{}
+
+				loadbalancerTypeInt.HttpsAutoCert.ServerHeaderChoice = serverHeaderChoiceInt
+
+				serverHeaderChoiceInt.AppendServerName = v.(string)
+
+			}
+
+			if v, ok := cs["default_header"]; ok && !isIntfNil(v) && !serverHeaderChoiceTypeFound {
+
+				serverHeaderChoiceTypeFound = true
+
+				if v.(bool) {
+					serverHeaderChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_DefaultHeader{}
+					serverHeaderChoiceInt.DefaultHeader = &ves_io_schema.Empty{}
+					loadbalancerTypeInt.HttpsAutoCert.ServerHeaderChoice = serverHeaderChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["pass_through"]; ok && !isIntfNil(v) && !serverHeaderChoiceTypeFound {
+
+				serverHeaderChoiceTypeFound = true
+
+				if v.(bool) {
+					serverHeaderChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_PassThrough{}
+					serverHeaderChoiceInt.PassThrough = &ves_io_schema.Empty{}
+					loadbalancerTypeInt.HttpsAutoCert.ServerHeaderChoice = serverHeaderChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["server_name"]; ok && !isIntfNil(v) && !serverHeaderChoiceTypeFound {
+
+				serverHeaderChoiceTypeFound = true
+				serverHeaderChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_ServerName{}
+
+				loadbalancerTypeInt.HttpsAutoCert.ServerHeaderChoice = serverHeaderChoiceInt
+
+				serverHeaderChoiceInt.ServerName = v.(string)
 
 			}
 
@@ -10220,6 +10364,54 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				loadbalancerTypeInt.Https.HttpRedirect = v.(bool)
 			}
 
+			serverHeaderChoiceTypeFound := false
+
+			if v, ok := cs["append_server_name"]; ok && !isIntfNil(v) && !serverHeaderChoiceTypeFound {
+
+				serverHeaderChoiceTypeFound = true
+				serverHeaderChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_AppendServerName{}
+
+				loadbalancerTypeInt.Https.ServerHeaderChoice = serverHeaderChoiceInt
+
+				serverHeaderChoiceInt.AppendServerName = v.(string)
+
+			}
+
+			if v, ok := cs["default_header"]; ok && !isIntfNil(v) && !serverHeaderChoiceTypeFound {
+
+				serverHeaderChoiceTypeFound = true
+
+				if v.(bool) {
+					serverHeaderChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_DefaultHeader{}
+					serverHeaderChoiceInt.DefaultHeader = &ves_io_schema.Empty{}
+					loadbalancerTypeInt.Https.ServerHeaderChoice = serverHeaderChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["pass_through"]; ok && !isIntfNil(v) && !serverHeaderChoiceTypeFound {
+
+				serverHeaderChoiceTypeFound = true
+
+				if v.(bool) {
+					serverHeaderChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_PassThrough{}
+					serverHeaderChoiceInt.PassThrough = &ves_io_schema.Empty{}
+					loadbalancerTypeInt.Https.ServerHeaderChoice = serverHeaderChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["server_name"]; ok && !isIntfNil(v) && !serverHeaderChoiceTypeFound {
+
+				serverHeaderChoiceTypeFound = true
+				serverHeaderChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_ServerName{}
+
+				loadbalancerTypeInt.Https.ServerHeaderChoice = serverHeaderChoiceInt
+
+				serverHeaderChoiceInt.ServerName = v.(string)
+
+			}
+
 			if v, ok := cs["tls_parameters"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
@@ -10590,6 +10782,54 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					}
 
 				}
+
+			}
+
+			serverHeaderChoiceTypeFound := false
+
+			if v, ok := cs["append_server_name"]; ok && !isIntfNil(v) && !serverHeaderChoiceTypeFound {
+
+				serverHeaderChoiceTypeFound = true
+				serverHeaderChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_AppendServerName{}
+
+				loadbalancerTypeInt.HttpsAutoCert.ServerHeaderChoice = serverHeaderChoiceInt
+
+				serverHeaderChoiceInt.AppendServerName = v.(string)
+
+			}
+
+			if v, ok := cs["default_header"]; ok && !isIntfNil(v) && !serverHeaderChoiceTypeFound {
+
+				serverHeaderChoiceTypeFound = true
+
+				if v.(bool) {
+					serverHeaderChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_DefaultHeader{}
+					serverHeaderChoiceInt.DefaultHeader = &ves_io_schema.Empty{}
+					loadbalancerTypeInt.HttpsAutoCert.ServerHeaderChoice = serverHeaderChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["pass_through"]; ok && !isIntfNil(v) && !serverHeaderChoiceTypeFound {
+
+				serverHeaderChoiceTypeFound = true
+
+				if v.(bool) {
+					serverHeaderChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_PassThrough{}
+					serverHeaderChoiceInt.PassThrough = &ves_io_schema.Empty{}
+					loadbalancerTypeInt.HttpsAutoCert.ServerHeaderChoice = serverHeaderChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["server_name"]; ok && !isIntfNil(v) && !serverHeaderChoiceTypeFound {
+
+				serverHeaderChoiceTypeFound = true
+				serverHeaderChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_ServerName{}
+
+				loadbalancerTypeInt.HttpsAutoCert.ServerHeaderChoice = serverHeaderChoiceInt
+
+				serverHeaderChoiceInt.ServerName = v.(string)
 
 			}
 

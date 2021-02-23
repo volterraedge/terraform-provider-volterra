@@ -3532,7 +3532,8 @@ var APISwaggerJSON string = `{
                     "description": " Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.",
                     "title": "Policy Endpoint",
                     "$ref": "#/definitions/network_policyEndpointChoiceType",
-                    "x-displayname": "Endpoint(s)"
+                    "x-displayname": "Endpoint(s)",
+                    "x-ves-required": "true"
                 },
                 "rules": {
                     "description": "Network Policy Rules",
@@ -3647,7 +3648,8 @@ var APISwaggerJSON string = `{
                     "description": " Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.",
                     "title": "Policy Endpoint",
                     "$ref": "#/definitions/network_policyEndpointChoiceType",
-                    "x-displayname": "Endpoint(s)"
+                    "x-displayname": "Endpoint(s)",
+                    "x-ves-required": "true"
                 },
                 "legacy_rules": {
                     "description": "Exclusive with [rules]\n",

@@ -20,25 +20,160 @@ resource "volterra_http_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
+  // One of the arguments from this list "advertise_on_public advertise_custom do_not_advertise advertise_on_public_default_vip" must be set
   do_not_advertise = true
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
-  no_challenge = true
 
+  policy_based_challenge {
+    // One of the arguments from this list "default_captcha_challenge_parameters captcha_challenge_parameters" must be set
+
+    captcha_challenge_parameters {
+      cookie_expiry            = "cookie_expiry"
+      custom_page              = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+      enable_captcha_challenge = true
+    }
+
+    // One of the arguments from this list "no_challenge always_enable_js_challenge always_enable_captcha_challenge" must be set
+    no_challenge = true
+
+    // One of the arguments from this list "default_js_challenge_parameters js_challenge_parameters" must be set
+    default_js_challenge_parameters = true
+
+    // One of the arguments from this list "default_mitigation_settings malicious_user_mitigation" must be set
+    default_mitigation_settings = true
+
+    rule_list {
+      rules {
+        metadata {
+          description = "Virtual Host for acmecorp website"
+          disable     = true
+          name        = "acmecorp-web"
+        }
+
+        spec {
+          arg_matchers {
+            invert_matcher = true
+
+            // One of the arguments from this list "check_not_present item presence check_present" must be set
+            presence = true
+
+            name = "name"
+          }
+
+          // One of the arguments from this list "asn_list asn_matcher any_asn" must be set
+
+          asn_matcher {
+            asn_sets {
+              name      = "test1"
+              namespace = "staging"
+              tenant    = "acmecorp"
+            }
+          }
+          body_matcher {
+            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+
+            transformers = ["transformers"]
+          }
+          // One of the arguments from this list "disable_challenge enable_javascript_challenge enable_captcha_challenge" must be set
+          disable_challenge = true
+          // One of the arguments from this list "client_name client_selector client_name_matcher any_client" must be set
+          any_client = true
+          cookie_matchers {
+            invert_matcher = true
+
+            // One of the arguments from this list "check_present check_not_present item presence" must be set
+            check_present = true
+            name          = "Session"
+          }
+          domain_matcher {
+            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+          }
+          expiration_timestamp = "0001-01-01T00:00:00Z"
+          headers {
+            invert_matcher = true
+
+            // One of the arguments from this list "presence check_present check_not_present item" must be set
+            presence = true
+
+            name = "Accept-Encoding"
+          }
+          http_method {
+            invert_matcher = true
+
+            methods = ["['GET', 'POST', 'DELETE']"]
+          }
+
+          // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
+
+          ip_prefix_list {
+            invert_match = true
+
+            ip_prefixes = ["192.168.20.0/24"]
+          }
+          path {
+            exact_values = ["['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']"]
+
+            prefix_values = ["['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']"]
+
+            regex_values = ["['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']"]
+
+            transformers = ["transformers"]
+          }
+          query_params {
+            invert_matcher = true
+            key            = "sourceid"
+
+            // One of the arguments from this list "presence check_present check_not_present item" must be set
+            check_present = true
+          }
+          tls_fingerprint_matcher {
+            classes = ["classes"]
+
+            exact_values = ["exact_values"]
+
+            excluded_values = ["excluded_values"]
+          }
+        }
+      }
+    }
+
+    // One of the arguments from this list "default_temporary_blocking_parameters temporary_user_blocking" must be set
+    default_temporary_blocking_parameters = true
+  }
   domains = ["www.foo.com"]
-
-  // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
-  random = true
+  // One of the arguments from this list "ring_hash round_robin least_active random source_ip_stickiness cookie_stickiness" must be set
+  round_robin = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
-  http {
-    dns_volterra_managed = true
+  https_auto_cert {
+    add_hsts      = true
+    http_redirect = true
+
+    // One of the arguments from this list "no_mtls use_mtls" must be set
+    no_mtls = true
+
+    // One of the arguments from this list "server_name append_server_name pass_through default_header" must be set
+    server_name = "server_name"
+
+    tls_config {
+      // One of the arguments from this list "default_security medium_security low_security custom_security" must be set
+
+      custom_security {
+        cipher_suites = ["cipher_suites"]
+        max_version   = "max_version"
+        min_version   = "min_version"
+      }
+    }
   }
   // One of the arguments from this list "disable_rate_limit rate_limit" must be set
   disable_rate_limit = true
-  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
+  // One of the arguments from this list "no_service_policies active_service_policies service_policies_from_namespace" must be set
   service_policies_from_namespace = true
 
   // One of the arguments from this list "disable_waf waf waf_rule" must be set
@@ -509,6 +644,10 @@ Custom selection of TLS versions and cipher suites.
 
 Use default parameters.
 
+### Default Header
+
+Specifies that the default value of "volt-adc" should be used for Server Header.
+
 ### Default Js Challenge Parameters
 
 Use default parameters.
@@ -653,6 +792,14 @@ User is responsible for managing DNS to this Load Balancer..
 
 `http_redirect` - (Optional) Redirect HTTP traffic to corresponding HTTPS (`Bool`).
 
+`append_server_name` - (Optional) If Server Header is already present it is not overwritten. It is just passed. (`String`).
+
+`default_header` - (Optional) Specifies that the default value of "volt-adc" should be used for Server Header (bool).
+
+`pass_through` - (Optional) appended. (bool).
+
+`server_name` - (Optional) This will overwrite existing values if any for Server Header (`String`).
+
 `tls_parameters` - (Optional) TLS parameters for downstream connections.. See [Tls Parameters ](#tls-parameters) below for details.
 
 ### Https Auto Cert
@@ -666,6 +813,14 @@ DNS records will be managed by Volterra..
 `no_mtls` - (Optional) mTLS with clients is not enabled (bool).
 
 `use_mtls` - (Optional) mTLS with clients is enabled. See [Use Mtls ](#use-mtls) below for details.
+
+`append_server_name` - (Optional) If Server Header is already present it is not overwritten. It is just passed. (`String`).
+
+`default_header` - (Optional) Specifies that the default value of "volt-adc" should be used for Server Header (bool).
+
+`pass_through` - (Optional) appended. (bool).
+
+`server_name` - (Optional) This will overwrite existing values if any for Server Header (`String`).
 
 `tls_config` - (Optional) Configuration for TLS parameters such as min/max TLS version and ciphers. See [Tls Config ](#tls-config) below for details.
 
@@ -816,6 +971,10 @@ Origin Pools for this route.
 `pool` - (Required) Simple, commonly used pool parameters with origin pool. See [ref](#ref) below for details.
 
 `weight` - (Optional) Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool (`Int`).
+
+### Pass Through
+
+appended..
 
 ### Path
 

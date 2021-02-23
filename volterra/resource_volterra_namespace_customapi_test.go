@@ -62,15 +62,6 @@ func testActiveServicePolicy(name, namespace string) string {
 			algo        = "FIRST_MATCH"
 			any_server  = true
 
-			simple_rules {
-				action = "ALLOW"
-				waf_action {
-					none = true
-					waf_in_monitoring_mode = false
-					waf_skip_processing    = false
-				}
-			}
-
 			allow_all_requests = true
 			deny_all_requests  = false
 		}

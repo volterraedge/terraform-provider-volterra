@@ -2312,6 +2312,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cluster_role_bindings_choice": "[\"use_custom_cluster_role_bindings\",\"use_default_cluster_role_bindings\"]",
             "x-ves-oneof-field-cluster_role_choice": "[\"use_custom_cluster_role_list\",\"use_default_cluster_roles\"]",
             "x-ves-oneof-field-global_access_choice": "[\"global_access_enable\",\"no_global_access\"]",
+            "x-ves-oneof-field-insecure_registries_choice": "[\"insecure_registry_list\",\"no_insecure_registries\"]",
             "x-ves-oneof-field-local_access_choice": "[\"local_access_config\",\"no_local_access\"]",
             "x-ves-oneof-field-pod_security_policy_choice": "[\"use_custom_psp_list\",\"use_default_psp\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.CreateSpecType",
@@ -2320,12 +2321,20 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [no_global_access]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "insecure_registry_list": {
+                    "description": "Exclusive with [no_insecure_registries]\n",
+                    "$ref": "#/definitions/k8s_clusterInsecureRegistryListType"
+                },
                 "local_access_config": {
                     "description": "Exclusive with [no_local_access]\n",
                     "$ref": "#/definitions/k8s_clusterLocalAccessConfigType"
                 },
                 "no_global_access": {
                     "description": "Exclusive with [global_access_enable]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_insecure_registries": {
+                    "description": "Exclusive with [insecure_registry_list]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "no_local_access": {
@@ -2469,6 +2478,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cluster_role_bindings_choice": "[\"use_custom_cluster_role_bindings\",\"use_default_cluster_role_bindings\"]",
             "x-ves-oneof-field-cluster_role_choice": "[\"use_custom_cluster_role_list\",\"use_default_cluster_roles\"]",
             "x-ves-oneof-field-global_access_choice": "[\"global_access_enable\",\"no_global_access\"]",
+            "x-ves-oneof-field-insecure_registries_choice": "[\"insecure_registry_list\",\"no_insecure_registries\"]",
             "x-ves-oneof-field-local_access_choice": "[\"local_access_config\",\"no_local_access\"]",
             "x-ves-oneof-field-pod_security_policy_choice": "[\"use_custom_psp_list\",\"use_default_psp\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.GetSpecType",
@@ -2477,12 +2487,20 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [no_global_access]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "insecure_registry_list": {
+                    "description": "Exclusive with [no_insecure_registries]\n",
+                    "$ref": "#/definitions/k8s_clusterInsecureRegistryListType"
+                },
                 "local_access_config": {
                     "description": "Exclusive with [no_local_access]\n",
                     "$ref": "#/definitions/k8s_clusterLocalAccessConfigType"
                 },
                 "no_global_access": {
                     "description": "Exclusive with [global_access_enable]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_insecure_registries": {
+                    "description": "Exclusive with [insecure_registry_list]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "no_local_access": {
@@ -2524,6 +2542,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cluster_role_bindings_choice": "[\"use_custom_cluster_role_bindings\",\"use_default_cluster_role_bindings\"]",
             "x-ves-oneof-field-cluster_role_choice": "[\"use_custom_cluster_role_list\",\"use_default_cluster_roles\"]",
             "x-ves-oneof-field-global_access_choice": "[\"global_access_enable\",\"no_global_access\"]",
+            "x-ves-oneof-field-insecure_registries_choice": "[\"insecure_registry_list\",\"no_insecure_registries\"]",
             "x-ves-oneof-field-local_access_choice": "[\"local_access_config\",\"no_local_access\"]",
             "x-ves-oneof-field-pod_security_policy_choice": "[\"use_custom_psp_list\",\"use_default_psp\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.GlobalSpecType",
@@ -2565,6 +2584,11 @@ var APISwaggerJSON string = `{
                     "title": "Enable VoltConsole API Access",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "insecure_registry_list": {
+                    "description": "Exclusive with [no_insecure_registries]\nx-displayName: \"Docker insecure registries\"\nSelect Docker insecure registries for this K8s cluster",
+                    "title": "Custom Docker insecure registries",
+                    "$ref": "#/definitions/k8s_clusterInsecureRegistryListType"
+                },
                 "local_access_config": {
                     "description": "Exclusive with [no_local_access]\nx-displayName: \"Enable Site Local API Access\"\nLocal access to site K8s cluster is enabled",
                     "title": "Enable Site Local API Access",
@@ -2578,6 +2602,11 @@ var APISwaggerJSON string = `{
                 "no_global_access": {
                     "description": "Exclusive with [global_access_enable]\nx-displayName: \"Disable VoltConsole API Access\"\nAccess via VoltConsole to site K8s API server is not enabled",
                     "title": "Disable VoltConsole API Access",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_insecure_registries": {
+                    "description": "Exclusive with [insecure_registry_list]\nx-displayName: \"No Docker insecure registries\"\nThere are no Docker insecure registries to be configured",
+                    "title": "No Docker insecure registries",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "no_local_access": {
@@ -2620,6 +2649,26 @@ var APISwaggerJSON string = `{
                     "title": "view_internal",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "View Internal"
+                }
+            }
+        },
+        "k8s_clusterInsecureRegistryListType": {
+            "type": "object",
+            "description": "List of docker insecure registries",
+            "title": "Docker Insecure Registry List",
+            "x-displayname": "Docker Insecure Registry List",
+            "x-ves-proto-message": "ves.io.schema.k8s_cluster.InsecureRegistryListType",
+            "properties": {
+                "insecure_registries": {
+                    "type": "array",
+                    "description": " List of docker insecure registries in format \"example.com:5000\"\n\nExample: - \"example.com:5000\"-\nRequired: YES",
+                    "title": "Docker Insecure Registry List",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Docker Insecure Registry List",
+                    "x-ves-example": "example.com:5000",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -2857,6 +2906,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cluster_role_bindings_choice": "[\"use_custom_cluster_role_bindings\",\"use_default_cluster_role_bindings\"]",
             "x-ves-oneof-field-cluster_role_choice": "[\"use_custom_cluster_role_list\",\"use_default_cluster_roles\"]",
             "x-ves-oneof-field-global_access_choice": "[\"global_access_enable\",\"no_global_access\"]",
+            "x-ves-oneof-field-insecure_registries_choice": "[\"insecure_registry_list\",\"no_insecure_registries\"]",
             "x-ves-oneof-field-local_access_choice": "[\"local_access_config\",\"no_local_access\"]",
             "x-ves-oneof-field-pod_security_policy_choice": "[\"use_custom_psp_list\",\"use_default_psp\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.ReplaceSpecType",
@@ -2865,12 +2915,20 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [no_global_access]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "insecure_registry_list": {
+                    "description": "Exclusive with [no_insecure_registries]\n",
+                    "$ref": "#/definitions/k8s_clusterInsecureRegistryListType"
+                },
                 "local_access_config": {
                     "description": "Exclusive with [no_local_access]\n",
                     "$ref": "#/definitions/k8s_clusterLocalAccessConfigType"
                 },
                 "no_global_access": {
                     "description": "Exclusive with [global_access_enable]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_insecure_registries": {
+                    "description": "Exclusive with [insecure_registry_list]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "no_local_access": {

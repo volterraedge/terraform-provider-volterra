@@ -4458,6 +4458,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Speed",
                     "x-ves-example": "high"
                 },
+                "usb_type": {
+                    "description": " Type of USB device\n\nExample: - \"INTERNAL\"-",
+                    "title": "usb_type",
+                    "$ref": "#/definitions/siteUsbType",
+                    "x-displayname": "USB Type",
+                    "x-ves-example": "INTERNAL"
+                },
                 "vendor_name": {
                     "type": "string",
                     "description": " Vendor ID translated to name (if available)\n\nExample: - \"IBM Corp.\"-",
@@ -4466,6 +4473,20 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "IBM Corp."
                 }
             }
+        },
+        "siteUsbType": {
+            "type": "string",
+            "description": "Type of USB device\n\nUnknown USB device type\nInternal USB present in Certified HW\nUSB device present during node registration\nUSB device that can be matched by USB rules",
+            "title": "UsbType",
+            "enum": [
+                "UNKNOWN_USB",
+                "INTERNAL",
+                "REGISTERED",
+                "CONFIGURABLE"
+            ],
+            "default": "UNKNOWN_USB",
+            "x-displayname": "USB Type",
+            "x-ves-proto-enum": "ves.io.schema.site.UsbType"
         },
         "siteVTRPState": {
             "type": "string",

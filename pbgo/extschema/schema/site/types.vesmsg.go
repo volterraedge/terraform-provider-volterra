@@ -6181,6 +6181,15 @@ func (v *ValidateUSBDevice) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
+	if fv, exists := v.FldValidators["usb_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("usb_type"))
+		if err := fv(ctx, m.GetUsbType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["vendor_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("vendor_name"))

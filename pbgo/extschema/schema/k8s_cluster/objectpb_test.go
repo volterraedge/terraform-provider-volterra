@@ -31,6 +31,7 @@ It has these top-level messages:
 	PodSecurityPolicyListType
 	ClusterRoleListType
 	ClusterRoleBindingListType
+	InsecureRegistryListType
 	GlobalSpecType
 	CreateSpecType
 	ReplaceSpecType
