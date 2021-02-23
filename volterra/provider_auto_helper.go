@@ -51,6 +51,7 @@ import (
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
 	ves_io_schema_service_policy_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_set"
 	ves_io_schema_token "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/token"
+	ves_io_schema_usb_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy"
 	ves_io_schema_user "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user"
 	ves_io_schema_aws_tgw_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
 	ves_io_schema_aws_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
@@ -114,6 +115,7 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_service_policy_rule":       resourceVolterraServicePolicyRule(),
 		"volterra_service_policy_set":        resourceVolterraServicePolicySet(),
 		"volterra_token":                     resourceVolterraToken(),
+		"volterra_usb_policy":                resourceVolterraUsbPolicy(),
 		"volterra_user":                      resourceVolterraUser(),
 		"volterra_aws_tgw_site":              resourceVolterraAwsTgwSite(),
 		"volterra_aws_vpc_site":              resourceVolterraAwsVpcSite(),
@@ -179,6 +181,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_service_policy_rule.ObjectType,
 		ves_io_schema_service_policy_set.ObjectType,
 		ves_io_schema_token.ObjectType,
+		ves_io_schema_usb_policy.ObjectType,
 		ves_io_schema_user.ObjectType,
 		ves_io_schema_aws_tgw_site.ObjectType,
 		ves_io_schema_aws_vpc_site.ObjectType,

@@ -4539,11 +4539,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.service_policy.SimpleRule",
             "properties": {
                 "action": {
-                    "description": " Action to be enforced if the input request matches the rule.\nRequired: YES",
+                    "description": " Action to be enforced if the input request matches the rule.",
                     "title": "action",
                     "$ref": "#/definitions/policyRuleAction",
-                    "x-displayname": "Action",
-                    "x-ves-required": "true"
+                    "x-displayname": "Action"
                 },
                 "api_group_matcher": {
                     "description": " The list of expected API group names to which the request API belongs. The actual list of API group names for the request API is determined from the api\n group and api group element configuration objects using the HTTP method and the HTTP path as inputs.\n The predicate evaluates to true if any of the actual API group names for the request is equal to any of the values in the api group matcher.",
@@ -4625,10 +4624,9 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Name of the rule.\nRequired: YES",
+                    "description": " Name of the rule.",
                     "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-required": "true"
+                    "x-displayname": "Name"
                 },
                 "path": {
                     "description": " A list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\n value extracted from the HTTP URL Resource, excluding any query and fragment information.\n The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",
@@ -4665,11 +4663,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "URL Matcher"
                 },
                 "waf_action": {
-                    "description": " App Firewall action to be enforced if the input request matches the rule.\nRequired: YES",
+                    "description": " App Firewall action to be enforced if the input request matches the rule.",
                     "title": "App Firewall Action",
                     "$ref": "#/definitions/policyWafAction",
-                    "x-displayname": "App Firewall Action",
-                    "x-ves-required": "true"
+                    "x-displayname": "App Firewall Action"
                 }
             }
         },

@@ -108,6 +108,7 @@ func testPk8sSiteConfig(name string) string {
 			}
 			no_local_access = false
 			global_access_enable = true
+			no_insecure_registries = true
 			use_custom_cluster_role_bindings {
 				cluster_role_bindings {
 					name = volterra_k8s_cluster_role_binding.this.name

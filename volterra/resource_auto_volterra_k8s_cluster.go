@@ -151,6 +151,32 @@ func resourceVolterraK8SCluster() *schema.Resource {
 				Optional: true,
 			},
 
+			"insecure_registry_list": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"insecure_registries": {
+
+							Type: schema.TypeList,
+
+							Required: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+					},
+				},
+			},
+
+			"no_insecure_registries": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"local_access_config": {
 
 				Type:     schema.TypeSet,
@@ -417,6 +443,47 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 			globalAccessChoiceInt := &ves_io_schema_k8s_cluster.CreateSpecType_NoGlobalAccess{}
 			globalAccessChoiceInt.NoGlobalAccess = &ves_io_schema.Empty{}
 			createSpec.GlobalAccessChoice = globalAccessChoiceInt
+		}
+
+	}
+
+	//insecure_registries_choice
+
+	insecureRegistriesChoiceTypeFound := false
+
+	if v, ok := d.GetOk("insecure_registry_list"); ok && !insecureRegistriesChoiceTypeFound {
+
+		insecureRegistriesChoiceTypeFound = true
+		insecureRegistriesChoiceInt := &ves_io_schema_k8s_cluster.CreateSpecType_InsecureRegistryList{}
+		insecureRegistriesChoiceInt.InsecureRegistryList = &ves_io_schema_k8s_cluster.InsecureRegistryListType{}
+		createSpec.InsecureRegistriesChoice = insecureRegistriesChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["insecure_registries"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				insecureRegistriesChoiceInt.InsecureRegistryList.InsecureRegistries = ls
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("no_insecure_registries"); ok && !insecureRegistriesChoiceTypeFound {
+
+		insecureRegistriesChoiceTypeFound = true
+
+		if v.(bool) {
+			insecureRegistriesChoiceInt := &ves_io_schema_k8s_cluster.CreateSpecType_NoInsecureRegistries{}
+			insecureRegistriesChoiceInt.NoInsecureRegistries = &ves_io_schema.Empty{}
+			createSpec.InsecureRegistriesChoice = insecureRegistriesChoiceInt
 		}
 
 	}
@@ -770,6 +837,45 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 			globalAccessChoiceInt := &ves_io_schema_k8s_cluster.ReplaceSpecType_NoGlobalAccess{}
 			globalAccessChoiceInt.NoGlobalAccess = &ves_io_schema.Empty{}
 			updateSpec.GlobalAccessChoice = globalAccessChoiceInt
+		}
+
+	}
+
+	insecureRegistriesChoiceTypeFound := false
+
+	if v, ok := d.GetOk("insecure_registry_list"); ok && !insecureRegistriesChoiceTypeFound {
+
+		insecureRegistriesChoiceTypeFound = true
+		insecureRegistriesChoiceInt := &ves_io_schema_k8s_cluster.ReplaceSpecType_InsecureRegistryList{}
+		insecureRegistriesChoiceInt.InsecureRegistryList = &ves_io_schema_k8s_cluster.InsecureRegistryListType{}
+		updateSpec.InsecureRegistriesChoice = insecureRegistriesChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["insecure_registries"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				insecureRegistriesChoiceInt.InsecureRegistryList.InsecureRegistries = ls
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("no_insecure_registries"); ok && !insecureRegistriesChoiceTypeFound {
+
+		insecureRegistriesChoiceTypeFound = true
+
+		if v.(bool) {
+			insecureRegistriesChoiceInt := &ves_io_schema_k8s_cluster.ReplaceSpecType_NoInsecureRegistries{}
+			insecureRegistriesChoiceInt.NoInsecureRegistries = &ves_io_schema.Empty{}
+			updateSpec.InsecureRegistriesChoice = insecureRegistriesChoiceInt
 		}
 
 	}

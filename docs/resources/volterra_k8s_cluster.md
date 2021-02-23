@@ -29,10 +29,13 @@ resource "volterra_k8s_cluster" "example" {
   // One of the arguments from this list "no_global_access global_access_enable" must be set
   no_global_access = true
 
+  // One of the arguments from this list "no_insecure_registries insecure_registry_list" must be set
+  no_insecure_registries = true
+
   // One of the arguments from this list "no_local_access local_access_config" must be set
   no_local_access = true
 
-  // One of the arguments from this list "use_default_psp use_custom_psp_list" must be set
+  // One of the arguments from this list "use_custom_psp_list use_default_psp" must be set
   use_default_psp = true
 }
 
@@ -69,6 +72,10 @@ Argument Reference
 
 `no_global_access` - (Optional) Access via VoltConsole to site K8s API server is not enabled (bool).
 
+`insecure_registry_list` - (Optional) Select Docker insecure registries for this K8s cluster. See [Insecure Registry List ](#insecure-registry-list) below for details.
+
+`no_insecure_registries` - (Optional) There are no Docker insecure registries to be configured (bool).
+
 `local_access_config` - (Optional) Local access to site K8s cluster is enabled. See [Local Access Config ](#local-access-config) below for details.
 
 `no_local_access` - (Optional) Local access to site K8s cluster is not enabled (bool).
@@ -80,6 +87,12 @@ Argument Reference
 ### Default Port
 
 Use default port for K8s API server..
+
+### Insecure Registry List
+
+Select Docker insecure registries for this K8s cluster.
+
+`insecure_registries` - (Required) List of docker insecure registries in format "example.com:5000" (`String`).
 
 ### Local Access Config
 

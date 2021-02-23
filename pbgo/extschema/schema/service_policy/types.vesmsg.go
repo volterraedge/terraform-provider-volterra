@@ -73,12 +73,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetSimpleRulesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	return drInfos, nil
 }
 
@@ -147,31 +141,6 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
-// GetDRefInfo for the field's type
-func (m *CreateSpecType) GetSimpleRulesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
-	if m.SimpleRules == nil {
-		return []db.DRefInfo{}, nil
-	}
-
-	for idx, e := range m.SimpleRules {
-		driSet, err := e.GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, dri := range driSet {
-			dri.DRField = fmt.Sprintf("simple_rules[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
-		}
-	}
-
-	return drInfos, err
-}
-
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -211,46 +180,6 @@ func (v *ValidateCreateSpecType) AlgoValidationRuleHandler(rules map[string]stri
 	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema_policy.RuleCombiningAlgorithm_name, conv)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for algo")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCreateSpecType) SimpleRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemsValidatorFn := func(ctx context.Context, elems []*SimpleRule, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := SimpleRuleValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for simple_rules")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*SimpleRule)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*SimpleRule, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated simple_rules")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items simple_rules")
-		}
-		return nil
 	}
 
 	return validatorFn, nil
@@ -437,14 +366,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["simple_rules"]; exists {
-		vOpts := append(opts, db.WithValidateField("simple_rules"))
-		if err := fv(ctx, m.GetSimpleRules(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	return nil
 }
 
@@ -504,17 +425,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["algo"] = vFn
-
-	vrhSimpleRules := v.SimpleRulesValidationRuleHandler
-	rulesSimpleRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1024",
-	}
-	vFn, err = vrhSimpleRules(rulesSimpleRules)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.simple_rules: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["simple_rules"] = vFn
 
 	v.FldValidators["rule_choice.allow_list"] = SourceListValidator().Validate
 	v.FldValidators["rule_choice.deny_list"] = SourceListValidator().Validate
@@ -2183,12 +2093,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetSimpleRulesDRefInfo(); err != nil {
-		return nil, err
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	return drInfos, nil
 }
 
@@ -2257,31 +2161,6 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, err
 }
 
-// GetDRefInfo for the field's type
-func (m *ReplaceSpecType) GetSimpleRulesDRefInfo() ([]db.DRefInfo, error) {
-	var (
-		drInfos, driSet []db.DRefInfo
-		err             error
-	)
-	_ = driSet
-	if m.SimpleRules == nil {
-		return []db.DRefInfo{}, nil
-	}
-
-	for idx, e := range m.SimpleRules {
-		driSet, err := e.GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, dri := range driSet {
-			dri.DRField = fmt.Sprintf("simple_rules[%v].%s", idx, dri.DRField)
-			drInfos = append(drInfos, dri)
-		}
-	}
-
-	return drInfos, err
-}
-
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -2321,46 +2200,6 @@ func (v *ValidateReplaceSpecType) AlgoValidationRuleHandler(rules map[string]str
 	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema_policy.RuleCombiningAlgorithm_name, conv)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for algo")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateReplaceSpecType) SimpleRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemsValidatorFn := func(ctx context.Context, elems []*SimpleRule, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := SimpleRuleValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for simple_rules")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*SimpleRule)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*SimpleRule, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated simple_rules")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items simple_rules")
-		}
-		return nil
 	}
 
 	return validatorFn, nil
@@ -2547,14 +2386,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["simple_rules"]; exists {
-		vOpts := append(opts, db.WithValidateField("simple_rules"))
-		if err := fv(ctx, m.GetSimpleRules(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	return nil
 }
 
@@ -2614,17 +2445,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["algo"] = vFn
-
-	vrhSimpleRules := v.SimpleRulesValidationRuleHandler
-	rulesSimpleRules := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1024",
-	}
-	vFn, err = vrhSimpleRules(rulesSimpleRules)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.simple_rules: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["simple_rules"] = vFn
 
 	v.FldValidators["rule_choice.allow_list"] = SourceListValidator().Validate
 	v.FldValidators["rule_choice.deny_list"] = SourceListValidator().Validate
@@ -3084,32 +2904,6 @@ type ValidateSimpleRule struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateSimpleRule) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateSimpleRule) ActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	var conv db.EnumConvFn
-	conv = func(v interface{}) int32 {
-		i := v.(ves_io_schema_policy.RuleAction)
-		return int32(i)
-	}
-	// ves_io_schema_policy.RuleAction_name is generated in .pb.go
-	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema_policy.RuleAction_name, conv)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for action")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateSimpleRule) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.HeaderMatcherType, opts ...db.ValidateOpt) error {
@@ -3144,27 +2938,6 @@ func (v *ValidateSimpleRule) HeadersValidationRuleHandler(rules map[string]strin
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items headers")
 		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateSimpleRule) WafActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for waf_action")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := ves_io_schema_policy.WafActionValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
 		return nil
 	}
 
@@ -3430,28 +3203,6 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhName := v.NameValidationRuleHandler
-	rulesName := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhName(rulesName)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleRule.name: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["name"] = vFn
-
-	vrhAction := v.ActionValidationRuleHandler
-	rulesAction := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhAction(rulesAction)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleRule.action: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["action"] = vFn
-
 	vrhHeaders := v.HeadersValidationRuleHandler
 	rulesHeaders := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "16",
@@ -3462,17 +3213,6 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 		panic(errMsg)
 	}
 	v.FldValidators["headers"] = vFn
-
-	vrhWafAction := v.WafActionValidationRuleHandler
-	rulesWafAction := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhWafAction(rulesWafAction)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleRule.waf_action: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["waf_action"] = vFn
 
 	vrhDescription := v.DescriptionValidationRuleHandler
 	rulesDescription := map[string]string{
@@ -3503,6 +3243,8 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 	v.FldValidators["path"] = ves_io_schema_policy.PathMatcherTypeValidator().Validate
 
 	v.FldValidators["http_method"] = ves_io_schema_policy.HttpMethodMatcherTypeValidator().Validate
+
+	v.FldValidators["waf_action"] = ves_io_schema_policy.WafActionValidator().Validate
 
 	v.FldValidators["port_matcher"] = ves_io_schema_policy.PortMatcherTypeValidator().Validate
 
@@ -4254,7 +3996,6 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.PortMatcher = f.GetPortMatcher()
 	m.GetRuleChoiceFromGlobalSpecType(f)
 	m.GetServerChoiceFromGlobalSpecType(f)
-	m.SimpleRules = f.GetSimpleRules()
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -4267,7 +4008,6 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.PortMatcher = m1.PortMatcher
 	m1.SetRuleChoiceToGlobalSpecType(f)
 	m1.SetServerChoiceToGlobalSpecType(f)
-	f.SimpleRules = m1.SimpleRules
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -4528,7 +4268,6 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.PortMatcher = f.GetPortMatcher()
 	m.GetRuleChoiceFromGlobalSpecType(f)
 	m.GetServerChoiceFromGlobalSpecType(f)
-	m.SimpleRules = f.GetSimpleRules()
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -4541,5 +4280,4 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.PortMatcher = m1.PortMatcher
 	m1.SetRuleChoiceToGlobalSpecType(f)
 	m1.SetServerChoiceToGlobalSpecType(f)
-	f.SimpleRules = m1.SimpleRules
 }

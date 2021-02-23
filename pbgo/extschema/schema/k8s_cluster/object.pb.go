@@ -31,6 +31,7 @@
 		PodSecurityPolicyListType
 		ClusterRoleListType
 		ClusterRoleBindingListType
+		InsecureRegistryListType
 		GlobalSpecType
 		CreateSpecType
 		ReplaceSpecType

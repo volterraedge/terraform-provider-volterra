@@ -1098,6 +1098,14 @@ func (v *ValidateCreateSpecType) GlobalAccessChoiceValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) InsecureRegistriesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for insecure_registries_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) LocalAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1236,6 +1244,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["insecure_registries_choice"]; exists {
+		val := m.GetInsecureRegistriesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("insecure_registries_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetInsecureRegistriesChoice().(type) {
+	case *CreateSpecType_NoInsecureRegistries:
+		if fv, exists := v.FldValidators["insecure_registries_choice.no_insecure_registries"]; exists {
+			val := m.GetInsecureRegistriesChoice().(*CreateSpecType_NoInsecureRegistries).NoInsecureRegistries
+			vOpts := append(opts,
+				db.WithValidateField("insecure_registries_choice"),
+				db.WithValidateField("no_insecure_registries"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_InsecureRegistryList:
+		if fv, exists := v.FldValidators["insecure_registries_choice.insecure_registry_list"]; exists {
+			val := m.GetInsecureRegistriesChoice().(*CreateSpecType_InsecureRegistryList).InsecureRegistryList
+			vOpts := append(opts,
+				db.WithValidateField("insecure_registries_choice"),
+				db.WithValidateField("insecure_registry_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["local_access_choice"]; exists {
 		val := m.GetLocalAccessChoice()
 		vOpts := append(opts,
@@ -1356,6 +1400,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["global_access_choice"] = vFn
 
+	vrhInsecureRegistriesChoice := v.InsecureRegistriesChoiceValidationRuleHandler
+	rulesInsecureRegistriesChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhInsecureRegistriesChoice(rulesInsecureRegistriesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.insecure_registries_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["insecure_registries_choice"] = vFn
+
 	vrhLocalAccessChoice := v.LocalAccessChoiceValidationRuleHandler
 	rulesLocalAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -1381,6 +1436,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["cluster_role_bindings_choice.use_custom_cluster_role_bindings"] = ClusterRoleBindingListTypeValidator().Validate
 
 	v.FldValidators["cluster_role_choice.use_custom_cluster_role_list"] = ClusterRoleListTypeValidator().Validate
+
+	v.FldValidators["insecure_registries_choice.insecure_registry_list"] = InsecureRegistryListTypeValidator().Validate
 
 	v.FldValidators["local_access_choice.local_access_config"] = LocalAccessConfigTypeValidator().Validate
 
@@ -1574,6 +1631,14 @@ func (v *ValidateGetSpecType) GlobalAccessChoiceValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) InsecureRegistriesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for insecure_registries_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) LocalAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1712,6 +1777,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["insecure_registries_choice"]; exists {
+		val := m.GetInsecureRegistriesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("insecure_registries_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetInsecureRegistriesChoice().(type) {
+	case *GetSpecType_NoInsecureRegistries:
+		if fv, exists := v.FldValidators["insecure_registries_choice.no_insecure_registries"]; exists {
+			val := m.GetInsecureRegistriesChoice().(*GetSpecType_NoInsecureRegistries).NoInsecureRegistries
+			vOpts := append(opts,
+				db.WithValidateField("insecure_registries_choice"),
+				db.WithValidateField("no_insecure_registries"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_InsecureRegistryList:
+		if fv, exists := v.FldValidators["insecure_registries_choice.insecure_registry_list"]; exists {
+			val := m.GetInsecureRegistriesChoice().(*GetSpecType_InsecureRegistryList).InsecureRegistryList
+			vOpts := append(opts,
+				db.WithValidateField("insecure_registries_choice"),
+				db.WithValidateField("insecure_registry_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["local_access_choice"]; exists {
 		val := m.GetLocalAccessChoice()
 		vOpts := append(opts,
@@ -1832,6 +1933,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["global_access_choice"] = vFn
 
+	vrhInsecureRegistriesChoice := v.InsecureRegistriesChoiceValidationRuleHandler
+	rulesInsecureRegistriesChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhInsecureRegistriesChoice(rulesInsecureRegistriesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.insecure_registries_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["insecure_registries_choice"] = vFn
+
 	vrhLocalAccessChoice := v.LocalAccessChoiceValidationRuleHandler
 	rulesLocalAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -1857,6 +1969,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["cluster_role_bindings_choice.use_custom_cluster_role_bindings"] = ClusterRoleBindingListTypeValidator().Validate
 
 	v.FldValidators["cluster_role_choice.use_custom_cluster_role_list"] = ClusterRoleListTypeValidator().Validate
+
+	v.FldValidators["insecure_registries_choice.insecure_registry_list"] = InsecureRegistryListTypeValidator().Validate
 
 	v.FldValidators["local_access_choice.local_access_config"] = LocalAccessConfigTypeValidator().Validate
 
@@ -2285,6 +2399,14 @@ func (v *ValidateGlobalSpecType) GlobalAccessChoiceValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) InsecureRegistriesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for insecure_registries_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) LocalAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2603,6 +2725,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["insecure_registries_choice"]; exists {
+		val := m.GetInsecureRegistriesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("insecure_registries_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetInsecureRegistriesChoice().(type) {
+	case *GlobalSpecType_NoInsecureRegistries:
+		if fv, exists := v.FldValidators["insecure_registries_choice.no_insecure_registries"]; exists {
+			val := m.GetInsecureRegistriesChoice().(*GlobalSpecType_NoInsecureRegistries).NoInsecureRegistries
+			vOpts := append(opts,
+				db.WithValidateField("insecure_registries_choice"),
+				db.WithValidateField("no_insecure_registries"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_InsecureRegistryList:
+		if fv, exists := v.FldValidators["insecure_registries_choice.insecure_registry_list"]; exists {
+			val := m.GetInsecureRegistriesChoice().(*GlobalSpecType_InsecureRegistryList).InsecureRegistryList
+			vOpts := append(opts,
+				db.WithValidateField("insecure_registries_choice"),
+				db.WithValidateField("insecure_registry_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["local_access_choice"]; exists {
 		val := m.GetLocalAccessChoice()
 		vOpts := append(opts,
@@ -2743,6 +2901,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["global_access_choice"] = vFn
 
+	vrhInsecureRegistriesChoice := v.InsecureRegistriesChoiceValidationRuleHandler
+	rulesInsecureRegistriesChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhInsecureRegistriesChoice(rulesInsecureRegistriesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.insecure_registries_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["insecure_registries_choice"] = vFn
+
 	vrhLocalAccessChoice := v.LocalAccessChoiceValidationRuleHandler
 	rulesLocalAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -2807,6 +2976,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["cluster_role_choice.use_custom_cluster_role_list"] = ClusterRoleListTypeValidator().Validate
 
+	v.FldValidators["insecure_registries_choice.insecure_registry_list"] = InsecureRegistryListTypeValidator().Validate
+
 	v.FldValidators["local_access_choice.local_access_config"] = LocalAccessConfigTypeValidator().Validate
 
 	v.FldValidators["pod_security_policy_choice.use_custom_psp_list"] = PodSecurityPolicyListTypeValidator().Validate
@@ -2818,6 +2989,149 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *InsecureRegistryListType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *InsecureRegistryListType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *InsecureRegistryListType) DeepCopy() *InsecureRegistryListType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &InsecureRegistryListType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *InsecureRegistryListType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *InsecureRegistryListType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return InsecureRegistryListTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateInsecureRegistryListType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateInsecureRegistryListType) InsecureRegistriesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for insecure_registries")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for insecure_registries")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated insecure_registries")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items insecure_registries")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateInsecureRegistryListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*InsecureRegistryListType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *InsecureRegistryListType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["insecure_registries"]; exists {
+		vOpts := append(opts, db.WithValidateField("insecure_registries"))
+		if err := fv(ctx, m.GetInsecureRegistries(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultInsecureRegistryListTypeValidator = func() *ValidateInsecureRegistryListType {
+	v := &ValidateInsecureRegistryListType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhInsecureRegistries := v.InsecureRegistriesValidationRuleHandler
+	rulesInsecureRegistries := map[string]string{
+		"ves.io.schema.rules.message.required":                "true",
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.min_items":              "1",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+		"ves.io.schema.rules.string.hostport":                 "true",
+	}
+	vFn, err = vrhInsecureRegistries(rulesInsecureRegistries)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for InsecureRegistryListType.insecure_registries: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["insecure_registries"] = vFn
+
+	return v
+}()
+
+func InsecureRegistryListTypeValidator() db.Validator {
+	return DefaultInsecureRegistryListTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3389,6 +3703,14 @@ func (v *ValidateReplaceSpecType) GlobalAccessChoiceValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) InsecureRegistriesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for insecure_registries_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) LocalAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -3527,6 +3849,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["insecure_registries_choice"]; exists {
+		val := m.GetInsecureRegistriesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("insecure_registries_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetInsecureRegistriesChoice().(type) {
+	case *ReplaceSpecType_NoInsecureRegistries:
+		if fv, exists := v.FldValidators["insecure_registries_choice.no_insecure_registries"]; exists {
+			val := m.GetInsecureRegistriesChoice().(*ReplaceSpecType_NoInsecureRegistries).NoInsecureRegistries
+			vOpts := append(opts,
+				db.WithValidateField("insecure_registries_choice"),
+				db.WithValidateField("no_insecure_registries"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_InsecureRegistryList:
+		if fv, exists := v.FldValidators["insecure_registries_choice.insecure_registry_list"]; exists {
+			val := m.GetInsecureRegistriesChoice().(*ReplaceSpecType_InsecureRegistryList).InsecureRegistryList
+			vOpts := append(opts,
+				db.WithValidateField("insecure_registries_choice"),
+				db.WithValidateField("insecure_registry_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["local_access_choice"]; exists {
 		val := m.GetLocalAccessChoice()
 		vOpts := append(opts,
@@ -3647,6 +4005,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["global_access_choice"] = vFn
 
+	vrhInsecureRegistriesChoice := v.InsecureRegistriesChoiceValidationRuleHandler
+	rulesInsecureRegistriesChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhInsecureRegistriesChoice(rulesInsecureRegistriesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.insecure_registries_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["insecure_registries_choice"] = vFn
+
 	vrhLocalAccessChoice := v.LocalAccessChoiceValidationRuleHandler
 	rulesLocalAccessChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -3672,6 +4041,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["cluster_role_bindings_choice.use_custom_cluster_role_bindings"] = ClusterRoleBindingListTypeValidator().Validate
 
 	v.FldValidators["cluster_role_choice.use_custom_cluster_role_list"] = ClusterRoleListTypeValidator().Validate
+
+	v.FldValidators["insecure_registries_choice.insecure_registry_list"] = InsecureRegistryListTypeValidator().Validate
 
 	v.FldValidators["local_access_choice.local_access_config"] = LocalAccessConfigTypeValidator().Validate
 
@@ -3790,6 +4161,41 @@ func (r *CreateSpecType) GetGlobalAccessChoiceFromGlobalSpecType(o *GlobalSpecTy
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetInsecureRegistriesChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.InsecureRegistriesChoice.(type) {
+	case nil:
+		o.InsecureRegistriesChoice = nil
+
+	case *CreateSpecType_InsecureRegistryList:
+		o.InsecureRegistriesChoice = &GlobalSpecType_InsecureRegistryList{InsecureRegistryList: of.InsecureRegistryList}
+
+	case *CreateSpecType_NoInsecureRegistries:
+		o.InsecureRegistriesChoice = &GlobalSpecType_NoInsecureRegistries{NoInsecureRegistries: of.NoInsecureRegistries}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetInsecureRegistriesChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.InsecureRegistriesChoice.(type) {
+	case nil:
+		r.InsecureRegistriesChoice = nil
+
+	case *GlobalSpecType_InsecureRegistryList:
+		r.InsecureRegistriesChoice = &CreateSpecType_InsecureRegistryList{InsecureRegistryList: of.InsecureRegistryList}
+
+	case *GlobalSpecType_NoInsecureRegistries:
+		r.InsecureRegistriesChoice = &CreateSpecType_NoInsecureRegistries{NoInsecureRegistries: of.NoInsecureRegistries}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetLocalAccessChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.LocalAccessChoice.(type) {
 	case nil:
@@ -3866,6 +4272,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetClusterRoleBindingsChoiceFromGlobalSpecType(f)
 	m.GetClusterRoleChoiceFromGlobalSpecType(f)
 	m.GetGlobalAccessChoiceFromGlobalSpecType(f)
+	m.GetInsecureRegistriesChoiceFromGlobalSpecType(f)
 	m.GetLocalAccessChoiceFromGlobalSpecType(f)
 	m.GetPodSecurityPolicyChoiceFromGlobalSpecType(f)
 }
@@ -3879,6 +4286,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetClusterRoleBindingsChoiceToGlobalSpecType(f)
 	m1.SetClusterRoleChoiceToGlobalSpecType(f)
 	m1.SetGlobalAccessChoiceToGlobalSpecType(f)
+	m1.SetInsecureRegistriesChoiceToGlobalSpecType(f)
 	m1.SetLocalAccessChoiceToGlobalSpecType(f)
 	m1.SetPodSecurityPolicyChoiceToGlobalSpecType(f)
 }
@@ -3989,6 +4397,41 @@ func (r *GetSpecType) GetGlobalAccessChoiceFromGlobalSpecType(o *GlobalSpecType)
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetInsecureRegistriesChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.InsecureRegistriesChoice.(type) {
+	case nil:
+		o.InsecureRegistriesChoice = nil
+
+	case *GetSpecType_InsecureRegistryList:
+		o.InsecureRegistriesChoice = &GlobalSpecType_InsecureRegistryList{InsecureRegistryList: of.InsecureRegistryList}
+
+	case *GetSpecType_NoInsecureRegistries:
+		o.InsecureRegistriesChoice = &GlobalSpecType_NoInsecureRegistries{NoInsecureRegistries: of.NoInsecureRegistries}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetInsecureRegistriesChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.InsecureRegistriesChoice.(type) {
+	case nil:
+		r.InsecureRegistriesChoice = nil
+
+	case *GlobalSpecType_InsecureRegistryList:
+		r.InsecureRegistriesChoice = &GetSpecType_InsecureRegistryList{InsecureRegistryList: of.InsecureRegistryList}
+
+	case *GlobalSpecType_NoInsecureRegistries:
+		r.InsecureRegistriesChoice = &GetSpecType_NoInsecureRegistries{NoInsecureRegistries: of.NoInsecureRegistries}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetLocalAccessChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.LocalAccessChoice.(type) {
 	case nil:
@@ -4065,6 +4508,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetClusterRoleBindingsChoiceFromGlobalSpecType(f)
 	m.GetClusterRoleChoiceFromGlobalSpecType(f)
 	m.GetGlobalAccessChoiceFromGlobalSpecType(f)
+	m.GetInsecureRegistriesChoiceFromGlobalSpecType(f)
 	m.GetLocalAccessChoiceFromGlobalSpecType(f)
 	m.GetPodSecurityPolicyChoiceFromGlobalSpecType(f)
 }
@@ -4078,6 +4522,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetClusterRoleBindingsChoiceToGlobalSpecType(f)
 	m1.SetClusterRoleChoiceToGlobalSpecType(f)
 	m1.SetGlobalAccessChoiceToGlobalSpecType(f)
+	m1.SetInsecureRegistriesChoiceToGlobalSpecType(f)
 	m1.SetLocalAccessChoiceToGlobalSpecType(f)
 	m1.SetPodSecurityPolicyChoiceToGlobalSpecType(f)
 }
@@ -4188,6 +4633,41 @@ func (r *ReplaceSpecType) GetGlobalAccessChoiceFromGlobalSpecType(o *GlobalSpecT
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetInsecureRegistriesChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.InsecureRegistriesChoice.(type) {
+	case nil:
+		o.InsecureRegistriesChoice = nil
+
+	case *ReplaceSpecType_InsecureRegistryList:
+		o.InsecureRegistriesChoice = &GlobalSpecType_InsecureRegistryList{InsecureRegistryList: of.InsecureRegistryList}
+
+	case *ReplaceSpecType_NoInsecureRegistries:
+		o.InsecureRegistriesChoice = &GlobalSpecType_NoInsecureRegistries{NoInsecureRegistries: of.NoInsecureRegistries}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetInsecureRegistriesChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.InsecureRegistriesChoice.(type) {
+	case nil:
+		r.InsecureRegistriesChoice = nil
+
+	case *GlobalSpecType_InsecureRegistryList:
+		r.InsecureRegistriesChoice = &ReplaceSpecType_InsecureRegistryList{InsecureRegistryList: of.InsecureRegistryList}
+
+	case *GlobalSpecType_NoInsecureRegistries:
+		r.InsecureRegistriesChoice = &ReplaceSpecType_NoInsecureRegistries{NoInsecureRegistries: of.NoInsecureRegistries}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
 func (r *ReplaceSpecType) SetLocalAccessChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.LocalAccessChoice.(type) {
 	case nil:
@@ -4264,6 +4744,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetClusterRoleBindingsChoiceFromGlobalSpecType(f)
 	m.GetClusterRoleChoiceFromGlobalSpecType(f)
 	m.GetGlobalAccessChoiceFromGlobalSpecType(f)
+	m.GetInsecureRegistriesChoiceFromGlobalSpecType(f)
 	m.GetLocalAccessChoiceFromGlobalSpecType(f)
 	m.GetPodSecurityPolicyChoiceFromGlobalSpecType(f)
 }
@@ -4277,6 +4758,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetClusterRoleBindingsChoiceToGlobalSpecType(f)
 	m1.SetClusterRoleChoiceToGlobalSpecType(f)
 	m1.SetGlobalAccessChoiceToGlobalSpecType(f)
+	m1.SetInsecureRegistriesChoiceToGlobalSpecType(f)
 	m1.SetLocalAccessChoiceToGlobalSpecType(f)
 	m1.SetPodSecurityPolicyChoiceToGlobalSpecType(f)
 }

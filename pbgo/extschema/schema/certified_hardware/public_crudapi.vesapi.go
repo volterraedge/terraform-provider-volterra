@@ -1387,7 +1387,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the certified_hardware",
                     "title": "spec",
-                    "$ref": "#/definitions/certified_hardwareGetSpecType",
+                    "$ref": "#/definitions/schemacertified_hardwareGetSpecType",
                     "x-displayname": "Spec"
                 },
                 "status": {
@@ -1417,146 +1417,6 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_READ"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
-        },
-        "certified_hardwareGetSpecType": {
-            "type": "object",
-            "description": "Get Certified Hardware object",
-            "title": "Get certified hardware",
-            "x-displayname": "Get Certified Hardware",
-            "x-ves-proto-message": "ves.io.schema.certified_hardware.GetSpecType",
-            "properties": {
-                "certified_hardware_type": {
-                    "description": " HW type defines billing rate per billing node.\n\nExample: - \"VOLTMESH\"-",
-                    "$ref": "#/definitions/certified_hardwareHardwareType",
-                    "x-displayname": "Certified Hardware Type",
-                    "x-ves-example": "VOLTMESH"
-                },
-                "devices": {
-                    "type": "array",
-                    "description": " List of supported devices in this model",
-                    "items": {
-                        "$ref": "#/definitions/certified_hardwareDeviceType"
-                    },
-                    "x-displayname": "Devices"
-                },
-                "image_list": {
-                    "type": "array",
-                    "description": " List of image names with providers for this certified hardware, e.g. AWS ami-0f99d090261d2acd5",
-                    "items": {
-                        "$ref": "#/definitions/certified_hardwareImageType"
-                    },
-                    "x-displayname": "Image List"
-                },
-                "mem_page_number": {
-                    "type": "integer",
-                    "description": " Number of pages allocated in this certified hardware for Hugepages. Each page size is defined above in 'mem_page_size'\n Total memory reserved for Hugepages is 'mem_page_size * mem_page_number'\n\nExample: - \"2\"-",
-                    "format": "int32",
-                    "x-displayname": "Number of pages",
-                    "x-ves-example": "2"
-                },
-                "mem_page_size": {
-                    "description": " An explicit page size used in certified hardware, 4KB, 2Mi, 2048, 1Gi",
-                    "$ref": "#/definitions/certified_hardwareMemPageSize",
-                    "x-displayname": "Memory Page Size"
-                },
-                "numa_mem": {
-                    "type": "array",
-                    "description": " List of Numa nodes with the number of MB of instance memory to map to node instance\n If not specified, memory is evenly divided among available NUMA nodes",
-                    "items": {
-                        "$ref": "#/definitions/certified_hardwareNumaMem"
-                    },
-                    "x-displayname": "NUMA Memory"
-                },
-                "numa_nodes": {
-                    "type": "integer",
-                    "description": " The number of host NUMA nodes used in certified hardware\n\nExample: - \"2\"-",
-                    "format": "int32",
-                    "x-displayname": "NUMA Node Count",
-                    "x-ves-example": "2"
-                },
-                "vendor_model_list": {
-                    "type": "array",
-                    "description": " List of supported hardware vendor and model for this certified hardware",
-                    "items": {
-                        "$ref": "#/definitions/certified_hardwareHardwareVendorModel"
-                    },
-                    "x-displayname": "Vendor and Model"
-                }
-            }
-        },
-        "certified_hardwareGlobalSpecType": {
-            "type": "object",
-            "description": "Certified Hardware Specification",
-            "title": "Global Specification",
-            "x-displayname": "Global Specification",
-            "x-ves-proto-message": "ves.io.schema.certified_hardware.GlobalSpecType",
-            "properties": {
-                "certified_hardware_type": {
-                    "description": " HW type defines billing rate per billing node.\n\nExample: - \"VOLTMESH\"-",
-                    "title": "Certified Hardware Type",
-                    "$ref": "#/definitions/certified_hardwareHardwareType",
-                    "x-displayname": "Certified Hardware Type",
-                    "x-ves-example": "VOLTMESH"
-                },
-                "devices": {
-                    "type": "array",
-                    "description": " List of supported devices in this model",
-                    "title": "Devices",
-                    "items": {
-                        "$ref": "#/definitions/certified_hardwareDeviceType"
-                    },
-                    "x-displayname": "Devices"
-                },
-                "image_list": {
-                    "type": "array",
-                    "description": " List of image names with providers for this certified hardware, e.g. AWS ami-0f99d090261d2acd5",
-                    "title": "Image List",
-                    "items": {
-                        "$ref": "#/definitions/certified_hardwareImageType"
-                    },
-                    "x-displayname": "Image List"
-                },
-                "mem_page_number": {
-                    "type": "integer",
-                    "description": " Number of pages allocated in this certified hardware for Hugepages. Each page size is defined above in 'mem_page_size'\n Total memory reserved for Hugepages is 'mem_page_size * mem_page_number'\n\nExample: - \"2\"-",
-                    "title": "Number of pages",
-                    "format": "int32",
-                    "x-displayname": "Number of pages",
-                    "x-ves-example": "2"
-                },
-                "mem_page_size": {
-                    "description": " An explicit page size used in certified hardware, 4KB, 2Mi, 2048, 1Gi",
-                    "title": "Memory Page Size",
-                    "$ref": "#/definitions/certified_hardwareMemPageSize",
-                    "x-displayname": "Memory Page Size"
-                },
-                "numa_mem": {
-                    "type": "array",
-                    "description": " List of Numa nodes with the number of MB of instance memory to map to node instance\n If not specified, memory is evenly divided among available NUMA nodes",
-                    "title": "NUMA Memory",
-                    "items": {
-                        "$ref": "#/definitions/certified_hardwareNumaMem"
-                    },
-                    "x-displayname": "NUMA Memory"
-                },
-                "numa_nodes": {
-                    "type": "integer",
-                    "description": " The number of host NUMA nodes used in certified hardware\n\nExample: - \"2\"-",
-                    "title": "NUMA Node Count",
-                    "format": "int32",
-                    "x-displayname": "NUMA Node Count",
-                    "x-ves-example": "2"
-                },
-                "vendor_model_list": {
-                    "type": "array",
-                    "description": " List of supported hardware vendor and model for this certified hardware",
-                    "title": "Vendor and Model",
-                    "items": {
-                        "$ref": "#/definitions/certified_hardwareHardwareVendorModel"
-                    },
-                    "x-displayname": "Vendor and Model"
-                }
-            }
         },
         "certified_hardwareHardwareDeviceInstanceUseType": {
             "type": "string",
@@ -1717,7 +1577,7 @@ var APISwaggerJSON string = `{
                 "get_spec": {
                     "description": " If ListRequest has any specified report_fields, it will appear in object",
                     "title": "get_spec",
-                    "$ref": "#/definitions/certified_hardwareGetSpecType",
+                    "$ref": "#/definitions/schemacertified_hardwareGetSpecType",
                     "x-displayname": "Get Specification"
                 },
                 "labels": {
@@ -1904,7 +1764,7 @@ var APISwaggerJSON string = `{
                 "gc_spec": {
                     "description": " Specification for Certified Hardware",
                     "title": "gc_spec",
-                    "$ref": "#/definitions/certified_hardwareGlobalSpecType",
+                    "$ref": "#/definitions/schemacertified_hardwareGlobalSpecType",
                     "x-displayname": "GC Spec"
                 }
             }
@@ -1936,7 +1796,7 @@ var APISwaggerJSON string = `{
                     "description": " Object reference",
                     "title": "object_refs",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
                 },
@@ -1945,6 +1805,50 @@ var APISwaggerJSON string = `{
                     "title": "status",
                     "$ref": "#/definitions/certified_hardwareCertifiedHardwareStatus",
                     "x-displayname": "Status"
+                }
+            }
+        },
+        "ioschemaObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
                 }
             }
         },
@@ -2143,50 +2047,6 @@ var APISwaggerJSON string = `{
                 "uid": {
                     "type": "string",
                     "description": " uid is the unique in time and space value for this object. Object create will fail if \n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
-        "schemaObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
-            "properties": {
-                "kind": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
-                    "title": "kind",
-                    "x-displayname": "Kind",
-                    "x-ves-example": "virtual_site"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contactus-route"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
@@ -2443,7 +2303,7 @@ var APISwaggerJSON string = `{
                     "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.",
                     "title": "namespace",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Namespace Reference"
                 },
@@ -2518,6 +2378,214 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
+                }
+            }
+        },
+        "schemacertified_hardwareGetSpecType": {
+            "type": "object",
+            "description": "Get Certified Hardware object",
+            "title": "Get certified hardware",
+            "x-displayname": "Get Certified Hardware",
+            "x-ves-proto-message": "ves.io.schema.certified_hardware.GetSpecType",
+            "properties": {
+                "certified_hardware_type": {
+                    "description": " HW type defines billing rate per billing node.\n\nExample: - \"VOLTMESH\"-",
+                    "$ref": "#/definitions/certified_hardwareHardwareType",
+                    "x-displayname": "Certified Hardware Type",
+                    "x-ves-example": "VOLTMESH"
+                },
+                "devices": {
+                    "type": "array",
+                    "description": " List of supported devices in this model",
+                    "items": {
+                        "$ref": "#/definitions/certified_hardwareDeviceType"
+                    },
+                    "x-displayname": "Devices"
+                },
+                "image_list": {
+                    "type": "array",
+                    "description": " List of image names with providers for this certified hardware, e.g. AWS ami-0f99d090261d2acd5",
+                    "items": {
+                        "$ref": "#/definitions/certified_hardwareImageType"
+                    },
+                    "x-displayname": "Image List"
+                },
+                "internal_usb_device_rule": {
+                    "type": "array",
+                    "description": " List of internal USB device rules for server",
+                    "items": {
+                        "$ref": "#/definitions/usb_policyRule"
+                    },
+                    "x-displayname": "Internal USB device rules"
+                },
+                "mem_page_number": {
+                    "type": "integer",
+                    "description": " Number of pages allocated in this certified hardware for Hugepages. Each page size is defined above in 'mem_page_size'\n Total memory reserved for Hugepages is 'mem_page_size * mem_page_number'\n\nExample: - \"2\"-",
+                    "format": "int32",
+                    "x-displayname": "Number of pages",
+                    "x-ves-example": "2"
+                },
+                "mem_page_size": {
+                    "description": " An explicit page size used in certified hardware, 4KB, 2Mi, 2048, 1Gi",
+                    "$ref": "#/definitions/certified_hardwareMemPageSize",
+                    "x-displayname": "Memory Page Size"
+                },
+                "numa_mem": {
+                    "type": "array",
+                    "description": " List of Numa nodes with the number of MB of instance memory to map to node instance\n If not specified, memory is evenly divided among available NUMA nodes",
+                    "items": {
+                        "$ref": "#/definitions/certified_hardwareNumaMem"
+                    },
+                    "x-displayname": "NUMA Memory"
+                },
+                "numa_nodes": {
+                    "type": "integer",
+                    "description": " The number of host NUMA nodes used in certified hardware\n\nExample: - \"2\"-",
+                    "format": "int32",
+                    "x-displayname": "NUMA Node Count",
+                    "x-ves-example": "2"
+                },
+                "vendor_model_list": {
+                    "type": "array",
+                    "description": " List of supported hardware vendor and model for this certified hardware",
+                    "items": {
+                        "$ref": "#/definitions/certified_hardwareHardwareVendorModel"
+                    },
+                    "x-displayname": "Vendor and Model"
+                }
+            }
+        },
+        "schemacertified_hardwareGlobalSpecType": {
+            "type": "object",
+            "description": "Certified Hardware Specification",
+            "title": "Global Specification",
+            "x-displayname": "Global Specification",
+            "x-ves-proto-message": "ves.io.schema.certified_hardware.GlobalSpecType",
+            "properties": {
+                "certified_hardware_type": {
+                    "description": " HW type defines billing rate per billing node.\n\nExample: - \"VOLTMESH\"-",
+                    "title": "Certified Hardware Type",
+                    "$ref": "#/definitions/certified_hardwareHardwareType",
+                    "x-displayname": "Certified Hardware Type",
+                    "x-ves-example": "VOLTMESH"
+                },
+                "devices": {
+                    "type": "array",
+                    "description": " List of supported devices in this model",
+                    "title": "Devices",
+                    "items": {
+                        "$ref": "#/definitions/certified_hardwareDeviceType"
+                    },
+                    "x-displayname": "Devices"
+                },
+                "image_list": {
+                    "type": "array",
+                    "description": " List of image names with providers for this certified hardware, e.g. AWS ami-0f99d090261d2acd5",
+                    "title": "Image List",
+                    "items": {
+                        "$ref": "#/definitions/certified_hardwareImageType"
+                    },
+                    "x-displayname": "Image List"
+                },
+                "internal_usb_device_rule": {
+                    "type": "array",
+                    "description": " List of internal USB device rules for server",
+                    "title": "InternalUSBDeviceRule",
+                    "items": {
+                        "$ref": "#/definitions/usb_policyRule"
+                    },
+                    "x-displayname": "Internal USB device rules"
+                },
+                "mem_page_number": {
+                    "type": "integer",
+                    "description": " Number of pages allocated in this certified hardware for Hugepages. Each page size is defined above in 'mem_page_size'\n Total memory reserved for Hugepages is 'mem_page_size * mem_page_number'\n\nExample: - \"2\"-",
+                    "title": "Number of pages",
+                    "format": "int32",
+                    "x-displayname": "Number of pages",
+                    "x-ves-example": "2"
+                },
+                "mem_page_size": {
+                    "description": " An explicit page size used in certified hardware, 4KB, 2Mi, 2048, 1Gi",
+                    "title": "Memory Page Size",
+                    "$ref": "#/definitions/certified_hardwareMemPageSize",
+                    "x-displayname": "Memory Page Size"
+                },
+                "numa_mem": {
+                    "type": "array",
+                    "description": " List of Numa nodes with the number of MB of instance memory to map to node instance\n If not specified, memory is evenly divided among available NUMA nodes",
+                    "title": "NUMA Memory",
+                    "items": {
+                        "$ref": "#/definitions/certified_hardwareNumaMem"
+                    },
+                    "x-displayname": "NUMA Memory"
+                },
+                "numa_nodes": {
+                    "type": "integer",
+                    "description": " The number of host NUMA nodes used in certified hardware\n\nExample: - \"2\"-",
+                    "title": "NUMA Node Count",
+                    "format": "int32",
+                    "x-displayname": "NUMA Node Count",
+                    "x-ves-example": "2"
+                },
+                "vendor_model_list": {
+                    "type": "array",
+                    "description": " List of supported hardware vendor and model for this certified hardware",
+                    "title": "Vendor and Model",
+                    "items": {
+                        "$ref": "#/definitions/certified_hardwareHardwareVendorModel"
+                    },
+                    "x-displayname": "Vendor and Model"
+                }
+            }
+        },
+        "usb_policyRule": {
+            "type": "object",
+            "description": "usb enablement rule",
+            "title": "Rule",
+            "x-displayname": "usb enablement rule",
+            "x-ves-proto-message": "ves.io.schema.usb_policy.Rule",
+            "properties": {
+                "b_device_class": {
+                    "type": "string",
+                    "description": " The class of this device\n\nExample: - \"hub\"-",
+                    "title": "b_device_class",
+                    "x-displayname": "Class",
+                    "x-ves-example": "hub"
+                },
+                "b_device_protocol": {
+                    "type": "string",
+                    "description": " The protocol (within the sub-class) of this device\n\nExample: - \"0002\"-",
+                    "title": "b_device_protocol",
+                    "x-displayname": "Protocol",
+                    "x-ves-example": "0002"
+                },
+                "b_device_sub_class": {
+                    "type": "string",
+                    "description": " The sub-class (within the class) of this device\n\nExample: - \"hub\"-",
+                    "title": "b_device_sub_class",
+                    "x-displayname": "Subclass",
+                    "x-ves-example": "hub"
+                },
+                "i_serial": {
+                    "type": "string",
+                    "description": " Index of Serial Number String Descriptor\n\nExample: - \"0000:00:14.0\"-",
+                    "title": "i_serial_number",
+                    "x-displayname": "iSerialNumber",
+                    "x-ves-example": "0000:00:14.0"
+                },
+                "id_product": {
+                    "type": "string",
+                    "description": " Product ID (Assigned by Manufacturer) in hex\n\nExample: - \"0x0002\"-",
+                    "title": "id_product",
+                    "x-displayname": "Product ID",
+                    "x-ves-example": "0x0002"
+                },
+                "id_vendor": {
+                    "type": "string",
+                    "description": " Vendor ID (Assigned by USB Org) in hex\n\nExample: - \"0x1d6b\"-",
+                    "title": "id_vendor",
+                    "x-displayname": "Vendor ID",
+                    "x-ves-example": "0x1d6b"
                 }
             }
         }

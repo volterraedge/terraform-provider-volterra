@@ -213,7 +213,21 @@ type ValidateCreateSpecType struct {
 
 func (v *ValidateCreateSpecType) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	validatorFn := EndpointChoiceTypeValidator().Validate
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for endpoint")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := EndpointChoiceTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
 
 	return validatorFn, nil
 }
@@ -266,7 +280,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_ = vFnMap
 
 	vrhEndpoint := v.EndpointValidationRuleHandler
-	rulesEndpoint := map[string]string{}
+	rulesEndpoint := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
 	vFn, err = vrhEndpoint(rulesEndpoint)
 	if err != nil {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.endpoint: %s", err)
@@ -2618,7 +2634,21 @@ type ValidateReplaceSpecType struct {
 
 func (v *ValidateReplaceSpecType) EndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	validatorFn := EndpointChoiceTypeValidator().Validate
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for endpoint")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := EndpointChoiceTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
 
 	return validatorFn, nil
 }
@@ -2688,7 +2718,9 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_ = vFnMap
 
 	vrhEndpoint := v.EndpointValidationRuleHandler
-	rulesEndpoint := map[string]string{}
+	rulesEndpoint := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
 	vFn, err = vrhEndpoint(rulesEndpoint)
 	if err != nil {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.endpoint: %s", err)

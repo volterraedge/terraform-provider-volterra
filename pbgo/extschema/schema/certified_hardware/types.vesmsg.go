@@ -821,6 +821,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["internal_usb_device_rule"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("internal_usb_device_rule"))
+		for idx, item := range m.GetInternalUsbDeviceRule() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["mem_page_number"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("mem_page_number"))
@@ -966,6 +978,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("image_list"))
 		for idx, item := range m.GetImageList() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["internal_usb_device_rule"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("internal_usb_device_rule"))
+		for idx, item := range m.GetInternalUsbDeviceRule() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
@@ -1458,6 +1482,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.CertifiedHardwareType = f.GetCertifiedHardwareType()
 	m.Devices = f.GetDevices()
 	m.ImageList = f.GetImageList()
+	m.InternalUsbDeviceRule = f.GetInternalUsbDeviceRule()
 	m.MemPageNumber = f.GetMemPageNumber()
 	m.MemPageSize = f.GetMemPageSize()
 	m.NumaMem = f.GetNumaMem()
@@ -1474,6 +1499,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.CertifiedHardwareType = m1.CertifiedHardwareType
 	f.Devices = m1.Devices
 	f.ImageList = m1.ImageList
+	f.InternalUsbDeviceRule = m1.InternalUsbDeviceRule
 	f.MemPageNumber = m1.MemPageNumber
 	f.MemPageSize = m1.MemPageSize
 	f.NumaMem = m1.NumaMem

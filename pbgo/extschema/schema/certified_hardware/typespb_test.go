@@ -18,6 +18,7 @@ import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/sch
 import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy"
 import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 

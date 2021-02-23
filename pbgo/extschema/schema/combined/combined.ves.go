@@ -75,7 +75,6 @@ import (
 	ves_io_schema_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log"
 	ves_io_schema_log_access_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/access_log"
 	ves_io_schema_log_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/audit_log"
-	ves_io_schema_log_console_login_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/console_login_events"
 	ves_io_schema_log_firewall_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/firewall_log"
 	ves_io_schema_log_k8s_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_audit_log"
 	ves_io_schema_log_k8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_events"
@@ -130,6 +129,8 @@ import (
 	ves_io_schema_token_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/token/crudapi"
 	ves_io_schema_tunnel "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tunnel"
 	ves_io_schema_tunnel_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tunnel/crudapi"
+	ves_io_schema_usb_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy"
+	ves_io_schema_usb_policy_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy/crudapi"
 	ves_io_schema_user "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user"
 	ves_io_schema_user_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user/crudapi"
 	ves_io_schema_vesenv "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
@@ -1153,6 +1154,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.CreateSpecType"] = ves_io_schema_k8s_cluster.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.GetSpecType"] = ves_io_schema_k8s_cluster.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.GlobalSpecType"] = ves_io_schema_k8s_cluster.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.InsecureRegistryListType"] = ves_io_schema_k8s_cluster.InsecureRegistryListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.LocalAccessConfigType"] = ves_io_schema_k8s_cluster.LocalAccessConfigTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.PodSecurityPolicyListType"] = ves_io_schema_k8s_cluster.PodSecurityPolicyListTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.k8s_cluster.ReplaceSpecType"] = ves_io_schema_k8s_cluster.ReplaceSpecTypeValidator()
@@ -1276,8 +1278,6 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.log.AccessLogRequestV2"] = ves_io_schema_log.AccessLogRequestV2Validator()
 	MDR.ValidatorRegistry["ves.io.schema.log.AuditLogAggregationRequest"] = ves_io_schema_log.AuditLogAggregationRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.AuditLogRequestV2"] = ves_io_schema_log.AuditLogRequestV2Validator()
-	MDR.ValidatorRegistry["ves.io.schema.log.ConsoleLoginEventsAggregationRequest"] = ves_io_schema_log.ConsoleLoginEventsAggregationRequestValidator()
-	MDR.ValidatorRegistry["ves.io.schema.log.ConsoleLoginEventsRequest"] = ves_io_schema_log.ConsoleLoginEventsRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.FirewallLogAggregationRequest"] = ves_io_schema_log.FirewallLogAggregationRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.FirewallLogRequest"] = ves_io_schema_log.FirewallLogRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.K8SAuditLogAggregationRequest"] = ves_io_schema_log.K8SAuditLogAggregationRequestValidator()
@@ -1309,9 +1309,6 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.log.audit_log.AggregationRequest"] = ves_io_schema_log_audit_log.AggregationRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.audit_log.DateAggregation"] = ves_io_schema_log_audit_log.DateAggregationValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.audit_log.FieldAggregation"] = ves_io_schema_log_audit_log.FieldAggregationValidator()
-
-	MDR.ValidatorRegistry["ves.io.schema.log.console_login_events.AggregationRequest"] = ves_io_schema_log_console_login_events.AggregationRequestValidator()
-	MDR.ValidatorRegistry["ves.io.schema.log.console_login_events.DateAggregation"] = ves_io_schema_log_console_login_events.DateAggregationValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.log.firewall_log.AggregationRequest"] = ves_io_schema_log_firewall_log.AggregationRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.log.firewall_log.CardinalityAggregation"] = ves_io_schema_log_firewall_log.CardinalityAggregationValidator()
@@ -2242,6 +2239,37 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.tunnel.crudapi.ObjectListRspItem"] = ves_io_schema_tunnel_crudapi.ObjectListRspItemValidator()
 	MDR.ValidatorRegistry["ves.io.schema.tunnel.crudapi.ObjectReplaceReq"] = ves_io_schema_tunnel_crudapi.ObjectReplaceReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.tunnel.crudapi.ObjectReplaceRsp"] = ves_io_schema_tunnel_crudapi.ObjectReplaceRspValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.SpecType"] = ves_io_schema_usb_policy.SpecTypeValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.CreateRequest"] = ves_io_schema_usb_policy.CreateRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.CreateResponse"] = ves_io_schema_usb_policy.CreateResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.DeleteRequest"] = ves_io_schema_usb_policy.DeleteRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.GetRequest"] = ves_io_schema_usb_policy.GetRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.GetResponse"] = ves_io_schema_usb_policy.GetResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.ListRequest"] = ves_io_schema_usb_policy.ListRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.ListResponse"] = ves_io_schema_usb_policy.ListResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.ListResponseItem"] = ves_io_schema_usb_policy.ListResponseItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.ReplaceRequest"] = ves_io_schema_usb_policy.ReplaceRequestValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.ReplaceResponse"] = ves_io_schema_usb_policy.ReplaceResponseValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.CreateSpecType"] = ves_io_schema_usb_policy.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.GetSpecType"] = ves_io_schema_usb_policy.GetSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.GlobalSpecType"] = ves_io_schema_usb_policy.GlobalSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.ReplaceSpecType"] = ves_io_schema_usb_policy.ReplaceSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.Rule"] = ves_io_schema_usb_policy.RuleValidator()
+
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.crudapi.ObjectCreateReq"] = ves_io_schema_usb_policy_crudapi.ObjectCreateReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.crudapi.ObjectCreateRsp"] = ves_io_schema_usb_policy_crudapi.ObjectCreateRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.crudapi.ObjectDeleteReq"] = ves_io_schema_usb_policy_crudapi.ObjectDeleteReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.crudapi.ObjectDeleteRsp"] = ves_io_schema_usb_policy_crudapi.ObjectDeleteRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.crudapi.ObjectGetReq"] = ves_io_schema_usb_policy_crudapi.ObjectGetReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.crudapi.ObjectGetRsp"] = ves_io_schema_usb_policy_crudapi.ObjectGetRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.crudapi.ObjectListReq"] = ves_io_schema_usb_policy_crudapi.ObjectListReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.crudapi.ObjectListRsp"] = ves_io_schema_usb_policy_crudapi.ObjectListRspValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.crudapi.ObjectListRspItem"] = ves_io_schema_usb_policy_crudapi.ObjectListRspItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.crudapi.ObjectReplaceReq"] = ves_io_schema_usb_policy_crudapi.ObjectReplaceReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.crudapi.ObjectReplaceRsp"] = ves_io_schema_usb_policy_crudapi.ObjectReplaceRspValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.user.SpecType"] = ves_io_schema_user.SpecTypeValidator()
 
@@ -4568,6 +4596,7 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
 				sets.NewString([]string{"global_access_enable", "no_global_access"}...),
+				sets.NewString([]string{"insecure_registry_list", "no_insecure_registries"}...),
 				sets.NewString([]string{"local_access_config", "no_local_access"}...),
 				sets.NewString([]string{"use_custom_cluster_role_bindings", "use_default_cluster_role_bindings"}...),
 				sets.NewString([]string{"use_custom_cluster_role_list", "use_default_cluster_roles"}...),
@@ -4583,6 +4612,7 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
 				sets.NewString([]string{"global_access_enable", "no_global_access"}...),
+				sets.NewString([]string{"insecure_registry_list", "no_insecure_registries"}...),
 				sets.NewString([]string{"local_access_config", "no_local_access"}...),
 				sets.NewString([]string{"use_custom_cluster_role_bindings", "use_default_cluster_role_bindings"}...),
 				sets.NewString([]string{"use_custom_cluster_role_list", "use_default_cluster_roles"}...),
@@ -4599,6 +4629,7 @@ func init() {
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"cluster_wide_app_list", "no_cluster_wide_apps"}...),
 				sets.NewString([]string{"global_access_enable", "no_global_access"}...),
+				sets.NewString([]string{"insecure_registry_list", "no_insecure_registries"}...),
 				sets.NewString([]string{"local_access_config", "no_local_access"}...),
 				sets.NewString([]string{"use_custom_cluster_role_bindings", "use_default_cluster_role_bindings"}...),
 				sets.NewString([]string{"use_custom_cluster_role_list", "use_default_cluster_roles"}...),
@@ -4618,6 +4649,7 @@ func init() {
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"cluster_wide_app_list", "no_cluster_wide_apps"}...),
 				sets.NewString([]string{"global_access_enable", "no_global_access"}...),
+				sets.NewString([]string{"insecure_registry_list", "no_insecure_registries"}...),
 				sets.NewString([]string{"local_access_config", "no_local_access"}...),
 				sets.NewString([]string{"use_custom_cluster_role_bindings", "use_default_cluster_role_bindings"}...),
 				sets.NewString([]string{"use_custom_cluster_role_list", "use_default_cluster_roles"}...),
@@ -4818,22 +4850,6 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"aggs": []sets.String{
 				sets.NewString([]string{"date_aggregation", "field_aggregation"}...),
-			},
-		},
-	}
-
-	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log.CustomAPI.ConsoleLoginEventsAggregationQuery"] = svcfw.OOExclusiveSet{
-		FieldsByAncestor: map[string][]sets.String{
-			"aggs": []sets.String{
-				sets.NewString([]string{"date_aggregation"}...),
-			},
-		},
-	}
-
-	MDR.RPCOneofExclusiveRegistry["ves.io.schema.log.CustomAPI.ConsoleLoginEventsQuery"] = svcfw.OOExclusiveSet{
-		FieldsByAncestor: map[string][]sets.String{
-			"aggs": []sets.String{
-				sets.NewString([]string{"date_aggregation"}...),
 			},
 		},
 	}
@@ -5583,16 +5599,6 @@ func init() {
 			"spec.rule_list.rules.spec.waf_action": []sets.String{
 				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
 			},
-			"spec.simple_rules.headers": []sets.String{
-				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
-			},
-			"spec.simple_rules.url_matcher.url_items": []sets.String{
-				sets.NewString([]string{"domain_regex", "domain_value"}...),
-				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
-			},
-			"spec.simple_rules.waf_action": []sets.String{
-				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
-			},
 		},
 	}
 
@@ -5638,16 +5644,6 @@ func init() {
 				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
 			},
 			"spec.rule_list.rules.spec.waf_action": []sets.String{
-				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
-			},
-			"spec.simple_rules.headers": []sets.String{
-				sets.NewString([]string{"check_not_present", "check_present", "item", "presence"}...),
-			},
-			"spec.simple_rules.url_matcher.url_items": []sets.String{
-				sets.NewString([]string{"domain_regex", "domain_value"}...),
-				sets.NewString([]string{"path_prefix", "path_regex", "path_value"}...),
-			},
-			"spec.simple_rules.waf_action": []sets.String{
 				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
 			},
 		},
@@ -7878,6 +7874,9 @@ func init() {
 			"spec.default_route_pools": []sets.String{
 				sets.NewString([]string{"cluster", "pool"}...),
 			},
+			"spec.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
 			"spec.https.tls_parameters": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
 			},
@@ -7888,6 +7887,7 @@ func init() {
 				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
 			},
 			"spec.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
 			},
 			"spec.https_auto_cert.tls_config": []sets.String{
@@ -7995,6 +7995,9 @@ func init() {
 			"spec.default_route_pools": []sets.String{
 				sets.NewString([]string{"cluster", "pool"}...),
 			},
+			"spec.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
 			"spec.https.tls_parameters": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
 			},
@@ -8005,6 +8008,7 @@ func init() {
 				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
 			},
 			"spec.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
 			},
 			"spec.https_auto_cert.tls_config": []sets.String{
@@ -8113,6 +8117,9 @@ func init() {
 			"spec.gc_spec.default_route_pools": []sets.String{
 				sets.NewString([]string{"cluster", "pool"}...),
 			},
+			"spec.gc_spec.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
 			"spec.gc_spec.https.tls_parameters": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
 			},
@@ -8123,6 +8130,7 @@ func init() {
 				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
 			},
 			"spec.gc_spec.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
 			},
 			"spec.gc_spec.https_auto_cert.tls_config": []sets.String{
@@ -8231,6 +8239,9 @@ func init() {
 			"spec.gc_spec.default_route_pools": []sets.String{
 				sets.NewString([]string{"cluster", "pool"}...),
 			},
+			"spec.gc_spec.https": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
+			},
 			"spec.gc_spec.https.tls_parameters": []sets.String{
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
 			},
@@ -8241,6 +8252,7 @@ func init() {
 				sets.NewString([]string{"custom_security", "default_security", "low_security", "medium_security"}...),
 			},
 			"spec.gc_spec.https_auto_cert": []sets.String{
+				sets.NewString([]string{"append_server_name", "default_header", "pass_through", "server_name"}...),
 				sets.NewString([]string{"no_mtls", "use_mtls"}...),
 			},
 			"spec.gc_spec.https_auto_cert.tls_config": []sets.String{
@@ -11812,6 +11824,47 @@ func init() {
 	csr.CRUDSwaggerRegistry["ves.io.schema.tunnel.Object"] = ves_io_schema_tunnel_crudapi.APISwaggerJSON
 
 	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.usb_policy.Object"] = ves_io_schema_usb_policy.NewEntryObject
+	MDR.EntryStoreMap["ves.io.schema.usb_policy.Object"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.usb_policy.Object"] = reflect.TypeOf(&ves_io_schema_usb_policy.DBObject{})
+	MDR.EntryIndexers["ves.io.schema.usb_policy.Object"] = ves_io_schema_usb_policy.GetObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.Object"] = ves_io_schema_usb_policy.ObjectValidator()
+	// Generate Entry registry and factory
+	MDR.EntryFactory["ves.io.schema.usb_policy.StatusObject"] = ves_io_schema_usb_policy.NewEntryStatusObject
+	MDR.EntryStoreMap["ves.io.schema.usb_policy.StatusObject"] = store.InMemory
+	MDR.EntryRegistry["ves.io.schema.usb_policy.StatusObject"] = reflect.TypeOf(&ves_io_schema_usb_policy.DBStatusObject{})
+	MDR.EntryIndexers["ves.io.schema.usb_policy.StatusObject"] = ves_io_schema_usb_policy.GetStatusObjectIndexers
+	MDR.ValidatorRegistry["ves.io.schema.usb_policy.StatusObject"] = ves_io_schema_usb_policy.StatusObjectValidator()
+
+	csr = MDR.PubCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.usb_policy.API"] = ves_io_schema_usb_policy.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.usb_policy.API"] = ves_io_schema_usb_policy.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.usb_policy.Object"] = ves_io_schema_usb_policy.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.usb_policy.Object"] = ves_io_schema_usb_policy.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.usb_policy.Object"] = ves_io_schema_usb_policy.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.usb_policy.Object"] = ves_io_schema_usb_policy.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.usb_policy.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.usb_policy.Object"] = ves_io_schema_usb_policy.APISwaggerJSON
+
+	csr = MDR.PvtCRUDServiceRegistry
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.usb_policy.crudapi.API"] = ves_io_schema_usb_policy_crudapi.RegisterAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.usb_policy.crudapi.API"] = ves_io_schema_usb_policy_crudapi.RegisterGwAPIHandler
+
+	csr.CRUDGrpcClientRegistry["ves.io.schema.usb_policy.Object"] = ves_io_schema_usb_policy_crudapi.NewCRUDAPIGrpcClient
+	csr.CRUDRestClientRegistry["ves.io.schema.usb_policy.Object"] = ves_io_schema_usb_policy_crudapi.NewCRUDAPIRestClient
+	csr.CRUDInprocClientRegistry["ves.io.schema.usb_policy.Object"] = ves_io_schema_usb_policy_crudapi.NewCRUDAPIInprocClient
+	csr.CRUDServerRegistry["ves.io.schema.usb_policy.Object"] = ves_io_schema_usb_policy_crudapi.NewCRUDAPIServer
+	csr.AllowedInNSTypes["ves.io.schema.usb_policy.Object"] = nil
+
+	csr.CRUDSwaggerRegistry["ves.io.schema.usb_policy.Object"] = ves_io_schema_usb_policy_crudapi.APISwaggerJSON
+
+	// Generate Entry registry and factory
 	MDR.EntryFactory["ves.io.schema.user.Object"] = ves_io_schema_user.NewEntryObject
 	MDR.EntryStoreMap["ves.io.schema.user.Object"] = store.InMemory
 	MDR.EntryRegistry["ves.io.schema.user.Object"] = reflect.TypeOf(&ves_io_schema_user.DBObject{})
@@ -14203,6 +14256,30 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_tunnel_crudapi.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_tunnel_crudapi.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.usb_policy.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_usb_policy.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_usb_policy.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_usb_policy.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_usb_policy.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.usb_policy.crudapi.API":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_usb_policy_crudapi.APIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_usb_policy_crudapi.APIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_usb_policy_crudapi.APIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_usb_policy_crudapi.APIServer", srv))
 		}
 		h(gSrv, s)
 

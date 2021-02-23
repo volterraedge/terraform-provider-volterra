@@ -6998,6 +6998,21 @@ type ValidateProxyTypeHttps struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateProxyTypeHttps) ServerHeaderChoiceServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ServerName, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
+	}
+	return oValidatorFn_ServerName, nil
+}
+func (v *ValidateProxyTypeHttps) ServerHeaderChoiceAppendServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AppendServerName, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for append_server_name")
+	}
+	return oValidatorFn_AppendServerName, nil
+}
+
 func (v *ValidateProxyTypeHttps) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ProxyTypeHttps)
 	if !ok {
@@ -7030,6 +7045,54 @@ func (v *ValidateProxyTypeHttps) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetServerHeaderChoice().(type) {
+	case *ProxyTypeHttps_DefaultHeader:
+		if fv, exists := v.FldValidators["server_header_choice.default_header"]; exists {
+			val := m.GetServerHeaderChoice().(*ProxyTypeHttps_DefaultHeader).DefaultHeader
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("default_header"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProxyTypeHttps_ServerName:
+		if fv, exists := v.FldValidators["server_header_choice.server_name"]; exists {
+			val := m.GetServerHeaderChoice().(*ProxyTypeHttps_ServerName).ServerName
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("server_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProxyTypeHttps_AppendServerName:
+		if fv, exists := v.FldValidators["server_header_choice.append_server_name"]; exists {
+			val := m.GetServerHeaderChoice().(*ProxyTypeHttps_AppendServerName).AppendServerName
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("append_server_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProxyTypeHttps_PassThrough:
+		if fv, exists := v.FldValidators["server_header_choice.pass_through"]; exists {
+			val := m.GetServerHeaderChoice().(*ProxyTypeHttps_PassThrough).PassThrough
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("pass_through"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
@@ -7045,6 +7108,36 @@ func (v *ValidateProxyTypeHttps) Validate(ctx context.Context, pm interface{}, o
 // Well-known symbol for default validator implementation
 var DefaultProxyTypeHttpsValidator = func() *ValidateProxyTypeHttps {
 	v := &ValidateProxyTypeHttps{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhServerHeaderChoiceServerName := v.ServerHeaderChoiceServerNameValidationRuleHandler
+	rulesServerHeaderChoiceServerName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFnMap["server_header_choice.server_name"], err = vrhServerHeaderChoiceServerName(rulesServerHeaderChoiceServerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ProxyTypeHttps.server_header_choice_server_name: %s", err)
+		panic(errMsg)
+	}
+	vrhServerHeaderChoiceAppendServerName := v.ServerHeaderChoiceAppendServerNameValidationRuleHandler
+	rulesServerHeaderChoiceAppendServerName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFnMap["server_header_choice.append_server_name"], err = vrhServerHeaderChoiceAppendServerName(rulesServerHeaderChoiceAppendServerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ProxyTypeHttps.server_header_choice_append_server_name: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["server_header_choice.server_name"] = vFnMap["server_header_choice.server_name"]
+	v.FldValidators["server_header_choice.append_server_name"] = vFnMap["server_header_choice.append_server_name"]
 
 	v.FldValidators["tls_parameters"] = DownstreamTlsParamsTypeValidator().Validate
 
@@ -7102,6 +7195,21 @@ func (v *ValidateProxyTypeHttpsAutoCerts) MtlsChoiceValidationRuleHandler(rules 
 		return nil, errors.Wrap(err, "ValidationRuleHandler for mtls_choice")
 	}
 	return validatorFn, nil
+}
+
+func (v *ValidateProxyTypeHttpsAutoCerts) ServerHeaderChoiceServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ServerName, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
+	}
+	return oValidatorFn_ServerName, nil
+}
+func (v *ValidateProxyTypeHttpsAutoCerts) ServerHeaderChoiceAppendServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AppendServerName, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for append_server_name")
+	}
+	return oValidatorFn_AppendServerName, nil
 }
 
 func (v *ValidateProxyTypeHttpsAutoCerts) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -7172,6 +7280,54 @@ func (v *ValidateProxyTypeHttpsAutoCerts) Validate(ctx context.Context, pm inter
 
 	}
 
+	switch m.GetServerHeaderChoice().(type) {
+	case *ProxyTypeHttpsAutoCerts_DefaultHeader:
+		if fv, exists := v.FldValidators["server_header_choice.default_header"]; exists {
+			val := m.GetServerHeaderChoice().(*ProxyTypeHttpsAutoCerts_DefaultHeader).DefaultHeader
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("default_header"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProxyTypeHttpsAutoCerts_ServerName:
+		if fv, exists := v.FldValidators["server_header_choice.server_name"]; exists {
+			val := m.GetServerHeaderChoice().(*ProxyTypeHttpsAutoCerts_ServerName).ServerName
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("server_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProxyTypeHttpsAutoCerts_AppendServerName:
+		if fv, exists := v.FldValidators["server_header_choice.append_server_name"]; exists {
+			val := m.GetServerHeaderChoice().(*ProxyTypeHttpsAutoCerts_AppendServerName).AppendServerName
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("append_server_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProxyTypeHttpsAutoCerts_PassThrough:
+		if fv, exists := v.FldValidators["server_header_choice.pass_through"]; exists {
+			val := m.GetServerHeaderChoice().(*ProxyTypeHttpsAutoCerts_PassThrough).PassThrough
+			vOpts := append(opts,
+				db.WithValidateField("server_header_choice"),
+				db.WithValidateField("pass_through"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_config"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_config"))
@@ -7206,6 +7362,28 @@ var DefaultProxyTypeHttpsAutoCertsValidator = func() *ValidateProxyTypeHttpsAuto
 		panic(errMsg)
 	}
 	v.FldValidators["mtls_choice"] = vFn
+
+	vrhServerHeaderChoiceServerName := v.ServerHeaderChoiceServerNameValidationRuleHandler
+	rulesServerHeaderChoiceServerName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFnMap["server_header_choice.server_name"], err = vrhServerHeaderChoiceServerName(rulesServerHeaderChoiceServerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ProxyTypeHttpsAutoCerts.server_header_choice_server_name: %s", err)
+		panic(errMsg)
+	}
+	vrhServerHeaderChoiceAppendServerName := v.ServerHeaderChoiceAppendServerNameValidationRuleHandler
+	rulesServerHeaderChoiceAppendServerName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFnMap["server_header_choice.append_server_name"], err = vrhServerHeaderChoiceAppendServerName(rulesServerHeaderChoiceAppendServerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ProxyTypeHttpsAutoCerts.server_header_choice_append_server_name: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["server_header_choice.server_name"] = vFnMap["server_header_choice.server_name"]
+	v.FldValidators["server_header_choice.append_server_name"] = vFnMap["server_header_choice.append_server_name"]
 
 	v.FldValidators["mtls_choice.use_mtls"] = DownstreamTlsValidationContextValidator().Validate
 

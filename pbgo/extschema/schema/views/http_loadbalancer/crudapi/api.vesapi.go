@@ -2485,7 +2485,8 @@ var APISwaggerJSON string = `{
             "description": "Choice for selecting HTTP proxy with bring your own certificates",
             "title": "BYOC HTTPS Choice",
             "x-displayname": "BYOC HTTPS Choice",
-            "x-ves-displayorder": "1,2,3",
+            "x-ves-displayorder": "1,2,3,4",
+            "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ProxyTypeHttps",
             "properties": {
                 "add_hsts": {
@@ -2495,12 +2496,32 @@ var APISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Add HSTS Header"
                 },
+                "append_server_name": {
+                    "type": "string",
+                    "description": "Exclusive with [default_header pass_through server_name]\nx-displayName: \"Append Server Name if absent\"\nSpecifies the value to be used for Server header if it is not already present.\nIf Server Header is already present it is not overwritten. It is just passed.",
+                    "title": "append_server_name"
+                },
+                "default_header": {
+                    "description": "Exclusive with [append_server_name pass_through server_name]\nx-displayName: \"Default value for Server header\"\nSpecifies that the default value of \"volt-adc\" should be used for Server Header",
+                    "title": "default_header",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "http_redirect": {
                     "type": "boolean",
                     "description": " Redirect HTTP traffic to corresponding HTTPS",
                     "title": "HTTP Redirect",
                     "format": "boolean",
                     "x-displayname": "HTTP Redirect to HTTPS"
+                },
+                "pass_through": {
+                    "description": "Exclusive with [append_server_name default_header server_name]\nx-displayName: \"Pass existing Server header\"\nPasses existing Server Header as is. If server header is absent, nothing is\nappended.",
+                    "title": "pass_through",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "server_name": {
+                    "type": "string",
+                    "description": "Exclusive with [append_server_name default_header pass_through]\nx-displayName: \"Server Name\"\nSpecifies the value to be used for Server header inserted in responses.\nThis will overwrite existing values if any for Server Header",
+                    "title": "server_name"
                 },
                 "tls_parameters": {
                     "description": " TLS parameters for downstream connections.",
@@ -2514,8 +2535,9 @@ var APISwaggerJSON string = `{
             "description": "Choice for selecting HTTP proxy with bring your own certificates",
             "title": "HTTPS with Auto Certs Choice",
             "x-displayname": "HTTPS with Auto Certs Choice",
-            "x-ves-displayorder": "1,2,4,3",
+            "x-ves-displayorder": "1,2,4,3,7",
             "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
+            "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ProxyTypeHttpsAutoCerts",
             "properties": {
                 "add_hsts": {
@@ -2524,6 +2546,16 @@ var APISwaggerJSON string = `{
                     "title": "Add HSTS",
                     "format": "boolean",
                     "x-displayname": "Add HSTS Header"
+                },
+                "append_server_name": {
+                    "type": "string",
+                    "description": "Exclusive with [default_header pass_through server_name]\nx-displayName: \"Append Server Name if absent\"\nSpecifies the value to be used for Server header if it is not already present.\nIf Server Header is already present it is not overwritten. It is just passed.",
+                    "title": "append_server_name"
+                },
+                "default_header": {
+                    "description": "Exclusive with [append_server_name pass_through server_name]\nx-displayName: \"Default value for Server header\"\nSpecifies that the default value of \"volt-adc\" should be used for Server Header",
+                    "title": "default_header",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "http_redirect": {
                     "type": "boolean",
@@ -2536,6 +2568,16 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [use_mtls]\nx-displayName: \"No mTLS\"\nmTLS with clients is not enabled",
                     "title": "No mTLS",
                     "$ref": "#/definitions/schemaEmpty"
+                },
+                "pass_through": {
+                    "description": "Exclusive with [append_server_name default_header server_name]\nx-displayName: \"Pass existing Server header\"\nPasses existing Server Header as is. If server header is absent, nothing is\nappended.",
+                    "title": "pass_through",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "server_name": {
+                    "type": "string",
+                    "description": "Exclusive with [append_server_name default_header pass_through]\nx-displayName: \"Server Name\"\nSpecifies the value to be used for Server header inserted in responses.\nThis will overwrite existing values if any for Server Header",
+                    "title": "server_name"
                 },
                 "tls_config": {
                     "description": " Configuration for TLS parameters such as min/max TLS version and ciphers",
