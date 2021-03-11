@@ -419,11 +419,6 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 				Optional: true,
 			},
 
-			"operating_system_version": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-
 			"tgw_security": {
 
 				Type:     schema.TypeSet,
@@ -1356,11 +1351,6 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 				},
 			},
 
-			"volterra_software_version": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-
 			"vpc_attachments": {
 
 				Type:     schema.TypeSet,
@@ -1937,13 +1927,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 			createSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
 
-	}
-
-	//operating_system_version
-	if v, ok := d.GetOk("operating_system_version"); ok && !isIntfNil(v) {
-
-		createSpec.OperatingSystemVersion =
-			v.(string)
 	}
 
 	//tgw_security
@@ -3227,13 +3210,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
-	//volterra_software_version
-	if v, ok := d.GetOk("volterra_software_version"); ok && !isIntfNil(v) {
-
-		createSpec.VolterraSoftwareVersion =
-			v.(string)
-	}
-
 	//vpc_attachments
 	if v, ok := d.GetOk("vpc_attachments"); ok && !isIntfNil(v) {
 
@@ -3438,12 +3414,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 			updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
 
-	}
-
-	if v, ok := d.GetOk("operating_system_version"); ok && !isIntfNil(v) {
-
-		updateSpec.OperatingSystemVersion =
-			v.(string)
 	}
 
 	if v, ok := d.GetOk("tgw_security"); ok && !isIntfNil(v) {
@@ -4723,12 +4693,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 		}
 
-	}
-
-	if v, ok := d.GetOk("volterra_software_version"); ok && !isIntfNil(v) {
-
-		updateSpec.VolterraSoftwareVersion =
-			v.(string)
 	}
 
 	if v, ok := d.GetOk("vpc_attachments"); ok && !isIntfNil(v) {

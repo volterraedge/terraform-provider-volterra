@@ -41,7 +41,7 @@ resource "volterra_aws_tgw_site" "example" {
       }
 
       workload_subnet {
-        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
+        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -116,13 +116,9 @@ Argument Reference
 
 `logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
-`operating_system_version` - (Optional) Desired Operating System version for this site. (`String`).
-
 `tgw_security` - (Optional) Security Configuration for transit gateway. See [Tgw Security ](#tgw-security) below for details.
 
 `vn_config` - (Optional) Virtual Network Configuration for transit gateway. See [Vn Config ](#vn-config) below for details.
-
-`volterra_software_version` - (Optional) Desired Volterra software version for this site, a string matching released set of software components. (`String`).
 
 `vpc_attachments` - (Optional) VPC attachments to transit gateway. See [Vpc Attachments ](#vpc-attachments) below for details.
 
@@ -188,15 +184,15 @@ Only Single AZ or Three AZ(s) nodes are supported currently..
 
 `aws_az_name` - (Required) AWS availability zone, must be consistent with the selected AWS region. (`String`).
 
-`inside_subnet` - (Optional) Subnets for the inside interface of the node. See [Inside Subnet ](#inside-subnet) below for details.
+`inside_subnet` - (Optional) Select Existing Subnet or Create New. See [Inside Subnet ](#inside-subnet) below for details.
 
-`reserved_inside_subnet` - (Optional) Use Reserved Subnet from Primary CIDR (bool).
+`reserved_inside_subnet` - (Optional) Autogenerate and reserve a subnet from the Primary CIDR (bool).
 
 `disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`String`).
 
-`outside_subnet` - (Required) Subnets for the outside interface of the node. See [Outside Subnet ](#outside-subnet) below for details.
+`outside_subnet` - (Required) Subnet for the outside interface of the node. See [Outside Subnet ](#outside-subnet) below for details.
 
-`workload_subnet` - (Optional) Workload Subnet where workloads should be running. See [Workload Subnet ](#workload-subnet) below for details.
+`workload_subnet` - (Optional) Subnet in which workloads are launched. See [Workload Subnet ](#workload-subnet) below for details.
 
 ### Blindfold Secret Info
 
@@ -342,7 +338,7 @@ Manage static routes for inside network..
 
 ### Inside Subnet
 
-Subnets for the inside interface of the node.
+Select Existing Subnet or Create New.
 
 `existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
 
@@ -444,7 +440,7 @@ Manage static routes for outside network..
 
 ### Outside Subnet
 
-Subnets for the outside interface of the node.
+Subnet for the outside interface of the node.
 
 `existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
 
@@ -484,7 +480,7 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 ### Reserved Inside Subnet
 
-Use Reserved Subnet from Primary CIDR.
+Autogenerate and reserve a subnet from the Primary CIDR.
 
 ### Sli To Global Dr
 
@@ -630,7 +626,7 @@ Secret is given as bootstrap secret in Volterra Security Sidecar.
 
 ### Workload Subnet
 
-Workload Subnet where workloads should be running.
+Subnet in which workloads are launched.
 
 `existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
 

@@ -181,6 +181,7 @@ func (c *CustomAPIRestClient) doRPCSetTGWInfo(ctx context.Context, callOpts *ser
 	pbRsp := &SetTGWInfoResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.aws_tgw_site.SetTGWInfoResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -258,6 +259,7 @@ func (c *CustomAPIRestClient) doRPCSetVPCIpPrefixes(ctx context.Context, callOpt
 	pbRsp := &SetVPCIpPrefixesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.aws_tgw_site.SetVPCIpPrefixesResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -335,6 +337,7 @@ func (c *CustomAPIRestClient) doRPCSetVPNTunnels(ctx context.Context, callOpts *
 	pbRsp := &SetVPNTunnelsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.aws_tgw_site.SetVPNTunnelsResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

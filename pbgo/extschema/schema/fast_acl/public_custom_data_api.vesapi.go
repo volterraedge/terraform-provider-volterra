@@ -162,6 +162,7 @@ func (c *CustomDataAPIRestClient) doRPCFastACLHits(ctx context.Context, callOpts
 	pbRsp := &FastACLHitsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.fast_acl.FastACLHitsResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

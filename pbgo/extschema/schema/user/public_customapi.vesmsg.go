@@ -1196,6 +1196,15 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["disabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("disabled"))
+		if err := fv(ctx, m.GetDisabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["domain_owner"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("domain_owner"))

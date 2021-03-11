@@ -181,6 +181,7 @@ func (c *CustomAPIRestClient) doRPCConfirmAlertReceiver(ctx context.Context, cal
 	pbRsp := &ConfirmAlertReceiverResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.alert_receiver.ConfirmAlertReceiverResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -257,6 +258,7 @@ func (c *CustomAPIRestClient) doRPCTestAlertReceiver(ctx context.Context, callOp
 	pbRsp := &TestAlertReceiverResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.alert_receiver.TestAlertReceiverResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -333,6 +335,7 @@ func (c *CustomAPIRestClient) doRPCVerifyAlertReceiver(ctx context.Context, call
 	pbRsp := &VerifyAlertReceiverResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.alert_receiver.VerifyAlertReceiverResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

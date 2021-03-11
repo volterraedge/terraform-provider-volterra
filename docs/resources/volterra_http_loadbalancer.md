@@ -20,169 +20,44 @@ resource "volterra_http_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "advertise_on_public advertise_custom do_not_advertise advertise_on_public_default_vip" must be set
-  do_not_advertise = true
+  // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
+  advertise_on_public_default_vip = true
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
+  no_challenge = true
 
-  policy_based_challenge {
-    // One of the arguments from this list "default_captcha_challenge_parameters captcha_challenge_parameters" must be set
-
-    captcha_challenge_parameters {
-      cookie_expiry            = "cookie_expiry"
-      custom_page              = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-      enable_captcha_challenge = true
-    }
-
-    // One of the arguments from this list "no_challenge always_enable_js_challenge always_enable_captcha_challenge" must be set
-    no_challenge = true
-
-    // One of the arguments from this list "default_js_challenge_parameters js_challenge_parameters" must be set
-    default_js_challenge_parameters = true
-
-    // One of the arguments from this list "default_mitigation_settings malicious_user_mitigation" must be set
-    default_mitigation_settings = true
-
-    rule_list {
-      rules {
-        metadata {
-          description = "Virtual Host for acmecorp website"
-          disable     = true
-          name        = "acmecorp-web"
-        }
-
-        spec {
-          arg_matchers {
-            invert_matcher = true
-
-            // One of the arguments from this list "check_not_present item presence check_present" must be set
-            presence = true
-
-            name = "name"
-          }
-
-          // One of the arguments from this list "asn_list asn_matcher any_asn" must be set
-
-          asn_matcher {
-            asn_sets {
-              name      = "test1"
-              namespace = "staging"
-              tenant    = "acmecorp"
-            }
-          }
-          body_matcher {
-            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-
-            transformers = ["transformers"]
-          }
-          // One of the arguments from this list "disable_challenge enable_javascript_challenge enable_captcha_challenge" must be set
-          disable_challenge = true
-          // One of the arguments from this list "client_name client_selector client_name_matcher any_client" must be set
-          any_client = true
-          cookie_matchers {
-            invert_matcher = true
-
-            // One of the arguments from this list "check_present check_not_present item presence" must be set
-            check_present = true
-            name          = "Session"
-          }
-          domain_matcher {
-            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-          }
-          expiration_timestamp = "0001-01-01T00:00:00Z"
-          headers {
-            invert_matcher = true
-
-            // One of the arguments from this list "presence check_present check_not_present item" must be set
-            presence = true
-
-            name = "Accept-Encoding"
-          }
-          http_method {
-            invert_matcher = true
-
-            methods = ["['GET', 'POST', 'DELETE']"]
-          }
-
-          // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
-
-          ip_prefix_list {
-            invert_match = true
-
-            ip_prefixes = ["192.168.20.0/24"]
-          }
-          path {
-            exact_values = ["['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']"]
-
-            prefix_values = ["['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']"]
-
-            regex_values = ["['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']"]
-
-            transformers = ["transformers"]
-          }
-          query_params {
-            invert_matcher = true
-            key            = "sourceid"
-
-            // One of the arguments from this list "presence check_present check_not_present item" must be set
-            check_present = true
-          }
-          tls_fingerprint_matcher {
-            classes = ["classes"]
-
-            exact_values = ["exact_values"]
-
-            excluded_values = ["excluded_values"]
-          }
-        }
-      }
-    }
-
-    // One of the arguments from this list "default_temporary_blocking_parameters temporary_user_blocking" must be set
-    default_temporary_blocking_parameters = true
-  }
   domains = ["www.foo.com"]
-  // One of the arguments from this list "ring_hash round_robin least_active random source_ip_stickiness cookie_stickiness" must be set
-  round_robin = true
+
+  // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
+  random = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
-  https_auto_cert {
-    add_hsts      = true
-    http_redirect = true
+  http {
+    dns_volterra_managed = true
+  }
 
-    // One of the arguments from this list "no_mtls use_mtls" must be set
-    no_mtls = true
+  // One of the arguments from this list "disable_rate_limit rate_limit" must be set
 
-    // One of the arguments from this list "server_name append_server_name pass_through default_header" must be set
-    server_name = "server_name"
+  rate_limit {
+    // One of the arguments from this list "custom_ip_allowed_list no_ip_allowed_list ip_allowed_list" must be set
 
-    tls_config {
-      // One of the arguments from this list "default_security medium_security low_security custom_security" must be set
+    ip_allowed_list {
+      prefixes = ["192.168.20.0/24"]
+    }
 
-      custom_security {
-        cipher_suites = ["cipher_suites"]
-        max_version   = "max_version"
-        min_version   = "min_version"
-      }
+    // One of the arguments from this list "no_policies policies" must be set
+    no_policies = true
+
+    rate_limiter {
+      total_number = "total_number"
+      unit         = "unit"
     }
   }
-  // One of the arguments from this list "disable_rate_limit rate_limit" must be set
-  disable_rate_limit = true
-  // One of the arguments from this list "no_service_policies active_service_policies service_policies_from_namespace" must be set
+  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
   service_policies_from_namespace = true
-
   // One of the arguments from this list "disable_waf waf waf_rule" must be set
-
-  waf {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  disable_waf = true
 }
 
 ```
@@ -328,7 +203,7 @@ Configure Advanced per route options.
 
 `enable_spdy` - (Optional) SPDY upgrade is enabled (bool).
 
-`timeout` - (Optional) for infinite timeout (`Int`).
+`timeout` - (Optional) Should be set to a high value or 0 (infinite timeout) for server-side streaming. (`Int`).
 
 `disable_waf` - (Optional) No WAF configuration for this load balancer (bool).
 
@@ -359,6 +234,8 @@ Where should this load balancer be available.
 `private_network` - (Optional) Advertise on a VoltADN private network. See [Private Network ](#private-network) below for details.
 
 `site` - (Optional) Advertise on a customer site and a given network. . See [Site ](#site) below for details.
+
+`srv6_network` - (Optional) Advertise on a Per site srv6 network. See [Srv6 Network ](#srv6-network) below for details.
 
 `virtual_site` - (Optional) Advertise on a customer virtual site and a given network.. See [Virtual Site ](#virtual-site) below for details.
 
@@ -460,13 +337,9 @@ Rules that specify the clients to be blocked.
 
 `ip_prefix` - (Required) IPv4 prefix string. (`String`).
 
-`description` - (Optional) Description (`String`).
-
 `expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
-
-`name` - (Required) rule name (`String`).
 
 ### Body Matcher
 
@@ -492,21 +365,17 @@ specify the maximum buffer size and buffer interval with this config..
 
 Configure Captcha challenge on this load balancer.
 
-`cookie_expiry` - (Optional) Default cookie expiry is set as 1 hour (`Int`).
+`cookie_expiry` - (Optional) An expired cookie causes the loadbalancer to issue a new challenge. (`Int`).
 
 `custom_page` - (Optional) E.g. "<p> Please Wait </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4=" (`String`).
-
-`enable_captcha_challenge` - (Optional) Turn this configuration knob to enable Captcha Challenge (`Bool`).
 
 ### Captcha Challenge Parameters
 
 Configure captcha challenge parameters.
 
-`cookie_expiry` - (Optional) Default cookie expiry is set as 1 hour (`Int`).
+`cookie_expiry` - (Optional) An expired cookie causes the loadbalancer to issue a new challenge. (`Int`).
 
 `custom_page` - (Optional) E.g. "<p> Please Wait </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4=" (`String`).
-
-`enable_captcha_challenge` - (Optional) Turn this configuration knob to enable Captcha Challenge (`Bool`).
 
 ### Check Not Present
 
@@ -870,25 +739,21 @@ Custom JavaScript Configuration. Custom JavaScript code can be executed at vario
 
 Configure Javascript challenge on this load balancer.
 
-`cookie_expiry` - (Optional) Default cookie expiry is set as 1 hour (`Int`).
+`cookie_expiry` - (Optional) An expired cookie causes the loadbalancer to issue a new challenge. (`Int`).
 
 `custom_page` - (Optional) E.g. "<p> Please Wait </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4=" (`String`).
 
-`enable_js_challenge` - (Optional) Turn this configuration knob to enable Javascript Challenge (`Bool`).
-
-`js_script_delay` - (Optional) Default delay is 5 seconds (`Int`).
+`js_script_delay` - (Optional) Delay introduced by Javascript, in milliseconds. (`Int`).
 
 ### Js Challenge Parameters
 
 Configure Javascript challenge parameters.
 
-`cookie_expiry` - (Optional) Default cookie expiry is set as 1 hour (`Int`).
+`cookie_expiry` - (Optional) An expired cookie causes the loadbalancer to issue a new challenge. (`Int`).
 
 `custom_page` - (Optional) E.g. "<p> Please Wait </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4=" (`String`).
 
-`enable_js_challenge` - (Optional) Turn this configuration knob to enable Javascript Challenge (`Bool`).
-
-`js_script_delay` - (Optional) Default delay is 5 seconds (`Int`).
+`js_script_delay` - (Optional) Delay introduced by Javascript, in milliseconds. (`Int`).
 
 ### Low Security
 
@@ -902,7 +767,7 @@ Medium Security chooses TLS v1.0+ with only PFS ciphers and medium strength cryp
 
 Common attributes for the rule including name and description..
 
-`description` - (Optional) Human readable description for the object that corresponds to the containing message. (`String`).
+`description` - (Optional) Human readable description. (`String`).
 
 `disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).
 
@@ -926,15 +791,15 @@ More options like header manipulation, compression etc..
 
 `custom_errors` - (Optional) matches for a request. (`String`).
 
-`disable_default_error_pages` - (Optional) An option to specify the use of default Volterra error pages (`Bool`).
+`disable_default_error_pages` - (Optional) Disable the use of default Volterra error pages. (`Bool`).
 
-`idle_timeout` - (Optional) The default if not specified is 1 minute. (`Int`).
+`idle_timeout` - (Optional) received, otherwise the stream is reset. (`Int`).
 
 `javascript_info` - (Optional) Custom JavaScript Configuration. Custom JavaScript code can be executed at various stages of request processing.. See [Javascript Info ](#javascript-info) below for details.
 
 `jwt` - (Optional) audiences and issuer. See [ref](#ref) below for details.
 
-`max_request_header_size` - (Optional) on any of the virtual hosts (`Int`).
+`max_request_header_size` - (Optional) such loadbalancers is used for all the loadbalancers in question. (`Int`).
 
 `request_headers_to_add` - (Optional) Headers specified at this level are applied after headers from matched Route are applied. See [Request Headers To Add ](#request-headers-to-add) below for details.
 
@@ -1302,6 +1167,16 @@ Configure hash policy specific for this route.
 
 `hash_policy` - (Required) route the request. See [Hash Policy ](#hash-policy) below for details.
 
+### Srv6 Network
+
+Advertise on a Per site srv6 network.
+
+`private_network` - (Required) Select per site srv6 network. See [ref](#ref) below for details.
+
+`default_vip` - (Optional) Use the default VIP, system allocated or configured in the VoltADN Private Network (bool).
+
+`specific_vip` - (Optional) Use given IP address as VIP on VoltADN private Network (`String`).
+
 ### Strip Query Params
 
 Specifies the list of query params to be removed. Not supported.
@@ -1366,13 +1241,9 @@ WAF processing is skipped for trusted clients.
 
 `ip_prefix` - (Required) IPv4 prefix string. (`String`).
 
-`description` - (Optional) Description (`String`).
-
 `expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
-
-`name` - (Required) rule name (`String`).
 
 ### Use Default Port
 
@@ -1418,8 +1289,6 @@ Advertise on vK8s Service Network on RE..
 
 Rules that specify the match conditions and the corresponding WAF_RULE_IDs which should be excluded from WAF evaluation.
 
-`description` - (Optional) Description (`String`).
-
 `any_domain` - (Optional) Apply this waf exclusion rule for any domain (bool).
 
 `domain_regex` - (Optional) Domain to be matched (`String`).
@@ -1431,8 +1300,6 @@ Rules that specify the match conditions and the corresponding WAF_RULE_IDs which
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
 
 `methods` - (Optional) methods to be matched (`List of Strings`).
-
-`name` - (Required) Exclusion rule name (`String`).
 
 `path_regex` - (Required) path regex to be matched (`String`).
 

@@ -1090,7 +1090,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.tcp_loadbalancer.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private replace request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Replace"), zap.Error(err))
 			}
@@ -1116,7 +1116,7 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.tcp_loadbalancer.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private get request")
 			}
 		}
 	}
@@ -1141,7 +1141,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.tcp_loadbalancer.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private list request")
 			}
 		}
 	}
@@ -1196,7 +1196,7 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.tcp_loadbalancer.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private delete request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Delete"), zap.Error(err))
 			}
@@ -2938,13 +2938,41 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsWhereSrv6Network": {
+            "type": "object",
+            "description": "Parameters to advertise on a given per site srv6 network",
+            "title": "WhereSrv6Network",
+            "x-displayname": "Per Site Srv6 Network",
+            "x-ves-displayorder": "1,2",
+            "x-ves-oneof-field-vip_choice": "[\"default_vip\",\"specific_vip\"]",
+            "x-ves-proto-message": "ves.io.schema.views.WhereSrv6Network",
+            "properties": {
+                "default_vip": {
+                    "description": "Exclusive with [specific_vip]\nx-displayName: \"Default VIP for VoltADN Private Network\"\nUse the default VIP, system allocated or configured in the VoltADN Private Network",
+                    "title": "Default VIP for VoltADN Private Network",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "private_network": {
+                    "description": " Select per site srv6 network\nRequired: YES",
+                    "title": "Per Site Srv6 Network",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Per Site Srv6 Network",
+                    "x-ves-required": "true"
+                },
+                "specific_vip": {
+                    "type": "string",
+                    "description": "Exclusive with [default_vip]\nx-displayName: \"Specific VIP\"\nUse given IP address as VIP on VoltADN private Network",
+                    "title": "Specific VIP"
+                }
+            }
+        },
         "viewsWhereType": {
             "type": "object",
             "description": "This defines various options where a Loadbalancer could be advertised",
             "title": "WhereType",
             "x-displayname": "Select Where to Advertise",
             "x-ves-displayorder": "4,5",
-            "x-ves-oneof-field-choice": "[\"private_network\",\"site\",\"virtual_site\",\"vk8s_service\"]",
+            "x-ves-oneof-field-choice": "[\"private_network\",\"site\",\"srv6_network\",\"virtual_site\",\"vk8s_service\"]",
             "x-ves-oneof-field-port_choice": "[\"port\",\"use_default_port\"]",
             "x-ves-proto-message": "ves.io.schema.views.WhereType",
             "properties": {
@@ -2955,14 +2983,19 @@ var APISwaggerJSON string = `{
                     "format": "int64"
                 },
                 "private_network": {
-                    "description": "Exclusive with [site virtual_site vk8s_service]\nx-displayName: \"VoltADN Private Network\"\nAdvertise on a VoltADN private network",
+                    "description": "Exclusive with [site srv6_network virtual_site vk8s_service]\nx-displayName: \"VoltADN Private Network\"\nAdvertise on a VoltADN private network",
                     "title": "VoltADN Private Network",
                     "$ref": "#/definitions/viewsWherePrivateNetwork"
                 },
                 "site": {
-                    "description": "Exclusive with [private_network virtual_site vk8s_service]\nx-displayName: \"Site\"\nAdvertise on a customer site and a given network.",
+                    "description": "Exclusive with [private_network srv6_network virtual_site vk8s_service]\nx-displayName: \"Site\"\nAdvertise on a customer site and a given network.",
                     "title": "Site",
                     "$ref": "#/definitions/viewsWhereSite"
+                },
+                "srv6_network": {
+                    "description": "Exclusive with [private_network site virtual_site vk8s_service]\nx-displayName: \"Per Site Srv6 Network\"\nAdvertise on a Per site srv6 network",
+                    "title": "Per Site Srv6 Network",
+                    "$ref": "#/definitions/viewsWhereSrv6Network"
                 },
                 "use_default_port": {
                     "description": "Exclusive with [port]\nx-displayName: \"Use Default TCP Listen Port\"\nFor HTTP, default is 80. For HTTPS/SNI, default is 443.",
@@ -2970,12 +3003,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [private_network site vk8s_service]\nx-displayName: \"Virtual Site\"\nAdvertise on a customer virtual site and a given network.",
+                    "description": "Exclusive with [private_network site srv6_network vk8s_service]\nx-displayName: \"Virtual Site\"\nAdvertise on a customer virtual site and a given network.",
                     "title": "Virtual Site",
                     "$ref": "#/definitions/viewsWhereVirtualSite"
                 },
                 "vk8s_service": {
-                    "description": "Exclusive with [private_network site virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vK8s Service Network on RE.",
+                    "description": "Exclusive with [private_network site srv6_network virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vK8s Service Network on RE.",
                     "title": "vK8s services network",
                     "$ref": "#/definitions/viewsWhereVK8SService"
                 }
@@ -3107,6 +3140,14 @@ var APISwaggerJSON string = `{
                     "title": "host name",
                     "x-displayname": "Host Name",
                     "x-ves-example": "ves-io-cf8684b9-a18f-4843-a24f-1f9ee8ea2776.ac.vh.ves.io"
+                },
+                "idle_timeout": {
+                    "type": "integer",
+                    "description": " The amount of time that a stream can exist without upstream or downstream activity, in milliseconds.\n\nExample: - \"2000\"-",
+                    "title": "Idle timeout",
+                    "format": "int64",
+                    "x-displayname": "Idle Timeout",
+                    "x-ves-example": "2000"
                 },
                 "listen_port": {
                     "type": "integer",

@@ -158,6 +158,7 @@ func (c *CustomPrivateAPIRestClient) doRPCValidateToken(ctx context.Context, cal
 	pbRsp := &ValidateTokenResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.ValidateTokenResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

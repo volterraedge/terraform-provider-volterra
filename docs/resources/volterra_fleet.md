@@ -20,18 +20,14 @@ resource "volterra_fleet" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "bond_device_list no_bond_devices" must be set
+  // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
 
   // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
+  no_dc_cluster_group = true
+  fleet_label         = ["sfo"]
 
-  dc_cluster_group {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
-  fleet_label = ["sfo"]
-  // One of the arguments from this list "disable_gpu enable_gpu" must be set
+  // One of the arguments from this list "enable_gpu disable_gpu" must be set
   disable_gpu = true
 
   // One of the arguments from this list "interface_list default_config device_list" must be set
@@ -47,105 +43,11 @@ resource "volterra_fleet" "example" {
   logs_streaming_disabled = true
   // One of the arguments from this list "default_storage_class storage_class_list" must be set
   default_storage_class = true
-
   // One of the arguments from this list "no_storage_device storage_device_list" must be set
-
-  storage_device_list {
-    storage_devices {
-      advanced_advanced_parameters = {
-        "key1" = "value1"
-      }
-
-      // One of the arguments from this list "netapp_trident pure_service_orchestrator openebs_enterprise" must be set
-
-      netapp_trident {
-        // One of the arguments from this list "netapp_backend_ontap_san netapp_backend_ontap_nas" must be set
-
-        netapp_backend_ontap_san {
-          // One of the arguments from this list "no_chap use_chap" must be set
-          no_chap = true
-
-          // One of the arguments from this list "data_lif_ip data_lif_dns_name" must be set
-          data_lif_ip = "10.5.2.4"
-
-          igroup_name = "igroup_name"
-
-          labels = {
-            "key1" = "value1"
-          }
-
-          limit_aggregate_usage = "80"
-          limit_volume_size     = "50"
-
-          // One of the arguments from this list "management_lif_dns_name management_lif_ip" must be set
-          management_lif_dns_name = "storage.local"
-
-          password {
-            blindfold_secret_info_internal {
-              decryption_provider = "decryption_provider"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "store_provider"
-            }
-
-            secret_encoding_type = "secret_encoding_type"
-
-            // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
-
-            blindfold_secret_info {
-              decryption_provider = "decryption_provider"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "store_provider"
-            }
-          }
-
-          region = "us_east_1b"
-
-          storage {
-            labels = {
-              "key1" = "value1"
-            }
-
-            volume_defaults {
-              encryption       = true
-              export_policy    = "default"
-              security_style   = "unix"
-              snapshot_dir     = true
-              snapshot_policy  = "none"
-              snapshot_reserve = "10"
-              space_reserve    = "thick"
-              split_on_clone   = true
-              tiering_policy   = "snapshot-only"
-              unix_permissions = "777"
-            }
-
-            zone = "us_east_1b"
-          }
-
-          storage_driver_name = "ontap-nas"
-          storage_prefix      = "trident"
-          svm                 = "trident_svm"
-          username            = "cluster-admin"
-
-          volume_defaults {
-            encryption       = true
-            export_policy    = "default"
-            security_style   = "unix"
-            snapshot_dir     = true
-            snapshot_policy  = "none"
-            snapshot_reserve = "10"
-            space_reserve    = "thick"
-            split_on_clone   = true
-            tiering_policy   = "snapshot-only"
-            unix_permissions = "777"
-          }
-        }
-      }
-      storage_device = "storage_device"
-    }
-  }
-  // One of the arguments from this list "storage_interface_list no_storage_interfaces" must be set
+  no_storage_device = true
+  // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
   no_storage_interfaces = true
-  // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
+  // One of the arguments from this list "storage_static_routes no_storage_static_routes" must be set
   no_storage_static_routes = true
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
   deny_all_usb = true

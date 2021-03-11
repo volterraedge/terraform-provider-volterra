@@ -4848,7 +4848,9 @@ var (
 	ErrIntOverflowApi   = fmt.Errorf("proto: integer overflow")
 )
 
-func init() { proto.RegisterFile("ves.io/schema/alert_policy_set/crudapi/api.proto", fileDescriptorApi) }
+func init() {
+	proto.RegisterFile("ves.io/schema/alert_policy_set/crudapi/api.proto", fileDescriptorApi)
+}
 func init() {
 	golang_proto.RegisterFile("ves.io/schema/alert_policy_set/crudapi/api.proto", fileDescriptorApi)
 }

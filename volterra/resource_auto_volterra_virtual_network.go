@@ -92,6 +92,354 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"access_network_rtargets": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"asn2byte_rtarget": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"as_number": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+
+												"value": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"asn4byte_rtarget": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"as_number": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+
+												"value": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"ipv4_addr_rtarget": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"address": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"value": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"anycast_vip": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"fleet_vip": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"vip_allocator": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"interface_ip_vip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enterprise_network_rtargets": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"asn2byte_rtarget": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"as_number": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+
+												"value": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"asn4byte_rtarget": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"as_number": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+
+												"value": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"ipv4_addr_rtarget": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"address": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"value": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"export_rtargets": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"asn2byte_rtarget": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"as_number": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+
+												"value": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"asn4byte_rtarget": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"as_number": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+
+												"value": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"ipv4_addr_rtarget": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"address": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"value": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"fleets": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"internet_rtargets": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"asn2byte_rtarget": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"as_number": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+
+												"value": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"asn4byte_rtarget": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"as_number": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+
+												"value": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"ipv4_addr_rtarget": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"address": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"value": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
 						"no_namespace_network": {
 
 							Type:     schema.TypeBool,
@@ -108,6 +456,111 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 									"namespace": {
 										Type:     schema.TypeString,
 										Optional: true,
+									},
+								},
+							},
+						},
+
+						"slice": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"fleet_snat_pool": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"snat_pool_allocator": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"interface_ip_snat_pool": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"site_snat_pool": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"node_snat_pool": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+												"value": {
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ipv4_prefixes": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+											},
+										},
 									},
 								},
 							},
@@ -299,6 +752,454 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			if v, ok := cs["access_network_rtargets"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				accessNetworkRtargets := make([]*ves_io_schema.RouteTarget, len(sl))
+				networkChoiceInt.Srv6Network.AccessNetworkRtargets = accessNetworkRtargets
+				for i, set := range sl {
+					accessNetworkRtargets[i] = &ves_io_schema.RouteTarget{}
+					accessNetworkRtargetsMapStrToI := set.(map[string]interface{})
+
+					rtargetChoiceTypeFound := false
+
+					if v, ok := accessNetworkRtargetsMapStrToI["asn2byte_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Asn2ByteRtarget{}
+						rtargetChoiceInt.Asn2ByteRtarget = &ves_io_schema.RouteTarget2ByteAsn{}
+						accessNetworkRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn2ByteRtarget.AsNumber = uint32(v.(int))
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn2ByteRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := accessNetworkRtargetsMapStrToI["asn4byte_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Asn4ByteRtarget{}
+						rtargetChoiceInt.Asn4ByteRtarget = &ves_io_schema.RouteTarget4ByteAsn{}
+						accessNetworkRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn4ByteRtarget.AsNumber = uint32(v.(int))
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn4ByteRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := accessNetworkRtargetsMapStrToI["ipv4_addr_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Ipv4AddrRtarget{}
+						rtargetChoiceInt.Ipv4AddrRtarget = &ves_io_schema.RouteTargetIPv4Addr{}
+						accessNetworkRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["address"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Ipv4AddrRtarget.Address = v.(string)
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Ipv4AddrRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			defaultVipChoiceTypeFound := false
+
+			if v, ok := cs["anycast_vip"]; ok && !isIntfNil(v) && !defaultVipChoiceTypeFound {
+
+				defaultVipChoiceTypeFound = true
+				defaultVipChoiceInt := &ves_io_schema_virtual_network.PerSiteSrv6NetworkType_AnycastVip{}
+
+				networkChoiceInt.Srv6Network.DefaultVipChoice = defaultVipChoiceInt
+
+				defaultVipChoiceInt.AnycastVip = v.(string)
+
+			}
+
+			if v, ok := cs["fleet_vip"]; ok && !isIntfNil(v) && !defaultVipChoiceTypeFound {
+
+				defaultVipChoiceTypeFound = true
+				defaultVipChoiceInt := &ves_io_schema_virtual_network.PerSiteSrv6NetworkType_FleetVip{}
+				defaultVipChoiceInt.FleetVip = &ves_io_schema_virtual_network.AnyCastVIPFleetType{}
+				networkChoiceInt.Srv6Network.DefaultVipChoice = defaultVipChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["vip_allocator"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						vipAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+						defaultVipChoiceInt.FleetVip.VipAllocator = vipAllocatorInt
+
+						for _, set := range sl {
+							vaMapToStrVal := set.(map[string]interface{})
+							if val, ok := vaMapToStrVal["name"]; ok && !isIntfNil(v) {
+								vipAllocatorInt.Name = val.(string)
+							}
+							if val, ok := vaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								vipAllocatorInt.Namespace = val.(string)
+							}
+
+							if val, ok := vaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								vipAllocatorInt.Tenant = val.(string)
+							}
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["interface_ip_vip"]; ok && !isIntfNil(v) && !defaultVipChoiceTypeFound {
+
+				defaultVipChoiceTypeFound = true
+
+				if v.(bool) {
+					defaultVipChoiceInt := &ves_io_schema_virtual_network.PerSiteSrv6NetworkType_InterfaceIpVip{}
+					defaultVipChoiceInt.InterfaceIpVip = &ves_io_schema.Empty{}
+					networkChoiceInt.Srv6Network.DefaultVipChoice = defaultVipChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["enterprise_network_rtargets"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				enterpriseNetworkRtargets := make([]*ves_io_schema.RouteTarget, len(sl))
+				networkChoiceInt.Srv6Network.EnterpriseNetworkRtargets = enterpriseNetworkRtargets
+				for i, set := range sl {
+					enterpriseNetworkRtargets[i] = &ves_io_schema.RouteTarget{}
+					enterpriseNetworkRtargetsMapStrToI := set.(map[string]interface{})
+
+					rtargetChoiceTypeFound := false
+
+					if v, ok := enterpriseNetworkRtargetsMapStrToI["asn2byte_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Asn2ByteRtarget{}
+						rtargetChoiceInt.Asn2ByteRtarget = &ves_io_schema.RouteTarget2ByteAsn{}
+						enterpriseNetworkRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn2ByteRtarget.AsNumber = uint32(v.(int))
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn2ByteRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := enterpriseNetworkRtargetsMapStrToI["asn4byte_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Asn4ByteRtarget{}
+						rtargetChoiceInt.Asn4ByteRtarget = &ves_io_schema.RouteTarget4ByteAsn{}
+						enterpriseNetworkRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn4ByteRtarget.AsNumber = uint32(v.(int))
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn4ByteRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := enterpriseNetworkRtargetsMapStrToI["ipv4_addr_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Ipv4AddrRtarget{}
+						rtargetChoiceInt.Ipv4AddrRtarget = &ves_io_schema.RouteTargetIPv4Addr{}
+						enterpriseNetworkRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["address"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Ipv4AddrRtarget.Address = v.(string)
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Ipv4AddrRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["export_rtargets"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				exportRtargets := make([]*ves_io_schema.RouteTarget, len(sl))
+				networkChoiceInt.Srv6Network.ExportRtargets = exportRtargets
+				for i, set := range sl {
+					exportRtargets[i] = &ves_io_schema.RouteTarget{}
+					exportRtargetsMapStrToI := set.(map[string]interface{})
+
+					rtargetChoiceTypeFound := false
+
+					if v, ok := exportRtargetsMapStrToI["asn2byte_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Asn2ByteRtarget{}
+						rtargetChoiceInt.Asn2ByteRtarget = &ves_io_schema.RouteTarget2ByteAsn{}
+						exportRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn2ByteRtarget.AsNumber = uint32(v.(int))
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn2ByteRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := exportRtargetsMapStrToI["asn4byte_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Asn4ByteRtarget{}
+						rtargetChoiceInt.Asn4ByteRtarget = &ves_io_schema.RouteTarget4ByteAsn{}
+						exportRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn4ByteRtarget.AsNumber = uint32(v.(int))
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn4ByteRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := exportRtargetsMapStrToI["ipv4_addr_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Ipv4AddrRtarget{}
+						rtargetChoiceInt.Ipv4AddrRtarget = &ves_io_schema.RouteTargetIPv4Addr{}
+						exportRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["address"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Ipv4AddrRtarget.Address = v.(string)
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Ipv4AddrRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["fleets"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				fleetsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+				networkChoiceInt.Srv6Network.Fleets = fleetsInt
+				for i, ps := range sl {
+
+					fMapToStrVal := ps.(map[string]interface{})
+					fleetsInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+					if v, ok := fMapToStrVal["name"]; ok && !isIntfNil(v) {
+						fleetsInt[i].Name = v.(string)
+					}
+
+					if v, ok := fMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						fleetsInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := fMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						fleetsInt[i].Tenant = v.(string)
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["internet_rtargets"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				internetRtargets := make([]*ves_io_schema.RouteTarget, len(sl))
+				networkChoiceInt.Srv6Network.InternetRtargets = internetRtargets
+				for i, set := range sl {
+					internetRtargets[i] = &ves_io_schema.RouteTarget{}
+					internetRtargetsMapStrToI := set.(map[string]interface{})
+
+					rtargetChoiceTypeFound := false
+
+					if v, ok := internetRtargetsMapStrToI["asn2byte_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Asn2ByteRtarget{}
+						rtargetChoiceInt.Asn2ByteRtarget = &ves_io_schema.RouteTarget2ByteAsn{}
+						internetRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn2ByteRtarget.AsNumber = uint32(v.(int))
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn2ByteRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := internetRtargetsMapStrToI["asn4byte_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Asn4ByteRtarget{}
+						rtargetChoiceInt.Asn4ByteRtarget = &ves_io_schema.RouteTarget4ByteAsn{}
+						internetRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn4ByteRtarget.AsNumber = uint32(v.(int))
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn4ByteRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := internetRtargetsMapStrToI["ipv4_addr_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Ipv4AddrRtarget{}
+						rtargetChoiceInt.Ipv4AddrRtarget = &ves_io_schema.RouteTargetIPv4Addr{}
+						internetRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["address"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Ipv4AddrRtarget.Address = v.(string)
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Ipv4AddrRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			namespaceChoiceTypeFound := false
 
 			if v, ok := cs["no_namespace_network"]; ok && !isIntfNil(v) && !namespaceChoiceTypeFound {
@@ -327,6 +1228,123 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						namespaceChoiceInt.Srv6NetworkNsParams.Namespace = v.(string)
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["slice"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				sliceInt := &ves_io_schema_views.ObjectRefType{}
+				networkChoiceInt.Srv6Network.Slice = sliceInt
+
+				for _, set := range sl {
+					sMapToStrVal := set.(map[string]interface{})
+					if val, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+						sliceInt.Name = val.(string)
+					}
+					if val, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						sliceInt.Namespace = val.(string)
+					}
+
+					if val, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						sliceInt.Tenant = val.(string)
+					}
+				}
+
+			}
+
+			snatPoolChoiceTypeFound := false
+
+			if v, ok := cs["fleet_snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+				snatPoolChoiceTypeFound = true
+				snatPoolChoiceInt := &ves_io_schema_virtual_network.PerSiteSrv6NetworkType_FleetSnatPool{}
+				snatPoolChoiceInt.FleetSnatPool = &ves_io_schema_virtual_network.SNATPoolFleetType{}
+				networkChoiceInt.Srv6Network.SnatPoolChoice = snatPoolChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["snat_pool_allocator"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						snatPoolAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+						snatPoolChoiceInt.FleetSnatPool.SnatPoolAllocator = snatPoolAllocatorInt
+
+						for _, set := range sl {
+							spaMapToStrVal := set.(map[string]interface{})
+							if val, ok := spaMapToStrVal["name"]; ok && !isIntfNil(v) {
+								snatPoolAllocatorInt.Name = val.(string)
+							}
+							if val, ok := spaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								snatPoolAllocatorInt.Namespace = val.(string)
+							}
+
+							if val, ok := spaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								snatPoolAllocatorInt.Tenant = val.(string)
+							}
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["interface_ip_snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+				snatPoolChoiceTypeFound = true
+
+				if v.(bool) {
+					snatPoolChoiceInt := &ves_io_schema_virtual_network.PerSiteSrv6NetworkType_InterfaceIpSnatPool{}
+					snatPoolChoiceInt.InterfaceIpSnatPool = &ves_io_schema.Empty{}
+					networkChoiceInt.Srv6Network.SnatPoolChoice = snatPoolChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["site_snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+				snatPoolChoiceTypeFound = true
+				snatPoolChoiceInt := &ves_io_schema_virtual_network.PerSiteSrv6NetworkType_SiteSnatPool{}
+				snatPoolChoiceInt.SiteSnatPool = &ves_io_schema_virtual_network.SNATPoolSiteType{}
+				networkChoiceInt.Srv6Network.SnatPoolChoice = snatPoolChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["node_snat_pool"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						nodeSnatPool := make(map[string]*ves_io_schema_virtual_network.SNATPoolType)
+						snatPoolChoiceInt.SiteSnatPool.NodeSnatPool = nodeSnatPool
+						for _, set := range sl {
+							nodeSnatPoolMapStrToI := set.(map[string]interface{})
+							key, ok := nodeSnatPoolMapStrToI["name"]
+							if ok && !isIntfNil(key) {
+								nodeSnatPool[key.(string)] = &ves_io_schema_virtual_network.SNATPoolType{}
+								val, _ := nodeSnatPoolMapStrToI["value"]
+
+								nodeSnatPoolVals := val.(*schema.Set).List()
+								for _, intVal := range nodeSnatPoolVals {
+
+									nodeSnatPoolStaticMap := intVal.(map[string]interface{})
+
+									if w, ok := nodeSnatPoolStaticMap["ipv4_prefixes"]; ok && !isIntfNil(w) {
+										nodeSnatPool[key.(string)].Ipv4Prefixes = w.([]string)
+									}
+
+									// break after one loop
+									break
+								}
+							}
+						}
+
 					}
 
 				}
@@ -594,6 +1612,454 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			if v, ok := cs["access_network_rtargets"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				accessNetworkRtargets := make([]*ves_io_schema.RouteTarget, len(sl))
+				networkChoiceInt.Srv6Network.AccessNetworkRtargets = accessNetworkRtargets
+				for i, set := range sl {
+					accessNetworkRtargets[i] = &ves_io_schema.RouteTarget{}
+					accessNetworkRtargetsMapStrToI := set.(map[string]interface{})
+
+					rtargetChoiceTypeFound := false
+
+					if v, ok := accessNetworkRtargetsMapStrToI["asn2byte_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Asn2ByteRtarget{}
+						rtargetChoiceInt.Asn2ByteRtarget = &ves_io_schema.RouteTarget2ByteAsn{}
+						accessNetworkRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn2ByteRtarget.AsNumber = uint32(v.(int))
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn2ByteRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := accessNetworkRtargetsMapStrToI["asn4byte_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Asn4ByteRtarget{}
+						rtargetChoiceInt.Asn4ByteRtarget = &ves_io_schema.RouteTarget4ByteAsn{}
+						accessNetworkRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn4ByteRtarget.AsNumber = uint32(v.(int))
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn4ByteRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := accessNetworkRtargetsMapStrToI["ipv4_addr_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Ipv4AddrRtarget{}
+						rtargetChoiceInt.Ipv4AddrRtarget = &ves_io_schema.RouteTargetIPv4Addr{}
+						accessNetworkRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["address"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Ipv4AddrRtarget.Address = v.(string)
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Ipv4AddrRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			defaultVipChoiceTypeFound := false
+
+			if v, ok := cs["anycast_vip"]; ok && !isIntfNil(v) && !defaultVipChoiceTypeFound {
+
+				defaultVipChoiceTypeFound = true
+				defaultVipChoiceInt := &ves_io_schema_virtual_network.PerSiteSrv6NetworkType_AnycastVip{}
+
+				networkChoiceInt.Srv6Network.DefaultVipChoice = defaultVipChoiceInt
+
+				defaultVipChoiceInt.AnycastVip = v.(string)
+
+			}
+
+			if v, ok := cs["fleet_vip"]; ok && !isIntfNil(v) && !defaultVipChoiceTypeFound {
+
+				defaultVipChoiceTypeFound = true
+				defaultVipChoiceInt := &ves_io_schema_virtual_network.PerSiteSrv6NetworkType_FleetVip{}
+				defaultVipChoiceInt.FleetVip = &ves_io_schema_virtual_network.AnyCastVIPFleetType{}
+				networkChoiceInt.Srv6Network.DefaultVipChoice = defaultVipChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["vip_allocator"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						vipAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+						defaultVipChoiceInt.FleetVip.VipAllocator = vipAllocatorInt
+
+						for _, set := range sl {
+							vaMapToStrVal := set.(map[string]interface{})
+							if val, ok := vaMapToStrVal["name"]; ok && !isIntfNil(v) {
+								vipAllocatorInt.Name = val.(string)
+							}
+							if val, ok := vaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								vipAllocatorInt.Namespace = val.(string)
+							}
+
+							if val, ok := vaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								vipAllocatorInt.Tenant = val.(string)
+							}
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["interface_ip_vip"]; ok && !isIntfNil(v) && !defaultVipChoiceTypeFound {
+
+				defaultVipChoiceTypeFound = true
+
+				if v.(bool) {
+					defaultVipChoiceInt := &ves_io_schema_virtual_network.PerSiteSrv6NetworkType_InterfaceIpVip{}
+					defaultVipChoiceInt.InterfaceIpVip = &ves_io_schema.Empty{}
+					networkChoiceInt.Srv6Network.DefaultVipChoice = defaultVipChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["enterprise_network_rtargets"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				enterpriseNetworkRtargets := make([]*ves_io_schema.RouteTarget, len(sl))
+				networkChoiceInt.Srv6Network.EnterpriseNetworkRtargets = enterpriseNetworkRtargets
+				for i, set := range sl {
+					enterpriseNetworkRtargets[i] = &ves_io_schema.RouteTarget{}
+					enterpriseNetworkRtargetsMapStrToI := set.(map[string]interface{})
+
+					rtargetChoiceTypeFound := false
+
+					if v, ok := enterpriseNetworkRtargetsMapStrToI["asn2byte_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Asn2ByteRtarget{}
+						rtargetChoiceInt.Asn2ByteRtarget = &ves_io_schema.RouteTarget2ByteAsn{}
+						enterpriseNetworkRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn2ByteRtarget.AsNumber = uint32(v.(int))
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn2ByteRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := enterpriseNetworkRtargetsMapStrToI["asn4byte_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Asn4ByteRtarget{}
+						rtargetChoiceInt.Asn4ByteRtarget = &ves_io_schema.RouteTarget4ByteAsn{}
+						enterpriseNetworkRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn4ByteRtarget.AsNumber = uint32(v.(int))
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn4ByteRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := enterpriseNetworkRtargetsMapStrToI["ipv4_addr_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Ipv4AddrRtarget{}
+						rtargetChoiceInt.Ipv4AddrRtarget = &ves_io_schema.RouteTargetIPv4Addr{}
+						enterpriseNetworkRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["address"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Ipv4AddrRtarget.Address = v.(string)
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Ipv4AddrRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["export_rtargets"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				exportRtargets := make([]*ves_io_schema.RouteTarget, len(sl))
+				networkChoiceInt.Srv6Network.ExportRtargets = exportRtargets
+				for i, set := range sl {
+					exportRtargets[i] = &ves_io_schema.RouteTarget{}
+					exportRtargetsMapStrToI := set.(map[string]interface{})
+
+					rtargetChoiceTypeFound := false
+
+					if v, ok := exportRtargetsMapStrToI["asn2byte_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Asn2ByteRtarget{}
+						rtargetChoiceInt.Asn2ByteRtarget = &ves_io_schema.RouteTarget2ByteAsn{}
+						exportRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn2ByteRtarget.AsNumber = uint32(v.(int))
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn2ByteRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := exportRtargetsMapStrToI["asn4byte_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Asn4ByteRtarget{}
+						rtargetChoiceInt.Asn4ByteRtarget = &ves_io_schema.RouteTarget4ByteAsn{}
+						exportRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn4ByteRtarget.AsNumber = uint32(v.(int))
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn4ByteRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := exportRtargetsMapStrToI["ipv4_addr_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Ipv4AddrRtarget{}
+						rtargetChoiceInt.Ipv4AddrRtarget = &ves_io_schema.RouteTargetIPv4Addr{}
+						exportRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["address"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Ipv4AddrRtarget.Address = v.(string)
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Ipv4AddrRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["fleets"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				fleetsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+				networkChoiceInt.Srv6Network.Fleets = fleetsInt
+				for i, ps := range sl {
+
+					fMapToStrVal := ps.(map[string]interface{})
+					fleetsInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+					if v, ok := fMapToStrVal["name"]; ok && !isIntfNil(v) {
+						fleetsInt[i].Name = v.(string)
+					}
+
+					if v, ok := fMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						fleetsInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := fMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						fleetsInt[i].Tenant = v.(string)
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["internet_rtargets"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				internetRtargets := make([]*ves_io_schema.RouteTarget, len(sl))
+				networkChoiceInt.Srv6Network.InternetRtargets = internetRtargets
+				for i, set := range sl {
+					internetRtargets[i] = &ves_io_schema.RouteTarget{}
+					internetRtargetsMapStrToI := set.(map[string]interface{})
+
+					rtargetChoiceTypeFound := false
+
+					if v, ok := internetRtargetsMapStrToI["asn2byte_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Asn2ByteRtarget{}
+						rtargetChoiceInt.Asn2ByteRtarget = &ves_io_schema.RouteTarget2ByteAsn{}
+						internetRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn2ByteRtarget.AsNumber = uint32(v.(int))
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn2ByteRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := internetRtargetsMapStrToI["asn4byte_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Asn4ByteRtarget{}
+						rtargetChoiceInt.Asn4ByteRtarget = &ves_io_schema.RouteTarget4ByteAsn{}
+						internetRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_number"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn4ByteRtarget.AsNumber = uint32(v.(int))
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Asn4ByteRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := internetRtargetsMapStrToI["ipv4_addr_rtarget"]; ok && !isIntfNil(v) && !rtargetChoiceTypeFound {
+
+						rtargetChoiceTypeFound = true
+						rtargetChoiceInt := &ves_io_schema.RouteTarget_Ipv4AddrRtarget{}
+						rtargetChoiceInt.Ipv4AddrRtarget = &ves_io_schema.RouteTargetIPv4Addr{}
+						internetRtargets[i].RtargetChoice = rtargetChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["address"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Ipv4AddrRtarget.Address = v.(string)
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								rtargetChoiceInt.Ipv4AddrRtarget.Value = uint32(v.(int))
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			namespaceChoiceTypeFound := false
 
 			if v, ok := cs["no_namespace_network"]; ok && !isIntfNil(v) && !namespaceChoiceTypeFound {
@@ -622,6 +2088,123 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
 						namespaceChoiceInt.Srv6NetworkNsParams.Namespace = v.(string)
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["slice"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				sliceInt := &ves_io_schema_views.ObjectRefType{}
+				networkChoiceInt.Srv6Network.Slice = sliceInt
+
+				for _, set := range sl {
+					sMapToStrVal := set.(map[string]interface{})
+					if val, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+						sliceInt.Name = val.(string)
+					}
+					if val, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						sliceInt.Namespace = val.(string)
+					}
+
+					if val, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						sliceInt.Tenant = val.(string)
+					}
+				}
+
+			}
+
+			snatPoolChoiceTypeFound := false
+
+			if v, ok := cs["fleet_snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+				snatPoolChoiceTypeFound = true
+				snatPoolChoiceInt := &ves_io_schema_virtual_network.PerSiteSrv6NetworkType_FleetSnatPool{}
+				snatPoolChoiceInt.FleetSnatPool = &ves_io_schema_virtual_network.SNATPoolFleetType{}
+				networkChoiceInt.Srv6Network.SnatPoolChoice = snatPoolChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["snat_pool_allocator"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						snatPoolAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+						snatPoolChoiceInt.FleetSnatPool.SnatPoolAllocator = snatPoolAllocatorInt
+
+						for _, set := range sl {
+							spaMapToStrVal := set.(map[string]interface{})
+							if val, ok := spaMapToStrVal["name"]; ok && !isIntfNil(v) {
+								snatPoolAllocatorInt.Name = val.(string)
+							}
+							if val, ok := spaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								snatPoolAllocatorInt.Namespace = val.(string)
+							}
+
+							if val, ok := spaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								snatPoolAllocatorInt.Tenant = val.(string)
+							}
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["interface_ip_snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+				snatPoolChoiceTypeFound = true
+
+				if v.(bool) {
+					snatPoolChoiceInt := &ves_io_schema_virtual_network.PerSiteSrv6NetworkType_InterfaceIpSnatPool{}
+					snatPoolChoiceInt.InterfaceIpSnatPool = &ves_io_schema.Empty{}
+					networkChoiceInt.Srv6Network.SnatPoolChoice = snatPoolChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["site_snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+				snatPoolChoiceTypeFound = true
+				snatPoolChoiceInt := &ves_io_schema_virtual_network.PerSiteSrv6NetworkType_SiteSnatPool{}
+				snatPoolChoiceInt.SiteSnatPool = &ves_io_schema_virtual_network.SNATPoolSiteType{}
+				networkChoiceInt.Srv6Network.SnatPoolChoice = snatPoolChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["node_snat_pool"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						nodeSnatPool := make(map[string]*ves_io_schema_virtual_network.SNATPoolType)
+						snatPoolChoiceInt.SiteSnatPool.NodeSnatPool = nodeSnatPool
+						for _, set := range sl {
+							nodeSnatPoolMapStrToI := set.(map[string]interface{})
+							key, ok := nodeSnatPoolMapStrToI["name"]
+							if ok && !isIntfNil(key) {
+								nodeSnatPool[key.(string)] = &ves_io_schema_virtual_network.SNATPoolType{}
+								val, _ := nodeSnatPoolMapStrToI["value"]
+
+								nodeSnatPoolVals := val.(*schema.Set).List()
+								for _, intVal := range nodeSnatPoolVals {
+
+									nodeSnatPoolStaticMap := intVal.(map[string]interface{})
+
+									if w, ok := nodeSnatPoolStaticMap["ipv4_prefixes"]; ok && !isIntfNil(w) {
+										nodeSnatPool[key.(string)].Ipv4Prefixes = w.([]string)
+									}
+
+									// break after one loop
+									break
+								}
+							}
+						}
+
 					}
 
 				}

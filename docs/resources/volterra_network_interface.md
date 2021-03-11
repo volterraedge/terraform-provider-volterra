@@ -20,21 +20,64 @@ resource "volterra_network_interface" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "legacy_interface dedicated_management_interface dedicated_interface ethernet_interface tunnel_interface" must be set
+  // One of the arguments from this list "dedicated_management_interface dedicated_interface ethernet_interface tunnel_interface legacy_interface" must be set
 
-  dedicated_interface {
-    device = "eth0"
+  legacy_interface {
+    DHCP_server = "DHCP_server"
 
-    // One of the arguments from this list "monitor_disabled monitor" must be set
+    DNS_server {
+      dns_mode = "dns_mode"
+
+      dns_server {
+        addr = "192.168.1.1"
+      }
+    }
+
+    address_allocator {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    default_gateway {
+      default_gateway_address {
+        addr = "192.168.1.1"
+      }
+
+      default_gateway_mode = "default_gateway_mode"
+    }
+
+    device_name  = "value"
+    dhcp_address = "dhcp_address"
+
+    // One of the arguments from this list "monitor monitor_disabled" must be set
     monitor_disabled = true
-    mtu              = "1450"
+    mtu              = "0"
+    priority         = "42"
 
-    // One of the arguments from this list "cluster node" must be set
-    cluster = true
+    static_addresses {
+      plen   = "plen"
+      prefix = "192.168.1.0"
+    }
 
-    // One of the arguments from this list "not_primary is_primary" must be set
-    not_primary = true
-    priority    = "42"
+    tunnel {
+      tunnel {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+    }
+
+    type = "type"
+
+    virtual_network {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    vlan_tag     = "0"
+    vlan_tagging = "NETWORK_INTERFACE_VLAN_TAGGING_DISABLE"
   }
 }
 
@@ -214,6 +257,8 @@ Ethernet interface configuration..
 `site_local_inside_network` - (Optional) Interface belongs to site local network inside (bool).
 
 `site_local_network` - (Optional) Interface belongs to site local network (outside) (bool).
+
+`srv6_network` - (Optional) Interface belongs to per site srv6 network. See [ref](#ref) below for details.
 
 `storage_network` - (Optional) Interface belongs to site local network inside (bool).
 

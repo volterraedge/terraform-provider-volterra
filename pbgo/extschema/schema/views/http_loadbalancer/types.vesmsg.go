@@ -355,6 +355,16 @@ func (v *ValidateAdvancedOptionsType) CustomErrorsValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
+func (v *ValidateAdvancedOptionsType) IdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for idle_timeout")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAdvancedOptionsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AdvancedOptionsType)
 	if !ok {
@@ -566,6 +576,17 @@ var DefaultAdvancedOptionsTypeValidator = func() *ValidateAdvancedOptionsType {
 		panic(errMsg)
 	}
 	v.FldValidators["custom_errors"] = vFn
+
+	vrhIdleTimeout := v.IdleTimeoutValidationRuleHandler
+	rulesIdleTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "300000",
+	}
+	vFn, err = vrhIdleTimeout(rulesIdleTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AdvancedOptionsType.idle_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["idle_timeout"] = vFn
 
 	v.FldValidators["buffer_policy"] = ves_io_schema.BufferConfigTypeValidator().Validate
 
@@ -1406,9 +1427,9 @@ func (m *CreateSpecType) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
 			return nil, nil
 		}
 		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("waf_rule.Object")
+		vdRef.SetKind("waf_rules.Object")
 		odri := db.DRefInfo{
-			RefdType:   "waf_rule.Object",
+			RefdType:   "waf_rules.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
 			RefdName:   vref.Name,
@@ -1454,9 +1475,9 @@ func (m *CreateSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interfa
 		}
 
 	case *CreateSpecType_WafRule:
-		refdType, err := d.TypeForEntryKind("", "", "waf_rule.Object")
+		refdType, err := d.TypeForEntryKind("", "", "waf_rules.Object")
 		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: waf_rule")
+			return nil, errors.Wrap(err, "Cannot find type for kind: waf_rules")
 		}
 
 		vref := m.GetWafRule()
@@ -1464,7 +1485,7 @@ func (m *CreateSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interfa
 			return nil, nil
 		}
 		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "waf_rule.Object",
+			Kind:      "waf_rules.Object",
 			Tenant:    vref.Tenant,
 			Namespace: vref.Namespace,
 			Name:      vref.Name,
@@ -3416,9 +3437,9 @@ func (m *GetSpecType) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
 			return nil, nil
 		}
 		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("waf_rule.Object")
+		vdRef.SetKind("waf_rules.Object")
 		odri := db.DRefInfo{
-			RefdType:   "waf_rule.Object",
+			RefdType:   "waf_rules.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
 			RefdName:   vref.Name,
@@ -3464,9 +3485,9 @@ func (m *GetSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interface)
 		}
 
 	case *GetSpecType_WafRule:
-		refdType, err := d.TypeForEntryKind("", "", "waf_rule.Object")
+		refdType, err := d.TypeForEntryKind("", "", "waf_rules.Object")
 		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: waf_rule")
+			return nil, errors.Wrap(err, "Cannot find type for kind: waf_rules")
 		}
 
 		vref := m.GetWafRule()
@@ -3474,7 +3495,7 @@ func (m *GetSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interface)
 			return nil, nil
 		}
 		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "waf_rule.Object",
+			Kind:      "waf_rules.Object",
 			Tenant:    vref.Tenant,
 			Namespace: vref.Namespace,
 			Name:      vref.Name,
@@ -5000,9 +5021,9 @@ func (m *GlobalSpecType) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
 			return nil, nil
 		}
 		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("waf_rule.Object")
+		vdRef.SetKind("waf_rules.Object")
 		odri := db.DRefInfo{
-			RefdType:   "waf_rule.Object",
+			RefdType:   "waf_rules.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
 			RefdName:   vref.Name,
@@ -5048,9 +5069,9 @@ func (m *GlobalSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interfa
 		}
 
 	case *GlobalSpecType_WafRule:
-		refdType, err := d.TypeForEntryKind("", "", "waf_rule.Object")
+		refdType, err := d.TypeForEntryKind("", "", "waf_rules.Object")
 		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: waf_rule")
+			return nil, errors.Wrap(err, "Cannot find type for kind: waf_rules")
 		}
 
 		vref := m.GetWafRule()
@@ -5058,7 +5079,7 @@ func (m *GlobalSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interfa
 			return nil, nil
 		}
 		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "waf_rule.Object",
+			Kind:      "waf_rules.Object",
 			Tenant:    vref.Tenant,
 			Namespace: vref.Namespace,
 			Name:      vref.Name,
@@ -8151,9 +8172,9 @@ func (m *ReplaceSpecType) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
 			return nil, nil
 		}
 		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("waf_rule.Object")
+		vdRef.SetKind("waf_rules.Object")
 		odri := db.DRefInfo{
-			RefdType:   "waf_rule.Object",
+			RefdType:   "waf_rules.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
 			RefdName:   vref.Name,
@@ -8199,9 +8220,9 @@ func (m *ReplaceSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interf
 		}
 
 	case *ReplaceSpecType_WafRule:
-		refdType, err := d.TypeForEntryKind("", "", "waf_rule.Object")
+		refdType, err := d.TypeForEntryKind("", "", "waf_rules.Object")
 		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: waf_rule")
+			return nil, errors.Wrap(err, "Cannot find type for kind: waf_rules")
 		}
 
 		vref := m.GetWafRule()
@@ -8209,7 +8230,7 @@ func (m *ReplaceSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interf
 			return nil, nil
 		}
 		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "waf_rule.Object",
+			Kind:      "waf_rules.Object",
 			Tenant:    vref.Tenant,
 			Namespace: vref.Namespace,
 			Name:      vref.Name,
@@ -9285,9 +9306,9 @@ func (m *RouteSimpleAdvancedOptions) GetWafChoiceDRefInfo() ([]db.DRefInfo, erro
 			return nil, nil
 		}
 		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("waf_rule.Object")
+		vdRef.SetKind("waf_rules.Object")
 		odri := db.DRefInfo{
-			RefdType:   "waf_rule.Object",
+			RefdType:   "waf_rules.Object",
 			RefdTenant: vref.Tenant,
 			RefdNS:     vref.Namespace,
 			RefdName:   vref.Name,
@@ -9333,9 +9354,9 @@ func (m *RouteSimpleAdvancedOptions) GetWafChoiceDBEntries(ctx context.Context, 
 		}
 
 	case *RouteSimpleAdvancedOptions_WafRule:
-		refdType, err := d.TypeForEntryKind("", "", "waf_rule.Object")
+		refdType, err := d.TypeForEntryKind("", "", "waf_rules.Object")
 		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: waf_rule")
+			return nil, errors.Wrap(err, "Cannot find type for kind: waf_rules")
 		}
 
 		vref := m.GetWafRule()
@@ -9343,7 +9364,7 @@ func (m *RouteSimpleAdvancedOptions) GetWafChoiceDBEntries(ctx context.Context, 
 			return nil, nil
 		}
 		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "waf_rule.Object",
+			Kind:      "waf_rules.Object",
 			Tenant:    vref.Tenant,
 			Namespace: vref.Namespace,
 			Name:      vref.Name,
@@ -11568,26 +11589,6 @@ func (v *ValidateSimpleClientSrcRule) ClientSourceChoiceAsNumberValidationRuleHa
 	return oValidatorFn_AsNumber, nil
 }
 
-func (v *ValidateSimpleClientSrcRule) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateSimpleClientSrcRule) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateSimpleClientSrcRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -11659,15 +11660,6 @@ func (v *ValidateSimpleClientSrcRule) Validate(ctx context.Context, pm interface
 
 	}
 
-	if fv, exists := v.FldValidators["description"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("description"))
-		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
@@ -11681,15 +11673,6 @@ func (v *ValidateSimpleClientSrcRule) Validate(ctx context.Context, pm interface
 
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("name"))
-		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
 
@@ -11745,29 +11728,6 @@ var DefaultSimpleClientSrcRuleValidator = func() *ValidateSimpleClientSrcRule {
 
 	v.FldValidators["client_source_choice.ip_prefix"] = vFnMap["client_source_choice.ip_prefix"]
 	v.FldValidators["client_source_choice.as_number"] = vFnMap["client_source_choice.as_number"]
-
-	vrhName := v.NameValidationRuleHandler
-	rulesName := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "64",
-	}
-	vFn, err = vrhName(rulesName)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleClientSrcRule.name: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["name"] = vFn
-
-	vrhDescription := v.DescriptionValidationRuleHandler
-	rulesDescription := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhDescription(rulesDescription)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleClientSrcRule.description: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["description"] = vFn
 
 	vrhMetadata := v.MetadataValidationRuleHandler
 	rulesMetadata := map[string]string{

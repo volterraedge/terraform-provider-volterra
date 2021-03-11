@@ -170,6 +170,7 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	pbRsp := &GetResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.GetResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -247,6 +248,7 @@ func (c *CustomAPIRestClient) doRPCGetStatus(ctx context.Context, callOpts *serv
 	pbRsp := &GetStatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.GetStatusResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1393,6 +1395,7 @@ func (c *CustomActionAPIRestClient) doRPCForceDelete(ctx context.Context, callOp
 	pbRsp := &ForceDeleteResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.ForceDeleteResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1471,6 +1474,7 @@ func (c *CustomActionAPIRestClient) doRPCRun(ctx context.Context, callOpts *serv
 	pbRsp := &RunResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.terraform_parameters.RunResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

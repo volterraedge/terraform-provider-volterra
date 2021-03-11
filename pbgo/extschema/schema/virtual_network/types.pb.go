@@ -69,7 +69,7 @@ func (m *VoltADNPrivateNetworkReInfoType) GetNodeSelector() *ves_io_schema4.Labe
 // VoltADN Private Network Tenant Info
 //
 // x-displayName: "VoltADN Private Network Tenant Info"
-// Per Tenant information VoltADN private network
+// Per Tenant information for VoltADN private network
 type VoltADNPrivateNetworkTenantInfoType struct {
 	// Default Tenant Private VIP
 	//
@@ -114,6 +114,7 @@ type DNSServersList struct {
 	// List of DNS server IP(s)
 	//
 	// x-displayName: "List of DNS Server IP(s)"
+	// x-required
 	// List DNS server ip addresses
 	DnsIp []string `protobuf:"bytes,6,rep,name=dns_ip,json=dnsIp" json:"dns_ip,omitempty"`
 }
@@ -159,7 +160,7 @@ type VoltADNPrivateNetworkType struct {
 	// x-displayName: "Common Node Label Expression"
 	// If RE specific expression is nil, then common expression is used.
 	CommonNodeSelector *ves_io_schema4.LabelSelectorType `protobuf:"bytes,7,opt,name=common_node_selector,json=commonNodeSelector" json:"common_node_selector,omitempty"`
-	// RE name  to Re info mao
+	// RE name  to RE info map
 	//
 	// x-displayName: "RE name to Re info mapping"
 	// Map of re name to re info map, Key:RE name, Value: RE info
@@ -502,6 +503,102 @@ func _VoltADNPrivateNetworkType_OneofSizer(msg proto.Message) (n int) {
 	return n
 }
 
+// Anycast VIP for Fleet
+//
+// x-displayName: "Anycast VIP for Fleet"
+// Configure anycast VIP address allocator
+type AnyCastVIPFleetType struct {
+	// Fleet VIP address allocator
+	//
+	// x-displayName: "Fleet VIP address allocator"
+	// x-required
+	// Anycast VIP address allocator reference
+	VipAllocator *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,opt,name=vip_allocator,json=vipAllocator" json:"vip_allocator,omitempty"`
+}
+
+func (m *AnyCastVIPFleetType) Reset()                    { *m = AnyCastVIPFleetType{} }
+func (*AnyCastVIPFleetType) ProtoMessage()               {}
+func (*AnyCastVIPFleetType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+
+func (m *AnyCastVIPFleetType) GetVipAllocator() *ves_io_schema_views.ObjectRefType {
+	if m != nil {
+		return m.VipAllocator
+	}
+	return nil
+}
+
+// SNAT Pool
+//
+// x-displayName: "SNAT Pool"
+// SNAT pool ip prefix  parameters
+type SNATPoolType struct {
+	// List of IPv4 Prefixes
+	//
+	// x-displayName: "List of IPv4 Prefixes"
+	// x-required
+	// List of IPv4 prefixes used as SNAT pool
+	Ipv4Prefixes []string `protobuf:"bytes,1,rep,name=ipv4_prefixes,json=ipv4Prefixes" json:"ipv4_prefixes,omitempty"`
+}
+
+func (m *SNATPoolType) Reset()                    { *m = SNATPoolType{} }
+func (*SNATPoolType) ProtoMessage()               {}
+func (*SNATPoolType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+
+func (m *SNATPoolType) GetIpv4Prefixes() []string {
+	if m != nil {
+		return m.Ipv4Prefixes
+	}
+	return nil
+}
+
+// Per Node SNAT pool for a Site
+//
+// x-displayName: "Per Node SNAT pool for a Site"
+// Per node snat pool for a site
+type SNATPoolSiteType struct {
+	// Per Node IPv4 Prefix
+	//
+	// x-displayName: "Per Node IPv4 Prefix"
+	// x-required
+	// Per node ip v4 prefix for snat pool
+	NodeSnatPool map[string]*SNATPoolType `protobuf:"bytes,1,rep,name=node_snat_pool,json=nodeSnatPool" json:"node_snat_pool,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value"`
+}
+
+func (m *SNATPoolSiteType) Reset()                    { *m = SNATPoolSiteType{} }
+func (*SNATPoolSiteType) ProtoMessage()               {}
+func (*SNATPoolSiteType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+
+func (m *SNATPoolSiteType) GetNodeSnatPool() map[string]*SNATPoolType {
+	if m != nil {
+		return m.NodeSnatPool
+	}
+	return nil
+}
+
+// SNAT pool for Fleet
+//
+// x-displayName: "SNAT pool for Fleet"
+// Configure SNAT pool address allocator
+type SNATPoolFleetType struct {
+	// Fleet SNAT pool address allocator
+	//
+	// x-displayName: "Fleet SNAT pool address allocator"
+	// x-required
+	// SNAT pool address allocator reference
+	SnatPoolAllocator *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,opt,name=snat_pool_allocator,json=snatPoolAllocator" json:"snat_pool_allocator,omitempty"`
+}
+
+func (m *SNATPoolFleetType) Reset()                    { *m = SNATPoolFleetType{} }
+func (*SNATPoolFleetType) ProtoMessage()               {}
+func (*SNATPoolFleetType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+
+func (m *SNATPoolFleetType) GetSnatPoolAllocator() *ves_io_schema_views.ObjectRefType {
+	if m != nil {
+		return m.SnatPoolAllocator
+	}
+	return nil
+}
+
 // Srv6 Network Namespace Parameters
 //
 // x-displayName: "Srv6 Network Namespace Parameters"
@@ -511,13 +608,16 @@ type Srv6NetworkNsParametersType struct {
 	//
 	// x-displayName: "Namespace"
 	// x-example: "production"
+	// x-required
 	// Name of namespace that is connected to srv6 Network
 	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
 }
 
-func (m *Srv6NetworkNsParametersType) Reset()                    { *m = Srv6NetworkNsParametersType{} }
-func (*Srv6NetworkNsParametersType) ProtoMessage()               {}
-func (*Srv6NetworkNsParametersType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (m *Srv6NetworkNsParametersType) Reset()      { *m = Srv6NetworkNsParametersType{} }
+func (*Srv6NetworkNsParametersType) ProtoMessage() {}
+func (*Srv6NetworkNsParametersType) Descriptor() ([]byte, []int) {
+	return fileDescriptorTypes, []int{8}
+}
 
 func (m *Srv6NetworkNsParametersType) GetNamespace() string {
 	if m != nil {
@@ -541,14 +641,79 @@ type PerSiteSrv6NetworkType struct {
 	//	*PerSiteSrv6NetworkType_NoNamespaceNetwork
 	//	*PerSiteSrv6NetworkType_Srv6NetworkNsParams
 	NamespaceChoice isPerSiteSrv6NetworkType_NamespaceChoice `protobuf_oneof:"namespace_choice"`
+	// Default VIP Choice
+	//
+	// x-displayName: "Default VIP Choice"
+	// x-required
+	// Default VIP configuration for this network
+	//
+	// Types that are valid to be assigned to DefaultVipChoice:
+	//	*PerSiteSrv6NetworkType_InterfaceIpVip
+	//	*PerSiteSrv6NetworkType_AnycastVip
+	//	*PerSiteSrv6NetworkType_FleetVip
+	DefaultVipChoice isPerSiteSrv6NetworkType_DefaultVipChoice `protobuf_oneof:"default_vip_choice"`
+	// SNAT Pool
+	//
+	// x-displayName: "SNAT Pool"
+	// x-required
+	// SNAT pool configuration for this network
+	//
+	// Types that are valid to be assigned to SnatPoolChoice:
+	//	*PerSiteSrv6NetworkType_InterfaceIpSnatPool
+	//	*PerSiteSrv6NetworkType_SiteSnatPool
+	//	*PerSiteSrv6NetworkType_FleetSnatPool
+	SnatPoolChoice isPerSiteSrv6NetworkType_SnatPoolChoice `protobuf_oneof:"snat_pool_choice"`
+	// slice
+	//
+	// x-displayName: "SRv6 Network Slice"
+	// x-required
+	// The srv6_network_slice to which this network belongs.
+	Slice *ves_io_schema_views.ObjectRefType `protobuf:"bytes,12,opt,name=slice" json:"slice,omitempty"`
+	// fleets
+	//
+	// x-displayName: "Fleets"
+	// The set of sites where this virtual network is to be instantiated.
+	Fleets []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,13,rep,name=fleets" json:"fleets,omitempty"`
+	// access_network_rtargets
+	//
+	// x-displayName: "Access Network Route Targets"
+	// Import Route Targets for connectivity to Access Networks.
+	AccessNetworkRtargets []*ves_io_schema4.RouteTarget `protobuf:"bytes,14,rep,name=access_network_rtargets,json=accessNetworkRtargets" json:"access_network_rtargets,omitempty"`
+	// internet_rtargets
+	//
+	// x-displayName: "Internet Route Targets"
+	// Import Route Targets for connectivity to the Internet.
+	InternetRtargets []*ves_io_schema4.RouteTarget `protobuf:"bytes,15,rep,name=internet_rtargets,json=internetRtargets" json:"internet_rtargets,omitempty"`
+	// enterprise_network_rtargets
+	//
+	// x-displayName: "Enterprise Network Route Targets"
+	// Import Route Targets for connectivity to Enterprise Networks.
+	EnterpriseNetworkRtargets []*ves_io_schema4.RouteTarget `protobuf:"bytes,16,rep,name=enterprise_network_rtargets,json=enterpriseNetworkRtargets" json:"enterprise_network_rtargets,omitempty"`
+	// export_rtargets
+	//
+	// x-displayName: "Export Route Targets"
+	// Export Route Targets for advertised routes.
+	ExportRtargets []*ves_io_schema4.RouteTarget `protobuf:"bytes,17,rep,name=export_rtargets,json=exportRtargets" json:"export_rtargets,omitempty"`
 }
 
 func (m *PerSiteSrv6NetworkType) Reset()                    { *m = PerSiteSrv6NetworkType{} }
 func (*PerSiteSrv6NetworkType) ProtoMessage()               {}
-func (*PerSiteSrv6NetworkType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (*PerSiteSrv6NetworkType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
 
 type isPerSiteSrv6NetworkType_NamespaceChoice interface {
 	isPerSiteSrv6NetworkType_NamespaceChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isPerSiteSrv6NetworkType_DefaultVipChoice interface {
+	isPerSiteSrv6NetworkType_DefaultVipChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isPerSiteSrv6NetworkType_SnatPoolChoice interface {
+	isPerSiteSrv6NetworkType_SnatPoolChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -560,13 +725,49 @@ type PerSiteSrv6NetworkType_NoNamespaceNetwork struct {
 type PerSiteSrv6NetworkType_Srv6NetworkNsParams struct {
 	Srv6NetworkNsParams *Srv6NetworkNsParametersType `protobuf:"bytes,3,opt,name=srv6_network_ns_params,json=srv6NetworkNsParams,oneof"`
 }
+type PerSiteSrv6NetworkType_InterfaceIpVip struct {
+	InterfaceIpVip *ves_io_schema4.Empty `protobuf:"bytes,5,opt,name=interface_ip_vip,json=interfaceIpVip,oneof"`
+}
+type PerSiteSrv6NetworkType_AnycastVip struct {
+	AnycastVip string `protobuf:"bytes,6,opt,name=anycast_vip,json=anycastVip,proto3,oneof"`
+}
+type PerSiteSrv6NetworkType_FleetVip struct {
+	FleetVip *AnyCastVIPFleetType `protobuf:"bytes,7,opt,name=fleet_vip,json=fleetVip,oneof"`
+}
+type PerSiteSrv6NetworkType_InterfaceIpSnatPool struct {
+	InterfaceIpSnatPool *ves_io_schema4.Empty `protobuf:"bytes,9,opt,name=interface_ip_snat_pool,json=interfaceIpSnatPool,oneof"`
+}
+type PerSiteSrv6NetworkType_SiteSnatPool struct {
+	SiteSnatPool *SNATPoolSiteType `protobuf:"bytes,10,opt,name=site_snat_pool,json=siteSnatPool,oneof"`
+}
+type PerSiteSrv6NetworkType_FleetSnatPool struct {
+	FleetSnatPool *SNATPoolFleetType `protobuf:"bytes,11,opt,name=fleet_snat_pool,json=fleetSnatPool,oneof"`
+}
 
 func (*PerSiteSrv6NetworkType_NoNamespaceNetwork) isPerSiteSrv6NetworkType_NamespaceChoice()  {}
 func (*PerSiteSrv6NetworkType_Srv6NetworkNsParams) isPerSiteSrv6NetworkType_NamespaceChoice() {}
+func (*PerSiteSrv6NetworkType_InterfaceIpVip) isPerSiteSrv6NetworkType_DefaultVipChoice()     {}
+func (*PerSiteSrv6NetworkType_AnycastVip) isPerSiteSrv6NetworkType_DefaultVipChoice()         {}
+func (*PerSiteSrv6NetworkType_FleetVip) isPerSiteSrv6NetworkType_DefaultVipChoice()           {}
+func (*PerSiteSrv6NetworkType_InterfaceIpSnatPool) isPerSiteSrv6NetworkType_SnatPoolChoice()  {}
+func (*PerSiteSrv6NetworkType_SiteSnatPool) isPerSiteSrv6NetworkType_SnatPoolChoice()         {}
+func (*PerSiteSrv6NetworkType_FleetSnatPool) isPerSiteSrv6NetworkType_SnatPoolChoice()        {}
 
 func (m *PerSiteSrv6NetworkType) GetNamespaceChoice() isPerSiteSrv6NetworkType_NamespaceChoice {
 	if m != nil {
 		return m.NamespaceChoice
+	}
+	return nil
+}
+func (m *PerSiteSrv6NetworkType) GetDefaultVipChoice() isPerSiteSrv6NetworkType_DefaultVipChoice {
+	if m != nil {
+		return m.DefaultVipChoice
+	}
+	return nil
+}
+func (m *PerSiteSrv6NetworkType) GetSnatPoolChoice() isPerSiteSrv6NetworkType_SnatPoolChoice {
+	if m != nil {
+		return m.SnatPoolChoice
 	}
 	return nil
 }
@@ -585,11 +786,101 @@ func (m *PerSiteSrv6NetworkType) GetSrv6NetworkNsParams() *Srv6NetworkNsParamete
 	return nil
 }
 
+func (m *PerSiteSrv6NetworkType) GetInterfaceIpVip() *ves_io_schema4.Empty {
+	if x, ok := m.GetDefaultVipChoice().(*PerSiteSrv6NetworkType_InterfaceIpVip); ok {
+		return x.InterfaceIpVip
+	}
+	return nil
+}
+
+func (m *PerSiteSrv6NetworkType) GetAnycastVip() string {
+	if x, ok := m.GetDefaultVipChoice().(*PerSiteSrv6NetworkType_AnycastVip); ok {
+		return x.AnycastVip
+	}
+	return ""
+}
+
+func (m *PerSiteSrv6NetworkType) GetFleetVip() *AnyCastVIPFleetType {
+	if x, ok := m.GetDefaultVipChoice().(*PerSiteSrv6NetworkType_FleetVip); ok {
+		return x.FleetVip
+	}
+	return nil
+}
+
+func (m *PerSiteSrv6NetworkType) GetInterfaceIpSnatPool() *ves_io_schema4.Empty {
+	if x, ok := m.GetSnatPoolChoice().(*PerSiteSrv6NetworkType_InterfaceIpSnatPool); ok {
+		return x.InterfaceIpSnatPool
+	}
+	return nil
+}
+
+func (m *PerSiteSrv6NetworkType) GetSiteSnatPool() *SNATPoolSiteType {
+	if x, ok := m.GetSnatPoolChoice().(*PerSiteSrv6NetworkType_SiteSnatPool); ok {
+		return x.SiteSnatPool
+	}
+	return nil
+}
+
+func (m *PerSiteSrv6NetworkType) GetFleetSnatPool() *SNATPoolFleetType {
+	if x, ok := m.GetSnatPoolChoice().(*PerSiteSrv6NetworkType_FleetSnatPool); ok {
+		return x.FleetSnatPool
+	}
+	return nil
+}
+
+func (m *PerSiteSrv6NetworkType) GetSlice() *ves_io_schema_views.ObjectRefType {
+	if m != nil {
+		return m.Slice
+	}
+	return nil
+}
+
+func (m *PerSiteSrv6NetworkType) GetFleets() []*ves_io_schema_views.ObjectRefType {
+	if m != nil {
+		return m.Fleets
+	}
+	return nil
+}
+
+func (m *PerSiteSrv6NetworkType) GetAccessNetworkRtargets() []*ves_io_schema4.RouteTarget {
+	if m != nil {
+		return m.AccessNetworkRtargets
+	}
+	return nil
+}
+
+func (m *PerSiteSrv6NetworkType) GetInternetRtargets() []*ves_io_schema4.RouteTarget {
+	if m != nil {
+		return m.InternetRtargets
+	}
+	return nil
+}
+
+func (m *PerSiteSrv6NetworkType) GetEnterpriseNetworkRtargets() []*ves_io_schema4.RouteTarget {
+	if m != nil {
+		return m.EnterpriseNetworkRtargets
+	}
+	return nil
+}
+
+func (m *PerSiteSrv6NetworkType) GetExportRtargets() []*ves_io_schema4.RouteTarget {
+	if m != nil {
+		return m.ExportRtargets
+	}
+	return nil
+}
+
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*PerSiteSrv6NetworkType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _PerSiteSrv6NetworkType_OneofMarshaler, _PerSiteSrv6NetworkType_OneofUnmarshaler, _PerSiteSrv6NetworkType_OneofSizer, []interface{}{
 		(*PerSiteSrv6NetworkType_NoNamespaceNetwork)(nil),
 		(*PerSiteSrv6NetworkType_Srv6NetworkNsParams)(nil),
+		(*PerSiteSrv6NetworkType_InterfaceIpVip)(nil),
+		(*PerSiteSrv6NetworkType_AnycastVip)(nil),
+		(*PerSiteSrv6NetworkType_FleetVip)(nil),
+		(*PerSiteSrv6NetworkType_InterfaceIpSnatPool)(nil),
+		(*PerSiteSrv6NetworkType_SiteSnatPool)(nil),
+		(*PerSiteSrv6NetworkType_FleetSnatPool)(nil),
 	}
 }
 
@@ -610,6 +901,46 @@ func _PerSiteSrv6NetworkType_OneofMarshaler(msg proto.Message, b *proto.Buffer) 
 	case nil:
 	default:
 		return fmt.Errorf("PerSiteSrv6NetworkType.NamespaceChoice has unexpected type %T", x)
+	}
+	// default_vip_choice
+	switch x := m.DefaultVipChoice.(type) {
+	case *PerSiteSrv6NetworkType_InterfaceIpVip:
+		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.InterfaceIpVip); err != nil {
+			return err
+		}
+	case *PerSiteSrv6NetworkType_AnycastVip:
+		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
+		_ = b.EncodeStringBytes(x.AnycastVip)
+	case *PerSiteSrv6NetworkType_FleetVip:
+		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.FleetVip); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("PerSiteSrv6NetworkType.DefaultVipChoice has unexpected type %T", x)
+	}
+	// snat_pool_choice
+	switch x := m.SnatPoolChoice.(type) {
+	case *PerSiteSrv6NetworkType_InterfaceIpSnatPool:
+		_ = b.EncodeVarint(9<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.InterfaceIpSnatPool); err != nil {
+			return err
+		}
+	case *PerSiteSrv6NetworkType_SiteSnatPool:
+		_ = b.EncodeVarint(10<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.SiteSnatPool); err != nil {
+			return err
+		}
+	case *PerSiteSrv6NetworkType_FleetSnatPool:
+		_ = b.EncodeVarint(11<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.FleetSnatPool); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("PerSiteSrv6NetworkType.SnatPoolChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -632,6 +963,53 @@ func _PerSiteSrv6NetworkType_OneofUnmarshaler(msg proto.Message, tag, wire int, 
 		msg := new(Srv6NetworkNsParametersType)
 		err := b.DecodeMessage(msg)
 		m.NamespaceChoice = &PerSiteSrv6NetworkType_Srv6NetworkNsParams{msg}
+		return true, err
+	case 5: // default_vip_choice.interface_ip_vip
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.DefaultVipChoice = &PerSiteSrv6NetworkType_InterfaceIpVip{msg}
+		return true, err
+	case 6: // default_vip_choice.anycast_vip
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.DefaultVipChoice = &PerSiteSrv6NetworkType_AnycastVip{x}
+		return true, err
+	case 7: // default_vip_choice.fleet_vip
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(AnyCastVIPFleetType)
+		err := b.DecodeMessage(msg)
+		m.DefaultVipChoice = &PerSiteSrv6NetworkType_FleetVip{msg}
+		return true, err
+	case 9: // snat_pool_choice.interface_ip_snat_pool
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.SnatPoolChoice = &PerSiteSrv6NetworkType_InterfaceIpSnatPool{msg}
+		return true, err
+	case 10: // snat_pool_choice.site_snat_pool
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(SNATPoolSiteType)
+		err := b.DecodeMessage(msg)
+		m.SnatPoolChoice = &PerSiteSrv6NetworkType_SiteSnatPool{msg}
+		return true, err
+	case 11: // snat_pool_choice.fleet_snat_pool
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(SNATPoolFleetType)
+		err := b.DecodeMessage(msg)
+		m.SnatPoolChoice = &PerSiteSrv6NetworkType_FleetSnatPool{msg}
 		return true, err
 	default:
 		return false, nil
@@ -656,6 +1034,47 @@ func _PerSiteSrv6NetworkType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
+	// default_vip_choice
+	switch x := m.DefaultVipChoice.(type) {
+	case *PerSiteSrv6NetworkType_InterfaceIpVip:
+		s := proto.Size(x.InterfaceIpVip)
+		n += proto.SizeVarint(5<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *PerSiteSrv6NetworkType_AnycastVip:
+		n += proto.SizeVarint(6<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(len(x.AnycastVip)))
+		n += len(x.AnycastVip)
+	case *PerSiteSrv6NetworkType_FleetVip:
+		s := proto.Size(x.FleetVip)
+		n += proto.SizeVarint(7<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	// snat_pool_choice
+	switch x := m.SnatPoolChoice.(type) {
+	case *PerSiteSrv6NetworkType_InterfaceIpSnatPool:
+		s := proto.Size(x.InterfaceIpSnatPool)
+		n += proto.SizeVarint(9<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *PerSiteSrv6NetworkType_SiteSnatPool:
+		s := proto.Size(x.SiteSnatPool)
+		n += proto.SizeVarint(10<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *PerSiteSrv6NetworkType_FleetSnatPool:
+		s := proto.Size(x.FleetSnatPool)
+		n += proto.SizeVarint(11<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
 	return n
 }
 
@@ -673,7 +1092,7 @@ type NextHopInterfaceList struct {
 
 func (m *NextHopInterfaceList) Reset()                    { *m = NextHopInterfaceList{} }
 func (*NextHopInterfaceList) ProtoMessage()               {}
-func (*NextHopInterfaceList) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (*NextHopInterfaceList) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
 
 func (m *NextHopInterfaceList) GetInterfaces() []*ves_io_schema_views.ObjectRefType {
 	if m != nil {
@@ -712,7 +1131,7 @@ type StaticRouteViewType struct {
 
 func (m *StaticRouteViewType) Reset()                    { *m = StaticRouteViewType{} }
 func (*StaticRouteViewType) ProtoMessage()               {}
-func (*StaticRouteViewType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (*StaticRouteViewType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
 
 type isStaticRouteViewType_NextHopChoice interface {
 	isStaticRouteViewType_NextHopChoice()
@@ -887,7 +1306,7 @@ type ActivePBRPoliciesType struct {
 
 func (m *ActivePBRPoliciesType) Reset()                    { *m = ActivePBRPoliciesType{} }
 func (*ActivePBRPoliciesType) ProtoMessage()               {}
-func (*ActivePBRPoliciesType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
+func (*ActivePBRPoliciesType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
 
 func (m *ActivePBRPoliciesType) GetForwardProxyPbrPolicies() []*ves_io_schema_views.ObjectRefType {
 	if m != nil {
@@ -899,6 +1318,29 @@ func (m *ActivePBRPoliciesType) GetForwardProxyPbrPolicies() []*ves_io_schema_vi
 func (m *ActivePBRPoliciesType) GetNetworkPbrPolicies() []*ves_io_schema_views.ObjectRefType {
 	if m != nil {
 		return m.NetworkPbrPolicies
+	}
+	return nil
+}
+
+// Per Tenant Anycast VIP
+//
+// x-displayName: "Per Tenant Anycast VIP"
+// Per tenant anycast vip
+type PerTenantVIPType struct {
+	// Per Tenant VIP
+	//
+	// x-displayName: "Per Tenant VIP"
+	// Per tenant anycast VIP for the Virtual network
+	TenantVipMap map[string]string `protobuf:"bytes,1,rep,name=tenant_vip_map,json=tenantVipMap" json:"tenant_vip_map,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (m *PerTenantVIPType) Reset()                    { *m = PerTenantVIPType{} }
+func (*PerTenantVIPType) ProtoMessage()               {}
+func (*PerTenantVIPType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{13} }
+
+func (m *PerTenantVIPType) GetTenantVipMap() map[string]string {
+	if m != nil {
+		return m.TenantVipMap
 	}
 	return nil
 }
@@ -945,14 +1387,65 @@ type GlobalSpecType struct {
 	// x-displayName: "VoltADN Private Network Parameters"
 	// Network parameters configured buy SRE,  after opening a support ticket
 	PrivateNetworkParameters *VoltADNPrivateNetworkType `protobuf:"bytes,15,opt,name=private_network_parameters,json=privateNetworkParameters" json:"private_network_parameters,omitempty"`
+	// Default VIP
+	//
+	// x-displayName: "Default VIP"
+	// Calculated default VIP
+	//
+	// Types that are valid to be assigned to DefaultVipChoice:
+	//	*GlobalSpecType_TenantVip
+	//	*GlobalSpecType_FleetVip
+	DefaultVipChoice isGlobalSpecType_DefaultVipChoice `protobuf_oneof:"default_vip_choice"`
+	// SNAT Pool
+	//
+	// x-displayName: "SNAT Pool"
+	// SNAT pool configuration for this network
+	//
+	// Types that are valid to be assigned to SnatPoolChoice:
+	//	*GlobalSpecType_InterfaceIp
+	//	*GlobalSpecType_SiteSnatPool
+	//	*GlobalSpecType_FleetSnatPool
+	SnatPoolChoice isGlobalSpecType_SnatPoolChoice `protobuf_oneof:"snat_pool_choice"`
+	// import_rtarget_strs
+	//
+	// x-displayName: "Import Route Target Strings"
+	// Import Route Targets in string format.
+	ImportRtargetStrs []string `protobuf:"bytes,1000,rep,name=import_rtarget_strs,json=importRtargetStrs" json:"import_rtarget_strs,omitempty"`
+	// export_rtarget_strs
+	//
+	// x-displayName: "Export Route Target Strings"
+	// Export Route Targets in string format.
+	ExportRtargetStrs []string `protobuf:"bytes,1001,rep,name=export_rtarget_strs,json=exportRtargetStrs" json:"export_rtarget_strs,omitempty"`
+	// fleet_refs
+	//
+	// x-displayName: "Fleet Refs"
+	// The set of sites where this virtual network is to be instantiated.
+	FleetRefs []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1002,rep,name=fleet_refs,json=fleetRefs" json:"fleet_refs,omitempty"`
+	// slice_ref
+	//
+	// x-displayName: "SRv6 Network Slice"
+	// Reference to srv6_network_slice for SRv6 VN.
+	SliceRef []*ves_io_schema4.ObjectRefType `protobuf:"bytes,1003,rep,name=slice_ref,json=sliceRef" json:"slice_ref,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
+func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{14} }
 
 type isGlobalSpecType_NetworkChoice interface {
 	isGlobalSpecType_NetworkChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isGlobalSpecType_DefaultVipChoice interface {
+	isGlobalSpecType_DefaultVipChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isGlobalSpecType_SnatPoolChoice interface {
+	isGlobalSpecType_SnatPoolChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -979,6 +1472,21 @@ type GlobalSpecType_PrivateNetwork struct {
 type GlobalSpecType_Srv6Network struct {
 	Srv6Network *PerSiteSrv6NetworkType `protobuf:"bytes,14,opt,name=srv6_network,json=srv6Network,oneof"`
 }
+type GlobalSpecType_TenantVip struct {
+	TenantVip *PerTenantVIPType `protobuf:"bytes,17,opt,name=tenant_vip,json=tenantVip,oneof"`
+}
+type GlobalSpecType_FleetVip struct {
+	FleetVip *AnyCastVIPFleetType `protobuf:"bytes,18,opt,name=fleet_vip,json=fleetVip,oneof"`
+}
+type GlobalSpecType_InterfaceIp struct {
+	InterfaceIp *ves_io_schema4.Empty `protobuf:"bytes,20,opt,name=interface_ip,json=interfaceIp,oneof"`
+}
+type GlobalSpecType_SiteSnatPool struct {
+	SiteSnatPool *SNATPoolSiteType `protobuf:"bytes,21,opt,name=site_snat_pool,json=siteSnatPool,oneof"`
+}
+type GlobalSpecType_FleetSnatPool struct {
+	FleetSnatPool *SNATPoolFleetType `protobuf:"bytes,22,opt,name=fleet_snat_pool,json=fleetSnatPool,oneof"`
+}
 
 func (*GlobalSpecType_GlobalNetwork) isGlobalSpecType_NetworkChoice()          {}
 func (*GlobalSpecType_SiteLocalNetwork) isGlobalSpecType_NetworkChoice()       {}
@@ -987,10 +1495,27 @@ func (*GlobalSpecType_InsideNetwork) isGlobalSpecType_NetworkChoice()          {
 func (*GlobalSpecType_LegacyType) isGlobalSpecType_NetworkChoice()             {}
 func (*GlobalSpecType_PrivateNetwork) isGlobalSpecType_NetworkChoice()         {}
 func (*GlobalSpecType_Srv6Network) isGlobalSpecType_NetworkChoice()            {}
+func (*GlobalSpecType_TenantVip) isGlobalSpecType_DefaultVipChoice()           {}
+func (*GlobalSpecType_FleetVip) isGlobalSpecType_DefaultVipChoice()            {}
+func (*GlobalSpecType_InterfaceIp) isGlobalSpecType_SnatPoolChoice()           {}
+func (*GlobalSpecType_SiteSnatPool) isGlobalSpecType_SnatPoolChoice()          {}
+func (*GlobalSpecType_FleetSnatPool) isGlobalSpecType_SnatPoolChoice()         {}
 
 func (m *GlobalSpecType) GetNetworkChoice() isGlobalSpecType_NetworkChoice {
 	if m != nil {
 		return m.NetworkChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetDefaultVipChoice() isGlobalSpecType_DefaultVipChoice {
+	if m != nil {
+		return m.DefaultVipChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetSnatPoolChoice() isGlobalSpecType_SnatPoolChoice {
+	if m != nil {
+		return m.SnatPoolChoice
 	}
 	return nil
 }
@@ -1072,6 +1597,69 @@ func (m *GlobalSpecType) GetPrivateNetworkParameters() *VoltADNPrivateNetworkTyp
 	return nil
 }
 
+func (m *GlobalSpecType) GetTenantVip() *PerTenantVIPType {
+	if x, ok := m.GetDefaultVipChoice().(*GlobalSpecType_TenantVip); ok {
+		return x.TenantVip
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetFleetVip() *AnyCastVIPFleetType {
+	if x, ok := m.GetDefaultVipChoice().(*GlobalSpecType_FleetVip); ok {
+		return x.FleetVip
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetInterfaceIp() *ves_io_schema4.Empty {
+	if x, ok := m.GetSnatPoolChoice().(*GlobalSpecType_InterfaceIp); ok {
+		return x.InterfaceIp
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetSiteSnatPool() *SNATPoolSiteType {
+	if x, ok := m.GetSnatPoolChoice().(*GlobalSpecType_SiteSnatPool); ok {
+		return x.SiteSnatPool
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetFleetSnatPool() *SNATPoolFleetType {
+	if x, ok := m.GetSnatPoolChoice().(*GlobalSpecType_FleetSnatPool); ok {
+		return x.FleetSnatPool
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetImportRtargetStrs() []string {
+	if m != nil {
+		return m.ImportRtargetStrs
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetExportRtargetStrs() []string {
+	if m != nil {
+		return m.ExportRtargetStrs
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetFleetRefs() []*ves_io_schema4.ObjectRefType {
+	if m != nil {
+		return m.FleetRefs
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetSliceRef() []*ves_io_schema4.ObjectRefType {
+	if m != nil {
+		return m.SliceRef
+	}
+	return nil
+}
+
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _GlobalSpecType_OneofMarshaler, _GlobalSpecType_OneofUnmarshaler, _GlobalSpecType_OneofSizer, []interface{}{
@@ -1082,6 +1670,11 @@ func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 		(*GlobalSpecType_LegacyType)(nil),
 		(*GlobalSpecType_PrivateNetwork)(nil),
 		(*GlobalSpecType_Srv6Network)(nil),
+		(*GlobalSpecType_TenantVip)(nil),
+		(*GlobalSpecType_FleetVip)(nil),
+		(*GlobalSpecType_InterfaceIp)(nil),
+		(*GlobalSpecType_SiteSnatPool)(nil),
+		(*GlobalSpecType_FleetSnatPool)(nil),
 	}
 }
 
@@ -1125,6 +1718,43 @@ func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("GlobalSpecType.NetworkChoice has unexpected type %T", x)
+	}
+	// default_vip_choice
+	switch x := m.DefaultVipChoice.(type) {
+	case *GlobalSpecType_TenantVip:
+		_ = b.EncodeVarint(17<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.TenantVip); err != nil {
+			return err
+		}
+	case *GlobalSpecType_FleetVip:
+		_ = b.EncodeVarint(18<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.FleetVip); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("GlobalSpecType.DefaultVipChoice has unexpected type %T", x)
+	}
+	// snat_pool_choice
+	switch x := m.SnatPoolChoice.(type) {
+	case *GlobalSpecType_InterfaceIp:
+		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.InterfaceIp); err != nil {
+			return err
+		}
+	case *GlobalSpecType_SiteSnatPool:
+		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.SiteSnatPool); err != nil {
+			return err
+		}
+	case *GlobalSpecType_FleetSnatPool:
+		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.FleetSnatPool); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("GlobalSpecType.SnatPoolChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -1187,6 +1817,46 @@ func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto
 		err := b.DecodeMessage(msg)
 		m.NetworkChoice = &GlobalSpecType_Srv6Network{msg}
 		return true, err
+	case 17: // default_vip_choice.tenant_vip
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(PerTenantVIPType)
+		err := b.DecodeMessage(msg)
+		m.DefaultVipChoice = &GlobalSpecType_TenantVip{msg}
+		return true, err
+	case 18: // default_vip_choice.fleet_vip
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(AnyCastVIPFleetType)
+		err := b.DecodeMessage(msg)
+		m.DefaultVipChoice = &GlobalSpecType_FleetVip{msg}
+		return true, err
+	case 20: // snat_pool_choice.interface_ip
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.SnatPoolChoice = &GlobalSpecType_InterfaceIp{msg}
+		return true, err
+	case 21: // snat_pool_choice.site_snat_pool
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(SNATPoolSiteType)
+		err := b.DecodeMessage(msg)
+		m.SnatPoolChoice = &GlobalSpecType_SiteSnatPool{msg}
+		return true, err
+	case 22: // snat_pool_choice.fleet_snat_pool
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(SNATPoolFleetType)
+		err := b.DecodeMessage(msg)
+		m.SnatPoolChoice = &GlobalSpecType_FleetSnatPool{msg}
+		return true, err
 	default:
 		return false, nil
 	}
@@ -1233,6 +1903,43 @@ func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
+	// default_vip_choice
+	switch x := m.DefaultVipChoice.(type) {
+	case *GlobalSpecType_TenantVip:
+		s := proto.Size(x.TenantVip)
+		n += proto.SizeVarint(17<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GlobalSpecType_FleetVip:
+		s := proto.Size(x.FleetVip)
+		n += proto.SizeVarint(18<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	// snat_pool_choice
+	switch x := m.SnatPoolChoice.(type) {
+	case *GlobalSpecType_InterfaceIp:
+		s := proto.Size(x.InterfaceIp)
+		n += proto.SizeVarint(20<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GlobalSpecType_SiteSnatPool:
+		s := proto.Size(x.SiteSnatPool)
+		n += proto.SizeVarint(21<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GlobalSpecType_FleetSnatPool:
+		s := proto.Size(x.FleetSnatPool)
+		n += proto.SizeVarint(22<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
 	return n
 }
 
@@ -1257,7 +1964,7 @@ type CreateSpecType struct {
 
 func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
+func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{15} }
 
 type isCreateSpecType_NetworkChoice interface {
 	isCreateSpecType_NetworkChoice()
@@ -1485,7 +2192,7 @@ type ReplaceSpecType struct {
 
 func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{16} }
 
 type isReplaceSpecType_NetworkChoice interface {
 	isReplaceSpecType_NetworkChoice()
@@ -1743,7 +2450,7 @@ type GetSpecType struct {
 
 func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
+func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{17} }
 
 type isGetSpecType_NetworkChoice interface {
 	isGetSpecType_NetworkChoice()
@@ -1988,6 +2695,14 @@ func init() {
 	golang_proto.RegisterType((*DNSServersList)(nil), "ves.io.schema.virtual_network.DNSServersList")
 	proto.RegisterType((*VoltADNPrivateNetworkType)(nil), "ves.io.schema.virtual_network.VoltADNPrivateNetworkType")
 	golang_proto.RegisterType((*VoltADNPrivateNetworkType)(nil), "ves.io.schema.virtual_network.VoltADNPrivateNetworkType")
+	proto.RegisterType((*AnyCastVIPFleetType)(nil), "ves.io.schema.virtual_network.AnyCastVIPFleetType")
+	golang_proto.RegisterType((*AnyCastVIPFleetType)(nil), "ves.io.schema.virtual_network.AnyCastVIPFleetType")
+	proto.RegisterType((*SNATPoolType)(nil), "ves.io.schema.virtual_network.SNATPoolType")
+	golang_proto.RegisterType((*SNATPoolType)(nil), "ves.io.schema.virtual_network.SNATPoolType")
+	proto.RegisterType((*SNATPoolSiteType)(nil), "ves.io.schema.virtual_network.SNATPoolSiteType")
+	golang_proto.RegisterType((*SNATPoolSiteType)(nil), "ves.io.schema.virtual_network.SNATPoolSiteType")
+	proto.RegisterType((*SNATPoolFleetType)(nil), "ves.io.schema.virtual_network.SNATPoolFleetType")
+	golang_proto.RegisterType((*SNATPoolFleetType)(nil), "ves.io.schema.virtual_network.SNATPoolFleetType")
 	proto.RegisterType((*Srv6NetworkNsParametersType)(nil), "ves.io.schema.virtual_network.Srv6NetworkNsParametersType")
 	golang_proto.RegisterType((*Srv6NetworkNsParametersType)(nil), "ves.io.schema.virtual_network.Srv6NetworkNsParametersType")
 	proto.RegisterType((*PerSiteSrv6NetworkType)(nil), "ves.io.schema.virtual_network.PerSiteSrv6NetworkType")
@@ -1998,6 +2713,8 @@ func init() {
 	golang_proto.RegisterType((*StaticRouteViewType)(nil), "ves.io.schema.virtual_network.StaticRouteViewType")
 	proto.RegisterType((*ActivePBRPoliciesType)(nil), "ves.io.schema.virtual_network.ActivePBRPoliciesType")
 	golang_proto.RegisterType((*ActivePBRPoliciesType)(nil), "ves.io.schema.virtual_network.ActivePBRPoliciesType")
+	proto.RegisterType((*PerTenantVIPType)(nil), "ves.io.schema.virtual_network.PerTenantVIPType")
+	golang_proto.RegisterType((*PerTenantVIPType)(nil), "ves.io.schema.virtual_network.PerTenantVIPType")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.virtual_network.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.virtual_network.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.virtual_network.CreateSpecType")
@@ -2304,6 +3021,112 @@ func (this *VoltADNPrivateNetworkType_AdvertiseDedicatedVips) Equal(that interfa
 	}
 	return true
 }
+func (this *AnyCastVIPFleetType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AnyCastVIPFleetType)
+	if !ok {
+		that2, ok := that.(AnyCastVIPFleetType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.VipAllocator.Equal(that1.VipAllocator) {
+		return false
+	}
+	return true
+}
+func (this *SNATPoolType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SNATPoolType)
+	if !ok {
+		that2, ok := that.(SNATPoolType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Ipv4Prefixes) != len(that1.Ipv4Prefixes) {
+		return false
+	}
+	for i := range this.Ipv4Prefixes {
+		if this.Ipv4Prefixes[i] != that1.Ipv4Prefixes[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *SNATPoolSiteType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SNATPoolSiteType)
+	if !ok {
+		that2, ok := that.(SNATPoolSiteType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.NodeSnatPool) != len(that1.NodeSnatPool) {
+		return false
+	}
+	for i := range this.NodeSnatPool {
+		if !this.NodeSnatPool[i].Equal(that1.NodeSnatPool[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *SNATPoolFleetType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SNATPoolFleetType)
+	if !ok {
+		that2, ok := that.(SNATPoolFleetType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SnatPoolAllocator.Equal(that1.SnatPoolAllocator) {
+		return false
+	}
+	return true
+}
 func (this *Srv6NetworkNsParametersType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2356,6 +3179,67 @@ func (this *PerSiteSrv6NetworkType) Equal(that interface{}) bool {
 	} else if !this.NamespaceChoice.Equal(that1.NamespaceChoice) {
 		return false
 	}
+	if that1.DefaultVipChoice == nil {
+		if this.DefaultVipChoice != nil {
+			return false
+		}
+	} else if this.DefaultVipChoice == nil {
+		return false
+	} else if !this.DefaultVipChoice.Equal(that1.DefaultVipChoice) {
+		return false
+	}
+	if that1.SnatPoolChoice == nil {
+		if this.SnatPoolChoice != nil {
+			return false
+		}
+	} else if this.SnatPoolChoice == nil {
+		return false
+	} else if !this.SnatPoolChoice.Equal(that1.SnatPoolChoice) {
+		return false
+	}
+	if !this.Slice.Equal(that1.Slice) {
+		return false
+	}
+	if len(this.Fleets) != len(that1.Fleets) {
+		return false
+	}
+	for i := range this.Fleets {
+		if !this.Fleets[i].Equal(that1.Fleets[i]) {
+			return false
+		}
+	}
+	if len(this.AccessNetworkRtargets) != len(that1.AccessNetworkRtargets) {
+		return false
+	}
+	for i := range this.AccessNetworkRtargets {
+		if !this.AccessNetworkRtargets[i].Equal(that1.AccessNetworkRtargets[i]) {
+			return false
+		}
+	}
+	if len(this.InternetRtargets) != len(that1.InternetRtargets) {
+		return false
+	}
+	for i := range this.InternetRtargets {
+		if !this.InternetRtargets[i].Equal(that1.InternetRtargets[i]) {
+			return false
+		}
+	}
+	if len(this.EnterpriseNetworkRtargets) != len(that1.EnterpriseNetworkRtargets) {
+		return false
+	}
+	for i := range this.EnterpriseNetworkRtargets {
+		if !this.EnterpriseNetworkRtargets[i].Equal(that1.EnterpriseNetworkRtargets[i]) {
+			return false
+		}
+	}
+	if len(this.ExportRtargets) != len(that1.ExportRtargets) {
+		return false
+	}
+	for i := range this.ExportRtargets {
+		if !this.ExportRtargets[i].Equal(that1.ExportRtargets[i]) {
+			return false
+		}
+	}
 	return true
 }
 func (this *PerSiteSrv6NetworkType_NoNamespaceNetwork) Equal(that interface{}) bool {
@@ -2402,6 +3286,150 @@ func (this *PerSiteSrv6NetworkType_Srv6NetworkNsParams) Equal(that interface{}) 
 		return false
 	}
 	if !this.Srv6NetworkNsParams.Equal(that1.Srv6NetworkNsParams) {
+		return false
+	}
+	return true
+}
+func (this *PerSiteSrv6NetworkType_InterfaceIpVip) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PerSiteSrv6NetworkType_InterfaceIpVip)
+	if !ok {
+		that2, ok := that.(PerSiteSrv6NetworkType_InterfaceIpVip)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.InterfaceIpVip.Equal(that1.InterfaceIpVip) {
+		return false
+	}
+	return true
+}
+func (this *PerSiteSrv6NetworkType_AnycastVip) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PerSiteSrv6NetworkType_AnycastVip)
+	if !ok {
+		that2, ok := that.(PerSiteSrv6NetworkType_AnycastVip)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.AnycastVip != that1.AnycastVip {
+		return false
+	}
+	return true
+}
+func (this *PerSiteSrv6NetworkType_FleetVip) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PerSiteSrv6NetworkType_FleetVip)
+	if !ok {
+		that2, ok := that.(PerSiteSrv6NetworkType_FleetVip)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.FleetVip.Equal(that1.FleetVip) {
+		return false
+	}
+	return true
+}
+func (this *PerSiteSrv6NetworkType_InterfaceIpSnatPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PerSiteSrv6NetworkType_InterfaceIpSnatPool)
+	if !ok {
+		that2, ok := that.(PerSiteSrv6NetworkType_InterfaceIpSnatPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.InterfaceIpSnatPool.Equal(that1.InterfaceIpSnatPool) {
+		return false
+	}
+	return true
+}
+func (this *PerSiteSrv6NetworkType_SiteSnatPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PerSiteSrv6NetworkType_SiteSnatPool)
+	if !ok {
+		that2, ok := that.(PerSiteSrv6NetworkType_SiteSnatPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SiteSnatPool.Equal(that1.SiteSnatPool) {
+		return false
+	}
+	return true
+}
+func (this *PerSiteSrv6NetworkType_FleetSnatPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PerSiteSrv6NetworkType_FleetSnatPool)
+	if !ok {
+		that2, ok := that.(PerSiteSrv6NetworkType_FleetSnatPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.FleetSnatPool.Equal(that1.FleetSnatPool) {
 		return false
 	}
 	return true
@@ -2590,6 +3618,35 @@ func (this *ActivePBRPoliciesType) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *PerTenantVIPType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PerTenantVIPType)
+	if !ok {
+		that2, ok := that.(PerTenantVIPType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.TenantVipMap) != len(that1.TenantVipMap) {
+		return false
+	}
+	for i := range this.TenantVipMap {
+		if this.TenantVipMap[i] != that1.TenantVipMap[i] {
+			return false
+		}
+	}
+	return true
+}
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2639,6 +3696,56 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	}
 	if !this.PrivateNetworkParameters.Equal(that1.PrivateNetworkParameters) {
 		return false
+	}
+	if that1.DefaultVipChoice == nil {
+		if this.DefaultVipChoice != nil {
+			return false
+		}
+	} else if this.DefaultVipChoice == nil {
+		return false
+	} else if !this.DefaultVipChoice.Equal(that1.DefaultVipChoice) {
+		return false
+	}
+	if that1.SnatPoolChoice == nil {
+		if this.SnatPoolChoice != nil {
+			return false
+		}
+	} else if this.SnatPoolChoice == nil {
+		return false
+	} else if !this.SnatPoolChoice.Equal(that1.SnatPoolChoice) {
+		return false
+	}
+	if len(this.ImportRtargetStrs) != len(that1.ImportRtargetStrs) {
+		return false
+	}
+	for i := range this.ImportRtargetStrs {
+		if this.ImportRtargetStrs[i] != that1.ImportRtargetStrs[i] {
+			return false
+		}
+	}
+	if len(this.ExportRtargetStrs) != len(that1.ExportRtargetStrs) {
+		return false
+	}
+	for i := range this.ExportRtargetStrs {
+		if this.ExportRtargetStrs[i] != that1.ExportRtargetStrs[i] {
+			return false
+		}
+	}
+	if len(this.FleetRefs) != len(that1.FleetRefs) {
+		return false
+	}
+	for i := range this.FleetRefs {
+		if !this.FleetRefs[i].Equal(that1.FleetRefs[i]) {
+			return false
+		}
+	}
+	if len(this.SliceRef) != len(that1.SliceRef) {
+		return false
+	}
+	for i := range this.SliceRef {
+		if !this.SliceRef[i].Equal(that1.SliceRef[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -2806,6 +3913,126 @@ func (this *GlobalSpecType_Srv6Network) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.Srv6Network.Equal(that1.Srv6Network) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_TenantVip) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_TenantVip)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_TenantVip)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TenantVip.Equal(that1.TenantVip) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_FleetVip) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_FleetVip)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_FleetVip)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.FleetVip.Equal(that1.FleetVip) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_InterfaceIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_InterfaceIp)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_InterfaceIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.InterfaceIp.Equal(that1.InterfaceIp) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_SiteSnatPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_SiteSnatPool)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_SiteSnatPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SiteSnatPool.Equal(that1.SiteSnatPool) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_FleetSnatPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_FleetSnatPool)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_FleetSnatPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.FleetSnatPool.Equal(that1.FleetSnatPool) {
 		return false
 	}
 	return true
@@ -3462,6 +4689,62 @@ func (this *VoltADNPrivateNetworkType_AdvertiseDedicatedVips) GoString() string 
 		`AdvertiseDedicatedVips:` + fmt.Sprintf("%#v", this.AdvertiseDedicatedVips) + `}`}, ", ")
 	return s
 }
+func (this *AnyCastVIPFleetType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&virtual_network.AnyCastVIPFleetType{")
+	if this.VipAllocator != nil {
+		s = append(s, "VipAllocator: "+fmt.Sprintf("%#v", this.VipAllocator)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SNATPoolType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&virtual_network.SNATPoolType{")
+	s = append(s, "Ipv4Prefixes: "+fmt.Sprintf("%#v", this.Ipv4Prefixes)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SNATPoolSiteType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&virtual_network.SNATPoolSiteType{")
+	keysForNodeSnatPool := make([]string, 0, len(this.NodeSnatPool))
+	for k, _ := range this.NodeSnatPool {
+		keysForNodeSnatPool = append(keysForNodeSnatPool, k)
+	}
+	sortkeys.Strings(keysForNodeSnatPool)
+	mapStringForNodeSnatPool := "map[string]*SNATPoolType{"
+	for _, k := range keysForNodeSnatPool {
+		mapStringForNodeSnatPool += fmt.Sprintf("%#v: %#v,", k, this.NodeSnatPool[k])
+	}
+	mapStringForNodeSnatPool += "}"
+	if this.NodeSnatPool != nil {
+		s = append(s, "NodeSnatPool: "+mapStringForNodeSnatPool+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SNATPoolFleetType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&virtual_network.SNATPoolFleetType{")
+	if this.SnatPoolAllocator != nil {
+		s = append(s, "SnatPoolAllocator: "+fmt.Sprintf("%#v", this.SnatPoolAllocator)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *Srv6NetworkNsParametersType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -3476,10 +4759,34 @@ func (this *PerSiteSrv6NetworkType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 18)
 	s = append(s, "&virtual_network.PerSiteSrv6NetworkType{")
 	if this.NamespaceChoice != nil {
 		s = append(s, "NamespaceChoice: "+fmt.Sprintf("%#v", this.NamespaceChoice)+",\n")
+	}
+	if this.DefaultVipChoice != nil {
+		s = append(s, "DefaultVipChoice: "+fmt.Sprintf("%#v", this.DefaultVipChoice)+",\n")
+	}
+	if this.SnatPoolChoice != nil {
+		s = append(s, "SnatPoolChoice: "+fmt.Sprintf("%#v", this.SnatPoolChoice)+",\n")
+	}
+	if this.Slice != nil {
+		s = append(s, "Slice: "+fmt.Sprintf("%#v", this.Slice)+",\n")
+	}
+	if this.Fleets != nil {
+		s = append(s, "Fleets: "+fmt.Sprintf("%#v", this.Fleets)+",\n")
+	}
+	if this.AccessNetworkRtargets != nil {
+		s = append(s, "AccessNetworkRtargets: "+fmt.Sprintf("%#v", this.AccessNetworkRtargets)+",\n")
+	}
+	if this.InternetRtargets != nil {
+		s = append(s, "InternetRtargets: "+fmt.Sprintf("%#v", this.InternetRtargets)+",\n")
+	}
+	if this.EnterpriseNetworkRtargets != nil {
+		s = append(s, "EnterpriseNetworkRtargets: "+fmt.Sprintf("%#v", this.EnterpriseNetworkRtargets)+",\n")
+	}
+	if this.ExportRtargets != nil {
+		s = append(s, "ExportRtargets: "+fmt.Sprintf("%#v", this.ExportRtargets)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -3498,6 +4805,54 @@ func (this *PerSiteSrv6NetworkType_Srv6NetworkNsParams) GoString() string {
 	}
 	s := strings.Join([]string{`&virtual_network.PerSiteSrv6NetworkType_Srv6NetworkNsParams{` +
 		`Srv6NetworkNsParams:` + fmt.Sprintf("%#v", this.Srv6NetworkNsParams) + `}`}, ", ")
+	return s
+}
+func (this *PerSiteSrv6NetworkType_InterfaceIpVip) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_network.PerSiteSrv6NetworkType_InterfaceIpVip{` +
+		`InterfaceIpVip:` + fmt.Sprintf("%#v", this.InterfaceIpVip) + `}`}, ", ")
+	return s
+}
+func (this *PerSiteSrv6NetworkType_AnycastVip) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_network.PerSiteSrv6NetworkType_AnycastVip{` +
+		`AnycastVip:` + fmt.Sprintf("%#v", this.AnycastVip) + `}`}, ", ")
+	return s
+}
+func (this *PerSiteSrv6NetworkType_FleetVip) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_network.PerSiteSrv6NetworkType_FleetVip{` +
+		`FleetVip:` + fmt.Sprintf("%#v", this.FleetVip) + `}`}, ", ")
+	return s
+}
+func (this *PerSiteSrv6NetworkType_InterfaceIpSnatPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_network.PerSiteSrv6NetworkType_InterfaceIpSnatPool{` +
+		`InterfaceIpSnatPool:` + fmt.Sprintf("%#v", this.InterfaceIpSnatPool) + `}`}, ", ")
+	return s
+}
+func (this *PerSiteSrv6NetworkType_SiteSnatPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_network.PerSiteSrv6NetworkType_SiteSnatPool{` +
+		`SiteSnatPool:` + fmt.Sprintf("%#v", this.SiteSnatPool) + `}`}, ", ")
+	return s
+}
+func (this *PerSiteSrv6NetworkType_FleetSnatPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_network.PerSiteSrv6NetworkType_FleetSnatPool{` +
+		`FleetSnatPool:` + fmt.Sprintf("%#v", this.FleetSnatPool) + `}`}, ", ")
 	return s
 }
 func (this *NextHopInterfaceList) GoString() string {
@@ -3565,11 +4920,33 @@ func (this *ActivePBRPoliciesType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *PerTenantVIPType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&virtual_network.PerTenantVIPType{")
+	keysForTenantVipMap := make([]string, 0, len(this.TenantVipMap))
+	for k, _ := range this.TenantVipMap {
+		keysForTenantVipMap = append(keysForTenantVipMap, k)
+	}
+	sortkeys.Strings(keysForTenantVipMap)
+	mapStringForTenantVipMap := "map[string]string{"
+	for _, k := range keysForTenantVipMap {
+		mapStringForTenantVipMap += fmt.Sprintf("%#v: %#v,", k, this.TenantVipMap[k])
+	}
+	mapStringForTenantVipMap += "}"
+	if this.TenantVipMap != nil {
+		s = append(s, "TenantVipMap: "+mapStringForTenantVipMap+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 15)
+	s := make([]string, 0, 24)
 	s = append(s, "&virtual_network.GlobalSpecType{")
 	if this.Subnets != nil {
 		s = append(s, "Subnets: "+fmt.Sprintf("%#v", this.Subnets)+",\n")
@@ -3583,6 +4960,20 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	if this.PrivateNetworkParameters != nil {
 		s = append(s, "PrivateNetworkParameters: "+fmt.Sprintf("%#v", this.PrivateNetworkParameters)+",\n")
+	}
+	if this.DefaultVipChoice != nil {
+		s = append(s, "DefaultVipChoice: "+fmt.Sprintf("%#v", this.DefaultVipChoice)+",\n")
+	}
+	if this.SnatPoolChoice != nil {
+		s = append(s, "SnatPoolChoice: "+fmt.Sprintf("%#v", this.SnatPoolChoice)+",\n")
+	}
+	s = append(s, "ImportRtargetStrs: "+fmt.Sprintf("%#v", this.ImportRtargetStrs)+",\n")
+	s = append(s, "ExportRtargetStrs: "+fmt.Sprintf("%#v", this.ExportRtargetStrs)+",\n")
+	if this.FleetRefs != nil {
+		s = append(s, "FleetRefs: "+fmt.Sprintf("%#v", this.FleetRefs)+",\n")
+	}
+	if this.SliceRef != nil {
+		s = append(s, "SliceRef: "+fmt.Sprintf("%#v", this.SliceRef)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -3641,6 +5032,46 @@ func (this *GlobalSpecType_Srv6Network) GoString() string {
 	}
 	s := strings.Join([]string{`&virtual_network.GlobalSpecType_Srv6Network{` +
 		`Srv6Network:` + fmt.Sprintf("%#v", this.Srv6Network) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_TenantVip) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_network.GlobalSpecType_TenantVip{` +
+		`TenantVip:` + fmt.Sprintf("%#v", this.TenantVip) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_FleetVip) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_network.GlobalSpecType_FleetVip{` +
+		`FleetVip:` + fmt.Sprintf("%#v", this.FleetVip) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_InterfaceIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_network.GlobalSpecType_InterfaceIp{` +
+		`InterfaceIp:` + fmt.Sprintf("%#v", this.InterfaceIp) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_SiteSnatPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_network.GlobalSpecType_SiteSnatPool{` +
+		`SiteSnatPool:` + fmt.Sprintf("%#v", this.SiteSnatPool) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_FleetSnatPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_network.GlobalSpecType_FleetSnatPool{` +
+		`FleetSnatPool:` + fmt.Sprintf("%#v", this.FleetSnatPool) + `}`}, ", ")
 	return s
 }
 func (this *CreateSpecType) GoString() string {
@@ -4133,6 +5564,146 @@ func (m *VoltADNPrivateNetworkType_AdvertiseDedicatedVips) MarshalTo(dAtA []byte
 	}
 	return i, nil
 }
+func (m *AnyCastVIPFleetType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AnyCastVIPFleetType) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.VipAllocator != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.VipAllocator.Size()))
+		n14, err := m.VipAllocator.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n14
+	}
+	return i, nil
+}
+
+func (m *SNATPoolType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SNATPoolType) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Ipv4Prefixes) > 0 {
+		for _, s := range m.Ipv4Prefixes {
+			dAtA[i] = 0xa
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	return i, nil
+}
+
+func (m *SNATPoolSiteType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SNATPoolSiteType) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.NodeSnatPool) > 0 {
+		keysForNodeSnatPool := make([]string, 0, len(m.NodeSnatPool))
+		for k, _ := range m.NodeSnatPool {
+			keysForNodeSnatPool = append(keysForNodeSnatPool, string(k))
+		}
+		sortkeys.Strings(keysForNodeSnatPool)
+		for _, k := range keysForNodeSnatPool {
+			dAtA[i] = 0xa
+			i++
+			v := m.NodeSnatPool[string(k)]
+			msgSize := 0
+			if v != nil {
+				msgSize = v.Size()
+				msgSize += 1 + sovTypes(uint64(msgSize))
+			}
+			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + msgSize
+			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
+			if v != nil {
+				dAtA[i] = 0x12
+				i++
+				i = encodeVarintTypes(dAtA, i, uint64(v.Size()))
+				n15, err := v.MarshalTo(dAtA[i:])
+				if err != nil {
+					return 0, err
+				}
+				i += n15
+			}
+		}
+	}
+	return i, nil
+}
+
+func (m *SNATPoolFleetType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SNATPoolFleetType) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.SnatPoolAllocator != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.SnatPoolAllocator.Size()))
+		n16, err := m.SnatPoolAllocator.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n16
+	}
+	return i, nil
+}
+
 func (m *Srv6NetworkNsParametersType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4173,11 +5744,99 @@ func (m *PerSiteSrv6NetworkType) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.NamespaceChoice != nil {
-		nn14, err := m.NamespaceChoice.MarshalTo(dAtA[i:])
+		nn17, err := m.NamespaceChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn14
+		i += nn17
+	}
+	if m.DefaultVipChoice != nil {
+		nn18, err := m.DefaultVipChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn18
+	}
+	if m.SnatPoolChoice != nil {
+		nn19, err := m.SnatPoolChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn19
+	}
+	if m.Slice != nil {
+		dAtA[i] = 0x62
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Slice.Size()))
+		n20, err := m.Slice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n20
+	}
+	if len(m.Fleets) > 0 {
+		for _, msg := range m.Fleets {
+			dAtA[i] = 0x6a
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.AccessNetworkRtargets) > 0 {
+		for _, msg := range m.AccessNetworkRtargets {
+			dAtA[i] = 0x72
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.InternetRtargets) > 0 {
+		for _, msg := range m.InternetRtargets {
+			dAtA[i] = 0x7a
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.EnterpriseNetworkRtargets) > 0 {
+		for _, msg := range m.EnterpriseNetworkRtargets {
+			dAtA[i] = 0x82
+			i++
+			dAtA[i] = 0x1
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.ExportRtargets) > 0 {
+		for _, msg := range m.ExportRtargets {
+			dAtA[i] = 0x8a
+			i++
+			dAtA[i] = 0x1
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
 	}
 	return i, nil
 }
@@ -4188,11 +5847,11 @@ func (m *PerSiteSrv6NetworkType_NoNamespaceNetwork) MarshalTo(dAtA []byte) (int,
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.NoNamespaceNetwork.Size()))
-		n15, err := m.NoNamespaceNetwork.MarshalTo(dAtA[i:])
+		n21, err := m.NoNamespaceNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n15
+		i += n21
 	}
 	return i, nil
 }
@@ -4202,11 +5861,89 @@ func (m *PerSiteSrv6NetworkType_Srv6NetworkNsParams) MarshalTo(dAtA []byte) (int
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Srv6NetworkNsParams.Size()))
-		n16, err := m.Srv6NetworkNsParams.MarshalTo(dAtA[i:])
+		n22, err := m.Srv6NetworkNsParams.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n16
+		i += n22
+	}
+	return i, nil
+}
+func (m *PerSiteSrv6NetworkType_InterfaceIpVip) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.InterfaceIpVip != nil {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.InterfaceIpVip.Size()))
+		n23, err := m.InterfaceIpVip.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n23
+	}
+	return i, nil
+}
+func (m *PerSiteSrv6NetworkType_AnycastVip) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x32
+	i++
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.AnycastVip)))
+	i += copy(dAtA[i:], m.AnycastVip)
+	return i, nil
+}
+func (m *PerSiteSrv6NetworkType_FleetVip) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.FleetVip != nil {
+		dAtA[i] = 0x3a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.FleetVip.Size()))
+		n24, err := m.FleetVip.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n24
+	}
+	return i, nil
+}
+func (m *PerSiteSrv6NetworkType_InterfaceIpSnatPool) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.InterfaceIpSnatPool != nil {
+		dAtA[i] = 0x4a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.InterfaceIpSnatPool.Size()))
+		n25, err := m.InterfaceIpSnatPool.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n25
+	}
+	return i, nil
+}
+func (m *PerSiteSrv6NetworkType_SiteSnatPool) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.SiteSnatPool != nil {
+		dAtA[i] = 0x52
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.SiteSnatPool.Size()))
+		n26, err := m.SiteSnatPool.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n26
+	}
+	return i, nil
+}
+func (m *PerSiteSrv6NetworkType_FleetSnatPool) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.FleetSnatPool != nil {
+		dAtA[i] = 0x5a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.FleetSnatPool.Size()))
+		n27, err := m.FleetSnatPool.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n27
 	}
 	return i, nil
 }
@@ -4271,28 +6008,28 @@ func (m *StaticRouteViewType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.NextHopChoice != nil {
-		nn17, err := m.NextHopChoice.MarshalTo(dAtA[i:])
+		nn28, err := m.NextHopChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn17
+		i += nn28
 	}
 	if len(m.Attrs) > 0 {
-		dAtA19 := make([]byte, len(m.Attrs)*10)
-		var j18 int
+		dAtA30 := make([]byte, len(m.Attrs)*10)
+		var j29 int
 		for _, num := range m.Attrs {
 			for num >= 1<<7 {
-				dAtA19[j18] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA30[j29] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
-				j18++
+				j29++
 			}
-			dAtA19[j18] = uint8(num)
-			j18++
+			dAtA30[j29] = uint8(num)
+			j29++
 		}
 		dAtA[i] = 0x32
 		i++
-		i = encodeVarintTypes(dAtA, i, uint64(j18))
-		i += copy(dAtA[i:], dAtA19[:j18])
+		i = encodeVarintTypes(dAtA, i, uint64(j29))
+		i += copy(dAtA[i:], dAtA30[:j29])
 	}
 	return i, nil
 }
@@ -4311,11 +6048,11 @@ func (m *StaticRouteViewType_Interface) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x22
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Interface.Size()))
-		n20, err := m.Interface.MarshalTo(dAtA[i:])
+		n31, err := m.Interface.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n20
+		i += n31
 	}
 	return i, nil
 }
@@ -4325,11 +6062,11 @@ func (m *StaticRouteViewType_DefaultGateway) MarshalTo(dAtA []byte) (int, error)
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultGateway.Size()))
-		n21, err := m.DefaultGateway.MarshalTo(dAtA[i:])
+		n32, err := m.DefaultGateway.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n21
+		i += n32
 	}
 	return i, nil
 }
@@ -4370,6 +6107,46 @@ func (m *ActivePBRPoliciesType) MarshalTo(dAtA []byte) (int, error) {
 				return 0, err
 			}
 			i += n
+		}
+	}
+	return i, nil
+}
+
+func (m *PerTenantVIPType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PerTenantVIPType) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.TenantVipMap) > 0 {
+		keysForTenantVipMap := make([]string, 0, len(m.TenantVipMap))
+		for k, _ := range m.TenantVipMap {
+			keysForTenantVipMap = append(keysForTenantVipMap, string(k))
+		}
+		sortkeys.Strings(keysForTenantVipMap)
+		for _, k := range keysForTenantVipMap {
+			dAtA[i] = 0xa
+			i++
+			v := m.TenantVipMap[string(k)]
+			mapSize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
+			i = encodeVarintTypes(dAtA, i, uint64(mapSize))
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(len(k)))
+			i += copy(dAtA[i:], k)
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
+			i += copy(dAtA[i:], v)
 		}
 	}
 	return i, nil
@@ -4420,21 +6197,97 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.NetworkChoice != nil {
-		nn22, err := m.NetworkChoice.MarshalTo(dAtA[i:])
+		nn33, err := m.NetworkChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn22
+		i += nn33
 	}
 	if m.PrivateNetworkParameters != nil {
 		dAtA[i] = 0x7a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.PrivateNetworkParameters.Size()))
-		n23, err := m.PrivateNetworkParameters.MarshalTo(dAtA[i:])
+		n34, err := m.PrivateNetworkParameters.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n23
+		i += n34
+	}
+	if m.DefaultVipChoice != nil {
+		nn35, err := m.DefaultVipChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn35
+	}
+	if m.SnatPoolChoice != nil {
+		nn36, err := m.SnatPoolChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn36
+	}
+	if len(m.ImportRtargetStrs) > 0 {
+		for _, s := range m.ImportRtargetStrs {
+			dAtA[i] = 0xc2
+			i++
+			dAtA[i] = 0x3e
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	if len(m.ExportRtargetStrs) > 0 {
+		for _, s := range m.ExportRtargetStrs {
+			dAtA[i] = 0xca
+			i++
+			dAtA[i] = 0x3e
+			i++
+			l = len(s)
+			for l >= 1<<7 {
+				dAtA[i] = uint8(uint64(l)&0x7f | 0x80)
+				l >>= 7
+				i++
+			}
+			dAtA[i] = uint8(l)
+			i++
+			i += copy(dAtA[i:], s)
+		}
+	}
+	if len(m.FleetRefs) > 0 {
+		for _, msg := range m.FleetRefs {
+			dAtA[i] = 0xd2
+			i++
+			dAtA[i] = 0x3e
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.SliceRef) > 0 {
+		for _, msg := range m.SliceRef {
+			dAtA[i] = 0xda
+			i++
+			dAtA[i] = 0x3e
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
 	}
 	return i, nil
 }
@@ -4445,11 +6298,11 @@ func (m *GlobalSpecType_GlobalNetwork) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.GlobalNetwork.Size()))
-		n24, err := m.GlobalNetwork.MarshalTo(dAtA[i:])
+		n37, err := m.GlobalNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n24
+		i += n37
 	}
 	return i, nil
 }
@@ -4459,11 +6312,11 @@ func (m *GlobalSpecType_SiteLocalNetwork) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.SiteLocalNetwork.Size()))
-		n25, err := m.SiteLocalNetwork.MarshalTo(dAtA[i:])
+		n38, err := m.SiteLocalNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n25
+		i += n38
 	}
 	return i, nil
 }
@@ -4473,11 +6326,11 @@ func (m *GlobalSpecType_SiteLocalInsideNetwork) MarshalTo(dAtA []byte) (int, err
 		dAtA[i] = 0x4a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.SiteLocalInsideNetwork.Size()))
-		n26, err := m.SiteLocalInsideNetwork.MarshalTo(dAtA[i:])
+		n39, err := m.SiteLocalInsideNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n26
+		i += n39
 	}
 	return i, nil
 }
@@ -4487,11 +6340,11 @@ func (m *GlobalSpecType_InsideNetwork) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x52
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.InsideNetwork.Size()))
-		n27, err := m.InsideNetwork.MarshalTo(dAtA[i:])
+		n40, err := m.InsideNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n27
+		i += n40
 	}
 	return i, nil
 }
@@ -4508,11 +6361,11 @@ func (m *GlobalSpecType_PrivateNetwork) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x6a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.PrivateNetwork.Size()))
-		n28, err := m.PrivateNetwork.MarshalTo(dAtA[i:])
+		n41, err := m.PrivateNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n28
+		i += n41
 	}
 	return i, nil
 }
@@ -4522,11 +6375,91 @@ func (m *GlobalSpecType_Srv6Network) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x72
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Srv6Network.Size()))
-		n29, err := m.Srv6Network.MarshalTo(dAtA[i:])
+		n42, err := m.Srv6Network.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n29
+		i += n42
+	}
+	return i, nil
+}
+func (m *GlobalSpecType_TenantVip) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.TenantVip != nil {
+		dAtA[i] = 0x8a
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.TenantVip.Size()))
+		n43, err := m.TenantVip.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n43
+	}
+	return i, nil
+}
+func (m *GlobalSpecType_FleetVip) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.FleetVip != nil {
+		dAtA[i] = 0x92
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.FleetVip.Size()))
+		n44, err := m.FleetVip.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n44
+	}
+	return i, nil
+}
+func (m *GlobalSpecType_InterfaceIp) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.InterfaceIp != nil {
+		dAtA[i] = 0xa2
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.InterfaceIp.Size()))
+		n45, err := m.InterfaceIp.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n45
+	}
+	return i, nil
+}
+func (m *GlobalSpecType_SiteSnatPool) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.SiteSnatPool != nil {
+		dAtA[i] = 0xaa
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.SiteSnatPool.Size()))
+		n46, err := m.SiteSnatPool.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n46
+	}
+	return i, nil
+}
+func (m *GlobalSpecType_FleetSnatPool) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.FleetSnatPool != nil {
+		dAtA[i] = 0xb2
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.FleetSnatPool.Size()))
+		n47, err := m.FleetSnatPool.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n47
 	}
 	return i, nil
 }
@@ -4546,11 +6479,11 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.NetworkChoice != nil {
-		nn30, err := m.NetworkChoice.MarshalTo(dAtA[i:])
+		nn48, err := m.NetworkChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn30
+		i += nn48
 	}
 	if len(m.StaticRoutes) > 0 {
 		for _, msg := range m.StaticRoutes {
@@ -4573,11 +6506,11 @@ func (m *CreateSpecType_GlobalNetwork) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.GlobalNetwork.Size()))
-		n31, err := m.GlobalNetwork.MarshalTo(dAtA[i:])
+		n49, err := m.GlobalNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n31
+		i += n49
 	}
 	return i, nil
 }
@@ -4587,11 +6520,11 @@ func (m *CreateSpecType_SiteLocalNetwork) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.SiteLocalNetwork.Size()))
-		n32, err := m.SiteLocalNetwork.MarshalTo(dAtA[i:])
+		n50, err := m.SiteLocalNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n32
+		i += n50
 	}
 	return i, nil
 }
@@ -4601,11 +6534,11 @@ func (m *CreateSpecType_SiteLocalInsideNetwork) MarshalTo(dAtA []byte) (int, err
 		dAtA[i] = 0x4a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.SiteLocalInsideNetwork.Size()))
-		n33, err := m.SiteLocalInsideNetwork.MarshalTo(dAtA[i:])
+		n51, err := m.SiteLocalInsideNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n33
+		i += n51
 	}
 	return i, nil
 }
@@ -4622,11 +6555,11 @@ func (m *CreateSpecType_Srv6Network) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x72
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Srv6Network.Size()))
-		n34, err := m.Srv6Network.MarshalTo(dAtA[i:])
+		n52, err := m.Srv6Network.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n34
+		i += n52
 	}
 	return i, nil
 }
@@ -4646,11 +6579,11 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.NetworkChoice != nil {
-		nn35, err := m.NetworkChoice.MarshalTo(dAtA[i:])
+		nn53, err := m.NetworkChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn35
+		i += nn53
 	}
 	if len(m.StaticRoutes) > 0 {
 		for _, msg := range m.StaticRoutes {
@@ -4673,11 +6606,11 @@ func (m *ReplaceSpecType_GlobalNetwork) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.GlobalNetwork.Size()))
-		n36, err := m.GlobalNetwork.MarshalTo(dAtA[i:])
+		n54, err := m.GlobalNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n36
+		i += n54
 	}
 	return i, nil
 }
@@ -4687,11 +6620,11 @@ func (m *ReplaceSpecType_SiteLocalNetwork) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.SiteLocalNetwork.Size()))
-		n37, err := m.SiteLocalNetwork.MarshalTo(dAtA[i:])
+		n55, err := m.SiteLocalNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n37
+		i += n55
 	}
 	return i, nil
 }
@@ -4701,11 +6634,11 @@ func (m *ReplaceSpecType_SiteLocalInsideNetwork) MarshalTo(dAtA []byte) (int, er
 		dAtA[i] = 0x4a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.SiteLocalInsideNetwork.Size()))
-		n38, err := m.SiteLocalInsideNetwork.MarshalTo(dAtA[i:])
+		n56, err := m.SiteLocalInsideNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n38
+		i += n56
 	}
 	return i, nil
 }
@@ -4722,11 +6655,11 @@ func (m *ReplaceSpecType_PrivateNetwork) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x6a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.PrivateNetwork.Size()))
-		n39, err := m.PrivateNetwork.MarshalTo(dAtA[i:])
+		n57, err := m.PrivateNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n39
+		i += n57
 	}
 	return i, nil
 }
@@ -4736,11 +6669,11 @@ func (m *ReplaceSpecType_Srv6Network) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x72
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Srv6Network.Size()))
-		n40, err := m.Srv6Network.MarshalTo(dAtA[i:])
+		n58, err := m.Srv6Network.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n40
+		i += n58
 	}
 	return i, nil
 }
@@ -4760,11 +6693,11 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if m.NetworkChoice != nil {
-		nn41, err := m.NetworkChoice.MarshalTo(dAtA[i:])
+		nn59, err := m.NetworkChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn41
+		i += nn59
 	}
 	if len(m.StaticRoutes) > 0 {
 		for _, msg := range m.StaticRoutes {
@@ -4787,11 +6720,11 @@ func (m *GetSpecType_GlobalNetwork) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.GlobalNetwork.Size()))
-		n42, err := m.GlobalNetwork.MarshalTo(dAtA[i:])
+		n60, err := m.GlobalNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n42
+		i += n60
 	}
 	return i, nil
 }
@@ -4801,11 +6734,11 @@ func (m *GetSpecType_SiteLocalNetwork) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.SiteLocalNetwork.Size()))
-		n43, err := m.SiteLocalNetwork.MarshalTo(dAtA[i:])
+		n61, err := m.SiteLocalNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n43
+		i += n61
 	}
 	return i, nil
 }
@@ -4815,11 +6748,11 @@ func (m *GetSpecType_SiteLocalInsideNetwork) MarshalTo(dAtA []byte) (int, error)
 		dAtA[i] = 0x4a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.SiteLocalInsideNetwork.Size()))
-		n44, err := m.SiteLocalInsideNetwork.MarshalTo(dAtA[i:])
+		n62, err := m.SiteLocalInsideNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n44
+		i += n62
 	}
 	return i, nil
 }
@@ -4836,11 +6769,11 @@ func (m *GetSpecType_PrivateNetwork) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x6a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.PrivateNetwork.Size()))
-		n45, err := m.PrivateNetwork.MarshalTo(dAtA[i:])
+		n63, err := m.PrivateNetwork.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n45
+		i += n63
 	}
 	return i, nil
 }
@@ -4850,11 +6783,11 @@ func (m *GetSpecType_Srv6Network) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x72
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Srv6Network.Size()))
-		n46, err := m.Srv6Network.MarshalTo(dAtA[i:])
+		n64, err := m.Srv6Network.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n46
+		i += n64
 	}
 	return i, nil
 }
@@ -4866,542 +6799,6 @@ func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	}
 	dAtA[offset] = uint8(v)
 	return offset + 1
-}
-func NewPopulatedVoltADNPrivateNetworkReInfoType(r randyTypes, easy bool) *VoltADNPrivateNetworkReInfoType {
-	this := &VoltADNPrivateNetworkReInfoType{}
-	this.Vlan = uint32(r.Uint32())
-	if r.Intn(10) != 0 {
-		this.NodeSelector = ves_io_schema4.NewPopulatedLabelSelectorType(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedVoltADNPrivateNetworkTenantInfoType(r randyTypes, easy bool) *VoltADNPrivateNetworkTenantInfoType {
-	this := &VoltADNPrivateNetworkTenantInfoType{}
-	this.DefaultPrivateVip = string(randStringTypes(r))
-	this.FinalDefaultPrivateVip = string(randStringTypes(r))
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedDNSServersList(r randyTypes, easy bool) *DNSServersList {
-	this := &DNSServersList{}
-	v1 := r.Intn(10)
-	this.DnsIp = make([]string, v1)
-	for i := 0; i < v1; i++ {
-		this.DnsIp[i] = string(randStringTypes(r))
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedVoltADNPrivateNetworkType(r randyTypes, easy bool) *VoltADNPrivateNetworkType {
-	this := &VoltADNPrivateNetworkType{}
-	oneofNumber_PrivateAccessChoice := []int32{2, 3}[r.Intn(2)]
-	switch oneofNumber_PrivateAccessChoice {
-	case 2:
-		this.PrivateAccessChoice = NewPopulatedVoltADNPrivateNetworkType_NoPrivateAccess(r, easy)
-	case 3:
-		this.PrivateAccessChoice = NewPopulatedVoltADNPrivateNetworkType_PrivateAccessEnabled(r, easy)
-	}
-	oneofNumber_DnsChoice := []int32{5, 6}[r.Intn(2)]
-	switch oneofNumber_DnsChoice {
-	case 5:
-		this.DnsChoice = NewPopulatedVoltADNPrivateNetworkType_NoPrivateDns(r, easy)
-	case 6:
-		this.DnsChoice = NewPopulatedVoltADNPrivateNetworkType_PrivateDns(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.CommonNodeSelector = ves_io_schema4.NewPopulatedLabelSelectorType(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		v2 := r.Intn(10)
-		this.ReInfoMap = make(map[string]*VoltADNPrivateNetworkReInfoType)
-		for i := 0; i < v2; i++ {
-			this.ReInfoMap[randStringTypes(r)] = NewPopulatedVoltADNPrivateNetworkReInfoType(r, easy)
-		}
-	}
-	this.OwnerTenantId = string(randStringTypes(r))
-	if r.Intn(10) != 0 {
-		v3 := r.Intn(10)
-		this.TenantInfoMap = make(map[string]*VoltADNPrivateNetworkTenantInfoType)
-		for i := 0; i < v3; i++ {
-			this.TenantInfoMap[randStringTypes(r)] = NewPopulatedVoltADNPrivateNetworkTenantInfoType(r, easy)
-		}
-	}
-	oneofNumber_DedicatedVipChoice := []int32{12, 13}[r.Intn(2)]
-	switch oneofNumber_DedicatedVipChoice {
-	case 12:
-		this.DedicatedVipChoice = NewPopulatedVoltADNPrivateNetworkType_NoAdvertiseDedicatedVips(r, easy)
-	case 13:
-		this.DedicatedVipChoice = NewPopulatedVoltADNPrivateNetworkType_AdvertiseDedicatedVips(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedVoltADNPrivateNetworkType_NoPrivateAccess(r randyTypes, easy bool) *VoltADNPrivateNetworkType_NoPrivateAccess {
-	this := &VoltADNPrivateNetworkType_NoPrivateAccess{}
-	this.NoPrivateAccess = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedVoltADNPrivateNetworkType_PrivateAccessEnabled(r randyTypes, easy bool) *VoltADNPrivateNetworkType_PrivateAccessEnabled {
-	this := &VoltADNPrivateNetworkType_PrivateAccessEnabled{}
-	this.PrivateAccessEnabled = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedVoltADNPrivateNetworkType_NoPrivateDns(r randyTypes, easy bool) *VoltADNPrivateNetworkType_NoPrivateDns {
-	this := &VoltADNPrivateNetworkType_NoPrivateDns{}
-	this.NoPrivateDns = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedVoltADNPrivateNetworkType_PrivateDns(r randyTypes, easy bool) *VoltADNPrivateNetworkType_PrivateDns {
-	this := &VoltADNPrivateNetworkType_PrivateDns{}
-	this.PrivateDns = NewPopulatedDNSServersList(r, easy)
-	return this
-}
-func NewPopulatedVoltADNPrivateNetworkType_NoAdvertiseDedicatedVips(r randyTypes, easy bool) *VoltADNPrivateNetworkType_NoAdvertiseDedicatedVips {
-	this := &VoltADNPrivateNetworkType_NoAdvertiseDedicatedVips{}
-	this.NoAdvertiseDedicatedVips = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedVoltADNPrivateNetworkType_AdvertiseDedicatedVips(r randyTypes, easy bool) *VoltADNPrivateNetworkType_AdvertiseDedicatedVips {
-	this := &VoltADNPrivateNetworkType_AdvertiseDedicatedVips{}
-	this.AdvertiseDedicatedVips = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedSrv6NetworkNsParametersType(r randyTypes, easy bool) *Srv6NetworkNsParametersType {
-	this := &Srv6NetworkNsParametersType{}
-	this.Namespace = string(randStringTypes(r))
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedPerSiteSrv6NetworkType(r randyTypes, easy bool) *PerSiteSrv6NetworkType {
-	this := &PerSiteSrv6NetworkType{}
-	oneofNumber_NamespaceChoice := []int32{2, 3}[r.Intn(2)]
-	switch oneofNumber_NamespaceChoice {
-	case 2:
-		this.NamespaceChoice = NewPopulatedPerSiteSrv6NetworkType_NoNamespaceNetwork(r, easy)
-	case 3:
-		this.NamespaceChoice = NewPopulatedPerSiteSrv6NetworkType_Srv6NetworkNsParams(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedPerSiteSrv6NetworkType_NoNamespaceNetwork(r randyTypes, easy bool) *PerSiteSrv6NetworkType_NoNamespaceNetwork {
-	this := &PerSiteSrv6NetworkType_NoNamespaceNetwork{}
-	this.NoNamespaceNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedPerSiteSrv6NetworkType_Srv6NetworkNsParams(r randyTypes, easy bool) *PerSiteSrv6NetworkType_Srv6NetworkNsParams {
-	this := &PerSiteSrv6NetworkType_Srv6NetworkNsParams{}
-	this.Srv6NetworkNsParams = NewPopulatedSrv6NetworkNsParametersType(r, easy)
-	return this
-}
-func NewPopulatedNextHopInterfaceList(r randyTypes, easy bool) *NextHopInterfaceList {
-	this := &NextHopInterfaceList{}
-	if r.Intn(10) != 0 {
-		v4 := r.Intn(5)
-		this.Interfaces = make([]*ves_io_schema_views.ObjectRefType, v4)
-		for i := 0; i < v4; i++ {
-			this.Interfaces[i] = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
-		}
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedStaticRouteViewType(r randyTypes, easy bool) *StaticRouteViewType {
-	this := &StaticRouteViewType{}
-	v5 := r.Intn(10)
-	this.IpPrefixes = make([]string, v5)
-	for i := 0; i < v5; i++ {
-		this.IpPrefixes[i] = string(randStringTypes(r))
-	}
-	oneofNumber_NextHopChoice := []int32{3, 4, 5}[r.Intn(3)]
-	switch oneofNumber_NextHopChoice {
-	case 3:
-		this.NextHopChoice = NewPopulatedStaticRouteViewType_IpAddress(r, easy)
-	case 4:
-		this.NextHopChoice = NewPopulatedStaticRouteViewType_Interface(r, easy)
-	case 5:
-		this.NextHopChoice = NewPopulatedStaticRouteViewType_DefaultGateway(r, easy)
-	}
-	v6 := r.Intn(10)
-	this.Attrs = make([]ves_io_schema4.RouteAttrType, v6)
-	for i := 0; i < v6; i++ {
-		this.Attrs[i] = ves_io_schema4.RouteAttrType([]int32{0, 1, 2, 3, 4}[r.Intn(5)])
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedStaticRouteViewType_IpAddress(r randyTypes, easy bool) *StaticRouteViewType_IpAddress {
-	this := &StaticRouteViewType_IpAddress{}
-	this.IpAddress = string(randStringTypes(r))
-	return this
-}
-func NewPopulatedStaticRouteViewType_Interface(r randyTypes, easy bool) *StaticRouteViewType_Interface {
-	this := &StaticRouteViewType_Interface{}
-	this.Interface = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
-	return this
-}
-func NewPopulatedStaticRouteViewType_DefaultGateway(r randyTypes, easy bool) *StaticRouteViewType_DefaultGateway {
-	this := &StaticRouteViewType_DefaultGateway{}
-	this.DefaultGateway = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedActivePBRPoliciesType(r randyTypes, easy bool) *ActivePBRPoliciesType {
-	this := &ActivePBRPoliciesType{}
-	if r.Intn(10) != 0 {
-		v7 := r.Intn(5)
-		this.ForwardProxyPbrPolicies = make([]*ves_io_schema_views.ObjectRefType, v7)
-		for i := 0; i < v7; i++ {
-			this.ForwardProxyPbrPolicies[i] = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
-		}
-	}
-	if r.Intn(10) != 0 {
-		v8 := r.Intn(5)
-		this.NetworkPbrPolicies = make([]*ves_io_schema_views.ObjectRefType, v8)
-		for i := 0; i < v8; i++ {
-			this.NetworkPbrPolicies[i] = ves_io_schema_views.NewPopulatedObjectRefType(r, easy)
-		}
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedGlobalSpecType(r randyTypes, easy bool) *GlobalSpecType {
-	this := &GlobalSpecType{}
-	if r.Intn(10) != 0 {
-		v9 := r.Intn(5)
-		this.Subnets = make([]*ves_io_schema3.IpSubnetType, v9)
-		for i := 0; i < v9; i++ {
-			this.Subnets[i] = ves_io_schema3.NewPopulatedIpSubnetType(r, easy)
-		}
-	}
-	this.Type = ves_io_schema3.VirtualNetworkType([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}[r.Intn(11)])
-	if r.Intn(10) != 0 {
-		v10 := r.Intn(5)
-		this.StaticRoutes = make([]*ves_io_schema4.StaticRouteType, v10)
-		for i := 0; i < v10; i++ {
-			this.StaticRoutes[i] = ves_io_schema4.NewPopulatedStaticRouteType(r, easy)
-		}
-	}
-	oneofNumber_NetworkChoice := []int32{7, 8, 9, 10, 11, 13, 14}[r.Intn(7)]
-	switch oneofNumber_NetworkChoice {
-	case 7:
-		this.NetworkChoice = NewPopulatedGlobalSpecType_GlobalNetwork(r, easy)
-	case 8:
-		this.NetworkChoice = NewPopulatedGlobalSpecType_SiteLocalNetwork(r, easy)
-	case 9:
-		this.NetworkChoice = NewPopulatedGlobalSpecType_SiteLocalInsideNetwork(r, easy)
-	case 10:
-		this.NetworkChoice = NewPopulatedGlobalSpecType_InsideNetwork(r, easy)
-	case 11:
-		this.NetworkChoice = NewPopulatedGlobalSpecType_LegacyType(r, easy)
-	case 13:
-		this.NetworkChoice = NewPopulatedGlobalSpecType_PrivateNetwork(r, easy)
-	case 14:
-		this.NetworkChoice = NewPopulatedGlobalSpecType_Srv6Network(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.PrivateNetworkParameters = NewPopulatedVoltADNPrivateNetworkType(r, easy)
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedGlobalSpecType_GlobalNetwork(r randyTypes, easy bool) *GlobalSpecType_GlobalNetwork {
-	this := &GlobalSpecType_GlobalNetwork{}
-	this.GlobalNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGlobalSpecType_SiteLocalNetwork(r randyTypes, easy bool) *GlobalSpecType_SiteLocalNetwork {
-	this := &GlobalSpecType_SiteLocalNetwork{}
-	this.SiteLocalNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGlobalSpecType_SiteLocalInsideNetwork(r randyTypes, easy bool) *GlobalSpecType_SiteLocalInsideNetwork {
-	this := &GlobalSpecType_SiteLocalInsideNetwork{}
-	this.SiteLocalInsideNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGlobalSpecType_InsideNetwork(r randyTypes, easy bool) *GlobalSpecType_InsideNetwork {
-	this := &GlobalSpecType_InsideNetwork{}
-	this.InsideNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGlobalSpecType_LegacyType(r randyTypes, easy bool) *GlobalSpecType_LegacyType {
-	this := &GlobalSpecType_LegacyType{}
-	this.LegacyType = ves_io_schema3.VirtualNetworkType([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}[r.Intn(11)])
-	return this
-}
-func NewPopulatedGlobalSpecType_PrivateNetwork(r randyTypes, easy bool) *GlobalSpecType_PrivateNetwork {
-	this := &GlobalSpecType_PrivateNetwork{}
-	this.PrivateNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGlobalSpecType_Srv6Network(r randyTypes, easy bool) *GlobalSpecType_Srv6Network {
-	this := &GlobalSpecType_Srv6Network{}
-	this.Srv6Network = NewPopulatedPerSiteSrv6NetworkType(r, easy)
-	return this
-}
-func NewPopulatedCreateSpecType(r randyTypes, easy bool) *CreateSpecType {
-	this := &CreateSpecType{}
-	oneofNumber_NetworkChoice := []int32{7, 8, 9, 11, 14}[r.Intn(5)]
-	switch oneofNumber_NetworkChoice {
-	case 7:
-		this.NetworkChoice = NewPopulatedCreateSpecType_GlobalNetwork(r, easy)
-	case 8:
-		this.NetworkChoice = NewPopulatedCreateSpecType_SiteLocalNetwork(r, easy)
-	case 9:
-		this.NetworkChoice = NewPopulatedCreateSpecType_SiteLocalInsideNetwork(r, easy)
-	case 11:
-		this.NetworkChoice = NewPopulatedCreateSpecType_LegacyType(r, easy)
-	case 14:
-		this.NetworkChoice = NewPopulatedCreateSpecType_Srv6Network(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		v11 := r.Intn(5)
-		this.StaticRoutes = make([]*StaticRouteViewType, v11)
-		for i := 0; i < v11; i++ {
-			this.StaticRoutes[i] = NewPopulatedStaticRouteViewType(r, easy)
-		}
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedCreateSpecType_GlobalNetwork(r randyTypes, easy bool) *CreateSpecType_GlobalNetwork {
-	this := &CreateSpecType_GlobalNetwork{}
-	this.GlobalNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedCreateSpecType_SiteLocalNetwork(r randyTypes, easy bool) *CreateSpecType_SiteLocalNetwork {
-	this := &CreateSpecType_SiteLocalNetwork{}
-	this.SiteLocalNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedCreateSpecType_SiteLocalInsideNetwork(r randyTypes, easy bool) *CreateSpecType_SiteLocalInsideNetwork {
-	this := &CreateSpecType_SiteLocalInsideNetwork{}
-	this.SiteLocalInsideNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedCreateSpecType_LegacyType(r randyTypes, easy bool) *CreateSpecType_LegacyType {
-	this := &CreateSpecType_LegacyType{}
-	this.LegacyType = ves_io_schema3.VirtualNetworkType([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}[r.Intn(11)])
-	return this
-}
-func NewPopulatedCreateSpecType_Srv6Network(r randyTypes, easy bool) *CreateSpecType_Srv6Network {
-	this := &CreateSpecType_Srv6Network{}
-	this.Srv6Network = NewPopulatedPerSiteSrv6NetworkType(r, easy)
-	return this
-}
-func NewPopulatedReplaceSpecType(r randyTypes, easy bool) *ReplaceSpecType {
-	this := &ReplaceSpecType{}
-	oneofNumber_NetworkChoice := []int32{7, 8, 9, 11, 13, 14}[r.Intn(6)]
-	switch oneofNumber_NetworkChoice {
-	case 7:
-		this.NetworkChoice = NewPopulatedReplaceSpecType_GlobalNetwork(r, easy)
-	case 8:
-		this.NetworkChoice = NewPopulatedReplaceSpecType_SiteLocalNetwork(r, easy)
-	case 9:
-		this.NetworkChoice = NewPopulatedReplaceSpecType_SiteLocalInsideNetwork(r, easy)
-	case 11:
-		this.NetworkChoice = NewPopulatedReplaceSpecType_LegacyType(r, easy)
-	case 13:
-		this.NetworkChoice = NewPopulatedReplaceSpecType_PrivateNetwork(r, easy)
-	case 14:
-		this.NetworkChoice = NewPopulatedReplaceSpecType_Srv6Network(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		v12 := r.Intn(5)
-		this.StaticRoutes = make([]*StaticRouteViewType, v12)
-		for i := 0; i < v12; i++ {
-			this.StaticRoutes[i] = NewPopulatedStaticRouteViewType(r, easy)
-		}
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedReplaceSpecType_GlobalNetwork(r randyTypes, easy bool) *ReplaceSpecType_GlobalNetwork {
-	this := &ReplaceSpecType_GlobalNetwork{}
-	this.GlobalNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedReplaceSpecType_SiteLocalNetwork(r randyTypes, easy bool) *ReplaceSpecType_SiteLocalNetwork {
-	this := &ReplaceSpecType_SiteLocalNetwork{}
-	this.SiteLocalNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedReplaceSpecType_SiteLocalInsideNetwork(r randyTypes, easy bool) *ReplaceSpecType_SiteLocalInsideNetwork {
-	this := &ReplaceSpecType_SiteLocalInsideNetwork{}
-	this.SiteLocalInsideNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedReplaceSpecType_LegacyType(r randyTypes, easy bool) *ReplaceSpecType_LegacyType {
-	this := &ReplaceSpecType_LegacyType{}
-	this.LegacyType = ves_io_schema3.VirtualNetworkType([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}[r.Intn(11)])
-	return this
-}
-func NewPopulatedReplaceSpecType_PrivateNetwork(r randyTypes, easy bool) *ReplaceSpecType_PrivateNetwork {
-	this := &ReplaceSpecType_PrivateNetwork{}
-	this.PrivateNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedReplaceSpecType_Srv6Network(r randyTypes, easy bool) *ReplaceSpecType_Srv6Network {
-	this := &ReplaceSpecType_Srv6Network{}
-	this.Srv6Network = NewPopulatedPerSiteSrv6NetworkType(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType(r randyTypes, easy bool) *GetSpecType {
-	this := &GetSpecType{}
-	oneofNumber_NetworkChoice := []int32{7, 8, 9, 11, 13, 14}[r.Intn(6)]
-	switch oneofNumber_NetworkChoice {
-	case 7:
-		this.NetworkChoice = NewPopulatedGetSpecType_GlobalNetwork(r, easy)
-	case 8:
-		this.NetworkChoice = NewPopulatedGetSpecType_SiteLocalNetwork(r, easy)
-	case 9:
-		this.NetworkChoice = NewPopulatedGetSpecType_SiteLocalInsideNetwork(r, easy)
-	case 11:
-		this.NetworkChoice = NewPopulatedGetSpecType_LegacyType(r, easy)
-	case 13:
-		this.NetworkChoice = NewPopulatedGetSpecType_PrivateNetwork(r, easy)
-	case 14:
-		this.NetworkChoice = NewPopulatedGetSpecType_Srv6Network(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		v13 := r.Intn(5)
-		this.StaticRoutes = make([]*StaticRouteViewType, v13)
-		for i := 0; i < v13; i++ {
-			this.StaticRoutes[i] = NewPopulatedStaticRouteViewType(r, easy)
-		}
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedGetSpecType_GlobalNetwork(r randyTypes, easy bool) *GetSpecType_GlobalNetwork {
-	this := &GetSpecType_GlobalNetwork{}
-	this.GlobalNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType_SiteLocalNetwork(r randyTypes, easy bool) *GetSpecType_SiteLocalNetwork {
-	this := &GetSpecType_SiteLocalNetwork{}
-	this.SiteLocalNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType_SiteLocalInsideNetwork(r randyTypes, easy bool) *GetSpecType_SiteLocalInsideNetwork {
-	this := &GetSpecType_SiteLocalInsideNetwork{}
-	this.SiteLocalInsideNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType_LegacyType(r randyTypes, easy bool) *GetSpecType_LegacyType {
-	this := &GetSpecType_LegacyType{}
-	this.LegacyType = ves_io_schema3.VirtualNetworkType([]int32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}[r.Intn(11)])
-	return this
-}
-func NewPopulatedGetSpecType_PrivateNetwork(r randyTypes, easy bool) *GetSpecType_PrivateNetwork {
-	this := &GetSpecType_PrivateNetwork{}
-	this.PrivateNetwork = ves_io_schema4.NewPopulatedEmpty(r, easy)
-	return this
-}
-func NewPopulatedGetSpecType_Srv6Network(r randyTypes, easy bool) *GetSpecType_Srv6Network {
-	this := &GetSpecType_Srv6Network{}
-	this.Srv6Network = NewPopulatedPerSiteSrv6NetworkType(r, easy)
-	return this
-}
-
-type randyTypes interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneTypes(r randyTypes) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringTypes(r randyTypes) string {
-	v14 := r.Intn(100)
-	tmps := make([]rune, v14)
-	for i := 0; i < v14; i++ {
-		tmps[i] = randUTF8RuneTypes(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedTypes(r randyTypes, maxFieldNumber int) (dAtA []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		dAtA = randFieldTypes(dAtA, r, fieldNumber, wire)
-	}
-	return dAtA
-}
-func randFieldTypes(dAtA []byte, r randyTypes, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		dAtA = encodeVarintPopulateTypes(dAtA, uint64(key))
-		v15 := r.Int63()
-		if r.Intn(2) == 0 {
-			v15 *= -1
-		}
-		dAtA = encodeVarintPopulateTypes(dAtA, uint64(v15))
-	case 1:
-		dAtA = encodeVarintPopulateTypes(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		dAtA = encodeVarintPopulateTypes(dAtA, uint64(key))
-		ll := r.Intn(100)
-		dAtA = encodeVarintPopulateTypes(dAtA, uint64(ll))
-		for j := 0; j < ll; j++ {
-			dAtA = append(dAtA, byte(r.Intn(256)))
-		}
-	default:
-		dAtA = encodeVarintPopulateTypes(dAtA, uint64(key))
-		dAtA = append(dAtA, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return dAtA
-}
-func encodeVarintPopulateTypes(dAtA []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		dAtA = append(dAtA, uint8(uint64(v)&0x7f|0x80))
-		v >>= 7
-	}
-	dAtA = append(dAtA, uint8(v))
-	return dAtA
 }
 func (m *VoltADNPrivateNetworkReInfoType) Size() (n int) {
 	var l int
@@ -5545,6 +6942,57 @@ func (m *VoltADNPrivateNetworkType_AdvertiseDedicatedVips) Size() (n int) {
 	}
 	return n
 }
+func (m *AnyCastVIPFleetType) Size() (n int) {
+	var l int
+	_ = l
+	if m.VipAllocator != nil {
+		l = m.VipAllocator.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *SNATPoolType) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Ipv4Prefixes) > 0 {
+		for _, s := range m.Ipv4Prefixes {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *SNATPoolSiteType) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.NodeSnatPool) > 0 {
+		for k, v := range m.NodeSnatPool {
+			_ = k
+			_ = v
+			l = 0
+			if v != nil {
+				l = v.Size()
+				l += 1 + sovTypes(uint64(l))
+			}
+			mapEntrySize := 1 + len(k) + sovTypes(uint64(len(k))) + l
+			n += mapEntrySize + 1 + sovTypes(uint64(mapEntrySize))
+		}
+	}
+	return n
+}
+
+func (m *SNATPoolFleetType) Size() (n int) {
+	var l int
+	_ = l
+	if m.SnatPoolAllocator != nil {
+		l = m.SnatPoolAllocator.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *Srv6NetworkNsParametersType) Size() (n int) {
 	var l int
 	_ = l
@@ -5560,6 +7008,46 @@ func (m *PerSiteSrv6NetworkType) Size() (n int) {
 	_ = l
 	if m.NamespaceChoice != nil {
 		n += m.NamespaceChoice.Size()
+	}
+	if m.DefaultVipChoice != nil {
+		n += m.DefaultVipChoice.Size()
+	}
+	if m.SnatPoolChoice != nil {
+		n += m.SnatPoolChoice.Size()
+	}
+	if m.Slice != nil {
+		l = m.Slice.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Fleets) > 0 {
+		for _, e := range m.Fleets {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.AccessNetworkRtargets) > 0 {
+		for _, e := range m.AccessNetworkRtargets {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.InternetRtargets) > 0 {
+		for _, e := range m.InternetRtargets {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.EnterpriseNetworkRtargets) > 0 {
+		for _, e := range m.EnterpriseNetworkRtargets {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ExportRtargets) > 0 {
+		for _, e := range m.ExportRtargets {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
 	}
 	return n
 }
@@ -5578,6 +7066,58 @@ func (m *PerSiteSrv6NetworkType_Srv6NetworkNsParams) Size() (n int) {
 	_ = l
 	if m.Srv6NetworkNsParams != nil {
 		l = m.Srv6NetworkNsParams.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *PerSiteSrv6NetworkType_InterfaceIpVip) Size() (n int) {
+	var l int
+	_ = l
+	if m.InterfaceIpVip != nil {
+		l = m.InterfaceIpVip.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *PerSiteSrv6NetworkType_AnycastVip) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.AnycastVip)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *PerSiteSrv6NetworkType_FleetVip) Size() (n int) {
+	var l int
+	_ = l
+	if m.FleetVip != nil {
+		l = m.FleetVip.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *PerSiteSrv6NetworkType_InterfaceIpSnatPool) Size() (n int) {
+	var l int
+	_ = l
+	if m.InterfaceIpSnatPool != nil {
+		l = m.InterfaceIpSnatPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *PerSiteSrv6NetworkType_SiteSnatPool) Size() (n int) {
+	var l int
+	_ = l
+	if m.SiteSnatPool != nil {
+		l = m.SiteSnatPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *PerSiteSrv6NetworkType_FleetSnatPool) Size() (n int) {
+	var l int
+	_ = l
+	if m.FleetSnatPool != nil {
+		l = m.FleetSnatPool.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -5659,6 +7199,20 @@ func (m *ActivePBRPoliciesType) Size() (n int) {
 	return n
 }
 
+func (m *PerTenantVIPType) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.TenantVipMap) > 0 {
+		for k, v := range m.TenantVipMap {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
+			n += mapEntrySize + 1 + sovTypes(uint64(mapEntrySize))
+		}
+	}
+	return n
+}
+
 func (m *GlobalSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -5683,6 +7237,36 @@ func (m *GlobalSpecType) Size() (n int) {
 	if m.PrivateNetworkParameters != nil {
 		l = m.PrivateNetworkParameters.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DefaultVipChoice != nil {
+		n += m.DefaultVipChoice.Size()
+	}
+	if m.SnatPoolChoice != nil {
+		n += m.SnatPoolChoice.Size()
+	}
+	if len(m.ImportRtargetStrs) > 0 {
+		for _, s := range m.ImportRtargetStrs {
+			l = len(s)
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ExportRtargetStrs) > 0 {
+		for _, s := range m.ExportRtargetStrs {
+			l = len(s)
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.FleetRefs) > 0 {
+		for _, e := range m.FleetRefs {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.SliceRef) > 0 {
+		for _, e := range m.SliceRef {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
 	}
 	return n
 }
@@ -5744,6 +7328,51 @@ func (m *GlobalSpecType_Srv6Network) Size() (n int) {
 	if m.Srv6Network != nil {
 		l = m.Srv6Network.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_TenantVip) Size() (n int) {
+	var l int
+	_ = l
+	if m.TenantVip != nil {
+		l = m.TenantVip.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_FleetVip) Size() (n int) {
+	var l int
+	_ = l
+	if m.FleetVip != nil {
+		l = m.FleetVip.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_InterfaceIp) Size() (n int) {
+	var l int
+	_ = l
+	if m.InterfaceIp != nil {
+		l = m.InterfaceIp.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_SiteSnatPool) Size() (n int) {
+	var l int
+	_ = l
+	if m.SiteSnatPool != nil {
+		l = m.SiteSnatPool.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_FleetSnatPool) Size() (n int) {
+	var l int
+	_ = l
+	if m.FleetSnatPool != nil {
+		l = m.FleetSnatPool.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -6078,6 +7707,56 @@ func (this *VoltADNPrivateNetworkType_AdvertiseDedicatedVips) String() string {
 	}, "")
 	return s
 }
+func (this *AnyCastVIPFleetType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AnyCastVIPFleetType{`,
+		`VipAllocator:` + strings.Replace(fmt.Sprintf("%v", this.VipAllocator), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SNATPoolType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SNATPoolType{`,
+		`Ipv4Prefixes:` + fmt.Sprintf("%v", this.Ipv4Prefixes) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SNATPoolSiteType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForNodeSnatPool := make([]string, 0, len(this.NodeSnatPool))
+	for k, _ := range this.NodeSnatPool {
+		keysForNodeSnatPool = append(keysForNodeSnatPool, k)
+	}
+	sortkeys.Strings(keysForNodeSnatPool)
+	mapStringForNodeSnatPool := "map[string]*SNATPoolType{"
+	for _, k := range keysForNodeSnatPool {
+		mapStringForNodeSnatPool += fmt.Sprintf("%v: %v,", k, this.NodeSnatPool[k])
+	}
+	mapStringForNodeSnatPool += "}"
+	s := strings.Join([]string{`&SNATPoolSiteType{`,
+		`NodeSnatPool:` + mapStringForNodeSnatPool + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SNATPoolFleetType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SNATPoolFleetType{`,
+		`SnatPoolAllocator:` + strings.Replace(fmt.Sprintf("%v", this.SnatPoolAllocator), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *Srv6NetworkNsParametersType) String() string {
 	if this == nil {
 		return "nil"
@@ -6094,6 +7773,14 @@ func (this *PerSiteSrv6NetworkType) String() string {
 	}
 	s := strings.Join([]string{`&PerSiteSrv6NetworkType{`,
 		`NamespaceChoice:` + fmt.Sprintf("%v", this.NamespaceChoice) + `,`,
+		`DefaultVipChoice:` + fmt.Sprintf("%v", this.DefaultVipChoice) + `,`,
+		`SnatPoolChoice:` + fmt.Sprintf("%v", this.SnatPoolChoice) + `,`,
+		`Slice:` + strings.Replace(fmt.Sprintf("%v", this.Slice), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`Fleets:` + strings.Replace(fmt.Sprintf("%v", this.Fleets), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`AccessNetworkRtargets:` + strings.Replace(fmt.Sprintf("%v", this.AccessNetworkRtargets), "RouteTarget", "ves_io_schema4.RouteTarget", 1) + `,`,
+		`InternetRtargets:` + strings.Replace(fmt.Sprintf("%v", this.InternetRtargets), "RouteTarget", "ves_io_schema4.RouteTarget", 1) + `,`,
+		`EnterpriseNetworkRtargets:` + strings.Replace(fmt.Sprintf("%v", this.EnterpriseNetworkRtargets), "RouteTarget", "ves_io_schema4.RouteTarget", 1) + `,`,
+		`ExportRtargets:` + strings.Replace(fmt.Sprintf("%v", this.ExportRtargets), "RouteTarget", "ves_io_schema4.RouteTarget", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6114,6 +7801,66 @@ func (this *PerSiteSrv6NetworkType_Srv6NetworkNsParams) String() string {
 	}
 	s := strings.Join([]string{`&PerSiteSrv6NetworkType_Srv6NetworkNsParams{`,
 		`Srv6NetworkNsParams:` + strings.Replace(fmt.Sprintf("%v", this.Srv6NetworkNsParams), "Srv6NetworkNsParametersType", "Srv6NetworkNsParametersType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PerSiteSrv6NetworkType_InterfaceIpVip) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PerSiteSrv6NetworkType_InterfaceIpVip{`,
+		`InterfaceIpVip:` + strings.Replace(fmt.Sprintf("%v", this.InterfaceIpVip), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PerSiteSrv6NetworkType_AnycastVip) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PerSiteSrv6NetworkType_AnycastVip{`,
+		`AnycastVip:` + fmt.Sprintf("%v", this.AnycastVip) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PerSiteSrv6NetworkType_FleetVip) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PerSiteSrv6NetworkType_FleetVip{`,
+		`FleetVip:` + strings.Replace(fmt.Sprintf("%v", this.FleetVip), "AnyCastVIPFleetType", "AnyCastVIPFleetType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PerSiteSrv6NetworkType_InterfaceIpSnatPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PerSiteSrv6NetworkType_InterfaceIpSnatPool{`,
+		`InterfaceIpSnatPool:` + strings.Replace(fmt.Sprintf("%v", this.InterfaceIpSnatPool), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PerSiteSrv6NetworkType_SiteSnatPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PerSiteSrv6NetworkType_SiteSnatPool{`,
+		`SiteSnatPool:` + strings.Replace(fmt.Sprintf("%v", this.SiteSnatPool), "SNATPoolSiteType", "SNATPoolSiteType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PerSiteSrv6NetworkType_FleetSnatPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PerSiteSrv6NetworkType_FleetSnatPool{`,
+		`FleetSnatPool:` + strings.Replace(fmt.Sprintf("%v", this.FleetSnatPool), "SNATPoolFleetType", "SNATPoolFleetType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6181,6 +7928,26 @@ func (this *ActivePBRPoliciesType) String() string {
 	}, "")
 	return s
 }
+func (this *PerTenantVIPType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForTenantVipMap := make([]string, 0, len(this.TenantVipMap))
+	for k, _ := range this.TenantVipMap {
+		keysForTenantVipMap = append(keysForTenantVipMap, k)
+	}
+	sortkeys.Strings(keysForTenantVipMap)
+	mapStringForTenantVipMap := "map[string]string{"
+	for _, k := range keysForTenantVipMap {
+		mapStringForTenantVipMap += fmt.Sprintf("%v: %v,", k, this.TenantVipMap[k])
+	}
+	mapStringForTenantVipMap += "}"
+	s := strings.Join([]string{`&PerTenantVIPType{`,
+		`TenantVipMap:` + mapStringForTenantVipMap + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -6191,6 +7958,12 @@ func (this *GlobalSpecType) String() string {
 		`StaticRoutes:` + strings.Replace(fmt.Sprintf("%v", this.StaticRoutes), "StaticRouteType", "ves_io_schema4.StaticRouteType", 1) + `,`,
 		`NetworkChoice:` + fmt.Sprintf("%v", this.NetworkChoice) + `,`,
 		`PrivateNetworkParameters:` + strings.Replace(fmt.Sprintf("%v", this.PrivateNetworkParameters), "VoltADNPrivateNetworkType", "VoltADNPrivateNetworkType", 1) + `,`,
+		`DefaultVipChoice:` + fmt.Sprintf("%v", this.DefaultVipChoice) + `,`,
+		`SnatPoolChoice:` + fmt.Sprintf("%v", this.SnatPoolChoice) + `,`,
+		`ImportRtargetStrs:` + fmt.Sprintf("%v", this.ImportRtargetStrs) + `,`,
+		`ExportRtargetStrs:` + fmt.Sprintf("%v", this.ExportRtargetStrs) + `,`,
+		`FleetRefs:` + strings.Replace(fmt.Sprintf("%v", this.FleetRefs), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`SliceRef:` + strings.Replace(fmt.Sprintf("%v", this.SliceRef), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6261,6 +8034,56 @@ func (this *GlobalSpecType_Srv6Network) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType_Srv6Network{`,
 		`Srv6Network:` + strings.Replace(fmt.Sprintf("%v", this.Srv6Network), "PerSiteSrv6NetworkType", "PerSiteSrv6NetworkType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_TenantVip) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_TenantVip{`,
+		`TenantVip:` + strings.Replace(fmt.Sprintf("%v", this.TenantVip), "PerTenantVIPType", "PerTenantVIPType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_FleetVip) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_FleetVip{`,
+		`FleetVip:` + strings.Replace(fmt.Sprintf("%v", this.FleetVip), "AnyCastVIPFleetType", "AnyCastVIPFleetType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_InterfaceIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_InterfaceIp{`,
+		`InterfaceIp:` + strings.Replace(fmt.Sprintf("%v", this.InterfaceIp), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_SiteSnatPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_SiteSnatPool{`,
+		`SiteSnatPool:` + strings.Replace(fmt.Sprintf("%v", this.SiteSnatPool), "SNATPoolSiteType", "SNATPoolSiteType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_FleetSnatPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_FleetSnatPool{`,
+		`FleetSnatPool:` + strings.Replace(fmt.Sprintf("%v", this.FleetSnatPool), "SNATPoolFleetType", "SNATPoolFleetType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -7315,6 +9138,424 @@ func (m *VoltADNPrivateNetworkType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *AnyCastVIPFleetType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AnyCastVIPFleetType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AnyCastVIPFleetType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VipAllocator", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VipAllocator == nil {
+				m.VipAllocator = &ves_io_schema_views.ObjectRefType{}
+			}
+			if err := m.VipAllocator.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SNATPoolType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SNATPoolType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SNATPoolType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv4Prefixes", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Ipv4Prefixes = append(m.Ipv4Prefixes, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SNATPoolSiteType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SNATPoolSiteType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SNATPoolSiteType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeSnatPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.NodeSnatPool == nil {
+				m.NodeSnatPool = make(map[string]*SNATPoolType)
+			}
+			var mapkey string
+			var mapvalue *SNATPoolType
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var mapmsglen int
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						mapmsglen |= (int(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					if mapmsglen < 0 {
+						return ErrInvalidLengthTypes
+					}
+					postmsgIndex := iNdEx + mapmsglen
+					if mapmsglen < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if postmsgIndex > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = &SNATPoolType{}
+					if err := mapvalue.Unmarshal(dAtA[iNdEx:postmsgIndex]); err != nil {
+						return err
+					}
+					iNdEx = postmsgIndex
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipTypes(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.NodeSnatPool[mapkey] = mapvalue
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SNATPoolFleetType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SNATPoolFleetType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SNATPoolFleetType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SnatPoolAllocator", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.SnatPoolAllocator == nil {
+				m.SnatPoolAllocator = &ves_io_schema_views.ObjectRefType{}
+			}
+			if err := m.SnatPoolAllocator.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *Srv6NetworkNsParametersType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -7486,6 +9727,383 @@ func (m *PerSiteSrv6NetworkType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.NamespaceChoice = &PerSiteSrv6NetworkType_Srv6NetworkNsParams{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InterfaceIpVip", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DefaultVipChoice = &PerSiteSrv6NetworkType_InterfaceIpVip{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AnycastVip", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DefaultVipChoice = &PerSiteSrv6NetworkType_AnycastVip{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FleetVip", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AnyCastVIPFleetType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DefaultVipChoice = &PerSiteSrv6NetworkType_FleetVip{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InterfaceIpSnatPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SnatPoolChoice = &PerSiteSrv6NetworkType_InterfaceIpSnatPool{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SiteSnatPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SNATPoolSiteType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SnatPoolChoice = &PerSiteSrv6NetworkType_SiteSnatPool{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FleetSnatPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SNATPoolFleetType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SnatPoolChoice = &PerSiteSrv6NetworkType_FleetSnatPool{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Slice", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Slice == nil {
+				m.Slice = &ves_io_schema_views.ObjectRefType{}
+			}
+			if err := m.Slice.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Fleets", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Fleets = append(m.Fleets, &ves_io_schema_views.ObjectRefType{})
+			if err := m.Fleets[len(m.Fleets)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AccessNetworkRtargets", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AccessNetworkRtargets = append(m.AccessNetworkRtargets, &ves_io_schema4.RouteTarget{})
+			if err := m.AccessNetworkRtargets[len(m.AccessNetworkRtargets)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InternetRtargets", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.InternetRtargets = append(m.InternetRtargets, &ves_io_schema4.RouteTarget{})
+			if err := m.InternetRtargets[len(m.InternetRtargets)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnterpriseNetworkRtargets", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EnterpriseNetworkRtargets = append(m.EnterpriseNetworkRtargets, &ves_io_schema4.RouteTarget{})
+			if err := m.EnterpriseNetworkRtargets[len(m.EnterpriseNetworkRtargets)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExportRtargets", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ExportRtargets = append(m.ExportRtargets, &ves_io_schema4.RouteTarget{})
+			if err := m.ExportRtargets[len(m.ExportRtargets)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -7935,6 +10553,174 @@ func (m *ActivePBRPoliciesType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *PerTenantVIPType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PerTenantVIPType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PerTenantVIPType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TenantVipMap", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TenantVipMap == nil {
+				m.TenantVipMap = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= (uint64(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= (uint64(b) & 0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipTypes(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.TenantVipMap[mapkey] = mapvalue
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -8287,6 +11073,286 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				m.PrivateNetworkParameters = &VoltADNPrivateNetworkType{}
 			}
 			if err := m.PrivateNetworkParameters.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TenantVip", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &PerTenantVIPType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DefaultVipChoice = &GlobalSpecType_TenantVip{v}
+			iNdEx = postIndex
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FleetVip", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AnyCastVIPFleetType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DefaultVipChoice = &GlobalSpecType_FleetVip{v}
+			iNdEx = postIndex
+		case 20:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InterfaceIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SnatPoolChoice = &GlobalSpecType_InterfaceIp{v}
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SiteSnatPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SNATPoolSiteType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SnatPoolChoice = &GlobalSpecType_SiteSnatPool{v}
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FleetSnatPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SNATPoolFleetType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SnatPoolChoice = &GlobalSpecType_FleetSnatPool{v}
+			iNdEx = postIndex
+		case 1000:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ImportRtargetStrs", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ImportRtargetStrs = append(m.ImportRtargetStrs, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 1001:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExportRtargetStrs", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ExportRtargetStrs = append(m.ExportRtargetStrs, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 1002:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FleetRefs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.FleetRefs = append(m.FleetRefs, &ves_io_schema4.ObjectRefType{})
+			if err := m.FleetRefs[len(m.FleetRefs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 1003:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SliceRef", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SliceRef = append(m.SliceRef, &ves_io_schema4.ObjectRefType{})
+			if err := m.SliceRef[len(m.SliceRef)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -9173,145 +12239,200 @@ func init() {
 }
 
 var fileDescriptorTypes = []byte{
-	// 2235 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x59, 0x4d, 0x6c, 0x1b, 0xc7,
-	0x15, 0xe6, 0xe3, 0x3f, 0x87, 0xe2, 0x8f, 0xd6, 0x8a, 0x42, 0xd3, 0x36, 0xbd, 0xa1, 0x53, 0x54,
-	0x2e, 0x48, 0xca, 0xa2, 0x6c, 0xc7, 0x76, 0x9b, 0xc4, 0x62, 0xa5, 0x5a, 0x72, 0x5c, 0x55, 0x5d,
-	0xb9, 0x42, 0x1a, 0xa0, 0x58, 0x0c, 0x97, 0x23, 0x6a, 0x63, 0x72, 0x77, 0xbb, 0x33, 0xa2, 0x44,
-	0xa0, 0x46, 0x0d, 0xa3, 0xbd, 0xf0, 0x50, 0x14, 0x06, 0x72, 0x71, 0xef, 0x41, 0x91, 0x43, 0xd1,
-	0x63, 0xd1, 0xe5, 0x41, 0x08, 0x50, 0x20, 0xe8, 0xa1, 0xd0, 0xa1, 0x07, 0xa3, 0xa7, 0x98, 0xb9,
-	0xb8, 0x46, 0x0f, 0x39, 0x1a, 0x3d, 0x14, 0xc5, 0xce, 0xee, 0x52, 0x24, 0x25, 0xd3, 0x8e, 0x90,
-	0x43, 0x60, 0xe4, 0x36, 0xbb, 0xf3, 0xde, 0xf7, 0xde, 0xbc, 0xf7, 0xcd, 0x7b, 0x6f, 0x49, 0x74,
-	0xbe, 0x45, 0x68, 0x49, 0xd5, 0x67, 0xa9, 0xb2, 0x45, 0x9a, 0x78, 0xb6, 0xa5, 0x9a, 0x6c, 0x1b,
-	0x37, 0x64, 0x8d, 0xb0, 0x1d, 0xdd, 0xbc, 0x33, 0xcb, 0xda, 0x06, 0xa1, 0x25, 0xc3, 0xd4, 0x99,
-	0x2e, 0x9c, 0x71, 0x44, 0x4b, 0x8e, 0x68, 0x69, 0x44, 0x34, 0x5b, 0xac, 0xab, 0x6c, 0x6b, 0xbb,
-	0x5a, 0x52, 0xf4, 0xe6, 0x6c, 0x5d, 0xaf, 0xeb, 0xb3, 0x5c, 0xab, 0xba, 0xbd, 0xc9, 0x9f, 0xf8,
-	0x03, 0x5f, 0x39, 0x68, 0xd9, 0xd7, 0x87, 0x0d, 0x6b, 0x84, 0xb9, 0x1b, 0xa7, 0x86, 0x37, 0x74,
-	0x83, 0xa9, 0xba, 0xe6, 0xfa, 0x90, 0x3d, 0x39, 0xbc, 0x39, 0xe0, 0x5e, 0xf6, 0xf4, 0xc8, 0x49,
-	0x70, 0x43, 0xad, 0x61, 0x46, 0xdc, 0x5d, 0x71, 0xf4, 0x9c, 0x64, 0x47, 0x1e, 0x86, 0x3e, 0x7b,
-	0x58, 0x82, 0x0e, 0x1a, 0xc8, 0xff, 0x01, 0xd0, 0xd9, 0x0d, 0xbd, 0xc1, 0x16, 0x16, 0x57, 0xd7,
-	0x4c, 0xb5, 0x85, 0x19, 0x59, 0x75, 0x8e, 0x2e, 0x91, 0x15, 0x6d, 0x53, 0xbf, 0xdd, 0x36, 0x88,
-	0x20, 0xa2, 0x60, 0xab, 0x81, 0xb5, 0x0c, 0x88, 0x30, 0x93, 0xa8, 0x4c, 0xfc, 0xf5, 0xdf, 0x7b,
-	0x81, 0xc8, 0xf7, 0x42, 0x99, 0xff, 0x9d, 0x9d, 0x01, 0x89, 0xef, 0x08, 0x1b, 0x28, 0xa1, 0xe9,
-	0x35, 0x22, 0x53, 0xd2, 0x20, 0x0a, 0xd3, 0xcd, 0x8c, 0x5f, 0x84, 0x99, 0x78, 0x59, 0x2c, 0x0d,
-	0x47, 0xf7, 0x16, 0xae, 0x92, 0xc6, 0xba, 0x2b, 0x63, 0x43, 0x57, 0x52, 0x8f, 0xee, 0xc2, 0x13,
-	0x0b, 0xe0, 0x61, 0x17, 0x82, 0xc8, 0xef, 0x03, 0x69, 0xc2, 0xc6, 0xf1, 0x44, 0xf2, 0x1f, 0x03,
-	0x3a, 0x77, 0xa4, 0x77, 0xb7, 0x89, 0x86, 0x35, 0xd6, 0xf7, 0xf0, 0x2a, 0x3a, 0x51, 0x23, 0x9b,
-	0x78, 0xbb, 0xc1, 0x64, 0xc3, 0x91, 0x93, 0x5b, 0xaa, 0xc1, 0x1d, 0x8e, 0x55, 0x62, 0xb6, 0xc3,
-	0x41, 0xd3, 0x6f, 0x80, 0x34, 0xe9, 0x4a, 0xb9, 0x60, 0x1b, 0xaa, 0x21, 0x2c, 0xa2, 0x93, 0x9b,
-	0xaa, 0x86, 0x1b, 0xf2, 0x51, 0x00, 0xfe, 0x51, 0x80, 0x69, 0x2e, 0xbb, 0x38, 0x8a, 0x92, 0x7f,
-	0x0f, 0x25, 0x17, 0x57, 0xd7, 0xd7, 0x89, 0xd9, 0x22, 0x26, 0xbd, 0xa5, 0x52, 0x26, 0x5c, 0x45,
-	0xe1, 0x9a, 0x46, 0x65, 0xd5, 0xc8, 0x84, 0xc5, 0xc0, 0x4c, 0xac, 0x92, 0xb7, 0x41, 0x62, 0x0f,
-	0x20, 0x9c, 0xe7, 0x48, 0xf6, 0x53, 0xe8, 0x01, 0xf8, 0xd3, 0x41, 0x6f, 0x15, 0x05, 0x29, 0x54,
-	0xd3, 0xe8, 0x8a, 0x91, 0xff, 0x6d, 0x12, 0x9d, 0x3c, 0xfa, 0xd4, 0xf6, 0x59, 0x2b, 0x68, 0x52,
-	0xd3, 0xfb, 0x5e, 0x62, 0x45, 0x21, 0x94, 0xba, 0xf1, 0x9e, 0x1a, 0x89, 0xf7, 0x52, 0xd3, 0x60,
-	0xed, 0x65, 0x9f, 0x94, 0xd2, 0x74, 0x17, 0x68, 0x81, 0x8b, 0x0b, 0xb7, 0xd0, 0xf4, 0x30, 0x80,
-	0x4c, 0x34, 0x5c, 0x6d, 0x90, 0x5a, 0x26, 0x30, 0x16, 0x68, 0xca, 0x18, 0x84, 0x59, 0x72, 0x74,
-	0x84, 0x1f, 0xa0, 0xe4, 0x80, 0x47, 0x35, 0x8d, 0x66, 0x42, 0x63, 0x50, 0x78, 0x8e, 0x5d, 0x77,
-	0x16, 0x35, 0x2a, 0xac, 0xa1, 0xf8, 0xa0, 0x6a, 0x98, 0xab, 0x16, 0x4b, 0x63, 0xef, 0x65, 0x69,
-	0x38, 0xd8, 0xcb, 0x20, 0x21, 0xe3, 0x00, 0x51, 0x41, 0x53, 0x8a, 0xde, 0x6c, 0xea, 0x9a, 0x3c,
-	0x4c, 0xca, 0xc8, 0x71, 0x49, 0x29, 0x38, 0x70, 0xab, 0x03, 0xd4, 0x14, 0x3e, 0x0e, 0xa0, 0xb8,
-	0x49, 0x64, 0x55, 0xdb, 0xd4, 0xe5, 0x26, 0x36, 0x32, 0x51, 0x31, 0x30, 0x13, 0x2f, 0xdf, 0x78,
-	0x81, 0xdf, 0xcf, 0x4d, 0x6b, 0xc9, 0xb9, 0x6f, 0x3f, 0xc6, 0xc6, 0x92, 0xc6, 0xcc, 0x76, 0xa5,
-	0xeb, 0xb7, 0x79, 0x11, 0x7f, 0x08, 0xd1, 0x7c, 0xd8, 0x0c, 0xa6, 0x21, 0x73, 0x9d, 0xf3, 0xe4,
-	0x21, 0xf8, 0xd3, 0xd7, 0x7b, 0x9f, 0xff, 0x2d, 0x50, 0xef, 0x74, 0x41, 0x11, 0xf0, 0xbf, 0x2c,
-	0xf8, 0x05, 0x8a, 0xe2, 0x26, 0xbd, 0x5a, 0xc4, 0x4d, 0x8a, 0xa2, 0x35, 0x65, 0xae, 0x5c, 0xc4,
-	0x74, 0x0b, 0x45, 0xb4, 0xf6, 0x95, 0xa2, 0xd6, 0x56, 0x50, 0xc4, 0xc0, 0xe5, 0xa2, 0x81, 0x4d,
-	0x7b, 0x71, 0xd1, 0x59, 0xd0, 0xfa, 0x7c, 0x91, 0xaa, 0x1a, 0x8a, 0xd2, 0xd6, 0xdc, 0x85, 0x22,
-	0xfd, 0x50, 0x41, 0x11, 0xa6, 0x95, 0x8b, 0x0d, 0x5d, 0x43, 0x11, 0xd6, 0xbe, 0x52, 0x64, 0x77,
-	0xda, 0x28, 0xb2, 0x43, 0x68, 0x91, 0x12, 0x6c, 0xdb, 0x9a, 0xec, 0x74, 0x21, 0x21, 0xc4, 0x9f,
-	0x5a, 0x10, 0x91, 0x96, 0x44, 0x0d, 0x37, 0x89, 0xfd, 0x76, 0xa2, 0xd3, 0x85, 0xa8, 0x10, 0xee,
-	0x59, 0xe0, 0x97, 0x96, 0xec, 0x17, 0xa8, 0xd3, 0x85, 0xb0, 0x10, 0xfc, 0xcc, 0x02, 0x9f, 0xfd,
-	0x18, 0xee, 0x74, 0x6d, 0x52, 0xdb, 0xcb, 0xf9, 0x4e, 0x17, 0x66, 0xb3, 0xc5, 0xa7, 0x16, 0x9c,
-	0x5f, 0x23, 0xa6, 0x28, 0x2d, 0x89, 0x6e, 0x1c, 0x44, 0x37, 0x6b, 0xa2, 0x1b, 0x1f, 0xd1, 0xc0,
-	0x26, 0x6e, 0x12, 0x46, 0x4c, 0x6a, 0xeb, 0x9d, 0xef, 0x74, 0xe1, 0x3b, 0xd9, 0x73, 0x3d, 0x0b,
-	0xbc, 0x1a, 0x25, 0xba, 0x91, 0x13, 0xdd, 0xd0, 0xd9, 0x58, 0x76, 0xdc, 0xfa, 0xf6, 0xb3, 0xc1,
-	0x3d, 0x0b, 0x40, 0x8a, 0x99, 0x5e, 0x38, 0x85, 0x79, 0x94, 0xd2, 0x77, 0x34, 0x62, 0xca, 0x8c,
-	0xd7, 0x0c, 0x59, 0xad, 0x65, 0x62, 0xfc, 0x5a, 0xc7, 0xed, 0x88, 0x86, 0xcd, 0xa0, 0x08, 0x33,
-	0xd7, 0xa5, 0x04, 0x97, 0x71, 0xcb, 0x4a, 0x4d, 0xf8, 0x87, 0x1f, 0xa5, 0x3c, 0x79, 0x2f, 0xc3,
-	0x88, 0x67, 0xf8, 0xbd, 0x63, 0x67, 0xf8, 0xa0, 0x66, 0xf5, 0xb3, 0xfc, 0x08, 0xc6, 0x67, 0xf9,
-	0xed, 0x4e, 0x17, 0xae, 0x0a, 0x6f, 0x3d, 0xb5, 0x60, 0x7e, 0x15, 0x37, 0x89, 0xa8, 0x6f, 0x8a,
-	0x6c, 0x8b, 0x88, 0x8e, 0x67, 0xe2, 0x8e, 0xca, 0xb6, 0xc4, 0x9d, 0x2d, 0xbd, 0x29, 0xb2, 0x2d,
-	0x95, 0xf6, 0x63, 0xa8, 0x52, 0x91, 0x6e, 0x61, 0x93, 0xd4, 0x6c, 0x84, 0x13, 0x9d, 0x2e, 0xa4,
-	0x84, 0x44, 0xcf, 0x82, 0x98, 0x63, 0x5f, 0x5c, 0xa9, 0x8d, 0x4f, 0xd6, 0xe9, 0x4e, 0x17, 0x32,
-	0xd9, 0xe9, 0xa7, 0x16, 0x08, 0xae, 0x86, 0x1d, 0x01, 0xb3, 0x89, 0xed, 0xbe, 0x62, 0x0b, 0xbc,
-	0xd6, 0xe9, 0xc2, 0x64, 0x36, 0xd5, 0xb3, 0x20, 0xbe, 0x32, 0xbc, 0x33, 0x98, 0x81, 0x04, 0x1b,
-	0x3c, 0xae, 0xf0, 0x33, 0x74, 0x4a, 0xd3, 0x65, 0x5c, 0x6b, 0x11, 0x93, 0xa9, 0x94, 0xc8, 0x35,
-	0x52, 0x53, 0x15, 0xcc, 0x48, 0xcd, 0xae, 0xb3, 0x34, 0x33, 0x31, 0xa6, 0x60, 0xf8, 0xa5, 0x8c,
-	0xa6, 0x2f, 0x78, 0x9a, 0x8b, 0x9e, 0xe2, 0x86, 0x6a, 0xd8, 0xc5, 0x23, 0xf3, 0x5c, 0xcc, 0xc4,
-	0x58, 0xcc, 0x69, 0x7c, 0x24, 0x62, 0xf6, 0x57, 0x28, 0x39, 0x7c, 0x15, 0x85, 0x34, 0x0a, 0xdc,
-	0x21, 0x6d, 0xa7, 0x99, 0x48, 0xf6, 0x52, 0xb8, 0x8d, 0x42, 0x2d, 0xdc, 0xd8, 0x26, 0x6e, 0xd9,
-	0x7d, 0xe7, 0x38, 0x94, 0x38, 0xe8, 0xaf, 0x92, 0x03, 0x76, 0xcd, 0x7f, 0x05, 0xb2, 0xbf, 0x01,
-	0x24, 0x1c, 0xe6, 0xc9, 0x11, 0x2e, 0xbc, 0x3f, 0xec, 0x42, 0xe5, 0x58, 0xac, 0x1c, 0x6a, 0xa2,
-	0x03, 0x6e, 0x54, 0x66, 0xd0, 0x6b, 0x23, 0xfd, 0x41, 0xd9, 0xd2, 0x55, 0x85, 0x08, 0xa9, 0x3d,
-	0x0b, 0xfc, 0xfb, 0x16, 0x40, 0xcf, 0x82, 0x40, 0xb9, 0x30, 0x5f, 0x39, 0x83, 0x90, 0xdd, 0xe6,
-	0x06, 0xb6, 0x43, 0xfb, 0x16, 0x04, 0xed, 0xed, 0x4b, 0x85, 0xcb, 0x95, 0xf3, 0x68, 0x6a, 0x28,
-	0x2b, 0x9e, 0xe0, 0xe4, 0x9e, 0x05, 0x13, 0xfb, 0x16, 0xc4, 0x7b, 0x16, 0x84, 0xe6, 0xca, 0x85,
-	0xb9, 0xf9, 0x9b, 0xc1, 0x28, 0xa4, 0xfd, 0x37, 0x83, 0xd1, 0x60, 0x3a, 0x74, 0x33, 0x18, 0x8d,
-	0xa7, 0x27, 0xf2, 0xdf, 0x47, 0xa7, 0xd6, 0xcd, 0xd6, 0x65, 0xd7, 0xdb, 0x55, 0xba, 0xd6, 0x2f,
-	0x0e, 0xbc, 0x11, 0x9e, 0x46, 0x31, 0xbb, 0x16, 0x51, 0x03, 0x2b, 0xc4, 0x0d, 0xcd, 0xc1, 0x8b,
-	0xfc, 0x3d, 0x3f, 0x9a, 0x5e, 0x23, 0xe6, 0xba, 0xca, 0xc8, 0x00, 0x08, 0x57, 0x5c, 0x46, 0x53,
-	0x9a, 0x2e, 0xf7, 0x45, 0xbd, 0x20, 0xbd, 0xa0, 0x89, 0x0a, 0x9a, 0xbe, 0xea, 0xa9, 0xb8, 0x68,
-	0xc2, 0x2f, 0xd1, 0x34, 0x35, 0x5b, 0x97, 0x3d, 0x04, 0x59, 0xa3, 0x32, 0xaf, 0x60, 0xd4, 0xed,
-	0xa3, 0xd7, 0x5e, 0x90, 0x96, 0x31, 0xc7, 0x5b, 0xf6, 0x49, 0x27, 0xe8, 0xa1, 0x6d, 0x5a, 0x39,
-	0x87, 0xd2, 0x07, 0x9e, 0x3f, 0x27, 0x2b, 0x4e, 0x2c, 0xf3, 0xbf, 0x03, 0x34, 0xb5, 0x4a, 0x76,
-	0xd9, 0xb2, 0x6e, 0xac, 0x68, 0x8c, 0x98, 0x9b, 0x58, 0x21, 0x7c, 0x36, 0x69, 0x21, 0xa4, 0x7a,
-	0x2f, 0x68, 0x06, 0x78, 0x5d, 0xcb, 0x1f, 0x72, 0x95, 0xec, 0xd0, 0xd2, 0x4f, 0xaa, 0x1f, 0x12,
-	0x85, 0x49, 0x64, 0x93, 0x37, 0xc6, 0xf2, 0x27, 0x77, 0x27, 0xbd, 0xa3, 0xf6, 0x01, 0xfa, 0x93,
-	0x0c, 0x1c, 0x4c, 0x32, 0xde, 0x2a, 0x03, 0xd2, 0x80, 0xa5, 0xfc, 0x3f, 0x03, 0xe8, 0xc4, 0x3a,
-	0xc3, 0x4c, 0x55, 0x24, 0x7d, 0xdb, 0x1e, 0x9c, 0xc8, 0x0e, 0x4f, 0xc8, 0x3a, 0x8a, 0xab, 0x86,
-	0x6c, 0x98, 0x64, 0x53, 0xdd, 0x75, 0x1d, 0x8a, 0x55, 0xca, 0xcf, 0x2c, 0xf0, 0xd9, 0x40, 0xe8,
-	0x01, 0x44, 0xf2, 0x21, 0x33, 0xf0, 0x0c, 0x38, 0x6e, 0xf8, 0x01, 0x04, 0xd2, 0xf7, 0xfc, 0xcf,
-	0x31, 0x66, 0xac, 0xb9, 0x28, 0x42, 0x09, 0x21, 0xd5, 0x90, 0x71, 0xad, 0x66, 0xda, 0x03, 0x52,
-	0x80, 0x97, 0xfc, 0x84, 0x87, 0x19, 0x34, 0xfd, 0xbb, 0xb0, 0xec, 0x93, 0x62, 0xaa, 0xb1, 0xe0,
-	0x48, 0x08, 0xef, 0xa3, 0x58, 0xdf, 0xd5, 0x4c, 0x90, 0xa7, 0xef, 0x65, 0x62, 0x32, 0x75, 0x54,
-	0x4c, 0x38, 0xb2, 0xf7, 0x20, 0xbc, 0x8b, 0x52, 0xde, 0x70, 0x59, 0xc7, 0x8c, 0xec, 0xe0, 0xf6,
-	0xd8, 0x01, 0xc9, 0x27, 0x25, 0x5d, 0xf1, 0x1b, 0x8e, 0xb4, 0xb0, 0x8c, 0x42, 0x98, 0x31, 0x93,
-	0xf2, 0x51, 0x32, 0x59, 0x3e, 0x3d, 0xa2, 0xc6, 0x83, 0xb9, 0xc0, 0x98, 0x33, 0xbd, 0x4c, 0x1d,
-	0x1e, 0x2d, 0x33, 0x20, 0x39, 0x00, 0xd7, 0xbe, 0xfb, 0xa9, 0x05, 0xe7, 0x50, 0x1a, 0xc5, 0x57,
-	0xd6, 0xc4, 0x7e, 0xa4, 0x60, 0x0e, 0xa5, 0x50, 0xd4, 0x66, 0x8a, 0xb8, 0xac, 0x1b, 0x42, 0xa0,
-	0x5c, 0xb8, 0x5c, 0x79, 0x13, 0xa5, 0x34, 0xb2, 0xcb, 0xe4, 0x2d, 0x7d, 0xe8, 0xce, 0x06, 0xf6,
-	0x2d, 0xf0, 0xdb, 0x77, 0x76, 0xbe, 0x70, 0xb1, 0x70, 0xe9, 0x66, 0x30, 0xea, 0x4f, 0x07, 0xf2,
-	0x1f, 0xf9, 0xd1, 0x6b, 0x0b, 0x0a, 0x53, 0x5b, 0x64, 0xad, 0x22, 0xad, 0xe9, 0x0d, 0x55, 0x51,
-	0x89, 0x73, 0x45, 0xef, 0x03, 0xca, 0x6e, 0xea, 0xe6, 0x0e, 0x36, 0x6b, 0xb2, 0x61, 0xea, 0xbb,
-	0x6d, 0xd9, 0xa8, 0x9a, 0xb2, 0xe1, 0x8a, 0x7c, 0x05, 0xe6, 0xbd, 0xf1, 0xc9, 0xdd, 0x29, 0xae,
-	0xd6, 0x96, 0xab, 0x98, 0x92, 0x9a, 0x6c, 0xea, 0xdb, 0x4c, 0xd5, 0xea, 0xfd, 0xb3, 0x8a, 0xd2,
-	0xeb, 0xae, 0xa1, 0x35, 0xdb, 0xce, 0x5a, 0xd5, 0xf4, 0x1c, 0x11, 0x76, 0xd0, 0x94, 0x97, 0xa0,
-	0x21, 0xeb, 0xfe, 0xaf, 0xd3, 0xba, 0xe0, 0x9a, 0x18, 0x30, 0x9c, 0x7f, 0x12, 0x41, 0xc9, 0x1b,
-	0x0d, 0xbd, 0x8a, 0x1b, 0xeb, 0x06, 0x51, 0x78, 0x40, 0x96, 0x50, 0x84, 0x6e, 0x57, 0x35, 0xc2,
-	0x3c, 0xf3, 0xa7, 0x46, 0xcc, 0xaf, 0x18, 0xeb, 0x7c, 0x9f, 0xdb, 0x4d, 0x3e, 0xba, 0x3b, 0x40,
-	0x79, 0x90, 0x3c, 0x5d, 0x61, 0x05, 0x05, 0xed, 0x8f, 0x38, 0xce, 0xea, 0x64, 0xf9, 0x8d, 0x11,
-	0x8c, 0x0d, 0xa7, 0xca, 0x0c, 0x94, 0xbc, 0x8a, 0x60, 0xc3, 0x24, 0xec, 0x74, 0x44, 0x7d, 0xe0,
-	0x0f, 0x04, 0x23, 0x31, 0x24, 0x71, 0x08, 0xe1, 0xe7, 0x28, 0x41, 0xf9, 0x95, 0xe4, 0x87, 0x22,
-	0xf6, 0xec, 0x6e, 0xfb, 0x95, 0x1b, 0xc1, 0x1c, 0xb8, 0xb6, 0x23, 0x2c, 0x4b, 0x0f, 0xb0, 0x6c,
-	0x82, 0x1e, 0x88, 0x51, 0xe1, 0x6d, 0x94, 0xac, 0xf3, 0xe3, 0xf7, 0x2b, 0x6c, 0x64, 0x2c, 0xed,
-	0x13, 0x8e, 0xb4, 0x57, 0x5c, 0x17, 0x91, 0x40, 0x55, 0x46, 0xe4, 0x86, 0xae, 0x0c, 0x40, 0x44,
-	0xc7, 0x42, 0xa4, 0x6d, 0x8d, 0x5b, 0xb6, 0x82, 0x87, 0xf2, 0x53, 0x74, 0x72, 0x00, 0x45, 0xd5,
-	0xa8, 0x5a, 0x3b, 0xa8, 0xf8, 0xb1, 0xb1, 0x60, 0xd3, 0x7d, 0xb0, 0x15, 0xae, 0xe6, 0x41, 0xfe,
-	0x08, 0x25, 0x47, 0x70, 0xd0, 0xf3, 0x71, 0x2a, 0x11, 0xf7, 0x6b, 0xc2, 0x3e, 0xa0, 0x3a, 0x84,
-	0xb3, 0x81, 0xe2, 0x0d, 0x52, 0xc7, 0x4a, 0x5b, 0xe6, 0xc9, 0x8c, 0xbf, 0x6c, 0x32, 0x79, 0xc4,
-	0xe3, 0xf7, 0x21, 0x9a, 0x0d, 0x3b, 0xc9, 0x5c, 0xf6, 0x49, 0xc8, 0x41, 0x72, 0xfb, 0x5b, 0xca,
-	0xeb, 0xde, 0x9e, 0x83, 0x89, 0x97, 0x73, 0x30, 0x69, 0x0c, 0x0d, 0x08, 0x82, 0x82, 0x26, 0x06,
-	0xfb, 0x5b, 0x26, 0xc9, 0x61, 0x2e, 0xbd, 0xa0, 0xab, 0x1d, 0xdd, 0x76, 0x07, 0xed, 0xc4, 0x07,
-	0x3a, 0x9b, 0xf0, 0x6b, 0x94, 0x1d, 0x71, 0x57, 0x3e, 0xf8, 0x0c, 0xc8, 0xa4, 0xb8, 0xc9, 0x2b,
-	0xc7, 0x9d, 0xba, 0xfb, 0x56, 0xa5, 0xcc, 0xf0, 0xd9, 0x0e, 0xba, 0x6d, 0x65, 0x16, 0x25, 0x3d,
-	0xc3, 0x6e, 0xa9, 0x3b, 0xb3, 0x67, 0x41, 0x64, 0xdf, 0x02, 0xfb, 0xeb, 0x66, 0xf2, 0xad, 0xc2,
-	0x95, 0xc2, 0xd5, 0xc2, 0xdc, 0x85, 0xc2, 0xdc, 0x7c, 0x61, 0xee, 0x62, 0x61, 0x6e, 0x6e, 0x64,
-	0x54, 0x09, 0xa7, 0x23, 0xf9, 0xff, 0x04, 0x51, 0xf2, 0x87, 0x26, 0xc1, 0x8c, 0xf4, 0xaf, 0xfa,
-	0xab, 0xca, 0xfe, 0xc5, 0xe3, 0xb1, 0x76, 0x84, 0xa3, 0xcd, 0xd1, 0xb2, 0x33, 0xc1, 0xcb, 0x4e,
-	0xf9, 0x45, 0x03, 0xd3, 0xe1, 0xe9, 0xe1, 0xa5, 0x4a, 0xd1, 0x07, 0x5f, 0x23, 0x91, 0x47, 0xf8,
-	0x7b, 0x6d, 0xe9, 0xef, 0xef, 0x8c, 0x94, 0xf9, 0x4f, 0x2d, 0xb8, 0x80, 0x4e, 0xa2, 0x29, 0x37,
-	0x0a, 0xfd, 0x8f, 0x55, 0x7e, 0x72, 0xb8, 0x8c, 0x4e, 0xa0, 0x84, 0x73, 0x10, 0xd1, 0x75, 0xcf,
-	0x3f, 0x57, 0xae, 0xbc, 0x79, 0x88, 0x85, 0xc2, 0xfd, 0xff, 0xc2, 0xc8, 0x3b, 0x97, 0x6e, 0x7f,
-	0x0a, 0xa1, 0x94, 0x44, 0x8c, 0x06, 0x56, 0xbe, 0xe5, 0xdb, 0x37, 0x92, 0x6f, 0xef, 0x7e, 0xa5,
-	0x12, 0x7c, 0x44, 0xe5, 0x7d, 0xc5, 0x08, 0xfb, 0xe7, 0x10, 0x8a, 0xdf, 0x20, 0xec, 0x95, 0x27,
-	0xeb, 0xcd, 0x63, 0xb6, 0x74, 0xfe, 0x9b, 0xc9, 0xb7, 0x94, 0xfd, 0x06, 0x51, 0xb6, 0xf2, 0x11,
-	0xec, 0x3f, 0xce, 0xf9, 0x1e, 0x3d, 0xce, 0xf9, 0xbe, 0x7c, 0x9c, 0x83, 0x67, 0x8f, 0x73, 0x70,
-	0xaf, 0x97, 0x83, 0x3f, 0xf6, 0x72, 0xf0, 0x97, 0x5e, 0x0e, 0xf6, 0x7a, 0x39, 0xf8, 0xac, 0x97,
-	0x83, 0xfd, 0x5e, 0x0e, 0x1e, 0xf5, 0x72, 0xf0, 0x79, 0x2f, 0x07, 0x4f, 0x7a, 0x39, 0xdf, 0x97,
-	0xbd, 0x1c, 0xfc, 0xfe, 0x8b, 0x9c, 0x6f, 0xef, 0x8b, 0x1c, 0x7c, 0xb0, 0x5e, 0xd7, 0x8d, 0x3b,
-	0xf5, 0x52, 0x4b, 0x6f, 0x30, 0x62, 0x9a, 0xb8, 0xb4, 0x4d, 0x67, 0xf9, 0x62, 0x53, 0x37, 0x9b,
-	0x45, 0xc3, 0xd4, 0x5b, 0x6a, 0x8d, 0x98, 0x45, 0x6f, 0x7b, 0xd6, 0xa8, 0xd6, 0xf5, 0x59, 0xb2,
-	0xcb, 0xdc, 0x3f, 0x6b, 0x8e, 0xfe, 0xf7, 0xaa, 0x1a, 0xe6, 0x7f, 0xdc, 0xcc, 0xff, 0x3f, 0x00,
-	0x00, 0xff, 0xff, 0x75, 0x86, 0xdd, 0x0d, 0xe5, 0x1a, 0x00, 0x00,
+	// 3119 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0x4d, 0x6c, 0x1b, 0xd7,
+	0xb5, 0xd6, 0xe5, 0x3f, 0x0f, 0xc5, 0xbf, 0x11, 0xad, 0xd0, 0xb4, 0xc3, 0x4c, 0xe8, 0xbc, 0x44,
+	0x4e, 0x28, 0xc9, 0xa4, 0xfc, 0xff, 0x5e, 0x12, 0x8b, 0x91, 0x62, 0xc9, 0xf1, 0x53, 0xf8, 0x46,
+	0x7e, 0xaa, 0x63, 0x20, 0x9d, 0x8e, 0xc8, 0x4b, 0x69, 0x62, 0x72, 0x66, 0x3a, 0x33, 0xa2, 0x4c,
+	0xa0, 0x42, 0x83, 0xa0, 0x5d, 0x94, 0x8b, 0xa2, 0x30, 0xd0, 0x8d, 0xbb, 0x2c, 0x10, 0x14, 0x5e,
+	0x14, 0x45, 0x81, 0x2e, 0xda, 0xe1, 0x42, 0x08, 0x50, 0x20, 0xe8, 0xa2, 0xd0, 0xa2, 0x0b, 0xa3,
+	0xab, 0x84, 0xd9, 0x24, 0x6a, 0x17, 0x59, 0xa6, 0x5d, 0x04, 0xc5, 0xbd, 0x33, 0x43, 0x0e, 0x47,
+	0x14, 0x2d, 0x0b, 0x09, 0x10, 0x04, 0xd9, 0xcd, 0xf0, 0x9e, 0xfb, 0x9d, 0x9f, 0x7b, 0xee, 0x39,
+	0xdf, 0x19, 0x09, 0xce, 0x36, 0xb1, 0x36, 0x23, 0xca, 0xb3, 0x5a, 0x65, 0x13, 0x37, 0x84, 0xd9,
+	0xa6, 0xa8, 0xea, 0x5b, 0x42, 0x9d, 0x97, 0xb0, 0xbe, 0x2d, 0xab, 0x77, 0x67, 0xf5, 0x96, 0x82,
+	0xb5, 0x19, 0x45, 0x95, 0x75, 0x99, 0x79, 0xda, 0x14, 0x9d, 0x31, 0x45, 0x67, 0x5c, 0xa2, 0x99,
+	0xe9, 0x0d, 0x51, 0xdf, 0xdc, 0x5a, 0x9f, 0xa9, 0xc8, 0x8d, 0xd9, 0x0d, 0x79, 0x43, 0x9e, 0xa5,
+	0xbb, 0xd6, 0xb7, 0x6a, 0xf4, 0x8d, 0xbe, 0xd0, 0x27, 0x13, 0x2d, 0xf3, 0xd4, 0xa0, 0x62, 0x09,
+	0xeb, 0xd6, 0xc2, 0xa9, 0xc1, 0x05, 0x59, 0xd1, 0x45, 0x59, 0xb2, 0x6c, 0xc8, 0x9c, 0x1c, 0x5c,
+	0x74, 0x98, 0x97, 0x39, 0xed, 0xf2, 0x44, 0xa8, 0x8b, 0x55, 0x41, 0xc7, 0xd6, 0x2a, 0xeb, 0xf6,
+	0x13, 0x6f, 0xf3, 0x83, 0xd0, 0xcf, 0x1c, 0x94, 0xd0, 0x9c, 0x0a, 0x72, 0xbf, 0x42, 0xf0, 0xcc,
+	0x9a, 0x5c, 0xd7, 0xe7, 0x17, 0x56, 0xca, 0xaa, 0xd8, 0x14, 0x74, 0xbc, 0x62, 0xba, 0xce, 0xe1,
+	0x65, 0xa9, 0x26, 0xdf, 0x6a, 0x29, 0x98, 0x61, 0xc1, 0xd7, 0xac, 0x0b, 0x52, 0x1a, 0xb1, 0x68,
+	0x2a, 0x5a, 0x1a, 0xff, 0xd3, 0x67, 0xbb, 0xde, 0xe0, 0x8b, 0xfe, 0xf4, 0x97, 0xcf, 0x4c, 0x21,
+	0x8e, 0xae, 0x30, 0x6b, 0x10, 0x95, 0xe4, 0x2a, 0xe6, 0x35, 0x5c, 0xc7, 0x15, 0x5d, 0x56, 0xd3,
+	0x1e, 0x16, 0x4d, 0x45, 0x8a, 0xec, 0xcc, 0x60, 0x74, 0x6f, 0x0a, 0xeb, 0xb8, 0xbe, 0x6a, 0xc9,
+	0x10, 0xe8, 0x52, 0xfc, 0xd1, 0x0e, 0xfa, 0xd4, 0x40, 0xe8, 0x41, 0x07, 0xf9, 0xc0, 0x33, 0x86,
+	0xb8, 0x71, 0x82, 0x63, 0x8b, 0xe4, 0xde, 0x47, 0x70, 0x66, 0xa8, 0x75, 0xb7, 0xb0, 0x24, 0x48,
+	0x7a, 0xcf, 0xc2, 0x2b, 0x30, 0x51, 0xc5, 0x35, 0x61, 0xab, 0xae, 0xf3, 0x8a, 0x29, 0xc7, 0x37,
+	0x45, 0x85, 0x1a, 0x1c, 0x2e, 0x85, 0x89, 0xc1, 0x3e, 0xd5, 0xa3, 0x20, 0x2e, 0x69, 0x49, 0x59,
+	0x60, 0x6b, 0xa2, 0xc2, 0x2c, 0xc0, 0xc9, 0x9a, 0x28, 0x09, 0x75, 0x7e, 0x18, 0x80, 0xc7, 0x0d,
+	0x30, 0x49, 0x65, 0x17, 0xdc, 0x28, 0xb9, 0x37, 0x20, 0xb6, 0xb0, 0xb2, 0xba, 0x8a, 0xd5, 0x26,
+	0x56, 0xb5, 0x9b, 0xa2, 0xa6, 0x33, 0x57, 0x20, 0x50, 0x95, 0x34, 0x5e, 0x54, 0xd2, 0x01, 0xd6,
+	0x3b, 0x15, 0x2e, 0xe5, 0x08, 0x48, 0xf8, 0x3e, 0x0a, 0xe4, 0x28, 0x12, 0x79, 0xf3, 0xdf, 0x47,
+	0x9e, 0x84, 0xcf, 0x7e, 0x0a, 0x21, 0xce, 0x5f, 0x95, 0xb4, 0x65, 0x25, 0xf7, 0xd3, 0x18, 0x9c,
+	0x1c, 0xee, 0x35, 0xf1, 0xb5, 0x04, 0x49, 0x49, 0xee, 0x59, 0x29, 0x54, 0x2a, 0x58, 0xd3, 0xac,
+	0x78, 0xa7, 0x5c, 0xf1, 0x5e, 0x6c, 0x28, 0x7a, 0x6b, 0x69, 0x8c, 0x8b, 0x4b, 0xb2, 0x05, 0x34,
+	0x4f, 0xc5, 0x99, 0x9b, 0x30, 0x39, 0x08, 0xc0, 0x63, 0x49, 0x58, 0xaf, 0xe3, 0x6a, 0xda, 0x3b,
+	0x12, 0x28, 0xa5, 0x38, 0x61, 0x16, 0xcd, 0x3d, 0xcc, 0xff, 0x40, 0xcc, 0x61, 0x51, 0x55, 0xd2,
+	0xd2, 0xfe, 0x11, 0x28, 0xf4, 0x8c, 0x2d, 0x73, 0x16, 0x24, 0x8d, 0x29, 0x43, 0xc4, 0xb9, 0x35,
+	0x40, 0xb7, 0x4e, 0xcf, 0x8c, 0xbc, 0x97, 0x33, 0x83, 0xc1, 0x5e, 0x42, 0x1c, 0x28, 0x7d, 0xc4,
+	0x0a, 0xa4, 0x2a, 0x72, 0xa3, 0x21, 0x4b, 0xfc, 0x60, 0x52, 0x06, 0x8f, 0x9b, 0x94, 0x8c, 0x09,
+	0xb7, 0xe2, 0x48, 0x4d, 0xe6, 0x7d, 0x2f, 0x44, 0x54, 0xcc, 0x8b, 0x52, 0x4d, 0xe6, 0x1b, 0x82,
+	0x92, 0x0e, 0xb1, 0xde, 0xa9, 0x48, 0xf1, 0xfa, 0x63, 0xec, 0x3e, 0xf4, 0x58, 0x67, 0xcc, 0xfb,
+	0xf6, 0xbf, 0x82, 0xb2, 0x28, 0xe9, 0x6a, 0xab, 0xd4, 0xf1, 0x90, 0xbc, 0x88, 0x3c, 0x40, 0xa1,
+	0x5c, 0x40, 0xf5, 0x25, 0x50, 0xfa, 0x1a, 0xcd, 0x93, 0x07, 0xc8, 0x93, 0xb8, 0xd6, 0xfd, 0xe8,
+	0xcf, 0xde, 0x8d, 0x76, 0x07, 0x55, 0x18, 0xe1, 0xef, 0x06, 0x7a, 0x1b, 0x42, 0x42, 0x43, 0xbb,
+	0x32, 0x2d, 0x34, 0x34, 0x08, 0x55, 0x2b, 0x85, 0xe2, 0xb4, 0xa0, 0x6d, 0x42, 0x50, 0x6a, 0x5d,
+	0x9e, 0x96, 0x5a, 0x15, 0x08, 0x2a, 0x42, 0x71, 0x5a, 0x11, 0x54, 0xf2, 0x70, 0xde, 0x7c, 0xd0,
+	0x36, 0xe6, 0xa6, 0x35, 0x51, 0x82, 0x90, 0xd6, 0x2c, 0x9c, 0x9b, 0xd6, 0xde, 0xa9, 0x40, 0x50,
+	0x97, 0x8a, 0xd3, 0x75, 0x59, 0x82, 0xa0, 0xde, 0xba, 0x3c, 0xad, 0xdf, 0x6d, 0x41, 0x70, 0x1b,
+	0x6b, 0xd3, 0x1a, 0x16, 0x88, 0xae, 0x64, 0xbb, 0x83, 0xa2, 0x4c, 0x64, 0xdf, 0x40, 0x41, 0x6e,
+	0x91, 0x95, 0x84, 0x06, 0x26, 0xbf, 0x8e, 0xb7, 0x3b, 0x28, 0xc4, 0x04, 0xba, 0x06, 0xf2, 0x70,
+	0x8b, 0xe4, 0x07, 0x68, 0x77, 0x50, 0x80, 0xf1, 0x7d, 0x68, 0xa0, 0x31, 0xf2, 0x1a, 0x68, 0x77,
+	0x48, 0x52, 0x93, 0xc7, 0xb9, 0x76, 0x07, 0xcd, 0x66, 0xa6, 0xf7, 0x0d, 0x74, 0xb6, 0x8c, 0x55,
+	0x96, 0x5b, 0x64, 0xad, 0x38, 0xb0, 0xd6, 0xa9, 0xb1, 0x56, 0x7c, 0x58, 0x45, 0x50, 0x85, 0x06,
+	0xd6, 0xb1, 0xaa, 0x91, 0x7d, 0x67, 0xdb, 0x1d, 0xf4, 0x5f, 0x99, 0x33, 0x5d, 0x03, 0xd9, 0x35,
+	0x8a, 0xb5, 0x22, 0xc7, 0x5a, 0xa1, 0x23, 0x58, 0x24, 0x6e, 0x3d, 0xfd, 0x19, 0xdf, 0xae, 0x81,
+	0x10, 0x17, 0x56, 0xed, 0x70, 0x32, 0x73, 0x10, 0x97, 0xb7, 0x25, 0xac, 0xf2, 0x3a, 0xad, 0x19,
+	0xbc, 0x58, 0x4d, 0x87, 0xe9, 0xb5, 0x8e, 0x90, 0x88, 0x06, 0x54, 0x1f, 0x8b, 0xa6, 0xae, 0x71,
+	0x51, 0x2a, 0x63, 0x95, 0x95, 0x2a, 0xf3, 0x57, 0x0f, 0xc4, 0x6d, 0x79, 0xfb, 0x84, 0x81, 0x9e,
+	0xf0, 0x1b, 0xc7, 0x3e, 0xe1, 0x7e, 0xcd, 0xea, 0x9d, 0xf2, 0x23, 0x34, 0xfa, 0x94, 0x5f, 0x6e,
+	0x77, 0xd0, 0x15, 0xe6, 0xd2, 0xbe, 0x81, 0xe6, 0x56, 0x84, 0x06, 0x66, 0xe5, 0x1a, 0xab, 0x6f,
+	0x62, 0xd6, 0xb4, 0x8c, 0xdd, 0x16, 0xf5, 0x4d, 0x76, 0x7b, 0x53, 0x6e, 0xb0, 0xfa, 0xa6, 0xa8,
+	0xf5, 0x62, 0x28, 0x6a, 0xac, 0xb6, 0x29, 0xa8, 0xb8, 0x4a, 0x10, 0x26, 0xda, 0x1d, 0x14, 0x67,
+	0xa2, 0x5d, 0x03, 0x85, 0x4d, 0xfd, 0xec, 0x72, 0x75, 0xf4, 0x61, 0x9d, 0x6e, 0x77, 0x50, 0x3a,
+	0x33, 0xb9, 0x6f, 0x20, 0xc6, 0xda, 0x41, 0x22, 0xa0, 0x36, 0x04, 0xd2, 0x57, 0x88, 0xc0, 0x89,
+	0x76, 0x07, 0x25, 0x33, 0xf1, 0xae, 0x81, 0x22, 0xcb, 0x83, 0x2b, 0xce, 0x13, 0x88, 0xea, 0x4e,
+	0x77, 0x99, 0xff, 0x87, 0x53, 0x92, 0xcc, 0x0b, 0xd5, 0x26, 0x56, 0x75, 0x51, 0xc3, 0x7c, 0x15,
+	0x57, 0xc5, 0x8a, 0xa0, 0xe3, 0x2a, 0xa9, 0xb3, 0x5a, 0x7a, 0x7c, 0x44, 0xc1, 0xf0, 0x70, 0x69,
+	0x49, 0x9e, 0xb7, 0x77, 0x2e, 0xd8, 0x1b, 0xd7, 0x44, 0x85, 0x14, 0x8f, 0xf4, 0xa1, 0x98, 0xd1,
+	0x91, 0x98, 0x93, 0xc2, 0x50, 0xc4, 0xcc, 0x8f, 0x20, 0x36, 0x78, 0x15, 0x99, 0x04, 0x78, 0xef,
+	0xe2, 0x96, 0xd9, 0x4c, 0x38, 0xf2, 0xc8, 0xdc, 0x02, 0x7f, 0x53, 0xa8, 0x6f, 0x61, 0xab, 0xec,
+	0xbe, 0x72, 0x9c, 0x94, 0xe8, 0xf7, 0x57, 0xce, 0x04, 0xbb, 0xea, 0xb9, 0x8c, 0x32, 0x3f, 0x41,
+	0xc0, 0x1c, 0xcc, 0x93, 0x21, 0x26, 0xdc, 0x1e, 0x34, 0xa1, 0x74, 0xac, 0xac, 0x1c, 0x68, 0xa2,
+	0x0e, 0x33, 0x4a, 0x53, 0x70, 0xc2, 0xd5, 0x1f, 0x2a, 0x9b, 0xb2, 0x58, 0xc1, 0x4c, 0x7c, 0xd7,
+	0x40, 0x9e, 0x3d, 0x03, 0xa1, 0xae, 0x81, 0xbc, 0xc5, 0xfc, 0x5c, 0xe9, 0x69, 0x00, 0xd2, 0xe6,
+	0x1c, 0xcb, 0xfe, 0x3d, 0x03, 0xf9, 0xc8, 0xf2, 0x85, 0xfc, 0xc5, 0xd2, 0x59, 0x48, 0x0d, 0x9c,
+	0x8a, 0x2d, 0x98, 0xdc, 0x35, 0xd0, 0xf8, 0x9e, 0x81, 0x22, 0x5d, 0x03, 0xf9, 0x0b, 0xc5, 0x7c,
+	0x61, 0xee, 0x86, 0x2f, 0x84, 0x12, 0x9e, 0x1b, 0xbe, 0x90, 0x2f, 0xe1, 0xbf, 0xe1, 0x0b, 0x45,
+	0x12, 0xe3, 0x39, 0x1d, 0x26, 0xe6, 0xa5, 0xd6, 0x6b, 0x82, 0xa6, 0xaf, 0x2d, 0x97, 0x5f, 0xaf,
+	0x63, 0xac, 0xd3, 0x06, 0xf8, 0x36, 0x44, 0x09, 0x92, 0x50, 0xaf, 0xcb, 0x15, 0x81, 0xd4, 0x75,
+	0x44, 0x43, 0x90, 0x3b, 0x10, 0x02, 0xbc, 0xad, 0xcd, 0xbc, 0xb9, 0xfe, 0x0e, 0xae, 0xe8, 0x1c,
+	0xae, 0xd1, 0xca, 0x9e, 0x7a, 0xb8, 0x93, 0x14, 0xaa, 0x55, 0x95, 0x78, 0xd4, 0xdb, 0xcf, 0x8d,
+	0x37, 0x45, 0x65, 0xde, 0x7e, 0xcb, 0xdd, 0x86, 0xf1, 0xd5, 0x95, 0xf9, 0x5b, 0x65, 0x59, 0xae,
+	0x53, 0x75, 0x4b, 0x10, 0x15, 0x95, 0xe6, 0x79, 0x5e, 0x51, 0x71, 0x4d, 0xbc, 0x87, 0xb5, 0x34,
+	0xa2, 0xfd, 0xfc, 0x0c, 0xb9, 0xa9, 0x70, 0x1f, 0x05, 0x73, 0x7e, 0xd5, 0xfb, 0x05, 0xea, 0x37,
+	0x74, 0xe4, 0x68, 0xe8, 0xe3, 0x64, 0x67, 0xd9, 0xda, 0x98, 0xfb, 0x83, 0x17, 0x12, 0x36, 0xf4,
+	0xaa, 0xa8, 0x63, 0x0a, 0xff, 0x7b, 0x0f, 0xe9, 0x9e, 0xa4, 0x4d, 0x49, 0x82, 0xce, 0x2b, 0xb2,
+	0x5c, 0xa7, 0x0a, 0x22, 0xc5, 0xf9, 0xc7, 0x1c, 0xa9, 0x1b, 0x69, 0x86, 0xb6, 0x27, 0x49, 0xd0,
+	0xc9, 0x8f, 0x66, 0x79, 0xf9, 0x70, 0x68, 0x79, 0x09, 0x3c, 0x40, 0xde, 0xc4, 0xbb, 0xf4, 0xae,
+	0xe7, 0xdb, 0x1d, 0x34, 0xc5, 0x3c, 0xbf, 0x6f, 0xa0, 0x9c, 0xb3, 0xbe, 0x10, 0x7b, 0xd8, 0x9a,
+	0xac, 0xd2, 0x17, 0x62, 0x17, 0x4b, 0xec, 0x72, 0x95, 0x13, 0xa2, 0x8e, 0x5d, 0xb1, 0x9a, 0xc1,
+	0xe1, 0xe5, 0x24, 0xdb, 0xee, 0xa0, 0x4c, 0x26, 0xbd, 0x6f, 0xa0, 0x14, 0xb1, 0x98, 0x22, 0xb9,
+	0xca, 0x3c, 0x05, 0xcd, 0x50, 0x50, 0x2a, 0x52, 0xb6, 0x94, 0x39, 0xcb, 0x89, 0xc9, 0x0b, 0x2d,
+	0xef, 0x32, 0x75, 0x48, 0x1e, 0xf0, 0x76, 0xc8, 0x25, 0x99, 0x1f, 0xbc, 0x24, 0x2f, 0x1d, 0x31,
+	0xa2, 0xae, 0xdb, 0x90, 0xdb, 0x81, 0xa4, 0xbd, 0xd4, 0xcf, 0xc2, 0x4d, 0x98, 0xe8, 0x9d, 0xd8,
+	0x57, 0x98, 0x8b, 0x49, 0xcd, 0xf2, 0xa9, 0x9f, 0x90, 0xff, 0x0d, 0xa7, 0x56, 0xd5, 0xe6, 0x45,
+	0xeb, 0xd2, 0xae, 0x68, 0xe5, 0x5e, 0xf0, 0xa8, 0x21, 0xa7, 0x21, 0x4c, 0x5a, 0xb2, 0xa6, 0x08,
+	0x15, 0x6c, 0x39, 0xdf, 0xff, 0x21, 0xf7, 0x25, 0xc0, 0x64, 0x19, 0xab, 0x24, 0x49, 0x1c, 0x20,
+	0x56, 0x62, 0xa7, 0x24, 0x99, 0xef, 0x89, 0xda, 0x61, 0x78, 0x0c, 0x97, 0x64, 0x24, 0x79, 0xc5,
+	0xde, 0x62, 0xa1, 0x31, 0x3f, 0x84, 0x49, 0x4d, 0x6d, 0x5e, 0xb4, 0x11, 0x78, 0x49, 0xe3, 0xe9,
+	0x09, 0x6b, 0x16, 0x9d, 0xbc, 0xfa, 0xb8, 0xc0, 0x1f, 0xee, 0xde, 0xd2, 0x18, 0x37, 0xa1, 0x1d,
+	0x58, 0xd6, 0x98, 0x6b, 0x90, 0x10, 0x25, 0x1d, 0xab, 0x35, 0x62, 0xb9, 0xa8, 0x50, 0xb6, 0x3e,
+	0x9a, 0x75, 0xc6, 0x7a, 0xf2, 0xcb, 0x0a, 0x21, 0xfe, 0x79, 0x88, 0x08, 0x52, 0xab, 0x22, 0x68,
+	0x3a, 0xdd, 0x1c, 0x70, 0x51, 0x7d, 0xc2, 0x29, 0xad, 0x75, 0x22, 0xfd, 0x7d, 0x08, 0xd7, 0xc8,
+	0xd9, 0x53, 0x59, 0x93, 0x48, 0x16, 0x1f, 0xe3, 0xd5, 0x90, 0xda, 0x55, 0x8a, 0x3c, 0xda, 0x41,
+	0x24, 0x9f, 0x09, 0xbd, 0x5c, 0x42, 0x5c, 0x88, 0x62, 0x12, 0xfc, 0x37, 0x60, 0x72, 0xc0, 0x9f,
+	0x7e, 0x35, 0x08, 0x8f, 0x6c, 0x63, 0x13, 0x0e, 0xaf, 0xec, 0xeb, 0xc0, 0x7c, 0x0f, 0x62, 0x9a,
+	0xa8, 0x3b, 0x4b, 0x0a, 0x50, 0x90, 0xd9, 0x27, 0x2c, 0x29, 0x4b, 0x1e, 0x6e, 0x9c, 0x00, 0xf5,
+	0x80, 0x37, 0x20, 0x6e, 0x46, 0xa1, 0x8f, 0x1c, 0xa1, 0xc8, 0xe7, 0x8e, 0x88, 0x7c, 0x48, 0x24,
+	0x3c, 0x5c, 0x94, 0xe2, 0xf6, 0x14, 0xbd, 0x09, 0x7e, 0xad, 0x2e, 0x56, 0xb0, 0x45, 0x0c, 0x8e,
+	0x72, 0x9f, 0x4e, 0x3c, 0xdc, 0x61, 0x06, 0xb2, 0x90, 0x02, 0x70, 0x26, 0x0e, 0x73, 0x1b, 0x02,
+	0x54, 0x03, 0xa1, 0x05, 0xde, 0x23, 0x22, 0x9e, 0x7e, 0xb8, 0xe3, 0xa7, 0x9b, 0x7a, 0xb5, 0xfd,
+	0x9a, 0xfd, 0x94, 0x46, 0x9c, 0x85, 0xc7, 0x6c, 0xc2, 0x53, 0x56, 0x8f, 0xb4, 0x15, 0xab, 0xba,
+	0xa0, 0x6e, 0x10, 0x55, 0x31, 0xaa, 0x2a, 0xe3, 0x52, 0xc5, 0xc9, 0x5b, 0x3a, 0xbe, 0x45, 0x45,
+	0x4a, 0xa9, 0x83, 0x73, 0x60, 0x1a, 0x71, 0x27, 0x4c, 0x40, 0x9b, 0x29, 0x58, 0x70, 0xcc, 0xdb,
+	0x90, 0xa4, 0xa7, 0x2d, 0x61, 0xbd, 0xaf, 0x23, 0x7e, 0x4c, 0x1d, 0x09, 0x1b, 0xaa, 0x07, 0xaf,
+	0xc0, 0x29, 0x4c, 0x7e, 0x53, 0x54, 0x42, 0xa6, 0x0e, 0x38, 0x93, 0x38, 0xa6, 0xa2, 0x93, 0x7d,
+	0x50, 0xb7, 0x43, 0x6f, 0x41, 0x1c, 0xdf, 0x53, 0x64, 0xd5, 0xe1, 0x4e, 0xf2, 0x98, 0x5a, 0x62,
+	0x26, 0x90, 0x0d, 0x5d, 0x3a, 0x03, 0x89, 0x7e, 0x65, 0x3b, 0x8c, 0xbc, 0xbc, 0x00, 0x8c, 0x3d,
+	0xf5, 0xbb, 0xb8, 0x89, 0x4d, 0x62, 0xfc, 0x17, 0xf2, 0x17, 0xf3, 0x97, 0x4a, 0x2f, 0x40, 0xa2,
+	0x5f, 0xec, 0x2d, 0xb1, 0x89, 0x5d, 0x03, 0x85, 0xf7, 0x0c, 0x14, 0xea, 0x1a, 0x28, 0x78, 0x25,
+	0x5f, 0x38, 0x97, 0x2f, 0x14, 0x5c, 0x24, 0x26, 0x94, 0x08, 0xe7, 0x7e, 0x8e, 0x20, 0xb5, 0x82,
+	0xef, 0xe9, 0x4b, 0xb2, 0xb2, 0x6c, 0x5f, 0x55, 0xfa, 0x81, 0xa0, 0x09, 0xd0, 0xbb, 0xbb, 0x9a,
+	0xd5, 0xf3, 0x8f, 0x92, 0x95, 0xc5, 0x87, 0x3b, 0x49, 0xfb, 0x70, 0x7a, 0x00, 0xc3, 0xd8, 0x87,
+	0x23, 0x3a, 0x0e, 0x4d, 0xb9, 0xbf, 0x79, 0x61, 0x62, 0x55, 0x17, 0x74, 0xb1, 0x42, 0xa3, 0xba,
+	0x26, 0xe2, 0x6d, 0xda, 0x0e, 0x56, 0x21, 0x22, 0x2a, 0x6e, 0x96, 0x53, 0xfc, 0xc2, 0x40, 0x63,
+	0x43, 0x98, 0x4e, 0xe0, 0x3e, 0xe1, 0x10, 0x9e, 0x43, 0x94, 0x29, 0x36, 0xe5, 0x61, 0x66, 0x00,
+	0x08, 0x55, 0x33, 0xdb, 0x1c, 0xed, 0x06, 0xe1, 0x52, 0xd4, 0xc6, 0xf4, 0xa9, 0x9e, 0x7b, 0x68,
+	0x69, 0x8c, 0x0b, 0x8b, 0xca, 0xbc, 0x29, 0xc1, 0xdc, 0x86, 0x70, 0xcf, 0xd4, 0xb4, 0xef, 0x89,
+	0x7a, 0xe9, 0x81, 0x98, 0x50, 0x64, 0xfb, 0x85, 0x79, 0x15, 0xe2, 0xf6, 0x59, 0x6f, 0x08, 0x3a,
+	0xde, 0x16, 0x5a, 0x23, 0xfb, 0xc5, 0x18, 0x17, 0xb3, 0xc4, 0xaf, 0x9b, 0xd2, 0xcc, 0x12, 0xf8,
+	0x05, 0x5d, 0x57, 0x35, 0xfa, 0x3d, 0x27, 0x56, 0x3c, 0x3d, 0x2c, 0x45, 0xe7, 0x75, 0xdd, 0xfc,
+	0x84, 0x30, 0x3c, 0x49, 0x4d, 0x80, 0xab, 0x2f, 0x7c, 0x60, 0xa0, 0x33, 0x90, 0x80, 0xc8, 0x72,
+	0x99, 0xed, 0x45, 0x0a, 0x15, 0x20, 0x0e, 0x21, 0x92, 0x29, 0xec, 0x92, 0xac, 0x30, 0xde, 0x62,
+	0xfe, 0x62, 0xe9, 0x39, 0x88, 0x4b, 0xf8, 0x9e, 0xce, 0x6f, 0xca, 0x03, 0xc9, 0xe9, 0xdd, 0x33,
+	0x90, 0x87, 0x24, 0xe7, 0x5c, 0xfe, 0x7c, 0xfe, 0xc2, 0x0d, 0x5f, 0xc8, 0x93, 0xf0, 0xe6, 0x7e,
+	0xe9, 0x81, 0x13, 0xf3, 0x15, 0x5d, 0x6c, 0xe2, 0x72, 0x89, 0x2b, 0xcb, 0x75, 0xb1, 0x22, 0x62,
+	0x93, 0x20, 0xbc, 0x87, 0x20, 0x53, 0x93, 0xd5, 0x6d, 0x41, 0xad, 0xf2, 0x8a, 0x2a, 0xdf, 0x6b,
+	0xf1, 0xca, 0xba, 0xca, 0x2b, 0x96, 0xc8, 0x13, 0x64, 0xde, 0xb3, 0x0f, 0x77, 0x52, 0x74, 0x5b,
+	0x8b, 0x5f, 0x17, 0x34, 0x5c, 0xe5, 0x55, 0x79, 0x4b, 0x17, 0xa5, 0x8d, 0x9e, 0xaf, 0x2c, 0xf7,
+	0x94, 0xa5, 0xa8, 0x4c, 0xf4, 0x94, 0xd7, 0x55, 0xdb, 0x10, 0x66, 0x1b, 0x52, 0xf6, 0x01, 0x0d,
+	0x68, 0xf7, 0x7c, 0x95, 0xda, 0x19, 0x4b, 0x85, 0x43, 0x71, 0xee, 0x5f, 0x1e, 0x48, 0x94, 0xed,
+	0xc9, 0x7e, 0x6d, 0xb9, 0x4c, 0x43, 0xf2, 0x6b, 0x0f, 0xc4, 0xac, 0xf1, 0x9e, 0x5c, 0x7c, 0x32,
+	0xdd, 0x1f, 0x8d, 0x74, 0xbb, 0x91, 0xac, 0xa1, 0x7e, 0x4d, 0x54, 0x7a, 0x33, 0xfd, 0x1f, 0x47,
+	0xcc, 0xf4, 0xf4, 0x1b, 0xe0, 0x03, 0x14, 0x78, 0x91, 0x52, 0x0c, 0xc2, 0x71, 0xa7, 0xda, 0x1d,
+	0xf4, 0x1c, 0x93, 0xdb, 0x37, 0x50, 0x76, 0xc8, 0x84, 0x6f, 0x73, 0xf0, 0xb5, 0xe5, 0xf2, 0xf1,
+	0x86, 0xf9, 0x54, 0xbb, 0x83, 0x12, 0x99, 0xd8, 0xbe, 0x81, 0xc0, 0xda, 0x61, 0x41, 0x59, 0x0b,
+	0x5d, 0x03, 0xc1, 0xb2, 0xc2, 0x5a, 0x17, 0x94, 0x1b, 0xd7, 0x1d, 0xee, 0x64, 0x5e, 0x85, 0xe4,
+	0x01, 0xf7, 0x86, 0xb0, 0xec, 0x94, 0x93, 0x65, 0x87, 0x9d, 0xc4, 0xf9, 0xa3, 0x18, 0xc4, 0xae,
+	0xd7, 0xe5, 0x75, 0xa1, 0xbe, 0xaa, 0xe0, 0x0a, 0x8d, 0xfc, 0x22, 0x04, 0xb5, 0xad, 0x75, 0x89,
+	0x94, 0x7a, 0xf3, 0xe8, 0x4f, 0xb9, 0x22, 0xbe, 0xac, 0xac, 0xd2, 0x75, 0x7a, 0xe6, 0xb1, 0x47,
+	0x3b, 0x8e, 0x72, 0x83, 0x38, 0x7b, 0x2f, 0xb3, 0x0c, 0x3e, 0xbd, 0xa5, 0x60, 0x5a, 0x51, 0x62,
+	0xc5, 0x67, 0x5d, 0x18, 0x6b, 0xe6, 0xa9, 0x39, 0xc8, 0x6e, 0x89, 0x21, 0x30, 0x51, 0x72, 0x15,
+	0x42, 0x63, 0xc8, 0xe3, 0xf5, 0x05, 0xc3, 0xc0, 0x51, 0x08, 0xe6, 0x2d, 0x88, 0x6a, 0xb4, 0x1c,
+	0xd2, 0x84, 0xc2, 0x5a, 0xda, 0x4f, 0xed, 0xca, 0xba, 0x30, 0x1d, 0x25, 0xd3, 0x75, 0xc3, 0x13,
+	0x8e, 0x1b, 0x3e, 0xae, 0xf5, 0xc5, 0x34, 0xe6, 0x65, 0x88, 0x6d, 0x50, 0xf7, 0x7b, 0xdc, 0x3a,
+	0x38, 0xb2, 0xe4, 0x44, 0x4d, 0x69, 0x9b, 0x56, 0x2f, 0x00, 0x43, 0x69, 0x1c, 0x19, 0x04, 0xfa,
+	0x10, 0xa1, 0x91, 0x10, 0x09, 0xb2, 0xe3, 0x26, 0xd9, 0x60, 0xa3, 0xfc, 0x1f, 0x9c, 0x74, 0xa0,
+	0x88, 0x92, 0x26, 0x56, 0xfb, 0x5c, 0x3f, 0x3c, 0x12, 0x6c, 0xb2, 0x07, 0xb6, 0x4c, 0xb7, 0xd9,
+	0x90, 0xaf, 0x43, 0xcc, 0x85, 0x03, 0x87, 0xe3, 0x94, 0x82, 0xd6, 0xe7, 0x54, 0xe2, 0xa0, 0x38,
+	0x80, 0x73, 0x07, 0x22, 0x75, 0xbc, 0x21, 0x54, 0x5a, 0x3c, 0x3d, 0xcc, 0xc8, 0x51, 0x0f, 0x33,
+	0x45, 0x88, 0x23, 0xbd, 0x65, 0xef, 0xa1, 0x50, 0x26, 0x60, 0x1e, 0xe8, 0xd2, 0x18, 0x07, 0x26,
+	0x9a, 0x35, 0xdd, 0xc4, 0xed, 0x4f, 0x18, 0xb6, 0x91, 0xd1, 0xa3, 0x19, 0x19, 0x53, 0x06, 0xbe,
+	0x92, 0x30, 0x3f, 0x80, 0x71, 0x27, 0xaf, 0x4c, 0xc7, 0x28, 0xcc, 0x85, 0xc7, 0x57, 0x8a, 0x21,
+	0x43, 0x57, 0x89, 0x4e, 0xb3, 0x4b, 0x63, 0x5c, 0xc4, 0x31, 0xd4, 0x30, 0x3f, 0x86, 0x8c, 0xcb,
+	0x56, 0xbe, 0x3f, 0x21, 0xa7, 0xe3, 0x54, 0xdf, 0xe5, 0xe3, 0x7e, 0x77, 0xec, 0xb9, 0xc6, 0xa5,
+	0x07, 0x1d, 0xeb, 0x0f, 0x5a, 0xcc, 0x5b, 0x00, 0xfd, 0x72, 0x98, 0x4e, 0x1e, 0x69, 0x58, 0x70,
+	0x97, 0xc2, 0x7e, 0x08, 0x11, 0x17, 0xee, 0xd5, 0x11, 0xe6, 0x8e, 0x73, 0x70, 0x62, 0x8e, 0x3d,
+	0x38, 0x39, 0xc0, 0xfb, 0x43, 0xd3, 0x15, 0x18, 0x77, 0x0e, 0x4d, 0xe9, 0xd4, 0xc8, 0x51, 0x29,
+	0xe2, 0x18, 0x95, 0x86, 0x8c, 0x48, 0x27, 0xbe, 0xb6, 0x11, 0x69, 0xf2, 0x6b, 0x19, 0x91, 0x6e,
+	0xc2, 0x84, 0xd8, 0x70, 0x92, 0x67, 0x5e, 0x23, 0xec, 0xe4, 0xd3, 0x20, 0x25, 0x6e, 0xa7, 0xac,
+	0x78, 0x0d, 0xe5, 0x21, 0x49, 0x73, 0xa3, 0x45, 0x96, 0x57, 0x75, 0x55, 0x23, 0x68, 0x83, 0x54,
+	0xdc, 0x44, 0xfb, 0xec, 0x28, 0x68, 0x03, 0xd4, 0x9b, 0xa2, 0x09, 0x00, 0x66, 0x10, 0x54, 0x5c,
+	0xd3, 0xd2, 0xfb, 0x41, 0x5a, 0x51, 0xdd, 0x8c, 0x69, 0xb0, 0xbd, 0x9f, 0xb1, 0x87, 0x2d, 0xb7,
+	0x2a, 0xe7, 0xcc, 0x65, 0xa6, 0x12, 0x87, 0x6b, 0x1a, 0xb3, 0x0e, 0x61, 0x3a, 0xd9, 0x11, 0x15,
+	0xe9, 0x7f, 0x1c, 0x45, 0xc3, 0xf3, 0x43, 0x07, 0x44, 0xb7, 0x3a, 0xc4, 0x85, 0xcc, 0xc1, 0x11,
+	0xd7, 0x4a, 0x79, 0x88, 0xd9, 0xb2, 0x16, 0xfd, 0xca, 0xec, 0x1a, 0x28, 0xb8, 0x67, 0xa0, 0x40,
+	0xd7, 0x40, 0xb1, 0x4b, 0xf9, 0xcb, 0xf9, 0x2b, 0xf9, 0xc2, 0xf9, 0x7c, 0xa1, 0x90, 0x2f, 0x9c,
+	0x2f, 0xbd, 0x34, 0x74, 0x9a, 0x38, 0xb1, 0x6b, 0xa0, 0xe4, 0x9e, 0x81, 0x12, 0xf4, 0x4b, 0xe7,
+	0xa5, 0x7c, 0xe1, 0xf2, 0xe7, 0x06, 0x42, 0xa5, 0xa9, 0x21, 0x13, 0x05, 0x29, 0x6b, 0xa9, 0x3d,
+	0x03, 0x4d, 0x74, 0x0d, 0x14, 0x2a, 0x9e, 0xcb, 0x17, 0x0b, 0xf9, 0x62, 0xd1, 0x35, 0x52, 0x04,
+	0x12, 0xc1, 0x1b, 0xbe, 0x50, 0x22, 0x91, 0xbc, 0xe1, 0x0b, 0x4d, 0x24, 0x52, 0xb9, 0x7f, 0xfa,
+	0x20, 0xf6, 0x9a, 0x8a, 0x05, 0x1d, 0xf7, 0x5a, 0xec, 0xb7, 0xb5, 0xeb, 0x2c, 0x1c, 0xaf, 0x5b,
+	0xb8, 0xfa, 0x42, 0xc3, 0xdd, 0xee, 0xc7, 0x69, 0xea, 0x3c, 0xae, 0x26, 0x0d, 0x99, 0x98, 0x8e,
+	0x44, 0x01, 0xee, 0x7c, 0x85, 0xcd, 0xc3, 0xd5, 0x36, 0xae, 0x2e, 0xfe, 0xe5, 0x15, 0x17, 0xbd,
+	0xfa, 0xc0, 0x40, 0xe7, 0xe0, 0x24, 0xa4, 0xac, 0x28, 0xf4, 0xfe, 0x4a, 0x46, 0x3d, 0x47, 0x17,
+	0x61, 0x02, 0xa2, 0xa6, 0x23, 0xac, 0x65, 0x9e, 0xa7, 0x50, 0x2c, 0x3d, 0x77, 0x20, 0xcb, 0x99,
+	0xf7, 0xfe, 0x8d, 0x5c, 0xbf, 0x99, 0xa9, 0x97, 0xfb, 0xad, 0x1f, 0xe2, 0x1c, 0x56, 0xea, 0x42,
+	0xe5, 0xbb, 0x7c, 0xfb, 0x46, 0xe6, 0xdb, 0xab, 0x4f, 0x44, 0x7b, 0x86, 0xb0, 0x9d, 0x6f, 0x59,
+	0xc2, 0xfe, 0xce, 0x0f, 0x91, 0xeb, 0x58, 0xff, 0xd6, 0x27, 0xeb, 0x8d, 0x63, 0x52, 0x69, 0x9b,
+	0x8f, 0x7e, 0x97, 0xb2, 0xdf, 0x94, 0x94, 0x2d, 0xfd, 0x0c, 0xed, 0x7d, 0x9c, 0x1d, 0x7b, 0xf4,
+	0x71, 0x76, 0xec, 0xf3, 0x8f, 0xb3, 0xe8, 0xdd, 0x6e, 0x16, 0xfd, 0xa6, 0x9b, 0x45, 0x1f, 0x76,
+	0xb3, 0x68, 0xaf, 0x9b, 0x45, 0x8f, 0xba, 0x59, 0xf4, 0x51, 0x37, 0x8b, 0x3e, 0xed, 0x66, 0xc7,
+	0x3e, 0xef, 0x66, 0xd1, 0x2f, 0x3e, 0xc9, 0x8e, 0xed, 0x7e, 0x92, 0x45, 0x77, 0x56, 0x37, 0x64,
+	0xe5, 0xee, 0xc6, 0x4c, 0x53, 0xae, 0xeb, 0x58, 0x55, 0x85, 0x99, 0x2d, 0x6d, 0x96, 0x3e, 0xd4,
+	0x64, 0xb5, 0x31, 0xad, 0xa8, 0x72, 0x53, 0xac, 0x62, 0x75, 0xda, 0x5e, 0x9e, 0x55, 0xd6, 0x37,
+	0xe4, 0x59, 0x7c, 0x4f, 0xb7, 0xfe, 0x33, 0x6c, 0xf8, 0xbf, 0xca, 0xad, 0x07, 0xe8, 0x7f, 0x89,
+	0xcd, 0xfd, 0x27, 0x00, 0x00, 0xff, 0xff, 0x3f, 0xdb, 0xae, 0x88, 0x52, 0x27, 0x00, 0x00,
 }

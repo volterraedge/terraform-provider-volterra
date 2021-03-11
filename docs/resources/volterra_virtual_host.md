@@ -21,13 +21,7 @@ resource "volterra_virtual_host" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
-
-  js_challenge {
-    cookie_expiry       = "cookie_expiry"
-    custom_page         = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-    enable_js_challenge = true
-    js_script_delay     = "js_script_delay"
-  }
+  no_challenge = true
 }
 
 ```
@@ -187,11 +181,9 @@ specify the maximum buffer size and buffer interval with this config..
 
 Configure Captcha challenge on Virtual Host.
 
-`cookie_expiry` - (Optional) Default cookie expiry is set as 1 hour (`Int`).
+`cookie_expiry` - (Optional) An expired cookie causes the loadbalancer to issue a new challenge. (`Int`).
 
 `custom_page` - (Optional) E.g. "<p> Please Wait </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4=" (`String`).
-
-`enable_captcha_challenge` - (Optional) Turn this configuration knob to enable Captcha Challenge (`Bool`).
 
 ### Clear Secret Info
 
@@ -279,13 +271,11 @@ request. The DNS response is cached for 60s by default..
 
 Configure Javascript challenge on Virtual Host.
 
-`cookie_expiry` - (Optional) Default cookie expiry is set as 1 hour (`Int`).
+`cookie_expiry` - (Optional) An expired cookie causes the loadbalancer to issue a new challenge. (`Int`).
 
 `custom_page` - (Optional) E.g. "<p> Please Wait </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4=" (`String`).
 
-`enable_js_challenge` - (Optional) Turn this configuration knob to enable Javascript Challenge (`Bool`).
-
-`js_script_delay` - (Optional) Default delay is 5 seconds (`Int`).
+`js_script_delay` - (Optional) Delay introduced by Javascript, in milliseconds. (`Int`).
 
 ### Kms Key Hmac
 

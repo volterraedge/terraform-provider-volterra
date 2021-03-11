@@ -26,7 +26,14 @@ resource "volterra_fast_acl" "example" {
     fast_acl_rules {
       action {
         // One of the arguments from this list "simple_action policer_action protocol_policer_action" must be set
-        simple_action = "simple_action"
+
+        policer_action {
+          ref {
+            name      = "test1"
+            namespace = "staging"
+            tenant    = "acmecorp"
+          }
+        }
       }
 
       metadata {
@@ -39,7 +46,7 @@ resource "volterra_fast_acl" "example" {
 
       port {
         // One of the arguments from this list "all user_defined dns" must be set
-        dns = true
+        all = true
       }
 
       // One of the arguments from this list "prefix ip_prefix_set" must be set
@@ -53,7 +60,7 @@ resource "volterra_fast_acl" "example" {
     outside_network = true
 
     // One of the arguments from this list "interface_services vip_services all_services" must be set
-    interface_services = true
+    all_services = true
   }
 }
 
@@ -206,7 +213,7 @@ ACL may be applied at regional edge sites or customer edge sites. Not recommende
 
 Common attributes for the rule including name and description..
 
-`description` - (Optional) Human readable description for the object that corresponds to the containing message. (`String`).
+`description` - (Optional) Human readable description. (`String`).
 
 `disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).
 

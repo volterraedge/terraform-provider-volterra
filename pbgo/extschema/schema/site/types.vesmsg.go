@@ -1480,6 +1480,492 @@ func DeploymentStateValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *FleetCondition) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FleetCondition) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FleetCondition) DeepCopy() *FleetCondition {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FleetCondition{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FleetCondition) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FleetCondition) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FleetConditionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFleetCondition struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFleetCondition) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FleetCondition)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FleetCondition got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["message"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("message"))
+		if err := fv(ctx, m.GetMessage(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["module_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("module_name"))
+		if err := fv(ctx, m.GetModuleName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["result"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("result"))
+		if err := fv(ctx, m.GetResult(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFleetConditionValidator = func() *ValidateFleetCondition {
+	v := &ValidateFleetCondition{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func FleetConditionValidator() db.Validator {
+	return DefaultFleetConditionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FleetDeploymentState) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FleetDeploymentState) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FleetDeploymentState) DeepCopy() *FleetDeploymentState {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FleetDeploymentState{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FleetDeploymentState) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FleetDeploymentState) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FleetDeploymentStateValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFleetDeploymentState struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFleetDeploymentState) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FleetDeploymentState)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FleetDeploymentState got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["condition"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("condition"))
+		for idx, item := range m.GetCondition() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["hash"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("hash"))
+		if err := fv(ctx, m.GetHash(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["modification_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("modification_timestamp"))
+		if err := fv(ctx, m.GetModificationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["result"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("result"))
+		if err := fv(ctx, m.GetResult(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFleetDeploymentStateValidator = func() *ValidateFleetDeploymentState {
+	v := &ValidateFleetDeploymentState{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func FleetDeploymentStateValidator() db.Validator {
+	return DefaultFleetDeploymentStateValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FleetStatus) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FleetStatus) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FleetStatus) DeepCopy() *FleetStatus {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FleetStatus{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FleetStatus) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FleetStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FleetStatusValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFleetStatus struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFleetStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FleetStatus)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FleetStatus got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["deployment_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("deployment_state"))
+		if err := fv(ctx, m.GetDeploymentState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFleetStatusValidator = func() *ValidateFleetStatus {
+	v := &ValidateFleetStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func FleetStatusValidator() db.Validator {
+	return DefaultFleetStatusValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GPU) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GPU) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GPU) DeepCopy() *GPU {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GPU{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GPU) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GPU) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GPUValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGPU struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGPU) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GPU)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GPU got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cuda_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cuda_version"))
+		if err := fv(ctx, m.GetCudaVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["driver_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("driver_version"))
+		if err := fv(ctx, m.GetDriverVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["gpu_device"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gpu_device"))
+		for idx, item := range m.GetGpuDevice() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGPUValidator = func() *ValidateGPU {
+	v := &ValidateGPU{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GPUValidator() db.Validator {
+	return DefaultGPUValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GPUDevice) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GPUDevice) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GPUDevice) DeepCopy() *GPUDevice {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GPUDevice{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GPUDevice) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GPUDevice) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GPUDeviceValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGPUDevice struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGPUDevice) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GPUDevice)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GPUDevice got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["processes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("processes"))
+		if err := fv(ctx, m.GetProcesses(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["product_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("product_name"))
+		if err := fv(ctx, m.GetProductName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGPUDeviceValidator = func() *ValidateGPUDevice {
+	v := &ValidateGPUDevice{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GPUDeviceValidator() db.Validator {
+	return DefaultGPUDeviceValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2739,6 +3225,26 @@ func (v *ValidateGlobalSpecType) K8SClusterApiGwValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) PrivateIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for private_ip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) IpsecSslVipFqdnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipsec_ssl_vip_fqdn")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -2874,6 +3380,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["ipsec_ssl_vip_fqdn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipsec_ssl_vip_fqdn"))
+		if err := fv(ctx, m.GetIpsecSslVipFqdn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["k8s_api_servers"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("k8s_api_servers"))
@@ -2967,6 +3482,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("outside_vip"))
 		if err := fv(ctx, m.GetOutsideVip(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["private_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("private_ip"))
+		if err := fv(ctx, m.GetPrivateIp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3077,6 +3601,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
 		if err := fv(ctx, m.GetTunnelType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["use_private_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("use_private_ip"))
+		if err := fv(ctx, m.GetUsePrivateIp(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3333,6 +3866,28 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["k8s_cluster_api_gw"] = vFn
+
+	vrhPrivateIp := v.PrivateIpValidationRuleHandler
+	rulesPrivateIp := map[string]string{
+		"ves.io.schema.rules.string.ip": "true",
+	}
+	vFn, err = vrhPrivateIp(rulesPrivateIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.private_ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["private_ip"] = vFn
+
+	vrhIpsecSslVipFqdn := v.IpsecSslVipFqdnValidationRuleHandler
+	rulesIpsecSslVipFqdn := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+	}
+	vFn, err = vrhIpsecSslVipFqdn(rulesIpsecSslVipFqdn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.ipsec_ssl_vip_fqdn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipsec_ssl_vip_fqdn"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -4745,6 +5300,15 @@ func (v *ValidateOsInfo) Validate(ctx context.Context, pm interface{}, opts ...d
 
 		vOpts := append(opts, db.WithValidateField("cpu"))
 		if err := fv(ctx, m.GetCpu(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["gpu"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gpu"))
+		if err := fv(ctx, m.GetGpu(), vOpts...); err != nil {
 			return err
 		}
 

@@ -173,6 +173,7 @@ func (c *CustomDataAPIRestClient) doRPCServicePolicyHits(ctx context.Context, ca
 	pbRsp := &ServicePolicyHitsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.service_policy.ServicePolicyHitsResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -253,6 +254,7 @@ func (c *CustomDataAPIRestClient) doRPCServicePolicyHitsLatency(ctx context.Cont
 	pbRsp := &ServicePolicyHitsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.service_policy.ServicePolicyHitsResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

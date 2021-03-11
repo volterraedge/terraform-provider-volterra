@@ -342,6 +342,185 @@ func ActivePBRPoliciesTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *AnyCastVIPFleetType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AnyCastVIPFleetType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AnyCastVIPFleetType) DeepCopy() *AnyCastVIPFleetType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AnyCastVIPFleetType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AnyCastVIPFleetType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AnyCastVIPFleetType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AnyCastVIPFleetTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *AnyCastVIPFleetType) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetVipAllocatorDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *AnyCastVIPFleetType) GetVipAllocatorDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+
+	vref := m.GetVipAllocator()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("address_allocator.Object")
+	drInfos = append(drInfos, db.DRefInfo{
+		RefdType:   "address_allocator.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "vip_allocator",
+		Ref:        vdRef,
+	})
+
+	return drInfos, nil
+}
+
+// GetVipAllocatorDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *AnyCastVIPFleetType) GetVipAllocatorDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "address_allocator.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: address_allocator")
+	}
+
+	vref := m.GetVipAllocator()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "address_allocator.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateAnyCastVIPFleetType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAnyCastVIPFleetType) VipAllocatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for vip_allocator")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAnyCastVIPFleetType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AnyCastVIPFleetType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AnyCastVIPFleetType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["vip_allocator"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vip_allocator"))
+		if err := fv(ctx, m.GetVipAllocator(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAnyCastVIPFleetTypeValidator = func() *ValidateAnyCastVIPFleetType {
+	v := &ValidateAnyCastVIPFleetType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVipAllocator := v.VipAllocatorValidationRuleHandler
+	rulesVipAllocator := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVipAllocator(rulesVipAllocator)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AnyCastVIPFleetType.vip_allocator: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vip_allocator"] = vFn
+
+	return v
+}()
+
+func AnyCastVIPFleetTypeValidator() db.Validator {
+	return DefaultAnyCastVIPFleetTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -379,6 +558,12 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetNetworkChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetStaticRoutesDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -386,6 +571,41 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.NetworkChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetNetworkChoice().(type) {
+	case *CreateSpecType_GlobalNetwork:
+
+	case *CreateSpecType_SiteLocalNetwork:
+
+	case *CreateSpecType_SiteLocalInsideNetwork:
+
+	case *CreateSpecType_Srv6Network:
+		odrInfos, err = m.GetSrv6Network().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "srv6_network." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -750,6 +970,7 @@ var DefaultDNSServersListValidator = func() *ValidateDNSServersList {
 
 	vrhDnsIp := v.DnsIpValidationRuleHandler
 	rulesDnsIp := map[string]string{
+		"ves.io.schema.rules.message.required":         "true",
 		"ves.io.schema.rules.repeated.items.string.ip": "true",
 		"ves.io.schema.rules.repeated.max_items":       "4",
 		"ves.io.schema.rules.repeated.min_items":       "1",
@@ -807,6 +1028,12 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetNetworkChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetStaticRoutesDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -814,6 +1041,43 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.NetworkChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetNetworkChoice().(type) {
+	case *GetSpecType_GlobalNetwork:
+
+	case *GetSpecType_SiteLocalNetwork:
+
+	case *GetSpecType_SiteLocalInsideNetwork:
+
+	case *GetSpecType_PrivateNetwork:
+
+	case *GetSpecType_Srv6Network:
+		odrInfos, err = m.GetSrv6Network().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "srv6_network." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -1106,6 +1370,36 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDefaultVipChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetFleetRefsDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetNetworkChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSliceRefDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSnatPoolChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetStaticRoutesDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -1113,6 +1407,191 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetDefaultVipChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.DefaultVipChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetDefaultVipChoice().(type) {
+	case *GlobalSpecType_TenantVip:
+
+	case *GlobalSpecType_FleetVip:
+		odrInfos, err = m.GetFleetVip().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "fleet_vip." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+func (m *GlobalSpecType) GetFleetRefsDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, ref := range m.GetFleetRefs() {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.fleet_refs[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "fleet.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "fleet_refs",
+			Ref:        ref,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetFleetRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetFleetRefsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "fleet.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: fleet")
+	}
+	for _, ref := range m.GetFleetRefs() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.NetworkChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetNetworkChoice().(type) {
+	case *GlobalSpecType_GlobalNetwork:
+
+	case *GlobalSpecType_SiteLocalNetwork:
+
+	case *GlobalSpecType_SiteLocalInsideNetwork:
+
+	case *GlobalSpecType_InsideNetwork:
+
+	case *GlobalSpecType_PrivateNetwork:
+
+	case *GlobalSpecType_Srv6Network:
+		odrInfos, err = m.GetSrv6Network().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "srv6_network." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+func (m *GlobalSpecType) GetSliceRefDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, ref := range m.GetSliceRef() {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.slice_ref[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "srv6_network_slice.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "slice_ref",
+			Ref:        ref,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetSliceRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetSliceRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "srv6_network_slice.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: srv6_network_slice")
+	}
+	for _, ref := range m.GetSliceRef() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetSnatPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.SnatPoolChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetSnatPoolChoice().(type) {
+	case *GlobalSpecType_InterfaceIp:
+
+	case *GlobalSpecType_SiteSnatPool:
+
+	case *GlobalSpecType_FleetSnatPool:
+		odrInfos, err = m.GetFleetSnatPool().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "fleet_snat_pool." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -1261,6 +1740,170 @@ func (v *ValidateGlobalSpecType) StaticRoutesValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) ImportRtargetStrsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for import_rtarget_strs")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for import_rtarget_strs")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated import_rtarget_strs")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items import_rtarget_strs")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ExportRtargetStrsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for export_rtarget_strs")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for export_rtarget_strs")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated export_rtarget_strs")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items export_rtarget_strs")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) FleetRefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for fleet_refs")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated fleet_refs")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items fleet_refs")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) SliceRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for slice_ref")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated slice_ref")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items slice_ref")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -1273,6 +1916,56 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	switch m.GetDefaultVipChoice().(type) {
+	case *GlobalSpecType_TenantVip:
+		if fv, exists := v.FldValidators["default_vip_choice.tenant_vip"]; exists {
+			val := m.GetDefaultVipChoice().(*GlobalSpecType_TenantVip).TenantVip
+			vOpts := append(opts,
+				db.WithValidateField("default_vip_choice"),
+				db.WithValidateField("tenant_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_FleetVip:
+		if fv, exists := v.FldValidators["default_vip_choice.fleet_vip"]; exists {
+			val := m.GetDefaultVipChoice().(*GlobalSpecType_FleetVip).FleetVip
+			vOpts := append(opts,
+				db.WithValidateField("default_vip_choice"),
+				db.WithValidateField("fleet_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["export_rtarget_strs"]; exists {
+		vOpts := append(opts, db.WithValidateField("export_rtarget_strs"))
+		if err := fv(ctx, m.GetExportRtargetStrs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["fleet_refs"]; exists {
+		vOpts := append(opts, db.WithValidateField("fleet_refs"))
+		if err := fv(ctx, m.GetFleetRefs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["import_rtarget_strs"]; exists {
+		vOpts := append(opts, db.WithValidateField("import_rtarget_strs"))
+		if err := fv(ctx, m.GetImportRtargetStrs(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["network_choice"]; exists {
@@ -1375,6 +2068,51 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["slice_ref"]; exists {
+		vOpts := append(opts, db.WithValidateField("slice_ref"))
+		if err := fv(ctx, m.GetSliceRef(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetSnatPoolChoice().(type) {
+	case *GlobalSpecType_InterfaceIp:
+		if fv, exists := v.FldValidators["snat_pool_choice.interface_ip"]; exists {
+			val := m.GetSnatPoolChoice().(*GlobalSpecType_InterfaceIp).InterfaceIp
+			vOpts := append(opts,
+				db.WithValidateField("snat_pool_choice"),
+				db.WithValidateField("interface_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_SiteSnatPool:
+		if fv, exists := v.FldValidators["snat_pool_choice.site_snat_pool"]; exists {
+			val := m.GetSnatPoolChoice().(*GlobalSpecType_SiteSnatPool).SiteSnatPool
+			vOpts := append(opts,
+				db.WithValidateField("snat_pool_choice"),
+				db.WithValidateField("site_snat_pool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_FleetSnatPool:
+		if fv, exists := v.FldValidators["snat_pool_choice.fleet_snat_pool"]; exists {
+			val := m.GetSnatPoolChoice().(*GlobalSpecType_FleetSnatPool).FleetSnatPool
+			vOpts := append(opts,
+				db.WithValidateField("snat_pool_choice"),
+				db.WithValidateField("fleet_snat_pool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["static_routes"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_routes"))
 		if err := fv(ctx, m.GetStaticRoutes(), vOpts...); err != nil {
@@ -1473,7 +2211,60 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["static_routes"] = vFn
 
+	vrhImportRtargetStrs := v.ImportRtargetStrsValidationRuleHandler
+	rulesImportRtargetStrs := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "4",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhImportRtargetStrs(rulesImportRtargetStrs)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.import_rtarget_strs: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["import_rtarget_strs"] = vFn
+
+	vrhExportRtargetStrs := v.ExportRtargetStrsValidationRuleHandler
+	rulesExportRtargetStrs := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "4",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhExportRtargetStrs(rulesExportRtargetStrs)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.export_rtarget_strs: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["export_rtarget_strs"] = vFn
+
+	vrhFleetRefs := v.FleetRefsValidationRuleHandler
+	rulesFleetRefs := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhFleetRefs(rulesFleetRefs)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.fleet_refs: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["fleet_refs"] = vFn
+
+	vrhSliceRef := v.SliceRefValidationRuleHandler
+	rulesSliceRef := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhSliceRef(rulesSliceRef)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.slice_ref: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["slice_ref"] = vFn
+
+	v.FldValidators["default_vip_choice.tenant_vip"] = PerTenantVIPTypeValidator().Validate
+	v.FldValidators["default_vip_choice.fleet_vip"] = AnyCastVIPFleetTypeValidator().Validate
+
 	v.FldValidators["network_choice.srv6_network"] = PerSiteSrv6NetworkTypeValidator().Validate
+
+	v.FldValidators["snat_pool_choice.site_snat_pool"] = SNATPoolSiteTypeValidator().Validate
+	v.FldValidators["snat_pool_choice.fleet_snat_pool"] = SNATPoolFleetTypeValidator().Validate
 
 	v.FldValidators["private_network_parameters"] = VoltADNPrivateNetworkTypeValidator().Validate
 
@@ -1721,8 +2512,218 @@ func (m *PerSiteSrv6NetworkType) Validate(ctx context.Context, opts ...db.Valida
 	return PerSiteSrv6NetworkTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *PerSiteSrv6NetworkType) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDefaultVipChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetFleetsDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSliceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSnatPoolChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *PerSiteSrv6NetworkType) GetDefaultVipChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.DefaultVipChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetDefaultVipChoice().(type) {
+	case *PerSiteSrv6NetworkType_InterfaceIpVip:
+
+	case *PerSiteSrv6NetworkType_FleetVip:
+		odrInfos, err = m.GetFleetVip().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "fleet_vip." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
+func (m *PerSiteSrv6NetworkType) GetFleetsDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, vref := range m.GetFleets() {
+		if vref == nil {
+			return nil, fmt.Errorf("PerSiteSrv6NetworkType.fleets[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("fleet.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "fleet.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "fleets",
+			Ref:        vdRef,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetFleetsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *PerSiteSrv6NetworkType) GetFleetsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "fleet.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: fleet")
+	}
+	for i, vref := range m.GetFleets() {
+		if vref == nil {
+			return nil, fmt.Errorf("PerSiteSrv6NetworkType.fleets[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "fleet.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *PerSiteSrv6NetworkType) GetSliceDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+
+	vref := m.GetSlice()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("srv6_network_slice.Object")
+	drInfos = append(drInfos, db.DRefInfo{
+		RefdType:   "srv6_network_slice.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "slice",
+		Ref:        vdRef,
+	})
+
+	return drInfos, nil
+}
+
+// GetSliceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *PerSiteSrv6NetworkType) GetSliceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "srv6_network_slice.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: srv6_network_slice")
+	}
+
+	vref := m.GetSlice()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "srv6_network_slice.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *PerSiteSrv6NetworkType) GetSnatPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.SnatPoolChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetSnatPoolChoice().(type) {
+	case *PerSiteSrv6NetworkType_InterfaceIpSnatPool:
+
+	case *PerSiteSrv6NetworkType_SiteSnatPool:
+
+	case *PerSiteSrv6NetworkType_FleetSnatPool:
+		odrInfos, err = m.GetFleetSnatPool().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "fleet_snat_pool." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
+}
+
 type ValidatePerSiteSrv6NetworkType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePerSiteSrv6NetworkType) DefaultVipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for default_vip_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidatePerSiteSrv6NetworkType) DefaultVipChoiceAnycastVipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AnycastVip, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for anycast_vip")
+	}
+	return oValidatorFn_AnycastVip, nil
 }
 
 func (v *ValidatePerSiteSrv6NetworkType) NamespaceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -1730,6 +2731,235 @@ func (v *ValidatePerSiteSrv6NetworkType) NamespaceChoiceValidationRuleHandler(ru
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace_choice")
 	}
+	return validatorFn, nil
+}
+
+func (v *ValidatePerSiteSrv6NetworkType) SnatPoolChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for snat_pool_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidatePerSiteSrv6NetworkType) SliceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for slice")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePerSiteSrv6NetworkType) FleetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for fleets")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated fleets")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items fleets")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePerSiteSrv6NetworkType) AccessNetworkRtargetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.RouteTarget, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.RouteTargetValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for access_network_rtargets")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.RouteTarget)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.RouteTarget, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated access_network_rtargets")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items access_network_rtargets")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePerSiteSrv6NetworkType) InternetRtargetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.RouteTarget, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.RouteTargetValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for internet_rtargets")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.RouteTarget)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.RouteTarget, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated internet_rtargets")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items internet_rtargets")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePerSiteSrv6NetworkType) EnterpriseNetworkRtargetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.RouteTarget, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.RouteTargetValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for enterprise_network_rtargets")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.RouteTarget)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.RouteTarget, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated enterprise_network_rtargets")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items enterprise_network_rtargets")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePerSiteSrv6NetworkType) ExportRtargetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.RouteTarget, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.RouteTargetValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for export_rtargets")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.RouteTarget)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.RouteTarget, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated export_rtargets")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items export_rtargets")
+		}
+		return nil
+	}
+
 	return validatorFn, nil
 }
 
@@ -1745,6 +2975,93 @@ func (v *ValidatePerSiteSrv6NetworkType) Validate(ctx context.Context, pm interf
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["access_network_rtargets"]; exists {
+		vOpts := append(opts, db.WithValidateField("access_network_rtargets"))
+		if err := fv(ctx, m.GetAccessNetworkRtargets(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["default_vip_choice"]; exists {
+		val := m.GetDefaultVipChoice()
+		vOpts := append(opts,
+			db.WithValidateField("default_vip_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDefaultVipChoice().(type) {
+	case *PerSiteSrv6NetworkType_InterfaceIpVip:
+		if fv, exists := v.FldValidators["default_vip_choice.interface_ip_vip"]; exists {
+			val := m.GetDefaultVipChoice().(*PerSiteSrv6NetworkType_InterfaceIpVip).InterfaceIpVip
+			vOpts := append(opts,
+				db.WithValidateField("default_vip_choice"),
+				db.WithValidateField("interface_ip_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PerSiteSrv6NetworkType_AnycastVip:
+		if fv, exists := v.FldValidators["default_vip_choice.anycast_vip"]; exists {
+			val := m.GetDefaultVipChoice().(*PerSiteSrv6NetworkType_AnycastVip).AnycastVip
+			vOpts := append(opts,
+				db.WithValidateField("default_vip_choice"),
+				db.WithValidateField("anycast_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PerSiteSrv6NetworkType_FleetVip:
+		if fv, exists := v.FldValidators["default_vip_choice.fleet_vip"]; exists {
+			val := m.GetDefaultVipChoice().(*PerSiteSrv6NetworkType_FleetVip).FleetVip
+			vOpts := append(opts,
+				db.WithValidateField("default_vip_choice"),
+				db.WithValidateField("fleet_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["enterprise_network_rtargets"]; exists {
+		vOpts := append(opts, db.WithValidateField("enterprise_network_rtargets"))
+		if err := fv(ctx, m.GetEnterpriseNetworkRtargets(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["export_rtargets"]; exists {
+		vOpts := append(opts, db.WithValidateField("export_rtargets"))
+		if err := fv(ctx, m.GetExportRtargets(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["fleets"]; exists {
+		vOpts := append(opts, db.WithValidateField("fleets"))
+		if err := fv(ctx, m.GetFleets(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["internet_rtargets"]; exists {
+		vOpts := append(opts, db.WithValidateField("internet_rtargets"))
+		if err := fv(ctx, m.GetInternetRtargets(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["namespace_choice"]; exists {
@@ -1783,6 +3100,62 @@ func (v *ValidatePerSiteSrv6NetworkType) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["slice"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("slice"))
+		if err := fv(ctx, m.GetSlice(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["snat_pool_choice"]; exists {
+		val := m.GetSnatPoolChoice()
+		vOpts := append(opts,
+			db.WithValidateField("snat_pool_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSnatPoolChoice().(type) {
+	case *PerSiteSrv6NetworkType_InterfaceIpSnatPool:
+		if fv, exists := v.FldValidators["snat_pool_choice.interface_ip_snat_pool"]; exists {
+			val := m.GetSnatPoolChoice().(*PerSiteSrv6NetworkType_InterfaceIpSnatPool).InterfaceIpSnatPool
+			vOpts := append(opts,
+				db.WithValidateField("snat_pool_choice"),
+				db.WithValidateField("interface_ip_snat_pool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PerSiteSrv6NetworkType_SiteSnatPool:
+		if fv, exists := v.FldValidators["snat_pool_choice.site_snat_pool"]; exists {
+			val := m.GetSnatPoolChoice().(*PerSiteSrv6NetworkType_SiteSnatPool).SiteSnatPool
+			vOpts := append(opts,
+				db.WithValidateField("snat_pool_choice"),
+				db.WithValidateField("site_snat_pool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PerSiteSrv6NetworkType_FleetSnatPool:
+		if fv, exists := v.FldValidators["snat_pool_choice.fleet_snat_pool"]; exists {
+			val := m.GetSnatPoolChoice().(*PerSiteSrv6NetworkType_FleetSnatPool).FleetSnatPool
+			vOpts := append(opts,
+				db.WithValidateField("snat_pool_choice"),
+				db.WithValidateField("fleet_snat_pool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -1798,6 +3171,29 @@ var DefaultPerSiteSrv6NetworkTypeValidator = func() *ValidatePerSiteSrv6NetworkT
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhDefaultVipChoice := v.DefaultVipChoiceValidationRuleHandler
+	rulesDefaultVipChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDefaultVipChoice(rulesDefaultVipChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PerSiteSrv6NetworkType.default_vip_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["default_vip_choice"] = vFn
+
+	vrhDefaultVipChoiceAnycastVip := v.DefaultVipChoiceAnycastVipValidationRuleHandler
+	rulesDefaultVipChoiceAnycastVip := map[string]string{
+		"ves.io.schema.rules.string.ip": "true",
+	}
+	vFnMap["default_vip_choice.anycast_vip"], err = vrhDefaultVipChoiceAnycastVip(rulesDefaultVipChoiceAnycastVip)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PerSiteSrv6NetworkType.default_vip_choice_anycast_vip: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["default_vip_choice.anycast_vip"] = vFnMap["default_vip_choice.anycast_vip"]
+
 	vrhNamespaceChoice := v.NamespaceChoiceValidationRuleHandler
 	rulesNamespaceChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -1809,11 +3205,244 @@ var DefaultPerSiteSrv6NetworkTypeValidator = func() *ValidatePerSiteSrv6NetworkT
 	}
 	v.FldValidators["namespace_choice"] = vFn
 
+	vrhSnatPoolChoice := v.SnatPoolChoiceValidationRuleHandler
+	rulesSnatPoolChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSnatPoolChoice(rulesSnatPoolChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PerSiteSrv6NetworkType.snat_pool_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["snat_pool_choice"] = vFn
+
+	vrhSlice := v.SliceValidationRuleHandler
+	rulesSlice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSlice(rulesSlice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PerSiteSrv6NetworkType.slice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["slice"] = vFn
+
+	vrhFleets := v.FleetsValidationRuleHandler
+	rulesFleets := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhFleets(rulesFleets)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PerSiteSrv6NetworkType.fleets: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["fleets"] = vFn
+
+	vrhAccessNetworkRtargets := v.AccessNetworkRtargetsValidationRuleHandler
+	rulesAccessNetworkRtargets := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "4",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhAccessNetworkRtargets(rulesAccessNetworkRtargets)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PerSiteSrv6NetworkType.access_network_rtargets: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["access_network_rtargets"] = vFn
+
+	vrhInternetRtargets := v.InternetRtargetsValidationRuleHandler
+	rulesInternetRtargets := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "4",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhInternetRtargets(rulesInternetRtargets)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PerSiteSrv6NetworkType.internet_rtargets: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["internet_rtargets"] = vFn
+
+	vrhEnterpriseNetworkRtargets := v.EnterpriseNetworkRtargetsValidationRuleHandler
+	rulesEnterpriseNetworkRtargets := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "4",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhEnterpriseNetworkRtargets(rulesEnterpriseNetworkRtargets)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PerSiteSrv6NetworkType.enterprise_network_rtargets: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enterprise_network_rtargets"] = vFn
+
+	vrhExportRtargets := v.ExportRtargetsValidationRuleHandler
+	rulesExportRtargets := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "4",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhExportRtargets(rulesExportRtargets)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PerSiteSrv6NetworkType.export_rtargets: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["export_rtargets"] = vFn
+
+	v.FldValidators["default_vip_choice.fleet_vip"] = AnyCastVIPFleetTypeValidator().Validate
+
+	v.FldValidators["namespace_choice.srv6_network_ns_params"] = Srv6NetworkNsParametersTypeValidator().Validate
+
+	v.FldValidators["snat_pool_choice.site_snat_pool"] = SNATPoolSiteTypeValidator().Validate
+	v.FldValidators["snat_pool_choice.fleet_snat_pool"] = SNATPoolFleetTypeValidator().Validate
+
 	return v
 }()
 
 func PerSiteSrv6NetworkTypeValidator() db.Validator {
 	return DefaultPerSiteSrv6NetworkTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PerTenantVIPType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PerTenantVIPType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PerTenantVIPType) DeepCopy() *PerTenantVIPType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PerTenantVIPType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PerTenantVIPType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PerTenantVIPType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PerTenantVIPTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePerTenantVIPType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePerTenantVIPType) TenantVipMapValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for tenant_vip_map")
+	}
+	itemValRules := db.GetMapStringValueRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemValRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item value ValidationRuleHandler for tenant_vip_map")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]string, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := itemValFn(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for tenant_vip_map")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]string)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]string, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map tenant_vip_map")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items tenant_vip_map")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePerTenantVIPType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PerTenantVIPType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PerTenantVIPType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["tenant_vip_map"]; exists {
+		vOpts := append(opts, db.WithValidateField("tenant_vip_map"))
+		if err := fv(ctx, m.GetTenantVipMap(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPerTenantVIPTypeValidator = func() *ValidatePerTenantVIPType {
+	v := &ValidatePerTenantVIPType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTenantVipMap := v.TenantVipMapValidationRuleHandler
+	rulesTenantVipMap := map[string]string{
+		"ves.io.schema.rules.map.keys.string.max_len": "64",
+		"ves.io.schema.rules.map.keys.string.min_len": "1",
+		"ves.io.schema.rules.map.max_pairs":           "64",
+		"ves.io.schema.rules.map.values.string.ip":    "true",
+	}
+	vFn, err = vrhTenantVipMap(rulesTenantVipMap)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PerTenantVIPType.tenant_vip_map: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tenant_vip_map"] = vFn
+
+	return v
+}()
+
+func PerTenantVIPTypeValidator() db.Validator {
+	return DefaultPerTenantVIPTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1855,6 +3484,12 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetNetworkChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetStaticRoutesDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -1862,6 +3497,43 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.NetworkChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetNetworkChoice().(type) {
+	case *ReplaceSpecType_GlobalNetwork:
+
+	case *ReplaceSpecType_SiteLocalNetwork:
+
+	case *ReplaceSpecType_SiteLocalInsideNetwork:
+
+	case *ReplaceSpecType_PrivateNetwork:
+
+	case *ReplaceSpecType_Srv6Network:
+		odrInfos, err = m.GetSrv6Network().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "srv6_network." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	}
+
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -2117,6 +3789,465 @@ func ReplaceSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SNATPoolFleetType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SNATPoolFleetType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SNATPoolFleetType) DeepCopy() *SNATPoolFleetType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SNATPoolFleetType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SNATPoolFleetType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SNATPoolFleetType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SNATPoolFleetTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SNATPoolFleetType) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSnatPoolAllocatorDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *SNATPoolFleetType) GetSnatPoolAllocatorDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+
+	vref := m.GetSnatPoolAllocator()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("address_allocator.Object")
+	drInfos = append(drInfos, db.DRefInfo{
+		RefdType:   "address_allocator.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "snat_pool_allocator",
+		Ref:        vdRef,
+	})
+
+	return drInfos, nil
+}
+
+// GetSnatPoolAllocatorDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SNATPoolFleetType) GetSnatPoolAllocatorDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "address_allocator.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: address_allocator")
+	}
+
+	vref := m.GetSnatPoolAllocator()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "address_allocator.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateSNATPoolFleetType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSNATPoolFleetType) SnatPoolAllocatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for snat_pool_allocator")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSNATPoolFleetType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SNATPoolFleetType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SNATPoolFleetType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["snat_pool_allocator"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("snat_pool_allocator"))
+		if err := fv(ctx, m.GetSnatPoolAllocator(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSNATPoolFleetTypeValidator = func() *ValidateSNATPoolFleetType {
+	v := &ValidateSNATPoolFleetType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSnatPoolAllocator := v.SnatPoolAllocatorValidationRuleHandler
+	rulesSnatPoolAllocator := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSnatPoolAllocator(rulesSnatPoolAllocator)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SNATPoolFleetType.snat_pool_allocator: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["snat_pool_allocator"] = vFn
+
+	return v
+}()
+
+func SNATPoolFleetTypeValidator() db.Validator {
+	return DefaultSNATPoolFleetTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SNATPoolSiteType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SNATPoolSiteType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SNATPoolSiteType) DeepCopy() *SNATPoolSiteType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SNATPoolSiteType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SNATPoolSiteType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SNATPoolSiteType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SNATPoolSiteTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSNATPoolSiteType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSNATPoolSiteType) NodeSnatPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for node_snat_pool")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]*SNATPoolType, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := SNATPoolTypeValidator().Validate(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for node_snat_pool")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]*SNATPoolType)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]*SNATPoolType, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map node_snat_pool")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items node_snat_pool")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSNATPoolSiteType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SNATPoolSiteType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SNATPoolSiteType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["node_snat_pool"]; exists {
+		vOpts := append(opts, db.WithValidateField("node_snat_pool"))
+		if err := fv(ctx, m.GetNodeSnatPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSNATPoolSiteTypeValidator = func() *ValidateSNATPoolSiteType {
+	v := &ValidateSNATPoolSiteType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNodeSnatPool := v.NodeSnatPoolValidationRuleHandler
+	rulesNodeSnatPool := map[string]string{
+		"ves.io.schema.rules.map.keys.string.max_len": "64",
+		"ves.io.schema.rules.map.keys.string.min_len": "1",
+		"ves.io.schema.rules.map.max_pairs":           "128",
+		"ves.io.schema.rules.message.required":        "true",
+	}
+	vFn, err = vrhNodeSnatPool(rulesNodeSnatPool)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SNATPoolSiteType.node_snat_pool: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["node_snat_pool"] = vFn
+
+	return v
+}()
+
+func SNATPoolSiteTypeValidator() db.Validator {
+	return DefaultSNATPoolSiteTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SNATPoolType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SNATPoolType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SNATPoolType) DeepCopy() *SNATPoolType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SNATPoolType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SNATPoolType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SNATPoolType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SNATPoolTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSNATPoolType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSNATPoolType) Ipv4PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for ipv4_prefixes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipv4_prefixes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipv4_prefixes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipv4_prefixes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSNATPoolType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SNATPoolType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SNATPoolType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ipv4_prefixes"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipv4_prefixes"))
+		if err := fv(ctx, m.GetIpv4Prefixes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSNATPoolTypeValidator = func() *ValidateSNATPoolType {
+	v := &ValidateSNATPoolType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIpv4Prefixes := v.Ipv4PrefixesValidationRuleHandler
+	rulesIpv4Prefixes := map[string]string{
+		"ves.io.schema.rules.message.required":                  "true",
+		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+		"ves.io.schema.rules.repeated.max_items":                "1",
+		"ves.io.schema.rules.repeated.min_items":                "1",
+	}
+	vFn, err = vrhIpv4Prefixes(rulesIpv4Prefixes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SNATPoolType.ipv4_prefixes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv4_prefixes"] = vFn
+
+	return v
+}()
+
+func SNATPoolTypeValidator() db.Validator {
+	return DefaultSNATPoolTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *Srv6NetworkNsParametersType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2156,6 +4287,16 @@ type ValidateSrv6NetworkNsParametersType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateSrv6NetworkNsParametersType) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateSrv6NetworkNsParametersType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*Srv6NetworkNsParametersType)
 	if !ok {
@@ -2185,6 +4326,25 @@ func (v *ValidateSrv6NetworkNsParametersType) Validate(ctx context.Context, pm i
 // Well-known symbol for default validator implementation
 var DefaultSrv6NetworkNsParametersTypeValidator = func() *ValidateSrv6NetworkNsParametersType {
 	v := &ValidateSrv6NetworkNsParametersType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Srv6NetworkNsParametersType.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
 
 	return v
 }()

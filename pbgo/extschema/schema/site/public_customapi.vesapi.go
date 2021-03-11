@@ -159,6 +159,7 @@ func (c *CustomStateAPIRestClient) doRPCSetState(ctx context.Context, callOpts *
 	pbRsp := &SetStateResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.site.SetStateResp", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

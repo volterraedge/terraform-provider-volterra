@@ -159,6 +159,7 @@ func (c *CustomAPIRestClient) doRPCTokenState(ctx context.Context, callOpts *ser
 	pbRsp := &ObjectChangeResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.token.ObjectChangeResp", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

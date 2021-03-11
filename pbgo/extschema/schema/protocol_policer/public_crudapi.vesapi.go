@@ -2645,7 +2645,7 @@ var APISwaggerJSON string = `{
         },
         "protocol_policerTcpFlags": {
             "type": "string",
-            "description": "TCP flags indicate a particular connection state\n\nFIN flag which indicates that there is no more data from the sender, used in the last packet sent from the sender\nSYN flag set in the first packet from sender and receiver while establishing three way handshake between two hosts\nRST flag that resets a connection when the host receives an unexpected packet\nPSH flag that tells the receiver to process packets as they are received, instead of buffering them\nACK flag that acknowledges successful receipt of a packet\nURG flag that notifies the receiver about urgent packets that need to processed before other packets\nMatch any TCP Flag - FIN / SYN / RST / PSH / ACK / URG",
+            "description": "TCP flags indicate a particular connection state\n\nFIN flag which indicates that there is no more data from the sender, used in the last packet sent from the sender\nSYN flag set in the first packet from sender and receiver while establishing three way handshake between two hosts\nRST flag that resets a connection when the host receives an unexpected packet\nPSH flag that tells the receiver to process packets as they are received, instead of buffering them\nACK flag that acknowledges successful receipt of a packet\nURG flag that notifies the receiver about urgent packets that need to processed before other packets\nKeepalive flag tracks the keepalive packets for tcp connection liveness\nMatch any TCP Flag - FIN / SYN / RST / PSH / ACK / URG / KEEPALIVE",
             "title": "TCP Flags",
             "enum": [
                 "FIN",
@@ -2654,6 +2654,7 @@ var APISwaggerJSON string = `{
                 "PSH",
                 "ACK",
                 "URG",
+                "KEEPALIVE",
                 "ALL_TCP_FLAGS"
             ],
             "default": "FIN",

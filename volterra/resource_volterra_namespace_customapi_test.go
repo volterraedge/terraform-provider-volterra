@@ -157,7 +157,7 @@ func testFastACLsForInternetVIPs(name, namespace string) string {
 						simple_action = "DENY"
 					}
 					metadata {
-						name = "deny_certain_ip"
+						name = "deny-certain-ip"
 					}
 					prefix {
 						prefix = ["1.1.1.1/32"]

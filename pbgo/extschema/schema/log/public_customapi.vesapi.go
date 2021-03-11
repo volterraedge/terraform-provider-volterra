@@ -381,6 +381,7 @@ func (c *CustomAPIRestClient) doRPCAccessLogAggregationQuery(ctx context.Context
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -463,6 +464,7 @@ func (c *CustomAPIRestClient) doRPCAccessLogQueryV2(ctx context.Context, callOpt
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -539,6 +541,7 @@ func (c *CustomAPIRestClient) doRPCAccessLogScrollQuery(ctx context.Context, cal
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -618,6 +621,7 @@ func (c *CustomAPIRestClient) doRPCAuditLogAggregationQuery(ctx context.Context,
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -700,6 +704,7 @@ func (c *CustomAPIRestClient) doRPCAuditLogQueryV2(ctx context.Context, callOpts
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -776,6 +781,7 @@ func (c *CustomAPIRestClient) doRPCAuditLogScrollQuery(ctx context.Context, call
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -855,6 +861,7 @@ func (c *CustomAPIRestClient) doRPCFirewallLogAggregationQuery(ctx context.Conte
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -937,6 +944,7 @@ func (c *CustomAPIRestClient) doRPCFirewallLogQuery(ctx context.Context, callOpt
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1013,6 +1021,7 @@ func (c *CustomAPIRestClient) doRPCFirewallLogScrollQuery(ctx context.Context, c
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1093,6 +1102,7 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogAggregationQuery(ctx context.Conte
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1176,6 +1186,7 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogQuery(ctx context.Context, callOpt
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1252,6 +1263,7 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogScrollQuery(ctx context.Context, c
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1332,6 +1344,7 @@ func (c *CustomAPIRestClient) doRPCK8SEventsAggregationQuery(ctx context.Context
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1415,6 +1428,7 @@ func (c *CustomAPIRestClient) doRPCK8SEventsQuery(ctx context.Context, callOpts 
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1491,6 +1505,7 @@ func (c *CustomAPIRestClient) doRPCK8SEventsScrollQuery(ctx context.Context, cal
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1570,6 +1585,7 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogAggregationQuery(ctx context.Cont
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1652,6 +1668,7 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogQuery(ctx context.Context, callOp
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1728,6 +1745,7 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogScrollQuery(ctx context.Context, 
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1807,6 +1825,7 @@ func (c *CustomAPIRestClient) doRPCVK8SEventsAggregationQuery(ctx context.Contex
 	pbRsp := &LogAggregationResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogAggregationResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1889,6 +1908,7 @@ func (c *CustomAPIRestClient) doRPCVK8SEventsQuery(ctx context.Context, callOpts
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -1965,6 +1985,7 @@ func (c *CustomAPIRestClient) doRPCVK8SEventsScrollQuery(ctx context.Context, ca
 	pbRsp := &LogResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

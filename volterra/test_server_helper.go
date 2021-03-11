@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
 
 	"gopkg.volterra.us/stdlib/client/vesapi"
+	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/store"
 	"gopkg.volterra.us/stdlib/svcfw"
@@ -172,8 +173,30 @@ func newTGWCustomAPIServer(sf svcfw.Service) server.APIHandler {
 	return &tgwCustomAPIServer{sf: sf}
 }
 
-func (t *tgwCustomAPIServer) SetVPCIpPrefixes(context.Context,
-	*ves_io_schema_aws_tgw_site.SetVPCIpPrefixesRequest) (*ves_io_schema_aws_tgw_site.SetVPCIpPrefixesResponse, error) {
+func (t *tgwCustomAPIServer) SetVPCIpPrefixes(ctx context.Context,
+	r *ves_io_schema_aws_tgw_site.SetVPCIpPrefixesRequest) (*ves_io_schema_aws_tgw_site.SetVPCIpPrefixesResponse, error) {
+	tenant := server.TenantFromContext(ctx)
+	if tenant == "" {
+		return nil, fmt.Errorf("Tenant missing in request")
+	}
+
+	e, ok, err := t.sf.FindEntry(ctx, ves_io_schema_aws_tgw_site.ObjectDefTblName, "", db.WithFindUsingNSIndex(tenant, "system", r.Name))
+	if err != nil {
+		return nil, fmt.Errorf("cannot find aws_tgw_site entry %s, err: %s", r.Name, err)
+	}
+	if !ok {
+		return nil, fmt.Errorf("aws_tgw_site %s does not exist", r.Name)
+	}
+	obj := e.(*ves_io_schema_aws_tgw_site.DBObject)
+
+	fmt.Printf("Foo Before setting the map\n")
+
+	obj.Spec.GcSpec.VpcIpPrefixes = r.GetVpcIpPrefixes()
+	fmt.Printf("Foo %s\n", obj.Spec.GcSpec)
+
+	if _, err := t.sf.ChgEntry(ctx, obj.ToEntry()); err != nil {
+		return nil, fmt.Errorf("Could not update aws_tgw_site %s", err)
+	}
 	return &ves_io_schema_aws_tgw_site.SetVPCIpPrefixesResponse{}, nil
 
 }

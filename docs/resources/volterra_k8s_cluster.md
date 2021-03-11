@@ -26,7 +26,7 @@ resource "volterra_k8s_cluster" "example" {
   // One of the arguments from this list "use_default_cluster_roles use_custom_cluster_role_list" must be set
   use_default_cluster_roles = true
 
-  // One of the arguments from this list "no_global_access global_access_enable" must be set
+  // One of the arguments from this list "global_access_enable no_global_access" must be set
   no_global_access = true
 
   // One of the arguments from this list "no_insecure_registries insecure_registry_list" must be set
@@ -35,7 +35,7 @@ resource "volterra_k8s_cluster" "example" {
   // One of the arguments from this list "no_local_access local_access_config" must be set
   no_local_access = true
 
-  // One of the arguments from this list "use_custom_psp_list use_default_psp" must be set
+  // One of the arguments from this list "use_default_psp use_custom_psp_list" must be set
   use_default_psp = true
 }
 
@@ -102,7 +102,7 @@ Local access to site K8s cluster is enabled.
 
 `default_port` - (Optional) Use default port for K8s API server. (bool).
 
-`port` - (Optional) Available port range is less than 65000 except 6443. (`Int`).
+`port` - (Optional) Available port range is less than 65000 except reserved ports. (`Int`).
 
 ### Ref
 

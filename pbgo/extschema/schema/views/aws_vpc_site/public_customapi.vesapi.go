@@ -159,6 +159,7 @@ func (c *CustomAPIRestClient) doRPCSetVPCK8SHostnames(ctx context.Context, callO
 	pbRsp := &SetVPCK8SHostnamesResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.aws_vpc_site.SetVPCK8SHostnamesResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

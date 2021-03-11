@@ -20,10 +20,10 @@ resource "volterra_tcp_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "advertise_custom do_not_advertise advertise_on_public_default_vip advertise_on_public" must be set
-  advertise_on_public_default_vip = true
+  // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
+  do_not_advertise = true
 
-  // One of the arguments from this list "hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness hash_policy_choice_round_robin" must be set
+  // One of the arguments from this list "hash_policy_choice_round_robin hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness" must be set
   hash_policy_choice_round_robin = true
 }
 
@@ -94,6 +94,8 @@ Where should this load balancer be available.
 
 `site` - (Optional) Advertise on a customer site and a given network. . See [Site ](#site) below for details.
 
+`srv6_network` - (Optional) Advertise on a Per site srv6 network. See [Srv6 Network ](#srv6-network) below for details.
+
 `virtual_site` - (Optional) Advertise on a customer virtual site and a given network.. See [Virtual Site ](#virtual-site) below for details.
 
 `vk8s_service` - (Optional) Advertise on vK8s Service Network on RE.. See [Vk8s Service ](#vk8s-service) below for details.
@@ -147,6 +149,16 @@ Advertise on a customer site and a given network. .
 `network` - (Required) By default VIP chosen as ip address of primary network interface in the network (`String`).
 
 `site` - (Required) Reference to site object. See [ref](#ref) below for details.
+
+### Srv6 Network
+
+Advertise on a Per site srv6 network.
+
+`private_network` - (Required) Select per site srv6 network. See [ref](#ref) below for details.
+
+`default_vip` - (Optional) Use the default VIP, system allocated or configured in the VoltADN Private Network (bool).
+
+`specific_vip` - (Optional) Use given IP address as VIP on VoltADN private Network (`String`).
 
 ### Use Default Port
 

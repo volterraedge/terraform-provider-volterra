@@ -20,7 +20,7 @@ resource "volterra_gcp_vpc_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "cloud_credentials assisted" must be set
+  // One of the arguments from this list "assisted cloud_credentials" must be set
 
   cloud_credentials {
     name      = "test1"
@@ -34,20 +34,36 @@ resource "volterra_gcp_vpc_site" "example" {
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
-  ingress_gw {
-    gcp_certified_hw = "gcp-byol-voltmesh"
+  voltstack_cluster {
+    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
+    no_forward_proxy = true
+    gcp_certified_hw = "gcp-byol-voltstack-combo"
 
     gcp_zone_names = ["us-west1-a, us-west1-b, us-west1-c"]
 
-    local_network {
-      // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
+    // One of the arguments from this list "no_global_network global_network_list" must be set
+    no_global_network = true
 
-      new_network_autogenerate {
-        autogenerate = true
+    // One of the arguments from this list "no_network_policy active_network_policies" must be set
+
+    active_network_policies {
+      network_policies {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
       }
     }
+    node_number = "node_number"
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+    no_outside_static_routes = true
+    site_local_network {
+      // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
 
-    local_subnet {
+      new_network {
+        name = "network1"
+      }
+    }
+    site_local_subnet {
       // One of the arguments from this list "new_subnet existing_subnet" must be set
 
       new_subnet {
@@ -55,8 +71,6 @@ resource "volterra_gcp_vpc_site" "example" {
         subnet_name  = "subnet1-in-network1"
       }
     }
-
-    node_number = "node_number"
   }
 }
 
@@ -93,15 +107,13 @@ Argument Reference
 
 `gcp_region` - (Required) Name for GCP Region. (`String`).
 
-`instance_type` - (Required) n1-standard-16 (16 x vCPU, 64GB RAM) very high performance (`String`).
+`instance_type` - (Required) Select Instance size based on performance needed (`String`).
 
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
 `logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
 `nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
-
-`operating_system_version` - (Optional) Desired Operating System version for this site. (`String`).
 
 `ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VPC network.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
 
@@ -110,8 +122,6 @@ Argument Reference
 `voltstack_cluster` - (Optional) Voltstack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
 
 `ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
-
-`volterra_software_version` - (Optional) Desired Volterra software version for this site, a string matching released set of software components. (`String`).
 
 ### Active Forward Proxy Policies
 

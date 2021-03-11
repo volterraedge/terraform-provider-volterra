@@ -747,6 +747,82 @@ func resourceVolterraOriginPool() *schema.Resource {
 							},
 						},
 
+						"srv6_private_ip": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"ip": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"virtual_network": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"srv6_private_name": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"dns_name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"private_network": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
 						"voltadn_private_ip": {
 
 							Type:     schema.TypeSet,
@@ -759,7 +835,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 										Optional: true,
 									},
 
-									"private_network": {
+									"virtual_network": {
 
 										Type:     schema.TypeSet,
 										Optional: true,
@@ -2104,11 +2180,11 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
-			if v, ok := originServersMapStrToI["voltadn_private_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
+			if v, ok := originServersMapStrToI["srv6_private_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 				choiceTypeFound = true
-				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_VoltadnPrivateIp{}
-				choiceInt.VoltadnPrivateIp = &ves_io_schema_views_origin_pool.OriginServerVoltADNPrivateIP{}
+				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_Srv6PrivateIp{}
+				choiceInt.Srv6PrivateIp = &ves_io_schema_views_origin_pool.OriginServerVirtualNetworkPrivateIP{}
 				originServers[i].Choice = choiceInt
 
 				sl := v.(*schema.Set).List()
@@ -2117,14 +2193,56 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
 
-						choiceInt.VoltadnPrivateIp.Ip = v.(string)
+						choiceInt.Srv6PrivateIp.Ip = v.(string)
+					}
+
+					if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						virtualNetworkInt := &ves_io_schema_views.ObjectRefType{}
+						choiceInt.Srv6PrivateIp.VirtualNetwork = virtualNetworkInt
+
+						for _, set := range sl {
+							vnMapToStrVal := set.(map[string]interface{})
+							if val, ok := vnMapToStrVal["name"]; ok && !isIntfNil(v) {
+								virtualNetworkInt.Name = val.(string)
+							}
+							if val, ok := vnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								virtualNetworkInt.Namespace = val.(string)
+							}
+
+							if val, ok := vnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								virtualNetworkInt.Tenant = val.(string)
+							}
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := originServersMapStrToI["srv6_private_name"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+				choiceTypeFound = true
+				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_Srv6PrivateName{}
+				choiceInt.Srv6PrivateName = &ves_io_schema_views_origin_pool.OriginServerVirtualNetworkPrivateName{}
+				originServers[i].Choice = choiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
+
+						choiceInt.Srv6PrivateName.DnsName = v.(string)
 					}
 
 					if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
 						privateNetworkInt := &ves_io_schema_views.ObjectRefType{}
-						choiceInt.VoltadnPrivateIp.PrivateNetwork = privateNetworkInt
+						choiceInt.Srv6PrivateName.PrivateNetwork = privateNetworkInt
 
 						for _, set := range sl {
 							pnMapToStrVal := set.(map[string]interface{})
@@ -2146,11 +2264,53 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := originServersMapStrToI["voltadn_private_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+				choiceTypeFound = true
+				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_VoltadnPrivateIp{}
+				choiceInt.VoltadnPrivateIp = &ves_io_schema_views_origin_pool.OriginServerVirtualNetworkPrivateIP{}
+				originServers[i].Choice = choiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+						choiceInt.VoltadnPrivateIp.Ip = v.(string)
+					}
+
+					if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						virtualNetworkInt := &ves_io_schema_views.ObjectRefType{}
+						choiceInt.VoltadnPrivateIp.VirtualNetwork = virtualNetworkInt
+
+						for _, set := range sl {
+							vnMapToStrVal := set.(map[string]interface{})
+							if val, ok := vnMapToStrVal["name"]; ok && !isIntfNil(v) {
+								virtualNetworkInt.Name = val.(string)
+							}
+							if val, ok := vnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								virtualNetworkInt.Namespace = val.(string)
+							}
+
+							if val, ok := vnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								virtualNetworkInt.Tenant = val.(string)
+							}
+						}
+
+					}
+
+				}
+
+			}
+
 			if v, ok := originServersMapStrToI["voltadn_private_name"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 				choiceTypeFound = true
 				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_VoltadnPrivateName{}
-				choiceInt.VoltadnPrivateName = &ves_io_schema_views_origin_pool.OriginServerVoltADNPrivateName{}
+				choiceInt.VoltadnPrivateName = &ves_io_schema_views_origin_pool.OriginServerVirtualNetworkPrivateName{}
 				originServers[i].Choice = choiceInt
 
 				sl := v.(*schema.Set).List()
@@ -3631,11 +3791,11 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
-			if v, ok := originServersMapStrToI["voltadn_private_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
+			if v, ok := originServersMapStrToI["srv6_private_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 				choiceTypeFound = true
-				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_VoltadnPrivateIp{}
-				choiceInt.VoltadnPrivateIp = &ves_io_schema_views_origin_pool.OriginServerVoltADNPrivateIP{}
+				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_Srv6PrivateIp{}
+				choiceInt.Srv6PrivateIp = &ves_io_schema_views_origin_pool.OriginServerVirtualNetworkPrivateIP{}
 				originServers[i].Choice = choiceInt
 
 				sl := v.(*schema.Set).List()
@@ -3644,14 +3804,56 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
 
-						choiceInt.VoltadnPrivateIp.Ip = v.(string)
+						choiceInt.Srv6PrivateIp.Ip = v.(string)
+					}
+
+					if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						virtualNetworkInt := &ves_io_schema_views.ObjectRefType{}
+						choiceInt.Srv6PrivateIp.VirtualNetwork = virtualNetworkInt
+
+						for _, set := range sl {
+							vnMapToStrVal := set.(map[string]interface{})
+							if val, ok := vnMapToStrVal["name"]; ok && !isIntfNil(v) {
+								virtualNetworkInt.Name = val.(string)
+							}
+							if val, ok := vnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								virtualNetworkInt.Namespace = val.(string)
+							}
+
+							if val, ok := vnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								virtualNetworkInt.Tenant = val.(string)
+							}
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := originServersMapStrToI["srv6_private_name"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+				choiceTypeFound = true
+				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_Srv6PrivateName{}
+				choiceInt.Srv6PrivateName = &ves_io_schema_views_origin_pool.OriginServerVirtualNetworkPrivateName{}
+				originServers[i].Choice = choiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
+
+						choiceInt.Srv6PrivateName.DnsName = v.(string)
 					}
 
 					if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
 						privateNetworkInt := &ves_io_schema_views.ObjectRefType{}
-						choiceInt.VoltadnPrivateIp.PrivateNetwork = privateNetworkInt
+						choiceInt.Srv6PrivateName.PrivateNetwork = privateNetworkInt
 
 						for _, set := range sl {
 							pnMapToStrVal := set.(map[string]interface{})
@@ -3673,11 +3875,53 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := originServersMapStrToI["voltadn_private_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+				choiceTypeFound = true
+				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_VoltadnPrivateIp{}
+				choiceInt.VoltadnPrivateIp = &ves_io_schema_views_origin_pool.OriginServerVirtualNetworkPrivateIP{}
+				originServers[i].Choice = choiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+						choiceInt.VoltadnPrivateIp.Ip = v.(string)
+					}
+
+					if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						virtualNetworkInt := &ves_io_schema_views.ObjectRefType{}
+						choiceInt.VoltadnPrivateIp.VirtualNetwork = virtualNetworkInt
+
+						for _, set := range sl {
+							vnMapToStrVal := set.(map[string]interface{})
+							if val, ok := vnMapToStrVal["name"]; ok && !isIntfNil(v) {
+								virtualNetworkInt.Name = val.(string)
+							}
+							if val, ok := vnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								virtualNetworkInt.Namespace = val.(string)
+							}
+
+							if val, ok := vnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								virtualNetworkInt.Tenant = val.(string)
+							}
+						}
+
+					}
+
+				}
+
+			}
+
 			if v, ok := originServersMapStrToI["voltadn_private_name"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 				choiceTypeFound = true
 				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_VoltadnPrivateName{}
-				choiceInt.VoltadnPrivateName = &ves_io_schema_views_origin_pool.OriginServerVoltADNPrivateName{}
+				choiceInt.VoltadnPrivateName = &ves_io_schema_views_origin_pool.OriginServerVirtualNetworkPrivateName{}
 				originServers[i].Choice = choiceInt
 
 				sl := v.(*schema.Set).List()

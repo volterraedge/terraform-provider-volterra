@@ -4048,10 +4048,11 @@ var DefaultLabelSelectorTypeValidator = func() *ValidateLabelSelectorType {
 
 	vrhExpressions := v.ExpressionsValidationRuleHandler
 	rulesExpressions := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1",
-		"ves.io.schema.rules.string.max_len":     "4096",
-		"ves.io.schema.rules.string.min_len":     "1",
+		"ves.io.schema.rules.message.required":          "true",
+		"ves.io.schema.rules.repeated.max_items":        "1",
+		"ves.io.schema.rules.string.k8s_label_selector": "true",
+		"ves.io.schema.rules.string.max_len":            "4096",
+		"ves.io.schema.rules.string.min_len":            "1",
 	}
 	vFn, err = vrhExpressions(rulesExpressions)
 	if err != nil {
@@ -4196,6 +4197,16 @@ func (v *ValidateMessageMetaType) NameValidationRuleHandler(rules map[string]str
 	return validatorFn, nil
 }
 
+func (v *ValidateMessageMetaType) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateMessageMetaType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*MessageMetaType)
 	if !ok {
@@ -4254,7 +4265,9 @@ var DefaultMessageMetaTypeValidator = func() *ValidateMessageMetaType {
 
 	vrhName := v.NameValidationRuleHandler
 	rulesName := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.min_len":         "1",
+		"ves.io.schema.rules.string.ves_object_name": "true",
 	}
 	vFn, err = vrhName(rulesName)
 	if err != nil {
@@ -4262,6 +4275,17 @@ var DefaultMessageMetaTypeValidator = func() *ValidateMessageMetaType {
 		panic(errMsg)
 	}
 	v.FldValidators["name"] = vFn
+
+	vrhDescription := v.DescriptionValidationRuleHandler
+	rulesDescription := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhDescription(rulesDescription)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MessageMetaType.description: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["description"] = vFn
 
 	return v
 }()
@@ -7294,6 +7318,575 @@ var DefaultRouteMatchValidator = func() *ValidateRouteMatch {
 
 func RouteMatchValidator() db.Validator {
 	return DefaultRouteMatchValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RouteTarget) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RouteTarget) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RouteTarget) DeepCopy() *RouteTarget {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RouteTarget{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RouteTarget) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RouteTarget) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RouteTargetValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRouteTarget struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRouteTarget) RtargetChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for rtarget_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteTarget) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RouteTarget)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RouteTarget got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["rtarget_choice"]; exists {
+		val := m.GetRtargetChoice()
+		vOpts := append(opts,
+			db.WithValidateField("rtarget_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRtargetChoice().(type) {
+	case *RouteTarget_Asn2ByteRtarget:
+		if fv, exists := v.FldValidators["rtarget_choice.asn2byte_rtarget"]; exists {
+			val := m.GetRtargetChoice().(*RouteTarget_Asn2ByteRtarget).Asn2ByteRtarget
+			vOpts := append(opts,
+				db.WithValidateField("rtarget_choice"),
+				db.WithValidateField("asn2byte_rtarget"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteTarget_Ipv4AddrRtarget:
+		if fv, exists := v.FldValidators["rtarget_choice.ipv4_addr_rtarget"]; exists {
+			val := m.GetRtargetChoice().(*RouteTarget_Ipv4AddrRtarget).Ipv4AddrRtarget
+			vOpts := append(opts,
+				db.WithValidateField("rtarget_choice"),
+				db.WithValidateField("ipv4_addr_rtarget"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteTarget_Asn4ByteRtarget:
+		if fv, exists := v.FldValidators["rtarget_choice.asn4byte_rtarget"]; exists {
+			val := m.GetRtargetChoice().(*RouteTarget_Asn4ByteRtarget).Asn4ByteRtarget
+			vOpts := append(opts,
+				db.WithValidateField("rtarget_choice"),
+				db.WithValidateField("asn4byte_rtarget"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRouteTargetValidator = func() *ValidateRouteTarget {
+	v := &ValidateRouteTarget{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRtargetChoice := v.RtargetChoiceValidationRuleHandler
+	rulesRtargetChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhRtargetChoice(rulesRtargetChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteTarget.rtarget_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rtarget_choice"] = vFn
+
+	v.FldValidators["rtarget_choice.asn2byte_rtarget"] = RouteTarget2ByteAsnValidator().Validate
+	v.FldValidators["rtarget_choice.ipv4_addr_rtarget"] = RouteTargetIPv4AddrValidator().Validate
+	v.FldValidators["rtarget_choice.asn4byte_rtarget"] = RouteTarget4ByteAsnValidator().Validate
+
+	return v
+}()
+
+func RouteTargetValidator() db.Validator {
+	return DefaultRouteTargetValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RouteTarget2ByteAsn) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RouteTarget2ByteAsn) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RouteTarget2ByteAsn) DeepCopy() *RouteTarget2ByteAsn {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RouteTarget2ByteAsn{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RouteTarget2ByteAsn) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RouteTarget2ByteAsn) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RouteTarget2ByteAsnValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRouteTarget2ByteAsn struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRouteTarget2ByteAsn) AsNumberValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for as_number")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteTarget2ByteAsn) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteTarget2ByteAsn) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RouteTarget2ByteAsn)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RouteTarget2ByteAsn got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["as_number"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("as_number"))
+		if err := fv(ctx, m.GetAsNumber(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRouteTarget2ByteAsnValidator = func() *ValidateRouteTarget2ByteAsn {
+	v := &ValidateRouteTarget2ByteAsn{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAsNumber := v.AsNumberValidationRuleHandler
+	rulesAsNumber := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhAsNumber(rulesAsNumber)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteTarget2ByteAsn.as_number: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["as_number"] = vFn
+
+	vrhValue := v.ValueValidationRuleHandler
+	rulesValue := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "4294967295",
+	}
+	vFn, err = vrhValue(rulesValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteTarget2ByteAsn.value: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["value"] = vFn
+
+	return v
+}()
+
+func RouteTarget2ByteAsnValidator() db.Validator {
+	return DefaultRouteTarget2ByteAsnValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RouteTarget4ByteAsn) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RouteTarget4ByteAsn) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RouteTarget4ByteAsn) DeepCopy() *RouteTarget4ByteAsn {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RouteTarget4ByteAsn{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RouteTarget4ByteAsn) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RouteTarget4ByteAsn) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RouteTarget4ByteAsnValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRouteTarget4ByteAsn struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRouteTarget4ByteAsn) AsNumberValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for as_number")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteTarget4ByteAsn) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteTarget4ByteAsn) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RouteTarget4ByteAsn)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RouteTarget4ByteAsn got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["as_number"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("as_number"))
+		if err := fv(ctx, m.GetAsNumber(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRouteTarget4ByteAsnValidator = func() *ValidateRouteTarget4ByteAsn {
+	v := &ValidateRouteTarget4ByteAsn{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAsNumber := v.AsNumberValidationRuleHandler
+	rulesAsNumber := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "65536",
+		"ves.io.schema.rules.uint32.lte":       "4294967295",
+	}
+	vFn, err = vrhAsNumber(rulesAsNumber)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteTarget4ByteAsn.as_number: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["as_number"] = vFn
+
+	vrhValue := v.ValueValidationRuleHandler
+	rulesValue := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhValue(rulesValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteTarget4ByteAsn.value: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["value"] = vFn
+
+	return v
+}()
+
+func RouteTarget4ByteAsnValidator() db.Validator {
+	return DefaultRouteTarget4ByteAsnValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RouteTargetIPv4Addr) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RouteTargetIPv4Addr) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RouteTargetIPv4Addr) DeepCopy() *RouteTargetIPv4Addr {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RouteTargetIPv4Addr{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RouteTargetIPv4Addr) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RouteTargetIPv4Addr) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RouteTargetIPv4AddrValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRouteTargetIPv4Addr struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRouteTargetIPv4Addr) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteTargetIPv4Addr) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteTargetIPv4Addr) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RouteTargetIPv4Addr)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RouteTargetIPv4Addr got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("address"))
+		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRouteTargetIPv4AddrValidator = func() *ValidateRouteTargetIPv4Addr {
+	v := &ValidateRouteTargetIPv4Addr{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAddress := v.AddressValidationRuleHandler
+	rulesAddress := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ipv4":      "true",
+	}
+	vFn, err = vrhAddress(rulesAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteTargetIPv4Addr.address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["address"] = vFn
+
+	vrhValue := v.ValueValidationRuleHandler
+	rulesValue := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhValue(rulesValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteTargetIPv4Addr.value: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["value"] = vFn
+
+	return v
+}()
+
+func RouteTargetIPv4AddrValidator() db.Validator {
+	return DefaultRouteTargetIPv4AddrValidator
 }
 
 // augmented methods on protoc/std generated struct

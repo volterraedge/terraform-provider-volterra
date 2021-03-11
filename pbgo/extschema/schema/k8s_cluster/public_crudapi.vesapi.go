@@ -2814,7 +2814,7 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": "Exclusive with [default_port]\nx-displayName: \"Custom k8s Port\"\nx-example: \"443\"\nUse custom K8s port for API server.\nAvailable port range is less than 65000 except 6443.",
+                    "description": "Exclusive with [default_port]\nx-displayName: \"Custom k8s Port\"\nx-example: \"443\"\nUse custom K8s port for API server.\nAvailable port range is less than 65000 except reserved ports.",
                     "title": "Custom k8s Port",
                     "format": "int64"
                 }

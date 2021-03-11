@@ -1090,7 +1090,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.voltstack_site.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private replace request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.voltstack_site.crudapi.API.Replace"), zap.Error(err))
 			}
@@ -1116,7 +1116,7 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.voltstack_site.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private get request")
 			}
 		}
 	}
@@ -1141,7 +1141,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.voltstack_site.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private list request")
 			}
 		}
 	}
@@ -1196,7 +1196,7 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.voltstack_site.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private delete request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.voltstack_site.crudapi.API.Delete"), zap.Error(err))
 			}
@@ -3622,7 +3622,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Ethernet Interface",
             "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"static_ip\"]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
-            "x-ves-oneof-field-network_choice": "[\"inside_network\",\"site_local_inside_network\",\"site_local_network\",\"storage_network\"]",
+            "x-ves-oneof-field-network_choice": "[\"inside_network\",\"site_local_inside_network\",\"site_local_network\",\"srv6_network\",\"storage_network\"]",
             "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
             "x-ves-oneof-field-primary_choice": "[\"is_primary\",\"not_primary\"]",
             "x-ves-oneof-field-vlan_choice": "[\"untagged\",\"vlan_id\"]",
@@ -3652,7 +3652,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_interfaceDHCPServerParametersType"
                 },
                 "inside_network": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network storage_network]\nx-displayName: \"Inside Network\"\nInterface belongs to user configured inside network",
+                    "description": "Exclusive with [site_local_inside_network site_local_network srv6_network storage_network]\nx-displayName: \"Inside Network\"\nInterface belongs to user configured inside network",
                     "title": "Inside Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
@@ -3698,14 +3698,19 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "42"
                 },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [inside_network site_local_network storage_network]\nx-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
+                    "description": "Exclusive with [inside_network site_local_network srv6_network storage_network]\nx-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
                     "title": "Site Local Network Inside",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [inside_network site_local_inside_network storage_network]\nx-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
+                    "description": "Exclusive with [inside_network site_local_inside_network srv6_network storage_network]\nx-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
                     "title": "Site Local Network",
                     "$ref": "#/definitions/schemaEmpty"
+                },
+                "srv6_network": {
+                    "description": "Exclusive with [inside_network site_local_inside_network site_local_network storage_network]\nx-displayName: \"Per Site Srv6 Network\"\nInterface belongs to per site srv6 network",
+                    "title": "Per Site Srv6 Network",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "static_ip": {
                     "description": "Exclusive with [dhcp_client dhcp_server]\nx-displayName: \"Static IP\"\nInterface IP is configured statically",
@@ -3713,7 +3718,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_interfaceStaticIPParametersType"
                 },
                 "storage_network": {
-                    "description": "Exclusive with [inside_network site_local_inside_network site_local_network]\nx-displayName: \"Storage Network\"\nInterface belongs to site local network inside",
+                    "description": "Exclusive with [inside_network site_local_inside_network site_local_network srv6_network]\nx-displayName: \"Storage Network\"\nInterface belongs to site local network inside",
                     "title": "Storage Network",
                     "$ref": "#/definitions/schemaEmpty"
                 },

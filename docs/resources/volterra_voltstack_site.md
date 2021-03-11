@@ -23,13 +23,13 @@ resource "volterra_voltstack_site" "example" {
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
 
-  // One of the arguments from this list "enable_gpu disable_gpu" must be set
+  // One of the arguments from this list "disable_gpu enable_gpu" must be set
   disable_gpu = true
 
-  // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
+  // One of the arguments from this list "k8s_cluster no_k8s_cluster" must be set
   no_k8s_cluster = true
 
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
   logs_streaming_disabled = true
 
   master_nodes = ["master-0"]
@@ -92,8 +92,6 @@ Argument Reference
 
 `default_network_config` - (Optional) Use default networking configuration based on certified hardware. (bool).
 
-`operating_system_version` - (Optional) Desired Operating System version that should be installed on the site (`String`).
-
 `custom_storage_config` - (Optional) Use custom storage configuration. See [Custom Storage Config ](#custom-storage-config) below for details.
 
 `default_storage_config` - (Optional) Use default storage configuration (bool).
@@ -105,8 +103,6 @@ Argument Reference
 `usb_policy` - (Optional) Allow only specific USB devices. See [ref](#ref) below for details.
 
 `volterra_certified_hw` - (Required) Name for generic server certified hardware to form this voltstack site. (`String`).
-
-`volterra_software_version` - (Optional) Desired volterra software version that should be installed on the site (`String`).
 
 `worker_nodes` - (Optional) Names of worker nodes (`List of String`).
 
@@ -425,6 +421,8 @@ Ethernet interface configuration..
 `site_local_inside_network` - (Optional) Interface belongs to site local network inside (bool).
 
 `site_local_network` - (Optional) Interface belongs to site local network (outside) (bool).
+
+`srv6_network` - (Optional) Interface belongs to per site srv6 network. See [ref](#ref) below for details.
 
 `storage_network` - (Optional) Interface belongs to site local network inside (bool).
 
@@ -769,6 +767,8 @@ Configure storage interface for this voltstack.
 `site_local_inside_network` - (Optional) Interface belongs to site local network inside (bool).
 
 `site_local_network` - (Optional) Interface belongs to site local network (outside) (bool).
+
+`srv6_network` - (Optional) Interface belongs to per site srv6 network. See [ref](#ref) below for details.
 
 `storage_network` - (Optional) Interface belongs to site local network inside (bool).
 

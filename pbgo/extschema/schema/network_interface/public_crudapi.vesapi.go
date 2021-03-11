@@ -2537,7 +2537,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Ethernet Interface",
             "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"static_ip\"]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
-            "x-ves-oneof-field-network_choice": "[\"inside_network\",\"site_local_inside_network\",\"site_local_network\",\"storage_network\"]",
+            "x-ves-oneof-field-network_choice": "[\"inside_network\",\"site_local_inside_network\",\"site_local_network\",\"srv6_network\",\"storage_network\"]",
             "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
             "x-ves-oneof-field-primary_choice": "[\"is_primary\",\"not_primary\"]",
             "x-ves-oneof-field-vlan_choice": "[\"untagged\",\"vlan_id\"]",
@@ -2567,7 +2567,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_interfaceDHCPServerParametersType"
                 },
                 "inside_network": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network storage_network]\nx-displayName: \"Inside Network\"\nInterface belongs to user configured inside network",
+                    "description": "Exclusive with [site_local_inside_network site_local_network srv6_network storage_network]\nx-displayName: \"Inside Network\"\nInterface belongs to user configured inside network",
                     "title": "Inside Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
@@ -2613,14 +2613,19 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "42"
                 },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [inside_network site_local_network storage_network]\nx-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
+                    "description": "Exclusive with [inside_network site_local_network srv6_network storage_network]\nx-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
                     "title": "Site Local Network Inside",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [inside_network site_local_inside_network storage_network]\nx-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
+                    "description": "Exclusive with [inside_network site_local_inside_network srv6_network storage_network]\nx-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
                     "title": "Site Local Network",
                     "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "srv6_network": {
+                    "description": "Exclusive with [inside_network site_local_inside_network site_local_network storage_network]\nx-displayName: \"Per Site Srv6 Network\"\nInterface belongs to per site srv6 network",
+                    "title": "Per Site Srv6 Network",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "static_ip": {
                     "description": "Exclusive with [dhcp_client dhcp_server]\nx-displayName: \"Static IP\"\nInterface IP is configured statically",
@@ -2628,7 +2633,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_interfaceStaticIPParametersType"
                 },
                 "storage_network": {
-                    "description": "Exclusive with [inside_network site_local_inside_network site_local_network]\nx-displayName: \"Storage Network\"\nInterface belongs to site local network inside",
+                    "description": "Exclusive with [inside_network site_local_inside_network site_local_network srv6_network]\nx-displayName: \"Storage Network\"\nInterface belongs to site local network inside",
                     "title": "Storage Network",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
@@ -2787,12 +2792,12 @@ var APISwaggerJSON string = `{
                 "dedicated_interface": {
                     "description": "Exclusive with [dedicated_management_interface ethernet_interface legacy tunnel_interface]\nx-displayName: \"Internal\"\nInternal helps in conversion",
                     "title": "Internal",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/network_interfaceDedicatedInterfaceType"
                 },
                 "dedicated_management_interface": {
                     "description": "Exclusive with [dedicated_interface ethernet_interface legacy tunnel_interface]\nx-displayName: \"Internal\"\nInternal helps in conversion",
                     "title": "Internal",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType"
                 },
                 "default_gateway": {
                     "description": " Configures how default gateway is derived for the subnet static addresses",
@@ -2824,7 +2829,7 @@ var APISwaggerJSON string = `{
                 "ethernet_interface": {
                     "description": "Exclusive with [dedicated_interface dedicated_management_interface legacy tunnel_interface]\nx-displayName: \"Internal\"\nInternal helps in conversion",
                     "title": "Internal",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/network_interfaceEthernetInterfaceType"
                 },
                 "interface_ip_map": {
                     "type": "object",
@@ -2903,7 +2908,7 @@ var APISwaggerJSON string = `{
                 "tunnel_interface": {
                     "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy]\nx-displayName: \"Internal\"\nInternal helps in conversion",
                     "title": "Internal",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/network_interfaceTunnelInterfaceType"
                 },
                 "type": {
                     "description": " Specifies the type of interface (ethernet, vlan, lacp etc)\nRequired: YES",

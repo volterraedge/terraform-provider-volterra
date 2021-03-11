@@ -187,6 +187,56 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										},
 									},
 
+									"srv6_network": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"private_network": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"default_vip": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"specific_vip": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"virtual_site": {
 
 										Type:     schema.TypeSet,
@@ -383,11 +433,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 						},
 
-						"description": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-
 						"expiration_timestamp": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -417,11 +462,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 								},
 							},
 						},
-
-						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
 					},
 				},
 			},
@@ -442,11 +482,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 						},
-
-						"enable_captcha_challenge": {
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
 					},
 				},
 			},
@@ -465,11 +500,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 						"custom_page": {
 							Type:     schema.TypeString,
-							Optional: true,
-						},
-
-						"enable_js_challenge": {
-							Type:     schema.TypeBool,
 							Optional: true,
 						},
 
@@ -508,11 +538,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 									"custom_page": {
 										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"enable_captcha_challenge": {
-										Type:     schema.TypeBool,
 										Optional: true,
 									},
 								},
@@ -563,11 +588,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 									"custom_page": {
 										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"enable_js_challenge": {
-										Type:     schema.TypeBool,
 										Optional: true,
 									},
 
@@ -3379,11 +3399,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 						},
 
-						"description": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-
 						"expiration_timestamp": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -3412,11 +3427,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									},
 								},
 							},
-						},
-
-						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
 						},
 					},
 				},
@@ -3504,11 +3514,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
-						"description": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-
 						"any_domain": {
 
 							Type:     schema.TypeBool,
@@ -3569,11 +3574,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
-						},
-
-						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
 						},
 
 						"path_regex": {
@@ -3780,6 +3780,70 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									}
 
 								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := advertiseWhereMapStrToI["srv6_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.WhereType_Srv6Network{}
+						choiceInt.Srv6Network = &ves_io_schema_views.WhereSrv6Network{}
+						advertiseWhere[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								privateNetwork := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.Srv6Network.PrivateNetwork = privateNetwork
+								for _, set := range sl {
+									privateNetworkMapStrToI := set.(map[string]interface{})
+
+									if w, ok := privateNetworkMapStrToI["name"]; ok && !isIntfNil(w) {
+										privateNetwork.Name = w.(string)
+									}
+
+									if w, ok := privateNetworkMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										privateNetwork.Namespace = w.(string)
+									}
+
+									if w, ok := privateNetworkMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										privateNetwork.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+							vipChoiceTypeFound := false
+
+							if v, ok := cs["default_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+
+								vipChoiceTypeFound = true
+
+								if v.(bool) {
+									vipChoiceInt := &ves_io_schema_views.WhereSrv6Network_DefaultVip{}
+									vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
+									choiceInt.Srv6Network.VipChoice = vipChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+
+								vipChoiceTypeFound = true
+								vipChoiceInt := &ves_io_schema_views.WhereSrv6Network_SpecificVip{}
+
+								choiceInt.Srv6Network.VipChoice = vipChoiceInt
+
+								vipChoiceInt.SpecificVip = v.(string)
 
 							}
 
@@ -4041,10 +4105,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
-			if w, ok := blockedClientsMapStrToI["description"]; ok && !isIntfNil(w) {
-				blockedClients[i].Description = w.(string)
-			}
-
 			if w, ok := blockedClientsMapStrToI["expiration_timestamp"]; ok && !isIntfNil(w) {
 				ts, err := parseTime(w.(string))
 				if err != nil {
@@ -4077,10 +4137,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
-			if w, ok := blockedClientsMapStrToI["name"]; ok && !isIntfNil(w) {
-				blockedClients[i].Name = w.(string)
-			}
-
 		}
 
 	}
@@ -4110,11 +4166,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				challengeTypeInt.CaptchaChallenge.CustomPage = v.(string)
 			}
 
-			if v, ok := cs["enable_captcha_challenge"]; ok && !isIntfNil(v) {
-
-				challengeTypeInt.CaptchaChallenge.EnableCaptchaChallenge = v.(bool)
-			}
-
 		}
 
 	}
@@ -4138,11 +4189,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.JsChallenge.CustomPage = v.(string)
-			}
-
-			if v, ok := cs["enable_js_challenge"]; ok && !isIntfNil(v) {
-
-				challengeTypeInt.JsChallenge.EnableJsChallenge = v.(bool)
 			}
 
 			if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
@@ -4198,11 +4244,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 						captchaChallengeParametersChoiceInt.CaptchaChallengeParameters.CustomPage = v.(string)
-					}
-
-					if v, ok := cs["enable_captcha_challenge"]; ok && !isIntfNil(v) {
-
-						captchaChallengeParametersChoiceInt.CaptchaChallengeParameters.EnableCaptchaChallenge = v.(bool)
 					}
 
 				}
@@ -4292,11 +4333,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 						jsChallengeParametersChoiceInt.JsChallengeParameters.CustomPage = v.(string)
-					}
-
-					if v, ok := cs["enable_js_challenge"]; ok && !isIntfNil(v) {
-
-						jsChallengeParametersChoiceInt.JsChallengeParameters.EnableJsChallenge = v.(bool)
 					}
 
 					if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
@@ -7936,10 +7972,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
-			if w, ok := trustedClientsMapStrToI["description"]; ok && !isIntfNil(w) {
-				trustedClients[i].Description = w.(string)
-			}
-
 			if w, ok := trustedClientsMapStrToI["expiration_timestamp"]; ok && !isIntfNil(w) {
 				ts, err := parseTime(w.(string))
 				if err != nil {
@@ -7970,10 +8002,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 				}
 
-			}
-
-			if w, ok := trustedClientsMapStrToI["name"]; ok && !isIntfNil(w) {
-				trustedClients[i].Name = w.(string)
 			}
 
 		}
@@ -8089,10 +8117,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			wafExclusionRules[i] = &ves_io_schema_policy.SimpleWafExclusionRule{}
 			wafExclusionRulesMapStrToI := set.(map[string]interface{})
 
-			if w, ok := wafExclusionRulesMapStrToI["description"]; ok && !isIntfNil(w) {
-				wafExclusionRules[i].Description = w.(string)
-			}
-
 			domainChoiceTypeFound := false
 
 			if v, ok := wafExclusionRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
@@ -8168,10 +8192,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				}
 				wafExclusionRules[i].Methods = methodsList
 
-			}
-
-			if w, ok := wafExclusionRulesMapStrToI["name"]; ok && !isIntfNil(w) {
-				wafExclusionRules[i].Name = w.(string)
 			}
 
 			if w, ok := wafExclusionRulesMapStrToI["path_regex"]; ok && !isIntfNil(w) {
@@ -8417,6 +8437,70 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									}
 
 								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := advertiseWhereMapStrToI["srv6_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.WhereType_Srv6Network{}
+						choiceInt.Srv6Network = &ves_io_schema_views.WhereSrv6Network{}
+						advertiseWhere[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								privateNetwork := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.Srv6Network.PrivateNetwork = privateNetwork
+								for _, set := range sl {
+									privateNetworkMapStrToI := set.(map[string]interface{})
+
+									if w, ok := privateNetworkMapStrToI["name"]; ok && !isIntfNil(w) {
+										privateNetwork.Name = w.(string)
+									}
+
+									if w, ok := privateNetworkMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										privateNetwork.Namespace = w.(string)
+									}
+
+									if w, ok := privateNetworkMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										privateNetwork.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+							vipChoiceTypeFound := false
+
+							if v, ok := cs["default_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+
+								vipChoiceTypeFound = true
+
+								if v.(bool) {
+									vipChoiceInt := &ves_io_schema_views.WhereSrv6Network_DefaultVip{}
+									vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
+									choiceInt.Srv6Network.VipChoice = vipChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+
+								vipChoiceTypeFound = true
+								vipChoiceInt := &ves_io_schema_views.WhereSrv6Network_SpecificVip{}
+
+								choiceInt.Srv6Network.VipChoice = vipChoiceInt
+
+								vipChoiceInt.SpecificVip = v.(string)
 
 							}
 
@@ -8677,10 +8761,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
-			if w, ok := blockedClientsMapStrToI["description"]; ok && !isIntfNil(w) {
-				blockedClients[i].Description = w.(string)
-			}
-
 			if w, ok := blockedClientsMapStrToI["expiration_timestamp"]; ok && !isIntfNil(w) {
 				ts, err := parseTime(w.(string))
 				if err != nil {
@@ -8713,10 +8793,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
-			if w, ok := blockedClientsMapStrToI["name"]; ok && !isIntfNil(w) {
-				blockedClients[i].Name = w.(string)
-			}
-
 		}
 
 	}
@@ -8744,11 +8820,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				challengeTypeInt.CaptchaChallenge.CustomPage = v.(string)
 			}
 
-			if v, ok := cs["enable_captcha_challenge"]; ok && !isIntfNil(v) {
-
-				challengeTypeInt.CaptchaChallenge.EnableCaptchaChallenge = v.(bool)
-			}
-
 		}
 
 	}
@@ -8772,11 +8843,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.JsChallenge.CustomPage = v.(string)
-			}
-
-			if v, ok := cs["enable_js_challenge"]; ok && !isIntfNil(v) {
-
-				challengeTypeInt.JsChallenge.EnableJsChallenge = v.(bool)
 			}
 
 			if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
@@ -8832,11 +8898,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 						captchaChallengeParametersChoiceInt.CaptchaChallengeParameters.CustomPage = v.(string)
-					}
-
-					if v, ok := cs["enable_captcha_challenge"]; ok && !isIntfNil(v) {
-
-						captchaChallengeParametersChoiceInt.CaptchaChallengeParameters.EnableCaptchaChallenge = v.(bool)
 					}
 
 				}
@@ -8926,11 +8987,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 						jsChallengeParametersChoiceInt.JsChallengeParameters.CustomPage = v.(string)
-					}
-
-					if v, ok := cs["enable_js_challenge"]; ok && !isIntfNil(v) {
-
-						jsChallengeParametersChoiceInt.JsChallengeParameters.EnableJsChallenge = v.(bool)
 					}
 
 					if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
@@ -12555,10 +12611,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
-			if w, ok := trustedClientsMapStrToI["description"]; ok && !isIntfNil(w) {
-				trustedClients[i].Description = w.(string)
-			}
-
 			if w, ok := trustedClientsMapStrToI["expiration_timestamp"]; ok && !isIntfNil(w) {
 				ts, err := parseTime(w.(string))
 				if err != nil {
@@ -12589,10 +12641,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 				}
 
-			}
-
-			if w, ok := trustedClientsMapStrToI["name"]; ok && !isIntfNil(w) {
-				trustedClients[i].Name = w.(string)
 			}
 
 		}
@@ -12704,10 +12752,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			wafExclusionRules[i] = &ves_io_schema_policy.SimpleWafExclusionRule{}
 			wafExclusionRulesMapStrToI := set.(map[string]interface{})
 
-			if w, ok := wafExclusionRulesMapStrToI["description"]; ok && !isIntfNil(w) {
-				wafExclusionRules[i].Description = w.(string)
-			}
-
 			domainChoiceTypeFound := false
 
 			if v, ok := wafExclusionRulesMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
@@ -12783,10 +12827,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				}
 				wafExclusionRules[i].Methods = methodsList
 
-			}
-
-			if w, ok := wafExclusionRulesMapStrToI["name"]; ok && !isIntfNil(w) {
-				wafExclusionRules[i].Name = w.(string)
 			}
 
 			if w, ok := wafExclusionRulesMapStrToI["path_regex"]; ok && !isIntfNil(w) {

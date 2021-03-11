@@ -162,6 +162,7 @@ func (c *CustomDataAPIRestClient) doRPCForwardProxyPolicyHits(ctx context.Contex
 	pbRsp := &ForwardProxyPolicyHitsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.forward_proxy_policy.ForwardProxyPolicyHitsResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

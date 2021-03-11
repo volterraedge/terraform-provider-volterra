@@ -467,9 +467,11 @@ type AuditLogRequestV2 struct {
 	Aggs map[string]*ves_io_schema_log_audit_log.AggregationRequest `protobuf:"bytes,9,rep,name=aggs" json:"aggs,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value"`
 }
 
-func (m *AuditLogRequestV2) Reset()                    { *m = AuditLogRequestV2{} }
-func (*AuditLogRequestV2) ProtoMessage()               {}
-func (*AuditLogRequestV2) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{2} }
+func (m *AuditLogRequestV2) Reset()      { *m = AuditLogRequestV2{} }
+func (*AuditLogRequestV2) ProtoMessage() {}
+func (*AuditLogRequestV2) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{2}
+}
 
 func (m *AuditLogRequestV2) GetNamespace() string {
 	if m != nil {
@@ -1269,9 +1271,11 @@ type VK8SEventsRequest struct {
 	Aggs map[string]*ves_io_schema_log_vk8s_events.AggregationRequest `protobuf:"bytes,8,rep,name=aggs" json:"aggs,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value"`
 }
 
-func (m *VK8SEventsRequest) Reset()                    { *m = VK8SEventsRequest{} }
-func (*VK8SEventsRequest) ProtoMessage()               {}
-func (*VK8SEventsRequest) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{8} }
+func (m *VK8SEventsRequest) Reset()      { *m = VK8SEventsRequest{} }
+func (*VK8SEventsRequest) ProtoMessage() {}
+func (*VK8SEventsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{8}
+}
 
 func (m *VK8SEventsRequest) GetNamespace() string {
 	if m != nil {
@@ -1530,9 +1534,11 @@ type K8SEventsRequest struct {
 	Aggs map[string]*ves_io_schema_log_k8s_events.AggregationRequest `protobuf:"bytes,9,rep,name=aggs" json:"aggs,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value"`
 }
 
-func (m *K8SEventsRequest) Reset()                    { *m = K8SEventsRequest{} }
-func (*K8SEventsRequest) ProtoMessage()               {}
-func (*K8SEventsRequest) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{10} }
+func (m *K8SEventsRequest) Reset()      { *m = K8SEventsRequest{} }
+func (*K8SEventsRequest) ProtoMessage() {}
+func (*K8SEventsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{10}
+}
 
 func (m *K8SEventsRequest) GetNamespace() string {
 	if m != nil {
@@ -1998,9 +2004,11 @@ type LogScrollRequest struct {
 	ScrollId string `protobuf:"bytes,2,opt,name=scroll_id,json=scrollId,proto3" json:"scroll_id,omitempty"`
 }
 
-func (m *LogScrollRequest) Reset()                    { *m = LogScrollRequest{} }
-func (*LogScrollRequest) ProtoMessage()               {}
-func (*LogScrollRequest) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{14} }
+func (m *LogScrollRequest) Reset()      { *m = LogScrollRequest{} }
+func (*LogScrollRequest) ProtoMessage() {}
+func (*LogScrollRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{14}
+}
 
 func (m *LogScrollRequest) GetNamespace() string {
 	if m != nil {

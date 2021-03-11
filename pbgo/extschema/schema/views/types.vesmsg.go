@@ -1547,6 +1547,7 @@ var DefaultPrefixStringListTypeValidator = func() *ValidatePrefixStringListType 
 	rulesPrefixes := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
 		"ves.io.schema.rules.repeated.max_items":                "128",
+		"ves.io.schema.rules.repeated.min_items":                "1",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
 	vFn, err = vrhPrefixes(rulesPrefixes)
@@ -2469,6 +2470,260 @@ func WhereSiteValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *WhereSrv6Network) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *WhereSrv6Network) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *WhereSrv6Network) DeepCopy() *WhereSrv6Network {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &WhereSrv6Network{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *WhereSrv6Network) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *WhereSrv6Network) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return WhereSrv6NetworkValidator().Validate(ctx, m, opts...)
+}
+
+func (m *WhereSrv6Network) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetPrivateNetworkDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *WhereSrv6Network) GetPrivateNetworkDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+
+	vref := m.GetPrivateNetwork()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_network.Object")
+	drInfos = append(drInfos, db.DRefInfo{
+		RefdType:   "virtual_network.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "private_network",
+		Ref:        vdRef,
+	})
+
+	return drInfos, nil
+}
+
+// GetPrivateNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *WhereSrv6Network) GetPrivateNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "virtual_network.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_network")
+	}
+
+	vref := m.GetPrivateNetwork()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "virtual_network.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateWhereSrv6Network struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateWhereSrv6Network) VipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vip_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereSrv6Network) VipChoiceSpecificVipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_SpecificVip, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for specific_vip")
+	}
+	return oValidatorFn_SpecificVip, nil
+}
+
+func (v *ValidateWhereSrv6Network) PrivateNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_network")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereSrv6Network) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*WhereSrv6Network)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *WhereSrv6Network got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["private_network"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("private_network"))
+		if err := fv(ctx, m.GetPrivateNetwork(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vip_choice"]; exists {
+		val := m.GetVipChoice()
+		vOpts := append(opts,
+			db.WithValidateField("vip_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetVipChoice().(type) {
+	case *WhereSrv6Network_DefaultVip:
+		if fv, exists := v.FldValidators["vip_choice.default_vip"]; exists {
+			val := m.GetVipChoice().(*WhereSrv6Network_DefaultVip).DefaultVip
+			vOpts := append(opts,
+				db.WithValidateField("vip_choice"),
+				db.WithValidateField("default_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WhereSrv6Network_SpecificVip:
+		if fv, exists := v.FldValidators["vip_choice.specific_vip"]; exists {
+			val := m.GetVipChoice().(*WhereSrv6Network_SpecificVip).SpecificVip
+			vOpts := append(opts,
+				db.WithValidateField("vip_choice"),
+				db.WithValidateField("specific_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultWhereSrv6NetworkValidator = func() *ValidateWhereSrv6Network {
+	v := &ValidateWhereSrv6Network{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVipChoice := v.VipChoiceValidationRuleHandler
+	rulesVipChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVipChoice(rulesVipChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereSrv6Network.vip_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vip_choice"] = vFn
+
+	vrhVipChoiceSpecificVip := v.VipChoiceSpecificVipValidationRuleHandler
+	rulesVipChoiceSpecificVip := map[string]string{
+		"ves.io.schema.rules.string.ip": "true",
+	}
+	vFnMap["vip_choice.specific_vip"], err = vrhVipChoiceSpecificVip(rulesVipChoiceSpecificVip)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field WhereSrv6Network.vip_choice_specific_vip: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["vip_choice.specific_vip"] = vFnMap["vip_choice.specific_vip"]
+
+	vrhPrivateNetwork := v.PrivateNetworkValidationRuleHandler
+	rulesPrivateNetwork := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPrivateNetwork(rulesPrivateNetwork)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereSrv6Network.private_network: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["private_network"] = vFn
+
+	return v
+}()
+
+func WhereSrv6NetworkValidator() db.Validator {
+	return DefaultWhereSrv6NetworkValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *WhereType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2566,6 +2821,16 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		for _, odri := range odrInfos {
 			odri.DRField = "private_network." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *WhereType_Srv6Network:
+		odrInfos, err = m.GetSrv6Network().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "srv6_network." + odri.DRField
 			drInfos = append(drInfos, odri)
 		}
 
@@ -2671,6 +2936,17 @@ func (v *ValidateWhereType) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
+	case *WhereType_Srv6Network:
+		if fv, exists := v.FldValidators["choice.srv6_network"]; exists {
+			val := m.GetChoice().(*WhereType_Srv6Network).Srv6Network
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("srv6_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2764,6 +3040,7 @@ var DefaultWhereTypeValidator = func() *ValidateWhereType {
 	v.FldValidators["choice.virtual_site"] = WhereVirtualSiteValidator().Validate
 	v.FldValidators["choice.vk8s_service"] = WhereVK8SServiceValidator().Validate
 	v.FldValidators["choice.private_network"] = WherePrivateNetworkValidator().Validate
+	v.FldValidators["choice.srv6_network"] = WhereSrv6NetworkValidator().Validate
 
 	return v
 }()

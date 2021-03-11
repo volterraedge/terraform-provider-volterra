@@ -21,22 +21,26 @@ resource "volterra_azure_vnet_site" "example" {
   namespace    = "staging"
   azure_region = ["East US"]
 
-  // One of the arguments from this list "assisted azure_cred" must be set
-  assisted = true
+  // One of the arguments from this list "azure_cred assisted" must be set
 
-  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
+  azure_cred {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
   resource_group          = ["my-resources"]
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
+  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
 
-  voltstack_cluster {
+  ingress_gw {
     az_nodes {
       azure_az  = "1"
       disk_size = "disk_size"
 
       local_subnet {
-        // One of the arguments from this list "subnet subnet_param" must be set
+        // One of the arguments from this list "subnet_param subnet" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -45,40 +49,15 @@ resource "volterra_azure_vnet_site" "example" {
       }
     }
 
-    azure_certified_hw = "azure-byol-voltstack-combo"
-
-    // One of the arguments from this list "forward_proxy_allow_all no_forward_proxy active_forward_proxy_policies" must be set
-    forward_proxy_allow_all = true
-
-    // One of the arguments from this list "no_global_network global_network_list" must be set
-
-    global_network_list {
-      global_network_connections {
-        // One of the arguments from this list "sli_to_global_dr slo_to_global_dr" must be set
-
-        sli_to_global_dr {
-          global_vn {
-            name      = "test1"
-            namespace = "staging"
-            tenant    = "acmecorp"
-          }
-        }
-
-        // One of the arguments from this list "disable_forward_proxy enable_forward_proxy" must be set
-        disable_forward_proxy = true
-      }
-    }
-    // One of the arguments from this list "active_network_policies no_network_policy" must be set
-    no_network_policy = true
-    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
-    no_outside_static_routes = true
+    azure_certified_hw = "azure-byol-voltmesh"
   }
   vnet {
     // One of the arguments from this list "new_vnet existing_vnet" must be set
 
     new_vnet {
       // One of the arguments from this list "name autogenerate" must be set
-      autogenerate = true
+      name = "name"
+
       primary_ipv4 = "10.1.0.0/16"
     }
   }
@@ -121,11 +100,9 @@ Argument Reference
 
 `logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
-`machine_type` - (Optional) Standard_D5_v2 (16 x vCPU, 56GB RAM) very high performance (`String`).
+`machine_type` - (Optional) Select Instance size based on performance needed (`String`).
 
 `nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
-
-`operating_system_version` - (Optional) Desired Operating System version for this site. (`String`).
 
 `resource_group` - (Required) Azure resource group for resources that will be created (`String`).
 
@@ -138,8 +115,6 @@ Argument Reference
 `ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
 
 `vnet` - (Required) Choice of using existing Vnet or create new Vnet. See [Vnet ](#vnet) below for details.
-
-`volterra_software_version` - (Optional) Desired Volterra software version for this site, a string matching released set of software components. (`String`).
 
 ### Active Forward Proxy Policies
 

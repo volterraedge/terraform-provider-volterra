@@ -179,6 +179,7 @@ func (c *CustomAPIRestClient) doRPCRules(ctx context.Context, callOpts *server.C
 	pbRsp := &RulesRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.waf_rules.RulesRsp", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -255,6 +256,7 @@ func (c *CustomAPIRestClient) doRPCVirtualHostWafRulesStatus(ctx context.Context
 	pbRsp := &VirtualHostWafRulesStatusRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.waf_rules.VirtualHostWafRulesStatusRsp", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -331,6 +333,7 @@ func (c *CustomAPIRestClient) doRPCWafRulesStatus(ctx context.Context, callOpts 
 	pbRsp := &WafRulesStatusRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.waf_rules.WafRulesStatusRsp", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

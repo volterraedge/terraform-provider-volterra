@@ -32,12 +32,8 @@ resource "volterra_service_policy_rule" "example" {
   any_ip = true
 
   waf_action {
-    // One of the arguments from this list "waf_in_monitoring_mode none waf_skip_processing waf_rule_control waf_inline_rule_control" must be set
-
-    waf_inline_rule_control {
-      exclude_rule_ids = ["exclude_rule_ids"]
-      monitoring_mode  = true
-    }
+    // One of the arguments from this list "none waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode" must be set
+    none = true
   }
 }
 

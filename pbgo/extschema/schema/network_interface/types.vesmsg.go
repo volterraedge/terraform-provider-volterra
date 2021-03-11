@@ -1344,6 +1344,7 @@ var DefaultDHCPServerParametersTypeValidator = func() *ValidateDHCPServerParamet
 	rulesFixedIpMap := map[string]string{
 		"ves.io.schema.rules.map.keys.string.mac":    "true",
 		"ves.io.schema.rules.map.max_pairs":          "128",
+		"ves.io.schema.rules.map.unique_values":      "true",
 		"ves.io.schema.rules.map.values.string.ipv4": "true",
 	}
 	vFn, err = vrhFixedIpMap(rulesFixedIpMap)
@@ -2038,6 +2039,24 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error
 
 	case *EthernetInterfaceType_StorageNetwork:
 
+	case *EthernetInterfaceType_Srv6Network:
+
+		vref := m.GetSrv6Network()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_network.Object")
+		odri := db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "srv6_network",
+			Ref:        vdRef,
+		}
+		odrInfos = append(odrInfos, odri)
+
 	}
 
 	return odrInfos, nil
@@ -2077,6 +2096,30 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDBEntries(ctx context.Context, d
 		}
 
 	case *EthernetInterfaceType_StorageNetwork:
+
+	case *EthernetInterfaceType_Srv6Network:
+		refdType, err := d.TypeForEntryKind("", "", "virtual_network.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: virtual_network")
+		}
+
+		vref := m.GetSrv6Network()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "virtual_network.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
 
 	}
 
@@ -2328,6 +2371,17 @@ func (v *ValidateEthernetInterfaceType) Validate(ctx context.Context, pm interfa
 			vOpts := append(opts,
 				db.WithValidateField("network_choice"),
 				db.WithValidateField("storage_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *EthernetInterfaceType_Srv6Network:
+		if fv, exists := v.FldValidators["network_choice.srv6_network"]; exists {
+			val := m.GetNetworkChoice().(*EthernetInterfaceType_Srv6Network).Srv6Network
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("srv6_network"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -2589,6 +2643,7 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 	v.FldValidators["address_choice.static_ip"] = StaticIPParametersTypeValidator().Validate
 
 	v.FldValidators["network_choice.inside_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["network_choice.srv6_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -2883,6 +2938,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetInterfaceChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetParentNetworkInterfaceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -2963,6 +3024,51 @@ func (m *GlobalSpecType) GetDhcpServerParamsDRefInfo() ([]db.DRefInfo, error) {
 	for _, dri := range driSet {
 		dri.DRField = "dhcp_server_params." + dri.DRField
 		drInfos = append(drInfos, dri)
+	}
+
+	return drInfos, err
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.InterfaceChoice == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetInterfaceChoice().(type) {
+	case *GlobalSpecType_DedicatedInterface:
+
+	case *GlobalSpecType_EthernetInterface:
+		odrInfos, err = m.GetEthernetInterface().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "ethernet_interface." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *GlobalSpecType_TunnelInterface:
+		odrInfos, err = m.GetTunnelInterface().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "tunnel_interface." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *GlobalSpecType_Legacy:
+
+	case *GlobalSpecType_DedicatedManagementInterface:
+
 	}
 
 	return drInfos, err
@@ -3816,6 +3922,11 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["interface_ip_map"] = vFn
+
+	v.FldValidators["interface_choice.dedicated_interface"] = DedicatedInterfaceTypeValidator().Validate
+	v.FldValidators["interface_choice.ethernet_interface"] = EthernetInterfaceTypeValidator().Validate
+	v.FldValidators["interface_choice.tunnel_interface"] = TunnelInterfaceTypeValidator().Validate
+	v.FldValidators["interface_choice.dedicated_management_interface"] = DedicatedManagementInterfaceTypeValidator().Validate
 
 	v.FldValidators["default_gateway"] = NetworkInterfaceDFGWValidator().Validate
 

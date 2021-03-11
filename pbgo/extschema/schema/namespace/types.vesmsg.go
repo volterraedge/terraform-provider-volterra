@@ -14,6 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -31,6 +33,16 @@ func (m *CreateSpecType) ToJSON() (string, error) {
 
 func (m *CreateSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *CreateSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	return nil
 }
 
 func (m *CreateSpecType) DeepCopy() *CreateSpecType {
@@ -102,6 +114,16 @@ func (m *GetSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *GetSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
 func (m *GetSpecType) DeepCopy() *GetSpecType {
 	if m == nil {
 		return nil
@@ -171,6 +193,22 @@ func (m *GlobalSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *GlobalSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetProxySubCas() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting GlobalSpecType.proxy_sub_cas idx %v", idx)
+		}
+	}
+
+	return nil
+}
+
 func (m *GlobalSpecType) DeepCopy() *GlobalSpecType {
 	if m == nil {
 		return nil
@@ -216,12 +254,35 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["proxy_sub_ca_latest_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("proxy_sub_ca_latest_version"))
+		if err := fv(ctx, m.GetProxySubCaLatestVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["proxy_sub_cas"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("proxy_sub_cas"))
+		for idx, item := range m.GetProxySubCas() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["proxy_sub_cas"] = SubCAValidator().Validate
 
 	return v
 }()
@@ -238,6 +299,16 @@ func (m *ReplaceSpecType) ToJSON() (string, error) {
 
 func (m *ReplaceSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ReplaceSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	return nil
 }
 
 func (m *ReplaceSpecType) DeepCopy() *ReplaceSpecType {
@@ -297,6 +368,226 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SubCA) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SubCA) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SubCA) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.PrivateKey = nil
+
+	return copy.string()
+}
+
+func (m *SubCA) GoString() string {
+	copy := m.DeepCopy()
+	copy.PrivateKey = nil
+
+	return copy.goString()
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *SubCA) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.PrivateKey = nil
+
+	return nil
+}
+
+func (m *SubCA) DeepCopy() *SubCA {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SubCA{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SubCA) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SubCA) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SubCAValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSubCA struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSubCA) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSubCA) PemValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for pem")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSubCA) PrivateKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for private_key")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSubCA) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SubCA)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SubCA got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["pem"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("pem"))
+		if err := fv(ctx, m.GetPem(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["private_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("private_key"))
+		if err := fv(ctx, m.GetPrivateKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("version"))
+		if err := fv(ctx, m.GetVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSubCAValidator = func() *ValidateSubCA {
+	v := &ValidateSubCA{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "514",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SubCA.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhPem := v.PemValidationRuleHandler
+	rulesPem := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "10240",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhPem(rulesPem)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SubCA.pem: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["pem"] = vFn
+
+	vrhPrivateKey := v.PrivateKeyValidationRuleHandler
+	rulesPrivateKey := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPrivateKey(rulesPrivateKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SubCA.private_key: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["private_key"] = vFn
+
+	return v
+}()
+
+func SubCAValidator() db.Validator {
+	return DefaultSubCAValidator
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {

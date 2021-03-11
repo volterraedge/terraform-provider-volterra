@@ -164,6 +164,7 @@ func (c *CustomDataAPIRestClient) doRPCPVCMetrics(ctx context.Context, callOpts 
 	pbRsp := &PVCMetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.virtual_k8s.PVCMetricsResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

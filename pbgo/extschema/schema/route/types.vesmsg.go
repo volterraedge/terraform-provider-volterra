@@ -1703,6 +1703,32 @@ func (v *ValidateRouteDestinationList) Validate(ctx context.Context, pm interfac
 
 	}
 
+	switch m.GetClusterRetractChoice().(type) {
+	case *RouteDestinationList_RetractCluster:
+		if fv, exists := v.FldValidators["cluster_retract_choice.retract_cluster"]; exists {
+			val := m.GetClusterRetractChoice().(*RouteDestinationList_RetractCluster).RetractCluster
+			vOpts := append(opts,
+				db.WithValidateField("cluster_retract_choice"),
+				db.WithValidateField("retract_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteDestinationList_DoNotRetractCluster:
+		if fv, exists := v.FldValidators["cluster_retract_choice.do_not_retract_cluster"]; exists {
+			val := m.GetClusterRetractChoice().(*RouteDestinationList_DoNotRetractCluster).DoNotRetractCluster
+			vOpts := append(opts,
+				db.WithValidateField("cluster_retract_choice"),
+				db.WithValidateField("do_not_retract_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cors_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cors_policy"))
@@ -2027,7 +2053,7 @@ var DefaultRouteDirectResponseValidator = func() *ValidateRouteDirectResponse {
 
 	vrhResponseBody := v.ResponseBodyValidationRuleHandler
 	rulesResponseBody := map[string]string{
-		"ves.io.schema.rules.string.max_bytes": "8192",
+		"ves.io.schema.rules.string.max_bytes": "4096",
 		"ves.io.schema.rules.string.min_bytes": "1",
 	}
 	vFn, err = vrhResponseBody(rulesResponseBody)

@@ -34,14 +34,10 @@ resource "volterra_cloud_credentials" "example" {
 
       secret_encoding_type = "secret_encoding_type"
 
-      // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
+      // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-      vault_secret_info {
-        key             = "key_pem"
-        location        = "v1/data/vhost_key"
-        provider        = "vault-vh-provider"
-        secret_encoding = "secret_encoding"
-        version         = "1"
+      wingman_secret_info {
+        name = "ChargeBack-API-Key"
       }
     }
   }

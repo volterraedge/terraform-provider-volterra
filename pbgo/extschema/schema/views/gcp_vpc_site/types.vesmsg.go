@@ -335,26 +335,6 @@ func (v *ValidateCreateSpecType) NodesPerAzValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) VolterraSoftwareVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_software_version")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCreateSpecType) OperatingSystemVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for operating_system_version")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateSpecType) DiskSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
@@ -525,15 +505,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["operating_system_version"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("operating_system_version"))
-		if err := fv(ctx, m.GetOperatingSystemVersion(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["site_type"]; exists {
 		val := m.GetSiteType()
 		vOpts := append(opts,
@@ -590,15 +561,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
-		if err := fv(ctx, m.GetVolterraSoftwareVersion(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	return nil
 }
 
@@ -650,7 +612,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhGcpRegion := v.GcpRegionValidationRuleHandler
 	rulesGcpRegion := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"asia-east1\",\"asia-east2\",\"asia-northeast1\",\"asia-northeast2\",\"asia-northeast3\",\"asia-south1\",\"asia-southeast1\",\"asia-southeast2\",\"australia-southeast1\",\"europe-north1\",\"europe-west1\",\"europe-west2\",\"europe-west3\",\"europe-west4\",\"europe-west6\",\"northamerica-northeast1\",\"southamerica-east1\",\"us-central1\",\"us-east1\",\"us-east2\",\"us-west1\",\"us-west2\",\"us-west3\",\"us-west4\"]",
+		"ves.io.schema.rules.string.in":        "[\"asia-east1\",\"asia-east2\",\"asia-northeast1\",\"asia-northeast2\",\"asia-northeast3\",\"asia-south1\",\"asia-southeast1\",\"asia-southeast2\",\"australia-southeast1\",\"europe-north1\",\"europe-west1\",\"europe-west2\",\"europe-west3\",\"europe-west4\",\"europe-west6\",\"northamerica-northeast1\",\"southamerica-east1\",\"us-central1\",\"us-east1\",\"us-east4\",\"us-west1\",\"us-west2\",\"us-west3\",\"us-west4\"]",
 	}
 	vFn, err = vrhGcpRegion(rulesGcpRegion)
 	if err != nil {
@@ -682,28 +644,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["nodes_per_az"] = vFn
-
-	vrhVolterraSoftwareVersion := v.VolterraSoftwareVersionValidationRuleHandler
-	rulesVolterraSoftwareVersion := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-	}
-	vFn, err = vrhVolterraSoftwareVersion(rulesVolterraSoftwareVersion)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.volterra_software_version: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["volterra_software_version"] = vFn
-
-	vrhOperatingSystemVersion := v.OperatingSystemVersionValidationRuleHandler
-	rulesOperatingSystemVersion := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-	}
-	vFn, err = vrhOperatingSystemVersion(rulesOperatingSystemVersion)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.operating_system_version: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["operating_system_version"] = vFn
 
 	vrhDiskSize := v.DiskSizeValidationRuleHandler
 	rulesDiskSize := map[string]string{
@@ -4114,7 +4054,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhGcpRegion := v.GcpRegionValidationRuleHandler
 	rulesGcpRegion := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"asia-east1\",\"asia-east2\",\"asia-northeast1\",\"asia-northeast2\",\"asia-northeast3\",\"asia-south1\",\"asia-southeast1\",\"asia-southeast2\",\"australia-southeast1\",\"europe-north1\",\"europe-west1\",\"europe-west2\",\"europe-west3\",\"europe-west4\",\"europe-west6\",\"northamerica-northeast1\",\"southamerica-east1\",\"us-central1\",\"us-east1\",\"us-east2\",\"us-west1\",\"us-west2\",\"us-west3\",\"us-west4\"]",
+		"ves.io.schema.rules.string.in":        "[\"asia-east1\",\"asia-east2\",\"asia-northeast1\",\"asia-northeast2\",\"asia-northeast3\",\"asia-south1\",\"asia-southeast1\",\"asia-southeast2\",\"australia-southeast1\",\"europe-north1\",\"europe-west1\",\"europe-west2\",\"europe-west3\",\"europe-west4\",\"europe-west6\",\"northamerica-northeast1\",\"southamerica-east1\",\"us-central1\",\"us-east1\",\"us-east4\",\"us-west1\",\"us-west2\",\"us-west3\",\"us-west4\"]",
 	}
 	vFn, err = vrhGcpRegion(rulesGcpRegion)
 	if err != nil {
@@ -4971,7 +4911,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhGcpRegion := v.GcpRegionValidationRuleHandler
 	rulesGcpRegion := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"asia-east1\",\"asia-east2\",\"asia-northeast1\",\"asia-northeast2\",\"asia-northeast3\",\"asia-south1\",\"asia-southeast1\",\"asia-southeast2\",\"australia-southeast1\",\"europe-north1\",\"europe-west1\",\"europe-west2\",\"europe-west3\",\"europe-west4\",\"europe-west6\",\"northamerica-northeast1\",\"southamerica-east1\",\"us-central1\",\"us-east1\",\"us-east2\",\"us-west1\",\"us-west2\",\"us-west3\",\"us-west4\"]",
+		"ves.io.schema.rules.string.in":        "[\"asia-east1\",\"asia-east2\",\"asia-northeast1\",\"asia-northeast2\",\"asia-northeast3\",\"asia-south1\",\"asia-southeast1\",\"asia-southeast2\",\"australia-southeast1\",\"europe-north1\",\"europe-west1\",\"europe-west2\",\"europe-west3\",\"europe-west4\",\"europe-west6\",\"northamerica-northeast1\",\"southamerica-east1\",\"us-central1\",\"us-east1\",\"us-east4\",\"us-west1\",\"us-west2\",\"us-west3\",\"us-west4\"]",
 	}
 	vFn, err = vrhGcpRegion(rulesGcpRegion)
 	if err != nil {
@@ -5278,26 +5218,6 @@ func (v *ValidateReplaceSpecType) SiteTypeValidationRuleHandler(rules map[string
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) VolterraSoftwareVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_software_version")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateReplaceSpecType) OperatingSystemVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for operating_system_version")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -5376,15 +5296,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["operating_system_version"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("operating_system_version"))
-		if err := fv(ctx, m.GetOperatingSystemVersion(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["site_type"]; exists {
 		val := m.GetSiteType()
 		vOpts := append(opts,
@@ -5432,15 +5343,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
-		if err := fv(ctx, m.GetVolterraSoftwareVersion(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	return nil
 }
 
@@ -5477,28 +5379,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["site_type"] = vFn
-
-	vrhVolterraSoftwareVersion := v.VolterraSoftwareVersionValidationRuleHandler
-	rulesVolterraSoftwareVersion := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-	}
-	vFn, err = vrhVolterraSoftwareVersion(rulesVolterraSoftwareVersion)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.volterra_software_version: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["volterra_software_version"] = vFn
-
-	vrhOperatingSystemVersion := v.OperatingSystemVersionValidationRuleHandler
-	rulesOperatingSystemVersion := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-	}
-	vFn, err = vrhOperatingSystemVersion(rulesOperatingSystemVersion)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.operating_system_version: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["operating_system_version"] = vFn
 
 	vrhAddress := v.AddressValidationRuleHandler
 	rulesAddress := map[string]string{
@@ -5648,10 +5528,8 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.InstanceType = f.GetInstanceType()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.NodesPerAz = f.GetNodesPerAz()
-	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
-	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -5668,10 +5546,8 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.InstanceType = m1.InstanceType
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.NodesPerAz = m1.NodesPerAz
-	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
-	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 }
 
 // create setters in GCPVPCIngressEgressGwReplaceType from GCPVPCIngressEgressGwType for oneof fields
@@ -6320,9 +6196,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Address = f.GetAddress()
 	m.Coordinates = f.GetCoordinates()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
-	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.GetSiteTypeFromGlobalSpecType(f)
-	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -6334,7 +6208,5 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Address = m1.Address
 	f.Coordinates = m1.Coordinates
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
-	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	m1.SetSiteTypeToGlobalSpecType(f)
-	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 }

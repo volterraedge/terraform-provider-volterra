@@ -164,6 +164,7 @@ func (c *CustomDataAPIRestClient) doRPCMetrics(ctx context.Context, callOpts *se
 	pbRsp := &MetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.dc_cluster_group.MetricsResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

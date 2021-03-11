@@ -546,11 +546,6 @@ func resourceVolterraVirtualHost() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 						},
-
-						"enable_captcha_challenge": {
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
 					},
 				},
 			},
@@ -569,11 +564,6 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 						"custom_page": {
 							Type:     schema.TypeString,
-							Optional: true,
-						},
-
-						"enable_js_challenge": {
-							Type:     schema.TypeBool,
 							Optional: true,
 						},
 
@@ -2051,11 +2041,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 				challengeTypeInt.CaptchaChallenge.CustomPage = v.(string)
 			}
 
-			if v, ok := cs["enable_captcha_challenge"]; ok && !isIntfNil(v) {
-
-				challengeTypeInt.CaptchaChallenge.EnableCaptchaChallenge = v.(bool)
-			}
-
 		}
 
 	}
@@ -2079,11 +2064,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 			if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.JsChallenge.CustomPage = v.(string)
-			}
-
-			if v, ok := cs["enable_js_challenge"]; ok && !isIntfNil(v) {
-
-				challengeTypeInt.JsChallenge.EnableJsChallenge = v.(bool)
 			}
 
 			if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
@@ -3707,11 +3687,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 				challengeTypeInt.CaptchaChallenge.CustomPage = v.(string)
 			}
 
-			if v, ok := cs["enable_captcha_challenge"]; ok && !isIntfNil(v) {
-
-				challengeTypeInt.CaptchaChallenge.EnableCaptchaChallenge = v.(bool)
-			}
-
 		}
 
 	}
@@ -3735,11 +3710,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 			if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
 
 				challengeTypeInt.JsChallenge.CustomPage = v.(string)
-			}
-
-			if v, ok := cs["enable_js_challenge"]; ok && !isIntfNil(v) {
-
-				challengeTypeInt.JsChallenge.EnableJsChallenge = v.(bool)
 			}
 
 			if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {

@@ -29,10 +29,10 @@ resource "volterra_aws_vpc_site" "example" {
     tenant    = "acmecorp"
   }
   instance_type = ["a1.xlarge"]
-  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 
-  // One of the arguments from this list "voltstack_cluster ingress_gw ingress_egress_gw" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
   ingress_gw {
     aws_certified_hw = "aws-byol-voltmesh"
@@ -43,7 +43,11 @@ resource "volterra_aws_vpc_site" "example" {
 
       local_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
-        existing_subnet_id = "subnet-12345678901234567"
+
+        subnet_param {
+          ipv4 = "10.1.2.0/24"
+          ipv6 = "1234:568:abcd:9100::/64"
+        }
       }
     }
   }
@@ -82,15 +86,13 @@ Argument Reference
 
 `disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
 
-`instance_type` - (Required) m5.4xlarge (16 x vCPU, 64GB RAM) very high performance (`String`).
+`instance_type` - (Required) Select Instance size based on performance needed (`String`).
 
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
 `logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
 `nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
-
-`operating_system_version` - (Optional) Desired Operating System version for this site. (`String`).
 
 `ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VPC.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
 
@@ -99,8 +101,6 @@ Argument Reference
 `voltstack_cluster` - (Optional) Voltstack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
 
 `ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
-
-`volterra_software_version` - (Optional) Desired Volterra software version for this site, a string matching released set of software components. (`String`).
 
 `vpc` - (Optional) Choice of using existing VPC or create new VPC. See [Vpc ](#vpc) below for details.
 
@@ -126,15 +126,15 @@ Only Single AZ or Three AZ(s) nodes are supported currently..
 
 `aws_az_name` - (Required) AWS availability zone, must be consistent with the selected AWS region. (`String`).
 
-`inside_subnet` - (Optional) Subnets for the inside interface of the node. See [Inside Subnet ](#inside-subnet) below for details.
+`inside_subnet` - (Optional) Select Existing Subnet or Create New. See [Inside Subnet ](#inside-subnet) below for details.
 
-`reserved_inside_subnet` - (Optional) Use Reserved Subnet from Primary CIDR (bool).
+`reserved_inside_subnet` - (Optional) Autogenerate and reserve a subnet from the Primary CIDR (bool).
 
 `disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`String`).
 
-`outside_subnet` - (Required) Subnets for the outside interface of the node. See [Outside Subnet ](#outside-subnet) below for details.
+`outside_subnet` - (Required) Subnet for the outside interface of the node. See [Outside Subnet ](#outside-subnet) below for details.
 
-`workload_subnet` - (Optional) Workload Subnet where workloads should be running. See [Workload Subnet ](#workload-subnet) below for details.
+`workload_subnet` - (Optional) Subnet in which workloads are launched. See [Workload Subnet ](#workload-subnet) below for details.
 
 ### Blindfold Secret Info
 
@@ -308,7 +308,7 @@ Manage static routes for inside network..
 
 ### Inside Subnet
 
-Subnets for the inside interface of the node.
+Select Existing Subnet or Create New.
 
 `existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
 
@@ -406,7 +406,7 @@ Manage static routes for outside network..
 
 ### Outside Subnet
 
-Subnets for the outside interface of the node.
+Subnet for the outside interface of the node.
 
 `existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
 
@@ -446,7 +446,7 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 ### Reserved Inside Subnet
 
-Use Reserved Subnet from Primary CIDR.
+Autogenerate and reserve a subnet from the Primary CIDR.
 
 ### Sli To Global Dr
 
@@ -584,7 +584,7 @@ Secret is given as bootstrap secret in Volterra Security Sidecar.
 
 ### Workload Subnet
 
-Workload Subnet where workloads should be running.
+Subnet in which workloads are launched.
 
 `existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
 

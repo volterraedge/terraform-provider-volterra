@@ -1090,7 +1090,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.registration.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private replace request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.registration.crudapi.API.Replace"), zap.Error(err))
 			}
@@ -1116,7 +1116,7 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.registration.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private get request")
 			}
 		}
 	}
@@ -1141,7 +1141,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.registration.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private list request")
 			}
 		}
 	}
@@ -1196,7 +1196,7 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.registration.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private delete request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.registration.crudapi.API.Delete"), zap.Error(err))
 			}
@@ -3125,6 +3125,64 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteGPU": {
+            "type": "object",
+            "description": "GPU information on server",
+            "title": "GPU",
+            "x-displayname": "GPU",
+            "x-ves-proto-message": "ves.io.schema.site.GPU",
+            "properties": {
+                "cuda_version": {
+                    "type": "string",
+                    "description": " GPU Cuda Version\n\nExample: - \"10.2\"-",
+                    "title": "cudaVersion",
+                    "x-displayname": "Cuda Version",
+                    "x-ves-example": "10.2"
+                },
+                "driver_version": {
+                    "type": "string",
+                    "description": " GPU Driver Version\n\nExample: - \"440.82\"-",
+                    "title": "driverVersion",
+                    "x-displayname": "Driver Version",
+                    "x-ves-example": "440.82"
+                },
+                "gpu_device": {
+                    "type": "array",
+                    "description": " List of GPU devices in server",
+                    "title": "GPUDevice",
+                    "items": {
+                        "$ref": "#/definitions/siteGPUDevice"
+                    },
+                    "x-displayname": "GPU devices"
+                }
+            }
+        },
+        "siteGPUDevice": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.GPUDevice",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": " GPU ID\n\nExample: - \"00000000:17:00.0\"-",
+                    "title": "id",
+                    "x-displayname": "GPU ID",
+                    "x-ves-example": "00000000:17:00.0"
+                },
+                "processes": {
+                    "type": "string",
+                    "description": " GPU Processes",
+                    "title": "processes",
+                    "x-displayname": "Processes"
+                },
+                "product_name": {
+                    "type": "string",
+                    "description": " GPU Product Name\n\nExample: - \"Quadro P1000\"-",
+                    "title": "productName",
+                    "x-displayname": "Product Name",
+                    "x-ves-example": "Quadro P1000"
+                }
+            }
+        },
         "siteKernel": {
             "type": "object",
             "description": "Kernel information",
@@ -3347,6 +3405,12 @@ var APISwaggerJSON string = `{
                     "title": "cpu",
                     "$ref": "#/definitions/siteCpu",
                     "x-displayname": "CPU"
+                },
+                "gpu": {
+                    "description": " GPU information on server",
+                    "title": "GPU",
+                    "$ref": "#/definitions/siteGPU",
+                    "x-displayname": "GPU"
                 },
                 "kernel": {
                     "description": " kernel information",
