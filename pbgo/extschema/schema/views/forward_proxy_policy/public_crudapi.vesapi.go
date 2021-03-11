@@ -3026,7 +3026,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object that corresponds to the containing message.\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description.\n\nExample: - \"Virtual Host for acmecorp website\"-",
                     "title": "description",
                     "x-displayname": "Description",
                     "x-ves-example": "Virtual Host for acmecorp website"

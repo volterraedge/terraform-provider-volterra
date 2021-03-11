@@ -15,6 +15,7 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	google_api "google.golang.org/genproto/googleapis/api/httpbody"
 	"google.golang.org/grpc"
 
 	"gopkg.volterra.us/stdlib/client"
@@ -193,6 +194,7 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointLearntSchema(ctx context.C
 	pbRsp := &APIEndpointLearntSchemaRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointLearntSchemaRsp", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -271,6 +273,7 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpointPDF(ctx context.Context, c
 	pbRsp := &APIEndpointPDFRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointPDFRsp", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -348,6 +351,7 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPIEndpoints(ctx context.Context, cal
 	pbRsp := &APIEndpointsRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.virtual_host.APIEndpointsRsp", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -421,9 +425,12 @@ func (c *ApiepCustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, call
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &SwaggerSpecRsp{}
+	pbRsp := &google_api.HttpBody{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.virtual_host.SwaggerSpecRsp", body)
+		// server strips HTTP Body proto message and sends only data, re-build it here
+		pbRsp.ContentType = rsp.Header.Get("Content-Type")
+		pbRsp.Data = body
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -608,7 +615,7 @@ func (c *ApiepCustomAPIInprocClient) GetAPIEndpoints(ctx context.Context, in *AP
 
 	return rsp, nil
 }
-func (c *ApiepCustomAPIInprocClient) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq, opts ...grpc.CallOption) (*SwaggerSpecRsp, error) {
+func (c *ApiepCustomAPIInprocClient) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
 	cah, ok := ah.(ApiepCustomAPIServer)
 	if !ok {
@@ -616,7 +623,7 @@ func (c *ApiepCustomAPIInprocClient) GetSwaggerSpec(ctx context.Context, in *Swa
 	}
 
 	var (
-		rsp *SwaggerSpecRsp
+		rsp *google_api.HttpBody
 		err error
 	)
 
@@ -648,7 +655,7 @@ func (c *ApiepCustomAPIInprocClient) GetSwaggerSpec(ctx context.Context, in *Swa
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.virtual_host.SwaggerSpecRsp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "google.api.HttpBody", rsp)...)
 
 	return rsp, nil
 }
@@ -994,7 +1001,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/virtual_hostSwaggerSpecRsp"
+                            "$ref": "#/definitions/apiHttpBody"
                         }
                     },
                     "401": {
@@ -1071,6 +1078,28 @@ var ApiepCustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "apiHttpBody": {
+            "type": "object",
+            "description": "Message that represents an arbitrary HTTP body. It should only be used for\npayload formats that can't be represented as JSON, such as raw binary or\nan HTML page.\n\n\nThis message can be used both in streaming and non-streaming API methods in\nthe request as well as the response.\n\nIt can be used as a top-level request field, which is convenient if one\nwants to extract parameters from either the URL or HTTP template into the\nrequest fields and also want access to the raw HTTP body.\n\nExample:\n\n    message GetResourceRequest {\n      // A unique request id.\n      string request_id = 1;\n\n      // The raw HTTP body is bound to this field.\n      google.api.HttpBody http_body = 2;\n    }\n\n    service ResourceService {\n      rpc GetResource(GetResourceRequest) returns (google.api.HttpBody);\n      rpc UpdateResource(google.api.HttpBody) returns\n      (google.protobuf.Empty);\n    }\n\nExample with streaming methods:\n\n    service CaldavService {\n      rpc GetCalendar(stream google.api.HttpBody)\n        returns (stream google.api.HttpBody);\n      rpc UpdateCalendar(stream google.api.HttpBody)\n        returns (stream google.api.HttpBody);\n    }\n\nUse of this type only changes how the request and response bodies are\nhandled, all other features will continue to work unchanged.",
+            "properties": {
+                "content_type": {
+                    "type": "string",
+                    "description": "The HTTP Content-Type header value specifying the content type of the body."
+                },
+                "data": {
+                    "type": "string",
+                    "description": "The HTTP request/response body as raw binary.",
+                    "format": "byte"
+                },
+                "extensions": {
+                    "type": "array",
+                    "description": "Application specific response metadata. Must be set in the first response\nfor streaming APIs.",
+                    "items": {
+                        "$ref": "#/definitions/protobufAny"
+                    }
+                }
+            }
+        },
         "app_typeAPIEPDynExample": {
             "type": "object",
             "description": "List of Examples of expanded URL components for API endpoints that are collapsed with a dynamic component that is identified automatically",
@@ -1332,6 +1361,21 @@ var ApiepCustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "protobufAny": {
+            "type": "object",
+            "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
+            "properties": {
+                "type_url": {
+                    "type": "string",
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n-path/google.protobuf.Duration-). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme -http-, -https-, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, -https- is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than -http-, -https- (or the empty scheme) might be\nused with implementation specific semantics."
+                },
+                "value": {
+                    "type": "string",
+                    "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                    "format": "byte"
+                }
+            }
+        },
         "virtual_hostAPIEndpointLearntSchemaRsp": {
             "type": "object",
             "description": "shape of response to get req body schema for a given API endpoint.",
@@ -1393,22 +1437,6 @@ var ApiepCustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/app_typeAPIEPInfo"
                     },
                     "x-displayname": "API Endpoints"
-                }
-            }
-        },
-        "virtual_hostSwaggerSpecRsp": {
-            "type": "object",
-            "description": "Json encoded swagger spec for the given vhost.",
-            "title": "Swagger Spec Response",
-            "x-displayname": "Swagger Spec Response",
-            "x-ves-proto-message": "ves.io.schema.virtual_host.SwaggerSpecRsp",
-            "properties": {
-                "swagger_spec": {
-                    "type": "string",
-                    "description": " Swagger spec json encoded string for current request\n\nExample: - \"{\\\"info\\\"{\\\"description\\\": \\\"\\\",\\\"title\\\": \\\"\\\",\\\"version\\\": \\\"\\\"},\\\"paths\\\": {\\\"\\/api\\/Addresss\\\": {\\\"post\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"query\\\",\\\"name\\\": \\\"test1\\\",\\\"type\\\": \\\"string\\\"},{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"query\\\",\\\"items\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"name\\\": \\\"test\\\",\\\"type\\\": \\\"array\\\"},{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"body\\\",\\\"name\\\": \\\"body\\\",\\\"schema\\\": {\\\"example\\\": [\\\"{\\\\\\\"country\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"fullName\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"mobileNum\\\\\\\": 1234567890, \\\\\\\"zipCode\\\\\\\": \\\\\\\"121\\\\\\\", \\\\\\\"streetAddress\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"city\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"state\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"test\\\\\\\": \\\\\\\"Hello, \\\\\\\\u4e16\\\\\\\\u754c\\\\\\\", \\\\\\\"abc\\\\\\\": \\\\\\\"def\\\\\\\"}\\\"],\\\"properties\\\": {\\\"abc\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"city\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"country\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"fullName\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"mobileNum\\\": {\\\"type\\\": \\\"integer\\\"},\\\"state\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"streetAddress\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"test\\\": {\\\"type\\\": \\\"string\\\"},\\\"zipCode\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"}},\\\"required\\\": [\\\"fullName\\\",\\\"mobileNum\\\",\\\"city\\\",\\\"test\\\",\\\"zipCode\\\",\\\"state\\\",\\\"streetAddress\\\",\\\"country\\\",\\\"abc\\\"],\\\"type\\\": \\\"object\\\"}}],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}},\\\"\\/api\\/Cards\\\": {\\\"post\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"body\\\",\\\"name\\\": \\\"body\\\",\\\"schema\\\": {\\\"example\\\": [\\\"{\\\\\\\"fullName\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"cardNum\\\\\\\": 0, \\\\\\\"expMonth\\\\\\\": \\\\\\\"0\\\\\\\", \\\\\\\"expYear\\\\\\\": \\\\\\\"0\\\\\\\"}\\\"],\\\"properties\\\": {\\\"cardNum\\\": {\\\"type\\\": \\\"integer\\\"},\\\"expMonth\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"expYear\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"fullName\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"}},\\\"required\\\": [\\\"expMonth\\\",\\\"expYear\\\",\\\"fullName\\\",\\\"cardNum\\\"],\\\"type\\\": \\\"object\\\"}}],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}},\\\"\\/rest\\/basket\\/6\\/checkout\\\": {\\\"post\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"body\\\",\\\"name\\\": \\\"body\\\",\\\"schema\\\": {\\\"example\\\": [\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9792\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21189\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\",\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9814\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21409\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\",\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9822\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21489\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\",\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9793\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21199\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\",\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9817\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21439\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\"],\\\"properties\\\": {\\\"couponData\\\": {\\\"type\\\": \\\"string\\\"},\\\"orderDetails\\\": {\\\"properties\\\": {\\\"addressId\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"deliveryMethodId\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"paymentId\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"}},\\\"required\\\": [\\\"addressId\\\",\\\"paymentId\\\",\\\"deliveryMethodId\\\"],\\\"type\\\": \\\"object\\\"}},\\\"required\\\": [\\\"orderDetails\\\",\\\"couponData\\\"],\\\"type\\\": \\\"object\\\"}}],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}},\\\"\\/rest\\/products\\/1\\/reviews\\\": {\\\"put\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}},\\\"\\/rest\\/user\\/login\\\": {\\\"post\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"body\\\",\\\"name\\\": \\\"body\\\",\\\"schema\\\": {\\\"example\\\": [\\\"{\\\\\\\"email\\\\\\\":\\\\\\\"dummy0@dummy.com\\\\\\\",\\\\\\\"password\\\\\\\":\\\\\\\"redacted\\\\\\\",\\\\\\\"test\\\\\\\":\\\\\\\"Hello, \\u4E16\\u754C\\\\\\\"}\\\",\\\"{\\\\\\\"email\\\\\\\":\\\\\\\"dummy1@dummy.com\\\\\\\",\\\\\\\"password\\\\\\\":\\\\\\\"redacted\\\\\\\",\\\\\\\"test\\\\\\\":\\\\\\\"Hello, \\u4E16\\u754C\\\\\\\"}\\\",\\\"{\\\\\\\"email\\\\\\\":\\\\\\\"dummy2@dummy.com\\\\\\\",\\\\\\\"password\\\\\\\":\\\\\\\"redacted\\\\\\\",\\\\\\\"test\\\\\\\":\\\\\\\"Hello, \\u4E16\\u754C\\\\\\\"}\\\",\\\"{\\\\\\\"email\\\\\\\":\\\\\\\"dummy3@dummy.com\\\\\\\",\\\\\\\"password\\\\\\\":\\\\\\\"redacted\\\\\\\",\\\\\\\"test\\\\\\\":\\\\\\\"Hello, \\u4E16\\u754C\\\\\\\"}\\\"],\\\"properties\\\": {\\\"email\\\": {\\\"description\\\": \\\"Email\\\",\\\"pattern\\\": \\\".+@.+\\\",\\\"type\\\": \\\"string\\\",\\\"x-pii\\\": {\\\"examples\\\": [\\\"dummy0@dummy.com\\\",\\\"dummy1@dummy.com\\\",\\\"dummy2@dummy.com\\\",\\\"dummy3@dummy.com\\\"]}},\\\"password\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"test\\\": {\\\"type\\\": \\\"string\\\"}},\\\"required\\\": [\\\"email\\\",\\\"test\\\",\\\"password\\\"],\\\"type\\\": \\\"object\\\"}}],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}}},\\\"schemes\\\": [\\\"https\\\",\\\"http\\\"],\\\"swagger\\\": \\\"2.0\\\"}\"-",
-                    "title": "Swagger Spec",
-                    "x-displayname": "Swagger Spec",
-                    "x-ves-example": "{\\\"info\\\": {\\\"description\\\": \\\"\\\",\\\"title\\\": \\\"\\\",\\\"version\\\": \\\"\\\"},\\\"paths\\\": {\\\"\\/api\\/Addresss\\\": {\\\"post\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"query\\\",\\\"name\\\": \\\"test1\\\",\\\"type\\\": \\\"string\\\"},{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"query\\\",\\\"items\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"name\\\": \\\"test\\\",\\\"type\\\": \\\"array\\\"},{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"body\\\",\\\"name\\\": \\\"body\\\",\\\"schema\\\": {\\\"example\\\": [\\\"{\\\\\\\"country\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"fullName\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"mobileNum\\\\\\\": 1234567890, \\\\\\\"zipCode\\\\\\\": \\\\\\\"121\\\\\\\", \\\\\\\"streetAddress\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"city\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"state\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"test\\\\\\\": \\\\\\\"Hello, \\\\\\\\u4e16\\\\\\\\u754c\\\\\\\", \\\\\\\"abc\\\\\\\": \\\\\\\"def\\\\\\\"}\\\"],\\\"properties\\\": {\\\"abc\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"city\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"country\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"fullName\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"mobileNum\\\": {\\\"type\\\": \\\"integer\\\"},\\\"state\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"streetAddress\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"test\\\": {\\\"type\\\": \\\"string\\\"},\\\"zipCode\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"}},\\\"required\\\": [\\\"fullName\\\",\\\"mobileNum\\\",\\\"city\\\",\\\"test\\\",\\\"zipCode\\\",\\\"state\\\",\\\"streetAddress\\\",\\\"country\\\",\\\"abc\\\"],\\\"type\\\": \\\"object\\\"}}],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}},\\\"\\/api\\/Cards\\\": {\\\"post\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"body\\\",\\\"name\\\": \\\"body\\\",\\\"schema\\\": {\\\"example\\\": [\\\"{\\\\\\\"fullName\\\\\\\": \\\\\\\"dummy\\\\\\\", \\\\\\\"cardNum\\\\\\\": 0, \\\\\\\"expMonth\\\\\\\": \\\\\\\"0\\\\\\\", \\\\\\\"expYear\\\\\\\": \\\\\\\"0\\\\\\\"}\\\"],\\\"properties\\\": {\\\"cardNum\\\": {\\\"type\\\": \\\"integer\\\"},\\\"expMonth\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"expYear\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"fullName\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"}},\\\"required\\\": [\\\"expMonth\\\",\\\"expYear\\\",\\\"fullName\\\",\\\"cardNum\\\"],\\\"type\\\": \\\"object\\\"}}],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}},\\\"\\/rest\\/basket\\/6\\/checkout\\\": {\\\"post\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"body\\\",\\\"name\\\": \\\"body\\\",\\\"schema\\\": {\\\"example\\\": [\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9792\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21189\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\",\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9814\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21409\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\",\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9822\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21489\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\",\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9793\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21199\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\",\\\"{\\\\\\\"couponData\\\\\\\": \\\\\\\"MTIzNDU2Nzg5MC0xNTg3MzM3MjAwMDAw\\\\\\\", \\\\\\\"orderDetails\\\\\\\": {\\\\\\\"paymentId\\\\\\\": \\\\\\\"9817\\\\\\\", \\\\\\\"addressId\\\\\\\": \\\\\\\"21439\\\\\\\", \\\\\\\"deliveryMethodId\\\\\\\": \\\\\\\"1\\\\\\\"}}\\\"],\\\"properties\\\": {\\\"couponData\\\": {\\\"type\\\": \\\"string\\\"},\\\"orderDetails\\\": {\\\"properties\\\": {\\\"addressId\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"deliveryMethodId\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"},\\\"paymentId\\\": {\\\"description\\\": \\\"Integer\\\",\\\"pattern\\\": \\\"-?\\\\\\\\d+\\\",\\\"type\\\": \\\"string\\\"}},\\\"required\\\": [\\\"addressId\\\",\\\"paymentId\\\",\\\"deliveryMethodId\\\"],\\\"type\\\": \\\"object\\\"}},\\\"required\\\": [\\\"orderDetails\\\",\\\"couponData\\\"],\\\"type\\\": \\\"object\\\"}}],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}},\\\"\\/rest\\/products\\/1\\/reviews\\\": {\\\"put\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}},\\\"\\/rest\\/user\\/login\\\": {\\\"post\\\": {\\\"consumes\\\": [\\\"application\\/json\\\"],\\\"description\\\": \\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\": [{\\\"description\\\": \\\"\\\",\\\"in\\\": \\\"body\\\",\\\"name\\\": \\\"body\\\",\\\"schema\\\": {\\\"example\\\": [\\\"{\\\\\\\"email\\\\\\\":\\\\\\\"dummy0@dummy.com\\\\\\\",\\\\\\\"password\\\\\\\":\\\\\\\"redacted\\\\\\\",\\\\\\\"test\\\\\\\":\\\\\\\"Hello, \\u4E16\\u754C\\\\\\\"}\\\",\\\"{\\\\\\\"email\\\\\\\":\\\\\\\"dummy1@dummy.com\\\\\\\",\\\\\\\"password\\\\\\\":\\\\\\\"redacted\\\\\\\",\\\\\\\"test\\\\\\\":\\\\\\\"Hello, \\u4E16\\u754C\\\\\\\"}\\\",\\\"{\\\\\\\"email\\\\\\\":\\\\\\\"dummy2@dummy.com\\\\\\\",\\\\\\\"password\\\\\\\":\\\\\\\"redacted\\\\\\\",\\\\\\\"test\\\\\\\":\\\\\\\"Hello, \\u4E16\\u754C\\\\\\\"}\\\",\\\"{\\\\\\\"email\\\\\\\":\\\\\\\"dummy3@dummy.com\\\\\\\",\\\\\\\"password\\\\\\\":\\\\\\\"redacted\\\\\\\",\\\\\\\"test\\\\\\\":\\\\\\\"Hello, \\u4E16\\u754C\\\\\\\"}\\\"],\\\"properties\\\": {\\\"email\\\": {\\\"description\\\": \\\"Email\\\",\\\"pattern\\\": \\\".+@.+\\\",\\\"type\\\": \\\"string\\\",\\\"x-pii\\\": {\\\"examples\\\": [\\\"dummy0@dummy.com\\\",\\\"dummy1@dummy.com\\\",\\\"dummy2@dummy.com\\\",\\\"dummy3@dummy.com\\\"]}},\\\"password\\\": {\\\"description\\\": \\\"Word\\\",\\\"pattern\\\": \\\"[a-z0-9-]+\\\",\\\"type\\\": \\\"string\\\"},\\\"test\\\": {\\\"type\\\": \\\"string\\\"}},\\\"required\\\": [\\\"email\\\",\\\"test\\\",\\\"password\\\"],\\\"type\\\": \\\"object\\\"}}],\\\"responses\\\": {\\\"200\\\": {\\\"description\\\": \\\"\\\"}}}}},\\\"schemes\\\": [\\\"https\\\",\\\"http\\\"],\\\"swagger\\\": \\\"2.0\\\"}"
                 }
             }
         }

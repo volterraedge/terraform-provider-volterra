@@ -1090,7 +1090,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_network.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private replace request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.virtual_network.crudapi.API.Replace"), zap.Error(err))
 			}
@@ -1116,7 +1116,7 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_network.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private get request")
 			}
 		}
 	}
@@ -1141,7 +1141,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_network.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private list request")
 			}
 		}
 	}
@@ -1196,7 +1196,7 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_network.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private delete request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.virtual_network.crudapi.API.Delete"), zap.Error(err))
 			}
@@ -2696,6 +2696,105 @@ var APISwaggerJSON string = `{
             "x-displayname": "Route Attribute",
             "x-ves-proto-enum": "ves.io.schema.RouteAttrType"
         },
+        "schemaRouteTarget": {
+            "type": "object",
+            "description": "BGP Route Target extended community as per RFC 4360.",
+            "title": "RouteTarget",
+            "x-displayname": "Route Target",
+            "x-ves-oneof-field-rtarget_choice": "[\"asn2byte_rtarget\",\"asn4byte_rtarget\",\"ipv4_addr_rtarget\"]",
+            "x-ves-proto-message": "ves.io.schema.RouteTarget",
+            "properties": {
+                "asn2byte_rtarget": {
+                    "description": "Exclusive with [asn4byte_rtarget ipv4_addr_rtarget]\nx-displayName: \"Two-Octet AS Specific\"\nTwo-Octet AS Specific Route Target.",
+                    "title": "Two-Octet AS Specific",
+                    "$ref": "#/definitions/schemaRouteTarget2ByteAsn"
+                },
+                "asn4byte_rtarget": {
+                    "description": "Exclusive with [asn2byte_rtarget ipv4_addr_rtarget]\nx-displayName: \"Four-Octet AS Specific\"\nFour-Octet AS Specific Route Target.",
+                    "title": "Four-Octet AS Specific",
+                    "$ref": "#/definitions/schemaRouteTarget4ByteAsn"
+                },
+                "ipv4_addr_rtarget": {
+                    "description": "Exclusive with [asn2byte_rtarget asn4byte_rtarget]\nx-displayName: \"IPv4 Address Specific\"\nIPv4 Address Specific Route Target.",
+                    "title": "Ipv4 Address Specific",
+                    "$ref": "#/definitions/schemaRouteTargetIPv4Addr"
+                }
+            }
+        },
+        "schemaRouteTarget2ByteAsn": {
+            "type": "object",
+            "description": "BGP Two-Octet AS Specific Route Target as per RFC 4360.",
+            "title": "RouteTarget2ByteAsn",
+            "x-displayname": "Route Target",
+            "x-ves-proto-message": "ves.io.schema.RouteTarget2ByteAsn",
+            "properties": {
+                "as_number": {
+                    "type": "integer",
+                    "description": " Two-Octet AS Number.\nRequired: YES",
+                    "title": "as_number",
+                    "format": "int64",
+                    "x-displayname": "AS Number",
+                    "x-ves-required": "true"
+                },
+                "value": {
+                    "type": "integer",
+                    "description": " A 4-byte value that is unique in the scope of the ASN.\nRequired: YES",
+                    "title": "value",
+                    "format": "int64",
+                    "x-displayname": "Local Administrator Field",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "schemaRouteTarget4ByteAsn": {
+            "type": "object",
+            "description": "BGP Four-Octet AS Specific Route Target as per RFC 5668.",
+            "title": "RouteTarget4ByteAsn",
+            "x-displayname": "Four-Octet AS Specific Route Target",
+            "x-ves-proto-message": "ves.io.schema.RouteTarget4ByteAsn",
+            "properties": {
+                "as_number": {
+                    "type": "integer",
+                    "description": " Four-Octet AS Number.\nRequired: YES",
+                    "title": "as_number",
+                    "format": "int64",
+                    "x-displayname": "AS Number",
+                    "x-ves-required": "true"
+                },
+                "value": {
+                    "type": "integer",
+                    "description": " A 2-byte value that is unique in the scope of the ASN.\nRequired: YES",
+                    "title": "value",
+                    "format": "int64",
+                    "x-displayname": "Local Administrator Field",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "schemaRouteTargetIPv4Addr": {
+            "type": "object",
+            "description": "BGP IPv4 Address Specific Route Target as per RFC 4360.",
+            "title": "RouteTargetIPv4Addr",
+            "x-displayname": "IPv4 Address Specific Route Target",
+            "x-ves-proto-message": "ves.io.schema.RouteTargetIPv4Addr",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "description": " IPv4 Address\nRequired: YES",
+                    "title": "address",
+                    "x-displayname": "IPv4 Address",
+                    "x-ves-required": "true"
+                },
+                "value": {
+                    "type": "integer",
+                    "description": " A 4-byte value that is unique in the scope of the IPv4 address.\nRequired: YES",
+                    "title": "value",
+                    "format": "int64",
+                    "x-displayname": "Local Administrator Field",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "schemaStaticRouteType": {
             "type": "object",
             "description": "Defines a static route, configuring a list of prefixes and a next-hop to be used for them",
@@ -2997,6 +3096,53 @@ var APISwaggerJSON string = `{
             "x-displayname": "Virtual Network Type",
             "x-ves-proto-enum": "ves.io.schema.VirtualNetworkType"
         },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred). \nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                }
+            }
+        },
+        "virtual_networkAnyCastVIPFleetType": {
+            "type": "object",
+            "description": "Configure anycast VIP address allocator",
+            "title": "Anycast VIP for Fleet",
+            "x-displayname": "Anycast VIP for Fleet",
+            "x-ves-proto-message": "ves.io.schema.virtual_network.AnyCastVIPFleetType",
+            "properties": {
+                "vip_allocator": {
+                    "description": " Anycast VIP address allocator reference\nRequired: YES",
+                    "title": "Fleet VIP address allocator",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Fleet VIP address allocator",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "virtual_networkDNSServersList": {
             "type": "object",
             "description": "List DNS server ip addresses",
@@ -3006,12 +3152,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "dns_ip": {
                     "type": "array",
-                    "description": " List DNS server ip addresses",
+                    "description": " List DNS server ip addresses\nRequired: YES",
                     "title": "List of DNS server IP(s)",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "List of DNS Server IP(s)"
+                    "x-displayname": "List of DNS Server IP(s)",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -3020,17 +3167,61 @@ var APISwaggerJSON string = `{
             "description": "Virtual Network specification",
             "title": "Global Specification",
             "x-displayname": "Global Specification",
+            "x-ves-oneof-field-default_vip_choice": "[\"fleet_vip\",\"tenant_vip\"]",
             "x-ves-oneof-field-network_choice": "[\"global_network\",\"inside_network\",\"legacy_type\",\"private_network\",\"site_local_inside_network\",\"site_local_network\",\"srv6_network\"]",
+            "x-ves-oneof-field-snat_pool_choice": "[\"fleet_snat_pool\",\"interface_ip\",\"site_snat_pool\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_network.GlobalSpecType",
             "properties": {
+                "export_rtarget_strs": {
+                    "type": "array",
+                    "description": " Export Route Targets in string format.",
+                    "title": "export_rtarget_strs",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Export Route Target Strings"
+                },
+                "fleet_refs": {
+                    "type": "array",
+                    "description": " The set of sites where this virtual network is to be instantiated.",
+                    "title": "fleet_refs",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Fleet Refs"
+                },
+                "fleet_snat_pool": {
+                    "description": "Exclusive with [interface_ip site_snat_pool]\nx-displayName: \"SNAT pool for Fleet\"\nConfigure address allocator for SNAT pool for a Fleet",
+                    "title": "SNAT pool for Fleet",
+                    "$ref": "#/definitions/virtual_networkSNATPoolFleetType"
+                },
+                "fleet_vip": {
+                    "description": "Exclusive with [tenant_vip]\nx-displayName: \"Fleet VIP Allocator\"\nReference to address allocator",
+                    "title": "Fleet VIP allocator",
+                    "$ref": "#/definitions/virtual_networkAnyCastVIPFleetType"
+                },
                 "global_network": {
                     "description": "Exclusive with [inside_network legacy_type private_network site_local_inside_network site_local_network srv6_network]\nx-displayName: \"Global Network\"\nGlobal network can extend to multiple sites.",
                     "title": "Global Network",
                     "$ref": "#/definitions/schemaEmpty"
                 },
+                "import_rtarget_strs": {
+                    "type": "array",
+                    "description": " Import Route Targets in string format.",
+                    "title": "import_rtarget_strs",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Import Route Target Strings"
+                },
                 "inside_network": {
                     "description": "Exclusive with [global_network legacy_type private_network site_local_inside_network site_local_network srv6_network]\nx-displayName: \"Per Site Network\"\nAdditional networks on site",
                     "title": "Per Site Network",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "interface_ip": {
+                    "description": "Exclusive with [fleet_snat_pool site_snat_pool]\nx-displayName: \"Interface IP\"\nSNAT pool is interface ip of respective node",
+                    "title": "Interface IP",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "legacy_type": {
@@ -3059,6 +3250,20 @@ var APISwaggerJSON string = `{
                     "title": "Site Local Network (outside)",
                     "$ref": "#/definitions/schemaEmpty"
                 },
+                "site_snat_pool": {
+                    "description": "Exclusive with [fleet_snat_pool interface_ip]\nx-displayName: \"Per Node SNAT pool\"\nConfigure per node SNAT pool for a site",
+                    "title": "Per Node SNAT pool",
+                    "$ref": "#/definitions/virtual_networkSNATPoolSiteType"
+                },
+                "slice_ref": {
+                    "type": "array",
+                    "description": " Reference to srv6_network_slice for SRv6 VN.",
+                    "title": "slice_ref",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "SRv6 Network Slice"
+                },
                 "srv6_network": {
                     "description": "Exclusive with [global_network inside_network legacy_type private_network site_local_inside_network site_local_network]\nx-displayName: \"Per Site Srv6 Network\"\nConfigure a per site srv6 network",
                     "title": "Per Site Srv6 Network",
@@ -3082,6 +3287,11 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Subnets"
                 },
+                "tenant_vip": {
+                    "description": "Exclusive with [fleet_vip]\nx-displayName: \"Per Tenant VIP\"\nPer tenant VIP",
+                    "title": "Per Tenant VIP",
+                    "$ref": "#/definitions/virtual_networkPerTenantVIPType"
+                },
                 "type": {
                     "description": " Type of virtual network\nRequired: YES",
                     "title": "type",
@@ -3096,18 +3306,164 @@ var APISwaggerJSON string = `{
             "description": "Per site network parameters",
             "title": "Per Site Srv6 Network",
             "x-displayname": "Per Site Srv6 Network",
+            "x-ves-oneof-field-default_vip_choice": "[\"anycast_vip\",\"fleet_vip\",\"interface_ip_vip\"]",
             "x-ves-oneof-field-namespace_choice": "[\"no_namespace_network\",\"srv6_network_ns_params\"]",
+            "x-ves-oneof-field-snat_pool_choice": "[\"fleet_snat_pool\",\"interface_ip_snat_pool\",\"site_snat_pool\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_network.PerSiteSrv6NetworkType",
             "properties": {
+                "access_network_rtargets": {
+                    "type": "array",
+                    "description": " Import Route Targets for connectivity to Access Networks.",
+                    "title": "access_network_rtargets",
+                    "items": {
+                        "$ref": "#/definitions/schemaRouteTarget"
+                    },
+                    "x-displayname": "Access Network Route Targets"
+                },
+                "anycast_vip": {
+                    "type": "string",
+                    "description": "Exclusive with [fleet_vip interface_ip_vip]\nx-displayName: \"Anycast VIP\"\nConfigure anycast VIP",
+                    "title": "Anycast VIP"
+                },
+                "enterprise_network_rtargets": {
+                    "type": "array",
+                    "description": " Import Route Targets for connectivity to Enterprise Networks.",
+                    "title": "enterprise_network_rtargets",
+                    "items": {
+                        "$ref": "#/definitions/schemaRouteTarget"
+                    },
+                    "x-displayname": "Enterprise Network Route Targets"
+                },
+                "export_rtargets": {
+                    "type": "array",
+                    "description": " Export Route Targets for advertised routes.",
+                    "title": "export_rtargets",
+                    "items": {
+                        "$ref": "#/definitions/schemaRouteTarget"
+                    },
+                    "x-displayname": "Export Route Targets"
+                },
+                "fleet_snat_pool": {
+                    "description": "Exclusive with [interface_ip_snat_pool site_snat_pool]\nx-displayName: \"SNAT pool for Fleet\"\nConfigure address allocator for SNAT pool for a Fleet",
+                    "title": "SNAT pool for Fleet",
+                    "$ref": "#/definitions/virtual_networkSNATPoolFleetType"
+                },
+                "fleet_vip": {
+                    "description": "Exclusive with [anycast_vip interface_ip_vip]\nx-displayName: \"Per Site Anycast VIP\"\nConfigure per site anycast vip allocator",
+                    "title": "Per Site Anycast VIP",
+                    "$ref": "#/definitions/virtual_networkAnyCastVIPFleetType"
+                },
+                "fleets": {
+                    "type": "array",
+                    "description": " The set of sites where this virtual network is to be instantiated.",
+                    "title": "fleets",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Fleets"
+                },
+                "interface_ip_snat_pool": {
+                    "description": "Exclusive with [fleet_snat_pool site_snat_pool]\nx-displayName: \"Interface IP\"\nSNAT pool is interface ip of respective node",
+                    "title": "Interface IP",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "interface_ip_vip": {
+                    "description": "Exclusive with [anycast_vip fleet_vip]\nx-displayName: \"Interface IP\"\nDefault VIP is interface ip of respective node",
+                    "title": "Interface IP",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "internet_rtargets": {
+                    "type": "array",
+                    "description": " Import Route Targets for connectivity to the Internet.",
+                    "title": "internet_rtargets",
+                    "items": {
+                        "$ref": "#/definitions/schemaRouteTarget"
+                    },
+                    "x-displayname": "Internet Route Targets"
+                },
                 "no_namespace_network": {
                     "description": "Exclusive with [srv6_network_ns_params]\nx-displayName: \"Namespace Network Not Connected\"\nNamespace network is not connected to this network",
                     "title": "Namespace Network Not Connected",
                     "$ref": "#/definitions/schemaEmpty"
                 },
+                "site_snat_pool": {
+                    "description": "Exclusive with [fleet_snat_pool interface_ip_snat_pool]\nx-displayName: \"Per Node SNAT pool\"\nConfigure per node SNAT pool for a site",
+                    "title": "Per Node SNAT pool",
+                    "$ref": "#/definitions/virtual_networkSNATPoolSiteType"
+                },
+                "slice": {
+                    "description": " The srv6_network_slice to which this network belongs.\nRequired: YES",
+                    "title": "slice",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "SRv6 Network Slice",
+                    "x-ves-required": "true"
+                },
                 "srv6_network_ns_params": {
                     "description": "Exclusive with [no_namespace_network]\nx-displayName: \"Namespace Network to be Connected\"\nName of namespace whose network is connected",
                     "title": "Namespace Network to be Connected",
                     "$ref": "#/definitions/virtual_networkSrv6NetworkNsParametersType"
+                }
+            }
+        },
+        "virtual_networkPerTenantVIPType": {
+            "type": "object",
+            "description": "Per tenant anycast vip",
+            "title": "Per Tenant Anycast VIP",
+            "x-displayname": "Per Tenant Anycast VIP",
+            "x-ves-proto-message": "ves.io.schema.virtual_network.PerTenantVIPType",
+            "properties": {
+                "tenant_vip_map": {
+                    "type": "object",
+                    "description": " Per tenant anycast VIP for the Virtual network",
+                    "title": "Per Tenant VIP",
+                    "x-displayname": "Per Tenant VIP"
+                }
+            }
+        },
+        "virtual_networkSNATPoolFleetType": {
+            "type": "object",
+            "description": "Configure SNAT pool address allocator",
+            "title": "SNAT pool for Fleet",
+            "x-displayname": "SNAT pool for Fleet",
+            "x-ves-proto-message": "ves.io.schema.virtual_network.SNATPoolFleetType",
+            "properties": {
+                "snat_pool_allocator": {
+                    "description": " SNAT pool address allocator reference\nRequired: YES",
+                    "title": "Fleet SNAT pool address allocator",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Fleet SNAT pool address allocator",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "virtual_networkSNATPoolSiteType": {
+            "type": "object",
+            "description": "Per node snat pool for a site",
+            "title": "Per Node SNAT pool for a Site",
+            "x-displayname": "Per Node SNAT pool for a Site",
+            "x-ves-proto-message": "ves.io.schema.virtual_network.SNATPoolSiteType",
+            "properties": {
+                "node_snat_pool": {
+                    "type": "object",
+                    "description": " Per node ip v4 prefix for snat pool\nRequired: YES",
+                    "title": "Per Node IPv4 Prefix",
+                    "x-displayname": "Per Node IPv4 Prefix",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "virtual_networkSNATPoolType": {
+            "type": "object",
+            "description": "x-displayName: \"SNAT Pool\"\nSNAT pool ip prefix  parameters",
+            "title": "SNAT Pool",
+            "properties": {
+                "ipv4_prefixes": {
+                    "type": "array",
+                    "description": "x-displayName: \"List of IPv4 Prefixes\"\nx-required\nList of IPv4 prefixes used as SNAT pool",
+                    "title": "List of IPv4 Prefixes",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
@@ -3134,10 +3490,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "namespace": {
                     "type": "string",
-                    "description": " Name of namespace that is connected to srv6 Network\n\nExample: - \"production\"-",
+                    "description": " Name of namespace that is connected to srv6 Network\n\nExample: - \"production\"-\nRequired: YES",
                     "title": "Namespace",
                     "x-displayname": "Namespace",
-                    "x-ves-example": "production"
+                    "x-ves-example": "production",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -3194,7 +3551,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_networkVoltADNPrivateNetworkTenantInfoType": {
             "type": "object",
-            "description": "x-displayName: \"VoltADN Private Network Tenant Info\"\nPer Tenant information VoltADN private network",
+            "description": "x-displayName: \"VoltADN Private Network Tenant Info\"\nPer Tenant information for VoltADN private network",
             "title": "VoltADN Private Network Tenant Info",
             "properties": {
                 "default_private_vip": {
@@ -3265,7 +3622,7 @@ var APISwaggerJSON string = `{
                 "re_info_map": {
                     "type": "object",
                     "description": " Map of re name to re info map, Key:RE name, Value: RE info",
-                    "title": "RE name  to Re info mao",
+                    "title": "RE name  to RE info map",
                     "x-displayname": "RE name to Re info mapping"
                 },
                 "tenant_info_map": {

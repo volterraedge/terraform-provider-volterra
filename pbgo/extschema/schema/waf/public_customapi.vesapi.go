@@ -158,6 +158,7 @@ func (c *CustomAPIRestClient) doRPCVirtualHostWafStatus(ctx context.Context, cal
 	pbRsp := &VirtualHostWafStatusRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.waf.VirtualHostWafStatusRsp", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

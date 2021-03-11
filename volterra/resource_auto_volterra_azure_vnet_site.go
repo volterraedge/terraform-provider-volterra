@@ -166,11 +166,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 				Optional: true,
 			},
 
-			"operating_system_version": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-
 			"resource_group": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -2114,11 +2109,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 					},
 				},
 			},
-
-			"volterra_software_version": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
 		},
 	}
 }
@@ -2322,13 +2312,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 		createSpec.NodesPerAz =
 			uint32(v.(int))
-	}
-
-	//operating_system_version
-	if v, ok := d.GetOk("operating_system_version"); ok && !isIntfNil(v) {
-
-		createSpec.OperatingSystemVersion =
-			v.(string)
 	}
 
 	//resource_group
@@ -5011,13 +4994,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	}
 
-	//volterra_software_version
-	if v, ok := d.GetOk("volterra_software_version"); ok && !isIntfNil(v) {
-
-		createSpec.VolterraSoftwareVersion =
-			v.(string)
-	}
-
 	log.Printf("[DEBUG] Creating Volterra AzureVnetSite object with struct: %+v", createReq)
 
 	createAzureVnetSiteResp, err := client.CreateObject(context.Background(), ves_io_schema_views_azure_vnet_site.ObjectType, createReq)
@@ -5190,12 +5166,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 		updateSpec.NodesPerAz =
 			uint32(v.(int))
-	}
-
-	if v, ok := d.GetOk("operating_system_version"); ok && !isIntfNil(v) {
-
-		updateSpec.OperatingSystemVersion =
-			v.(string)
 	}
 
 	siteTypeTypeFound := false
@@ -7352,12 +7322,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 		}
 
-	}
-
-	if v, ok := d.GetOk("volterra_software_version"); ok && !isIntfNil(v) {
-
-		updateSpec.VolterraSoftwareVersion =
-			v.(string)
 	}
 
 	log.Printf("[DEBUG] Updating Volterra AzureVnetSite obj with struct: %+v", updateReq)

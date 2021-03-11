@@ -196,6 +196,7 @@ func (c *WAFMonitoringAPIRestClient) doRPCClientRuleHitsMetrics(ctx context.Cont
 	pbRsp := &RuleHitsCountResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.waf.RuleHitsCountResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -277,6 +278,7 @@ func (c *WAFMonitoringAPIRestClient) doRPCClientSecurityEventsMetrics(ctx contex
 	pbRsp := &SecurityEventsCountResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.waf.SecurityEventsCountResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -358,6 +360,7 @@ func (c *WAFMonitoringAPIRestClient) doRPCServerRuleHitsMetrics(ctx context.Cont
 	pbRsp := &RuleHitsCountResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.waf.RuleHitsCountResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -439,6 +442,7 @@ func (c *WAFMonitoringAPIRestClient) doRPCServerSecurityEventsMetrics(ctx contex
 	pbRsp := &SecurityEventsCountResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.waf.SecurityEventsCountResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

@@ -246,6 +246,7 @@ func (c *CustomAPIRestClient) doRPCAcceptTOS(ctx context.Context, callOpts *serv
 	pbRsp := &AcceptTOSResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.AcceptTOSResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -323,6 +324,7 @@ func (c *CustomAPIRestClient) doRPCAssignRole(ctx context.Context, callOpts *ser
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Empty", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -399,6 +401,7 @@ func (c *CustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, callOpts *
 	pbRsp := &CascadeDeleteResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.CascadeDeleteResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -481,6 +484,7 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	pbRsp := &Object{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Object", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -556,6 +560,7 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	pbRsp := &GetUserRoleResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.GetUserRoleResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -631,6 +636,7 @@ func (c *CustomAPIRestClient) doRPCGetTOS(ctx context.Context, callOpts *server.
 	pbRsp := &GetTOSResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.GetTOSResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -706,6 +712,7 @@ func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.Cu
 	pbRsp := &ListUserRoleResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.ListUserRoleResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -788,6 +795,7 @@ func (c *CustomAPIRestClient) doRPCReplace(ctx context.Context, callOpts *server
 	pbRsp := &Object{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.Object", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -864,6 +872,7 @@ func (c *CustomAPIRestClient) doRPCSendPasswordEmail(ctx context.Context, callOp
 	pbRsp := &SendPasswordEmailResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.user.SendPasswordEmailResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -2907,6 +2916,13 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Creation Timestamp\nx-displayName: \"Creation Timestamp\"\nUser object creation timestamp",
                     "format": "date-time",
                     "x-displayname": "Creation Timestamp"
+                },
+                "disabled": {
+                    "type": "boolean",
+                    "description": " If set to true user is completely disabled including IDM.",
+                    "title": "Disabled",
+                    "format": "boolean",
+                    "x-displayname": "Disabled"
                 },
                 "domain_owner": {
                     "type": "boolean",

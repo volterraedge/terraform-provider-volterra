@@ -4295,24 +4295,24 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Cloud Disk Size"
                 },
                 "inside_subnet": {
-                    "description": "Exclusive with [reserved_inside_subnet]\nx-displayName: \"Subnet for Inside Interface\"\nSubnets for the inside interface of the node",
+                    "description": "Exclusive with [reserved_inside_subnet]\nx-displayName: \"Specify Subnet\"\nSelect Existing Subnet or Create New",
                     "title": "Inside Subnet Choice",
                     "$ref": "#/definitions/viewsCloudSubnetType"
                 },
                 "outside_subnet": {
-                    "description": " Subnets for the outside interface of the node\nRequired: YES",
+                    "description": " Subnet for the outside interface of the node\nRequired: YES",
                     "title": "Outside Subnet",
                     "$ref": "#/definitions/viewsCloudSubnetType",
                     "x-displayname": "Subnet for Outside Interface",
                     "x-ves-required": "true"
                 },
                 "reserved_inside_subnet": {
-                    "description": "Exclusive with [inside_subnet]\nx-displayName: \"Use Reserved Subnet from Primary CIDR\"\nUse Reserved Subnet from Primary CIDR",
+                    "description": "Exclusive with [inside_subnet]\nx-displayName: \"Autogenerate Subnet\"\nAutogenerate and reserve a subnet from the Primary CIDR",
                     "title": "Reserved Subnet Choice",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "workload_subnet": {
-                    "description": " Workload Subnet where workloads should be running",
+                    "description": " Subnet in which workloads are launched",
                     "title": "Workload Subnet",
                     "$ref": "#/definitions/viewsCloudSubnetType",
                     "x-displayname": "Workload Subnet"
@@ -4502,12 +4502,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
-                "operating_system_version": {
-                    "type": "string",
-                    "description": " Desired Operating System version for this site.\n\nExample: - \"value\"-",
-                    "x-displayname": "Operating System Version",
-                    "x-ves-example": "value"
-                },
                 "tgw_security": {
                     "description": " Security Configuration for transit gateway",
                     "$ref": "#/definitions/aws_tgw_siteSecurityConfigType",
@@ -4517,12 +4511,6 @@ var APISwaggerJSON string = `{
                     "description": " Virtual Network Configuration for transit gateway",
                     "$ref": "#/definitions/aws_tgw_siteVnConfiguration",
                     "x-displayname": "TGW Virtual Network Configuration"
-                },
-                "volterra_software_version": {
-                    "type": "string",
-                    "description": " Desired Volterra software version for this site, a string matching released set of software components.\n\nExample: - \"value\"-",
-                    "x-displayname": "Software Version",
-                    "x-ves-example": "value"
                 },
                 "vpc_attachments": {
                     "description": " VPC attachments to transit gateway",
@@ -4756,12 +4744,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [log_receiver]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
-                "operating_system_version": {
-                    "type": "string",
-                    "description": " Desired Operating System version for this site.\n\nExample: - \"value\"-",
-                    "x-displayname": "Operating System Version",
-                    "x-ves-example": "value"
-                },
                 "tgw_security": {
                     "description": " Security Configuration for transit gateway",
                     "$ref": "#/definitions/aws_tgw_siteSecurityConfigType",
@@ -4771,12 +4753,6 @@ var APISwaggerJSON string = `{
                     "description": " Virtual Network Configuration for transit gateway",
                     "$ref": "#/definitions/aws_tgw_siteVnConfiguration",
                     "x-displayname": "TGW Virtual Network Configuration"
-                },
-                "volterra_software_version": {
-                    "type": "string",
-                    "description": " Desired Volterra software version for this site, a string matching released set of software components.\n\nExample: - \"value\"-",
-                    "x-displayname": "Software Version",
-                    "x-ves-example": "value"
                 },
                 "vpc_attachments": {
                     "description": " VPC attachments to transit gateway",

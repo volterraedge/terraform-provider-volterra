@@ -2879,21 +2879,21 @@ var APISwaggerJSON string = `{
             "title": "OriginServerType",
             "x-displayname": "Origin Server",
             "x-ves-displayorder": "9,8",
-            "x-ves-oneof-field-choice": "[\"consul_service\",\"custom_endpoint_object\",\"k8s_service\",\"private_ip\",\"private_name\",\"public_ip\",\"public_name\",\"voltadn_private_ip\",\"voltadn_private_name\"]",
+            "x-ves-oneof-field-choice": "[\"consul_service\",\"custom_endpoint_object\",\"k8s_service\",\"private_ip\",\"private_name\",\"public_ip\",\"public_name\",\"srv6_private_ip\",\"srv6_private_name\",\"voltadn_private_ip\",\"voltadn_private_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerType",
             "properties": {
                 "consul_service": {
-                    "description": "Exclusive with [custom_endpoint_object k8s_service private_ip private_name public_ip public_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"Consul Service Name of Origin Server on given Sites\"\nSpecify origin server with Hashi Corp Consul service name and site information",
+                    "description": "Exclusive with [custom_endpoint_object k8s_service private_ip private_name public_ip public_name srv6_private_ip srv6_private_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"Consul Service Name of Origin Server on given Sites\"\nSpecify origin server with Hashi Corp Consul service name and site information",
                     "title": "OriginServerConsulService",
                     "$ref": "#/definitions/origin_poolOriginServerConsulService"
                 },
                 "custom_endpoint_object": {
-                    "description": "Exclusive with [consul_service k8s_service private_ip private_name public_ip public_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"Custom Endpoint Object for Origin Server\"\nSpecify origin server with a reference to endpoint object",
+                    "description": "Exclusive with [consul_service k8s_service private_ip private_name public_ip public_name srv6_private_ip srv6_private_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"Custom Endpoint Object for Origin Server\"\nSpecify origin server with a reference to endpoint object",
                     "title": "OriginServerCustomEndpoint",
                     "$ref": "#/definitions/origin_poolOriginServerCustomEndpoint"
                 },
                 "k8s_service": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object private_ip private_name public_ip public_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"K8s Service Name of Origin Server on given Sites\"\nSpecify origin server with K8s service name and site information",
+                    "description": "Exclusive with [consul_service custom_endpoint_object private_ip private_name public_ip public_name srv6_private_ip srv6_private_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"K8s Service Name of Origin Server on given Sites\"\nSpecify origin server with K8s service name and site information",
                     "title": "OriginServerK8SService",
                     "$ref": "#/definitions/origin_poolOriginServerK8SService"
                 },
@@ -2904,44 +2904,54 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Origin Server Labels"
                 },
                 "private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_name public_ip public_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"IP address of Origin Server on given Sites\"\nSpecify origin server with private or public IP address and site information",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_name public_ip public_name srv6_private_ip srv6_private_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"IP address of Origin Server on given Sites\"\nSpecify origin server with private or public IP address and site information",
                     "title": "OriginServerPrivateIP",
                     "$ref": "#/definitions/origin_poolOriginServerPrivateIP"
                 },
                 "private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip public_ip public_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"DNS Name of Origin Server on given Sites\"\nSpecify origin server with private or public DNS name and site information",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip public_ip public_name srv6_private_ip srv6_private_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"DNS Name of Origin Server on given Sites\"\nSpecify origin server with private or public DNS name and site information",
                     "title": "OriginServerPrivateName",
                     "$ref": "#/definitions/origin_poolOriginServerPrivateName"
                 },
                 "public_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"Public IP of Origin Server\"\nSpecify origin server with public IP",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_name srv6_private_ip srv6_private_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"Public IP of Origin Server\"\nSpecify origin server with public IP",
                     "title": "OriginServerPublicName",
                     "$ref": "#/definitions/origin_poolOriginServerPublicIP"
                 },
                 "public_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip voltadn_private_ip voltadn_private_name]\nx-displayName: \"Public DNS Name of Origin Server\"\nSpecify origin server with public DNS name",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip srv6_private_ip srv6_private_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"Public DNS Name of Origin Server\"\nSpecify origin server with public DNS name",
                     "title": "OriginServerPublicName",
                     "$ref": "#/definitions/origin_poolOriginServerPublicName"
                 },
+                "srv6_private_ip": {
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name srv6_private_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"IP address on Srv6 Network\"\nSpecify origin server IP address on per site srv6 network",
+                    "title": "OriginServerSrv6Srv6NetworkPrivateIP",
+                    "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkPrivateIP"
+                },
+                "srv6_private_name": {
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name srv6_private_ip voltadn_private_ip voltadn_private_name]\nx-displayName: \"Name on Srv6 Network\"\nSpecify origin server name on per site srv6 network",
+                    "title": "OriginServerSrv6NetworkPrivateName",
+                    "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkPrivateName"
+                },
                 "voltadn_private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name voltadn_private_name]\nx-displayName: \"IP address on VoltADN Private Network\"\nSpecify origin server IP address on VoltADN private network",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name srv6_private_ip srv6_private_name voltadn_private_name]\nx-displayName: \"IP address on VoltADN Private Network\"\nSpecify origin server IP address on VoltADN private network",
                     "title": "OriginServerVoltADNPrivateIP",
-                    "$ref": "#/definitions/origin_poolOriginServerVoltADNPrivateIP"
+                    "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkPrivateIP"
                 },
                 "voltadn_private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name voltadn_private_ip]\nx-displayName: \"Name on VoltADN Private Network\"\nSpecify origin server name on VoltADN private network",
-                    "title": "OriginServerPrivateIP",
-                    "$ref": "#/definitions/origin_poolOriginServerVoltADNPrivateName"
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name srv6_private_ip srv6_private_name voltadn_private_ip]\nx-displayName: \"Name on VoltADN Private Network\"\nSpecify origin server name on VoltADN private network",
+                    "title": "OriginServerVoltADNPrivateName",
+                    "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkPrivateName"
                 }
             }
         },
-        "origin_poolOriginServerVoltADNPrivateIP": {
+        "origin_poolOriginServerVirtualNetworkPrivateIP": {
             "type": "object",
             "description": "Specify origin server with IP on VoltADN Private Network",
-            "title": "OriginServerVoltADNPrivateIP",
-            "x-displayname": "IP address on VoltADN Private Network",
+            "title": "OriginServerVirtualNetworkPrivateIP",
+            "x-displayname": "IP address in Virtual Network",
             "x-ves-displayorder": "1,2",
-            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerVoltADNPrivateIP",
+            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerVirtualNetworkPrivateIP",
             "properties": {
                 "ip": {
                     "type": "string",
@@ -2950,22 +2960,22 @@ var APISwaggerJSON string = `{
                     "x-displayname": "IP",
                     "x-ves-required": "true"
                 },
-                "private_network": {
-                    "description": " VoltADN Private Network where this IP will be present\nRequired: YES",
-                    "title": "VoltADN Private Network",
+                "virtual_network": {
+                    "description": " Virtual Network where this IP will be present\nRequired: YES",
+                    "title": "Virtual Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "VoltADN Private Network",
+                    "x-displayname": "Virtual Network",
                     "x-ves-required": "true"
                 }
             }
         },
-        "origin_poolOriginServerVoltADNPrivateName": {
+        "origin_poolOriginServerVirtualNetworkPrivateName": {
             "type": "object",
             "description": "Specify origin server with DNS name on VoltADN private Network",
-            "title": "OriginServerVoltADNPrivateName",
-            "x-displayname": "DNS Name on VoltADN Private Network",
+            "title": "OriginServerVirtualNetworkPrivateName",
+            "x-displayname": "DNS Name in Virtual Network",
             "x-ves-displayorder": "1,2",
-            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerVoltADNPrivateName",
+            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerVirtualNetworkPrivateName",
             "properties": {
                 "dns_name": {
                     "type": "string",
@@ -2975,10 +2985,10 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "private_network": {
-                    "description": " VoltADN Private Network where this Name will be present\nRequired: YES",
-                    "title": "VoltADN Private Network",
+                    "description": " Virtual Network where this Name will be present\nRequired: YES",
+                    "title": "Virtual Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "VoltADN Private Network",
+                    "x-displayname": "Virtual Network",
                     "x-ves-required": "true"
                 }
             }

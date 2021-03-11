@@ -1090,7 +1090,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private replace request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"), zap.Error(err))
 			}
@@ -1116,7 +1116,7 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.http_loadbalancer.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private get request")
 			}
 		}
 	}
@@ -1141,7 +1141,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.http_loadbalancer.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private list request")
 			}
 		}
 	}
@@ -1196,7 +1196,7 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.http_loadbalancer.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private delete request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.http_loadbalancer.crudapi.API.Delete"), zap.Error(err))
 			}
@@ -2292,18 +2292,17 @@ var APISwaggerJSON string = `{
                 },
                 "disable_default_error_pages": {
                     "type": "boolean",
-                    "description": "\n An option to specify the use of default Volterra error pages\n\nExample: - \"true\"-",
+                    "description": " Disable the use of default Volterra error pages.",
                     "title": "Disable the use of default Volterra error pages",
                     "format": "boolean",
-                    "x-displayname": "Disable default error pages",
-                    "x-ves-example": "true"
+                    "x-displayname": "Disable Default Error Pages"
                 },
                 "idle_timeout": {
                     "type": "integer",
-                    "description": " Idle timeout is the amount of time that the loadbalancer will allow a stream to exist with\n no upstream or downstream activity.\n\n Idle timeout and Proxy Type:\n\n HTTP_PROXY, HTTPS_PROXY:\n Idle timer is started when the first byte is received on the connection.\n Each time an encode/decode event for headers or data is processed for the stream,\n the timer will be reset.\n If the timeout fires, the stream is terminated with a 408 (Request Timeout) error code if\n no upstream response header has been received, otherwise a stream reset occurs.\n The default idle timeout is 30 seconds\n\n TCP PROXY, TCP_PROXY_WITH_SNI, SMA_PROXY:\n The idle timeout is defined as the period in which there are no bytes sent or received on\n either the upstream or downstream connection.\n The default idle timeout is 1 hour.\n\n UDP PROXY:\n The idle timeout for sessions. Idle timeout is defined as the period in which there are no\n datagrams sent or received on the session.\n The default if not specified is 1 minute.\n\nExample: - \"2000\"-",
+                    "description": " The amount of time that a stream can exist without upstream or downstream activity, in milliseconds.\n The stream is terminated with a HTTP 408 (Request Timeout) error code if no upstream response header has been\n received, otherwise the stream is reset.\n\nExample: - \"2000\"-",
                     "title": "Idle timeout",
                     "format": "int64",
-                    "x-displayname": "Idle timeout (in milliseconds)",
+                    "x-displayname": "Idle Timeout",
                     "x-ves-example": "2000"
                 },
                 "javascript_info": {
@@ -2323,7 +2322,7 @@ var APISwaggerJSON string = `{
                 },
                 "max_request_header_size": {
                     "type": "integer",
-                    "description": "\n The maximum request header size in KiB for incoming connections.\n\n If un-configured, the default max request headers allowed is 60 KiB.\n\n Requests that exceed this limit will receive a 431 response.\n\n The max configurable limit is 96 KiB, based on current implementation constraints.\n\n Note:\n\n  *  When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective\n     \"maximum request header size\" for such virtual hosts is the highest value configured\n     on any of the virtual hosts",
+                    "description": " The maximum request header size for downstream connections, in KiB.\n A HTTP 431 (Request Header Fields Too Large) error code is sent for requests that exceed this size.\n\n If multiple loadbalancers share the same advertise_policy, the highest value configured across all\n such loadbalancers is used for all the loadbalancers in question.",
                     "title": "Maximum request header size",
                     "format": "int64",
                     "x-displayname": "Maximum Request Header Size"
@@ -2781,7 +2780,7 @@ var APISwaggerJSON string = `{
                 },
                 "timeout": {
                     "type": "integer",
-                    "description": " Specifies the timeout for the route in milliseconds.\n This timeout includes all retries.\n For server side streaming, configure this field with higher value or leave it 0\n for infinite timeout\n\nExample: - 2000-",
+                    "description": " The timeout for the route including all retries, in milliseconds.\n Should be set to a high value or 0 (infinite timeout) for server-side streaming.\n\nExample: - 2000-",
                     "title": "timeout",
                     "format": "int64",
                     "x-displayname": "Timeout"
@@ -2948,6 +2947,7 @@ var APISwaggerJSON string = `{
             "description": "Simple client source rule specifies the sources to be blocked or trusted (skip WAF)",
             "title": "SimpleClientSrcRule",
             "x-displayname": "Simple Client Src Rule",
+            "x-ves-displayorder": "10,3,9",
             "x-ves-oneof-field-client_source_choice": "[\"as_number\",\"ip_prefix\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.SimpleClientSrcRule",
             "properties": {
@@ -2956,13 +2956,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [ip_prefix]\nx-displayName: \"AS Number\"\nx-required\nx-example: \"4683\"\nRFC 6793 defined 4-byte AS number",
                     "title": "as number",
                     "format": "int64"
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Description\n\nExample: - \"blocking this IP due to malicious activity seen on september 4 2020\"-",
-                    "title": "Description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "blocking this IP due to malicious activity seen on september 4 2020"
                 },
                 "expiration_timestamp": {
                     "type": "string",
@@ -2982,14 +2975,6 @@ var APISwaggerJSON string = `{
                     "title": "metadata",
                     "$ref": "#/definitions/schemaMessageMetaType",
                     "x-displayname": "Metadata",
-                    "x-ves-required": "true"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " rule name\n\nExample: - \"block-223.226.31.151-for-30-mins\"-\nRequired: YES",
-                    "title": "Name",
-                    "x-displayname": "Rule Name",
-                    "x-ves-example": "block-223.226.31.151-for-30-mins",
                     "x-ves-required": "true"
                 }
             }
@@ -3405,6 +3390,7 @@ var APISwaggerJSON string = `{
             "description": "Simple WAF exclusion rule specifies a simple set of match conditions to be matched to skip a list of WAF rule ids",
             "title": "SimpleWafExclusionRule",
             "x-displayname": "Simple WAF Exclusion Rule",
+            "x-ves-displayorder": "10,3,6,7,8,9",
             "x-ves-oneof-field-domain_choice": "[\"any_domain\",\"domain_regex\"]",
             "x-ves-proto-message": "ves.io.schema.policy.SimpleWafExclusionRule",
             "properties": {
@@ -3412,13 +3398,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [domain_regex]\nx-displayName: \"Any Domain\"\nApply this waf exclusion rule for any domain",
                     "title": "Any domain",
                     "$ref": "#/definitions/schemaEmpty"
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Description\n\nExample: - \"exclusions for login API seen due to false positives on september 4 2020\"-",
-                    "title": "Description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "exclusions for login API seen due to false positives on september 4 2020"
                 },
                 "domain_regex": {
                     "type": "string",
@@ -3460,14 +3439,6 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Methods",
                     "x-ves-example": "GET"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " Exclusion rule name\n\nExample: - \"login-exclusions\"-\nRequired: YES",
-                    "title": "Name",
-                    "x-displayname": "Exclusion Rule Name",
-                    "x-ves-example": "login-exclusions",
-                    "x-ves-required": "true"
                 },
                 "path_regex": {
                     "type": "string",
@@ -4257,7 +4228,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object that corresponds to the containing message.\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description.\n\nExample: - \"Virtual Host for acmecorp website\"-",
                     "title": "description",
                     "x-displayname": "Description",
                     "x-ves-example": "Virtual Host for acmecorp website"
@@ -5341,13 +5312,41 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsWhereSrv6Network": {
+            "type": "object",
+            "description": "Parameters to advertise on a given per site srv6 network",
+            "title": "WhereSrv6Network",
+            "x-displayname": "Per Site Srv6 Network",
+            "x-ves-displayorder": "1,2",
+            "x-ves-oneof-field-vip_choice": "[\"default_vip\",\"specific_vip\"]",
+            "x-ves-proto-message": "ves.io.schema.views.WhereSrv6Network",
+            "properties": {
+                "default_vip": {
+                    "description": "Exclusive with [specific_vip]\nx-displayName: \"Default VIP for VoltADN Private Network\"\nUse the default VIP, system allocated or configured in the VoltADN Private Network",
+                    "title": "Default VIP for VoltADN Private Network",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "private_network": {
+                    "description": " Select per site srv6 network\nRequired: YES",
+                    "title": "Per Site Srv6 Network",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Per Site Srv6 Network",
+                    "x-ves-required": "true"
+                },
+                "specific_vip": {
+                    "type": "string",
+                    "description": "Exclusive with [default_vip]\nx-displayName: \"Specific VIP\"\nUse given IP address as VIP on VoltADN private Network",
+                    "title": "Specific VIP"
+                }
+            }
+        },
         "viewsWhereType": {
             "type": "object",
             "description": "This defines various options where a Loadbalancer could be advertised",
             "title": "WhereType",
             "x-displayname": "Select Where to Advertise",
             "x-ves-displayorder": "4,5",
-            "x-ves-oneof-field-choice": "[\"private_network\",\"site\",\"virtual_site\",\"vk8s_service\"]",
+            "x-ves-oneof-field-choice": "[\"private_network\",\"site\",\"srv6_network\",\"virtual_site\",\"vk8s_service\"]",
             "x-ves-oneof-field-port_choice": "[\"port\",\"use_default_port\"]",
             "x-ves-proto-message": "ves.io.schema.views.WhereType",
             "properties": {
@@ -5358,14 +5357,19 @@ var APISwaggerJSON string = `{
                     "format": "int64"
                 },
                 "private_network": {
-                    "description": "Exclusive with [site virtual_site vk8s_service]\nx-displayName: \"VoltADN Private Network\"\nAdvertise on a VoltADN private network",
+                    "description": "Exclusive with [site srv6_network virtual_site vk8s_service]\nx-displayName: \"VoltADN Private Network\"\nAdvertise on a VoltADN private network",
                     "title": "VoltADN Private Network",
                     "$ref": "#/definitions/viewsWherePrivateNetwork"
                 },
                 "site": {
-                    "description": "Exclusive with [private_network virtual_site vk8s_service]\nx-displayName: \"Site\"\nAdvertise on a customer site and a given network.",
+                    "description": "Exclusive with [private_network srv6_network virtual_site vk8s_service]\nx-displayName: \"Site\"\nAdvertise on a customer site and a given network.",
                     "title": "Site",
                     "$ref": "#/definitions/viewsWhereSite"
+                },
+                "srv6_network": {
+                    "description": "Exclusive with [private_network site virtual_site vk8s_service]\nx-displayName: \"Per Site Srv6 Network\"\nAdvertise on a Per site srv6 network",
+                    "title": "Per Site Srv6 Network",
+                    "$ref": "#/definitions/viewsWhereSrv6Network"
                 },
                 "use_default_port": {
                     "description": "Exclusive with [port]\nx-displayName: \"Use Default TCP Listen Port\"\nFor HTTP, default is 80. For HTTPS/SNI, default is 443.",
@@ -5373,12 +5377,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [private_network site vk8s_service]\nx-displayName: \"Virtual Site\"\nAdvertise on a customer virtual site and a given network.",
+                    "description": "Exclusive with [private_network site srv6_network vk8s_service]\nx-displayName: \"Virtual Site\"\nAdvertise on a customer virtual site and a given network.",
                     "title": "Virtual Site",
                     "$ref": "#/definitions/viewsWhereVirtualSite"
                 },
                 "vk8s_service": {
-                    "description": "Exclusive with [private_network site virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vK8s Service Network on RE.",
+                    "description": "Exclusive with [private_network site srv6_network virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vK8s Service Network on RE.",
                     "title": "vK8s services network",
                     "$ref": "#/definitions/viewsWhereVK8SService"
                 }
@@ -5528,11 +5532,11 @@ var APISwaggerJSON string = `{
                 "blocked_clients": {
                     "type": "array",
                     "description": " Rules that specify the clients to be blocked",
-                    "title": "Client Blacklisting Rules",
+                    "title": "Client Blocking Rules",
                     "items": {
                         "$ref": "#/definitions/http_loadbalancerSimpleClientSrcRule"
                     },
-                    "x-displayname": "Client Blacklisting Rules"
+                    "x-displayname": "Client Blocking Rules"
                 },
                 "captcha_challenge": {
                     "description": "Exclusive with [js_challenge no_challenge policy_based_challenge]\nx-displayName: \"Captcha Challenge\"\nConfigure Captcha challenge on this load balancer",
@@ -5932,10 +5936,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cookie_expiry": {
                     "type": "integer",
-                    "description": " Specifies, in seconds, cookie expiry duration.\n Expired cookie will cause loadbalancer to perform Captcha challenge\n Default cookie expiry is set as 1 hour\n\nExample: - 1000-",
+                    "description": " Cookie expiration period, in seconds.\n An expired cookie causes the loadbalancer to issue a new challenge.\n\nExample: - 1000-",
                     "title": "cookie_expiry",
                     "format": "int64",
-                    "x-displayname": "Cookie Expiry period"
+                    "x-displayname": "Cookie Expiration Period"
                 },
                 "custom_page": {
                     "type": "string",
@@ -5943,14 +5947,6 @@ var APISwaggerJSON string = `{
                     "title": "custom_page",
                     "x-displayname": "Custom message for Captcha Challenge",
                     "x-ves-example": "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-                },
-                "enable_captcha_challenge": {
-                    "type": "boolean",
-                    "description": " Turn this configuration knob to enable Captcha Challenge\n\nExample: - \"true\"-",
-                    "title": "Enable Captcha Challenge",
-                    "format": "boolean",
-                    "x-displayname": "Enable",
-                    "x-ves-example": "true"
                 }
             }
         },
@@ -6054,10 +6050,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cookie_expiry": {
                     "type": "integer",
-                    "description": " Specifies, in seconds, cookie expiry duration.\n Expired cookie will cause loadbalancer to perform Javascript challenge\n Default cookie expiry is set as 1 hour\n\nExample: - 1000-",
+                    "description": " Cookie expiration period, in seconds.\n An expired cookie causes the loadbalancer to issue a new challenge.\n\nExample: - 1000-",
                     "title": "cookie_expiry",
                     "format": "int64",
-                    "x-displayname": "Cookie Expiry period"
+                    "x-displayname": "Cookie Expiration Period"
                 },
                 "custom_page": {
                     "type": "string",
@@ -6066,17 +6062,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Custom Message for Javascript Challenge",
                     "x-ves-example": "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
                 },
-                "enable_js_challenge": {
-                    "type": "boolean",
-                    "description": " Turn this configuration knob to enable Javascript Challenge\n\nExample: - \"true\"-",
-                    "title": "Enable Javascript Challenge",
-                    "format": "boolean",
-                    "x-displayname": "Enable",
-                    "x-ves-example": "true"
-                },
                 "js_script_delay": {
                     "type": "integer",
-                    "description": " Specifies, in milliseconds, the delay that Javascript introduces.\n Default delay is 5 seconds\n\nExample: - 1000-",
+                    "description": " Delay introduced by Javascript, in milliseconds.\n\nExample: - 1000-",
                     "title": "js_script_delay",
                     "format": "int64",
                     "x-displayname": "Javascript Delay"

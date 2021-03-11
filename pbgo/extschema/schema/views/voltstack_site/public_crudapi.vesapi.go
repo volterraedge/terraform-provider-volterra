@@ -3465,7 +3465,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Ethernet Interface",
             "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"static_ip\"]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
-            "x-ves-oneof-field-network_choice": "[\"inside_network\",\"site_local_inside_network\",\"site_local_network\",\"storage_network\"]",
+            "x-ves-oneof-field-network_choice": "[\"inside_network\",\"site_local_inside_network\",\"site_local_network\",\"srv6_network\",\"storage_network\"]",
             "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
             "x-ves-oneof-field-primary_choice": "[\"is_primary\",\"not_primary\"]",
             "x-ves-oneof-field-vlan_choice": "[\"untagged\",\"vlan_id\"]",
@@ -3495,7 +3495,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_interfaceDHCPServerParametersType"
                 },
                 "inside_network": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network storage_network]\nx-displayName: \"Inside Network\"\nInterface belongs to user configured inside network",
+                    "description": "Exclusive with [site_local_inside_network site_local_network srv6_network storage_network]\nx-displayName: \"Inside Network\"\nInterface belongs to user configured inside network",
                     "title": "Inside Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
@@ -3541,14 +3541,19 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "42"
                 },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [inside_network site_local_network storage_network]\nx-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
+                    "description": "Exclusive with [inside_network site_local_network srv6_network storage_network]\nx-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
                     "title": "Site Local Network Inside",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [inside_network site_local_inside_network storage_network]\nx-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
+                    "description": "Exclusive with [inside_network site_local_inside_network srv6_network storage_network]\nx-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
                     "title": "Site Local Network",
                     "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "srv6_network": {
+                    "description": "Exclusive with [inside_network site_local_inside_network site_local_network storage_network]\nx-displayName: \"Per Site Srv6 Network\"\nInterface belongs to per site srv6 network",
+                    "title": "Per Site Srv6 Network",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "static_ip": {
                     "description": "Exclusive with [dhcp_client dhcp_server]\nx-displayName: \"Static IP\"\nInterface IP is configured statically",
@@ -3556,7 +3561,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_interfaceStaticIPParametersType"
                 },
                 "storage_network": {
-                    "description": "Exclusive with [inside_network site_local_inside_network site_local_network]\nx-displayName: \"Storage Network\"\nInterface belongs to site local network inside",
+                    "description": "Exclusive with [inside_network site_local_inside_network site_local_network srv6_network]\nx-displayName: \"Storage Network\"\nInterface belongs to site local network inside",
                     "title": "Storage Network",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
@@ -5001,12 +5006,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [k8s_cluster]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
-                "operating_system_version": {
-                    "type": "string",
-                    "description": " Desired Operating System version that should be installed on the site\n\nExample: - \"value\"-",
-                    "x-displayname": "Operating System Version",
-                    "x-ves-example": "value"
-                },
                 "usb_policy": {
                     "description": "Exclusive with [allow_all_usb deny_all_usb]\n",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
@@ -5017,12 +5016,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Generic Server Certified Hardware",
                     "x-ves-example": "isv-8000-series-voltstack-combo",
                     "x-ves-required": "true"
-                },
-                "volterra_software_version": {
-                    "type": "string",
-                    "description": " Desired volterra software version that should be installed on the site\n\nExample: - \"value\"-",
-                    "x-displayname": "Software Version",
-                    "x-ves-example": "value"
                 },
                 "worker_nodes": {
                     "type": "array",
@@ -5404,12 +5397,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [k8s_cluster]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
-                "operating_system_version": {
-                    "type": "string",
-                    "description": " Desired Operating System version that should be installed on the site\n\nExample: - \"value\"-",
-                    "x-displayname": "Operating System Version",
-                    "x-ves-example": "value"
-                },
                 "usb_policy": {
                     "description": "Exclusive with [allow_all_usb deny_all_usb]\n",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
@@ -5420,12 +5407,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Generic Server Certified Hardware",
                     "x-ves-example": "isv-8000-series-voltstack-combo",
                     "x-ves-required": "true"
-                },
-                "volterra_software_version": {
-                    "type": "string",
-                    "description": " Desired volterra software version that should be installed on the site\n\nExample: - \"value\"-",
-                    "x-displayname": "Software Version",
-                    "x-ves-example": "value"
                 },
                 "worker_nodes": {
                     "type": "array",

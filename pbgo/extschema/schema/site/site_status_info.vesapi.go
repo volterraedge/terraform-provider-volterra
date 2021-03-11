@@ -162,6 +162,7 @@ func (c *CustomSiteStatusAPIRestClient) doRPCSiteStatusMetrics(ctx context.Conte
 	pbRsp := &SiteStatusMetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.site.SiteStatusMetricsResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

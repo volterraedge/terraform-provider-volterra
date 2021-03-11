@@ -1090,7 +1090,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_interface.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private replace request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.network_interface.crudapi.API.Replace"), zap.Error(err))
 			}
@@ -1116,7 +1116,7 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_interface.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private get request")
 			}
 		}
 	}
@@ -1141,7 +1141,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_interface.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private list request")
 			}
 		}
 	}
@@ -1196,7 +1196,7 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.network_interface.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private delete request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.network_interface.crudapi.API.Delete"), zap.Error(err))
 			}
@@ -2475,6 +2475,228 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "network_interfaceDedicatedInterfaceType": {
+            "type": "object",
+            "description": "Dedicated Interface Configuration",
+            "title": "Dedicated Interface",
+            "x-displayname": "Dedicated Interface",
+            "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
+            "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
+            "x-ves-oneof-field-primary_choice": "[\"is_primary\",\"not_primary\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.DedicatedInterfaceType",
+            "properties": {
+                "cluster": {
+                    "description": "Exclusive with [node]\nx-displayName: \"Cluster, All Node of the site\"\nConfiguration will apply to given device on all nodes of the site.",
+                    "title": "Cluster",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "device": {
+                    "type": "string",
+                    "description": " Name of the device for which interface is configured. Use wwan0 for 4G/LTE.\n\nExample: - \"eth0\"-\nRequired: YES",
+                    "title": "Device",
+                    "x-displayname": "Interface Device",
+                    "x-ves-example": "eth0",
+                    "x-ves-required": "true"
+                },
+                "is_primary": {
+                    "description": "Exclusive with [not_primary]\nx-displayName: \"Interface is Primary\"\nThis interface is primary",
+                    "title": "Interface is Primary",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "monitor": {
+                    "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
+                    "title": "Monitoring enabled",
+                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig"
+                },
+                "monitor_disabled": {
+                    "description": "Exclusive with [monitor]\nx-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
+                    "title": "Monitoring disabled",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "mtu": {
+                    "type": "integer",
+                    "description": " Maximum packet size (Maximum Transfer Unit) of the interface\n When configured, mtu must be between 512 and 16384\n\nExample: - \"1450\"-",
+                    "title": "Maximum Packet Size (MTU)",
+                    "format": "int64",
+                    "x-displayname": "Maximum Packet Size (MTU)",
+                    "x-ves-example": "1450"
+                },
+                "node": {
+                    "type": "string",
+                    "description": "Exclusive with [cluster]\nx-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node of the site.",
+                    "title": "Node"
+                },
+                "not_primary": {
+                    "description": "Exclusive with [is_primary]\nx-displayName: \"Interface is Not Primary\"\nThis interface is not primary",
+                    "title": "Interface is Not Primary",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "priority": {
+                    "type": "integer",
+                    "description": " Priority of the network interface when multiple network interfaces are present in outside network\n Greater the value, higher the priority\n\nExample: - \"42\"-",
+                    "title": "Priority",
+                    "format": "int64",
+                    "x-displayname": "Priority",
+                    "x-ves-example": "42"
+                }
+            }
+        },
+        "network_interfaceDedicatedManagementInterfaceType": {
+            "type": "object",
+            "description": "Dedicated Interface Configuration",
+            "title": "Dedicated Management Interface",
+            "x-displayname": "Dedicated Management Interface",
+            "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.DedicatedManagementInterfaceType",
+            "properties": {
+                "cluster": {
+                    "description": "Exclusive with [node]\nx-displayName: \"Cluster, All Node of the site\"\nConfiguration will apply to given device on all nodes of the site.",
+                    "title": "Cluster",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "device": {
+                    "type": "string",
+                    "description": " Name of the device for which interface is configured \n\nExample: - \"eth0\"-\nRequired: YES",
+                    "title": "Device",
+                    "x-displayname": "Interface Device",
+                    "x-ves-example": "eth0",
+                    "x-ves-required": "true"
+                },
+                "mtu": {
+                    "type": "integer",
+                    "description": " Maximum packet size (Maximum Transfer Unit) of the interface\n When configured, mtu must be between 512 and 16384\n\nExample: - \"1450\"-",
+                    "title": "Maximum Packet Size (MTU)",
+                    "format": "int64",
+                    "x-displayname": "Maximum Packet Size (MTU)",
+                    "x-ves-example": "1450"
+                },
+                "node": {
+                    "type": "string",
+                    "description": "Exclusive with [cluster]\nx-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node of the site.",
+                    "title": "Node"
+                }
+            }
+        },
+        "network_interfaceEthernetInterfaceType": {
+            "type": "object",
+            "description": "Ethernet Interface Configuration",
+            "title": "Ethernet Interface",
+            "x-displayname": "Ethernet Interface",
+            "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"static_ip\"]",
+            "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
+            "x-ves-oneof-field-network_choice": "[\"inside_network\",\"site_local_inside_network\",\"site_local_network\",\"srv6_network\",\"storage_network\"]",
+            "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
+            "x-ves-oneof-field-primary_choice": "[\"is_primary\",\"not_primary\"]",
+            "x-ves-oneof-field-vlan_choice": "[\"untagged\",\"vlan_id\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.EthernetInterfaceType",
+            "properties": {
+                "cluster": {
+                    "description": "Exclusive with [node]\nx-displayName: \"Cluster, All Nodes of the Site\"\nConfiguration will apply to given device on all nodes of the site.",
+                    "title": "Node Independent",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "device": {
+                    "type": "string",
+                    "description": " Interface configuration for the ethernet device \n\nExample: - \"eth0\"-\nRequired: YES",
+                    "title": "Device",
+                    "x-displayname": "Ethernet Device",
+                    "x-ves-example": "eth0",
+                    "x-ves-required": "true"
+                },
+                "dhcp_client": {
+                    "description": "Exclusive with [dhcp_server static_ip]\nx-displayName: \"DHCP Client\"\nInterface gets it IP address from external DHCP server",
+                    "title": "DHCP Client",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "dhcp_server": {
+                    "description": "Exclusive with [dhcp_client static_ip]\nx-displayName: \"DHCP server\"\nDHCP Server is configured for this interface, Interface IP from DHCP server configuration.",
+                    "title": "DHCP Server",
+                    "$ref": "#/definitions/network_interfaceDHCPServerParametersType"
+                },
+                "inside_network": {
+                    "description": "Exclusive with [site_local_inside_network site_local_network srv6_network storage_network]\nx-displayName: \"Inside Network\"\nInterface belongs to user configured inside network",
+                    "title": "Inside Network",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "is_primary": {
+                    "description": "Exclusive with [not_primary]\nx-displayName: \"Interface is Primary\"\nThis interface is primary",
+                    "title": "Interface is Primary",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "monitor": {
+                    "description": "Exclusive with [monitor_disabled]\nx-displayName: \"Enabled\"\nLink Quality Monitoring parameters. Choosing the option will enable link quality monitoring.",
+                    "title": "Monitoring enabled",
+                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig"
+                },
+                "monitor_disabled": {
+                    "description": "Exclusive with [monitor]\nx-displayName: \"Disabled\"\nLink quality monitoring disabled on the interface.",
+                    "title": "Monitoring disabled",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "mtu": {
+                    "type": "integer",
+                    "description": " Maximum packet size (Maximum Transfer Unit) of the interface\n When configured, mtu must be between 512 and 16384\n\nExample: - \"1450\"-",
+                    "title": "Maximum Packet Size (MTU)",
+                    "format": "int64",
+                    "x-displayname": "Maximum Packet Size (MTU)",
+                    "x-ves-example": "1450"
+                },
+                "node": {
+                    "type": "string",
+                    "description": "Exclusive with [cluster]\nx-displayName: \"Specific Node\"\nConfiguration will apply to a device on the given node.",
+                    "title": "Node"
+                },
+                "not_primary": {
+                    "description": "Exclusive with [is_primary]\nx-displayName: \"Interface is Not Primary\"\nThis interface is not primary",
+                    "title": "Interface is Not Primary",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "priority": {
+                    "type": "integer",
+                    "description": " Priority of the network interface when multiple network interfaces are present in outside network\n Greater the value, higher the priority\n\nExample: - \"42\"-",
+                    "title": "Priority",
+                    "format": "int64",
+                    "x-displayname": "Priority",
+                    "x-ves-example": "42"
+                },
+                "site_local_inside_network": {
+                    "description": "Exclusive with [inside_network site_local_network srv6_network storage_network]\nx-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
+                    "title": "Site Local Network Inside",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "site_local_network": {
+                    "description": "Exclusive with [inside_network site_local_inside_network srv6_network storage_network]\nx-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
+                    "title": "Site Local Network",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "srv6_network": {
+                    "description": "Exclusive with [inside_network site_local_inside_network site_local_network storage_network]\nx-displayName: \"Per Site Srv6 Network\"\nInterface belongs to per site srv6 network",
+                    "title": "Per Site Srv6 Network",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "static_ip": {
+                    "description": "Exclusive with [dhcp_client dhcp_server]\nx-displayName: \"Static IP\"\nInterface IP is configured statically",
+                    "title": "Static IP",
+                    "$ref": "#/definitions/network_interfaceStaticIPParametersType"
+                },
+                "storage_network": {
+                    "description": "Exclusive with [inside_network site_local_inside_network site_local_network srv6_network]\nx-displayName: \"Storage Network\"\nInterface belongs to site local network inside",
+                    "title": "Storage Network",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "untagged": {
+                    "description": "Exclusive with [vlan_id]\nx-displayName: \"Untagged\"\nConfigure a untagged ethernet interface",
+                    "title": "Untagged",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "vlan_id": {
+                    "type": "integer",
+                    "description": "Exclusive with [untagged]\nx-displayName: \"VLAN Id\"\nConfigure a VLAN tagged ethernet interface",
+                    "title": "VLAN Id",
+                    "format": "int64"
+                }
+            }
+        },
         "network_interfaceGlobalSpecType": {
             "type": "object",
             "description": "Network Interface specification",
@@ -2509,12 +2731,12 @@ var APISwaggerJSON string = `{
                 "dedicated_interface": {
                     "description": "Exclusive with [dedicated_management_interface ethernet_interface legacy tunnel_interface]\nx-displayName: \"Internal\"\nInternal helps in conversion",
                     "title": "Internal",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/network_interfaceDedicatedInterfaceType"
                 },
                 "dedicated_management_interface": {
                     "description": "Exclusive with [dedicated_interface ethernet_interface legacy tunnel_interface]\nx-displayName: \"Internal\"\nInternal helps in conversion",
                     "title": "Internal",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/network_interfaceDedicatedManagementInterfaceType"
                 },
                 "default_gateway": {
                     "description": " Configures how default gateway is derived for the subnet static addresses",
@@ -2546,7 +2768,7 @@ var APISwaggerJSON string = `{
                 "ethernet_interface": {
                     "description": "Exclusive with [dedicated_interface dedicated_management_interface legacy tunnel_interface]\nx-displayName: \"Internal\"\nInternal helps in conversion",
                     "title": "Internal",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/network_interfaceEthernetInterfaceType"
                 },
                 "interface_ip_map": {
                     "type": "object",
@@ -2625,7 +2847,7 @@ var APISwaggerJSON string = `{
                 "tunnel_interface": {
                     "description": "Exclusive with [dedicated_interface dedicated_management_interface ethernet_interface legacy]\nx-displayName: \"Internal\"\nInternal helps in conversion",
                     "title": "Internal",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/network_interfaceTunnelInterfaceType"
                 },
                 "type": {
                     "description": " Specifies the type of interface (ethernet, vlan, lacp etc)\nRequired: YES",
@@ -2866,6 +3088,106 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "network_interfaceStaticIPParametersType": {
+            "type": "object",
+            "description": "Configure Static IP parameters",
+            "title": "Static IP Parameters",
+            "x-displayname": "Static IP Parameters",
+            "x-ves-oneof-field-network_prefix_choice": "[\"cluster_static_ip\",\"fleet_static_ip\",\"node_static_ip\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.StaticIPParametersType",
+            "properties": {
+                "cluster_static_ip": {
+                    "description": "Exclusive with [fleet_static_ip node_static_ip]\nx-displayName: \"Cluster, All Nodes of the  Site\"\nStatic IP configuration for a specific node",
+                    "title": "Node Specific",
+                    "$ref": "#/definitions/network_interfaceStaticIpParametersClusterType"
+                },
+                "fleet_static_ip": {
+                    "description": "Exclusive with [cluster_static_ip node_static_ip]\nx-displayName: \"Fleet, All Nodes of All Sites in Fleet\"\nStatic IP configuration for the fleet",
+                    "title": "Fleet",
+                    "$ref": "#/definitions/network_interfaceStaticIpParametersFleetType"
+                },
+                "node_static_ip": {
+                    "description": "Exclusive with [cluster_static_ip fleet_static_ip]\nx-displayName: \"Specific Node\"\nStatic IP configuration for the Node",
+                    "title": "Node",
+                    "$ref": "#/definitions/network_interfaceStaticIpParametersNodeType"
+                }
+            }
+        },
+        "network_interfaceStaticIpParametersClusterType": {
+            "type": "object",
+            "description": "Configure Static IP parameters  for cluster",
+            "title": "Static IP Parameters",
+            "x-displayname": "Cluster: Static IP Parameters",
+            "x-ves-proto-message": "ves.io.schema.network_interface.StaticIpParametersClusterType",
+            "properties": {
+                "interface_ip_map": {
+                    "type": "object",
+                    "description": " Map of Node to Static ip configuration value, Key:Node, Value:IP Address",
+                    "title": "Site:Node to IP mapping",
+                    "x-displayname": "Node to IP Mapping"
+                }
+            }
+        },
+        "network_interfaceStaticIpParametersFleetType": {
+            "type": "object",
+            "description": "Configure Static IP parameters",
+            "title": "Static IP Parameters",
+            "x-displayname": "Fleet: Static IP Parameters",
+            "x-ves-proto-message": "ves.io.schema.network_interface.StaticIpParametersFleetType",
+            "properties": {
+                "default_gw": {
+                    "type": "string",
+                    "description": " IPv4 address offset of the default gateway, prefix len is used to calculate offset\n\nExample: - \"192.168.20.1\"-",
+                    "title": "Default Gateway",
+                    "x-displayname": "Default Gateway",
+                    "x-ves-example": "192.168.20.1"
+                },
+                "dns_server": {
+                    "type": "string",
+                    "description": " IPv4 address offset of the DNS server, prefix len is used to calculate offset\n\nExample: - \"192.168.20.1\"-",
+                    "title": "DNS Server",
+                    "x-displayname": "DNS Server",
+                    "x-ves-example": "192.168.20.1"
+                },
+                "network_prefix_allocator": {
+                    "description": " Static IP configuration for the fleet",
+                    "title": "Fleet",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Fleet address allocator"
+                }
+            }
+        },
+        "network_interfaceStaticIpParametersNodeType": {
+            "type": "object",
+            "description": "Configure Static IP parameters for a node",
+            "title": "Static IP Parameters",
+            "x-displayname": "Node: Static IP Parameters",
+            "x-ves-proto-message": "ves.io.schema.network_interface.StaticIpParametersNodeType",
+            "properties": {
+                "default_gw": {
+                    "type": "string",
+                    "description": " IPv4 address of the default gateway.\n\nExample: - \"192.168.20.1\"-",
+                    "title": "Default Gateway",
+                    "x-displayname": "Default Gateway",
+                    "x-ves-example": "192.168.20.1"
+                },
+                "dns_server": {
+                    "type": "string",
+                    "description": " IPv4 address of the DNS server\n\nExample: - \"192.168.20.1\"-",
+                    "title": "DNS Server",
+                    "x-displayname": "DNS Server",
+                    "x-ves-example": "192.168.20.1"
+                },
+                "ip_address": {
+                    "type": "string",
+                    "description": " IPv4 address of the interface and prefix length\n\nExample: - \"192.168.20.1/24\"-\nRequired: YES",
+                    "title": "Default Gateway",
+                    "x-displayname": "IP address/Prefix Length",
+                    "x-ves-example": "192.168.20.1/24",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "network_interfaceStatusObject": {
             "type": "object",
             "description": "Most recently observed status of object",
@@ -2902,6 +3224,70 @@ var APISwaggerJSON string = `{
                     "title": "status",
                     "$ref": "#/definitions/network_interfaceNetworkInterfaceStatus",
                     "x-displayname": "Status"
+                }
+            }
+        },
+        "network_interfaceTunnelInterfaceType": {
+            "type": "object",
+            "description": "Tunnel Interface Configuration",
+            "title": "Tunnel Interface",
+            "x-displayname": "Tunnel Interface",
+            "x-ves-oneof-field-network_choice": "[\"inside_network\",\"site_local_inside_network\",\"site_local_network\"]",
+            "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.TunnelInterfaceType",
+            "properties": {
+                "cluster": {
+                    "description": "Exclusive with [node]\nx-displayName: \"Cluster, All Nodes of the Site\"\nConfiguration will apply to given device on all nodes of the site",
+                    "title": "Node Independent",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "inside_network": {
+                    "description": "Exclusive with [site_local_inside_network site_local_network]\nx-displayName: \"Inside Network\"\nInterface belongs to user configured inside network",
+                    "title": "Inside Network",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "mtu": {
+                    "type": "integer",
+                    "description": " Maximum packet size (Maximum Transfer Unit) of the interface\n When configured, mtu must be between 512 and 16384\n\nExample: - \"1450\"-",
+                    "title": "Maximum Packet Size (MTU)",
+                    "format": "int64",
+                    "x-displayname": "Maximum Packet Size (MTU)",
+                    "x-ves-example": "1450"
+                },
+                "node": {
+                    "type": "string",
+                    "description": "Exclusive with [cluster]\nx-displayName: \"Specific Node\"\nConfiguration will apply to a given device on the given node.",
+                    "title": "Node"
+                },
+                "priority": {
+                    "type": "integer",
+                    "description": " Priority of the network interface when multiple network interfaces are present in outside network\n Greater the value, higher the priority\n\nExample: - \"42\"-",
+                    "title": "Priority",
+                    "format": "int64",
+                    "x-displayname": "Priority",
+                    "x-ves-example": "42"
+                },
+                "site_local_inside_network": {
+                    "description": "Exclusive with [inside_network site_local_network]\nx-displayName: \"Site Local Network Inside\"\nInterface belongs to site local network inside",
+                    "title": "Site Local Network Inside",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "site_local_network": {
+                    "description": "Exclusive with [inside_network site_local_inside_network]\nx-displayName: \"Site Local Network (Outside)\"\nInterface belongs to site local network (outside)",
+                    "title": "Site Local Network",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "static_ip": {
+                    "description": " Interface IP is configured statically",
+                    "title": "Static IP",
+                    "$ref": "#/definitions/network_interfaceStaticIPParametersType",
+                    "x-displayname": "Static IP"
+                },
+                "tunnel": {
+                    "description": " Tunnel Configuration for this Interface",
+                    "title": "Tunnel",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Tunnel"
                 }
             }
         },

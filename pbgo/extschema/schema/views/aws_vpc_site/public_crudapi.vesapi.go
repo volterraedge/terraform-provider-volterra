@@ -4240,24 +4240,24 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Cloud Disk Size"
                 },
                 "inside_subnet": {
-                    "description": "Exclusive with [reserved_inside_subnet]\nx-displayName: \"Subnet for Inside Interface\"\nSubnets for the inside interface of the node",
+                    "description": "Exclusive with [reserved_inside_subnet]\nx-displayName: \"Specify Subnet\"\nSelect Existing Subnet or Create New",
                     "title": "Inside Subnet Choice",
                     "$ref": "#/definitions/viewsCloudSubnetType"
                 },
                 "outside_subnet": {
-                    "description": " Subnets for the outside interface of the node\nRequired: YES",
+                    "description": " Subnet for the outside interface of the node\nRequired: YES",
                     "title": "Outside Subnet",
                     "$ref": "#/definitions/viewsCloudSubnetType",
                     "x-displayname": "Subnet for Outside Interface",
                     "x-ves-required": "true"
                 },
                 "reserved_inside_subnet": {
-                    "description": "Exclusive with [inside_subnet]\nx-displayName: \"Use Reserved Subnet from Primary CIDR\"\nUse Reserved Subnet from Primary CIDR",
+                    "description": "Exclusive with [inside_subnet]\nx-displayName: \"Autogenerate Subnet\"\nAutogenerate and reserve a subnet from the Primary CIDR",
                     "title": "Reserved Subnet Choice",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "workload_subnet": {
-                    "description": " Workload Subnet where workloads should be running",
+                    "description": " Subnet in which workloads are launched",
                     "title": "Workload Subnet",
                     "$ref": "#/definitions/viewsCloudSubnetType",
                     "x-displayname": "Workload Subnet"
@@ -4559,7 +4559,7 @@ var APISwaggerJSON string = `{
                 },
                 "instance_type": {
                     "type": "string",
-                    "description": " Select Instance size based on performance needed\n t3.xlarge  (4 x vCPU, 16GB RAM)  medium performance\n t3.2xlarge (8 x vCPU, 32GB RAM)  high performance\n m5.4xlarge (16 x vCPU, 64GB RAM) very high performance\n\nExample: - \"a1.xlarge\"-\nRequired: YES",
+                    "description": " Select Instance size based on performance needed\n\nExample: - \"a1.xlarge\"-\nRequired: YES",
                     "x-displayname": "AWS Instance Type for Node",
                     "x-ves-example": "a1.xlarge",
                     "x-ves-required": "true"
@@ -4579,23 +4579,11 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Desired Worker Nodes Per AZ",
                     "x-ves-example": "2"
                 },
-                "operating_system_version": {
-                    "type": "string",
-                    "description": " Desired Operating System version for this site.\n\nExample: - \"value\"-",
-                    "x-displayname": "Operating System Version",
-                    "x-ves-example": "value"
-                },
                 "ssh_key": {
                     "type": "string",
                     "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-",
                     "x-displayname": "Public SSH key",
                     "x-ves-example": "ssh-rsa AAAAB..."
-                },
-                "volterra_software_version": {
-                    "type": "string",
-                    "description": " Desired Volterra software version for this site, a string matching released set of software components.\n\nExample: - \"value\"-",
-                    "x-displayname": "Software Version",
-                    "x-ves-example": "value"
                 },
                 "voltstack_cluster": {
                     "description": "Exclusive with [ingress_egress_gw ingress_gw]\n",
@@ -4661,7 +4649,7 @@ var APISwaggerJSON string = `{
                 },
                 "instance_type": {
                     "type": "string",
-                    "description": " Select Instance size based on performance needed\n t3.xlarge  (4 x vCPU, 16GB RAM)  medium performance\n t3.2xlarge (8 x vCPU, 32GB RAM)  high performance\n m5.4xlarge (16 x vCPU, 64GB RAM) very high performance\n\nExample: - \"a1.xlarge\"-\nRequired: YES",
+                    "description": " Select Instance size based on performance needed\n\nExample: - \"a1.xlarge\"-\nRequired: YES",
                     "x-displayname": "AWS Instance Type for Node",
                     "x-ves-example": "a1.xlarge",
                     "x-ves-required": "true"
@@ -4771,7 +4759,7 @@ var APISwaggerJSON string = `{
                 },
                 "instance_type": {
                     "type": "string",
-                    "description": " Select Instance size based on performance needed\n t3.xlarge  (4 x vCPU, 16GB RAM)  medium performance\n t3.2xlarge (8 x vCPU, 32GB RAM)  high performance\n m5.4xlarge (16 x vCPU, 64GB RAM) very high performance\n\nExample: - \"a1.xlarge\"-\nRequired: YES",
+                    "description": " Select Instance size based on performance needed\n\nExample: - \"a1.xlarge\"-\nRequired: YES",
                     "title": "Instance Type",
                     "x-displayname": "AWS Instance Type for Node",
                     "x-ves-example": "a1.xlarge",
@@ -4885,18 +4873,6 @@ var APISwaggerJSON string = `{
                     "format": "int64",
                     "x-displayname": "Desired Worker Nodes Per AZ",
                     "x-ves-example": "2"
-                },
-                "operating_system_version": {
-                    "type": "string",
-                    "description": " Desired Operating System version for this site.\n\nExample: - \"value\"-",
-                    "x-displayname": "Operating System Version",
-                    "x-ves-example": "value"
-                },
-                "volterra_software_version": {
-                    "type": "string",
-                    "description": " Desired Volterra software version for this site, a string matching released set of software components.\n\nExample: - \"value\"-",
-                    "x-displayname": "Software Version",
-                    "x-ves-example": "value"
                 },
                 "voltstack_cluster": {
                     "description": "Exclusive with [ingress_egress_gw ingress_gw]\nx-displayName: \"Voltstack Cluster (One Interface)\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",

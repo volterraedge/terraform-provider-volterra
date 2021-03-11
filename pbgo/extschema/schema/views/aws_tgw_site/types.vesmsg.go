@@ -818,26 +818,6 @@ func (v *ValidateCreateSpecType) AwsParametersValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) VolterraSoftwareVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_software_version")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCreateSpecType) OperatingSystemVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for operating_system_version")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -925,15 +905,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["operating_system_version"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("operating_system_version"))
-		if err := fv(ctx, m.GetOperatingSystemVersion(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["tgw_security"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tgw_security"))
@@ -947,15 +918,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("vn_config"))
 		if err := fv(ctx, m.GetVnConfig(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
-		if err := fv(ctx, m.GetVolterraSoftwareVersion(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1006,28 +968,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["aws_parameters"] = vFn
-
-	vrhVolterraSoftwareVersion := v.VolterraSoftwareVersionValidationRuleHandler
-	rulesVolterraSoftwareVersion := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-	}
-	vFn, err = vrhVolterraSoftwareVersion(rulesVolterraSoftwareVersion)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.volterra_software_version: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["volterra_software_version"] = vFn
-
-	vrhOperatingSystemVersion := v.OperatingSystemVersionValidationRuleHandler
-	rulesOperatingSystemVersion := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-	}
-	vFn, err = vrhOperatingSystemVersion(rulesOperatingSystemVersion)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.operating_system_version: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["operating_system_version"] = vFn
 
 	vrhAddress := v.AddressValidationRuleHandler
 	rulesAddress := map[string]string{
@@ -2626,26 +2566,6 @@ func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) VolterraSoftwareVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_software_version")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateReplaceSpecType) OperatingSystemVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for operating_system_version")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -2724,15 +2644,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["operating_system_version"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("operating_system_version"))
-		if err := fv(ctx, m.GetOperatingSystemVersion(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["tgw_security"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tgw_security"))
@@ -2746,15 +2657,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("vn_config"))
 		if err := fv(ctx, m.GetVnConfig(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
-		if err := fv(ctx, m.GetVolterraSoftwareVersion(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2794,28 +2696,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
-
-	vrhVolterraSoftwareVersion := v.VolterraSoftwareVersionValidationRuleHandler
-	rulesVolterraSoftwareVersion := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-	}
-	vFn, err = vrhVolterraSoftwareVersion(rulesVolterraSoftwareVersion)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.volterra_software_version: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["volterra_software_version"] = vFn
-
-	vrhOperatingSystemVersion := v.OperatingSystemVersionValidationRuleHandler
-	rulesOperatingSystemVersion := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-	}
-	vFn, err = vrhOperatingSystemVersion(rulesOperatingSystemVersion)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.operating_system_version: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["operating_system_version"] = vFn
 
 	vrhAddress := v.AddressValidationRuleHandler
 	rulesAddress := map[string]string{
@@ -4918,10 +4798,8 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.AwsParameters = f.GetAwsParameters()
 	m.Coordinates = f.GetCoordinates()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
-	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.VnConfig = f.GetVnConfig()
-	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 	m.VpcAttachments = f.GetVpcAttachments()
 }
 
@@ -4935,10 +4813,8 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.AwsParameters = m1.AwsParameters
 	f.Coordinates = m1.Coordinates
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
-	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.TgwSecurity = m1.TgwSecurity
 	f.VnConfig = m1.VnConfig
-	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 	f.VpcAttachments = m1.VpcAttachments
 }
 
@@ -5059,10 +4935,8 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Address = f.GetAddress()
 	m.Coordinates = f.GetCoordinates()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
-	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.VnConfig = f.GetVnConfig()
-	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 	m.VpcAttachments = f.GetVpcAttachments()
 }
 
@@ -5075,9 +4949,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Address = m1.Address
 	f.Coordinates = m1.Coordinates
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
-	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.TgwSecurity = m1.TgwSecurity
 	f.VnConfig = m1.VnConfig
-	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 	f.VpcAttachments = m1.VpcAttachments
 }

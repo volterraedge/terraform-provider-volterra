@@ -1191,6 +1191,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["fleet_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("fleet_status"))
+		if err := fv(ctx, e.GetFleetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["hostname"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("hostname"))

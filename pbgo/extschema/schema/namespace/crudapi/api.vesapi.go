@@ -1090,7 +1090,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.namespace.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private replace request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.namespace.crudapi.API.Replace"), zap.Error(err))
 			}
@@ -1116,7 +1116,7 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.namespace.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private get request")
 			}
 		}
 	}
@@ -1141,7 +1141,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.namespace.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private list request")
 			}
 		}
 	}
@@ -1196,7 +1196,7 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.namespace.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private delete request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.namespace.crudapi.API.Delete"), zap.Error(err))
 			}
@@ -2249,7 +2249,25 @@ var APISwaggerJSON string = `{
             "description": "This is the shape of the namespace representation in the database at Global Controller",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
-            "x-ves-proto-message": "ves.io.schema.namespace.GlobalSpecType"
+            "x-ves-proto-message": "ves.io.schema.namespace.GlobalSpecType",
+            "properties": {
+                "proxy_sub_ca_latest_version": {
+                    "type": "integer",
+                    "description": " SubCA version which is the latest and will be used for proxy feature.",
+                    "title": "Proxy Sub CA Version",
+                    "format": "int64",
+                    "x-displayname": "Proxy Sub CA Version"
+                },
+                "proxy_sub_cas": {
+                    "type": "array",
+                    "description": " Array of SubCAs, the latest one will be used for proxy feature.",
+                    "title": "Proxy Sub CAs",
+                    "items": {
+                        "$ref": "#/definitions/namespaceSubCA"
+                    },
+                    "x-displayname": "Proxy Sub CAs"
+                }
+            }
         },
         "namespaceSpecType": {
             "type": "object",
@@ -2266,6 +2284,43 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "namespaceSubCA": {
+            "type": "object",
+            "description": "Sub CA information.",
+            "title": "Sub CA Usage",
+            "x-displayname": "Sub CA",
+            "x-ves-proto-message": "ves.io.schema.namespace.SubCA",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name for this CA\nRequired: YES",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-required": "true"
+                },
+                "pem": {
+                    "type": "string",
+                    "description": " PEM encoded certificate\nRequired: YES",
+                    "title": "CA PEM",
+                    "x-displayname": "PEM encoded certificate for",
+                    "x-ves-required": "true"
+                },
+                "private_key": {
+                    "description": " Private Key for CA\nRequired: YES",
+                    "title": "Private Key",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Private Key",
+                    "x-ves-required": "true"
+                },
+                "version": {
+                    "type": "integer",
+                    "description": " Certificate version",
+                    "title": "Version",
+                    "format": "int64",
+                    "x-displayname": "Version"
+                }
+            }
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -2278,6 +2333,61 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "Must be a valid serialized protocol buffer of the above specified type.",
                     "format": "byte"
+                }
+            }
+        },
+        "schemaBlindfoldSecretInfoType": {
+            "type": "object",
+            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by Volterra Secret Management",
+            "title": "BlindfoldSecretInfoType",
+            "x-displayname": "Blindfold Secret",
+            "x-ves-displayorder": "3,1,2",
+            "x-ves-proto-message": "ves.io.schema.BlindfoldSecretInfoType",
+            "properties": {
+                "decryption_provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "title": "Decryption Provider",
+                    "x-displayname": "Decryption Provider"
+                },
+                "location": {
+                    "type": "string",
+                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "title": "Location",
+                    "x-displayname": "Location",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true"
+                },
+                "store_provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///",
+                    "title": "Store Provider",
+                    "x-displayname": "Store Provider"
+                }
+            }
+        },
+        "schemaClearSecretInfoType": {
+            "type": "object",
+            "description": "ClearSecretInfoType specifies information about the Secret that is not encrypted.",
+            "title": "ClearSecretInfoType",
+            "x-displayname": "In-Clear Secret",
+            "x-ves-displayorder": "2,1",
+            "x-ves-proto-message": "ves.io.schema.ClearSecretInfoType",
+            "properties": {
+                "provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"box-provider\"-",
+                    "title": "Provider",
+                    "x-displayname": "Provider",
+                    "x-ves-example": "box-provider"
+                },
+                "url": {
+                    "type": "string",
+                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.  \n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\nRequired: YES",
+                    "title": "URL",
+                    "x-displayname": "URL",
+                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -2440,6 +2550,60 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaSecretEncodingType": {
+            "type": "string",
+            "description": "SecretEncodingType defines the encoding type of the secret before handled by the Secret Management Service.\n\nNo Encoding\n - EncodingBase64: Base64\n\nBase64 encoding",
+            "title": "SecretEncodingType",
+            "enum": [
+                "EncodingNone",
+                "EncodingBase64"
+            ],
+            "default": "EncodingNone",
+            "x-displayname": "Secret Encoding",
+            "x-ves-proto-enum": "ves.io.schema.SecretEncodingType"
+        },
+        "schemaSecretType": {
+            "type": "object",
+            "description": "SecretType is used in an object to indicate a sensitive/confidential field",
+            "title": "SecretType",
+            "x-displayname": "Secret",
+            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\",\"vault_secret_info\",\"wingman_secret_info\"]",
+            "x-ves-proto-message": "ves.io.schema.SecretType",
+            "properties": {
+                "blindfold_secret_info": {
+                    "description": "Exclusive with [clear_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by Volterra Secret Management Service",
+                    "title": "Blindfold Secret",
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                },
+                "blindfold_secret_info_internal": {
+                    "description": " Blindfold Secret Internal is used for the putting re-encrypted blindfold secret",
+                    "title": "Blindfold Secret Internal",
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
+                    "x-displayname": "Blindfold Secret Internal"
+                },
+                "clear_secret_info": {
+                    "description": "Exclusive with [blindfold_secret_info vault_secret_info wingman_secret_info]\nx-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
+                    "title": "Clear Secret",
+                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                },
+                "secret_encoding_type": {
+                    "description": " This field defines the encoding type of the secret BEFORE the secret is given to any Secret Management System.\n this will be set if the secret is encoded and not plaintext BEFORE it is encrypted and put it in SecretType.\n Note - Do NOT set this field for Clear Secret with string:/// scheme.\n e.g. if a secret is base64 encoded and then put into vault.",
+                    "title": "secret_encoding_type",
+                    "$ref": "#/definitions/schemaSecretEncodingType",
+                    "x-displayname": "Secret Encoding"
+                },
+                "vault_secret_info": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info wingman_secret_info]\nx-displayName: \"Vault Secret\"\nVault Secret is used for the secrets managed by Hashicorp Vault",
+                    "title": "Vault Secret",
+                    "$ref": "#/definitions/schemaVaultSecretInfoType"
+                },
+                "wingman_secret_info": {
+                    "description": "Exclusive with [blindfold_secret_info clear_secret_info vault_secret_info]\nx-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in Volterra Security Sidecar",
+                    "title": "Wingman Secret",
+                    "$ref": "#/definitions/schemaWingmanSecretInfoType"
+                }
+            }
+        },
         "schemaStatusType": {
             "type": "object",
             "description": "Status is a return value for calls that don't return other objects.",
@@ -2582,6 +2746,53 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaVaultSecretInfoType": {
+            "type": "object",
+            "description": "VaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
+            "title": "VaultSecretInfoType",
+            "x-displayname": "Vault Secret",
+            "x-ves-displayorder": "1,2,3,4,5",
+            "x-ves-proto-message": "ves.io.schema.VaultSecretInfoType",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "description": " Key of the individual secret. Vault Secrets are stored as key-value pair.\n If user is only interested in one value from the map, this field should be set to the corresponding key.\n If not provided entire secret will be returned.\n\nExample: - \"key_pem\"-",
+                    "title": "Key",
+                    "x-displayname": "Key",
+                    "x-ves-example": "key_pem"
+                },
+                "location": {
+                    "type": "string",
+                    "description": " Path to secret in Vault.\n\nExample: - \"v1/data/vhost_key\"-\nRequired: YES",
+                    "title": "Location",
+                    "x-displayname": "Location",
+                    "x-ves-example": "v1/data/vhost_key",
+                    "x-ves-required": "true"
+                },
+                "provider": {
+                    "type": "string",
+                    "description": " Name of the Secret Management Access object that contains information about the backend Vault.\n\nExample: - \"vault-vh-provider\"-\nRequired: YES",
+                    "title": "Provider",
+                    "x-displayname": "Provider",
+                    "x-ves-example": "vault-vh-provider",
+                    "x-ves-required": "true"
+                },
+                "secret_encoding": {
+                    "description": " This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault.",
+                    "title": "secret_encoding",
+                    "$ref": "#/definitions/schemaSecretEncodingType",
+                    "x-displayname": "Secret Encoding"
+                },
+                "version": {
+                    "type": "integer",
+                    "description": " Version of the secret to be fetched. As vault secrets are versioned, user can specify this field to fetch specific version.\n If not provided latest version will be returned.\n\nExample: - \"1\"-",
+                    "title": "Version",
+                    "format": "int64",
+                    "x-displayname": "Version",
+                    "x-ves-example": "1"
+                }
+            }
+        },
         "schemaViewRefType": {
             "type": "object",
             "description": "ViewRefType represents a reference to a view",
@@ -2616,6 +2827,23 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
+                }
+            }
+        },
+        "schemaWingmanSecretInfoType": {
+            "type": "object",
+            "description": "WingmanSecretInfoType specifies the handle to the wingman secret",
+            "title": "WingmanSecretInfoType",
+            "x-displayname": "Wingman Secret",
+            "x-ves-proto-message": "ves.io.schema.WingmanSecretInfoType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the secret.\n\nExample: - \"ChargeBack-API-Key\"-\nRequired: YES",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "ChargeBack-API-Key",
+                    "x-ves-required": "true"
                 }
             }
         }

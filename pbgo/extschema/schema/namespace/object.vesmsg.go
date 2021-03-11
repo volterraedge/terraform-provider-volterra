@@ -33,6 +33,20 @@ func (m *SpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *SpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetGcSpec().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting SpecType.gc_spec")
+	}
+
+	return nil
+}
+
 func (m *SpecType) DeepCopy() *SpecType {
 	if m == nil {
 		return nil
@@ -93,6 +107,8 @@ func (v *ValidateSpecType) Validate(ctx context.Context, pm interface{}, opts ..
 // Well-known symbol for default validator implementation
 var DefaultSpecTypeValidator = func() *ValidateSpecType {
 	v := &ValidateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["gc_spec"] = GlobalSpecTypeValidator().Validate
 
 	return v
 }()

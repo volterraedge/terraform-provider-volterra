@@ -536,26 +536,6 @@ func (v *ValidateCreateSpecType) WorkerNodesValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) VolterraSoftwareVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_software_version")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCreateSpecType) OperatingSystemVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for operating_system_version")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -786,15 +766,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["operating_system_version"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("operating_system_version"))
-		if err := fv(ctx, m.GetOperatingSystemVersion(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["storage_cfg_choice"]; exists {
 		val := m.GetStorageCfgChoice()
 		vOpts := append(opts,
@@ -882,15 +853,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("volterra_certified_hw"))
 		if err := fv(ctx, m.GetVolterraCertifiedHw(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
-		if err := fv(ctx, m.GetVolterraSoftwareVersion(), vOpts...); err != nil {
 			return err
 		}
 
@@ -999,7 +961,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhVolterraCertifiedHw := v.VolterraCertifiedHwValidationRuleHandler
 	rulesVolterraCertifiedHw := map[string]string{
 		"ves.io.schema.rules.message.required":       "true",
-		"ves.io.schema.rules.string.in":              "[\"dell-edger640-series-voltstack-combo\",\"igw-5000-series-voltstack-combo\",\"isv-8000-series-voltstack-combo\",\"vmware-voltstack-combo\",\"kvm-volstack-combo\",\"generic-single-nic-volstack-combo\"]",
+		"ves.io.schema.rules.string.min_len":         "1",
 		"ves.io.schema.rules.string.ves_object_name": "true",
 	}
 	vFn, err = vrhVolterraCertifiedHw(rulesVolterraCertifiedHw)
@@ -1033,28 +995,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["worker_nodes"] = vFn
-
-	vrhVolterraSoftwareVersion := v.VolterraSoftwareVersionValidationRuleHandler
-	rulesVolterraSoftwareVersion := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhVolterraSoftwareVersion(rulesVolterraSoftwareVersion)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.volterra_software_version: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["volterra_software_version"] = vFn
-
-	vrhOperatingSystemVersion := v.OperatingSystemVersionValidationRuleHandler
-	rulesOperatingSystemVersion := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhOperatingSystemVersion(rulesOperatingSystemVersion)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.operating_system_version: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["operating_system_version"] = vFn
 
 	vrhAddress := v.AddressValidationRuleHandler
 	rulesAddress := map[string]string{
@@ -2056,7 +1996,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhVolterraCertifiedHw := v.VolterraCertifiedHwValidationRuleHandler
 	rulesVolterraCertifiedHw := map[string]string{
 		"ves.io.schema.rules.message.required":       "true",
-		"ves.io.schema.rules.string.in":              "[\"dell-edger640-series-voltstack-combo\",\"igw-5000-series-voltstack-combo\",\"isv-8000-series-voltstack-combo\",\"vmware-voltstack-combo\",\"kvm-volstack-combo\",\"generic-single-nic-volstack-combo\"]",
+		"ves.io.schema.rules.string.min_len":         "1",
 		"ves.io.schema.rules.string.ves_object_name": "true",
 	}
 	vFn, err = vrhVolterraCertifiedHw(rulesVolterraCertifiedHw)
@@ -3602,7 +3542,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhVolterraCertifiedHw := v.VolterraCertifiedHwValidationRuleHandler
 	rulesVolterraCertifiedHw := map[string]string{
 		"ves.io.schema.rules.message.required":       "true",
-		"ves.io.schema.rules.string.in":              "[\"dell-edger640-series-voltstack-combo\",\"igw-5000-series-voltstack-combo\",\"isv-8000-series-voltstack-combo\",\"vmware-voltstack-combo\",\"kvm-volstack-combo\",\"generic-single-nic-volstack-combo\"]",
+		"ves.io.schema.rules.string.min_len":         "1",
 		"ves.io.schema.rules.string.ves_object_name": "true",
 	}
 	vFn, err = vrhVolterraCertifiedHw(rulesVolterraCertifiedHw)
@@ -4628,26 +4568,6 @@ func (v *ValidateReplaceSpecType) WorkerNodesValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) VolterraSoftwareVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_software_version")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateReplaceSpecType) OperatingSystemVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for operating_system_version")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -4878,15 +4798,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["operating_system_version"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("operating_system_version"))
-		if err := fv(ctx, m.GetOperatingSystemVersion(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["storage_cfg_choice"]; exists {
 		val := m.GetStorageCfgChoice()
 		vOpts := append(opts,
@@ -4974,15 +4885,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("volterra_certified_hw"))
 		if err := fv(ctx, m.GetVolterraCertifiedHw(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
-		if err := fv(ctx, m.GetVolterraSoftwareVersion(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5091,7 +4993,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vrhVolterraCertifiedHw := v.VolterraCertifiedHwValidationRuleHandler
 	rulesVolterraCertifiedHw := map[string]string{
 		"ves.io.schema.rules.message.required":       "true",
-		"ves.io.schema.rules.string.in":              "[\"dell-edger640-series-voltstack-combo\",\"igw-5000-series-voltstack-combo\",\"isv-8000-series-voltstack-combo\",\"vmware-voltstack-combo\",\"kvm-volstack-combo\",\"generic-single-nic-volstack-combo\"]",
+		"ves.io.schema.rules.string.min_len":         "1",
 		"ves.io.schema.rules.string.ves_object_name": "true",
 	}
 	vFn, err = vrhVolterraCertifiedHw(rulesVolterraCertifiedHw)
@@ -5125,28 +5027,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["worker_nodes"] = vFn
-
-	vrhVolterraSoftwareVersion := v.VolterraSoftwareVersionValidationRuleHandler
-	rulesVolterraSoftwareVersion := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhVolterraSoftwareVersion(rulesVolterraSoftwareVersion)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.volterra_software_version: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["volterra_software_version"] = vFn
-
-	vrhOperatingSystemVersion := v.OperatingSystemVersionValidationRuleHandler
-	rulesOperatingSystemVersion := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhOperatingSystemVersion(rulesOperatingSystemVersion)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.operating_system_version: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["operating_system_version"] = vFn
 
 	vrhAddress := v.AddressValidationRuleHandler
 	rulesAddress := map[string]string{
@@ -7470,11 +7350,9 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.MasterNodes = f.GetMasterNodes()
 	m.GetNetworkCfgChoiceFromGlobalSpecType(f)
-	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.GetStorageCfgChoiceFromGlobalSpecType(f)
 	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
 	m.VolterraCertifiedHw = f.GetVolterraCertifiedHw()
-	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 	m.WorkerNodes = f.GetWorkerNodes()
 }
 
@@ -7492,11 +7370,9 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.MasterNodes = m1.MasterNodes
 	m1.SetNetworkCfgChoiceToGlobalSpecType(f)
-	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	m1.SetStorageCfgChoiceToGlobalSpecType(f)
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
 	f.VolterraCertifiedHw = m1.VolterraCertifiedHw
-	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 	f.WorkerNodes = m1.WorkerNodes
 }
 
@@ -8056,11 +7932,9 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.MasterNodes = f.GetMasterNodes()
 	m.GetNetworkCfgChoiceFromGlobalSpecType(f)
-	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.GetStorageCfgChoiceFromGlobalSpecType(f)
 	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
 	m.VolterraCertifiedHw = f.GetVolterraCertifiedHw()
-	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 	m.WorkerNodes = f.GetWorkerNodes()
 }
 
@@ -8078,10 +7952,8 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.MasterNodes = m1.MasterNodes
 	m1.SetNetworkCfgChoiceToGlobalSpecType(f)
-	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	m1.SetStorageCfgChoiceToGlobalSpecType(f)
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
 	f.VolterraCertifiedHw = m1.VolterraCertifiedHw
-	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 	f.WorkerNodes = m1.WorkerNodes
 }

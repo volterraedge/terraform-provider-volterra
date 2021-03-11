@@ -1090,7 +1090,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.route.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private replace request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.route.crudapi.API.Replace"), zap.Error(err))
 			}
@@ -1116,7 +1116,7 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.route.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private get request")
 			}
 		}
 	}
@@ -1141,7 +1141,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.route.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private list request")
 			}
 		}
 	}
@@ -1196,7 +1196,7 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.route.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private delete request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.route.crudapi.API.Delete"), zap.Error(err))
 			}
@@ -2426,7 +2426,8 @@ var APISwaggerJSON string = `{
             "description": "List of destination to choose if the route is match.",
             "title": "RouteDestinationList",
             "x-displayname": "Destination List",
-            "x-ves-displayorder": "1,8,9,5,20,10,11,13,14,15,16,18,19",
+            "x-ves-displayorder": "1,8,9,5,20,10,11,13,14,15,16,18,19,23",
+            "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"host_rewrite\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteDestinationList",
             "properties": {
@@ -2457,6 +2458,11 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Destination Origin pools (clusters)",
                     "x-ves-required": "true"
+                },
+                "do_not_retract_cluster": {
+                    "description": "Exclusive with [retract_cluster]\nx-displayName: \"Disable cluster retraction\"\nWhen this option is configured, cluster with no healthy\nendpoints is not retracted from route having weighted cluster\nconfiguration.",
+                    "title": "do_not_retract_cluster",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "endpoint_subsets": {
                     "type": "object",
@@ -2496,6 +2502,11 @@ var APISwaggerJSON string = `{
                     "title": "priority",
                     "$ref": "#/definitions/schemaRoutingPriority",
                     "x-displayname": "Priority"
+                },
+                "retract_cluster": {
+                    "description": "Exclusive with [do_not_retract_cluster]\nx-displayName: \"Retract cluster with no healthy endpoints\"\nWhen this option is enabled, weighted cluster will not be considered\nfor loadbalancing, if all its endpoints are unhealthy.\nSince the cluster with all unhealthy endpoints is removed, the traffic\nwill be distributed among remaining clusters as per their weight.\nAlso panic-threshold configuration is ignored for retracted cluster.\n\nThis option is ignored when\n(1) health check is not configured.\n(2) single destination cluster is configured for route.",
+                    "title": "retract_cluster",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "retry_policy": {
                     "description": " Indicates that the route has a retry policy.",

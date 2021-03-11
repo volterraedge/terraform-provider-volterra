@@ -111,6 +111,10 @@
 		HostIdentifier
 		InterfaceIdentifier
 		InterfaceOrNetwork
+		RouteTarget2ByteAsn
+		RouteTarget4ByteAsn
+		RouteTargetIPv4Addr
+		RouteTarget
 		FieldRules
 		FloatRules
 		DoubleRules

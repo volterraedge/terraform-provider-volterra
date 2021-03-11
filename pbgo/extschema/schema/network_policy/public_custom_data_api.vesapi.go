@@ -162,6 +162,7 @@ func (c *CustomDataAPIRestClient) doRPCNetworkPolicyHits(ctx context.Context, ca
 	pbRsp := &NetworkPolicyHitsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.network_policy.NetworkPolicyHitsResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

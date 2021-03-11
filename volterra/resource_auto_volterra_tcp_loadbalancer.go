@@ -173,6 +173,56 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 										},
 									},
 
+									"srv6_network": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"private_network": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"default_vip": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"specific_vip": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"virtual_site": {
 
 										Type:     schema.TypeSet,
@@ -664,6 +714,70 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 									}
 
 								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := advertiseWhereMapStrToI["srv6_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.WhereType_Srv6Network{}
+						choiceInt.Srv6Network = &ves_io_schema_views.WhereSrv6Network{}
+						advertiseWhere[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								privateNetwork := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.Srv6Network.PrivateNetwork = privateNetwork
+								for _, set := range sl {
+									privateNetworkMapStrToI := set.(map[string]interface{})
+
+									if w, ok := privateNetworkMapStrToI["name"]; ok && !isIntfNil(w) {
+										privateNetwork.Name = w.(string)
+									}
+
+									if w, ok := privateNetworkMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										privateNetwork.Namespace = w.(string)
+									}
+
+									if w, ok := privateNetworkMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										privateNetwork.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+							vipChoiceTypeFound := false
+
+							if v, ok := cs["default_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+
+								vipChoiceTypeFound = true
+
+								if v.(bool) {
+									vipChoiceInt := &ves_io_schema_views.WhereSrv6Network_DefaultVip{}
+									vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
+									choiceInt.Srv6Network.VipChoice = vipChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+
+								vipChoiceTypeFound = true
+								vipChoiceInt := &ves_io_schema_views.WhereSrv6Network_SpecificVip{}
+
+								choiceInt.Srv6Network.VipChoice = vipChoiceInt
+
+								vipChoiceInt.SpecificVip = v.(string)
 
 							}
 
@@ -1291,6 +1405,70 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 									}
 
 								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := advertiseWhereMapStrToI["srv6_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.WhereType_Srv6Network{}
+						choiceInt.Srv6Network = &ves_io_schema_views.WhereSrv6Network{}
+						advertiseWhere[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								privateNetwork := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.Srv6Network.PrivateNetwork = privateNetwork
+								for _, set := range sl {
+									privateNetworkMapStrToI := set.(map[string]interface{})
+
+									if w, ok := privateNetworkMapStrToI["name"]; ok && !isIntfNil(w) {
+										privateNetwork.Name = w.(string)
+									}
+
+									if w, ok := privateNetworkMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										privateNetwork.Namespace = w.(string)
+									}
+
+									if w, ok := privateNetworkMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										privateNetwork.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+							vipChoiceTypeFound := false
+
+							if v, ok := cs["default_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+
+								vipChoiceTypeFound = true
+
+								if v.(bool) {
+									vipChoiceInt := &ves_io_schema_views.WhereSrv6Network_DefaultVip{}
+									vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
+									choiceInt.Srv6Network.VipChoice = vipChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+
+								vipChoiceTypeFound = true
+								vipChoiceInt := &ves_io_schema_views.WhereSrv6Network_SpecificVip{}
+
+								choiceInt.Srv6Network.VipChoice = vipChoiceInt
+
+								vipChoiceInt.SpecificVip = v.(string)
 
 							}
 

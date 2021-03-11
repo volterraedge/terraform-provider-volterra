@@ -287,6 +287,18 @@ func resourceVolterraRoute() *schema.Resource {
 										},
 									},
 
+									"do_not_retract_cluster": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"retract_cluster": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
 									"cors_policy": {
 
 										Type:     schema.TypeSet,
@@ -1169,6 +1181,32 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 								bufferPolicy.MaxRequestTime = uint32(w.(int))
 							}
 
+						}
+
+					}
+
+					clusterRetractChoiceTypeFound := false
+
+					if v, ok := cs["do_not_retract_cluster"]; ok && !isIntfNil(v) && !clusterRetractChoiceTypeFound {
+
+						clusterRetractChoiceTypeFound = true
+
+						if v.(bool) {
+							clusterRetractChoiceInt := &ves_io_schema_route.RouteDestinationList_DoNotRetractCluster{}
+							clusterRetractChoiceInt.DoNotRetractCluster = &ves_io_schema.Empty{}
+							routeActionInt.RouteDestination.ClusterRetractChoice = clusterRetractChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["retract_cluster"]; ok && !isIntfNil(v) && !clusterRetractChoiceTypeFound {
+
+						clusterRetractChoiceTypeFound = true
+
+						if v.(bool) {
+							clusterRetractChoiceInt := &ves_io_schema_route.RouteDestinationList_RetractCluster{}
+							clusterRetractChoiceInt.RetractCluster = &ves_io_schema.Empty{}
+							routeActionInt.RouteDestination.ClusterRetractChoice = clusterRetractChoiceInt
 						}
 
 					}
@@ -2200,6 +2238,32 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 								bufferPolicy.MaxRequestTime = uint32(w.(int))
 							}
 
+						}
+
+					}
+
+					clusterRetractChoiceTypeFound := false
+
+					if v, ok := cs["do_not_retract_cluster"]; ok && !isIntfNil(v) && !clusterRetractChoiceTypeFound {
+
+						clusterRetractChoiceTypeFound = true
+
+						if v.(bool) {
+							clusterRetractChoiceInt := &ves_io_schema_route.RouteDestinationList_DoNotRetractCluster{}
+							clusterRetractChoiceInt.DoNotRetractCluster = &ves_io_schema.Empty{}
+							routeActionInt.RouteDestination.ClusterRetractChoice = clusterRetractChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["retract_cluster"]; ok && !isIntfNil(v) && !clusterRetractChoiceTypeFound {
+
+						clusterRetractChoiceTypeFound = true
+
+						if v.(bool) {
+							clusterRetractChoiceInt := &ves_io_schema_route.RouteDestinationList_RetractCluster{}
+							clusterRetractChoiceInt.RetractCluster = &ves_io_schema.Empty{}
+							routeActionInt.RouteDestination.ClusterRetractChoice = clusterRetractChoiceInt
 						}
 
 					}

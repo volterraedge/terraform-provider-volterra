@@ -235,6 +235,7 @@ func (c *CustomAPIRestClient) doRPCActivate(ctx context.Context, callOpts *serve
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -313,6 +314,7 @@ func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.
 	pbRsp := &CreateResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.CreateResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -395,6 +397,7 @@ func (c *CustomAPIRestClient) doRPCCreateServiceCredentials(ctx context.Context,
 	pbRsp := &CreateResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.CreateResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -471,6 +474,7 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	pbRsp := &GetResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.GetResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -546,6 +550,7 @@ func (c *CustomAPIRestClient) doRPCList(ctx context.Context, callOpts *server.Cu
 	pbRsp := &ListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.ListResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -621,6 +626,7 @@ func (c *CustomAPIRestClient) doRPCListServiceCredentials(ctx context.Context, c
 	pbRsp := &ListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.ListResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -698,6 +704,7 @@ func (c *CustomAPIRestClient) doRPCRenew(ctx context.Context, callOpts *server.C
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -774,6 +781,7 @@ func (c *CustomAPIRestClient) doRPCRevoke(ctx context.Context, callOpts *server.
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

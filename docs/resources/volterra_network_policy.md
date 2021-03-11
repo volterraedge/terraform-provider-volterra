@@ -21,8 +21,8 @@ resource "volterra_network_policy" "example" {
   namespace = "staging"
 
   endpoint {
-    // One of the arguments from this list "prefix_list any outside_endpoints inside_endpoints interface namespace label_selector" must be set
-    outside_endpoints = true
+    // One of the arguments from this list "any outside_endpoints inside_endpoints interface namespace label_selector prefix_list" must be set
+    any = true
   }
 }
 
@@ -187,7 +187,7 @@ local end point is set of prefixes determined by label selector expression.
 
 Common attributes for the rule including name and description..
 
-`description` - (Optional) Human readable description for the object that corresponds to the containing message. (`String`).
+`description` - (Optional) Human readable description. (`String`).
 
 `disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).
 

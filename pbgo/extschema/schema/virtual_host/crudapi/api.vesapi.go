@@ -1090,7 +1090,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private replace request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.virtual_host.crudapi.API.Replace"), zap.Error(err))
 			}
@@ -1116,7 +1116,7 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private get request")
 			}
 		}
 	}
@@ -1141,7 +1141,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private list request")
 			}
 		}
 	}
@@ -1196,7 +1196,7 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.virtual_host.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private delete request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.virtual_host.crudapi.API.Delete"), zap.Error(err))
 			}
@@ -4030,6 +4030,13 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "User Identification Policy"
                 },
+                "volterra_cert": {
+                    "type": "boolean",
+                    "description": " Volterra managed certificates. If this field is set, the user cannot specifi the TLS certificates",
+                    "title": "Volterra Certificates",
+                    "format": "boolean",
+                    "x-displayname": "Volterra Certificates"
+                },
                 "waf_type": {
                     "description": " WAF can be used to analyze inbound and outbound http/https traffic.\n WAF can be configured either in BLOCKing Mode or ALERTing Mode.\n In BLOCKing mode if WAF detects suspicious inbound/outbound traffic it blocks the request or response.\n In ALERTing mode if suspicious traffic is detected, WAF generates ALERTs with details on the\n suspicious traffic (instead of blocking traffic).\n\n waf_type can be either WAF or WAFRules.\n WAF Object allows to\n     Configure mode of the WAF (BLOCK/ALERT)\n     Configure language used by the application which is being protected by the WAF\n     Disable different high level security tags if required (e.g. SQLI_DETECTION, XSS_DETECTION etc)\n WAFRules allows to\n     Configure mode of the WAF (BLOCK/ALERT)\n     Enable/Disable individual WAF security rules",
                     "title": "Enable the WAF (Web Application Firewall) functionality for VirtualHost",
@@ -4136,10 +4143,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cookie_expiry": {
                     "type": "integer",
-                    "description": " Specifies, in seconds, cookie expiry duration.\n Expired cookie will cause loadbalancer to perform Captcha challenge\n Default cookie expiry is set as 1 hour\n\nExample: - 1000-",
+                    "description": " Cookie expiration period, in seconds.\n An expired cookie causes the loadbalancer to issue a new challenge.\n\nExample: - 1000-",
                     "title": "cookie_expiry",
                     "format": "int64",
-                    "x-displayname": "Cookie Expiry period"
+                    "x-displayname": "Cookie Expiration Period"
                 },
                 "custom_page": {
                     "type": "string",
@@ -4147,14 +4154,6 @@ var APISwaggerJSON string = `{
                     "title": "custom_page",
                     "x-displayname": "Custom message for Captcha Challenge",
                     "x-ves-example": "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-                },
-                "enable_captcha_challenge": {
-                    "type": "boolean",
-                    "description": " Turn this configuration knob to enable Captcha Challenge\n\nExample: - \"true\"-",
-                    "title": "Enable Captcha Challenge",
-                    "format": "boolean",
-                    "x-displayname": "Enable",
-                    "x-ves-example": "true"
                 }
             }
         },
@@ -4289,10 +4288,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cookie_expiry": {
                     "type": "integer",
-                    "description": " Specifies, in seconds, cookie expiry duration.\n Expired cookie will cause loadbalancer to perform Javascript challenge\n Default cookie expiry is set as 1 hour\n\nExample: - 1000-",
+                    "description": " Cookie expiration period, in seconds.\n An expired cookie causes the loadbalancer to issue a new challenge.\n\nExample: - 1000-",
                     "title": "cookie_expiry",
                     "format": "int64",
-                    "x-displayname": "Cookie Expiry period"
+                    "x-displayname": "Cookie Expiration Period"
                 },
                 "custom_page": {
                     "type": "string",
@@ -4301,17 +4300,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Custom Message for Javascript Challenge",
                     "x-ves-example": "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
                 },
-                "enable_js_challenge": {
-                    "type": "boolean",
-                    "description": " Turn this configuration knob to enable Javascript Challenge\n\nExample: - \"true\"-",
-                    "title": "Enable Javascript Challenge",
-                    "format": "boolean",
-                    "x-displayname": "Enable",
-                    "x-ves-example": "true"
-                },
                 "js_script_delay": {
                     "type": "integer",
-                    "description": " Specifies, in milliseconds, the delay that Javascript introduces.\n Default delay is 5 seconds\n\nExample: - 1000-",
+                    "description": " Delay introduced by Javascript, in milliseconds.\n\nExample: - 1000-",
                     "title": "js_script_delay",
                     "format": "int64",
                     "x-displayname": "Javascript Delay"

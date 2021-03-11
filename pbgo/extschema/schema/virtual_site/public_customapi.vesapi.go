@@ -158,6 +158,7 @@ func (c *CustomAPIRestClient) doRPCGetSelectees(ctx context.Context, callOpts *s
 	pbRsp := &SelecteeResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.virtual_site.SelecteeResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

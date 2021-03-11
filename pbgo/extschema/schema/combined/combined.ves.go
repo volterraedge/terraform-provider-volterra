@@ -262,6 +262,10 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.RetryBackOff"] = ves_io_schema.RetryBackOffValidator()
 	MDR.ValidatorRegistry["ves.io.schema.RetryPolicyType"] = ves_io_schema.RetryPolicyTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.RouteMatch"] = ves_io_schema.RouteMatchValidator()
+	MDR.ValidatorRegistry["ves.io.schema.RouteTarget"] = ves_io_schema.RouteTargetValidator()
+	MDR.ValidatorRegistry["ves.io.schema.RouteTarget2ByteAsn"] = ves_io_schema.RouteTarget2ByteAsnValidator()
+	MDR.ValidatorRegistry["ves.io.schema.RouteTarget4ByteAsn"] = ves_io_schema.RouteTarget4ByteAsnValidator()
+	MDR.ValidatorRegistry["ves.io.schema.RouteTargetIPv4Addr"] = ves_io_schema.RouteTargetIPv4AddrValidator()
 	MDR.ValidatorRegistry["ves.io.schema.SecretType"] = ves_io_schema.SecretTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.SiteRefType"] = ves_io_schema.SiteRefTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.SiteVirtualSiteRefSelector"] = ves_io_schema.SiteVirtualSiteRefSelectorValidator()
@@ -1400,6 +1404,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetSpecType"] = ves_io_schema_namespace.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GlobalSpecType"] = ves_io_schema_namespace.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.ReplaceSpecType"] = ves_io_schema_namespace.ReplaceSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.SubCA"] = ves_io_schema_namespace.SubCAValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.namespace.crudapi.ObjectCreateReq"] = ves_io_schema_namespace_crudapi.ObjectCreateReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.crudapi.ObjectCreateRsp"] = ves_io_schema_namespace_crudapi.ObjectCreateRspValidator()
@@ -2079,6 +2084,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.site.ReplaceRequest"] = ves_io_schema_site.ReplaceRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.ReplaceResponse"] = ves_io_schema_site.ReplaceResponseValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.site.PodListRequest"] = ves_io_schema_site.PodListRequestValidator()
+
 	MDR.ValidatorRegistry["ves.io.schema.site.SetStateReq"] = ves_io_schema_site.SetStateReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.SetStateResp"] = ves_io_schema_site.SetStateRespValidator()
 
@@ -2099,6 +2106,11 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.site.CreateKubeConfigReq"] = ves_io_schema_site.CreateKubeConfigReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.CreateSpecType"] = ves_io_schema_site.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.DeploymentState"] = ves_io_schema_site.DeploymentStateValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.FleetCondition"] = ves_io_schema_site.FleetConditionValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.FleetDeploymentState"] = ves_io_schema_site.FleetDeploymentStateValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.FleetStatus"] = ves_io_schema_site.FleetStatusValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.GPU"] = ves_io_schema_site.GPUValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.GPUDevice"] = ves_io_schema_site.GPUDeviceValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.GetSpecType"] = ves_io_schema_site.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.GlobalSpecType"] = ves_io_schema_site.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.InterfaceStatus"] = ves_io_schema_site.InterfaceStatusValidator()
@@ -2380,6 +2392,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.TlsConfig"] = ves_io_schema_views.TlsConfigValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.WherePrivateNetwork"] = ves_io_schema_views.WherePrivateNetworkValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.WhereSite"] = ves_io_schema_views.WhereSiteValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.WhereSrv6Network"] = ves_io_schema_views.WhereSrv6NetworkValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.WhereType"] = ves_io_schema_views.WhereTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.WhereTypeSiteVsite"] = ves_io_schema_views.WhereTypeSiteVsiteValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.WhereVK8SService"] = ves_io_schema_views.WhereVK8SServiceValidator()
@@ -2708,8 +2721,8 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.OriginServerPublicIP"] = ves_io_schema_views_origin_pool.OriginServerPublicIPValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.OriginServerPublicName"] = ves_io_schema_views_origin_pool.OriginServerPublicNameValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.OriginServerType"] = ves_io_schema_views_origin_pool.OriginServerTypeValidator()
-	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.OriginServerVoltADNPrivateIP"] = ves_io_schema_views_origin_pool.OriginServerVoltADNPrivateIPValidator()
-	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.OriginServerVoltADNPrivateName"] = ves_io_schema_views_origin_pool.OriginServerVoltADNPrivateNameValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.OriginServerVirtualNetworkPrivateIP"] = ves_io_schema_views_origin_pool.OriginServerVirtualNetworkPrivateIPValidator()
+	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.OriginServerVirtualNetworkPrivateName"] = ves_io_schema_views_origin_pool.OriginServerVirtualNetworkPrivateNameValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.ReplaceSpecType"] = ves_io_schema_views_origin_pool.ReplaceSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.TlsCertificatesType"] = ves_io_schema_views_origin_pool.TlsCertificatesTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.origin_pool.UpstreamTlsParameters"] = ves_io_schema_views_origin_pool.UpstreamTlsParametersValidator()
@@ -2972,13 +2985,18 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.virtual_network.ReplaceResponse"] = ves_io_schema_virtual_network.ReplaceResponseValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.virtual_network.ActivePBRPoliciesType"] = ves_io_schema_virtual_network.ActivePBRPoliciesTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_network.AnyCastVIPFleetType"] = ves_io_schema_virtual_network.AnyCastVIPFleetTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_network.CreateSpecType"] = ves_io_schema_virtual_network.CreateSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_network.DNSServersList"] = ves_io_schema_virtual_network.DNSServersListValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_network.GetSpecType"] = ves_io_schema_virtual_network.GetSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_network.GlobalSpecType"] = ves_io_schema_virtual_network.GlobalSpecTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_network.NextHopInterfaceList"] = ves_io_schema_virtual_network.NextHopInterfaceListValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_network.PerSiteSrv6NetworkType"] = ves_io_schema_virtual_network.PerSiteSrv6NetworkTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_network.PerTenantVIPType"] = ves_io_schema_virtual_network.PerTenantVIPTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_network.ReplaceSpecType"] = ves_io_schema_virtual_network.ReplaceSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_network.SNATPoolFleetType"] = ves_io_schema_virtual_network.SNATPoolFleetTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_network.SNATPoolSiteType"] = ves_io_schema_virtual_network.SNATPoolSiteTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.virtual_network.SNATPoolType"] = ves_io_schema_virtual_network.SNATPoolTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_network.Srv6NetworkNsParametersType"] = ves_io_schema_virtual_network.Srv6NetworkNsParametersTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_network.StaticRouteViewType"] = ves_io_schema_virtual_network.StaticRouteViewTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.virtual_network.VoltADNPrivateNetworkReInfoType"] = ves_io_schema_virtual_network.VoltADNPrivateNetworkReInfoTypeValidator()
@@ -4984,6 +5002,22 @@ func init() {
 		},
 	}
 
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.namespace.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.proxy_sub_cas.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.namespace.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.proxy_sub_cas.private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+		},
+	}
+
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.network_connector.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
@@ -5160,7 +5194,7 @@ func init() {
 			"spec.ethernet_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"untagged", "vlan_id"}...),
@@ -5205,7 +5239,7 @@ func init() {
 			"spec.ethernet_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"untagged", "vlan_id"}...),
@@ -5240,6 +5274,14 @@ func init() {
 				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "legacy", "tunnel_interface"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 			},
+			"spec.gc_spec.dedicated_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"is_primary", "not_primary"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+			},
+			"spec.gc_spec.dedicated_management_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+			},
 			"spec.gc_spec.dhcp_server_params": []sets.String{
 				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
 			},
@@ -5247,6 +5289,32 @@ func init() {
 				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
 				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
 				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.gc_spec.ethernet_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"is_primary", "not_primary"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+				sets.NewString([]string{"untagged", "vlan_id"}...),
+			},
+			"spec.gc_spec.ethernet_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.gc_spec.ethernet_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.gc_spec.ethernet_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.tunnel_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network"}...),
+			},
+			"spec.gc_spec.tunnel_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
 			},
 		},
 	}
@@ -5257,6 +5325,14 @@ func init() {
 				sets.NewString([]string{"dedicated_interface", "dedicated_management_interface", "ethernet_interface", "legacy", "tunnel_interface"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 			},
+			"spec.gc_spec.dedicated_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"is_primary", "not_primary"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+			},
+			"spec.gc_spec.dedicated_management_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+			},
 			"spec.gc_spec.dhcp_server_params": []sets.String{
 				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
 			},
@@ -5264,6 +5340,32 @@ func init() {
 				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
 				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
 				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.gc_spec.ethernet_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
+				sets.NewString([]string{"is_primary", "not_primary"}...),
+				sets.NewString([]string{"monitor", "monitor_disabled"}...),
+				sets.NewString([]string{"untagged", "vlan_id"}...),
+			},
+			"spec.gc_spec.ethernet_interface.dhcp_server": []sets.String{
+				sets.NewString([]string{"automatic_from_end", "automatic_from_start", "interface_ip_map"}...),
+			},
+			"spec.gc_spec.ethernet_interface.dhcp_server.dhcp_networks": []sets.String{
+				sets.NewString([]string{"dgw_address", "first_address", "last_address"}...),
+				sets.NewString([]string{"dns_address", "same_as_dgw"}...),
+				sets.NewString([]string{"network_prefix", "network_prefix_allocator"}...),
+			},
+			"spec.gc_spec.ethernet_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
+			},
+			"spec.gc_spec.tunnel_interface": []sets.String{
+				sets.NewString([]string{"cluster", "node"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network"}...),
+			},
+			"spec.gc_spec.tunnel_interface.static_ip": []sets.String{
+				sets.NewString([]string{"cluster_static_ip", "fleet_static_ip", "node_static_ip"}...),
 			},
 		},
 	}
@@ -5423,6 +5525,7 @@ func init() {
 			},
 			"spec.routes.route_destination": []sets.String{
 				sets.NewString([]string{"auto_host_rewrite", "host_rewrite"}...),
+				sets.NewString([]string{"do_not_retract_cluster", "retract_cluster"}...),
 			},
 			"spec.routes.route_destination.hash_policy": []sets.String{
 				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
@@ -5452,6 +5555,7 @@ func init() {
 			},
 			"spec.routes.route_destination": []sets.String{
 				sets.NewString([]string{"auto_host_rewrite", "host_rewrite"}...),
+				sets.NewString([]string{"do_not_retract_cluster", "retract_cluster"}...),
 			},
 			"spec.routes.route_destination.hash_policy": []sets.String{
 				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
@@ -5481,6 +5585,7 @@ func init() {
 			},
 			"spec.gc_spec.routes.route_destination": []sets.String{
 				sets.NewString([]string{"auto_host_rewrite", "host_rewrite"}...),
+				sets.NewString([]string{"do_not_retract_cluster", "retract_cluster"}...),
 			},
 			"spec.gc_spec.routes.route_destination.hash_policy": []sets.String{
 				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
@@ -5510,6 +5615,7 @@ func init() {
 			},
 			"spec.gc_spec.routes.route_destination": []sets.String{
 				sets.NewString([]string{"auto_host_rewrite", "host_rewrite"}...),
+				sets.NewString([]string{"do_not_retract_cluster", "retract_cluster"}...),
 			},
 			"spec.gc_spec.routes.route_destination.hash_policy": []sets.String{
 				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
@@ -7860,9 +7966,12 @@ func init() {
 			},
 			"spec.advertise_custom.advertise_where": []sets.String{
 				sets.NewString([]string{"port", "use_default_port"}...),
-				sets.NewString([]string{"private_network", "site", "virtual_site", "vk8s_service"}...),
+				sets.NewString([]string{"private_network", "site", "srv6_network", "virtual_site", "vk8s_service"}...),
 			},
 			"spec.advertise_custom.advertise_where.private_network": []sets.String{
+				sets.NewString([]string{"default_vip", "specific_vip"}...),
+			},
+			"spec.advertise_custom.advertise_where.srv6_network": []sets.String{
 				sets.NewString([]string{"default_vip", "specific_vip"}...),
 			},
 			"spec.advertise_custom.advertise_where.vk8s_service": []sets.String{
@@ -7981,9 +8090,12 @@ func init() {
 			},
 			"spec.advertise_custom.advertise_where": []sets.String{
 				sets.NewString([]string{"port", "use_default_port"}...),
-				sets.NewString([]string{"private_network", "site", "virtual_site", "vk8s_service"}...),
+				sets.NewString([]string{"private_network", "site", "srv6_network", "virtual_site", "vk8s_service"}...),
 			},
 			"spec.advertise_custom.advertise_where.private_network": []sets.String{
+				sets.NewString([]string{"default_vip", "specific_vip"}...),
+			},
+			"spec.advertise_custom.advertise_where.srv6_network": []sets.String{
 				sets.NewString([]string{"default_vip", "specific_vip"}...),
 			},
 			"spec.advertise_custom.advertise_where.vk8s_service": []sets.String{
@@ -8103,9 +8215,12 @@ func init() {
 			},
 			"spec.gc_spec.advertise_custom.advertise_where": []sets.String{
 				sets.NewString([]string{"port", "use_default_port"}...),
-				sets.NewString([]string{"private_network", "site", "virtual_site", "vk8s_service"}...),
+				sets.NewString([]string{"private_network", "site", "srv6_network", "virtual_site", "vk8s_service"}...),
 			},
 			"spec.gc_spec.advertise_custom.advertise_where.private_network": []sets.String{
+				sets.NewString([]string{"default_vip", "specific_vip"}...),
+			},
+			"spec.gc_spec.advertise_custom.advertise_where.srv6_network": []sets.String{
 				sets.NewString([]string{"default_vip", "specific_vip"}...),
 			},
 			"spec.gc_spec.advertise_custom.advertise_where.vk8s_service": []sets.String{
@@ -8225,9 +8340,12 @@ func init() {
 			},
 			"spec.gc_spec.advertise_custom.advertise_where": []sets.String{
 				sets.NewString([]string{"port", "use_default_port"}...),
-				sets.NewString([]string{"private_network", "site", "virtual_site", "vk8s_service"}...),
+				sets.NewString([]string{"private_network", "site", "srv6_network", "virtual_site", "vk8s_service"}...),
 			},
 			"spec.gc_spec.advertise_custom.advertise_where.private_network": []sets.String{
+				sets.NewString([]string{"default_vip", "specific_vip"}...),
+			},
+			"spec.gc_spec.advertise_custom.advertise_where.srv6_network": []sets.String{
 				sets.NewString([]string{"default_vip", "specific_vip"}...),
 			},
 			"spec.gc_spec.advertise_custom.advertise_where.vk8s_service": []sets.String{
@@ -8413,7 +8531,7 @@ func init() {
 				sets.NewString([]string{"any_endpoint", "default_subset", "fail_request"}...),
 			},
 			"spec.origin_servers": []sets.String{
-				sets.NewString([]string{"consul_service", "custom_endpoint_object", "k8s_service", "private_ip", "private_name", "public_ip", "public_name", "voltadn_private_ip", "voltadn_private_name"}...),
+				sets.NewString([]string{"consul_service", "custom_endpoint_object", "k8s_service", "private_ip", "private_name", "public_ip", "public_name", "srv6_private_ip", "srv6_private_name", "voltadn_private_ip", "voltadn_private_name"}...),
 			},
 			"spec.origin_servers.consul_service": []sets.String{
 				sets.NewString([]string{"inside_network", "outside_network"}...),
@@ -8469,7 +8587,7 @@ func init() {
 				sets.NewString([]string{"any_endpoint", "default_subset", "fail_request"}...),
 			},
 			"spec.origin_servers": []sets.String{
-				sets.NewString([]string{"consul_service", "custom_endpoint_object", "k8s_service", "private_ip", "private_name", "public_ip", "public_name", "voltadn_private_ip", "voltadn_private_name"}...),
+				sets.NewString([]string{"consul_service", "custom_endpoint_object", "k8s_service", "private_ip", "private_name", "public_ip", "public_name", "srv6_private_ip", "srv6_private_name", "voltadn_private_ip", "voltadn_private_name"}...),
 			},
 			"spec.origin_servers.consul_service": []sets.String{
 				sets.NewString([]string{"inside_network", "outside_network"}...),
@@ -8525,7 +8643,7 @@ func init() {
 				sets.NewString([]string{"any_endpoint", "default_subset", "fail_request"}...),
 			},
 			"spec.gc_spec.origin_servers": []sets.String{
-				sets.NewString([]string{"consul_service", "custom_endpoint_object", "k8s_service", "private_ip", "private_name", "public_ip", "public_name", "voltadn_private_ip", "voltadn_private_name"}...),
+				sets.NewString([]string{"consul_service", "custom_endpoint_object", "k8s_service", "private_ip", "private_name", "public_ip", "public_name", "srv6_private_ip", "srv6_private_name", "voltadn_private_ip", "voltadn_private_name"}...),
 			},
 			"spec.gc_spec.origin_servers.consul_service": []sets.String{
 				sets.NewString([]string{"inside_network", "outside_network"}...),
@@ -8581,7 +8699,7 @@ func init() {
 				sets.NewString([]string{"any_endpoint", "default_subset", "fail_request"}...),
 			},
 			"spec.gc_spec.origin_servers": []sets.String{
-				sets.NewString([]string{"consul_service", "custom_endpoint_object", "k8s_service", "private_ip", "private_name", "public_ip", "public_name", "voltadn_private_ip", "voltadn_private_name"}...),
+				sets.NewString([]string{"consul_service", "custom_endpoint_object", "k8s_service", "private_ip", "private_name", "public_ip", "public_name", "srv6_private_ip", "srv6_private_name", "voltadn_private_ip", "voltadn_private_name"}...),
 			},
 			"spec.gc_spec.origin_servers.consul_service": []sets.String{
 				sets.NewString([]string{"inside_network", "outside_network"}...),
@@ -8629,9 +8747,12 @@ func init() {
 			},
 			"spec.advertise_custom.advertise_where": []sets.String{
 				sets.NewString([]string{"port", "use_default_port"}...),
-				sets.NewString([]string{"private_network", "site", "virtual_site", "vk8s_service"}...),
+				sets.NewString([]string{"private_network", "site", "srv6_network", "virtual_site", "vk8s_service"}...),
 			},
 			"spec.advertise_custom.advertise_where.private_network": []sets.String{
+				sets.NewString([]string{"default_vip", "specific_vip"}...),
+			},
+			"spec.advertise_custom.advertise_where.srv6_network": []sets.String{
 				sets.NewString([]string{"default_vip", "specific_vip"}...),
 			},
 			"spec.advertise_custom.advertise_where.vk8s_service": []sets.String{
@@ -8651,9 +8772,12 @@ func init() {
 			},
 			"spec.advertise_custom.advertise_where": []sets.String{
 				sets.NewString([]string{"port", "use_default_port"}...),
-				sets.NewString([]string{"private_network", "site", "virtual_site", "vk8s_service"}...),
+				sets.NewString([]string{"private_network", "site", "srv6_network", "virtual_site", "vk8s_service"}...),
 			},
 			"spec.advertise_custom.advertise_where.private_network": []sets.String{
+				sets.NewString([]string{"default_vip", "specific_vip"}...),
+			},
+			"spec.advertise_custom.advertise_where.srv6_network": []sets.String{
 				sets.NewString([]string{"default_vip", "specific_vip"}...),
 			},
 			"spec.advertise_custom.advertise_where.vk8s_service": []sets.String{
@@ -8673,9 +8797,12 @@ func init() {
 			},
 			"spec.gc_spec.advertise_custom.advertise_where": []sets.String{
 				sets.NewString([]string{"port", "use_default_port"}...),
-				sets.NewString([]string{"private_network", "site", "virtual_site", "vk8s_service"}...),
+				sets.NewString([]string{"private_network", "site", "srv6_network", "virtual_site", "vk8s_service"}...),
 			},
 			"spec.gc_spec.advertise_custom.advertise_where.private_network": []sets.String{
+				sets.NewString([]string{"default_vip", "specific_vip"}...),
+			},
+			"spec.gc_spec.advertise_custom.advertise_where.srv6_network": []sets.String{
 				sets.NewString([]string{"default_vip", "specific_vip"}...),
 			},
 			"spec.gc_spec.advertise_custom.advertise_where.vk8s_service": []sets.String{
@@ -8695,9 +8822,12 @@ func init() {
 			},
 			"spec.gc_spec.advertise_custom.advertise_where": []sets.String{
 				sets.NewString([]string{"port", "use_default_port"}...),
-				sets.NewString([]string{"private_network", "site", "virtual_site", "vk8s_service"}...),
+				sets.NewString([]string{"private_network", "site", "srv6_network", "virtual_site", "vk8s_service"}...),
 			},
 			"spec.gc_spec.advertise_custom.advertise_where.private_network": []sets.String{
+				sets.NewString([]string{"default_vip", "specific_vip"}...),
+			},
+			"spec.gc_spec.advertise_custom.advertise_where.srv6_network": []sets.String{
 				sets.NewString([]string{"default_vip", "specific_vip"}...),
 			},
 			"spec.gc_spec.advertise_custom.advertise_where.vk8s_service": []sets.String{
@@ -8765,7 +8895,7 @@ func init() {
 			"spec.custom_network_config.interface_list.interfaces.ethernet_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"untagged", "vlan_id"}...),
@@ -8850,7 +8980,7 @@ func init() {
 			"spec.custom_storage_config.storage_interface_list.storage_interfaces.storage_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"untagged", "vlan_id"}...),
@@ -8925,7 +9055,7 @@ func init() {
 			"spec.custom_network_config.interface_list.interfaces.ethernet_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"untagged", "vlan_id"}...),
@@ -9010,7 +9140,7 @@ func init() {
 			"spec.custom_storage_config.storage_interface_list.storage_interfaces.storage_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"untagged", "vlan_id"}...),
@@ -9085,7 +9215,7 @@ func init() {
 			"spec.gc_spec.custom_network_config.interface_list.interfaces.ethernet_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"untagged", "vlan_id"}...),
@@ -9170,7 +9300,7 @@ func init() {
 			"spec.gc_spec.custom_storage_config.storage_interface_list.storage_interfaces.storage_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"untagged", "vlan_id"}...),
@@ -9245,7 +9375,7 @@ func init() {
 			"spec.gc_spec.custom_network_config.interface_list.interfaces.ethernet_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"untagged", "vlan_id"}...),
@@ -9330,7 +9460,7 @@ func init() {
 			"spec.gc_spec.custom_storage_config.storage_interface_list.storage_interfaces.storage_interface": []sets.String{
 				sets.NewString([]string{"cluster", "node"}...),
 				sets.NewString([]string{"dhcp_client", "dhcp_server", "static_ip"}...),
-				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "storage_network"}...),
+				sets.NewString([]string{"inside_network", "site_local_inside_network", "site_local_network", "srv6_network", "storage_network"}...),
 				sets.NewString([]string{"is_primary", "not_primary"}...),
 				sets.NewString([]string{"monitor", "monitor_disabled"}...),
 				sets.NewString([]string{"untagged", "vlan_id"}...),
@@ -9537,7 +9667,21 @@ func init() {
 				sets.NewString([]string{"global_network", "legacy_type", "site_local_inside_network", "site_local_network", "srv6_network"}...),
 			},
 			"spec.srv6_network": []sets.String{
+				sets.NewString([]string{"anycast_vip", "fleet_vip", "interface_ip_vip"}...),
+				sets.NewString([]string{"fleet_snat_pool", "interface_ip_snat_pool", "site_snat_pool"}...),
 				sets.NewString([]string{"no_namespace_network", "srv6_network_ns_params"}...),
+			},
+			"spec.srv6_network.access_network_rtargets": []sets.String{
+				sets.NewString([]string{"asn2byte_rtarget", "asn4byte_rtarget", "ipv4_addr_rtarget"}...),
+			},
+			"spec.srv6_network.enterprise_network_rtargets": []sets.String{
+				sets.NewString([]string{"asn2byte_rtarget", "asn4byte_rtarget", "ipv4_addr_rtarget"}...),
+			},
+			"spec.srv6_network.export_rtargets": []sets.String{
+				sets.NewString([]string{"asn2byte_rtarget", "asn4byte_rtarget", "ipv4_addr_rtarget"}...),
+			},
+			"spec.srv6_network.internet_rtargets": []sets.String{
+				sets.NewString([]string{"asn2byte_rtarget", "asn4byte_rtarget", "ipv4_addr_rtarget"}...),
 			},
 			"spec.static_routes": []sets.String{
 				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
@@ -9551,7 +9695,21 @@ func init() {
 				sets.NewString([]string{"global_network", "legacy_type", "private_network", "site_local_inside_network", "site_local_network", "srv6_network"}...),
 			},
 			"spec.srv6_network": []sets.String{
+				sets.NewString([]string{"anycast_vip", "fleet_vip", "interface_ip_vip"}...),
+				sets.NewString([]string{"fleet_snat_pool", "interface_ip_snat_pool", "site_snat_pool"}...),
 				sets.NewString([]string{"no_namespace_network", "srv6_network_ns_params"}...),
+			},
+			"spec.srv6_network.access_network_rtargets": []sets.String{
+				sets.NewString([]string{"asn2byte_rtarget", "asn4byte_rtarget", "ipv4_addr_rtarget"}...),
+			},
+			"spec.srv6_network.enterprise_network_rtargets": []sets.String{
+				sets.NewString([]string{"asn2byte_rtarget", "asn4byte_rtarget", "ipv4_addr_rtarget"}...),
+			},
+			"spec.srv6_network.export_rtargets": []sets.String{
+				sets.NewString([]string{"asn2byte_rtarget", "asn4byte_rtarget", "ipv4_addr_rtarget"}...),
+			},
+			"spec.srv6_network.internet_rtargets": []sets.String{
+				sets.NewString([]string{"asn2byte_rtarget", "asn4byte_rtarget", "ipv4_addr_rtarget"}...),
 			},
 			"spec.static_routes": []sets.String{
 				sets.NewString([]string{"default_gateway", "interface", "ip_address"}...),
@@ -9562,6 +9720,8 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.virtual_network.crudapi.API.Create"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"fleet_snat_pool", "interface_ip", "site_snat_pool"}...),
+				sets.NewString([]string{"fleet_vip", "tenant_vip"}...),
 				sets.NewString([]string{"global_network", "inside_network", "legacy_type", "private_network", "site_local_inside_network", "site_local_network", "srv6_network"}...),
 			},
 			"spec.gc_spec.private_network_parameters": []sets.String{
@@ -9570,7 +9730,21 @@ func init() {
 				sets.NewString([]string{"no_private_dns", "private_dns"}...),
 			},
 			"spec.gc_spec.srv6_network": []sets.String{
+				sets.NewString([]string{"anycast_vip", "fleet_vip", "interface_ip_vip"}...),
+				sets.NewString([]string{"fleet_snat_pool", "interface_ip_snat_pool", "site_snat_pool"}...),
 				sets.NewString([]string{"no_namespace_network", "srv6_network_ns_params"}...),
+			},
+			"spec.gc_spec.srv6_network.access_network_rtargets": []sets.String{
+				sets.NewString([]string{"asn2byte_rtarget", "asn4byte_rtarget", "ipv4_addr_rtarget"}...),
+			},
+			"spec.gc_spec.srv6_network.enterprise_network_rtargets": []sets.String{
+				sets.NewString([]string{"asn2byte_rtarget", "asn4byte_rtarget", "ipv4_addr_rtarget"}...),
+			},
+			"spec.gc_spec.srv6_network.export_rtargets": []sets.String{
+				sets.NewString([]string{"asn2byte_rtarget", "asn4byte_rtarget", "ipv4_addr_rtarget"}...),
+			},
+			"spec.gc_spec.srv6_network.internet_rtargets": []sets.String{
+				sets.NewString([]string{"asn2byte_rtarget", "asn4byte_rtarget", "ipv4_addr_rtarget"}...),
 			},
 			"spec.gc_spec.static_routes.nexthop.nexthop_address": []sets.String{
 				sets.NewString([]string{"ipv4", "ipv6"}...),
@@ -9587,6 +9761,8 @@ func init() {
 	MDR.RPCOneofExclusiveRegistry["ves.io.schema.virtual_network.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
+				sets.NewString([]string{"fleet_snat_pool", "interface_ip", "site_snat_pool"}...),
+				sets.NewString([]string{"fleet_vip", "tenant_vip"}...),
 				sets.NewString([]string{"global_network", "inside_network", "legacy_type", "private_network", "site_local_inside_network", "site_local_network", "srv6_network"}...),
 			},
 			"spec.gc_spec.private_network_parameters": []sets.String{
@@ -9595,7 +9771,21 @@ func init() {
 				sets.NewString([]string{"no_private_dns", "private_dns"}...),
 			},
 			"spec.gc_spec.srv6_network": []sets.String{
+				sets.NewString([]string{"anycast_vip", "fleet_vip", "interface_ip_vip"}...),
+				sets.NewString([]string{"fleet_snat_pool", "interface_ip_snat_pool", "site_snat_pool"}...),
 				sets.NewString([]string{"no_namespace_network", "srv6_network_ns_params"}...),
+			},
+			"spec.gc_spec.srv6_network.access_network_rtargets": []sets.String{
+				sets.NewString([]string{"asn2byte_rtarget", "asn4byte_rtarget", "ipv4_addr_rtarget"}...),
+			},
+			"spec.gc_spec.srv6_network.enterprise_network_rtargets": []sets.String{
+				sets.NewString([]string{"asn2byte_rtarget", "asn4byte_rtarget", "ipv4_addr_rtarget"}...),
+			},
+			"spec.gc_spec.srv6_network.export_rtargets": []sets.String{
+				sets.NewString([]string{"asn2byte_rtarget", "asn4byte_rtarget", "ipv4_addr_rtarget"}...),
+			},
+			"spec.gc_spec.srv6_network.internet_rtargets": []sets.String{
+				sets.NewString([]string{"asn2byte_rtarget", "asn4byte_rtarget", "ipv4_addr_rtarget"}...),
 			},
 			"spec.gc_spec.static_routes.nexthop.nexthop_address": []sets.String{
 				sets.NewString([]string{"ipv4", "ipv6"}...),
@@ -11635,6 +11825,16 @@ func init() {
 	csr.AllowedInNSTypes["ves.io.schema.site.Object"] = []svcfw.NamespaceType{svcfw.SystemNSType}
 
 	csr.CRUDSwaggerRegistry["ves.io.schema.site.Object"] = ves_io_schema_site.APISwaggerJSON
+
+	customCSR = MDR.PubCustomServiceRegistry
+	customCSR.GrpcClientRegistry["ves.io.schema.site.CustomDataK8SAPI"] = ves_io_schema_site.NewCustomDataK8SAPIGrpcClient
+	customCSR.RestClientRegistry["ves.io.schema.site.CustomDataK8SAPI"] = ves_io_schema_site.NewCustomDataK8SAPIRestClient
+
+	// Generate Service register handlers
+	MDR.SvcRegisterHandlers["ves.io.schema.site.CustomDataK8SAPI"] = ves_io_schema_site.RegisterCustomDataK8SAPIServer
+	MDR.SvcGwRegisterHandlers["ves.io.schema.site.CustomDataK8SAPI"] = ves_io_schema_site.RegisterGwCustomDataK8SAPIHandler
+
+	customCSR.SwaggerRegistry["ves.io.schema.site.Object"] = ves_io_schema_site.CustomDataK8SAPISwaggerJSON
 
 	customCSR = MDR.PubCustomServiceRegistry
 	customCSR.GrpcClientRegistry["ves.io.schema.site.CustomStateAPI"] = ves_io_schema_site.NewCustomStateAPIGrpcClient
@@ -14112,6 +14312,18 @@ func RegisterGrpcAPI(api string, gSrv *grpc.Server, srv interface{}) error {
 		s, ok := srv.(ves_io_schema_site.APIServer)
 		if !ok {
 			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_site.APIServer", srv))
+		}
+		h(gSrv, s)
+
+	case "ves.io.schema.site.CustomDataK8SAPI":
+		gh, _ := MDR.SvcRegisterHandlers[api]
+		h, ok := gh.(func(*grpc.Server, ves_io_schema_site.CustomDataK8SAPIServer))
+		if !ok {
+			return fmt.Errorf("gRPC API reg expected func(*grpc.Server, ves_io_schema_site.CustomDataK8SAPIServer), got %T", gh)
+		}
+		s, ok := srv.(ves_io_schema_site.CustomDataK8SAPIServer)
+		if !ok {
+			panic(fmt.Sprintf("%T does not satisfy interface ves_io_schema_site.CustomDataK8SAPIServer", srv))
 		}
 		h(gSrv, s)
 

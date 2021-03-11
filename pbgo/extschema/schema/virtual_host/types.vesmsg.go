@@ -570,15 +570,6 @@ func (v *ValidateCaptchaChallengeType) Validate(ctx context.Context, pm interfac
 
 	}
 
-	if fv, exists := v.FldValidators["enable_captcha_challenge"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("enable_captcha_challenge"))
-		if err := fv(ctx, m.GetEnableCaptchaChallenge(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	return nil
 }
 
@@ -596,6 +587,7 @@ var DefaultCaptchaChallengeTypeValidator = func() *ValidateCaptchaChallengeType 
 
 	vrhCookieExpiry := v.CookieExpiryValidationRuleHandler
 	rulesCookieExpiry := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
 		"ves.io.schema.rules.uint32.lte": "86400",
 	}
 	vFn, err = vrhCookieExpiry(rulesCookieExpiry)
@@ -607,7 +599,7 @@ var DefaultCaptchaChallengeTypeValidator = func() *ValidateCaptchaChallengeType 
 
 	vrhCustomPage := v.CustomPageValidationRuleHandler
 	rulesCustomPage := map[string]string{
-		"ves.io.schema.rules.string.max_len": "8192",
+		"ves.io.schema.rules.string.max_len": "16384",
 		"ves.io.schema.rules.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomPage(rulesCustomPage)
@@ -5017,6 +5009,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["volterra_cert"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("volterra_cert"))
+		if err := fv(ctx, m.GetVolterraCert(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["waf_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("waf_type"))
@@ -5437,15 +5438,6 @@ func (v *ValidateJavascriptChallengeType) Validate(ctx context.Context, pm inter
 
 	}
 
-	if fv, exists := v.FldValidators["enable_js_challenge"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("enable_js_challenge"))
-		if err := fv(ctx, m.GetEnableJsChallenge(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["js_script_delay"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("js_script_delay"))
@@ -5472,6 +5464,7 @@ var DefaultJavascriptChallengeTypeValidator = func() *ValidateJavascriptChalleng
 
 	vrhJsScriptDelay := v.JsScriptDelayValidationRuleHandler
 	rulesJsScriptDelay := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1000",
 		"ves.io.schema.rules.uint32.lte": "60000",
 	}
 	vFn, err = vrhJsScriptDelay(rulesJsScriptDelay)
@@ -5483,6 +5476,7 @@ var DefaultJavascriptChallengeTypeValidator = func() *ValidateJavascriptChalleng
 
 	vrhCookieExpiry := v.CookieExpiryValidationRuleHandler
 	rulesCookieExpiry := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
 		"ves.io.schema.rules.uint32.lte": "86400",
 	}
 	vFn, err = vrhCookieExpiry(rulesCookieExpiry)
@@ -5494,7 +5488,7 @@ var DefaultJavascriptChallengeTypeValidator = func() *ValidateJavascriptChalleng
 
 	vrhCustomPage := v.CustomPageValidationRuleHandler
 	rulesCustomPage := map[string]string{
-		"ves.io.schema.rules.string.max_len": "8192",
+		"ves.io.schema.rules.string.max_len": "16384",
 		"ves.io.schema.rules.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomPage(rulesCustomPage)
@@ -7093,7 +7087,7 @@ var DefaultTemporaryUserBlockingTypeValidator = func() *ValidateTemporaryUserBlo
 
 	vrhCustomPage := v.CustomPageValidationRuleHandler
 	rulesCustomPage := map[string]string{
-		"ves.io.schema.rules.string.max_len": "8192",
+		"ves.io.schema.rules.string.max_len": "16384",
 		"ves.io.schema.rules.string.uri_ref": "true",
 	}
 	vFn, err = vrhCustomPage(rulesCustomPage)

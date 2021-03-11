@@ -1897,6 +1897,15 @@ func (v *ValidateMapRules) Validate(ctx context.Context, pm interface{}, opts ..
 
 	}
 
+	if fv, exists := v.FldValidators["unique_values"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("unique_values"))
+		if err := fv(ctx, m.GetUniqueValues(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["values"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("values"))
@@ -3187,6 +3196,17 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *StringRules_K8SLabelSelector:
+		if fv, exists := v.FldValidators["well_known.k8s_label_selector"]; exists {
+			val := m.GetWellKnown().(*StringRules_K8SLabelSelector).K8SLabelSelector
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("k8s_label_selector"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -3474,6 +3494,15 @@ func (v *ValidateUInt32Rules) Validate(ctx context.Context, pm interface{}, opts
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["not_in_ranges"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("not_in_ranges"))
+		if err := fv(ctx, m.GetNotInRanges(), vOpts...); err != nil {
+			return err
 		}
 
 	}

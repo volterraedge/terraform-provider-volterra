@@ -169,7 +169,10 @@ func (c *UamKubeConfigAPIRestClient) doRPCCreateGlobalKubeConfig(ctx context.Con
 	}
 	pbRsp := &google_api.HttpBody{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, fmt.Errorf("JSON Response %s is not of type *google.api.HttpBody", body)
+		// server strips HTTP Body proto message and sends only data, re-build it here
+		pbRsp.ContentType = rsp.Header.Get("Content-Type")
+		pbRsp.Data = body
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -246,6 +249,7 @@ func (c *UamKubeConfigAPIRestClient) doRPCListGlobalKubeConfig(ctx context.Conte
 	pbRsp := &ListKubeConfigRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.site.ListKubeConfigRsp", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

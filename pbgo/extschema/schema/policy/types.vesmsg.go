@@ -346,6 +346,7 @@ var DefaultAsnMatchListValidator = func() *ValidateAsnMatchList {
 	vrhAsNumbers := v.AsNumbersValidationRuleHandler
 	rulesAsNumbers := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhAsNumbers(rulesAsNumbers)
@@ -3054,26 +3055,6 @@ func (v *ValidateSimpleWafExclusionRule) DomainChoiceDomainRegexValidationRuleHa
 	return oValidatorFn_DomainRegex, nil
 }
 
-func (v *ValidateSimpleWafExclusionRule) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateSimpleWafExclusionRule) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateSimpleWafExclusionRule) PathRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -3215,15 +3196,6 @@ func (v *ValidateSimpleWafExclusionRule) Validate(ctx context.Context, pm interf
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["description"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("description"))
-		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["domain_choice"]; exists {
 		val := m.GetDomainChoice()
 		vOpts := append(opts,
@@ -3294,15 +3266,6 @@ func (v *ValidateSimpleWafExclusionRule) Validate(ctx context.Context, pm interf
 
 	}
 
-	if fv, exists := v.FldValidators["name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("name"))
-		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["path_regex"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("path_regex"))
@@ -3350,29 +3313,6 @@ var DefaultSimpleWafExclusionRuleValidator = func() *ValidateSimpleWafExclusionR
 	}
 
 	v.FldValidators["domain_choice.domain_regex"] = vFnMap["domain_choice.domain_regex"]
-
-	vrhName := v.NameValidationRuleHandler
-	rulesName := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "64",
-	}
-	vFn, err = vrhName(rulesName)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleWafExclusionRule.name: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["name"] = vFn
-
-	vrhDescription := v.DescriptionValidationRuleHandler
-	rulesDescription := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhDescription(rulesDescription)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleWafExclusionRule.description: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["description"] = vFn
 
 	vrhPathRegex := v.PathRegexValidationRuleHandler
 	rulesPathRegex := map[string]string{

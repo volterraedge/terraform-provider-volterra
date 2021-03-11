@@ -166,11 +166,6 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 				Optional: true,
 			},
 
-			"operating_system_version": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
-
 			"ingress_egress_gw": {
 
 				Type:     schema.TypeSet,
@@ -2209,11 +2204,6 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-
-			"volterra_software_version": {
-				Type:     schema.TypeString,
-				Optional: true,
-			},
 		},
 	}
 }
@@ -2417,13 +2407,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 		createSpec.NodesPerAz =
 			uint32(v.(int))
-	}
-
-	//operating_system_version
-	if v, ok := d.GetOk("operating_system_version"); ok && !isIntfNil(v) {
-
-		createSpec.OperatingSystemVersion =
-			v.(string)
 	}
 
 	//site_type
@@ -5192,13 +5175,6 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 			v.(string)
 	}
 
-	//volterra_software_version
-	if v, ok := d.GetOk("volterra_software_version"); ok && !isIntfNil(v) {
-
-		createSpec.VolterraSoftwareVersion =
-			v.(string)
-	}
-
 	log.Printf("[DEBUG] Creating Volterra GcpVpcSite object with struct: %+v", createReq)
 
 	createGcpVpcSiteResp, err := client.CreateObject(context.Background(), ves_io_schema_views_gcp_vpc_site.ObjectType, createReq)
@@ -5365,12 +5341,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 			updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
 
-	}
-
-	if v, ok := d.GetOk("operating_system_version"); ok && !isIntfNil(v) {
-
-		updateSpec.OperatingSystemVersion =
-			v.(string)
 	}
 
 	siteTypeTypeFound := false
@@ -7527,12 +7497,6 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 		}
 
-	}
-
-	if v, ok := d.GetOk("volterra_software_version"); ok && !isIntfNil(v) {
-
-		updateSpec.VolterraSoftwareVersion =
-			v.(string)
 	}
 
 	log.Printf("[DEBUG] Updating Volterra GcpVpcSite obj with struct: %+v", updateReq)

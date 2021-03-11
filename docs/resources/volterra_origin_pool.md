@@ -23,10 +23,16 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "voltadn_private_ip voltadn_private_name public_name private_ip k8s_service custom_endpoint_object public_ip private_name consul_service" must be set
+    // One of the arguments from this list "voltadn_private_name srv6_private_name public_ip public_name custom_endpoint_object voltadn_private_ip srv6_private_ip private_ip private_name k8s_service consul_service" must be set
 
-    public_ip {
-      ip = "ip"
+    voltadn_private_name {
+      dns_name = "dns_name"
+
+      private_network {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
     }
 
     labels = {
@@ -287,6 +293,10 @@ List of origin servers in this pool.
 
 `public_name` - (Optional) Specify origin server with public DNS name. See [Public Name ](#public-name) below for details.
 
+`srv6_private_ip` - (Optional) Specify origin server IP address on per site srv6 network. See [Srv6 Private Ip ](#srv6-private-ip) below for details.
+
+`srv6_private_name` - (Optional) Specify origin server name on per site srv6 network. See [Srv6 Private Name ](#srv6-private-name) below for details.
+
 `voltadn_private_ip` - (Optional) Specify origin server IP address on VoltADN private network. See [Voltadn Private Ip ](#voltadn-private-ip) below for details.
 
 `voltadn_private_name` - (Optional) Specify origin server name on VoltADN private network. See [Voltadn Private Name ](#voltadn-private-name) below for details.
@@ -385,6 +395,22 @@ Site or Virtual site where this origin server is located.
 
 Skip origin server verification.
 
+### Srv6 Private Ip
+
+Specify origin server IP address on per site srv6 network.
+
+`ip` - (Required) IP address (`String`).
+
+`virtual_network` - (Required) Virtual Network where this IP will be present. See [ref](#ref) below for details.
+
+### Srv6 Private Name
+
+Specify origin server name on per site srv6 network.
+
+`dns_name` - (Required) DNS Name (`String`).
+
+`private_network` - (Required) Virtual Network where this Name will be present. See [ref](#ref) below for details.
+
 ### Tls Certificates
 
 TLS Certificates.
@@ -469,7 +495,7 @@ Specify origin server IP address on VoltADN private network.
 
 `ip` - (Required) IP address (`String`).
 
-`private_network` - (Required) VoltADN Private Network where this IP will be present. See [ref](#ref) below for details.
+`virtual_network` - (Required) Virtual Network where this IP will be present. See [ref](#ref) below for details.
 
 ### Voltadn Private Name
 
@@ -477,7 +503,7 @@ Specify origin server name on VoltADN private network.
 
 `dns_name` - (Required) DNS Name (`String`).
 
-`private_network` - (Required) VoltADN Private Network where this Name will be present. See [ref](#ref) below for details.
+`private_network` - (Required) Virtual Network where this Name will be present. See [ref](#ref) below for details.
 
 ### Volterra Trusted Ca
 

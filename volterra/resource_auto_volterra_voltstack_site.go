@@ -1174,6 +1174,29 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																Optional: true,
 															},
 
+															"srv6_network": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
 															"storage_network": {
 
 																Type:     schema.TypeBool,
@@ -1652,11 +1675,6 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 			"default_network_config": {
 
 				Type:     schema.TypeBool,
-				Optional: true,
-			},
-
-			"operating_system_version": {
-				Type:     schema.TypeString,
 				Optional: true,
 			},
 
@@ -3780,6 +3798,29 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																Optional: true,
 															},
 
+															"srv6_network": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
 															"storage_network": {
 
 																Type:     schema.TypeBool,
@@ -3883,11 +3924,6 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 			"volterra_certified_hw": {
 				Type:     schema.TypeString,
 				Required: true,
-			},
-
-			"volterra_software_version": {
-				Type:     schema.TypeString,
-				Optional: true,
 			},
 
 			"worker_nodes": {
@@ -5531,6 +5567,36 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 									}
 
+									if v, ok := cs["srv6_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+										networkChoiceTypeFound = true
+										networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_Srv6Network{}
+										networkChoiceInt.Srv6Network = &ves_io_schema_views.ObjectRefType{}
+										interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.Srv6Network.Name = v.(string)
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.Srv6Network.Namespace = v.(string)
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.Srv6Network.Tenant = v.(string)
+											}
+
+										}
+
+									}
+
 									if v, ok := cs["storage_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
 
 										networkChoiceTypeFound = true
@@ -6208,13 +6274,6 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 			createSpec.NetworkCfgChoice = networkCfgChoiceInt
 		}
 
-	}
-
-	//operating_system_version
-	if v, ok := d.GetOk("operating_system_version"); ok && !isIntfNil(v) {
-
-		createSpec.OperatingSystemVersion =
-			v.(string)
 	}
 
 	//storage_cfg_choice
@@ -8854,6 +8913,36 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 									}
 
+									if v, ok := storageInterfaceMapStrToI["srv6_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+										networkChoiceTypeFound = true
+										networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_Srv6Network{}
+										networkChoiceInt.Srv6Network = &ves_io_schema_views.ObjectRefType{}
+										storageInterface.NetworkChoice = networkChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.Srv6Network.Name = v.(string)
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.Srv6Network.Namespace = v.(string)
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.Srv6Network.Tenant = v.(string)
+											}
+
+										}
+
+									}
+
 									if v, ok := storageInterfaceMapStrToI["storage_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
 
 										networkChoiceTypeFound = true
@@ -9037,13 +9126,6 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 	if v, ok := d.GetOk("volterra_certified_hw"); ok && !isIntfNil(v) {
 
 		createSpec.VolterraCertifiedHw =
-			v.(string)
-	}
-
-	//volterra_software_version
-	if v, ok := d.GetOk("volterra_software_version"); ok && !isIntfNil(v) {
-
-		createSpec.VolterraSoftwareVersion =
 			v.(string)
 	}
 
@@ -10718,6 +10800,36 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 									}
 
+									if v, ok := cs["srv6_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+										networkChoiceTypeFound = true
+										networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_Srv6Network{}
+										networkChoiceInt.Srv6Network = &ves_io_schema_views.ObjectRefType{}
+										interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.Srv6Network.Name = v.(string)
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.Srv6Network.Namespace = v.(string)
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.Srv6Network.Tenant = v.(string)
+											}
+
+										}
+
+									}
+
 									if v, ok := cs["storage_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
 
 										networkChoiceTypeFound = true
@@ -11395,12 +11507,6 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 			updateSpec.NetworkCfgChoice = networkCfgChoiceInt
 		}
 
-	}
-
-	if v, ok := d.GetOk("operating_system_version"); ok && !isIntfNil(v) {
-
-		updateSpec.OperatingSystemVersion =
-			v.(string)
 	}
 
 	storageCfgChoiceTypeFound := false
@@ -14038,6 +14144,36 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 									}
 
+									if v, ok := storageInterfaceMapStrToI["srv6_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+										networkChoiceTypeFound = true
+										networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_Srv6Network{}
+										networkChoiceInt.Srv6Network = &ves_io_schema_views.ObjectRefType{}
+										storageInterface.NetworkChoice = networkChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.Srv6Network.Name = v.(string)
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.Srv6Network.Namespace = v.(string)
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.Srv6Network.Tenant = v.(string)
+											}
+
+										}
+
+									}
+
 									if v, ok := storageInterfaceMapStrToI["storage_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
 
 										networkChoiceTypeFound = true
@@ -14218,12 +14354,6 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 	if v, ok := d.GetOk("volterra_certified_hw"); ok && !isIntfNil(v) {
 
 		updateSpec.VolterraCertifiedHw =
-			v.(string)
-	}
-
-	if v, ok := d.GetOk("volterra_software_version"); ok && !isIntfNil(v) {
-
-		updateSpec.VolterraSoftwareVersion =
 			v.(string)
 	}
 

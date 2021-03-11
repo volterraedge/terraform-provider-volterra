@@ -21,9 +21,9 @@ require (
 	github.com/golang/protobuf v1.4.3
 	github.com/gomodule/redigo v1.8.2 // indirect
 	github.com/google/uuid v1.1.2
-	github.com/gorilla/handlers v1.5.1 // indirect
+	github.com/gorilla/handlers v1.4.2 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0 // indirect
-	github.com/grpc-ecosystem/grpc-gateway v1.14.5
+	github.com/grpc-ecosystem/grpc-gateway v1.11.1
 	github.com/hashicorp/go-getter v1.4.2-0.20200106182914-9813cbd4eb02 // indirect
 	github.com/hashicorp/go-multierror v1.1.0
 	github.com/hashicorp/go-version v1.2.1 // indirect
@@ -62,11 +62,13 @@ require (
 	google.golang.org/api v0.15.1 // indirect
 	google.golang.org/appengine v1.6.6 // indirect
 	google.golang.org/genproto v0.0.0-20200122232147-0452cf42e150
-	google.golang.org/grpc v1.26.0
+	google.golang.org/grpc v1.27.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
-	gopkg.volterra.us/stdlib v0.0.0-20210209172134-6053fe0f0dcb
-	k8s.io/apimachinery v0.19.0-beta.2 // indirect
-	k8s.io/klog/v2 v2.2.0 // indirect
+	gopkg.volterra.us/stdlib v0.0.0-20210304025337-3b867abb8422
+	k8s.io/api v0.17.9
+	k8s.io/apimachinery v0.17.10-rc.0 // indirect
+	k8s.io/client-go v0.17.9 // indirect
+	sigs.k8s.io/structured-merge-diff/v3 v3.0.0 // indirect
 	software.sslmate.com/src/go-pkcs12 v0.0.0-20201103104416-57fc603b7f52 // indirect
 )
 

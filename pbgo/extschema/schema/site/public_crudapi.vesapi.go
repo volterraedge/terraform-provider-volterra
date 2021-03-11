@@ -2605,6 +2605,146 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteFleetCondition": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.FleetCondition",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "description": " A verbose human readable explanation of the reason",
+                    "title": "message",
+                    "x-displayname": "Message"
+                },
+                "module_name": {
+                    "type": "string",
+                    "description": " A name of module that produced the condition",
+                    "title": "module_name",
+                    "x-displayname": "Module Name"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " A name of condition",
+                    "title": "name",
+                    "x-displayname": "Name"
+                },
+                "result": {
+                    "type": "string",
+                    "description": " Result of the condition",
+                    "title": "result",
+                    "x-displayname": "Result"
+                }
+            }
+        },
+        "siteFleetDeploymentState": {
+            "type": "object",
+            "description": "Details of Fleet Deployment",
+            "title": "Fleet Deployment State",
+            "x-displayname": "Fleet Deployment State",
+            "x-ves-proto-message": "ves.io.schema.site.FleetDeploymentState",
+            "properties": {
+                "condition": {
+                    "type": "array",
+                    "description": " Map of fleet conditions",
+                    "title": "conditiom",
+                    "items": {
+                        "$ref": "#/definitions/siteFleetCondition"
+                    },
+                    "x-displayname": "Condition"
+                },
+                "hash": {
+                    "type": "string",
+                    "description": " Hash sum of fleet config.",
+                    "title": "hash",
+                    "x-displayname": "Fleet Hash"
+                },
+                "modification_timestamp": {
+                    "type": "string",
+                    "description": " ModificationTimestamp is a timestamp representing the server time when deployment state was\n last modified.",
+                    "title": "modification_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Modified At"
+                },
+                "result": {
+                    "type": "string",
+                    "description": " Summarized result of the deployment, one of Success, Failure, Unknown",
+                    "title": "result",
+                    "x-displayname": "Result"
+                }
+            }
+        },
+        "siteFleetStatus": {
+            "type": "object",
+            "description": "Volterra fleet status on the node",
+            "title": "Volterra Fleet Status",
+            "x-displayname": "Volterra Fleet Status",
+            "x-ves-proto-message": "ves.io.schema.site.FleetStatus",
+            "properties": {
+                "deployment_state": {
+                    "description": " deployment state shows status of last fleet version on the node",
+                    "title": "deployment_state",
+                    "$ref": "#/definitions/siteFleetDeploymentState",
+                    "x-displayname": "Fleet Deployment State"
+                }
+            }
+        },
+        "siteGPU": {
+            "type": "object",
+            "description": "GPU information on server",
+            "title": "GPU",
+            "x-displayname": "GPU",
+            "x-ves-proto-message": "ves.io.schema.site.GPU",
+            "properties": {
+                "cuda_version": {
+                    "type": "string",
+                    "description": " GPU Cuda Version\n\nExample: - \"10.2\"-",
+                    "title": "cudaVersion",
+                    "x-displayname": "Cuda Version",
+                    "x-ves-example": "10.2"
+                },
+                "driver_version": {
+                    "type": "string",
+                    "description": " GPU Driver Version\n\nExample: - \"440.82\"-",
+                    "title": "driverVersion",
+                    "x-displayname": "Driver Version",
+                    "x-ves-example": "440.82"
+                },
+                "gpu_device": {
+                    "type": "array",
+                    "description": " List of GPU devices in server",
+                    "title": "GPUDevice",
+                    "items": {
+                        "$ref": "#/definitions/siteGPUDevice"
+                    },
+                    "x-displayname": "GPU devices"
+                }
+            }
+        },
+        "siteGPUDevice": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.GPUDevice",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": " GPU ID\n\nExample: - \"00000000:17:00.0\"-",
+                    "title": "id",
+                    "x-displayname": "GPU ID",
+                    "x-ves-example": "00000000:17:00.0"
+                },
+                "processes": {
+                    "type": "string",
+                    "description": " GPU Processes",
+                    "title": "processes",
+                    "x-displayname": "Processes"
+                },
+                "product_name": {
+                    "type": "string",
+                    "description": " GPU Product Name\n\nExample: - \"Quadro P1000\"-",
+                    "title": "productName",
+                    "x-displayname": "Product Name",
+                    "x-ves-example": "Quadro P1000"
+                }
+            }
+        },
         "siteGetResponse": {
             "type": "object",
             "description": "This is the output message of the 'Get' RPC",
@@ -2931,6 +3071,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Inside VIP",
                     "x-ves-example": "10.1.1.1"
                 },
+                "ipsec_ssl_vip_fqdn": {
+                    "type": "string",
+                    "description": " FQDN resolves in public ip on public network and private ip on private network\n\nExample: - \"re01.ves.io\"-",
+                    "title": "ipsec_ssl_vip_fqdn",
+                    "x-displayname": "FQDN for IPSEC/SSL VIP",
+                    "x-ves-example": "re01.ves.io"
+                },
                 "k8s_api_servers": {
                     "type": "object",
                     "description": " physical kubernetes API servers on this site.\n The index is kubernetes API server host name",
@@ -3004,6 +3151,13 @@ var APISwaggerJSON string = `{
                     "title": "outside_vip",
                     "x-displayname": "Outside VIP",
                     "x-ves-example": "10.1.1.1"
+                },
+                "private_ip": {
+                    "type": "string",
+                    "description": " VIP in the Private VN used for terminating IPSec/SSL tunnels\n The automatic tunnels between regional-edges and customer-edge sites use this VIP if private access is enabled\n\nExample: - \"1.2.3.4\"-",
+                    "title": "private_ip",
+                    "x-displayname": "Private IP",
+                    "x-ves-example": "1.2.3.4"
                 },
                 "public_ip": {
                     "type": "string",
@@ -3087,6 +3241,13 @@ var APISwaggerJSON string = `{
                     "title": "Site to site tunnel type",
                     "$ref": "#/definitions/schemaSiteToSiteTunnelType",
                     "x-displayname": "Site Tunnel Type"
+                },
+                "use_private_ip": {
+                    "type": "boolean",
+                    "description": " VER should use private IP to setup SSL/IPSEC tunnels",
+                    "title": "Use Private IP",
+                    "format": "boolean",
+                    "x-displayname": "Use Private IP"
                 },
                 "vega": {
                     "description": " Parameters to connect to this site {URL, type of TLS}",
@@ -3681,6 +3842,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteCpu",
                     "x-displayname": "CPU"
                 },
+                "gpu": {
+                    "description": " GPU information on server",
+                    "title": "GPU",
+                    "$ref": "#/definitions/siteGPU",
+                    "x-displayname": "GPU"
+                },
                 "kernel": {
                     "description": " kernel information",
                     "title": "kernel",
@@ -4072,6 +4239,12 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaConditionType"
                     },
                     "x-displayname": "Conditions"
+                },
+                "fleet_status": {
+                    "description": " Fleet status shows fleet deployment status of last fleet default config on the node",
+                    "title": "Fleet Status",
+                    "$ref": "#/definitions/siteFleetStatus",
+                    "x-displayname": "Fleet Status"
                 },
                 "hostname": {
                     "type": "string",

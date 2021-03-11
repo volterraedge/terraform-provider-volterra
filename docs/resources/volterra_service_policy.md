@@ -21,187 +21,11 @@ resource "volterra_service_policy" "example" {
   namespace = "staging"
   algo      = ["algo"]
 
-  // One of the arguments from this list "legacy_rule_list allow_all_requests deny_all_requests internally_generated allow_list deny_list rule_list" must be set
+  // One of the arguments from this list "deny_all_requests internally_generated allow_list deny_list rule_list legacy_rule_list allow_all_requests" must be set
+  allow_all_requests = true
 
-  rule_list {
-    rules {
-      metadata {
-        description = "Virtual Host for acmecorp website"
-        disable     = true
-        name        = "acmecorp-web"
-      }
-
-      spec {
-        action = "action"
-
-        api_group_matcher {
-          invert_matcher = true
-
-          match = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-        }
-
-        arg_matchers {
-          invert_matcher = true
-
-          // One of the arguments from this list "presence check_present check_not_present item" must be set
-          presence = true
-
-          name = "name"
-        }
-
-        // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
-        any_asn = true
-
-        body_matcher {
-          exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-          regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-
-          transformers = ["transformers"]
-        }
-
-        challenge_action = "challenge_action"
-
-        // One of the arguments from this list "any_client client_name client_selector client_name_matcher" must be set
-
-        client_selector {
-          expressions = ["region in (us-west1, us-west2),tier in (staging)"]
-        }
-        client_role {
-          match = "ves-io-monitor-role"
-        }
-        cookie_matchers {
-          invert_matcher = true
-
-          // One of the arguments from this list "presence check_present check_not_present item" must be set
-          presence = true
-
-          name = "Session"
-        }
-        domain_matcher {
-          exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-          regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-
-          transformers = ["transformers"]
-        }
-        // One of the arguments from this list "any_dst_asn dst_asn_list dst_asn_matcher" must be set
-        any_dst_asn = true
-        // One of the arguments from this list "any_dst_ip dst_ip_prefix_list dst_ip_matcher" must be set
-        any_dst_ip           = true
-        expiration_timestamp = "0001-01-01T00:00:00Z"
-        forwarding_class {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-        goto_policy {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-        headers {
-          invert_matcher = true
-
-          // One of the arguments from this list "check_not_present item presence check_present" must be set
-          presence = true
-
-          name = "Accept-Encoding"
-        }
-        http_method {
-          invert_matcher = true
-
-          methods = ["['GET', 'POST', 'DELETE']"]
-        }
-        // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
-        any_ip = true
-        l4_dest_matcher {
-          invert_matcher = true
-
-          l4_dests {
-            port_ranges = "80,443,8080-8191,9080"
-
-            prefixes = ["prefixes"]
-          }
-        }
-        label_matcher {
-          keys = ["['environment', 'location', 'deployment']"]
-        }
-        malicious_user_mitigation {}
-        malicious_user_mitigation_bypass = true
-        path {
-          exact_values = ["['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']"]
-
-          prefix_values = ["['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']"]
-
-          regex_values = ["['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']"]
-
-          transformers = ["transformers"]
-        }
-        port_matcher {
-          invert_matcher = true
-
-          ports = ["8000-8191"]
-        }
-        query_params {
-          invert_matcher = true
-          key            = "sourceid"
-
-          // One of the arguments from this list "presence check_present check_not_present item" must be set
-          presence = true
-        }
-        rate_limiter {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-        scheme = ["HTTPS"]
-        server_selector {
-          expressions = ["region in (us-west1, us-west2),tier in (staging)"]
-        }
-        tls_fingerprint_matcher {
-          classes = ["classes"]
-
-          exact_values = ["exact_values"]
-
-          excluded_values = ["excluded_values"]
-        }
-        url_matcher {
-          invert_matcher = true
-
-          url_items {
-            // One of the arguments from this list "domain_value domain_regex" must be set
-            domain_regex = "*.mybloggingwebsite.org"
-
-            // One of the arguments from this list "path_regex path_value path_prefix" must be set
-            path_value = "/api/web/namespaces/project179/users/user1"
-          }
-        }
-        virtual_host_matcher {
-          exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-          regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-
-          transformers = ["transformers"]
-        }
-        waf_action {
-          // One of the arguments from this list "none waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode" must be set
-
-          waf_rule_control {
-            exclude_rule_ids {
-              name      = "test1"
-              namespace = "staging"
-              tenant    = "acmecorp"
-            }
-
-            monitoring_mode = true
-          }
-        }
-      }
-    }
-  }
-  // One of the arguments from this list "any_server server_name server_selector server_name_matcher" must be set
-  any_server = true
+  // One of the arguments from this list "server_name_matcher any_server server_name server_selector" must be set
+  server_name = "database.production.customer.volterra.us"
 }
 
 ```
@@ -250,8 +74,6 @@ Argument Reference
 `server_name_matcher` - (Optional) The predicate evaluates to true if any of the server's actual names match any of the exact values or regular expressions in the server name matcher.. See [Server Name Matcher ](#server-name-matcher) below for details.
 
 `server_selector` - (Optional) The predicate evaluates to true if the expressions in the label selector are true for the server labels.. See [Server Selector ](#server-selector) below for details.
-
-`simple_rules` - (Optional) This is mutually exclusive with the rules field and is for internal use only.. See [Simple Rules ](#simple-rules) below for details.
 
 ### Allow List
 
@@ -553,7 +375,7 @@ the appropriate match conditions in the enclosing policy rule and setting malici
 
 Common attributes for the rule including name and description..
 
-`description` - (Optional) Human readable description for the object that corresponds to the containing message. (`String`).
+`description` - (Optional) Human readable description. (`String`).
 
 `disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).
 
@@ -642,50 +464,6 @@ The predicate evaluates to true if any of the server's actual names match any of
 The predicate evaluates to true if the expressions in the label selector are true for the server labels..
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
-
-### Simple Rules
-
-This is mutually exclusive with the rules field and is for internal use only..
-
-`action` - (Required) Action to be enforced if the input request matches the rule. (`String`).
-
-`api_group_matcher` - (Optional) The predicate evaluates to true if any of the actual API group names for the request is equal to any of the values in the api group matcher.. See [Api Group Matcher ](#api-group-matcher) below for details.
-
-`asn_list` - (Optional) The predicate evaluates to true if the origin ASN is present in the ASN list.. See [Asn List ](#asn-list) below for details.
-
-`client_role` - (Optional) The predicate evaluates to true if any of the client's roles match the value(s) specified in client role.. See [Client Role ](#client-role) below for details.
-
-`description` - (Optional) Description for the rule. (`String`).
-
-`domain_matcher` - (Optional) matcher.. See [Domain Matcher ](#domain-matcher) below for details.
-
-`dst_ip_prefix_list` - (Optional) The predicate evaluates to true if the destination address is covered by one or more of the IPv4 Prefixes from the list.. See [Dst Ip Prefix List ](#dst-ip-prefix-list) below for details.
-
-`expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
-
-`headers` - (Optional) Note that all specified header predicates must evaluate to true.. See [Headers ](#headers) below for details.
-
-`http_method` - (Optional) The predicate evaluates to true if the actual HTTP method belongs is present in the list of expected values.. See [Http Method ](#http-method) below for details.
-
-`ip_prefix_list` - (Optional) The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list.. See [Ip Prefix List ](#ip-prefix-list) below for details.
-
-`l4_dest_matcher` - (Optional) IP matches one of the prefixes and the destination port belongs to the port range.. See [L4 Dest Matcher ](#l4-dest-matcher) below for details.
-
-`metric_name_label` - (Optional) Name label to use in service policy rule metrics generated for this simple rule. (`String`).
-
-`name` - (Required) Name of the rule. (`String`).
-
-`path` - (Optional) The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.. See [Path ](#path) below for details.
-
-`port_matcher` - (Optional) The list of port ranges to which the destination port should belong. In case of an HTTP Connect, the port is extracted from the desired destination.. See [Port Matcher ](#port-matcher) below for details.
-
-`scheme` - (Optional) The scheme in the request. (`String`).
-
-`tls_fingerprint_matcher` - (Optional) The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.. See [Tls Fingerprint Matcher ](#tls-fingerprint-matcher) below for details.
-
-`url_matcher` - (Optional) A URL matcher specifies a list of URL items as match criteria. The match is considered successful if the domain and path match any of the URL items.. See [Url Matcher ](#url-matcher) below for details.
-
-`waf_action` - (Required) App Firewall action to be enforced if the input request matches the rule.. See [Waf Action ](#waf-action) below for details.
 
 ### Spec
 

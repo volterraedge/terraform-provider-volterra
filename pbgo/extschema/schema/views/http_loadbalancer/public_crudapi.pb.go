@@ -9,7 +9,7 @@ import fmt "fmt"
 import math "math"
 import _ "github.com/gogo/protobuf/gogoproto"
 import _ "github.com/gogo/googleapis/google/api"
-import google_protobuf4 "github.com/gogo/protobuf/types"
+import google_protobuf5 "github.com/gogo/protobuf/types"
 import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
 import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
@@ -1336,7 +1336,7 @@ type APIClient interface {
 	//
 	// x-displayName: "Delete Configure HTTP Loadbalancer"
 	// Delete the specified http_loadbalancer
-	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf4.Empty, error)
+	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf5.Empty, error)
 }
 
 type aPIClient struct {
@@ -1383,8 +1383,8 @@ func (c *aPIClient) Replace(ctx context.Context, in *ReplaceRequest, opts ...grp
 	return out, nil
 }
 
-func (c *aPIClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf4.Empty, error) {
-	out := new(google_protobuf4.Empty)
+func (c *aPIClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf5.Empty, error) {
+	out := new(google_protobuf5.Empty)
 	err := grpc.Invoke(ctx, "/ves.io.schema.views.http_loadbalancer.API/Delete", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
@@ -1419,7 +1419,7 @@ type APIServer interface {
 	//
 	// x-displayName: "Delete Configure HTTP Loadbalancer"
 	// Delete the specified http_loadbalancer
-	Delete(context.Context, *DeleteRequest) (*google_protobuf4.Empty, error)
+	Delete(context.Context, *DeleteRequest) (*google_protobuf5.Empty, error)
 }
 
 func RegisterAPIServer(s *grpc.Server, srv APIServer) {

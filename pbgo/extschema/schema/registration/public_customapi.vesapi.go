@@ -202,6 +202,7 @@ func (c *CustomAPIRestClient) doRPCListRegistrationsBySite(ctx context.Context, 
 	pbRsp := &ListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.registration.ListResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -278,6 +279,7 @@ func (c *CustomAPIRestClient) doRPCListRegistrationsByState(ctx context.Context,
 	pbRsp := &ListResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.registration.ListResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -360,6 +362,7 @@ func (c *CustomAPIRestClient) doRPCRegistrationApprove(ctx context.Context, call
 	pbRsp := &ObjectChangeResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.registration.ObjectChangeResp", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -437,6 +440,7 @@ func (c *CustomAPIRestClient) doRPCRegistrationConfig(ctx context.Context, callO
 	pbRsp := &ConfigResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.registration.ConfigResp", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -513,6 +517,7 @@ func (c *CustomAPIRestClient) doRPCRegistrationCreate(ctx context.Context, callO
 	pbRsp := &Object{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.registration.Object", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -2675,6 +2680,64 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "siteGPU": {
+            "type": "object",
+            "description": "GPU information on server",
+            "title": "GPU",
+            "x-displayname": "GPU",
+            "x-ves-proto-message": "ves.io.schema.site.GPU",
+            "properties": {
+                "cuda_version": {
+                    "type": "string",
+                    "description": " GPU Cuda Version\n\nExample: - \"10.2\"-",
+                    "title": "cudaVersion",
+                    "x-displayname": "Cuda Version",
+                    "x-ves-example": "10.2"
+                },
+                "driver_version": {
+                    "type": "string",
+                    "description": " GPU Driver Version\n\nExample: - \"440.82\"-",
+                    "title": "driverVersion",
+                    "x-displayname": "Driver Version",
+                    "x-ves-example": "440.82"
+                },
+                "gpu_device": {
+                    "type": "array",
+                    "description": " List of GPU devices in server",
+                    "title": "GPUDevice",
+                    "items": {
+                        "$ref": "#/definitions/siteGPUDevice"
+                    },
+                    "x-displayname": "GPU devices"
+                }
+            }
+        },
+        "siteGPUDevice": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.GPUDevice",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": " GPU ID\n\nExample: - \"00000000:17:00.0\"-",
+                    "title": "id",
+                    "x-displayname": "GPU ID",
+                    "x-ves-example": "00000000:17:00.0"
+                },
+                "processes": {
+                    "type": "string",
+                    "description": " GPU Processes",
+                    "title": "processes",
+                    "x-displayname": "Processes"
+                },
+                "product_name": {
+                    "type": "string",
+                    "description": " GPU Product Name\n\nExample: - \"Quadro P1000\"-",
+                    "title": "productName",
+                    "x-displayname": "Product Name",
+                    "x-ves-example": "Quadro P1000"
+                }
+            }
+        },
         "siteKernel": {
             "type": "object",
             "description": "Kernel information",
@@ -2897,6 +2960,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "cpu",
                     "$ref": "#/definitions/siteCpu",
                     "x-displayname": "CPU"
+                },
+                "gpu": {
+                    "description": " GPU information on server",
+                    "title": "GPU",
+                    "$ref": "#/definitions/siteGPU",
+                    "x-displayname": "GPU"
                 },
                 "kernel": {
                     "description": " kernel information",

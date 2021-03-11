@@ -170,6 +170,7 @@ func (c *UpgradeAPIRestClient) doRPCUpgradeOS(ctx context.Context, callOpts *ser
 	pbRsp := &UpgradeOSResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.site.UpgradeOSResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp
@@ -247,6 +248,7 @@ func (c *UpgradeAPIRestClient) doRPCUpgradeSW(ctx context.Context, callOpts *ser
 	pbRsp := &UpgradeSWResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.site.UpgradeSWResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

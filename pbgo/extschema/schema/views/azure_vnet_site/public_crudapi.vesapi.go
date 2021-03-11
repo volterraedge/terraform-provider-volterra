@@ -4514,7 +4514,7 @@ var APISwaggerJSON string = `{
                 },
                 "machine_type": {
                     "type": "string",
-                    "description": " Select Instance size based on performance needed\n Standard_D3_v2 (4 x vCPU, 14GB RAM) medium performance\n Standard_D4_v2 (8 x vCPU, 28GB RAM) high performance\n Standard_D5_v2 (16 x vCPU, 56GB RAM) very high performance\n\nExample: - \"Standard_D3_v2\"-",
+                    "description": " Select Instance size based on performance needed\n\nExample: - \"Standard_D3_v2\"-",
                     "x-displayname": "Azure Machine Type for Node",
                     "x-ves-example": "Standard_D3_v2"
                 },
@@ -4524,12 +4524,6 @@ var APISwaggerJSON string = `{
                     "format": "int64",
                     "x-displayname": "Desired Worker Nodes Per AZ",
                     "x-ves-example": "2"
-                },
-                "operating_system_version": {
-                    "type": "string",
-                    "description": " Desired Operating System version for this site.\n\nExample: - \"value\"-",
-                    "x-displayname": "Operating System Version",
-                    "x-ves-example": "value"
                 },
                 "resource_group": {
                     "type": "string",
@@ -4549,12 +4543,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsAzureVnetChoiceType",
                     "x-displayname": "Vnet",
                     "x-ves-required": "true"
-                },
-                "volterra_software_version": {
-                    "type": "string",
-                    "description": " Desired Volterra software version for this site, a string matching released set of software components.\n\nExample: - \"value\"-",
-                    "x-displayname": "Software Version",
-                    "x-ves-example": "value"
                 },
                 "voltstack_cluster": {
                     "description": "Exclusive with [ingress_egress_gw ingress_gw]\n",
@@ -4623,7 +4611,7 @@ var APISwaggerJSON string = `{
                 },
                 "machine_type": {
                     "type": "string",
-                    "description": " Select Instance size based on performance needed\n Standard_D3_v2 (4 x vCPU, 14GB RAM) medium performance\n Standard_D4_v2 (8 x vCPU, 28GB RAM) high performance\n Standard_D5_v2 (16 x vCPU, 56GB RAM) very high performance\n\nExample: - \"Standard_D3_v2\"-",
+                    "description": " Select Instance size based on performance needed\n\nExample: - \"Standard_D3_v2\"-",
                     "x-displayname": "Azure Machine Type for Node",
                     "x-ves-example": "Standard_D3_v2"
                 },
@@ -4742,7 +4730,7 @@ var APISwaggerJSON string = `{
                 },
                 "machine_type": {
                     "type": "string",
-                    "description": " Select Instance size based on performance needed\n Standard_D3_v2 (4 x vCPU, 14GB RAM) medium performance\n Standard_D4_v2 (8 x vCPU, 28GB RAM) high performance\n Standard_D5_v2 (16 x vCPU, 56GB RAM) very high performance\n\nExample: - \"Standard_D3_v2\"-",
+                    "description": " Select Instance size based on performance needed\n\nExample: - \"Standard_D3_v2\"-",
                     "title": "Machine Type",
                     "x-displayname": "Azure Machine Type for Node",
                     "x-ves-example": "Standard_D3_v2"
@@ -4854,18 +4842,6 @@ var APISwaggerJSON string = `{
                     "format": "int64",
                     "x-displayname": "Desired Worker Nodes Per AZ",
                     "x-ves-example": "2"
-                },
-                "operating_system_version": {
-                    "type": "string",
-                    "description": " Desired Operating System version for this site.\n\nExample: - \"value\"-",
-                    "x-displayname": "Operating System Version",
-                    "x-ves-example": "value"
-                },
-                "volterra_software_version": {
-                    "type": "string",
-                    "description": " Desired Volterra software version for this site, a string matching released set of software components.\n\nExample: - \"value\"-",
-                    "x-displayname": "Software Version",
-                    "x-ves-example": "value"
                 },
                 "voltstack_cluster": {
                     "description": "Exclusive with [ingress_egress_gw ingress_gw]\nx-displayName: \"Voltstack Cluster (One Interface)\"\nVoltstack Cluster using single interface, useful for deploying K8s cluster.",

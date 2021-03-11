@@ -158,6 +158,7 @@ func (c *CustomAPIRestClient) doRPCGetDnsInfo(ctx context.Context, callOpts *ser
 	pbRsp := &GetDnsInfoResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.GetDnsInfoResponse", body)
+
 	}
 	if callOpts.OutCallResponse != nil {
 		callOpts.OutCallResponse.ProtoMsg = pbRsp

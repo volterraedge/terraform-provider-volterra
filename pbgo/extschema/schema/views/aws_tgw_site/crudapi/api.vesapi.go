@@ -1090,7 +1090,7 @@ func (s *APISrv) Replace(ctx context.Context, req *ObjectReplaceReq) (*ObjectRep
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_tgw_site.crudapi.API.Replace"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private replace request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.aws_tgw_site.crudapi.API.Replace"), zap.Error(err))
 			}
@@ -1116,7 +1116,7 @@ func (s *APISrv) Get(ctx context.Context, req *ObjectGetReq) (*ObjectGetRsp, err
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_tgw_site.crudapi.API.Get"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private get request")
 			}
 		}
 	}
@@ -1141,7 +1141,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 	if s.sf.Config().EnableAPIValidation {
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_tgw_site.crudapi.API.List"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
-				return nil, errors.Wrap(err, "Validating private create request")
+				return nil, errors.Wrap(err, "Validating private list request")
 			}
 		}
 	}
@@ -1196,7 +1196,7 @@ func (s *APISrv) Delete(ctx context.Context, req *ObjectDeleteReq) (*ObjectDelet
 		if rvFn := s.sf.GetRPCValidator("ves.io.schema.views.aws_tgw_site.crudapi.API.Delete"); rvFn != nil {
 			if err := rvFn(ctx, req); err != nil {
 				if !server.NoReqValidateFromContext(ctx) {
-					return nil, errors.Wrap(err, "Validating private create request")
+					return nil, errors.Wrap(err, "Validating private delete request")
 				}
 				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.views.aws_tgw_site.crudapi.API.Delete"), zap.Error(err))
 			}
@@ -3924,24 +3924,24 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Cloud Disk Size"
                 },
                 "inside_subnet": {
-                    "description": "Exclusive with [reserved_inside_subnet]\nx-displayName: \"Subnet for Inside Interface\"\nSubnets for the inside interface of the node",
+                    "description": "Exclusive with [reserved_inside_subnet]\nx-displayName: \"Specify Subnet\"\nSelect Existing Subnet or Create New",
                     "title": "Inside Subnet Choice",
                     "$ref": "#/definitions/viewsCloudSubnetType"
                 },
                 "outside_subnet": {
-                    "description": " Subnets for the outside interface of the node\nRequired: YES",
+                    "description": " Subnet for the outside interface of the node\nRequired: YES",
                     "title": "Outside Subnet",
                     "$ref": "#/definitions/viewsCloudSubnetType",
                     "x-displayname": "Subnet for Outside Interface",
                     "x-ves-required": "true"
                 },
                 "reserved_inside_subnet": {
-                    "description": "Exclusive with [inside_subnet]\nx-displayName: \"Use Reserved Subnet from Primary CIDR\"\nUse Reserved Subnet from Primary CIDR",
+                    "description": "Exclusive with [inside_subnet]\nx-displayName: \"Autogenerate Subnet\"\nAutogenerate and reserve a subnet from the Primary CIDR",
                     "title": "Reserved Subnet Choice",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "workload_subnet": {
-                    "description": " Workload Subnet where workloads should be running",
+                    "description": " Subnet in which workloads are launched",
                     "title": "Workload Subnet",
                     "$ref": "#/definitions/viewsCloudSubnetType",
                     "x-displayname": "Workload Subnet"

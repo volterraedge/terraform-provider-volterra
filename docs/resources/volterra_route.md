@@ -30,14 +30,14 @@ resource "volterra_route" "example" {
         name         = "Content-Type"
 
         // One of the arguments from this list "exact regex presence" must be set
-        presence = true
+        exact = "application/json"
       }
 
       http_method = "http_method"
 
       path {
         // One of the arguments from this list "prefix path regex" must be set
-        prefix = "prefix"
+        regex = "regex"
       }
 
       query_params {
@@ -73,6 +73,9 @@ resource "volterra_route" "example" {
         max_request_time  = "30"
       }
 
+      // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
+      retract_cluster = true
+
       cors_policy {
         allow_credentials = true
         allow_headers     = "allow_headers"
@@ -107,12 +110,7 @@ resource "volterra_route" "example" {
 
       hash_policy {
         // One of the arguments from this list "header_name cookie source_ip" must be set
-
-        cookie {
-          name = "userid"
-          path = "/Users/userid/browser/cookies"
-          ttl  = "ttl"
-        }
+        header_name = "host"
 
         terminal = true
       }
@@ -261,6 +259,10 @@ sent to the cluster specified in the destination.
 
 `weight` - (Optional) sent to the cluster specified in the destination (`Int`).
 
+### Do Not Retract Cluster
+
+configuration..
+
 ### Hash Policy
 
 route the request.
@@ -373,6 +375,10 @@ enclosing VirtualHost object level.
 
 Retain all query parameters.
 
+### Retract Cluster
+
+(2) single destination cluster is configured for route..
+
 ### Retry Policy
 
 Indicates that the route has a retry policy..
@@ -392,6 +398,10 @@ Indicates that the route has a retry policy..
 Send request to one of the destination from list of destinations.
 
 `buffer_policy` - (Optional) Route level buffer configuration overrides any configuration at VirtualHost level.. See [Buffer Policy ](#buffer-policy) below for details.
+
+`do_not_retract_cluster` - (Optional) configuration. (bool).
+
+`retract_cluster` - (Optional) (2) single destination cluster is configured for route. (bool).
 
 `cors_policy` - (Optional) resources from a server at a different origin. See [Cors Policy ](#cors-policy) below for details.
 

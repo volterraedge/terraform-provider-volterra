@@ -47,9 +47,11 @@ type GetDnsInfoRequest struct {
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 }
 
-func (m *GetDnsInfoRequest) Reset()                    { *m = GetDnsInfoRequest{} }
-func (*GetDnsInfoRequest) ProtoMessage()               {}
-func (*GetDnsInfoRequest) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{0} }
+func (m *GetDnsInfoRequest) Reset()      { *m = GetDnsInfoRequest{} }
+func (*GetDnsInfoRequest) ProtoMessage() {}
+func (*GetDnsInfoRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{0}
+}
 
 func (m *GetDnsInfoRequest) GetNamespace() string {
 	if m != nil {

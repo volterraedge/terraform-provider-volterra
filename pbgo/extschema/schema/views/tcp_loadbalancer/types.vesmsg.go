@@ -1394,6 +1394,16 @@ func (v *ValidateGlobalSpecType) OriginPoolsWeightsValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) IdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for idle_timeout")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -1562,6 +1572,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["idle_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("idle_timeout"))
+		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["listen_port"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("listen_port"))
@@ -1669,6 +1688,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["origin_pools_weights"] = vFn
+
+	vrhIdleTimeout := v.IdleTimeoutValidationRuleHandler
+	rulesIdleTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "300000",
+	}
+	vFn, err = vrhIdleTimeout(rulesIdleTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.idle_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["idle_timeout"] = vFn
 
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate

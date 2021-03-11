@@ -3288,9 +3288,7 @@ var DefaultLocalAccessConfigTypeValidator = func() *ValidateLocalAccessConfigTyp
 
 	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
 	rulesPortChoicePort := map[string]string{
-		"ves.io.schema.rules.uint32.gte":    "1",
-		"ves.io.schema.rules.uint32.lte":    "65000",
-		"ves.io.schema.rules.uint32.not_in": "6443",
+		"ves.io.schema.rules.uint32.not_in_ranges": "0,6443,8005-8007,8443-8444,8505-8507,9005-9007,9090,9505-9507,9100,9115,9999,20914,23802,30805,30855,30905,30955,32222,18091-18095,65000-65334",
 	}
 	vFnMap["port_choice.port"], err = vrhPortChoicePort(rulesPortChoicePort)
 	if err != nil {
