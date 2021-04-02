@@ -80,11 +80,11 @@ func (m *AdvertiseCustom) GetAdvertiseWhereDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AdvertiseWhere == nil {
+	if m.GetAdvertiseWhere() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.AdvertiseWhere {
+	for idx, e := range m.GetAdvertiseWhere() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -434,11 +434,11 @@ func (m *AdvertiseSiteVsite) GetAdvertiseWhereDRefInfo() ([]db.DRefInfo, error) 
 		err             error
 	)
 	_ = driSet
-	if m.AdvertiseWhere == nil {
+	if m.GetAdvertiseWhere() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.AdvertiseWhere {
+	for idx, e := range m.GetAdvertiseWhere() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1545,6 +1545,7 @@ var DefaultPrefixStringListTypeValidator = func() *ValidatePrefixStringListType 
 
 	vrhPrefixes := v.PrefixesValidationRuleHandler
 	rulesPrefixes := map[string]string{
+		"ves.io.schema.rules.message.required":                  "true",
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
 		"ves.io.schema.rules.repeated.max_items":                "128",
 		"ves.io.schema.rules.repeated.min_items":                "1",
@@ -2777,7 +2778,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Choice == nil {
+	if m.GetChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3104,7 +3105,7 @@ func (m *WhereTypeSiteVsite) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Choice == nil {
+	if m.GetChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 

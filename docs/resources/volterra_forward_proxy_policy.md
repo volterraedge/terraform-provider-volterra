@@ -23,40 +23,8 @@ resource "volterra_forward_proxy_policy" "example" {
   // One of the arguments from this list "any_proxy network_connector proxy_label_selector drp_http_connect" must be set
   any_proxy = true
 
-  // One of the arguments from this list "deny_list rule_list allow_all allow_list" must be set
-
-  deny_list {
-    // One of the arguments from this list "default_action_next_policy default_action_deny default_action_allow" must be set
-    default_action_next_policy = true
-
-    dest_list {
-      port_ranges = "80,443,8080-8191,9080"
-
-      prefixes = ["prefixes"]
-    }
-
-    http_list {
-      // One of the arguments from this list "regex_value exact_value suffix_value" must be set
-      suffix_value = "xyz.com"
-
-      // One of the arguments from this list "path_exact_value path_prefix_value path_regex_value any_path" must be set
-      path_prefix_value = "/abc/xyz/"
-    }
-
-    metadata {
-      description = "Virtual Host for acmecorp website"
-      disable     = true
-      name        = "acmecorp-web"
-    }
-
-    rule_description = "Rule to block example.com"
-    rule_name        = "my-policy-allow-github.com"
-
-    tls_list {
-      // One of the arguments from this list "exact_value suffix_value regex_value" must be set
-      exact_value = "abc.zyz.com"
-    }
-  }
+  // One of the arguments from this list "allow_all allow_list deny_list rule_list" must be set
+  allow_all = true
 }
 
 ```
@@ -176,7 +144,7 @@ L4 destinations for non-HTTP and non-TLS connections and TLS connections without
 
 The ASN is obtained by performing a lookup for the destination IPv4 Address in a GeoIP DB..
 
-`as_numbers` - (Optional) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
 
 ### Dst Label Selector
 
@@ -188,7 +156,7 @@ Destination is the set of prefixes determined by the label selector expression.
 
 Addresses that are covered by the given list of IPv4 prefixes.
 
-`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
+`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
 
 ### Http List
 
@@ -244,7 +212,7 @@ In case of an HTTP Connect, the destination port is extracted from the connect d
 
 list of ip prefixes that are representing source of traffic seen by proxy.
 
-`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
+`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
 
 ### Proxy Label Selector
 
@@ -266,7 +234,7 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 List of custom rules.
 
-`rules` - (Optional) List of custom rules. See [Rules ](#rules) below for details.
+`rules` - (Required) List of custom rules. See [Rules ](#rules) below for details.
 
 ### Rules
 

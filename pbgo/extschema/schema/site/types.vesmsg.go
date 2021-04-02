@@ -1080,6 +1080,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["default_underlay_network"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_underlay_network"))
+		if err := fv(ctx, m.GetDefaultUnderlayNetwork(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["desired_pool_count"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("desired_pool_count"))
@@ -1357,11 +1366,145 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
+	v.FldValidators["default_underlay_network"] = DefaultUnderlayNetworkTypeValidator().Validate
+
 	return v
 }()
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DefaultUnderlayNetworkType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DefaultUnderlayNetworkType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DefaultUnderlayNetworkType) DeepCopy() *DefaultUnderlayNetworkType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DefaultUnderlayNetworkType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DefaultUnderlayNetworkType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DefaultUnderlayNetworkType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DefaultUnderlayNetworkTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDefaultUnderlayNetworkType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDefaultUnderlayNetworkType) PrivateAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for private_access_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDefaultUnderlayNetworkType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DefaultUnderlayNetworkType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DefaultUnderlayNetworkType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["private_access_choice"]; exists {
+		val := m.GetPrivateAccessChoice()
+		vOpts := append(opts,
+			db.WithValidateField("private_access_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPrivateAccessChoice().(type) {
+	case *DefaultUnderlayNetworkType_SiteLocalOutside:
+		if fv, exists := v.FldValidators["private_access_choice.site_local_outside"]; exists {
+			val := m.GetPrivateAccessChoice().(*DefaultUnderlayNetworkType_SiteLocalOutside).SiteLocalOutside
+			vOpts := append(opts,
+				db.WithValidateField("private_access_choice"),
+				db.WithValidateField("site_local_outside"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DefaultUnderlayNetworkType_SiteLocalInside:
+		if fv, exists := v.FldValidators["private_access_choice.site_local_inside"]; exists {
+			val := m.GetPrivateAccessChoice().(*DefaultUnderlayNetworkType_SiteLocalInside).SiteLocalInside
+			vOpts := append(opts,
+				db.WithValidateField("private_access_choice"),
+				db.WithValidateField("site_local_inside"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDefaultUnderlayNetworkTypeValidator = func() *ValidateDefaultUnderlayNetworkType {
+	v := &ValidateDefaultUnderlayNetworkType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPrivateAccessChoice := v.PrivateAccessChoiceValidationRuleHandler
+	rulesPrivateAccessChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPrivateAccessChoice(rulesPrivateAccessChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DefaultUnderlayNetworkType.private_access_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["private_access_choice"] = vFn
+
+	return v
+}()
+
+func DefaultUnderlayNetworkTypeValidator() db.Validator {
+	return DefaultDefaultUnderlayNetworkTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2391,6 +2534,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["default_underlay_network"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_underlay_network"))
+		if err := fv(ctx, m.GetDefaultUnderlayNetwork(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["desired_pool_count"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("desired_pool_count"))
@@ -2716,6 +2868,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["tunnel_dead_timeout"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
+
+	v.FldValidators["default_underlay_network"] = DefaultUnderlayNetworkTypeValidator().Validate
 
 	return v
 }()
@@ -3353,6 +3507,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["default_underlay_network"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_underlay_network"))
+		if err := fv(ctx, m.GetDefaultUnderlayNetwork(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["desired_pool_count"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("desired_pool_count"))
@@ -3890,6 +4053,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["ipsec_ssl_vip_fqdn"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
+
+	v.FldValidators["default_underlay_network"] = DefaultUnderlayNetworkTypeValidator().Validate
 
 	return v
 }()
@@ -5712,6 +5877,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["default_underlay_network"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_underlay_network"))
+		if err := fv(ctx, m.GetDefaultUnderlayNetwork(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["desired_pool_count"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("desired_pool_count"))
@@ -5977,6 +6151,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["tunnel_dead_timeout"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
+
+	v.FldValidators["default_underlay_network"] = DefaultUnderlayNetworkTypeValidator().Validate
 
 	return v
 }()
@@ -7109,6 +7285,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.BgpRouterId = f.GetBgpRouterId()
 	m.CeSiteMode = f.GetCeSiteMode()
 	m.Coordinates = f.GetCoordinates()
+	m.DefaultUnderlayNetwork = f.GetDefaultUnderlayNetwork()
 	m.DesiredPoolCount = f.GetDesiredPoolCount()
 	m.InsideNameserver = f.GetInsideNameserver()
 	m.InsideVip = f.GetInsideVip()
@@ -7136,6 +7313,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.BgpRouterId = m1.BgpRouterId
 	f.CeSiteMode = m1.CeSiteMode
 	f.Coordinates = m1.Coordinates
+	f.DefaultUnderlayNetwork = m1.DefaultUnderlayNetwork
 	f.DesiredPoolCount = m1.DesiredPoolCount
 	f.InsideNameserver = m1.InsideNameserver
 	f.InsideVip = m1.InsideVip
@@ -7163,6 +7341,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.ConnectedRe = f.GetConnectedRe()
 	m.ConnectedReForConfig = f.GetConnectedReForConfig()
 	m.Coordinates = f.GetCoordinates()
+	m.DefaultUnderlayNetwork = f.GetDefaultUnderlayNetwork()
 	m.DesiredPoolCount = f.GetDesiredPoolCount()
 	m.InsideNameserver = f.GetInsideNameserver()
 	m.InsideVip = f.GetInsideVip()
@@ -7195,6 +7374,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.ConnectedRe = m1.ConnectedRe
 	f.ConnectedReForConfig = m1.ConnectedReForConfig
 	f.Coordinates = m1.Coordinates
+	f.DefaultUnderlayNetwork = m1.DefaultUnderlayNetwork
 	f.DesiredPoolCount = m1.DesiredPoolCount
 	f.InsideNameserver = m1.InsideNameserver
 	f.InsideVip = m1.InsideVip
@@ -7222,6 +7402,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.BgpPeerAddress = f.GetBgpPeerAddress()
 	m.BgpRouterId = f.GetBgpRouterId()
 	m.Coordinates = f.GetCoordinates()
+	m.DefaultUnderlayNetwork = f.GetDefaultUnderlayNetwork()
 	m.DesiredPoolCount = f.GetDesiredPoolCount()
 	m.InsideNameserver = f.GetInsideNameserver()
 	m.InsideVip = f.GetInsideVip()
@@ -7248,6 +7429,7 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.BgpPeerAddress = m1.BgpPeerAddress
 	f.BgpRouterId = m1.BgpRouterId
 	f.Coordinates = m1.Coordinates
+	f.DefaultUnderlayNetwork = m1.DefaultUnderlayNetwork
 	f.DesiredPoolCount = m1.DesiredPoolCount
 	f.InsideNameserver = m1.InsideNameserver
 	f.InsideVip = m1.InsideVip

@@ -16079,12 +16079,39 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.namespace.CustomAPI.CascadeDelete"] = rpcInfo
 	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "EvaluateAPIAccess",
+		InMsgType:    "ves.io.schema.namespace.EvaluateAPIAccessReq",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.namespace.EvaluateAPIAccessResp",
+		OutStreaming: false,
+		IsImmutable:  false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/evaluate-api-access"}}
+	aInfo.RPCsInfo[svcfw.RPCName("EvaluateAPIAccess")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.namespace.CustomAPI.EvaluateAPIAccess"] = rpcInfo
+	}
 
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	if mdr.APIIdx != nil {
 		mdr.APIIdx["ves.io.schema.namespace.CustomAPI"] = aInfo
 	}
 
+	mInfo = &svcfw.MsgInfo{
+		Name:     "APIItem",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.APIItem"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "APIItemList",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.APIItemList"] = mInfo
+	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "CascadeDeleteItemType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
@@ -16105,6 +16132,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.namespace.CascadeDeleteResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "EvaluateAPIAccessReq",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.EvaluateAPIAccessReq"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "EvaluateAPIAccessResp",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.EvaluateAPIAccessResp"] = mInfo
 	}
 
 	fInfo = &svcfw.FileInfo{
@@ -26459,6 +26500,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.site.CreateSpecType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "DefaultUnderlayNetworkType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.DefaultUnderlayNetworkType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "DeploymentState",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -35385,6 +35433,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.FileIdx["ves.io/schema/views/terraform_parameters/azure_types.proto"] = fInfo
 	}
 
+	mInfo = &svcfw.MsgInfo{
+		Name:     "AzureExistingSubnetParamType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.terraform_parameters.AzureExistingSubnetParamType"] = mInfo
+	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "AzureInstanceType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),

@@ -167,11 +167,11 @@ func (m *VirtualHostWafStatusRsp) GetWafStatusDRefInfo() ([]db.DRefInfo, error) 
 		err             error
 	)
 	_ = driSet
-	if m.WafStatus == nil {
+	if m.GetWafStatus() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.WafStatus {
+	for idx, e := range m.GetWafStatus() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err

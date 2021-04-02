@@ -23,6 +23,7 @@
 		AWSTGWType
 		AzureInstanceType
 		AzureSubnetParamType
+		AzureExistingSubnetParamType
 		AzureSubnetChoice
 		AzureSubnetType
 		AzureVnetParamsType

@@ -299,7 +299,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhConfigMethodChoiceYaml := v.ConfigMethodChoiceYamlValidationRuleHandler
 	rulesConfigMethodChoiceYaml := map[string]string{
-		"ves.io.schema.rules.string.max_len": "6096",
+		"ves.io.schema.rules.string.max_len": "4096",
 		"ves.io.schema.rules.string.uri_ref": "true",
 	}
 	vFnMap["config_method_choice.yaml"], err = vrhConfigMethodChoiceYaml(rulesConfigMethodChoiceYaml)
@@ -454,7 +454,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhConfigMethodChoiceYaml := v.ConfigMethodChoiceYamlValidationRuleHandler
 	rulesConfigMethodChoiceYaml := map[string]string{
-		"ves.io.schema.rules.string.max_len": "6096",
+		"ves.io.schema.rules.string.max_len": "4096",
 		"ves.io.schema.rules.string.uri_ref": "true",
 	}
 	vFnMap["config_method_choice.yaml"], err = vrhConfigMethodChoiceYaml(rulesConfigMethodChoiceYaml)
@@ -628,7 +628,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhConfigMethodChoiceYaml := v.ConfigMethodChoiceYamlValidationRuleHandler
 	rulesConfigMethodChoiceYaml := map[string]string{
-		"ves.io.schema.rules.string.max_len": "6096",
+		"ves.io.schema.rules.string.max_len": "4096",
 		"ves.io.schema.rules.string.uri_ref": "true",
 	}
 	vFnMap["config_method_choice.yaml"], err = vrhConfigMethodChoiceYaml(rulesConfigMethodChoiceYaml)
@@ -641,7 +641,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhGeneratedYaml := v.GeneratedYamlValidationRuleHandler
 	rulesGeneratedYaml := map[string]string{
-		"ves.io.schema.rules.string.max_len": "6096",
+		"ves.io.schema.rules.string.max_len": "4096",
 		"ves.io.schema.rules.string.uri_ref": "true",
 	}
 	vFn, err = vrhGeneratedYaml(rulesGeneratedYaml)
@@ -1059,7 +1059,6 @@ var DefaultIDStrategyOptionsTypeValidator = func() *ValidateIDStrategyOptionsTyp
 	vrhIdRanges := v.IdRangesValidationRuleHandler
 	rulesIdRanges := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "16",
-		"ves.io.schema.rules.repeated.min_items": "1",
 	}
 	vFn, err = vrhIdRanges(rulesIdRanges)
 	if err != nil {
@@ -2343,7 +2342,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhConfigMethodChoiceYaml := v.ConfigMethodChoiceYamlValidationRuleHandler
 	rulesConfigMethodChoiceYaml := map[string]string{
-		"ves.io.schema.rules.string.max_len": "6096",
+		"ves.io.schema.rules.string.max_len": "4096",
 		"ves.io.schema.rules.string.uri_ref": "true",
 	}
 	vFnMap["config_method_choice.yaml"], err = vrhConfigMethodChoiceYaml(rulesConfigMethodChoiceYaml)
@@ -2504,6 +2503,7 @@ var DefaultRuntimeClassStrategyOptionsValidator = func() *ValidateRuntimeClassSt
 
 	vrhAllowedRuntimeClassNames := v.AllowedRuntimeClassNamesValidationRuleHandler
 	rulesAllowedRuntimeClassNames := map[string]string{
+		"ves.io.schema.rules.message.required":                "true",
 		"ves.io.schema.rules.repeated.items.string.max_bytes": "64",
 		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
 		"ves.io.schema.rules.repeated.max_items":              "4",

@@ -21,43 +21,33 @@ resource "volterra_http_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
-  advertise_on_public_default_vip = true
+  do_not_advertise = true
 
-  // One of the arguments from this list "no_challenge js_challenge captcha_challenge policy_based_challenge" must be set
+  // One of the arguments from this list "js_challenge captcha_challenge policy_based_challenge no_challenge" must be set
   no_challenge = true
 
   domains = ["www.foo.com"]
 
-  // One of the arguments from this list "least_active random source_ip_stickiness cookie_stickiness ring_hash round_robin" must be set
-  random = true
+  // One of the arguments from this list "cookie_stickiness ring_hash round_robin least_active random source_ip_stickiness" must be set
+  round_robin = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
   http {
     dns_volterra_managed = true
   }
-
-  // One of the arguments from this list "disable_rate_limit rate_limit" must be set
-
-  rate_limit {
-    // One of the arguments from this list "custom_ip_allowed_list no_ip_allowed_list ip_allowed_list" must be set
-
-    ip_allowed_list {
-      prefixes = ["192.168.20.0/24"]
-    }
-
-    // One of the arguments from this list "no_policies policies" must be set
-    no_policies = true
-
-    rate_limiter {
-      total_number = "total_number"
-      unit         = "unit"
-    }
-  }
+  // One of the arguments from this list "rate_limit disable_rate_limit" must be set
+  disable_rate_limit = true
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-  service_policies_from_namespace = true
-  // One of the arguments from this list "disable_waf waf waf_rule" must be set
-  disable_waf = true
+  no_service_policies = true
+
+  // One of the arguments from this list "waf waf_rule disable_waf" must be set
+
+  waf_rule {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 }
 
 ```
@@ -166,6 +156,10 @@ Configure Advanced per route options.
 `buffer_policy` - (Optional) Route level buffer configuration overrides any configuration at VirtualHost level.. See [Buffer Policy ](#buffer-policy) below for details.
 
 `common_buffering` - (Optional) Use common buffering configuration (bool).
+
+`do_not_retract_cluster` - (Optional) configuration. (bool).
+
+`retract_cluster` - (Optional) for route (bool).
 
 `cors_policy` - (Optional) resources from a server at a different origin. See [Cors Policy ](#cors-policy) below for details.
 
@@ -289,7 +283,7 @@ arg_matchers.
 
 asn_list.
 
-`as_numbers` - (Optional) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
 
 ### Asn Matcher
 
@@ -591,6 +585,10 @@ No WAF configuration for this load balancer.
 
 Websocket upgrade is disabled.
 
+### Do Not Retract Cluster
+
+configuration..
+
 ### Domain Matcher
 
 domain_matcher.
@@ -697,7 +695,7 @@ DNS records will be managed by Volterra..
 
 List of IP(s) for which rate limiting will be disabled..
 
-`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
+`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
 
 ### Ip Matcher
 
@@ -1008,6 +1006,10 @@ Headers specified at this level are applied after headers from matched Route are
 ### Retain All Params
 
 Retain all query parameters.
+
+### Retract Cluster
+
+for route.
 
 ### Retry Policy
 

@@ -86,11 +86,11 @@ func (m *CreateSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Action == nil {
+	if m.GetAction() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Action.GetDRefInfo()
+	driSet, err = m.GetAction().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +109,7 @@ func (m *CreateSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Source == nil {
+	if m.GetSource() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -382,7 +382,7 @@ func (m *FastAclRuleAction) GetActionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Action == nil {
+	if m.GetAction() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -547,11 +547,11 @@ func (m *GetSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Action == nil {
+	if m.GetAction() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Action.GetDRefInfo()
+	driSet, err = m.GetAction().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -570,7 +570,7 @@ func (m *GetSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Source == nil {
+	if m.GetSource() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -849,11 +849,11 @@ func (m *GlobalSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Action == nil {
+	if m.GetAction() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Action.GetDRefInfo()
+	driSet, err = m.GetAction().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -872,7 +872,7 @@ func (m *GlobalSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Source == nil {
+	if m.GetSource() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1151,11 +1151,11 @@ func (m *ReplaceSpecType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Action == nil {
+	if m.GetAction() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Action.GetDRefInfo()
+	driSet, err = m.GetAction().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1174,7 +1174,7 @@ func (m *ReplaceSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Source == nil {
+	if m.GetSource() == nil {
 		return []db.DRefInfo{}, nil
 	}
 

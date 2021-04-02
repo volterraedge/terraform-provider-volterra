@@ -37,6 +37,7 @@
 		SiteStatusMetricsResponse
 		Coordinates
 		K8SApiServerParameters
+		DefaultUnderlayNetworkType
 		GlobalSpecType
 		CreateSpecType
 		ReplaceSpecType

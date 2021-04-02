@@ -143,6 +143,11 @@ func (n *nsCustomAPIServer) CascadeDelete(context.Context,
 	return &ves_io_schema_ns.CascadeDeleteResponse{}, nil
 }
 
+func (n *nsCustomAPIServer) EvaluateAPIAccess(context.Context,
+	*ves_io_schema_ns.EvaluateAPIAccessReq) (*ves_io_schema_ns.EvaluateAPIAccessResp, error) {
+	return &ves_io_schema_ns.EvaluateAPIAccessResp{}, nil
+}
+
 var _ ves_io_schema_ns.CustomAPIServer = &nsCustomAPIServer{}
 
 // ves.io.schema.namespace.CustomAPI handling - end

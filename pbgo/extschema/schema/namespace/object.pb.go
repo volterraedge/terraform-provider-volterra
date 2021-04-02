@@ -26,6 +26,10 @@
 		CascadeDeleteRequest
 		CascadeDeleteResponse
 		CascadeDeleteItemType
+		APIItem
+		APIItemList
+		EvaluateAPIAccessReq
+		EvaluateAPIAccessResp
 		SetFastACLsForInternetVIPsRequest
 		SetFastACLsForInternetVIPsResponse
 		GetFastACLsForInternetVIPsRequest

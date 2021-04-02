@@ -2310,14 +2310,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "as_numbers": {
                     "type": "array",
-                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-",
+                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\nRequired: YES",
                     "title": "as numbers",
                     "items": {
                         "type": "integer",
                         "format": "int64"
                     },
                     "x-displayname": "AS Numbers",
-                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]"
+                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]",
+                    "x-ves-required": "true"
                 }
             }
         },

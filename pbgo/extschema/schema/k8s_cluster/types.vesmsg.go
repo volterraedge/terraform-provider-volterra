@@ -984,7 +984,7 @@ func (m *CreateSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, 
 		err             error
 	)
 	_ = driSet
-	if m.ClusterRoleBindingsChoice == nil {
+	if m.GetClusterRoleBindingsChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1015,7 +1015,7 @@ func (m *CreateSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ClusterRoleChoice == nil {
+	if m.GetClusterRoleChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1046,7 +1046,7 @@ func (m *CreateSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, er
 		err             error
 	)
 	_ = driSet
-	if m.PodSecurityPolicyChoice == nil {
+	if m.GetPodSecurityPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1517,7 +1517,7 @@ func (m *GetSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, err
 		err             error
 	)
 	_ = driSet
-	if m.ClusterRoleBindingsChoice == nil {
+	if m.GetClusterRoleBindingsChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1548,7 +1548,7 @@ func (m *GetSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ClusterRoleChoice == nil {
+	if m.GetClusterRoleChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1579,7 +1579,7 @@ func (m *GetSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, error
 		err             error
 	)
 	_ = driSet
-	if m.PodSecurityPolicyChoice == nil {
+	if m.GetPodSecurityPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2074,7 +2074,7 @@ func (m *GlobalSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, 
 		err             error
 	)
 	_ = driSet
-	if m.ClusterRoleBindingsChoice == nil {
+	if m.GetClusterRoleBindingsChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2105,7 +2105,7 @@ func (m *GlobalSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ClusterRoleChoice == nil {
+	if m.GetClusterRoleChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2289,7 +2289,7 @@ func (m *GlobalSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, er
 		err             error
 	)
 	_ = driSet
-	if m.PodSecurityPolicyChoice == nil {
+	if m.GetPodSecurityPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3587,7 +3587,7 @@ func (m *ReplaceSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo,
 		err             error
 	)
 	_ = driSet
-	if m.ClusterRoleBindingsChoice == nil {
+	if m.GetClusterRoleBindingsChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3618,7 +3618,7 @@ func (m *ReplaceSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) 
 		err             error
 	)
 	_ = driSet
-	if m.ClusterRoleChoice == nil {
+	if m.GetClusterRoleChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3649,7 +3649,7 @@ func (m *ReplaceSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, e
 		err             error
 	)
 	_ = driSet
-	if m.PodSecurityPolicyChoice == nil {
+	if m.GetPodSecurityPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 

@@ -427,6 +427,17 @@ func (v *ValidateFieldViewOptions) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
+	case *FieldViewOptions_InputBoxFormat:
+		if fv, exists := v.FldValidators["type.input_box_format"]; exists {
+			val := m.GetType().(*FieldViewOptions_InputBoxFormat).InputBoxFormat
+			vOpts := append(opts,
+				db.WithValidateField("type"),
+				db.WithValidateField("input_box_format"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

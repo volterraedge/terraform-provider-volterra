@@ -153,11 +153,11 @@ func (m *CreateSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.OriginServers == nil {
+	if m.GetOriginServers() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.OriginServers {
+	for idx, e := range m.GetOriginServers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -676,11 +676,11 @@ func (m *GetSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.OriginServers == nil {
+	if m.GetOriginServers() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.OriginServers {
+	for idx, e := range m.GetOriginServers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1205,11 +1205,11 @@ func (m *GlobalSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.OriginServers == nil {
+	if m.GetOriginServers() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.OriginServers {
+	for idx, e := range m.GetOriginServers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -2455,11 +2455,11 @@ func (m *OriginServerConsulService) GetSiteLocatorDRefInfo() ([]db.DRefInfo, err
 		err             error
 	)
 	_ = driSet
-	if m.SiteLocator == nil {
+	if m.GetSiteLocator() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.SiteLocator.GetDRefInfo()
+	driSet, err = m.GetSiteLocator().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -2871,11 +2871,11 @@ func (m *OriginServerK8SService) GetSiteLocatorDRefInfo() ([]db.DRefInfo, error)
 		err             error
 	)
 	_ = driSet
-	if m.SiteLocator == nil {
+	if m.GetSiteLocator() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.SiteLocator.GetDRefInfo()
+	driSet, err = m.GetSiteLocator().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -3119,11 +3119,11 @@ func (m *OriginServerPrivateIP) GetSiteLocatorDRefInfo() ([]db.DRefInfo, error) 
 		err             error
 	)
 	_ = driSet
-	if m.SiteLocator == nil {
+	if m.GetSiteLocator() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.SiteLocator.GetDRefInfo()
+	driSet, err = m.GetSiteLocator().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -3357,11 +3357,11 @@ func (m *OriginServerPrivateName) GetSiteLocatorDRefInfo() ([]db.DRefInfo, error
 		err             error
 	)
 	_ = driSet
-	if m.SiteLocator == nil {
+	if m.GetSiteLocator() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.SiteLocator.GetDRefInfo()
+	driSet, err = m.GetSiteLocator().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -3812,7 +3812,7 @@ func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Choice == nil {
+	if m.GetChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -4681,11 +4681,11 @@ func (m *ReplaceSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.OriginServers == nil {
+	if m.GetOriginServers() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.OriginServers {
+	for idx, e := range m.GetOriginServers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err

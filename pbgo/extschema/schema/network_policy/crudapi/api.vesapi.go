@@ -3260,13 +3260,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\nRequired: YES",
                     "title": "ipv4 prefix list",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefix List",
-                    "x-ves-example": "192.168.20.0/24"
+                    "x-ves-example": "192.168.20.0/24",
+                    "x-ves-required": "true"
                 }
             }
         }

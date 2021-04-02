@@ -83,7 +83,7 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RuleChoice == nil {
+	if m.GetRuleChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -510,7 +510,7 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RuleChoice == nil {
+	if m.GetRuleChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -616,11 +616,11 @@ func (m *GetSpecType) GetSimpleRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.SimpleRules == nil {
+	if m.GetSimpleRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.SimpleRules {
+	for idx, e := range m.GetSimpleRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1174,7 +1174,7 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RuleChoice == nil {
+	if m.GetRuleChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1280,11 +1280,11 @@ func (m *GlobalSpecType) GetSimpleRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.SimpleRules == nil {
+	if m.GetSimpleRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.SimpleRules {
+	for idx, e := range m.GetSimpleRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -2103,7 +2103,7 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RuleChoice == nil {
+	if m.GetRuleChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2518,11 +2518,11 @@ func (m *Rule) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Spec == nil {
+	if m.GetSpec() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Spec.GetDRefInfo()
+	driSet, err = m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -2711,11 +2711,11 @@ func (m *RuleList) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Rules == nil {
+	if m.GetRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Rules {
+	for idx, e := range m.GetRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -2884,11 +2884,11 @@ func (m *SimpleRule) GetWafActionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.WafAction == nil {
+	if m.GetWafAction() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.WafAction.GetDRefInfo()
+	driSet, err = m.GetWafAction().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}

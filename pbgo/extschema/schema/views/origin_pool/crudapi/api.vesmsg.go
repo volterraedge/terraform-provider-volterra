@@ -87,11 +87,11 @@ func (m *ObjectCreateReq) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Spec == nil {
+	if m.GetSpec() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Spec.GetDRefInfo()
+	driSet, err = m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -110,11 +110,11 @@ func (m *ObjectCreateReq) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.SystemMetadata == nil {
+	if m.GetSystemMetadata() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.SystemMetadata.GetDRefInfo()
+	driSet, err = m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -252,11 +252,11 @@ func (m *ObjectCreateRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Spec == nil {
+	if m.GetSpec() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Spec.GetDRefInfo()
+	driSet, err = m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -275,11 +275,11 @@ func (m *ObjectCreateRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.SystemMetadata == nil {
+	if m.GetSystemMetadata() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.SystemMetadata.GetDRefInfo()
+	driSet, err = m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -699,11 +699,11 @@ func (m *ObjectGetRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Spec == nil {
+	if m.GetSpec() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Spec.GetDRefInfo()
+	driSet, err = m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -722,11 +722,11 @@ func (m *ObjectGetRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.SystemMetadata == nil {
+	if m.GetSystemMetadata() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.SystemMetadata.GetDRefInfo()
+	driSet, err = m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1020,11 +1020,11 @@ func (m *ObjectListRsp) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Items == nil {
+	if m.GetItems() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Items {
+	for idx, e := range m.GetItems() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1175,11 +1175,11 @@ func (m *ObjectListRspItem) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Spec == nil {
+	if m.GetSpec() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Spec.GetDRefInfo()
+	driSet, err = m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1198,11 +1198,11 @@ func (m *ObjectListRspItem) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.SystemMetadata == nil {
+	if m.GetSystemMetadata() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.SystemMetadata.GetDRefInfo()
+	driSet, err = m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1382,11 +1382,11 @@ func (m *ObjectReplaceReq) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Spec == nil {
+	if m.GetSpec() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Spec.GetDRefInfo()
+	driSet, err = m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1531,11 +1531,11 @@ func (m *ObjectReplaceRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Spec == nil {
+	if m.GetSpec() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Spec.GetDRefInfo()
+	driSet, err = m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1554,11 +1554,11 @@ func (m *ObjectReplaceRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.SystemMetadata == nil {
+	if m.GetSystemMetadata() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.SystemMetadata.GetDRefInfo()
+	driSet, err = m.GetSystemMetadata().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}

@@ -80,11 +80,11 @@ func (m *CreateSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ProtocolPolicer == nil {
+	if m.GetProtocolPolicer() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.ProtocolPolicer {
+	for idx, e := range m.GetProtocolPolicer() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -322,11 +322,11 @@ func (m *GetSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ProtocolPolicer == nil {
+	if m.GetProtocolPolicer() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.ProtocolPolicer {
+	for idx, e := range m.GetProtocolPolicer() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -495,11 +495,11 @@ func (m *GlobalSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ProtocolPolicer == nil {
+	if m.GetProtocolPolicer() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.ProtocolPolicer {
+	for idx, e := range m.GetProtocolPolicer() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1093,11 +1093,11 @@ func (m *ReplaceSpecType) GetProtocolPolicerDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ProtocolPolicer == nil {
+	if m.GetProtocolPolicer() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.ProtocolPolicer {
+	for idx, e := range m.GetProtocolPolicer() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err

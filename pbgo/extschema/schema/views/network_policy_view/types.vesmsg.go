@@ -94,11 +94,11 @@ func (m *CreateSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.EgressRules == nil {
+	if m.GetEgressRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.EgressRules {
+	for idx, e := range m.GetEgressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -119,11 +119,11 @@ func (m *CreateSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Endpoint == nil {
+	if m.GetEndpoint() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Endpoint.GetDRefInfo()
+	driSet, err = m.GetEndpoint().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -142,11 +142,11 @@ func (m *CreateSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.IngressRules == nil {
+	if m.GetIngressRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.IngressRules {
+	for idx, e := range m.GetIngressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -428,11 +428,11 @@ func (m *GetSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.EgressRules == nil {
+	if m.GetEgressRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.EgressRules {
+	for idx, e := range m.GetEgressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -453,11 +453,11 @@ func (m *GetSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Endpoint == nil {
+	if m.GetEndpoint() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Endpoint.GetDRefInfo()
+	driSet, err = m.GetEndpoint().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -476,11 +476,11 @@ func (m *GetSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.IngressRules == nil {
+	if m.GetIngressRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.IngressRules {
+	for idx, e := range m.GetIngressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -768,11 +768,11 @@ func (m *GlobalSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.EgressRules == nil {
+	if m.GetEgressRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.EgressRules {
+	for idx, e := range m.GetEgressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -793,11 +793,11 @@ func (m *GlobalSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Endpoint == nil {
+	if m.GetEndpoint() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Endpoint.GetDRefInfo()
+	driSet, err = m.GetEndpoint().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -816,11 +816,11 @@ func (m *GlobalSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.IngressRules == nil {
+	if m.GetIngressRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.IngressRules {
+	for idx, e := range m.GetIngressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1163,11 +1163,11 @@ func (m *ReplaceSpecType) GetEgressRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.EgressRules == nil {
+	if m.GetEgressRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.EgressRules {
+	for idx, e := range m.GetEgressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1188,11 +1188,11 @@ func (m *ReplaceSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Endpoint == nil {
+	if m.GetEndpoint() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Endpoint.GetDRefInfo()
+	driSet, err = m.GetEndpoint().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1211,11 +1211,11 @@ func (m *ReplaceSpecType) GetIngressRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.IngressRules == nil {
+	if m.GetIngressRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.IngressRules {
+	for idx, e := range m.GetIngressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err

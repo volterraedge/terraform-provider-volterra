@@ -2862,6 +2862,7 @@ var APISwaggerJSON string = `{
             "title": "CreateSpecType",
             "x-displayname": "Create TCP Loadbalancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
+            "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.CreateSpecType",
             "properties": {
@@ -2885,6 +2886,10 @@ var APISwaggerJSON string = `{
                 },
                 "do_not_advertise": {
                     "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "do_not_retract_cluster": {
+                    "description": "Exclusive with [retract_cluster]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "domains": {
@@ -2912,6 +2917,13 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_round_robin]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "idle_timeout": {
+                    "type": "integer",
+                    "description": " The amount of time that a stream can exist without upstream or downstream activity, in milliseconds.\n\nExample: - \"2000\"-",
+                    "format": "int64",
+                    "x-displayname": "Idle Timeout",
+                    "x-ves-example": "2000"
+                },
                 "listen_port": {
                     "type": "integer",
                     "description": " Listen Port for this TCP proxy\n\nExample: - \"0\"-",
@@ -2926,6 +2938,10 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/viewsOriginPoolWithWeight"
                     },
                     "x-displayname": "Origin Pools"
+                },
+                "retract_cluster": {
+                    "description": "Exclusive with [do_not_retract_cluster]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "with_sni": {
                     "type": "boolean",
@@ -3045,6 +3061,7 @@ var APISwaggerJSON string = `{
             "title": "GetSpecType",
             "x-displayname": "Get TCP Loadbalancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
+            "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.GetSpecType",
             "properties": {
@@ -3078,6 +3095,10 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "do_not_retract_cluster": {
+                    "description": "Exclusive with [retract_cluster]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "domains": {
                     "type": "array",
                     "description": " A list of domains (host/authority header) that will be matched to this loadbalancer.\n\n Domains are also used for SNI matching if the with_sni is true\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-",
@@ -3109,6 +3130,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Host Name",
                     "x-ves-example": "ves-io-cf8684b9-a18f-4843-a24f-1f9ee8ea2776.ac.vh.ves.io"
                 },
+                "idle_timeout": {
+                    "type": "integer",
+                    "description": " The amount of time that a stream can exist without upstream or downstream activity, in milliseconds.\n\nExample: - \"2000\"-",
+                    "format": "int64",
+                    "x-displayname": "Idle Timeout",
+                    "x-ves-example": "2000"
+                },
                 "listen_port": {
                     "type": "integer",
                     "description": " Listen Port for this TCP proxy\n\nExample: - \"0\"-",
@@ -3131,6 +3159,10 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/viewsOriginPoolWithWeight"
                     },
                     "x-displayname": "Origin Pools"
+                },
+                "retract_cluster": {
+                    "description": "Exclusive with [do_not_retract_cluster]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "with_sni": {
                     "type": "boolean",
@@ -3298,6 +3330,7 @@ var APISwaggerJSON string = `{
             "title": "ReplaceSpecType",
             "x-displayname": "Replace TCP Loadbalancer",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
+            "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.ReplaceSpecType",
             "properties": {
@@ -3321,6 +3354,10 @@ var APISwaggerJSON string = `{
                 },
                 "do_not_advertise": {
                     "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "do_not_retract_cluster": {
+                    "description": "Exclusive with [retract_cluster]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "domains": {
@@ -3348,6 +3385,13 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_round_robin]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "idle_timeout": {
+                    "type": "integer",
+                    "description": " The amount of time that a stream can exist without upstream or downstream activity, in milliseconds.\n\nExample: - \"2000\"-",
+                    "format": "int64",
+                    "x-displayname": "Idle Timeout",
+                    "x-ves-example": "2000"
+                },
                 "listen_port": {
                     "type": "integer",
                     "description": " Listen Port for this TCP proxy\n\nExample: - \"0\"-",
@@ -3370,6 +3414,10 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/viewsOriginPoolWithWeight"
                     },
                     "x-displayname": "Origin Pools"
+                },
+                "retract_cluster": {
+                    "description": "Exclusive with [do_not_retract_cluster]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "with_sni": {
                     "type": "boolean",
@@ -3679,6 +3727,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "View Specification",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
+            "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.GlobalSpecType",
             "properties": {
@@ -3716,6 +3765,11 @@ var APISwaggerJSON string = `{
                 "do_not_advertise": {
                     "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\nx-displayName: \"Do Not Advertise\"\nDo not advertise this loadbalancer",
                     "title": "Do Not Advertise",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "do_not_retract_cluster": {
+                    "description": "Exclusive with [retract_cluster]\nx-displayName: \"Disable cluster retraction\"\nWhen this option is configured, cluster with no healthy\nendpoints is not retracted from route having weighted cluster\nconfiguration.",
+                    "title": "do_not_retract_cluster",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "domains": {
@@ -3788,6 +3842,11 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/viewsOriginPoolWithWeight"
                     },
                     "x-displayname": "Origin Pools"
+                },
+                "retract_cluster": {
+                    "description": "Exclusive with [do_not_retract_cluster]\nx-displayName: \"Retract cluster with no healthy endpoints\"\nWhen this option is enabled, weighted cluster will not be considered\nfor loadbalancing, if all its endpoints are unhealthy.\nSince the cluster with all unhealthy endpoints is removed, the traffic\nwill be distributed among remaining clusters as per their weight.\nAlso panic-threshold configuration is ignored for retracted cluster.\n\nThis option is ignored when single destination cluster is configured\nfor route",
+                    "title": "retract_cluster",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "view_internal": {
                     "description": " Reference to view internal object",

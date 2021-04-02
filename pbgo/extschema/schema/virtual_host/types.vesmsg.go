@@ -143,7 +143,7 @@ func (m *AuthenticationDetails) GetCookieParamsChoiceDRefInfo() ([]db.DRefInfo, 
 		err             error
 	)
 	_ = driSet
-	if m.CookieParamsChoice == nil {
+	if m.GetCookieParamsChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -961,7 +961,7 @@ func (m *CreateSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error
 		err             error
 	)
 	_ = driSet
-	if m.AuthenticationChoice == nil {
+	if m.GetAuthenticationChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -992,11 +992,11 @@ func (m *CreateSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error)
 		err             error
 	)
 	_ = driSet
-	if m.DynamicReverseProxy == nil {
+	if m.GetDynamicReverseProxy() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.DynamicReverseProxy.GetDRefInfo()
+	driSet, err = m.GetDynamicReverseProxy().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1179,11 +1179,11 @@ func (m *CreateSpecType) GetWafTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.WafType == nil {
+	if m.GetWafType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.WafType.GetDRefInfo()
+	driSet, err = m.GetWafType().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1297,6 +1297,170 @@ func (v *ValidateCreateSpecType) RoutesValidationRuleHandler(rules map[string]st
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items routes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) RequestHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_headers_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.HeaderManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.HeaderManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_headers_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_headers_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) ResponseHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_headers_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.HeaderManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.HeaderManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_headers_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_headers_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) ResponseHeadersToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for response_headers_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_headers_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_headers_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_headers_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) RequestHeadersToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for request_headers_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_headers_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_headers_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_headers_to_remove")
 		}
 		return nil
 	}
@@ -1701,49 +1865,33 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 
 	if fv, exists := v.FldValidators["request_headers_to_add"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_headers_to_add"))
-		for idx, item := range m.GetRequestHeadersToAdd() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetRequestHeadersToAdd(), vOpts...); err != nil {
+			return err
 		}
 
 	}
 
 	if fv, exists := v.FldValidators["request_headers_to_remove"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_headers_to_remove"))
-		for idx, item := range m.GetRequestHeadersToRemove() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetRequestHeadersToRemove(), vOpts...); err != nil {
+			return err
 		}
 
 	}
 
 	if fv, exists := v.FldValidators["response_headers_to_add"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("response_headers_to_add"))
-		for idx, item := range m.GetResponseHeadersToAdd() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetResponseHeadersToAdd(), vOpts...); err != nil {
+			return err
 		}
 
 	}
 
 	if fv, exists := v.FldValidators["response_headers_to_remove"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("response_headers_to_remove"))
-		for idx, item := range m.GetResponseHeadersToRemove() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetResponseHeadersToRemove(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1920,6 +2068,54 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["routes"] = vFn
 
+	vrhRequestHeadersToAdd := v.RequestHeadersToAddValidationRuleHandler
+	rulesRequestHeadersToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRequestHeadersToAdd(rulesRequestHeadersToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.request_headers_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_headers_to_add"] = vFn
+
+	vrhResponseHeadersToAdd := v.ResponseHeadersToAddValidationRuleHandler
+	rulesResponseHeadersToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhResponseHeadersToAdd(rulesResponseHeadersToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.response_headers_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_headers_to_add"] = vFn
+
+	vrhResponseHeadersToRemove := v.ResponseHeadersToRemoveValidationRuleHandler
+	rulesResponseHeadersToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhResponseHeadersToRemove(rulesResponseHeadersToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.response_headers_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_headers_to_remove"] = vFn
+
+	vrhRequestHeadersToRemove := v.RequestHeadersToRemoveValidationRuleHandler
+	rulesRequestHeadersToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRequestHeadersToRemove(rulesRequestHeadersToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.request_headers_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_headers_to_remove"] = vFn
+
 	vrhCustomErrors := v.CustomErrorsValidationRuleHandler
 	rulesCustomErrors := map[string]string{
 		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
@@ -1983,10 +2179,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["challenge_type.js_challenge"] = JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
-
-	v.FldValidators["request_headers_to_add"] = ves_io_schema.HeaderManipulationOptionTypeValidator().Validate
-
-	v.FldValidators["response_headers_to_add"] = ves_io_schema.HeaderManipulationOptionTypeValidator().Validate
 
 	v.FldValidators["tls_parameters"] = ves_io_schema.DownstreamTlsParamsTypeValidator().Validate
 
@@ -2316,7 +2508,7 @@ func (m *GetSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AuthenticationChoice == nil {
+	if m.GetAuthenticationChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2347,11 +2539,11 @@ func (m *GetSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.DynamicReverseProxy == nil {
+	if m.GetDynamicReverseProxy() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.DynamicReverseProxy.GetDRefInfo()
+	driSet, err = m.GetDynamicReverseProxy().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -2534,11 +2726,11 @@ func (m *GetSpecType) GetWafTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.WafType == nil {
+	if m.GetWafType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.WafType.GetDRefInfo()
+	driSet, err = m.GetWafType().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -2652,6 +2844,170 @@ func (v *ValidateGetSpecType) RoutesValidationRuleHandler(rules map[string]strin
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items routes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) RequestHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_headers_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.HeaderManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.HeaderManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_headers_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_headers_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) ResponseHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_headers_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.HeaderManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.HeaderManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_headers_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_headers_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) ResponseHeadersToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for response_headers_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_headers_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_headers_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_headers_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) RequestHeadersToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for request_headers_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_headers_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_headers_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_headers_to_remove")
 		}
 		return nil
 	}
@@ -3095,49 +3451,33 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 
 	if fv, exists := v.FldValidators["request_headers_to_add"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_headers_to_add"))
-		for idx, item := range m.GetRequestHeadersToAdd() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetRequestHeadersToAdd(), vOpts...); err != nil {
+			return err
 		}
 
 	}
 
 	if fv, exists := v.FldValidators["request_headers_to_remove"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_headers_to_remove"))
-		for idx, item := range m.GetRequestHeadersToRemove() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetRequestHeadersToRemove(), vOpts...); err != nil {
+			return err
 		}
 
 	}
 
 	if fv, exists := v.FldValidators["response_headers_to_add"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("response_headers_to_add"))
-		for idx, item := range m.GetResponseHeadersToAdd() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetResponseHeadersToAdd(), vOpts...); err != nil {
+			return err
 		}
 
 	}
 
 	if fv, exists := v.FldValidators["response_headers_to_remove"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("response_headers_to_remove"))
-		for idx, item := range m.GetResponseHeadersToRemove() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetResponseHeadersToRemove(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -3332,6 +3672,54 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["routes"] = vFn
 
+	vrhRequestHeadersToAdd := v.RequestHeadersToAddValidationRuleHandler
+	rulesRequestHeadersToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRequestHeadersToAdd(rulesRequestHeadersToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.request_headers_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_headers_to_add"] = vFn
+
+	vrhResponseHeadersToAdd := v.ResponseHeadersToAddValidationRuleHandler
+	rulesResponseHeadersToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhResponseHeadersToAdd(rulesResponseHeadersToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.response_headers_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_headers_to_add"] = vFn
+
+	vrhResponseHeadersToRemove := v.ResponseHeadersToRemoveValidationRuleHandler
+	rulesResponseHeadersToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhResponseHeadersToRemove(rulesResponseHeadersToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.response_headers_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_headers_to_remove"] = vFn
+
+	vrhRequestHeadersToRemove := v.RequestHeadersToRemoveValidationRuleHandler
+	rulesRequestHeadersToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRequestHeadersToRemove(rulesRequestHeadersToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.request_headers_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_headers_to_remove"] = vFn
+
 	vrhCustomErrors := v.CustomErrorsValidationRuleHandler
 	rulesCustomErrors := map[string]string{
 		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
@@ -3395,10 +3783,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["challenge_type.js_challenge"] = JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
-
-	v.FldValidators["request_headers_to_add"] = ves_io_schema.HeaderManipulationOptionTypeValidator().Validate
-
-	v.FldValidators["response_headers_to_add"] = ves_io_schema.HeaderManipulationOptionTypeValidator().Validate
 
 	v.FldValidators["tls_parameters"] = ves_io_schema.DownstreamTlsParamsTypeValidator().Validate
 
@@ -3613,7 +3997,7 @@ func (m *GlobalSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error
 		err             error
 	)
 	_ = driSet
-	if m.AuthenticationChoice == nil {
+	if m.GetAuthenticationChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3644,7 +4028,7 @@ func (m *GlobalSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ChallengeType == nil {
+	if m.GetChallengeType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3720,11 +4104,11 @@ func (m *GlobalSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error)
 		err             error
 	)
 	_ = driSet
-	if m.DynamicReverseProxy == nil {
+	if m.GetDynamicReverseProxy() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.DynamicReverseProxy.GetDRefInfo()
+	driSet, err = m.GetDynamicReverseProxy().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -4030,11 +4414,11 @@ func (m *GlobalSpecType) GetWafTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.WafType == nil {
+	if m.GetWafType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.WafType.GetDRefInfo()
+	driSet, err = m.GetWafType().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -4148,6 +4532,170 @@ func (v *ValidateGlobalSpecType) RoutesValidationRuleHandler(rules map[string]st
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items routes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) RequestHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_headers_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.HeaderManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.HeaderManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_headers_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_headers_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ResponseHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_headers_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.HeaderManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.HeaderManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_headers_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_headers_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ResponseHeadersToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for response_headers_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_headers_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_headers_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_headers_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) RequestHeadersToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for request_headers_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_headers_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_headers_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_headers_to_remove")
 		}
 		return nil
 	}
@@ -4828,49 +5376,33 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 
 	if fv, exists := v.FldValidators["request_headers_to_add"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_headers_to_add"))
-		for idx, item := range m.GetRequestHeadersToAdd() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetRequestHeadersToAdd(), vOpts...); err != nil {
+			return err
 		}
 
 	}
 
 	if fv, exists := v.FldValidators["request_headers_to_remove"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_headers_to_remove"))
-		for idx, item := range m.GetRequestHeadersToRemove() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetRequestHeadersToRemove(), vOpts...); err != nil {
+			return err
 		}
 
 	}
 
 	if fv, exists := v.FldValidators["response_headers_to_add"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("response_headers_to_add"))
-		for idx, item := range m.GetResponseHeadersToAdd() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetResponseHeadersToAdd(), vOpts...); err != nil {
+			return err
 		}
 
 	}
 
 	if fv, exists := v.FldValidators["response_headers_to_remove"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("response_headers_to_remove"))
-		for idx, item := range m.GetResponseHeadersToRemove() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetResponseHeadersToRemove(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -5099,6 +5631,54 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["routes"] = vFn
 
+	vrhRequestHeadersToAdd := v.RequestHeadersToAddValidationRuleHandler
+	rulesRequestHeadersToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRequestHeadersToAdd(rulesRequestHeadersToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.request_headers_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_headers_to_add"] = vFn
+
+	vrhResponseHeadersToAdd := v.ResponseHeadersToAddValidationRuleHandler
+	rulesResponseHeadersToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhResponseHeadersToAdd(rulesResponseHeadersToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.response_headers_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_headers_to_add"] = vFn
+
+	vrhResponseHeadersToRemove := v.ResponseHeadersToRemoveValidationRuleHandler
+	rulesResponseHeadersToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhResponseHeadersToRemove(rulesResponseHeadersToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.response_headers_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_headers_to_remove"] = vFn
+
+	vrhRequestHeadersToRemove := v.RequestHeadersToRemoveValidationRuleHandler
+	rulesRequestHeadersToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRequestHeadersToRemove(rulesRequestHeadersToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.request_headers_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_headers_to_remove"] = vFn
+
 	vrhCustomErrors := v.CustomErrorsValidationRuleHandler
 	rulesCustomErrors := map[string]string{
 		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
@@ -5209,10 +5789,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["challenge_type.js_challenge"] = JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.policy_based_challenge"] = PolicyBasedChallengeValidator().Validate
-
-	v.FldValidators["request_headers_to_add"] = ves_io_schema.HeaderManipulationOptionTypeValidator().Validate
-
-	v.FldValidators["response_headers_to_add"] = ves_io_schema.HeaderManipulationOptionTypeValidator().Validate
 
 	v.FldValidators["tls_parameters"] = ves_io_schema.DownstreamTlsParamsTypeValidator().Validate
 
@@ -5948,7 +6524,7 @@ func (m *ReplaceSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, erro
 		err             error
 	)
 	_ = driSet
-	if m.AuthenticationChoice == nil {
+	if m.GetAuthenticationChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -5979,11 +6555,11 @@ func (m *ReplaceSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error
 		err             error
 	)
 	_ = driSet
-	if m.DynamicReverseProxy == nil {
+	if m.GetDynamicReverseProxy() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.DynamicReverseProxy.GetDRefInfo()
+	driSet, err = m.GetDynamicReverseProxy().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -6166,11 +6742,11 @@ func (m *ReplaceSpecType) GetWafTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.WafType == nil {
+	if m.GetWafType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.WafType.GetDRefInfo()
+	driSet, err = m.GetWafType().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -6284,6 +6860,170 @@ func (v *ValidateReplaceSpecType) RoutesValidationRuleHandler(rules map[string]s
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items routes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) RequestHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_headers_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.HeaderManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.HeaderManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_headers_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_headers_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ResponseHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_headers_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.HeaderManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.HeaderManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_headers_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_headers_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ResponseHeadersToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for response_headers_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_headers_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_headers_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_headers_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) RequestHeadersToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for request_headers_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_headers_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_headers_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_headers_to_remove")
 		}
 		return nil
 	}
@@ -6688,49 +7428,33 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	}
 
 	if fv, exists := v.FldValidators["request_headers_to_add"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_headers_to_add"))
-		for idx, item := range m.GetRequestHeadersToAdd() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetRequestHeadersToAdd(), vOpts...); err != nil {
+			return err
 		}
 
 	}
 
 	if fv, exists := v.FldValidators["request_headers_to_remove"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("request_headers_to_remove"))
-		for idx, item := range m.GetRequestHeadersToRemove() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetRequestHeadersToRemove(), vOpts...); err != nil {
+			return err
 		}
 
 	}
 
 	if fv, exists := v.FldValidators["response_headers_to_add"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("response_headers_to_add"))
-		for idx, item := range m.GetResponseHeadersToAdd() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetResponseHeadersToAdd(), vOpts...); err != nil {
+			return err
 		}
 
 	}
 
 	if fv, exists := v.FldValidators["response_headers_to_remove"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("response_headers_to_remove"))
-		for idx, item := range m.GetResponseHeadersToRemove() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetResponseHeadersToRemove(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -6907,6 +7631,54 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["routes"] = vFn
 
+	vrhRequestHeadersToAdd := v.RequestHeadersToAddValidationRuleHandler
+	rulesRequestHeadersToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRequestHeadersToAdd(rulesRequestHeadersToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.request_headers_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_headers_to_add"] = vFn
+
+	vrhResponseHeadersToAdd := v.ResponseHeadersToAddValidationRuleHandler
+	rulesResponseHeadersToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhResponseHeadersToAdd(rulesResponseHeadersToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.response_headers_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_headers_to_add"] = vFn
+
+	vrhResponseHeadersToRemove := v.ResponseHeadersToRemoveValidationRuleHandler
+	rulesResponseHeadersToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhResponseHeadersToRemove(rulesResponseHeadersToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.response_headers_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_headers_to_remove"] = vFn
+
+	vrhRequestHeadersToRemove := v.RequestHeadersToRemoveValidationRuleHandler
+	rulesRequestHeadersToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRequestHeadersToRemove(rulesRequestHeadersToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.request_headers_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_headers_to_remove"] = vFn
+
 	vrhCustomErrors := v.CustomErrorsValidationRuleHandler
 	rulesCustomErrors := map[string]string{
 		"ves.io.schema.rules.map.keys.uint32.gte":       "3",
@@ -6970,10 +7742,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["challenge_type.js_challenge"] = JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
-
-	v.FldValidators["request_headers_to_add"] = ves_io_schema.HeaderManipulationOptionTypeValidator().Validate
-
-	v.FldValidators["response_headers_to_add"] = ves_io_schema.HeaderManipulationOptionTypeValidator().Validate
 
 	v.FldValidators["tls_parameters"] = ves_io_schema.DownstreamTlsParamsTypeValidator().Validate
 

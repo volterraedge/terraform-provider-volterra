@@ -495,7 +495,7 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 													Type: schema.TypeList,
 
-													Optional: true,
+													Required: true,
 													Elem: &schema.Schema{
 														Type: schema.TypeInt,
 													},
@@ -581,7 +581,7 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 													Type: schema.TypeList,
 
-													Optional: true,
+													Required: true,
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
@@ -851,7 +851,7 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 													Type: schema.TypeList,
 
-													Optional: true,
+													Required: true,
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},

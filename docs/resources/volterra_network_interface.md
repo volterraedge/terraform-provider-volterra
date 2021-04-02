@@ -20,64 +20,21 @@ resource "volterra_network_interface" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "dedicated_management_interface dedicated_interface ethernet_interface tunnel_interface legacy_interface" must be set
+  // One of the arguments from this list "dedicated_interface ethernet_interface tunnel_interface legacy_interface dedicated_management_interface" must be set
 
-  legacy_interface {
-    DHCP_server = "DHCP_server"
+  dedicated_interface {
+    device = "eth0"
 
-    DNS_server {
-      dns_mode = "dns_mode"
-
-      dns_server {
-        addr = "192.168.1.1"
-      }
-    }
-
-    address_allocator {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-
-    default_gateway {
-      default_gateway_address {
-        addr = "192.168.1.1"
-      }
-
-      default_gateway_mode = "default_gateway_mode"
-    }
-
-    device_name  = "value"
-    dhcp_address = "dhcp_address"
-
-    // One of the arguments from this list "monitor monitor_disabled" must be set
+    // One of the arguments from this list "monitor_disabled monitor" must be set
     monitor_disabled = true
-    mtu              = "0"
-    priority         = "42"
+    mtu              = "1450"
 
-    static_addresses {
-      plen   = "plen"
-      prefix = "192.168.1.0"
-    }
+    // One of the arguments from this list "cluster node" must be set
+    cluster = true
 
-    tunnel {
-      tunnel {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
-
-    type = "type"
-
-    virtual_network {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-
-    vlan_tag     = "0"
-    vlan_tagging = "NETWORK_INTERFACE_VLAN_TAGGING_DISABLE"
+    // One of the arguments from this list "not_primary is_primary" must be set
+    is_primary = true
+    priority   = "42"
   }
 }
 

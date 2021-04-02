@@ -490,6 +490,11 @@ func resourceVolterraFleet() *schema.Resource {
 										Optional: true,
 									},
 
+									"allow_volume_expansion": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
 									"default_storage_class": {
 										Type:     schema.TypeBool,
 										Optional: true,
@@ -509,6 +514,11 @@ func resourceVolterraFleet() *schema.Resource {
 
 												"selector": {
 													Type:     schema.TypeMap,
+													Optional: true,
+												},
+
+												"storage_pools": {
+													Type:     schema.TypeString,
 													Optional: true,
 												},
 											},
@@ -546,8 +556,23 @@ func resourceVolterraFleet() *schema.Resource {
 													Type:     schema.TypeString,
 													Optional: true,
 												},
+
+												"bandwidth_limit": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"iops_limit": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
 											},
 										},
+									},
+
+									"reclaim_policy": {
+										Type:     schema.TypeString,
+										Optional: true,
 									},
 
 									"storage_class_name": {
@@ -616,7 +641,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Required: true,
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -633,6 +658,146 @@ func resourceVolterraFleet() *schema.Resource {
 															"backend_name": {
 																Type:     schema.TypeString,
 																Optional: true,
+															},
+
+															"client_certificate": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"client_private_key": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"blindfold_secret_info_internal": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"decryption_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"location": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"store_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"secret_encoding_type": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"blindfold_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"decryption_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"location": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"store_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"clear_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"url": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"vault_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"key": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"location": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"secret_encoding": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"version": {
+																						Type:     schema.TypeInt,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"wingman_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
 															},
 
 															"data_lif_dns_name": {
@@ -848,6 +1013,24 @@ func resourceVolterraFleet() *schema.Resource {
 																						Optional: true,
 																					},
 
+																					"adaptive_qos_policy": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"no_qos": {
+
+																						Type:     schema.TypeBool,
+																						Optional: true,
+																					},
+
+																					"qos_policy": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
 																					"security_style": {
 																						Type:     schema.TypeString,
 																						Optional: true,
@@ -914,6 +1097,11 @@ func resourceVolterraFleet() *schema.Resource {
 																Optional: true,
 															},
 
+															"trusted_ca_certificate": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
 															"username": {
 																Type:     schema.TypeString,
 																Optional: true,
@@ -932,6 +1120,24 @@ func resourceVolterraFleet() *schema.Resource {
 																		},
 
 																		"export_policy": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"adaptive_qos_policy": {
+
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"no_qos": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"qos_policy": {
+
 																			Type:     schema.TypeString,
 																			Optional: true,
 																		},
@@ -1285,6 +1491,146 @@ func resourceVolterraFleet() *schema.Resource {
 																},
 															},
 
+															"client_certificate": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"client_private_key": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"blindfold_secret_info_internal": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"decryption_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"location": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"store_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"secret_encoding_type": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"blindfold_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"decryption_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"location": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"store_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"clear_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"url": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"vault_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"key": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"location": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"secret_encoding": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"version": {
+																						Type:     schema.TypeInt,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"wingman_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
 															"data_lif_dns_name": {
 
 																Type:     schema.TypeString,
@@ -1498,6 +1844,24 @@ func resourceVolterraFleet() *schema.Resource {
 																						Optional: true,
 																					},
 
+																					"adaptive_qos_policy": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"no_qos": {
+
+																						Type:     schema.TypeBool,
+																						Optional: true,
+																					},
+
+																					"qos_policy": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
 																					"security_style": {
 																						Type:     schema.TypeString,
 																						Optional: true,
@@ -1564,6 +1928,11 @@ func resourceVolterraFleet() *schema.Resource {
 																Optional: true,
 															},
 
+															"trusted_ca_certificate": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
 															"username": {
 																Type:     schema.TypeString,
 																Optional: true,
@@ -1582,6 +1951,24 @@ func resourceVolterraFleet() *schema.Resource {
 																		},
 
 																		"export_policy": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"adaptive_qos_policy": {
+
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"no_qos": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"qos_policy": {
+
 																			Type:     schema.TypeString,
 																			Optional: true,
 																		},
@@ -3026,6 +3413,10 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 						storageClasses[i].AdvancedStorageParameters = ms
 					}
 
+					if w, ok := storageClassesMapStrToI["allow_volume_expansion"]; ok && !isIntfNil(w) {
+						storageClasses[i].AllowVolumeExpansion = w.(bool)
+					}
+
 					if w, ok := storageClassesMapStrToI["default_storage_class"]; ok && !isIntfNil(w) {
 						storageClasses[i].DefaultStorageClass = w.(bool)
 					}
@@ -3054,6 +3445,11 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 									ms[k] = v.(string)
 								}
 								deviceChoiceInt.NetappTrident.Selector = ms
+							}
+
+							if v, ok := cs["storage_pools"]; ok && !isIntfNil(v) {
+
+								deviceChoiceInt.NetappTrident.StoragePools = v.(string)
 							}
 
 						}
@@ -3101,8 +3497,22 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 								deviceChoiceInt.PureServiceOrchestrator.Backend = v.(string)
 							}
 
+							if v, ok := cs["bandwidth_limit"]; ok && !isIntfNil(v) {
+
+								deviceChoiceInt.PureServiceOrchestrator.BandwidthLimit = v.(string)
+							}
+
+							if v, ok := cs["iops_limit"]; ok && !isIntfNil(v) {
+
+								deviceChoiceInt.PureServiceOrchestrator.IopsLimit = uint32(v.(int))
+							}
+
 						}
 
+					}
+
+					if w, ok := storageClassesMapStrToI["reclaim_policy"]; ok && !isIntfNil(w) {
+						storageClasses[i].ReclaimPolicy = w.(string)
 					}
 
 					if w, ok := storageClassesMapStrToI["storage_class_name"]; ok && !isIntfNil(w) {
@@ -3219,6 +3629,171 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["backend_name"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.BackendName = v.(string)
+									}
+
+									if v, ok := cs["client_certificate"]; ok && !isIntfNil(v) {
+
+										backendChoiceInt.NetappBackendOntapNas.ClientCertificate = v.(string)
+									}
+
+									if v, ok := cs["client_private_key"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										clientPrivateKey := &ves_io_schema.SecretType{}
+										backendChoiceInt.NetappBackendOntapNas.ClientPrivateKey = clientPrivateKey
+										for _, set := range sl {
+											clientPrivateKeyMapStrToI := set.(map[string]interface{})
+
+											if v, ok := clientPrivateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+												clientPrivateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+												for _, set := range sl {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := clientPrivateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+												clientPrivateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+											}
+
+											secretInfoOneofTypeFound := false
+
+											if v, ok := clientPrivateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+												secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+												clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+													}
+
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := clientPrivateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+												secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+												clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := clientPrivateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+												secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+												clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+													}
+
+												}
+
+											}
+
+											if v, ok := clientPrivateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+												secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+												clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+													}
+
+												}
+
+											}
+
+										}
+
 									}
 
 									dataLifTypeFound := false
@@ -3491,6 +4066,42 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 														volumeDefaults.ExportPolicy = w.(string)
 													}
 
+													qosPolicyChoiceTypeFound := false
+
+													if v, ok := volumeDefaultsMapStrToI["adaptive_qos_policy"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+														qosPolicyChoiceTypeFound = true
+														qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_AdaptiveQosPolicy{}
+
+														volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+
+														qosPolicyChoiceInt.AdaptiveQosPolicy = v.(string)
+
+													}
+
+													if v, ok := volumeDefaultsMapStrToI["no_qos"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+														qosPolicyChoiceTypeFound = true
+
+														if v.(bool) {
+															qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_NoQos{}
+															qosPolicyChoiceInt.NoQos = &ves_io_schema.Empty{}
+															volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+														}
+
+													}
+
+													if v, ok := volumeDefaultsMapStrToI["qos_policy"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+														qosPolicyChoiceTypeFound = true
+														qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_QosPolicy{}
+
+														volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+
+														qosPolicyChoiceInt.QosPolicy = v.(string)
+
+													}
+
 													if w, ok := volumeDefaultsMapStrToI["security_style"]; ok && !isIntfNil(w) {
 														volumeDefaults.SecurityStyle = w.(string)
 													}
@@ -3550,6 +4161,11 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 										backendChoiceInt.NetappBackendOntapNas.Svm = v.(string)
 									}
 
+									if v, ok := cs["trusted_ca_certificate"]; ok && !isIntfNil(v) {
+
+										backendChoiceInt.NetappBackendOntapNas.TrustedCaCertificate = v.(string)
+									}
+
 									if v, ok := cs["username"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.Username = v.(string)
@@ -3569,6 +4185,42 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 											if w, ok := volumeDefaultsMapStrToI["export_policy"]; ok && !isIntfNil(w) {
 												volumeDefaults.ExportPolicy = w.(string)
+											}
+
+											qosPolicyChoiceTypeFound := false
+
+											if v, ok := volumeDefaultsMapStrToI["adaptive_qos_policy"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+												qosPolicyChoiceTypeFound = true
+												qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_AdaptiveQosPolicy{}
+
+												volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+
+												qosPolicyChoiceInt.AdaptiveQosPolicy = v.(string)
+
+											}
+
+											if v, ok := volumeDefaultsMapStrToI["no_qos"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+												qosPolicyChoiceTypeFound = true
+
+												if v.(bool) {
+													qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_NoQos{}
+													qosPolicyChoiceInt.NoQos = &ves_io_schema.Empty{}
+													volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+												}
+
+											}
+
+											if v, ok := volumeDefaultsMapStrToI["qos_policy"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+												qosPolicyChoiceTypeFound = true
+												qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_QosPolicy{}
+
+												volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+
+												qosPolicyChoiceInt.QosPolicy = v.(string)
+
 											}
 
 											if w, ok := volumeDefaultsMapStrToI["security_style"]; ok && !isIntfNil(w) {
@@ -3981,6 +4633,171 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 									}
 
+									if v, ok := cs["client_certificate"]; ok && !isIntfNil(v) {
+
+										backendChoiceInt.NetappBackendOntapSan.ClientCertificate = v.(string)
+									}
+
+									if v, ok := cs["client_private_key"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										clientPrivateKey := &ves_io_schema.SecretType{}
+										backendChoiceInt.NetappBackendOntapSan.ClientPrivateKey = clientPrivateKey
+										for _, set := range sl {
+											clientPrivateKeyMapStrToI := set.(map[string]interface{})
+
+											if v, ok := clientPrivateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+												clientPrivateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+												for _, set := range sl {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := clientPrivateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+												clientPrivateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+											}
+
+											secretInfoOneofTypeFound := false
+
+											if v, ok := clientPrivateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+												secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+												clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+													}
+
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := clientPrivateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+												secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+												clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := clientPrivateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+												secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+												clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+													}
+
+												}
+
+											}
+
+											if v, ok := clientPrivateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+												secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+												clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
 									dataLifTypeFound := false
 
 									if v, ok := cs["data_lif_dns_name"]; ok && !isIntfNil(v) && !dataLifTypeFound {
@@ -4251,6 +5068,42 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 														volumeDefaults.ExportPolicy = w.(string)
 													}
 
+													qosPolicyChoiceTypeFound := false
+
+													if v, ok := volumeDefaultsMapStrToI["adaptive_qos_policy"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+														qosPolicyChoiceTypeFound = true
+														qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_AdaptiveQosPolicy{}
+
+														volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+
+														qosPolicyChoiceInt.AdaptiveQosPolicy = v.(string)
+
+													}
+
+													if v, ok := volumeDefaultsMapStrToI["no_qos"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+														qosPolicyChoiceTypeFound = true
+
+														if v.(bool) {
+															qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_NoQos{}
+															qosPolicyChoiceInt.NoQos = &ves_io_schema.Empty{}
+															volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+														}
+
+													}
+
+													if v, ok := volumeDefaultsMapStrToI["qos_policy"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+														qosPolicyChoiceTypeFound = true
+														qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_QosPolicy{}
+
+														volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+
+														qosPolicyChoiceInt.QosPolicy = v.(string)
+
+													}
+
 													if w, ok := volumeDefaultsMapStrToI["security_style"]; ok && !isIntfNil(w) {
 														volumeDefaults.SecurityStyle = w.(string)
 													}
@@ -4310,6 +5163,11 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 										backendChoiceInt.NetappBackendOntapSan.Svm = v.(string)
 									}
 
+									if v, ok := cs["trusted_ca_certificate"]; ok && !isIntfNil(v) {
+
+										backendChoiceInt.NetappBackendOntapSan.TrustedCaCertificate = v.(string)
+									}
+
 									if v, ok := cs["username"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.Username = v.(string)
@@ -4329,6 +5187,42 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 											if w, ok := volumeDefaultsMapStrToI["export_policy"]; ok && !isIntfNil(w) {
 												volumeDefaults.ExportPolicy = w.(string)
+											}
+
+											qosPolicyChoiceTypeFound := false
+
+											if v, ok := volumeDefaultsMapStrToI["adaptive_qos_policy"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+												qosPolicyChoiceTypeFound = true
+												qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_AdaptiveQosPolicy{}
+
+												volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+
+												qosPolicyChoiceInt.AdaptiveQosPolicy = v.(string)
+
+											}
+
+											if v, ok := volumeDefaultsMapStrToI["no_qos"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+												qosPolicyChoiceTypeFound = true
+
+												if v.(bool) {
+													qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_NoQos{}
+													qosPolicyChoiceInt.NoQos = &ves_io_schema.Empty{}
+													volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+												}
+
+											}
+
+											if v, ok := volumeDefaultsMapStrToI["qos_policy"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+												qosPolicyChoiceTypeFound = true
+												qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_QosPolicy{}
+
+												volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+
+												qosPolicyChoiceInt.QosPolicy = v.(string)
+
 											}
 
 											if w, ok := volumeDefaultsMapStrToI["security_style"]; ok && !isIntfNil(w) {
@@ -5988,6 +6882,10 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 						storageClasses[i].AdvancedStorageParameters = ms
 					}
 
+					if w, ok := storageClassesMapStrToI["allow_volume_expansion"]; ok && !isIntfNil(w) {
+						storageClasses[i].AllowVolumeExpansion = w.(bool)
+					}
+
 					if w, ok := storageClassesMapStrToI["default_storage_class"]; ok && !isIntfNil(w) {
 						storageClasses[i].DefaultStorageClass = w.(bool)
 					}
@@ -6016,6 +6914,11 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 									ms[k] = v.(string)
 								}
 								deviceChoiceInt.NetappTrident.Selector = ms
+							}
+
+							if v, ok := cs["storage_pools"]; ok && !isIntfNil(v) {
+
+								deviceChoiceInt.NetappTrident.StoragePools = v.(string)
 							}
 
 						}
@@ -6063,8 +6966,22 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 								deviceChoiceInt.PureServiceOrchestrator.Backend = v.(string)
 							}
 
+							if v, ok := cs["bandwidth_limit"]; ok && !isIntfNil(v) {
+
+								deviceChoiceInt.PureServiceOrchestrator.BandwidthLimit = v.(string)
+							}
+
+							if v, ok := cs["iops_limit"]; ok && !isIntfNil(v) {
+
+								deviceChoiceInt.PureServiceOrchestrator.IopsLimit = uint32(v.(int))
+							}
+
 						}
 
+					}
+
+					if w, ok := storageClassesMapStrToI["reclaim_policy"]; ok && !isIntfNil(w) {
+						storageClasses[i].ReclaimPolicy = w.(string)
 					}
 
 					if w, ok := storageClassesMapStrToI["storage_class_name"]; ok && !isIntfNil(w) {
@@ -6179,6 +7096,171 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 									if v, ok := cs["backend_name"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.BackendName = v.(string)
+									}
+
+									if v, ok := cs["client_certificate"]; ok && !isIntfNil(v) {
+
+										backendChoiceInt.NetappBackendOntapNas.ClientCertificate = v.(string)
+									}
+
+									if v, ok := cs["client_private_key"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										clientPrivateKey := &ves_io_schema.SecretType{}
+										backendChoiceInt.NetappBackendOntapNas.ClientPrivateKey = clientPrivateKey
+										for _, set := range sl {
+											clientPrivateKeyMapStrToI := set.(map[string]interface{})
+
+											if v, ok := clientPrivateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+												clientPrivateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+												for _, set := range sl {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := clientPrivateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+												clientPrivateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+											}
+
+											secretInfoOneofTypeFound := false
+
+											if v, ok := clientPrivateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+												secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+												clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+													}
+
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := clientPrivateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+												secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+												clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := clientPrivateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+												secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+												clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+													}
+
+												}
+
+											}
+
+											if v, ok := clientPrivateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+												secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+												clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+													}
+
+												}
+
+											}
+
+										}
+
 									}
 
 									dataLifTypeFound := false
@@ -6451,6 +7533,42 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 														volumeDefaults.ExportPolicy = w.(string)
 													}
 
+													qosPolicyChoiceTypeFound := false
+
+													if v, ok := volumeDefaultsMapStrToI["adaptive_qos_policy"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+														qosPolicyChoiceTypeFound = true
+														qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_AdaptiveQosPolicy{}
+
+														volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+
+														qosPolicyChoiceInt.AdaptiveQosPolicy = v.(string)
+
+													}
+
+													if v, ok := volumeDefaultsMapStrToI["no_qos"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+														qosPolicyChoiceTypeFound = true
+
+														if v.(bool) {
+															qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_NoQos{}
+															qosPolicyChoiceInt.NoQos = &ves_io_schema.Empty{}
+															volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+														}
+
+													}
+
+													if v, ok := volumeDefaultsMapStrToI["qos_policy"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+														qosPolicyChoiceTypeFound = true
+														qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_QosPolicy{}
+
+														volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+
+														qosPolicyChoiceInt.QosPolicy = v.(string)
+
+													}
+
 													if w, ok := volumeDefaultsMapStrToI["security_style"]; ok && !isIntfNil(w) {
 														volumeDefaults.SecurityStyle = w.(string)
 													}
@@ -6510,6 +7628,11 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 										backendChoiceInt.NetappBackendOntapNas.Svm = v.(string)
 									}
 
+									if v, ok := cs["trusted_ca_certificate"]; ok && !isIntfNil(v) {
+
+										backendChoiceInt.NetappBackendOntapNas.TrustedCaCertificate = v.(string)
+									}
+
 									if v, ok := cs["username"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapNas.Username = v.(string)
@@ -6529,6 +7652,42 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 
 											if w, ok := volumeDefaultsMapStrToI["export_policy"]; ok && !isIntfNil(w) {
 												volumeDefaults.ExportPolicy = w.(string)
+											}
+
+											qosPolicyChoiceTypeFound := false
+
+											if v, ok := volumeDefaultsMapStrToI["adaptive_qos_policy"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+												qosPolicyChoiceTypeFound = true
+												qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_AdaptiveQosPolicy{}
+
+												volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+
+												qosPolicyChoiceInt.AdaptiveQosPolicy = v.(string)
+
+											}
+
+											if v, ok := volumeDefaultsMapStrToI["no_qos"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+												qosPolicyChoiceTypeFound = true
+
+												if v.(bool) {
+													qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_NoQos{}
+													qosPolicyChoiceInt.NoQos = &ves_io_schema.Empty{}
+													volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+												}
+
+											}
+
+											if v, ok := volumeDefaultsMapStrToI["qos_policy"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+												qosPolicyChoiceTypeFound = true
+												qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_QosPolicy{}
+
+												volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+
+												qosPolicyChoiceInt.QosPolicy = v.(string)
+
 											}
 
 											if w, ok := volumeDefaultsMapStrToI["security_style"]; ok && !isIntfNil(w) {
@@ -6941,6 +8100,171 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 
 									}
 
+									if v, ok := cs["client_certificate"]; ok && !isIntfNil(v) {
+
+										backendChoiceInt.NetappBackendOntapSan.ClientCertificate = v.(string)
+									}
+
+									if v, ok := cs["client_private_key"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										clientPrivateKey := &ves_io_schema.SecretType{}
+										backendChoiceInt.NetappBackendOntapSan.ClientPrivateKey = clientPrivateKey
+										for _, set := range sl {
+											clientPrivateKeyMapStrToI := set.(map[string]interface{})
+
+											if v, ok := clientPrivateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+												clientPrivateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+												for _, set := range sl {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := clientPrivateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+												clientPrivateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+											}
+
+											secretInfoOneofTypeFound := false
+
+											if v, ok := clientPrivateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+												secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+												clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+													}
+
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := clientPrivateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+												secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+												clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := clientPrivateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+												secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+												clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+													}
+
+												}
+
+											}
+
+											if v, ok := clientPrivateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+												secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+												clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
 									dataLifTypeFound := false
 
 									if v, ok := cs["data_lif_dns_name"]; ok && !isIntfNil(v) && !dataLifTypeFound {
@@ -7211,6 +8535,42 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 														volumeDefaults.ExportPolicy = w.(string)
 													}
 
+													qosPolicyChoiceTypeFound := false
+
+													if v, ok := volumeDefaultsMapStrToI["adaptive_qos_policy"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+														qosPolicyChoiceTypeFound = true
+														qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_AdaptiveQosPolicy{}
+
+														volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+
+														qosPolicyChoiceInt.AdaptiveQosPolicy = v.(string)
+
+													}
+
+													if v, ok := volumeDefaultsMapStrToI["no_qos"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+														qosPolicyChoiceTypeFound = true
+
+														if v.(bool) {
+															qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_NoQos{}
+															qosPolicyChoiceInt.NoQos = &ves_io_schema.Empty{}
+															volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+														}
+
+													}
+
+													if v, ok := volumeDefaultsMapStrToI["qos_policy"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+														qosPolicyChoiceTypeFound = true
+														qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_QosPolicy{}
+
+														volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+
+														qosPolicyChoiceInt.QosPolicy = v.(string)
+
+													}
+
 													if w, ok := volumeDefaultsMapStrToI["security_style"]; ok && !isIntfNil(w) {
 														volumeDefaults.SecurityStyle = w.(string)
 													}
@@ -7270,6 +8630,11 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 										backendChoiceInt.NetappBackendOntapSan.Svm = v.(string)
 									}
 
+									if v, ok := cs["trusted_ca_certificate"]; ok && !isIntfNil(v) {
+
+										backendChoiceInt.NetappBackendOntapSan.TrustedCaCertificate = v.(string)
+									}
+
 									if v, ok := cs["username"]; ok && !isIntfNil(v) {
 
 										backendChoiceInt.NetappBackendOntapSan.Username = v.(string)
@@ -7289,6 +8654,42 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 
 											if w, ok := volumeDefaultsMapStrToI["export_policy"]; ok && !isIntfNil(w) {
 												volumeDefaults.ExportPolicy = w.(string)
+											}
+
+											qosPolicyChoiceTypeFound := false
+
+											if v, ok := volumeDefaultsMapStrToI["adaptive_qos_policy"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+												qosPolicyChoiceTypeFound = true
+												qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_AdaptiveQosPolicy{}
+
+												volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+
+												qosPolicyChoiceInt.AdaptiveQosPolicy = v.(string)
+
+											}
+
+											if v, ok := volumeDefaultsMapStrToI["no_qos"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+												qosPolicyChoiceTypeFound = true
+
+												if v.(bool) {
+													qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_NoQos{}
+													qosPolicyChoiceInt.NoQos = &ves_io_schema.Empty{}
+													volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+												}
+
+											}
+
+											if v, ok := volumeDefaultsMapStrToI["qos_policy"]; ok && !isIntfNil(v) && !qosPolicyChoiceTypeFound {
+
+												qosPolicyChoiceTypeFound = true
+												qosPolicyChoiceInt := &ves_io_schema_fleet.OntapVolumeDefaults_QosPolicy{}
+
+												volumeDefaults.QosPolicyChoice = qosPolicyChoiceInt
+
+												qosPolicyChoiceInt.QosPolicy = v.(string)
+
 											}
 
 											if w, ok := volumeDefaultsMapStrToI["security_style"]; ok && !isIntfNil(w) {

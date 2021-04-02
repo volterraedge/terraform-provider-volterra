@@ -147,6 +147,168 @@ func (m *CascadeDeleteItemType) GetErrorMessage() string {
 	return ""
 }
 
+// APIItem
+//
+// x-displayName: "API Item"
+// An item for which API access needs to be checked - used in request and response
+// The result field is ignored when processing requests
+type APIItem struct {
+	// method
+	//
+	// x-displayName: "Method"
+	// x-example: "GET"
+	// HTTP request method
+	Method string `protobuf:"bytes,1,opt,name=method,proto3" json:"method,omitempty"`
+	// path
+	//
+	// x-displayName: "Path"
+	// x-example: "/api/web/namespaces"
+	// HTTP request URL path
+	Path string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
+	// result
+	//
+	// x-displayName: "Result"
+	// Result after evaluation
+	Result bool `protobuf:"varint,3,opt,name=result,proto3" json:"result,omitempty"`
+}
+
+func (m *APIItem) Reset()                    { *m = APIItem{} }
+func (*APIItem) ProtoMessage()               {}
+func (*APIItem) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{3} }
+
+func (m *APIItem) GetMethod() string {
+	if m != nil {
+		return m.Method
+	}
+	return ""
+}
+
+func (m *APIItem) GetPath() string {
+	if m != nil {
+		return m.Path
+	}
+	return ""
+}
+
+func (m *APIItem) GetResult() bool {
+	if m != nil {
+		return m.Result
+	}
+	return false
+}
+
+// APIItemList
+//
+// x-displayName: "API Item List"
+// An list of items for which API access needs to be checked  - used in request and response
+// result will show combined AND output from the result of individual api items.
+type APIItemList struct {
+	// list_id
+	//
+	// x-displayName: "List ID"
+	// x-example: "value"
+	// Identifier group items
+	ListId string `protobuf:"bytes,1,opt,name=list_id,json=listId,proto3" json:"list_id,omitempty"`
+	// items
+	//
+	// x-displayName: "Items"
+	// List of APIItem entries
+	Items []*APIItem `protobuf:"bytes,2,rep,name=items" json:"items,omitempty"`
+	// result
+	//
+	// x-displayName: "Result"
+	// Combined result after evaluation of items
+	Result bool `protobuf:"varint,3,opt,name=result,proto3" json:"result,omitempty"`
+}
+
+func (m *APIItemList) Reset()                    { *m = APIItemList{} }
+func (*APIItemList) ProtoMessage()               {}
+func (*APIItemList) Descriptor() ([]byte, []int) { return fileDescriptorPublicCustomapi, []int{4} }
+
+func (m *APIItemList) GetListId() string {
+	if m != nil {
+		return m.ListId
+	}
+	return ""
+}
+
+func (m *APIItemList) GetItems() []*APIItem {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
+func (m *APIItemList) GetResult() bool {
+	if m != nil {
+		return m.Result
+	}
+	return false
+}
+
+// EvaluateAPIAccessReq
+//
+// x-displayName: "Request for EvaluateAPIAccess"
+// Request body of EvaluateAPIAccess request
+type EvaluateAPIAccessReq struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "value"
+	// Name of the namespace under which all the URLs in APIItems will be evaluated
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// item_lists
+	//
+	// x-displayName: "Item Lists"
+	// List of APIItemList entries
+	ItemLists []*APIItemList `protobuf:"bytes,2,rep,name=item_lists,json=itemLists" json:"item_lists,omitempty"`
+}
+
+func (m *EvaluateAPIAccessReq) Reset()      { *m = EvaluateAPIAccessReq{} }
+func (*EvaluateAPIAccessReq) ProtoMessage() {}
+func (*EvaluateAPIAccessReq) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{5}
+}
+
+func (m *EvaluateAPIAccessReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *EvaluateAPIAccessReq) GetItemLists() []*APIItemList {
+	if m != nil {
+		return m.ItemLists
+	}
+	return nil
+}
+
+// EvaluateAPIAccessResp
+//
+// x-displayName: "Response for EvaluateAPIAccess"
+// Response body of EvaluateAPIAccess request
+type EvaluateAPIAccessResp struct {
+	// item_lists
+	//
+	// x-displayName: "Item Lists"
+	// List of APIItemList entries
+	ItemLists []*APIItemList `protobuf:"bytes,1,rep,name=item_lists,json=itemLists" json:"item_lists,omitempty"`
+}
+
+func (m *EvaluateAPIAccessResp) Reset()      { *m = EvaluateAPIAccessResp{} }
+func (*EvaluateAPIAccessResp) ProtoMessage() {}
+func (*EvaluateAPIAccessResp) Descriptor() ([]byte, []int) {
+	return fileDescriptorPublicCustomapi, []int{6}
+}
+
+func (m *EvaluateAPIAccessResp) GetItemLists() []*APIItemList {
+	if m != nil {
+		return m.ItemLists
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*CascadeDeleteRequest)(nil), "ves.io.schema.namespace.CascadeDeleteRequest")
 	golang_proto.RegisterType((*CascadeDeleteRequest)(nil), "ves.io.schema.namespace.CascadeDeleteRequest")
@@ -154,6 +316,14 @@ func init() {
 	golang_proto.RegisterType((*CascadeDeleteResponse)(nil), "ves.io.schema.namespace.CascadeDeleteResponse")
 	proto.RegisterType((*CascadeDeleteItemType)(nil), "ves.io.schema.namespace.CascadeDeleteItemType")
 	golang_proto.RegisterType((*CascadeDeleteItemType)(nil), "ves.io.schema.namespace.CascadeDeleteItemType")
+	proto.RegisterType((*APIItem)(nil), "ves.io.schema.namespace.APIItem")
+	golang_proto.RegisterType((*APIItem)(nil), "ves.io.schema.namespace.APIItem")
+	proto.RegisterType((*APIItemList)(nil), "ves.io.schema.namespace.APIItemList")
+	golang_proto.RegisterType((*APIItemList)(nil), "ves.io.schema.namespace.APIItemList")
+	proto.RegisterType((*EvaluateAPIAccessReq)(nil), "ves.io.schema.namespace.EvaluateAPIAccessReq")
+	golang_proto.RegisterType((*EvaluateAPIAccessReq)(nil), "ves.io.schema.namespace.EvaluateAPIAccessReq")
+	proto.RegisterType((*EvaluateAPIAccessResp)(nil), "ves.io.schema.namespace.EvaluateAPIAccessResp")
+	golang_proto.RegisterType((*EvaluateAPIAccessResp)(nil), "ves.io.schema.namespace.EvaluateAPIAccessResp")
 }
 func (this *CascadeDeleteRequest) Equal(that interface{}) bool {
 	if that == nil {
@@ -241,6 +411,132 @@ func (this *CascadeDeleteItemType) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *APIItem) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*APIItem)
+	if !ok {
+		that2, ok := that.(APIItem)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Method != that1.Method {
+		return false
+	}
+	if this.Path != that1.Path {
+		return false
+	}
+	if this.Result != that1.Result {
+		return false
+	}
+	return true
+}
+func (this *APIItemList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*APIItemList)
+	if !ok {
+		that2, ok := that.(APIItemList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ListId != that1.ListId {
+		return false
+	}
+	if len(this.Items) != len(that1.Items) {
+		return false
+	}
+	for i := range this.Items {
+		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
+	}
+	if this.Result != that1.Result {
+		return false
+	}
+	return true
+}
+func (this *EvaluateAPIAccessReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*EvaluateAPIAccessReq)
+	if !ok {
+		that2, ok := that.(EvaluateAPIAccessReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if len(this.ItemLists) != len(that1.ItemLists) {
+		return false
+	}
+	for i := range this.ItemLists {
+		if !this.ItemLists[i].Equal(that1.ItemLists[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *EvaluateAPIAccessResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*EvaluateAPIAccessResp)
+	if !ok {
+		that2, ok := that.(EvaluateAPIAccessResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.ItemLists) != len(that1.ItemLists) {
+		return false
+	}
+	for i := range this.ItemLists {
+		if !this.ItemLists[i].Equal(that1.ItemLists[i]) {
+			return false
+		}
+	}
+	return true
+}
 func (this *CascadeDeleteRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -276,6 +572,57 @@ func (this *CascadeDeleteItemType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *APIItem) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&namespace.APIItem{")
+	s = append(s, "Method: "+fmt.Sprintf("%#v", this.Method)+",\n")
+	s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
+	s = append(s, "Result: "+fmt.Sprintf("%#v", this.Result)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *APIItemList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&namespace.APIItemList{")
+	s = append(s, "ListId: "+fmt.Sprintf("%#v", this.ListId)+",\n")
+	if this.Items != nil {
+		s = append(s, "Items: "+fmt.Sprintf("%#v", this.Items)+",\n")
+	}
+	s = append(s, "Result: "+fmt.Sprintf("%#v", this.Result)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *EvaluateAPIAccessReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&namespace.EvaluateAPIAccessReq{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	if this.ItemLists != nil {
+		s = append(s, "ItemLists: "+fmt.Sprintf("%#v", this.ItemLists)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *EvaluateAPIAccessResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&namespace.EvaluateAPIAccessResp{")
+	if this.ItemLists != nil {
+		s = append(s, "ItemLists: "+fmt.Sprintf("%#v", this.ItemLists)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func valueToGoStringPublicCustomapi(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -301,8 +648,12 @@ type CustomAPIClient interface {
 	// x-displayName: "Cascade Delete"
 	// CascadeDelete will delete the namespace and all configuration objects like virtual_hosts etc.
 	// under it. Use this only if the entire namespace and its contents are to be wiped out.
-	// DEPRECATED by request/approve APIs as above. this will be made private.
 	CascadeDelete(ctx context.Context, in *CascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error)
+	// EvaluateAPIAccess
+	//
+	// x-displayName: "Evaluate API Access"
+	// EvaluateAPIAccess can evaluate multiple lists of API url, method under a namesapce for a given user of a tenant.
+	EvaluateAPIAccess(ctx context.Context, in *EvaluateAPIAccessReq, opts ...grpc.CallOption) (*EvaluateAPIAccessResp, error)
 }
 
 type customAPIClient struct {
@@ -322,6 +673,15 @@ func (c *customAPIClient) CascadeDelete(ctx context.Context, in *CascadeDeleteRe
 	return out, nil
 }
 
+func (c *customAPIClient) EvaluateAPIAccess(ctx context.Context, in *EvaluateAPIAccessReq, opts ...grpc.CallOption) (*EvaluateAPIAccessResp, error) {
+	out := new(EvaluateAPIAccessResp)
+	err := grpc.Invoke(ctx, "/ves.io.schema.namespace.CustomAPI/EvaluateAPIAccess", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for CustomAPI service
 
 type CustomAPIServer interface {
@@ -330,8 +690,12 @@ type CustomAPIServer interface {
 	// x-displayName: "Cascade Delete"
 	// CascadeDelete will delete the namespace and all configuration objects like virtual_hosts etc.
 	// under it. Use this only if the entire namespace and its contents are to be wiped out.
-	// DEPRECATED by request/approve APIs as above. this will be made private.
 	CascadeDelete(context.Context, *CascadeDeleteRequest) (*CascadeDeleteResponse, error)
+	// EvaluateAPIAccess
+	//
+	// x-displayName: "Evaluate API Access"
+	// EvaluateAPIAccess can evaluate multiple lists of API url, method under a namesapce for a given user of a tenant.
+	EvaluateAPIAccess(context.Context, *EvaluateAPIAccessReq) (*EvaluateAPIAccessResp, error)
 }
 
 func RegisterCustomAPIServer(s *grpc.Server, srv CustomAPIServer) {
@@ -356,6 +720,24 @@ func _CustomAPI_CascadeDelete_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomAPI_EvaluateAPIAccess_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EvaluateAPIAccessReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).EvaluateAPIAccess(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.namespace.CustomAPI/EvaluateAPIAccess",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).EvaluateAPIAccess(ctx, req.(*EvaluateAPIAccessReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.namespace.CustomAPI",
 	HandlerType: (*CustomAPIServer)(nil),
@@ -363,6 +745,10 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CascadeDelete",
 			Handler:    _CustomAPI_CascadeDelete_Handler,
+		},
+		{
+			MethodName: "EvaluateAPIAccess",
+			Handler:    _CustomAPI_EvaluateAPIAccess_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -465,6 +851,158 @@ func (m *CascadeDeleteItemType) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *APIItem) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *APIItem) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Method) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Method)))
+		i += copy(dAtA[i:], m.Method)
+	}
+	if len(m.Path) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Path)))
+		i += copy(dAtA[i:], m.Path)
+	}
+	if m.Result {
+		dAtA[i] = 0x18
+		i++
+		if m.Result {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	return i, nil
+}
+
+func (m *APIItemList) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *APIItemList) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.ListId) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.ListId)))
+		i += copy(dAtA[i:], m.ListId)
+	}
+	if len(m.Items) > 0 {
+		for _, msg := range m.Items {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.Result {
+		dAtA[i] = 0x18
+		i++
+		if m.Result {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	return i, nil
+}
+
+func (m *EvaluateAPIAccessReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EvaluateAPIAccessReq) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Namespace) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i += copy(dAtA[i:], m.Namespace)
+	}
+	if len(m.ItemLists) > 0 {
+		for _, msg := range m.ItemLists {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
+func (m *EvaluateAPIAccessResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EvaluateAPIAccessResp) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.ItemLists) > 0 {
+		for _, msg := range m.ItemLists {
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
 func encodeVarintPublicCustomapi(dAtA []byte, offset int, v uint64) int {
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
@@ -518,6 +1056,70 @@ func (m *CascadeDeleteItemType) Size() (n int) {
 	return n
 }
 
+func (m *APIItem) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Method)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Path)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if m.Result {
+		n += 2
+	}
+	return n
+}
+
+func (m *APIItemList) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.ListId)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	if m.Result {
+		n += 2
+	}
+	return n
+}
+
+func (m *EvaluateAPIAccessReq) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if len(m.ItemLists) > 0 {
+		for _, e := range m.ItemLists {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *EvaluateAPIAccessResp) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.ItemLists) > 0 {
+		for _, e := range m.ItemLists {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
 func sovPublicCustomapi(x uint64) (n int) {
 	for {
 		n++
@@ -560,6 +1162,51 @@ func (this *CascadeDeleteItemType) String() string {
 		`ObjectUid:` + fmt.Sprintf("%v", this.ObjectUid) + `,`,
 		`ObjectName:` + fmt.Sprintf("%v", this.ObjectName) + `,`,
 		`ErrorMessage:` + fmt.Sprintf("%v", this.ErrorMessage) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *APIItem) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&APIItem{`,
+		`Method:` + fmt.Sprintf("%v", this.Method) + `,`,
+		`Path:` + fmt.Sprintf("%v", this.Path) + `,`,
+		`Result:` + fmt.Sprintf("%v", this.Result) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *APIItemList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&APIItemList{`,
+		`ListId:` + fmt.Sprintf("%v", this.ListId) + `,`,
+		`Items:` + strings.Replace(fmt.Sprintf("%v", this.Items), "APIItem", "APIItem", 1) + `,`,
+		`Result:` + fmt.Sprintf("%v", this.Result) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *EvaluateAPIAccessReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&EvaluateAPIAccessReq{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`ItemLists:` + strings.Replace(fmt.Sprintf("%v", this.ItemLists), "APIItemList", "APIItemList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *EvaluateAPIAccessResp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&EvaluateAPIAccessResp{`,
+		`ItemLists:` + strings.Replace(fmt.Sprintf("%v", this.ItemLists), "APIItemList", "APIItemList", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -898,6 +1545,455 @@ func (m *CascadeDeleteItemType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *APIItem) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: APIItem: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: APIItem: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Method", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Method = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Path = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Result = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *APIItemList) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: APIItemList: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: APIItemList: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ListId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ListId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, &APIItem{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Result = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EvaluateAPIAccessReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EvaluateAPIAccessReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EvaluateAPIAccessReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ItemLists", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ItemLists = append(m.ItemLists, &APIItemList{})
+			if err := m.ItemLists[len(m.ItemLists)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EvaluateAPIAccessResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EvaluateAPIAccessResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EvaluateAPIAccessResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ItemLists", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ItemLists = append(m.ItemLists, &APIItemList{})
+			if err := m.ItemLists[len(m.ItemLists)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func skipPublicCustomapi(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
@@ -1011,39 +2107,51 @@ func init() {
 }
 
 var fileDescriptorPublicCustomapi = []byte{
-	// 532 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x93, 0x31, 0x6f, 0xd3, 0x40,
-	0x14, 0xc7, 0x73, 0x49, 0x41, 0x8a, 0x4b, 0x17, 0xab, 0x08, 0x13, 0xca, 0x51, 0x99, 0x25, 0xaa,
-	0xf0, 0x9d, 0x54, 0x36, 0x36, 0x68, 0x97, 0x0a, 0x15, 0x50, 0x04, 0x0b, 0x12, 0x8a, 0xce, 0xf6,
-	0xab, 0x73, 0x60, 0xfb, 0x0e, 0xdf, 0xd9, 0x50, 0x21, 0x04, 0xea, 0x27, 0x40, 0x62, 0x66, 0xe7,
-	0x3b, 0x64, 0xe9, 0x06, 0x13, 0xaa, 0x60, 0x61, 0x24, 0x2e, 0x03, 0x63, 0x37, 0x56, 0x94, 0xb3,
-	0x43, 0xe3, 0x48, 0x95, 0xba, 0xbd, 0x7b, 0xff, 0xdf, 0x7b, 0x7a, 0xef, 0xe9, 0x7f, 0x16, 0x29,
-	0x40, 0x11, 0x2e, 0xa8, 0x0a, 0x46, 0x90, 0x30, 0x9a, 0xb2, 0x04, 0x94, 0x64, 0x01, 0x50, 0x99,
-	0xfb, 0x31, 0x0f, 0x86, 0x41, 0xae, 0xb4, 0x48, 0x98, 0xe4, 0x44, 0x66, 0x42, 0x0b, 0xfb, 0x4a,
-	0xc5, 0x93, 0x8a, 0x27, 0xff, 0xf9, 0x9e, 0x17, 0x71, 0x3d, 0xca, 0x7d, 0x12, 0x88, 0x84, 0x46,
-	0x22, 0x12, 0xd4, 0xf0, 0x7e, 0xbe, 0x67, 0x5e, 0xe6, 0x61, 0xa2, 0xaa, 0x4f, 0x6f, 0x2d, 0x12,
-	0x22, 0x8a, 0x81, 0x32, 0xc9, 0x29, 0x4b, 0x53, 0xa1, 0x99, 0xe6, 0x22, 0x55, 0xb5, 0x7a, 0xad,
-	0x39, 0x95, 0x90, 0xf3, 0xe2, 0xd5, 0xa6, 0xa8, 0xf7, 0x25, 0xcc, 0xa4, 0xb5, 0xa6, 0x54, 0xb0,
-	0x98, 0x87, 0x4c, 0x43, 0xad, 0xba, 0x0b, 0x2a, 0x28, 0x48, 0x8b, 0x66, 0x73, 0x77, 0xc3, 0x5a,
-	0xdd, 0x62, 0x2a, 0x60, 0x21, 0x6c, 0x43, 0x0c, 0x1a, 0x06, 0xf0, 0x32, 0x07, 0xa5, 0x6d, 0xdb,
-	0x5a, 0x9a, 0xee, 0xea, 0xa0, 0x75, 0xd4, 0xef, 0x0e, 0x4c, 0xec, 0x3e, 0xb3, 0x2e, 0x2f, 0xb0,
-	0x4a, 0x8a, 0x54, 0x81, 0xbd, 0x6d, 0x5d, 0xe0, 0x1a, 0x12, 0xe5, 0xa0, 0xf5, 0x4e, 0x7f, 0x79,
-	0x93, 0x90, 0x33, 0x8e, 0x46, 0x1a, 0xe5, 0x3b, 0x1a, 0x92, 0xc7, 0xfb, 0x12, 0x06, 0x55, 0xb1,
-	0xfb, 0x09, 0x2d, 0xf4, 0x9f, 0x01, 0xf6, 0x0d, 0x6b, 0x59, 0xf8, 0xcf, 0x21, 0xd0, 0xc3, 0xe9,
-	0xf2, 0xf5, 0x4c, 0x56, 0x95, 0x32, 0xc0, 0x75, 0xab, 0x7e, 0x0d, 0x73, 0x1e, 0x3a, 0x6d, 0xa3,
-	0x77, 0xab, 0xcc, 0x13, 0x1e, 0xce, 0xd5, 0x9b, 0x9d, 0x3a, 0xf3, 0xf5, 0x0f, 0x58, 0x02, 0xf6,
-	0x4d, 0x6b, 0x05, 0xb2, 0x4c, 0x64, 0xc3, 0x04, 0x94, 0x62, 0x11, 0x38, 0x4b, 0x06, 0xb9, 0x64,
-	0x92, 0xbb, 0x55, 0x6e, 0xf3, 0x2f, 0xb2, 0xba, 0x5b, 0xc6, 0x1e, 0x77, 0x1f, 0xed, 0xd8, 0x63,
-	0x64, 0xad, 0x34, 0xa6, 0xb5, 0xbd, 0xf3, 0xad, 0x5d, 0x5f, 0xb8, 0x47, 0xce, 0x8b, 0x57, 0x47,
-	0x76, 0xef, 0x97, 0x5f, 0x9c, 0xd5, 0x02, 0x94, 0xc7, 0x85, 0x17, 0x41, 0x0a, 0x19, 0x8b, 0xbd,
-	0x57, 0x19, 0xd7, 0x70, 0xf0, 0xe3, 0xf7, 0xc7, 0xb6, 0xe7, 0xf6, 0x6b, 0x0b, 0x9f, 0x7a, 0x5a,
-	0xd1, 0x37, 0xd3, 0xf8, 0x2d, 0x0d, 0xaa, 0x86, 0xc3, 0xd0, 0x74, 0xbc, 0x83, 0x36, 0x7a, 0xb7,
-	0x0e, 0xc7, 0xa8, 0xf3, 0x7d, 0x8c, 0xf0, 0x59, 0x33, 0x3c, 0x34, 0xc7, 0x39, 0xf8, 0xe6, 0xb4,
-	0x47, 0xe8, 0xde, 0xbb, 0xa3, 0x09, 0x6e, 0xfd, 0x9c, 0xe0, 0xd6, 0xc9, 0x04, 0xa3, 0xf7, 0x25,
-	0x46, 0x9f, 0x4b, 0x8c, 0xbe, 0x96, 0x18, 0x1d, 0x95, 0x18, 0xfd, 0x2a, 0x31, 0xfa, 0x53, 0xe2,
-	0xd6, 0x49, 0x89, 0xd1, 0x87, 0x63, 0xdc, 0x3a, 0x3c, 0xc6, 0xe8, 0xe9, 0x6e, 0x24, 0xe4, 0x8b,
-	0x88, 0x14, 0x22, 0xd6, 0x90, 0x65, 0x8c, 0xe4, 0x8a, 0x9a, 0x60, 0x4f, 0x64, 0x89, 0x27, 0x33,
-	0x51, 0xf0, 0x10, 0x32, 0x6f, 0x26, 0x53, 0xe9, 0x47, 0x82, 0xc2, 0x6b, 0x5d, 0x3b, 0x75, 0xf1,
-	0x73, 0xfa, 0x17, 0x8d, 0x59, 0x6f, 0xff, 0x0b, 0x00, 0x00, 0xff, 0xff, 0x23, 0xb8, 0x39, 0x02,
-	0xbe, 0x03, 0x00, 0x00,
+	// 733 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x55, 0x41, 0x6f, 0xd3, 0x48,
+	0x14, 0xce, 0x24, 0xdd, 0x76, 0x33, 0xdd, 0x1e, 0xd6, 0x6a, 0xb7, 0xd9, 0x6c, 0xd7, 0x54, 0x86,
+	0x43, 0x55, 0x61, 0x5b, 0x2a, 0x12, 0x87, 0xde, 0x42, 0xcb, 0x21, 0x82, 0x42, 0x15, 0xe0, 0x82,
+	0x40, 0xd1, 0xc4, 0x7e, 0x75, 0x06, 0xec, 0x8c, 0xeb, 0x19, 0xbb, 0x44, 0x08, 0x81, 0xfa, 0x0b,
+	0x90, 0x38, 0x73, 0xe7, 0x3f, 0xf4, 0x52, 0x4e, 0xe5, 0x84, 0x2a, 0xb8, 0x70, 0xa4, 0x2e, 0x07,
+	0x8e, 0xfd, 0x09, 0xc8, 0xe3, 0x49, 0x9b, 0x84, 0xa4, 0x54, 0xdc, 0xde, 0x7b, 0xdf, 0xf7, 0xbe,
+	0xf9, 0xde, 0x8b, 0x67, 0x82, 0xad, 0x04, 0xb8, 0x45, 0x99, 0xcd, 0x9d, 0x36, 0x04, 0xc4, 0xee,
+	0x90, 0x00, 0x78, 0x48, 0x1c, 0xb0, 0xc3, 0xb8, 0xe5, 0x53, 0xa7, 0xe9, 0xc4, 0x5c, 0xb0, 0x80,
+	0x84, 0xd4, 0x0a, 0x23, 0x26, 0x98, 0x36, 0x9f, 0xf3, 0xad, 0x9c, 0x6f, 0x9d, 0xf2, 0xab, 0xa6,
+	0x47, 0x45, 0x3b, 0x6e, 0x59, 0x0e, 0x0b, 0x6c, 0x8f, 0x79, 0xcc, 0x96, 0xfc, 0x56, 0xbc, 0x25,
+	0x33, 0x99, 0xc8, 0x28, 0xd7, 0xa9, 0x2e, 0x78, 0x8c, 0x79, 0x3e, 0xd8, 0x24, 0xa4, 0x36, 0xe9,
+	0x74, 0x98, 0x20, 0x82, 0xb2, 0x0e, 0x57, 0xe8, 0x7f, 0x83, 0xae, 0x58, 0xd8, 0x0f, 0xfe, 0x3b,
+	0x08, 0x8a, 0x6e, 0x08, 0x3d, 0x68, 0x61, 0x10, 0x4a, 0x88, 0x4f, 0x5d, 0x22, 0x40, 0xa1, 0xc6,
+	0x10, 0x0a, 0x1c, 0x3a, 0xc9, 0xa0, 0xb8, 0xb1, 0x8c, 0x67, 0xd7, 0x08, 0x77, 0x88, 0x0b, 0xeb,
+	0xe0, 0x83, 0x80, 0x06, 0x6c, 0xc7, 0xc0, 0x85, 0xa6, 0xe1, 0x89, 0x6c, 0xd6, 0x0a, 0x5a, 0x44,
+	0x4b, 0xe5, 0x86, 0x8c, 0x8d, 0xc7, 0x78, 0x6e, 0x88, 0xcb, 0x43, 0xd6, 0xe1, 0xa0, 0xad, 0xe3,
+	0x3f, 0xa8, 0x80, 0x80, 0x57, 0xd0, 0x62, 0x69, 0x69, 0x7a, 0xc5, 0xb2, 0xc6, 0x2c, 0xcd, 0x1a,
+	0x68, 0xaf, 0x0b, 0x08, 0xee, 0x77, 0x43, 0x68, 0xe4, 0xcd, 0xc6, 0x5b, 0x34, 0xa4, 0xdf, 0x23,
+	0x68, 0x97, 0xf0, 0x34, 0x6b, 0x3d, 0x01, 0x47, 0x34, 0xb3, 0xe1, 0x95, 0x27, 0x9c, 0x97, 0x24,
+	0xe1, 0x7f, 0xac, 0xb2, 0x66, 0x4c, 0xdd, 0x4a, 0x51, 0xe2, 0xe5, 0xbc, 0xf2, 0x80, 0xba, 0x7d,
+	0xfd, 0x72, 0xa6, 0x52, 0x7f, 0xff, 0x1d, 0x12, 0x80, 0x76, 0x19, 0xcf, 0x40, 0x14, 0xb1, 0xa8,
+	0x19, 0x00, 0xe7, 0xc4, 0x83, 0xca, 0x84, 0xa4, 0xfc, 0x25, 0x8b, 0x1b, 0x79, 0xcd, 0xd8, 0xc0,
+	0x53, 0xb5, 0xcd, 0x7a, 0x66, 0x4a, 0xfb, 0x07, 0x4f, 0x06, 0x20, 0xda, 0xcc, 0x55, 0x5e, 0x54,
+	0x96, 0x6d, 0x2d, 0x24, 0xa2, 0xad, 0x1c, 0xc8, 0x38, 0xe3, 0x46, 0xc0, 0x63, 0x5f, 0xc8, 0x73,
+	0xff, 0x6c, 0xa8, 0xcc, 0x48, 0xf0, 0xb4, 0x92, 0xbb, 0x4d, 0xb9, 0xd0, 0xe6, 0xf1, 0x94, 0x4f,
+	0xb9, 0x68, 0xd2, 0x53, 0xcd, 0x2c, 0xad, 0xbb, 0xda, 0xf5, 0xde, 0x72, 0x8b, 0x72, 0xb9, 0x8b,
+	0x63, 0x97, 0xab, 0xd4, 0xd4, 0x3a, 0xc7, 0x9e, 0xdb, 0xc5, 0xb3, 0x37, 0x13, 0xe2, 0xc7, 0x44,
+	0x40, 0x6d, 0xb3, 0x5e, 0x73, 0x1c, 0xe0, 0xbc, 0x01, 0xdb, 0xda, 0x02, 0x2e, 0x9f, 0x6a, 0x29,
+	0x0b, 0x67, 0x05, 0x6d, 0x0d, 0xe3, 0x4c, 0xb6, 0x99, 0x99, 0xea, 0x59, 0xb9, 0xf2, 0x2b, 0x2b,
+	0xd9, 0x60, 0x8d, 0x32, 0x55, 0x11, 0x37, 0x1e, 0xe1, 0xb9, 0x11, 0x47, 0xf3, 0x70, 0x48, 0x1d,
+	0xfd, 0x96, 0xfa, 0xca, 0xfb, 0x12, 0x2e, 0xaf, 0xc9, 0xeb, 0x5b, 0xdb, 0xac, 0x6b, 0x7b, 0x08,
+	0xcf, 0x0c, 0x7c, 0x4d, 0x9a, 0x79, 0xb1, 0xcf, 0x52, 0xdd, 0x80, 0xaa, 0x75, 0x51, 0x7a, 0x7e,
+	0x09, 0x8c, 0x5b, 0xe9, 0x41, 0x65, 0x36, 0x01, 0x6e, 0x52, 0x66, 0x7a, 0xd0, 0x81, 0x88, 0xf8,
+	0xe6, 0x4e, 0x44, 0x05, 0xec, 0x7e, 0xfe, 0xf6, 0xa6, 0x68, 0x1a, 0x4b, 0xea, 0x89, 0x39, 0x7b,
+	0x73, 0xb8, 0xfd, 0x3c, 0x8b, 0x5f, 0xd8, 0x4e, 0x2e, 0xd8, 0x74, 0xa5, 0xe2, 0x2a, 0x5a, 0xd6,
+	0x0e, 0x10, 0xfe, 0xfb, 0xa7, 0x55, 0x9d, 0x33, 0xc1, 0xa8, 0x5f, 0xf4, 0x9c, 0x09, 0x46, 0xfe,
+	0x0a, 0xc6, 0xbd, 0xf4, 0xa0, 0x32, 0xaf, 0x26, 0xd8, 0x81, 0x96, 0x49, 0x24, 0xd4, 0x37, 0xc4,
+	0x8a, 0x61, 0x8e, 0x18, 0x82, 0x77, 0xb9, 0x80, 0xc0, 0x06, 0xa5, 0x69, 0x92, 0x90, 0xaa, 0xd6,
+	0x55, 0xb4, 0x5c, 0xbd, 0xba, 0xbf, 0x87, 0x4a, 0x9f, 0xf6, 0x90, 0x3e, 0xce, 0xcb, 0x5d, 0x79,
+	0x0d, 0x77, 0x3f, 0x56, 0x8a, 0x6d, 0x74, 0xe3, 0xe5, 0xe1, 0x91, 0x5e, 0xf8, 0x72, 0xa4, 0x17,
+	0x4e, 0x8e, 0x74, 0xf4, 0x2a, 0xd5, 0xd1, 0xbb, 0x54, 0x47, 0x1f, 0x52, 0x1d, 0x1d, 0xa6, 0x3a,
+	0xfa, 0x9a, 0xea, 0xe8, 0x7b, 0xaa, 0x17, 0x4e, 0x52, 0x1d, 0xbd, 0x3e, 0xd6, 0x0b, 0xfb, 0xc7,
+	0x3a, 0x7a, 0xb8, 0xe1, 0xb1, 0xf0, 0xa9, 0x67, 0x25, 0xcc, 0x17, 0x10, 0x45, 0xc4, 0x8a, 0xb9,
+	0x2d, 0x83, 0x2d, 0x16, 0x05, 0x66, 0x18, 0xb1, 0x84, 0xba, 0x10, 0x99, 0x3d, 0xd8, 0x0e, 0x5b,
+	0x1e, 0xb3, 0xe1, 0x99, 0x50, 0x6f, 0xe2, 0xf0, 0xdf, 0x40, 0x6b, 0x52, 0x3e, 0x8b, 0xd7, 0x7e,
+	0x04, 0x00, 0x00, 0xff, 0xff, 0x96, 0x92, 0xeb, 0x6d, 0x28, 0x06, 0x00, 0x00,
 }

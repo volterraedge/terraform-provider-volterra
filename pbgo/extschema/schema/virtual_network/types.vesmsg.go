@@ -580,7 +580,7 @@ func (m *CreateSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.NetworkChoice == nil {
+	if m.GetNetworkChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -615,11 +615,11 @@ func (m *CreateSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.StaticRoutes == nil {
+	if m.GetStaticRoutes() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.StaticRoutes {
+	for idx, e := range m.GetStaticRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1050,7 +1050,7 @@ func (m *GetSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.NetworkChoice == nil {
+	if m.GetNetworkChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1087,11 +1087,11 @@ func (m *GetSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.StaticRoutes == nil {
+	if m.GetStaticRoutes() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.StaticRoutes {
+	for idx, e := range m.GetStaticRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1416,7 +1416,7 @@ func (m *GlobalSpecType) GetDefaultVipChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.DefaultVipChoice == nil {
+	if m.GetDefaultVipChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1488,7 +1488,7 @@ func (m *GlobalSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.NetworkChoice == nil {
+	if m.GetNetworkChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1568,7 +1568,7 @@ func (m *GlobalSpecType) GetSnatPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.SnatPoolChoice == nil {
+	if m.GetSnatPoolChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1601,11 +1601,11 @@ func (m *GlobalSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.StaticRoutes == nil {
+	if m.GetStaticRoutes() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.StaticRoutes {
+	for idx, e := range m.GetStaticRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -2457,6 +2457,7 @@ var DefaultNextHopInterfaceListValidator = func() *ValidateNextHopInterfaceList 
 
 	vrhInterfaces := v.InterfacesValidationRuleHandler
 	rulesInterfaces := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "1",
 		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
@@ -2548,7 +2549,7 @@ func (m *PerSiteSrv6NetworkType) GetDefaultVipChoiceDRefInfo() ([]db.DRefInfo, e
 		err             error
 	)
 	_ = driSet
-	if m.DefaultVipChoice == nil {
+	if m.GetDefaultVipChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2680,7 +2681,7 @@ func (m *PerSiteSrv6NetworkType) GetSnatPoolChoiceDRefInfo() ([]db.DRefInfo, err
 		err             error
 	)
 	_ = driSet
-	if m.SnatPoolChoice == nil {
+	if m.GetSnatPoolChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3506,7 +3507,7 @@ func (m *ReplaceSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.NetworkChoice == nil {
+	if m.GetNetworkChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3543,11 +3544,11 @@ func (m *ReplaceSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.StaticRoutes == nil {
+	if m.GetStaticRoutes() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.StaticRoutes {
+	for idx, e := range m.GetStaticRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -4693,6 +4694,7 @@ var DefaultStaticRouteViewTypeValidator = func() *ValidateStaticRouteViewType {
 
 	vrhIpPrefixes := v.IpPrefixesValidationRuleHandler
 	rulesIpPrefixes := map[string]string{
+		"ves.io.schema.rules.message.required":                  "true",
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
 		"ves.io.schema.rules.repeated.max_items":                "256",
 		"ves.io.schema.rules.repeated.min_items":                "1",

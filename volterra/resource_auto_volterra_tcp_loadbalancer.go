@@ -400,6 +400,18 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 				Optional: true,
 			},
 
+			"do_not_retract_cluster": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"retract_cluster": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"dns_volterra_managed": {
 				Type:     schema.TypeBool,
 				Optional: true,
@@ -436,6 +448,11 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 			"hash_policy_choice_source_ip_stickiness": {
 
 				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"idle_timeout": {
+				Type:     schema.TypeInt,
 				Optional: true,
 			},
 
@@ -1004,6 +1021,34 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 	}
 
+	//cluster_retract_choice
+
+	clusterRetractChoiceTypeFound := false
+
+	if v, ok := d.GetOk("do_not_retract_cluster"); ok && !clusterRetractChoiceTypeFound {
+
+		clusterRetractChoiceTypeFound = true
+
+		if v.(bool) {
+			clusterRetractChoiceInt := &ves_io_schema_views_tcp_loadbalancer.CreateSpecType_DoNotRetractCluster{}
+			clusterRetractChoiceInt.DoNotRetractCluster = &ves_io_schema.Empty{}
+			createSpec.ClusterRetractChoice = clusterRetractChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("retract_cluster"); ok && !clusterRetractChoiceTypeFound {
+
+		clusterRetractChoiceTypeFound = true
+
+		if v.(bool) {
+			clusterRetractChoiceInt := &ves_io_schema_views_tcp_loadbalancer.CreateSpecType_RetractCluster{}
+			clusterRetractChoiceInt.RetractCluster = &ves_io_schema.Empty{}
+			createSpec.ClusterRetractChoice = clusterRetractChoiceInt
+		}
+
+	}
+
 	//dns_volterra_managed
 	if v, ok := d.GetOk("dns_volterra_managed"); ok && !isIntfNil(v) {
 
@@ -1072,6 +1117,13 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 			createSpec.HashPolicyChoice = hashPolicyChoiceInt
 		}
 
+	}
+
+	//idle_timeout
+	if v, ok := d.GetOk("idle_timeout"); ok && !isIntfNil(v) {
+
+		createSpec.IdleTimeout =
+			uint32(v.(int))
 	}
 
 	//listen_port
@@ -1695,6 +1747,32 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 	}
 
+	clusterRetractChoiceTypeFound := false
+
+	if v, ok := d.GetOk("do_not_retract_cluster"); ok && !clusterRetractChoiceTypeFound {
+
+		clusterRetractChoiceTypeFound = true
+
+		if v.(bool) {
+			clusterRetractChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ReplaceSpecType_DoNotRetractCluster{}
+			clusterRetractChoiceInt.DoNotRetractCluster = &ves_io_schema.Empty{}
+			updateSpec.ClusterRetractChoice = clusterRetractChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("retract_cluster"); ok && !clusterRetractChoiceTypeFound {
+
+		clusterRetractChoiceTypeFound = true
+
+		if v.(bool) {
+			clusterRetractChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ReplaceSpecType_RetractCluster{}
+			clusterRetractChoiceInt.RetractCluster = &ves_io_schema.Empty{}
+			updateSpec.ClusterRetractChoice = clusterRetractChoiceInt
+		}
+
+	}
+
 	if v, ok := d.GetOk("dns_volterra_managed"); ok && !isIntfNil(v) {
 
 		updateSpec.DnsVolterraManaged =
@@ -1759,6 +1837,12 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 			updateSpec.HashPolicyChoice = hashPolicyChoiceInt
 		}
 
+	}
+
+	if v, ok := d.GetOk("idle_timeout"); ok && !isIntfNil(v) {
+
+		updateSpec.IdleTimeout =
+			uint32(v.(int))
 	}
 
 	if v, ok := d.GetOk("listen_port"); ok && !isIntfNil(v) {

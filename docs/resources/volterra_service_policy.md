@@ -21,11 +21,16 @@ resource "volterra_service_policy" "example" {
   namespace = "staging"
   algo      = ["algo"]
 
-  // One of the arguments from this list "deny_all_requests internally_generated allow_list deny_list rule_list legacy_rule_list allow_all_requests" must be set
-  allow_all_requests = true
+  // One of the arguments from this list "deny_list rule_list legacy_rule_list allow_all_requests deny_all_requests internally_generated allow_list" must be set
+  deny_all_requests = true
 
-  // One of the arguments from this list "server_name_matcher any_server server_name server_selector" must be set
-  server_name = "database.production.customer.volterra.us"
+  // One of the arguments from this list "any_server server_name server_selector server_name_matcher" must be set
+
+  server_name_matcher {
+    exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+    regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+  }
 }
 
 ```
@@ -147,7 +152,7 @@ Note that all specified arg matcher predicates must evaluate to true..
 
 The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB..
 
-`as_numbers` - (Optional) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
 
 ### Asn Matcher
 
@@ -261,7 +266,7 @@ matcher..
 
 The predicate evaluates to true if the destination ASN is present in the ASN list..
 
-`as_numbers` - (Optional) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
 
 ### Dst Asn Matcher
 
@@ -409,7 +414,7 @@ The list of port ranges to which the destination port should belong. In case of 
 
 Addresses that are covered by the given list of IPv4 prefixes.
 
-`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
+`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
 
 ### Query Params
 

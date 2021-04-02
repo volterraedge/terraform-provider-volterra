@@ -405,7 +405,7 @@ func (m *CreateSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.InterfaceChoice == nil {
+	if m.GetInterfaceChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -634,7 +634,7 @@ func (m *CreateSpecType) GetStorageInterfaceChoiceDRefInfo() ([]db.DRefInfo, err
 		err             error
 	)
 	_ = driSet
-	if m.StorageInterfaceChoice == nil {
+	if m.GetStorageInterfaceChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -665,7 +665,7 @@ func (m *CreateSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, 
 		err             error
 	)
 	_ = driSet
-	if m.StorageStaticRoutesChoice == nil {
+	if m.GetStorageStaticRoutesChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1792,7 +1792,7 @@ func (m *DeviceInstanceType) GetDeviceInstanceDRefInfo() ([]db.DRefInfo, error) 
 		err             error
 	)
 	_ = driSet
-	if m.DeviceInstance == nil {
+	if m.GetDeviceInstance() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3778,11 +3778,11 @@ func (m *FleetDeviceListType) GetDevicesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Devices == nil {
+	if m.GetDevices() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Devices {
+	for idx, e := range m.GetDevices() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -4436,6 +4436,16 @@ func (v *ValidateFleetStorageClassType) StorageClassNameValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
+func (v *ValidateFleetStorageClassType) ReclaimPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for reclaim_policy")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateFleetStorageClassType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*FleetStorageClassType)
 	if !ok {
@@ -4453,6 +4463,15 @@ func (v *ValidateFleetStorageClassType) Validate(ctx context.Context, pm interfa
 	if fv, exists := v.FldValidators["advanced_storage_parameters"]; exists {
 		vOpts := append(opts, db.WithValidateField("advanced_storage_parameters"))
 		if err := fv(ctx, m.GetAdvancedStorageParameters(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["allow_volume_expansion"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allow_volume_expansion"))
+		if err := fv(ctx, m.GetAllowVolumeExpansion(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4519,6 +4538,15 @@ func (v *ValidateFleetStorageClassType) Validate(ctx context.Context, pm interfa
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["reclaim_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("reclaim_policy"))
+		if err := fv(ctx, m.GetReclaimPolicy(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -4618,6 +4646,18 @@ var DefaultFleetStorageClassTypeValidator = func() *ValidateFleetStorageClassTyp
 	}
 	v.FldValidators["storage_class_name"] = vFn
 
+	vrhReclaimPolicy := v.ReclaimPolicyValidationRuleHandler
+	rulesReclaimPolicy := map[string]string{
+		"ves.io.schema.rules.string.max_len": "16",
+	}
+	vFn, err = vrhReclaimPolicy(rulesReclaimPolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FleetStorageClassType.reclaim_policy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["reclaim_policy"] = vFn
+
+	v.FldValidators["device_choice.netapp_trident"] = StorageClassNetappTridentTypeValidator().Validate
 	v.FldValidators["device_choice.pure_service_orchestrator"] = StorageClassPureServiceOrchestratorTypeValidator().Validate
 	v.FldValidators["device_choice.openebs_enterprise"] = StorageClassOpenebsEnterpriseTypeValidator().Validate
 
@@ -5100,11 +5140,11 @@ func (m *FleetStorageStaticRoutesListType) GetStorageRoutesDRefInfo() ([]db.DRef
 		err             error
 	)
 	_ = driSet
-	if m.StorageRoutes == nil {
+	if m.GetStorageRoutes() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.StorageRoutes {
+	for idx, e := range m.GetStorageRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -5560,7 +5600,7 @@ func (m *GetSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.InterfaceChoice == nil {
+	if m.GetInterfaceChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -5789,7 +5829,7 @@ func (m *GetSpecType) GetStorageInterfaceChoiceDRefInfo() ([]db.DRefInfo, error)
 		err             error
 	)
 	_ = driSet
-	if m.StorageInterfaceChoice == nil {
+	if m.GetStorageInterfaceChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -5820,7 +5860,7 @@ func (m *GetSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, err
 		err             error
 	)
 	_ = driSet
-	if m.StorageStaticRoutesChoice == nil {
+	if m.GetStorageStaticRoutesChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -7140,11 +7180,11 @@ func (m *GlobalSpecType) GetDevicesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Devices == nil {
+	if m.GetDevices() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Devices {
+	for idx, e := range m.GetDevices() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -7206,7 +7246,7 @@ func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.InterfaceChoice == nil {
+	if m.GetInterfaceChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -7518,7 +7558,7 @@ func (m *GlobalSpecType) GetStorageInterfaceChoiceDRefInfo() ([]db.DRefInfo, err
 		err             error
 	)
 	_ = driSet
-	if m.StorageInterfaceChoice == nil {
+	if m.GetStorageInterfaceChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -7549,7 +7589,7 @@ func (m *GlobalSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, 
 		err             error
 	)
 	_ = driSet
-	if m.StorageStaticRoutesChoice == nil {
+	if m.GetStorageStaticRoutesChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -9198,6 +9238,29 @@ type ValidateOntapVolumeDefaults struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateOntapVolumeDefaults) QosPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for qos_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateOntapVolumeDefaults) QosPolicyChoiceQosPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_QosPolicy, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for qos_policy")
+	}
+	return oValidatorFn_QosPolicy, nil
+}
+func (v *ValidateOntapVolumeDefaults) QosPolicyChoiceAdaptiveQosPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AdaptiveQosPolicy, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for adaptive_qos_policy")
+	}
+	return oValidatorFn_AdaptiveQosPolicy, nil
+}
+
 func (v *ValidateOntapVolumeDefaults) SpaceReserveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -9236,6 +9299,53 @@ func (v *ValidateOntapVolumeDefaults) Validate(ctx context.Context, pm interface
 		vOpts := append(opts, db.WithValidateField("export_policy"))
 		if err := fv(ctx, m.GetExportPolicy(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["qos_policy_choice"]; exists {
+		val := m.GetQosPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("qos_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetQosPolicyChoice().(type) {
+	case *OntapVolumeDefaults_NoQos:
+		if fv, exists := v.FldValidators["qos_policy_choice.no_qos"]; exists {
+			val := m.GetQosPolicyChoice().(*OntapVolumeDefaults_NoQos).NoQos
+			vOpts := append(opts,
+				db.WithValidateField("qos_policy_choice"),
+				db.WithValidateField("no_qos"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OntapVolumeDefaults_QosPolicy:
+		if fv, exists := v.FldValidators["qos_policy_choice.qos_policy"]; exists {
+			val := m.GetQosPolicyChoice().(*OntapVolumeDefaults_QosPolicy).QosPolicy
+			vOpts := append(opts,
+				db.WithValidateField("qos_policy_choice"),
+				db.WithValidateField("qos_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OntapVolumeDefaults_AdaptiveQosPolicy:
+		if fv, exists := v.FldValidators["qos_policy_choice.adaptive_qos_policy"]; exists {
+			val := m.GetQosPolicyChoice().(*OntapVolumeDefaults_AdaptiveQosPolicy).AdaptiveQosPolicy
+			vOpts := append(opts,
+				db.WithValidateField("qos_policy_choice"),
+				db.WithValidateField("adaptive_qos_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -9326,6 +9436,41 @@ var DefaultOntapVolumeDefaultsValidator = func() *ValidateOntapVolumeDefaults {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhQosPolicyChoice := v.QosPolicyChoiceValidationRuleHandler
+	rulesQosPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhQosPolicyChoice(rulesQosPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OntapVolumeDefaults.qos_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["qos_policy_choice"] = vFn
+
+	vrhQosPolicyChoiceQosPolicy := v.QosPolicyChoiceQosPolicyValidationRuleHandler
+	rulesQosPolicyChoiceQosPolicy := map[string]string{
+		"ves.io.schema.rules.string.max_len": "128",
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFnMap["qos_policy_choice.qos_policy"], err = vrhQosPolicyChoiceQosPolicy(rulesQosPolicyChoiceQosPolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OntapVolumeDefaults.qos_policy_choice_qos_policy: %s", err)
+		panic(errMsg)
+	}
+	vrhQosPolicyChoiceAdaptiveQosPolicy := v.QosPolicyChoiceAdaptiveQosPolicyValidationRuleHandler
+	rulesQosPolicyChoiceAdaptiveQosPolicy := map[string]string{
+		"ves.io.schema.rules.string.max_len": "128",
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFnMap["qos_policy_choice.adaptive_qos_policy"], err = vrhQosPolicyChoiceAdaptiveQosPolicy(rulesQosPolicyChoiceAdaptiveQosPolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OntapVolumeDefaults.qos_policy_choice_adaptive_qos_policy: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["qos_policy_choice.qos_policy"] = vFnMap["qos_policy_choice.qos_policy"]
+	v.FldValidators["qos_policy_choice.adaptive_qos_policy"] = vFnMap["qos_policy_choice.adaptive_qos_policy"]
 
 	vrhSpaceReserve := v.SpaceReserveValidationRuleHandler
 	rulesSpaceReserve := map[string]string{
@@ -9929,7 +10074,7 @@ func (m *ReplaceSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.InterfaceChoice == nil {
+	if m.GetInterfaceChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -10158,7 +10303,7 @@ func (m *ReplaceSpecType) GetStorageInterfaceChoiceDRefInfo() ([]db.DRefInfo, er
 		err             error
 	)
 	_ = driSet
-	if m.StorageInterfaceChoice == nil {
+	if m.GetStorageInterfaceChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -10189,7 +10334,7 @@ func (m *ReplaceSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo,
 		err             error
 	)
 	_ = driSet
-	if m.StorageStaticRoutesChoice == nil {
+	if m.GetStorageStaticRoutesChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -11635,6 +11780,16 @@ type ValidateStorageClassNetappTridentType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateStorageClassNetappTridentType) StoragePoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for storage_pools")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateStorageClassNetappTridentType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*StorageClassNetappTridentType)
 	if !ok {
@@ -11661,12 +11816,40 @@ func (v *ValidateStorageClassNetappTridentType) Validate(ctx context.Context, pm
 
 	}
 
+	if fv, exists := v.FldValidators["storage_pools"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("storage_pools"))
+		if err := fv(ctx, m.GetStoragePools(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultStorageClassNetappTridentTypeValidator = func() *ValidateStorageClassNetappTridentType {
 	v := &ValidateStorageClassNetappTridentType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStoragePools := v.StoragePoolsValidationRuleHandler
+	rulesStoragePools := map[string]string{
+		"ves.io.schema.rules.string.max_len": "512",
+	}
+	vFn, err = vrhStoragePools(rulesStoragePools)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageClassNetappTridentType.storage_pools: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["storage_pools"] = vFn
 
 	return v
 }()
@@ -11842,6 +12025,26 @@ func (v *ValidateStorageClassPureServiceOrchestratorType) BackendValidationRuleH
 	return validatorFn, nil
 }
 
+func (v *ValidateStorageClassPureServiceOrchestratorType) IopsLimitValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for iops_limit")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageClassPureServiceOrchestratorType) BandwidthLimitValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bandwidth_limit")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateStorageClassPureServiceOrchestratorType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*StorageClassPureServiceOrchestratorType)
 	if !ok {
@@ -11860,6 +12063,24 @@ func (v *ValidateStorageClassPureServiceOrchestratorType) Validate(ctx context.C
 
 		vOpts := append(opts, db.WithValidateField("backend"))
 		if err := fv(ctx, m.GetBackend(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bandwidth_limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bandwidth_limit"))
+		if err := fv(ctx, m.GetBandwidthLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["iops_limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("iops_limit"))
+		if err := fv(ctx, m.GetIopsLimit(), vOpts...); err != nil {
 			return err
 		}
 
@@ -11890,6 +12111,28 @@ var DefaultStorageClassPureServiceOrchestratorTypeValidator = func() *ValidateSt
 		panic(errMsg)
 	}
 	v.FldValidators["backend"] = vFn
+
+	vrhIopsLimit := v.IopsLimitValidationRuleHandler
+	rulesIopsLimit := map[string]string{
+		"ves.io.schema.rules.uint32.ranges": "0,100-100000000",
+	}
+	vFn, err = vrhIopsLimit(rulesIopsLimit)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageClassPureServiceOrchestratorType.iops_limit: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["iops_limit"] = vFn
+
+	vrhBandwidthLimit := v.BandwidthLimitValidationRuleHandler
+	rulesBandwidthLimit := map[string]string{
+		"ves.io.schema.rules.string.max_len": "12",
+	}
+	vFn, err = vrhBandwidthLimit(rulesBandwidthLimit)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageClassPureServiceOrchestratorType.bandwidth_limit: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bandwidth_limit"] = vFn
 
 	return v
 }()
@@ -12616,6 +12859,10 @@ func (m *StorageDeviceNetappBackendOntapNasType) Redact(ctx context.Context) err
 		return errors.Wrapf(err, "Redacting StorageDeviceNetappBackendOntapNasType.password")
 	}
 
+	if err := m.GetClientPrivateKey().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting StorageDeviceNetappBackendOntapNasType.client_private_key")
+	}
+
 	return nil
 }
 
@@ -12813,6 +13060,26 @@ func (v *ValidateStorageDeviceNetappBackendOntapNasType) StorageValidationRuleHa
 	return validatorFn, nil
 }
 
+func (v *ValidateStorageDeviceNetappBackendOntapNasType) ClientCertificateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for client_certificate")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageDeviceNetappBackendOntapNasType) TrustedCaCertificateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for trusted_ca_certificate")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateStorageDeviceNetappBackendOntapNasType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*StorageDeviceNetappBackendOntapNasType)
 	if !ok {
@@ -12849,6 +13116,24 @@ func (v *ValidateStorageDeviceNetappBackendOntapNasType) Validate(ctx context.Co
 
 		vOpts := append(opts, db.WithValidateField("backend_name"))
 		if err := fv(ctx, m.GetBackendName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["client_certificate"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_certificate"))
+		if err := fv(ctx, m.GetClientCertificate(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["client_private_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_private_key"))
+		if err := fv(ctx, m.GetClientPrivateKey(), vOpts...); err != nil {
 			return err
 		}
 
@@ -12999,6 +13284,15 @@ func (v *ValidateStorageDeviceNetappBackendOntapNasType) Validate(ctx context.Co
 
 		vOpts := append(opts, db.WithValidateField("svm"))
 		if err := fv(ctx, m.GetSvm(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["trusted_ca_certificate"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("trusted_ca_certificate"))
+		if err := fv(ctx, m.GetTrustedCaCertificate(), vOpts...); err != nil {
 			return err
 		}
 
@@ -13170,11 +13464,35 @@ var DefaultStorageDeviceNetappBackendOntapNasTypeValidator = func() *ValidateSto
 	}
 	v.FldValidators["storage"] = vFn
 
+	vrhClientCertificate := v.ClientCertificateValidationRuleHandler
+	rulesClientCertificate := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8192",
+	}
+	vFn, err = vrhClientCertificate(rulesClientCertificate)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageDeviceNetappBackendOntapNasType.client_certificate: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["client_certificate"] = vFn
+
+	vrhTrustedCaCertificate := v.TrustedCaCertificateValidationRuleHandler
+	rulesTrustedCaCertificate := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8192",
+	}
+	vFn, err = vrhTrustedCaCertificate(rulesTrustedCaCertificate)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageDeviceNetappBackendOntapNasType.trusted_ca_certificate: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["trusted_ca_certificate"] = vFn
+
 	v.FldValidators["password"] = ves_io_schema.SecretTypeValidator().Validate
 
 	v.FldValidators["auto_export_cidrs"] = ves_io_schema_views.PrefixStringListTypeValidator().Validate
 
 	v.FldValidators["volume_defaults"] = OntapVolumeDefaultsValidator().Validate
+
+	v.FldValidators["client_private_key"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
 }()
@@ -13206,6 +13524,10 @@ func (m *StorageDeviceNetappBackendOntapSanType) Redact(ctx context.Context) err
 
 	if err := m.GetUseChap().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting StorageDeviceNetappBackendOntapSanType.use_chap")
+	}
+
+	if err := m.GetClientPrivateKey().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting StorageDeviceNetappBackendOntapSanType.client_private_key")
 	}
 
 	return nil
@@ -13425,6 +13747,26 @@ func (v *ValidateStorageDeviceNetappBackendOntapSanType) StorageValidationRuleHa
 	return validatorFn, nil
 }
 
+func (v *ValidateStorageDeviceNetappBackendOntapSanType) ClientCertificateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for client_certificate")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStorageDeviceNetappBackendOntapSanType) TrustedCaCertificateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for trusted_ca_certificate")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateStorageDeviceNetappBackendOntapSanType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*StorageDeviceNetappBackendOntapSanType)
 	if !ok {
@@ -13461,6 +13803,24 @@ func (v *ValidateStorageDeviceNetappBackendOntapSanType) Validate(ctx context.Co
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["client_certificate"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_certificate"))
+		if err := fv(ctx, m.GetClientCertificate(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["client_private_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_private_key"))
+		if err := fv(ctx, m.GetClientPrivateKey(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -13610,6 +13970,15 @@ func (v *ValidateStorageDeviceNetappBackendOntapSanType) Validate(ctx context.Co
 
 		vOpts := append(opts, db.WithValidateField("svm"))
 		if err := fv(ctx, m.GetSvm(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["trusted_ca_certificate"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("trusted_ca_certificate"))
+		if err := fv(ctx, m.GetTrustedCaCertificate(), vOpts...); err != nil {
 			return err
 		}
 
@@ -13805,11 +14174,35 @@ var DefaultStorageDeviceNetappBackendOntapSanTypeValidator = func() *ValidateSto
 	}
 	v.FldValidators["storage"] = vFn
 
+	vrhClientCertificate := v.ClientCertificateValidationRuleHandler
+	rulesClientCertificate := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8192",
+	}
+	vFn, err = vrhClientCertificate(rulesClientCertificate)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageDeviceNetappBackendOntapSanType.client_certificate: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["client_certificate"] = vFn
+
+	vrhTrustedCaCertificate := v.TrustedCaCertificateValidationRuleHandler
+	rulesTrustedCaCertificate := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8192",
+	}
+	vFn, err = vrhTrustedCaCertificate(rulesTrustedCaCertificate)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageDeviceNetappBackendOntapSanType.trusted_ca_certificate: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["trusted_ca_certificate"] = vFn
+
 	v.FldValidators["chap_choice.use_chap"] = DeviceNetappBackendOntapSanChapTypeValidator().Validate
 
 	v.FldValidators["password"] = ves_io_schema.SecretTypeValidator().Validate
 
 	v.FldValidators["volume_defaults"] = OntapVolumeDefaultsValidator().Validate
+
+	v.FldValidators["client_private_key"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
 }()

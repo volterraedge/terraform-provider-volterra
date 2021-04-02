@@ -1383,9 +1383,13 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.namespace.ReplaceRequest"] = ves_io_schema_namespace.ReplaceRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.ReplaceResponse"] = ves_io_schema_namespace.ReplaceResponseValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.namespace.APIItem"] = ves_io_schema_namespace.APIItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.APIItemList"] = ves_io_schema_namespace.APIItemListValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteItemType"] = ves_io_schema_namespace.CascadeDeleteItemTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteRequest"] = ves_io_schema_namespace.CascadeDeleteRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteResponse"] = ves_io_schema_namespace.CascadeDeleteResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.EvaluateAPIAccessReq"] = ves_io_schema_namespace.EvaluateAPIAccessReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.EvaluateAPIAccessResp"] = ves_io_schema_namespace.EvaluateAPIAccessRespValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveNetworkPoliciesRequest"] = ves_io_schema_namespace.GetActiveNetworkPoliciesRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveNetworkPoliciesResponse"] = ves_io_schema_namespace.GetActiveNetworkPoliciesResponseValidator()
@@ -2105,6 +2109,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.site.Cpu"] = ves_io_schema_site.CpuValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.CreateKubeConfigReq"] = ves_io_schema_site.CreateKubeConfigReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.CreateSpecType"] = ves_io_schema_site.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.DefaultUnderlayNetworkType"] = ves_io_schema_site.DefaultUnderlayNetworkTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.DeploymentState"] = ves_io_schema_site.DeploymentStateValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.FleetCondition"] = ves_io_schema_site.FleetConditionValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.FleetDeploymentState"] = ves_io_schema_site.FleetDeploymentStateValidator()
@@ -2789,6 +2794,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.CloudSubnetType"] = ves_io_schema_views_terraform_parameters.CloudSubnetTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.SubnetType"] = ves_io_schema_views_terraform_parameters.SubnetTypeValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureExistingSubnetParamType"] = ves_io_schema_views_terraform_parameters.AzureExistingSubnetParamTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureInstanceType"] = ves_io_schema_views_terraform_parameters.AzureInstanceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureSubnetChoice"] = ves_io_schema_views_terraform_parameters.AzureSubnetChoiceValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureSubnetParamType"] = ves_io_schema_views_terraform_parameters.AzureSubnetParamTypeValidator()
@@ -4311,22 +4317,40 @@ func init() {
 				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
 				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
 			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.client_private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.storage.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san": []sets.String{
 				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
 				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
 				sets.NewString([]string{"no_chap", "use_chap"}...),
 			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.client_private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.storage.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_initiator_secret": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_target_initiator_secret": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_array.flash_arrays": []sets.String{
 				sets.NewString([]string{"mgmt_dns_name", "mgmt_ip"}...),
@@ -4383,22 +4407,40 @@ func init() {
 				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
 				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
 			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.client_private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.storage.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san": []sets.String{
 				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
 				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
 				sets.NewString([]string{"no_chap", "use_chap"}...),
 			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.client_private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.storage.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_initiator_secret": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_target_initiator_secret": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_array.flash_arrays": []sets.String{
 				sets.NewString([]string{"mgmt_dns_name", "mgmt_ip"}...),
@@ -4455,22 +4497,40 @@ func init() {
 				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
 				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
 			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.client_private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.storage.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san": []sets.String{
 				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
 				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
 				sets.NewString([]string{"no_chap", "use_chap"}...),
 			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.client_private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.storage.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_initiator_secret": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_target_initiator_secret": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.gc_spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_array.flash_arrays": []sets.String{
 				sets.NewString([]string{"mgmt_dns_name", "mgmt_ip"}...),
@@ -4527,22 +4587,40 @@ func init() {
 				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
 				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
 			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.client_private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.storage.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san": []sets.String{
 				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
 				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
 				sets.NewString([]string{"no_chap", "use_chap"}...),
 			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.client_private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.storage.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_initiator_secret": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_target_initiator_secret": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.gc_spec.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_array.flash_arrays": []sets.String{
 				sets.NewString([]string{"mgmt_dns_name", "mgmt_ip"}...),
@@ -6013,6 +6091,30 @@ func init() {
 			},
 			"spec.gc_spec.waf_action": []sets.String{
 				sets.NewString([]string{"none", "waf_in_monitoring_mode", "waf_inline_rule_control", "waf_rule_control", "waf_skip_processing"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.site.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.default_underlay_network": []sets.String{
+				sets.NewString([]string{"site_local_inside", "site_local_outside"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.site.crudapi.API.Create"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.default_underlay_network": []sets.String{
+				sets.NewString([]string{"site_local_inside", "site_local_outside"}...),
+			},
+		},
+	}
+
+	MDR.RPCOneofExclusiveRegistry["ves.io.schema.site.crudapi.API.Replace"] = svcfw.OOExclusiveSet{
+		FieldsByAncestor: map[string][]sets.String{
+			"spec.gc_spec.default_underlay_network": []sets.String{
+				sets.NewString([]string{"site_local_inside", "site_local_outside"}...),
 			},
 		},
 	}
@@ -8058,6 +8160,7 @@ func init() {
 				sets.NewString([]string{"disable_spdy", "enable_spdy"}...),
 				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"disable_web_socket_config", "web_socket_config"}...),
+				sets.NewString([]string{"do_not_retract_cluster", "retract_cluster"}...),
 			},
 			"spec.routes.simple_route.advanced_options.specific_hash_policy.hash_policy": []sets.String{
 				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
@@ -8182,6 +8285,7 @@ func init() {
 				sets.NewString([]string{"disable_spdy", "enable_spdy"}...),
 				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"disable_web_socket_config", "web_socket_config"}...),
+				sets.NewString([]string{"do_not_retract_cluster", "retract_cluster"}...),
 			},
 			"spec.routes.simple_route.advanced_options.specific_hash_policy.hash_policy": []sets.String{
 				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
@@ -8307,6 +8411,7 @@ func init() {
 				sets.NewString([]string{"disable_spdy", "enable_spdy"}...),
 				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"disable_web_socket_config", "web_socket_config"}...),
+				sets.NewString([]string{"do_not_retract_cluster", "retract_cluster"}...),
 			},
 			"spec.gc_spec.routes.simple_route.advanced_options.specific_hash_policy.hash_policy": []sets.String{
 				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
@@ -8432,6 +8537,7 @@ func init() {
 				sets.NewString([]string{"disable_spdy", "enable_spdy"}...),
 				sets.NewString([]string{"disable_waf", "waf", "waf_rule"}...),
 				sets.NewString([]string{"disable_web_socket_config", "web_socket_config"}...),
+				sets.NewString([]string{"do_not_retract_cluster", "retract_cluster"}...),
 			},
 			"spec.gc_spec.routes.simple_route.advanced_options.specific_hash_policy.hash_policy": []sets.String{
 				sets.NewString([]string{"cookie", "header_name", "source_ip"}...),
@@ -8743,6 +8849,7 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
 				sets.NewString([]string{"advertise_custom", "advertise_on_public", "advertise_on_public_default_vip", "do_not_advertise"}...),
+				sets.NewString([]string{"do_not_retract_cluster", "retract_cluster"}...),
 				sets.NewString([]string{"hash_policy_choice_least_active", "hash_policy_choice_random", "hash_policy_choice_round_robin", "hash_policy_choice_source_ip_stickiness"}...),
 			},
 			"spec.advertise_custom.advertise_where": []sets.String{
@@ -8768,6 +8875,7 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec": []sets.String{
 				sets.NewString([]string{"advertise_custom", "advertise_on_public", "advertise_on_public_default_vip", "do_not_advertise"}...),
+				sets.NewString([]string{"do_not_retract_cluster", "retract_cluster"}...),
 				sets.NewString([]string{"hash_policy_choice_least_active", "hash_policy_choice_random", "hash_policy_choice_round_robin", "hash_policy_choice_source_ip_stickiness"}...),
 			},
 			"spec.advertise_custom.advertise_where": []sets.String{
@@ -8793,6 +8901,7 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"advertise_custom", "advertise_on_public", "advertise_on_public_default_vip", "do_not_advertise"}...),
+				sets.NewString([]string{"do_not_retract_cluster", "retract_cluster"}...),
 				sets.NewString([]string{"hash_policy_choice_least_active", "hash_policy_choice_random", "hash_policy_choice_round_robin", "hash_policy_choice_source_ip_stickiness"}...),
 			},
 			"spec.gc_spec.advertise_custom.advertise_where": []sets.String{
@@ -8818,6 +8927,7 @@ func init() {
 		FieldsByAncestor: map[string][]sets.String{
 			"spec.gc_spec": []sets.String{
 				sets.NewString([]string{"advertise_custom", "advertise_on_public", "advertise_on_public_default_vip", "do_not_advertise"}...),
+				sets.NewString([]string{"do_not_retract_cluster", "retract_cluster"}...),
 				sets.NewString([]string{"hash_policy_choice_least_active", "hash_policy_choice_random", "hash_policy_choice_round_robin", "hash_policy_choice_source_ip_stickiness"}...),
 			},
 			"spec.gc_spec.advertise_custom.advertise_where": []sets.String{
@@ -8947,22 +9057,40 @@ func init() {
 				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
 				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
 			},
+			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.client_private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.storage.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
+			},
+			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san": []sets.String{
 				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
 				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
 				sets.NewString([]string{"no_chap", "use_chap"}...),
 			},
+			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.client_private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.storage.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_initiator_secret": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_target_initiator_secret": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.custom_storage_config.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_array.flash_arrays": []sets.String{
 				sets.NewString([]string{"mgmt_dns_name", "mgmt_ip"}...),
@@ -9107,22 +9235,40 @@ func init() {
 				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
 				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
 			},
+			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.client_private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.storage.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
+			},
+			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san": []sets.String{
 				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
 				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
 				sets.NewString([]string{"no_chap", "use_chap"}...),
 			},
+			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.client_private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.storage.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_initiator_secret": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_target_initiator_secret": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.custom_storage_config.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_array.flash_arrays": []sets.String{
 				sets.NewString([]string{"mgmt_dns_name", "mgmt_ip"}...),
@@ -9267,22 +9413,40 @@ func init() {
 				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
 				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
 			},
+			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.client_private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.storage.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
+			},
+			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san": []sets.String{
 				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
 				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
 				sets.NewString([]string{"no_chap", "use_chap"}...),
 			},
+			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.client_private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.storage.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_initiator_secret": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_target_initiator_secret": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_array.flash_arrays": []sets.String{
 				sets.NewString([]string{"mgmt_dns_name", "mgmt_ip"}...),
@@ -9427,22 +9591,40 @@ func init() {
 				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
 				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
 			},
+			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.client_private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.storage.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
+			},
+			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_nas.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san": []sets.String{
 				sets.NewString([]string{"data_lif_dns_name", "data_lif_ip"}...),
 				sets.NewString([]string{"management_lif_dns_name", "management_lif_ip"}...),
 				sets.NewString([]string{"no_chap", "use_chap"}...),
 			},
+			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.client_private_key": []sets.String{
+				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
 			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.password": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.storage.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_initiator_secret": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
 			},
 			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.use_chap.chap_target_initiator_secret": []sets.String{
 				sets.NewString([]string{"blindfold_secret_info", "clear_secret_info", "vault_secret_info", "wingman_secret_info"}...),
+			},
+			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.netapp_trident.netapp_backend_ontap_san.volume_defaults": []sets.String{
+				sets.NewString([]string{"adaptive_qos_policy", "no_qos", "qos_policy"}...),
 			},
 			"spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.pure_service_orchestrator.arrays.flash_array.flash_arrays": []sets.String{
 				sets.NewString([]string{"mgmt_dns_name", "mgmt_ip"}...),

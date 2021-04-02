@@ -45,6 +45,15 @@ func (c *CustomAPIGrpcClient) doRPCCascadeDelete(ctx context.Context, yamlReq st
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCEvaluateAPIAccess(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &EvaluateAPIAccessReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.EvaluateAPIAccessReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.EvaluateAPIAccess(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -76,6 +85,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
+
+	rpcFns["EvaluateAPIAccess"] = ccl.doRPCEvaluateAPIAccess
 
 	ccl.rpcFns = rpcFns
 
@@ -166,6 +177,83 @@ func (c *CustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, callOpts *
 	return pbRsp, nil
 }
 
+func (c *CustomAPIRestClient) doRPCEvaluateAPIAccess(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &EvaluateAPIAccessReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.EvaluateAPIAccessReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("item_lists", fmt.Sprintf("%v", req.ItemLists))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &EvaluateAPIAccessResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.EvaluateAPIAccessResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -191,6 +279,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
+
+	rpcFns["EvaluateAPIAccess"] = ccl.doRPCEvaluateAPIAccess
 
 	ccl.rpcFns = rpcFns
 
@@ -248,6 +338,50 @@ func (c *CustomAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDe
 
 	return rsp, nil
 }
+func (c *CustomAPIInprocClient) EvaluateAPIAccess(ctx context.Context, in *EvaluateAPIAccessReq, opts ...grpc.CallOption) (*EvaluateAPIAccessResp, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.namespace.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPISrv", ah)
+	}
+
+	var (
+		rsp *EvaluateAPIAccessResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.namespace.EvaluateAPIAccessReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.EvaluateAPIAccess' operation on 'namespace'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.CustomAPI.EvaluateAPIAccess"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.EvaluateAPIAccess(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.namespace.EvaluateAPIAccessResp", rsp)...)
+
+	return rsp, nil
+}
 
 func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
 	return &CustomAPIInprocClient{svc: svc}
@@ -282,10 +416,94 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": null,
     "paths": {
+        "/public/namespaces/system/evaluate-api-access": {
+            "post": {
+                "summary": "EvaluateAPIAccess",
+                "description": "EvaluateAPIAccess can evaluate multiple lists of API url, method under a namesapce for a given user of a tenant.",
+                "operationId": "ves.io.schema.namespace.CustomAPI.EvaluateAPIAccess",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/namespaceEvaluateAPIAccessResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/namespaceEvaluateAPIAccessReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-CustomAPI-EvaluateAPIAccess"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.namespace.CustomAPI.EvaluateAPIAccess"
+            },
+            "x-displayname": "CustomAPI",
+            "x-ves-proto-service": "ves.io.schema.namespace.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{name}/cascade_delete": {
             "post": {
                 "summary": "CascadeDelete",
-                "description": "CascadeDelete will delete the namespace and all configuration objects like virtual_hosts etc.\nunder it. Use this only if the entire namespace and its contents are to be wiped out.\nDEPRECATED by request/approve APIs as above. this will be made private.",
+                "description": "CascadeDelete will delete the namespace and all configuration objects like virtual_hosts etc.\nunder it. Use this only if the entire namespace and its contents are to be wiped out.",
                 "operationId": "ves.io.schema.namespace.CustomAPI.CascadeDelete",
                 "responses": {
                     "200": {
@@ -374,6 +592,68 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "namespaceAPIItem": {
+            "type": "object",
+            "description": "An item for which API access needs to be checked - used in request and response\nThe result field is ignored when processing requests",
+            "title": "APIItem",
+            "x-displayname": "API Item",
+            "x-ves-proto-message": "ves.io.schema.namespace.APIItem",
+            "properties": {
+                "method": {
+                    "type": "string",
+                    "description": " HTTP request method\n\nExample: - \"GET\"-",
+                    "title": "method",
+                    "x-displayname": "Method",
+                    "x-ves-example": "GET"
+                },
+                "path": {
+                    "type": "string",
+                    "description": " HTTP request URL path\n\nExample: - \"/api/web/namespaces\"-",
+                    "title": "path",
+                    "x-displayname": "Path",
+                    "x-ves-example": "/api/web/namespaces"
+                },
+                "result": {
+                    "type": "boolean",
+                    "description": " Result after evaluation ",
+                    "title": "result",
+                    "format": "boolean",
+                    "x-displayname": "Result"
+                }
+            }
+        },
+        "namespaceAPIItemList": {
+            "type": "object",
+            "description": "An list of items for which API access needs to be checked  - used in request and response\nresult will show combined AND output from the result of individual api items.",
+            "title": "APIItemList",
+            "x-displayname": "API Item List",
+            "x-ves-proto-message": "ves.io.schema.namespace.APIItemList",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": " List of APIItem entries",
+                    "title": "items",
+                    "items": {
+                        "$ref": "#/definitions/namespaceAPIItem"
+                    },
+                    "x-displayname": "Items"
+                },
+                "list_id": {
+                    "type": "string",
+                    "description": " Identifier group items\n\nExample: - \"value\"-",
+                    "title": "list_id",
+                    "x-displayname": "List ID",
+                    "x-ves-example": "value"
+                },
+                "result": {
+                    "type": "boolean",
+                    "description": " Combined result after evaluation of items",
+                    "title": "result",
+                    "format": "boolean",
+                    "x-displayname": "Result"
+                }
+            }
+        },
         "namespaceCascadeDeleteItemType": {
             "type": "object",
             "description": "CascadeDeleteItemType is details of object that was handled as part of cascade delete\nof namespace and whether it was successfully deleted",
@@ -442,6 +722,49 @@ var CustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/namespaceCascadeDeleteItemType"
                     },
                     "x-displayname": "Items"
+                }
+            }
+        },
+        "namespaceEvaluateAPIAccessReq": {
+            "type": "object",
+            "description": "Request body of EvaluateAPIAccess request",
+            "title": "EvaluateAPIAccessReq",
+            "x-displayname": "Request for EvaluateAPIAccess",
+            "x-ves-proto-message": "ves.io.schema.namespace.EvaluateAPIAccessReq",
+            "properties": {
+                "item_lists": {
+                    "type": "array",
+                    "description": " List of APIItemList entries",
+                    "title": "item_lists",
+                    "items": {
+                        "$ref": "#/definitions/namespaceAPIItemList"
+                    },
+                    "x-displayname": "Item Lists"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Name of the namespace under which all the URLs in APIItems will be evaluated\n\nExample: - \"value\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "namespaceEvaluateAPIAccessResp": {
+            "type": "object",
+            "description": "Response body of EvaluateAPIAccess request",
+            "title": "EvaluateAPIAccessResp",
+            "x-displayname": "Response for EvaluateAPIAccess",
+            "x-ves-proto-message": "ves.io.schema.namespace.EvaluateAPIAccessResp",
+            "properties": {
+                "item_lists": {
+                    "type": "array",
+                    "description": " List of APIItemList entries",
+                    "title": "item_lists",
+                    "items": {
+                        "$ref": "#/definitions/namespaceAPIItemList"
+                    },
+                    "x-displayname": "Item Lists"
                 }
             }
         }

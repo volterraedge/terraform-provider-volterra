@@ -80,11 +80,11 @@ func (m *CreateRequest) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Spec == nil {
+	if m.GetSpec() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Spec.GetDRefInfo()
+	driSet, err = m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -205,11 +205,11 @@ func (m *CreateResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Spec == nil {
+	if m.GetSpec() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Spec.GetDRefInfo()
+	driSet, err = m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -543,11 +543,11 @@ func (m *GetResponse) GetCreateFormDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.CreateForm == nil {
+	if m.GetCreateForm() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.CreateForm.GetDRefInfo()
+	driSet, err = m.GetCreateForm().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -566,11 +566,11 @@ func (m *GetResponse) GetReplaceFormDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ReplaceForm == nil {
+	if m.GetReplaceForm() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.ReplaceForm.GetDRefInfo()
+	driSet, err = m.GetReplaceForm().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -589,11 +589,11 @@ func (m *GetResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Spec == nil {
+	if m.GetSpec() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Spec.GetDRefInfo()
+	driSet, err = m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -890,11 +890,11 @@ func (m *ListResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Items == nil {
+	if m.GetItems() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Items {
+	for idx, e := range m.GetItems() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1009,11 +1009,11 @@ func (m *ListResponseItem) GetGetSpecDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.GetSpec == nil {
+	if m.GetGetSpec() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.GetSpec.GetDRefInfo()
+	driSet, err = m.GetGetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1255,11 +1255,11 @@ func (m *ReplaceRequest) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Spec == nil {
+	if m.GetSpec() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Spec.GetDRefInfo()
+	driSet, err = m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}

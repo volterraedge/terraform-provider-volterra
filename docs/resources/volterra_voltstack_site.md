@@ -26,22 +26,23 @@ resource "volterra_voltstack_site" "example" {
   // One of the arguments from this list "disable_gpu enable_gpu" must be set
   disable_gpu = true
 
-  // One of the arguments from this list "k8s_cluster no_k8s_cluster" must be set
+  // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
   no_k8s_cluster = true
 
-  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
-  logs_streaming_disabled = true
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
 
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
   master_nodes = ["master-0"]
-
-  // One of the arguments from this list "custom_network_config default_network_config" must be set
+  // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
-
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
-
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
-  deny_all_usb          = true
+  allow_all_usb         = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
 }
 
@@ -542,6 +543,8 @@ Storage class Device configuration for NetApp Trident.
 
 `selector` - (Optional) The volume will have the aspects defined in the chosen virtual pool. (`String`).
 
+`storage_pools` - (Optional) The storagePools parameter is used to further restrict the set of pools that match any specified attributes (`String`).
+
 ### No Dc Cluster Group
 
 This site is not a member of dc cluster group.
@@ -552,7 +555,7 @@ Disable Forward Proxy for this site.
 
 ### No Global Network
 
-No global network to connect .
+No global network to connect.
 
 ### No Interception
 
@@ -634,6 +637,10 @@ Storage class Device configuration for Pure Service Orchestrator.
 
 `backend` - (Optional) The volume will have the aspects defined in the chosen virtual pool. (`String`).
 
+`bandwidth_limit` - (Optional) Valid unit symbols are K, M, G, representing KiB, MiB, and GiB. (`String`).
+
+`iops_limit` - (Optional) Enable IOPS limitation. It must be between 100 and 100 million. If value is 0, IOPS limit is not defined. (`Int`).
+
 ### Ref
 
 Reference to another volterra object is shown like below
@@ -710,6 +717,8 @@ List of custom storage classes.
 
 `advanced_storage_parameters` - (Optional) Map of parameter name and string value (`String`).
 
+`allow_volume_expansion` - (Optional) Allow volume expansion. (`Bool`).
+
 `default_storage_class` - (Optional) Make this storage class default storage class for the K8s cluster (`Bool`).
 
 `description` - (Optional) Description for this storage class (`String`).
@@ -719,6 +728,8 @@ List of custom storage classes.
 `openebs_enterprise` - (Optional) Storage class Device configuration for OpenEBS Enterprise. See [Openebs Enterprise ](#openebs-enterprise) below for details.
 
 `pure_service_orchestrator` - (Optional) Storage class Device configuration for Pure Service Orchestrator. See [Pure Service Orchestrator ](#pure-service-orchestrator) below for details.
+
+`reclaim_policy` - (Optional) Reclaim Policy (`String`).
 
 `storage_class_name` - (Required) Name of the storage class as it will appear in K8s. (`String`).
 

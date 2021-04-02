@@ -137,7 +137,7 @@ func (m *CreateSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.SiteChoice == nil {
+	if m.GetSiteChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -728,11 +728,11 @@ func (m *FastACLRuleType) GetActionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Action == nil {
+	if m.GetAction() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Action.GetDRefInfo()
+	driSet, err = m.GetAction().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -751,7 +751,7 @@ func (m *FastACLRuleType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Source == nil {
+	if m.GetSource() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1130,7 +1130,7 @@ func (m *GetSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.SiteChoice == nil {
+	if m.GetSiteChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1372,7 +1372,7 @@ func (m *GlobalSpecType) GetConfigChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ConfigChoice == nil {
+	if m.GetConfigChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2244,11 +2244,11 @@ func (m *ReACLType) GetFastAclRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.FastAclRules == nil {
+	if m.GetFastAclRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.FastAclRules {
+	for idx, e := range m.GetFastAclRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -2269,7 +2269,7 @@ func (m *ReACLType) GetVipChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.VipChoice == nil {
+	if m.GetVipChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2574,7 +2574,7 @@ func (m *ReplaceSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.SiteChoice == nil {
+	if m.GetSiteChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3137,11 +3137,11 @@ func (m *SiteACLType) GetFastAclRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.FastAclRules == nil {
+	if m.GetFastAclRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.FastAclRules {
+	for idx, e := range m.GetFastAclRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err

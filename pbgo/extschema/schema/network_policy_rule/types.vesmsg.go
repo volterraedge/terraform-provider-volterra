@@ -80,7 +80,7 @@ func (m *CreateSpecType) GetRemoteEndpointDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RemoteEndpoint == nil {
+	if m.GetRemoteEndpoint() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -363,7 +363,7 @@ func (m *GetSpecType) GetRemoteEndpointDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RemoteEndpoint == nil {
+	if m.GetRemoteEndpoint() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -652,11 +652,11 @@ func (m *GlobalSpecType) GetPbrActionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.PbrAction == nil {
+	if m.GetPbrAction() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.PbrAction.GetDRefInfo()
+	driSet, err = m.GetPbrAction().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -675,7 +675,7 @@ func (m *GlobalSpecType) GetRemoteEndpointDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RemoteEndpoint == nil {
+	if m.GetRemoteEndpoint() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1235,7 +1235,7 @@ func (m *ReplaceSpecType) GetRemoteEndpointDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RemoteEndpoint == nil {
+	if m.GetRemoteEndpoint() == nil {
 		return []db.DRefInfo{}, nil
 	}
 

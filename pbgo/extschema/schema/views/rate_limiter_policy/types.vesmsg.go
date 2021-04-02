@@ -83,11 +83,11 @@ func (m *CreateSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Rules == nil {
+	if m.GetRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Rules {
+	for idx, e := range m.GetRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -327,11 +327,11 @@ func (m *GetSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Rules == nil {
+	if m.GetRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Rules {
+	for idx, e := range m.GetRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -577,11 +577,11 @@ func (m *GlobalSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Rules == nil {
+	if m.GetRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Rules {
+	for idx, e := range m.GetRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1081,11 +1081,11 @@ func (m *RateLimiterRule) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Spec == nil {
+	if m.GetSpec() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Spec.GetDRefInfo()
+	driSet, err = m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1274,11 +1274,11 @@ func (m *ReplaceSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Rules == nil {
+	if m.GetRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Rules {
+	for idx, e := range m.GetRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err

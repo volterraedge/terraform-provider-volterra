@@ -3065,6 +3065,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "View Specification",
             "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
+            "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.GlobalSpecType",
             "properties": {
@@ -3102,6 +3103,11 @@ var APISwaggerJSON string = `{
                 "do_not_advertise": {
                     "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\nx-displayName: \"Do Not Advertise\"\nDo not advertise this loadbalancer",
                     "title": "Do Not Advertise",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "do_not_retract_cluster": {
+                    "description": "Exclusive with [retract_cluster]\nx-displayName: \"Disable cluster retraction\"\nWhen this option is configured, cluster with no healthy\nendpoints is not retracted from route having weighted cluster\nconfiguration.",
+                    "title": "do_not_retract_cluster",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "domains": {
@@ -3174,6 +3180,11 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/viewsOriginPoolWithWeight"
                     },
                     "x-displayname": "Origin Pools"
+                },
+                "retract_cluster": {
+                    "description": "Exclusive with [do_not_retract_cluster]\nx-displayName: \"Retract cluster with no healthy endpoints\"\nWhen this option is enabled, weighted cluster will not be considered\nfor loadbalancing, if all its endpoints are unhealthy.\nSince the cluster with all unhealthy endpoints is removed, the traffic\nwill be distributed among remaining clusters as per their weight.\nAlso panic-threshold configuration is ignored for retracted cluster.\n\nThis option is ignored when single destination cluster is configured\nfor route",
+                    "title": "retract_cluster",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "view_internal": {
                     "description": " Reference to view internal object",

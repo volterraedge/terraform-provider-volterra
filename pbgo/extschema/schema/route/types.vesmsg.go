@@ -207,11 +207,11 @@ func (m *CreateSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Routes == nil {
+	if m.GetRoutes() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Routes {
+	for idx, e := range m.GetRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -380,11 +380,11 @@ func (m *GetSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Routes == nil {
+	if m.GetRoutes() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Routes {
+	for idx, e := range m.GetRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -553,11 +553,11 @@ func (m *GlobalSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Routes == nil {
+	if m.GetRoutes() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Routes {
+	for idx, e := range m.GetRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1101,11 +1101,11 @@ func (m *ReplaceSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Routes == nil {
+	if m.GetRoutes() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Routes {
+	for idx, e := range m.GetRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1542,11 +1542,11 @@ func (m *RouteDestinationList) GetDestinationsDRefInfo() ([]db.DRefInfo, error) 
 		err             error
 	)
 	_ = driSet
-	if m.Destinations == nil {
+	if m.GetDestinations() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Destinations {
+	for idx, e := range m.GetDestinations() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1567,11 +1567,11 @@ func (m *RouteDestinationList) GetMirrorPolicyDRefInfo() ([]db.DRefInfo, error) 
 		err             error
 	)
 	_ = driSet
-	if m.MirrorPolicy == nil {
+	if m.GetMirrorPolicy() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.MirrorPolicy.GetDRefInfo()
+	driSet, err = m.GetMirrorPolicy().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -2474,7 +2474,7 @@ func (m *RouteType) GetRouteActionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RouteAction == nil {
+	if m.GetRouteAction() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2507,11 +2507,11 @@ func (m *RouteType) GetWafTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.WafType == nil {
+	if m.GetWafType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.WafType.GetDRefInfo()
+	driSet, err = m.GetWafType().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}

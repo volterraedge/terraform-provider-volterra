@@ -3047,11 +3047,11 @@ func (m *GlobalNetworkConnectionListType) GetGlobalNetworkConnectionsDRefInfo() 
 		err             error
 	)
 	_ = driSet
-	if m.GlobalNetworkConnections == nil {
+	if m.GetGlobalNetworkConnections() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.GlobalNetworkConnections {
+	for idx, e := range m.GetGlobalNetworkConnections() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -3235,7 +3235,7 @@ func (m *GlobalNetworkConnectionType) GetConnectionChoiceDRefInfo() ([]db.DRefIn
 		err             error
 	)
 	_ = driSet
-	if m.ConnectionChoice == nil {
+	if m.GetConnectionChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3448,11 +3448,11 @@ func (m *SiteStaticRoutesListType) GetStaticRouteListDRefInfo() ([]db.DRefInfo, 
 		err             error
 	)
 	_ = driSet
-	if m.StaticRouteList == nil {
+	if m.GetStaticRouteList() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.StaticRouteList {
+	for idx, e := range m.GetStaticRouteList() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -3622,7 +3622,7 @@ func (m *SiteStaticRoutesType) GetConfigModeChoiceDRefInfo() ([]db.DRefInfo, err
 		err             error
 	)
 	_ = driSet
-	if m.ConfigModeChoice == nil {
+	if m.GetConfigModeChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 

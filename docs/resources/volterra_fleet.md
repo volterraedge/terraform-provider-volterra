@@ -24,13 +24,17 @@ resource "volterra_fleet" "example" {
   no_bond_devices = true
 
   // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
-  no_dc_cluster_group = true
-  fleet_label         = ["sfo"]
 
-  // One of the arguments from this list "enable_gpu disable_gpu" must be set
+  dc_cluster_group_inside {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+  fleet_label = ["sfo"]
+  // One of the arguments from this list "disable_gpu enable_gpu" must be set
   disable_gpu = true
 
-  // One of the arguments from this list "interface_list default_config device_list" must be set
+  // One of the arguments from this list "default_config device_list interface_list" must be set
 
   interface_list {
     interfaces {
@@ -45,12 +49,20 @@ resource "volterra_fleet" "example" {
   default_storage_class = true
   // One of the arguments from this list "no_storage_device storage_device_list" must be set
   no_storage_device = true
-  // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
-  no_storage_interfaces = true
-  // One of the arguments from this list "storage_static_routes no_storage_static_routes" must be set
+
+  // One of the arguments from this list "storage_interface_list no_storage_interfaces" must be set
+
+  storage_interface_list {
+    interfaces {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
+  // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
   no_storage_static_routes = true
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
-  deny_all_usb = true
+  allow_all_usb = true
 }
 
 ```
@@ -208,6 +220,8 @@ Storage class Device configuration for NetApp Trident.
 
 `selector` - (Optional) The volume will have the aspects defined in the chosen virtual pool. (`String`).
 
+`storage_pools` - (Optional) The storagePools parameter is used to further restrict the set of pools that match any specified attributes (`String`).
+
 ### Network Device
 
 Device instance is a networking device like ethernet.
@@ -248,6 +262,10 @@ Storage class Device configuration for Pure Service Orchestrator.
 
 `backend` - (Optional) The volume will have the aspects defined in the chosen virtual pool. (`String`).
 
+`bandwidth_limit` - (Optional) Valid unit symbols are K, M, G, representing KiB, MiB, and GiB. (`String`).
+
+`iops_limit` - (Optional) Enable IOPS limitation. It must be between 100 and 100 million. If value is 0, IOPS limit is not defined. (`Int`).
+
 ### Ref
 
 Reference to another volterra object is shown like below
@@ -270,6 +288,8 @@ List of custom storage classes.
 
 `advanced_storage_parameters` - (Optional) Map of parameter name and string value (`String`).
 
+`allow_volume_expansion` - (Optional) Allow volume expansion. (`Bool`).
+
 `default_storage_class` - (Optional) Make this storage class default storage class for the K8s cluster (`Bool`).
 
 `description` - (Optional) Description for this storage class (`String`).
@@ -279,6 +299,8 @@ List of custom storage classes.
 `openebs_enterprise` - (Optional) Storage class Device configuration for OpenEBS Enterprise. See [Openebs Enterprise ](#openebs-enterprise) below for details.
 
 `pure_service_orchestrator` - (Optional) Storage class Device configuration for Pure Service Orchestrator. See [Pure Service Orchestrator ](#pure-service-orchestrator) below for details.
+
+`reclaim_policy` - (Optional) Reclaim Policy (`String`).
 
 `storage_class_name` - (Required) Name of the storage class as it will appear in K8s. (`String`).
 

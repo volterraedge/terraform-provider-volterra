@@ -341,11 +341,11 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.GcSpec == nil {
+	if m.GetGcSpec() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.GcSpec.GetDRefInfo()
+	driSet, err = m.GetGcSpec().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}

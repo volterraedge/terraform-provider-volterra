@@ -344,6 +344,7 @@ var DefaultAWSVPNTunnelConfigTypeValidator = func() *ValidateAWSVPNTunnelConfigT
 		"ves.io.schema.rules.repeated.items.string.ipv4": "true",
 		"ves.io.schema.rules.repeated.max_items":         "2",
 		"ves.io.schema.rules.repeated.min_items":         "1",
+		"ves.io.schema.rules.repeated.unique":            "true",
 	}
 	vFn, err = vrhTunnelRemoteIp(rulesTunnelRemoteIp)
 	if err != nil {
@@ -658,11 +659,11 @@ func (m *CreateSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AwsParameters == nil {
+	if m.GetAwsParameters() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.AwsParameters.GetDRefInfo()
+	driSet, err = m.GetAwsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -746,11 +747,11 @@ func (m *CreateSpecType) GetTgwSecurityDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.TgwSecurity == nil {
+	if m.GetTgwSecurity() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.TgwSecurity.GetDRefInfo()
+	driSet, err = m.GetTgwSecurity().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -769,11 +770,11 @@ func (m *CreateSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.VnConfig == nil {
+	if m.GetVnConfig() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.VnConfig.GetDRefInfo()
+	driSet, err = m.GetVnConfig().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1254,11 +1255,11 @@ func (m *GetSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AwsParameters == nil {
+	if m.GetAwsParameters() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.AwsParameters.GetDRefInfo()
+	driSet, err = m.GetAwsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1342,11 +1343,11 @@ func (m *GetSpecType) GetTgwSecurityDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.TgwSecurity == nil {
+	if m.GetTgwSecurity() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.TgwSecurity.GetDRefInfo()
+	driSet, err = m.GetTgwSecurity().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1365,11 +1366,11 @@ func (m *GetSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.VnConfig == nil {
+	if m.GetVnConfig() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.VnConfig.GetDRefInfo()
+	driSet, err = m.GetVnConfig().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1439,6 +1440,46 @@ func (v *ValidateGetSpecType) AddressValidationRuleHandler(rules map[string]stri
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) TunnelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*AWSVPNTunnelConfigType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := AWSVPNTunnelConfigTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for tunnels")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*AWSVPNTunnelConfigType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*AWSVPNTunnelConfigType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated tunnels")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items tunnels")
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -1549,13 +1590,9 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 
 	if fv, exists := v.FldValidators["tunnels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnels"))
-		for idx, item := range m.GetTunnels() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetTunnels(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1678,6 +1715,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["address"] = vFn
 
+	vrhTunnels := v.TunnelsValidationRuleHandler
+	rulesTunnels := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhTunnels(rulesTunnels)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.tunnels: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tunnels"] = vFn
+
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
@@ -1691,8 +1740,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	v.FldValidators["tgw_info"] = AWSTGWInfoConfigTypeValidator().Validate
-
-	v.FldValidators["tunnels"] = AWSVPNTunnelConfigTypeValidator().Validate
 
 	return v
 }()
@@ -1800,11 +1847,11 @@ func (m *GlobalSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AwsParameters == nil {
+	if m.GetAwsParameters() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.AwsParameters.GetDRefInfo()
+	driSet, err = m.GetAwsParameters().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1938,11 +1985,11 @@ func (m *GlobalSpecType) GetTgwSecurityDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.TgwSecurity == nil {
+	if m.GetTgwSecurity() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.TgwSecurity.GetDRefInfo()
+	driSet, err = m.GetTgwSecurity().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -2011,11 +2058,11 @@ func (m *GlobalSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.VnConfig == nil {
+	if m.GetVnConfig() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.VnConfig.GetDRefInfo()
+	driSet, err = m.GetVnConfig().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -2085,6 +2132,46 @@ func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]s
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) TunnelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*AWSVPNTunnelConfigType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := AWSVPNTunnelConfigTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for tunnels")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*AWSVPNTunnelConfigType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*AWSVPNTunnelConfigType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated tunnels")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items tunnels")
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -2204,13 +2291,9 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 
 	if fv, exists := v.FldValidators["tunnels"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("tunnels"))
-		for idx, item := range m.GetTunnels() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetTunnels(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -2342,6 +2425,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["address"] = vFn
 
+	vrhTunnels := v.TunnelsValidationRuleHandler
+	rulesTunnels := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhTunnels(rulesTunnels)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.tunnels: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tunnels"] = vFn
+
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
@@ -2355,8 +2450,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	v.FldValidators["tgw_info"] = AWSTGWInfoConfigTypeValidator().Validate
-
-	v.FldValidators["tunnels"] = AWSVPNTunnelConfigTypeValidator().Validate
 
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -2515,11 +2608,11 @@ func (m *ReplaceSpecType) GetTgwSecurityDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.TgwSecurity == nil {
+	if m.GetTgwSecurity() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.TgwSecurity.GetDRefInfo()
+	driSet, err = m.GetTgwSecurity().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -2538,11 +2631,11 @@ func (m *ReplaceSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.VnConfig == nil {
+	if m.GetVnConfig() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.VnConfig.GetDRefInfo()
+	driSet, err = m.GetVnConfig().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -2792,7 +2885,7 @@ func (m *SecurityConfigType) GetEastWestServicePolicyChoiceDRefInfo() ([]db.DRef
 		err             error
 	)
 	_ = driSet
-	if m.EastWestServicePolicyChoice == nil {
+	if m.GetEastWestServicePolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2825,7 +2918,7 @@ func (m *SecurityConfigType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, err
 		err             error
 	)
 	_ = driSet
-	if m.ForwardProxyChoice == nil {
+	if m.GetForwardProxyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2858,7 +2951,7 @@ func (m *SecurityConfigType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, er
 		err             error
 	)
 	_ = driSet
-	if m.NetworkPolicyChoice == nil {
+	if m.GetNetworkPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -4099,7 +4192,6 @@ var DefaultVPCAttachmentListTypeValidator = func() *ValidateVPCAttachmentListTyp
 	vrhVpcList := v.VpcListValidationRuleHandler
 	rulesVpcList := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "128",
-		"ves.io.schema.rules.repeated.min_items": "0",
 	}
 	vFn, err = vrhVpcList(rulesVpcList)
 	if err != nil {
@@ -4458,7 +4550,7 @@ func (m *VnConfiguration) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error
 		err             error
 	)
 	_ = driSet
-	if m.GlobalNetworkChoice == nil {
+	if m.GetGlobalNetworkChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -4489,7 +4581,7 @@ func (m *VnConfiguration) GetInsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, e
 		err             error
 	)
 	_ = driSet
-	if m.InsideStaticRouteChoice == nil {
+	if m.GetInsideStaticRouteChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -4520,7 +4612,7 @@ func (m *VnConfiguration) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, 
 		err             error
 	)
 	_ = driSet
-	if m.OutsideStaticRouteChoice == nil {
+	if m.GetOutsideStaticRouteChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 

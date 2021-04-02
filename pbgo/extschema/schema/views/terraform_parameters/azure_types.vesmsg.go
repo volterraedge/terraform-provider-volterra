@@ -27,6 +27,93 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AzureExistingSubnetParamType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureExistingSubnetParamType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureExistingSubnetParamType) DeepCopy() *AzureExistingSubnetParamType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureExistingSubnetParamType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureExistingSubnetParamType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureExistingSubnetParamType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureExistingSubnetParamTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureExistingSubnetParamType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureExistingSubnetParamType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureExistingSubnetParamType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureExistingSubnetParamType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["subnet_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("subnet_name"))
+		if err := fv(ctx, m.GetSubnetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["subnet_resource_grp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("subnet_resource_grp"))
+		if err := fv(ctx, m.GetSubnetResourceGrp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureExistingSubnetParamTypeValidator = func() *ValidateAzureExistingSubnetParamType {
+	v := &ValidateAzureExistingSubnetParamType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AzureExistingSubnetParamTypeValidator() db.Validator {
+	return DefaultAzureExistingSubnetParamTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AzureInstanceType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -256,8 +343,6 @@ var DefaultAzureSubnetChoiceValidator = func() *ValidateAzureSubnetChoice {
 	v := &ValidateAzureSubnetChoice{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["subnet_param"] = AzureSubnetParamTypeValidator().Validate
-
-	v.FldValidators["existing_subnet"] = ves_io_schema_views.AzureSubnetTypeValidator().Validate
 
 	return v
 }()

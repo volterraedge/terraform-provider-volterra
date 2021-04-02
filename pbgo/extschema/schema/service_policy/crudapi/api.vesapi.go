@@ -2467,14 +2467,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "as_numbers": {
                     "type": "array",
-                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-",
+                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\nRequired: YES",
                     "title": "as numbers",
                     "items": {
                         "type": "integer",
                         "format": "int64"
                     },
                     "x-displayname": "AS Numbers",
-                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]"
+                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -4809,13 +4810,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\nRequired: YES",
                     "title": "ipv4 prefix list",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefix List",
-                    "x-ves-example": "192.168.20.0/24"
+                    "x-ves-example": "192.168.20.0/24",
+                    "x-ves-required": "true"
                 }
             }
         },

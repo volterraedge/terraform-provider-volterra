@@ -81,7 +81,7 @@ func (m *CreateSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.InterfaceChoice == nil {
+	if m.GetInterfaceChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1089,11 +1089,11 @@ func (m *DHCPServerParametersType) GetDhcpNetworksDRefInfo() ([]db.DRefInfo, err
 		err             error
 	)
 	_ = driSet
-	if m.DhcpNetworks == nil {
+	if m.GetDhcpNetworks() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.DhcpNetworks {
+	for idx, e := range m.GetDhcpNetworks() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1977,7 +1977,7 @@ func (m *EthernetInterfaceType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error
 		err             error
 	)
 	_ = driSet
-	if m.AddressChoice == nil {
+	if m.GetAddressChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2707,7 +2707,7 @@ func (m *GetSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.InterfaceChoice == nil {
+	if m.GetInterfaceChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3013,11 +3013,11 @@ func (m *GlobalSpecType) GetDhcpServerParamsDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.DhcpServerParams == nil {
+	if m.GetDhcpServerParams() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.DhcpServerParams.GetDRefInfo()
+	driSet, err = m.GetDhcpServerParams().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -3036,7 +3036,7 @@ func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.InterfaceChoice == nil {
+	if m.GetInterfaceChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3122,11 +3122,11 @@ func (m *GlobalSpecType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Tunnel == nil {
+	if m.GetTunnel() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Tunnel.GetDRefInfo()
+	driSet, err = m.GetTunnel().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -4051,11 +4051,11 @@ func (m *LegacyInterfaceType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Tunnel == nil {
+	if m.GetTunnel() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Tunnel.GetDRefInfo()
+	driSet, err = m.GetTunnel().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -5220,7 +5220,7 @@ func (m *ReplaceSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.InterfaceChoice == nil {
+	if m.GetInterfaceChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -5455,7 +5455,7 @@ func (m *StaticIPParametersType) GetNetworkPrefixChoiceDRefInfo() ([]db.DRefInfo
 		err             error
 	)
 	_ = driSet
-	if m.NetworkPrefixChoice == nil {
+	if m.GetNetworkPrefixChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -6242,11 +6242,11 @@ func (m *TunnelInterfaceType) GetStaticIpDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.StaticIp == nil {
+	if m.GetStaticIp() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.StaticIp.GetDRefInfo()
+	driSet, err = m.GetStaticIp().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}

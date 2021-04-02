@@ -23,9 +23,9 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "voltadn_private_name srv6_private_name public_ip public_name custom_endpoint_object voltadn_private_ip srv6_private_ip private_ip private_name k8s_service consul_service" must be set
+    // One of the arguments from this list "private_ip k8s_service voltadn_private_name srv6_private_ip srv6_private_name public_ip private_name consul_service custom_endpoint_object voltadn_private_ip public_name" must be set
 
-    voltadn_private_name {
+    srv6_private_name {
       dns_name = "dns_name"
 
       private_network {
@@ -43,7 +43,28 @@ resource "volterra_origin_pool" "example" {
   port = ["9080"]
 
   // One of the arguments from this list "no_tls use_tls" must be set
-  no_tls = true
+
+  use_tls {
+    // One of the arguments from this list "no_mtls use_mtls" must be set
+    no_mtls = true
+
+    // One of the arguments from this list "use_server_verification skip_server_verification volterra_trusted_ca" must be set
+
+    use_server_verification {
+      trusted_ca_url = "trusted_ca_url"
+    }
+    // One of the arguments from this list "sni use_host_header_as_sni disable_sni" must be set
+    sni = "sni"
+    tls_config {
+      // One of the arguments from this list "default_security medium_security low_security custom_security" must be set
+
+      custom_security {
+        cipher_suites = ["cipher_suites"]
+        max_version   = "max_version"
+        min_version   = "min_version"
+      }
+    }
+  }
 }
 
 ```
