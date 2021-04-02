@@ -228,7 +228,7 @@ type Ipv6AddressType struct {
 	//
 	// x-displayName: "IPv6 Address"
 	// x-example: "2001:db8:0:0:0:0:2:1"
-	// IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers sepearted by ':'
+	// IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'
 	// The address can be compacted by suppressing zeros
 	// e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'
 	Addr string `protobuf:"bytes,1,opt,name=addr,proto3" json:"addr,omitempty"`
@@ -255,7 +255,7 @@ type Ipv6SubnetType struct {
 	// x-displayName: "Prefix"
 	// x-example: "2001:db8:0:0:0:0:2:0"
 	// Prefix part of the IPv6 subnet given in form of string.
-	// IPv6 address must be specified as hexadecimal numbers sepearted by ':'
+	// IPv6 address must be specified as hexadecimal numbers separated by ':'
 	// e.g. "2001:db8:0:0:0:2:0:0"
 	// The address can be compacted by suppressing zeros
 	// e.g. "2001:db8::2::"

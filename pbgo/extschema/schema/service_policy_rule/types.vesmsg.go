@@ -89,7 +89,7 @@ func (m *ChallengeRuleSpec) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AsnChoice == nil {
+	if m.GetAsnChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -122,7 +122,7 @@ func (m *ChallengeRuleSpec) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.IpChoice == nil {
+	if m.GetIpChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -796,7 +796,7 @@ func (m *CreateSpecType) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AsnChoice == nil {
+	if m.GetAsnChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -829,7 +829,7 @@ func (m *CreateSpecType) GetDstAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.DstAsnChoice == nil {
+	if m.GetDstAsnChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -862,7 +862,7 @@ func (m *CreateSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.DstIpChoice == nil {
+	if m.GetDstIpChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -936,7 +936,7 @@ func (m *CreateSpecType) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.IpChoice == nil {
+	if m.GetIpChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1010,11 +1010,11 @@ func (m *CreateSpecType) GetWafActionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.WafAction == nil {
+	if m.GetWafAction() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.WafAction.GetDRefInfo()
+	driSet, err = m.GetWafAction().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -2177,7 +2177,7 @@ func (m *GetSpecType) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AsnChoice == nil {
+	if m.GetAsnChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2210,7 +2210,7 @@ func (m *GetSpecType) GetDstAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.DstAsnChoice == nil {
+	if m.GetDstAsnChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2243,7 +2243,7 @@ func (m *GetSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.DstIpChoice == nil {
+	if m.GetDstIpChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2317,7 +2317,7 @@ func (m *GetSpecType) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.IpChoice == nil {
+	if m.GetIpChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2391,11 +2391,11 @@ func (m *GetSpecType) GetWafActionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.WafAction == nil {
+	if m.GetWafAction() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.WafAction.GetDRefInfo()
+	driSet, err = m.GetWafAction().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -3564,7 +3564,7 @@ func (m *GlobalSpecType) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AsnChoice == nil {
+	if m.GetAsnChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3597,7 +3597,7 @@ func (m *GlobalSpecType) GetDstAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.DstAsnChoice == nil {
+	if m.GetDstAsnChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3630,7 +3630,7 @@ func (m *GlobalSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.DstIpChoice == nil {
+	if m.GetDstIpChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3745,7 +3745,7 @@ func (m *GlobalSpecType) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.IpChoice == nil {
+	if m.GetIpChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3819,11 +3819,11 @@ func (m *GlobalSpecType) GetWafActionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.WafAction == nil {
+	if m.GetWafAction() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.WafAction.GetDRefInfo()
+	driSet, err = m.GetWafAction().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -5363,7 +5363,7 @@ func (m *ReplaceSpecType) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AsnChoice == nil {
+	if m.GetAsnChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -5396,7 +5396,7 @@ func (m *ReplaceSpecType) GetDstAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.DstAsnChoice == nil {
+	if m.GetDstAsnChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -5429,7 +5429,7 @@ func (m *ReplaceSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.DstIpChoice == nil {
+	if m.GetDstIpChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -5503,7 +5503,7 @@ func (m *ReplaceSpecType) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.IpChoice == nil {
+	if m.GetIpChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -5577,11 +5577,11 @@ func (m *ReplaceSpecType) GetWafActionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.WafAction == nil {
+	if m.GetWafAction() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.WafAction.GetDRefInfo()
+	driSet, err = m.GetWafAction().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}

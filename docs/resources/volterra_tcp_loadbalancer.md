@@ -21,9 +21,17 @@ resource "volterra_tcp_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
-  do_not_advertise = true
 
-  // One of the arguments from this list "hash_policy_choice_round_robin hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness" must be set
+  advertise_on_public {
+    public_ip {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
+  // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
+  retract_cluster = true
+  // One of the arguments from this list "hash_policy_choice_source_ip_stickiness hash_policy_choice_round_robin hash_policy_choice_least_active hash_policy_choice_random" must be set
   hash_policy_choice_round_robin = true
 }
 
@@ -56,6 +64,10 @@ Argument Reference
 
 `do_not_advertise` - (Optional) Do not advertise this loadbalancer (bool).
 
+`do_not_retract_cluster` - (Optional) configuration. (bool).
+
+`retract_cluster` - (Optional) for route (bool).
+
 `dns_volterra_managed` - (Optional) This requires the domain to be delegated to Volterra using the Delegated Domain feature. (`Bool`).
 
 `domains` - (Optional) Domains also indicate the list of names for which DNS resolution will be done by VER (`List of String`).
@@ -67,6 +79,8 @@ Argument Reference
 `hash_policy_choice_round_robin` - (Optional) Connections are sent to all eligible origin servers in round robin fashion (bool).
 
 `hash_policy_choice_source_ip_stickiness` - (Optional) Connections are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server (bool).
+
+`idle_timeout` - (Optional) The amount of time that a stream can exist without upstream or downstream activity, in milliseconds. (`Int`).
 
 `listen_port` - (Optional) Listen Port for this TCP proxy (`Int`).
 

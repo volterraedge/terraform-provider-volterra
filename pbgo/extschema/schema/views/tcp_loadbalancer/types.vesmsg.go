@@ -88,7 +88,7 @@ func (m *CreateSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AdvertiseChoice == nil {
+	if m.GetAdvertiseChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -131,11 +131,11 @@ func (m *CreateSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) 
 		err             error
 	)
 	_ = driSet
-	if m.OriginPoolsWeights == nil {
+	if m.GetOriginPoolsWeights() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.OriginPoolsWeights {
+	for idx, e := range m.GetOriginPoolsWeights() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -157,6 +157,14 @@ func (v *ValidateCreateSpecType) AdvertiseChoiceValidationRuleHandler(rules map[
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for advertise_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) ClusterRetractChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_retract_choice")
 	}
 	return validatorFn, nil
 }
@@ -251,6 +259,16 @@ func (v *ValidateCreateSpecType) OriginPoolsWeightsValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) IdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for idle_timeout")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -315,6 +333,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("advertise_choice"),
 				db.WithValidateField("advertise_on_public_default_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cluster_retract_choice"]; exists {
+		val := m.GetClusterRetractChoice()
+		vOpts := append(opts,
+			db.WithValidateField("cluster_retract_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClusterRetractChoice().(type) {
+	case *CreateSpecType_RetractCluster:
+		if fv, exists := v.FldValidators["cluster_retract_choice.retract_cluster"]; exists {
+			val := m.GetClusterRetractChoice().(*CreateSpecType_RetractCluster).RetractCluster
+			vOpts := append(opts,
+				db.WithValidateField("cluster_retract_choice"),
+				db.WithValidateField("retract_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DoNotRetractCluster:
+		if fv, exists := v.FldValidators["cluster_retract_choice.do_not_retract_cluster"]; exists {
+			val := m.GetClusterRetractChoice().(*CreateSpecType_DoNotRetractCluster).DoNotRetractCluster
+			vOpts := append(opts,
+				db.WithValidateField("cluster_retract_choice"),
+				db.WithValidateField("do_not_retract_cluster"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -398,6 +452,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["idle_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("idle_timeout"))
+		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["listen_port"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("listen_port"))
@@ -450,6 +513,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["advertise_choice"] = vFn
 
+	vrhClusterRetractChoice := v.ClusterRetractChoiceValidationRuleHandler
+	rulesClusterRetractChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhClusterRetractChoice(rulesClusterRetractChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.cluster_retract_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cluster_retract_choice"] = vFn
+
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -477,6 +551,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhOriginPoolsWeights := v.OriginPoolsWeightsValidationRuleHandler
 	rulesOriginPoolsWeights := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhOriginPoolsWeights(rulesOriginPoolsWeights)
 	if err != nil {
@@ -484,6 +559,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["origin_pools_weights"] = vFn
+
+	vrhIdleTimeout := v.IdleTimeoutValidationRuleHandler
+	rulesIdleTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "300000",
+	}
+	vFn, err = vrhIdleTimeout(rulesIdleTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.idle_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["idle_timeout"] = vFn
 
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
@@ -562,7 +648,7 @@ func (m *GetSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AdvertiseChoice == nil {
+	if m.GetAdvertiseChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -656,11 +742,11 @@ func (m *GetSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.OriginPoolsWeights == nil {
+	if m.GetOriginPoolsWeights() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.OriginPoolsWeights {
+	for idx, e := range m.GetOriginPoolsWeights() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -682,6 +768,14 @@ func (v *ValidateGetSpecType) AdvertiseChoiceValidationRuleHandler(rules map[str
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for advertise_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) ClusterRetractChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_retract_choice")
 	}
 	return validatorFn, nil
 }
@@ -736,6 +830,46 @@ func (v *ValidateGetSpecType) DomainsValidationRuleHandler(rules map[string]stri
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) OriginPoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for origin_pools")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated origin_pools")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items origin_pools")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) OriginPoolsWeightsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.OriginPoolWithWeight, opts ...db.ValidateOpt) error {
@@ -771,6 +905,16 @@ func (v *ValidateGetSpecType) OriginPoolsWeightsValidationRuleHandler(rules map[
 			return errors.Wrap(err, "items origin_pools_weights")
 		}
 		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) IdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for idle_timeout")
 	}
 
 	return validatorFn, nil
@@ -840,6 +984,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("advertise_choice"),
 				db.WithValidateField("advertise_on_public_default_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cluster_retract_choice"]; exists {
+		val := m.GetClusterRetractChoice()
+		vOpts := append(opts,
+			db.WithValidateField("cluster_retract_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClusterRetractChoice().(type) {
+	case *GetSpecType_RetractCluster:
+		if fv, exists := v.FldValidators["cluster_retract_choice.retract_cluster"]; exists {
+			val := m.GetClusterRetractChoice().(*GetSpecType_RetractCluster).RetractCluster
+			vOpts := append(opts,
+				db.WithValidateField("cluster_retract_choice"),
+				db.WithValidateField("retract_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DoNotRetractCluster:
+		if fv, exists := v.FldValidators["cluster_retract_choice.do_not_retract_cluster"]; exists {
+			val := m.GetClusterRetractChoice().(*GetSpecType_DoNotRetractCluster).DoNotRetractCluster
+			vOpts := append(opts,
+				db.WithValidateField("cluster_retract_choice"),
+				db.WithValidateField("do_not_retract_cluster"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -944,6 +1124,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["idle_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("idle_timeout"))
+		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["listen_port"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("listen_port"))
@@ -954,13 +1143,9 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 
 	if fv, exists := v.FldValidators["origin_pools"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin_pools"))
-		for idx, item := range m.GetOriginPools() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetOriginPools(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1008,6 +1193,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["advertise_choice"] = vFn
 
+	vrhClusterRetractChoice := v.ClusterRetractChoiceValidationRuleHandler
+	rulesClusterRetractChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhClusterRetractChoice(rulesClusterRetractChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.cluster_retract_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cluster_retract_choice"] = vFn
+
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -1032,9 +1228,22 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["domains"] = vFn
 
+	vrhOriginPools := v.OriginPoolsValidationRuleHandler
+	rulesOriginPools := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhOriginPools(rulesOriginPools)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.origin_pools: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["origin_pools"] = vFn
+
 	vrhOriginPoolsWeights := v.OriginPoolsWeightsValidationRuleHandler
 	rulesOriginPoolsWeights := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhOriginPoolsWeights(rulesOriginPoolsWeights)
 	if err != nil {
@@ -1043,10 +1252,19 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["origin_pools_weights"] = vFn
 
+	vrhIdleTimeout := v.IdleTimeoutValidationRuleHandler
+	rulesIdleTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "300000",
+	}
+	vFn, err = vrhIdleTimeout(rulesIdleTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.idle_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["idle_timeout"] = vFn
+
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
-
-	v.FldValidators["origin_pools"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
 
@@ -1130,7 +1348,7 @@ func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AdvertiseChoice == nil {
+	if m.GetAdvertiseChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1224,11 +1442,11 @@ func (m *GlobalSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error) 
 		err             error
 	)
 	_ = driSet
-	if m.OriginPoolsWeights == nil {
+	if m.GetOriginPoolsWeights() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.OriginPoolsWeights {
+	for idx, e := range m.GetOriginPoolsWeights() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1304,6 +1522,14 @@ func (v *ValidateGlobalSpecType) AdvertiseChoiceValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) ClusterRetractChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_retract_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) HashPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1347,6 +1573,46 @@ func (v *ValidateGlobalSpecType) DomainsValidationRuleHandler(rules map[string]s
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items domains")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) OriginPoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for origin_pools")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated origin_pools")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items origin_pools")
 		}
 		return nil
 	}
@@ -1476,6 +1742,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["cluster_retract_choice"]; exists {
+		val := m.GetClusterRetractChoice()
+		vOpts := append(opts,
+			db.WithValidateField("cluster_retract_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClusterRetractChoice().(type) {
+	case *GlobalSpecType_RetractCluster:
+		if fv, exists := v.FldValidators["cluster_retract_choice.retract_cluster"]; exists {
+			val := m.GetClusterRetractChoice().(*GlobalSpecType_RetractCluster).RetractCluster
+			vOpts := append(opts,
+				db.WithValidateField("cluster_retract_choice"),
+				db.WithValidateField("retract_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DoNotRetractCluster:
+		if fv, exists := v.FldValidators["cluster_retract_choice.do_not_retract_cluster"]; exists {
+			val := m.GetClusterRetractChoice().(*GlobalSpecType_DoNotRetractCluster).DoNotRetractCluster
+			vOpts := append(opts,
+				db.WithValidateField("cluster_retract_choice"),
+				db.WithValidateField("do_not_retract_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["dns_info"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("dns_info"))
@@ -1591,13 +1893,9 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 
 	if fv, exists := v.FldValidators["origin_pools"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin_pools"))
-		for idx, item := range m.GetOriginPools() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetOriginPools(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1654,6 +1952,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["advertise_choice"] = vFn
 
+	vrhClusterRetractChoice := v.ClusterRetractChoiceValidationRuleHandler
+	rulesClusterRetractChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhClusterRetractChoice(rulesClusterRetractChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.cluster_retract_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cluster_retract_choice"] = vFn
+
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -1678,9 +1987,22 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["domains"] = vFn
 
+	vrhOriginPools := v.OriginPoolsValidationRuleHandler
+	rulesOriginPools := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhOriginPools(rulesOriginPools)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.origin_pools: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["origin_pools"] = vFn
+
 	vrhOriginPoolsWeights := v.OriginPoolsWeightsValidationRuleHandler
 	rulesOriginPoolsWeights := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhOriginPoolsWeights(rulesOriginPoolsWeights)
 	if err != nil {
@@ -1702,8 +2024,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
-
-	v.FldValidators["origin_pools"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -1783,7 +2103,7 @@ func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AdvertiseChoice == nil {
+	if m.GetAdvertiseChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1877,11 +2197,11 @@ func (m *ReplaceSpecType) GetOriginPoolsWeightsDRefInfo() ([]db.DRefInfo, error)
 		err             error
 	)
 	_ = driSet
-	if m.OriginPoolsWeights == nil {
+	if m.GetOriginPoolsWeights() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.OriginPoolsWeights {
+	for idx, e := range m.GetOriginPoolsWeights() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1903,6 +2223,14 @@ func (v *ValidateReplaceSpecType) AdvertiseChoiceValidationRuleHandler(rules map
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for advertise_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ClusterRetractChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_retract_choice")
 	}
 	return validatorFn, nil
 }
@@ -1957,6 +2285,46 @@ func (v *ValidateReplaceSpecType) DomainsValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) OriginPoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for origin_pools")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated origin_pools")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items origin_pools")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) OriginPoolsWeightsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.OriginPoolWithWeight, opts ...db.ValidateOpt) error {
@@ -1992,6 +2360,16 @@ func (v *ValidateReplaceSpecType) OriginPoolsWeightsValidationRuleHandler(rules 
 			return errors.Wrap(err, "items origin_pools_weights")
 		}
 		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) IdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for idle_timeout")
 	}
 
 	return validatorFn, nil
@@ -2061,6 +2439,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			vOpts := append(opts,
 				db.WithValidateField("advertise_choice"),
 				db.WithValidateField("advertise_on_public_default_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cluster_retract_choice"]; exists {
+		val := m.GetClusterRetractChoice()
+		vOpts := append(opts,
+			db.WithValidateField("cluster_retract_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClusterRetractChoice().(type) {
+	case *ReplaceSpecType_RetractCluster:
+		if fv, exists := v.FldValidators["cluster_retract_choice.retract_cluster"]; exists {
+			val := m.GetClusterRetractChoice().(*ReplaceSpecType_RetractCluster).RetractCluster
+			vOpts := append(opts,
+				db.WithValidateField("cluster_retract_choice"),
+				db.WithValidateField("retract_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DoNotRetractCluster:
+		if fv, exists := v.FldValidators["cluster_retract_choice.do_not_retract_cluster"]; exists {
+			val := m.GetClusterRetractChoice().(*ReplaceSpecType_DoNotRetractCluster).DoNotRetractCluster
+			vOpts := append(opts,
+				db.WithValidateField("cluster_retract_choice"),
+				db.WithValidateField("do_not_retract_cluster"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -2144,6 +2558,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["idle_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("idle_timeout"))
+		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["listen_port"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("listen_port"))
@@ -2154,13 +2577,9 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	}
 
 	if fv, exists := v.FldValidators["origin_pools"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("origin_pools"))
-		for idx, item := range m.GetOriginPools() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetOriginPools(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -2208,6 +2627,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["advertise_choice"] = vFn
 
+	vrhClusterRetractChoice := v.ClusterRetractChoiceValidationRuleHandler
+	rulesClusterRetractChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhClusterRetractChoice(rulesClusterRetractChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.cluster_retract_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cluster_retract_choice"] = vFn
+
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -2232,9 +2662,22 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["domains"] = vFn
 
+	vrhOriginPools := v.OriginPoolsValidationRuleHandler
+	rulesOriginPools := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhOriginPools(rulesOriginPools)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.origin_pools: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["origin_pools"] = vFn
+
 	vrhOriginPoolsWeights := v.OriginPoolsWeightsValidationRuleHandler
 	rulesOriginPoolsWeights := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhOriginPoolsWeights(rulesOriginPoolsWeights)
 	if err != nil {
@@ -2243,10 +2686,19 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["origin_pools_weights"] = vFn
 
+	vrhIdleTimeout := v.IdleTimeoutValidationRuleHandler
+	rulesIdleTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "300000",
+	}
+	vFn, err = vrhIdleTimeout(rulesIdleTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.idle_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["idle_timeout"] = vFn
+
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 	v.FldValidators["advertise_choice.advertise_custom"] = ves_io_schema_views.AdvertiseCustomValidator().Validate
-
-	v.FldValidators["origin_pools"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -2295,6 +2747,41 @@ func (r *CreateSpecType) GetAdvertiseChoiceFromGlobalSpecType(o *GlobalSpecType)
 
 	case *GlobalSpecType_DoNotAdvertise:
 		r.AdvertiseChoice = &CreateSpecType_DoNotAdvertise{DoNotAdvertise: of.DoNotAdvertise}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetClusterRetractChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ClusterRetractChoice.(type) {
+	case nil:
+		o.ClusterRetractChoice = nil
+
+	case *CreateSpecType_DoNotRetractCluster:
+		o.ClusterRetractChoice = &GlobalSpecType_DoNotRetractCluster{DoNotRetractCluster: of.DoNotRetractCluster}
+
+	case *CreateSpecType_RetractCluster:
+		o.ClusterRetractChoice = &GlobalSpecType_RetractCluster{RetractCluster: of.RetractCluster}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetClusterRetractChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ClusterRetractChoice.(type) {
+	case nil:
+		r.ClusterRetractChoice = nil
+
+	case *GlobalSpecType_DoNotRetractCluster:
+		r.ClusterRetractChoice = &CreateSpecType_DoNotRetractCluster{DoNotRetractCluster: of.DoNotRetractCluster}
+
+	case *GlobalSpecType_RetractCluster:
+		r.ClusterRetractChoice = &CreateSpecType_RetractCluster{RetractCluster: of.RetractCluster}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -2354,9 +2841,11 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m.GetAdvertiseChoiceFromGlobalSpecType(f)
+	m.GetClusterRetractChoiceFromGlobalSpecType(f)
 	m.DnsVolterraManaged = f.GetDnsVolterraManaged()
 	m.Domains = f.GetDomains()
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
+	m.IdleTimeout = f.GetIdleTimeout()
 	m.ListenPort = f.GetListenPort()
 	m.OriginPoolsWeights = f.GetOriginPoolsWeights()
 	m.WithSni = f.GetWithSni()
@@ -2369,9 +2858,11 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m1.SetAdvertiseChoiceToGlobalSpecType(f)
+	m1.SetClusterRetractChoiceToGlobalSpecType(f)
 	f.DnsVolterraManaged = m1.DnsVolterraManaged
 	f.Domains = m1.Domains
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)
+	f.IdleTimeout = m1.IdleTimeout
 	f.ListenPort = m1.ListenPort
 	f.OriginPoolsWeights = m1.OriginPoolsWeights
 	f.WithSni = m1.WithSni
@@ -2417,6 +2908,41 @@ func (r *GetSpecType) GetAdvertiseChoiceFromGlobalSpecType(o *GlobalSpecType) er
 
 	case *GlobalSpecType_DoNotAdvertise:
 		r.AdvertiseChoice = &GetSpecType_DoNotAdvertise{DoNotAdvertise: of.DoNotAdvertise}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetClusterRetractChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ClusterRetractChoice.(type) {
+	case nil:
+		o.ClusterRetractChoice = nil
+
+	case *GetSpecType_DoNotRetractCluster:
+		o.ClusterRetractChoice = &GlobalSpecType_DoNotRetractCluster{DoNotRetractCluster: of.DoNotRetractCluster}
+
+	case *GetSpecType_RetractCluster:
+		o.ClusterRetractChoice = &GlobalSpecType_RetractCluster{RetractCluster: of.RetractCluster}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetClusterRetractChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ClusterRetractChoice.(type) {
+	case nil:
+		r.ClusterRetractChoice = nil
+
+	case *GlobalSpecType_DoNotRetractCluster:
+		r.ClusterRetractChoice = &GetSpecType_DoNotRetractCluster{DoNotRetractCluster: of.DoNotRetractCluster}
+
+	case *GlobalSpecType_RetractCluster:
+		r.ClusterRetractChoice = &GetSpecType_RetractCluster{RetractCluster: of.RetractCluster}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -2476,11 +3002,13 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m.GetAdvertiseChoiceFromGlobalSpecType(f)
+	m.GetClusterRetractChoiceFromGlobalSpecType(f)
 	m.DnsInfo = f.GetDnsInfo()
 	m.DnsVolterraManaged = f.GetDnsVolterraManaged()
 	m.Domains = f.GetDomains()
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.HostName = f.GetHostName()
+	m.IdleTimeout = f.GetIdleTimeout()
 	m.ListenPort = f.GetListenPort()
 	m.OriginPools = f.GetOriginPools()
 	m.OriginPoolsWeights = f.GetOriginPoolsWeights()
@@ -2494,11 +3022,13 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m1.SetAdvertiseChoiceToGlobalSpecType(f)
+	m1.SetClusterRetractChoiceToGlobalSpecType(f)
 	f.DnsInfo = m1.DnsInfo
 	f.DnsVolterraManaged = m1.DnsVolterraManaged
 	f.Domains = m1.Domains
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	f.HostName = m1.HostName
+	f.IdleTimeout = m1.IdleTimeout
 	f.ListenPort = m1.ListenPort
 	f.OriginPools = m1.OriginPools
 	f.OriginPoolsWeights = m1.OriginPoolsWeights
@@ -2545,6 +3075,41 @@ func (r *ReplaceSpecType) GetAdvertiseChoiceFromGlobalSpecType(o *GlobalSpecType
 
 	case *GlobalSpecType_DoNotAdvertise:
 		r.AdvertiseChoice = &ReplaceSpecType_DoNotAdvertise{DoNotAdvertise: of.DoNotAdvertise}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetClusterRetractChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ClusterRetractChoice.(type) {
+	case nil:
+		o.ClusterRetractChoice = nil
+
+	case *ReplaceSpecType_DoNotRetractCluster:
+		o.ClusterRetractChoice = &GlobalSpecType_DoNotRetractCluster{DoNotRetractCluster: of.DoNotRetractCluster}
+
+	case *ReplaceSpecType_RetractCluster:
+		o.ClusterRetractChoice = &GlobalSpecType_RetractCluster{RetractCluster: of.RetractCluster}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetClusterRetractChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ClusterRetractChoice.(type) {
+	case nil:
+		r.ClusterRetractChoice = nil
+
+	case *GlobalSpecType_DoNotRetractCluster:
+		r.ClusterRetractChoice = &ReplaceSpecType_DoNotRetractCluster{DoNotRetractCluster: of.DoNotRetractCluster}
+
+	case *GlobalSpecType_RetractCluster:
+		r.ClusterRetractChoice = &ReplaceSpecType_RetractCluster{RetractCluster: of.RetractCluster}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -2604,9 +3169,11 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m.GetAdvertiseChoiceFromGlobalSpecType(f)
+	m.GetClusterRetractChoiceFromGlobalSpecType(f)
 	m.DnsVolterraManaged = f.GetDnsVolterraManaged()
 	m.Domains = f.GetDomains()
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
+	m.IdleTimeout = f.GetIdleTimeout()
 	m.ListenPort = f.GetListenPort()
 	m.OriginPools = f.GetOriginPools()
 	m.OriginPoolsWeights = f.GetOriginPoolsWeights()
@@ -2620,9 +3187,11 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m1.SetAdvertiseChoiceToGlobalSpecType(f)
+	m1.SetClusterRetractChoiceToGlobalSpecType(f)
 	f.DnsVolterraManaged = m1.DnsVolterraManaged
 	f.Domains = m1.Domains
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)
+	f.IdleTimeout = m1.IdleTimeout
 	f.ListenPort = m1.ListenPort
 	f.OriginPools = m1.OriginPools
 	f.OriginPoolsWeights = m1.OriginPoolsWeights

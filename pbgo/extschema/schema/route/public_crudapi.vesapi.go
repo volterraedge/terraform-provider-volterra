@@ -2712,7 +2712,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Priority"
                 },
                 "retract_cluster": {
-                    "description": "Exclusive with [do_not_retract_cluster]\nx-displayName: \"Retract cluster with no healthy endpoints\"\nWhen this option is enabled, weighted cluster will not be considered\nfor loadbalancing, if all its endpoints are unhealthy.\nSince the cluster with all unhealthy endpoints is removed, the traffic\nwill be distributed among remaining clusters as per their weight.\nAlso panic-threshold configuration is ignored for retracted cluster.\n\nThis option is ignored when\n(1) health check is not configured.\n(2) single destination cluster is configured for route.",
+                    "description": "Exclusive with [do_not_retract_cluster]\nx-displayName: \"Retract cluster with no healthy endpoints\"\nWhen this option is enabled, weighted cluster will not be considered\nfor loadbalancing, if all its endpoints are unhealthy.\nSince the cluster with all unhealthy endpoints is removed, the traffic\nwill be distributed among remaining clusters as per their weight.\nAlso panic-threshold configuration is ignored for retracted cluster.\n\nThis option is ignored when single destination cluster is configured\nfor route",
                     "title": "retract_cluster",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },

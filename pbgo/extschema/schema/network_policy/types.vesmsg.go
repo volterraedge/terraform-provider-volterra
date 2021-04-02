@@ -168,11 +168,11 @@ func (m *CreateSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Endpoint == nil {
+	if m.GetEndpoint() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Endpoint.GetDRefInfo()
+	driSet, err = m.GetEndpoint().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -191,11 +191,11 @@ func (m *CreateSpecType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Rules == nil {
+	if m.GetRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Rules.GetDRefInfo()
+	driSet, err = m.GetRules().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -643,11 +643,11 @@ func (m *GetSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Endpoint == nil {
+	if m.GetEndpoint() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Endpoint.GetDRefInfo()
+	driSet, err = m.GetEndpoint().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -666,7 +666,7 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RuleChoice == nil {
+	if m.GetRuleChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -896,11 +896,11 @@ func (m *GlobalSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Endpoint == nil {
+	if m.GetEndpoint() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Endpoint.GetDRefInfo()
+	driSet, err = m.GetEndpoint().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1001,7 +1001,7 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RuleChoice == nil {
+	if m.GetRuleChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1737,11 +1737,11 @@ func (m *NetworkPolicyRuleChoice) GetEgressRulesDRefInfo() ([]db.DRefInfo, error
 		err             error
 	)
 	_ = driSet
-	if m.EgressRules == nil {
+	if m.GetEgressRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.EgressRules {
+	for idx, e := range m.GetEgressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1762,11 +1762,11 @@ func (m *NetworkPolicyRuleChoice) GetIngressRulesDRefInfo() ([]db.DRefInfo, erro
 		err             error
 	)
 	_ = driSet
-	if m.IngressRules == nil {
+	if m.GetIngressRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.IngressRules {
+	for idx, e := range m.GetIngressRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1995,7 +1995,7 @@ func (m *NetworkPolicyRuleType) GetOtherEndpointDRefInfo() ([]db.DRefInfo, error
 		err             error
 	)
 	_ = driSet
-	if m.OtherEndpoint == nil {
+	if m.GetOtherEndpoint() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2573,11 +2573,11 @@ func (m *ReplaceSpecType) GetEndpointDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Endpoint == nil {
+	if m.GetEndpoint() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Endpoint.GetDRefInfo()
+	driSet, err = m.GetEndpoint().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -2596,7 +2596,7 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RuleChoice == nil {
+	if m.GetRuleChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 

@@ -98,6 +98,17 @@ type GlobalSpecType struct {
 	// x-example: "2000"
 	// The amount of time that a stream can exist without upstream or downstream activity, in milliseconds.
 	IdleTimeout uint32 `protobuf:"varint,17,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`
+	// Oneof for Cluster retraction
+	//
+	// x-displayName: "Select Cluster retract option"
+	// x-required
+	// Specifies whether retraction of cluster has to be enabled or
+	// disabled
+	//
+	// Types that are valid to be assigned to ClusterRetractChoice:
+	//	*GlobalSpecType_RetractCluster
+	//	*GlobalSpecType_DoNotRetractCluster
+	ClusterRetractChoice isGlobalSpecType_ClusterRetractChoice `protobuf_oneof:"cluster_retract_choice"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
@@ -132,6 +143,12 @@ type isGlobalSpecType_HashPolicyChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGlobalSpecType_ClusterRetractChoice interface {
+	isGlobalSpecType_ClusterRetractChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GlobalSpecType_DoNotAdvertise struct {
 	DoNotAdvertise *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=do_not_advertise,json=doNotAdvertise,oneof"`
@@ -157,6 +174,12 @@ type GlobalSpecType_HashPolicyChoiceRandom struct {
 type GlobalSpecType_HashPolicyChoiceSourceIpStickiness struct {
 	HashPolicyChoiceSourceIpStickiness *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=hash_policy_choice_source_ip_stickiness,json=hashPolicyChoiceSourceIpStickiness,oneof"`
 }
+type GlobalSpecType_RetractCluster struct {
+	RetractCluster *ves_io_schema4.Empty `protobuf:"bytes,19,opt,name=retract_cluster,json=retractCluster,oneof"`
+}
+type GlobalSpecType_DoNotRetractCluster struct {
+	DoNotRetractCluster *ves_io_schema4.Empty `protobuf:"bytes,20,opt,name=do_not_retract_cluster,json=doNotRetractCluster,oneof"`
+}
 
 func (*GlobalSpecType_DoNotAdvertise) isGlobalSpecType_AdvertiseChoice()                      {}
 func (*GlobalSpecType_AdvertiseOnPublicDefaultVip) isGlobalSpecType_AdvertiseChoice()         {}
@@ -166,6 +189,8 @@ func (*GlobalSpecType_HashPolicyChoiceRoundRobin) isGlobalSpecType_HashPolicyCho
 func (*GlobalSpecType_HashPolicyChoiceLeastActive) isGlobalSpecType_HashPolicyChoice()        {}
 func (*GlobalSpecType_HashPolicyChoiceRandom) isGlobalSpecType_HashPolicyChoice()             {}
 func (*GlobalSpecType_HashPolicyChoiceSourceIpStickiness) isGlobalSpecType_HashPolicyChoice() {}
+func (*GlobalSpecType_RetractCluster) isGlobalSpecType_ClusterRetractChoice()                 {}
+func (*GlobalSpecType_DoNotRetractCluster) isGlobalSpecType_ClusterRetractChoice()            {}
 
 func (m *GlobalSpecType) GetAdvertiseChoice() isGlobalSpecType_AdvertiseChoice {
 	if m != nil {
@@ -176,6 +201,12 @@ func (m *GlobalSpecType) GetAdvertiseChoice() isGlobalSpecType_AdvertiseChoice {
 func (m *GlobalSpecType) GetHashPolicyChoice() isGlobalSpecType_HashPolicyChoice {
 	if m != nil {
 		return m.HashPolicyChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetClusterRetractChoice() isGlobalSpecType_ClusterRetractChoice {
+	if m != nil {
+		return m.ClusterRetractChoice
 	}
 	return nil
 }
@@ -285,6 +316,20 @@ func (m *GlobalSpecType) GetIdleTimeout() uint32 {
 	return 0
 }
 
+func (m *GlobalSpecType) GetRetractCluster() *ves_io_schema4.Empty {
+	if x, ok := m.GetClusterRetractChoice().(*GlobalSpecType_RetractCluster); ok {
+		return x.RetractCluster
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDoNotRetractCluster() *ves_io_schema4.Empty {
+	if x, ok := m.GetClusterRetractChoice().(*GlobalSpecType_DoNotRetractCluster); ok {
+		return x.DoNotRetractCluster
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetViewInternal() *ves_io_schema_views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
@@ -317,6 +362,8 @@ func (*GlobalSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 		(*GlobalSpecType_HashPolicyChoiceLeastActive)(nil),
 		(*GlobalSpecType_HashPolicyChoiceRandom)(nil),
 		(*GlobalSpecType_HashPolicyChoiceSourceIpStickiness)(nil),
+		(*GlobalSpecType_RetractCluster)(nil),
+		(*GlobalSpecType_DoNotRetractCluster)(nil),
 	}
 }
 
@@ -373,6 +420,22 @@ func _GlobalSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("GlobalSpecType.HashPolicyChoice has unexpected type %T", x)
+	}
+	// cluster_retract_choice
+	switch x := m.ClusterRetractChoice.(type) {
+	case *GlobalSpecType_RetractCluster:
+		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.RetractCluster); err != nil {
+			return err
+		}
+	case *GlobalSpecType_DoNotRetractCluster:
+		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.DoNotRetractCluster); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("GlobalSpecType.ClusterRetractChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -444,6 +507,22 @@ func _GlobalSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto
 		err := b.DecodeMessage(msg)
 		m.HashPolicyChoice = &GlobalSpecType_HashPolicyChoiceSourceIpStickiness{msg}
 		return true, err
+	case 19: // cluster_retract_choice.retract_cluster
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ClusterRetractChoice = &GlobalSpecType_RetractCluster{msg}
+		return true, err
+	case 20: // cluster_retract_choice.do_not_retract_cluster
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ClusterRetractChoice = &GlobalSpecType_DoNotRetractCluster{msg}
+		return true, err
 	default:
 		return false, nil
 	}
@@ -503,6 +582,22 @@ func _GlobalSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
+	// cluster_retract_choice
+	switch x := m.ClusterRetractChoice.(type) {
+	case *GlobalSpecType_RetractCluster:
+		s := proto.Size(x.RetractCluster)
+		n += proto.SizeVarint(19<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GlobalSpecType_DoNotRetractCluster:
+		s := proto.Size(x.DoNotRetractCluster)
+		n += proto.SizeVarint(20<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
 	return n
 }
 
@@ -528,6 +623,11 @@ type CreateSpecType struct {
 	//	*CreateSpecType_HashPolicyChoiceRandom
 	//	*CreateSpecType_HashPolicyChoiceSourceIpStickiness
 	HashPolicyChoice isCreateSpecType_HashPolicyChoice `protobuf_oneof:"hash_policy_choice"`
+	IdleTimeout      uint32                            `protobuf:"varint,17,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`
+	// Types that are valid to be assigned to ClusterRetractChoice:
+	//	*CreateSpecType_RetractCluster
+	//	*CreateSpecType_DoNotRetractCluster
+	ClusterRetractChoice isCreateSpecType_ClusterRetractChoice `protobuf_oneof:"cluster_retract_choice"`
 }
 
 func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
@@ -542,6 +642,12 @@ type isCreateSpecType_AdvertiseChoice interface {
 }
 type isCreateSpecType_HashPolicyChoice interface {
 	isCreateSpecType_HashPolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isCreateSpecType_ClusterRetractChoice interface {
+	isCreateSpecType_ClusterRetractChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -571,6 +677,12 @@ type CreateSpecType_HashPolicyChoiceRandom struct {
 type CreateSpecType_HashPolicyChoiceSourceIpStickiness struct {
 	HashPolicyChoiceSourceIpStickiness *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=hash_policy_choice_source_ip_stickiness,json=hashPolicyChoiceSourceIpStickiness,oneof"`
 }
+type CreateSpecType_RetractCluster struct {
+	RetractCluster *ves_io_schema4.Empty `protobuf:"bytes,19,opt,name=retract_cluster,json=retractCluster,oneof"`
+}
+type CreateSpecType_DoNotRetractCluster struct {
+	DoNotRetractCluster *ves_io_schema4.Empty `protobuf:"bytes,20,opt,name=do_not_retract_cluster,json=doNotRetractCluster,oneof"`
+}
 
 func (*CreateSpecType_DoNotAdvertise) isCreateSpecType_AdvertiseChoice()                      {}
 func (*CreateSpecType_AdvertiseOnPublicDefaultVip) isCreateSpecType_AdvertiseChoice()         {}
@@ -580,6 +692,8 @@ func (*CreateSpecType_HashPolicyChoiceRoundRobin) isCreateSpecType_HashPolicyCho
 func (*CreateSpecType_HashPolicyChoiceLeastActive) isCreateSpecType_HashPolicyChoice()        {}
 func (*CreateSpecType_HashPolicyChoiceRandom) isCreateSpecType_HashPolicyChoice()             {}
 func (*CreateSpecType_HashPolicyChoiceSourceIpStickiness) isCreateSpecType_HashPolicyChoice() {}
+func (*CreateSpecType_RetractCluster) isCreateSpecType_ClusterRetractChoice()                 {}
+func (*CreateSpecType_DoNotRetractCluster) isCreateSpecType_ClusterRetractChoice()            {}
 
 func (m *CreateSpecType) GetAdvertiseChoice() isCreateSpecType_AdvertiseChoice {
 	if m != nil {
@@ -590,6 +704,12 @@ func (m *CreateSpecType) GetAdvertiseChoice() isCreateSpecType_AdvertiseChoice {
 func (m *CreateSpecType) GetHashPolicyChoice() isCreateSpecType_HashPolicyChoice {
 	if m != nil {
 		return m.HashPolicyChoice
+	}
+	return nil
+}
+func (m *CreateSpecType) GetClusterRetractChoice() isCreateSpecType_ClusterRetractChoice {
+	if m != nil {
+		return m.ClusterRetractChoice
 	}
 	return nil
 }
@@ -685,6 +805,27 @@ func (m *CreateSpecType) GetHashPolicyChoiceSourceIpStickiness() *ves_io_schema4
 	return nil
 }
 
+func (m *CreateSpecType) GetIdleTimeout() uint32 {
+	if m != nil {
+		return m.IdleTimeout
+	}
+	return 0
+}
+
+func (m *CreateSpecType) GetRetractCluster() *ves_io_schema4.Empty {
+	if x, ok := m.GetClusterRetractChoice().(*CreateSpecType_RetractCluster); ok {
+		return x.RetractCluster
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDoNotRetractCluster() *ves_io_schema4.Empty {
+	if x, ok := m.GetClusterRetractChoice().(*CreateSpecType_DoNotRetractCluster); ok {
+		return x.DoNotRetractCluster
+	}
+	return nil
+}
+
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _CreateSpecType_OneofMarshaler, _CreateSpecType_OneofUnmarshaler, _CreateSpecType_OneofSizer, []interface{}{
@@ -696,6 +837,8 @@ func (*CreateSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer
 		(*CreateSpecType_HashPolicyChoiceLeastActive)(nil),
 		(*CreateSpecType_HashPolicyChoiceRandom)(nil),
 		(*CreateSpecType_HashPolicyChoiceSourceIpStickiness)(nil),
+		(*CreateSpecType_RetractCluster)(nil),
+		(*CreateSpecType_DoNotRetractCluster)(nil),
 	}
 }
 
@@ -752,6 +895,22 @@ func _CreateSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("CreateSpecType.HashPolicyChoice has unexpected type %T", x)
+	}
+	// cluster_retract_choice
+	switch x := m.ClusterRetractChoice.(type) {
+	case *CreateSpecType_RetractCluster:
+		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.RetractCluster); err != nil {
+			return err
+		}
+	case *CreateSpecType_DoNotRetractCluster:
+		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.DoNotRetractCluster); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("CreateSpecType.ClusterRetractChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -823,6 +982,22 @@ func _CreateSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto
 		err := b.DecodeMessage(msg)
 		m.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceSourceIpStickiness{msg}
 		return true, err
+	case 19: // cluster_retract_choice.retract_cluster
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ClusterRetractChoice = &CreateSpecType_RetractCluster{msg}
+		return true, err
+	case 20: // cluster_retract_choice.do_not_retract_cluster
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ClusterRetractChoice = &CreateSpecType_DoNotRetractCluster{msg}
+		return true, err
 	default:
 		return false, nil
 	}
@@ -882,6 +1057,22 @@ func _CreateSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
+	// cluster_retract_choice
+	switch x := m.ClusterRetractChoice.(type) {
+	case *CreateSpecType_RetractCluster:
+		s := proto.Size(x.RetractCluster)
+		n += proto.SizeVarint(19<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *CreateSpecType_DoNotRetractCluster:
+		s := proto.Size(x.DoNotRetractCluster)
+		n += proto.SizeVarint(20<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
 	return n
 }
 
@@ -908,6 +1099,11 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_HashPolicyChoiceRandom
 	//	*ReplaceSpecType_HashPolicyChoiceSourceIpStickiness
 	HashPolicyChoice isReplaceSpecType_HashPolicyChoice `protobuf_oneof:"hash_policy_choice"`
+	IdleTimeout      uint32                             `protobuf:"varint,17,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`
+	// Types that are valid to be assigned to ClusterRetractChoice:
+	//	*ReplaceSpecType_RetractCluster
+	//	*ReplaceSpecType_DoNotRetractCluster
+	ClusterRetractChoice isReplaceSpecType_ClusterRetractChoice `protobuf_oneof:"cluster_retract_choice"`
 }
 
 func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
@@ -922,6 +1118,12 @@ type isReplaceSpecType_AdvertiseChoice interface {
 }
 type isReplaceSpecType_HashPolicyChoice interface {
 	isReplaceSpecType_HashPolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isReplaceSpecType_ClusterRetractChoice interface {
+	isReplaceSpecType_ClusterRetractChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -951,6 +1153,12 @@ type ReplaceSpecType_HashPolicyChoiceRandom struct {
 type ReplaceSpecType_HashPolicyChoiceSourceIpStickiness struct {
 	HashPolicyChoiceSourceIpStickiness *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=hash_policy_choice_source_ip_stickiness,json=hashPolicyChoiceSourceIpStickiness,oneof"`
 }
+type ReplaceSpecType_RetractCluster struct {
+	RetractCluster *ves_io_schema4.Empty `protobuf:"bytes,19,opt,name=retract_cluster,json=retractCluster,oneof"`
+}
+type ReplaceSpecType_DoNotRetractCluster struct {
+	DoNotRetractCluster *ves_io_schema4.Empty `protobuf:"bytes,20,opt,name=do_not_retract_cluster,json=doNotRetractCluster,oneof"`
+}
 
 func (*ReplaceSpecType_DoNotAdvertise) isReplaceSpecType_AdvertiseChoice()                      {}
 func (*ReplaceSpecType_AdvertiseOnPublicDefaultVip) isReplaceSpecType_AdvertiseChoice()         {}
@@ -960,6 +1168,8 @@ func (*ReplaceSpecType_HashPolicyChoiceRoundRobin) isReplaceSpecType_HashPolicyC
 func (*ReplaceSpecType_HashPolicyChoiceLeastActive) isReplaceSpecType_HashPolicyChoice()        {}
 func (*ReplaceSpecType_HashPolicyChoiceRandom) isReplaceSpecType_HashPolicyChoice()             {}
 func (*ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) isReplaceSpecType_HashPolicyChoice() {}
+func (*ReplaceSpecType_RetractCluster) isReplaceSpecType_ClusterRetractChoice()                 {}
+func (*ReplaceSpecType_DoNotRetractCluster) isReplaceSpecType_ClusterRetractChoice()            {}
 
 func (m *ReplaceSpecType) GetAdvertiseChoice() isReplaceSpecType_AdvertiseChoice {
 	if m != nil {
@@ -970,6 +1180,12 @@ func (m *ReplaceSpecType) GetAdvertiseChoice() isReplaceSpecType_AdvertiseChoice
 func (m *ReplaceSpecType) GetHashPolicyChoice() isReplaceSpecType_HashPolicyChoice {
 	if m != nil {
 		return m.HashPolicyChoice
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetClusterRetractChoice() isReplaceSpecType_ClusterRetractChoice {
+	if m != nil {
+		return m.ClusterRetractChoice
 	}
 	return nil
 }
@@ -1072,6 +1288,27 @@ func (m *ReplaceSpecType) GetHashPolicyChoiceSourceIpStickiness() *ves_io_schema
 	return nil
 }
 
+func (m *ReplaceSpecType) GetIdleTimeout() uint32 {
+	if m != nil {
+		return m.IdleTimeout
+	}
+	return 0
+}
+
+func (m *ReplaceSpecType) GetRetractCluster() *ves_io_schema4.Empty {
+	if x, ok := m.GetClusterRetractChoice().(*ReplaceSpecType_RetractCluster); ok {
+		return x.RetractCluster
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetDoNotRetractCluster() *ves_io_schema4.Empty {
+	if x, ok := m.GetClusterRetractChoice().(*ReplaceSpecType_DoNotRetractCluster); ok {
+		return x.DoNotRetractCluster
+	}
+	return nil
+}
+
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _ReplaceSpecType_OneofMarshaler, _ReplaceSpecType_OneofUnmarshaler, _ReplaceSpecType_OneofSizer, []interface{}{
@@ -1083,6 +1320,8 @@ func (*ReplaceSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffe
 		(*ReplaceSpecType_HashPolicyChoiceLeastActive)(nil),
 		(*ReplaceSpecType_HashPolicyChoiceRandom)(nil),
 		(*ReplaceSpecType_HashPolicyChoiceSourceIpStickiness)(nil),
+		(*ReplaceSpecType_RetractCluster)(nil),
+		(*ReplaceSpecType_DoNotRetractCluster)(nil),
 	}
 }
 
@@ -1139,6 +1378,22 @@ func _ReplaceSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("ReplaceSpecType.HashPolicyChoice has unexpected type %T", x)
+	}
+	// cluster_retract_choice
+	switch x := m.ClusterRetractChoice.(type) {
+	case *ReplaceSpecType_RetractCluster:
+		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.RetractCluster); err != nil {
+			return err
+		}
+	case *ReplaceSpecType_DoNotRetractCluster:
+		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.DoNotRetractCluster); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("ReplaceSpecType.ClusterRetractChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -1210,6 +1465,22 @@ func _ReplaceSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *prot
 		err := b.DecodeMessage(msg)
 		m.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceSourceIpStickiness{msg}
 		return true, err
+	case 19: // cluster_retract_choice.retract_cluster
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ClusterRetractChoice = &ReplaceSpecType_RetractCluster{msg}
+		return true, err
+	case 20: // cluster_retract_choice.do_not_retract_cluster
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ClusterRetractChoice = &ReplaceSpecType_DoNotRetractCluster{msg}
+		return true, err
 	default:
 		return false, nil
 	}
@@ -1269,6 +1540,22 @@ func _ReplaceSpecType_OneofSizer(msg proto.Message) (n int) {
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
 	}
+	// cluster_retract_choice
+	switch x := m.ClusterRetractChoice.(type) {
+	case *ReplaceSpecType_RetractCluster:
+		s := proto.Size(x.RetractCluster)
+		n += proto.SizeVarint(19<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *ReplaceSpecType_DoNotRetractCluster:
+		s := proto.Size(x.DoNotRetractCluster)
+		n += proto.SizeVarint(20<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
 	return n
 }
 
@@ -1294,9 +1581,14 @@ type GetSpecType struct {
 	//	*GetSpecType_HashPolicyChoiceLeastActive
 	//	*GetSpecType_HashPolicyChoiceRandom
 	//	*GetSpecType_HashPolicyChoiceSourceIpStickiness
-	HashPolicyChoice isGetSpecType_HashPolicyChoice                 `protobuf_oneof:"hash_policy_choice"`
-	HostName         string                                         `protobuf:"bytes,1001,opt,name=host_name,json=hostName,proto3" json:"host_name,omitempty"`
-	DnsInfo          []*ves_io_schema_virtual_host_dns_info.DnsInfo `protobuf:"bytes,1002,rep,name=dns_info,json=dnsInfo" json:"dns_info,omitempty"`
+	HashPolicyChoice isGetSpecType_HashPolicyChoice `protobuf_oneof:"hash_policy_choice"`
+	IdleTimeout      uint32                         `protobuf:"varint,17,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`
+	// Types that are valid to be assigned to ClusterRetractChoice:
+	//	*GetSpecType_RetractCluster
+	//	*GetSpecType_DoNotRetractCluster
+	ClusterRetractChoice isGetSpecType_ClusterRetractChoice             `protobuf_oneof:"cluster_retract_choice"`
+	HostName             string                                         `protobuf:"bytes,1001,opt,name=host_name,json=hostName,proto3" json:"host_name,omitempty"`
+	DnsInfo              []*ves_io_schema_virtual_host_dns_info.DnsInfo `protobuf:"bytes,1002,rep,name=dns_info,json=dnsInfo" json:"dns_info,omitempty"`
 }
 
 func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
@@ -1311,6 +1603,12 @@ type isGetSpecType_AdvertiseChoice interface {
 }
 type isGetSpecType_HashPolicyChoice interface {
 	isGetSpecType_HashPolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isGetSpecType_ClusterRetractChoice interface {
+	isGetSpecType_ClusterRetractChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -1340,6 +1638,12 @@ type GetSpecType_HashPolicyChoiceRandom struct {
 type GetSpecType_HashPolicyChoiceSourceIpStickiness struct {
 	HashPolicyChoiceSourceIpStickiness *ves_io_schema4.Empty `protobuf:"bytes,16,opt,name=hash_policy_choice_source_ip_stickiness,json=hashPolicyChoiceSourceIpStickiness,oneof"`
 }
+type GetSpecType_RetractCluster struct {
+	RetractCluster *ves_io_schema4.Empty `protobuf:"bytes,19,opt,name=retract_cluster,json=retractCluster,oneof"`
+}
+type GetSpecType_DoNotRetractCluster struct {
+	DoNotRetractCluster *ves_io_schema4.Empty `protobuf:"bytes,20,opt,name=do_not_retract_cluster,json=doNotRetractCluster,oneof"`
+}
 
 func (*GetSpecType_DoNotAdvertise) isGetSpecType_AdvertiseChoice()                      {}
 func (*GetSpecType_AdvertiseOnPublicDefaultVip) isGetSpecType_AdvertiseChoice()         {}
@@ -1349,6 +1653,8 @@ func (*GetSpecType_HashPolicyChoiceRoundRobin) isGetSpecType_HashPolicyChoice() 
 func (*GetSpecType_HashPolicyChoiceLeastActive) isGetSpecType_HashPolicyChoice()        {}
 func (*GetSpecType_HashPolicyChoiceRandom) isGetSpecType_HashPolicyChoice()             {}
 func (*GetSpecType_HashPolicyChoiceSourceIpStickiness) isGetSpecType_HashPolicyChoice() {}
+func (*GetSpecType_RetractCluster) isGetSpecType_ClusterRetractChoice()                 {}
+func (*GetSpecType_DoNotRetractCluster) isGetSpecType_ClusterRetractChoice()            {}
 
 func (m *GetSpecType) GetAdvertiseChoice() isGetSpecType_AdvertiseChoice {
 	if m != nil {
@@ -1359,6 +1665,12 @@ func (m *GetSpecType) GetAdvertiseChoice() isGetSpecType_AdvertiseChoice {
 func (m *GetSpecType) GetHashPolicyChoice() isGetSpecType_HashPolicyChoice {
 	if m != nil {
 		return m.HashPolicyChoice
+	}
+	return nil
+}
+func (m *GetSpecType) GetClusterRetractChoice() isGetSpecType_ClusterRetractChoice {
+	if m != nil {
+		return m.ClusterRetractChoice
 	}
 	return nil
 }
@@ -1461,6 +1773,27 @@ func (m *GetSpecType) GetHashPolicyChoiceSourceIpStickiness() *ves_io_schema4.Em
 	return nil
 }
 
+func (m *GetSpecType) GetIdleTimeout() uint32 {
+	if m != nil {
+		return m.IdleTimeout
+	}
+	return 0
+}
+
+func (m *GetSpecType) GetRetractCluster() *ves_io_schema4.Empty {
+	if x, ok := m.GetClusterRetractChoice().(*GetSpecType_RetractCluster); ok {
+		return x.RetractCluster
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDoNotRetractCluster() *ves_io_schema4.Empty {
+	if x, ok := m.GetClusterRetractChoice().(*GetSpecType_DoNotRetractCluster); ok {
+		return x.DoNotRetractCluster
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetHostName() string {
 	if m != nil {
 		return m.HostName
@@ -1486,6 +1819,8 @@ func (*GetSpecType) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) e
 		(*GetSpecType_HashPolicyChoiceLeastActive)(nil),
 		(*GetSpecType_HashPolicyChoiceRandom)(nil),
 		(*GetSpecType_HashPolicyChoiceSourceIpStickiness)(nil),
+		(*GetSpecType_RetractCluster)(nil),
+		(*GetSpecType_DoNotRetractCluster)(nil),
 	}
 }
 
@@ -1542,6 +1877,22 @@ func _GetSpecType_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case nil:
 	default:
 		return fmt.Errorf("GetSpecType.HashPolicyChoice has unexpected type %T", x)
+	}
+	// cluster_retract_choice
+	switch x := m.ClusterRetractChoice.(type) {
+	case *GetSpecType_RetractCluster:
+		_ = b.EncodeVarint(19<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.RetractCluster); err != nil {
+			return err
+		}
+	case *GetSpecType_DoNotRetractCluster:
+		_ = b.EncodeVarint(20<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.DoNotRetractCluster); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("GetSpecType.ClusterRetractChoice has unexpected type %T", x)
 	}
 	return nil
 }
@@ -1613,6 +1964,22 @@ func _GetSpecType_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Bu
 		err := b.DecodeMessage(msg)
 		m.HashPolicyChoice = &GetSpecType_HashPolicyChoiceSourceIpStickiness{msg}
 		return true, err
+	case 19: // cluster_retract_choice.retract_cluster
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ClusterRetractChoice = &GetSpecType_RetractCluster{msg}
+		return true, err
+	case 20: // cluster_retract_choice.do_not_retract_cluster
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.ClusterRetractChoice = &GetSpecType_DoNotRetractCluster{msg}
+		return true, err
 	default:
 		return false, nil
 	}
@@ -1666,6 +2033,22 @@ func _GetSpecType_OneofSizer(msg proto.Message) (n int) {
 	case *GetSpecType_HashPolicyChoiceSourceIpStickiness:
 		s := proto.Size(x.HashPolicyChoiceSourceIpStickiness)
 		n += proto.SizeVarint(16<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	// cluster_retract_choice
+	switch x := m.ClusterRetractChoice.(type) {
+	case *GetSpecType_RetractCluster:
+		s := proto.Size(x.RetractCluster)
+		n += proto.SizeVarint(19<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *GetSpecType_DoNotRetractCluster:
+		s := proto.Size(x.DoNotRetractCluster)
+		n += proto.SizeVarint(20<<3 | proto.WireBytes)
 		n += proto.SizeVarint(uint64(s))
 		n += s
 	case nil:
@@ -1756,6 +2139,15 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if this.IdleTimeout != that1.IdleTimeout {
+		return false
+	}
+	if that1.ClusterRetractChoice == nil {
+		if this.ClusterRetractChoice != nil {
+			return false
+		}
+	} else if this.ClusterRetractChoice == nil {
+		return false
+	} else if !this.ClusterRetractChoice.Equal(that1.ClusterRetractChoice) {
 		return false
 	}
 	if !this.ViewInternal.Equal(that1.ViewInternal) {
@@ -1966,6 +2358,54 @@ func (this *GlobalSpecType_HashPolicyChoiceSourceIpStickiness) Equal(that interf
 	}
 	return true
 }
+func (this *GlobalSpecType_RetractCluster) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_RetractCluster)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_RetractCluster)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RetractCluster.Equal(that1.RetractCluster) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_DoNotRetractCluster) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DoNotRetractCluster)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DoNotRetractCluster)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DoNotRetractCluster.Equal(that1.DoNotRetractCluster) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2026,6 +2466,18 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this.HashPolicyChoice == nil {
 		return false
 	} else if !this.HashPolicyChoice.Equal(that1.HashPolicyChoice) {
+		return false
+	}
+	if this.IdleTimeout != that1.IdleTimeout {
+		return false
+	}
+	if that1.ClusterRetractChoice == nil {
+		if this.ClusterRetractChoice != nil {
+			return false
+		}
+	} else if this.ClusterRetractChoice == nil {
+		return false
+	} else if !this.ClusterRetractChoice.Equal(that1.ClusterRetractChoice) {
 		return false
 	}
 	return true
@@ -2222,6 +2674,54 @@ func (this *CreateSpecType_HashPolicyChoiceSourceIpStickiness) Equal(that interf
 	}
 	return true
 }
+func (this *CreateSpecType_RetractCluster) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_RetractCluster)
+	if !ok {
+		that2, ok := that.(CreateSpecType_RetractCluster)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RetractCluster.Equal(that1.RetractCluster) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_DoNotRetractCluster) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DoNotRetractCluster)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DoNotRetractCluster)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DoNotRetractCluster.Equal(that1.DoNotRetractCluster) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2290,6 +2790,18 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if this.HashPolicyChoice == nil {
 		return false
 	} else if !this.HashPolicyChoice.Equal(that1.HashPolicyChoice) {
+		return false
+	}
+	if this.IdleTimeout != that1.IdleTimeout {
+		return false
+	}
+	if that1.ClusterRetractChoice == nil {
+		if this.ClusterRetractChoice != nil {
+			return false
+		}
+	} else if this.ClusterRetractChoice == nil {
+		return false
+	} else if !this.ClusterRetractChoice.Equal(that1.ClusterRetractChoice) {
 		return false
 	}
 	return true
@@ -2486,6 +2998,54 @@ func (this *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) Equal(that inter
 	}
 	return true
 }
+func (this *ReplaceSpecType_RetractCluster) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_RetractCluster)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_RetractCluster)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RetractCluster.Equal(that1.RetractCluster) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_DoNotRetractCluster) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DoNotRetractCluster)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DoNotRetractCluster)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DoNotRetractCluster.Equal(that1.DoNotRetractCluster) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2554,6 +3114,18 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if this.HashPolicyChoice == nil {
 		return false
 	} else if !this.HashPolicyChoice.Equal(that1.HashPolicyChoice) {
+		return false
+	}
+	if this.IdleTimeout != that1.IdleTimeout {
+		return false
+	}
+	if that1.ClusterRetractChoice == nil {
+		if this.ClusterRetractChoice != nil {
+			return false
+		}
+	} else if this.ClusterRetractChoice == nil {
+		return false
+	} else if !this.ClusterRetractChoice.Equal(that1.ClusterRetractChoice) {
 		return false
 	}
 	if this.HostName != that1.HostName {
@@ -2761,11 +3333,59 @@ func (this *GetSpecType_HashPolicyChoiceSourceIpStickiness) Equal(that interface
 	}
 	return true
 }
+func (this *GetSpecType_RetractCluster) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_RetractCluster)
+	if !ok {
+		that2, ok := that.(GetSpecType_RetractCluster)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RetractCluster.Equal(that1.RetractCluster) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_DoNotRetractCluster) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DoNotRetractCluster)
+	if !ok {
+		that2, ok := that.(GetSpecType_DoNotRetractCluster)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DoNotRetractCluster.Equal(that1.DoNotRetractCluster) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 22)
+	s := make([]string, 0, 24)
 	s = append(s, "&tcp_loadbalancer.GlobalSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	s = append(s, "ListenPort: "+fmt.Sprintf("%#v", this.ListenPort)+",\n")
@@ -2784,6 +3404,9 @@ func (this *GlobalSpecType) GoString() string {
 		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
 	}
 	s = append(s, "IdleTimeout: "+fmt.Sprintf("%#v", this.IdleTimeout)+",\n")
+	if this.ClusterRetractChoice != nil {
+		s = append(s, "ClusterRetractChoice: "+fmt.Sprintf("%#v", this.ClusterRetractChoice)+",\n")
+	}
 	if this.ViewInternal != nil {
 		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
 	}
@@ -2858,11 +3481,27 @@ func (this *GlobalSpecType_HashPolicyChoiceSourceIpStickiness) GoString() string
 		`HashPolicyChoiceSourceIpStickiness:` + fmt.Sprintf("%#v", this.HashPolicyChoiceSourceIpStickiness) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_RetractCluster) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GlobalSpecType_RetractCluster{` +
+		`RetractCluster:` + fmt.Sprintf("%#v", this.RetractCluster) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_DoNotRetractCluster) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GlobalSpecType_DoNotRetractCluster{` +
+		`DoNotRetractCluster:` + fmt.Sprintf("%#v", this.DoNotRetractCluster) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 17)
+	s := make([]string, 0, 20)
 	s = append(s, "&tcp_loadbalancer.CreateSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	s = append(s, "ListenPort: "+fmt.Sprintf("%#v", this.ListenPort)+",\n")
@@ -2876,6 +3515,10 @@ func (this *CreateSpecType) GoString() string {
 	}
 	if this.HashPolicyChoice != nil {
 		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
+	}
+	s = append(s, "IdleTimeout: "+fmt.Sprintf("%#v", this.IdleTimeout)+",\n")
+	if this.ClusterRetractChoice != nil {
+		s = append(s, "ClusterRetractChoice: "+fmt.Sprintf("%#v", this.ClusterRetractChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -2944,11 +3587,27 @@ func (this *CreateSpecType_HashPolicyChoiceSourceIpStickiness) GoString() string
 		`HashPolicyChoiceSourceIpStickiness:` + fmt.Sprintf("%#v", this.HashPolicyChoiceSourceIpStickiness) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_RetractCluster) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.CreateSpecType_RetractCluster{` +
+		`RetractCluster:` + fmt.Sprintf("%#v", this.RetractCluster) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_DoNotRetractCluster) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.CreateSpecType_DoNotRetractCluster{` +
+		`DoNotRetractCluster:` + fmt.Sprintf("%#v", this.DoNotRetractCluster) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 18)
+	s := make([]string, 0, 21)
 	s = append(s, "&tcp_loadbalancer.ReplaceSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	s = append(s, "ListenPort: "+fmt.Sprintf("%#v", this.ListenPort)+",\n")
@@ -2965,6 +3624,10 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	if this.HashPolicyChoice != nil {
 		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
+	}
+	s = append(s, "IdleTimeout: "+fmt.Sprintf("%#v", this.IdleTimeout)+",\n")
+	if this.ClusterRetractChoice != nil {
+		s = append(s, "ClusterRetractChoice: "+fmt.Sprintf("%#v", this.ClusterRetractChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -3033,11 +3696,27 @@ func (this *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) GoString() strin
 		`HashPolicyChoiceSourceIpStickiness:` + fmt.Sprintf("%#v", this.HashPolicyChoiceSourceIpStickiness) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_RetractCluster) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.ReplaceSpecType_RetractCluster{` +
+		`RetractCluster:` + fmt.Sprintf("%#v", this.RetractCluster) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_DoNotRetractCluster) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.ReplaceSpecType_DoNotRetractCluster{` +
+		`DoNotRetractCluster:` + fmt.Sprintf("%#v", this.DoNotRetractCluster) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 20)
+	s := make([]string, 0, 23)
 	s = append(s, "&tcp_loadbalancer.GetSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	s = append(s, "ListenPort: "+fmt.Sprintf("%#v", this.ListenPort)+",\n")
@@ -3054,6 +3733,10 @@ func (this *GetSpecType) GoString() string {
 	}
 	if this.HashPolicyChoice != nil {
 		s = append(s, "HashPolicyChoice: "+fmt.Sprintf("%#v", this.HashPolicyChoice)+",\n")
+	}
+	s = append(s, "IdleTimeout: "+fmt.Sprintf("%#v", this.IdleTimeout)+",\n")
+	if this.ClusterRetractChoice != nil {
+		s = append(s, "ClusterRetractChoice: "+fmt.Sprintf("%#v", this.ClusterRetractChoice)+",\n")
 	}
 	s = append(s, "HostName: "+fmt.Sprintf("%#v", this.HostName)+",\n")
 	if this.DnsInfo != nil {
@@ -3124,6 +3807,22 @@ func (this *GetSpecType_HashPolicyChoiceSourceIpStickiness) GoString() string {
 	}
 	s := strings.Join([]string{`&tcp_loadbalancer.GetSpecType_HashPolicyChoiceSourceIpStickiness{` +
 		`HashPolicyChoiceSourceIpStickiness:` + fmt.Sprintf("%#v", this.HashPolicyChoiceSourceIpStickiness) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_RetractCluster) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GetSpecType_RetractCluster{` +
+		`RetractCluster:` + fmt.Sprintf("%#v", this.RetractCluster) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DoNotRetractCluster) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tcp_loadbalancer.GetSpecType_DoNotRetractCluster{` +
+		`DoNotRetractCluster:` + fmt.Sprintf("%#v", this.DoNotRetractCluster) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -3234,17 +3933,24 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.IdleTimeout))
 	}
+	if m.ClusterRetractChoice != nil {
+		nn3, err := m.ClusterRetractChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn3
+	}
 	if m.ViewInternal != nil {
 		dAtA[i] = 0xc2
 		i++
 		dAtA[i] = 0x3e
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.ViewInternal.Size()))
-		n3, err := m.ViewInternal.MarshalTo(dAtA[i:])
+		n4, err := m.ViewInternal.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n4
 	}
 	if len(m.HostName) > 0 {
 		dAtA[i] = 0xca
@@ -3277,11 +3983,11 @@ func (m *GlobalSpecType_AdvertiseOnPublic) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublic.Size()))
-		n4, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
+		n5, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n4
+		i += n5
 	}
 	return i, nil
 }
@@ -3291,11 +3997,11 @@ func (m *GlobalSpecType_AdvertiseCustom) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseCustom.Size()))
-		n5, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
+		n6, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n5
+		i += n6
 	}
 	return i, nil
 }
@@ -3305,11 +4011,11 @@ func (m *GlobalSpecType_DoNotAdvertise) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotAdvertise.Size()))
-		n6, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
+		n7, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n6
+		i += n7
 	}
 	return i, nil
 }
@@ -3319,11 +4025,11 @@ func (m *GlobalSpecType_AdvertiseOnPublicDefaultVip) MarshalTo(dAtA []byte) (int
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublicDefaultVip.Size()))
-		n7, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
+		n8, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n7
+		i += n8
 	}
 	return i, nil
 }
@@ -3333,11 +4039,11 @@ func (m *GlobalSpecType_HashPolicyChoiceRoundRobin) MarshalTo(dAtA []byte) (int,
 		dAtA[i] = 0x6a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRoundRobin.Size()))
-		n8, err := m.HashPolicyChoiceRoundRobin.MarshalTo(dAtA[i:])
+		n9, err := m.HashPolicyChoiceRoundRobin.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n8
+		i += n9
 	}
 	return i, nil
 }
@@ -3347,11 +4053,11 @@ func (m *GlobalSpecType_HashPolicyChoiceLeastActive) MarshalTo(dAtA []byte) (int
 		dAtA[i] = 0x72
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceLeastActive.Size()))
-		n9, err := m.HashPolicyChoiceLeastActive.MarshalTo(dAtA[i:])
+		n10, err := m.HashPolicyChoiceLeastActive.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n9
+		i += n10
 	}
 	return i, nil
 }
@@ -3361,11 +4067,11 @@ func (m *GlobalSpecType_HashPolicyChoiceRandom) MarshalTo(dAtA []byte) (int, err
 		dAtA[i] = 0x7a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRandom.Size()))
-		n10, err := m.HashPolicyChoiceRandom.MarshalTo(dAtA[i:])
+		n11, err := m.HashPolicyChoiceRandom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n10
+		i += n11
 	}
 	return i, nil
 }
@@ -3377,11 +4083,43 @@ func (m *GlobalSpecType_HashPolicyChoiceSourceIpStickiness) MarshalTo(dAtA []byt
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceSourceIpStickiness.Size()))
-		n11, err := m.HashPolicyChoiceSourceIpStickiness.MarshalTo(dAtA[i:])
+		n12, err := m.HashPolicyChoiceSourceIpStickiness.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n11
+		i += n12
+	}
+	return i, nil
+}
+func (m *GlobalSpecType_RetractCluster) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.RetractCluster != nil {
+		dAtA[i] = 0x9a
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.RetractCluster.Size()))
+		n13, err := m.RetractCluster.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n13
+	}
+	return i, nil
+}
+func (m *GlobalSpecType_DoNotRetractCluster) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.DoNotRetractCluster != nil {
+		dAtA[i] = 0xa2
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotRetractCluster.Size()))
+		n14, err := m.DoNotRetractCluster.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n14
 	}
 	return i, nil
 }
@@ -3431,11 +4169,11 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i++
 	}
 	if m.AdvertiseChoice != nil {
-		nn12, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
+		nn15, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn12
+		i += nn15
 	}
 	if len(m.OriginPoolsWeights) > 0 {
 		for _, msg := range m.OriginPoolsWeights {
@@ -3460,11 +4198,25 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i++
 	}
 	if m.HashPolicyChoice != nil {
-		nn13, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
+		nn16, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn13
+		i += nn16
+	}
+	if m.IdleTimeout != 0 {
+		dAtA[i] = 0x88
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.IdleTimeout))
+	}
+	if m.ClusterRetractChoice != nil {
+		nn17, err := m.ClusterRetractChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn17
 	}
 	return i, nil
 }
@@ -3475,11 +4227,11 @@ func (m *CreateSpecType_AdvertiseOnPublic) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublic.Size()))
-		n14, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
+		n18, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n14
+		i += n18
 	}
 	return i, nil
 }
@@ -3489,11 +4241,11 @@ func (m *CreateSpecType_AdvertiseCustom) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseCustom.Size()))
-		n15, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
+		n19, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n15
+		i += n19
 	}
 	return i, nil
 }
@@ -3503,11 +4255,11 @@ func (m *CreateSpecType_DoNotAdvertise) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotAdvertise.Size()))
-		n16, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
+		n20, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n16
+		i += n20
 	}
 	return i, nil
 }
@@ -3517,11 +4269,11 @@ func (m *CreateSpecType_AdvertiseOnPublicDefaultVip) MarshalTo(dAtA []byte) (int
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublicDefaultVip.Size()))
-		n17, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
+		n21, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n17
+		i += n21
 	}
 	return i, nil
 }
@@ -3531,11 +4283,11 @@ func (m *CreateSpecType_HashPolicyChoiceRoundRobin) MarshalTo(dAtA []byte) (int,
 		dAtA[i] = 0x6a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRoundRobin.Size()))
-		n18, err := m.HashPolicyChoiceRoundRobin.MarshalTo(dAtA[i:])
+		n22, err := m.HashPolicyChoiceRoundRobin.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n18
+		i += n22
 	}
 	return i, nil
 }
@@ -3545,11 +4297,11 @@ func (m *CreateSpecType_HashPolicyChoiceLeastActive) MarshalTo(dAtA []byte) (int
 		dAtA[i] = 0x72
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceLeastActive.Size()))
-		n19, err := m.HashPolicyChoiceLeastActive.MarshalTo(dAtA[i:])
+		n23, err := m.HashPolicyChoiceLeastActive.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n19
+		i += n23
 	}
 	return i, nil
 }
@@ -3559,11 +4311,11 @@ func (m *CreateSpecType_HashPolicyChoiceRandom) MarshalTo(dAtA []byte) (int, err
 		dAtA[i] = 0x7a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRandom.Size()))
-		n20, err := m.HashPolicyChoiceRandom.MarshalTo(dAtA[i:])
+		n24, err := m.HashPolicyChoiceRandom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n20
+		i += n24
 	}
 	return i, nil
 }
@@ -3575,11 +4327,43 @@ func (m *CreateSpecType_HashPolicyChoiceSourceIpStickiness) MarshalTo(dAtA []byt
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceSourceIpStickiness.Size()))
-		n21, err := m.HashPolicyChoiceSourceIpStickiness.MarshalTo(dAtA[i:])
+		n25, err := m.HashPolicyChoiceSourceIpStickiness.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n21
+		i += n25
+	}
+	return i, nil
+}
+func (m *CreateSpecType_RetractCluster) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.RetractCluster != nil {
+		dAtA[i] = 0x9a
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.RetractCluster.Size()))
+		n26, err := m.RetractCluster.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n26
+	}
+	return i, nil
+}
+func (m *CreateSpecType_DoNotRetractCluster) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.DoNotRetractCluster != nil {
+		dAtA[i] = 0xa2
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotRetractCluster.Size()))
+		n27, err := m.DoNotRetractCluster.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n27
 	}
 	return i, nil
 }
@@ -3641,11 +4425,11 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.AdvertiseChoice != nil {
-		nn22, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
+		nn28, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn22
+		i += nn28
 	}
 	if len(m.OriginPoolsWeights) > 0 {
 		for _, msg := range m.OriginPoolsWeights {
@@ -3670,11 +4454,25 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i++
 	}
 	if m.HashPolicyChoice != nil {
-		nn23, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
+		nn29, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn23
+		i += nn29
+	}
+	if m.IdleTimeout != 0 {
+		dAtA[i] = 0x88
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.IdleTimeout))
+	}
+	if m.ClusterRetractChoice != nil {
+		nn30, err := m.ClusterRetractChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn30
 	}
 	return i, nil
 }
@@ -3685,11 +4483,11 @@ func (m *ReplaceSpecType_AdvertiseOnPublic) MarshalTo(dAtA []byte) (int, error) 
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublic.Size()))
-		n24, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
+		n31, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n24
+		i += n31
 	}
 	return i, nil
 }
@@ -3699,11 +4497,11 @@ func (m *ReplaceSpecType_AdvertiseCustom) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseCustom.Size()))
-		n25, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
+		n32, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n25
+		i += n32
 	}
 	return i, nil
 }
@@ -3713,11 +4511,11 @@ func (m *ReplaceSpecType_DoNotAdvertise) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotAdvertise.Size()))
-		n26, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
+		n33, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n26
+		i += n33
 	}
 	return i, nil
 }
@@ -3727,11 +4525,11 @@ func (m *ReplaceSpecType_AdvertiseOnPublicDefaultVip) MarshalTo(dAtA []byte) (in
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublicDefaultVip.Size()))
-		n27, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
+		n34, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n27
+		i += n34
 	}
 	return i, nil
 }
@@ -3741,11 +4539,11 @@ func (m *ReplaceSpecType_HashPolicyChoiceRoundRobin) MarshalTo(dAtA []byte) (int
 		dAtA[i] = 0x6a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRoundRobin.Size()))
-		n28, err := m.HashPolicyChoiceRoundRobin.MarshalTo(dAtA[i:])
+		n35, err := m.HashPolicyChoiceRoundRobin.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n28
+		i += n35
 	}
 	return i, nil
 }
@@ -3755,11 +4553,11 @@ func (m *ReplaceSpecType_HashPolicyChoiceLeastActive) MarshalTo(dAtA []byte) (in
 		dAtA[i] = 0x72
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceLeastActive.Size()))
-		n29, err := m.HashPolicyChoiceLeastActive.MarshalTo(dAtA[i:])
+		n36, err := m.HashPolicyChoiceLeastActive.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n29
+		i += n36
 	}
 	return i, nil
 }
@@ -3769,11 +4567,11 @@ func (m *ReplaceSpecType_HashPolicyChoiceRandom) MarshalTo(dAtA []byte) (int, er
 		dAtA[i] = 0x7a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRandom.Size()))
-		n30, err := m.HashPolicyChoiceRandom.MarshalTo(dAtA[i:])
+		n37, err := m.HashPolicyChoiceRandom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n30
+		i += n37
 	}
 	return i, nil
 }
@@ -3785,11 +4583,43 @@ func (m *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) MarshalTo(dAtA []by
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceSourceIpStickiness.Size()))
-		n31, err := m.HashPolicyChoiceSourceIpStickiness.MarshalTo(dAtA[i:])
+		n38, err := m.HashPolicyChoiceSourceIpStickiness.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n31
+		i += n38
+	}
+	return i, nil
+}
+func (m *ReplaceSpecType_RetractCluster) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.RetractCluster != nil {
+		dAtA[i] = 0x9a
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.RetractCluster.Size()))
+		n39, err := m.RetractCluster.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n39
+	}
+	return i, nil
+}
+func (m *ReplaceSpecType_DoNotRetractCluster) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.DoNotRetractCluster != nil {
+		dAtA[i] = 0xa2
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotRetractCluster.Size()))
+		n40, err := m.DoNotRetractCluster.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n40
 	}
 	return i, nil
 }
@@ -3851,11 +4681,11 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 	}
 	if m.AdvertiseChoice != nil {
-		nn32, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
+		nn41, err := m.AdvertiseChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn32
+		i += nn41
 	}
 	if len(m.OriginPoolsWeights) > 0 {
 		for _, msg := range m.OriginPoolsWeights {
@@ -3880,11 +4710,25 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		i++
 	}
 	if m.HashPolicyChoice != nil {
-		nn33, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
+		nn42, err := m.HashPolicyChoice.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += nn33
+		i += nn42
+	}
+	if m.IdleTimeout != 0 {
+		dAtA[i] = 0x88
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.IdleTimeout))
+	}
+	if m.ClusterRetractChoice != nil {
+		nn43, err := m.ClusterRetractChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn43
 	}
 	if len(m.HostName) > 0 {
 		dAtA[i] = 0xca
@@ -3917,11 +4761,11 @@ func (m *GetSpecType_AdvertiseOnPublic) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x2a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublic.Size()))
-		n34, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
+		n44, err := m.AdvertiseOnPublic.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n34
+		i += n44
 	}
 	return i, nil
 }
@@ -3931,11 +4775,11 @@ func (m *GetSpecType_AdvertiseCustom) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x32
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseCustom.Size()))
-		n35, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
+		n45, err := m.AdvertiseCustom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n35
+		i += n45
 	}
 	return i, nil
 }
@@ -3945,11 +4789,11 @@ func (m *GetSpecType_DoNotAdvertise) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotAdvertise.Size()))
-		n36, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
+		n46, err := m.DoNotAdvertise.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n36
+		i += n46
 	}
 	return i, nil
 }
@@ -3959,11 +4803,11 @@ func (m *GetSpecType_AdvertiseOnPublicDefaultVip) MarshalTo(dAtA []byte) (int, e
 		dAtA[i] = 0x42
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.AdvertiseOnPublicDefaultVip.Size()))
-		n37, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
+		n47, err := m.AdvertiseOnPublicDefaultVip.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n37
+		i += n47
 	}
 	return i, nil
 }
@@ -3973,11 +4817,11 @@ func (m *GetSpecType_HashPolicyChoiceRoundRobin) MarshalTo(dAtA []byte) (int, er
 		dAtA[i] = 0x6a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRoundRobin.Size()))
-		n38, err := m.HashPolicyChoiceRoundRobin.MarshalTo(dAtA[i:])
+		n48, err := m.HashPolicyChoiceRoundRobin.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n38
+		i += n48
 	}
 	return i, nil
 }
@@ -3987,11 +4831,11 @@ func (m *GetSpecType_HashPolicyChoiceLeastActive) MarshalTo(dAtA []byte) (int, e
 		dAtA[i] = 0x72
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceLeastActive.Size()))
-		n39, err := m.HashPolicyChoiceLeastActive.MarshalTo(dAtA[i:])
+		n49, err := m.HashPolicyChoiceLeastActive.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n39
+		i += n49
 	}
 	return i, nil
 }
@@ -4001,11 +4845,11 @@ func (m *GetSpecType_HashPolicyChoiceRandom) MarshalTo(dAtA []byte) (int, error)
 		dAtA[i] = 0x7a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceRandom.Size()))
-		n40, err := m.HashPolicyChoiceRandom.MarshalTo(dAtA[i:])
+		n50, err := m.HashPolicyChoiceRandom.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n40
+		i += n50
 	}
 	return i, nil
 }
@@ -4017,11 +4861,43 @@ func (m *GetSpecType_HashPolicyChoiceSourceIpStickiness) MarshalTo(dAtA []byte) 
 		dAtA[i] = 0x1
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.HashPolicyChoiceSourceIpStickiness.Size()))
-		n41, err := m.HashPolicyChoiceSourceIpStickiness.MarshalTo(dAtA[i:])
+		n51, err := m.HashPolicyChoiceSourceIpStickiness.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n41
+		i += n51
+	}
+	return i, nil
+}
+func (m *GetSpecType_RetractCluster) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.RetractCluster != nil {
+		dAtA[i] = 0x9a
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.RetractCluster.Size()))
+		n52, err := m.RetractCluster.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n52
+	}
+	return i, nil
+}
+func (m *GetSpecType_DoNotRetractCluster) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.DoNotRetractCluster != nil {
+		dAtA[i] = 0xa2
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DoNotRetractCluster.Size()))
+		n53, err := m.DoNotRetractCluster.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n53
 	}
 	return i, nil
 }
@@ -4072,6 +4948,9 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.IdleTimeout != 0 {
 		n += 2 + sovTypes(uint64(m.IdleTimeout))
+	}
+	if m.ClusterRetractChoice != nil {
+		n += m.ClusterRetractChoice.Size()
 	}
 	if m.ViewInternal != nil {
 		l = m.ViewInternal.Size()
@@ -4162,6 +5041,24 @@ func (m *GlobalSpecType_HashPolicyChoiceSourceIpStickiness) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_RetractCluster) Size() (n int) {
+	var l int
+	_ = l
+	if m.RetractCluster != nil {
+		l = m.RetractCluster.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_DoNotRetractCluster) Size() (n int) {
+	var l int
+	_ = l
+	if m.DoNotRetractCluster != nil {
+		l = m.DoNotRetractCluster.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -4191,6 +5088,12 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	if m.HashPolicyChoice != nil {
 		n += m.HashPolicyChoice.Size()
+	}
+	if m.IdleTimeout != 0 {
+		n += 2 + sovTypes(uint64(m.IdleTimeout))
+	}
+	if m.ClusterRetractChoice != nil {
+		n += m.ClusterRetractChoice.Size()
 	}
 	return n
 }
@@ -4267,6 +5170,24 @@ func (m *CreateSpecType_HashPolicyChoiceSourceIpStickiness) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_RetractCluster) Size() (n int) {
+	var l int
+	_ = l
+	if m.RetractCluster != nil {
+		l = m.RetractCluster.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_DoNotRetractCluster) Size() (n int) {
+	var l int
+	_ = l
+	if m.DoNotRetractCluster != nil {
+		l = m.DoNotRetractCluster.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -4302,6 +5223,12 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	if m.HashPolicyChoice != nil {
 		n += m.HashPolicyChoice.Size()
+	}
+	if m.IdleTimeout != 0 {
+		n += 2 + sovTypes(uint64(m.IdleTimeout))
+	}
+	if m.ClusterRetractChoice != nil {
+		n += m.ClusterRetractChoice.Size()
 	}
 	return n
 }
@@ -4378,6 +5305,24 @@ func (m *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_RetractCluster) Size() (n int) {
+	var l int
+	_ = l
+	if m.RetractCluster != nil {
+		l = m.RetractCluster.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_DoNotRetractCluster) Size() (n int) {
+	var l int
+	_ = l
+	if m.DoNotRetractCluster != nil {
+		l = m.DoNotRetractCluster.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -4413,6 +5358,12 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.HashPolicyChoice != nil {
 		n += m.HashPolicyChoice.Size()
+	}
+	if m.IdleTimeout != 0 {
+		n += 2 + sovTypes(uint64(m.IdleTimeout))
+	}
+	if m.ClusterRetractChoice != nil {
+		n += m.ClusterRetractChoice.Size()
 	}
 	l = len(m.HostName)
 	if l > 0 {
@@ -4499,6 +5450,24 @@ func (m *GetSpecType_HashPolicyChoiceSourceIpStickiness) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_RetractCluster) Size() (n int) {
+	var l int
+	_ = l
+	if m.RetractCluster != nil {
+		l = m.RetractCluster.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_DoNotRetractCluster) Size() (n int) {
+	var l int
+	_ = l
+	if m.DoNotRetractCluster != nil {
+		l = m.DoNotRetractCluster.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	for {
@@ -4527,6 +5496,7 @@ func (this *GlobalSpecType) String() string {
 		`DnsVolterraManaged:` + fmt.Sprintf("%v", this.DnsVolterraManaged) + `,`,
 		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
 		`IdleTimeout:` + fmt.Sprintf("%v", this.IdleTimeout) + `,`,
+		`ClusterRetractChoice:` + fmt.Sprintf("%v", this.ClusterRetractChoice) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
 		`DnsInfo:` + strings.Replace(fmt.Sprintf("%v", this.DnsInfo), "DnsInfo", "ves_io_schema_virtual_host_dns_info.DnsInfo", 1) + `,`,
@@ -4614,6 +5584,26 @@ func (this *GlobalSpecType_HashPolicyChoiceSourceIpStickiness) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_RetractCluster) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_RetractCluster{`,
+		`RetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.RetractCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_DoNotRetractCluster) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DoNotRetractCluster{`,
+		`DoNotRetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.DoNotRetractCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -4626,6 +5616,8 @@ func (this *CreateSpecType) String() string {
 		`OriginPoolsWeights:` + strings.Replace(fmt.Sprintf("%v", this.OriginPoolsWeights), "OriginPoolWithWeight", "ves_io_schema_views.OriginPoolWithWeight", 1) + `,`,
 		`DnsVolterraManaged:` + fmt.Sprintf("%v", this.DnsVolterraManaged) + `,`,
 		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
+		`IdleTimeout:` + fmt.Sprintf("%v", this.IdleTimeout) + `,`,
+		`ClusterRetractChoice:` + fmt.Sprintf("%v", this.ClusterRetractChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4710,6 +5702,26 @@ func (this *CreateSpecType_HashPolicyChoiceSourceIpStickiness) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_RetractCluster) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_RetractCluster{`,
+		`RetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.RetractCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_DoNotRetractCluster) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DoNotRetractCluster{`,
+		`DoNotRetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.DoNotRetractCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -4723,6 +5735,8 @@ func (this *ReplaceSpecType) String() string {
 		`OriginPoolsWeights:` + strings.Replace(fmt.Sprintf("%v", this.OriginPoolsWeights), "OriginPoolWithWeight", "ves_io_schema_views.OriginPoolWithWeight", 1) + `,`,
 		`DnsVolterraManaged:` + fmt.Sprintf("%v", this.DnsVolterraManaged) + `,`,
 		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
+		`IdleTimeout:` + fmt.Sprintf("%v", this.IdleTimeout) + `,`,
+		`ClusterRetractChoice:` + fmt.Sprintf("%v", this.ClusterRetractChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4807,6 +5821,26 @@ func (this *ReplaceSpecType_HashPolicyChoiceSourceIpStickiness) String() string 
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_RetractCluster) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_RetractCluster{`,
+		`RetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.RetractCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_DoNotRetractCluster) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DoNotRetractCluster{`,
+		`DoNotRetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.DoNotRetractCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -4820,6 +5854,8 @@ func (this *GetSpecType) String() string {
 		`OriginPoolsWeights:` + strings.Replace(fmt.Sprintf("%v", this.OriginPoolsWeights), "OriginPoolWithWeight", "ves_io_schema_views.OriginPoolWithWeight", 1) + `,`,
 		`DnsVolterraManaged:` + fmt.Sprintf("%v", this.DnsVolterraManaged) + `,`,
 		`HashPolicyChoice:` + fmt.Sprintf("%v", this.HashPolicyChoice) + `,`,
+		`IdleTimeout:` + fmt.Sprintf("%v", this.IdleTimeout) + `,`,
+		`ClusterRetractChoice:` + fmt.Sprintf("%v", this.ClusterRetractChoice) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
 		`DnsInfo:` + strings.Replace(fmt.Sprintf("%v", this.DnsInfo), "DnsInfo", "ves_io_schema_virtual_host_dns_info.DnsInfo", 1) + `,`,
 		`}`,
@@ -4902,6 +5938,26 @@ func (this *GetSpecType_HashPolicyChoiceSourceIpStickiness) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_HashPolicyChoiceSourceIpStickiness{`,
 		`HashPolicyChoiceSourceIpStickiness:` + strings.Replace(fmt.Sprintf("%v", this.HashPolicyChoiceSourceIpStickiness), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_RetractCluster) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_RetractCluster{`,
+		`RetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.RetractCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_DoNotRetractCluster) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DoNotRetractCluster{`,
+		`DoNotRetractCluster:` + strings.Replace(fmt.Sprintf("%v", this.DoNotRetractCluster), "Empty", "ves_io_schema4.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5368,6 +6424,70 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RetractCluster", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterRetractChoice = &GlobalSpecType_RetractCluster{v}
+			iNdEx = postIndex
+		case 20:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoNotRetractCluster", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterRetractChoice = &GlobalSpecType_DoNotRetractCluster{v}
+			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ViewInternal", wireType)
@@ -5886,6 +7006,89 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.HashPolicyChoice = &CreateSpecType_HashPolicyChoiceSourceIpStickiness{v}
 			iNdEx = postIndex
+		case 17:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IdleTimeout", wireType)
+			}
+			m.IdleTimeout = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.IdleTimeout |= (uint32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RetractCluster", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterRetractChoice = &CreateSpecType_RetractCluster{v}
+			iNdEx = postIndex
+		case 20:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoNotRetractCluster", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterRetractChoice = &CreateSpecType_DoNotRetractCluster{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -6341,6 +7544,89 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.HashPolicyChoice = &ReplaceSpecType_HashPolicyChoiceSourceIpStickiness{v}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IdleTimeout", wireType)
+			}
+			m.IdleTimeout = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.IdleTimeout |= (uint32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RetractCluster", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterRetractChoice = &ReplaceSpecType_RetractCluster{v}
+			iNdEx = postIndex
+		case 20:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoNotRetractCluster", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterRetractChoice = &ReplaceSpecType_DoNotRetractCluster{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -6798,6 +8084,89 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.HashPolicyChoice = &GetSpecType_HashPolicyChoiceSourceIpStickiness{v}
 			iNdEx = postIndex
+		case 17:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IdleTimeout", wireType)
+			}
+			m.IdleTimeout = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.IdleTimeout |= (uint32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RetractCluster", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterRetractChoice = &GetSpecType_RetractCluster{v}
+			iNdEx = postIndex
+		case 20:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DoNotRetractCluster", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClusterRetractChoice = &GetSpecType_DoNotRetractCluster{v}
+			iNdEx = postIndex
 		case 1001:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field HostName", wireType)
@@ -6992,81 +8361,87 @@ func init() {
 }
 
 var fileDescriptorTypes = []byte{
-	// 1208 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x98, 0xcd, 0x6f, 0x13, 0xc7,
-	0x1b, 0xc7, 0x3d, 0x89, 0x93, 0xd8, 0xe3, 0xbc, 0x98, 0x01, 0xf1, 0x5b, 0x02, 0x5a, 0xac, 0x88,
-	0x5f, 0x49, 0xab, 0x8d, 0x5f, 0x12, 0x5e, 0x0a, 0xaa, 0x2a, 0xb1, 0xa1, 0xe5, 0x45, 0x14, 0xd2,
-	0x0d, 0x05, 0x35, 0x45, 0x5a, 0x8d, 0x77, 0xc7, 0xf6, 0x34, 0xeb, 0x9d, 0xd5, 0xce, 0xd8, 0x34,
-	0x07, 0xa4, 0x8a, 0x53, 0x8f, 0x88, 0x7f, 0xa2, 0x15, 0xea, 0xa9, 0xc7, 0xba, 0x87, 0xa8, 0xa7,
-	0xaa, 0xa7, 0x1c, 0x7a, 0x40, 0x3d, 0x81, 0xb9, 0x40, 0x4f, 0x1c, 0x2b, 0x4e, 0xd5, 0xcc, 0xc6,
-	0xc6, 0x2f, 0xdb, 0x08, 0x55, 0x50, 0xb5, 0xaa, 0x6f, 0x3b, 0xf3, 0xcc, 0xf7, 0x3b, 0x33, 0xfb,
-	0x3c, 0xfe, 0xcc, 0x78, 0x61, 0xb1, 0x49, 0x78, 0x9e, 0xb2, 0x02, 0x77, 0x6a, 0xa4, 0x8e, 0x0b,
-	0x4d, 0x4a, 0x6e, 0xf3, 0x82, 0x70, 0x02, 0xdb, 0x63, 0xd8, 0x2d, 0x63, 0x0f, 0xfb, 0x0e, 0x09,
-	0x0b, 0x62, 0x2b, 0x20, 0x3c, 0x1f, 0x84, 0x4c, 0x30, 0x74, 0x2c, 0x52, 0xe4, 0x23, 0x45, 0x5e,
-	0x29, 0xf2, 0x83, 0x8a, 0xf9, 0xa5, 0x2a, 0x15, 0xb5, 0x46, 0x39, 0xef, 0xb0, 0x7a, 0xa1, 0xca,
-	0xaa, 0xac, 0xa0, 0xc4, 0xe5, 0x46, 0x45, 0xb5, 0x54, 0x43, 0x3d, 0x45, 0xa6, 0xf3, 0x87, 0xfb,
-	0x97, 0xc1, 0x02, 0x41, 0x99, 0xbf, 0x3b, 0xe3, 0xfc, 0xa1, 0xfe, 0x60, 0xcf, 0x62, 0xe6, 0x8f,
-	0x0c, 0x2c, 0x1f, 0x7b, 0xd4, 0xc5, 0x82, 0xec, 0x46, 0x73, 0xc3, 0x9b, 0xb3, 0xfb, 0xad, 0x8f,
-	0xc6, 0x6e, 0xbf, 0x67, 0x82, 0xa1, 0xf7, 0x13, 0x8a, 0x06, 0xf6, 0xec, 0x1a, 0xe3, 0xc2, 0x76,
-	0x7d, 0x6e, 0x53, 0xbf, 0xc2, 0x0a, 0xac, 0xfc, 0x39, 0x71, 0x44, 0xa4, 0x58, 0xf8, 0x6e, 0x1a,
-	0xce, 0x5e, 0xf0, 0x58, 0x19, 0x7b, 0xeb, 0x01, 0x71, 0xae, 0x6f, 0x05, 0x04, 0xbd, 0x07, 0xa7,
-	0x5c, 0x56, 0xc7, 0xd4, 0xe7, 0x1a, 0xc8, 0x8d, 0x2f, 0xa6, 0xcd, 0x85, 0xef, 0x9f, 0x6d, 0x8f,
-	0xa7, 0xef, 0x83, 0xc9, 0x85, 0x64, 0x38, 0x56, 0x03, 0xb2, 0x35, 0x71, 0x1f, 0x8c, 0x65, 0xb3,
-	0x9d, 0x27, 0x0d, 0x58, 0x1d, 0x09, 0x3a, 0x0a, 0x33, 0x1e, 0xe5, 0x82, 0xf8, 0x76, 0xc0, 0x42,
-	0xa1, 0x8d, 0xe5, 0xc0, 0xe2, 0x8c, 0x05, 0xa3, 0xae, 0x35, 0x16, 0x0a, 0x74, 0x08, 0xa6, 0x6e,
-	0x53, 0x51, 0xb3, 0xb9, 0x4f, 0xb5, 0xf1, 0x1c, 0x58, 0x4c, 0x59, 0x53, 0xb2, 0xbd, 0xee, 0x53,
-	0xf4, 0x29, 0x9c, 0x66, 0x21, 0xad, 0x52, 0xa9, 0x65, 0x1e, 0xd7, 0x92, 0xb9, 0xf1, 0xc5, 0xcc,
-	0xf2, 0x42, 0x3e, 0x2e, 0x87, 0xd7, 0xd4, 0x2e, 0x2c, 0x52, 0x91, 0x6b, 0x36, 0xd1, 0x83, 0x3b,
-	0x99, 0x1e, 0xe9, 0x76, 0x0b, 0x00, 0x6b, 0xb7, 0x63, 0x4d, 0x5a, 0xa1, 0x5b, 0x70, 0x3f, 0x76,
-	0x9b, 0x24, 0x14, 0x94, 0x13, 0x9b, 0xf9, 0x76, 0xd0, 0x28, 0x7b, 0xd4, 0xd1, 0x26, 0x72, 0x60,
-	0x31, 0xb3, 0x7c, 0x2c, 0x76, 0x86, 0x73, 0x9d, 0xf1, 0x6b, 0x6a, 0xac, 0x99, 0x94, 0xae, 0x17,
-	0x13, 0xd6, 0xbe, 0xae, 0xd1, 0x35, 0x3f, 0x0a, 0xa1, 0x9b, 0x30, 0xfb, 0xd2, 0xdd, 0x69, 0x70,
-	0xc1, 0xea, 0xda, 0xe4, 0xab, 0x58, 0xaf, 0xaa, 0xb1, 0x66, 0x72, 0x27, 0xb2, 0x9e, 0xc3, 0xfd,
-	0x01, 0xf4, 0x21, 0xcc, 0xba, 0xcc, 0xf6, 0x99, 0xb0, 0xbb, 0x11, 0x6d, 0x4a, 0x19, 0x1f, 0x18,
-	0x30, 0xfe, 0xa0, 0x1e, 0x88, 0xad, 0xee, 0x1a, 0x67, 0x5d, 0x76, 0x95, 0x89, 0xee, 0x34, 0xe8,
-	0x16, 0x3c, 0x1a, 0xb3, 0x7d, 0xdb, 0x25, 0x15, 0xdc, 0xf0, 0x84, 0xdd, 0xa4, 0x81, 0x96, 0xfa,
-	0x73, 0xdb, 0x8b, 0x09, 0xeb, 0xf0, 0xd0, 0xa6, 0xcf, 0x47, 0xda, 0x1b, 0x34, 0x40, 0x9b, 0xf0,
-	0x40, 0x6f, 0xde, 0xec, 0xdb, 0x84, 0x56, 0x6b, 0x82, 0x6b, 0x50, 0xe5, 0xef, 0xed, 0xf8, 0xfc,
-	0x75, 0x93, 0x73, 0x93, 0x8a, 0xda, 0x4d, 0xa5, 0x30, 0x67, 0xe5, 0x7b, 0x78, 0x59, 0x5f, 0x16,
-	0xea, 0x49, 0x61, 0x34, 0x84, 0xa3, 0x22, 0x3c, 0x20, 0x4b, 0xb9, 0xc9, 0x3c, 0x41, 0xc2, 0x10,
-	0xdb, 0x75, 0xec, 0xe3, 0x2a, 0x71, 0xb5, 0x8c, 0xaa, 0x25, 0xe4, 0xfa, 0xfc, 0xc6, 0x6e, 0xe8,
-	0xa3, 0x28, 0x82, 0x36, 0xa0, 0x5e, 0xc3, 0xbc, 0x66, 0x07, 0xcc, 0xa3, 0xce, 0x96, 0xed, 0xd4,
-	0x18, 0x75, 0x88, 0x1d, 0xb2, 0x86, 0xef, 0xda, 0x21, 0x2b, 0x53, 0x5f, 0x9b, 0xd9, 0x63, 0xef,
-	0xc0, 0x9a, 0x97, 0xea, 0x35, 0x25, 0x5e, 0x55, 0x5a, 0x4b, 0x4a, 0x2d, 0xa9, 0x94, 0x2f, 0x36,
-	0xc6, 0xdb, 0x23, 0x98, 0x0b, 0x1b, 0x3b, 0x82, 0x36, 0x89, 0x36, 0xbb, 0xa7, 0xf9, 0xe1, 0x41,
-	0xf3, 0x2b, 0x52, 0x7b, 0x4e, 0x49, 0xd1, 0xc7, 0xf0, 0x50, 0xdc, 0xca, 0xb1, 0xef, 0xb2, 0xba,
-	0x36, 0xb7, 0xa7, 0xef, 0xc1, 0xa1, 0x45, 0x2b, 0x15, 0xda, 0x84, 0xc7, 0x63, 0x2c, 0x39, 0x6b,
-	0x84, 0x0e, 0xb1, 0x69, 0x60, 0x73, 0x41, 0x9d, 0x4d, 0xea, 0x13, 0xce, 0xb5, 0xec, 0x9e, 0x13,
-	0x2c, 0x0c, 0x4e, 0xb0, 0xae, 0x3c, 0x2e, 0x05, 0xeb, 0x5d, 0x07, 0xb4, 0x0a, 0xa7, 0xa9, 0xeb,
-	0x11, 0x5b, 0xd0, 0x3a, 0x61, 0x0d, 0xa1, 0xed, 0x93, 0x34, 0x30, 0x73, 0xb2, 0x48, 0x7f, 0x6d,
-	0x81, 0x89, 0x95, 0x62, 0xb1, 0x58, 0xfc, 0xbd, 0x05, 0x12, 0x5f, 0xfd, 0x00, 0x12, 0x32, 0xed,
-	0x93, 0xef, 0x24, 0xb5, 0x47, 0x5f, 0x23, 0x2b, 0x23, 0x55, 0xd7, 0x23, 0x11, 0xda, 0x80, 0x33,
-	0x8a, 0x85, 0xd4, 0x17, 0x24, 0xf4, 0xb1, 0xa7, 0x3d, 0x8d, 0x7e, 0x01, 0xaf, 0xc2, 0x85, 0xec,
-	0x83, 0x3b, 0xfd, 0x62, 0x6b, 0x5a, 0x36, 0x2f, 0xed, 0xb6, 0xd0, 0x11, 0x98, 0x56, 0x70, 0xf4,
-	0x71, 0x9d, 0x68, 0xcf, 0xa4, 0x6f, 0xda, 0x4a, 0xc9, 0x9e, 0xab, 0xb8, 0x4e, 0xd0, 0x45, 0x98,
-	0xea, 0x50, 0x53, 0xfb, 0x6d, 0x4a, 0x15, 0xb3, 0x31, 0x34, 0x69, 0x0c, 0x62, 0xf3, 0xe7, 0x7d,
-	0x7e, 0xc9, 0xaf, 0x30, 0x6b, 0xca, 0x8d, 0x1e, 0xce, 0xd6, 0x7e, 0x6c, 0x01, 0x17, 0xbe, 0x05,
-	0xf7, 0x9b, 0x98, 0x53, 0x27, 0xb7, 0xca, 0xfc, 0x0a, 0xad, 0x36, 0x42, 0x2c, 0xe9, 0x8e, 0xe6,
-	0x4a, 0xc6, 0xb2, 0xb1, 0x62, 0x94, 0x4a, 0x46, 0xa9, 0x68, 0x9c, 0x31, 0x4e, 0xc0, 0x23, 0xf0,
-	0xe0, 0x15, 0x86, 0xdd, 0x9c, 0xa9, 0xce, 0x27, 0xea, 0x57, 0xa5, 0x40, 0x84, 0xcc, 0x43, 0x63,
-	0xa5, 0x65, 0x19, 0x3d, 0xe7, 0x36, 0xe5, 0xc1, 0xe5, 0x0e, 0x18, 0x8d, 0x95, 0x4e, 0x9b, 0xc7,
-	0xfb, 0x50, 0xa4, 0x12, 0x83, 0xf6, 0x6f, 0xb7, 0x40, 0x6a, 0xa7, 0x05, 0xd2, 0xed, 0x16, 0x98,
-	0x7a, 0xd7, 0x38, 0x69, 0x9c, 0x36, 0x4e, 0x99, 0x4b, 0x10, 0x0d, 0x17, 0x02, 0xfa, 0xdf, 0x76,
-	0x0b, 0xcc, 0xec, 0xb4, 0xc0, 0x74, 0xbb, 0x05, 0x32, 0xa5, 0x15, 0xa3, 0x74, 0xc2, 0x28, 0x9d,
-	0x34, 0x4a, 0xa7, 0x2e, 0x27, 0x53, 0xe9, 0x2c, 0xbc, 0x9c, 0x4c, 0x4d, 0x67, 0x67, 0x16, 0x7e,
-	0x49, 0xc1, 0xd9, 0xd5, 0x90, 0x60, 0x41, 0xba, 0x87, 0x86, 0x36, 0x70, 0x68, 0xbc, 0x9e, 0x03,
-	0x61, 0x44, 0xed, 0x37, 0x48, 0xed, 0xcf, 0x5e, 0x13, 0xb5, 0x47, 0x94, 0xfe, 0x77, 0x53, 0xfa,
-	0xec, 0xbe, 0x9f, 0xdf, 0x1f, 0xb8, 0x03, 0x9a, 0x67, 0x62, 0x28, 0xf2, 0xff, 0x1e, 0x8a, 0x4c,
-	0x28, 0x86, 0xdc, 0x7d, 0x01, 0x86, 0x86, 0x99, 0x46, 0x2c, 0x57, 0x0e, 0xde, 0x7d, 0x01, 0x62,
-	0xfa, 0xfb, 0xb0, 0xf2, 0x6d, 0x1a, 0xce, 0x59, 0x24, 0xf0, 0xb0, 0xf3, 0xa6, 0xb9, 0xf2, 0xc9,
-	0x5f, 0xbe, 0x68, 0xce, 0xf6, 0x5f, 0x34, 0x47, 0x97, 0xcc, 0x11, 0xae, 0x46, 0xb8, 0xfa, 0x6f,
-	0xe2, 0xea, 0x1e, 0x84, 0x99, 0x0b, 0x44, 0x8c, 0x50, 0x35, 0x42, 0xd5, 0x08, 0x55, 0x23, 0x54,
-	0xc5, 0xfd, 0xff, 0xfd, 0xbb, 0xfe, 0x5e, 0xfe, 0x43, 0x90, 0x68, 0xde, 0x03, 0x3b, 0x8f, 0xf5,
-	0xc4, 0xc3, 0xc7, 0x7a, 0xe2, 0xf9, 0x63, 0x1d, 0x7c, 0xd9, 0xd6, 0xc1, 0x37, 0x6d, 0x1d, 0xfc,
-	0xd4, 0xd6, 0xc1, 0x4e, 0x5b, 0x07, 0x0f, 0xdb, 0x3a, 0x78, 0xd4, 0xd6, 0xc1, 0xd3, 0xb6, 0x9e,
-	0x78, 0xde, 0xd6, 0xc1, 0xbd, 0x27, 0x7a, 0x62, 0xfb, 0x89, 0x0e, 0x36, 0x36, 0xaa, 0x2c, 0xd8,
-	0xac, 0xe6, 0x3b, 0x25, 0x9d, 0x6f, 0xf0, 0x82, 0x7a, 0xa8, 0xb0, 0xb0, 0xbe, 0x14, 0x84, 0xac,
-	0x49, 0x5d, 0x12, 0x2e, 0x75, 0xc2, 0x85, 0xa0, 0x5c, 0x65, 0x05, 0xf2, 0x85, 0xd8, 0xfd, 0xca,
-	0xb9, 0xe7, 0xc7, 0xe0, 0xf2, 0xa4, 0xfa, 0xce, 0xb9, 0xf2, 0x47, 0x00, 0x00, 0x00, 0xff, 0xff,
-	0x0e, 0x44, 0x3b, 0xc1, 0x3b, 0x16, 0x00, 0x00,
+	// 1309 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x59, 0xcd, 0x6f, 0x13, 0x47,
+	0x14, 0xf7, 0x24, 0x4e, 0xe2, 0x8c, 0x13, 0xc7, 0x8c, 0xa3, 0x74, 0x09, 0x68, 0x71, 0x23, 0x5a,
+	0x42, 0xb5, 0xf1, 0x47, 0xc2, 0x47, 0x41, 0x55, 0x2b, 0x36, 0xb4, 0x7c, 0x94, 0x42, 0xba, 0xa1,
+	0x20, 0xa5, 0x48, 0xab, 0xf1, 0xee, 0xd8, 0x9e, 0xb2, 0xde, 0x59, 0xed, 0x8e, 0x4d, 0x73, 0x40,
+	0xaa, 0x38, 0xf5, 0x88, 0xb8, 0xf1, 0x17, 0xb4, 0xe2, 0x4f, 0xe8, 0xf6, 0x90, 0xf6, 0x84, 0x7a,
+	0xf2, 0x11, 0xf5, 0x04, 0xe6, 0x02, 0x3d, 0x71, 0xac, 0x90, 0x2a, 0x55, 0x3b, 0xeb, 0x98, 0xd8,
+	0xde, 0x58, 0xa8, 0x82, 0xaa, 0x8d, 0x7c, 0x9b, 0xd9, 0xf7, 0x7e, 0xbf, 0xf7, 0x66, 0xdf, 0xcc,
+	0xef, 0x79, 0x3d, 0xb0, 0xd0, 0x20, 0x5e, 0x8e, 0xb2, 0xbc, 0x67, 0x54, 0x49, 0x0d, 0xe7, 0x1b,
+	0x94, 0xdc, 0xf2, 0xf2, 0xdc, 0x70, 0x74, 0x8b, 0x61, 0xb3, 0x84, 0x2d, 0x6c, 0x1b, 0xc4, 0xcd,
+	0xf3, 0x4d, 0x87, 0x78, 0x39, 0xc7, 0x65, 0x9c, 0xa1, 0xc3, 0x21, 0x22, 0x17, 0x22, 0x72, 0x02,
+	0x91, 0xeb, 0x45, 0xcc, 0x2f, 0x55, 0x28, 0xaf, 0xd6, 0x4b, 0x39, 0x83, 0xd5, 0xf2, 0x15, 0x56,
+	0x61, 0x79, 0x01, 0x2e, 0xd5, 0xcb, 0x62, 0x26, 0x26, 0x62, 0x14, 0x92, 0xce, 0x1f, 0xe8, 0x4e,
+	0x83, 0x39, 0x9c, 0x32, 0xbb, 0x1d, 0x71, 0x7e, 0x7f, 0xb7, 0x71, 0x47, 0x32, 0xf3, 0x07, 0x7b,
+	0xd2, 0xc7, 0x16, 0x35, 0x31, 0x27, 0x6d, 0x6b, 0xb6, 0x7f, 0x71, 0x7a, 0x37, 0xf5, 0xa1, 0xc8,
+	0xe5, 0xef, 0x08, 0xd0, 0xf7, 0x7e, 0x5c, 0x5e, 0xc7, 0x96, 0x5e, 0x65, 0x1e, 0xd7, 0x4d, 0xdb,
+	0xd3, 0xa9, 0x5d, 0x66, 0x79, 0x56, 0xfa, 0x86, 0x18, 0x3c, 0x44, 0x2c, 0xdc, 0x4f, 0xc1, 0xd4,
+	0x39, 0x8b, 0x95, 0xb0, 0xb5, 0xee, 0x10, 0xe3, 0xea, 0xa6, 0x43, 0xd0, 0x47, 0x70, 0xc2, 0x64,
+	0x35, 0x4c, 0x6d, 0x4f, 0x02, 0xd9, 0xd1, 0xc5, 0x49, 0x75, 0xe1, 0xa7, 0xe7, 0x5b, 0xa3, 0x93,
+	0xf7, 0xc0, 0xf8, 0x42, 0xdc, 0x1d, 0xa9, 0x82, 0x60, 0x36, 0x76, 0x0f, 0x8c, 0xa4, 0xd3, 0xdb,
+	0x23, 0x09, 0x68, 0xdb, 0x10, 0x74, 0x08, 0x26, 0x2d, 0xea, 0x71, 0x62, 0xeb, 0x0e, 0x73, 0xb9,
+	0x34, 0x92, 0x05, 0x8b, 0xd3, 0x1a, 0x0c, 0x1f, 0xad, 0x31, 0x97, 0xa3, 0xfd, 0x30, 0x71, 0x8b,
+	0xf2, 0xaa, 0xee, 0xd9, 0x54, 0x1a, 0xcd, 0x82, 0xc5, 0x84, 0x36, 0x11, 0xcc, 0xd7, 0x6d, 0x8a,
+	0x1c, 0x38, 0xc5, 0x5c, 0x5a, 0xa1, 0x01, 0x96, 0x59, 0x9e, 0x14, 0xcf, 0x8e, 0x2e, 0x26, 0x97,
+	0x17, 0x72, 0x51, 0x35, 0xbc, 0x22, 0x56, 0xa1, 0x91, 0x72, 0x90, 0xb3, 0x7a, 0xf4, 0xc1, 0xed,
+	0xe4, 0x0e, 0xe8, 0xa3, 0xdb, 0xe0, 0x99, 0x0f, 0xa2, 0x33, 0x6d, 0xfb, 0xad, 0x05, 0x11, 0xd0,
+	0x0d, 0x98, 0xc1, 0x66, 0x83, 0xb8, 0x9c, 0x7a, 0x44, 0x67, 0xb6, 0xee, 0xd4, 0x4b, 0x16, 0x35,
+	0xa4, 0xb1, 0x2c, 0x58, 0x4c, 0x2e, 0x1f, 0x8e, 0x0c, 0x7c, 0x66, 0xdb, 0x7f, 0x4d, 0xf8, 0xaa,
+	0xf1, 0x2d, 0x1f, 0x80, 0xf3, 0x31, 0x6d, 0x5f, 0x87, 0xe8, 0x8a, 0x1d, 0x9a, 0xd0, 0x75, 0x98,
+	0x7e, 0xc5, 0x6e, 0xd4, 0x3d, 0xce, 0x6a, 0xd2, 0xf8, 0xeb, 0x50, 0xaf, 0x0a, 0x5f, 0x35, 0xde,
+	0x0c, 0xa9, 0x67, 0x70, 0xb7, 0x01, 0x7d, 0x06, 0xd3, 0x26, 0xd3, 0x6d, 0xc6, 0xf5, 0x8e, 0x45,
+	0x9a, 0x10, 0xc4, 0xb3, 0x3d, 0xc4, 0x9f, 0xd6, 0x1c, 0xbe, 0xd9, 0xc9, 0x31, 0x65, 0xb2, 0xcb,
+	0x8c, 0x77, 0xc2, 0xa0, 0x1b, 0xf0, 0x50, 0xc4, 0xf2, 0x75, 0x93, 0x94, 0x71, 0xdd, 0xe2, 0x7a,
+	0x83, 0x3a, 0x52, 0x62, 0x77, 0xda, 0xf3, 0x31, 0xed, 0x40, 0xdf, 0xa2, 0xcf, 0x86, 0xd8, 0x6b,
+	0xd4, 0x41, 0x75, 0x38, 0xbb, 0xb3, 0x9c, 0xfa, 0x2d, 0x42, 0x2b, 0x55, 0xee, 0x49, 0x50, 0x94,
+	0xf5, 0x68, 0x74, 0x59, 0x3b, 0xc5, 0xb9, 0x4e, 0x79, 0xf5, 0xba, 0x40, 0xa8, 0x52, 0x73, 0xb7,
+	0x62, 0xa2, 0x1d, 0xc5, 0x0c, 0x9d, 0x3d, 0x54, 0x80, 0xb3, 0xc1, 0x5e, 0x6f, 0x30, 0x8b, 0x13,
+	0xd7, 0xc5, 0x7a, 0x0d, 0xdb, 0xb8, 0x42, 0x4c, 0x29, 0x29, 0x36, 0x1b, 0x32, 0x6d, 0xef, 0x5a,
+	0xdb, 0xf4, 0x45, 0x68, 0x41, 0x1b, 0x50, 0xae, 0x62, 0xaf, 0xaa, 0x3b, 0xcc, 0xa2, 0xc6, 0xa6,
+	0x6e, 0x54, 0x19, 0x35, 0x88, 0xee, 0xb2, 0xba, 0x6d, 0xea, 0x2e, 0x2b, 0x51, 0x5b, 0x9a, 0x1e,
+	0xf0, 0x16, 0x80, 0x36, 0x1f, 0xa0, 0xd7, 0x04, 0x78, 0x55, 0x60, 0xb5, 0x00, 0xaa, 0x05, 0xc8,
+	0xe0, 0x15, 0x47, 0x70, 0x5b, 0x04, 0x7b, 0x5c, 0xc7, 0x06, 0xa7, 0x0d, 0x22, 0xa5, 0x06, 0x92,
+	0x1f, 0xe8, 0x25, 0xbf, 0x14, 0x60, 0xcf, 0x08, 0x28, 0xfa, 0x12, 0xee, 0x8f, 0xca, 0x1c, 0xdb,
+	0x26, 0xab, 0x49, 0x33, 0x03, 0x79, 0xe7, 0xfa, 0x92, 0x16, 0x28, 0x74, 0x13, 0x1e, 0x89, 0xa0,
+	0xf4, 0x58, 0xdd, 0x35, 0x88, 0x4e, 0x1d, 0xdd, 0xe3, 0xd4, 0xb8, 0x49, 0x6d, 0xe2, 0x79, 0x52,
+	0x7a, 0x60, 0x80, 0x85, 0xde, 0x00, 0xeb, 0x82, 0xe3, 0x82, 0xb3, 0xde, 0x61, 0x40, 0xab, 0x70,
+	0x8a, 0x9a, 0x16, 0xd1, 0x39, 0xad, 0x11, 0x56, 0xe7, 0xd2, 0xbe, 0x40, 0x2e, 0xd4, 0x6c, 0xb0,
+	0x5d, 0x7f, 0xf7, 0xc1, 0xd8, 0x4a, 0xa1, 0x50, 0x28, 0xfc, 0xe9, 0x83, 0xd8, 0xf7, 0x3f, 0x83,
+	0x58, 0x50, 0xf6, 0xf1, 0x0f, 0xe2, 0xd2, 0xe3, 0x1f, 0x90, 0x96, 0x0c, 0x50, 0x57, 0x43, 0x10,
+	0xfa, 0x04, 0xce, 0xb8, 0x84, 0xbb, 0xd8, 0xe0, 0xba, 0x61, 0xd5, 0x3d, 0x4e, 0x5c, 0x29, 0x33,
+	0x20, 0xb3, 0x11, 0x2d, 0xd5, 0x76, 0x5f, 0x0d, 0xbd, 0xd1, 0xe7, 0x70, 0xae, 0x7d, 0x9c, 0x7a,
+	0x79, 0x66, 0x07, 0xf2, 0x64, 0xc4, 0x71, 0xd2, 0xba, 0xc9, 0x36, 0xe0, 0xb4, 0x90, 0x6e, 0x6a,
+	0x73, 0xe2, 0xda, 0xd8, 0x92, 0x9e, 0x85, 0x27, 0xf3, 0x75, 0x64, 0x2c, 0xfd, 0xe0, 0x76, 0x37,
+	0x58, 0x9b, 0x0a, 0xa6, 0x17, 0xda, 0x33, 0x74, 0x10, 0x4e, 0x0a, 0x2d, 0xb7, 0x71, 0x8d, 0x48,
+	0xcf, 0x03, 0xde, 0x49, 0x2d, 0x11, 0x3c, 0xb9, 0x8c, 0x6b, 0x04, 0x9d, 0x87, 0x89, 0x6d, 0x91,
+	0x97, 0xfe, 0x98, 0x10, 0x87, 0x4c, 0xe9, 0x0b, 0x1a, 0xd1, 0x11, 0x72, 0x67, 0x6d, 0xef, 0x82,
+	0x5d, 0x66, 0xda, 0x84, 0x19, 0x0e, 0x4e, 0x57, 0x7f, 0xf5, 0x81, 0x09, 0xdf, 0x87, 0x19, 0x15,
+	0x7b, 0xd4, 0xc8, 0xae, 0x32, 0xbb, 0x4c, 0x2b, 0x75, 0x17, 0x07, 0xcd, 0x08, 0xcd, 0x14, 0x95,
+	0x65, 0x65, 0x45, 0x29, 0x16, 0x95, 0x62, 0x41, 0x39, 0xa5, 0x1c, 0x83, 0x07, 0xe1, 0xdc, 0x25,
+	0x86, 0xcd, 0xac, 0x2a, 0xda, 0x29, 0xb5, 0x2b, 0x01, 0x80, 0xbb, 0xcc, 0x42, 0x23, 0xc5, 0xe5,
+	0xc0, 0x7a, 0xc6, 0x6c, 0x04, 0x7d, 0xd6, 0xec, 0x21, 0x1a, 0x29, 0x9e, 0x54, 0x8f, 0x74, 0x49,
+	0xa4, 0xd8, 0x26, 0x28, 0xb3, 0xe5, 0x83, 0x44, 0xd3, 0x07, 0x93, 0x2d, 0x1f, 0x4c, 0x7c, 0xa8,
+	0x1c, 0x57, 0x4e, 0x2a, 0x27, 0xd4, 0x25, 0x88, 0xfa, 0xb7, 0x25, 0x7a, 0x67, 0xcb, 0x07, 0xd3,
+	0x4d, 0x1f, 0x4c, 0xb5, 0x7c, 0x90, 0x2c, 0xae, 0x28, 0xc5, 0x63, 0x4a, 0xf1, 0xb8, 0x52, 0x3c,
+	0xa1, 0x16, 0xe0, 0x5c, 0xbb, 0x86, 0xaf, 0x6a, 0x1a, 0x42, 0xe6, 0xb6, 0x7c, 0x90, 0x79, 0xe8,
+	0x03, 0xd0, 0xf4, 0x01, 0x6a, 0xf9, 0x60, 0xbc, 0x78, 0x4a, 0xc9, 0x2e, 0x17, 0x2e, 0xc6, 0x13,
+	0x93, 0x69, 0x78, 0x31, 0x9e, 0x98, 0x4a, 0x4f, 0x5f, 0x8c, 0x27, 0x50, 0x3a, 0xb3, 0xf0, 0x0b,
+	0x84, 0xa9, 0x55, 0x97, 0x60, 0x4e, 0x3a, 0xbd, 0x51, 0xea, 0xe9, 0x8d, 0x6f, 0xa6, 0xef, 0x0d,
+	0xbb, 0xd0, 0x5b, 0xec, 0x42, 0x5f, 0xbf, 0xa1, 0x2e, 0x34, 0xec, 0x35, 0xff, 0xf3, 0x5e, 0xf3,
+	0x6e, 0x54, 0xaf, 0xf9, 0x0f, 0x77, 0x92, 0xd3, 0xfb, 0x7e, 0xfb, 0xb8, 0xe7, 0xb7, 0xb9, 0x7a,
+	0x2a, 0x42, 0x2e, 0xdf, 0xdb, 0x21, 0x97, 0x63, 0x42, 0x2c, 0xef, 0xbc, 0x04, 0x7d, 0x6e, 0xaa,
+	0x12, 0x29, 0xa0, 0x73, 0x77, 0x5e, 0x82, 0x88, 0xe7, 0xea, 0xb1, 0x5d, 0xf5, 0x73, 0xfe, 0xce,
+	0x4b, 0xb0, 0x8b, 0x2d, 0x42, 0x43, 0xef, 0x27, 0xe1, 0x8c, 0x46, 0x1c, 0x0b, 0x1b, 0x6f, 0x5b,
+	0x44, 0xbf, 0xfa, 0xc7, 0x1f, 0x0f, 0xa9, 0xee, 0x8f, 0x87, 0xe1, 0x17, 0xc2, 0x50, 0x9b, 0x87,
+	0xda, 0x3c, 0xd4, 0xe6, 0x3d, 0xaf, 0xcd, 0x7f, 0x25, 0x61, 0xf2, 0x1c, 0xe1, 0x43, 0x5d, 0x1e,
+	0xea, 0xf2, 0x50, 0x97, 0x87, 0xba, 0xbc, 0x17, 0x74, 0xf9, 0x5f, 0xfb, 0x87, 0x64, 0x0f, 0xe8,
+	0xbf, 0x7a, 0x17, 0x34, 0x9f, 0xc8, 0xb1, 0x47, 0x4f, 0xe4, 0xd8, 0x8b, 0x27, 0x32, 0xf8, 0xae,
+	0x25, 0x83, 0x1f, 0x5b, 0x32, 0x78, 0xd8, 0x92, 0x41, 0xb3, 0x25, 0x83, 0x47, 0x2d, 0x19, 0x3c,
+	0x6e, 0xc9, 0xe0, 0x59, 0x4b, 0x8e, 0xbd, 0x68, 0xc9, 0xe0, 0xee, 0x53, 0x39, 0xb6, 0xf5, 0x54,
+	0x06, 0x1b, 0x1b, 0x15, 0xe6, 0xdc, 0xac, 0xe4, 0xb6, 0xcf, 0x6f, 0xae, 0xee, 0xe5, 0xc5, 0xa0,
+	0xcc, 0xdc, 0xda, 0x92, 0xe3, 0xb2, 0x06, 0x35, 0x89, 0xbb, 0xb4, 0x6d, 0xce, 0x3b, 0xa5, 0x0a,
+	0xcb, 0x93, 0x6f, 0x79, 0xfb, 0x4e, 0x62, 0xe0, 0xd5, 0x4d, 0x69, 0x5c, 0xdc, 0x4a, 0xac, 0xfc,
+	0x1d, 0x00, 0x00, 0xff, 0xff, 0xb2, 0xa0, 0xf2, 0x9c, 0xe9, 0x19, 0x00, 0x00,
 }

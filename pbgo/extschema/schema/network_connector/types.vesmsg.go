@@ -95,7 +95,7 @@ func (m *CreateSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ConnectorChoice == nil {
+	if m.GetConnectorChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -543,6 +543,7 @@ var DefaultDynamicReverseProxyListTypeValidator = func() *ValidateDynamicReverse
 
 	vrhDrps := v.DrpsValidationRuleHandler
 	rulesDrps := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "1",
 		"ves.io.schema.rules.repeated.min_items": "1",
 	}
@@ -629,7 +630,7 @@ func (m *GetSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ConnectorChoice == nil {
+	if m.GetConnectorChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1006,11 +1007,11 @@ func (m *GlobalSnatConnectorType) GetSnatConfigDRefInfo() ([]db.DRefInfo, error)
 		err             error
 	)
 	_ = driSet
-	if m.SnatConfig == nil {
+	if m.GetSnatConfig() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.SnatConfig.GetDRefInfo()
+	driSet, err = m.GetSnatConfig().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1459,6 +1460,46 @@ func (v *ValidateGlobalSpecType) SnatPoolTypeValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) NatPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.Ipv4SubnetType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.Ipv4SubnetTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for nat_pool")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.Ipv4SubnetType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.Ipv4SubnetType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated nat_pool")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items nat_pool")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) DynamicReverseProxyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
@@ -1557,13 +1598,9 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 
 	if fv, exists := v.FldValidators["nat_pool"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("nat_pool"))
-		for idx, item := range m.GetNatPool() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetNatPool(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1687,6 +1724,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["snat_pool_type"] = vFn
 
+	vrhNatPool := v.NatPoolValidationRuleHandler
+	rulesNatPool := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhNatPool(rulesNatPool)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.nat_pool: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["nat_pool"] = vFn
+
 	vrhDynamicReverseProxy := v.DynamicReverseProxyValidationRuleHandler
 	rulesDynamicReverseProxy := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "1",
@@ -1697,8 +1746,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["dynamic_reverse_proxy"] = vFn
-
-	v.FldValidators["nat_pool"] = ves_io_schema.Ipv4SubnetTypeValidator().Validate
 
 	v.FldValidators["forward_proxy"] = ves_io_schema.ForwardProxyConfigTypeValidator().Validate
 
@@ -1856,7 +1903,7 @@ func (m *ReplaceSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ConnectorChoice == nil {
+	if m.GetConnectorChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 

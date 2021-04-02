@@ -20,7 +20,7 @@ resource "volterra_discovery" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "discovery_consul discovery_k8s" must be set
+  // One of the arguments from this list "discovery_k8s discovery_consul" must be set
 
   discovery_k8s {
     access_info {
@@ -50,11 +50,15 @@ resource "volterra_discovery" "example" {
 
     publish_info {
       // One of the arguments from this list "disable publish publish_fqdns dns_delegation" must be set
-      disable = true
+
+      dns_delegation {
+        dns_mode  = "dns_mode"
+        subdomain = "subdomain"
+      }
     }
   }
   where {
-    // One of the arguments from this list "virtual_site virtual_network site" must be set
+    // One of the arguments from this list "virtual_network site virtual_site" must be set
 
     virtual_network {
       ref {

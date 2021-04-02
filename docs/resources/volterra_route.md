@@ -36,8 +36,8 @@ resource "volterra_route" "example" {
       http_method = "http_method"
 
       path {
-        // One of the arguments from this list "prefix path regex" must be set
-        regex = "regex"
+        // One of the arguments from this list "regex prefix path" must be set
+        prefix = "prefix"
       }
 
       query_params {
@@ -377,7 +377,7 @@ Retain all query parameters.
 
 ### Retract Cluster
 
-(2) single destination cluster is configured for route..
+for route.
 
 ### Retry Policy
 
@@ -401,7 +401,7 @@ Send request to one of the destination from list of destinations.
 
 `do_not_retract_cluster` - (Optional) configuration. (bool).
 
-`retract_cluster` - (Optional) (2) single destination cluster is configured for route. (bool).
+`retract_cluster` - (Optional) for route (bool).
 
 `cors_policy` - (Optional) resources from a server at a different origin. See [Cors Policy ](#cors-policy) below for details.
 

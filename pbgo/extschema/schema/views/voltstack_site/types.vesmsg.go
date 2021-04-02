@@ -258,7 +258,7 @@ func (m *CreateSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.NetworkCfgChoice == nil {
+	if m.GetNetworkCfgChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -289,7 +289,7 @@ func (m *CreateSpecType) GetStorageCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.StorageCfgChoice == nil {
+	if m.GetStorageCfgChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -974,6 +974,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhMasterNodes := v.MasterNodesValidationRuleHandler
 	rulesMasterNodes := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "3",
 		"ves.io.schema.rules.repeated.num_items": "1,3",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -1255,7 +1256,7 @@ func (m *GetSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.NetworkCfgChoice == nil {
+	if m.GetNetworkCfgChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1286,7 +1287,7 @@ func (m *GetSpecType) GetStorageCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.StorageCfgChoice == nil {
+	if m.GetStorageCfgChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2009,6 +2010,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhMasterNodes := v.MasterNodesValidationRuleHandler
 	rulesMasterNodes := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "3",
 		"ves.io.schema.rules.repeated.num_items": "1,3",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -2156,11 +2158,11 @@ func (m *GlobalNetworkConnectionListType) GetGlobalNetworkConnectionsDRefInfo() 
 		err             error
 	)
 	_ = driSet
-	if m.GlobalNetworkConnections == nil {
+	if m.GetGlobalNetworkConnections() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.GlobalNetworkConnections {
+	for idx, e := range m.GetGlobalNetworkConnections() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -2344,7 +2346,7 @@ func (m *GlobalNetworkConnectionType) GetConnectionChoiceDRefInfo() ([]db.DRefIn
 		err             error
 	)
 	_ = driSet
-	if m.ConnectionChoice == nil {
+	if m.GetConnectionChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2742,7 +2744,7 @@ func (m *GlobalSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.NetworkCfgChoice == nil {
+	if m.GetNetworkCfgChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2773,7 +2775,7 @@ func (m *GlobalSpecType) GetStorageCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.StorageCfgChoice == nil {
+	if m.GetStorageCfgChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3555,6 +3557,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhMasterNodes := v.MasterNodesValidationRuleHandler
 	rulesMasterNodes := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "3",
 		"ves.io.schema.rules.repeated.num_items": "1,3",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -3688,7 +3691,7 @@ func (m *Interface) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.InterfaceChoice == nil {
+	if m.GetInterfaceChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3943,11 +3946,11 @@ func (m *InterfaceListType) GetInterfacesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Interfaces == nil {
+	if m.GetInterfaces() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Interfaces {
+	for idx, e := range m.GetInterfaces() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -4290,7 +4293,7 @@ func (m *ReplaceSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.NetworkCfgChoice == nil {
+	if m.GetNetworkCfgChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -4321,7 +4324,7 @@ func (m *ReplaceSpecType) GetStorageCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.StorageCfgChoice == nil {
+	if m.GetStorageCfgChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -5006,6 +5009,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vrhMasterNodes := v.MasterNodesValidationRuleHandler
 	rulesMasterNodes := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "3",
 		"ves.io.schema.rules.repeated.num_items": "1,3",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -5115,11 +5119,11 @@ func (m *StaticRoutesListType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) 
 		err             error
 	)
 	_ = driSet
-	if m.StaticRoutes == nil {
+	if m.GetStaticRoutes() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.StaticRoutes {
+	for idx, e := range m.GetStaticRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -5290,11 +5294,11 @@ func (m *StorageInterfaceListType) GetStorageInterfacesDRefInfo() ([]db.DRefInfo
 		err             error
 	)
 	_ = driSet
-	if m.StorageInterfaces == nil {
+	if m.GetStorageInterfaces() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.StorageInterfaces {
+	for idx, e := range m.GetStorageInterfaces() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -5465,11 +5469,11 @@ func (m *StorageInterfaceType) GetStorageInterfaceDRefInfo() ([]db.DRefInfo, err
 		err             error
 	)
 	_ = driSet
-	if m.StorageInterface == nil {
+	if m.GetStorageInterface() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.StorageInterface.GetDRefInfo()
+	driSet, err = m.GetStorageInterface().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -5730,7 +5734,7 @@ func (m *VnConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) 
 		err             error
 	)
 	_ = driSet
-	if m.StaticRouteChoice == nil {
+	if m.GetStaticRouteChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -6013,7 +6017,7 @@ func (m *VssNetworkConfiguration) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo
 		err             error
 	)
 	_ = driSet
-	if m.ForwardProxyChoice == nil {
+	if m.GetForwardProxyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -6046,7 +6050,7 @@ func (m *VssNetworkConfiguration) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInf
 		err             error
 	)
 	_ = driSet
-	if m.GlobalNetworkChoice == nil {
+	if m.GetGlobalNetworkChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -6077,7 +6081,7 @@ func (m *VssNetworkConfiguration) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, e
 		err             error
 	)
 	_ = driSet
-	if m.InterfaceChoice == nil {
+	if m.GetInterfaceChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -6108,7 +6112,7 @@ func (m *VssNetworkConfiguration) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInf
 		err             error
 	)
 	_ = driSet
-	if m.NetworkPolicyChoice == nil {
+	if m.GetNetworkPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -6139,7 +6143,7 @@ func (m *VssNetworkConfiguration) GetSloChoiceDRefInfo() ([]db.DRefInfo, error) 
 		err             error
 	)
 	_ = driSet
-	if m.SloChoice == nil {
+	if m.GetSloChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -6764,7 +6768,7 @@ func (m *VssStorageConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefInfo,
 		err             error
 	)
 	_ = driSet
-	if m.StaticRouteChoice == nil {
+	if m.GetStaticRouteChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -6795,7 +6799,7 @@ func (m *VssStorageConfiguration) GetStorageInterfaceChoiceDRefInfo() ([]db.DRef
 		err             error
 	)
 	_ = driSet
-	if m.StorageInterfaceChoice == nil {
+	if m.GetStorageInterfaceChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 

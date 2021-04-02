@@ -20,8 +20,8 @@ resource "volterra_virtual_network" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "global_network site_local_network site_local_inside_network legacy_type srv6_network" must be set
-  site_local_inside_network = true
+  // One of the arguments from this list "legacy_type srv6_network global_network site_local_network site_local_inside_network" must be set
+  legacy_type = "legacy_type"
 }
 
 ```
@@ -215,7 +215,7 @@ List of static routes on the virtual network.
 
 `attrs` - (Optional) List of attributes that control forwarding, dynamic routing and control plane(host) reachability (`List of Strings`).
 
-`ip_prefixes` - (Optional) List of route prefixes that have common next hop and attributes (`String`).
+`ip_prefixes` - (Required) List of route prefixes that have common next hop and attributes (`String`).
 
 `default_gateway` - (Optional) Traffic matching the ip prefixes is sent to default gateway (bool).
 

@@ -1329,6 +1329,7 @@ type ForwardProxyRuleListType struct {
 	// rules
 	//
 	// x-displayName: "Custom Rule List"
+	// x-required
 	// List of custom rules
 	Rules []*ForwardProxyAdvancedRuleType `protobuf:"bytes,1,rep,name=rules" json:"rules,omitempty"`
 }

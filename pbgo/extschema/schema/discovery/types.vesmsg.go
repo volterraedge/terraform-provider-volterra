@@ -649,11 +649,11 @@ func (m *CreateSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Where == nil {
+	if m.GetWhere() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Where.GetDRefInfo()
+	driSet, err = m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1214,11 +1214,11 @@ func (m *GetSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Where == nil {
+	if m.GetWhere() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Where.GetDRefInfo()
+	driSet, err = m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1493,11 +1493,11 @@ func (m *GlobalSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Where == nil {
+	if m.GetWhere() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Where.GetDRefInfo()
+	driSet, err = m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -2681,11 +2681,11 @@ func (m *ReplaceSpecType) GetWhereDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Where == nil {
+	if m.GetWhere() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Where.GetDRefInfo()
+	driSet, err = m.GetWhere().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}

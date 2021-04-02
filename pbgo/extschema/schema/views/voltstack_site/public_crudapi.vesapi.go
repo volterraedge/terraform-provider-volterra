@@ -2429,6 +2429,13 @@ var APISwaggerJSON string = `{
                     "title": "Advanced Parameters",
                     "x-displayname": "Advanced Parameters"
                 },
+                "allow_volume_expansion": {
+                    "type": "boolean",
+                    "description": " Allow volume expansion.",
+                    "title": "Allow Volume Expansion",
+                    "format": "boolean",
+                    "x-displayname": "Allow Volume Expansion"
+                },
                 "default_storage_class": {
                     "type": "boolean",
                     "description": " Make this storage class default storage class for the K8s cluster",
@@ -2456,6 +2463,13 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [netapp_trident openebs_enterprise]\nx-displayName: \"Pure Storage Service Orchestrator\"\nStorage class Device configuration for Pure Service Orchestrator",
                     "title": "Pure Storage Service Orchestrator",
                     "$ref": "#/definitions/fleetStorageClassPureServiceOrchestratorType"
+                },
+                "reclaim_policy": {
+                    "type": "string",
+                    "description": " Reclaim Policy\n\nExample: - \"Delete\"-",
+                    "title": "Reclaim Policy",
+                    "x-displayname": "Reclaim Policy",
+                    "x-ves-example": "Delete"
                 },
                 "storage_class_name": {
                     "type": "string",
@@ -2564,8 +2578,14 @@ var APISwaggerJSON string = `{
             "description": "It controls how each volume is provisioned by default using these options in a special section of the configuration.",
             "title": "Backend OnTap Volume Defaults",
             "x-displayname": "Backend OnTap Volume Defaults",
+            "x-ves-oneof-field-qos_policy_choice": "[\"adaptive_qos_policy\",\"no_qos\",\"qos_policy\"]",
             "x-ves-proto-message": "ves.io.schema.fleet.OntapVolumeDefaults",
             "properties": {
+                "adaptive_qos_policy": {
+                    "type": "string",
+                    "description": "Exclusive with [no_qos qos_policy]\nx-displayName: \"Adaptive QoS Policy name\"\nEnter Adaptive QoS Policy Name",
+                    "title": "Storage Server IP address"
+                },
                 "encryption": {
                     "type": "boolean",
                     "description": " Enable NetApp volume encryption.\n\nExample: - \"false\"-",
@@ -2580,6 +2600,16 @@ var APISwaggerJSON string = `{
                     "title": "Export Policy",
                     "x-displayname": "Export Policy",
                     "x-ves-example": "default"
+                },
+                "no_qos": {
+                    "description": "Exclusive with [adaptive_qos_policy qos_policy]\nx-displayName: \"No QoS\"\nNo QoS configured",
+                    "title": "No QoS",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "qos_policy": {
+                    "type": "string",
+                    "description": "Exclusive with [adaptive_qos_policy no_qos]\nx-displayName: \"QoS Policy Name\"\nEnter QoS Policy Name",
+                    "title": "QoS Policy Name"
                 },
                 "security_style": {
                     "type": "string",
@@ -2711,6 +2741,13 @@ var APISwaggerJSON string = `{
                     "title": "Selector",
                     "x-displayname": "Selector",
                     "x-ves-example": "protection=silver; creditpoints=20000"
+                },
+                "storage_pools": {
+                    "type": "string",
+                    "description": " The storagePools parameter is used to further restrict the set of pools that match any specified attributes\n\nExample: - \"backend-name1:.*;backend-name2:storagePoolListName\"-",
+                    "title": "Storage Pools",
+                    "x-displayname": "Storage Pools",
+                    "x-ves-example": "backend-name1:.*;backend-name2:storagePoolListName"
                 }
             }
         },
@@ -2751,6 +2788,21 @@ var APISwaggerJSON string = `{
                     "title": "Backend",
                     "x-displayname": "Backend",
                     "x-ves-example": "block"
+                },
+                "bandwidth_limit": {
+                    "type": "string",
+                    "description": " It must be between 1 MB/s and 512 GB/s. Enter the size as a number (bytes must be multiple of 512) or number with a single character unit symbol.\n Valid unit symbols are K, M, G, representing KiB, MiB, and GiB.\n\nExample: - \"1G\"-",
+                    "title": "Bandwidth Limit",
+                    "x-displayname": "Bandwidth Limit",
+                    "x-ves-example": "1G"
+                },
+                "iops_limit": {
+                    "type": "integer",
+                    "description": " Enable IOPS limitation. It must be between 100 and 100 million. If value is 0, IOPS limit is not defined.\n\nExample: - \"3000\"-",
+                    "title": "IOPS Limit",
+                    "format": "int64",
+                    "x-displayname": "IOPS Limit",
+                    "x-ves-example": "3000"
                 }
             }
         },
@@ -2782,6 +2834,18 @@ var APISwaggerJSON string = `{
                     "description": " Configuration of Backend Name. Driver is name + \"_\" + dataLIF",
                     "title": "Storage Backend Name",
                     "x-displayname": "Storage Backend Name"
+                },
+                "client_certificate": {
+                    "type": "string",
+                    "description": " Please Enter Base64-encoded value of client certificate. Used for certificate-based auth.",
+                    "title": "Client Certificate",
+                    "x-displayname": "Client Certificate"
+                },
+                "client_private_key": {
+                    "description": " Please Enter value of client private key. Used for certificate-based auth.",
+                    "title": "Client Private Key",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Client Private Key"
                 },
                 "data_lif_dns_name": {
                     "type": "string",
@@ -2875,6 +2939,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Backend SVM",
                     "x-ves-example": "trident_svm"
                 },
+                "trusted_ca_certificate": {
+                    "type": "string",
+                    "description": " Please Enter Base64-encoded value of trusted CA certificate. Optional. Used for certificate-based auth..",
+                    "title": "Trusted CA Certificate",
+                    "x-displayname": "Trusted CA Certificate"
+                },
                 "username": {
                     "type": "string",
                     "description": " Username to connect to the cluster/SVM\n\nExample: - \"cluster-admin\"-\nRequired: YES",
@@ -2901,6 +2971,18 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-management_lif": "[\"management_lif_dns_name\",\"management_lif_ip\"]",
             "x-ves-proto-message": "ves.io.schema.fleet.StorageDeviceNetappBackendOntapSanType",
             "properties": {
+                "client_certificate": {
+                    "type": "string",
+                    "description": " Please Enter Base64-encoded value of client certificate. Used for certificate-based auth.",
+                    "title": "Client Certificate",
+                    "x-displayname": "Client Certificate"
+                },
+                "client_private_key": {
+                    "description": " Please Enter value of client private key. Used for certificate-based auth.",
+                    "title": "Client Private Key",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Client Private Key"
+                },
                 "data_lif_dns_name": {
                     "type": "string",
                     "description": "Exclusive with [data_lif_ip]\nx-displayName: \"Backend Data LIF Name\"\nx-example: \"storage.local\"\nBackend Data LIF IP Address's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.",
@@ -2998,6 +3080,12 @@ var APISwaggerJSON string = `{
                     "title": "Backend SVM",
                     "x-displayname": "Backend SVM",
                     "x-ves-example": "trident_svm"
+                },
+                "trusted_ca_certificate": {
+                    "type": "string",
+                    "description": " Please Enter Base64-encoded value of trusted CA certificate. Optional. Used for certificate-based auth..",
+                    "title": "Trusted CA Certificate",
+                    "x-displayname": "Trusted CA Certificate"
                 },
                 "use_chap": {
                     "description": "Exclusive with [no_chap]\nx-displayName: \"Use Device NetApp Backend ONTAP SAN CHAP\"\nDevice NetApp Backend ONTAP SAN CHAP configuration options for enabled CHAP",
@@ -4905,13 +4993,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\nRequired: YES",
                     "title": "ipv4 prefix list",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefix List",
-                    "x-ves-example": "192.168.20.0/24"
+                    "x-ves-example": "192.168.20.0/24",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -5453,12 +5542,13 @@ var APISwaggerJSON string = `{
                 },
                 "ip_prefixes": {
                     "type": "array",
-                    "description": " List of route prefixes that have common next hop and attributes",
+                    "description": " List of route prefixes that have common next hop and attributes\nRequired: YES",
                     "title": "IP Prefixes",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "IP Prefixes"
+                    "x-displayname": "IP Prefixes",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -6017,14 +6107,14 @@ var APISwaggerJSON string = `{
                 },
                 "bgp_peer_address": {
                     "type": "string",
-                    "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured \n to fetch BGP peer address from site Object. This can be used to change peer address per site in fleet.\n\nExample: - \"10.1.1.1\"-",
+                    "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer address from site Object. This can be used to change peer address per site in fleet.\n\nExample: - \"10.1.1.1\"-",
                     "title": "bgp_peer_address",
                     "x-displayname": "BGP Peer Address",
                     "x-ves-example": "10.1.1.1"
                 },
                 "bgp_router_id": {
                     "type": "string",
-                    "description": " Optional bgp router id that can be used as parameter for BGP configuration when BGP is configured to\n fetch BGP router ID from site object. \n\nExample: - \"10.1.1.1\"-",
+                    "description": " Optional bgp router id that can be used as parameter for BGP configuration when BGP is configured to\n fetch BGP router ID from site object.\n\nExample: - \"10.1.1.1\"-",
                     "title": "bgp_router_id",
                     "x-displayname": "BGP Router ID",
                     "x-ves-example": "10.1.1.1"

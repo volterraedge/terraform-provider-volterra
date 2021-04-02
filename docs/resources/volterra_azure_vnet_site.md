@@ -32,7 +32,7 @@ resource "volterra_azure_vnet_site" "example" {
   logs_streaming_disabled = true
   resource_group          = ["my-resources"]
 
-  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
   ingress_gw {
     az_nodes {
@@ -40,7 +40,7 @@ resource "volterra_azure_vnet_site" "example" {
       disk_size = "disk_size"
 
       local_subnet {
-        // One of the arguments from this list "subnet_param subnet" must be set
+        // One of the arguments from this list "subnet subnet_param" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -566,7 +566,7 @@ Voltstack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
 
-`outside_static_routes` - (Optional) Manage static routes for outisde network.. See [Outside Static Routes ](#outside-static-routes) below for details.
+`outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
 
 ### Wingman Secret Info
 

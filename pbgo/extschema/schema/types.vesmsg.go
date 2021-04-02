@@ -4624,7 +4624,7 @@ func (m *NetworkSiteRefSelector) GetRefOrSelectorDRefInfo() ([]db.DRefInfo, erro
 		err             error
 	)
 	_ = driSet
-	if m.RefOrSelector == nil {
+	if m.GetRefOrSelector() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -8342,7 +8342,7 @@ func (m *SiteVirtualSiteRefSelector) GetRefOrSelectorDRefInfo() ([]db.DRefInfo, 
 		err             error
 	)
 	_ = driSet
-	if m.RefOrSelector == nil {
+	if m.GetRefOrSelector() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -8490,11 +8490,11 @@ func (m *StaticRouteType) GetNexthopDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Nexthop == nil {
+	if m.GetNexthop() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Nexthop.GetDRefInfo()
+	driSet, err = m.GetNexthop().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -12455,7 +12455,7 @@ func (m *WafType) GetRefTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RefType == nil {
+	if m.GetRefType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 

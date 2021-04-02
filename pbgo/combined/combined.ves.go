@@ -1383,9 +1383,13 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.namespace.ReplaceRequest"] = ves_io_schema_namespace.ReplaceRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.ReplaceResponse"] = ves_io_schema_namespace.ReplaceResponseValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.namespace.APIItem"] = ves_io_schema_namespace.APIItemValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.APIItemList"] = ves_io_schema_namespace.APIItemListValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteItemType"] = ves_io_schema_namespace.CascadeDeleteItemTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteRequest"] = ves_io_schema_namespace.CascadeDeleteRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.CascadeDeleteResponse"] = ves_io_schema_namespace.CascadeDeleteResponseValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.EvaluateAPIAccessReq"] = ves_io_schema_namespace.EvaluateAPIAccessReqValidator()
+	MDR.ValidatorRegistry["ves.io.schema.namespace.EvaluateAPIAccessResp"] = ves_io_schema_namespace.EvaluateAPIAccessRespValidator()
 
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveNetworkPoliciesRequest"] = ves_io_schema_namespace.GetActiveNetworkPoliciesRequestValidator()
 	MDR.ValidatorRegistry["ves.io.schema.namespace.GetActiveNetworkPoliciesResponse"] = ves_io_schema_namespace.GetActiveNetworkPoliciesResponseValidator()
@@ -2105,6 +2109,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.site.Cpu"] = ves_io_schema_site.CpuValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.CreateKubeConfigReq"] = ves_io_schema_site.CreateKubeConfigReqValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.CreateSpecType"] = ves_io_schema_site.CreateSpecTypeValidator()
+	MDR.ValidatorRegistry["ves.io.schema.site.DefaultUnderlayNetworkType"] = ves_io_schema_site.DefaultUnderlayNetworkTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.DeploymentState"] = ves_io_schema_site.DeploymentStateValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.FleetCondition"] = ves_io_schema_site.FleetConditionValidator()
 	MDR.ValidatorRegistry["ves.io.schema.site.FleetDeploymentState"] = ves_io_schema_site.FleetDeploymentStateValidator()
@@ -2789,6 +2794,7 @@ func init() {
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.CloudSubnetType"] = ves_io_schema_views_terraform_parameters.CloudSubnetTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.SubnetType"] = ves_io_schema_views_terraform_parameters.SubnetTypeValidator()
 
+	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureExistingSubnetParamType"] = ves_io_schema_views_terraform_parameters.AzureExistingSubnetParamTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureInstanceType"] = ves_io_schema_views_terraform_parameters.AzureInstanceTypeValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureSubnetChoice"] = ves_io_schema_views_terraform_parameters.AzureSubnetChoiceValidator()
 	MDR.ValidatorRegistry["ves.io.schema.views.terraform_parameters.AzureSubnetParamType"] = ves_io_schema_views_terraform_parameters.AzureSubnetParamTypeValidator()

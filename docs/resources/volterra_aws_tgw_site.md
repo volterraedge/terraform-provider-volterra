@@ -28,9 +28,16 @@ resource "volterra_aws_tgw_site" "example" {
       aws_az_name = "us-west-2a"
 
       // One of the arguments from this list "reserved_inside_subnet inside_subnet" must be set
-      reserved_inside_subnet = true
-      disk_size              = "disk_size"
 
+      inside_subnet {
+        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
+
+        subnet_param {
+          ipv4 = "10.1.2.0/24"
+          ipv6 = "1234:568:abcd:9100::/64"
+        }
+      }
+      disk_size = "disk_size"
       outside_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
@@ -39,7 +46,6 @@ resource "volterra_aws_tgw_site" "example" {
           ipv6 = "1234:568:abcd:9100::/64"
         }
       }
-
       workload_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
@@ -60,23 +66,14 @@ resource "volterra_aws_tgw_site" "example" {
     disk_size     = "80"
     instance_type = "a1.xlarge"
     nodes_per_az  = "2"
-
     // One of the arguments from this list "new_vpc vpc_id" must be set
-
-    new_vpc {
-      allocate_ipv6 = true
-
-      // One of the arguments from this list "name_tag autogenerate" must be set
-      name_tag = "name_tag"
-
-      primary_ipv4 = "10.1.0.0/16"
-    }
+    vpc_id = "vpc-12345678901234567"
     ssh_key = "ssh-rsa AAAAB..."
 
     // One of the arguments from this list "new_tgw existing_tgw" must be set
 
     new_tgw {
-      // One of the arguments from this list "system_generated user_assigned" must be set
+      // One of the arguments from this list "user_assigned system_generated" must be set
       system_generated = true
     }
   }

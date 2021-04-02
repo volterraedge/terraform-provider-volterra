@@ -95,7 +95,7 @@ func (m *CookieParams) GetSecretChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.SecretChoice == nil {
+	if m.GetSecretChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -351,11 +351,11 @@ func (m *CreateSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.CookieParams == nil {
+	if m.GetCookieParams() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.CookieParams.GetDRefInfo()
+	driSet, err = m.GetCookieParams().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -567,11 +567,11 @@ func (m *GetSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.CookieParams == nil {
+	if m.GetCookieParams() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.CookieParams.GetDRefInfo()
+	driSet, err = m.GetCookieParams().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -783,11 +783,11 @@ func (m *GlobalSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.CookieParams == nil {
+	if m.GetCookieParams() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.CookieParams.GetDRefInfo()
+	driSet, err = m.GetCookieParams().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1808,11 +1808,11 @@ func (m *ReplaceSpecType) GetCookieParamsDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.CookieParams == nil {
+	if m.GetCookieParams() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.CookieParams.GetDRefInfo()
+	driSet, err = m.GetCookieParams().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}

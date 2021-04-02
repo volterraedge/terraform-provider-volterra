@@ -1874,6 +1874,7 @@ type AsnMatchList struct {
 	//
 	// x-displayName: "AS Numbers"
 	// x-example: "[713, 7932, 847325, 4683, 15269, 1000001]"
+	// x-required
 	// An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.
 	AsNumbers []uint32 `protobuf:"varint,1,rep,packed,name=as_numbers,json=asNumbers" json:"as_numbers,omitempty"`
 }

@@ -2636,6 +2636,7 @@ var APISwaggerJSON string = `{
             "title": "Advanced Route Options",
             "x-displayname": "Advanced Route Options",
             "x-ves-oneof-field-buffer_choice": "[\"buffer_policy\",\"common_buffering\"]",
+            "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"common_hash_policy\",\"specific_hash_policy\"]",
             "x-ves-oneof-field-mirroring_choice": "[\"disable_mirroring\",\"mirror_policy\"]",
             "x-ves-oneof-field-retry_policy_choice": "[\"default_retry_policy\",\"retry_policy\"]",
@@ -2703,6 +2704,11 @@ var APISwaggerJSON string = `{
                     "title": "Disable Websocket",
                     "$ref": "#/definitions/schemaEmpty"
                 },
+                "do_not_retract_cluster": {
+                    "description": "Exclusive with [retract_cluster]\nx-displayName: \"Disable cluster retraction\"\nWhen this option is configured, cluster with no healthy\nendpoints is not retracted from route having weighted cluster\nconfiguration.",
+                    "title": "do_not_retract_cluster",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "enable_spdy": {
                     "description": "Exclusive with [disable_spdy]\nx-displayName: \"Enable SPDY\"\nSPDY upgrade is enabled",
                     "title": "Enable SPDY",
@@ -2767,6 +2773,11 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Remove Response Headers",
                     "x-ves-example": "host"
+                },
+                "retract_cluster": {
+                    "description": "Exclusive with [do_not_retract_cluster]\nx-displayName: \"Retract cluster with no healthy endpoints\"\nWhen this option is enabled, weighted cluster will not be considered\nfor loadbalancing, if all its endpoints are unhealthy.\nSince the cluster with all unhealthy endpoints is removed, the traffic\nwill be distributed among remaining clusters as per their weight.\nAlso panic-threshold configuration is ignored for retracted cluster.\n\nThis option is ignored when single destination cluster is configured\nfor route",
+                    "title": "retract_cluster",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "retry_policy": {
                     "description": "Exclusive with [default_retry_policy]\nx-displayName: \"Custom Retry Policy\"\nConfigure custom retry policy",
@@ -3138,14 +3149,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "as_numbers": {
                     "type": "array",
-                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-",
+                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\nRequired: YES",
                     "title": "as numbers",
                     "items": {
                         "type": "integer",
                         "format": "int64"
                     },
                     "x-displayname": "AS Numbers",
-                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]"
+                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]",
+                    "x-ves-required": "true"
                 }
             }
         },
@@ -5200,13 +5212,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\nRequired: YES",
                     "title": "ipv4 prefix list",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefix List",
-                    "x-ves-example": "192.168.20.0/24"
+                    "x-ves-example": "192.168.20.0/24",
+                    "x-ves-required": "true"
                 }
             }
         },

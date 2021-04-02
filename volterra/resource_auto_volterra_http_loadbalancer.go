@@ -769,7 +769,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Optional: true,
+																			Required: true,
 																			Elem: &schema.Schema{
 																				Type: schema.TypeInt,
 																			},
@@ -2413,7 +2413,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 										Type: schema.TypeList,
 
-										Optional: true,
+										Required: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -2744,6 +2744,18 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 												},
 
 												"common_buffering": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"do_not_retract_cluster": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"retract_cluster": {
 
 													Type:     schema.TypeBool,
 													Optional: true,
@@ -7113,6 +7125,32 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									bufferChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_CommonBuffering{}
 									bufferChoiceInt.CommonBuffering = &ves_io_schema.Empty{}
 									advancedOptions.BufferChoice = bufferChoiceInt
+								}
+
+							}
+
+							clusterRetractChoiceTypeFound := false
+
+							if v, ok := advancedOptionsMapStrToI["do_not_retract_cluster"]; ok && !isIntfNil(v) && !clusterRetractChoiceTypeFound {
+
+								clusterRetractChoiceTypeFound = true
+
+								if v.(bool) {
+									clusterRetractChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_DoNotRetractCluster{}
+									clusterRetractChoiceInt.DoNotRetractCluster = &ves_io_schema.Empty{}
+									advancedOptions.ClusterRetractChoice = clusterRetractChoiceInt
+								}
+
+							}
+
+							if v, ok := advancedOptionsMapStrToI["retract_cluster"]; ok && !isIntfNil(v) && !clusterRetractChoiceTypeFound {
+
+								clusterRetractChoiceTypeFound = true
+
+								if v.(bool) {
+									clusterRetractChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_RetractCluster{}
+									clusterRetractChoiceInt.RetractCluster = &ves_io_schema.Empty{}
+									advancedOptions.ClusterRetractChoice = clusterRetractChoiceInt
 								}
 
 							}
@@ -11755,6 +11793,32 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									bufferChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_CommonBuffering{}
 									bufferChoiceInt.CommonBuffering = &ves_io_schema.Empty{}
 									advancedOptions.BufferChoice = bufferChoiceInt
+								}
+
+							}
+
+							clusterRetractChoiceTypeFound := false
+
+							if v, ok := advancedOptionsMapStrToI["do_not_retract_cluster"]; ok && !isIntfNil(v) && !clusterRetractChoiceTypeFound {
+
+								clusterRetractChoiceTypeFound = true
+
+								if v.(bool) {
+									clusterRetractChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_DoNotRetractCluster{}
+									clusterRetractChoiceInt.DoNotRetractCluster = &ves_io_schema.Empty{}
+									advancedOptions.ClusterRetractChoice = clusterRetractChoiceInt
+								}
+
+							}
+
+							if v, ok := advancedOptionsMapStrToI["retract_cluster"]; ok && !isIntfNil(v) && !clusterRetractChoiceTypeFound {
+
+								clusterRetractChoiceTypeFound = true
+
+								if v.(bool) {
+									clusterRetractChoiceInt := &ves_io_schema_views_http_loadbalancer.RouteSimpleAdvancedOptions_RetractCluster{}
+									clusterRetractChoiceInt.RetractCluster = &ves_io_schema.Empty{}
+									advancedOptions.ClusterRetractChoice = clusterRetractChoiceInt
 								}
 
 							}

@@ -2318,9 +2318,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "generated_yaml": {
                     "type": "string",
-                    "description": " K8s YAML for ClusterRole",
-                    "title": "K8s YAML",
-                    "x-displayname": "K8s YAML"
+                    "description": " Generated YAML",
+                    "title": "Generated YAML",
+                    "x-displayname": "Generated YAML"
                 }
             }
         },
@@ -2333,9 +2333,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "generated_yaml": {
                     "type": "string",
-                    "description": " K8s YAML for ClusterRole",
-                    "title": "K8s YAML",
-                    "x-displayname": "K8s YAML"
+                    "description": " Generated YAML",
+                    "title": "Generated YAML",
+                    "x-displayname": "Generated YAML"
                 }
             }
         },

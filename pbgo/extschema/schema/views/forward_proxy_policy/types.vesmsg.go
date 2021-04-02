@@ -161,7 +161,7 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RuleChoice == nil {
+	if m.GetRuleChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1290,11 +1290,11 @@ func (m *ForwardProxyRuleListType) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Rules == nil {
+	if m.GetRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Rules {
+	for idx, e := range m.GetRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1391,6 +1391,7 @@ var DefaultForwardProxyRuleListTypeValidator = func() *ValidateForwardProxyRuleL
 
 	vrhRules := v.RulesValidationRuleHandler
 	rulesRules := map[string]string{
+		"ves.io.schema.rules.message.required":              "true",
 		"ves.io.schema.rules.repeated.max_items":            "32",
 		"ves.io.schema.rules.repeated.min_items":            "1",
 		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
@@ -1925,7 +1926,7 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RuleChoice == nil {
+	if m.GetRuleChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2294,7 +2295,7 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RuleChoice == nil {
+	if m.GetRuleChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2718,7 +2719,7 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RuleChoice == nil {
+	if m.GetRuleChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 

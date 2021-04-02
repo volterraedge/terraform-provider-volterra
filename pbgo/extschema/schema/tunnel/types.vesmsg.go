@@ -94,11 +94,11 @@ func (m *CreateSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.LocalIp == nil {
+	if m.GetLocalIp() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.LocalIp.GetDRefInfo()
+	driSet, err = m.GetLocalIp().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -341,11 +341,11 @@ func (m *GetSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.LocalIp == nil {
+	if m.GetLocalIp() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.LocalIp.GetDRefInfo()
+	driSet, err = m.GetLocalIp().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -588,11 +588,11 @@ func (m *GlobalSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.LocalIp == nil {
+	if m.GetLocalIp() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.LocalIp.GetDRefInfo()
+	driSet, err = m.GetLocalIp().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1103,7 +1103,7 @@ func (m *LocalIpAddressSelector) GetTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Type == nil {
+	if m.GetType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1729,11 +1729,11 @@ func (m *ReplaceSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.LocalIp == nil {
+	if m.GetLocalIp() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.LocalIp.GetDRefInfo()
+	driSet, err = m.GetLocalIp().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}

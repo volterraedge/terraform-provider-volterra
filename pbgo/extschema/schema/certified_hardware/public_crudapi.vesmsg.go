@@ -427,11 +427,11 @@ func (m *ListResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Items == nil {
+	if m.GetItems() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Items {
+	for idx, e := range m.GetItems() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err

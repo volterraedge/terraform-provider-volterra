@@ -656,11 +656,11 @@ func (m *ChallengeRule) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Spec == nil {
+	if m.GetSpec() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.Spec.GetDRefInfo()
+	driSet, err = m.GetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -849,11 +849,11 @@ func (m *ChallengeRuleList) GetRulesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Rules == nil {
+	if m.GetRules() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Rules {
+	for idx, e := range m.GetRules() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1090,7 +1090,7 @@ func (m *CreateSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AdvertiseChoice == nil {
+	if m.GetAdvertiseChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1133,7 +1133,7 @@ func (m *CreateSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ChallengeType == nil {
+	if m.GetChallengeType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1168,11 +1168,11 @@ func (m *CreateSpecType) GetDefaultRoutePoolsDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.DefaultRoutePools == nil {
+	if m.GetDefaultRoutePools() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.DefaultRoutePools {
+	for idx, e := range m.GetDefaultRoutePools() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1243,11 +1243,11 @@ func (m *CreateSpecType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.MoreOption == nil {
+	if m.GetMoreOption() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.MoreOption.GetDRefInfo()
+	driSet, err = m.GetMoreOption().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -1266,7 +1266,7 @@ func (m *CreateSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RateLimitChoice == nil {
+	if m.GetRateLimitChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1297,11 +1297,11 @@ func (m *CreateSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Routes == nil {
+	if m.GetRoutes() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Routes {
+	for idx, e := range m.GetRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -1322,7 +1322,7 @@ func (m *CreateSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 		err             error
 	)
 	_ = driSet
-	if m.ServicePolicyChoice == nil {
+	if m.GetServicePolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1600,6 +1600,46 @@ func (v *ValidateCreateSpecType) DomainsValidationRuleHandler(rules map[string]s
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items domains")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) DefaultRoutePoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.OriginPoolWithWeight, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.OriginPoolWithWeightValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for default_route_pools")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.OriginPoolWithWeight)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.OriginPoolWithWeight, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated default_route_pools")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items default_route_pools")
 		}
 		return nil
 	}
@@ -1924,13 +1964,9 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 
 	if fv, exists := v.FldValidators["default_route_pools"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_route_pools"))
-		for idx, item := range m.GetDefaultRoutePools() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetDefaultRoutePools(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -2360,6 +2396,18 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["domains"] = vFn
 
+	vrhDefaultRoutePools := v.DefaultRoutePoolsValidationRuleHandler
+	rulesDefaultRoutePools := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhDefaultRoutePools(rulesDefaultRoutePools)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.default_route_pools: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["default_route_pools"] = vFn
+
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "64",
@@ -2427,8 +2475,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["waf_choice.waf"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["waf_choice.waf_rule"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
-	v.FldValidators["default_route_pools"] = ves_io_schema_views.OriginPoolWithWeightValidator().Validate
 
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
@@ -3100,7 +3146,7 @@ func (m *GetSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AdvertiseChoice == nil {
+	if m.GetAdvertiseChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3143,7 +3189,7 @@ func (m *GetSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ChallengeType == nil {
+	if m.GetChallengeType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3178,11 +3224,11 @@ func (m *GetSpecType) GetDefaultRoutePoolsDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.DefaultRoutePools == nil {
+	if m.GetDefaultRoutePools() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.DefaultRoutePools {
+	for idx, e := range m.GetDefaultRoutePools() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -3253,11 +3299,11 @@ func (m *GetSpecType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.MoreOption == nil {
+	if m.GetMoreOption() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.MoreOption.GetDRefInfo()
+	driSet, err = m.GetMoreOption().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -3276,7 +3322,7 @@ func (m *GetSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RateLimitChoice == nil {
+	if m.GetRateLimitChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3307,11 +3353,11 @@ func (m *GetSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Routes == nil {
+	if m.GetRoutes() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Routes {
+	for idx, e := range m.GetRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -3332,7 +3378,7 @@ func (m *GetSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ServicePolicyChoice == nil {
+	if m.GetServicePolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3610,6 +3656,46 @@ func (v *ValidateGetSpecType) DomainsValidationRuleHandler(rules map[string]stri
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items domains")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) DefaultRoutePoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.OriginPoolWithWeight, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.OriginPoolWithWeightValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for default_route_pools")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.OriginPoolWithWeight)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.OriginPoolWithWeight, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated default_route_pools")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items default_route_pools")
 		}
 		return nil
 	}
@@ -3952,13 +4038,9 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 
 	if fv, exists := v.FldValidators["default_route_pools"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_route_pools"))
-		for idx, item := range m.GetDefaultRoutePools() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetDefaultRoutePools(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -4418,6 +4500,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["domains"] = vFn
 
+	vrhDefaultRoutePools := v.DefaultRoutePoolsValidationRuleHandler
+	rulesDefaultRoutePools := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhDefaultRoutePools(rulesDefaultRoutePools)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.default_route_pools: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["default_route_pools"] = vFn
+
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "64",
@@ -4485,8 +4579,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["waf_choice.waf"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["waf_choice.waf_rule"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
-	v.FldValidators["default_route_pools"] = ves_io_schema_views.OriginPoolWithWeightValidator().Validate
 
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
@@ -4634,7 +4726,7 @@ func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AdvertiseChoice == nil {
+	if m.GetAdvertiseChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -4677,7 +4769,7 @@ func (m *GlobalSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ChallengeType == nil {
+	if m.GetChallengeType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -4712,11 +4804,11 @@ func (m *GlobalSpecType) GetDefaultRoutePoolsDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.DefaultRoutePools == nil {
+	if m.GetDefaultRoutePools() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.DefaultRoutePools {
+	for idx, e := range m.GetDefaultRoutePools() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -4787,11 +4879,11 @@ func (m *GlobalSpecType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.MoreOption == nil {
+	if m.GetMoreOption() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.MoreOption.GetDRefInfo()
+	driSet, err = m.GetMoreOption().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -4810,7 +4902,7 @@ func (m *GlobalSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RateLimitChoice == nil {
+	if m.GetRateLimitChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -4841,11 +4933,11 @@ func (m *GlobalSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Routes == nil {
+	if m.GetRoutes() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Routes {
+	for idx, e := range m.GetRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -4866,7 +4958,7 @@ func (m *GlobalSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 		err             error
 	)
 	_ = driSet
-	if m.ServicePolicyChoice == nil {
+	if m.GetServicePolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -5209,6 +5301,46 @@ func (v *ValidateGlobalSpecType) DomainsValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) DefaultRoutePoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.OriginPoolWithWeight, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.OriginPoolWithWeightValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for default_route_pools")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.OriginPoolWithWeight)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.OriginPoolWithWeight, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated default_route_pools")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items default_route_pools")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemsValidatorFn := func(ctx context.Context, elems []*RouteType, opts ...db.ValidateOpt) error {
@@ -5544,13 +5676,9 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 
 	if fv, exists := v.FldValidators["default_route_pools"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_route_pools"))
-		for idx, item := range m.GetDefaultRoutePools() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetDefaultRoutePools(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -6068,6 +6196,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["domains"] = vFn
 
+	vrhDefaultRoutePools := v.DefaultRoutePoolsValidationRuleHandler
+	rulesDefaultRoutePools := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhDefaultRoutePools(rulesDefaultRoutePools)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.default_route_pools: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["default_route_pools"] = vFn
+
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "64",
@@ -6135,8 +6275,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["waf_choice.waf"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["waf_choice.waf_rule"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
-	v.FldValidators["default_route_pools"] = ves_io_schema_views.OriginPoolWithWeightValidator().Validate
 
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
@@ -6641,11 +6779,11 @@ func (m *PolicyBasedChallenge) GetRuleListDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RuleList == nil {
+	if m.GetRuleList() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.RuleList.GetDRefInfo()
+	driSet, err = m.GetRuleList().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -7478,7 +7616,7 @@ func (m *RateLimitConfigType) GetIpAllowedListChoiceDRefInfo() ([]db.DRefInfo, e
 		err             error
 	)
 	_ = driSet
-	if m.IpAllowedListChoice == nil {
+	if m.GetIpAllowedListChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -7511,7 +7649,7 @@ func (m *RateLimitConfigType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.PolicyChoice == nil {
+	if m.GetPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -7835,7 +7973,7 @@ func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AdvertiseChoice == nil {
+	if m.GetAdvertiseChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -7878,7 +8016,7 @@ func (m *ReplaceSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ChallengeType == nil {
+	if m.GetChallengeType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -7913,11 +8051,11 @@ func (m *ReplaceSpecType) GetDefaultRoutePoolsDRefInfo() ([]db.DRefInfo, error) 
 		err             error
 	)
 	_ = driSet
-	if m.DefaultRoutePools == nil {
+	if m.GetDefaultRoutePools() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.DefaultRoutePools {
+	for idx, e := range m.GetDefaultRoutePools() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -7988,11 +8126,11 @@ func (m *ReplaceSpecType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.MoreOption == nil {
+	if m.GetMoreOption() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.MoreOption.GetDRefInfo()
+	driSet, err = m.GetMoreOption().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -8011,7 +8149,7 @@ func (m *ReplaceSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.RateLimitChoice == nil {
+	if m.GetRateLimitChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -8042,11 +8180,11 @@ func (m *ReplaceSpecType) GetRoutesDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Routes == nil {
+	if m.GetRoutes() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Routes {
+	for idx, e := range m.GetRoutes() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -8067,7 +8205,7 @@ func (m *ReplaceSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error
 		err             error
 	)
 	_ = driSet
-	if m.ServicePolicyChoice == nil {
+	if m.GetServicePolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -8345,6 +8483,46 @@ func (v *ValidateReplaceSpecType) DomainsValidationRuleHandler(rules map[string]
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items domains")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) DefaultRoutePoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.OriginPoolWithWeight, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.OriginPoolWithWeightValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for default_route_pools")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.OriginPoolWithWeight)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.OriginPoolWithWeight, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated default_route_pools")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items default_route_pools")
 		}
 		return nil
 	}
@@ -8669,13 +8847,9 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	}
 
 	if fv, exists := v.FldValidators["default_route_pools"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("default_route_pools"))
-		for idx, item := range m.GetDefaultRoutePools() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetDefaultRoutePools(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -9105,6 +9279,18 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["domains"] = vFn
 
+	vrhDefaultRoutePools := v.DefaultRoutePoolsValidationRuleHandler
+	rulesDefaultRoutePools := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhDefaultRoutePools(rulesDefaultRoutePools)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.default_route_pools: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["default_route_pools"] = vFn
+
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "64",
@@ -9172,8 +9358,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["waf_choice.waf"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["waf_choice.waf_rule"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
-	v.FldValidators["default_route_pools"] = ves_io_schema_views.OriginPoolWithWeightValidator().Validate
 
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
@@ -9251,7 +9435,7 @@ func (m *RouteSimpleAdvancedOptions) GetMirroringChoiceDRefInfo() ([]db.DRefInfo
 		err             error
 	)
 	_ = driSet
-	if m.MirroringChoice == nil {
+	if m.GetMirroringChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -9390,6 +9574,14 @@ func (v *ValidateRouteSimpleAdvancedOptions) BufferChoiceValidationRuleHandler(r
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for buffer_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteSimpleAdvancedOptions) ClusterRetractChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_retract_choice")
 	}
 	return validatorFn, nil
 }
@@ -9719,6 +9911,42 @@ func (v *ValidateRouteSimpleAdvancedOptions) Validate(ctx context.Context, pm in
 			vOpts := append(opts,
 				db.WithValidateField("buffer_choice"),
 				db.WithValidateField("buffer_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cluster_retract_choice"]; exists {
+		val := m.GetClusterRetractChoice()
+		vOpts := append(opts,
+			db.WithValidateField("cluster_retract_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClusterRetractChoice().(type) {
+	case *RouteSimpleAdvancedOptions_RetractCluster:
+		if fv, exists := v.FldValidators["cluster_retract_choice.retract_cluster"]; exists {
+			val := m.GetClusterRetractChoice().(*RouteSimpleAdvancedOptions_RetractCluster).RetractCluster
+			vOpts := append(opts,
+				db.WithValidateField("cluster_retract_choice"),
+				db.WithValidateField("retract_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteSimpleAdvancedOptions_DoNotRetractCluster:
+		if fv, exists := v.FldValidators["cluster_retract_choice.do_not_retract_cluster"]; exists {
+			val := m.GetClusterRetractChoice().(*RouteSimpleAdvancedOptions_DoNotRetractCluster).DoNotRetractCluster
+			vOpts := append(opts,
+				db.WithValidateField("cluster_retract_choice"),
+				db.WithValidateField("do_not_retract_cluster"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -10092,6 +10320,17 @@ var DefaultRouteSimpleAdvancedOptionsValidator = func() *ValidateRouteSimpleAdva
 	}
 	v.FldValidators["buffer_choice"] = vFn
 
+	vrhClusterRetractChoice := v.ClusterRetractChoiceValidationRuleHandler
+	rulesClusterRetractChoice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhClusterRetractChoice(rulesClusterRetractChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteSimpleAdvancedOptions.cluster_retract_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cluster_retract_choice"] = vFn
+
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -10331,7 +10570,7 @@ func (m *RouteType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Choice == nil {
+	if m.GetChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -10891,11 +11130,11 @@ func (m *RouteTypeSimple) GetAdvancedOptionsDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.AdvancedOptions == nil {
+	if m.GetAdvancedOptions() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.AdvancedOptions.GetDRefInfo()
+	driSet, err = m.GetAdvancedOptions().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}
@@ -10914,11 +11153,11 @@ func (m *RouteTypeSimple) GetOriginPoolsDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.OriginPools == nil {
+	if m.GetOriginPools() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.OriginPools {
+	for idx, e := range m.GetOriginPools() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err

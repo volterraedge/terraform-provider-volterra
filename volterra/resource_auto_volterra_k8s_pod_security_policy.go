@@ -354,7 +354,7 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 
 										Type: schema.TypeList,
 
-										Optional: true,
+										Required: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},

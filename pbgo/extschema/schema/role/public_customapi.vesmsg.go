@@ -455,11 +455,11 @@ func (m *CustomListResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.Items == nil {
+	if m.GetItems() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	for idx, e := range m.Items {
+	for idx, e := range m.GetItems() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
 			return nil, err
@@ -684,11 +684,11 @@ func (m *Role) GetGetSpecDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.GetSpec == nil {
+	if m.GetGetSpec() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.GetSpec.GetDRefInfo()
+	driSet, err = m.GetGetSpec().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}

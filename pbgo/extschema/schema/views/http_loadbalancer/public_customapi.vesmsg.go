@@ -167,11 +167,11 @@ func (m *GetDnsInfoResponse) GetDnsInfoDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.DnsInfo == nil {
+	if m.GetDnsInfo() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
-	driSet, err = m.DnsInfo.GetDRefInfo()
+	driSet, err = m.GetDnsInfo().GetDRefInfo()
 	if err != nil {
 		return nil, err
 	}

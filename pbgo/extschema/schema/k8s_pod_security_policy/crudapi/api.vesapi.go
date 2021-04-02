@@ -2618,12 +2618,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "allowed_runtime_class_names": {
                     "type": "array",
-                    "description": " List of allowed runtime class names",
+                    "description": " List of allowed runtime class names\nRequired: YES",
                     "title": "Allowed Runtime Classes",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Allowed Runtime Classes"
+                    "x-displayname": "Allowed Runtime Classes",
+                    "x-ves-required": "true"
                 },
                 "default_runtime_class_name": {
                     "type": "string",

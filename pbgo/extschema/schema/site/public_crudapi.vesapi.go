@@ -1536,6 +1536,13 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
+        },
         "schemaConditionType": {
             "type": "object",
             "description": "Conditions are used in the object status to describe the current state of the\nobject, e.g. Ready, Succeeded, etc.",
@@ -1685,7 +1692,7 @@ var APISwaggerJSON string = `{
                 },
                 "prefix": {
                     "type": "string",
-                    "description": " Prefix part of the IPv6 subnet given in form of string.\n IPv6 address must be specified as hexadecimal numbers sepearted by ':'\n e.g. \"2001:db8:0:0:0:2:0:0\"\n The address can be compacted by suppressing zeros\n e.g. \"2001:db8::2::\"\n\nExample: - \"2001:db8:0:0:0:0:2:0\"-",
+                    "description": " Prefix part of the IPv6 subnet given in form of string.\n IPv6 address must be specified as hexadecimal numbers separated by ':'\n e.g. \"2001:db8:0:0:0:2:0:0\"\n The address can be compacted by suppressing zeros\n e.g. \"2001:db8::2::\"\n\nExample: - \"2001:db8:0:0:0:0:2:0\"-",
                     "title": "Prefix",
                     "x-displayname": "Prefix",
                     "x-ves-example": "2001:db8:0:0:0:0:2:0"
@@ -2565,6 +2572,26 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteDefaultUnderlayNetworkType": {
+            "type": "object",
+            "description": "Optional, virtual network to be used as underlay for different overlay protocols (SRv6, IP-in-IP tunnels for DC Cluster Group)\nDefault is site-local-outside network",
+            "title": "default_underlay_vn",
+            "x-displayname": "Default Underlay Virtual Network",
+            "x-ves-oneof-field-private_access_choice": "[\"site_local_inside\",\"site_local_outside\"]",
+            "x-ves-proto-message": "ves.io.schema.site.DefaultUnderlayNetworkType",
+            "properties": {
+                "site_local_inside": {
+                    "description": "Exclusive with [site_local_outside]\nx-displayName: \"Site Local Inside\"\nUse site local inside as underlay protocol",
+                    "title": "Site Local Inside",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "site_local_outside": {
+                    "description": "Exclusive with [site_local_inside]\nx-displayName: \"Site Local Outside\"\nUse site local outside as underlay protocol",
+                    "title": "Site Local Outside",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
         "siteDeploymentState": {
             "type": "object",
             "description": "Details of Deployment",
@@ -2864,6 +2891,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
                 },
+                "default_underlay_network": {
+                    "description": " Optional, virtual network to be used as underlay for different overlay protocols (SRv6, IP-in-IP tunnels for DC Cluster Group)\n Default is site-local-outside network",
+                    "$ref": "#/definitions/siteDefaultUnderlayNetworkType",
+                    "x-displayname": "Default Underlay Virtual Network"
+                },
                 "desired_pool_count": {
                     "type": "integer",
                     "description": " Desired pool count represent desired number of worker(non master) nodes\n for manual scaling of public cloud(AWS, GCP, Azure) sites. The desired count\n must be less than or equal to the maximum size of the scaling group for a\n given public cloud. One may also have to increase maximum scaling group size to\n effectively increase desired pool count.\n\nExample: - \"0\"-",
@@ -3048,6 +3080,12 @@ var APISwaggerJSON string = `{
                     "title": "coordinates",
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
+                },
+                "default_underlay_network": {
+                    "description": " Optional, virtual network to be used as underlay for different overlay protocols (SRv6, IP-in-IP tunnels for DC Cluster Group)\n Default is site-local-outside network",
+                    "title": "default_underlay_vn",
+                    "$ref": "#/definitions/siteDefaultUnderlayNetworkType",
+                    "x-displayname": "Default Underlay Virtual Network"
                 },
                 "desired_pool_count": {
                     "type": "integer",
@@ -3996,6 +4034,11 @@ var APISwaggerJSON string = `{
                     "description": " Site longitude and latitude co-ordinates",
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
+                },
+                "default_underlay_network": {
+                    "description": " Optional, virtual network to be used as underlay for different overlay protocols (SRv6, IP-in-IP tunnels for DC Cluster Group)\n Default is site-local-outside network",
+                    "$ref": "#/definitions/siteDefaultUnderlayNetworkType",
+                    "x-displayname": "Default Underlay Virtual Network"
                 },
                 "desired_pool_count": {
                     "type": "integer",

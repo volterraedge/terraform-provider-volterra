@@ -2392,7 +2392,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "outside_static_routes": {
-                    "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outisde network.",
+                    "description": "Exclusive with [no_outside_static_routes]\nx-displayName: \"Manage Static routes\"\nManage static routes for outside network.",
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType"
                 }
@@ -3175,7 +3175,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers sepearted by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-",
+                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-",
                     "title": "IPv6 Address",
                     "x-displayname": "IPv6 Address",
                     "x-ves-example": "2001:db8:0:0:0:0:2:1"
@@ -3199,7 +3199,7 @@ var APISwaggerJSON string = `{
                 },
                 "prefix": {
                     "type": "string",
-                    "description": " Prefix part of the IPv6 subnet given in form of string.\n IPv6 address must be specified as hexadecimal numbers sepearted by ':'\n e.g. \"2001:db8:0:0:0:2:0:0\"\n The address can be compacted by suppressing zeros\n e.g. \"2001:db8::2::\"\n\nExample: - \"2001:db8:0:0:0:0:2:0\"-",
+                    "description": " Prefix part of the IPv6 subnet given in form of string.\n IPv6 address must be specified as hexadecimal numbers separated by ':'\n e.g. \"2001:db8:0:0:0:2:0:0\"\n The address can be compacted by suppressing zeros\n e.g. \"2001:db8::2::\"\n\nExample: - \"2001:db8:0:0:0:0:2:0\"-",
                     "title": "Prefix",
                     "x-displayname": "Prefix",
                     "x-ves-example": "2001:db8:0:0:0:0:2:0"

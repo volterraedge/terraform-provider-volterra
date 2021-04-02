@@ -693,7 +693,7 @@ func (m *CreateSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.FastAclChoice == nil {
+	if m.GetFastAclChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -726,7 +726,7 @@ func (m *CreateSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, e
 		err             error
 	)
 	_ = driSet
-	if m.ForwardProxyPolicyChoice == nil {
+	if m.GetForwardProxyPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -759,7 +759,7 @@ func (m *CreateSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 		err             error
 	)
 	_ = driSet
-	if m.NetworkPolicyChoice == nil {
+	if m.GetNetworkPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1144,7 +1144,7 @@ func (m *GetSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.FastAclChoice == nil {
+	if m.GetFastAclChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1177,7 +1177,7 @@ func (m *GetSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, erro
 		err             error
 	)
 	_ = driSet
-	if m.ForwardProxyPolicyChoice == nil {
+	if m.GetForwardProxyPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1210,7 +1210,7 @@ func (m *GetSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.NetworkPolicyChoice == nil {
+	if m.GetNetworkPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1619,7 +1619,7 @@ func (m *GlobalSpecType) GetFastAclConfigModeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.FastAclConfigMode == nil {
+	if m.GetFastAclConfigMode() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1693,7 +1693,7 @@ func (m *GlobalSpecType) GetForwardProxyPolicyConfigModeDRefInfo() ([]db.DRefInf
 		err             error
 	)
 	_ = driSet
-	if m.ForwardProxyPolicyConfigMode == nil {
+	if m.GetForwardProxyPolicyConfigMode() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1767,7 +1767,7 @@ func (m *GlobalSpecType) GetNetworkPolicyConfigModeDRefInfo() ([]db.DRefInfo, er
 		err             error
 	)
 	_ = driSet
-	if m.NetworkPolicyConfigMode == nil {
+	if m.GetNetworkPolicyConfigMode() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2374,7 +2374,7 @@ func (m *ReplaceSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.FastAclChoice == nil {
+	if m.GetFastAclChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2407,7 +2407,7 @@ func (m *ReplaceSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, 
 		err             error
 	)
 	_ = driSet
-	if m.ForwardProxyPolicyChoice == nil {
+	if m.GetForwardProxyPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2440,7 +2440,7 @@ func (m *ReplaceSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error
 		err             error
 	)
 	_ = driSet
-	if m.NetworkPolicyChoice == nil {
+	if m.GetNetworkPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 

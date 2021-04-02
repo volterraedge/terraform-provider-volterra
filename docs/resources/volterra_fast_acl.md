@@ -25,15 +25,8 @@ resource "volterra_fast_acl" "example" {
   site_acl {
     fast_acl_rules {
       action {
-        // One of the arguments from this list "simple_action policer_action protocol_policer_action" must be set
-
-        policer_action {
-          ref {
-            name      = "test1"
-            namespace = "staging"
-            tenant    = "acmecorp"
-          }
-        }
+        // One of the arguments from this list "policer_action protocol_policer_action simple_action" must be set
+        simple_action = "simple_action"
       }
 
       metadata {
@@ -60,7 +53,7 @@ resource "volterra_fast_acl" "example" {
     outside_network = true
 
     // One of the arguments from this list "interface_services vip_services all_services" must be set
-    all_services = true
+    interface_services = true
   }
 }
 

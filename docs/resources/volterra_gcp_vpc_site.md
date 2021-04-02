@@ -20,7 +20,7 @@ resource "volterra_gcp_vpc_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "assisted cloud_credentials" must be set
+  // One of the arguments from this list "cloud_credentials assisted" must be set
 
   cloud_credentials {
     name      = "test1"
@@ -29,41 +29,25 @@ resource "volterra_gcp_vpc_site" "example" {
   }
   gcp_region    = ["us-west1"]
   instance_type = ["n1-standard-4"]
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
   logs_streaming_disabled = true
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
-  voltstack_cluster {
-    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
-    no_forward_proxy = true
-    gcp_certified_hw = "gcp-byol-voltstack-combo"
+  ingress_gw {
+    gcp_certified_hw = "gcp-byol-voltmesh"
 
     gcp_zone_names = ["us-west1-a, us-west1-b, us-west1-c"]
 
-    // One of the arguments from this list "no_global_network global_network_list" must be set
-    no_global_network = true
-
-    // One of the arguments from this list "no_network_policy active_network_policies" must be set
-
-    active_network_policies {
-      network_policies {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
-    node_number = "node_number"
-    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
-    no_outside_static_routes = true
-    site_local_network {
+    local_network {
       // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
 
-      new_network {
+      existing_network {
         name = "network1"
       }
     }
-    site_local_subnet {
+
+    local_subnet {
       // One of the arguments from this list "new_subnet existing_subnet" must be set
 
       new_subnet {
@@ -71,6 +55,8 @@ resource "volterra_gcp_vpc_site" "example" {
         subnet_name  = "subnet1-in-network1"
       }
     }
+
+    node_number = "node_number"
   }
 }
 

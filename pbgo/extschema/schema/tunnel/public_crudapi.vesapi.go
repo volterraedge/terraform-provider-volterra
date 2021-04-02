@@ -2277,7 +2277,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addr": {
                     "type": "string",
-                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers sepearted by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-",
+                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-",
                     "title": "IPv6 Address",
                     "x-displayname": "IPv6 Address",
                     "x-ves-example": "2001:db8:0:0:0:0:2:1"

@@ -121,7 +121,7 @@ func (m *AWSVPCIngressEgressGwReplaceType) GetForwardProxyChoiceDRefInfo() ([]db
 		err             error
 	)
 	_ = driSet
-	if m.ForwardProxyChoice == nil {
+	if m.GetForwardProxyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -154,7 +154,7 @@ func (m *AWSVPCIngressEgressGwReplaceType) GetGlobalNetworkChoiceDRefInfo() ([]d
 		err             error
 	)
 	_ = driSet
-	if m.GlobalNetworkChoice == nil {
+	if m.GetGlobalNetworkChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -185,7 +185,7 @@ func (m *AWSVPCIngressEgressGwReplaceType) GetInsideStaticRouteChoiceDRefInfo() 
 		err             error
 	)
 	_ = driSet
-	if m.InsideStaticRouteChoice == nil {
+	if m.GetInsideStaticRouteChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -216,7 +216,7 @@ func (m *AWSVPCIngressEgressGwReplaceType) GetNetworkPolicyChoiceDRefInfo() ([]d
 		err             error
 	)
 	_ = driSet
-	if m.NetworkPolicyChoice == nil {
+	if m.GetNetworkPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -247,7 +247,7 @@ func (m *AWSVPCIngressEgressGwReplaceType) GetOutsideStaticRouteChoiceDRefInfo()
 		err             error
 	)
 	_ = driSet
-	if m.OutsideStaticRouteChoice == nil {
+	if m.GetOutsideStaticRouteChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -700,7 +700,7 @@ func (m *AWSVPCIngressEgressGwType) GetForwardProxyChoiceDRefInfo() ([]db.DRefIn
 		err             error
 	)
 	_ = driSet
-	if m.ForwardProxyChoice == nil {
+	if m.GetForwardProxyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -733,7 +733,7 @@ func (m *AWSVPCIngressEgressGwType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefI
 		err             error
 	)
 	_ = driSet
-	if m.GlobalNetworkChoice == nil {
+	if m.GetGlobalNetworkChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -764,7 +764,7 @@ func (m *AWSVPCIngressEgressGwType) GetInsideStaticRouteChoiceDRefInfo() ([]db.D
 		err             error
 	)
 	_ = driSet
-	if m.InsideStaticRouteChoice == nil {
+	if m.GetInsideStaticRouteChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -795,7 +795,7 @@ func (m *AWSVPCIngressEgressGwType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefI
 		err             error
 	)
 	_ = driSet
-	if m.NetworkPolicyChoice == nil {
+	if m.GetNetworkPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -826,7 +826,7 @@ func (m *AWSVPCIngressEgressGwType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.
 		err             error
 	)
 	_ = driSet
-	if m.OutsideStaticRouteChoice == nil {
+	if m.GetOutsideStaticRouteChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1602,7 +1602,7 @@ func (m *AWSVPCVoltstackClusterReplaceType) GetForwardProxyChoiceDRefInfo() ([]d
 		err             error
 	)
 	_ = driSet
-	if m.ForwardProxyChoice == nil {
+	if m.GetForwardProxyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1635,7 +1635,7 @@ func (m *AWSVPCVoltstackClusterReplaceType) GetGlobalNetworkChoiceDRefInfo() ([]
 		err             error
 	)
 	_ = driSet
-	if m.GlobalNetworkChoice == nil {
+	if m.GetGlobalNetworkChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1666,7 +1666,7 @@ func (m *AWSVPCVoltstackClusterReplaceType) GetNetworkPolicyChoiceDRefInfo() ([]
 		err             error
 	)
 	_ = driSet
-	if m.NetworkPolicyChoice == nil {
+	if m.GetNetworkPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -1697,7 +1697,7 @@ func (m *AWSVPCVoltstackClusterReplaceType) GetOutsideStaticRouteChoiceDRefInfo(
 		err             error
 	)
 	_ = driSet
-	if m.OutsideStaticRouteChoice == nil {
+	if m.GetOutsideStaticRouteChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2087,7 +2087,7 @@ func (m *AWSVPCVoltstackClusterType) GetForwardProxyChoiceDRefInfo() ([]db.DRefI
 		err             error
 	)
 	_ = driSet
-	if m.ForwardProxyChoice == nil {
+	if m.GetForwardProxyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2120,7 +2120,7 @@ func (m *AWSVPCVoltstackClusterType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRef
 		err             error
 	)
 	_ = driSet
-	if m.GlobalNetworkChoice == nil {
+	if m.GetGlobalNetworkChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2151,7 +2151,7 @@ func (m *AWSVPCVoltstackClusterType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRef
 		err             error
 	)
 	_ = driSet
-	if m.NetworkPolicyChoice == nil {
+	if m.GetNetworkPolicyChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2182,7 +2182,7 @@ func (m *AWSVPCVoltstackClusterType) GetOutsideStaticRouteChoiceDRefInfo() ([]db
 		err             error
 	)
 	_ = driSet
-	if m.OutsideStaticRouteChoice == nil {
+	if m.GetOutsideStaticRouteChoice() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -2848,7 +2848,7 @@ func (m *CreateSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.SiteType == nil {
+	if m.GetSiteType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -3526,7 +3526,7 @@ func (m *GetSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.SiteType == nil {
+	if m.GetSiteType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -4276,7 +4276,7 @@ func (m *GlobalSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.SiteType == nil {
+	if m.GetSiteType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 
@@ -5065,7 +5065,7 @@ func (m *ReplaceSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.SiteType == nil {
+	if m.GetSiteType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 

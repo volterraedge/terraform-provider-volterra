@@ -345,6 +345,7 @@ var DefaultAsnMatchListValidator = func() *ValidateAsnMatchList {
 
 	vrhAsNumbers := v.AsNumbersValidationRuleHandler
 	rulesAsNumbers := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "16",
 		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
@@ -4255,7 +4256,7 @@ func (m *WafAction) GetActionTypeDRefInfo() ([]db.DRefInfo, error) {
 		err             error
 	)
 	_ = driSet
-	if m.ActionType == nil {
+	if m.GetActionType() == nil {
 		return []db.DRefInfo{}, nil
 	}
 

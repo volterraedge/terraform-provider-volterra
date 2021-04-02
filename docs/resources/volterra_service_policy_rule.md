@@ -25,14 +25,14 @@ resource "volterra_service_policy_rule" "example" {
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "any_client client_name client_selector client_name_matcher" must be set
+  // One of the arguments from this list "client_name_matcher any_client client_name client_selector" must be set
   any_client = true
 
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
   any_ip = true
 
   waf_action {
-    // One of the arguments from this list "none waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode" must be set
+    // One of the arguments from this list "waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode none" must be set
     none = true
   }
 }
@@ -174,7 +174,7 @@ Note that all specified arg matcher predicates must evaluate to true..
 
 The predicate evaluates to true if the origin ASN is present in the ASN list..
 
-`as_numbers` - (Optional) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
 
 ### Asn Matcher
 
@@ -256,7 +256,7 @@ matcher..
 
 The predicate evaluates to true if the destination ASN is present in the ASN list..
 
-`as_numbers` - (Optional) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
 
 ### Dst Asn Matcher
 
