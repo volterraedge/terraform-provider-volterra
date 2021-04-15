@@ -1229,6 +1229,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
 
+	case GET_RSP_FORMAT_REFERRING_OBJECTS:
+		rsrcReq.RspInReferringObjectsForm = true
+
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1434,6 +1437,19 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	}
 	_ = buildStatusForm
+	buildReferringObjectsForm := func() {
+		for _, br := range rsrcRsp.ReferringObjects {
+			rsp.ReferringObjects = append(rsp.ReferringObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+
+	}
+	_ = buildReferringObjectsForm
 
 	switch req.ResponseFormat {
 
@@ -1458,6 +1474,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
+
+	case GET_RSP_FORMAT_REFERRING_OBJECTS:
+		buildReferringObjectsForm()
 
 	default:
 		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
@@ -1681,6 +1700,10 @@ var APISwaggerJSON string = `{
                 "tags": [
                     "API"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-API-Create"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.API.Create"
             },
             "x-displayname": "Configure AWS VPC Site",
@@ -1773,6 +1796,10 @@ var APISwaggerJSON string = `{
                 "tags": [
                     "API"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-API-Replace"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.API.Replace"
             },
             "x-displayname": "Configure AWS VPC Site",
@@ -1881,6 +1908,10 @@ var APISwaggerJSON string = `{
                 "tags": [
                     "API"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-API-List"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.API.List"
             },
             "x-displayname": "Configure AWS VPC Site",
@@ -1963,7 +1994,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1972,15 +2003,20 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_FOR_CREATE",
                             "GET_RSP_FORMAT_FOR_REPLACE",
                             "GET_RSP_FORMAT_STATUS",
-                            "GET_RSP_FORMAT_READ"
+                            "GET_RSP_FORMAT_READ",
+                            "GET_RSP_FORMAT_REFERRING_OBJECTS"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "GetSpecType format"
+                        "x-displayname": "Referring Objects"
                     }
                 ],
                 "tags": [
                     "API"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-API-Get"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.API.Get"
             },
             "delete": {
@@ -2068,6 +2104,10 @@ var APISwaggerJSON string = `{
                 "tags": [
                     "API"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-API-Delete"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.API.Delete"
             },
             "x-displayname": "Configure AWS VPC Site",
@@ -2509,6 +2549,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/aws_vpc_siteObject",
                     "x-displayname": "Object"
                 },
+                "referring_objects": {
+                    "type": "array",
+                    "description": "The set of objects that are referring to this object in their spec",
+                    "title": "referring_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Referring Objects"
+                },
                 "replace_form": {
                     "description": "Format to replace changeable values in object",
                     "title": "replace_form",
@@ -2547,14 +2596,15 @@ var APISwaggerJSON string = `{
         },
         "aws_vpc_siteGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
                 "GET_RSP_FORMAT_FOR_CREATE",
                 "GET_RSP_FORMAT_FOR_REPLACE",
                 "GET_RSP_FORMAT_STATUS",
-                "GET_RSP_FORMAT_READ"
+                "GET_RSP_FORMAT_READ",
+                "GET_RSP_FORMAT_REFERRING_OBJECTS"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
@@ -3853,6 +3903,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
+                },
                 "tenant": {
                     "type": "string",
                     "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
@@ -4149,6 +4207,25 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteSiteState": {
+            "type": "string",
+            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration",
+            "title": "SiteState",
+            "enum": [
+                "ONLINE",
+                "PROVISIONING",
+                "UPGRADING",
+                "STANDBY",
+                "FAILED",
+                "REREGISTRATION",
+                "WAITINGNODES",
+                "DECOMMISSIONING",
+                "WAITING_FOR_REGISTRATION"
+            ],
+            "default": "ONLINE",
+            "x-displayname": "Site State",
+            "x-ves-proto-enum": "ves.io.schema.site.SiteState"
+        },
         "viewsAWSVPCOneInterfaceNodeType": {
             "type": "object",
             "description": "Parameters for creating Single interface Node in one AZ",
@@ -4221,7 +4298,7 @@ var APISwaggerJSON string = `{
             "description": "Parameters for creating two interface Node in one AZ",
             "title": "Two Interface Node",
             "x-displayname": "Two Interface Node",
-            "x-ves-displayorder": "1,5,7,3,4",
+            "x-ves-displayorder": "1,5,7,3,8",
             "x-ves-oneof-field-choice": "[\"inside_subnet\",\"reserved_inside_subnet\"]",
             "x-ves-proto-message": "ves.io.schema.views.AWSVPCTwoInterfaceNodeType",
             "properties": {
@@ -4234,9 +4311,10 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "disk_size": {
-                    "type": "string",
+                    "type": "integer",
                     "description": " x-example \"80\"\n Disk size to be used for this instance in GiB. 80 is 80 GiB",
                     "title": "Cloud Disk size",
+                    "format": "int64",
                     "x-displayname": "Cloud Disk Size"
                 },
                 "inside_subnet": {
@@ -4674,6 +4752,9 @@ var APISwaggerJSON string = `{
                     "description": " Desired Operating System version for this site.\n\nExample: - \"value\"-",
                     "x-displayname": "Operating System Version",
                     "x-ves-example": "value"
+                },
+                "site_state": {
+                    "$ref": "#/definitions/siteSiteState"
                 },
                 "ssh_key": {
                     "type": "string",

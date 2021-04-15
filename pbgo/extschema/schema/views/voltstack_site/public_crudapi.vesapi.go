@@ -1229,6 +1229,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
 
+	case GET_RSP_FORMAT_REFERRING_OBJECTS:
+		rsrcReq.RspInReferringObjectsForm = true
+
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1434,6 +1437,19 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	}
 	_ = buildStatusForm
+	buildReferringObjectsForm := func() {
+		for _, br := range rsrcRsp.ReferringObjects {
+			rsp.ReferringObjects = append(rsp.ReferringObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+
+	}
+	_ = buildReferringObjectsForm
 
 	switch req.ResponseFormat {
 
@@ -1458,6 +1474,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
+
+	case GET_RSP_FORMAT_REFERRING_OBJECTS:
+		buildReferringObjectsForm()
 
 	default:
 		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
@@ -1975,7 +1994,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1984,10 +2003,11 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_FOR_CREATE",
                             "GET_RSP_FORMAT_FOR_REPLACE",
                             "GET_RSP_FORMAT_STATUS",
-                            "GET_RSP_FORMAT_READ"
+                            "GET_RSP_FORMAT_READ",
+                            "GET_RSP_FORMAT_REFERRING_OBJECTS"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "GetSpecType format"
+                        "x-displayname": "Referring Objects"
                     }
                 ],
                 "tags": [
@@ -2096,6 +2116,355 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "bgpBgpParameters": {
+            "type": "object",
+            "description": "BGP parameters for the local site",
+            "title": "BGP Parameters",
+            "x-displayname": "BGP Parameters",
+            "x-ves-displayorder": "1,5",
+            "x-ves-oneof-field-router_id_choice": "[\"from_site\",\"ip_address\",\"local_address\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.BgpParameters",
+            "properties": {
+                "asn": {
+                    "type": "integer",
+                    "description": " Autonomous System Number\n\nExample: - 64512-\nRequired: YES",
+                    "title": "ASN",
+                    "format": "int64",
+                    "x-displayname": "ASN",
+                    "x-ves-required": "true"
+                },
+                "bgp_router_id": {
+                    "description": " If Router ID Type is set to \"From IP Address\", this is used as Router ID. Else, this is ignored.",
+                    "title": "Router ID",
+                    "$ref": "#/definitions/schemaIpAddressType",
+                    "x-displayname": "Router ID"
+                },
+                "bgp_router_id_key": {
+                    "type": "string",
+                    "description": " If Router ID Type is set to \"From Site Template\", this is used to lookup BGP router ID\n from site template parameters map in site object. Else, this is ignored.",
+                    "title": "Router ID Key",
+                    "x-displayname": "Router ID Key"
+                },
+                "bgp_router_id_type": {
+                    "description": " Decides how BGP router id is derived",
+                    "title": "Router ID Type",
+                    "$ref": "#/definitions/bgpBgpRouterIdType",
+                    "x-displayname": "Router ID Type"
+                },
+                "from_site": {
+                    "description": "Exclusive with [ip_address local_address]\nx-displayName: \"From Site\"\nUse the Router ID field from the site object.",
+                    "title": "from_site",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "ip_address": {
+                    "type": "string",
+                    "description": "Exclusive with [from_site local_address]\nx-displayName: \"IP Address\"\nUse the configured IPv4 Address as Router ID.",
+                    "title": "ip_address"
+                },
+                "local_address": {
+                    "description": "Exclusive with [from_site ip_address]\nx-displayName: \"From Interface Address\"\nUse an interface address of the site as the Router ID.",
+                    "title": "local_address",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
+        "bgpBgpRouterIdType": {
+            "type": "string",
+            "description": "Dictates how BGP router id is derived\n\nUse IP address of interface on which BGP is configured as BGP router ID\nUse BGP Router ID from BGP Parameters as BGP router ID\nUse BGP Router ID from corresponding site object as BGP router ID\nUse BGP Router ID Key from corresponding site's Site Template Parameters as BGP router ID.\nThis is not currently supported.",
+            "title": "BGP Router ID",
+            "enum": [
+                "BGP_ROUTER_ID_FROM_INTERFACE",
+                "BGP_ROUTER_ID_FROM_IP_ADDRESS",
+                "BGP_ROUTER_ID_FROM_SITE_OBJECT",
+                "BGP_ROUTER_ID_FROM_SITE_TEMPLATE_PARAMETERS"
+            ],
+            "default": "BGP_ROUTER_ID_FROM_INTERFACE",
+            "x-displayname": "BGP Router ID",
+            "x-ves-proto-enum": "ves.io.schema.bgp.BgpRouterIdType"
+        },
+        "bgpFamilyInet": {
+            "type": "object",
+            "description": "Parameters for inet family.",
+            "title": "FamilyInet",
+            "x-displayname": "BGP Family Inet",
+            "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.FamilyInet",
+            "properties": {
+                "disable": {
+                    "description": "Exclusive with [enable]\nx-displayName: \"Disable IPv4 Unicast\"\nDisable the IPv4 Unicast family.",
+                    "title": "disable",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "enable": {
+                    "description": "Exclusive with [disable]\nx-displayName: \"Enable IPv4 Unicast\"\nEnable the IPv4 Unicast family.",
+                    "title": "enable",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
+        "bgpFamilyInetvpn": {
+            "type": "object",
+            "description": "Parameters for inetvpn family.",
+            "title": "FamilyInetvpn",
+            "x-displayname": "BGP Family Inetvpn",
+            "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.FamilyInetvpn",
+            "properties": {
+                "disable": {
+                    "description": "Exclusive with [enable]\nx-displayName: \"Disable IPv4 VPN Unicast\"\nDisable the IPv4 Unicast family.",
+                    "title": "disable",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "enable": {
+                    "description": "Exclusive with [disable]\nx-displayName: \"Enable IPv4 VPN Unicast\"\nEnable the IPv4 Unicast family.",
+                    "title": "enable",
+                    "$ref": "#/definitions/bgpFamilyInetvpnParameters"
+                }
+            }
+        },
+        "bgpFamilyInetvpnParameters": {
+            "type": "object",
+            "description": "Parameters for inetvpn family.",
+            "title": "FamilyInetvpnParameters",
+            "x-displayname": "BGP Family Inetvpn",
+            "x-ves-oneof-field-sr_choice": "[\"disable\",\"enable\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.FamilyInetvpnParameters",
+            "properties": {
+                "disable": {
+                    "description": "Exclusive with [enable]\nx-displayName: \"Disable IPv4 VPN Unicast\"\nDisable the IPv4 Unicast family.",
+                    "title": "disable",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "enable": {
+                    "description": "Exclusive with [disable]\nx-displayName: \"Enable IPv4 VPN Unicast\"\nEnable the IPv4 Unicast family.",
+                    "title": "enable",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
+        "bgpFamilyRtarget": {
+            "type": "object",
+            "description": "Parameters for rtarget family.",
+            "title": "FamilyRtarget",
+            "x-displayname": "BGP Family Route Target",
+            "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.FamilyRtarget",
+            "properties": {
+                "disable": {
+                    "description": "Exclusive with [enable]\nx-displayName: \"Disable Route Target\"\nDisable the Route Target family.",
+                    "title": "disable",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "enable": {
+                    "description": "Exclusive with [disable]\nx-displayName: \"Enable Route Target\"\nEnable the Route Target family.",
+                    "title": "enable",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
+        "bgpInterfaceList": {
+            "type": "object",
+            "description": "List of network interfaces.",
+            "title": "InterfaceList",
+            "x-displayname": "Interface List",
+            "x-ves-proto-message": "ves.io.schema.bgp.InterfaceList",
+            "properties": {
+                "interfaces": {
+                    "type": "array",
+                    "description": " List of network interfaces.\nRequired: YES",
+                    "title": "interface_list",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Interface List",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "bgpPeer": {
+            "type": "object",
+            "description": "BGP Peer parameters",
+            "title": "Peer",
+            "x-displayname": "BGP Peer",
+            "x-ves-displayorder": "1,2",
+            "x-ves-oneof-field-type_choice": "[\"external\",\"internal\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.Peer",
+            "properties": {
+                "external": {
+                    "description": "Exclusive with [internal]\nx-displayName: \"External\"\nExternal BGP peer.",
+                    "title": "external",
+                    "$ref": "#/definitions/bgpPeerExternal"
+                },
+                "internal": {
+                    "description": "Exclusive with [external]\nx-displayName: \"External\"\nExternal BGP peer.",
+                    "title": "external",
+                    "$ref": "#/definitions/bgpPeerInternal"
+                },
+                "metadata": {
+                    "description": " Common attributes for the peer including name and description.\nRequired: YES",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true"
+                },
+                "target_service": {
+                    "type": "string",
+                    "description": " Specify whether this peer should be configured in \"phobos\" or \"frr\".",
+                    "title": "target_service",
+                    "x-displayname": "Target Service"
+                }
+            }
+        },
+        "bgpPeerExternal": {
+            "type": "object",
+            "description": "External BGP Peer parameters.",
+            "title": "PeerExternal",
+            "x-displayname": "External BGP Peer",
+            "x-ves-displayorder": "1,2,10,11",
+            "x-ves-oneof-field-address_choice": "[\"address\",\"default_gateway\",\"from_site\",\"subnet_begin_offset\",\"subnet_end_offset\"]",
+            "x-ves-oneof-field-interface_choice": "[\"inside_interfaces\",\"interface\",\"interface_list\",\"outside_interfaces\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.PeerExternal",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "description": "Exclusive with [default_gateway from_site subnet_begin_offset subnet_end_offset]\nx-displayName: \"Peer Address\"\nSpecify peer address.",
+                    "title": "address"
+                },
+                "asn": {
+                    "type": "integer",
+                    "description": " Autonomous System Number for BGP peer\n\nExample: - 64512-\nRequired: YES",
+                    "title": "ASN",
+                    "format": "int64",
+                    "x-displayname": "ASN",
+                    "x-ves-required": "true"
+                },
+                "default_gateway": {
+                    "description": "Exclusive with [address from_site subnet_begin_offset subnet_end_offset]\nx-displayName: \"Use default gateway\"\nUse the default gateway address.",
+                    "title": "default_gateway",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "family_inet": {
+                    "description": " Parameters for IPv4 Unicast family.",
+                    "title": "family_inet",
+                    "$ref": "#/definitions/bgpFamilyInet",
+                    "x-displayname": "Family IPv4 Unicast"
+                },
+                "from_site": {
+                    "description": "Exclusive with [address default_gateway subnet_begin_offset subnet_end_offset]\nx-displayName: \"Use address from site object\"\nUse the address specified in the site object.",
+                    "title": "from_site",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "inside_interfaces": {
+                    "description": "Exclusive with [interface interface_list outside_interfaces]\nx-displayName: \"Site Local Inside Interfaces\"\nAll interfaces in the site local inside network.",
+                    "title": "inside_interfaces",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "interface": {
+                    "description": "Exclusive with [inside_interfaces interface_list outside_interfaces]\nx-displayName: \"Interface\"\nSpecify interface.",
+                    "title": "interface",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "interface_list": {
+                    "description": "Exclusive with [inside_interfaces interface outside_interfaces]\nx-displayName: \"Interface List\"\nList of network interfaces.",
+                    "title": "interface_list",
+                    "$ref": "#/definitions/bgpInterfaceList"
+                },
+                "outside_interfaces": {
+                    "description": "Exclusive with [inside_interfaces interface interface_list]\nx-displayName: \"Site Local Interfaces\"\nAll interfaces in the site local outside network.",
+                    "title": "outside_interfaces",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Peer TCP port number.\n\nExample: - 179-",
+                    "title": "Peer Port",
+                    "format": "int64",
+                    "x-displayname": "Peer Port"
+                },
+                "subnet_begin_offset": {
+                    "type": "integer",
+                    "description": "Exclusive with [address default_gateway from_site subnet_end_offset]\nx-displayName: \"Use offset from beginning of subnet\"\nCalculate peer address using offset from the beginning of the subnet.",
+                    "title": "subnet_begin_offset",
+                    "format": "int64"
+                },
+                "subnet_end_offset": {
+                    "type": "integer",
+                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset]\nx-displayName: \"Use offset from end of subnet\"\nCalculate peer address using offset from the end of the subnet.",
+                    "title": "subnet_end_offset",
+                    "format": "int64"
+                }
+            }
+        },
+        "bgpPeerInternal": {
+            "type": "object",
+            "description": "Internal BGP Peer parameters.",
+            "title": "PeerInternal",
+            "x-displayname": "Internal BGP Peer",
+            "x-ves-displayorder": "2,10,11",
+            "x-ves-oneof-field-address_choice": "[\"address\",\"dns_name\",\"from_site\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.PeerInternal",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "description": "Exclusive with [dns_name from_site]\nx-displayName: \"Peer Address\"\nSpecify peer address.",
+                    "title": "address"
+                },
+                "dns_name": {
+                    "type": "string",
+                    "description": "Exclusive with [address from_site]\nx-displayName: \"Use address for DNS name\"\nUse the addresse by resolving the given DNS name.",
+                    "title": "dns_name"
+                },
+                "family_inetvpn": {
+                    "description": " Parameters for IPv4 VPN Unicast family.",
+                    "title": "family_inetvpn",
+                    "$ref": "#/definitions/bgpFamilyInetvpn",
+                    "x-displayname": "Family IPv4 VPN Unicast"
+                },
+                "family_rtarget": {
+                    "description": " Parameters for Route Target family.",
+                    "title": "family_rtarget",
+                    "$ref": "#/definitions/bgpFamilyRtarget",
+                    "x-displayname": "Family Route Target"
+                },
+                "from_site": {
+                    "description": "Exclusive with [address dns_name]\nx-displayName: \"Use address from site object\"\nUse the address specified in the site object.",
+                    "title": "from_site",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Peer TCP port number.\n\nExample: - 179-",
+                    "title": "port",
+                    "format": "int64",
+                    "x-displayname": "Peer Port"
+                }
+            }
+        },
+        "fleetBGPConfiguration": {
+            "type": "object",
+            "description": "BGP configuration parameters",
+            "title": "BGP Configuration",
+            "x-displayname": "BGP Configuration",
+            "x-ves-proto-message": "ves.io.schema.fleet.BGPConfiguration",
+            "properties": {
+                "bgp_parameters": {
+                    "description": " BGP parameters for local site\nRequired: YES",
+                    "title": "BGP Parameters",
+                    "$ref": "#/definitions/bgpBgpParameters",
+                    "x-displayname": "Common Parameters",
+                    "x-ves-required": "true"
+                },
+                "peers": {
+                    "type": "array",
+                    "description": " BGP parameters for peer",
+                    "title": "BGP Peers",
+                    "items": {
+                        "$ref": "#/definitions/bgpPeer"
+                    },
+                    "x-displayname": "Peers"
+                }
+            }
+        },
         "fleetBondLacpType": {
             "type": "object",
             "description": "x-displayName: \"LACP parameters\nLACP parameters for the bond device",
@@ -2541,6 +2910,32 @@ var APISwaggerJSON string = `{
                     "title": "Storage Device",
                     "x-displayname": "Storage Device",
                     "x-ves-required": "true"
+                }
+            }
+        },
+        "fleetLocalControlPlaneType": {
+            "type": "object",
+            "description": "Enable local control plane for L3VPN, SRV6, EVPN etc",
+            "title": "Local Control Plane",
+            "x-displayname": "Local Control Plane",
+            "x-ves-oneof-field-network_choice": "[\"inside_vn\",\"outside_vn\"]",
+            "x-ves-proto-message": "ves.io.schema.fleet.LocalControlPlaneType",
+            "properties": {
+                "bgp_config": {
+                    "description": " BGP configuration for local control plane",
+                    "title": "BGP configuration",
+                    "$ref": "#/definitions/fleetBGPConfiguration",
+                    "x-displayname": "BGP Configuration"
+                },
+                "inside_vn": {
+                    "description": "Exclusive with [outside_vn]\nx-displayName: \"Inside Network\"\nLocal control plane will work on inside network",
+                    "title": "Inside Network",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "outside_vn": {
+                    "description": "Exclusive with [inside_vn]\nx-displayName: \"Outside Network\"\nLocal control plane will work on outside network",
+                    "title": "Outside Network",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },
@@ -4060,6 +4455,91 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaIpAddressType": {
+            "type": "object",
+            "description": "IP Address used to specify an IPv4 or IPv6 address",
+            "title": "IP Address",
+            "x-displayname": "IP Address",
+            "x-ves-displayorder": "3",
+            "x-ves-oneof-field-ver": "[\"ipv4\",\"ipv6\"]",
+            "x-ves-proto-message": "ves.io.schema.IpAddressType",
+            "properties": {
+                "ipv4": {
+                    "description": "Exclusive with [ipv6]\nx-displayName: \"IPv4 Address\"\nIPv4 Address",
+                    "title": "IPv4 Address",
+                    "$ref": "#/definitions/schemaIpv4AddressType"
+                },
+                "ipv6": {
+                    "description": "Exclusive with [ipv4]\nx-displayName: \"IPv6 Address\"\nIPv6 Address",
+                    "title": "IPv6 ADDRESS",
+                    "$ref": "#/definitions/schemaIpv6AddressType"
+                }
+            }
+        },
+        "schemaIpv4AddressType": {
+            "type": "object",
+            "description": "IPv4 Address in dot-decimal notation",
+            "title": "IPv4 Address",
+            "x-displayname": "IPv4 Address",
+            "x-ves-proto-message": "ves.io.schema.Ipv4AddressType",
+            "properties": {
+                "addr": {
+                    "type": "string",
+                    "description": " IPv4 Address in string form with dot-decimal notation\n\nExample: - \"192.168.1.1\"-",
+                    "title": "IPv4 Address",
+                    "x-displayname": "IPv4 Address",
+                    "x-ves-example": "192.168.1.1"
+                }
+            }
+        },
+        "schemaIpv6AddressType": {
+            "type": "object",
+            "description": "IPv6 Address specified as hexadecimal numbers seperated by ':'",
+            "title": "IPv6 Address",
+            "x-displayname": "IPv6 Address",
+            "x-ves-proto-message": "ves.io.schema.Ipv6AddressType",
+            "properties": {
+                "addr": {
+                    "type": "string",
+                    "description": " IPv6 Address in form of string. IPv6 address must be specified as hexadecimal numbers separated by ':'\n The address can be compacted by suppressing zeros \n e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::'\n\nExample: - \"2001:db8:0:0:0:0:2:1\"-",
+                    "title": "IPv6 Address",
+                    "x-displayname": "IPv6 Address",
+                    "x-ves-example": "2001:db8:0:0:0:0:2:1"
+                }
+            }
+        },
+        "schemaMessageMetaType": {
+            "type": "object",
+            "description": "MessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
+            "title": "MessageMetaType",
+            "x-displayname": "Message Metadata",
+            "x-ves-proto-message": "ves.io.schema.MessageMetaType",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " Human readable description.\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "title": "description",
+                    "x-displayname": "Description",
+                    "x-ves-example": "Virtual Host for acmecorp website"
+                },
+                "disable": {
+                    "type": "boolean",
+                    "description": " A value of true will administratively disable the object that corresponds to the containing message.\n\nExample: - \"true\"-",
+                    "title": "disable",
+                    "format": "boolean",
+                    "x-displayname": "Disable",
+                    "x-ves-example": "true"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " This is the name of the message.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "schemaObjectCreateMetaType": {
             "type": "object",
             "description": "ObjectCreateMetaType is metadata that can be specified in Create request of an object.",
@@ -4609,6 +5089,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
+                },
                 "tenant": {
                     "type": "string",
                     "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
@@ -4968,6 +5456,25 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteSiteState": {
+            "type": "string",
+            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration",
+            "title": "SiteState",
+            "enum": [
+                "ONLINE",
+                "PROVISIONING",
+                "UPGRADING",
+                "STANDBY",
+                "FAILED",
+                "REREGISTRATION",
+                "WAITINGNODES",
+                "DECOMMISSIONING",
+                "WAITING_FOR_REGISTRATION"
+            ],
+            "default": "ONLINE",
+            "x-displayname": "Site State",
+            "x-ves-proto-enum": "ves.io.schema.site.SiteState"
+        },
         "viewsGlobalConnectorType": {
             "type": "object",
             "description": "Global network reference for direct connection",
@@ -5012,6 +5519,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
             "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
             "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
+            "x-ves-oneof-field-local_control_plane_choice": "[\"local_control_plane\",\"no_local_control_plane\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-network_cfg_choice": "[\"custom_network_config\",\"default_network_config\"]",
             "x-ves-oneof-field-storage_cfg_choice": "[\"custom_storage_config\",\"default_storage_config\"]",
@@ -5069,6 +5577,10 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [no_k8s_cluster]\n",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
+                "local_control_plane": {
+                    "description": "Exclusive with [no_local_control_plane]\n",
+                    "$ref": "#/definitions/fleetLocalControlPlaneType"
+                },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
@@ -5093,6 +5605,10 @@ var APISwaggerJSON string = `{
                 },
                 "no_k8s_cluster": {
                     "description": "Exclusive with [k8s_cluster]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_local_control_plane": {
+                    "description": "Exclusive with [local_control_plane]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "usb_policy": {
@@ -5125,6 +5641,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
             "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
             "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
+            "x-ves-oneof-field-local_control_plane_choice": "[\"local_control_plane\",\"no_local_control_plane\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-network_cfg_choice": "[\"custom_network_config\",\"default_network_config\"]",
             "x-ves-oneof-field-storage_cfg_choice": "[\"custom_storage_config\",\"default_storage_config\"]",
@@ -5182,6 +5699,10 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [no_k8s_cluster]\n",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
+                "local_control_plane": {
+                    "description": "Exclusive with [no_local_control_plane]\n",
+                    "$ref": "#/definitions/fleetLocalControlPlaneType"
+                },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
@@ -5208,11 +5729,18 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [k8s_cluster]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "no_local_control_plane": {
+                    "description": "Exclusive with [local_control_plane]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "operating_system_version": {
                     "type": "string",
                     "description": " Desired Operating System version that should be installed on the site\n\nExample: - \"value\"-",
                     "x-displayname": "Operating System Version",
                     "x-ves-example": "value"
+                },
+                "site_state": {
+                    "$ref": "#/definitions/siteSiteState"
                 },
                 "usb_policy": {
                     "description": "Exclusive with [allow_all_usb deny_all_usb]\n",
@@ -5250,6 +5778,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
             "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
             "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
+            "x-ves-oneof-field-local_control_plane_choice": "[\"local_control_plane\",\"no_local_control_plane\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-network_cfg_choice": "[\"custom_network_config\",\"default_network_config\"]",
             "x-ves-oneof-field-storage_cfg_choice": "[\"custom_storage_config\",\"default_storage_config\"]",
@@ -5319,6 +5848,11 @@ var APISwaggerJSON string = `{
                     "title": "Enable Site Local K8s API access",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
+                "local_control_plane": {
+                    "description": "Exclusive with [no_local_control_plane]\nx-displayName: \"Enable Site Local Control Plane\"\nSite Local control plane is enabled",
+                    "title": "Enable Site Local Control Plane",
+                    "$ref": "#/definitions/fleetLocalControlPlaneType"
+                },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\nx-displayName: \"Enable Logs Streaming\"\nSelect log receiver for logs streaming",
                     "title": "Disable Logs Streaming",
@@ -5348,6 +5882,11 @@ var APISwaggerJSON string = `{
                 "no_k8s_cluster": {
                     "description": "Exclusive with [k8s_cluster]\nx-displayName: \"Disable Site Local K8s API access\"\nSite Local K8s API access is disabled",
                     "title": "Disable Site Local K8s API access",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_local_control_plane": {
+                    "description": "Exclusive with [local_control_plane]\nx-displayName: \"Disable Site Local Control Plane\"\nSite Local control plane is disabled",
+                    "title": "Disable Site Local Control Plane",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "operating_system_version": {
@@ -5403,6 +5942,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
             "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
             "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
+            "x-ves-oneof-field-local_control_plane_choice": "[\"local_control_plane\",\"no_local_control_plane\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-network_cfg_choice": "[\"custom_network_config\",\"default_network_config\"]",
             "x-ves-oneof-field-storage_cfg_choice": "[\"custom_storage_config\",\"default_storage_config\"]",
@@ -5460,6 +6000,10 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [no_k8s_cluster]\n",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
+                "local_control_plane": {
+                    "description": "Exclusive with [no_local_control_plane]\n",
+                    "$ref": "#/definitions/fleetLocalControlPlaneType"
+                },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
@@ -5484,6 +6028,10 @@ var APISwaggerJSON string = `{
                 },
                 "no_k8s_cluster": {
                     "description": "Exclusive with [k8s_cluster]\n",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_local_control_plane": {
+                    "description": "Exclusive with [local_control_plane]\n",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "usb_policy": {
@@ -5651,6 +6199,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/voltstack_siteObject",
                     "x-displayname": "Object"
                 },
+                "referring_objects": {
+                    "type": "array",
+                    "description": "The set of objects that are referring to this object in their spec",
+                    "title": "referring_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Referring Objects"
+                },
                 "replace_form": {
                     "description": "Format to replace changeable values in object",
                     "title": "replace_form",
@@ -5689,14 +6246,15 @@ var APISwaggerJSON string = `{
         },
         "voltstack_siteGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
                 "GET_RSP_FORMAT_FOR_CREATE",
                 "GET_RSP_FORMAT_FOR_REPLACE",
                 "GET_RSP_FORMAT_STATUS",
-                "GET_RSP_FORMAT_READ"
+                "GET_RSP_FORMAT_READ",
+                "GET_RSP_FORMAT_REFERRING_OBJECTS"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },

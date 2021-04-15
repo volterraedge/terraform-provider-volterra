@@ -16,6 +16,9 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
+	k8s_io_api_apps_v1 "k8s.io/api/apps/v1"
+	k8s_io_api_batch_v1 "k8s.io/api/batch/v1"
+	k8s_io_api_batch_v1beta1 "k8s.io/api/batch/v1beta1"
 	k8s_io_api_core_v1 "k8s.io/api/core/v1"
 
 	"gopkg.volterra.us/stdlib/client"
@@ -37,12 +40,111 @@ type CustomDataK8SAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *CustomDataK8SAPIGrpcClient) doRPCConfigMapList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ConfigMapListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.ConfigMapListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ConfigMapList(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomDataK8SAPIGrpcClient) doRPCCronJobList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &CronJobListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.CronJobListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.CronJobList(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomDataK8SAPIGrpcClient) doRPCDaemonSetList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &DaemonSetListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.DaemonSetListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.DaemonSetList(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomDataK8SAPIGrpcClient) doRPCDeploymentList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &DeploymentListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.DeploymentListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.DeploymentList(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomDataK8SAPIGrpcClient) doRPCJobList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &JobListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.JobListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.JobList(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomDataK8SAPIGrpcClient) doRPCNamespaceList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &NamespaceListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.NamespaceListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.NamespaceList(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomDataK8SAPIGrpcClient) doRPCPersistentVolumeClaimList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &PersistentVolumeClaimListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.PersistentVolumeClaimListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.PersistentVolumeClaimList(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomDataK8SAPIGrpcClient) doRPCPodList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &PodListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.PodListRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.PodList(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomDataK8SAPIGrpcClient) doRPCReplicaSetList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ReplicaSetListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.ReplicaSetListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ReplicaSetList(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomDataK8SAPIGrpcClient) doRPCSecretList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &SecretListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.SecretListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.SecretList(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomDataK8SAPIGrpcClient) doRPCServiceList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ServiceListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.ServiceListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ServiceList(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomDataK8SAPIGrpcClient) doRPCStatefulSetList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &StatefulSetListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.StatefulSetListRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.StatefulSetList(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -76,7 +178,29 @@ func NewCustomDataK8SAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewCustomDataK8SAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["ConfigMapList"] = ccl.doRPCConfigMapList
+
+	rpcFns["CronJobList"] = ccl.doRPCCronJobList
+
+	rpcFns["DaemonSetList"] = ccl.doRPCDaemonSetList
+
+	rpcFns["DeploymentList"] = ccl.doRPCDeploymentList
+
+	rpcFns["JobList"] = ccl.doRPCJobList
+
+	rpcFns["NamespaceList"] = ccl.doRPCNamespaceList
+
+	rpcFns["PersistentVolumeClaimList"] = ccl.doRPCPersistentVolumeClaimList
+
 	rpcFns["PodList"] = ccl.doRPCPodList
+
+	rpcFns["ReplicaSetList"] = ccl.doRPCReplicaSetList
+
+	rpcFns["SecretList"] = ccl.doRPCSecretList
+
+	rpcFns["ServiceList"] = ccl.doRPCServiceList
+
+	rpcFns["StatefulSetList"] = ccl.doRPCStatefulSetList
 
 	ccl.rpcFns = rpcFns
 
@@ -89,6 +213,544 @@ type CustomDataK8SAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *CustomDataK8SAPIRestClient) doRPCConfigMapList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ConfigMapListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.ConfigMapListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &k8s_io_api_core_v1.ConfigMapList{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.ConfigMapList", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomDataK8SAPIRestClient) doRPCCronJobList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &CronJobListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.CronJobListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &k8s_io_api_batch_v1beta1.CronJobList{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.batch.v1beta1.CronJobList", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomDataK8SAPIRestClient) doRPCDaemonSetList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &DaemonSetListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.DaemonSetListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &k8s_io_api_apps_v1.DaemonSetList{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.apps.v1.DaemonSetList", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomDataK8SAPIRestClient) doRPCDeploymentList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &DeploymentListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.DeploymentListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &k8s_io_api_apps_v1.DeploymentList{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.apps.v1.DeploymentList", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomDataK8SAPIRestClient) doRPCJobList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &JobListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.JobListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &k8s_io_api_batch_v1.JobList{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.batch.v1.JobList", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomDataK8SAPIRestClient) doRPCNamespaceList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &NamespaceListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.NamespaceListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &k8s_io_api_core_v1.NamespaceList{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.NamespaceList", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomDataK8SAPIRestClient) doRPCPersistentVolumeClaimList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &PersistentVolumeClaimListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.PersistentVolumeClaimListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &k8s_io_api_core_v1.PersistentVolumeClaimList{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.PersistentVolumeClaimList", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *CustomDataK8SAPIRestClient) doRPCPodList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -168,6 +830,314 @@ func (c *CustomDataK8SAPIRestClient) doRPCPodList(ctx context.Context, callOpts 
 	return pbRsp, nil
 }
 
+func (c *CustomDataK8SAPIRestClient) doRPCReplicaSetList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ReplicaSetListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.ReplicaSetListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &k8s_io_api_apps_v1.ReplicaSetList{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.apps.v1.ReplicaSetList", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomDataK8SAPIRestClient) doRPCSecretList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &SecretListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.SecretListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &k8s_io_api_core_v1.SecretList{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.SecretList", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomDataK8SAPIRestClient) doRPCServiceList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ServiceListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.ServiceListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &k8s_io_api_core_v1.ServiceList{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.core.v1.ServiceList", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomDataK8SAPIRestClient) doRPCStatefulSetList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &StatefulSetListRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.StatefulSetListRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &k8s_io_api_apps_v1.StatefulSetList{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *k8s.io.api.apps.v1.StatefulSetList", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomDataK8SAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -192,7 +1162,29 @@ func NewCustomDataK8SAPIRestClient(baseURL string, hc http.Client) server.Custom
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["ConfigMapList"] = ccl.doRPCConfigMapList
+
+	rpcFns["CronJobList"] = ccl.doRPCCronJobList
+
+	rpcFns["DaemonSetList"] = ccl.doRPCDaemonSetList
+
+	rpcFns["DeploymentList"] = ccl.doRPCDeploymentList
+
+	rpcFns["JobList"] = ccl.doRPCJobList
+
+	rpcFns["NamespaceList"] = ccl.doRPCNamespaceList
+
+	rpcFns["PersistentVolumeClaimList"] = ccl.doRPCPersistentVolumeClaimList
+
 	rpcFns["PodList"] = ccl.doRPCPodList
+
+	rpcFns["ReplicaSetList"] = ccl.doRPCReplicaSetList
+
+	rpcFns["SecretList"] = ccl.doRPCSecretList
+
+	rpcFns["ServiceList"] = ccl.doRPCServiceList
+
+	rpcFns["StatefulSetList"] = ccl.doRPCStatefulSetList
 
 	ccl.rpcFns = rpcFns
 
@@ -206,6 +1198,314 @@ type CustomDataK8SAPIInprocClient struct {
 	svc svcfw.Service
 }
 
+func (c *CustomDataK8SAPIInprocClient) ConfigMapList(ctx context.Context, in *ConfigMapListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.ConfigMapList, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+	cah, ok := ah.(CustomDataK8SAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+	}
+
+	var (
+		rsp *k8s_io_api_core_v1.ConfigMapList
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.ConfigMapListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataK8SAPI.ConfigMapList' operation on 'site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.ConfigMapList"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ConfigMapList(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.ConfigMapList", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomDataK8SAPIInprocClient) CronJobList(ctx context.Context, in *CronJobListRequest, opts ...grpc.CallOption) (*k8s_io_api_batch_v1beta1.CronJobList, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+	cah, ok := ah.(CustomDataK8SAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+	}
+
+	var (
+		rsp *k8s_io_api_batch_v1beta1.CronJobList
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.CronJobListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataK8SAPI.CronJobList' operation on 'site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.CronJobList"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.CronJobList(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.batch.v1beta1.CronJobList", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomDataK8SAPIInprocClient) DaemonSetList(ctx context.Context, in *DaemonSetListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.DaemonSetList, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+	cah, ok := ah.(CustomDataK8SAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+	}
+
+	var (
+		rsp *k8s_io_api_apps_v1.DaemonSetList
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.DaemonSetListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataK8SAPI.DaemonSetList' operation on 'site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.DaemonSetList"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.DaemonSetList(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.apps.v1.DaemonSetList", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomDataK8SAPIInprocClient) DeploymentList(ctx context.Context, in *DeploymentListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.DeploymentList, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+	cah, ok := ah.(CustomDataK8SAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+	}
+
+	var (
+		rsp *k8s_io_api_apps_v1.DeploymentList
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.DeploymentListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataK8SAPI.DeploymentList' operation on 'site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.DeploymentList"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.DeploymentList(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.apps.v1.DeploymentList", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomDataK8SAPIInprocClient) JobList(ctx context.Context, in *JobListRequest, opts ...grpc.CallOption) (*k8s_io_api_batch_v1.JobList, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+	cah, ok := ah.(CustomDataK8SAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+	}
+
+	var (
+		rsp *k8s_io_api_batch_v1.JobList
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.JobListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataK8SAPI.JobList' operation on 'site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.JobList"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.JobList(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.batch.v1.JobList", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomDataK8SAPIInprocClient) NamespaceList(ctx context.Context, in *NamespaceListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.NamespaceList, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+	cah, ok := ah.(CustomDataK8SAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+	}
+
+	var (
+		rsp *k8s_io_api_core_v1.NamespaceList
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.NamespaceListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataK8SAPI.NamespaceList' operation on 'site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.NamespaceList"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.NamespaceList(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.NamespaceList", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomDataK8SAPIInprocClient) PersistentVolumeClaimList(ctx context.Context, in *PersistentVolumeClaimListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.PersistentVolumeClaimList, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+	cah, ok := ah.(CustomDataK8SAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+	}
+
+	var (
+		rsp *k8s_io_api_core_v1.PersistentVolumeClaimList
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.PersistentVolumeClaimListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataK8SAPI.PersistentVolumeClaimList' operation on 'site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.PersistentVolumeClaimList(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.PersistentVolumeClaimList", rsp)...)
+
+	return rsp, nil
+}
 func (c *CustomDataK8SAPIInprocClient) PodList(ctx context.Context, in *PodListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.PodList, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
 	cah, ok := ah.(CustomDataK8SAPIServer)
@@ -250,6 +1550,182 @@ func (c *CustomDataK8SAPIInprocClient) PodList(ctx context.Context, in *PodListR
 
 	return rsp, nil
 }
+func (c *CustomDataK8SAPIInprocClient) ReplicaSetList(ctx context.Context, in *ReplicaSetListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.ReplicaSetList, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+	cah, ok := ah.(CustomDataK8SAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+	}
+
+	var (
+		rsp *k8s_io_api_apps_v1.ReplicaSetList
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.ReplicaSetListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataK8SAPI.ReplicaSetList' operation on 'site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ReplicaSetList(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.apps.v1.ReplicaSetList", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomDataK8SAPIInprocClient) SecretList(ctx context.Context, in *SecretListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.SecretList, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+	cah, ok := ah.(CustomDataK8SAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+	}
+
+	var (
+		rsp *k8s_io_api_core_v1.SecretList
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.SecretListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataK8SAPI.SecretList' operation on 'site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.SecretList"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.SecretList(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.SecretList", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomDataK8SAPIInprocClient) ServiceList(ctx context.Context, in *ServiceListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.ServiceList, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+	cah, ok := ah.(CustomDataK8SAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+	}
+
+	var (
+		rsp *k8s_io_api_core_v1.ServiceList
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.ServiceListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataK8SAPI.ServiceList' operation on 'site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.ServiceList"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ServiceList(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.core.v1.ServiceList", rsp)...)
+
+	return rsp, nil
+}
+func (c *CustomDataK8SAPIInprocClient) StatefulSetList(ctx context.Context, in *StatefulSetListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.StatefulSetList, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+	cah, ok := ah.(CustomDataK8SAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPISrv", ah)
+	}
+
+	var (
+		rsp *k8s_io_api_apps_v1.StatefulSetList
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.site.StatefulSetListRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataK8SAPI.StatefulSetList' operation on 'site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.StatefulSetList"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.StatefulSetList(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "k8s.io.api.apps.v1.StatefulSetList", rsp)...)
+
+	return rsp, nil
+}
 
 func NewCustomDataK8SAPIInprocClient(svc svcfw.Service) CustomDataK8SAPIClient {
 	return &CustomDataK8SAPIInprocClient{svc: svc}
@@ -284,6 +1760,354 @@ var CustomDataK8SAPISwaggerJSON string = `{
     ],
     "tags": null,
     "paths": {
+        "/public/namespaces/system/site/{site}/api/v1/configmaps": {
+            "get": {
+                "summary": "ConfigMapList",
+                "description": "API to get list of configmaps for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.ConfigMapList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1ConfigMapList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "description": "x-example: \"ns1\"\nNamespace to scope the listing of configmaps in a site",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-ConfigMapList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ConfigMapList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/api/v1/namespaces": {
+            "get": {
+                "summary": "NamespaceList",
+                "description": "API to get list of namespaces in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.NamespaceList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1NamespaceList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-NamespaceList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.NamespaceList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/configmaps": {
+            "get": {
+                "summary": "ConfigMapList",
+                "description": "API to get list of configmaps for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.ConfigMapList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1ConfigMapList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-ConfigMapList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ConfigMapList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/persistentvolumeclaims": {
+            "get": {
+                "summary": "PersistentVolumeClaimList",
+                "description": "API to get list of PVCs for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1PersistentVolumeClaimList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-PersistentVolumeClaimList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/pods": {
             "get": {
                 "summary": "PodList",
@@ -367,6 +2191,272 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-PodList"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PodList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/secrets": {
+            "get": {
+                "summary": "SecretList",
+                "description": "API to get list of secrets for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.SecretList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1SecretList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-SecretList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.SecretList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/services": {
+            "get": {
+                "summary": "ServiceList",
+                "description": "API to get list of services for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.ServiceList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1ServiceList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-ServiceList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ServiceList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/api/v1/persistentvolumeclaims": {
+            "get": {
+                "summary": "PersistentVolumeClaimList",
+                "description": "API to get list of PVCs for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1PersistentVolumeClaimList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "description": "x-example: \"ns1\"\nNamespace to scope the listing of PVCs in a site",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-PersistentVolumeClaimList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList"
             },
             "x-displayname": "Custom Data K8s API",
             "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
@@ -457,6 +2547,1254 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-PodList"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PodList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/api/v1/secrets": {
+            "get": {
+                "summary": "SecretList",
+                "description": "API to get list of secrets for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.SecretList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1SecretList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "description": "x-example: \"ns1\"\nNamespace to scope the listing of secrets in a site",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-SecretList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.SecretList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/api/v1/services": {
+            "get": {
+                "summary": "ServiceList",
+                "description": "API to get list of services for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.ServiceList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1ServiceList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "description": "x-example: \"ns1\"\nNamespace to scope the listing of services in a site",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-ServiceList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ServiceList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/apis/apps/v1/daemonsets": {
+            "get": {
+                "summary": "DaemonSetList",
+                "description": "API to get list of daemon sets for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.DaemonSetList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1DaemonSetList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "description": "x-example: \"ns1\"\nNamespace to scope the listing of daemon sets in a site",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-DaemonSetList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.DaemonSetList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/apis/apps/v1/deployments": {
+            "get": {
+                "summary": "DeploymentList",
+                "description": "API to get list of deployments for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.DeploymentList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1DeploymentList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "description": "x-example: \"ns1\"\nNamespace to scope the listing of deployments in a site",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-DeploymentList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.DeploymentList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/apis/apps/v1/namespaces/{namespace}/daemonsets": {
+            "get": {
+                "summary": "DaemonSetList",
+                "description": "API to get list of daemon sets for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.DaemonSetList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1DaemonSetList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-DaemonSetList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.DaemonSetList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/apis/apps/v1/namespaces/{namespace}/deployments": {
+            "get": {
+                "summary": "DeploymentList",
+                "description": "API to get list of deployments for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.DeploymentList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1DeploymentList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-DeploymentList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.DeploymentList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/apis/apps/v1/namespaces/{namespace}/replicasets": {
+            "get": {
+                "summary": "ReplicaSetList",
+                "description": "API to get list of replica sets for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1ReplicaSetList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-ReplicaSetList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/apis/apps/v1/namespaces/{namespace}/statefulsets": {
+            "get": {
+                "summary": "StatefulSetList",
+                "description": "API to get list of stateful sets for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.StatefulSetList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1StatefulSetList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-StatefulSetList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.StatefulSetList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/apis/apps/v1/replicasets": {
+            "get": {
+                "summary": "ReplicaSetList",
+                "description": "API to get list of replica sets for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1ReplicaSetList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "description": "x-example: \"ns1\"\nNamespace to scope the listing of replication sets in a site",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-ReplicaSetList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/apis/apps/v1/statefulsets": {
+            "get": {
+                "summary": "StatefulSetList",
+                "description": "API to get list of stateful sets for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.StatefulSetList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1StatefulSetList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "description": "x-example: \"ns1\"\nNamespace to scope the listing of stateful sets in a site",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-StatefulSetList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.StatefulSetList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/apis/batch/v1/jobs": {
+            "get": {
+                "summary": "JobList",
+                "description": "API to get list of jobs for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.JobList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1JobList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "description": "x-example: \"ns1\"\nNamespace to scope the listing of jobs in a site",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-JobList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.JobList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/apis/batch/v1/namespaces/{namespace}/jobs": {
+            "get": {
+                "summary": "JobList",
+                "description": "API to get list of jobs for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.JobList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1JobList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-JobList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.JobList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/apis/batch/v1beta1/cronjobs": {
+            "get": {
+                "summary": "CronJobList",
+                "description": "API to get list of cronjobs for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.CronJobList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1beta1CronJobList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "description": "x-example: \"ns1\"\nNamespace to scope the listing of cronjobs in a site",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-CronJobList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.CronJobList"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/apis/batch/v1beta1/namespaces/{namespace}/cronjobs": {
+            "get": {
+                "summary": "CronJobList",
+                "description": "API to get list of cronjobs for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.CronJobList",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/v1beta1CronJobList"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomDataK8SAPI-CronJobList"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.CronJobList"
             },
             "x-displayname": "Custom Data K8s API",
             "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
@@ -687,6 +4025,35 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1ClientIPConfig": {
+            "type": "object",
+            "description": "ClientIPConfig represents the configurations of Client IP based session affinity.",
+            "properties": {
+                "timeoutSeconds": {
+                    "type": "integer",
+                    "title": "timeoutSeconds specifies the seconds of ClientIP type session sticky time.\nThe value must be \u003e0 \u0026\u0026 \u003c=86400(for 1 day) if ServiceAffinity == \"ClientIP\".\nDefault value is 10800(for 3 hours).\n+optional",
+                    "format": "int32"
+                }
+            }
+        },
+        "v1ConfigMap": {
+            "type": "object",
+            "description": "ConfigMap holds configuration data for pods to consume.",
+            "properties": {
+                "binaryData": {
+                    "type": "object",
+                    "title": "BinaryData contains the binary data.\nEach key must consist of alphanumeric characters, '-', '_' or '.'.\nBinaryData can contain byte sequences that are not in the UTF-8 range.\nThe keys stored in BinaryData must not overlap with the ones in\nthe Data field, this is enforced during validation process.\nUsing this field will require 1.10+ apiserver and\nkubelet.\n+optional"
+                },
+                "data": {
+                    "type": "object",
+                    "title": "Data contains the configuration data.\nEach key must consist of alphanumeric characters, '-', '_' or '.'.\nValues with non-UTF-8 byte sequences must use the BinaryData field.\nThe keys stored in Data must not overlap with the keys in\nthe BinaryData field, this is enforced during validation process.\n+optional"
+                },
+                "metadata": {
+                    "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                }
+            }
+        },
         "v1ConfigMapEnvSource": {
             "type": "object",
             "description": "ConfigMapEnvSource selects a ConfigMap to populate the environment\nvariables with.\n\nThe contents of the target ConfigMap's Data field will represent the\nkey-value pairs as environment variables.",
@@ -718,6 +4085,23 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "type": "boolean",
                     "title": "Specify whether the ConfigMap or its key must be defined\n+optional",
                     "format": "boolean"
+                }
+            }
+        },
+        "v1ConfigMapList": {
+            "type": "object",
+            "description": "ConfigMapList is a resource containing a list of ConfigMap objects.",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": "Items is the list of ConfigMaps.",
+                    "items": {
+                        "$ref": "#/definitions/v1ConfigMap"
+                    }
+                },
+                "metadata": {
+                    "title": "More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ListMeta"
                 }
             }
         },
@@ -1034,6 +4418,337 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "state": {
                     "title": "Details about the container's current condition.\n+optional",
                     "$ref": "#/definitions/v1ContainerState"
+                }
+            }
+        },
+        "v1DaemonSet": {
+            "type": "object",
+            "description": "DaemonSet represents the configuration of a daemon set.",
+            "properties": {
+                "metadata": {
+                    "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                },
+                "spec": {
+                    "title": "The desired behavior of this daemon set.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1DaemonSetSpec"
+                },
+                "status": {
+                    "title": "The current status of this daemon set. This data may be\nout of date by some window of time.\nPopulated by the system.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1DaemonSetStatus"
+                }
+            }
+        },
+        "v1DaemonSetCondition": {
+            "type": "object",
+            "description": "DaemonSetCondition describes the state of a DaemonSet at a certain point.",
+            "properties": {
+                "lastTransitionTime": {
+                    "title": "Last time the condition transitioned from one status to another.\n+optional",
+                    "$ref": "#/definitions/v1Time"
+                },
+                "message": {
+                    "type": "string",
+                    "title": "A human readable message indicating details about the transition.\n+optional"
+                },
+                "reason": {
+                    "type": "string",
+                    "title": "The reason for the condition's last transition.\n+optional"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Status of the condition, one of True, False, Unknown."
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Type of DaemonSet condition."
+                }
+            }
+        },
+        "v1DaemonSetList": {
+            "type": "object",
+            "description": "DaemonSetList is a collection of daemon sets.",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": "A list of daemon sets.",
+                    "items": {
+                        "$ref": "#/definitions/v1DaemonSet"
+                    }
+                },
+                "metadata": {
+                    "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ListMeta"
+                }
+            }
+        },
+        "v1DaemonSetSpec": {
+            "type": "object",
+            "description": "DaemonSetSpec is the specification of a daemon set.",
+            "properties": {
+                "minReadySeconds": {
+                    "type": "integer",
+                    "title": "The minimum number of seconds for which a newly created DaemonSet pod should\nbe ready without any of its container crashing, for it to be considered\navailable. Defaults to 0 (pod will be considered available as soon as it\nis ready).\n+optional",
+                    "format": "int32"
+                },
+                "revisionHistoryLimit": {
+                    "type": "integer",
+                    "title": "The number of old history to retain to allow rollback.\nThis is a pointer to distinguish between explicit zero and not specified.\nDefaults to 10.\n+optional",
+                    "format": "int32"
+                },
+                "selector": {
+                    "title": "A label query over pods that are managed by the daemon set.\nMust match in order to be controlled.\nIt must match the pod template's labels.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors",
+                    "$ref": "#/definitions/v1LabelSelector"
+                },
+                "template": {
+                    "title": "An object that describes the pod that will be created.\nThe DaemonSet will create exactly one copy of this pod on every node\nthat matches the template's node selector (or on every node if no node\nselector is specified).\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller#pod-template",
+                    "$ref": "#/definitions/v1PodTemplateSpec"
+                },
+                "updateStrategy": {
+                    "title": "An update strategy to replace existing DaemonSet pods with new pods.\n+optional",
+                    "$ref": "#/definitions/v1DaemonSetUpdateStrategy"
+                }
+            }
+        },
+        "v1DaemonSetStatus": {
+            "type": "object",
+            "description": "DaemonSetStatus represents the current status of a daemon set.",
+            "properties": {
+                "collisionCount": {
+                    "type": "integer",
+                    "title": "Count of hash collisions for the DaemonSet. The DaemonSet controller\nuses this field as a collision avoidance mechanism when it needs to\ncreate the name for the newest ControllerRevision.\n+optional",
+                    "format": "int32"
+                },
+                "conditions": {
+                    "type": "array",
+                    "title": "Represents the latest available observations of a DaemonSet's current state.\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
+                    "items": {
+                        "$ref": "#/definitions/v1DaemonSetCondition"
+                    }
+                },
+                "currentNumberScheduled": {
+                    "type": "integer",
+                    "title": "The number of nodes that are running at least 1\ndaemon pod and are supposed to run the daemon pod.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/",
+                    "format": "int32"
+                },
+                "desiredNumberScheduled": {
+                    "type": "integer",
+                    "title": "The total number of nodes that should be running the daemon\npod (including nodes correctly running the daemon pod).\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/",
+                    "format": "int32"
+                },
+                "numberAvailable": {
+                    "type": "integer",
+                    "title": "The number of nodes that should be running the\ndaemon pod and have one or more of the daemon pod running and\navailable (ready for at least spec.minReadySeconds)\n+optional",
+                    "format": "int32"
+                },
+                "numberMisscheduled": {
+                    "type": "integer",
+                    "title": "The number of nodes that are running the daemon pod, but are\nnot supposed to run the daemon pod.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/",
+                    "format": "int32"
+                },
+                "numberReady": {
+                    "type": "integer",
+                    "description": "The number of nodes that should be running the daemon pod and have one\nor more of the daemon pod running and ready.",
+                    "format": "int32"
+                },
+                "numberUnavailable": {
+                    "type": "integer",
+                    "title": "The number of nodes that should be running the\ndaemon pod and have none of the daemon pod running and available\n(ready for at least spec.minReadySeconds)\n+optional",
+                    "format": "int32"
+                },
+                "observedGeneration": {
+                    "type": "string",
+                    "title": "The most recent generation observed by the daemon set controller.\n+optional",
+                    "format": "int64"
+                },
+                "updatedNumberScheduled": {
+                    "type": "integer",
+                    "title": "The total number of nodes that are running updated daemon pod\n+optional",
+                    "format": "int32"
+                }
+            }
+        },
+        "v1DaemonSetUpdateStrategy": {
+            "type": "object",
+            "description": "DaemonSetUpdateStrategy is a struct used to control the update strategy for a DaemonSet.",
+            "properties": {
+                "rollingUpdate": {
+                    "title": "Rolling update config params. Present only if type = \"RollingUpdate\".\n---\nTODO: Update this to follow our convention for oneOf, whatever we decide it\nto be. Same as Deployment -strategy.rollingUpdate-.\nSee https://github.com/kubernetes/kubernetes/issues/35345\n+optional",
+                    "$ref": "#/definitions/v1RollingUpdateDaemonSet"
+                },
+                "type": {
+                    "type": "string",
+                    "title": "Type of daemon set update. Can be \"RollingUpdate\" or \"OnDelete\". Default is RollingUpdate.\n+optional"
+                }
+            }
+        },
+        "v1Deployment": {
+            "type": "object",
+            "description": "Deployment enables declarative updates for Pods and ReplicaSets.",
+            "properties": {
+                "metadata": {
+                    "title": "Standard object metadata.\n+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                },
+                "spec": {
+                    "title": "Specification of the desired behavior of the Deployment.\n+optional",
+                    "$ref": "#/definitions/v1DeploymentSpec"
+                },
+                "status": {
+                    "title": "Most recently observed status of the Deployment.\n+optional",
+                    "$ref": "#/definitions/v1DeploymentStatus"
+                }
+            }
+        },
+        "v1DeploymentCondition": {
+            "type": "object",
+            "description": "DeploymentCondition describes the state of a deployment at a certain point.",
+            "properties": {
+                "lastTransitionTime": {
+                    "description": "Last time the condition transitioned from one status to another.",
+                    "$ref": "#/definitions/v1Time"
+                },
+                "lastUpdateTime": {
+                    "description": "The last time this condition was updated.",
+                    "$ref": "#/definitions/v1Time"
+                },
+                "message": {
+                    "type": "string",
+                    "description": "A human readable message indicating details about the transition."
+                },
+                "reason": {
+                    "type": "string",
+                    "description": "The reason for the condition's last transition."
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Status of the condition, one of True, False, Unknown."
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Type of deployment condition."
+                }
+            }
+        },
+        "v1DeploymentList": {
+            "type": "object",
+            "description": "DeploymentList is a list of Deployments.",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": "Items is the list of Deployments.",
+                    "items": {
+                        "$ref": "#/definitions/v1Deployment"
+                    }
+                },
+                "metadata": {
+                    "title": "Standard list metadata.\n+optional",
+                    "$ref": "#/definitions/v1ListMeta"
+                }
+            }
+        },
+        "v1DeploymentSpec": {
+            "type": "object",
+            "description": "DeploymentSpec is the specification of the desired behavior of the Deployment.",
+            "properties": {
+                "minReadySeconds": {
+                    "type": "integer",
+                    "title": "Minimum number of seconds for which a newly created pod should be ready\nwithout any of its container crashing, for it to be considered available.\nDefaults to 0 (pod will be considered available as soon as it is ready)\n+optional",
+                    "format": "int32"
+                },
+                "paused": {
+                    "type": "boolean",
+                    "title": "Indicates that the deployment is paused.\n+optional",
+                    "format": "boolean"
+                },
+                "progressDeadlineSeconds": {
+                    "type": "integer",
+                    "description": "The maximum time in seconds for a deployment to make progress before it\nis considered to be failed. The deployment controller will continue to\nprocess failed deployments and a condition with a ProgressDeadlineExceeded\nreason will be surfaced in the deployment status. Note that progress will\nnot be estimated during the time a deployment is paused. Defaults to 600s.",
+                    "format": "int32"
+                },
+                "replicas": {
+                    "type": "integer",
+                    "title": "Number of desired pods. This is a pointer to distinguish between explicit\nzero and not specified. Defaults to 1.\n+optional",
+                    "format": "int32"
+                },
+                "revisionHistoryLimit": {
+                    "type": "integer",
+                    "title": "The number of old ReplicaSets to retain to allow rollback.\nThis is a pointer to distinguish between explicit zero and not specified.\nDefaults to 10.\n+optional",
+                    "format": "int32"
+                },
+                "selector": {
+                    "description": "Label selector for pods. Existing ReplicaSets whose pods are\nselected by this will be the ones affected by this deployment.\nIt must match the pod template's labels.",
+                    "$ref": "#/definitions/v1LabelSelector"
+                },
+                "strategy": {
+                    "title": "The deployment strategy to use to replace existing pods with new ones.\n+optional\n+patchStrategy=retainKeys",
+                    "$ref": "#/definitions/v1DeploymentStrategy"
+                },
+                "template": {
+                    "description": "Template describes the pods that will be created.",
+                    "$ref": "#/definitions/v1PodTemplateSpec"
+                }
+            }
+        },
+        "v1DeploymentStatus": {
+            "type": "object",
+            "description": "DeploymentStatus is the most recently observed status of the Deployment.",
+            "properties": {
+                "availableReplicas": {
+                    "type": "integer",
+                    "title": "Total number of available pods (ready for at least minReadySeconds) targeted by this deployment.\n+optional",
+                    "format": "int32"
+                },
+                "collisionCount": {
+                    "type": "integer",
+                    "title": "Count of hash collisions for the Deployment. The Deployment controller uses this\nfield as a collision avoidance mechanism when it needs to create the name for the\nnewest ReplicaSet.\n+optional",
+                    "format": "int32"
+                },
+                "conditions": {
+                    "type": "array",
+                    "title": "Represents the latest available observations of a deployment's current state.\n+patchMergeKey=type\n+patchStrategy=merge",
+                    "items": {
+                        "$ref": "#/definitions/v1DeploymentCondition"
+                    }
+                },
+                "observedGeneration": {
+                    "type": "string",
+                    "title": "The generation observed by the deployment controller.\n+optional",
+                    "format": "int64"
+                },
+                "readyReplicas": {
+                    "type": "integer",
+                    "title": "Total number of ready pods targeted by this deployment.\n+optional",
+                    "format": "int32"
+                },
+                "replicas": {
+                    "type": "integer",
+                    "title": "Total number of non-terminated pods targeted by this deployment (their labels match the selector).\n+optional",
+                    "format": "int32"
+                },
+                "unavailableReplicas": {
+                    "type": "integer",
+                    "title": "Total number of unavailable pods targeted by this deployment. This is the total number of\npods that are still required for the deployment to have 100% available capacity. They may\neither be pods that are running but not yet available or pods that still have not been created.\n+optional",
+                    "format": "int32"
+                },
+                "updatedReplicas": {
+                    "type": "integer",
+                    "title": "Total number of non-terminated pods targeted by this deployment that have the desired template spec.\n+optional",
+                    "format": "int32"
+                }
+            }
+        },
+        "v1DeploymentStrategy": {
+            "type": "object",
+            "description": "DeploymentStrategy describes how to replace existing pods with new ones.",
+            "properties": {
+                "rollingUpdate": {
+                    "title": "Rolling update config params. Present only if DeploymentStrategyType =\nRollingUpdate.\n---\nTODO: Update this to follow our convention for oneOf, whatever we decide it\nto be.\n+optional",
+                    "$ref": "#/definitions/v1RollingUpdateDeployment"
+                },
+                "type": {
+                    "type": "string",
+                    "title": "Type of deployment. Can be \"Recreate\" or \"RollingUpdate\". Default is RollingUpdate.\n+optional"
                 }
             }
         },
@@ -1604,6 +5319,151 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1Job": {
+            "type": "object",
+            "description": "Job represents the configuration of a single job.",
+            "properties": {
+                "metadata": {
+                    "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                },
+                "spec": {
+                    "title": "Specification of the desired behavior of a job.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1JobSpec"
+                },
+                "status": {
+                    "title": "Current status of a job.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1JobStatus"
+                }
+            }
+        },
+        "v1JobCondition": {
+            "type": "object",
+            "description": "JobCondition describes current state of a job.",
+            "properties": {
+                "lastProbeTime": {
+                    "title": "Last time the condition was checked.\n+optional",
+                    "$ref": "#/definitions/v1Time"
+                },
+                "lastTransitionTime": {
+                    "title": "Last time the condition transit from one status to another.\n+optional",
+                    "$ref": "#/definitions/v1Time"
+                },
+                "message": {
+                    "type": "string",
+                    "title": "Human readable message indicating details about last transition.\n+optional"
+                },
+                "reason": {
+                    "type": "string",
+                    "title": "(brief) reason for the condition's last transition.\n+optional"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Status of the condition, one of True, False, Unknown."
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Type of job condition, Complete or Failed."
+                }
+            }
+        },
+        "v1JobList": {
+            "type": "object",
+            "description": "JobList is a collection of jobs.",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": "items is the list of Jobs.",
+                    "items": {
+                        "$ref": "#/definitions/v1Job"
+                    }
+                },
+                "metadata": {
+                    "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ListMeta"
+                }
+            }
+        },
+        "v1JobSpec": {
+            "type": "object",
+            "description": "JobSpec describes how the job execution will look like.",
+            "properties": {
+                "activeDeadlineSeconds": {
+                    "type": "string",
+                    "title": "Specifies the duration in seconds relative to the startTime that the job may be active\nbefore the system tries to terminate it; value must be positive integer\n+optional",
+                    "format": "int64"
+                },
+                "backoffLimit": {
+                    "type": "integer",
+                    "title": "Specifies the number of retries before marking this job failed.\nDefaults to 6\n+optional",
+                    "format": "int32"
+                },
+                "completions": {
+                    "type": "integer",
+                    "title": "Specifies the desired number of successfully finished pods the\njob should be run with.  Setting to nil means that the success of any\npod signals the success of all pods, and allows parallelism to have any positive\nvalue.  Setting to 1 means that parallelism is limited to 1 and the success of that\npod signals the success of the job.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/\n+optional",
+                    "format": "int32"
+                },
+                "manualSelector": {
+                    "type": "boolean",
+                    "title": "manualSelector controls generation of pod labels and pod selectors.\nLeave -manualSelector- unset unless you are certain what you are doing.\nWhen false or unset, the system pick labels unique to this job\nand appends those labels to the pod template.  When true,\nthe user is responsible for picking unique labels and specifying\nthe selector.  Failure to pick a unique label may cause this\nand other jobs to not function correctly.  However, You may see\n-manualSelector=true- in jobs that were created with the old -extensions/v1beta1-\nAPI.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#specifying-your-own-pod-selector\n+optional",
+                    "format": "boolean"
+                },
+                "parallelism": {
+                    "type": "integer",
+                    "title": "Specifies the maximum desired number of pods the job should\nrun at any given time. The actual number of pods running in steady state will\nbe less than this number when ((.spec.completions - .status.successful) \u003c .spec.parallelism),\ni.e. when the work left to do is less than max parallelism.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/\n+optional",
+                    "format": "int32"
+                },
+                "selector": {
+                    "title": "A label query over pods that should match the pod count.\nNormally, the system sets this field for you.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors\n+optional",
+                    "$ref": "#/definitions/v1LabelSelector"
+                },
+                "template": {
+                    "title": "Describes the pod that will be created when executing a job.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/",
+                    "$ref": "#/definitions/v1PodTemplateSpec"
+                },
+                "ttlSecondsAfterFinished": {
+                    "type": "integer",
+                    "title": "ttlSecondsAfterFinished limits the lifetime of a Job that has finished\nexecution (either Complete or Failed). If this field is set,\nttlSecondsAfterFinished after the Job finishes, it is eligible to be\nautomatically deleted. When the Job is being deleted, its lifecycle\nguarantees (e.g. finalizers) will be honored. If this field is unset,\nthe Job won't be automatically deleted. If this field is set to zero,\nthe Job becomes eligible to be deleted immediately after it finishes.\nThis field is alpha-level and is only honored by servers that enable the\nTTLAfterFinished feature.\n+optional",
+                    "format": "int32"
+                }
+            }
+        },
+        "v1JobStatus": {
+            "type": "object",
+            "description": "JobStatus represents the current state of a Job.",
+            "properties": {
+                "active": {
+                    "type": "integer",
+                    "title": "The number of actively running pods.\n+optional",
+                    "format": "int32"
+                },
+                "completionTime": {
+                    "title": "Represents time when the job was completed. It is not guaranteed to\nbe set in happens-before order across separate operations.\nIt is represented in RFC3339 form and is in UTC.\n+optional",
+                    "$ref": "#/definitions/v1Time"
+                },
+                "conditions": {
+                    "type": "array",
+                    "title": "The latest available observations of an object's current state.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
+                    "items": {
+                        "$ref": "#/definitions/v1JobCondition"
+                    }
+                },
+                "failed": {
+                    "type": "integer",
+                    "title": "The number of pods which reached phase Failed.\n+optional",
+                    "format": "int32"
+                },
+                "startTime": {
+                    "title": "Represents time when the job was acknowledged by the job controller.\nIt is not guaranteed to be set in happens-before order across separate operations.\nIt is represented in RFC3339 form and is in UTC.\n+optional",
+                    "$ref": "#/definitions/v1Time"
+                },
+                "succeeded": {
+                    "type": "integer",
+                    "title": "The number of pods which reached phase Succeeded.\n+optional",
+                    "format": "int32"
+                }
+            }
+        },
         "v1KeyToPath": {
             "type": "object",
             "description": "Maps a string key to a path within a volume.",
@@ -1698,6 +5558,33 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1LoadBalancerIngress": {
+            "type": "object",
+            "description": "LoadBalancerIngress represents the status of a load-balancer ingress point:\ntraffic intended for the service should be sent to an ingress point.",
+            "properties": {
+                "hostname": {
+                    "type": "string",
+                    "title": "Hostname is set for load-balancer ingress points that are DNS based\n(typically AWS load-balancers)\n+optional"
+                },
+                "ip": {
+                    "type": "string",
+                    "title": "IP is set for load-balancer ingress points that are IP based\n(typically GCE or OpenStack load-balancers)\n+optional"
+                }
+            }
+        },
+        "v1LoadBalancerStatus": {
+            "type": "object",
+            "description": "LoadBalancerStatus represents the status of a load-balancer.",
+            "properties": {
+                "ingress": {
+                    "type": "array",
+                    "title": "Ingress is a list containing ingress points for the load-balancer.\nTraffic intended for the service should be sent to these ingress points.\n+optional",
+                    "items": {
+                        "$ref": "#/definitions/v1LoadBalancerIngress"
+                    }
+                }
+            }
+        },
         "v1LocalObjectReference": {
             "type": "object",
             "description": "LocalObjectReference contains enough information to let you locate the\nreferenced object inside the same namespace.",
@@ -1754,6 +5641,97 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "server": {
                     "type": "string",
                     "title": "Server is the hostname or IP address of the NFS server.\nMore info: https://kubernetes.io/docs/concepts/storage/volumes#nfs"
+                }
+            }
+        },
+        "v1Namespace": {
+            "type": "object",
+            "description": "Namespace provides a scope for Names.\nUse of multiple namespaces is optional.",
+            "properties": {
+                "metadata": {
+                    "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                },
+                "spec": {
+                    "title": "Spec defines the behavior of the Namespace.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1NamespaceSpec"
+                },
+                "status": {
+                    "title": "Status describes the current status of a Namespace.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1NamespaceStatus"
+                }
+            }
+        },
+        "v1NamespaceCondition": {
+            "type": "object",
+            "description": "NamespaceCondition contains details about state of namespace.",
+            "properties": {
+                "lastTransitionTime": {
+                    "title": "+optional",
+                    "$ref": "#/definitions/v1Time"
+                },
+                "message": {
+                    "type": "string",
+                    "title": "+optional"
+                },
+                "reason": {
+                    "type": "string",
+                    "title": "+optional"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Status of the condition, one of True, False, Unknown."
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Type of namespace controller condition."
+                }
+            }
+        },
+        "v1NamespaceList": {
+            "type": "object",
+            "description": "NamespaceList is a list of Namespaces.",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "title": "Items is the list of Namespace objects in the list.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+                    "items": {
+                        "$ref": "#/definitions/v1Namespace"
+                    }
+                },
+                "metadata": {
+                    "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
+                    "$ref": "#/definitions/v1ListMeta"
+                }
+            }
+        },
+        "v1NamespaceSpec": {
+            "type": "object",
+            "description": "NamespaceSpec describes the attributes on a Namespace.",
+            "properties": {
+                "finalizers": {
+                    "type": "array",
+                    "title": "Finalizers is an opaque list of values that must be empty to permanently remove object from storage.\nMore info: https://kubernetes.io/docs/tasks/administer-cluster/namespaces/\n+optional",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "v1NamespaceStatus": {
+            "type": "object",
+            "description": "NamespaceStatus is information about the current status of a Namespace.",
+            "properties": {
+                "conditions": {
+                    "type": "array",
+                    "title": "Represents the latest available observations of a namespace's current state.\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
+                    "items": {
+                        "$ref": "#/definitions/v1NamespaceCondition"
+                    }
+                },
+                "phase": {
+                    "type": "string",
+                    "title": "Phase is the current lifecycle phase of the namespace.\nMore info: https://kubernetes.io/docs/tasks/administer-cluster/namespaces/\n+optional"
                 }
             }
         },
@@ -1923,6 +5901,40 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1ObjectReference": {
+            "type": "object",
+            "title": "ObjectReference contains enough information to let you inspect or modify the referred object.\n+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object",
+            "properties": {
+                "apiVersion": {
+                    "type": "string",
+                    "title": "API version of the referent.\n+optional"
+                },
+                "fieldPath": {
+                    "type": "string",
+                    "title": "If referring to a piece of an object instead of an entire object, this string\nshould contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].\nFor example, if the object reference is to a container within a pod, this would take on a value like:\n\"spec.containers{name}\" (where \"name\" refers to the name of the container that triggered\nthe event) or if no container name is specified \"spec.containers[2]\" (container with\nindex 2 in this pod). This syntax is chosen only to have some well-defined way of\nreferencing a part of an object.\nTODO: this design is not final and this field is subject to change in the future.\n+optional"
+                },
+                "kind": {
+                    "type": "string",
+                    "title": "Kind of the referent.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional"
+                },
+                "name": {
+                    "type": "string",
+                    "title": "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\n+optional"
+                },
+                "namespace": {
+                    "type": "string",
+                    "title": "Namespace of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/\n+optional"
+                },
+                "resourceVersion": {
+                    "type": "string",
+                    "title": "Specific resourceVersion to which this reference is made, if any.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency\n+optional"
+                },
+                "uid": {
+                    "type": "string",
+                    "title": "UID of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids\n+optional"
+                }
+            }
+        },
         "v1OwnerReference": {
             "type": "object",
             "description": "OwnerReference contains enough information to let you identify an owning\nobject. An owning object must be in the same namespace as the dependent, or\nbe cluster-scoped, so there is no namespace field.",
@@ -1952,6 +5964,134 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "uid": {
                     "type": "string",
                     "title": "UID of the referent.\nMore info: http://kubernetes.io/docs/user-guide/identifiers#uids"
+                }
+            }
+        },
+        "v1PersistentVolumeClaim": {
+            "type": "object",
+            "title": "PersistentVolumeClaim is a user's request for and claim to a persistent volume",
+            "properties": {
+                "metadata": {
+                    "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                },
+                "spec": {
+                    "title": "Spec defines the desired characteristics of a volume requested by a pod author.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims\n+optional",
+                    "$ref": "#/definitions/v1PersistentVolumeClaimSpec"
+                },
+                "status": {
+                    "title": "Status represents the current information/status of a persistent volume claim.\nRead-only.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims\n+optional",
+                    "$ref": "#/definitions/v1PersistentVolumeClaimStatus"
+                }
+            }
+        },
+        "v1PersistentVolumeClaimCondition": {
+            "type": "object",
+            "title": "PersistentVolumeClaimCondition contails details about state of pvc",
+            "properties": {
+                "lastProbeTime": {
+                    "title": "Last time we probed the condition.\n+optional",
+                    "$ref": "#/definitions/v1Time"
+                },
+                "lastTransitionTime": {
+                    "title": "Last time the condition transitioned from one status to another.\n+optional",
+                    "$ref": "#/definitions/v1Time"
+                },
+                "message": {
+                    "type": "string",
+                    "title": "Human-readable message indicating details about last transition.\n+optional"
+                },
+                "reason": {
+                    "type": "string",
+                    "title": "Unique, this should be a short, machine understandable string that gives the reason\nfor condition's last transition. If it reports \"ResizeStarted\" that means the underlying\npersistent volume is being resized.\n+optional"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "v1PersistentVolumeClaimList": {
+            "type": "object",
+            "description": "PersistentVolumeClaimList is a list of PersistentVolumeClaim items.",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "title": "A list of persistent volume claims.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims",
+                    "items": {
+                        "$ref": "#/definitions/v1PersistentVolumeClaim"
+                    }
+                },
+                "metadata": {
+                    "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
+                    "$ref": "#/definitions/v1ListMeta"
+                }
+            }
+        },
+        "v1PersistentVolumeClaimSpec": {
+            "type": "object",
+            "title": "PersistentVolumeClaimSpec describes the common attributes of storage devices\nand allows a Source for provider-specific attributes",
+            "properties": {
+                "accessModes": {
+                    "type": "array",
+                    "title": "AccessModes contains the desired access modes the volume should have.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1\n+optional",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "dataSource": {
+                    "title": "This field requires the VolumeSnapshotDataSource alpha feature gate to be\nenabled and currently VolumeSnapshot is the only supported data source.\nIf the provisioner can support VolumeSnapshot data source, it will create\na new volume and data will be restored to the volume at the same time.\nIf the provisioner does not support VolumeSnapshot data source, volume will\nnot be created and the failure will be reported as an event.\nIn the future, we plan to support more data source types and the behavior\nof the provisioner may change.\n+optional",
+                    "$ref": "#/definitions/v1TypedLocalObjectReference"
+                },
+                "resources": {
+                    "title": "Resources represents the minimum resources the volume should have.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#resources\n+optional",
+                    "$ref": "#/definitions/v1ResourceRequirements"
+                },
+                "selector": {
+                    "title": "A label query over volumes to consider for binding.\n+optional",
+                    "$ref": "#/definitions/v1LabelSelector"
+                },
+                "storageClassName": {
+                    "type": "string",
+                    "title": "Name of the StorageClass required by the claim.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#class-1\n+optional"
+                },
+                "volumeMode": {
+                    "type": "string",
+                    "title": "volumeMode defines what type of volume is required by the claim.\nValue of Filesystem is implied when not included in claim spec.\nThis is a beta feature.\n+optional"
+                },
+                "volumeName": {
+                    "type": "string",
+                    "title": "VolumeName is the binding reference to the PersistentVolume backing this claim.\n+optional"
+                }
+            }
+        },
+        "v1PersistentVolumeClaimStatus": {
+            "type": "object",
+            "description": "PersistentVolumeClaimStatus is the current status of a persistent volume claim.",
+            "properties": {
+                "accessModes": {
+                    "type": "array",
+                    "title": "AccessModes contains the actual access modes the volume backing the PVC has.\nMore info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1\n+optional",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "capacity": {
+                    "type": "object",
+                    "title": "Represents the actual resources of the underlying volume.\n+optional"
+                },
+                "conditions": {
+                    "type": "array",
+                    "title": "Current Condition of persistent volume claim. If underlying persistent volume is being\nresized then the Condition will be set to 'ResizeStarted'.\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
+                    "items": {
+                        "$ref": "#/definitions/v1PersistentVolumeClaimCondition"
+                    }
+                },
+                "phase": {
+                    "type": "string",
+                    "title": "Phase represents the current phase of PersistentVolumeClaim.\n+optional"
                 }
             }
         },
@@ -2473,6 +6613,20 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1PodTemplateSpec": {
+            "type": "object",
+            "title": "PodTemplateSpec describes the data a pod should have when created from a template",
+            "properties": {
+                "metadata": {
+                    "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                },
+                "spec": {
+                    "title": "Specification of the desired behavior of the pod.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1PodSpec"
+                }
+            }
+        },
         "v1PortworxVolumeSource": {
             "type": "object",
             "description": "PortworxVolumeSource represents a Portworx volume resource.",
@@ -2633,6 +6787,129 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1ReplicaSet": {
+            "type": "object",
+            "description": "ReplicaSet ensures that a specified number of pod replicas are running at any given time.",
+            "properties": {
+                "metadata": {
+                    "title": "If the Labels of a ReplicaSet are empty, they are defaulted to\nbe the same as the Pod(s) that the ReplicaSet manages.\nStandard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                },
+                "spec": {
+                    "title": "Spec defines the specification of the desired behavior of the ReplicaSet.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1ReplicaSetSpec"
+                },
+                "status": {
+                    "title": "Status is the most recently observed status of the ReplicaSet.\nThis data may be out of date by some window of time.\nPopulated by the system.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1ReplicaSetStatus"
+                }
+            }
+        },
+        "v1ReplicaSetCondition": {
+            "type": "object",
+            "description": "ReplicaSetCondition describes the state of a replica set at a certain point.",
+            "properties": {
+                "lastTransitionTime": {
+                    "title": "The last time the condition transitioned from one status to another.\n+optional",
+                    "$ref": "#/definitions/v1Time"
+                },
+                "message": {
+                    "type": "string",
+                    "title": "A human readable message indicating details about the transition.\n+optional"
+                },
+                "reason": {
+                    "type": "string",
+                    "title": "The reason for the condition's last transition.\n+optional"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Status of the condition, one of True, False, Unknown."
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Type of replica set condition."
+                }
+            }
+        },
+        "v1ReplicaSetList": {
+            "type": "object",
+            "description": "ReplicaSetList is a collection of ReplicaSets.",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "title": "List of ReplicaSets.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller",
+                    "items": {
+                        "$ref": "#/definitions/v1ReplicaSet"
+                    }
+                },
+                "metadata": {
+                    "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
+                    "$ref": "#/definitions/v1ListMeta"
+                }
+            }
+        },
+        "v1ReplicaSetSpec": {
+            "type": "object",
+            "description": "ReplicaSetSpec is the specification of a ReplicaSet.",
+            "properties": {
+                "minReadySeconds": {
+                    "type": "integer",
+                    "title": "Minimum number of seconds for which a newly created pod should be ready\nwithout any of its container crashing, for it to be considered available.\nDefaults to 0 (pod will be considered available as soon as it is ready)\n+optional",
+                    "format": "int32"
+                },
+                "replicas": {
+                    "type": "integer",
+                    "title": "Replicas is the number of desired replicas.\nThis is a pointer to distinguish between explicit zero and unspecified.\nDefaults to 1.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller/#what-is-a-replicationcontroller\n+optional",
+                    "format": "int32"
+                },
+                "selector": {
+                    "title": "Selector is a label query over pods that should match the replica count.\nLabel keys and values that must match in order to be controlled by this replica set.\nIt must match the pod template's labels.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors",
+                    "$ref": "#/definitions/v1LabelSelector"
+                },
+                "template": {
+                    "title": "Template is the object that describes the pod that will be created if\ninsufficient replicas are detected.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller#pod-template\n+optional",
+                    "$ref": "#/definitions/v1PodTemplateSpec"
+                }
+            }
+        },
+        "v1ReplicaSetStatus": {
+            "type": "object",
+            "description": "ReplicaSetStatus represents the current status of a ReplicaSet.",
+            "properties": {
+                "availableReplicas": {
+                    "type": "integer",
+                    "title": "The number of available replicas (ready for at least minReadySeconds) for this replica set.\n+optional",
+                    "format": "int32"
+                },
+                "conditions": {
+                    "type": "array",
+                    "title": "Represents the latest available observations of a replica set's current state.\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
+                    "items": {
+                        "$ref": "#/definitions/v1ReplicaSetCondition"
+                    }
+                },
+                "fullyLabeledReplicas": {
+                    "type": "integer",
+                    "title": "The number of pods that have labels matching the labels of the pod template of the replicaset.\n+optional",
+                    "format": "int32"
+                },
+                "observedGeneration": {
+                    "type": "string",
+                    "title": "ObservedGeneration reflects the generation of the most recently observed ReplicaSet.\n+optional",
+                    "format": "int64"
+                },
+                "readyReplicas": {
+                    "type": "integer",
+                    "title": "The number of ready replicas for this replica set.\n+optional",
+                    "format": "int32"
+                },
+                "replicas": {
+                    "type": "integer",
+                    "title": "Replicas is the most recently oberved number of replicas.\nMore info: https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller/#what-is-a-replicationcontroller",
+                    "format": "int32"
+                }
+            }
+        },
         "v1ResourceFieldSelector": {
             "type": "object",
             "title": "ResourceFieldSelector represents container resources (cpu, memory) and their output format",
@@ -2662,6 +6939,41 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "requests": {
                     "type": "object",
                     "title": "Requests describes the minimum amount of compute resources required.\nIf Requests is omitted for a container, it defaults to Limits if that is explicitly specified,\notherwise to an implementation-defined value.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/\n+optional"
+                }
+            }
+        },
+        "v1RollingUpdateDaemonSet": {
+            "type": "object",
+            "description": "Spec to control the desired behavior of daemon set rolling update.",
+            "properties": {
+                "maxUnavailable": {
+                    "title": "The maximum number of DaemonSet pods that can be unavailable during the\nupdate. Value can be an absolute number (ex: 5) or a percentage of total\nnumber of DaemonSet pods at the start of the update (ex: 10%). Absolute\nnumber is calculated from percentage by rounding up.\nThis cannot be 0.\nDefault value is 1.\nExample: when this is set to 30%, at most 30% of the total number of nodes\nthat should be running the daemon pod (i.e. status.desiredNumberScheduled)\ncan have their pods stopped for an update at any given\ntime. The update starts by stopping at most 30% of those DaemonSet pods\nand then brings up new DaemonSet pods in their place. Once the new pods\nare available, it then proceeds onto other DaemonSet pods, thus ensuring\nthat at least 70% of original number of DaemonSet pods are available at\nall times during the update.\n+optional",
+                    "$ref": "#/definitions/intstrIntOrString"
+                }
+            }
+        },
+        "v1RollingUpdateDeployment": {
+            "type": "object",
+            "description": "Spec to control the desired behavior of rolling update.",
+            "properties": {
+                "maxSurge": {
+                    "title": "The maximum number of pods that can be scheduled above the desired number of\npods.\nValue can be an absolute number (ex: 5) or a percentage of desired pods (ex: 10%).\nThis can not be 0 if MaxUnavailable is 0.\nAbsolute number is calculated from percentage by rounding up.\nDefaults to 25%.\nExample: when this is set to 30%, the new ReplicaSet can be scaled up immediately when\nthe rolling update starts, such that the total number of old and new pods do not exceed\n130% of desired pods. Once old pods have been killed,\nnew ReplicaSet can be scaled up further, ensuring that total number of pods running\nat any time during the update is at most 130% of desired pods.\n+optional",
+                    "$ref": "#/definitions/intstrIntOrString"
+                },
+                "maxUnavailable": {
+                    "title": "The maximum number of pods that can be unavailable during the update.\nValue can be an absolute number (ex: 5) or a percentage of desired pods (ex: 10%).\nAbsolute number is calculated from percentage by rounding down.\nThis can not be 0 if MaxSurge is 0.\nDefaults to 25%.\nExample: when this is set to 30%, the old ReplicaSet can be scaled down to 70% of desired pods\nimmediately when the rolling update starts. Once new pods are ready, old ReplicaSet\ncan be scaled down further, followed by scaling up the new ReplicaSet, ensuring\nthat the total number of pods available at all times during the update is at\nleast 70% of desired pods.\n+optional",
+                    "$ref": "#/definitions/intstrIntOrString"
+                }
+            }
+        },
+        "v1RollingUpdateStatefulSetStrategy": {
+            "type": "object",
+            "description": "RollingUpdateStatefulSetStrategy is used to communicate parameter for RollingUpdateStatefulSetStrategyType.",
+            "properties": {
+                "partition": {
+                    "type": "integer",
+                    "title": "Partition indicates the ordinal at which the StatefulSet should be\npartitioned.\nDefault value is 0.\n+optional",
+                    "format": "int32"
                 }
             }
         },
@@ -2735,6 +7047,28 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1Secret": {
+            "type": "object",
+            "description": "Secret holds secret data of a certain type. The total bytes of the values in\nthe Data field must be less than MaxSecretSize bytes.",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "title": "Data contains the secret data. Each key must consist of alphanumeric\ncharacters, '-', '_' or '.'. The serialized form of the secret data is a\nbase64 encoded string, representing the arbitrary (possibly non-string)\ndata value here. Described in https://tools.ietf.org/html/rfc4648#section-4\n+optional"
+                },
+                "metadata": {
+                    "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                },
+                "stringData": {
+                    "type": "object",
+                    "title": "stringData allows specifying non-binary secret data in string form.\nIt is provided as a write-only convenience method.\nAll keys and values are merged into the data field on write, overwriting any existing values.\nIt is never output when reading from the API.\n+k8s:conversion-gen=false\n+optional"
+                },
+                "type": {
+                    "type": "string",
+                    "title": "Used to facilitate programmatic handling of secret data.\n+optional"
+                }
+            }
+        },
         "v1SecretEnvSource": {
             "type": "object",
             "description": "SecretEnvSource selects a Secret to populate the environment\nvariables with.\n\nThe contents of the target Secret's Data field will represent the\nkey-value pairs as environment variables.",
@@ -2766,6 +7100,23 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "type": "boolean",
                     "title": "Specify whether the Secret or its key must be defined\n+optional",
                     "format": "boolean"
+                }
+            }
+        },
+        "v1SecretList": {
+            "type": "object",
+            "description": "SecretList is a list of Secret.",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "title": "Items is a list of secret objects.\nMore info: https://kubernetes.io/docs/concepts/configuration/secret",
+                    "items": {
+                        "$ref": "#/definitions/v1Secret"
+                    }
+                },
+                "metadata": {
+                    "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
+                    "$ref": "#/definitions/v1ListMeta"
                 }
             }
         },
@@ -2869,6 +7220,24 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 }
             }
         },
+        "v1Service": {
+            "type": "object",
+            "description": "Service is a named abstraction of software service (for example, mysql) consisting of local port\n(for example 3306) that the proxy listens on, and the selector that determines which pods\nwill answer requests sent through the proxy.",
+            "properties": {
+                "metadata": {
+                    "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                },
+                "spec": {
+                    "title": "Spec defines the behavior of a service.\nhttps://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1ServiceSpec"
+                },
+                "status": {
+                    "title": "Most recently observed status of the service.\nPopulated by the system.\nRead-only.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1ServiceStatus"
+                }
+            }
+        },
         "v1ServiceAccountTokenProjection": {
             "type": "object",
             "description": "ServiceAccountTokenProjection represents a projected service account token\nvolume. This projection can be used to insert a service account token into\nthe pods runtime filesystem for use against APIs (Kubernetes API Server or\notherwise).",
@@ -2885,6 +7254,319 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "path": {
                     "type": "string",
                     "description": "Path is the path relative to the mount point of the file to project the\ntoken into."
+                }
+            }
+        },
+        "v1ServiceList": {
+            "type": "object",
+            "description": "ServiceList holds a list of services.",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "title": "List of services",
+                    "items": {
+                        "$ref": "#/definitions/v1Service"
+                    }
+                },
+                "metadata": {
+                    "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\n+optional",
+                    "$ref": "#/definitions/v1ListMeta"
+                }
+            }
+        },
+        "v1ServicePort": {
+            "type": "object",
+            "description": "ServicePort contains information on service's port.",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "title": "The name of this port within the service. This must be a DNS_LABEL.\nAll ports within a ServiceSpec must have unique names. When considering\nthe endpoints for a Service, this must match the 'name' field in the\nEndpointPort.\nOptional if only one ServicePort is defined on this service.\n+optional"
+                },
+                "nodePort": {
+                    "type": "integer",
+                    "title": "The port on each node on which this service is exposed when type=NodePort or LoadBalancer.\nUsually assigned by the system. If specified, it will be allocated to the service\nif unused or else creation of the service will fail.\nDefault is to auto-allocate a port if the ServiceType of this Service requires one.\nMore info: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport\n+optional",
+                    "format": "int32"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": "The port that will be exposed by this service.",
+                    "format": "int32"
+                },
+                "protocol": {
+                    "type": "string",
+                    "title": "The IP protocol for this port. Supports \"TCP\", \"UDP\", and \"SCTP\".\nDefault is TCP.\n+optional"
+                },
+                "targetPort": {
+                    "title": "Number or name of the port to access on the pods targeted by the service.\nNumber must be in the range 1 to 65535. Name must be an IANA_SVC_NAME.\nIf this is a string, it will be looked up as a named port in the\ntarget Pod's container ports. If this is not specified, the value\nof the 'port' field is used (an identity map).\nThis field is ignored for services with clusterIP=None, and should be\nomitted or set equal to the 'port' field.\nMore info: https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service\n+optional",
+                    "$ref": "#/definitions/intstrIntOrString"
+                }
+            }
+        },
+        "v1ServiceSpec": {
+            "type": "object",
+            "description": "ServiceSpec describes the attributes that a user creates on a service.",
+            "properties": {
+                "clusterIP": {
+                    "type": "string",
+                    "title": "clusterIP is the IP address of the service and is usually assigned\nrandomly by the master. If an address is specified manually and is not in\nuse by others, it will be allocated to the service; otherwise, creation\nof the service will fail. This field can not be changed through updates.\nValid values are \"None\", empty string (\"\"), or a valid IP address. \"None\"\ncan be specified for headless services when proxying is not required.\nOnly applies to types ClusterIP, NodePort, and LoadBalancer. Ignored if\ntype is ExternalName.\nMore info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies\n+optional"
+                },
+                "externalIPs": {
+                    "type": "array",
+                    "title": "externalIPs is a list of IP addresses for which nodes in the cluster\nwill also accept traffic for this service.  These IPs are not managed by\nKubernetes.  The user is responsible for ensuring that traffic arrives\nat a node with this IP.  A common example is external load-balancers\nthat are not part of the Kubernetes system.\n+optional",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "externalName": {
+                    "type": "string",
+                    "title": "externalName is the external reference that kubedns or equivalent will\nreturn as a CNAME record for this service. No proxying will be involved.\nMust be a valid RFC-1123 hostname (https://tools.ietf.org/html/rfc1123)\nand requires Type to be ExternalName.\n+optional"
+                },
+                "externalTrafficPolicy": {
+                    "type": "string",
+                    "title": "externalTrafficPolicy denotes if this Service desires to route external\ntraffic to node-local or cluster-wide endpoints. \"Local\" preserves the\nclient source IP and avoids a second hop for LoadBalancer and Nodeport\ntype services, but risks potentially imbalanced traffic spreading.\n\"Cluster\" obscures the client source IP and may cause a second hop to\nanother node, but should have good overall load-spreading.\n+optional"
+                },
+                "healthCheckNodePort": {
+                    "type": "integer",
+                    "title": "healthCheckNodePort specifies the healthcheck nodePort for the service.\nIf not specified, HealthCheckNodePort is created by the service api\nbackend with the allocated nodePort. Will use user-specified nodePort value\nif specified by the client. Only effects when Type is set to LoadBalancer\nand ExternalTrafficPolicy is set to Local.\n+optional",
+                    "format": "int32"
+                },
+                "ipFamily": {
+                    "type": "string",
+                    "title": "ipFamily specifies whether this Service has a preference for a particular IP family (e.g. IPv4 vs.\nIPv6).  If a specific IP family is requested, the clusterIP field will be allocated from that family, if it is\navailable in the cluster.  If no IP family is requested, the cluster's primary IP family will be used.\nOther IP fields (loadBalancerIP, loadBalancerSourceRanges, externalIPs) and controllers which\nallocate external load-balancers should use the same IP family.  Endpoints for this Service will be of\nthis family.  This field is immutable after creation. Assigning a ServiceIPFamily not available in the\ncluster (e.g. IPv6 in IPv4 only cluster) is an error condition and will fail during clusterIP assignment.\n+optional"
+                },
+                "loadBalancerIP": {
+                    "type": "string",
+                    "title": "Only applies to Service Type: LoadBalancer\nLoadBalancer will get created with the IP specified in this field.\nThis feature depends on whether the underlying cloud-provider supports specifying\nthe loadBalancerIP when a load balancer is created.\nThis field will be ignored if the cloud-provider does not support the feature.\n+optional"
+                },
+                "loadBalancerSourceRanges": {
+                    "type": "array",
+                    "title": "If specified and supported by the platform, this will restrict traffic through the cloud-provider\nload-balancer will be restricted to the specified client IPs. This field will be ignored if the\ncloud-provider does not support the feature.\"\nMore info: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/\n+optional",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "ports": {
+                    "type": "array",
+                    "title": "The list of ports that are exposed by this service.\nMore info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies\n+patchMergeKey=port\n+patchStrategy=merge\n+listType=map\n+listMapKey=port\n+listMapKey=protocol",
+                    "items": {
+                        "$ref": "#/definitions/v1ServicePort"
+                    }
+                },
+                "publishNotReadyAddresses": {
+                    "type": "boolean",
+                    "title": "publishNotReadyAddresses, when set to true, indicates that DNS implementations\nmust publish the notReadyAddresses of subsets for the Endpoints associated with\nthe Service. The default value is false.\nThe primary use case for setting this field is to use a StatefulSet's Headless Service\nto propagate SRV records for its Pods without respect to their readiness for purpose\nof peer discovery.\n+optional",
+                    "format": "boolean"
+                },
+                "selector": {
+                    "type": "object",
+                    "title": "Route service traffic to pods with label keys and values matching this\nselector. If empty or not present, the service is assumed to have an\nexternal process managing its endpoints, which Kubernetes will not\nmodify. Only applies to types ClusterIP, NodePort, and LoadBalancer.\nIgnored if type is ExternalName.\nMore info: https://kubernetes.io/docs/concepts/services-networking/service/\n+optional"
+                },
+                "sessionAffinity": {
+                    "type": "string",
+                    "title": "Supports \"ClientIP\" and \"None\". Used to maintain session affinity.\nEnable client IP based session affinity.\nMust be ClientIP or None.\nDefaults to None.\nMore info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies\n+optional"
+                },
+                "sessionAffinityConfig": {
+                    "title": "sessionAffinityConfig contains the configurations of session affinity.\n+optional",
+                    "$ref": "#/definitions/v1SessionAffinityConfig"
+                },
+                "topologyKeys": {
+                    "type": "array",
+                    "title": "topologyKeys is a preference-order list of topology keys which\nimplementations of services should use to preferentially sort endpoints\nwhen accessing this Service, it can not be used at the same time as\nexternalTrafficPolicy=Local.\nTopology keys must be valid label keys and at most 16 keys may be specified.\nEndpoints are chosen based on the first topology key with available backends.\nIf this field is specified and all entries have no backends that match\nthe topology of the client, the service has no backends for that client\nand connections should fail.\nThe special value \"*\" may be used to mean \"any topology\". This catch-all\nvalue, if used, only makes sense as the last value in the list.\nIf this is not specified or empty, no topology constraints will be applied.\n+optional",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "type": {
+                    "type": "string",
+                    "title": "type determines how the Service is exposed. Defaults to ClusterIP. Valid\noptions are ExternalName, ClusterIP, NodePort, and LoadBalancer.\n\"ExternalName\" maps to the specified externalName.\n\"ClusterIP\" allocates a cluster-internal IP address for load-balancing to\nendpoints. Endpoints are determined by the selector or if that is not\nspecified, by manual construction of an Endpoints object. If clusterIP is\n\"None\", no virtual IP is allocated and the endpoints are published as a\nset of endpoints rather than a stable IP.\n\"NodePort\" builds on ClusterIP and allocates a port on every node which\nroutes to the clusterIP.\n\"LoadBalancer\" builds on NodePort and creates an\nexternal load-balancer (if supported in the current cloud) which routes\nto the clusterIP.\nMore info: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types\n+optional"
+                }
+            }
+        },
+        "v1ServiceStatus": {
+            "type": "object",
+            "description": "ServiceStatus represents the current status of a service.",
+            "properties": {
+                "loadBalancer": {
+                    "title": "LoadBalancer contains the current status of the load-balancer,\nif one is present.\n+optional",
+                    "$ref": "#/definitions/v1LoadBalancerStatus"
+                }
+            }
+        },
+        "v1SessionAffinityConfig": {
+            "type": "object",
+            "description": "SessionAffinityConfig represents the configurations of session affinity.",
+            "properties": {
+                "clientIP": {
+                    "title": "clientIP contains the configurations of Client IP based session affinity.\n+optional",
+                    "$ref": "#/definitions/v1ClientIPConfig"
+                }
+            }
+        },
+        "v1StatefulSet": {
+            "type": "object",
+            "description": "StatefulSet represents a set of pods with consistent identities.\nIdentities are defined as:\n - Network: A single stable DNS and hostname.\n - Storage: As many VolumeClaims as requested.\nThe StatefulSet guarantees that a given network identity will always\nmap to the same storage identity.",
+            "properties": {
+                "metadata": {
+                    "title": "+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                },
+                "spec": {
+                    "title": "Spec defines the desired identities of pods in this set.\n+optional",
+                    "$ref": "#/definitions/v1StatefulSetSpec"
+                },
+                "status": {
+                    "title": "Status is the current status of Pods in this StatefulSet. This data\nmay be out of date by some window of time.\n+optional",
+                    "$ref": "#/definitions/v1StatefulSetStatus"
+                }
+            }
+        },
+        "v1StatefulSetCondition": {
+            "type": "object",
+            "description": "StatefulSetCondition describes the state of a statefulset at a certain point.",
+            "properties": {
+                "lastTransitionTime": {
+                    "title": "Last time the condition transitioned from one status to another.\n+optional",
+                    "$ref": "#/definitions/v1Time"
+                },
+                "message": {
+                    "type": "string",
+                    "title": "A human readable message indicating details about the transition.\n+optional"
+                },
+                "reason": {
+                    "type": "string",
+                    "title": "The reason for the condition's last transition.\n+optional"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Status of the condition, one of True, False, Unknown."
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Type of statefulset condition."
+                }
+            }
+        },
+        "v1StatefulSetList": {
+            "type": "object",
+            "description": "StatefulSetList is a collection of StatefulSets.",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v1StatefulSet"
+                    }
+                },
+                "metadata": {
+                    "title": "+optional",
+                    "$ref": "#/definitions/v1ListMeta"
+                }
+            }
+        },
+        "v1StatefulSetSpec": {
+            "type": "object",
+            "description": "A StatefulSetSpec is the specification of a StatefulSet.",
+            "properties": {
+                "podManagementPolicy": {
+                    "type": "string",
+                    "title": "podManagementPolicy controls how pods are created during initial scale up,\nwhen replacing pods on nodes, or when scaling down. The default policy is\n-OrderedReady-, where pods are created in increasing order (pod-0, then\npod-1, etc) and the controller will wait until each pod is ready before\ncontinuing. When scaling down, the pods are removed in the opposite order.\nThe alternative policy is -Parallel- which will create pods in parallel\nto match the desired scale without waiting, and on scale down will delete\nall pods at once.\n+optional"
+                },
+                "replicas": {
+                    "type": "integer",
+                    "title": "replicas is the desired number of replicas of the given Template.\nThese are replicas in the sense that they are instantiations of the\nsame Template, but individual replicas also have a consistent identity.\nIf unspecified, defaults to 1.\nTODO: Consider a rename of this field.\n+optional",
+                    "format": "int32"
+                },
+                "revisionHistoryLimit": {
+                    "type": "integer",
+                    "description": "revisionHistoryLimit is the maximum number of revisions that will\nbe maintained in the StatefulSet's revision history. The revision history\nconsists of all revisions not represented by a currently applied\nStatefulSetSpec version. The default value is 10.",
+                    "format": "int32"
+                },
+                "selector": {
+                    "title": "selector is a label query over pods that should match the replica count.\nIt must match the pod template's labels.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors",
+                    "$ref": "#/definitions/v1LabelSelector"
+                },
+                "serviceName": {
+                    "type": "string",
+                    "description": "serviceName is the name of the service that governs this StatefulSet.\nThis service must exist before the StatefulSet, and is responsible for\nthe network identity of the set. Pods get DNS/hostnames that follow the\npattern: pod-specific-string.serviceName.default.svc.cluster.local\nwhere \"pod-specific-string\" is managed by the StatefulSet controller."
+                },
+                "template": {
+                    "description": "template is the object that describes the pod that will be created if\ninsufficient replicas are detected. Each pod stamped out by the StatefulSet\nwill fulfill this Template, but have a unique identity from the rest\nof the StatefulSet.",
+                    "$ref": "#/definitions/v1PodTemplateSpec"
+                },
+                "updateStrategy": {
+                    "description": "updateStrategy indicates the StatefulSetUpdateStrategy that will be\nemployed to update Pods in the StatefulSet when a revision is made to\nTemplate.",
+                    "$ref": "#/definitions/v1StatefulSetUpdateStrategy"
+                },
+                "volumeClaimTemplates": {
+                    "type": "array",
+                    "title": "volumeClaimTemplates is a list of claims that pods are allowed to reference.\nThe StatefulSet controller is responsible for mapping network identities to\nclaims in a way that maintains the identity of a pod. Every claim in\nthis list must have at least one matching (by name) volumeMount in one\ncontainer in the template. A claim in this list takes precedence over\nany volumes in the template, with the same name.\nTODO: Define the behavior if a claim already exists with the same name.\n+optional",
+                    "items": {
+                        "$ref": "#/definitions/v1PersistentVolumeClaim"
+                    }
+                }
+            }
+        },
+        "v1StatefulSetStatus": {
+            "type": "object",
+            "description": "StatefulSetStatus represents the current state of a StatefulSet.",
+            "properties": {
+                "collisionCount": {
+                    "type": "integer",
+                    "title": "collisionCount is the count of hash collisions for the StatefulSet. The StatefulSet controller\nuses this field as a collision avoidance mechanism when it needs to create the name for the\nnewest ControllerRevision.\n+optional",
+                    "format": "int32"
+                },
+                "conditions": {
+                    "type": "array",
+                    "title": "Represents the latest available observations of a statefulset's current state.\n+optional\n+patchMergeKey=type\n+patchStrategy=merge",
+                    "items": {
+                        "$ref": "#/definitions/v1StatefulSetCondition"
+                    }
+                },
+                "currentReplicas": {
+                    "type": "integer",
+                    "description": "currentReplicas is the number of Pods created by the StatefulSet controller from the StatefulSet version\nindicated by currentRevision.",
+                    "format": "int32"
+                },
+                "currentRevision": {
+                    "type": "string",
+                    "description": "currentRevision, if not empty, indicates the version of the StatefulSet used to generate Pods in the\nsequence [0,currentReplicas)."
+                },
+                "observedGeneration": {
+                    "type": "string",
+                    "title": "observedGeneration is the most recent generation observed for this StatefulSet. It corresponds to the\nStatefulSet's generation, which is updated on mutation by the API Server.\n+optional",
+                    "format": "int64"
+                },
+                "readyReplicas": {
+                    "type": "integer",
+                    "description": "readyReplicas is the number of Pods created by the StatefulSet controller that have a Ready Condition.",
+                    "format": "int32"
+                },
+                "replicas": {
+                    "type": "integer",
+                    "description": "replicas is the number of Pods created by the StatefulSet controller.",
+                    "format": "int32"
+                },
+                "updateRevision": {
+                    "type": "string",
+                    "title": "updateRevision, if not empty, indicates the version of the StatefulSet used to generate Pods in the sequence\n[replicas-updatedReplicas,replicas)"
+                },
+                "updatedReplicas": {
+                    "type": "integer",
+                    "description": "updatedReplicas is the number of Pods created by the StatefulSet controller from the StatefulSet version\nindicated by updateRevision.",
+                    "format": "int32"
+                }
+            }
+        },
+        "v1StatefulSetUpdateStrategy": {
+            "type": "object",
+            "description": "StatefulSetUpdateStrategy indicates the strategy that the StatefulSet\ncontroller will use to perform updates. It includes any additional parameters\nnecessary to perform the update for the indicated strategy.",
+            "properties": {
+                "rollingUpdate": {
+                    "title": "RollingUpdate is used to communicate parameters when Type is RollingUpdateStatefulSetStrategyType.\n+optional",
+                    "$ref": "#/definitions/v1RollingUpdateStatefulSetStrategy"
+                },
+                "type": {
+                    "type": "string",
+                    "title": "Type indicates the type of the StatefulSetUpdateStrategy.\nDefault is RollingUpdate.\n+optional"
                 }
             }
         },
@@ -3006,6 +7688,24 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "whenUnsatisfiable": {
                     "type": "string",
                     "description": "WhenUnsatisfiable indicates how to deal with a pod if it doesn't satisfy\nthe spread constraint.\n- DoNotSchedule (default) tells the scheduler not to schedule it\n- ScheduleAnyway tells the scheduler to still schedule it\nIt's considered as \"Unsatisfiable\" if and only if placing incoming pod on any\ntopology violates \"MaxSkew\".\nFor example, in a 3-zone cluster, MaxSkew is set to 1, and pods with the same\nlabelSelector spread as 3/1/1:\n+-------+-------+-------+\n| zone1 | zone2 | zone3 |\n+-------+-------+-------+\n| P P P |   P   |   P   |\n+-------+-------+-------+\nIf WhenUnsatisfiable is set to DoNotSchedule, incoming pod can only be scheduled\nto zone2(zone3) to become 3/2/1(3/1/2) as ActualSkew(2-1) on zone2(zone3) satisfies\nMaxSkew(1). In other words, the cluster can still be imbalanced, but scheduler\nwon't make it *more* imbalanced.\nIt's a required field."
+                }
+            }
+        },
+        "v1TypedLocalObjectReference": {
+            "type": "object",
+            "description": "TypedLocalObjectReference contains enough information to let you locate the\ntyped referenced object inside the same namespace.",
+            "properties": {
+                "apiGroup": {
+                    "type": "string",
+                    "title": "APIGroup is the group for the resource being referenced.\nIf APIGroup is not specified, the specified Kind must be in the core API group.\nFor any other third-party types, APIGroup is required.\n+optional"
+                },
+                "kind": {
+                    "type": "string",
+                    "title": "Kind is the type of resource being referenced"
+                },
+                "name": {
+                    "type": "string",
+                    "title": "Name is the name of resource being referenced"
                 }
             }
         },
@@ -3260,6 +7960,110 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 "runAsUserName": {
                     "type": "string",
                     "title": "The UserName in Windows to run the entrypoint of the container process.\nDefaults to the user specified in image metadata if unspecified.\nMay also be set in PodSecurityContext. If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\nThis field is beta-level and may be disabled with the WindowsRunAsUserName feature flag.\n+optional"
+                }
+            }
+        },
+        "v1beta1CronJob": {
+            "type": "object",
+            "description": "CronJob represents the configuration of a single cron job.",
+            "properties": {
+                "metadata": {
+                    "title": "Standard object's metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                },
+                "spec": {
+                    "title": "Specification of the desired behavior of a cron job, including the schedule.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1beta1CronJobSpec"
+                },
+                "status": {
+                    "title": "Current status of a cron job.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1beta1CronJobStatus"
+                }
+            }
+        },
+        "v1beta1CronJobList": {
+            "type": "object",
+            "description": "CronJobList is a collection of cron jobs.",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": "items is the list of CronJobs.",
+                    "items": {
+                        "$ref": "#/definitions/v1beta1CronJob"
+                    }
+                },
+                "metadata": {
+                    "title": "Standard list metadata.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ListMeta"
+                }
+            }
+        },
+        "v1beta1CronJobSpec": {
+            "type": "object",
+            "description": "CronJobSpec describes how the job execution will look like and when it will actually run.",
+            "properties": {
+                "concurrencyPolicy": {
+                    "type": "string",
+                    "title": "Specifies how to treat concurrent executions of a Job.\nValid values are:\n- \"Allow\" (default): allows CronJobs to run concurrently;\n- \"Forbid\": forbids concurrent runs, skipping next run if previous run hasn't finished yet;\n- \"Replace\": cancels currently running job and replaces it with a new one\n+optional"
+                },
+                "failedJobsHistoryLimit": {
+                    "type": "integer",
+                    "title": "The number of failed finished jobs to retain.\nThis is a pointer to distinguish between explicit zero and not specified.\nDefaults to 1.\n+optional",
+                    "format": "int32"
+                },
+                "jobTemplate": {
+                    "description": "Specifies the job that will be created when executing a CronJob.",
+                    "$ref": "#/definitions/v1beta1JobTemplateSpec"
+                },
+                "schedule": {
+                    "type": "string",
+                    "description": "The schedule in Cron format, see https://en.wikipedia.org/wiki/Cron."
+                },
+                "startingDeadlineSeconds": {
+                    "type": "string",
+                    "title": "Optional deadline in seconds for starting the job if it misses scheduled\ntime for any reason.  Missed jobs executions will be counted as failed ones.\n+optional",
+                    "format": "int64"
+                },
+                "successfulJobsHistoryLimit": {
+                    "type": "integer",
+                    "title": "The number of successful finished jobs to retain.\nThis is a pointer to distinguish between explicit zero and not specified.\nDefaults to 3.\n+optional",
+                    "format": "int32"
+                },
+                "suspend": {
+                    "type": "boolean",
+                    "title": "This flag tells the controller to suspend subsequent executions, it does\nnot apply to already started executions.  Defaults to false.\n+optional",
+                    "format": "boolean"
+                }
+            }
+        },
+        "v1beta1CronJobStatus": {
+            "type": "object",
+            "description": "CronJobStatus represents the current state of a cron job.",
+            "properties": {
+                "active": {
+                    "type": "array",
+                    "title": "A list of pointers to currently running jobs.\n+optional",
+                    "items": {
+                        "$ref": "#/definitions/v1ObjectReference"
+                    }
+                },
+                "lastScheduleTime": {
+                    "title": "Information when was the last time the job was successfully scheduled.\n+optional",
+                    "$ref": "#/definitions/v1Time"
+                }
+            }
+        },
+        "v1beta1JobTemplateSpec": {
+            "type": "object",
+            "title": "JobTemplateSpec describes the data a Job should have when created from a template",
+            "properties": {
+                "metadata": {
+                    "title": "Standard object's metadata of the jobs created from this template.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata\n+optional",
+                    "$ref": "#/definitions/v1ObjectMeta"
+                },
+                "spec": {
+                    "title": "Specification of the desired behavior of the job.\nMore info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status\n+optional",
+                    "$ref": "#/definitions/v1JobSpec"
                 }
             }
         }

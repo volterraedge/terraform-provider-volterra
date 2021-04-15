@@ -2681,6 +2681,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
+                },
                 "tenant": {
                     "type": "string",
                     "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
@@ -2761,6 +2769,13 @@ var APISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Allow Volterra",
                     "x-ves-example": "true"
+                },
+                "decrypt_cache_timeout": {
+                    "type": "string",
+                    "description": " decrypt_cache_timeout contains the amount of time a decrypted secret is cached in wingman.\n Value for this parameter is a string ending in the suffix \"s\" (indicating seconds), suffix \"m\" (indicating minutes) or suffix \"h\" (indicating hours)\n\nExample: - \"6h\"-",
+                    "title": "Decrypt Cache Timeout",
+                    "x-displayname": "Decrypt Cache Timeout",
+                    "x-ves-example": "6h"
                 },
                 "rules": {
                     "type": "array",

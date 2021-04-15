@@ -2403,6 +2403,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_policy_ruleNetworkPolicyRuleAction",
                     "x-displayname": "Action"
                 },
+                "adv_action": {
+                    "description": " Advanced action to be taken at rule match. Currently supported actions are NoLog \u0026 Log",
+                    "title": "Advanced Action",
+                    "$ref": "#/definitions/network_policy_ruleNetworkPolicyRuleAdvancedAction",
+                    "x-displayname": "Advanced Action"
+                },
                 "all_tcp_traffic": {
                     "description": "Exclusive with [all_traffic all_udp_traffic applications protocol_port_range]\nx-displayName: \"Match All TCP Traffic\"\nSelect all TCP traffic to match",
                     "title": "All TCP Traffic",
@@ -2522,6 +2528,18 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "network_policy_ruleLogAction": {
+            "type": "string",
+            "description": "Choice to choose logging or no logging\nThis works together with option selected via NetworkPolicyRuleAction or any other action specified\nx-example: (No Selection in NetworkPolicyRuleAction + AdvancedAction as LOG) = LOG Only, (ALLOW/DENY in NetworkPolicyRuleAction + AdvancedAction as LOG) = Log and Allow/Deny, (ALLOW/DENY in NetworkPolicyRuleAction + NOLOG in AdvancedAction) = Allow/Deny with no log\n\n - NOLOG: Dont sample the traffic hitting the rule\n - LOG: Sample the traffic hitting the rule",
+            "title": "Log Action",
+            "enum": [
+                "NOLOG",
+                "LOG"
+            ],
+            "default": "NOLOG",
+            "x-displayname": "Log Action",
+            "x-ves-proto-enum": "ves.io.schema.network_policy_rule.LogAction"
+        },
         "network_policy_ruleNetworkPolicyRuleAction": {
             "type": "string",
             "description": "Network policy rule action configures the action to be taken on rule match\n\n - DENY: Apply deny action on rule match\n - ALLOW: Apply allow action on rule match",
@@ -2533,6 +2551,21 @@ var APISwaggerJSON string = `{
             "default": "DENY",
             "x-displayname": "Network Policy Rule Action",
             "x-ves-proto-enum": "ves.io.schema.network_policy_rule.NetworkPolicyRuleAction"
+        },
+        "network_policy_ruleNetworkPolicyRuleAdvancedAction": {
+            "type": "object",
+            "description": "Network Policy Rule Advanced Action provides additional options along with RuleAction and PBRRuleAction",
+            "title": "Network Policy Rule Advanced Action",
+            "x-displayname": "Network Policy Rule Advanced Action",
+            "x-ves-proto-message": "ves.io.schema.network_policy_rule.NetworkPolicyRuleAdvancedAction",
+            "properties": {
+                "action": {
+                    "description": " Advanced action applied along with selection in NetworkPolicyRuleAction",
+                    "title": "Action",
+                    "$ref": "#/definitions/network_policy_ruleLogAction",
+                    "x-displayname": "Action"
+                }
+            }
         },
         "network_policy_viewSpecType": {
             "type": "object",
@@ -3013,6 +3046,14 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
                 },
                 "tenant": {
                     "type": "string",

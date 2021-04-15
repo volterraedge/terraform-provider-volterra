@@ -26,36 +26,48 @@ resource "volterra_bgp" "example" {
     bgp_router_id {
       // One of the arguments from this list "ipv4 ipv6" must be set
 
-      ipv4 {
-        addr = "192.168.1.1"
+      ipv6 {
+        addr = "2001:db8:0:0:0:0:2:1"
       }
     }
 
     bgp_router_id_key  = "bgp_router_id_key"
     bgp_router_id_type = "bgp_router_id_type"
+
+    // One of the arguments from this list "local_address from_site ip_address" must be set
+    local_address = true
   }
 
-  bgp_peers {
-    asn = "asn"
-
-    bgp_peer_address {
-      // One of the arguments from this list "ipv4 ipv6" must be set
-
-      ipv4 {
-        addr = "192.168.1.1"
-      }
+  peers {
+    metadata {
+      description = "Virtual Host for acmecorp website"
+      disable     = true
+      name        = "acmecorp-web"
     }
 
-    bgp_peer_address_key   = "bgp_peer_address_key"
-    bgp_peer_address_type  = "bgp_peer_address_type"
-    bgp_peer_subnet_offset = "bgp_peer_subnet_offset"
-    port                   = "port"
-  }
+    target_service = "target_service"
 
-  network_interface {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
+    // One of the arguments from this list "external internal" must be set
+
+    external {
+      // One of the arguments from this list "address subnet_begin_offset subnet_end_offset from_site default_gateway" must be set
+      from_site = true
+      asn       = "asn"
+
+      family_inet {
+        // One of the arguments from this list "enable disable" must be set
+        enable = true
+      }
+
+      // One of the arguments from this list "outside_interfaces interface interface_list inside_interfaces" must be set
+
+      interface {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+      port = "port"
+    }
   }
 
   where {
@@ -96,9 +108,7 @@ Argument Reference
 
 `bgp_parameters` - (Required) BGP parameters for local site. See [Bgp Parameters ](#bgp-parameters) below for details.
 
-`bgp_peers` - (Required) BGP parameters for peer. See [Bgp Peers ](#bgp-peers) below for details.
-
-`network_interface` - (Required) List of interfaces to which the BGP configuration is applied. See [ref](#ref) below for details.
+`peers` - (Required) BGP parameters for peer. See [Peers ](#peers) below for details.
 
 `where` - (Required) Set of sites in which this configuration is valid and must be present. See [Where ](#where) below for details.
 
@@ -106,37 +116,19 @@ Argument Reference
 
 BGP parameters for local site.
 
-`asn` - (Required) Autonomous System Number for current site (`Int`).
+`asn` - (Required) Autonomous System Number (`Int`).
 
 `bgp_router_id` - (Optional) If Router ID Type is set to "From IP Address", this is used as Router ID. Else, this is ignored.. See [Bgp Router Id ](#bgp-router-id) below for details.
 
 `bgp_router_id_key` - (Optional) from site template parameters map in site object. Else, this is ignored. (`String`).
 
-`bgp_router_id_type` - (Required) Decides how BGP router id is derived (`String`).
+`bgp_router_id_type` - (Optional) Decides how BGP router id is derived (`String`).
 
-### Bgp Peer Address
+`from_site` - (Optional) Use the Router ID field from the site object. (bool).
 
-If Peer Address Type is set to "From IP Address", this is used as Peer Address. Else, this is ignored..
+`ip_address` - (Optional) Use the configured IPv4 Address as Router ID. (`String`).
 
-`ipv4` - (Optional) IPv4 Address. See [Ipv4 ](#ipv4) below for details.
-
-`ipv6` - (Optional) IPv6 Address. See [Ipv6 ](#ipv6) below for details.
-
-### Bgp Peers
-
-BGP parameters for peer.
-
-`asn` - (Required) Autonomous System Number for BGP peer (`Int`).
-
-`bgp_peer_address` - (Optional) If Peer Address Type is set to "From IP Address", this is used as Peer Address. Else, this is ignored.. See [Bgp Peer Address ](#bgp-peer-address) below for details.
-
-`bgp_peer_address_key` - (Optional) from site template parameters map in site object. Else, this is ignored. (`String`).
-
-`bgp_peer_address_type` - (Required) Decides how bgp peer address is derived for this peer (`String`).
-
-`bgp_peer_subnet_offset` - (Optional) set to 5 with Peer Address Type set to "Offset from end of Subnet", peer address of 1.2.3.250 is used. (`Int`).
-
-`port` - (Optional) Peer's port number, defaults to port 179 when not set (`Int`).
+`local_address` - (Optional) Use an interface address of the site as the Router ID. (bool).
 
 ### Bgp Router Id
 
@@ -145,6 +137,100 @@ If Router ID Type is set to "From IP Address", this is used as Router ID. Else, 
 `ipv4` - (Optional) IPv4 Address. See [Ipv4 ](#ipv4) below for details.
 
 `ipv6` - (Optional) IPv6 Address. See [Ipv6 ](#ipv6) below for details.
+
+### Default Gateway
+
+Use the default gateway address..
+
+### Disable
+
+Disable the IPv4 Unicast family..
+
+### Enable
+
+Enable the IPv4 Unicast family..
+
+### External
+
+External BGP peer..
+
+`address` - (Optional) Specify peer address. (`String`).
+
+`default_gateway` - (Optional) Use the default gateway address. (bool).
+
+`from_site` - (Optional) Use the address specified in the site object. (bool).
+
+`subnet_begin_offset` - (Optional) Calculate peer address using offset from the beginning of the subnet. (`Int`).
+
+`subnet_end_offset` - (Optional) Calculate peer address using offset from the end of the subnet. (`Int`).
+
+`asn` - (Required) Autonomous System Number for BGP peer (`Int`).
+
+`family_inet` - (Optional) Parameters for IPv4 Unicast family.. See [Family Inet ](#family-inet) below for details.
+
+`inside_interfaces` - (Optional) All interfaces in the site local inside network. (bool).
+
+`interface` - (Optional) Specify interface.. See [ref](#ref) below for details.
+
+`interface_list` - (Optional) List of network interfaces.. See [Interface List ](#interface-list) below for details.
+
+`outside_interfaces` - (Optional) All interfaces in the site local outside network. (bool).
+
+`port` - (Optional) Peer TCP port number. (`Int`).
+
+### Family Inet
+
+Parameters for IPv4 Unicast family..
+
+`disable` - (Optional) Disable the IPv4 Unicast family. (bool).
+
+`enable` - (Optional) Enable the IPv4 Unicast family. (bool).
+
+### Family Inetvpn
+
+Parameters for IPv4 VPN Unicast family..
+
+`disable` - (Optional) Disable the IPv4 Unicast family. (bool).
+
+`enable` - (Optional) Enable the IPv4 Unicast family.. See [Enable ](#enable) below for details.
+
+### Family Rtarget
+
+Parameters for Route Target family..
+
+`disable` - (Optional) Disable the Route Target family. (bool).
+
+`enable` - (Optional) Enable the Route Target family. (bool).
+
+### From Site
+
+Use the Router ID field from the site object..
+
+### Inside Interfaces
+
+All interfaces in the site local inside network..
+
+### Interface List
+
+List of network interfaces..
+
+`interfaces` - (Required) List of network interfaces.. See [ref](#ref) below for details.
+
+### Internal
+
+External BGP peer..
+
+`address` - (Optional) Specify peer address. (`String`).
+
+`dns_name` - (Optional) Use the addresse by resolving the given DNS name. (`String`).
+
+`from_site` - (Optional) Use the address specified in the site object. (bool).
+
+`family_inetvpn` - (Optional) Parameters for IPv4 VPN Unicast family.. See [Family Inetvpn ](#family-inetvpn) below for details.
+
+`family_rtarget` - (Optional) Parameters for Route Target family.. See [Family Rtarget ](#family-rtarget) below for details.
+
+`port` - (Optional) Peer TCP port number. (`Int`).
 
 ### Ipv4
 
@@ -157,6 +243,36 @@ IPv4 Address.
 IPv6 Address.
 
 `addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
+
+### Local Address
+
+Use an interface address of the site as the Router ID..
+
+### Metadata
+
+Common attributes for the peer including name and description..
+
+`description` - (Optional) Human readable description. (`String`).
+
+`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).
+
+`name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
+
+### Outside Interfaces
+
+All interfaces in the site local outside network..
+
+### Peers
+
+BGP parameters for peer.
+
+`metadata` - (Required) Common attributes for the peer including name and description.. See [Metadata ](#metadata) below for details.
+
+`target_service` - (Optional) Specify whether this peer should be configured in "phobos" or "frr". (`String`).
+
+`external` - (Optional) External BGP peer.. See [External ](#external) below for details.
+
+`internal` - (Optional) External BGP peer.. See [Internal ](#internal) below for details.
 
 ### Ref
 

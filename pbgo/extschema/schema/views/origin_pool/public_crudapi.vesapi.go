@@ -1215,6 +1215,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
 
+	case GET_RSP_FORMAT_REFERRING_OBJECTS:
+		rsrcReq.RspInReferringObjectsForm = true
+
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1412,6 +1415,19 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	}
 	_ = buildStatusForm
+	buildReferringObjectsForm := func() {
+		for _, br := range rsrcRsp.ReferringObjects {
+			rsp.ReferringObjects = append(rsp.ReferringObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+
+	}
+	_ = buildReferringObjectsForm
 
 	switch req.ResponseFormat {
 
@@ -1433,6 +1449,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
+
+	case GET_RSP_FORMAT_REFERRING_OBJECTS:
+		buildReferringObjectsForm()
 
 	default:
 		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
@@ -1939,7 +1958,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1947,10 +1966,11 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_DEFAULT",
                             "GET_RSP_FORMAT_FOR_CREATE",
                             "GET_RSP_FORMAT_FOR_REPLACE",
-                            "GET_RSP_FORMAT_READ"
+                            "GET_RSP_FORMAT_READ",
+                            "GET_RSP_FORMAT_REFERRING_OBJECTS"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "GetSpecType format"
+                        "x-displayname": "Referring Objects"
                     }
                 ],
                 "tags": [
@@ -2375,6 +2395,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/origin_poolObject",
                     "x-displayname": "Object"
                 },
+                "referring_objects": {
+                    "type": "array",
+                    "description": "The set of objects that are referring to this object in their spec",
+                    "title": "referring_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Referring Objects"
+                },
                 "replace_form": {
                     "description": "Format to replace changeable values in object",
                     "title": "replace_form",
@@ -2404,13 +2433,14 @@ var APISwaggerJSON string = `{
         },
         "origin_poolGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
                 "GET_RSP_FORMAT_FOR_CREATE",
                 "GET_RSP_FORMAT_FOR_REPLACE",
-                "GET_RSP_FORMAT_READ"
+                "GET_RSP_FORMAT_READ",
+                "GET_RSP_FORMAT_REFERRING_OBJECTS"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
@@ -2879,21 +2909,21 @@ var APISwaggerJSON string = `{
             "title": "OriginServerType",
             "x-displayname": "Origin Server",
             "x-ves-displayorder": "9,8",
-            "x-ves-oneof-field-choice": "[\"consul_service\",\"custom_endpoint_object\",\"k8s_service\",\"private_ip\",\"private_name\",\"public_ip\",\"public_name\",\"srv6_private_ip\",\"srv6_private_name\",\"voltadn_private_ip\",\"voltadn_private_name\"]",
+            "x-ves-oneof-field-choice": "[\"consul_service\",\"custom_endpoint_object\",\"k8s_service\",\"private_ip\",\"private_name\",\"public_ip\",\"public_name\",\"vn_private_ip\",\"vn_private_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerType",
             "properties": {
                 "consul_service": {
-                    "description": "Exclusive with [custom_endpoint_object k8s_service private_ip private_name public_ip public_name srv6_private_ip srv6_private_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"Consul Service Name of Origin Server on given Sites\"\nSpecify origin server with Hashi Corp Consul service name and site information",
+                    "description": "Exclusive with [custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\nx-displayName: \"Consul Service Name of Origin Server on given Sites\"\nSpecify origin server with Hashi Corp Consul service name and site information",
                     "title": "OriginServerConsulService",
                     "$ref": "#/definitions/origin_poolOriginServerConsulService"
                 },
                 "custom_endpoint_object": {
-                    "description": "Exclusive with [consul_service k8s_service private_ip private_name public_ip public_name srv6_private_ip srv6_private_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"Custom Endpoint Object for Origin Server\"\nSpecify origin server with a reference to endpoint object",
+                    "description": "Exclusive with [consul_service k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\nx-displayName: \"Custom Endpoint Object for Origin Server\"\nSpecify origin server with a reference to endpoint object",
                     "title": "OriginServerCustomEndpoint",
                     "$ref": "#/definitions/origin_poolOriginServerCustomEndpoint"
                 },
                 "k8s_service": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object private_ip private_name public_ip public_name srv6_private_ip srv6_private_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"K8s Service Name of Origin Server on given Sites\"\nSpecify origin server with K8s service name and site information",
+                    "description": "Exclusive with [consul_service custom_endpoint_object private_ip private_name public_ip public_name vn_private_ip vn_private_name]\nx-displayName: \"K8s Service Name of Origin Server on given Sites\"\nSpecify origin server with K8s service name and site information",
                     "title": "OriginServerK8SService",
                     "$ref": "#/definitions/origin_poolOriginServerK8SService"
                 },
@@ -2904,54 +2934,44 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Origin Server Labels"
                 },
                 "private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_name public_ip public_name srv6_private_ip srv6_private_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"IP address of Origin Server on given Sites\"\nSpecify origin server with private or public IP address and site information",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_name public_ip public_name vn_private_ip vn_private_name]\nx-displayName: \"IP address of Origin Server on given Sites\"\nSpecify origin server with private or public IP address and site information",
                     "title": "OriginServerPrivateIP",
                     "$ref": "#/definitions/origin_poolOriginServerPrivateIP"
                 },
                 "private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip public_ip public_name srv6_private_ip srv6_private_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"DNS Name of Origin Server on given Sites\"\nSpecify origin server with private or public DNS name and site information",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip public_ip public_name vn_private_ip vn_private_name]\nx-displayName: \"DNS Name of Origin Server on given Sites\"\nSpecify origin server with private or public DNS name and site information",
                     "title": "OriginServerPrivateName",
                     "$ref": "#/definitions/origin_poolOriginServerPrivateName"
                 },
                 "public_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_name srv6_private_ip srv6_private_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"Public IP of Origin Server\"\nSpecify origin server with public IP",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_name vn_private_ip vn_private_name]\nx-displayName: \"Public IP of Origin Server\"\nSpecify origin server with public IP",
                     "title": "OriginServerPublicName",
                     "$ref": "#/definitions/origin_poolOriginServerPublicIP"
                 },
                 "public_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip srv6_private_ip srv6_private_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"Public DNS Name of Origin Server\"\nSpecify origin server with public DNS name",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip vn_private_ip vn_private_name]\nx-displayName: \"Public DNS Name of Origin Server\"\nSpecify origin server with public DNS name",
                     "title": "OriginServerPublicName",
                     "$ref": "#/definitions/origin_poolOriginServerPublicName"
                 },
-                "srv6_private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name srv6_private_name voltadn_private_ip voltadn_private_name]\nx-displayName: \"IP address on Srv6 Network\"\nSpecify origin server IP address on per site srv6 network",
-                    "title": "OriginServerSrv6Srv6NetworkPrivateIP",
-                    "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkPrivateIP"
+                "vn_private_ip": {
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_name]\nx-displayName: \"IP address on Virtual Network\"\nSpecify origin server IP address on virtual network other than inside or outside network",
+                    "title": "OriginServerVirtualNetworkIP",
+                    "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkIP"
                 },
-                "srv6_private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name srv6_private_ip voltadn_private_ip voltadn_private_name]\nx-displayName: \"Name on Srv6 Network\"\nSpecify origin server name on per site srv6 network",
-                    "title": "OriginServerSrv6NetworkPrivateName",
-                    "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkPrivateName"
-                },
-                "voltadn_private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name srv6_private_ip srv6_private_name voltadn_private_name]\nx-displayName: \"IP address on VoltADN Private Network\"\nSpecify origin server IP address on VoltADN private network",
-                    "title": "OriginServerVoltADNPrivateIP",
-                    "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkPrivateIP"
-                },
-                "voltadn_private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name srv6_private_ip srv6_private_name voltadn_private_ip]\nx-displayName: \"Name on VoltADN Private Network\"\nSpecify origin server name on VoltADN private network",
-                    "title": "OriginServerVoltADNPrivateName",
-                    "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkPrivateName"
+                "vn_private_name": {
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip]\nx-displayName: \"Name on Virtual Network\"\nSpecify origin server name on virtual network other than inside or outside network",
+                    "title": "OriginServerVirtualNetworkName",
+                    "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkName"
                 }
             }
         },
-        "origin_poolOriginServerVirtualNetworkPrivateIP": {
+        "origin_poolOriginServerVirtualNetworkIP": {
             "type": "object",
-            "description": "Specify origin server with IP on VoltADN Private Network",
-            "title": "OriginServerVirtualNetworkPrivateIP",
-            "x-displayname": "IP address in Virtual Network",
+            "description": "Specify origin server with IP on Virtual Network",
+            "title": "OriginServerVirtualNetworkIP",
+            "x-displayname": "IP address Virtual Network",
             "x-ves-displayorder": "1,2",
-            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerVirtualNetworkPrivateIP",
+            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerVirtualNetworkIP",
             "properties": {
                 "ip": {
                     "type": "string",
@@ -2969,13 +2989,13 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "origin_poolOriginServerVirtualNetworkPrivateName": {
+        "origin_poolOriginServerVirtualNetworkName": {
             "type": "object",
-            "description": "Specify origin server with DNS name on VoltADN private Network",
-            "title": "OriginServerVirtualNetworkPrivateName",
-            "x-displayname": "DNS Name in Virtual Network",
+            "description": "Specify origin server with DNS name on Virtual Network",
+            "title": "OriginServerVirtualNetworkName",
+            "x-displayname": "DNS Name on Virtual Network",
             "x-ves-displayorder": "1,2",
-            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerVirtualNetworkPrivateName",
+            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerVirtualNetworkName",
             "properties": {
                 "dns_name": {
                     "type": "string",
@@ -3710,6 +3730,14 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
                 },
                 "tenant": {
                     "type": "string",

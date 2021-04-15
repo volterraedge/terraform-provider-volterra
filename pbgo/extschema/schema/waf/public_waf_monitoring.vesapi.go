@@ -785,6 +785,10 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 "tags": [
                     "WAFMonitoringAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf-WAFMonitoringAPI-ClientRuleHitsMetrics"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.waf.WAFMonitoringAPI.ClientRuleHitsMetrics"
             },
             "x-displayname": "WAF Monitoring API",
@@ -871,6 +875,10 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 "tags": [
                     "WAFMonitoringAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf-WAFMonitoringAPI-ClientSecurityEventsMetrics"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.waf.WAFMonitoringAPI.ClientSecurityEventsMetrics"
             },
             "x-displayname": "WAF Monitoring API",
@@ -957,6 +965,10 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 "tags": [
                     "WAFMonitoringAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf-WAFMonitoringAPI-ServerRuleHitsMetrics"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.waf.WAFMonitoringAPI.ServerRuleHitsMetrics"
             },
             "x-displayname": "WAF Monitoring API",
@@ -1043,6 +1055,10 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 "tags": [
                     "WAFMonitoringAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf-WAFMonitoringAPI-ServerSecurityEventsMetrics"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.waf.WAFMonitoringAPI.ServerSecurityEventsMetrics"
             },
             "x-displayname": "WAF Monitoring API",

@@ -1540,7 +1540,7 @@ var DefaultDomainTypeValidator = func() *ValidateDomainType {
 
 	vrhDomainChoice := v.DomainChoiceValidationRuleHandler
 	rulesDomainChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDomainChoice(rulesDomainChoice)
 	if err != nil {
@@ -1551,8 +1551,9 @@ var DefaultDomainTypeValidator = func() *ValidateDomainType {
 
 	vrhDomainChoiceExactValue := v.DomainChoiceExactValueValidationRuleHandler
 	rulesDomainChoiceExactValue := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-		"ves.io.schema.rules.string.min_len": "1",
+		"ves.io.schema.rules.string.hostname": "true",
+		"ves.io.schema.rules.string.max_len":  "256",
+		"ves.io.schema.rules.string.min_len":  "1",
 	}
 	vFnMap["domain_choice.exact_value"], err = vrhDomainChoiceExactValue(rulesDomainChoiceExactValue)
 	if err != nil {
@@ -1561,8 +1562,9 @@ var DefaultDomainTypeValidator = func() *ValidateDomainType {
 	}
 	vrhDomainChoiceSuffixValue := v.DomainChoiceSuffixValueValidationRuleHandler
 	rulesDomainChoiceSuffixValue := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-		"ves.io.schema.rules.string.min_len": "1",
+		"ves.io.schema.rules.string.hostname": "true",
+		"ves.io.schema.rules.string.max_len":  "256",
+		"ves.io.schema.rules.string.min_len":  "1",
 	}
 	vFnMap["domain_choice.suffix_value"], err = vrhDomainChoiceSuffixValue(rulesDomainChoiceSuffixValue)
 	if err != nil {
@@ -5977,6 +5979,20 @@ type ValidatePathMatcherType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidatePathMatcherType) PathMatchPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Prefix, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for prefix")
+	}
+	return oValidatorFn_Prefix, nil
+}
+func (v *ValidatePathMatcherType) PathMatchPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Path, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for path")
+	}
+	return oValidatorFn_Path, nil
+}
 func (v *ValidatePathMatcherType) PathMatchRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_Regex, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -6051,6 +6067,26 @@ var DefaultPathMatcherTypeValidator = func() *ValidatePathMatcherType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhPathMatchPrefix := v.PathMatchPrefixValidationRuleHandler
+	rulesPathMatchPrefix := map[string]string{
+		"ves.io.schema.rules.string.http_path": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFnMap["path_match.prefix"], err = vrhPathMatchPrefix(rulesPathMatchPrefix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PathMatcherType.path_match_prefix: %s", err)
+		panic(errMsg)
+	}
+	vrhPathMatchPath := v.PathMatchPathValidationRuleHandler
+	rulesPathMatchPath := map[string]string{
+		"ves.io.schema.rules.string.http_path": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFnMap["path_match.path"], err = vrhPathMatchPath(rulesPathMatchPath)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PathMatcherType.path_match_path: %s", err)
+		panic(errMsg)
+	}
 	vrhPathMatchRegex := v.PathMatchRegexValidationRuleHandler
 	rulesPathMatchRegex := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "256",
@@ -6063,6 +6099,8 @@ var DefaultPathMatcherTypeValidator = func() *ValidatePathMatcherType {
 		panic(errMsg)
 	}
 
+	v.FldValidators["path_match.prefix"] = vFnMap["path_match.prefix"]
+	v.FldValidators["path_match.path"] = vFnMap["path_match.path"]
 	v.FldValidators["path_match.regex"] = vFnMap["path_match.regex"]
 
 	return v
@@ -7447,7 +7485,7 @@ var DefaultRouteTargetValidator = func() *ValidateRouteTarget {
 
 	vrhRtargetChoice := v.RtargetChoiceValidationRuleHandler
 	rulesRtargetChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRtargetChoice(rulesRtargetChoice)
 	if err != nil {
@@ -8067,7 +8105,7 @@ var DefaultSecretTypeValidator = func() *ValidateSecretType {
 
 	vrhSecretInfoOneof := v.SecretInfoOneofValidationRuleHandler
 	rulesSecretInfoOneof := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSecretInfoOneof(rulesSecretInfoOneof)
 	if err != nil {
@@ -9188,6 +9226,11 @@ func (m *SystemObjectMetaType) SetObjectIndex(in uint32) {
 	m.ObjectIndex = in
 }
 
+// SetSreDisable sets the field
+func (m *SystemObjectMetaType) SetSreDisable(in bool) {
+	m.SreDisable = in
+}
+
 // SetTenant sets the field
 func (m *SystemObjectMetaType) SetTenant(in string) {
 	m.Tenant = in
@@ -9398,6 +9441,15 @@ func (v *ValidateSystemObjectMetaType) Validate(ctx context.Context, pm interfac
 
 		vOpts := append(opts, db.WithValidateField("owner_view"))
 		if err := fv(ctx, m.GetOwnerView(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sre_disable"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sre_disable"))
+		if err := fv(ctx, m.GetSreDisable(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9922,7 +9974,7 @@ var DefaultTlsInterceptionRuleValidator = func() *ValidateTlsInterceptionRule {
 
 	vrhEnableDisableChoice := v.EnableDisableChoiceValidationRuleHandler
 	rulesEnableDisableChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhEnableDisableChoice(rulesEnableDisableChoice)
 	if err != nil {
@@ -10175,7 +10227,7 @@ var DefaultTlsInterceptionTypeValidator = func() *ValidateTlsInterceptionType {
 
 	vrhInterceptionPolicyChoice := v.InterceptionPolicyChoiceValidationRuleHandler
 	rulesInterceptionPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInterceptionPolicyChoice(rulesInterceptionPolicyChoice)
 	if err != nil {
@@ -10186,7 +10238,7 @@ var DefaultTlsInterceptionTypeValidator = func() *ValidateTlsInterceptionType {
 
 	vrhSigningCertChoice := v.SigningCertChoiceValidationRuleHandler
 	rulesSigningCertChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSigningCertChoice(rulesSigningCertChoice)
 	if err != nil {
@@ -10197,7 +10249,7 @@ var DefaultTlsInterceptionTypeValidator = func() *ValidateTlsInterceptionType {
 
 	vrhTrustedCaChoice := v.TrustedCaChoiceValidationRuleHandler
 	rulesTrustedCaChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhTrustedCaChoice(rulesTrustedCaChoice)
 	if err != nil {
@@ -10733,7 +10785,7 @@ var DefaultUpstreamTlsParamsTypeValidator = func() *ValidateUpstreamTlsParamsTyp
 
 	vrhSniChoice := v.SniChoiceValidationRuleHandler
 	rulesSniChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSniChoice(rulesSniChoice)
 	if err != nil {

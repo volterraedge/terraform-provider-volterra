@@ -16,6 +16,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_bgp "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
@@ -25,6 +26,219 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *BGPConfiguration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BGPConfiguration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BGPConfiguration) DeepCopy() *BGPConfiguration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BGPConfiguration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BGPConfiguration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BGPConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BGPConfigurationValidator().Validate(ctx, m, opts...)
+}
+
+func (m *BGPConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetPeersDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *BGPConfiguration) GetPeersDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetPeers() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	for idx, e := range m.GetPeers() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, dri := range driSet {
+			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
+			drInfos = append(drInfos, dri)
+		}
+	}
+
+	return drInfos, err
+}
+
+type ValidateBGPConfiguration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBGPConfiguration) BgpParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for bgp_parameters")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_bgp.BgpParametersValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBGPConfiguration) PeersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_bgp.Peer, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_bgp.PeerValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for peers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_bgp.Peer)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_bgp.Peer, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated peers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items peers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBGPConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BGPConfiguration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BGPConfiguration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["bgp_parameters"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_parameters"))
+		if err := fv(ctx, m.GetBgpParameters(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["peers"]; exists {
+		vOpts := append(opts, db.WithValidateField("peers"))
+		if err := fv(ctx, m.GetPeers(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBGPConfigurationValidator = func() *ValidateBGPConfiguration {
+	v := &ValidateBGPConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhBgpParameters := v.BgpParametersValidationRuleHandler
+	rulesBgpParameters := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhBgpParameters(rulesBgpParameters)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BGPConfiguration.bgp_parameters: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bgp_parameters"] = vFn
+
+	vrhPeers := v.PeersValidationRuleHandler
+	rulesPeers := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+	}
+	vFn, err = vrhPeers(rulesPeers)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BGPConfiguration.peers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["peers"] = vFn
+
+	return v
+}()
+
+func BGPConfigurationValidator() db.Validator {
+	return DefaultBGPConfigurationValidator
+}
 
 // augmented methods on protoc/std generated struct
 
@@ -1524,7 +1738,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhBondChoice := v.BondChoiceValidationRuleHandler
 	rulesBondChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhBondChoice(rulesBondChoice)
 	if err != nil {
@@ -1535,7 +1749,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhDcClusterGroupChoice := v.DcClusterGroupChoiceValidationRuleHandler
 	rulesDcClusterGroupChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDcClusterGroupChoice(rulesDcClusterGroupChoice)
 	if err != nil {
@@ -1546,7 +1760,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhGpuChoice := v.GpuChoiceValidationRuleHandler
 	rulesGpuChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhGpuChoice(rulesGpuChoice)
 	if err != nil {
@@ -1557,7 +1771,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInterfaceChoice(rulesInterfaceChoice)
 	if err != nil {
@@ -1568,7 +1782,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLogsReceiverChoice(rulesLogsReceiverChoice)
 	if err != nil {
@@ -1579,7 +1793,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhStorageClassChoice := v.StorageClassChoiceValidationRuleHandler
 	rulesStorageClassChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageClassChoice(rulesStorageClassChoice)
 	if err != nil {
@@ -1590,7 +1804,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhStorageDeviceChoice := v.StorageDeviceChoiceValidationRuleHandler
 	rulesStorageDeviceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageDeviceChoice(rulesStorageDeviceChoice)
 	if err != nil {
@@ -1601,7 +1815,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhStorageInterfaceChoice := v.StorageInterfaceChoiceValidationRuleHandler
 	rulesStorageInterfaceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageInterfaceChoice(rulesStorageInterfaceChoice)
 	if err != nil {
@@ -1612,7 +1826,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhStorageStaticRoutesChoice := v.StorageStaticRoutesChoiceValidationRuleHandler
 	rulesStorageStaticRoutesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageStaticRoutesChoice(rulesStorageStaticRoutesChoice)
 	if err != nil {
@@ -1623,7 +1837,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhUsbPolicyChoice := v.UsbPolicyChoiceValidationRuleHandler
 	rulesUsbPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhUsbPolicyChoice(rulesUsbPolicyChoice)
 	if err != nil {
@@ -1916,7 +2130,7 @@ var DefaultDeviceInstanceTypeValidator = func() *ValidateDeviceInstanceType {
 
 	vrhDeviceInstance := v.DeviceInstanceValidationRuleHandler
 	rulesDeviceInstance := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDeviceInstance(rulesDeviceInstance)
 	if err != nil {
@@ -2332,7 +2546,7 @@ var DefaultFlashArrayEndpointValidator = func() *ValidateFlashArrayEndpoint {
 
 	vrhMgmtEndpoint := v.MgmtEndpointValidationRuleHandler
 	rulesMgmtEndpoint := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhMgmtEndpoint(rulesMgmtEndpoint)
 	if err != nil {
@@ -3005,7 +3219,7 @@ var DefaultFlashBladeEndpointValidator = func() *ValidateFlashBladeEndpoint {
 
 	vrhMgmtEndpoint := v.MgmtEndpointValidationRuleHandler
 	rulesMgmtEndpoint := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhMgmtEndpoint(rulesMgmtEndpoint)
 	if err != nil {
@@ -3039,7 +3253,7 @@ var DefaultFlashBladeEndpointValidator = func() *ValidateFlashBladeEndpoint {
 
 	vrhNfsEndpoint := v.NfsEndpointValidationRuleHandler
 	rulesNfsEndpoint := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNfsEndpoint(rulesNfsEndpoint)
 	if err != nil {
@@ -3513,7 +3727,7 @@ var DefaultFleetBondDeviceTypeValidator = func() *ValidateFleetBondDeviceType {
 
 	vrhLacpChoice := v.LacpChoiceValidationRuleHandler
 	rulesLacpChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLacpChoice(rulesLacpChoice)
 	if err != nil {
@@ -4586,7 +4800,7 @@ var DefaultFleetStorageClassTypeValidator = func() *ValidateFleetStorageClassTyp
 
 	vrhDeviceChoice := v.DeviceChoiceValidationRuleHandler
 	rulesDeviceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDeviceChoice(rulesDeviceChoice)
 	if err != nil {
@@ -5038,7 +5252,7 @@ var DefaultFleetStorageDeviceTypeValidator = func() *ValidateFleetStorageDeviceT
 
 	vrhDeviceChoice := v.DeviceChoiceValidationRuleHandler
 	rulesDeviceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDeviceChoice(rulesDeviceChoice)
 	if err != nil {
@@ -6719,7 +6933,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhBondChoice := v.BondChoiceValidationRuleHandler
 	rulesBondChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhBondChoice(rulesBondChoice)
 	if err != nil {
@@ -6730,7 +6944,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhDcClusterGroupChoice := v.DcClusterGroupChoiceValidationRuleHandler
 	rulesDcClusterGroupChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDcClusterGroupChoice(rulesDcClusterGroupChoice)
 	if err != nil {
@@ -6741,7 +6955,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhGpuChoice := v.GpuChoiceValidationRuleHandler
 	rulesGpuChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhGpuChoice(rulesGpuChoice)
 	if err != nil {
@@ -6752,7 +6966,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInterfaceChoice(rulesInterfaceChoice)
 	if err != nil {
@@ -6763,7 +6977,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLogsReceiverChoice(rulesLogsReceiverChoice)
 	if err != nil {
@@ -6774,7 +6988,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhStorageClassChoice := v.StorageClassChoiceValidationRuleHandler
 	rulesStorageClassChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageClassChoice(rulesStorageClassChoice)
 	if err != nil {
@@ -6785,7 +6999,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhStorageDeviceChoice := v.StorageDeviceChoiceValidationRuleHandler
 	rulesStorageDeviceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageDeviceChoice(rulesStorageDeviceChoice)
 	if err != nil {
@@ -6796,7 +7010,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhStorageInterfaceChoice := v.StorageInterfaceChoiceValidationRuleHandler
 	rulesStorageInterfaceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageInterfaceChoice(rulesStorageInterfaceChoice)
 	if err != nil {
@@ -6807,7 +7021,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhStorageStaticRoutesChoice := v.StorageStaticRoutesChoiceValidationRuleHandler
 	rulesStorageStaticRoutesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageStaticRoutesChoice(rulesStorageStaticRoutesChoice)
 	if err != nil {
@@ -6818,7 +7032,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhUsbPolicyChoice := v.UsbPolicyChoiceValidationRuleHandler
 	rulesUsbPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhUsbPolicyChoice(rulesUsbPolicyChoice)
 	if err != nil {
@@ -7015,6 +7229,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetLocalControlPlaneDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
 		return nil, err
 	} else {
@@ -7058,6 +7278,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	if fdrInfos, err := m.GetUsbPolicyChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -7320,6 +7546,29 @@ func (m *GlobalSpecType) GetK8SClusterDBEntries(ctx context.Context, d db.Interf
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetLocalControlPlaneDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetLocalControlPlane() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	driSet, err = m.GetLocalControlPlane().GetDRefInfo()
+	if err != nil {
+		return nil, err
+	}
+	for _, dri := range driSet {
+		dri.DRField = "local_control_plane." + dri.DRField
+		drInfos = append(drInfos, dri)
+	}
+
+	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -7677,6 +7926,56 @@ func (m *GlobalSpecType) GetUsbPolicyChoiceDBEntries(ctx context.Context, d db.I
 			entries = append(entries, refdEnt)
 		}
 
+	}
+
+	return entries, nil
+}
+
+func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	drInfos = append(drInfos, db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	})
+
+	return drInfos, nil
+}
+
+// GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "view_internal.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
+	}
+
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "view_internal.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
 	}
 
 	return entries, nil
@@ -8277,6 +8576,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["local_control_plane"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_control_plane"))
+		if err := fv(ctx, m.GetLocalControlPlane(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -8545,6 +8853,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["view_internal"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("view_internal"))
+		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["volterra_software_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
@@ -8571,7 +8888,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhBondChoice := v.BondChoiceValidationRuleHandler
 	rulesBondChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhBondChoice(rulesBondChoice)
 	if err != nil {
@@ -8582,7 +8899,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhDcClusterGroupChoice := v.DcClusterGroupChoiceValidationRuleHandler
 	rulesDcClusterGroupChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDcClusterGroupChoice(rulesDcClusterGroupChoice)
 	if err != nil {
@@ -8593,7 +8910,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhGpuChoice := v.GpuChoiceValidationRuleHandler
 	rulesGpuChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhGpuChoice(rulesGpuChoice)
 	if err != nil {
@@ -8604,7 +8921,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInterfaceChoice(rulesInterfaceChoice)
 	if err != nil {
@@ -8615,7 +8932,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLogsReceiverChoice(rulesLogsReceiverChoice)
 	if err != nil {
@@ -8626,7 +8943,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhStorageClassChoice := v.StorageClassChoiceValidationRuleHandler
 	rulesStorageClassChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageClassChoice(rulesStorageClassChoice)
 	if err != nil {
@@ -8637,7 +8954,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhStorageDeviceChoice := v.StorageDeviceChoiceValidationRuleHandler
 	rulesStorageDeviceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageDeviceChoice(rulesStorageDeviceChoice)
 	if err != nil {
@@ -8648,7 +8965,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhStorageInterfaceChoice := v.StorageInterfaceChoiceValidationRuleHandler
 	rulesStorageInterfaceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageInterfaceChoice(rulesStorageInterfaceChoice)
 	if err != nil {
@@ -8659,7 +8976,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhStorageStaticRoutesChoice := v.StorageStaticRoutesChoiceValidationRuleHandler
 	rulesStorageStaticRoutesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageStaticRoutesChoice(rulesStorageStaticRoutesChoice)
 	if err != nil {
@@ -8670,7 +8987,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhUsbPolicyChoice := v.UsbPolicyChoiceValidationRuleHandler
 	rulesUsbPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhUsbPolicyChoice(rulesUsbPolicyChoice)
 	if err != nil {
@@ -8800,11 +9117,192 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["k8s_cluster"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
+	v.FldValidators["local_control_plane"] = LocalControlPlaneTypeValidator().Validate
+
+	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
 	return v
 }()
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *LocalControlPlaneType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LocalControlPlaneType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LocalControlPlaneType) DeepCopy() *LocalControlPlaneType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LocalControlPlaneType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LocalControlPlaneType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LocalControlPlaneType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LocalControlPlaneTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *LocalControlPlaneType) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetBgpConfigDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *LocalControlPlaneType) GetBgpConfigDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetBgpConfig() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	driSet, err = m.GetBgpConfig().GetDRefInfo()
+	if err != nil {
+		return nil, err
+	}
+	for _, dri := range driSet {
+		dri.DRField = "bgp_config." + dri.DRField
+		drInfos = append(drInfos, dri)
+	}
+
+	return drInfos, err
+}
+
+type ValidateLocalControlPlaneType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLocalControlPlaneType) NetworkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for network_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateLocalControlPlaneType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LocalControlPlaneType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LocalControlPlaneType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["bgp_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_config"))
+		if err := fv(ctx, m.GetBgpConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["network_choice"]; exists {
+		val := m.GetNetworkChoice()
+		vOpts := append(opts,
+			db.WithValidateField("network_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetNetworkChoice().(type) {
+	case *LocalControlPlaneType_InsideVn:
+		if fv, exists := v.FldValidators["network_choice.inside_vn"]; exists {
+			val := m.GetNetworkChoice().(*LocalControlPlaneType_InsideVn).InsideVn
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("inside_vn"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *LocalControlPlaneType_OutsideVn:
+		if fv, exists := v.FldValidators["network_choice.outside_vn"]; exists {
+			val := m.GetNetworkChoice().(*LocalControlPlaneType_OutsideVn).OutsideVn
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("outside_vn"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLocalControlPlaneTypeValidator = func() *ValidateLocalControlPlaneType {
+	v := &ValidateLocalControlPlaneType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
+	rulesNetworkChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhNetworkChoice(rulesNetworkChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LocalControlPlaneType.network_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["network_choice"] = vFn
+
+	v.FldValidators["bgp_config"] = BGPConfigurationValidator().Validate
+
+	return v
+}()
+
+func LocalControlPlaneTypeValidator() db.Validator {
+	return DefaultLocalControlPlaneTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -9439,7 +9937,7 @@ var DefaultOntapVolumeDefaultsValidator = func() *ValidateOntapVolumeDefaults {
 
 	vrhQosPolicyChoice := v.QosPolicyChoiceValidationRuleHandler
 	rulesQosPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhQosPolicyChoice(rulesQosPolicyChoice)
 	if err != nil {
@@ -11174,7 +11672,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhBondChoice := v.BondChoiceValidationRuleHandler
 	rulesBondChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhBondChoice(rulesBondChoice)
 	if err != nil {
@@ -11185,7 +11683,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhDcClusterGroupChoice := v.DcClusterGroupChoiceValidationRuleHandler
 	rulesDcClusterGroupChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDcClusterGroupChoice(rulesDcClusterGroupChoice)
 	if err != nil {
@@ -11196,7 +11694,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhGpuChoice := v.GpuChoiceValidationRuleHandler
 	rulesGpuChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhGpuChoice(rulesGpuChoice)
 	if err != nil {
@@ -11207,7 +11705,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInterfaceChoice(rulesInterfaceChoice)
 	if err != nil {
@@ -11218,7 +11716,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLogsReceiverChoice(rulesLogsReceiverChoice)
 	if err != nil {
@@ -11229,7 +11727,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhStorageClassChoice := v.StorageClassChoiceValidationRuleHandler
 	rulesStorageClassChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageClassChoice(rulesStorageClassChoice)
 	if err != nil {
@@ -11240,7 +11738,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhStorageDeviceChoice := v.StorageDeviceChoiceValidationRuleHandler
 	rulesStorageDeviceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageDeviceChoice(rulesStorageDeviceChoice)
 	if err != nil {
@@ -11251,7 +11749,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhStorageInterfaceChoice := v.StorageInterfaceChoiceValidationRuleHandler
 	rulesStorageInterfaceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageInterfaceChoice(rulesStorageInterfaceChoice)
 	if err != nil {
@@ -11262,7 +11760,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhStorageStaticRoutesChoice := v.StorageStaticRoutesChoiceValidationRuleHandler
 	rulesStorageStaticRoutesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageStaticRoutesChoice(rulesStorageStaticRoutesChoice)
 	if err != nil {
@@ -11273,7 +11771,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhUsbPolicyChoice := v.UsbPolicyChoiceValidationRuleHandler
 	rulesUsbPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhUsbPolicyChoice(rulesUsbPolicyChoice)
 	if err != nil {
@@ -11553,7 +12051,7 @@ var DefaultStorageClassDellIsilonF800TypeValidator = func() *ValidateStorageClas
 
 	vrhHttpsChoice := v.HttpsChoiceValidationRuleHandler
 	rulesHttpsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHttpsChoice(rulesHttpsChoice)
 	if err != nil {
@@ -12442,7 +12940,7 @@ var DefaultStorageDeviceDellIsilonF800TypeValidator = func() *ValidateStorageDev
 
 	vrhAddressChoice := v.AddressChoiceValidationRuleHandler
 	rulesAddressChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAddressChoice(rulesAddressChoice)
 	if err != nil {
@@ -12475,7 +12973,7 @@ var DefaultStorageDeviceDellIsilonF800TypeValidator = func() *ValidateStorageDev
 
 	vrhHttpsChoice := v.HttpsChoiceValidationRuleHandler
 	rulesHttpsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHttpsChoice(rulesHttpsChoice)
 	if err != nil {
@@ -13356,7 +13854,7 @@ var DefaultStorageDeviceNetappBackendOntapNasTypeValidator = func() *ValidateSto
 
 	vrhManagementLif := v.ManagementLifValidationRuleHandler
 	rulesManagementLif := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhManagementLif(rulesManagementLif)
 	if err != nil {
@@ -14042,7 +14540,7 @@ var DefaultStorageDeviceNetappBackendOntapSanTypeValidator = func() *ValidateSto
 
 	vrhManagementLif := v.ManagementLifValidationRuleHandler
 	rulesManagementLif := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhManagementLif(rulesManagementLif)
 	if err != nil {
@@ -14345,7 +14843,7 @@ var DefaultStorageDeviceNetappTridentTypeValidator = func() *ValidateStorageDevi
 
 	vrhBackendChoice := v.BackendChoiceValidationRuleHandler
 	rulesBackendChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhBackendChoice(rulesBackendChoice)
 	if err != nil {

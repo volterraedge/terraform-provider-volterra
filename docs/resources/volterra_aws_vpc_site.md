@@ -32,7 +32,7 @@ resource "volterra_aws_vpc_site" "example" {
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 
-  // One of the arguments from this list "voltstack_cluster ingress_gw ingress_egress_gw" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
   ingress_egress_gw {
     aws_certified_hw = "aws-byol-multi-nic-voltmesh"
@@ -63,18 +63,56 @@ resource "volterra_aws_vpc_site" "example" {
       }
     }
 
-    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
+    // One of the arguments from this list "forward_proxy_allow_all no_forward_proxy active_forward_proxy_policies" must be set
     no_forward_proxy = true
 
     // One of the arguments from this list "no_global_network global_network_list" must be set
     no_global_network = true
 
     // One of the arguments from this list "no_inside_static_routes inside_static_routes" must be set
-    no_inside_static_routes = true
 
+    inside_static_routes {
+      static_route_list {
+        // One of the arguments from this list "custom_static_route simple_static_route" must be set
+
+        custom_static_route {
+          attrs = ["attrs"]
+
+          labels = {
+            "key1" = "value1"
+          }
+
+          nexthop {
+            interface {
+              name      = "test1"
+              namespace = "staging"
+              tenant    = "acmecorp"
+            }
+
+            nexthop_address {
+              // One of the arguments from this list "ipv4 ipv6" must be set
+
+              ipv4 {
+                addr = "192.168.1.1"
+              }
+            }
+
+            type = "type"
+          }
+
+          subnets {
+            // One of the arguments from this list "ipv4 ipv6" must be set
+
+            ipv4 {
+              plen   = "plen"
+              prefix = "192.168.1.0"
+            }
+          }
+        }
+      }
+    }
     // One of the arguments from this list "no_network_policy active_network_policies" must be set
     no_network_policy = true
-
     // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
     no_outside_static_routes = true
   }
@@ -157,7 +195,7 @@ Only Single AZ or Three AZ(s) nodes are supported currently..
 
 `reserved_inside_subnet` - (Optional) Autogenerate and reserve a subnet from the Primary CIDR (bool).
 
-`disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`String`).
+`disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
 
 `outside_subnet` - (Required) Subnet for the outside interface of the node. See [Outside Subnet ](#outside-subnet) below for details.
 

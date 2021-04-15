@@ -459,140 +459,6 @@ func (m *MaliciousUserMitigationRule) GetMitigationAction() *MaliciousUserMitiga
 	return nil
 }
 
-// JavascriptChallengeSettings
-//
-// x-displayName: Javascript Challenge Settings
-// Configuration to be used when a Javascript challenge is launched as mitigation action
-type JavascriptChallengeSettings struct {
-	// js_script_delay
-	//
-	// x-displayName: "Javascript Delay"
-	// x-example: 1000
-	// x-required
-	// Specifies, in milliseconds, the delay that Javascript introduces.
-	// Default delay is 5 seconds
-	JsScriptDelay uint32 `protobuf:"varint,2,opt,name=js_script_delay,json=jsScriptDelay,proto3" json:"js_script_delay,omitempty"`
-	// cookie_expiry
-	//
-	// x-displayName: "Cookie Expiry period"
-	// x-example: 1000
-	// x-required
-	// Specifies, in seconds, cookie expiry duration.
-	// Expired cookie will cause loadbalancer to perform Javascript challenge
-	// Default cookie expiry is set as 1 hour
-	CookieExpiry uint32 `protobuf:"varint,3,opt,name=cookie_expiry,json=cookieExpiry,proto3" json:"cookie_expiry,omitempty"`
-	// custom_page
-	//
-	// x-displayName: "Custom Message for Javascript Challenge"
-	// x-example: "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-	// Custom message is of type uri_ref. Currently supported URL schemes is string:///.
-	// For string:/// scheme, message needs to be encoded in Base64 format.
-	// You can specify this message as base64 encoded plain text message e.g. "Please Wait.."
-	// or it can be HTML paragraph or a body string encoded as base64 string
-	// E.g. "<p> Please Wait </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-	CustomPage string `protobuf:"bytes,4,opt,name=custom_page,json=customPage,proto3" json:"custom_page,omitempty"`
-}
-
-func (m *JavascriptChallengeSettings) Reset()      { *m = JavascriptChallengeSettings{} }
-func (*JavascriptChallengeSettings) ProtoMessage() {}
-func (*JavascriptChallengeSettings) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{3}
-}
-
-func (m *JavascriptChallengeSettings) GetJsScriptDelay() uint32 {
-	if m != nil {
-		return m.JsScriptDelay
-	}
-	return 0
-}
-
-func (m *JavascriptChallengeSettings) GetCookieExpiry() uint32 {
-	if m != nil {
-		return m.CookieExpiry
-	}
-	return 0
-}
-
-func (m *JavascriptChallengeSettings) GetCustomPage() string {
-	if m != nil {
-		return m.CustomPage
-	}
-	return ""
-}
-
-// CaptchaChallengeSettings
-//
-// x-displayName: "Captcha Challenge Settings"
-// Configuration to be used when a Captcha challenge is launched as mitigation action
-type CaptchaChallengeSettings struct {
-	// cookie_expiry
-	//
-	// x-displayName: "Cookie Expiry period"
-	// x-example: 1000
-	// x-required
-	// Specifies, in seconds, cookie expiry duration.
-	// Expired cookie will cause loadbalancer to perform Captcha challenge
-	// Default cookie expiry is set as 1 hour
-	CookieExpiry uint32 `protobuf:"varint,2,opt,name=cookie_expiry,json=cookieExpiry,proto3" json:"cookie_expiry,omitempty"`
-	// custom_page
-	//
-	// x-displayName: "Custom message for Captcha Challenge"
-	// x-example: "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-	// Custom message is of type uri_ref. Currently supported URL schemes is string:///.
-	// For string:/// scheme, message needs to be encoded in Base64 format.
-	// You can specify this message as base64 encoded plain text message e.g. "Please Wait.."
-	// or it can be HTML paragraph or a body string encoded as base64 string
-	// E.g. "<p> Please Wait </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-	CustomPage string `protobuf:"bytes,3,opt,name=custom_page,json=customPage,proto3" json:"custom_page,omitempty"`
-}
-
-func (m *CaptchaChallengeSettings) Reset()                    { *m = CaptchaChallengeSettings{} }
-func (*CaptchaChallengeSettings) ProtoMessage()               {}
-func (*CaptchaChallengeSettings) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
-
-func (m *CaptchaChallengeSettings) GetCookieExpiry() uint32 {
-	if m != nil {
-		return m.CookieExpiry
-	}
-	return 0
-}
-
-func (m *CaptchaChallengeSettings) GetCustomPage() string {
-	if m != nil {
-		return m.CustomPage
-	}
-	return ""
-}
-
-// Temporary Blocking Settings
-//
-// x-displayName: "Temporary Blocking Settings"
-//
-// Specifies configuration for temporary user blocking resulting from user behavior analysis.
-type TemporaryBlockingSettings struct {
-	// custom_page
-	//
-	// x-displayName: "Custom Message for Temporary Blocking"
-	// x-example: "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-	// Custom message is of type `uri_ref`. Currently supported URL schemes is `string:///`.
-	// For `string:///` scheme, message needs to be encoded in Base64 format.
-	// You can specify this message as base64 encoded plain text message e.g. "Blocked.."
-	// or it can be HTML paragraph or a body string encoded as base64 string
-	// E.g. "<p> Blocked </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-	CustomPage string `protobuf:"bytes,1,opt,name=custom_page,json=customPage,proto3" json:"custom_page,omitempty"`
-}
-
-func (m *TemporaryBlockingSettings) Reset()                    { *m = TemporaryBlockingSettings{} }
-func (*TemporaryBlockingSettings) ProtoMessage()               {}
-func (*TemporaryBlockingSettings) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
-
-func (m *TemporaryBlockingSettings) GetCustomPage() string {
-	if m != nil {
-		return m.CustomPage
-	}
-	return ""
-}
-
 // MaliciousUserMitigationType
 //
 // x-displayName: "Malicious User Mitigation Type"
@@ -611,7 +477,7 @@ type MaliciousUserMitigationType struct {
 func (m *MaliciousUserMitigationType) Reset()      { *m = MaliciousUserMitigationType{} }
 func (*MaliciousUserMitigationType) ProtoMessage() {}
 func (*MaliciousUserMitigationType) Descriptor() ([]byte, []int) {
-	return fileDescriptorTypes, []int{6}
+	return fileDescriptorTypes, []int{3}
 }
 
 func (m *MaliciousUserMitigationType) GetRules() []*MaliciousUserMitigationRule {
@@ -632,51 +498,15 @@ type GlobalSpecType struct {
 	// Malicious user mitigation type specifies the malicious user mitigation rules that define the actions to be taken for users mapped to different threat levels.
 	// A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.
 	MitigationType *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType" json:"mitigation_type,omitempty"`
-	// Javascript Challenge Settings
-	//
-	// x-displayName: "Javascript challenge settings"
-	// Configuration to be used when a Javascript challenge is launched as mitigation action
-	JavascriptChallengeSettings *JavascriptChallengeSettings `protobuf:"bytes,2,opt,name=javascript_challenge_settings,json=javascriptChallengeSettings" json:"javascript_challenge_settings,omitempty"`
-	// Captcha Challenge Settings
-	//
-	// x-displayName: "Captcha challenge settings"
-	// Configuration to be used when a captcha challenge is launched as mitigation action
-	CaptchaChallengeSettings *CaptchaChallengeSettings `protobuf:"bytes,3,opt,name=captcha_challenge_settings,json=captchaChallengeSettings" json:"captcha_challenge_settings,omitempty"`
-	// Temporary Blocking Settings
-	//
-	// x-displayName: "Temporary Blocking Settings"
-	// Configuration to be used when a user is temporarily blocked
-	TemporaryBlockingSettings *TemporaryBlockingSettings `protobuf:"bytes,4,opt,name=temporary_blocking_settings,json=temporaryBlockingSettings" json:"temporary_blocking_settings,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
 
 func (m *GlobalSpecType) GetMitigationType() *MaliciousUserMitigationType {
 	if m != nil {
 		return m.MitigationType
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetJavascriptChallengeSettings() *JavascriptChallengeSettings {
-	if m != nil {
-		return m.JavascriptChallengeSettings
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetCaptchaChallengeSettings() *CaptchaChallengeSettings {
-	if m != nil {
-		return m.CaptchaChallengeSettings
-	}
-	return nil
-}
-
-func (m *GlobalSpecType) GetTemporaryBlockingSettings() *TemporaryBlockingSettings {
-	if m != nil {
-		return m.TemporaryBlockingSettings
 	}
 	return nil
 }
@@ -686,40 +516,16 @@ func (m *GlobalSpecType) GetTemporaryBlockingSettings() *TemporaryBlockingSettin
 // x-displayName: "Create Malicious User Mitigation"
 // Create malicious_user_mitigation creates a new object in the storage backend for metadata.namespace.
 type CreateSpecType struct {
-	MitigationType              *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType" json:"mitigation_type,omitempty"`
-	JavascriptChallengeSettings *JavascriptChallengeSettings `protobuf:"bytes,2,opt,name=javascript_challenge_settings,json=javascriptChallengeSettings" json:"javascript_challenge_settings,omitempty"`
-	CaptchaChallengeSettings    *CaptchaChallengeSettings    `protobuf:"bytes,3,opt,name=captcha_challenge_settings,json=captchaChallengeSettings" json:"captcha_challenge_settings,omitempty"`
-	TemporaryBlockingSettings   *TemporaryBlockingSettings   `protobuf:"bytes,4,opt,name=temporary_blocking_settings,json=temporaryBlockingSettings" json:"temporary_blocking_settings,omitempty"`
+	MitigationType *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType" json:"mitigation_type,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
+func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
 
 func (m *CreateSpecType) GetMitigationType() *MaliciousUserMitigationType {
 	if m != nil {
 		return m.MitigationType
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetJavascriptChallengeSettings() *JavascriptChallengeSettings {
-	if m != nil {
-		return m.JavascriptChallengeSettings
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetCaptchaChallengeSettings() *CaptchaChallengeSettings {
-	if m != nil {
-		return m.CaptchaChallengeSettings
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetTemporaryBlockingSettings() *TemporaryBlockingSettings {
-	if m != nil {
-		return m.TemporaryBlockingSettings
 	}
 	return nil
 }
@@ -729,40 +535,16 @@ func (m *CreateSpecType) GetTemporaryBlockingSettings() *TemporaryBlockingSettin
 // x-displayName: "Replace Malicious User Mitigation"
 // Replace malicious_user_mitigation replaces an existing object in the storage backend for metadata.namespace.
 type ReplaceSpecType struct {
-	MitigationType              *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType" json:"mitigation_type,omitempty"`
-	JavascriptChallengeSettings *JavascriptChallengeSettings `protobuf:"bytes,2,opt,name=javascript_challenge_settings,json=javascriptChallengeSettings" json:"javascript_challenge_settings,omitempty"`
-	CaptchaChallengeSettings    *CaptchaChallengeSettings    `protobuf:"bytes,3,opt,name=captcha_challenge_settings,json=captchaChallengeSettings" json:"captcha_challenge_settings,omitempty"`
-	TemporaryBlockingSettings   *TemporaryBlockingSettings   `protobuf:"bytes,4,opt,name=temporary_blocking_settings,json=temporaryBlockingSettings" json:"temporary_blocking_settings,omitempty"`
+	MitigationType *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType" json:"mitigation_type,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
 
 func (m *ReplaceSpecType) GetMitigationType() *MaliciousUserMitigationType {
 	if m != nil {
 		return m.MitigationType
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetJavascriptChallengeSettings() *JavascriptChallengeSettings {
-	if m != nil {
-		return m.JavascriptChallengeSettings
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetCaptchaChallengeSettings() *CaptchaChallengeSettings {
-	if m != nil {
-		return m.CaptchaChallengeSettings
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetTemporaryBlockingSettings() *TemporaryBlockingSettings {
-	if m != nil {
-		return m.TemporaryBlockingSettings
 	}
 	return nil
 }
@@ -772,40 +554,16 @@ func (m *ReplaceSpecType) GetTemporaryBlockingSettings() *TemporaryBlockingSetti
 // x-displayName: "Get Malicious User Mitigation"
 // Get malicious_user_mitigation reads a given object from storage backend for metadata.namespace.
 type GetSpecType struct {
-	MitigationType              *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType" json:"mitigation_type,omitempty"`
-	JavascriptChallengeSettings *JavascriptChallengeSettings `protobuf:"bytes,2,opt,name=javascript_challenge_settings,json=javascriptChallengeSettings" json:"javascript_challenge_settings,omitempty"`
-	CaptchaChallengeSettings    *CaptchaChallengeSettings    `protobuf:"bytes,3,opt,name=captcha_challenge_settings,json=captchaChallengeSettings" json:"captcha_challenge_settings,omitempty"`
-	TemporaryBlockingSettings   *TemporaryBlockingSettings   `protobuf:"bytes,4,opt,name=temporary_blocking_settings,json=temporaryBlockingSettings" json:"temporary_blocking_settings,omitempty"`
+	MitigationType *MaliciousUserMitigationType `protobuf:"bytes,1,opt,name=mitigation_type,json=mitigationType" json:"mitigation_type,omitempty"`
 }
 
 func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
+func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
 
 func (m *GetSpecType) GetMitigationType() *MaliciousUserMitigationType {
 	if m != nil {
 		return m.MitigationType
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetJavascriptChallengeSettings() *JavascriptChallengeSettings {
-	if m != nil {
-		return m.JavascriptChallengeSettings
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetCaptchaChallengeSettings() *CaptchaChallengeSettings {
-	if m != nil {
-		return m.CaptchaChallengeSettings
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetTemporaryBlockingSettings() *TemporaryBlockingSettings {
-	if m != nil {
-		return m.TemporaryBlockingSettings
 	}
 	return nil
 }
@@ -817,12 +575,6 @@ func init() {
 	golang_proto.RegisterType((*MaliciousUserMitigationAction)(nil), "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationAction")
 	proto.RegisterType((*MaliciousUserMitigationRule)(nil), "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationRule")
 	golang_proto.RegisterType((*MaliciousUserMitigationRule)(nil), "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationRule")
-	proto.RegisterType((*JavascriptChallengeSettings)(nil), "ves.io.schema.malicious_user_mitigation.JavascriptChallengeSettings")
-	golang_proto.RegisterType((*JavascriptChallengeSettings)(nil), "ves.io.schema.malicious_user_mitigation.JavascriptChallengeSettings")
-	proto.RegisterType((*CaptchaChallengeSettings)(nil), "ves.io.schema.malicious_user_mitigation.CaptchaChallengeSettings")
-	golang_proto.RegisterType((*CaptchaChallengeSettings)(nil), "ves.io.schema.malicious_user_mitigation.CaptchaChallengeSettings")
-	proto.RegisterType((*TemporaryBlockingSettings)(nil), "ves.io.schema.malicious_user_mitigation.TemporaryBlockingSettings")
-	golang_proto.RegisterType((*TemporaryBlockingSettings)(nil), "ves.io.schema.malicious_user_mitigation.TemporaryBlockingSettings")
 	proto.RegisterType((*MaliciousUserMitigationType)(nil), "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationType")
 	golang_proto.RegisterType((*MaliciousUserMitigationType)(nil), "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationType")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.malicious_user_mitigation.GlobalSpecType")
@@ -1113,87 +865,6 @@ func (this *MaliciousUserMitigationRule) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *JavascriptChallengeSettings) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*JavascriptChallengeSettings)
-	if !ok {
-		that2, ok := that.(JavascriptChallengeSettings)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.JsScriptDelay != that1.JsScriptDelay {
-		return false
-	}
-	if this.CookieExpiry != that1.CookieExpiry {
-		return false
-	}
-	if this.CustomPage != that1.CustomPage {
-		return false
-	}
-	return true
-}
-func (this *CaptchaChallengeSettings) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CaptchaChallengeSettings)
-	if !ok {
-		that2, ok := that.(CaptchaChallengeSettings)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.CookieExpiry != that1.CookieExpiry {
-		return false
-	}
-	if this.CustomPage != that1.CustomPage {
-		return false
-	}
-	return true
-}
-func (this *TemporaryBlockingSettings) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*TemporaryBlockingSettings)
-	if !ok {
-		that2, ok := that.(TemporaryBlockingSettings)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.CustomPage != that1.CustomPage {
-		return false
-	}
-	return true
-}
 func (this *MaliciousUserMitigationType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1245,15 +916,6 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if !this.MitigationType.Equal(that1.MitigationType) {
 		return false
 	}
-	if !this.JavascriptChallengeSettings.Equal(that1.JavascriptChallengeSettings) {
-		return false
-	}
-	if !this.CaptchaChallengeSettings.Equal(that1.CaptchaChallengeSettings) {
-		return false
-	}
-	if !this.TemporaryBlockingSettings.Equal(that1.TemporaryBlockingSettings) {
-		return false
-	}
 	return true
 }
 func (this *CreateSpecType) Equal(that interface{}) bool {
@@ -1276,15 +938,6 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.MitigationType.Equal(that1.MitigationType) {
-		return false
-	}
-	if !this.JavascriptChallengeSettings.Equal(that1.JavascriptChallengeSettings) {
-		return false
-	}
-	if !this.CaptchaChallengeSettings.Equal(that1.CaptchaChallengeSettings) {
-		return false
-	}
-	if !this.TemporaryBlockingSettings.Equal(that1.TemporaryBlockingSettings) {
 		return false
 	}
 	return true
@@ -1311,15 +964,6 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if !this.MitigationType.Equal(that1.MitigationType) {
 		return false
 	}
-	if !this.JavascriptChallengeSettings.Equal(that1.JavascriptChallengeSettings) {
-		return false
-	}
-	if !this.CaptchaChallengeSettings.Equal(that1.CaptchaChallengeSettings) {
-		return false
-	}
-	if !this.TemporaryBlockingSettings.Equal(that1.TemporaryBlockingSettings) {
-		return false
-	}
 	return true
 }
 func (this *GetSpecType) Equal(that interface{}) bool {
@@ -1342,15 +986,6 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.MitigationType.Equal(that1.MitigationType) {
-		return false
-	}
-	if !this.JavascriptChallengeSettings.Equal(that1.JavascriptChallengeSettings) {
-		return false
-	}
-	if !this.CaptchaChallengeSettings.Equal(that1.CaptchaChallengeSettings) {
-		return false
-	}
-	if !this.TemporaryBlockingSettings.Equal(that1.TemporaryBlockingSettings) {
 		return false
 	}
 	return true
@@ -1458,39 +1093,6 @@ func (this *MaliciousUserMitigationRule) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *JavascriptChallengeSettings) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 7)
-	s = append(s, "&malicious_user_mitigation.JavascriptChallengeSettings{")
-	s = append(s, "JsScriptDelay: "+fmt.Sprintf("%#v", this.JsScriptDelay)+",\n")
-	s = append(s, "CookieExpiry: "+fmt.Sprintf("%#v", this.CookieExpiry)+",\n")
-	s = append(s, "CustomPage: "+fmt.Sprintf("%#v", this.CustomPage)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *CaptchaChallengeSettings) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&malicious_user_mitigation.CaptchaChallengeSettings{")
-	s = append(s, "CookieExpiry: "+fmt.Sprintf("%#v", this.CookieExpiry)+",\n")
-	s = append(s, "CustomPage: "+fmt.Sprintf("%#v", this.CustomPage)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *TemporaryBlockingSettings) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&malicious_user_mitigation.TemporaryBlockingSettings{")
-	s = append(s, "CustomPage: "+fmt.Sprintf("%#v", this.CustomPage)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
 func (this *MaliciousUserMitigationType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1507,19 +1109,10 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 5)
 	s = append(s, "&malicious_user_mitigation.GlobalSpecType{")
 	if this.MitigationType != nil {
 		s = append(s, "MitigationType: "+fmt.Sprintf("%#v", this.MitigationType)+",\n")
-	}
-	if this.JavascriptChallengeSettings != nil {
-		s = append(s, "JavascriptChallengeSettings: "+fmt.Sprintf("%#v", this.JavascriptChallengeSettings)+",\n")
-	}
-	if this.CaptchaChallengeSettings != nil {
-		s = append(s, "CaptchaChallengeSettings: "+fmt.Sprintf("%#v", this.CaptchaChallengeSettings)+",\n")
-	}
-	if this.TemporaryBlockingSettings != nil {
-		s = append(s, "TemporaryBlockingSettings: "+fmt.Sprintf("%#v", this.TemporaryBlockingSettings)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1528,19 +1121,10 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 5)
 	s = append(s, "&malicious_user_mitigation.CreateSpecType{")
 	if this.MitigationType != nil {
 		s = append(s, "MitigationType: "+fmt.Sprintf("%#v", this.MitigationType)+",\n")
-	}
-	if this.JavascriptChallengeSettings != nil {
-		s = append(s, "JavascriptChallengeSettings: "+fmt.Sprintf("%#v", this.JavascriptChallengeSettings)+",\n")
-	}
-	if this.CaptchaChallengeSettings != nil {
-		s = append(s, "CaptchaChallengeSettings: "+fmt.Sprintf("%#v", this.CaptchaChallengeSettings)+",\n")
-	}
-	if this.TemporaryBlockingSettings != nil {
-		s = append(s, "TemporaryBlockingSettings: "+fmt.Sprintf("%#v", this.TemporaryBlockingSettings)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1549,19 +1133,10 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 5)
 	s = append(s, "&malicious_user_mitigation.ReplaceSpecType{")
 	if this.MitigationType != nil {
 		s = append(s, "MitigationType: "+fmt.Sprintf("%#v", this.MitigationType)+",\n")
-	}
-	if this.JavascriptChallengeSettings != nil {
-		s = append(s, "JavascriptChallengeSettings: "+fmt.Sprintf("%#v", this.JavascriptChallengeSettings)+",\n")
-	}
-	if this.CaptchaChallengeSettings != nil {
-		s = append(s, "CaptchaChallengeSettings: "+fmt.Sprintf("%#v", this.CaptchaChallengeSettings)+",\n")
-	}
-	if this.TemporaryBlockingSettings != nil {
-		s = append(s, "TemporaryBlockingSettings: "+fmt.Sprintf("%#v", this.TemporaryBlockingSettings)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1570,19 +1145,10 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 5)
 	s = append(s, "&malicious_user_mitigation.GetSpecType{")
 	if this.MitigationType != nil {
 		s = append(s, "MitigationType: "+fmt.Sprintf("%#v", this.MitigationType)+",\n")
-	}
-	if this.JavascriptChallengeSettings != nil {
-		s = append(s, "JavascriptChallengeSettings: "+fmt.Sprintf("%#v", this.JavascriptChallengeSettings)+",\n")
-	}
-	if this.CaptchaChallengeSettings != nil {
-		s = append(s, "CaptchaChallengeSettings: "+fmt.Sprintf("%#v", this.CaptchaChallengeSettings)+",\n")
-	}
-	if this.TemporaryBlockingSettings != nil {
-		s = append(s, "TemporaryBlockingSettings: "+fmt.Sprintf("%#v", this.TemporaryBlockingSettings)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1795,93 +1361,6 @@ func (m *MaliciousUserMitigationRule) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *JavascriptChallengeSettings) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *JavascriptChallengeSettings) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.JsScriptDelay != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.JsScriptDelay))
-	}
-	if m.CookieExpiry != 0 {
-		dAtA[i] = 0x18
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CookieExpiry))
-	}
-	if len(m.CustomPage) > 0 {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.CustomPage)))
-		i += copy(dAtA[i:], m.CustomPage)
-	}
-	return i, nil
-}
-
-func (m *CaptchaChallengeSettings) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *CaptchaChallengeSettings) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.CookieExpiry != 0 {
-		dAtA[i] = 0x10
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CookieExpiry))
-	}
-	if len(m.CustomPage) > 0 {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.CustomPage)))
-		i += copy(dAtA[i:], m.CustomPage)
-	}
-	return i, nil
-}
-
-func (m *TemporaryBlockingSettings) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *TemporaryBlockingSettings) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if len(m.CustomPage) > 0 {
-		dAtA[i] = 0xa
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.CustomPage)))
-		i += copy(dAtA[i:], m.CustomPage)
-	}
-	return i, nil
-}
-
 func (m *MaliciousUserMitigationType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1937,36 +1416,6 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n13
 	}
-	if m.JavascriptChallengeSettings != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.JavascriptChallengeSettings.Size()))
-		n14, err := m.JavascriptChallengeSettings.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n14
-	}
-	if m.CaptchaChallengeSettings != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CaptchaChallengeSettings.Size()))
-		n15, err := m.CaptchaChallengeSettings.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n15
-	}
-	if m.TemporaryBlockingSettings != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TemporaryBlockingSettings.Size()))
-		n16, err := m.TemporaryBlockingSettings.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n16
-	}
 	return i, nil
 }
 
@@ -1989,41 +1438,11 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.MitigationType.Size()))
-		n17, err := m.MitigationType.MarshalTo(dAtA[i:])
+		n14, err := m.MitigationType.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n17
-	}
-	if m.JavascriptChallengeSettings != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.JavascriptChallengeSettings.Size()))
-		n18, err := m.JavascriptChallengeSettings.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n18
-	}
-	if m.CaptchaChallengeSettings != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CaptchaChallengeSettings.Size()))
-		n19, err := m.CaptchaChallengeSettings.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n19
-	}
-	if m.TemporaryBlockingSettings != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TemporaryBlockingSettings.Size()))
-		n20, err := m.TemporaryBlockingSettings.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n20
+		i += n14
 	}
 	return i, nil
 }
@@ -2047,41 +1466,11 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.MitigationType.Size()))
-		n21, err := m.MitigationType.MarshalTo(dAtA[i:])
+		n15, err := m.MitigationType.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n21
-	}
-	if m.JavascriptChallengeSettings != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.JavascriptChallengeSettings.Size()))
-		n22, err := m.JavascriptChallengeSettings.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n22
-	}
-	if m.CaptchaChallengeSettings != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CaptchaChallengeSettings.Size()))
-		n23, err := m.CaptchaChallengeSettings.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n23
-	}
-	if m.TemporaryBlockingSettings != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TemporaryBlockingSettings.Size()))
-		n24, err := m.TemporaryBlockingSettings.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n24
+		i += n15
 	}
 	return i, nil
 }
@@ -2105,41 +1494,11 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.MitigationType.Size()))
-		n25, err := m.MitigationType.MarshalTo(dAtA[i:])
+		n16, err := m.MitigationType.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n25
-	}
-	if m.JavascriptChallengeSettings != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.JavascriptChallengeSettings.Size()))
-		n26, err := m.JavascriptChallengeSettings.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n26
-	}
-	if m.CaptchaChallengeSettings != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.CaptchaChallengeSettings.Size()))
-		n27, err := m.CaptchaChallengeSettings.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n27
-	}
-	if m.TemporaryBlockingSettings != nil {
-		dAtA[i] = 0x22
-		i++
-		i = encodeVarintTypes(dAtA, i, uint64(m.TemporaryBlockingSettings.Size()))
-		n28, err := m.TemporaryBlockingSettings.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n28
+		i += n16
 	}
 	return i, nil
 }
@@ -2257,45 +1616,6 @@ func (m *MaliciousUserMitigationRule) Size() (n int) {
 	return n
 }
 
-func (m *JavascriptChallengeSettings) Size() (n int) {
-	var l int
-	_ = l
-	if m.JsScriptDelay != 0 {
-		n += 1 + sovTypes(uint64(m.JsScriptDelay))
-	}
-	if m.CookieExpiry != 0 {
-		n += 1 + sovTypes(uint64(m.CookieExpiry))
-	}
-	l = len(m.CustomPage)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *CaptchaChallengeSettings) Size() (n int) {
-	var l int
-	_ = l
-	if m.CookieExpiry != 0 {
-		n += 1 + sovTypes(uint64(m.CookieExpiry))
-	}
-	l = len(m.CustomPage)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *TemporaryBlockingSettings) Size() (n int) {
-	var l int
-	_ = l
-	l = len(m.CustomPage)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
 func (m *MaliciousUserMitigationType) Size() (n int) {
 	var l int
 	_ = l
@@ -2315,18 +1635,6 @@ func (m *GlobalSpecType) Size() (n int) {
 		l = m.MitigationType.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.JavascriptChallengeSettings != nil {
-		l = m.JavascriptChallengeSettings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.CaptchaChallengeSettings != nil {
-		l = m.CaptchaChallengeSettings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.TemporaryBlockingSettings != nil {
-		l = m.TemporaryBlockingSettings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	return n
 }
 
@@ -2335,18 +1643,6 @@ func (m *CreateSpecType) Size() (n int) {
 	_ = l
 	if m.MitigationType != nil {
 		l = m.MitigationType.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.JavascriptChallengeSettings != nil {
-		l = m.JavascriptChallengeSettings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.CaptchaChallengeSettings != nil {
-		l = m.CaptchaChallengeSettings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.TemporaryBlockingSettings != nil {
-		l = m.TemporaryBlockingSettings.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -2359,18 +1655,6 @@ func (m *ReplaceSpecType) Size() (n int) {
 		l = m.MitigationType.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.JavascriptChallengeSettings != nil {
-		l = m.JavascriptChallengeSettings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.CaptchaChallengeSettings != nil {
-		l = m.CaptchaChallengeSettings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.TemporaryBlockingSettings != nil {
-		l = m.TemporaryBlockingSettings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	return n
 }
 
@@ -2379,18 +1663,6 @@ func (m *GetSpecType) Size() (n int) {
 	_ = l
 	if m.MitigationType != nil {
 		l = m.MitigationType.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.JavascriptChallengeSettings != nil {
-		l = m.JavascriptChallengeSettings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.CaptchaChallengeSettings != nil {
-		l = m.CaptchaChallengeSettings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.TemporaryBlockingSettings != nil {
-		l = m.TemporaryBlockingSettings.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -2520,39 +1792,6 @@ func (this *MaliciousUserMitigationRule) String() string {
 	}, "")
 	return s
 }
-func (this *JavascriptChallengeSettings) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&JavascriptChallengeSettings{`,
-		`JsScriptDelay:` + fmt.Sprintf("%v", this.JsScriptDelay) + `,`,
-		`CookieExpiry:` + fmt.Sprintf("%v", this.CookieExpiry) + `,`,
-		`CustomPage:` + fmt.Sprintf("%v", this.CustomPage) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CaptchaChallengeSettings) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CaptchaChallengeSettings{`,
-		`CookieExpiry:` + fmt.Sprintf("%v", this.CookieExpiry) + `,`,
-		`CustomPage:` + fmt.Sprintf("%v", this.CustomPage) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *TemporaryBlockingSettings) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&TemporaryBlockingSettings{`,
-		`CustomPage:` + fmt.Sprintf("%v", this.CustomPage) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *MaliciousUserMitigationType) String() string {
 	if this == nil {
 		return "nil"
@@ -2569,9 +1808,6 @@ func (this *GlobalSpecType) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`MitigationType:` + strings.Replace(fmt.Sprintf("%v", this.MitigationType), "MaliciousUserMitigationType", "MaliciousUserMitigationType", 1) + `,`,
-		`JavascriptChallengeSettings:` + strings.Replace(fmt.Sprintf("%v", this.JavascriptChallengeSettings), "JavascriptChallengeSettings", "JavascriptChallengeSettings", 1) + `,`,
-		`CaptchaChallengeSettings:` + strings.Replace(fmt.Sprintf("%v", this.CaptchaChallengeSettings), "CaptchaChallengeSettings", "CaptchaChallengeSettings", 1) + `,`,
-		`TemporaryBlockingSettings:` + strings.Replace(fmt.Sprintf("%v", this.TemporaryBlockingSettings), "TemporaryBlockingSettings", "TemporaryBlockingSettings", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2582,9 +1818,6 @@ func (this *CreateSpecType) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`MitigationType:` + strings.Replace(fmt.Sprintf("%v", this.MitigationType), "MaliciousUserMitigationType", "MaliciousUserMitigationType", 1) + `,`,
-		`JavascriptChallengeSettings:` + strings.Replace(fmt.Sprintf("%v", this.JavascriptChallengeSettings), "JavascriptChallengeSettings", "JavascriptChallengeSettings", 1) + `,`,
-		`CaptchaChallengeSettings:` + strings.Replace(fmt.Sprintf("%v", this.CaptchaChallengeSettings), "CaptchaChallengeSettings", "CaptchaChallengeSettings", 1) + `,`,
-		`TemporaryBlockingSettings:` + strings.Replace(fmt.Sprintf("%v", this.TemporaryBlockingSettings), "TemporaryBlockingSettings", "TemporaryBlockingSettings", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2595,9 +1828,6 @@ func (this *ReplaceSpecType) String() string {
 	}
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`MitigationType:` + strings.Replace(fmt.Sprintf("%v", this.MitigationType), "MaliciousUserMitigationType", "MaliciousUserMitigationType", 1) + `,`,
-		`JavascriptChallengeSettings:` + strings.Replace(fmt.Sprintf("%v", this.JavascriptChallengeSettings), "JavascriptChallengeSettings", "JavascriptChallengeSettings", 1) + `,`,
-		`CaptchaChallengeSettings:` + strings.Replace(fmt.Sprintf("%v", this.CaptchaChallengeSettings), "CaptchaChallengeSettings", "CaptchaChallengeSettings", 1) + `,`,
-		`TemporaryBlockingSettings:` + strings.Replace(fmt.Sprintf("%v", this.TemporaryBlockingSettings), "TemporaryBlockingSettings", "TemporaryBlockingSettings", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2608,9 +1838,6 @@ func (this *GetSpecType) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType{`,
 		`MitigationType:` + strings.Replace(fmt.Sprintf("%v", this.MitigationType), "MaliciousUserMitigationType", "MaliciousUserMitigationType", 1) + `,`,
-		`JavascriptChallengeSettings:` + strings.Replace(fmt.Sprintf("%v", this.JavascriptChallengeSettings), "JavascriptChallengeSettings", "JavascriptChallengeSettings", 1) + `,`,
-		`CaptchaChallengeSettings:` + strings.Replace(fmt.Sprintf("%v", this.CaptchaChallengeSettings), "CaptchaChallengeSettings", "CaptchaChallengeSettings", 1) + `,`,
-		`TemporaryBlockingSettings:` + strings.Replace(fmt.Sprintf("%v", this.TemporaryBlockingSettings), "TemporaryBlockingSettings", "TemporaryBlockingSettings", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3095,300 +2322,6 @@ func (m *MaliciousUserMitigationRule) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *JavascriptChallengeSettings) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: JavascriptChallengeSettings: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: JavascriptChallengeSettings: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JsScriptDelay", wireType)
-			}
-			m.JsScriptDelay = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.JsScriptDelay |= (uint32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CookieExpiry", wireType)
-			}
-			m.CookieExpiry = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.CookieExpiry |= (uint32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CustomPage", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CustomPage = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *CaptchaChallengeSettings) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CaptchaChallengeSettings: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CaptchaChallengeSettings: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CookieExpiry", wireType)
-			}
-			m.CookieExpiry = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.CookieExpiry |= (uint32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CustomPage", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CustomPage = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *TemporaryBlockingSettings) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: TemporaryBlockingSettings: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: TemporaryBlockingSettings: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CustomPage", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CustomPage = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
 func (m *MaliciousUserMitigationType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -3532,105 +2465,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JavascriptChallengeSettings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.JavascriptChallengeSettings == nil {
-				m.JavascriptChallengeSettings = &JavascriptChallengeSettings{}
-			}
-			if err := m.JavascriptChallengeSettings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CaptchaChallengeSettings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.CaptchaChallengeSettings == nil {
-				m.CaptchaChallengeSettings = &CaptchaChallengeSettings{}
-			}
-			if err := m.CaptchaChallengeSettings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TemporaryBlockingSettings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.TemporaryBlockingSettings == nil {
-				m.TemporaryBlockingSettings = &TemporaryBlockingSettings{}
-			}
-			if err := m.TemporaryBlockingSettings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -3711,105 +2545,6 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				m.MitigationType = &MaliciousUserMitigationType{}
 			}
 			if err := m.MitigationType.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JavascriptChallengeSettings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.JavascriptChallengeSettings == nil {
-				m.JavascriptChallengeSettings = &JavascriptChallengeSettings{}
-			}
-			if err := m.JavascriptChallengeSettings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CaptchaChallengeSettings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.CaptchaChallengeSettings == nil {
-				m.CaptchaChallengeSettings = &CaptchaChallengeSettings{}
-			}
-			if err := m.CaptchaChallengeSettings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TemporaryBlockingSettings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.TemporaryBlockingSettings == nil {
-				m.TemporaryBlockingSettings = &TemporaryBlockingSettings{}
-			}
-			if err := m.TemporaryBlockingSettings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3896,105 +2631,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JavascriptChallengeSettings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.JavascriptChallengeSettings == nil {
-				m.JavascriptChallengeSettings = &JavascriptChallengeSettings{}
-			}
-			if err := m.JavascriptChallengeSettings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CaptchaChallengeSettings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.CaptchaChallengeSettings == nil {
-				m.CaptchaChallengeSettings = &CaptchaChallengeSettings{}
-			}
-			if err := m.CaptchaChallengeSettings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TemporaryBlockingSettings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.TemporaryBlockingSettings == nil {
-				m.TemporaryBlockingSettings = &TemporaryBlockingSettings{}
-			}
-			if err := m.TemporaryBlockingSettings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -4075,105 +2711,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				m.MitigationType = &MaliciousUserMitigationType{}
 			}
 			if err := m.MitigationType.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JavascriptChallengeSettings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.JavascriptChallengeSettings == nil {
-				m.JavascriptChallengeSettings = &JavascriptChallengeSettings{}
-			}
-			if err := m.JavascriptChallengeSettings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CaptchaChallengeSettings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.CaptchaChallengeSettings == nil {
-				m.CaptchaChallengeSettings = &CaptchaChallengeSettings{}
-			}
-			if err := m.CaptchaChallengeSettings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TemporaryBlockingSettings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.TemporaryBlockingSettings == nil {
-				m.TemporaryBlockingSettings = &TemporaryBlockingSettings{}
-			}
-			if err := m.TemporaryBlockingSettings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4311,67 +2848,52 @@ func init() {
 }
 
 var fileDescriptorTypes = []byte{
-	// 988 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x97, 0xc1, 0x6f, 0xdc, 0x44,
-	0x14, 0xc6, 0x77, 0xb2, 0xde, 0x6d, 0x32, 0x69, 0x92, 0x8d, 0x09, 0x92, 0xb3, 0x4b, 0x4d, 0xd8,
-	0x0b, 0x51, 0x94, 0x78, 0x45, 0xd2, 0x0a, 0x89, 0x43, 0x45, 0x37, 0x2d, 0x85, 0x88, 0xaa, 0xc8,
-	0x09, 0x17, 0x24, 0x64, 0xcd, 0x7a, 0xa7, 0xde, 0x49, 0xc6, 0x3b, 0x96, 0x3d, 0xde, 0xd6, 0x27,
-	0x22, 0x40, 0x08, 0x24, 0x24, 0x2a, 0x38, 0x73, 0xe2, 0x82, 0x90, 0xe0, 0x0f, 0x60, 0x2f, 0x39,
-	0x02, 0xa7, 0x1c, 0x38, 0xf4, 0xd8, 0xb8, 0x17, 0xb8, 0x55, 0x9c, 0x72, 0x44, 0x1e, 0x7b, 0xb3,
-	0xf1, 0xa6, 0xeb, 0x5d, 0x5a, 0x29, 0x5c, 0x72, 0x89, 0xec, 0xcc, 0xf7, 0xde, 0x7c, 0xcf, 0xef,
-	0x37, 0x6f, 0x35, 0x70, 0xa3, 0x83, 0x3d, 0x8d, 0xb0, 0x9a, 0x67, 0xb6, 0xb0, 0x8d, 0x6a, 0x36,
-	0xa2, 0xc4, 0x24, 0xcc, 0xf7, 0x0c, 0xdf, 0xc3, 0xae, 0x61, 0x13, 0x4e, 0x2c, 0xc4, 0x09, 0x6b,
-	0xd7, 0x78, 0xe0, 0x60, 0x4f, 0x73, 0x5c, 0xc6, 0x99, 0xfc, 0x7a, 0x1c, 0xa4, 0xc5, 0x41, 0xda,
-	0xd0, 0xa0, 0xf2, 0x9a, 0x45, 0x78, 0xcb, 0x6f, 0x68, 0x26, 0xb3, 0x6b, 0x16, 0xb3, 0x58, 0x4d,
-	0xc4, 0x37, 0xfc, 0x7b, 0xe2, 0x4d, 0xbc, 0x88, 0xa7, 0x38, 0x6f, 0xf9, 0x55, 0x8b, 0x31, 0x8b,
-	0xe2, 0xbe, 0x8a, 0x13, 0x1b, 0x7b, 0x1c, 0xd9, 0x4e, 0x22, 0xa8, 0xa4, 0xdd, 0x32, 0x27, 0xda,
-	0x25, 0x71, 0x55, 0x5e, 0x4c, 0x2f, 0x9e, 0x32, 0x5c, 0x7e, 0x25, 0xbd, 0xd4, 0x41, 0x94, 0x34,
-	0x11, 0xc7, 0xc9, 0xea, 0xd2, 0xc0, 0x2a, 0xc1, 0xf7, 0x8d, 0x54, 0xea, 0xea, 0xef, 0x00, 0x2a,
-	0x77, 0x7a, 0x55, 0x7e, 0xe8, 0x61, 0x77, 0xa7, 0xe5, 0x62, 0xc4, 0xdf, 0xc7, 0x1d, 0x4c, 0xe5,
-	0x65, 0x98, 0xa7, 0xec, 0xbe, 0x02, 0x96, 0xc0, 0xf2, 0xf4, 0xfa, 0x82, 0x96, 0xfe, 0x36, 0xb7,
-	0x6c, 0x87, 0x07, 0xef, 0xe6, 0xf4, 0x48, 0x22, 0x6b, 0xb0, 0x68, 0xe3, 0x26, 0xf1, 0x6d, 0x65,
-	0x22, 0x53, 0x9c, 0xa8, 0xe4, 0x15, 0x28, 0xb5, 0x88, 0xd5, 0x52, 0xf2, 0x99, 0x6a, 0xa1, 0xa9,
-	0xbf, 0x06, 0x2f, 0x73, 0x61, 0xca, 0xa0, 0xc2, 0xd5, 0xfc, 0x41, 0x17, 0x80, 0xc3, 0x2e, 0x90,
-	0xc2, 0x2e, 0x28, 0xbc, 0xb1, 0xba, 0xbe, 0xba, 0xb1, 0x25, 0x4d, 0x4a, 0xa5, 0x42, 0xf5, 0xab,
-	0x3c, 0xbc, 0x92, 0xaa, 0xe5, 0xce, 0x49, 0xbf, 0x6e, 0x98, 0xd1, 0xdf, 0x68, 0xdb, 0x36, 0x6b,
-	0xe3, 0x11, 0x15, 0x09, 0x8d, 0x7c, 0x0d, 0x42, 0x44, 0xb1, 0xcb, 0x0d, 0xd6, 0xa6, 0xc1, 0x88,
-	0xb2, 0xa6, 0x84, 0xf2, 0x6e, 0x9b, 0x06, 0xf2, 0x7b, 0x70, 0x61, 0x17, 0x75, 0x90, 0x67, 0xba,
-	0xc4, 0xe1, 0x86, 0xd9, 0x42, 0x94, 0xe2, 0xb6, 0x85, 0x47, 0x54, 0xfa, 0x52, 0x3f, 0x66, 0xb3,
-	0x17, 0x22, 0x6f, 0xc2, 0x79, 0x13, 0x39, 0xdc, 0x6c, 0xa1, 0x53, 0x79, 0xa4, 0xcc, 0x3c, 0xa5,
-	0x24, 0x20, 0x95, 0xa4, 0x41, 0x99, 0xb9, 0x67, 0x70, 0x6c, 0x3b, 0xcc, 0x45, 0x2e, 0xa1, 0x81,
-	0x52, 0xc8, 0x4e, 0x22, 0x02, 0x76, 0xfa, 0xfa, 0xfa, 0x0a, 0x9c, 0xef, 0xb3, 0x6f, 0xa0, 0xf8,
-	0x63, 0xbe, 0x9c, 0xf4, 0xa1, 0x18, 0x76, 0xc1, 0x94, 0xe8, 0xc3, 0xea, 0xd5, 0xd5, 0x6b, 0x5b,
-	0xd2, 0x64, 0xb1, 0x74, 0xa9, 0x7a, 0x0c, 0x60, 0x65, 0x48, 0x2f, 0x74, 0x9f, 0x62, 0xb9, 0x99,
-	0x6e, 0x6a, 0xd2, 0x91, 0x1b, 0xda, 0x98, 0xe7, 0x4f, 0x1b, 0xc6, 0xac, 0x3e, 0xcd, 0x4f, 0x01,
-	0xec, 0x3d, 0xc3, 0x77, 0xd2, 0xca, 0x77, 0x9e, 0x6f, 0xab, 0x41, 0xa4, 0xf4, 0x92, 0x3d, 0xf0,
-	0x9f, 0xea, 0x01, 0x80, 0x95, 0xad, 0xb3, 0xed, 0xdc, 0xc6, 0x9c, 0x93, 0xb6, 0xe5, 0xc9, 0x6f,
-	0xc2, 0xb9, 0x5d, 0xcf, 0x48, 0x00, 0x69, 0x62, 0x8a, 0x62, 0xba, 0x66, 0xea, 0x73, 0xc7, 0x5d,
-	0x90, 0xfb, 0xf5, 0xef, 0x83, 0x7c, 0x71, 0x45, 0x52, 0x1e, 0xff, 0x99, 0xd7, 0x67, 0x76, 0xbd,
-	0x6d, 0x21, 0xbb, 0x19, 0xa9, 0xe4, 0xab, 0x70, 0xc6, 0x64, 0x6c, 0x8f, 0x60, 0x03, 0x3f, 0x70,
-	0x88, 0x1b, 0x08, 0xa6, 0x06, 0xc2, 0xf6, 0x7f, 0x28, 0xe8, 0x97, 0x63, 0xd5, 0x2d, 0x21, 0x92,
-	0xd7, 0xe1, 0xb4, 0xe9, 0x7b, 0x9c, 0xd9, 0x86, 0x83, 0x12, 0x7e, 0xa6, 0xea, 0xf3, 0xc7, 0x5d,
-	0x90, 0x8f, 0x62, 0x26, 0xdd, 0xa2, 0xb2, 0xff, 0xf6, 0x43, 0x00, 0x74, 0x18, 0xab, 0x3e, 0x40,
-	0x16, 0xae, 0x7e, 0x0e, 0xa0, 0xb2, 0x39, 0x40, 0xd2, 0x89, 0xff, 0x33, 0x36, 0x26, 0x9e, 0xc3,
-	0x46, 0x7e, 0x1c, 0x1b, 0x77, 0xe1, 0x62, 0x8f, 0xc2, 0xa0, 0x1e, 0x31, 0x49, 0xda, 0xd6, 0x89,
-	0x8d, 0x81, 0x84, 0x60, 0x9c, 0x84, 0xdf, 0x0c, 0xa7, 0x72, 0x27, 0x70, 0xb0, 0xec, 0xc0, 0x82,
-	0xeb, 0x53, 0xec, 0x29, 0x60, 0x29, 0xbf, 0x3c, 0xbd, 0x7e, 0xf3, 0x45, 0x19, 0x89, 0x50, 0xaf,
-	0x2f, 0x44, 0x7e, 0x0a, 0xdf, 0x82, 0x89, 0x92, 0xd4, 0x7b, 0x52, 0x80, 0x1e, 0x6f, 0x54, 0xfd,
-	0x5e, 0x82, 0xb3, 0xb7, 0x29, 0x6b, 0x20, 0xba, 0xed, 0x60, 0x53, 0x98, 0xb0, 0xe1, 0xdc, 0x29,
-	0x68, 0xa3, 0x61, 0x9f, 0x9c, 0x8e, 0x17, 0xb6, 0x13, 0xa5, 0xd7, 0x67, 0xed, 0x74, 0xcd, 0x5f,
-	0x03, 0x78, 0xe5, 0x59, 0x13, 0xcb, 0xf0, 0x92, 0x2f, 0x9d, 0x1c, 0x98, 0xf1, 0x77, 0xcf, 0x80,
-	0xbf, 0x1e, 0x95, 0x5e, 0xd9, 0xcd, 0x38, 0x1d, 0x9f, 0x01, 0x58, 0x3e, 0x33, 0xf5, 0xfa, 0x5e,
-	0xf2, 0xff, 0x71, 0x4e, 0x0c, 0xa3, 0x58, 0x18, 0x51, 0xcc, 0x61, 0x8c, 0x7f, 0x01, 0x60, 0xa5,
-	0x37, 0x30, 0x03, 0xa3, 0x91, 0xb0, 0xd7, 0xb7, 0x11, 0x4f, 0xe1, 0xfa, 0xd8, 0x36, 0x86, 0x62,
-	0x2c, 0x7c, 0x2c, 0xf2, 0x61, 0xcb, 0xd5, 0x9f, 0x25, 0x38, 0xbb, 0x19, 0x0d, 0x34, 0xfc, 0x7f,
-	0xf1, 0xf1, 0xe5, 0x79, 0xf2, 0x91, 0xcd, 0xc6, 0x27, 0xe7, 0x82, 0x46, 0x06, 0x16, 0x9f, 0x9e,
-	0x17, 0x16, 0x19, 0x48, 0xbc, 0x55, 0xf9, 0xe3, 0xfa, 0xc0, 0xc8, 0xf8, 0xe7, 0xfa, 0xa5, 0xe4,
-	0xf7, 0xb7, 0xfa, 0x8b, 0x04, 0xe7, 0x74, 0xec, 0x50, 0x64, 0x5e, 0x00, 0x73, 0x01, 0xcc, 0x18,
-	0xc0, 0xfc, 0x24, 0xc1, 0xe9, 0xdb, 0x98, 0x5f, 0xc0, 0x72, 0x01, 0xcb, 0x48, 0x58, 0xea, 0xdf,
-	0x81, 0xc3, 0x23, 0x35, 0xf7, 0xe8, 0x48, 0xcd, 0x3d, 0x3d, 0x52, 0xc1, 0x7e, 0xa8, 0x82, 0x1f,
-	0x43, 0x15, 0xfc, 0x16, 0xaa, 0xe0, 0x30, 0x54, 0xc1, 0xa3, 0x50, 0x05, 0x8f, 0x43, 0x15, 0xfc,
-	0x15, 0xaa, 0xb9, 0xa7, 0xa1, 0x0a, 0x1e, 0x3e, 0x51, 0x73, 0x07, 0x4f, 0x54, 0xf0, 0xd1, 0xc7,
-	0x16, 0x73, 0xf6, 0x2c, 0xad, 0xc3, 0x28, 0xc7, 0xae, 0x8b, 0x34, 0xdf, 0xab, 0x89, 0x87, 0x7b,
-	0xcc, 0xb5, 0xd7, 0x1c, 0x97, 0x75, 0x48, 0x13, 0xbb, 0x6b, 0xbd, 0xe5, 0x9a, 0xd3, 0xb0, 0x58,
-	0x0d, 0x3f, 0xe0, 0xc9, 0xad, 0x75, 0xd4, 0x05, 0xbe, 0x51, 0x14, 0x57, 0xd9, 0x8d, 0x7f, 0x03,
-	0x00, 0x00, 0xff, 0xff, 0xc1, 0x2f, 0xd1, 0x2a, 0xf2, 0x0f, 0x00, 0x00,
+	// 737 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x55, 0x31, 0x6f, 0xd3, 0x40,
+	0x14, 0xce, 0x25, 0x4e, 0x48, 0x2f, 0xa8, 0x4d, 0x4c, 0x91, 0x42, 0x0a, 0xa6, 0x64, 0xa1, 0xaa,
+	0x52, 0x5b, 0xb4, 0x74, 0x61, 0x40, 0x6a, 0x0a, 0x14, 0x22, 0x2a, 0xa4, 0x50, 0x16, 0x24, 0x64,
+	0x5d, 0xdc, 0xab, 0x73, 0xed, 0x39, 0x77, 0xb2, 0xcf, 0x29, 0xd9, 0x18, 0x58, 0x98, 0x8a, 0xda,
+	0x81, 0xbf, 0xc0, 0x6f, 0x20, 0x4b, 0x47, 0x60, 0xea, 0xd8, 0x91, 0xba, 0x0b, 0x6c, 0xfd, 0x09,
+	0xc8, 0x8e, 0xd3, 0xc4, 0x11, 0x49, 0x10, 0x15, 0x52, 0x97, 0xe8, 0xec, 0xf7, 0x7d, 0xef, 0x7d,
+	0xef, 0x7d, 0xcf, 0x39, 0xb8, 0xd4, 0xc4, 0x8e, 0x4a, 0x98, 0xe6, 0x18, 0x75, 0x6c, 0x21, 0xcd,
+	0x42, 0x94, 0x18, 0x84, 0xb9, 0x8e, 0xee, 0x3a, 0xd8, 0xd6, 0x2d, 0x22, 0x88, 0x89, 0x04, 0x61,
+	0x0d, 0x4d, 0xb4, 0x38, 0x76, 0x54, 0x6e, 0x33, 0xc1, 0xe4, 0xbb, 0x1d, 0x92, 0xda, 0x21, 0xa9,
+	0x43, 0x49, 0x85, 0x05, 0x93, 0x88, 0xba, 0x5b, 0x53, 0x0d, 0x66, 0x69, 0x26, 0x33, 0x99, 0x16,
+	0xf0, 0x6b, 0xee, 0x56, 0xf0, 0x14, 0x3c, 0x04, 0xa7, 0x4e, 0xde, 0xc2, 0x6d, 0x93, 0x31, 0x93,
+	0xe2, 0x1e, 0x4a, 0x10, 0x0b, 0x3b, 0x02, 0x59, 0x3c, 0x04, 0xcc, 0x44, 0xd5, 0x32, 0xee, 0x57,
+	0x09, 0x55, 0x15, 0x6e, 0x44, 0x83, 0x7d, 0x82, 0x0b, 0x37, 0xa3, 0xa1, 0x26, 0xa2, 0x64, 0x13,
+	0x09, 0x1c, 0x46, 0x67, 0x07, 0xa2, 0x04, 0xef, 0xea, 0x91, 0xd4, 0xc5, 0x6f, 0x00, 0xe6, 0xd7,
+	0xbb, 0x5d, 0xbe, 0x72, 0xb0, 0xbd, 0x51, 0xb7, 0x31, 0x12, 0xcf, 0x71, 0x13, 0x53, 0x79, 0x0e,
+	0x26, 0x28, 0xdb, 0xcd, 0x83, 0x59, 0x30, 0x97, 0x59, 0x9c, 0x56, 0xa3, 0xb3, 0x79, 0x6c, 0x71,
+	0xd1, 0x7a, 0x1a, 0xab, 0xfa, 0x10, 0x59, 0x85, 0x29, 0x0b, 0x6f, 0x12, 0xd7, 0xca, 0xc7, 0x47,
+	0x82, 0x43, 0x94, 0x3c, 0x0f, 0xa5, 0x3a, 0x31, 0xeb, 0xf9, 0xc4, 0x48, 0x74, 0x80, 0x29, 0xdf,
+	0x81, 0x57, 0x45, 0x20, 0x4a, 0xa7, 0x81, 0xaa, 0xdc, 0x61, 0x1b, 0x80, 0xa3, 0x36, 0x90, 0xbc,
+	0x36, 0x48, 0xde, 0x2b, 0x2d, 0x96, 0x96, 0x2a, 0x52, 0x5a, 0xca, 0x26, 0x8b, 0x1f, 0x12, 0xf0,
+	0x56, 0xa4, 0x97, 0xf5, 0x73, 0xbf, 0x56, 0x0c, 0xff, 0xd7, 0x2f, 0xdb, 0x60, 0x0d, 0x3c, 0xa6,
+	0xa3, 0x00, 0x23, 0x2f, 0x43, 0x88, 0x28, 0xb6, 0x85, 0xce, 0x1a, 0xb4, 0x35, 0xa6, 0xad, 0x89,
+	0x00, 0xf9, 0xa2, 0x41, 0x5b, 0xf2, 0x33, 0x38, 0xbd, 0x8d, 0x9a, 0xc8, 0x31, 0x6c, 0xc2, 0x85,
+	0x6e, 0xd4, 0x11, 0xa5, 0xb8, 0x61, 0xe2, 0x31, 0x9d, 0x5e, 0xeb, 0x71, 0x56, 0xbb, 0x14, 0x79,
+	0x15, 0xe6, 0x0c, 0xc4, 0x85, 0x51, 0x47, 0x7d, 0x79, 0xa4, 0x91, 0x79, 0xb2, 0x21, 0x21, 0x92,
+	0xa4, 0x46, 0x99, 0xb1, 0xa3, 0x0b, 0x6c, 0x71, 0x66, 0x23, 0x9b, 0xd0, 0x56, 0x3e, 0x39, 0x3a,
+	0x49, 0x40, 0xd8, 0xe8, 0xe1, 0xcb, 0xf3, 0x30, 0xd7, 0xdb, 0x7d, 0x1d, 0x75, 0x86, 0x79, 0x3d,
+	0xf4, 0x21, 0xe5, 0xb5, 0xc1, 0x44, 0xe0, 0x43, 0xe9, 0x7e, 0x69, 0xb9, 0x22, 0xa5, 0x53, 0xd9,
+	0x2b, 0xc5, 0xf7, 0x71, 0x38, 0x33, 0xc4, 0x8b, 0xaa, 0x4b, 0xb1, 0xbc, 0x1d, 0x35, 0x35, 0x74,
+	0x64, 0x45, 0xfd, 0xcb, 0xef, 0x4f, 0x1d, 0xb6, 0xb3, 0x65, 0xe9, 0xac, 0x0d, 0x40, 0x35, 0x23,
+	0xfa, 0xd6, 0xb8, 0xf5, 0x07, 0xf5, 0xa1, 0xa1, 0x4f, 0xfe, 0xad, 0xe0, 0xe0, 0x62, 0x85, 0x55,
+	0xb3, 0xd6, 0xc0, 0xfb, 0xe2, 0x1e, 0x18, 0x3a, 0x86, 0x8d, 0x16, 0xc7, 0x32, 0x87, 0x49, 0xdb,
+	0xa5, 0xd8, 0xc9, 0x83, 0xd9, 0xc4, 0x5c, 0x66, 0xf1, 0xd1, 0x45, 0xe5, 0xf8, 0xb3, 0x2d, 0x4f,
+	0x7f, 0xf9, 0x75, 0x98, 0x48, 0xee, 0x83, 0x78, 0x56, 0xea, 0x9e, 0xf2, 0xa0, 0xda, 0x29, 0x54,
+	0xfc, 0x04, 0xe0, 0xe4, 0x1a, 0x65, 0x35, 0x44, 0x5f, 0x72, 0x6c, 0x04, 0x22, 0x1c, 0x38, 0xd5,
+	0x37, 0x1f, 0xff, 0xdf, 0x25, 0xb4, 0xe3, 0xc2, 0x72, 0xfc, 0xf4, 0xe1, 0x6c, 0x26, 0xad, 0xc8,
+	0xdb, 0x8a, 0x94, 0x8e, 0x67, 0x13, 0x15, 0x29, 0x9d, 0xc8, 0x4a, 0xe1, 0xe7, 0xbb, 0x0f, 0xe0,
+	0xe4, 0xaa, 0xef, 0x1a, 0x3e, 0x57, 0x66, 0xfd, 0x57, 0x65, 0x83, 0x9a, 0x1e, 0xe4, 0xbe, 0x3f,
+	0x1c, 0x98, 0x4d, 0xf1, 0x00, 0xc0, 0xa9, 0x2a, 0xe6, 0x14, 0x19, 0x97, 0x49, 0xd5, 0x1e, 0x80,
+	0x99, 0x35, 0x2c, 0x2e, 0x8f, 0xa2, 0xf2, 0x01, 0x38, 0x3a, 0x51, 0x62, 0xc7, 0x27, 0x4a, 0xec,
+	0xec, 0x44, 0x01, 0xef, 0x3c, 0x05, 0x7c, 0xf6, 0x14, 0xf0, 0xd5, 0x53, 0xc0, 0x91, 0xa7, 0x80,
+	0x63, 0x4f, 0x01, 0x3f, 0x3c, 0x05, 0xfc, 0xf4, 0x94, 0xd8, 0x99, 0xa7, 0x80, 0x8f, 0xa7, 0x4a,
+	0xec, 0xf0, 0x54, 0x01, 0xaf, 0xdf, 0x98, 0x8c, 0xef, 0x98, 0x6a, 0x93, 0x51, 0x81, 0x6d, 0x1b,
+	0xa9, 0xae, 0xa3, 0x05, 0x87, 0x2d, 0x66, 0x5b, 0x0b, 0xdc, 0x66, 0x4d, 0xb2, 0x89, 0xed, 0x85,
+	0x6e, 0x58, 0xe3, 0x35, 0x93, 0x69, 0xf8, 0xad, 0x08, 0xef, 0xb3, 0x71, 0x57, 0x7b, 0x2d, 0x15,
+	0x5c, 0x72, 0x4b, 0xbf, 0x03, 0x00, 0x00, 0xff, 0xff, 0x63, 0xf2, 0x00, 0x41, 0x0c, 0x08, 0x00,
+	0x00,
 }

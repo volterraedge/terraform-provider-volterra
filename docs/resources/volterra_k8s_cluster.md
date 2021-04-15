@@ -23,21 +23,23 @@ resource "volterra_k8s_cluster" "example" {
   // One of the arguments from this list "use_default_cluster_role_bindings use_custom_cluster_role_bindings" must be set
   use_default_cluster_role_bindings = true
 
-  // One of the arguments from this list "use_custom_cluster_role_list use_default_cluster_roles" must be set
+  // One of the arguments from this list "use_default_cluster_roles use_custom_cluster_role_list" must be set
+  use_default_cluster_roles = true
 
-  use_custom_cluster_role_list {
-    cluster_roles {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
   // One of the arguments from this list "no_global_access global_access_enable" must be set
   no_global_access = true
+
   // One of the arguments from this list "no_insecure_registries insecure_registry_list" must be set
   no_insecure_registries = true
-  // One of the arguments from this list "no_local_access local_access_config" must be set
-  no_local_access = true
+
+  // One of the arguments from this list "local_access_config no_local_access" must be set
+
+  local_access_config {
+    local_domain = "example.com"
+
+    // One of the arguments from this list "default_port port" must be set
+    port = "443"
+  }
   // One of the arguments from this list "use_default_psp use_custom_psp_list" must be set
   use_default_psp = true
 }
@@ -89,7 +91,7 @@ Argument Reference
 
 ### Default Port
 
-Use default port for K8s API server..
+Use default port 65443 for K8s API server..
 
 ### Insecure Registry List
 
@@ -103,7 +105,7 @@ Local access to site K8s cluster is enabled.
 
 `local_domain` - (Required) Local K8s API server will be accessible at <site name>.<local domain>. (`String`).
 
-`default_port` - (Optional) Use default port for K8s API server. (bool).
+`default_port` - (Optional) Use default port 65443 for K8s API server. (bool).
 
 `port` - (Optional) Available port range is less than 65000 except reserved ports. (`Int`).
 

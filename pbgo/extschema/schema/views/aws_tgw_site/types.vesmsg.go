@@ -950,7 +950,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLogsReceiverChoice(rulesLogsReceiverChoice)
 	if err != nil {
@@ -1571,6 +1571,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["site_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_state"))
+		if err := fv(ctx, m.GetSiteState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tgw_info"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tgw_info"))
@@ -1662,7 +1671,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLogsReceiverChoice(rulesLogsReceiverChoice)
 	if err != nil {
@@ -2372,7 +2381,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLogsReceiverChoice(rulesLogsReceiverChoice)
 	if err != nil {
@@ -2781,7 +2790,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLogsReceiverChoice(rulesLogsReceiverChoice)
 	if err != nil {
@@ -3164,7 +3173,7 @@ var DefaultSecurityConfigTypeValidator = func() *ValidateSecurityConfigType {
 
 	vrhEastWestServicePolicyChoice := v.EastWestServicePolicyChoiceValidationRuleHandler
 	rulesEastWestServicePolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhEastWestServicePolicyChoice(rulesEastWestServicePolicyChoice)
 	if err != nil {
@@ -3175,7 +3184,7 @@ var DefaultSecurityConfigTypeValidator = func() *ValidateSecurityConfigType {
 
 	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
 	rulesForwardProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
 	if err != nil {
@@ -3186,7 +3195,7 @@ var DefaultSecurityConfigTypeValidator = func() *ValidateSecurityConfigType {
 
 	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
 	rulesNetworkPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkPolicyChoice(rulesNetworkPolicyChoice)
 	if err != nil {
@@ -3658,7 +3667,7 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 
 	vrhDeployment := v.DeploymentValidationRuleHandler
 	rulesDeployment := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDeployment(rulesDeployment)
 	if err != nil {
@@ -3669,7 +3678,7 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 
 	vrhServiceVpcChoice := v.ServiceVpcChoiceValidationRuleHandler
 	rulesServiceVpcChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhServiceVpcChoice(rulesServiceVpcChoice)
 	if err != nil {
@@ -3693,7 +3702,7 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 
 	vrhTgwChoice := v.TgwChoiceValidationRuleHandler
 	rulesTgwChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhTgwChoice(rulesTgwChoice)
 	if err != nil {
@@ -4053,7 +4062,7 @@ var DefaultTGWParamsTypeValidator = func() *ValidateTGWParamsType {
 
 	vrhAsnChoice := v.AsnChoiceValidationRuleHandler
 	rulesAsnChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAsnChoice(rulesAsnChoice)
 	if err != nil {
@@ -4803,7 +4812,7 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 
 	vrhGlobalNetworkChoice := v.GlobalNetworkChoiceValidationRuleHandler
 	rulesGlobalNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhGlobalNetworkChoice(rulesGlobalNetworkChoice)
 	if err != nil {
@@ -4814,7 +4823,7 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 
 	vrhInsideStaticRouteChoice := v.InsideStaticRouteChoiceValidationRuleHandler
 	rulesInsideStaticRouteChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInsideStaticRouteChoice(rulesInsideStaticRouteChoice)
 	if err != nil {
@@ -4825,7 +4834,7 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 
 	vrhOutsideStaticRouteChoice := v.OutsideStaticRouteChoiceValidationRuleHandler
 	rulesOutsideStaticRouteChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhOutsideStaticRouteChoice(rulesOutsideStaticRouteChoice)
 	if err != nil {
@@ -4954,6 +4963,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Coordinates = f.GetCoordinates()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
+
 	m.TgwInfo = f.GetTgwInfo()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.Tunnels = f.GetTunnels()
@@ -4975,6 +4985,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Coordinates = m1.Coordinates
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
+
 	f.TgwInfo = m1.TgwInfo
 	f.TgwSecurity = m1.TgwSecurity
 	f.Tunnels = m1.Tunnels

@@ -356,7 +356,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhProxyChoice := v.ProxyChoiceValidationRuleHandler
 	rulesProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhProxyChoice(rulesProxyChoice)
 	if err != nil {
@@ -367,7 +367,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRuleChoice(rulesRuleChoice)
 	if err != nil {
@@ -1170,7 +1170,7 @@ var DefaultForwardProxyAdvancedRuleTypeValidator = func() *ValidateForwardProxyA
 
 	vrhDestinationChoice := v.DestinationChoiceValidationRuleHandler
 	rulesDestinationChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDestinationChoice(rulesDestinationChoice)
 	if err != nil {
@@ -1181,7 +1181,7 @@ var DefaultForwardProxyAdvancedRuleTypeValidator = func() *ValidateForwardProxyA
 
 	vrhSourceChoice := v.SourceChoiceValidationRuleHandler
 	rulesSourceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSourceChoice(rulesSourceChoice)
 	if err != nil {
@@ -1729,7 +1729,7 @@ var DefaultForwardProxySimpleRuleTypeValidator = func() *ValidateForwardProxySim
 
 	vrhDefaultActionChoice := v.DefaultActionChoiceValidationRuleHandler
 	rulesDefaultActionChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDefaultActionChoice(rulesDefaultActionChoice)
 	if err != nil {
@@ -2121,7 +2121,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhProxyChoice := v.ProxyChoiceValidationRuleHandler
 	rulesProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhProxyChoice(rulesProxyChoice)
 	if err != nil {
@@ -2132,7 +2132,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRuleChoice(rulesRuleChoice)
 	if err != nil {
@@ -2549,7 +2549,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhProxyChoice := v.ProxyChoiceValidationRuleHandler
 	rulesProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhProxyChoice(rulesProxyChoice)
 	if err != nil {
@@ -2560,7 +2560,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRuleChoice(rulesRuleChoice)
 	if err != nil {
@@ -2914,7 +2914,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhProxyChoice := v.ProxyChoiceValidationRuleHandler
 	rulesProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhProxyChoice(rulesProxyChoice)
 	if err != nil {
@@ -2925,7 +2925,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRuleChoice(rulesRuleChoice)
 	if err != nil {
@@ -3322,7 +3322,7 @@ var DefaultURLTypeValidator = func() *ValidateURLType {
 
 	vrhDomainChoice := v.DomainChoiceValidationRuleHandler
 	rulesDomainChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDomainChoice(rulesDomainChoice)
 	if err != nil {
@@ -3333,8 +3333,9 @@ var DefaultURLTypeValidator = func() *ValidateURLType {
 
 	vrhDomainChoiceExactValue := v.DomainChoiceExactValueValidationRuleHandler
 	rulesDomainChoiceExactValue := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-		"ves.io.schema.rules.string.min_len": "1",
+		"ves.io.schema.rules.string.hostname": "true",
+		"ves.io.schema.rules.string.max_len":  "256",
+		"ves.io.schema.rules.string.min_len":  "1",
 	}
 	vFnMap["domain_choice.exact_value"], err = vrhDomainChoiceExactValue(rulesDomainChoiceExactValue)
 	if err != nil {
@@ -3343,8 +3344,9 @@ var DefaultURLTypeValidator = func() *ValidateURLType {
 	}
 	vrhDomainChoiceSuffixValue := v.DomainChoiceSuffixValueValidationRuleHandler
 	rulesDomainChoiceSuffixValue := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-		"ves.io.schema.rules.string.min_len": "1",
+		"ves.io.schema.rules.string.hostname": "true",
+		"ves.io.schema.rules.string.max_len":  "256",
+		"ves.io.schema.rules.string.min_len":  "1",
 	}
 	vFnMap["domain_choice.suffix_value"], err = vrhDomainChoiceSuffixValue(rulesDomainChoiceSuffixValue)
 	if err != nil {
@@ -3369,7 +3371,7 @@ var DefaultURLTypeValidator = func() *ValidateURLType {
 
 	vrhPathChoice := v.PathChoiceValidationRuleHandler
 	rulesPathChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhPathChoice(rulesPathChoice)
 	if err != nil {
@@ -3380,8 +3382,9 @@ var DefaultURLTypeValidator = func() *ValidateURLType {
 
 	vrhPathChoicePathExactValue := v.PathChoicePathExactValueValidationRuleHandler
 	rulesPathChoicePathExactValue := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-		"ves.io.schema.rules.string.min_len": "1",
+		"ves.io.schema.rules.string.http_path": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFnMap["path_choice.path_exact_value"], err = vrhPathChoicePathExactValue(rulesPathChoicePathExactValue)
 	if err != nil {
@@ -3390,8 +3393,9 @@ var DefaultURLTypeValidator = func() *ValidateURLType {
 	}
 	vrhPathChoicePathPrefixValue := v.PathChoicePathPrefixValueValidationRuleHandler
 	rulesPathChoicePathPrefixValue := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-		"ves.io.schema.rules.string.min_len": "1",
+		"ves.io.schema.rules.string.http_path": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFnMap["path_choice.path_prefix_value"], err = vrhPathChoicePathPrefixValue(rulesPathChoicePathPrefixValue)
 	if err != nil {

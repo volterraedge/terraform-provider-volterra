@@ -45,7 +45,6 @@ import (
 	ves_io_schema_rate_limiter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
 	ves_io_schema_role "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/role"
 	ves_io_schema_route "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
-	ves_io_schema_secret_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy"
 	ves_io_schema_secret_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy_rule"
 	ves_io_schema_service_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy"
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
@@ -109,7 +108,6 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_rate_limiter":              resourceVolterraRateLimiter(),
 		"volterra_role":                      resourceVolterraRole(),
 		"volterra_route":                     resourceVolterraRoute(),
-		"volterra_secret_policy":             resourceVolterraSecretPolicy(),
 		"volterra_secret_policy_rule":        resourceVolterraSecretPolicyRule(),
 		"volterra_service_policy":            resourceVolterraServicePolicy(),
 		"volterra_service_policy_rule":       resourceVolterraServicePolicyRule(),
@@ -175,7 +173,6 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_rate_limiter.ObjectType,
 		ves_io_schema_role.ObjectType,
 		ves_io_schema_route.ObjectType,
-		ves_io_schema_secret_policy.ObjectType,
 		ves_io_schema_secret_policy_rule.ObjectType,
 		ves_io_schema_service_policy.ObjectType,
 		ves_io_schema_service_policy_rule.ObjectType,

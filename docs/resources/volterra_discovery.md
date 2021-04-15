@@ -20,11 +20,11 @@ resource "volterra_discovery" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "discovery_k8s discovery_consul" must be set
+  // One of the arguments from this list "discovery_consul discovery_k8s" must be set
 
   discovery_k8s {
     access_info {
-      // One of the arguments from this list "kubeconfig_url connection_info in_cluster" must be set
+      // One of the arguments from this list "in_cluster kubeconfig_url connection_info" must be set
 
       kubeconfig_url {
         blindfold_secret_info_internal {
@@ -35,7 +35,7 @@ resource "volterra_discovery" "example" {
 
         secret_encoding_type = "secret_encoding_type"
 
-        // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
+        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
         blindfold_secret_info {
           decryption_provider = "decryption_provider"
@@ -50,11 +50,7 @@ resource "volterra_discovery" "example" {
 
     publish_info {
       // One of the arguments from this list "disable publish publish_fqdns dns_delegation" must be set
-
-      dns_delegation {
-        dns_mode  = "dns_mode"
-        subdomain = "subdomain"
-      }
+      disable = true
     }
   }
   where {

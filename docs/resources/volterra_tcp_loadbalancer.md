@@ -21,17 +21,12 @@ resource "volterra_tcp_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
+  advertise_on_public_default_vip = true
 
-  advertise_on_public {
-    public_ip {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
   // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
   retract_cluster = true
-  // One of the arguments from this list "hash_policy_choice_source_ip_stickiness hash_policy_choice_round_robin hash_policy_choice_least_active hash_policy_choice_random" must be set
+
+  // One of the arguments from this list "hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness hash_policy_choice_round_robin" must be set
   hash_policy_choice_round_robin = true
 }
 
@@ -104,11 +99,9 @@ Advertise this loadbalancer on public network.
 
 Where should this load balancer be available.
 
-`private_network` - (Optional) Advertise on a VoltADN private network. See [Private Network ](#private-network) below for details.
-
 `site` - (Optional) Advertise on a customer site and a given network. . See [Site ](#site) below for details.
 
-`srv6_network` - (Optional) Advertise on a Per site srv6 network. See [Srv6 Network ](#srv6-network) below for details.
+`virtual_network` - (Optional) Advertise on a virtual network. See [Virtual Network ](#virtual-network) below for details.
 
 `virtual_site` - (Optional) Advertise on a customer virtual site and a given network.. See [Virtual Site ](#virtual-site) below for details.
 
@@ -120,7 +113,7 @@ Where should this load balancer be available.
 
 ### Default Vip
 
-Use the default VIP, system allocated or configured in the VoltADN Private Network.
+Use the default VIP, system allocated or configured in the virtual network.
 
 ### Origin Pools Weights
 
@@ -133,16 +126,6 @@ Origin pools and weights used for this loadbalancer..
 `pool` - (Required) Simple, commonly used pool parameters with origin pool. See [ref](#ref) below for details.
 
 `weight` - (Optional) Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool (`Int`).
-
-### Private Network
-
-Advertise on a VoltADN private network.
-
-`private_network` - (Required) Select VoltADN private network reference. See [ref](#ref) below for details.
-
-`default_vip` - (Optional) Use the default VIP, system allocated or configured in the VoltADN Private Network (bool).
-
-`specific_vip` - (Optional) Use given IP address as VIP on VoltADN private Network (`String`).
 
 ### Ref
 
@@ -164,19 +147,19 @@ Advertise on a customer site and a given network. .
 
 `site` - (Required) Reference to site object. See [ref](#ref) below for details.
 
-### Srv6 Network
-
-Advertise on a Per site srv6 network.
-
-`private_network` - (Required) Select per site srv6 network. See [ref](#ref) below for details.
-
-`default_vip` - (Optional) Use the default VIP, system allocated or configured in the VoltADN Private Network (bool).
-
-`specific_vip` - (Optional) Use given IP address as VIP on VoltADN private Network (`String`).
-
 ### Use Default Port
 
 For HTTP, default is 80. For HTTPS/SNI, default is 443..
+
+### Virtual Network
+
+Advertise on a virtual network.
+
+`default_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (bool).
+
+`specific_vip` - (Optional) Use given IP address as VIP on VoltADN private Network (`String`).
+
+`virtual_network` - (Required) Select virtual network reference. See [ref](#ref) below for details.
 
 ### Virtual Site
 

@@ -64,7 +64,7 @@ require (
 	google.golang.org/genproto v0.0.0-20200122232147-0452cf42e150
 	google.golang.org/grpc v1.27.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
-	gopkg.volterra.us/stdlib v0.0.0-20210317144045-4a56d31d74f9
+	gopkg.volterra.us/stdlib v0.0.0-20210409204458-7c7675f75ed0
 	k8s.io/api v0.17.9
 	k8s.io/apimachinery v0.17.10-rc.0 // indirect
 	k8s.io/client-go v0.17.9 // indirect

@@ -997,7 +997,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhFastAclChoice := v.FastAclChoiceValidationRuleHandler
 	rulesFastAclChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhFastAclChoice(rulesFastAclChoice)
 	if err != nil {
@@ -1020,7 +1020,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhForwardProxyPolicyChoice := v.ForwardProxyPolicyChoiceValidationRuleHandler
 	rulesForwardProxyPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhForwardProxyPolicyChoice(rulesForwardProxyPolicyChoice)
 	if err != nil {
@@ -1043,7 +1043,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
 	rulesNetworkPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkPolicyChoice(rulesNetworkPolicyChoice)
 	if err != nil {
@@ -1448,7 +1448,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhFastAclChoice := v.FastAclChoiceValidationRuleHandler
 	rulesFastAclChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhFastAclChoice(rulesFastAclChoice)
 	if err != nil {
@@ -1471,7 +1471,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhForwardProxyPolicyChoice := v.ForwardProxyPolicyChoiceValidationRuleHandler
 	rulesForwardProxyPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhForwardProxyPolicyChoice(rulesForwardProxyPolicyChoice)
 	if err != nil {
@@ -1494,7 +1494,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
 	rulesNetworkPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkPolicyChoice(rulesNetworkPolicyChoice)
 	if err != nil {
@@ -2678,7 +2678,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhFastAclChoice := v.FastAclChoiceValidationRuleHandler
 	rulesFastAclChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhFastAclChoice(rulesFastAclChoice)
 	if err != nil {
@@ -2701,7 +2701,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhForwardProxyPolicyChoice := v.ForwardProxyPolicyChoiceValidationRuleHandler
 	rulesForwardProxyPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhForwardProxyPolicyChoice(rulesForwardProxyPolicyChoice)
 	if err != nil {
@@ -2724,7 +2724,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
 	rulesNetworkPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkPolicyChoice(rulesNetworkPolicyChoice)
 	if err != nil {

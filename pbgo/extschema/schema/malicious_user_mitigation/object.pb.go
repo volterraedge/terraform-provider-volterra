@@ -26,9 +26,6 @@
 		MaliciousUserThreatLevel
 		MaliciousUserMitigationAction
 		MaliciousUserMitigationRule
-		JavascriptChallengeSettings
-		CaptchaChallengeSettings
-		TemporaryBlockingSettings
 		MaliciousUserMitigationType
 		GlobalSpecType
 		CreateSpecType

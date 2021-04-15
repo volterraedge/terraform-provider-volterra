@@ -278,7 +278,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhSiteChoice := v.SiteChoiceValidationRuleHandler
 	rulesSiteChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSiteChoice(rulesSiteChoice)
 	if err != nil {
@@ -967,7 +967,7 @@ var DefaultFastACLRuleTypeValidator = func() *ValidateFastACLRuleType {
 
 	vrhSource := v.SourceValidationRuleHandler
 	rulesSource := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSource(rulesSource)
 	if err != nil {
@@ -1271,7 +1271,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhSiteChoice := v.SiteChoiceValidationRuleHandler
 	rulesSiteChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSiteChoice(rulesSiteChoice)
 	if err != nil {
@@ -1844,7 +1844,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhConfigChoice := v.ConfigChoiceValidationRuleHandler
 	rulesConfigChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhConfigChoice(rulesConfigChoice)
 	if err != nil {
@@ -2433,7 +2433,7 @@ var DefaultReACLTypeValidator = func() *ValidateReACLType {
 
 	vrhVipChoice := v.VipChoiceValidationRuleHandler
 	rulesVipChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhVipChoice(rulesVipChoice)
 	if err != nil {
@@ -2715,7 +2715,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhSiteChoice := v.SiteChoiceValidationRuleHandler
 	rulesSiteChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSiteChoice(rulesSiteChoice)
 	if err != nil {
@@ -3337,7 +3337,7 @@ var DefaultSiteACLTypeValidator = func() *ValidateSiteACLType {
 
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkChoice(rulesNetworkChoice)
 	if err != nil {
@@ -3348,7 +3348,7 @@ var DefaultSiteACLTypeValidator = func() *ValidateSiteACLType {
 
 	vrhVipChoice := v.VipChoiceValidationRuleHandler
 	rulesVipChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhVipChoice(rulesVipChoice)
 	if err != nil {

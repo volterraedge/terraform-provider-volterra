@@ -15,6 +15,7 @@ import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/sch
 import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+import ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
 import strconv "strconv"
 
@@ -163,12 +164,22 @@ type BgpParameters struct {
 	// x-displayName: "ASN"
 	// x-example: 64512
 	// x-required
-	// Autonomous System Number for current site
+	// Autonomous System Number
 	Asn uint32 `protobuf:"varint,1,opt,name=asn,proto3" json:"asn,omitempty"`
+	// router_id_choice
+	//
+	// x-displayName: "Router ID"
+	// x-required
+	// Select the Router ID.
+	//
+	// Types that are valid to be assigned to RouterIdChoice:
+	//	*BgpParameters_LocalAddress
+	//	*BgpParameters_FromSite
+	//	*BgpParameters_IpAddress
+	RouterIdChoice isBgpParameters_RouterIdChoice `protobuf_oneof:"router_id_choice"`
 	// Router ID Type
 	//
 	// x-displayName: "Router ID Type"
-	// x-required
 	// Decides how BGP router id is derived
 	BgpRouterIdType BgpRouterIdType `protobuf:"varint,2,opt,name=bgp_router_id_type,json=bgpRouterIdType,proto3,enum=ves.io.schema.bgp.BgpRouterIdType" json:"bgp_router_id_type,omitempty"`
 	// Router ID
@@ -188,11 +199,60 @@ func (m *BgpParameters) Reset()                    { *m = BgpParameters{} }
 func (*BgpParameters) ProtoMessage()               {}
 func (*BgpParameters) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{0} }
 
+type isBgpParameters_RouterIdChoice interface {
+	isBgpParameters_RouterIdChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type BgpParameters_LocalAddress struct {
+	LocalAddress *ves_io_schema4.Empty `protobuf:"bytes,6,opt,name=local_address,json=localAddress,oneof"`
+}
+type BgpParameters_FromSite struct {
+	FromSite *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=from_site,json=fromSite,oneof"`
+}
+type BgpParameters_IpAddress struct {
+	IpAddress string `protobuf:"bytes,8,opt,name=ip_address,json=ipAddress,proto3,oneof"`
+}
+
+func (*BgpParameters_LocalAddress) isBgpParameters_RouterIdChoice() {}
+func (*BgpParameters_FromSite) isBgpParameters_RouterIdChoice()     {}
+func (*BgpParameters_IpAddress) isBgpParameters_RouterIdChoice()    {}
+
+func (m *BgpParameters) GetRouterIdChoice() isBgpParameters_RouterIdChoice {
+	if m != nil {
+		return m.RouterIdChoice
+	}
+	return nil
+}
+
 func (m *BgpParameters) GetAsn() uint32 {
 	if m != nil {
 		return m.Asn
 	}
 	return 0
+}
+
+func (m *BgpParameters) GetLocalAddress() *ves_io_schema4.Empty {
+	if x, ok := m.GetRouterIdChoice().(*BgpParameters_LocalAddress); ok {
+		return x.LocalAddress
+	}
+	return nil
+}
+
+func (m *BgpParameters) GetFromSite() *ves_io_schema4.Empty {
+	if x, ok := m.GetRouterIdChoice().(*BgpParameters_FromSite); ok {
+		return x.FromSite
+	}
+	return nil
+}
+
+func (m *BgpParameters) GetIpAddress() string {
+	if x, ok := m.GetRouterIdChoice().(*BgpParameters_IpAddress); ok {
+		return x.IpAddress
+	}
+	return ""
 }
 
 func (m *BgpParameters) GetBgpRouterIdType() BgpRouterIdType {
@@ -216,22 +276,108 @@ func (m *BgpParameters) GetBgpRouterIdKey() string {
 	return ""
 }
 
-// BGP Peer
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*BgpParameters) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _BgpParameters_OneofMarshaler, _BgpParameters_OneofUnmarshaler, _BgpParameters_OneofSizer, []interface{}{
+		(*BgpParameters_LocalAddress)(nil),
+		(*BgpParameters_FromSite)(nil),
+		(*BgpParameters_IpAddress)(nil),
+	}
+}
+
+func _BgpParameters_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*BgpParameters)
+	// router_id_choice
+	switch x := m.RouterIdChoice.(type) {
+	case *BgpParameters_LocalAddress:
+		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.LocalAddress); err != nil {
+			return err
+		}
+	case *BgpParameters_FromSite:
+		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.FromSite); err != nil {
+			return err
+		}
+	case *BgpParameters_IpAddress:
+		_ = b.EncodeVarint(8<<3 | proto.WireBytes)
+		_ = b.EncodeStringBytes(x.IpAddress)
+	case nil:
+	default:
+		return fmt.Errorf("BgpParameters.RouterIdChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _BgpParameters_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*BgpParameters)
+	switch tag {
+	case 6: // router_id_choice.local_address
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.RouterIdChoice = &BgpParameters_LocalAddress{msg}
+		return true, err
+	case 7: // router_id_choice.from_site
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.RouterIdChoice = &BgpParameters_FromSite{msg}
+		return true, err
+	case 8: // router_id_choice.ip_address
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.RouterIdChoice = &BgpParameters_IpAddress{x}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _BgpParameters_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*BgpParameters)
+	// router_id_choice
+	switch x := m.RouterIdChoice.(type) {
+	case *BgpParameters_LocalAddress:
+		s := proto.Size(x.LocalAddress)
+		n += proto.SizeVarint(6<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *BgpParameters_FromSite:
+		s := proto.Size(x.FromSite)
+		n += proto.SizeVarint(7<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *BgpParameters_IpAddress:
+		n += proto.SizeVarint(8<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(len(x.IpAddress)))
+		n += len(x.IpAddress)
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// Legacy BGP Peer
 //
-// x-displayName: "BGP Peer"
-// BGP Neighbor parameters
+// x-displayName: "Legacy BGP Peer"
+// Legacy BGP Peer parameters
 type BgpPeer struct {
 	// ASN
 	//
 	// x-displayName: "ASN"
-	// x-example: 64512
-	// x-required
 	// Autonomous System Number for BGP peer
 	Asn uint32 `protobuf:"varint,1,opt,name=asn,proto3" json:"asn,omitempty"`
 	// Peer Address Type
 	//
 	// x-displayName: "Peer Address Type"
-	// x-required
 	// Decides how bgp peer address is derived for this peer
 	BgpPeerAddressType BgpPeerAddressType `protobuf:"varint,2,opt,name=bgp_peer_address_type,json=bgpPeerAddressType,proto3,enum=ves.io.schema.bgp.BgpPeerAddressType" json:"bgp_peer_address_type,omitempty"`
 	// Peer Address
@@ -268,6 +414,26 @@ type BgpPeer struct {
 	// end of subnet and used as the peer address. For example, if the subnet is 1.2.3.0/24 and offset is
 	// set to 5 with Peer Address Type set to "Offset from end of Subnet", peer address of 1.2.3.250 is used.
 	BgpPeerSubnetOffset uint32 `protobuf:"varint,6,opt,name=bgp_peer_subnet_offset,json=bgpPeerSubnetOffset,proto3" json:"bgp_peer_subnet_offset,omitempty"`
+	// families
+	//
+	// x-displayName: "Address Families"
+	// List of address families for processing in vega code.
+	Families []*PeerFamilyParameters `protobuf:"bytes,20,rep,name=families" json:"families,omitempty"`
+	// interface_refs
+	//
+	// x-displayName: "Interface Refs"
+	// List of interface refs for processing in vega code.
+	InterfaceRefs []*ves_io_schema4.ObjectRefType `protobuf:"bytes,21,rep,name=interface_refs,json=interfaceRefs" json:"interface_refs,omitempty"`
+	// all_inside_interfaces
+	//
+	// x-displayName: "All Inside Interfaces"
+	// Tell vega to create this peer on each inside interface.
+	AllInsideInterfaces bool `protobuf:"varint,22,opt,name=all_inside_interfaces,json=allInsideInterfaces,proto3" json:"all_inside_interfaces,omitempty"`
+	// interface_refs
+	//
+	// x-displayName: "All Outside Interfaces"
+	// Tell vega to create this peer on each outside interface.
+	AllOutsideInterfaces bool `protobuf:"varint,23,opt,name=all_outside_interfaces,json=allOutsideInterfaces,proto3" json:"all_outside_interfaces,omitempty"`
 }
 
 func (m *BgpPeer) Reset()                    { *m = BgpPeer{} }
@@ -316,10 +482,1388 @@ func (m *BgpPeer) GetBgpPeerSubnetOffset() uint32 {
 	return 0
 }
 
+func (m *BgpPeer) GetFamilies() []*PeerFamilyParameters {
+	if m != nil {
+		return m.Families
+	}
+	return nil
+}
+
+func (m *BgpPeer) GetInterfaceRefs() []*ves_io_schema4.ObjectRefType {
+	if m != nil {
+		return m.InterfaceRefs
+	}
+	return nil
+}
+
+func (m *BgpPeer) GetAllInsideInterfaces() bool {
+	if m != nil {
+		return m.AllInsideInterfaces
+	}
+	return false
+}
+
+func (m *BgpPeer) GetAllOutsideInterfaces() bool {
+	if m != nil {
+		return m.AllOutsideInterfaces
+	}
+	return false
+}
+
+// InterfaceList
+//
+// x-displayName: "Interface List"
+// List of network interfaces.
+type InterfaceList struct {
+	// interface_list
+	//
+	// x-displayName: "Interface List"
+	// x-required
+	// List of network interfaces.
+	Interfaces []*ves_io_schema_views.ObjectRefType `protobuf:"bytes,1,rep,name=interfaces" json:"interfaces,omitempty"`
+}
+
+func (m *InterfaceList) Reset()                    { *m = InterfaceList{} }
+func (*InterfaceList) ProtoMessage()               {}
+func (*InterfaceList) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+
+func (m *InterfaceList) GetInterfaces() []*ves_io_schema_views.ObjectRefType {
+	if m != nil {
+		return m.Interfaces
+	}
+	return nil
+}
+
+// FamilyInet
+//
+// x-displayName: "BGP Family Inet"
+// Parameters for inet family.
+type FamilyInet struct {
+	// enable_choice
+	//
+	// x-displayName: "Enable or Disable IPv4 Unicast"
+	// x-required
+	// Enable or disable the IPv4 Unicast family i.e. AFI 1 and SAFI 1.
+	//
+	// Types that are valid to be assigned to EnableChoice:
+	//	*FamilyInet_Enable
+	//	*FamilyInet_Disable
+	EnableChoice isFamilyInet_EnableChoice `protobuf_oneof:"enable_choice"`
+}
+
+func (m *FamilyInet) Reset()                    { *m = FamilyInet{} }
+func (*FamilyInet) ProtoMessage()               {}
+func (*FamilyInet) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+
+type isFamilyInet_EnableChoice interface {
+	isFamilyInet_EnableChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type FamilyInet_Enable struct {
+	Enable *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=enable,oneof"`
+}
+type FamilyInet_Disable struct {
+	Disable *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=disable,oneof"`
+}
+
+func (*FamilyInet_Enable) isFamilyInet_EnableChoice()  {}
+func (*FamilyInet_Disable) isFamilyInet_EnableChoice() {}
+
+func (m *FamilyInet) GetEnableChoice() isFamilyInet_EnableChoice {
+	if m != nil {
+		return m.EnableChoice
+	}
+	return nil
+}
+
+func (m *FamilyInet) GetEnable() *ves_io_schema4.Empty {
+	if x, ok := m.GetEnableChoice().(*FamilyInet_Enable); ok {
+		return x.Enable
+	}
+	return nil
+}
+
+func (m *FamilyInet) GetDisable() *ves_io_schema4.Empty {
+	if x, ok := m.GetEnableChoice().(*FamilyInet_Disable); ok {
+		return x.Disable
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*FamilyInet) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _FamilyInet_OneofMarshaler, _FamilyInet_OneofUnmarshaler, _FamilyInet_OneofSizer, []interface{}{
+		(*FamilyInet_Enable)(nil),
+		(*FamilyInet_Disable)(nil),
+	}
+}
+
+func _FamilyInet_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*FamilyInet)
+	// enable_choice
+	switch x := m.EnableChoice.(type) {
+	case *FamilyInet_Enable:
+		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Enable); err != nil {
+			return err
+		}
+	case *FamilyInet_Disable:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Disable); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("FamilyInet.EnableChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _FamilyInet_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*FamilyInet)
+	switch tag {
+	case 2: // enable_choice.enable
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.EnableChoice = &FamilyInet_Enable{msg}
+		return true, err
+	case 3: // enable_choice.disable
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.EnableChoice = &FamilyInet_Disable{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _FamilyInet_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*FamilyInet)
+	// enable_choice
+	switch x := m.EnableChoice.(type) {
+	case *FamilyInet_Enable:
+		s := proto.Size(x.Enable)
+		n += proto.SizeVarint(2<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *FamilyInet_Disable:
+		s := proto.Size(x.Disable)
+		n += proto.SizeVarint(3<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// FamilyInetvpnParameters
+//
+// x-displayName: "BGP Family Inetvpn"
+// Parameters for inetvpn family.
+type FamilyInetvpnParameters struct {
+	// sr_choice
+	//
+	// x-displayName: "Enable Segment Routing with IPv6"
+	// x-required
+	// Enable or disable extensions for Segment Routing with IPv6.
+	//
+	// Types that are valid to be assigned to SrChoice:
+	//	*FamilyInetvpnParameters_Enable
+	//	*FamilyInetvpnParameters_Disable
+	SrChoice isFamilyInetvpnParameters_SrChoice `protobuf_oneof:"sr_choice"`
+}
+
+func (m *FamilyInetvpnParameters) Reset()                    { *m = FamilyInetvpnParameters{} }
+func (*FamilyInetvpnParameters) ProtoMessage()               {}
+func (*FamilyInetvpnParameters) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+
+type isFamilyInetvpnParameters_SrChoice interface {
+	isFamilyInetvpnParameters_SrChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type FamilyInetvpnParameters_Enable struct {
+	Enable *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=enable,oneof"`
+}
+type FamilyInetvpnParameters_Disable struct {
+	Disable *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=disable,oneof"`
+}
+
+func (*FamilyInetvpnParameters_Enable) isFamilyInetvpnParameters_SrChoice()  {}
+func (*FamilyInetvpnParameters_Disable) isFamilyInetvpnParameters_SrChoice() {}
+
+func (m *FamilyInetvpnParameters) GetSrChoice() isFamilyInetvpnParameters_SrChoice {
+	if m != nil {
+		return m.SrChoice
+	}
+	return nil
+}
+
+func (m *FamilyInetvpnParameters) GetEnable() *ves_io_schema4.Empty {
+	if x, ok := m.GetSrChoice().(*FamilyInetvpnParameters_Enable); ok {
+		return x.Enable
+	}
+	return nil
+}
+
+func (m *FamilyInetvpnParameters) GetDisable() *ves_io_schema4.Empty {
+	if x, ok := m.GetSrChoice().(*FamilyInetvpnParameters_Disable); ok {
+		return x.Disable
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*FamilyInetvpnParameters) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _FamilyInetvpnParameters_OneofMarshaler, _FamilyInetvpnParameters_OneofUnmarshaler, _FamilyInetvpnParameters_OneofSizer, []interface{}{
+		(*FamilyInetvpnParameters_Enable)(nil),
+		(*FamilyInetvpnParameters_Disable)(nil),
+	}
+}
+
+func _FamilyInetvpnParameters_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*FamilyInetvpnParameters)
+	// sr_choice
+	switch x := m.SrChoice.(type) {
+	case *FamilyInetvpnParameters_Enable:
+		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Enable); err != nil {
+			return err
+		}
+	case *FamilyInetvpnParameters_Disable:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Disable); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("FamilyInetvpnParameters.SrChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _FamilyInetvpnParameters_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*FamilyInetvpnParameters)
+	switch tag {
+	case 2: // sr_choice.enable
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.SrChoice = &FamilyInetvpnParameters_Enable{msg}
+		return true, err
+	case 3: // sr_choice.disable
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.SrChoice = &FamilyInetvpnParameters_Disable{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _FamilyInetvpnParameters_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*FamilyInetvpnParameters)
+	// sr_choice
+	switch x := m.SrChoice.(type) {
+	case *FamilyInetvpnParameters_Enable:
+		s := proto.Size(x.Enable)
+		n += proto.SizeVarint(2<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *FamilyInetvpnParameters_Disable:
+		s := proto.Size(x.Disable)
+		n += proto.SizeVarint(3<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// FamilyInetvpn
+//
+// x-displayName: "BGP Family Inetvpn"
+// Parameters for inetvpn family.
+type FamilyInetvpn struct {
+	// enable_choice
+	//
+	// x-displayName: "Enable or Disable IPv4 VPN Unicast"
+	// x-required
+	// Enable or disable the IPv4 Unicast family i.e. AFI 1 and SAFI 128.
+	//
+	// Types that are valid to be assigned to EnableChoice:
+	//	*FamilyInetvpn_Enable
+	//	*FamilyInetvpn_Disable
+	EnableChoice isFamilyInetvpn_EnableChoice `protobuf_oneof:"enable_choice"`
+}
+
+func (m *FamilyInetvpn) Reset()                    { *m = FamilyInetvpn{} }
+func (*FamilyInetvpn) ProtoMessage()               {}
+func (*FamilyInetvpn) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+
+type isFamilyInetvpn_EnableChoice interface {
+	isFamilyInetvpn_EnableChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type FamilyInetvpn_Enable struct {
+	Enable *FamilyInetvpnParameters `protobuf:"bytes,2,opt,name=enable,oneof"`
+}
+type FamilyInetvpn_Disable struct {
+	Disable *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=disable,oneof"`
+}
+
+func (*FamilyInetvpn_Enable) isFamilyInetvpn_EnableChoice()  {}
+func (*FamilyInetvpn_Disable) isFamilyInetvpn_EnableChoice() {}
+
+func (m *FamilyInetvpn) GetEnableChoice() isFamilyInetvpn_EnableChoice {
+	if m != nil {
+		return m.EnableChoice
+	}
+	return nil
+}
+
+func (m *FamilyInetvpn) GetEnable() *FamilyInetvpnParameters {
+	if x, ok := m.GetEnableChoice().(*FamilyInetvpn_Enable); ok {
+		return x.Enable
+	}
+	return nil
+}
+
+func (m *FamilyInetvpn) GetDisable() *ves_io_schema4.Empty {
+	if x, ok := m.GetEnableChoice().(*FamilyInetvpn_Disable); ok {
+		return x.Disable
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*FamilyInetvpn) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _FamilyInetvpn_OneofMarshaler, _FamilyInetvpn_OneofUnmarshaler, _FamilyInetvpn_OneofSizer, []interface{}{
+		(*FamilyInetvpn_Enable)(nil),
+		(*FamilyInetvpn_Disable)(nil),
+	}
+}
+
+func _FamilyInetvpn_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*FamilyInetvpn)
+	// enable_choice
+	switch x := m.EnableChoice.(type) {
+	case *FamilyInetvpn_Enable:
+		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Enable); err != nil {
+			return err
+		}
+	case *FamilyInetvpn_Disable:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Disable); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("FamilyInetvpn.EnableChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _FamilyInetvpn_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*FamilyInetvpn)
+	switch tag {
+	case 2: // enable_choice.enable
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(FamilyInetvpnParameters)
+		err := b.DecodeMessage(msg)
+		m.EnableChoice = &FamilyInetvpn_Enable{msg}
+		return true, err
+	case 3: // enable_choice.disable
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.EnableChoice = &FamilyInetvpn_Disable{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _FamilyInetvpn_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*FamilyInetvpn)
+	// enable_choice
+	switch x := m.EnableChoice.(type) {
+	case *FamilyInetvpn_Enable:
+		s := proto.Size(x.Enable)
+		n += proto.SizeVarint(2<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *FamilyInetvpn_Disable:
+		s := proto.Size(x.Disable)
+		n += proto.SizeVarint(3<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// FamilyRtarget
+//
+// x-displayName: "BGP Family Route Target"
+// Parameters for rtarget family.
+type FamilyRtarget struct {
+	// enable_choice
+	//
+	// x-displayName: "Enable or Disable Route Target"
+	// x-required
+	// Enable or disable the Route Target family i.e. AFI 1 and SAFI 132.
+	//
+	// Types that are valid to be assigned to EnableChoice:
+	//	*FamilyRtarget_Enable
+	//	*FamilyRtarget_Disable
+	EnableChoice isFamilyRtarget_EnableChoice `protobuf_oneof:"enable_choice"`
+}
+
+func (m *FamilyRtarget) Reset()                    { *m = FamilyRtarget{} }
+func (*FamilyRtarget) ProtoMessage()               {}
+func (*FamilyRtarget) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+
+type isFamilyRtarget_EnableChoice interface {
+	isFamilyRtarget_EnableChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type FamilyRtarget_Enable struct {
+	Enable *ves_io_schema4.Empty `protobuf:"bytes,2,opt,name=enable,oneof"`
+}
+type FamilyRtarget_Disable struct {
+	Disable *ves_io_schema4.Empty `protobuf:"bytes,3,opt,name=disable,oneof"`
+}
+
+func (*FamilyRtarget_Enable) isFamilyRtarget_EnableChoice()  {}
+func (*FamilyRtarget_Disable) isFamilyRtarget_EnableChoice() {}
+
+func (m *FamilyRtarget) GetEnableChoice() isFamilyRtarget_EnableChoice {
+	if m != nil {
+		return m.EnableChoice
+	}
+	return nil
+}
+
+func (m *FamilyRtarget) GetEnable() *ves_io_schema4.Empty {
+	if x, ok := m.GetEnableChoice().(*FamilyRtarget_Enable); ok {
+		return x.Enable
+	}
+	return nil
+}
+
+func (m *FamilyRtarget) GetDisable() *ves_io_schema4.Empty {
+	if x, ok := m.GetEnableChoice().(*FamilyRtarget_Disable); ok {
+		return x.Disable
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*FamilyRtarget) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _FamilyRtarget_OneofMarshaler, _FamilyRtarget_OneofUnmarshaler, _FamilyRtarget_OneofSizer, []interface{}{
+		(*FamilyRtarget_Enable)(nil),
+		(*FamilyRtarget_Disable)(nil),
+	}
+}
+
+func _FamilyRtarget_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*FamilyRtarget)
+	// enable_choice
+	switch x := m.EnableChoice.(type) {
+	case *FamilyRtarget_Enable:
+		_ = b.EncodeVarint(2<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Enable); err != nil {
+			return err
+		}
+	case *FamilyRtarget_Disable:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Disable); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("FamilyRtarget.EnableChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _FamilyRtarget_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*FamilyRtarget)
+	switch tag {
+	case 2: // enable_choice.enable
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.EnableChoice = &FamilyRtarget_Enable{msg}
+		return true, err
+	case 3: // enable_choice.disable
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.EnableChoice = &FamilyRtarget_Disable{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _FamilyRtarget_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*FamilyRtarget)
+	// enable_choice
+	switch x := m.EnableChoice.(type) {
+	case *FamilyRtarget_Enable:
+		s := proto.Size(x.Enable)
+		n += proto.SizeVarint(2<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *FamilyRtarget_Disable:
+		s := proto.Size(x.Disable)
+		n += proto.SizeVarint(3<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// PeerFamilyParameters
+//
+// x-displayName: "BGP Peer Family"
+// Peer Family parameters - for internal use only.
+type PeerFamilyParameters struct {
+	// family
+	//
+	// x-displayName: "Family"
+	// x-example: "inetvpn"
+	// Name of the address family.
+	Family string `protobuf:"bytes,1,opt,name=family,proto3" json:"family,omitempty"`
+	// enable_srv6
+	//
+	// x-displayName: "Enable SRv6"
+	// Enable extensions for SRv6.
+	EnableSrv6 bool `protobuf:"varint,2,opt,name=enable_srv6,json=enableSrv6,proto3" json:"enable_srv6,omitempty"`
+}
+
+func (m *PeerFamilyParameters) Reset()                    { *m = PeerFamilyParameters{} }
+func (*PeerFamilyParameters) ProtoMessage()               {}
+func (*PeerFamilyParameters) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+
+func (m *PeerFamilyParameters) GetFamily() string {
+	if m != nil {
+		return m.Family
+	}
+	return ""
+}
+
+func (m *PeerFamilyParameters) GetEnableSrv6() bool {
+	if m != nil {
+		return m.EnableSrv6
+	}
+	return false
+}
+
+// PeerExternal
+//
+// x-displayName: "External BGP Peer"
+// External BGP Peer parameters.
+type PeerExternal struct {
+	// ASN
+	//
+	// x-displayName: "ASN"
+	// x-example: 64512
+	// x-required
+	// Autonomous System Number for BGP peer
+	Asn uint32 `protobuf:"varint,1,opt,name=asn,proto3" json:"asn,omitempty"`
+	// address_choice
+	//
+	// x-displayName: "Peer Address"
+	// x-required
+	// Peer address configuration.
+	//
+	// Types that are valid to be assigned to AddressChoice:
+	//	*PeerExternal_Address
+	//	*PeerExternal_SubnetBeginOffset
+	//	*PeerExternal_SubnetEndOffset
+	//	*PeerExternal_FromSite
+	//	*PeerExternal_DefaultGateway
+	AddressChoice isPeerExternal_AddressChoice `protobuf_oneof:"address_choice"`
+	// Peer Port
+	//
+	// x-displayName: "Peer Port"
+	// x-example: 179
+	// Peer TCP port number.
+	Port uint32 `protobuf:"varint,10,opt,name=port,proto3" json:"port,omitempty"`
+	// family_inet
+	//
+	// x-displayName: "Family IPv4 Unicast"
+	// Parameters for IPv4 Unicast family.
+	FamilyInet *FamilyInet `protobuf:"bytes,11,opt,name=family_inet,json=familyInet" json:"family_inet,omitempty"`
+	// interface_choice
+	//
+	// x-displayName: "Peer Interface(s)"
+	// x-required
+	// Peer interface configuration.
+	//
+	// Types that are valid to be assigned to InterfaceChoice:
+	//	*PeerExternal_Interface
+	//	*PeerExternal_InterfaceList
+	//	*PeerExternal_InsideInterfaces
+	//	*PeerExternal_OutsideInterfaces
+	InterfaceChoice isPeerExternal_InterfaceChoice `protobuf_oneof:"interface_choice"`
+}
+
+func (m *PeerExternal) Reset()                    { *m = PeerExternal{} }
+func (*PeerExternal) ProtoMessage()               {}
+func (*PeerExternal) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{8} }
+
+type isPeerExternal_AddressChoice interface {
+	isPeerExternal_AddressChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isPeerExternal_InterfaceChoice interface {
+	isPeerExternal_InterfaceChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type PeerExternal_Address struct {
+	Address string `protobuf:"bytes,3,opt,name=address,proto3,oneof"`
+}
+type PeerExternal_SubnetBeginOffset struct {
+	SubnetBeginOffset uint32 `protobuf:"varint,4,opt,name=subnet_begin_offset,json=subnetBeginOffset,proto3,oneof"`
+}
+type PeerExternal_SubnetEndOffset struct {
+	SubnetEndOffset uint32 `protobuf:"varint,5,opt,name=subnet_end_offset,json=subnetEndOffset,proto3,oneof"`
+}
+type PeerExternal_FromSite struct {
+	FromSite *ves_io_schema4.Empty `protobuf:"bytes,6,opt,name=from_site,json=fromSite,oneof"`
+}
+type PeerExternal_DefaultGateway struct {
+	DefaultGateway *ves_io_schema4.Empty `protobuf:"bytes,7,opt,name=default_gateway,json=defaultGateway,oneof"`
+}
+type PeerExternal_Interface struct {
+	Interface *ves_io_schema_views.ObjectRefType `protobuf:"bytes,21,opt,name=interface,oneof"`
+}
+type PeerExternal_InterfaceList struct {
+	InterfaceList *InterfaceList `protobuf:"bytes,22,opt,name=interface_list,json=interfaceList,oneof"`
+}
+type PeerExternal_InsideInterfaces struct {
+	InsideInterfaces *ves_io_schema4.Empty `protobuf:"bytes,23,opt,name=inside_interfaces,json=insideInterfaces,oneof"`
+}
+type PeerExternal_OutsideInterfaces struct {
+	OutsideInterfaces *ves_io_schema4.Empty `protobuf:"bytes,24,opt,name=outside_interfaces,json=outsideInterfaces,oneof"`
+}
+
+func (*PeerExternal_Address) isPeerExternal_AddressChoice()             {}
+func (*PeerExternal_SubnetBeginOffset) isPeerExternal_AddressChoice()   {}
+func (*PeerExternal_SubnetEndOffset) isPeerExternal_AddressChoice()     {}
+func (*PeerExternal_FromSite) isPeerExternal_AddressChoice()            {}
+func (*PeerExternal_DefaultGateway) isPeerExternal_AddressChoice()      {}
+func (*PeerExternal_Interface) isPeerExternal_InterfaceChoice()         {}
+func (*PeerExternal_InterfaceList) isPeerExternal_InterfaceChoice()     {}
+func (*PeerExternal_InsideInterfaces) isPeerExternal_InterfaceChoice()  {}
+func (*PeerExternal_OutsideInterfaces) isPeerExternal_InterfaceChoice() {}
+
+func (m *PeerExternal) GetAddressChoice() isPeerExternal_AddressChoice {
+	if m != nil {
+		return m.AddressChoice
+	}
+	return nil
+}
+func (m *PeerExternal) GetInterfaceChoice() isPeerExternal_InterfaceChoice {
+	if m != nil {
+		return m.InterfaceChoice
+	}
+	return nil
+}
+
+func (m *PeerExternal) GetAsn() uint32 {
+	if m != nil {
+		return m.Asn
+	}
+	return 0
+}
+
+func (m *PeerExternal) GetAddress() string {
+	if x, ok := m.GetAddressChoice().(*PeerExternal_Address); ok {
+		return x.Address
+	}
+	return ""
+}
+
+func (m *PeerExternal) GetSubnetBeginOffset() uint32 {
+	if x, ok := m.GetAddressChoice().(*PeerExternal_SubnetBeginOffset); ok {
+		return x.SubnetBeginOffset
+	}
+	return 0
+}
+
+func (m *PeerExternal) GetSubnetEndOffset() uint32 {
+	if x, ok := m.GetAddressChoice().(*PeerExternal_SubnetEndOffset); ok {
+		return x.SubnetEndOffset
+	}
+	return 0
+}
+
+func (m *PeerExternal) GetFromSite() *ves_io_schema4.Empty {
+	if x, ok := m.GetAddressChoice().(*PeerExternal_FromSite); ok {
+		return x.FromSite
+	}
+	return nil
+}
+
+func (m *PeerExternal) GetDefaultGateway() *ves_io_schema4.Empty {
+	if x, ok := m.GetAddressChoice().(*PeerExternal_DefaultGateway); ok {
+		return x.DefaultGateway
+	}
+	return nil
+}
+
+func (m *PeerExternal) GetPort() uint32 {
+	if m != nil {
+		return m.Port
+	}
+	return 0
+}
+
+func (m *PeerExternal) GetFamilyInet() *FamilyInet {
+	if m != nil {
+		return m.FamilyInet
+	}
+	return nil
+}
+
+func (m *PeerExternal) GetInterface() *ves_io_schema_views.ObjectRefType {
+	if x, ok := m.GetInterfaceChoice().(*PeerExternal_Interface); ok {
+		return x.Interface
+	}
+	return nil
+}
+
+func (m *PeerExternal) GetInterfaceList() *InterfaceList {
+	if x, ok := m.GetInterfaceChoice().(*PeerExternal_InterfaceList); ok {
+		return x.InterfaceList
+	}
+	return nil
+}
+
+func (m *PeerExternal) GetInsideInterfaces() *ves_io_schema4.Empty {
+	if x, ok := m.GetInterfaceChoice().(*PeerExternal_InsideInterfaces); ok {
+		return x.InsideInterfaces
+	}
+	return nil
+}
+
+func (m *PeerExternal) GetOutsideInterfaces() *ves_io_schema4.Empty {
+	if x, ok := m.GetInterfaceChoice().(*PeerExternal_OutsideInterfaces); ok {
+		return x.OutsideInterfaces
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*PeerExternal) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _PeerExternal_OneofMarshaler, _PeerExternal_OneofUnmarshaler, _PeerExternal_OneofSizer, []interface{}{
+		(*PeerExternal_Address)(nil),
+		(*PeerExternal_SubnetBeginOffset)(nil),
+		(*PeerExternal_SubnetEndOffset)(nil),
+		(*PeerExternal_FromSite)(nil),
+		(*PeerExternal_DefaultGateway)(nil),
+		(*PeerExternal_Interface)(nil),
+		(*PeerExternal_InterfaceList)(nil),
+		(*PeerExternal_InsideInterfaces)(nil),
+		(*PeerExternal_OutsideInterfaces)(nil),
+	}
+}
+
+func _PeerExternal_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*PeerExternal)
+	// address_choice
+	switch x := m.AddressChoice.(type) {
+	case *PeerExternal_Address:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		_ = b.EncodeStringBytes(x.Address)
+	case *PeerExternal_SubnetBeginOffset:
+		_ = b.EncodeVarint(4<<3 | proto.WireVarint)
+		_ = b.EncodeVarint(uint64(x.SubnetBeginOffset))
+	case *PeerExternal_SubnetEndOffset:
+		_ = b.EncodeVarint(5<<3 | proto.WireVarint)
+		_ = b.EncodeVarint(uint64(x.SubnetEndOffset))
+	case *PeerExternal_FromSite:
+		_ = b.EncodeVarint(6<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.FromSite); err != nil {
+			return err
+		}
+	case *PeerExternal_DefaultGateway:
+		_ = b.EncodeVarint(7<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.DefaultGateway); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("PeerExternal.AddressChoice has unexpected type %T", x)
+	}
+	// interface_choice
+	switch x := m.InterfaceChoice.(type) {
+	case *PeerExternal_Interface:
+		_ = b.EncodeVarint(21<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Interface); err != nil {
+			return err
+		}
+	case *PeerExternal_InterfaceList:
+		_ = b.EncodeVarint(22<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.InterfaceList); err != nil {
+			return err
+		}
+	case *PeerExternal_InsideInterfaces:
+		_ = b.EncodeVarint(23<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.InsideInterfaces); err != nil {
+			return err
+		}
+	case *PeerExternal_OutsideInterfaces:
+		_ = b.EncodeVarint(24<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.OutsideInterfaces); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("PeerExternal.InterfaceChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _PeerExternal_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*PeerExternal)
+	switch tag {
+	case 3: // address_choice.address
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.AddressChoice = &PeerExternal_Address{x}
+		return true, err
+	case 4: // address_choice.subnet_begin_offset
+		if wire != proto.WireVarint {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeVarint()
+		m.AddressChoice = &PeerExternal_SubnetBeginOffset{uint32(x)}
+		return true, err
+	case 5: // address_choice.subnet_end_offset
+		if wire != proto.WireVarint {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeVarint()
+		m.AddressChoice = &PeerExternal_SubnetEndOffset{uint32(x)}
+		return true, err
+	case 6: // address_choice.from_site
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.AddressChoice = &PeerExternal_FromSite{msg}
+		return true, err
+	case 7: // address_choice.default_gateway
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.AddressChoice = &PeerExternal_DefaultGateway{msg}
+		return true, err
+	case 21: // interface_choice.interface
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema_views.ObjectRefType)
+		err := b.DecodeMessage(msg)
+		m.InterfaceChoice = &PeerExternal_Interface{msg}
+		return true, err
+	case 22: // interface_choice.interface_list
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(InterfaceList)
+		err := b.DecodeMessage(msg)
+		m.InterfaceChoice = &PeerExternal_InterfaceList{msg}
+		return true, err
+	case 23: // interface_choice.inside_interfaces
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.InterfaceChoice = &PeerExternal_InsideInterfaces{msg}
+		return true, err
+	case 24: // interface_choice.outside_interfaces
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.InterfaceChoice = &PeerExternal_OutsideInterfaces{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _PeerExternal_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*PeerExternal)
+	// address_choice
+	switch x := m.AddressChoice.(type) {
+	case *PeerExternal_Address:
+		n += proto.SizeVarint(3<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(len(x.Address)))
+		n += len(x.Address)
+	case *PeerExternal_SubnetBeginOffset:
+		n += proto.SizeVarint(4<<3 | proto.WireVarint)
+		n += proto.SizeVarint(uint64(x.SubnetBeginOffset))
+	case *PeerExternal_SubnetEndOffset:
+		n += proto.SizeVarint(5<<3 | proto.WireVarint)
+		n += proto.SizeVarint(uint64(x.SubnetEndOffset))
+	case *PeerExternal_FromSite:
+		s := proto.Size(x.FromSite)
+		n += proto.SizeVarint(6<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *PeerExternal_DefaultGateway:
+		s := proto.Size(x.DefaultGateway)
+		n += proto.SizeVarint(7<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	// interface_choice
+	switch x := m.InterfaceChoice.(type) {
+	case *PeerExternal_Interface:
+		s := proto.Size(x.Interface)
+		n += proto.SizeVarint(21<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *PeerExternal_InterfaceList:
+		s := proto.Size(x.InterfaceList)
+		n += proto.SizeVarint(22<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *PeerExternal_InsideInterfaces:
+		s := proto.Size(x.InsideInterfaces)
+		n += proto.SizeVarint(23<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *PeerExternal_OutsideInterfaces:
+		s := proto.Size(x.OutsideInterfaces)
+		n += proto.SizeVarint(24<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// PeerInternal
+//
+// x-displayName: "Internal BGP Peer"
+// Internal BGP Peer parameters.
+type PeerInternal struct {
+	// address_choice
+	//
+	// x-displayName: "Peer Address"
+	// x-required
+	// Peer address configuration.
+	//
+	// Types that are valid to be assigned to AddressChoice:
+	//	*PeerInternal_Address
+	//	*PeerInternal_FromSite
+	//	*PeerInternal_DnsName
+	AddressChoice isPeerInternal_AddressChoice `protobuf_oneof:"address_choice"`
+	// port
+	//
+	// x-displayName: "Peer Port"
+	// x-example: 179
+	// Peer TCP port number.
+	Port uint32 `protobuf:"varint,10,opt,name=port,proto3" json:"port,omitempty"`
+	// family_inetvpn
+	//
+	// x-displayName: "Family IPv4 VPN Unicast"
+	// Parameters for IPv4 VPN Unicast family.
+	FamilyInetvpn *FamilyInetvpn `protobuf:"bytes,11,opt,name=family_inetvpn,json=familyInetvpn" json:"family_inetvpn,omitempty"`
+	// family_rtarget
+	//
+	// x-displayName: "Family Route Target"
+	// Parameters for Route Target family.
+	FamilyRtarget *FamilyRtarget `protobuf:"bytes,12,opt,name=family_rtarget,json=familyRtarget" json:"family_rtarget,omitempty"`
+}
+
+func (m *PeerInternal) Reset()                    { *m = PeerInternal{} }
+func (*PeerInternal) ProtoMessage()               {}
+func (*PeerInternal) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{9} }
+
+type isPeerInternal_AddressChoice interface {
+	isPeerInternal_AddressChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type PeerInternal_Address struct {
+	Address string `protobuf:"bytes,3,opt,name=address,proto3,oneof"`
+}
+type PeerInternal_FromSite struct {
+	FromSite *ves_io_schema4.Empty `protobuf:"bytes,4,opt,name=from_site,json=fromSite,oneof"`
+}
+type PeerInternal_DnsName struct {
+	DnsName string `protobuf:"bytes,5,opt,name=dns_name,json=dnsName,proto3,oneof"`
+}
+
+func (*PeerInternal_Address) isPeerInternal_AddressChoice()  {}
+func (*PeerInternal_FromSite) isPeerInternal_AddressChoice() {}
+func (*PeerInternal_DnsName) isPeerInternal_AddressChoice()  {}
+
+func (m *PeerInternal) GetAddressChoice() isPeerInternal_AddressChoice {
+	if m != nil {
+		return m.AddressChoice
+	}
+	return nil
+}
+
+func (m *PeerInternal) GetAddress() string {
+	if x, ok := m.GetAddressChoice().(*PeerInternal_Address); ok {
+		return x.Address
+	}
+	return ""
+}
+
+func (m *PeerInternal) GetFromSite() *ves_io_schema4.Empty {
+	if x, ok := m.GetAddressChoice().(*PeerInternal_FromSite); ok {
+		return x.FromSite
+	}
+	return nil
+}
+
+func (m *PeerInternal) GetDnsName() string {
+	if x, ok := m.GetAddressChoice().(*PeerInternal_DnsName); ok {
+		return x.DnsName
+	}
+	return ""
+}
+
+func (m *PeerInternal) GetPort() uint32 {
+	if m != nil {
+		return m.Port
+	}
+	return 0
+}
+
+func (m *PeerInternal) GetFamilyInetvpn() *FamilyInetvpn {
+	if m != nil {
+		return m.FamilyInetvpn
+	}
+	return nil
+}
+
+func (m *PeerInternal) GetFamilyRtarget() *FamilyRtarget {
+	if m != nil {
+		return m.FamilyRtarget
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*PeerInternal) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _PeerInternal_OneofMarshaler, _PeerInternal_OneofUnmarshaler, _PeerInternal_OneofSizer, []interface{}{
+		(*PeerInternal_Address)(nil),
+		(*PeerInternal_FromSite)(nil),
+		(*PeerInternal_DnsName)(nil),
+	}
+}
+
+func _PeerInternal_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*PeerInternal)
+	// address_choice
+	switch x := m.AddressChoice.(type) {
+	case *PeerInternal_Address:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		_ = b.EncodeStringBytes(x.Address)
+	case *PeerInternal_FromSite:
+		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.FromSite); err != nil {
+			return err
+		}
+	case *PeerInternal_DnsName:
+		_ = b.EncodeVarint(5<<3 | proto.WireBytes)
+		_ = b.EncodeStringBytes(x.DnsName)
+	case nil:
+	default:
+		return fmt.Errorf("PeerInternal.AddressChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _PeerInternal_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*PeerInternal)
+	switch tag {
+	case 3: // address_choice.address
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.AddressChoice = &PeerInternal_Address{x}
+		return true, err
+	case 4: // address_choice.from_site
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ves_io_schema4.Empty)
+		err := b.DecodeMessage(msg)
+		m.AddressChoice = &PeerInternal_FromSite{msg}
+		return true, err
+	case 5: // address_choice.dns_name
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.AddressChoice = &PeerInternal_DnsName{x}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _PeerInternal_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*PeerInternal)
+	// address_choice
+	switch x := m.AddressChoice.(type) {
+	case *PeerInternal_Address:
+		n += proto.SizeVarint(3<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(len(x.Address)))
+		n += len(x.Address)
+	case *PeerInternal_FromSite:
+		s := proto.Size(x.FromSite)
+		n += proto.SizeVarint(4<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *PeerInternal_DnsName:
+		n += proto.SizeVarint(5<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(len(x.DnsName)))
+		n += len(x.DnsName)
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// Peer
+//
+// x-displayName: "BGP Peer"
+// BGP Peer parameters
+type Peer struct {
+	// metadata
+	//
+	// x-displayName: "Metadata"
+	// x-required
+	// Common attributes for the peer including name and description.
+	Metadata *ves_io_schema4.MessageMetaType `protobuf:"bytes,1,opt,name=metadata" json:"metadata,omitempty"`
+	// type_choice
+	//
+	// x-displayName: "Peer Type"
+	// x-required
+	// Select the type of peer.
+	//
+	// Types that are valid to be assigned to TypeChoice:
+	//	*Peer_External
+	//	*Peer_Internal
+	TypeChoice isPeer_TypeChoice `protobuf_oneof:"type_choice"`
+	// target_service
+	//
+	// x-displayName: "Target Service"
+	// Specify whether this peer should be configured in "phobos" or "frr".
+	TargetService string `protobuf:"bytes,1000,opt,name=target_service,json=targetService,proto3" json:"target_service,omitempty"`
+}
+
+func (m *Peer) Reset()                    { *m = Peer{} }
+func (*Peer) ProtoMessage()               {}
+func (*Peer) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{10} }
+
+type isPeer_TypeChoice interface {
+	isPeer_TypeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type Peer_External struct {
+	External *PeerExternal `protobuf:"bytes,3,opt,name=external,oneof"`
+}
+type Peer_Internal struct {
+	Internal *PeerInternal `protobuf:"bytes,4,opt,name=internal,oneof"`
+}
+
+func (*Peer_External) isPeer_TypeChoice() {}
+func (*Peer_Internal) isPeer_TypeChoice() {}
+
+func (m *Peer) GetTypeChoice() isPeer_TypeChoice {
+	if m != nil {
+		return m.TypeChoice
+	}
+	return nil
+}
+
+func (m *Peer) GetMetadata() *ves_io_schema4.MessageMetaType {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *Peer) GetExternal() *PeerExternal {
+	if x, ok := m.GetTypeChoice().(*Peer_External); ok {
+		return x.External
+	}
+	return nil
+}
+
+func (m *Peer) GetInternal() *PeerInternal {
+	if x, ok := m.GetTypeChoice().(*Peer_Internal); ok {
+		return x.Internal
+	}
+	return nil
+}
+
+func (m *Peer) GetTargetService() string {
+	if m != nil {
+		return m.TargetService
+	}
+	return ""
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*Peer) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _Peer_OneofMarshaler, _Peer_OneofUnmarshaler, _Peer_OneofSizer, []interface{}{
+		(*Peer_External)(nil),
+		(*Peer_Internal)(nil),
+	}
+}
+
+func _Peer_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*Peer)
+	// type_choice
+	switch x := m.TypeChoice.(type) {
+	case *Peer_External:
+		_ = b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.External); err != nil {
+			return err
+		}
+	case *Peer_Internal:
+		_ = b.EncodeVarint(4<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Internal); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("Peer.TypeChoice has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _Peer_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*Peer)
+	switch tag {
+	case 3: // type_choice.external
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(PeerExternal)
+		err := b.DecodeMessage(msg)
+		m.TypeChoice = &Peer_External{msg}
+		return true, err
+	case 4: // type_choice.internal
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(PeerInternal)
+		err := b.DecodeMessage(msg)
+		m.TypeChoice = &Peer_Internal{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _Peer_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*Peer)
+	// type_choice
+	switch x := m.TypeChoice.(type) {
+	case *Peer_External:
+		s := proto.Size(x.External)
+		n += proto.SizeVarint(3<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *Peer_Internal:
+		s := proto.Size(x.Internal)
+		n += proto.SizeVarint(4<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
 // Global Specification
 //
 // x-displayName: "Global Specification"
-// BGP specification to peer with external BGP servers
+// BGP specification.
 type GlobalSpecType struct {
 	// Where
 	//
@@ -336,20 +1880,37 @@ type GlobalSpecType struct {
 	// BGP Peers
 	//
 	// x-displayName: "Peers"
-	// x-required
 	// BGP parameters for peer
 	BgpPeers []*BgpPeer `protobuf:"bytes,3,rep,name=bgp_peers,json=bgpPeers" json:"bgp_peers,omitempty"`
 	// Interfaces
 	//
 	// x-displayName: "Interfaces"
-	// x-required
 	// List of interfaces to which the BGP configuration is applied
 	NetworkInterface []*ves_io_schema4.ObjectRefType `protobuf:"bytes,4,rep,name=network_interface,json=networkInterface" json:"network_interface,omitempty"`
+	// BGP Peers
+	//
+	// x-displayName: "Peers"
+	// x-required
+	// BGP parameters for peer
+	Peers []*Peer `protobuf:"bytes,5,rep,name=peers" json:"peers,omitempty"`
+	// view_internal
+	//
+	// x-displayName: "View Internal"
+	// Reference to view internal object
+	ViewInternal *ves_io_schema_views.ObjectRefType `protobuf:"bytes,1000,opt,name=view_internal,json=viewInternal" json:"view_internal,omitempty"`
+	// view_version
+	//
+	// x-displayName: "View Version"
+	// Version number for view. This will be set to 1 for objects that are read from the database,
+	// converted to (Create|Replace)SpecType, processed and stored again after view handling. This
+	// field can continue to be used in a similar way when multiple versions need to be handled in
+	// the future.
+	ViewVersion uint32 `protobuf:"varint,1001,opt,name=view_version,json=viewVersion,proto3" json:"view_version,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage()               {}
-func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{2} }
+func (*GlobalSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{11} }
 
 func (m *GlobalSpecType) GetWhere() *ves_io_schema4.SiteVirtualSiteRefSelector {
 	if m != nil {
@@ -379,21 +1940,41 @@ func (m *GlobalSpecType) GetNetworkInterface() []*ves_io_schema4.ObjectRefType {
 	return nil
 }
 
+func (m *GlobalSpecType) GetPeers() []*Peer {
+	if m != nil {
+		return m.Peers
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetViewInternal() *ves_io_schema_views.ObjectRefType {
+	if m != nil {
+		return m.ViewInternal
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetViewVersion() uint32 {
+	if m != nil {
+		return m.ViewVersion
+	}
+	return 0
+}
+
 // Create bgp
 //
 // x-displayName: "Create BGP"
 // BGP object is the configuration for peering with external BGP servers.
 // It is created by users in system namespace.
 type CreateSpecType struct {
-	Where            *ves_io_schema4.SiteVirtualSiteRefSelector `protobuf:"bytes,1,opt,name=where" json:"where,omitempty"`
-	BgpParameters    *BgpParameters                             `protobuf:"bytes,2,opt,name=bgp_parameters,json=bgpParameters" json:"bgp_parameters,omitempty"`
-	BgpPeers         []*BgpPeer                                 `protobuf:"bytes,3,rep,name=bgp_peers,json=bgpPeers" json:"bgp_peers,omitempty"`
-	NetworkInterface []*ves_io_schema4.ObjectRefType            `protobuf:"bytes,4,rep,name=network_interface,json=networkInterface" json:"network_interface,omitempty"`
+	Where         *ves_io_schema4.SiteVirtualSiteRefSelector `protobuf:"bytes,1,opt,name=where" json:"where,omitempty"`
+	BgpParameters *BgpParameters                             `protobuf:"bytes,2,opt,name=bgp_parameters,json=bgpParameters" json:"bgp_parameters,omitempty"`
+	Peers         []*Peer                                    `protobuf:"bytes,5,rep,name=peers" json:"peers,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage()               {}
-func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{3} }
+func (*CreateSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{12} }
 
 func (m *CreateSpecType) GetWhere() *ves_io_schema4.SiteVirtualSiteRefSelector {
 	if m != nil {
@@ -409,16 +1990,9 @@ func (m *CreateSpecType) GetBgpParameters() *BgpParameters {
 	return nil
 }
 
-func (m *CreateSpecType) GetBgpPeers() []*BgpPeer {
+func (m *CreateSpecType) GetPeers() []*Peer {
 	if m != nil {
-		return m.BgpPeers
-	}
-	return nil
-}
-
-func (m *CreateSpecType) GetNetworkInterface() []*ves_io_schema4.ObjectRefType {
-	if m != nil {
-		return m.NetworkInterface
+		return m.Peers
 	}
 	return nil
 }
@@ -429,15 +2003,14 @@ func (m *CreateSpecType) GetNetworkInterface() []*ves_io_schema4.ObjectRefType {
 // BGP object is the configuration for peering with external BGP servers.
 // Replace bgp will replace the contents of given BGP object.
 type ReplaceSpecType struct {
-	Where            *ves_io_schema4.SiteVirtualSiteRefSelector `protobuf:"bytes,1,opt,name=where" json:"where,omitempty"`
-	BgpParameters    *BgpParameters                             `protobuf:"bytes,2,opt,name=bgp_parameters,json=bgpParameters" json:"bgp_parameters,omitempty"`
-	BgpPeers         []*BgpPeer                                 `protobuf:"bytes,3,rep,name=bgp_peers,json=bgpPeers" json:"bgp_peers,omitempty"`
-	NetworkInterface []*ves_io_schema4.ObjectRefType            `protobuf:"bytes,4,rep,name=network_interface,json=networkInterface" json:"network_interface,omitempty"`
+	Where         *ves_io_schema4.SiteVirtualSiteRefSelector `protobuf:"bytes,1,opt,name=where" json:"where,omitempty"`
+	BgpParameters *BgpParameters                             `protobuf:"bytes,2,opt,name=bgp_parameters,json=bgpParameters" json:"bgp_parameters,omitempty"`
+	Peers         []*Peer                                    `protobuf:"bytes,5,rep,name=peers" json:"peers,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage()               {}
-func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{4} }
+func (*ReplaceSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{13} }
 
 func (m *ReplaceSpecType) GetWhere() *ves_io_schema4.SiteVirtualSiteRefSelector {
 	if m != nil {
@@ -453,16 +2026,9 @@ func (m *ReplaceSpecType) GetBgpParameters() *BgpParameters {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetBgpPeers() []*BgpPeer {
+func (m *ReplaceSpecType) GetPeers() []*Peer {
 	if m != nil {
-		return m.BgpPeers
-	}
-	return nil
-}
-
-func (m *ReplaceSpecType) GetNetworkInterface() []*ves_io_schema4.ObjectRefType {
-	if m != nil {
-		return m.NetworkInterface
+		return m.Peers
 	}
 	return nil
 }
@@ -473,15 +2039,14 @@ func (m *ReplaceSpecType) GetNetworkInterface() []*ves_io_schema4.ObjectRefType 
 // BGP object is the configuration for peering with external BGP servers.
 // Get bgp reads from system namespace.
 type GetSpecType struct {
-	Where            *ves_io_schema4.SiteVirtualSiteRefSelector `protobuf:"bytes,1,opt,name=where" json:"where,omitempty"`
-	BgpParameters    *BgpParameters                             `protobuf:"bytes,2,opt,name=bgp_parameters,json=bgpParameters" json:"bgp_parameters,omitempty"`
-	BgpPeers         []*BgpPeer                                 `protobuf:"bytes,3,rep,name=bgp_peers,json=bgpPeers" json:"bgp_peers,omitempty"`
-	NetworkInterface []*ves_io_schema4.ObjectRefType            `protobuf:"bytes,4,rep,name=network_interface,json=networkInterface" json:"network_interface,omitempty"`
+	Where         *ves_io_schema4.SiteVirtualSiteRefSelector `protobuf:"bytes,1,opt,name=where" json:"where,omitempty"`
+	BgpParameters *BgpParameters                             `protobuf:"bytes,2,opt,name=bgp_parameters,json=bgpParameters" json:"bgp_parameters,omitempty"`
+	Peers         []*Peer                                    `protobuf:"bytes,5,rep,name=peers" json:"peers,omitempty"`
 }
 
 func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage()               {}
-func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{5} }
+func (*GetSpecType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{14} }
 
 func (m *GetSpecType) GetWhere() *ves_io_schema4.SiteVirtualSiteRefSelector {
 	if m != nil {
@@ -497,16 +2062,9 @@ func (m *GetSpecType) GetBgpParameters() *BgpParameters {
 	return nil
 }
 
-func (m *GetSpecType) GetBgpPeers() []*BgpPeer {
+func (m *GetSpecType) GetPeers() []*Peer {
 	if m != nil {
-		return m.BgpPeers
-	}
-	return nil
-}
-
-func (m *GetSpecType) GetNetworkInterface() []*ves_io_schema4.ObjectRefType {
-	if m != nil {
-		return m.NetworkInterface
+		return m.Peers
 	}
 	return nil
 }
@@ -575,7 +2133,7 @@ type BgpPeerStatusType struct {
 
 func (m *BgpPeerStatusType) Reset()                    { *m = BgpPeerStatusType{} }
 func (*BgpPeerStatusType) ProtoMessage()               {}
-func (*BgpPeerStatusType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{6} }
+func (*BgpPeerStatusType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{15} }
 
 func (m *BgpPeerStatusType) GetPeerAddress() *ves_io_schema3.IpAddressType {
 	if m != nil {
@@ -678,7 +2236,7 @@ type BgpStatusType struct {
 
 func (m *BgpStatusType) Reset()                    { *m = BgpStatusType{} }
 func (*BgpStatusType) ProtoMessage()               {}
-func (*BgpStatusType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{7} }
+func (*BgpStatusType) Descriptor() ([]byte, []int) { return fileDescriptorTypes, []int{16} }
 
 func (m *BgpStatusType) GetLocalRouterId() string {
 	if m != nil {
@@ -706,6 +2264,24 @@ func init() {
 	golang_proto.RegisterType((*BgpParameters)(nil), "ves.io.schema.bgp.BgpParameters")
 	proto.RegisterType((*BgpPeer)(nil), "ves.io.schema.bgp.BgpPeer")
 	golang_proto.RegisterType((*BgpPeer)(nil), "ves.io.schema.bgp.BgpPeer")
+	proto.RegisterType((*InterfaceList)(nil), "ves.io.schema.bgp.InterfaceList")
+	golang_proto.RegisterType((*InterfaceList)(nil), "ves.io.schema.bgp.InterfaceList")
+	proto.RegisterType((*FamilyInet)(nil), "ves.io.schema.bgp.FamilyInet")
+	golang_proto.RegisterType((*FamilyInet)(nil), "ves.io.schema.bgp.FamilyInet")
+	proto.RegisterType((*FamilyInetvpnParameters)(nil), "ves.io.schema.bgp.FamilyInetvpnParameters")
+	golang_proto.RegisterType((*FamilyInetvpnParameters)(nil), "ves.io.schema.bgp.FamilyInetvpnParameters")
+	proto.RegisterType((*FamilyInetvpn)(nil), "ves.io.schema.bgp.FamilyInetvpn")
+	golang_proto.RegisterType((*FamilyInetvpn)(nil), "ves.io.schema.bgp.FamilyInetvpn")
+	proto.RegisterType((*FamilyRtarget)(nil), "ves.io.schema.bgp.FamilyRtarget")
+	golang_proto.RegisterType((*FamilyRtarget)(nil), "ves.io.schema.bgp.FamilyRtarget")
+	proto.RegisterType((*PeerFamilyParameters)(nil), "ves.io.schema.bgp.PeerFamilyParameters")
+	golang_proto.RegisterType((*PeerFamilyParameters)(nil), "ves.io.schema.bgp.PeerFamilyParameters")
+	proto.RegisterType((*PeerExternal)(nil), "ves.io.schema.bgp.PeerExternal")
+	golang_proto.RegisterType((*PeerExternal)(nil), "ves.io.schema.bgp.PeerExternal")
+	proto.RegisterType((*PeerInternal)(nil), "ves.io.schema.bgp.PeerInternal")
+	golang_proto.RegisterType((*PeerInternal)(nil), "ves.io.schema.bgp.PeerInternal")
+	proto.RegisterType((*Peer)(nil), "ves.io.schema.bgp.Peer")
+	golang_proto.RegisterType((*Peer)(nil), "ves.io.schema.bgp.Peer")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.bgp.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.bgp.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.bgp.CreateSpecType")
@@ -768,6 +2344,15 @@ func (this *BgpParameters) Equal(that interface{}) bool {
 	if this.Asn != that1.Asn {
 		return false
 	}
+	if that1.RouterIdChoice == nil {
+		if this.RouterIdChoice != nil {
+			return false
+		}
+	} else if this.RouterIdChoice == nil {
+		return false
+	} else if !this.RouterIdChoice.Equal(that1.RouterIdChoice) {
+		return false
+	}
 	if this.BgpRouterIdType != that1.BgpRouterIdType {
 		return false
 	}
@@ -775,6 +2360,78 @@ func (this *BgpParameters) Equal(that interface{}) bool {
 		return false
 	}
 	if this.BgpRouterIdKey != that1.BgpRouterIdKey {
+		return false
+	}
+	return true
+}
+func (this *BgpParameters_LocalAddress) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*BgpParameters_LocalAddress)
+	if !ok {
+		that2, ok := that.(BgpParameters_LocalAddress)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.LocalAddress.Equal(that1.LocalAddress) {
+		return false
+	}
+	return true
+}
+func (this *BgpParameters_FromSite) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*BgpParameters_FromSite)
+	if !ok {
+		that2, ok := that.(BgpParameters_FromSite)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.FromSite.Equal(that1.FromSite) {
+		return false
+	}
+	return true
+}
+func (this *BgpParameters_IpAddress) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*BgpParameters_IpAddress)
+	if !ok {
+		that2, ok := that.(BgpParameters_IpAddress)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.IpAddress != that1.IpAddress {
 		return false
 	}
 	return true
@@ -814,6 +2471,855 @@ func (this *BgpPeer) Equal(that interface{}) bool {
 		return false
 	}
 	if this.BgpPeerSubnetOffset != that1.BgpPeerSubnetOffset {
+		return false
+	}
+	if len(this.Families) != len(that1.Families) {
+		return false
+	}
+	for i := range this.Families {
+		if !this.Families[i].Equal(that1.Families[i]) {
+			return false
+		}
+	}
+	if len(this.InterfaceRefs) != len(that1.InterfaceRefs) {
+		return false
+	}
+	for i := range this.InterfaceRefs {
+		if !this.InterfaceRefs[i].Equal(that1.InterfaceRefs[i]) {
+			return false
+		}
+	}
+	if this.AllInsideInterfaces != that1.AllInsideInterfaces {
+		return false
+	}
+	if this.AllOutsideInterfaces != that1.AllOutsideInterfaces {
+		return false
+	}
+	return true
+}
+func (this *InterfaceList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*InterfaceList)
+	if !ok {
+		that2, ok := that.(InterfaceList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Interfaces) != len(that1.Interfaces) {
+		return false
+	}
+	for i := range this.Interfaces {
+		if !this.Interfaces[i].Equal(that1.Interfaces[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *FamilyInet) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*FamilyInet)
+	if !ok {
+		that2, ok := that.(FamilyInet)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.EnableChoice == nil {
+		if this.EnableChoice != nil {
+			return false
+		}
+	} else if this.EnableChoice == nil {
+		return false
+	} else if !this.EnableChoice.Equal(that1.EnableChoice) {
+		return false
+	}
+	return true
+}
+func (this *FamilyInet_Enable) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*FamilyInet_Enable)
+	if !ok {
+		that2, ok := that.(FamilyInet_Enable)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Enable.Equal(that1.Enable) {
+		return false
+	}
+	return true
+}
+func (this *FamilyInet_Disable) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*FamilyInet_Disable)
+	if !ok {
+		that2, ok := that.(FamilyInet_Disable)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Disable.Equal(that1.Disable) {
+		return false
+	}
+	return true
+}
+func (this *FamilyInetvpnParameters) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*FamilyInetvpnParameters)
+	if !ok {
+		that2, ok := that.(FamilyInetvpnParameters)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.SrChoice == nil {
+		if this.SrChoice != nil {
+			return false
+		}
+	} else if this.SrChoice == nil {
+		return false
+	} else if !this.SrChoice.Equal(that1.SrChoice) {
+		return false
+	}
+	return true
+}
+func (this *FamilyInetvpnParameters_Enable) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*FamilyInetvpnParameters_Enable)
+	if !ok {
+		that2, ok := that.(FamilyInetvpnParameters_Enable)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Enable.Equal(that1.Enable) {
+		return false
+	}
+	return true
+}
+func (this *FamilyInetvpnParameters_Disable) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*FamilyInetvpnParameters_Disable)
+	if !ok {
+		that2, ok := that.(FamilyInetvpnParameters_Disable)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Disable.Equal(that1.Disable) {
+		return false
+	}
+	return true
+}
+func (this *FamilyInetvpn) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*FamilyInetvpn)
+	if !ok {
+		that2, ok := that.(FamilyInetvpn)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.EnableChoice == nil {
+		if this.EnableChoice != nil {
+			return false
+		}
+	} else if this.EnableChoice == nil {
+		return false
+	} else if !this.EnableChoice.Equal(that1.EnableChoice) {
+		return false
+	}
+	return true
+}
+func (this *FamilyInetvpn_Enable) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*FamilyInetvpn_Enable)
+	if !ok {
+		that2, ok := that.(FamilyInetvpn_Enable)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Enable.Equal(that1.Enable) {
+		return false
+	}
+	return true
+}
+func (this *FamilyInetvpn_Disable) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*FamilyInetvpn_Disable)
+	if !ok {
+		that2, ok := that.(FamilyInetvpn_Disable)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Disable.Equal(that1.Disable) {
+		return false
+	}
+	return true
+}
+func (this *FamilyRtarget) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*FamilyRtarget)
+	if !ok {
+		that2, ok := that.(FamilyRtarget)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.EnableChoice == nil {
+		if this.EnableChoice != nil {
+			return false
+		}
+	} else if this.EnableChoice == nil {
+		return false
+	} else if !this.EnableChoice.Equal(that1.EnableChoice) {
+		return false
+	}
+	return true
+}
+func (this *FamilyRtarget_Enable) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*FamilyRtarget_Enable)
+	if !ok {
+		that2, ok := that.(FamilyRtarget_Enable)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Enable.Equal(that1.Enable) {
+		return false
+	}
+	return true
+}
+func (this *FamilyRtarget_Disable) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*FamilyRtarget_Disable)
+	if !ok {
+		that2, ok := that.(FamilyRtarget_Disable)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Disable.Equal(that1.Disable) {
+		return false
+	}
+	return true
+}
+func (this *PeerFamilyParameters) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PeerFamilyParameters)
+	if !ok {
+		that2, ok := that.(PeerFamilyParameters)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Family != that1.Family {
+		return false
+	}
+	if this.EnableSrv6 != that1.EnableSrv6 {
+		return false
+	}
+	return true
+}
+func (this *PeerExternal) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PeerExternal)
+	if !ok {
+		that2, ok := that.(PeerExternal)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Asn != that1.Asn {
+		return false
+	}
+	if that1.AddressChoice == nil {
+		if this.AddressChoice != nil {
+			return false
+		}
+	} else if this.AddressChoice == nil {
+		return false
+	} else if !this.AddressChoice.Equal(that1.AddressChoice) {
+		return false
+	}
+	if this.Port != that1.Port {
+		return false
+	}
+	if !this.FamilyInet.Equal(that1.FamilyInet) {
+		return false
+	}
+	if that1.InterfaceChoice == nil {
+		if this.InterfaceChoice != nil {
+			return false
+		}
+	} else if this.InterfaceChoice == nil {
+		return false
+	} else if !this.InterfaceChoice.Equal(that1.InterfaceChoice) {
+		return false
+	}
+	return true
+}
+func (this *PeerExternal_Address) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PeerExternal_Address)
+	if !ok {
+		that2, ok := that.(PeerExternal_Address)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Address != that1.Address {
+		return false
+	}
+	return true
+}
+func (this *PeerExternal_SubnetBeginOffset) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PeerExternal_SubnetBeginOffset)
+	if !ok {
+		that2, ok := that.(PeerExternal_SubnetBeginOffset)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.SubnetBeginOffset != that1.SubnetBeginOffset {
+		return false
+	}
+	return true
+}
+func (this *PeerExternal_SubnetEndOffset) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PeerExternal_SubnetEndOffset)
+	if !ok {
+		that2, ok := that.(PeerExternal_SubnetEndOffset)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.SubnetEndOffset != that1.SubnetEndOffset {
+		return false
+	}
+	return true
+}
+func (this *PeerExternal_FromSite) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PeerExternal_FromSite)
+	if !ok {
+		that2, ok := that.(PeerExternal_FromSite)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.FromSite.Equal(that1.FromSite) {
+		return false
+	}
+	return true
+}
+func (this *PeerExternal_DefaultGateway) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PeerExternal_DefaultGateway)
+	if !ok {
+		that2, ok := that.(PeerExternal_DefaultGateway)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DefaultGateway.Equal(that1.DefaultGateway) {
+		return false
+	}
+	return true
+}
+func (this *PeerExternal_Interface) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PeerExternal_Interface)
+	if !ok {
+		that2, ok := that.(PeerExternal_Interface)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Interface.Equal(that1.Interface) {
+		return false
+	}
+	return true
+}
+func (this *PeerExternal_InterfaceList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PeerExternal_InterfaceList)
+	if !ok {
+		that2, ok := that.(PeerExternal_InterfaceList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.InterfaceList.Equal(that1.InterfaceList) {
+		return false
+	}
+	return true
+}
+func (this *PeerExternal_InsideInterfaces) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PeerExternal_InsideInterfaces)
+	if !ok {
+		that2, ok := that.(PeerExternal_InsideInterfaces)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.InsideInterfaces.Equal(that1.InsideInterfaces) {
+		return false
+	}
+	return true
+}
+func (this *PeerExternal_OutsideInterfaces) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PeerExternal_OutsideInterfaces)
+	if !ok {
+		that2, ok := that.(PeerExternal_OutsideInterfaces)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.OutsideInterfaces.Equal(that1.OutsideInterfaces) {
+		return false
+	}
+	return true
+}
+func (this *PeerInternal) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PeerInternal)
+	if !ok {
+		that2, ok := that.(PeerInternal)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.AddressChoice == nil {
+		if this.AddressChoice != nil {
+			return false
+		}
+	} else if this.AddressChoice == nil {
+		return false
+	} else if !this.AddressChoice.Equal(that1.AddressChoice) {
+		return false
+	}
+	if this.Port != that1.Port {
+		return false
+	}
+	if !this.FamilyInetvpn.Equal(that1.FamilyInetvpn) {
+		return false
+	}
+	if !this.FamilyRtarget.Equal(that1.FamilyRtarget) {
+		return false
+	}
+	return true
+}
+func (this *PeerInternal_Address) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PeerInternal_Address)
+	if !ok {
+		that2, ok := that.(PeerInternal_Address)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Address != that1.Address {
+		return false
+	}
+	return true
+}
+func (this *PeerInternal_FromSite) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PeerInternal_FromSite)
+	if !ok {
+		that2, ok := that.(PeerInternal_FromSite)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.FromSite.Equal(that1.FromSite) {
+		return false
+	}
+	return true
+}
+func (this *PeerInternal_DnsName) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*PeerInternal_DnsName)
+	if !ok {
+		that2, ok := that.(PeerInternal_DnsName)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DnsName != that1.DnsName {
+		return false
+	}
+	return true
+}
+func (this *Peer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Peer)
+	if !ok {
+		that2, ok := that.(Peer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if that1.TypeChoice == nil {
+		if this.TypeChoice != nil {
+			return false
+		}
+	} else if this.TypeChoice == nil {
+		return false
+	} else if !this.TypeChoice.Equal(that1.TypeChoice) {
+		return false
+	}
+	if this.TargetService != that1.TargetService {
+		return false
+	}
+	return true
+}
+func (this *Peer_External) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Peer_External)
+	if !ok {
+		that2, ok := that.(Peer_External)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.External.Equal(that1.External) {
+		return false
+	}
+	return true
+}
+func (this *Peer_Internal) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Peer_Internal)
+	if !ok {
+		that2, ok := that.(Peer_Internal)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Internal.Equal(that1.Internal) {
 		return false
 	}
 	return true
@@ -859,6 +3365,20 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if len(this.Peers) != len(that1.Peers) {
+		return false
+	}
+	for i := range this.Peers {
+		if !this.Peers[i].Equal(that1.Peers[i]) {
+			return false
+		}
+	}
+	if !this.ViewInternal.Equal(that1.ViewInternal) {
+		return false
+	}
+	if this.ViewVersion != that1.ViewVersion {
+		return false
+	}
 	return true
 }
 func (this *CreateSpecType) Equal(that interface{}) bool {
@@ -886,19 +3406,11 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if !this.BgpParameters.Equal(that1.BgpParameters) {
 		return false
 	}
-	if len(this.BgpPeers) != len(that1.BgpPeers) {
+	if len(this.Peers) != len(that1.Peers) {
 		return false
 	}
-	for i := range this.BgpPeers {
-		if !this.BgpPeers[i].Equal(that1.BgpPeers[i]) {
-			return false
-		}
-	}
-	if len(this.NetworkInterface) != len(that1.NetworkInterface) {
-		return false
-	}
-	for i := range this.NetworkInterface {
-		if !this.NetworkInterface[i].Equal(that1.NetworkInterface[i]) {
+	for i := range this.Peers {
+		if !this.Peers[i].Equal(that1.Peers[i]) {
 			return false
 		}
 	}
@@ -929,19 +3441,11 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if !this.BgpParameters.Equal(that1.BgpParameters) {
 		return false
 	}
-	if len(this.BgpPeers) != len(that1.BgpPeers) {
+	if len(this.Peers) != len(that1.Peers) {
 		return false
 	}
-	for i := range this.BgpPeers {
-		if !this.BgpPeers[i].Equal(that1.BgpPeers[i]) {
-			return false
-		}
-	}
-	if len(this.NetworkInterface) != len(that1.NetworkInterface) {
-		return false
-	}
-	for i := range this.NetworkInterface {
-		if !this.NetworkInterface[i].Equal(that1.NetworkInterface[i]) {
+	for i := range this.Peers {
+		if !this.Peers[i].Equal(that1.Peers[i]) {
 			return false
 		}
 	}
@@ -972,19 +3476,11 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if !this.BgpParameters.Equal(that1.BgpParameters) {
 		return false
 	}
-	if len(this.BgpPeers) != len(that1.BgpPeers) {
+	if len(this.Peers) != len(that1.Peers) {
 		return false
 	}
-	for i := range this.BgpPeers {
-		if !this.BgpPeers[i].Equal(that1.BgpPeers[i]) {
-			return false
-		}
-	}
-	if len(this.NetworkInterface) != len(that1.NetworkInterface) {
-		return false
-	}
-	for i := range this.NetworkInterface {
-		if !this.NetworkInterface[i].Equal(that1.NetworkInterface[i]) {
+	for i := range this.Peers {
+		if !this.Peers[i].Equal(that1.Peers[i]) {
 			return false
 		}
 	}
@@ -1083,9 +3579,12 @@ func (this *BgpParameters) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 11)
 	s = append(s, "&bgp.BgpParameters{")
 	s = append(s, "Asn: "+fmt.Sprintf("%#v", this.Asn)+",\n")
+	if this.RouterIdChoice != nil {
+		s = append(s, "RouterIdChoice: "+fmt.Sprintf("%#v", this.RouterIdChoice)+",\n")
+	}
 	s = append(s, "BgpRouterIdType: "+fmt.Sprintf("%#v", this.BgpRouterIdType)+",\n")
 	if this.BgpRouterId != nil {
 		s = append(s, "BgpRouterId: "+fmt.Sprintf("%#v", this.BgpRouterId)+",\n")
@@ -1094,11 +3593,35 @@ func (this *BgpParameters) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *BgpParameters_LocalAddress) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.BgpParameters_LocalAddress{` +
+		`LocalAddress:` + fmt.Sprintf("%#v", this.LocalAddress) + `}`}, ", ")
+	return s
+}
+func (this *BgpParameters_FromSite) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.BgpParameters_FromSite{` +
+		`FromSite:` + fmt.Sprintf("%#v", this.FromSite) + `}`}, ", ")
+	return s
+}
+func (this *BgpParameters_IpAddress) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.BgpParameters_IpAddress{` +
+		`IpAddress:` + fmt.Sprintf("%#v", this.IpAddress) + `}`}, ", ")
+	return s
+}
 func (this *BgpPeer) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 14)
 	s = append(s, "&bgp.BgpPeer{")
 	s = append(s, "Asn: "+fmt.Sprintf("%#v", this.Asn)+",\n")
 	s = append(s, "BgpPeerAddressType: "+fmt.Sprintf("%#v", this.BgpPeerAddressType)+",\n")
@@ -1108,14 +3631,324 @@ func (this *BgpPeer) GoString() string {
 	s = append(s, "BgpPeerAddressKey: "+fmt.Sprintf("%#v", this.BgpPeerAddressKey)+",\n")
 	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
 	s = append(s, "BgpPeerSubnetOffset: "+fmt.Sprintf("%#v", this.BgpPeerSubnetOffset)+",\n")
+	if this.Families != nil {
+		s = append(s, "Families: "+fmt.Sprintf("%#v", this.Families)+",\n")
+	}
+	if this.InterfaceRefs != nil {
+		s = append(s, "InterfaceRefs: "+fmt.Sprintf("%#v", this.InterfaceRefs)+",\n")
+	}
+	s = append(s, "AllInsideInterfaces: "+fmt.Sprintf("%#v", this.AllInsideInterfaces)+",\n")
+	s = append(s, "AllOutsideInterfaces: "+fmt.Sprintf("%#v", this.AllOutsideInterfaces)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *InterfaceList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&bgp.InterfaceList{")
+	if this.Interfaces != nil {
+		s = append(s, "Interfaces: "+fmt.Sprintf("%#v", this.Interfaces)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *FamilyInet) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&bgp.FamilyInet{")
+	if this.EnableChoice != nil {
+		s = append(s, "EnableChoice: "+fmt.Sprintf("%#v", this.EnableChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *FamilyInet_Enable) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.FamilyInet_Enable{` +
+		`Enable:` + fmt.Sprintf("%#v", this.Enable) + `}`}, ", ")
+	return s
+}
+func (this *FamilyInet_Disable) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.FamilyInet_Disable{` +
+		`Disable:` + fmt.Sprintf("%#v", this.Disable) + `}`}, ", ")
+	return s
+}
+func (this *FamilyInetvpnParameters) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&bgp.FamilyInetvpnParameters{")
+	if this.SrChoice != nil {
+		s = append(s, "SrChoice: "+fmt.Sprintf("%#v", this.SrChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *FamilyInetvpnParameters_Enable) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.FamilyInetvpnParameters_Enable{` +
+		`Enable:` + fmt.Sprintf("%#v", this.Enable) + `}`}, ", ")
+	return s
+}
+func (this *FamilyInetvpnParameters_Disable) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.FamilyInetvpnParameters_Disable{` +
+		`Disable:` + fmt.Sprintf("%#v", this.Disable) + `}`}, ", ")
+	return s
+}
+func (this *FamilyInetvpn) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&bgp.FamilyInetvpn{")
+	if this.EnableChoice != nil {
+		s = append(s, "EnableChoice: "+fmt.Sprintf("%#v", this.EnableChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *FamilyInetvpn_Enable) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.FamilyInetvpn_Enable{` +
+		`Enable:` + fmt.Sprintf("%#v", this.Enable) + `}`}, ", ")
+	return s
+}
+func (this *FamilyInetvpn_Disable) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.FamilyInetvpn_Disable{` +
+		`Disable:` + fmt.Sprintf("%#v", this.Disable) + `}`}, ", ")
+	return s
+}
+func (this *FamilyRtarget) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&bgp.FamilyRtarget{")
+	if this.EnableChoice != nil {
+		s = append(s, "EnableChoice: "+fmt.Sprintf("%#v", this.EnableChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *FamilyRtarget_Enable) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.FamilyRtarget_Enable{` +
+		`Enable:` + fmt.Sprintf("%#v", this.Enable) + `}`}, ", ")
+	return s
+}
+func (this *FamilyRtarget_Disable) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.FamilyRtarget_Disable{` +
+		`Disable:` + fmt.Sprintf("%#v", this.Disable) + `}`}, ", ")
+	return s
+}
+func (this *PeerFamilyParameters) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&bgp.PeerFamilyParameters{")
+	s = append(s, "Family: "+fmt.Sprintf("%#v", this.Family)+",\n")
+	s = append(s, "EnableSrv6: "+fmt.Sprintf("%#v", this.EnableSrv6)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *PeerExternal) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 16)
+	s = append(s, "&bgp.PeerExternal{")
+	s = append(s, "Asn: "+fmt.Sprintf("%#v", this.Asn)+",\n")
+	if this.AddressChoice != nil {
+		s = append(s, "AddressChoice: "+fmt.Sprintf("%#v", this.AddressChoice)+",\n")
+	}
+	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
+	if this.FamilyInet != nil {
+		s = append(s, "FamilyInet: "+fmt.Sprintf("%#v", this.FamilyInet)+",\n")
+	}
+	if this.InterfaceChoice != nil {
+		s = append(s, "InterfaceChoice: "+fmt.Sprintf("%#v", this.InterfaceChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *PeerExternal_Address) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.PeerExternal_Address{` +
+		`Address:` + fmt.Sprintf("%#v", this.Address) + `}`}, ", ")
+	return s
+}
+func (this *PeerExternal_SubnetBeginOffset) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.PeerExternal_SubnetBeginOffset{` +
+		`SubnetBeginOffset:` + fmt.Sprintf("%#v", this.SubnetBeginOffset) + `}`}, ", ")
+	return s
+}
+func (this *PeerExternal_SubnetEndOffset) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.PeerExternal_SubnetEndOffset{` +
+		`SubnetEndOffset:` + fmt.Sprintf("%#v", this.SubnetEndOffset) + `}`}, ", ")
+	return s
+}
+func (this *PeerExternal_FromSite) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.PeerExternal_FromSite{` +
+		`FromSite:` + fmt.Sprintf("%#v", this.FromSite) + `}`}, ", ")
+	return s
+}
+func (this *PeerExternal_DefaultGateway) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.PeerExternal_DefaultGateway{` +
+		`DefaultGateway:` + fmt.Sprintf("%#v", this.DefaultGateway) + `}`}, ", ")
+	return s
+}
+func (this *PeerExternal_Interface) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.PeerExternal_Interface{` +
+		`Interface:` + fmt.Sprintf("%#v", this.Interface) + `}`}, ", ")
+	return s
+}
+func (this *PeerExternal_InterfaceList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.PeerExternal_InterfaceList{` +
+		`InterfaceList:` + fmt.Sprintf("%#v", this.InterfaceList) + `}`}, ", ")
+	return s
+}
+func (this *PeerExternal_InsideInterfaces) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.PeerExternal_InsideInterfaces{` +
+		`InsideInterfaces:` + fmt.Sprintf("%#v", this.InsideInterfaces) + `}`}, ", ")
+	return s
+}
+func (this *PeerExternal_OutsideInterfaces) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.PeerExternal_OutsideInterfaces{` +
+		`OutsideInterfaces:` + fmt.Sprintf("%#v", this.OutsideInterfaces) + `}`}, ", ")
+	return s
+}
+func (this *PeerInternal) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&bgp.PeerInternal{")
+	if this.AddressChoice != nil {
+		s = append(s, "AddressChoice: "+fmt.Sprintf("%#v", this.AddressChoice)+",\n")
+	}
+	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
+	if this.FamilyInetvpn != nil {
+		s = append(s, "FamilyInetvpn: "+fmt.Sprintf("%#v", this.FamilyInetvpn)+",\n")
+	}
+	if this.FamilyRtarget != nil {
+		s = append(s, "FamilyRtarget: "+fmt.Sprintf("%#v", this.FamilyRtarget)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *PeerInternal_Address) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.PeerInternal_Address{` +
+		`Address:` + fmt.Sprintf("%#v", this.Address) + `}`}, ", ")
+	return s
+}
+func (this *PeerInternal_FromSite) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.PeerInternal_FromSite{` +
+		`FromSite:` + fmt.Sprintf("%#v", this.FromSite) + `}`}, ", ")
+	return s
+}
+func (this *PeerInternal_DnsName) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.PeerInternal_DnsName{` +
+		`DnsName:` + fmt.Sprintf("%#v", this.DnsName) + `}`}, ", ")
+	return s
+}
+func (this *Peer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&bgp.Peer{")
+	if this.Metadata != nil {
+		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
+	}
+	if this.TypeChoice != nil {
+		s = append(s, "TypeChoice: "+fmt.Sprintf("%#v", this.TypeChoice)+",\n")
+	}
+	s = append(s, "TargetService: "+fmt.Sprintf("%#v", this.TargetService)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *Peer_External) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.Peer_External{` +
+		`External:` + fmt.Sprintf("%#v", this.External) + `}`}, ", ")
+	return s
+}
+func (this *Peer_Internal) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&bgp.Peer_Internal{` +
+		`Internal:` + fmt.Sprintf("%#v", this.Internal) + `}`}, ", ")
+	return s
 }
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 11)
 	s = append(s, "&bgp.GlobalSpecType{")
 	if this.Where != nil {
 		s = append(s, "Where: "+fmt.Sprintf("%#v", this.Where)+",\n")
@@ -1129,6 +3962,13 @@ func (this *GlobalSpecType) GoString() string {
 	if this.NetworkInterface != nil {
 		s = append(s, "NetworkInterface: "+fmt.Sprintf("%#v", this.NetworkInterface)+",\n")
 	}
+	if this.Peers != nil {
+		s = append(s, "Peers: "+fmt.Sprintf("%#v", this.Peers)+",\n")
+	}
+	if this.ViewInternal != nil {
+		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
+	}
+	s = append(s, "ViewVersion: "+fmt.Sprintf("%#v", this.ViewVersion)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1136,7 +3976,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 7)
 	s = append(s, "&bgp.CreateSpecType{")
 	if this.Where != nil {
 		s = append(s, "Where: "+fmt.Sprintf("%#v", this.Where)+",\n")
@@ -1144,11 +3984,8 @@ func (this *CreateSpecType) GoString() string {
 	if this.BgpParameters != nil {
 		s = append(s, "BgpParameters: "+fmt.Sprintf("%#v", this.BgpParameters)+",\n")
 	}
-	if this.BgpPeers != nil {
-		s = append(s, "BgpPeers: "+fmt.Sprintf("%#v", this.BgpPeers)+",\n")
-	}
-	if this.NetworkInterface != nil {
-		s = append(s, "NetworkInterface: "+fmt.Sprintf("%#v", this.NetworkInterface)+",\n")
+	if this.Peers != nil {
+		s = append(s, "Peers: "+fmt.Sprintf("%#v", this.Peers)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1157,7 +3994,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 7)
 	s = append(s, "&bgp.ReplaceSpecType{")
 	if this.Where != nil {
 		s = append(s, "Where: "+fmt.Sprintf("%#v", this.Where)+",\n")
@@ -1165,11 +4002,8 @@ func (this *ReplaceSpecType) GoString() string {
 	if this.BgpParameters != nil {
 		s = append(s, "BgpParameters: "+fmt.Sprintf("%#v", this.BgpParameters)+",\n")
 	}
-	if this.BgpPeers != nil {
-		s = append(s, "BgpPeers: "+fmt.Sprintf("%#v", this.BgpPeers)+",\n")
-	}
-	if this.NetworkInterface != nil {
-		s = append(s, "NetworkInterface: "+fmt.Sprintf("%#v", this.NetworkInterface)+",\n")
+	if this.Peers != nil {
+		s = append(s, "Peers: "+fmt.Sprintf("%#v", this.Peers)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1178,7 +4012,7 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 7)
 	s = append(s, "&bgp.GetSpecType{")
 	if this.Where != nil {
 		s = append(s, "Where: "+fmt.Sprintf("%#v", this.Where)+",\n")
@@ -1186,11 +4020,8 @@ func (this *GetSpecType) GoString() string {
 	if this.BgpParameters != nil {
 		s = append(s, "BgpParameters: "+fmt.Sprintf("%#v", this.BgpParameters)+",\n")
 	}
-	if this.BgpPeers != nil {
-		s = append(s, "BgpPeers: "+fmt.Sprintf("%#v", this.BgpPeers)+",\n")
-	}
-	if this.NetworkInterface != nil {
-		s = append(s, "NetworkInterface: "+fmt.Sprintf("%#v", this.NetworkInterface)+",\n")
+	if this.Peers != nil {
+		s = append(s, "Peers: "+fmt.Sprintf("%#v", this.Peers)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1282,9 +4113,52 @@ func (m *BgpParameters) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.BgpRouterIdKey)))
 		i += copy(dAtA[i:], m.BgpRouterIdKey)
 	}
+	if m.RouterIdChoice != nil {
+		nn2, err := m.RouterIdChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn2
+	}
 	return i, nil
 }
 
+func (m *BgpParameters_LocalAddress) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.LocalAddress != nil {
+		dAtA[i] = 0x32
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.LocalAddress.Size()))
+		n3, err := m.LocalAddress.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	return i, nil
+}
+func (m *BgpParameters_FromSite) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.FromSite != nil {
+		dAtA[i] = 0x3a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.FromSite.Size()))
+		n4, err := m.FromSite.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n4
+	}
+	return i, nil
+}
+func (m *BgpParameters_IpAddress) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x42
+	i++
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.IpAddress)))
+	i += copy(dAtA[i:], m.IpAddress)
+	return i, nil
+}
 func (m *BgpPeer) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1314,11 +4188,11 @@ func (m *BgpPeer) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.BgpPeerAddress.Size()))
-		n2, err := m.BgpPeerAddress.MarshalTo(dAtA[i:])
+		n5, err := m.BgpPeerAddress.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n2
+		i += n5
 	}
 	if len(m.BgpPeerAddressKey) > 0 {
 		dAtA[i] = 0x22
@@ -1336,9 +4210,654 @@ func (m *BgpPeer) MarshalTo(dAtA []byte) (int, error) {
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.BgpPeerSubnetOffset))
 	}
+	if len(m.Families) > 0 {
+		for _, msg := range m.Families {
+			dAtA[i] = 0xa2
+			i++
+			dAtA[i] = 0x1
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if len(m.InterfaceRefs) > 0 {
+		for _, msg := range m.InterfaceRefs {
+			dAtA[i] = 0xaa
+			i++
+			dAtA[i] = 0x1
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.AllInsideInterfaces {
+		dAtA[i] = 0xb0
+		i++
+		dAtA[i] = 0x1
+		i++
+		if m.AllInsideInterfaces {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	if m.AllOutsideInterfaces {
+		dAtA[i] = 0xb8
+		i++
+		dAtA[i] = 0x1
+		i++
+		if m.AllOutsideInterfaces {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
 	return i, nil
 }
 
+func (m *InterfaceList) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *InterfaceList) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Interfaces) > 0 {
+		for _, msg := range m.Interfaces {
+			dAtA[i] = 0xa
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
+func (m *FamilyInet) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *FamilyInet) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.EnableChoice != nil {
+		nn6, err := m.EnableChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn6
+	}
+	return i, nil
+}
+
+func (m *FamilyInet_Enable) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Enable != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Enable.Size()))
+		n7, err := m.Enable.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n7
+	}
+	return i, nil
+}
+func (m *FamilyInet_Disable) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Disable != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Disable.Size()))
+		n8, err := m.Disable.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n8
+	}
+	return i, nil
+}
+func (m *FamilyInetvpnParameters) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *FamilyInetvpnParameters) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.SrChoice != nil {
+		nn9, err := m.SrChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn9
+	}
+	return i, nil
+}
+
+func (m *FamilyInetvpnParameters_Enable) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Enable != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Enable.Size()))
+		n10, err := m.Enable.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n10
+	}
+	return i, nil
+}
+func (m *FamilyInetvpnParameters_Disable) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Disable != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Disable.Size()))
+		n11, err := m.Disable.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n11
+	}
+	return i, nil
+}
+func (m *FamilyInetvpn) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *FamilyInetvpn) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.EnableChoice != nil {
+		nn12, err := m.EnableChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn12
+	}
+	return i, nil
+}
+
+func (m *FamilyInetvpn_Enable) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Enable != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Enable.Size()))
+		n13, err := m.Enable.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n13
+	}
+	return i, nil
+}
+func (m *FamilyInetvpn_Disable) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Disable != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Disable.Size()))
+		n14, err := m.Disable.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n14
+	}
+	return i, nil
+}
+func (m *FamilyRtarget) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *FamilyRtarget) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.EnableChoice != nil {
+		nn15, err := m.EnableChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn15
+	}
+	return i, nil
+}
+
+func (m *FamilyRtarget_Enable) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Enable != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Enable.Size()))
+		n16, err := m.Enable.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n16
+	}
+	return i, nil
+}
+func (m *FamilyRtarget_Disable) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Disable != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Disable.Size()))
+		n17, err := m.Disable.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n17
+	}
+	return i, nil
+}
+func (m *PeerFamilyParameters) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PeerFamilyParameters) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if len(m.Family) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Family)))
+		i += copy(dAtA[i:], m.Family)
+	}
+	if m.EnableSrv6 {
+		dAtA[i] = 0x10
+		i++
+		if m.EnableSrv6 {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i++
+	}
+	return i, nil
+}
+
+func (m *PeerExternal) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PeerExternal) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Asn != 0 {
+		dAtA[i] = 0x8
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Asn))
+	}
+	if m.AddressChoice != nil {
+		nn18, err := m.AddressChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn18
+	}
+	if m.Port != 0 {
+		dAtA[i] = 0x50
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
+	}
+	if m.FamilyInet != nil {
+		dAtA[i] = 0x5a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.FamilyInet.Size()))
+		n19, err := m.FamilyInet.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n19
+	}
+	if m.InterfaceChoice != nil {
+		nn20, err := m.InterfaceChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn20
+	}
+	return i, nil
+}
+
+func (m *PeerExternal_Address) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x1a
+	i++
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
+	i += copy(dAtA[i:], m.Address)
+	return i, nil
+}
+func (m *PeerExternal_SubnetBeginOffset) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x20
+	i++
+	i = encodeVarintTypes(dAtA, i, uint64(m.SubnetBeginOffset))
+	return i, nil
+}
+func (m *PeerExternal_SubnetEndOffset) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x28
+	i++
+	i = encodeVarintTypes(dAtA, i, uint64(m.SubnetEndOffset))
+	return i, nil
+}
+func (m *PeerExternal_FromSite) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.FromSite != nil {
+		dAtA[i] = 0x32
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.FromSite.Size()))
+		n21, err := m.FromSite.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n21
+	}
+	return i, nil
+}
+func (m *PeerExternal_DefaultGateway) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.DefaultGateway != nil {
+		dAtA[i] = 0x3a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DefaultGateway.Size()))
+		n22, err := m.DefaultGateway.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n22
+	}
+	return i, nil
+}
+func (m *PeerExternal_Interface) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Interface != nil {
+		dAtA[i] = 0xaa
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Interface.Size()))
+		n23, err := m.Interface.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n23
+	}
+	return i, nil
+}
+func (m *PeerExternal_InterfaceList) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.InterfaceList != nil {
+		dAtA[i] = 0xb2
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.InterfaceList.Size()))
+		n24, err := m.InterfaceList.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n24
+	}
+	return i, nil
+}
+func (m *PeerExternal_InsideInterfaces) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.InsideInterfaces != nil {
+		dAtA[i] = 0xba
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.InsideInterfaces.Size()))
+		n25, err := m.InsideInterfaces.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n25
+	}
+	return i, nil
+}
+func (m *PeerExternal_OutsideInterfaces) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.OutsideInterfaces != nil {
+		dAtA[i] = 0xc2
+		i++
+		dAtA[i] = 0x1
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.OutsideInterfaces.Size()))
+		n26, err := m.OutsideInterfaces.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n26
+	}
+	return i, nil
+}
+func (m *PeerInternal) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PeerInternal) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.AddressChoice != nil {
+		nn27, err := m.AddressChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn27
+	}
+	if m.Port != 0 {
+		dAtA[i] = 0x50
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
+	}
+	if m.FamilyInetvpn != nil {
+		dAtA[i] = 0x5a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.FamilyInetvpn.Size()))
+		n28, err := m.FamilyInetvpn.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n28
+	}
+	if m.FamilyRtarget != nil {
+		dAtA[i] = 0x62
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.FamilyRtarget.Size()))
+		n29, err := m.FamilyRtarget.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n29
+	}
+	return i, nil
+}
+
+func (m *PeerInternal_Address) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x1a
+	i++
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
+	i += copy(dAtA[i:], m.Address)
+	return i, nil
+}
+func (m *PeerInternal_FromSite) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.FromSite != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.FromSite.Size()))
+		n30, err := m.FromSite.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n30
+	}
+	return i, nil
+}
+func (m *PeerInternal_DnsName) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	dAtA[i] = 0x2a
+	i++
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.DnsName)))
+	i += copy(dAtA[i:], m.DnsName)
+	return i, nil
+}
+func (m *Peer) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Peer) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Metadata.Size()))
+		n31, err := m.Metadata.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n31
+	}
+	if m.TypeChoice != nil {
+		nn32, err := m.TypeChoice.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += nn32
+	}
+	if len(m.TargetService) > 0 {
+		dAtA[i] = 0xc2
+		i++
+		dAtA[i] = 0x3e
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.TargetService)))
+		i += copy(dAtA[i:], m.TargetService)
+	}
+	return i, nil
+}
+
+func (m *Peer_External) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.External != nil {
+		dAtA[i] = 0x1a
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.External.Size()))
+		n33, err := m.External.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n33
+	}
+	return i, nil
+}
+func (m *Peer_Internal) MarshalTo(dAtA []byte) (int, error) {
+	i := 0
+	if m.Internal != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.Internal.Size()))
+		n34, err := m.Internal.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n34
+	}
+	return i, nil
+}
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1358,21 +4877,21 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Where.Size()))
-		n3, err := m.Where.MarshalTo(dAtA[i:])
+		n35, err := m.Where.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n35
 	}
 	if m.BgpParameters != nil {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.BgpParameters.Size()))
-		n4, err := m.BgpParameters.MarshalTo(dAtA[i:])
+		n36, err := m.BgpParameters.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n4
+		i += n36
 	}
 	if len(m.BgpPeers) > 0 {
 		for _, msg := range m.BgpPeers {
@@ -1397,6 +4916,37 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 			}
 			i += n
 		}
+	}
+	if len(m.Peers) > 0 {
+		for _, msg := range m.Peers {
+			dAtA[i] = 0x2a
+			i++
+			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.ViewInternal != nil {
+		dAtA[i] = 0xc2
+		i++
+		dAtA[i] = 0x3e
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.ViewInternal.Size()))
+		n37, err := m.ViewInternal.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n37
+	}
+	if m.ViewVersion != 0 {
+		dAtA[i] = 0xc8
+		i++
+		dAtA[i] = 0x3e
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.ViewVersion))
 	}
 	return i, nil
 }
@@ -1420,37 +4970,25 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Where.Size()))
-		n5, err := m.Where.MarshalTo(dAtA[i:])
+		n38, err := m.Where.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n5
+		i += n38
 	}
 	if m.BgpParameters != nil {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.BgpParameters.Size()))
-		n6, err := m.BgpParameters.MarshalTo(dAtA[i:])
+		n39, err := m.BgpParameters.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n6
+		i += n39
 	}
-	if len(m.BgpPeers) > 0 {
-		for _, msg := range m.BgpPeers {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.NetworkInterface) > 0 {
-		for _, msg := range m.NetworkInterface {
-			dAtA[i] = 0x22
+	if len(m.Peers) > 0 {
+		for _, msg := range m.Peers {
+			dAtA[i] = 0x2a
 			i++
 			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
 			n, err := msg.MarshalTo(dAtA[i:])
@@ -1482,37 +5020,25 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Where.Size()))
-		n7, err := m.Where.MarshalTo(dAtA[i:])
+		n40, err := m.Where.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n7
+		i += n40
 	}
 	if m.BgpParameters != nil {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.BgpParameters.Size()))
-		n8, err := m.BgpParameters.MarshalTo(dAtA[i:])
+		n41, err := m.BgpParameters.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n8
+		i += n41
 	}
-	if len(m.BgpPeers) > 0 {
-		for _, msg := range m.BgpPeers {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.NetworkInterface) > 0 {
-		for _, msg := range m.NetworkInterface {
-			dAtA[i] = 0x22
+	if len(m.Peers) > 0 {
+		for _, msg := range m.Peers {
+			dAtA[i] = 0x2a
 			i++
 			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
 			n, err := msg.MarshalTo(dAtA[i:])
@@ -1544,37 +5070,25 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.Where.Size()))
-		n9, err := m.Where.MarshalTo(dAtA[i:])
+		n42, err := m.Where.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n9
+		i += n42
 	}
 	if m.BgpParameters != nil {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.BgpParameters.Size()))
-		n10, err := m.BgpParameters.MarshalTo(dAtA[i:])
+		n43, err := m.BgpParameters.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n10
+		i += n43
 	}
-	if len(m.BgpPeers) > 0 {
-		for _, msg := range m.BgpPeers {
-			dAtA[i] = 0x1a
-			i++
-			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if len(m.NetworkInterface) > 0 {
-		for _, msg := range m.NetworkInterface {
-			dAtA[i] = 0x22
+	if len(m.Peers) > 0 {
+		for _, msg := range m.Peers {
+			dAtA[i] = 0x2a
 			i++
 			i = encodeVarintTypes(dAtA, i, uint64(msg.Size()))
 			n, err := msg.MarshalTo(dAtA[i:])
@@ -1611,11 +5125,11 @@ func (m *BgpPeerStatusType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.PeerAddress.Size()))
-		n11, err := m.PeerAddress.MarshalTo(dAtA[i:])
+		n44, err := m.PeerAddress.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n11
+		i += n44
 	}
 	if m.PeerPort != 0 {
 		dAtA[i] = 0x20
@@ -1637,11 +5151,11 @@ func (m *BgpPeerStatusType) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3a
 		i++
 		i = encodeVarintTypes(dAtA, i, uint64(m.UpDownTimestamp.Size()))
-		n12, err := m.UpDownTimestamp.MarshalTo(dAtA[i:])
+		n45, err := m.UpDownTimestamp.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n12
+		i += n45
 	}
 	if m.ConnectionFlapCount != 0 {
 		dAtA[i] = 0x40
@@ -1740,9 +5254,37 @@ func (m *BgpParameters) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.RouterIdChoice != nil {
+		n += m.RouterIdChoice.Size()
+	}
 	return n
 }
 
+func (m *BgpParameters_LocalAddress) Size() (n int) {
+	var l int
+	_ = l
+	if m.LocalAddress != nil {
+		l = m.LocalAddress.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *BgpParameters_FromSite) Size() (n int) {
+	var l int
+	_ = l
+	if m.FromSite != nil {
+		l = m.FromSite.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *BgpParameters_IpAddress) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.IpAddress)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
 func (m *BgpPeer) Size() (n int) {
 	var l int
 	_ = l
@@ -1766,9 +5308,333 @@ func (m *BgpPeer) Size() (n int) {
 	if m.BgpPeerSubnetOffset != 0 {
 		n += 1 + sovTypes(uint64(m.BgpPeerSubnetOffset))
 	}
+	if len(m.Families) > 0 {
+		for _, e := range m.Families {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.InterfaceRefs) > 0 {
+		for _, e := range m.InterfaceRefs {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.AllInsideInterfaces {
+		n += 3
+	}
+	if m.AllOutsideInterfaces {
+		n += 3
+	}
 	return n
 }
 
+func (m *InterfaceList) Size() (n int) {
+	var l int
+	_ = l
+	if len(m.Interfaces) > 0 {
+		for _, e := range m.Interfaces {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *FamilyInet) Size() (n int) {
+	var l int
+	_ = l
+	if m.EnableChoice != nil {
+		n += m.EnableChoice.Size()
+	}
+	return n
+}
+
+func (m *FamilyInet_Enable) Size() (n int) {
+	var l int
+	_ = l
+	if m.Enable != nil {
+		l = m.Enable.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *FamilyInet_Disable) Size() (n int) {
+	var l int
+	_ = l
+	if m.Disable != nil {
+		l = m.Disable.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *FamilyInetvpnParameters) Size() (n int) {
+	var l int
+	_ = l
+	if m.SrChoice != nil {
+		n += m.SrChoice.Size()
+	}
+	return n
+}
+
+func (m *FamilyInetvpnParameters_Enable) Size() (n int) {
+	var l int
+	_ = l
+	if m.Enable != nil {
+		l = m.Enable.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *FamilyInetvpnParameters_Disable) Size() (n int) {
+	var l int
+	_ = l
+	if m.Disable != nil {
+		l = m.Disable.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *FamilyInetvpn) Size() (n int) {
+	var l int
+	_ = l
+	if m.EnableChoice != nil {
+		n += m.EnableChoice.Size()
+	}
+	return n
+}
+
+func (m *FamilyInetvpn_Enable) Size() (n int) {
+	var l int
+	_ = l
+	if m.Enable != nil {
+		l = m.Enable.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *FamilyInetvpn_Disable) Size() (n int) {
+	var l int
+	_ = l
+	if m.Disable != nil {
+		l = m.Disable.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *FamilyRtarget) Size() (n int) {
+	var l int
+	_ = l
+	if m.EnableChoice != nil {
+		n += m.EnableChoice.Size()
+	}
+	return n
+}
+
+func (m *FamilyRtarget_Enable) Size() (n int) {
+	var l int
+	_ = l
+	if m.Enable != nil {
+		l = m.Enable.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *FamilyRtarget_Disable) Size() (n int) {
+	var l int
+	_ = l
+	if m.Disable != nil {
+		l = m.Disable.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *PeerFamilyParameters) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Family)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.EnableSrv6 {
+		n += 2
+	}
+	return n
+}
+
+func (m *PeerExternal) Size() (n int) {
+	var l int
+	_ = l
+	if m.Asn != 0 {
+		n += 1 + sovTypes(uint64(m.Asn))
+	}
+	if m.AddressChoice != nil {
+		n += m.AddressChoice.Size()
+	}
+	if m.Port != 0 {
+		n += 1 + sovTypes(uint64(m.Port))
+	}
+	if m.FamilyInet != nil {
+		l = m.FamilyInet.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.InterfaceChoice != nil {
+		n += m.InterfaceChoice.Size()
+	}
+	return n
+}
+
+func (m *PeerExternal_Address) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Address)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *PeerExternal_SubnetBeginOffset) Size() (n int) {
+	var l int
+	_ = l
+	n += 1 + sovTypes(uint64(m.SubnetBeginOffset))
+	return n
+}
+func (m *PeerExternal_SubnetEndOffset) Size() (n int) {
+	var l int
+	_ = l
+	n += 1 + sovTypes(uint64(m.SubnetEndOffset))
+	return n
+}
+func (m *PeerExternal_FromSite) Size() (n int) {
+	var l int
+	_ = l
+	if m.FromSite != nil {
+		l = m.FromSite.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *PeerExternal_DefaultGateway) Size() (n int) {
+	var l int
+	_ = l
+	if m.DefaultGateway != nil {
+		l = m.DefaultGateway.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *PeerExternal_Interface) Size() (n int) {
+	var l int
+	_ = l
+	if m.Interface != nil {
+		l = m.Interface.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *PeerExternal_InterfaceList) Size() (n int) {
+	var l int
+	_ = l
+	if m.InterfaceList != nil {
+		l = m.InterfaceList.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *PeerExternal_InsideInterfaces) Size() (n int) {
+	var l int
+	_ = l
+	if m.InsideInterfaces != nil {
+		l = m.InsideInterfaces.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *PeerExternal_OutsideInterfaces) Size() (n int) {
+	var l int
+	_ = l
+	if m.OutsideInterfaces != nil {
+		l = m.OutsideInterfaces.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *PeerInternal) Size() (n int) {
+	var l int
+	_ = l
+	if m.AddressChoice != nil {
+		n += m.AddressChoice.Size()
+	}
+	if m.Port != 0 {
+		n += 1 + sovTypes(uint64(m.Port))
+	}
+	if m.FamilyInetvpn != nil {
+		l = m.FamilyInetvpn.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.FamilyRtarget != nil {
+		l = m.FamilyRtarget.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *PeerInternal_Address) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.Address)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *PeerInternal_FromSite) Size() (n int) {
+	var l int
+	_ = l
+	if m.FromSite != nil {
+		l = m.FromSite.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *PeerInternal_DnsName) Size() (n int) {
+	var l int
+	_ = l
+	l = len(m.DnsName)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *Peer) Size() (n int) {
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.TypeChoice != nil {
+		n += m.TypeChoice.Size()
+	}
+	l = len(m.TargetService)
+	if l > 0 {
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *Peer_External) Size() (n int) {
+	var l int
+	_ = l
+	if m.External != nil {
+		l = m.External.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *Peer_Internal) Size() (n int) {
+	var l int
+	_ = l
+	if m.Internal != nil {
+		l = m.Internal.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GlobalSpecType) Size() (n int) {
 	var l int
 	_ = l
@@ -1792,6 +5658,19 @@ func (m *GlobalSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if len(m.Peers) > 0 {
+		for _, e := range m.Peers {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.ViewInternal != nil {
+		l = m.ViewInternal.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.ViewVersion != 0 {
+		n += 2 + sovTypes(uint64(m.ViewVersion))
+	}
 	return n
 }
 
@@ -1806,14 +5685,8 @@ func (m *CreateSpecType) Size() (n int) {
 		l = m.BgpParameters.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if len(m.BgpPeers) > 0 {
-		for _, e := range m.BgpPeers {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.NetworkInterface) > 0 {
-		for _, e := range m.NetworkInterface {
+	if len(m.Peers) > 0 {
+		for _, e := range m.Peers {
 			l = e.Size()
 			n += 1 + l + sovTypes(uint64(l))
 		}
@@ -1832,14 +5705,8 @@ func (m *ReplaceSpecType) Size() (n int) {
 		l = m.BgpParameters.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if len(m.BgpPeers) > 0 {
-		for _, e := range m.BgpPeers {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.NetworkInterface) > 0 {
-		for _, e := range m.NetworkInterface {
+	if len(m.Peers) > 0 {
+		for _, e := range m.Peers {
 			l = e.Size()
 			n += 1 + l + sovTypes(uint64(l))
 		}
@@ -1858,14 +5725,8 @@ func (m *GetSpecType) Size() (n int) {
 		l = m.BgpParameters.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if len(m.BgpPeers) > 0 {
-		for _, e := range m.BgpPeers {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.NetworkInterface) > 0 {
-		for _, e := range m.NetworkInterface {
+	if len(m.Peers) > 0 {
+		for _, e := range m.Peers {
 			l = e.Size()
 			n += 1 + l + sovTypes(uint64(l))
 		}
@@ -1958,6 +5819,37 @@ func (this *BgpParameters) String() string {
 		`BgpRouterIdType:` + fmt.Sprintf("%v", this.BgpRouterIdType) + `,`,
 		`BgpRouterId:` + strings.Replace(fmt.Sprintf("%v", this.BgpRouterId), "IpAddressType", "ves_io_schema3.IpAddressType", 1) + `,`,
 		`BgpRouterIdKey:` + fmt.Sprintf("%v", this.BgpRouterIdKey) + `,`,
+		`RouterIdChoice:` + fmt.Sprintf("%v", this.RouterIdChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *BgpParameters_LocalAddress) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&BgpParameters_LocalAddress{`,
+		`LocalAddress:` + strings.Replace(fmt.Sprintf("%v", this.LocalAddress), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *BgpParameters_FromSite) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&BgpParameters_FromSite{`,
+		`FromSite:` + strings.Replace(fmt.Sprintf("%v", this.FromSite), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *BgpParameters_IpAddress) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&BgpParameters_IpAddress{`,
+		`IpAddress:` + fmt.Sprintf("%v", this.IpAddress) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1973,6 +5865,330 @@ func (this *BgpPeer) String() string {
 		`BgpPeerAddressKey:` + fmt.Sprintf("%v", this.BgpPeerAddressKey) + `,`,
 		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
 		`BgpPeerSubnetOffset:` + fmt.Sprintf("%v", this.BgpPeerSubnetOffset) + `,`,
+		`Families:` + strings.Replace(fmt.Sprintf("%v", this.Families), "PeerFamilyParameters", "PeerFamilyParameters", 1) + `,`,
+		`InterfaceRefs:` + strings.Replace(fmt.Sprintf("%v", this.InterfaceRefs), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`AllInsideInterfaces:` + fmt.Sprintf("%v", this.AllInsideInterfaces) + `,`,
+		`AllOutsideInterfaces:` + fmt.Sprintf("%v", this.AllOutsideInterfaces) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *InterfaceList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&InterfaceList{`,
+		`Interfaces:` + strings.Replace(fmt.Sprintf("%v", this.Interfaces), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *FamilyInet) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&FamilyInet{`,
+		`EnableChoice:` + fmt.Sprintf("%v", this.EnableChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *FamilyInet_Enable) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&FamilyInet_Enable{`,
+		`Enable:` + strings.Replace(fmt.Sprintf("%v", this.Enable), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *FamilyInet_Disable) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&FamilyInet_Disable{`,
+		`Disable:` + strings.Replace(fmt.Sprintf("%v", this.Disable), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *FamilyInetvpnParameters) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&FamilyInetvpnParameters{`,
+		`SrChoice:` + fmt.Sprintf("%v", this.SrChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *FamilyInetvpnParameters_Enable) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&FamilyInetvpnParameters_Enable{`,
+		`Enable:` + strings.Replace(fmt.Sprintf("%v", this.Enable), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *FamilyInetvpnParameters_Disable) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&FamilyInetvpnParameters_Disable{`,
+		`Disable:` + strings.Replace(fmt.Sprintf("%v", this.Disable), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *FamilyInetvpn) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&FamilyInetvpn{`,
+		`EnableChoice:` + fmt.Sprintf("%v", this.EnableChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *FamilyInetvpn_Enable) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&FamilyInetvpn_Enable{`,
+		`Enable:` + strings.Replace(fmt.Sprintf("%v", this.Enable), "FamilyInetvpnParameters", "FamilyInetvpnParameters", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *FamilyInetvpn_Disable) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&FamilyInetvpn_Disable{`,
+		`Disable:` + strings.Replace(fmt.Sprintf("%v", this.Disable), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *FamilyRtarget) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&FamilyRtarget{`,
+		`EnableChoice:` + fmt.Sprintf("%v", this.EnableChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *FamilyRtarget_Enable) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&FamilyRtarget_Enable{`,
+		`Enable:` + strings.Replace(fmt.Sprintf("%v", this.Enable), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *FamilyRtarget_Disable) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&FamilyRtarget_Disable{`,
+		`Disable:` + strings.Replace(fmt.Sprintf("%v", this.Disable), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PeerFamilyParameters) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PeerFamilyParameters{`,
+		`Family:` + fmt.Sprintf("%v", this.Family) + `,`,
+		`EnableSrv6:` + fmt.Sprintf("%v", this.EnableSrv6) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PeerExternal) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PeerExternal{`,
+		`Asn:` + fmt.Sprintf("%v", this.Asn) + `,`,
+		`AddressChoice:` + fmt.Sprintf("%v", this.AddressChoice) + `,`,
+		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
+		`FamilyInet:` + strings.Replace(fmt.Sprintf("%v", this.FamilyInet), "FamilyInet", "FamilyInet", 1) + `,`,
+		`InterfaceChoice:` + fmt.Sprintf("%v", this.InterfaceChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PeerExternal_Address) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PeerExternal_Address{`,
+		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PeerExternal_SubnetBeginOffset) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PeerExternal_SubnetBeginOffset{`,
+		`SubnetBeginOffset:` + fmt.Sprintf("%v", this.SubnetBeginOffset) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PeerExternal_SubnetEndOffset) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PeerExternal_SubnetEndOffset{`,
+		`SubnetEndOffset:` + fmt.Sprintf("%v", this.SubnetEndOffset) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PeerExternal_FromSite) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PeerExternal_FromSite{`,
+		`FromSite:` + strings.Replace(fmt.Sprintf("%v", this.FromSite), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PeerExternal_DefaultGateway) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PeerExternal_DefaultGateway{`,
+		`DefaultGateway:` + strings.Replace(fmt.Sprintf("%v", this.DefaultGateway), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PeerExternal_Interface) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PeerExternal_Interface{`,
+		`Interface:` + strings.Replace(fmt.Sprintf("%v", this.Interface), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PeerExternal_InterfaceList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PeerExternal_InterfaceList{`,
+		`InterfaceList:` + strings.Replace(fmt.Sprintf("%v", this.InterfaceList), "InterfaceList", "InterfaceList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PeerExternal_InsideInterfaces) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PeerExternal_InsideInterfaces{`,
+		`InsideInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.InsideInterfaces), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PeerExternal_OutsideInterfaces) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PeerExternal_OutsideInterfaces{`,
+		`OutsideInterfaces:` + strings.Replace(fmt.Sprintf("%v", this.OutsideInterfaces), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PeerInternal) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PeerInternal{`,
+		`AddressChoice:` + fmt.Sprintf("%v", this.AddressChoice) + `,`,
+		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
+		`FamilyInetvpn:` + strings.Replace(fmt.Sprintf("%v", this.FamilyInetvpn), "FamilyInetvpn", "FamilyInetvpn", 1) + `,`,
+		`FamilyRtarget:` + strings.Replace(fmt.Sprintf("%v", this.FamilyRtarget), "FamilyRtarget", "FamilyRtarget", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PeerInternal_Address) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PeerInternal_Address{`,
+		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PeerInternal_FromSite) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PeerInternal_FromSite{`,
+		`FromSite:` + strings.Replace(fmt.Sprintf("%v", this.FromSite), "Empty", "ves_io_schema4.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *PeerInternal_DnsName) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&PeerInternal_DnsName{`,
+		`DnsName:` + fmt.Sprintf("%v", this.DnsName) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Peer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Peer{`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "ves_io_schema4.MessageMetaType", 1) + `,`,
+		`TypeChoice:` + fmt.Sprintf("%v", this.TypeChoice) + `,`,
+		`TargetService:` + fmt.Sprintf("%v", this.TargetService) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Peer_External) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Peer_External{`,
+		`External:` + strings.Replace(fmt.Sprintf("%v", this.External), "PeerExternal", "PeerExternal", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Peer_Internal) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Peer_Internal{`,
+		`Internal:` + strings.Replace(fmt.Sprintf("%v", this.Internal), "PeerInternal", "PeerInternal", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1986,6 +6202,9 @@ func (this *GlobalSpecType) String() string {
 		`BgpParameters:` + strings.Replace(fmt.Sprintf("%v", this.BgpParameters), "BgpParameters", "BgpParameters", 1) + `,`,
 		`BgpPeers:` + strings.Replace(fmt.Sprintf("%v", this.BgpPeers), "BgpPeer", "BgpPeer", 1) + `,`,
 		`NetworkInterface:` + strings.Replace(fmt.Sprintf("%v", this.NetworkInterface), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Peers:` + strings.Replace(fmt.Sprintf("%v", this.Peers), "Peer", "Peer", 1) + `,`,
+		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "ves_io_schema_views.ObjectRefType", 1) + `,`,
+		`ViewVersion:` + fmt.Sprintf("%v", this.ViewVersion) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1997,8 +6216,7 @@ func (this *CreateSpecType) String() string {
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`Where:` + strings.Replace(fmt.Sprintf("%v", this.Where), "SiteVirtualSiteRefSelector", "ves_io_schema4.SiteVirtualSiteRefSelector", 1) + `,`,
 		`BgpParameters:` + strings.Replace(fmt.Sprintf("%v", this.BgpParameters), "BgpParameters", "BgpParameters", 1) + `,`,
-		`BgpPeers:` + strings.Replace(fmt.Sprintf("%v", this.BgpPeers), "BgpPeer", "BgpPeer", 1) + `,`,
-		`NetworkInterface:` + strings.Replace(fmt.Sprintf("%v", this.NetworkInterface), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Peers:` + strings.Replace(fmt.Sprintf("%v", this.Peers), "Peer", "Peer", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2010,8 +6228,7 @@ func (this *ReplaceSpecType) String() string {
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`Where:` + strings.Replace(fmt.Sprintf("%v", this.Where), "SiteVirtualSiteRefSelector", "ves_io_schema4.SiteVirtualSiteRefSelector", 1) + `,`,
 		`BgpParameters:` + strings.Replace(fmt.Sprintf("%v", this.BgpParameters), "BgpParameters", "BgpParameters", 1) + `,`,
-		`BgpPeers:` + strings.Replace(fmt.Sprintf("%v", this.BgpPeers), "BgpPeer", "BgpPeer", 1) + `,`,
-		`NetworkInterface:` + strings.Replace(fmt.Sprintf("%v", this.NetworkInterface), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Peers:` + strings.Replace(fmt.Sprintf("%v", this.Peers), "Peer", "Peer", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2023,8 +6240,7 @@ func (this *GetSpecType) String() string {
 	s := strings.Join([]string{`&GetSpecType{`,
 		`Where:` + strings.Replace(fmt.Sprintf("%v", this.Where), "SiteVirtualSiteRefSelector", "ves_io_schema4.SiteVirtualSiteRefSelector", 1) + `,`,
 		`BgpParameters:` + strings.Replace(fmt.Sprintf("%v", this.BgpParameters), "BgpParameters", "BgpParameters", 1) + `,`,
-		`BgpPeers:` + strings.Replace(fmt.Sprintf("%v", this.BgpPeers), "BgpPeer", "BgpPeer", 1) + `,`,
-		`NetworkInterface:` + strings.Replace(fmt.Sprintf("%v", this.NetworkInterface), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
+		`Peers:` + strings.Replace(fmt.Sprintf("%v", this.Peers), "Peer", "Peer", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2197,6 +6413,99 @@ func (m *BgpParameters) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.BgpRouterIdKey = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LocalAddress", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RouterIdChoice = &BgpParameters_LocalAddress{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FromSite", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RouterIdChoice = &BgpParameters_FromSite{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IpAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RouterIdChoice = &BgpParameters_IpAddress{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2386,6 +6695,1527 @@ func (m *BgpPeer) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 20:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Families", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Families = append(m.Families, &PeerFamilyParameters{})
+			if err := m.Families[len(m.Families)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InterfaceRefs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.InterfaceRefs = append(m.InterfaceRefs, &ves_io_schema4.ObjectRefType{})
+			if err := m.InterfaceRefs[len(m.InterfaceRefs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 22:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AllInsideInterfaces", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.AllInsideInterfaces = bool(v != 0)
+		case 23:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AllOutsideInterfaces", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.AllOutsideInterfaces = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *InterfaceList) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: InterfaceList: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: InterfaceList: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Interfaces", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Interfaces = append(m.Interfaces, &ves_io_schema_views.ObjectRefType{})
+			if err := m.Interfaces[len(m.Interfaces)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *FamilyInet) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: FamilyInet: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: FamilyInet: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Enable", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EnableChoice = &FamilyInet_Enable{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Disable", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EnableChoice = &FamilyInet_Disable{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *FamilyInetvpnParameters) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: FamilyInetvpnParameters: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: FamilyInetvpnParameters: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Enable", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SrChoice = &FamilyInetvpnParameters_Enable{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Disable", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SrChoice = &FamilyInetvpnParameters_Disable{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *FamilyInetvpn) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: FamilyInetvpn: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: FamilyInetvpn: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Enable", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &FamilyInetvpnParameters{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EnableChoice = &FamilyInetvpn_Enable{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Disable", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EnableChoice = &FamilyInetvpn_Disable{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *FamilyRtarget) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: FamilyRtarget: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: FamilyRtarget: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Enable", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EnableChoice = &FamilyRtarget_Enable{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Disable", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.EnableChoice = &FamilyRtarget_Disable{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PeerFamilyParameters) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PeerFamilyParameters: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PeerFamilyParameters: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Family", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Family = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableSrv6", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.EnableSrv6 = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PeerExternal) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PeerExternal: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PeerExternal: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Asn", wireType)
+			}
+			m.Asn = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Asn |= (uint32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AddressChoice = &PeerExternal_Address{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubnetBeginOffset", wireType)
+			}
+			var v uint32
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= (uint32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.AddressChoice = &PeerExternal_SubnetBeginOffset{v}
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubnetEndOffset", wireType)
+			}
+			var v uint32
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= (uint32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.AddressChoice = &PeerExternal_SubnetEndOffset{v}
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FromSite", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AddressChoice = &PeerExternal_FromSite{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultGateway", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AddressChoice = &PeerExternal_DefaultGateway{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
+			}
+			m.Port = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Port |= (uint32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FamilyInet", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.FamilyInet == nil {
+				m.FamilyInet = &FamilyInet{}
+			}
+			if err := m.FamilyInet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Interface", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema_views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.InterfaceChoice = &PeerExternal_Interface{v}
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InterfaceList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &InterfaceList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.InterfaceChoice = &PeerExternal_InterfaceList{v}
+			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InsideInterfaces", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.InterfaceChoice = &PeerExternal_InsideInterfaces{v}
+			iNdEx = postIndex
+		case 24:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OutsideInterfaces", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.InterfaceChoice = &PeerExternal_OutsideInterfaces{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PeerInternal) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PeerInternal: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PeerInternal: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AddressChoice = &PeerInternal_Address{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FromSite", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ves_io_schema4.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AddressChoice = &PeerInternal_FromSite{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AddressChoice = &PeerInternal_DnsName{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
+			}
+			m.Port = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Port |= (uint32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FamilyInetvpn", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.FamilyInetvpn == nil {
+				m.FamilyInetvpn = &FamilyInetvpn{}
+			}
+			if err := m.FamilyInetvpn.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FamilyRtarget", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.FamilyRtarget == nil {
+				m.FamilyRtarget = &FamilyRtarget{}
+			}
+			if err := m.FamilyRtarget.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Peer) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Peer: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Peer: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &ves_io_schema4.MessageMetaType{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field External", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &PeerExternal{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TypeChoice = &Peer_External{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Internal", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &PeerInternal{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TypeChoice = &Peer_Internal{v}
+			iNdEx = postIndex
+		case 1000:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TargetService", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TargetService = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -2564,6 +8394,89 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Peers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Peers = append(m.Peers, &Peer{})
+			if err := m.Peers[len(m.Peers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 1000:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ViewInternal", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ViewInternal == nil {
+				m.ViewInternal = &ves_io_schema_views.ObjectRefType{}
+			}
+			if err := m.ViewInternal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 1001:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ViewVersion", wireType)
+			}
+			m.ViewVersion = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ViewVersion |= (uint32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -2680,9 +8593,9 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
+		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BgpPeers", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Peers", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2706,39 +8619,8 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.BgpPeers = append(m.BgpPeers, &BgpPeer{})
-			if err := m.BgpPeers[len(m.BgpPeers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NetworkInterface", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.NetworkInterface = append(m.NetworkInterface, &ves_io_schema4.ObjectRefType{})
-			if err := m.NetworkInterface[len(m.NetworkInterface)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.Peers = append(m.Peers, &Peer{})
+			if err := m.Peers[len(m.Peers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2858,9 +8740,9 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
+		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BgpPeers", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Peers", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2884,39 +8766,8 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.BgpPeers = append(m.BgpPeers, &BgpPeer{})
-			if err := m.BgpPeers[len(m.BgpPeers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NetworkInterface", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.NetworkInterface = append(m.NetworkInterface, &ves_io_schema4.ObjectRefType{})
-			if err := m.NetworkInterface[len(m.NetworkInterface)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.Peers = append(m.Peers, &Peer{})
+			if err := m.Peers[len(m.Peers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3036,9 +8887,9 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
+		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BgpPeers", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Peers", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3062,39 +8913,8 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.BgpPeers = append(m.BgpPeers, &BgpPeer{})
-			if err := m.BgpPeers[len(m.BgpPeers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NetworkInterface", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.NetworkInterface = append(m.NetworkInterface, &ves_io_schema4.ObjectRefType{})
-			if err := m.NetworkInterface[len(m.NetworkInterface)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.Peers = append(m.Peers, &Peer{})
+			if err := m.Peers[len(m.Peers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3674,91 +9494,151 @@ func init() { proto.RegisterFile("ves.io/schema/bgp/types.proto", fileDescriptor
 func init() { golang_proto.RegisterFile("ves.io/schema/bgp/types.proto", fileDescriptorTypes) }
 
 var fileDescriptorTypes = []byte{
-	// 1371 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0xbd, 0x8f, 0x13, 0x47,
-	0x14, 0xf7, 0xf8, 0x7c, 0x5f, 0xcf, 0xd8, 0x67, 0x0f, 0x5c, 0x30, 0x3e, 0x58, 0x8c, 0x03, 0xe1,
-	0x38, 0x7c, 0xb6, 0x30, 0x5f, 0x11, 0x4a, 0x0e, 0xce, 0x77, 0x6b, 0xeb, 0x02, 0xd8, 0xd6, 0xd8,
-	0x17, 0xa4, 0x14, 0x59, 0xad, 0xed, 0xf1, 0xb2, 0xc1, 0xde, 0x5d, 0xed, 0x8e, 0x7d, 0x5c, 0x81,
-	0x94, 0x3f, 0x21, 0x4a, 0x8a, 0x54, 0xe9, 0x12, 0x29, 0x4a, 0x97, 0x36, 0xd7, 0xa0, 0x54, 0x51,
-	0x8a, 0x88, 0xa4, 0xa2, 0x0c, 0xa6, 0x21, 0x1d, 0xa2, 0x8a, 0xd2, 0x10, 0xed, 0xec, 0x7a, 0xfd,
-	0x71, 0x1f, 0x21, 0x11, 0x55, 0x44, 0x37, 0x3b, 0xef, 0xf7, 0x7e, 0xf3, 0xe6, 0xf7, 0x66, 0xe6,
-	0xbd, 0x85, 0x13, 0x5d, 0x6a, 0xa5, 0x55, 0x3d, 0x63, 0xd5, 0xef, 0xd2, 0xb6, 0x9c, 0xa9, 0x29,
-	0x46, 0x86, 0x6d, 0x1b, 0xd4, 0x4a, 0x1b, 0xa6, 0xce, 0x74, 0x1c, 0x75, 0xcc, 0x69, 0xc7, 0x9c,
-	0xae, 0x29, 0x46, 0x7c, 0x59, 0x51, 0xd9, 0xdd, 0x4e, 0x2d, 0x5d, 0xd7, 0xdb, 0x19, 0x45, 0x57,
-	0xf4, 0x0c, 0x47, 0xd6, 0x3a, 0x4d, 0xfe, 0xc5, 0x3f, 0xf8, 0xc8, 0x61, 0x88, 0x9f, 0x54, 0x74,
-	0x5d, 0x69, 0xd1, 0x01, 0x8a, 0xa9, 0x6d, 0x6a, 0x31, 0xb9, 0x6d, 0xb8, 0x80, 0xa3, 0xa3, 0x11,
-	0x68, 0x94, 0xb9, 0x86, 0x85, 0x51, 0x83, 0x6e, 0x30, 0x55, 0xd7, 0xdc, 0xc0, 0xe2, 0x63, 0x71,
-	0x1b, 0x5d, 0x26, 0x0d, 0xc5, 0x1d, 0x3f, 0x36, 0x6a, 0x1e, 0x36, 0x1d, 0x1f, 0x35, 0x75, 0xe5,
-	0x96, 0xda, 0x90, 0x19, 0x75, 0xad, 0x89, 0x31, 0xab, 0x4a, 0xb7, 0xa4, 0x91, 0x95, 0x93, 0x5f,
-	0xf8, 0x21, 0x94, 0x53, 0x8c, 0xb2, 0x6c, 0xca, 0x6d, 0xca, 0xa8, 0x69, 0xe1, 0x93, 0x30, 0x21,
-	0x5b, 0x5a, 0x0c, 0x25, 0xd0, 0x62, 0x28, 0x17, 0xfa, 0x73, 0x07, 0xf9, 0x7e, 0xf8, 0xe3, 0xe1,
-	0x44, 0x60, 0xc9, 0xbf, 0x88, 0x88, 0x6d, 0xc1, 0x9b, 0x80, 0x6b, 0x8a, 0x21, 0x99, 0x7a, 0x87,
-	0x51, 0x53, 0x52, 0x1b, 0x3c, 0xd4, 0x98, 0x3f, 0x81, 0x16, 0xc3, 0xd9, 0x64, 0x7a, 0x97, 0xc4,
-	0xe9, 0x9c, 0x62, 0x10, 0x8e, 0xdd, 0x68, 0x54, 0xb7, 0x0d, 0x9a, 0x0b, 0xd8, 0x9c, 0x64, 0xae,
-	0x36, 0x3a, 0x8d, 0x6f, 0x40, 0x68, 0x84, 0x36, 0x36, 0x91, 0x40, 0x8b, 0xc1, 0xec, 0xf1, 0x31,
-	0xc6, 0x0d, 0x63, 0xb5, 0xd1, 0x30, 0xa9, 0x65, 0xd9, 0x4e, 0x24, 0x38, 0xc4, 0x82, 0xdf, 0x83,
-	0xe8, 0x68, 0x60, 0xf7, 0xe8, 0x76, 0x2c, 0x90, 0x40, 0x8b, 0xb3, 0xb9, 0xe8, 0xb3, 0x1d, 0x84,
-	0xbc, 0xbd, 0x98, 0xfe, 0xd8, 0x0d, 0x12, 0x1e, 0x72, 0xbd, 0x49, 0xb7, 0xaf, 0xc1, 0x8b, 0x95,
-	0xe9, 0x0b, 0xa9, 0x6c, 0xea, 0x62, 0xea, 0x52, 0xf2, 0xcb, 0x09, 0x98, 0xb6, 0x55, 0xa1, 0xd4,
-	0xfc, 0x67, 0x3d, 0x3e, 0x86, 0x79, 0x7b, 0x59, 0x83, 0x52, 0x53, 0x92, 0x9d, 0xd8, 0x86, 0x25,
-	0x39, 0xb3, 0xb7, 0x24, 0x36, 0xf7, 0xd0, 0x4e, 0x5c, 0x55, 0x6c, 0x65, 0xc7, 0x2c, 0x38, 0x0f,
-	0x91, 0x71, 0xfe, 0x57, 0xd2, 0x26, 0x3c, 0xca, 0x85, 0x73, 0x70, 0x64, 0x57, 0x9c, 0x07, 0x2a,
-	0x14, 0x1d, 0x25, 0xb8, 0x49, 0xb7, 0xf1, 0x59, 0x08, 0x18, 0xba, 0xc9, 0x62, 0x93, 0x5c, 0x8d,
-	0xc3, 0x0f, 0x87, 0x7c, 0xa6, 0x96, 0x02, 0xb1, 0x97, 0x2f, 0x27, 0x08, 0x07, 0xe0, 0x3c, 0xbc,
-	0xe5, 0x2d, 0x66, 0x75, 0x6a, 0x1a, 0x65, 0x92, 0xde, 0x6c, 0x5a, 0x94, 0xc5, 0xa6, 0xb8, 0x6b,
-	0x74, 0xd8, 0x35, 0xb0, 0xe4, 0x8f, 0x25, 0xc8, 0x61, 0x77, 0xb9, 0x0a, 0x87, 0x97, 0x38, 0xfa,
-	0x5a, 0xf8, 0xc5, 0x4a, 0xd0, 0xc9, 0xca, 0xe5, 0xd4, 0x95, 0xd4, 0xa5, 0xe4, 0x5f, 0x7e, 0x08,
-	0x17, 0x5a, 0x7a, 0x4d, 0x6e, 0x55, 0x0c, 0x5a, 0xe7, 0xfa, 0x5c, 0x87, 0xc9, 0xad, 0xbb, 0xd4,
-	0xa4, 0x3c, 0x45, 0xc1, 0xec, 0xb9, 0x31, 0x51, 0x2a, 0x2a, 0xa3, 0x1f, 0xaa, 0x26, 0xeb, 0xc8,
-	0x2d, 0x7b, 0x48, 0x68, 0xb3, 0x42, 0x5b, 0xb4, 0xce, 0x74, 0x93, 0x38, 0x7e, 0xb8, 0x00, 0x61,
-	0x1e, 0xab, 0x77, 0x07, 0x78, 0xe6, 0x82, 0xd9, 0xc4, 0x3e, 0x99, 0xf3, 0x70, 0xc4, 0x3e, 0xb1,
-	0x43, 0x57, 0xe7, 0x2a, 0xcc, 0xf6, 0x37, 0x6d, 0xa7, 0x68, 0x62, 0x31, 0x98, 0x8d, 0xef, 0x9f,
-	0x7d, 0x32, 0xe3, 0x6e, 0xd8, 0xc2, 0x5b, 0x10, 0xd5, 0x28, 0xdb, 0xd2, 0xcd, 0x7b, 0x92, 0xaa,
-	0x31, 0x6a, 0x36, 0xe5, 0x3a, 0x8d, 0x05, 0x38, 0xc1, 0x78, 0x8e, 0x4b, 0xb5, 0x4f, 0x68, 0x9d,
-	0x11, 0xda, 0xe4, 0xa7, 0x26, 0xf5, 0xdd, 0x83, 0xdd, 0x9e, 0x8f, 0x76, 0x10, 0xb2, 0x65, 0x9d,
-	0xfc, 0x1c, 0xf9, 0x23, 0x33, 0xfd, 0xd1, 0x0c, 0x22, 0x11, 0x17, 0xba, 0xd1, 0x47, 0x5e, 0x4b,
-	0xfd, 0xb8, 0x83, 0x16, 0x21, 0x0e, 0xd1, 0x5c, 0xa1, 0x9c, 0xa8, 0xeb, 0x5a, 0x53, 0x55, 0x3a,
-	0xa6, 0x6c, 0x3f, 0x10, 0x78, 0x92, 0x5f, 0x05, 0x00, 0x98, 0xbc, 0xc3, 0x55, 0x42, 0x17, 0x92,
-	0xbf, 0xfa, 0x21, 0xbc, 0x66, 0x52, 0x99, 0xd1, 0xff, 0x93, 0xf8, 0xd2, 0x7f, 0x15, 0xff, 0xc8,
-	0x5e, 0xe2, 0xef, 0x21, 0xf2, 0xc2, 0xcf, 0x2b, 0x63, 0x67, 0xf6, 0xc5, 0xca, 0xb4, 0xad, 0xee,
-	0x85, 0xd4, 0xa5, 0xe4, 0x6f, 0x7e, 0x98, 0x23, 0xd4, 0x68, 0xc9, 0xf5, 0x37, 0xa2, 0xbe, 0x36,
-	0x51, 0x7f, 0xf1, 0x43, 0xb0, 0x40, 0xd9, 0x1b, 0x41, 0x5f, 0x97, 0xa0, 0xdf, 0x04, 0x20, 0xea,
-	0xc6, 0x54, 0x61, 0x32, 0xeb, 0x38, 0x95, 0xe9, 0x7d, 0x98, 0xee, 0x18, 0x52, 0x43, 0xdf, 0x72,
-	0xca, 0x63, 0x38, 0x7b, 0x7a, 0xff, 0xad, 0x6c, 0x1a, 0xeb, 0xfa, 0x96, 0xc6, 0x0b, 0xd3, 0x54,
-	0x87, 0x8f, 0xf1, 0x75, 0x38, 0xf4, 0xaf, 0x8b, 0x5a, 0xd0, 0x18, 0xaa, 0x68, 0x0b, 0x30, 0xcb,
-	0x09, 0x78, 0x49, 0xb2, 0xcb, 0x58, 0x88, 0xcc, 0xd8, 0x13, 0x65, 0xbb, 0x02, 0x9d, 0x86, 0x30,
-	0x37, 0x0e, 0x1a, 0x0a, 0xbb, 0x68, 0xcd, 0x12, 0xbe, 0xa6, 0xd7, 0x33, 0x1c, 0x83, 0x19, 0x27,
-	0x06, 0x4b, 0x73, 0x2a, 0x13, 0x99, 0xe6, 0x2b, 0x58, 0x1a, 0xce, 0x43, 0xd4, 0xdd, 0x9d, 0xe4,
-	0x75, 0x79, 0xb1, 0x69, 0x1e, 0x63, 0x3c, 0xed, 0xf4, 0x81, 0xe9, 0x7e, 0x1f, 0x98, 0xae, 0xf6,
-	0x11, 0x64, 0xce, 0xd9, 0x9d, 0x37, 0x81, 0xb3, 0x30, 0x5f, 0xd7, 0x35, 0x8d, 0xd6, 0xed, 0x67,
-	0x55, 0x6a, 0xb6, 0x64, 0x43, 0xaa, 0xeb, 0x1d, 0x8d, 0xc5, 0x66, 0xf8, 0x7a, 0x87, 0x07, 0xc6,
-	0x7c, 0x4b, 0x36, 0xd6, 0x6c, 0x13, 0xbe, 0x02, 0x47, 0xe5, 0x46, 0x97, 0x9a, 0x4c, 0xb5, 0x68,
-	0x43, 0x32, 0x4c, 0xda, 0x54, 0xef, 0xbb, 0x5e, 0xb3, 0xdc, 0x6b, 0x7e, 0x60, 0x2e, 0x73, 0xab,
-	0xe3, 0x97, 0x85, 0x79, 0x93, 0xd6, 0xa9, 0xda, 0x1d, 0xf7, 0x02, 0x67, 0xad, 0xbe, 0x71, 0xd8,
-	0xe7, 0x0c, 0x84, 0xbd, 0x73, 0x21, 0x69, 0x72, 0x9b, 0xc6, 0x82, 0x5c, 0xa8, 0x90, 0x37, 0x5b,
-	0x94, 0xdb, 0x14, 0xbf, 0x0d, 0xa1, 0x96, 0x5e, 0x97, 0x5b, 0x5e, 0xba, 0x0e, 0x39, 0x72, 0xf2,
-	0x49, 0x37, 0x23, 0xc9, 0xaf, 0x11, 0x6f, 0x27, 0x87, 0xce, 0xc8, 0x3b, 0x30, 0xe7, 0xb8, 0x0d,
-	0xf2, 0x80, 0x1c, 0x7a, 0x3e, 0xed, 0x25, 0x62, 0x01, 0x66, 0x5d, 0x7a, 0x4b, 0xe3, 0x97, 0x2b,
-	0x44, 0x66, 0x1c, 0x6a, 0x4b, 0xc3, 0x45, 0x88, 0x38, 0x9d, 0x04, 0xe7, 0x95, 0x5a, 0xaa, 0xc5,
-	0xdc, 0xcb, 0x73, 0xc0, 0x89, 0x1b, 0x04, 0x41, 0xf8, 0x49, 0x70, 0xbe, 0x6f, 0xa9, 0x16, 0x5b,
-	0xfa, 0x1e, 0xc1, 0xdc, 0x58, 0x5b, 0x8a, 0x13, 0x70, 0x3c, 0x57, 0x28, 0x4b, 0xa4, 0xb4, 0x59,
-	0x15, 0x89, 0xb4, 0xb1, 0x2e, 0xe5, 0x49, 0xe9, 0xb6, 0xb4, 0x51, 0xac, 0x8a, 0x24, 0xbf, 0xba,
-	0x26, 0x46, 0x7c, 0xf8, 0x14, 0x9c, 0xd8, 0x0b, 0x51, 0x96, 0x56, 0xd7, 0xd7, 0x89, 0x58, 0xa9,
-	0x44, 0x10, 0x4e, 0x82, 0xb0, 0x07, 0xa4, 0xb2, 0x51, 0x15, 0xa5, 0x52, 0xee, 0x03, 0x71, 0xad,
-	0x1a, 0xf1, 0xe3, 0xcb, 0x70, 0x7e, 0x3f, 0x4c, 0x55, 0xbc, 0x5d, 0xbe, 0xb5, 0x5a, 0x15, 0xa5,
-	0xf2, 0x2a, 0x59, 0xbd, 0x2d, 0x56, 0x45, 0x52, 0x89, 0x4c, 0xc4, 0x03, 0x76, 0xaf, 0xb4, 0xf4,
-	0x95, 0x1f, 0xf0, 0xee, 0xbe, 0x11, 0x9f, 0x86, 0x84, 0xcd, 0x56, 0x16, 0x45, 0xd2, 0x8f, 0xc3,
-	0x21, 0x5c, 0x17, 0xf3, 0xab, 0x9b, 0xb7, 0xaa, 0x52, 0xe1, 0x4e, 0xc4, 0xb7, 0x3f, 0x6a, 0x24,
-	0xfa, 0x33, 0x70, 0x6a, 0x6f, 0xd4, 0xe8, 0x06, 0xde, 0x85, 0xf4, 0x01, 0xb0, 0x03, 0xf6, 0x80,
-	0x97, 0xe1, 0xdc, 0x2e, 0xcf, 0x52, 0x3e, 0x5f, 0x11, 0xab, 0x2e, 0xc1, 0x66, 0xae, 0x28, 0x56,
-	0xa5, 0x9c, 0x58, 0xd8, 0x28, 0x46, 0x02, 0xf8, 0x3c, 0x9c, 0x7d, 0x15, 0xb8, 0x58, 0x5c, 0x8f,
-	0x4c, 0x2e, 0x5d, 0xf5, 0x5e, 0xa8, 0xc1, 0x53, 0x83, 0xa3, 0x10, 0xf2, 0x18, 0xd6, 0x4b, 0x77,
-	0x8a, 0x11, 0x1f, 0x9e, 0x83, 0xa0, 0x37, 0xb5, 0x59, 0x8e, 0xa0, 0xdc, 0x83, 0x47, 0x4f, 0x04,
-	0xdf, 0xe3, 0x27, 0x82, 0xef, 0xf9, 0x13, 0x01, 0x7d, 0xda, 0x13, 0xd0, 0xb7, 0x3d, 0x01, 0xfd,
-	0xd4, 0x13, 0xd0, 0xa3, 0x9e, 0x80, 0x1e, 0xf7, 0x04, 0xf4, 0x7b, 0x4f, 0x40, 0xcf, 0x7a, 0x82,
-	0xef, 0x79, 0x4f, 0x40, 0x9f, 0x3d, 0x15, 0x7c, 0x0f, 0x9f, 0x0a, 0xe8, 0xa3, 0x82, 0xa2, 0x1b,
-	0xf7, 0x94, 0x74, 0x57, 0x6f, 0x31, 0x6a, 0x9a, 0x72, 0xba, 0x63, 0x65, 0xf8, 0xa0, 0xa9, 0x9b,
-	0xed, 0x65, 0xc3, 0xd4, 0xbb, 0x6a, 0x83, 0x9a, 0xcb, 0x7d, 0x73, 0xc6, 0xa8, 0x29, 0x7a, 0x86,
-	0xde, 0x67, 0xee, 0x9f, 0xd8, 0xe0, 0x07, 0xb5, 0x36, 0xc5, 0xdf, 0x90, 0x8b, 0x7f, 0x07, 0x00,
-	0x00, 0xff, 0xff, 0xab, 0xf4, 0x0a, 0x1e, 0xbc, 0x0e, 0x00, 0x00,
+	// 2334 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x59, 0x4d, 0x6c, 0x1b, 0xc7,
+	0x15, 0xd6, 0xf0, 0x4f, 0xe4, 0xa3, 0x28, 0x91, 0x63, 0xc9, 0xda, 0xc8, 0x09, 0x4d, 0x33, 0x51,
+	0x22, 0xcb, 0x14, 0x65, 0x51, 0xfe, 0x49, 0x64, 0xd8, 0xae, 0x28, 0x51, 0x3f, 0xae, 0x2d, 0x09,
+	0x43, 0xda, 0x0e, 0x72, 0x59, 0x2c, 0xc9, 0x21, 0xbd, 0xf1, 0x72, 0x77, 0xb1, 0xbb, 0xa4, 0xac,
+	0x02, 0x06, 0x7a, 0xeb, 0xad, 0x28, 0x7a, 0xeb, 0x21, 0xe8, 0xa5, 0x2d, 0x8a, 0x00, 0x3d, 0xf4,
+	0xd2, 0x43, 0x79, 0x11, 0x7a, 0x2a, 0x7a, 0xd2, 0xd1, 0x2d, 0x1a, 0xa0, 0x66, 0x50, 0xc0, 0xb9,
+	0x19, 0xbe, 0xf4, 0x98, 0x62, 0x67, 0x97, 0xcb, 0xe5, 0x52, 0x94, 0x99, 0x1e, 0x82, 0x22, 0xb7,
+	0xdd, 0x79, 0x3f, 0xf3, 0xde, 0xbc, 0x37, 0xdf, 0x7b, 0xfb, 0x16, 0xde, 0x6b, 0x51, 0x3d, 0x2b,
+	0x2a, 0xcb, 0x7a, 0xe5, 0x09, 0x6d, 0x08, 0xcb, 0xe5, 0xba, 0xba, 0x6c, 0x1c, 0xa9, 0x54, 0xcf,
+	0xaa, 0x9a, 0x62, 0x28, 0x38, 0x61, 0x91, 0xb3, 0x16, 0x39, 0x5b, 0xae, 0xab, 0x73, 0x4b, 0x75,
+	0xd1, 0x78, 0xd2, 0x2c, 0x67, 0x2b, 0x4a, 0x63, 0xb9, 0xae, 0xd4, 0x95, 0x65, 0xc6, 0x59, 0x6e,
+	0xd6, 0xd8, 0x1b, 0x7b, 0x61, 0x4f, 0x96, 0x86, 0xb9, 0x8b, 0x75, 0x45, 0xa9, 0x4b, 0xb4, 0xc7,
+	0x65, 0x88, 0x0d, 0xaa, 0x1b, 0x42, 0x43, 0xb5, 0x19, 0x66, 0xfb, 0x2d, 0x90, 0xa9, 0x61, 0x13,
+	0x2e, 0xf4, 0x13, 0x14, 0xd5, 0x10, 0x15, 0xd9, 0x36, 0x6c, 0xce, 0x63, 0xb7, 0xda, 0x32, 0x78,
+	0x97, 0xdd, 0x73, 0xef, 0xf4, 0x93, 0xdd, 0xa4, 0x77, 0xfb, 0x49, 0x2d, 0x41, 0x12, 0xab, 0x82,
+	0x41, 0x6d, 0x6a, 0xca, 0x43, 0x15, 0xe9, 0x21, 0xdf, 0xbf, 0xf3, 0xc5, 0x41, 0x0e, 0xdd, 0xbd,
+	0x41, 0xfa, 0xdf, 0x7e, 0x88, 0xe5, 0xeb, 0xea, 0x81, 0xa0, 0x09, 0x0d, 0x6a, 0x50, 0x4d, 0xc7,
+	0x17, 0xc0, 0x2f, 0xe8, 0x32, 0x87, 0x52, 0x68, 0x21, 0x96, 0x8f, 0xfc, 0xf9, 0x9b, 0x63, 0x7f,
+	0x60, 0xd1, 0xb7, 0x80, 0x88, 0xb9, 0x8a, 0x3f, 0x05, 0x5c, 0xae, 0xab, 0xbc, 0xa6, 0x34, 0x0d,
+	0xaa, 0xf1, 0x62, 0x95, 0xf9, 0xc1, 0xf9, 0x52, 0x68, 0x61, 0x32, 0x97, 0xce, 0x0e, 0x9c, 0x7f,
+	0x36, 0x5f, 0x57, 0x09, 0xe3, 0xdd, 0xad, 0x96, 0x8e, 0x54, 0x9a, 0x1f, 0x7f, 0xf1, 0x1c, 0xbd,
+	0x6a, 0x23, 0x44, 0xa6, 0xca, 0xfd, 0x14, 0xbc, 0x0b, 0xb1, 0x3e, 0xcd, 0x9c, 0x3f, 0x85, 0x16,
+	0xa2, 0xb9, 0x77, 0x3d, 0x4a, 0x77, 0xd5, 0xf5, 0x6a, 0x55, 0xa3, 0xba, 0xde, 0xaf, 0x2e, 0xea,
+	0x52, 0x87, 0x6f, 0x41, 0xa2, 0xdf, 0xc8, 0xa7, 0xf4, 0x88, 0x0b, 0xa4, 0xd0, 0x42, 0x24, 0x1f,
+	0xb7, 0x05, 0x98, 0x5b, 0x9a, 0x8f, 0xfb, 0x11, 0x99, 0x74, 0x49, 0xfe, 0x98, 0x1e, 0xe1, 0x5b,
+	0x10, 0x93, 0x94, 0x8a, 0x20, 0xf1, 0x82, 0xb5, 0x0f, 0x17, 0x62, 0x76, 0x4c, 0x7b, 0xec, 0x28,
+	0x34, 0x54, 0xe3, 0x68, 0x67, 0x8c, 0x4c, 0x30, 0x66, 0xdb, 0x26, 0xbc, 0x0a, 0x91, 0x9a, 0xa6,
+	0x34, 0x78, 0x5d, 0x34, 0x28, 0x37, 0x7e, 0xa6, 0x60, 0xd8, 0x64, 0x2c, 0x8a, 0x06, 0xc5, 0x8b,
+	0x00, 0xa2, 0xea, 0x6c, 0x17, 0x66, 0x76, 0x46, 0x6c, 0x03, 0x9f, 0xa1, 0x9d, 0x31, 0x12, 0x11,
+	0xbb, 0x4e, 0xaf, 0x85, 0xde, 0xdc, 0xf1, 0xaf, 0x64, 0xae, 0xe7, 0x2f, 0x43, 0xbc, 0xe7, 0x5e,
+	0xe5, 0x89, 0x22, 0x56, 0x28, 0x9e, 0x39, 0x6e, 0xa3, 0xd0, 0x49, 0x1b, 0x05, 0x3b, 0x6d, 0x14,
+	0xbc, 0x91, 0xb9, 0x99, 0xf9, 0xf8, 0x75, 0x1b, 0xa1, 0x7b, 0x81, 0x70, 0x30, 0x1e, 0x4a, 0xff,
+	0x21, 0x08, 0xe3, 0x66, 0x9c, 0x29, 0xd5, 0xde, 0x16, 0xe1, 0x19, 0xf3, 0xf0, 0x54, 0x4a, 0xb5,
+	0xae, 0x4d, 0xee, 0x20, 0xcf, 0x9f, 0x1e, 0x64, 0x53, 0xaf, 0x2b, 0x30, 0xc4, 0xcc, 0x12, 0xcf,
+	0x1a, 0xde, 0x82, 0xb8, 0x57, 0xf3, 0x28, 0x41, 0x66, 0x11, 0x72, 0xe9, 0xc2, 0x6b, 0x30, 0x3d,
+	0x60, 0x61, 0x2f, 0xc2, 0x91, 0x5e, 0x68, 0x13, 0xfd, 0x82, 0x66, 0x74, 0xdf, 0x87, 0x80, 0xaa,
+	0x68, 0x06, 0x17, 0x64, 0xbe, 0x4f, 0x1d, 0xdb, 0xa9, 0x10, 0x5a, 0x0c, 0x70, 0xdf, 0x7e, 0xeb,
+	0x27, 0x8c, 0x88, 0xf3, 0x70, 0xde, 0xd9, 0x40, 0x6f, 0x96, 0x65, 0x6a, 0xf0, 0x4a, 0xad, 0xa6,
+	0x53, 0x83, 0xe5, 0x42, 0x2c, 0x1f, 0xeb, 0x8a, 0x05, 0x16, 0x7d, 0x5c, 0x8a, 0x9c, 0xb3, 0xb7,
+	0x29, 0x32, 0xd6, 0x7d, 0xc6, 0x89, 0x1f, 0x41, 0xb8, 0x26, 0x34, 0x44, 0x49, 0xa4, 0x3a, 0x37,
+	0x9d, 0xf2, 0x2f, 0x44, 0x73, 0x1f, 0x9d, 0x72, 0x72, 0xa6, 0xd8, 0x96, 0xc9, 0x76, 0xd4, 0xbb,
+	0x80, 0xf9, 0x84, 0x2b, 0x47, 0x83, 0xbf, 0x44, 0xbe, 0x78, 0x80, 0x38, 0xba, 0xf0, 0xe7, 0x30,
+	0x29, 0xca, 0x06, 0xd5, 0x6a, 0x42, 0x85, 0xf2, 0x1a, 0xad, 0xe9, 0xdc, 0x0c, 0xd3, 0xee, 0x3d,
+	0xc2, 0xfd, 0xf2, 0xe7, 0xb4, 0x62, 0x10, 0x5a, 0x63, 0xf7, 0x64, 0xfe, 0xcb, 0xe7, 0x09, 0x99,
+	0x1a, 0x87, 0x8a, 0xf6, 0x94, 0x77, 0xc4, 0xbd, 0xdb, 0x84, 0x49, 0xcc, 0xa1, 0x11, 0x5a, 0xd3,
+	0xf1, 0x2d, 0x98, 0x11, 0x24, 0x89, 0x17, 0x65, 0x5d, 0xac, 0xd2, 0x9e, 0x9c, 0xce, 0x9d, 0x4f,
+	0xa1, 0x85, 0x70, 0xef, 0xf2, 0x9d, 0x13, 0x24, 0x69, 0x97, 0x31, 0xed, 0x3a, 0x3c, 0xf8, 0x36,
+	0x9c, 0x37, 0x85, 0x95, 0xa6, 0xe1, 0x95, 0x9e, 0xed, 0x97, 0x9e, 0x16, 0x24, 0x69, 0xdf, 0xe2,
+	0xea, 0x89, 0xa7, 0x7f, 0x86, 0x20, 0xe6, 0xbc, 0xde, 0x17, 0x75, 0x03, 0xb7, 0x00, 0x5c, 0x4a,
+	0x10, 0xf3, 0xda, 0x0b, 0x39, 0x0c, 0xdf, 0x3c, 0xbe, 0xe7, 0x4e, 0xf3, 0xbd, 0xe7, 0x74, 0xf7,
+	0x29, 0xec, 0x1c, 0x04, 0x87, 0x88, 0x6b, 0xa7, 0xf4, 0x17, 0x08, 0xc0, 0x8a, 0xd1, 0xae, 0x4c,
+	0x0d, 0x9c, 0x85, 0x10, 0x95, 0x85, 0xb2, 0x64, 0x5d, 0x88, 0xe1, 0xf7, 0xdb, 0xe6, 0xc2, 0x9f,
+	0xc0, 0x78, 0x55, 0xd4, 0x99, 0x80, 0x7f, 0xb8, 0x80, 0x73, 0x1c, 0x3b, 0x63, 0xa4, 0xcb, 0x9f,
+	0x4f, 0x42, 0xcc, 0x52, 0xd2, 0xbd, 0xe1, 0x66, 0xe2, 0xf9, 0x4e, 0xda, 0x08, 0x75, 0xda, 0x08,
+	0xe5, 0xee, 0x05, 0xc2, 0x28, 0xee, 0x4b, 0xff, 0x0e, 0xc1, 0x6c, 0xcf, 0xbe, 0x96, 0x2a, 0xbb,
+	0xb0, 0xfc, 0x7b, 0x34, 0x76, 0x0e, 0x22, 0xba, 0x76, 0xa6, 0xa1, 0x7f, 0x42, 0x10, 0xeb, 0x33,
+	0x14, 0x6f, 0x7a, 0xcc, 0x5b, 0x3c, 0xe5, 0x8a, 0x0c, 0x71, 0xed, 0xfb, 0x3c, 0xe1, 0x5f, 0x39,
+	0x86, 0x13, 0x43, 0xd0, 0xea, 0xff, 0x43, 0x12, 0x5c, 0x1d, 0xc9, 0x44, 0xb7, 0x65, 0x29, 0xaf,
+	0x65, 0x53, 0x2e, 0xcb, 0xfc, 0xb9, 0xcc, 0xaa, 0x6d, 0xdb, 0x67, 0x30, 0x7d, 0x1a, 0x88, 0xe0,
+	0x4b, 0x10, 0x62, 0x98, 0x71, 0xc4, 0x60, 0xde, 0x05, 0x8b, 0x71, 0x62, 0x13, 0xf0, 0x45, 0x88,
+	0xda, 0x5b, 0xe8, 0x5a, 0xeb, 0x06, 0xf3, 0x24, 0x4c, 0xc0, 0x5a, 0x2a, 0x6a, 0xad, 0x1b, 0xe9,
+	0xaf, 0x42, 0x30, 0x61, 0x2a, 0x2f, 0x3c, 0x33, 0xa8, 0x26, 0x0b, 0xd2, 0xd9, 0x85, 0x63, 0x1e,
+	0xc6, 0xdd, 0xa8, 0xee, 0xa9, 0x61, 0x5d, 0x1a, 0xbe, 0x05, 0xe7, 0x6c, 0x4c, 0x2d, 0xd3, 0xba,
+	0x28, 0x77, 0x91, 0x35, 0xd0, 0xa7, 0x93, 0x4b, 0xed, 0x8c, 0x91, 0x84, 0xc5, 0x97, 0x37, 0xd9,
+	0x6c, 0x54, 0xbd, 0x09, 0xf6, 0x22, 0x4f, 0xe5, 0x6a, 0x57, 0x34, 0x38, 0x28, 0x3a, 0x65, 0x71,
+	0x15, 0xe4, 0xaa, 0x2d, 0xd8, 0x57, 0x98, 0x43, 0x23, 0x16, 0xe6, 0xbb, 0x30, 0x55, 0xa5, 0x35,
+	0xa1, 0x29, 0x19, 0x7c, 0x5d, 0x30, 0xe8, 0xa1, 0x70, 0xf4, 0x96, 0x9a, 0x3e, 0x69, 0xb3, 0x6f,
+	0x5b, 0xdc, 0x38, 0x63, 0x57, 0x1b, 0x60, 0x16, 0x72, 0x66, 0xd9, 0xf8, 0x47, 0x1b, 0xf9, 0x57,
+	0x6e, 0x7e, 0x62, 0x1a, 0x1b, 0x5e, 0x0c, 0x99, 0x45, 0x67, 0x01, 0xd9, 0x65, 0xe7, 0x0e, 0x44,
+	0xad, 0xc8, 0xf0, 0xa2, 0x4c, 0x0d, 0x2e, 0xca, 0xb6, 0x7a, 0xef, 0xcc, 0x2b, 0x41, 0xa0, 0xd6,
+	0x43, 0xa6, 0x4f, 0x21, 0xe2, 0xc0, 0x16, 0x37, 0xc3, 0xa4, 0x47, 0xc1, 0xc7, 0xe9, 0xd3, 0xf0,
+	0x71, 0x07, 0x91, 0x9e, 0x32, 0xbc, 0xeb, 0x2e, 0x3a, 0x92, 0xa8, 0x1b, 0xac, 0x02, 0x44, 0x73,
+	0xa9, 0x53, 0x8c, 0xeb, 0x03, 0xed, 0x1d, 0xe4, 0xaa, 0x29, 0x0c, 0xc5, 0xef, 0x43, 0x62, 0xb0,
+	0x9e, 0xcc, 0x8e, 0x72, 0x6d, 0x11, 0x89, 0x8b, 0xde, 0x22, 0xb3, 0x07, 0xf8, 0x94, 0x02, 0xc3,
+	0x8d, 0xa6, 0x2e, 0xa1, 0x78, 0xab, 0xce, 0xda, 0xc4, 0x9b, 0x3b, 0x91, 0x95, 0x4c, 0x2e, 0xb3,
+	0x72, 0x35, 0xb3, 0xb2, 0x92, 0x9f, 0x87, 0xc9, 0x6e, 0x7f, 0x61, 0x5f, 0xc2, 0x73, 0xc7, 0x6d,
+	0xe4, 0x3f, 0x69, 0x23, 0x5f, 0xa7, 0x8d, 0xc6, 0x57, 0x33, 0xd7, 0x32, 0xd7, 0x33, 0x37, 0xf2,
+	0x57, 0x20, 0xde, 0x3b, 0x1d, 0x9b, 0x71, 0xf6, 0xb8, 0x8d, 0x66, 0x4e, 0xda, 0x68, 0xba, 0xd3,
+	0x46, 0xd1, 0xdc, 0x4a, 0x26, 0x97, 0xcb, 0xe4, 0x56, 0x33, 0xb9, 0x6b, 0xf7, 0x02, 0x61, 0x5f,
+	0xdc, 0x7f, 0x2f, 0x10, 0x9e, 0x8e, 0xcf, 0xa4, 0x7f, 0xee, 0xb7, 0xee, 0x17, 0x33, 0xc0, 0xbc,
+	0x5f, 0x23, 0x5e, 0xa1, 0xbe, 0x64, 0x0e, 0x8c, 0x98, 0xcc, 0x4b, 0x10, 0xae, 0xca, 0x3a, 0x2f,
+	0x0b, 0x0d, 0xca, 0x6e, 0xcc, 0x40, 0x2f, 0xfc, 0xc4, 0x42, 0x46, 0x59, 0xdf, 0x13, 0x1a, 0xf4,
+	0x3b, 0xa6, 0xee, 0x36, 0x4c, 0xba, 0x52, 0xb7, 0xa5, 0xca, 0x76, 0xf6, 0xa6, 0xde, 0x06, 0xe8,
+	0x24, 0x56, 0xeb, 0xab, 0x08, 0x3d, 0x45, 0x9a, 0x05, 0xb5, 0xdc, 0xc4, 0x5b, 0x14, 0xd9, 0x90,
+	0xdc, 0x55, 0x64, 0xbf, 0xae, 0xc1, 0x9b, 0x3b, 0xe3, 0xdd, 0x38, 0x5e, 0x1a, 0x88, 0xe3, 0x94,
+	0x2b, 0x8e, 0xfe, 0xd5, 0x8c, 0x1d, 0x96, 0xf4, 0xaf, 0x7d, 0x10, 0x60, 0x1d, 0xf2, 0x1a, 0x84,
+	0x1b, 0xd4, 0x10, 0xaa, 0x82, 0x21, 0x30, 0xb4, 0x8b, 0xe6, 0x92, 0x1e, 0x03, 0x1e, 0x50, 0x5d,
+	0x17, 0xea, 0xf4, 0x01, 0x35, 0x04, 0xd6, 0xa4, 0x3a, 0xfc, 0xf8, 0x36, 0x84, 0xa9, 0x0d, 0x98,
+	0x36, 0xd8, 0x5f, 0x1c, 0xd2, 0xf9, 0x75, 0x71, 0xd5, 0x8c, 0x53, 0x57, 0x04, 0x6f, 0x41, 0x58,
+	0xb4, 0xf3, 0xc1, 0x8e, 0xed, 0x30, 0xf1, 0x6e, 0xda, 0xb8, 0x2b, 0x9b, 0x23, 0x8b, 0x3f, 0x84,
+	0x49, 0xeb, 0x28, 0x78, 0x9d, 0x6a, 0x2d, 0xb1, 0x42, 0xb9, 0x57, 0x26, 0x78, 0x45, 0x48, 0xcc,
+	0x5a, 0x2e, 0x5a, 0xab, 0xf6, 0x17, 0x45, 0x2e, 0x9f, 0x84, 0xa8, 0xd9, 0xe6, 0xbf, 0xe5, 0x84,
+	0xfe, 0x13, 0x80, 0xc9, 0x6d, 0x49, 0x29, 0x0b, 0x52, 0x51, 0xa5, 0x15, 0xd6, 0xd6, 0xdf, 0x85,
+	0xe0, 0xe1, 0x13, 0xaa, 0x51, 0xfb, 0xa0, 0x2e, 0x7b, 0xac, 0x35, 0x93, 0xef, 0x91, 0xa8, 0x19,
+	0x4d, 0x41, 0x32, 0x1f, 0x09, 0xad, 0x15, 0xa9, 0x44, 0x2b, 0x86, 0xa2, 0x11, 0x4b, 0xce, 0x8c,
+	0x39, 0x6b, 0xb7, 0x9d, 0xe2, 0x65, 0x17, 0xd5, 0xd4, 0x90, 0x4f, 0x0d, 0x87, 0x8f, 0x98, 0x5f,
+	0x8c, 0xae, 0x9a, 0x57, 0x82, 0x48, 0xb7, 0x6f, 0x37, 0x2f, 0x90, 0xd9, 0x20, 0xce, 0x0d, 0xff,
+	0x5c, 0xc9, 0x5f, 0x18, 0x68, 0x80, 0x5d, 0x1d, 0x60, 0xd8, 0x6e, 0xea, 0x75, 0xfc, 0x13, 0x18,
+	0x84, 0x47, 0x2e, 0x30, 0x42, 0xd3, 0xbd, 0x3c, 0x52, 0xd3, 0xed, 0xda, 0x33, 0x6e, 0x73, 0x3b,
+	0x80, 0x84, 0x37, 0x20, 0x68, 0x79, 0x13, 0x64, 0xfb, 0xcd, 0x0e, 0xc9, 0x84, 0xfc, 0xf4, 0xa0,
+	0xbe, 0xab, 0x88, 0x58, 0xb2, 0x58, 0x80, 0x18, 0x9b, 0x0c, 0x38, 0x69, 0xf5, 0x6a, 0x7c, 0xe4,
+	0xe2, 0x30, 0xfb, 0xe5, 0xf3, 0x7e, 0xe1, 0x6e, 0xd7, 0x3e, 0x61, 0xae, 0x3a, 0xc0, 0x75, 0x05,
+	0xd8, 0x3b, 0xdf, 0xa2, 0x9a, 0x2e, 0x2a, 0x32, 0xf7, 0xcd, 0x38, 0x83, 0x8d, 0xde, 0xe7, 0xb9,
+	0x49, 0x7d, 0x64, 0x11, 0xd7, 0xae, 0xfd, 0xa5, 0x8d, 0xae, 0xc2, 0x79, 0x48, 0x6c, 0x28, 0x8d,
+	0x86, 0x22, 0xa7, 0x5c, 0x11, 0x44, 0x39, 0x00, 0x08, 0x5a, 0xe7, 0x8e, 0xae, 0x9b, 0xcf, 0x8f,
+	0x59, 0x8a, 0xa0, 0x95, 0xf4, 0x3f, 0x11, 0x4c, 0x6e, 0x68, 0x54, 0x30, 0xe8, 0xff, 0x61, 0xe6,
+	0x2d, 0x8d, 0x16, 0x27, 0x3b, 0x22, 0x6b, 0x89, 0xbf, 0xdd, 0xf1, 0xdc, 0xa2, 0xf4, 0x57, 0x08,
+	0xa6, 0x08, 0x55, 0x25, 0xa1, 0xf2, 0xc3, 0xf4, 0xef, 0xef, 0x08, 0xa2, 0xdb, 0xd4, 0xf8, 0x41,
+	0xfa, 0xf6, 0xdb, 0x00, 0x24, 0x6c, 0x50, 0x29, 0x1a, 0x82, 0xd1, 0xb4, 0xc6, 0x1d, 0xb7, 0x61,
+	0xbc, 0xa9, 0xf2, 0x55, 0xe5, 0xd0, 0x6a, 0x98, 0x27, 0x73, 0x1f, 0x0c, 0xc7, 0xa2, 0x87, 0xea,
+	0xa6, 0x72, 0x28, 0xb3, 0x42, 0x12, 0x6a, 0xb2, 0x67, 0x7c, 0x17, 0x26, 0xbe, 0xf3, 0xa4, 0x24,
+	0xaa, 0xba, 0xc6, 0x24, 0x17, 0x20, 0xc2, 0x14, 0xb0, 0x32, 0xce, 0xda, 0x6b, 0x12, 0x36, 0x17,
+	0x0e, 0xcc, 0x82, 0xfd, 0x01, 0x4c, 0x32, 0x62, 0x6f, 0xdc, 0xc6, 0x7a, 0x02, 0xc2, 0xf6, 0x74,
+	0x06, 0x69, 0xef, 0x40, 0xd8, 0xb2, 0x41, 0x97, 0xad, 0xd1, 0x07, 0x19, 0x67, 0x3b, 0xe8, 0x32,
+	0xde, 0x82, 0x84, 0xed, 0x1d, 0xef, 0xcc, 0x48, 0xed, 0xee, 0x78, 0x2e, 0x6b, 0x4d, 0x51, 0xb3,
+	0xdd, 0x29, 0x6a, 0xb6, 0xd4, 0xe5, 0x20, 0x53, 0x96, 0x77, 0xce, 0x02, 0xce, 0xc1, 0x4c, 0x45,
+	0x91, 0x65, 0x5a, 0x31, 0x44, 0x45, 0xe6, 0x6b, 0x92, 0xa0, 0xf2, 0x15, 0xa5, 0x29, 0x1b, 0x6c,
+	0x0e, 0x16, 0x23, 0xe7, 0x7a, 0xc4, 0x2d, 0x49, 0x50, 0x37, 0x4c, 0x12, 0xbe, 0x01, 0xb3, 0x42,
+	0xb5, 0x45, 0x35, 0x43, 0xd4, 0x69, 0x95, 0x57, 0x35, 0x5a, 0x13, 0x9f, 0xd9, 0x52, 0x11, 0x26,
+	0x35, 0xd3, 0x23, 0x1f, 0x30, 0xaa, 0x25, 0x97, 0x83, 0x19, 0x8d, 0x56, 0xa8, 0xd8, 0xf2, 0x4a,
+	0x81, 0xb5, 0x57, 0x97, 0xe8, 0x96, 0x99, 0x77, 0xb7, 0xbe, 0xac, 0x79, 0x8a, 0x5a, 0x55, 0xd4,
+	0x59, 0x65, 0xed, 0xd2, 0xfb, 0xde, 0xa9, 0xe1, 0x84, 0x75, 0x9c, 0xee, 0xe9, 0x60, 0xfa, 0x37,
+	0x88, 0xcd, 0x5a, 0x5d, 0x39, 0xf2, 0x21, 0x4c, 0x59, 0x62, 0xbd, 0x38, 0x20, 0x4b, 0x3d, 0x5b,
+	0x76, 0x02, 0x71, 0x01, 0x22, 0xb6, 0x7a, 0x5d, 0x66, 0x79, 0x1e, 0x23, 0x61, 0x4b, 0xb5, 0x2e,
+	0xe3, 0x3d, 0x88, 0x5b, 0xa3, 0x2a, 0xa6, 0xd7, 0xea, 0xcf, 0xad, 0xea, 0x77, 0x46, 0xc6, 0xf5,
+	0x8c, 0x20, 0x2c, 0x13, 0xac, 0x77, 0xb3, 0x45, 0x5f, 0xfc, 0x23, 0x82, 0x29, 0xcf, 0xdc, 0x16,
+	0xa7, 0xe0, 0xdd, 0xfc, 0xf6, 0x01, 0x4f, 0xf6, 0x1f, 0x96, 0x0a, 0x84, 0xdf, 0xdd, 0xe4, 0xb7,
+	0xc8, 0xfe, 0x03, 0x7e, 0x77, 0xaf, 0x54, 0x20, 0x5b, 0xeb, 0x1b, 0x85, 0xf8, 0x18, 0xbe, 0x04,
+	0xef, 0x9d, 0xc6, 0x71, 0xc0, 0xaf, 0x6f, 0x6e, 0x92, 0x42, 0xb1, 0x18, 0x47, 0x38, 0x0d, 0xc9,
+	0x53, 0x58, 0x8a, 0xbb, 0xa5, 0x02, 0xbf, 0x9f, 0xbf, 0x57, 0xd8, 0x28, 0xc5, 0x7d, 0xf8, 0x3a,
+	0x5c, 0x19, 0xc6, 0x53, 0x2a, 0x3c, 0x38, 0xb8, 0xbf, 0x5e, 0x2a, 0xf0, 0x07, 0xeb, 0x64, 0xfd,
+	0x41, 0xa1, 0x54, 0x20, 0xc5, 0xb8, 0x7f, 0x2e, 0x60, 0xb6, 0xa6, 0x8b, 0x5f, 0xf8, 0x00, 0x0f,
+	0x8e, 0x21, 0xf1, 0x07, 0x90, 0x32, 0xb5, 0x1d, 0x14, 0x0a, 0xa4, 0x6b, 0x87, 0xa5, 0x70, 0xb3,
+	0xb0, 0xb5, 0xfe, 0xf0, 0x7e, 0x89, 0xdf, 0x7e, 0x1c, 0x1f, 0x1b, 0xce, 0xd5, 0x67, 0xfd, 0x3c,
+	0x5c, 0x3a, 0x9d, 0xab, 0xdf, 0x81, 0x8f, 0x21, 0x7b, 0x06, 0xdb, 0x19, 0x3e, 0xe0, 0x25, 0xb8,
+	0x3c, 0x20, 0xb9, 0xbf, 0xb5, 0x55, 0x2c, 0x94, 0x6c, 0x05, 0x0f, 0xf3, 0x7b, 0x85, 0x12, 0x9f,
+	0x2f, 0x6c, 0xef, 0xee, 0xc5, 0x03, 0xf8, 0x0a, 0x7c, 0x34, 0x0a, 0x7b, 0x61, 0x6f, 0x33, 0x1e,
+	0x5c, 0xbc, 0xe9, 0x20, 0x54, 0x0f, 0x6a, 0x70, 0x02, 0x62, 0x8e, 0x86, 0xcd, 0xfd, 0xc7, 0x7b,
+	0xf1, 0x31, 0x3c, 0x05, 0x51, 0x67, 0xe9, 0xe1, 0x41, 0x1c, 0xe5, 0x9f, 0x9f, 0xbc, 0x4c, 0x8e,
+	0xbd, 0x78, 0x99, 0x1c, 0x7b, 0xfd, 0x32, 0x89, 0x7e, 0xda, 0x49, 0xa2, 0xdf, 0x77, 0x92, 0xe8,
+	0xaf, 0x9d, 0x24, 0x3a, 0xe9, 0x24, 0xd1, 0x8b, 0x4e, 0x12, 0xfd, 0xab, 0x93, 0x44, 0xaf, 0x3a,
+	0xc9, 0xb1, 0xd7, 0x9d, 0x24, 0xfa, 0xc5, 0xd7, 0xc9, 0xb1, 0xe3, 0xaf, 0x93, 0xe8, 0xb3, 0xed,
+	0xba, 0xa2, 0x3e, 0xad, 0x67, 0x5b, 0x8a, 0x64, 0x50, 0x4d, 0x13, 0xb2, 0x4d, 0x7d, 0x99, 0x3d,
+	0xd4, 0x14, 0xad, 0xb1, 0xa4, 0x6a, 0x4a, 0x4b, 0xac, 0x52, 0x6d, 0xa9, 0x4b, 0x5e, 0x56, 0xcb,
+	0x75, 0x65, 0x99, 0x3e, 0x33, 0xec, 0xbf, 0x14, 0xbd, 0xdf, 0x3b, 0xe5, 0x10, 0xc3, 0x90, 0xd5,
+	0xff, 0x06, 0x00, 0x00, 0xff, 0xff, 0x49, 0x5e, 0xe1, 0x00, 0xfa, 0x19, 0x00, 0x00,
 }

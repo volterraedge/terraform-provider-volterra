@@ -2309,108 +2309,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "malicious_user_mitigationMaliciousUserMitigationAction": {
-            "type": "object",
-            "description": "Supported actions that can be taken to mitigate malicious activity from a user",
-            "title": "MaliciousUserMitigationAction",
-            "x-displayname": "Malicious User Mitigation Action",
-            "x-ves-oneof-field-mitigation_action": "[\"alert_only\",\"block_temporarily\",\"captcha_challenge\",\"javascript_challenge\",\"none\"]",
-            "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationAction",
-            "properties": {
-                "alert_only": {
-                    "description": "Exclusive with [block_temporarily captcha_challenge javascript_challenge none]\nx-displayName: \"Alert Only\"\nGenerate alert while not taking any invasive actions",
-                    "title": "Alert Only",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "block_temporarily": {
-                    "description": "Exclusive with [alert_only captcha_challenge javascript_challenge none]\nx-displayName: \"Block Temporarily\"\nBlock user temporarily. The blocking duration is determined by user activity.\nSettings for temporary blocking are derived from the virtual host that the request is sent to\nIf temporary blocking is not configured for the virtual host, a software default configuration is used",
-                    "title": "Block User Temporarily",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "captcha_challenge": {
-                    "description": "Exclusive with [alert_only block_temporarily javascript_challenge none]\nx-displayName: \"Captcha Challenge\"\nSend a Captcha Challenge\nSettings for Captcha Challenge are derived from the virtual host that the request is sent to\nIf Captcha Challenge is not configured for the virtual host, a software default configuration is used",
-                    "title": "Captcha Challenge",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "javascript_challenge": {
-                    "description": "Exclusive with [alert_only block_temporarily captcha_challenge none]\nx-displayName: \"Javascript Challenge\"\nSend a Javascript Challenge. \nSettings for Javascript Challenge are derived from the virtual host that the request is sent to\nIf Javascript Challenge is not configured for the virtual host, a software default configuration is used",
-                    "title": "Javascript Challenge",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "none": {
-                    "description": "Exclusive with [alert_only block_temporarily captcha_challenge javascript_challenge]\nx-displayName: \"No Action\"\nNo mitigation actions",
-                    "title": "None",
-                    "$ref": "#/definitions/schemaEmpty"
-                }
-            }
-        },
-        "malicious_user_mitigationMaliciousUserMitigationRule": {
-            "type": "object",
-            "description": "Specifies the mitigation action that will be taken for users detected to be at the specified threat level",
-            "title": "MaliciousUserMitigationRule",
-            "x-displayname": "Malicious User Mitigation Rule",
-            "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationRule",
-            "properties": {
-                "mitigation_action": {
-                    "description": " The action to be taken at the specified threat level\nRequired: YES",
-                    "title": "mitigation action",
-                    "$ref": "#/definitions/malicious_user_mitigationMaliciousUserMitigationAction",
-                    "x-displayname": "Mitigation Action",
-                    "x-ves-required": "true"
-                },
-                "threat_level": {
-                    "description": " The threat level at which mitigation actions will be taken\nRequired: YES",
-                    "title": "threat level",
-                    "$ref": "#/definitions/malicious_user_mitigationMaliciousUserThreatLevel",
-                    "x-displayname": "Threat Level",
-                    "x-ves-required": "true"
-                }
-            }
-        },
-        "malicious_user_mitigationMaliciousUserMitigationType": {
-            "type": "object",
-            "description": "Malicious user mitigation type specifies the malicious user mitigation rules that define the actions to be taken for users mapped to different threat levels.\nA threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.",
-            "title": "MaliciousUserMitigationType",
-            "x-displayname": "Malicious User Mitigation Type",
-            "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.MaliciousUserMitigationType",
-            "properties": {
-                "rules": {
-                    "type": "array",
-                    "description": " Malicious user mitigation rules specify the actions to be taken for users mapped to different threat levels.\n A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.\nRequired: YES",
-                    "title": "malicious user mitigation rules",
-                    "items": {
-                        "$ref": "#/definitions/malicious_user_mitigationMaliciousUserMitigationRule"
-                    },
-                    "x-displayname": "Malicious User Mitigation Rules",
-                    "x-ves-required": "true"
-                }
-            }
-        },
-        "malicious_user_mitigationMaliciousUserThreatLevel": {
-            "type": "object",
-            "description": "Threat level estimated for each user based on the user's activity and reputation",
-            "title": "MaliciousUserThreatLevel",
-            "x-displayname": "Malicious User Threat Level",
-            "x-ves-oneof-field-threat_level": "[\"high\",\"low\",\"medium\"]",
-            "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.MaliciousUserThreatLevel",
-            "properties": {
-                "high": {
-                    "description": "Exclusive with [low medium]\nx-displayName: \"Threat Level High\"\nUser estimated to be high threat",
-                    "title": "High",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "low": {
-                    "description": "Exclusive with [high medium]\nx-displayName: \"Threat Level Low\"\nUser estimated to be low threat",
-                    "title": "Low",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "medium": {
-                    "description": "Exclusive with [high low]\nx-displayName: \"Threat Level Medium\"\nUser estimated to be medium threat",
-                    "title": "Medium",
-                    "$ref": "#/definitions/schemaEmpty"
-                }
-            }
-        },
         "policyArgMatcherType": {
             "type": "object",
             "description": "A argument matcher specifies the name of a single argument in the body and the criteria to match it.\nA argument matcher can check for one of the following:\n* Presence or absence of the argument\n* At least one of the values for the argument in the request satisfies the MatcherType item",
@@ -2500,13 +2398,14 @@ var APISwaggerJSON string = `{
         },
         "policyChallengeAction": {
             "type": "string",
-            "description": "The challenge options to use when a policy based challenge is configured.\n\n - DEFAULT_CHALLENGE: DEFAULT_CHALLENGE\n\nDefault challenge.\n - ENABLE_JAVASCRIPT_CHALLENGE: ENABLE_JAVASCRIPT_CHALLENGE\n\nEnable javascript challenge.\n - ENABLE_CAPTCHA_CHALLENGE: ENABLE_CAPTCHA_CHALLENGE\n\nCaptcha challenge.\n - DISABLE_CHALLENGE: DISABLE_CHALLENGE\n\nDisable challenge",
+            "description": "The challenge options to use when a policy based challenge is configured.\n\n - DEFAULT_CHALLENGE: DEFAULT_CHALLENGE\n\nDefault challenge.\n - ENABLE_JAVASCRIPT_CHALLENGE: ENABLE_JAVASCRIPT_CHALLENGE\n\nEnable javascript challenge.\n - ENABLE_CAPTCHA_CHALLENGE: ENABLE_CAPTCHA_CHALLENGE\n\nCaptcha challenge.\n - DISABLE_CHALLENGE: DISABLE_CHALLENGE\n\nDisable challenge\n - TEMPORARY_BLOCKING: TEMPORARY_BLOCKING\n\nBlock the user temporarily.",
             "title": "Challenge Action",
             "enum": [
                 "DEFAULT_CHALLENGE",
                 "ENABLE_JAVASCRIPT_CHALLENGE",
                 "ENABLE_CAPTCHA_CHALLENGE",
-                "DISABLE_CHALLENGE"
+                "DISABLE_CHALLENGE",
+                "TEMPORARY_BLOCKING"
             ],
             "default": "DEFAULT_CHALLENGE",
             "x-displayname": "Challenge Action",
@@ -3468,6 +3367,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
+                },
                 "tenant": {
                     "type": "string",
                     "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
@@ -3871,12 +3778,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaLabelMatcherType",
                     "x-displayname": "Label Matcher",
                     "x-ves-example": "label_matcher.keys = ['environment', 'location', 'deployment']"
-                },
-                "malicious_user_mitigation": {
-                    "description": " When user behavior analyses is enabled, all requests in the application namespace are subjected to user-activity based threat level checks and the specified\n actions are taken for mitigation at different threat levels.",
-                    "title": "malicious user mitigation",
-                    "$ref": "#/definitions/malicious_user_mitigationMaliciousUserMitigationType",
-                    "x-displayname": "Malicious User Mitigation"
                 },
                 "malicious_user_mitigation_bypass": {
                     "description": " When user behavior analyses is enabled, all requests in the application namespace\n are subjected to user behavior analyses and mitigation actions are taken as configured in MaliciousUserMitigationRule.\n If required, the behavior checks can be disabled for certain requests by configuring\n the appropriate match conditions in the enclosing policy rule and setting malicious user mitigation bypass flag.",

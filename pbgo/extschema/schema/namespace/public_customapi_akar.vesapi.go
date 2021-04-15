@@ -36,6 +36,15 @@ type NamespaceCustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *NamespaceCustomAPIGrpcClient) doRPCGetActiveAlertPolicies(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetActiveAlertPoliciesRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.GetActiveAlertPoliciesRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetActiveAlertPolicies(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *NamespaceCustomAPIGrpcClient) doRPCGetActiveNetworkPolicies(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetActiveNetworkPoliciesRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -60,6 +69,15 @@ func (c *NamespaceCustomAPIGrpcClient) doRPCGetFastACLsForInternetVIPs(ctx conte
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.GetFastACLsForInternetVIPsRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.GetFastACLsForInternetVIPs(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *NamespaceCustomAPIGrpcClient) doRPCSetActiveAlertPolicies(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &SetActiveAlertPoliciesRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.SetActiveAlertPoliciesRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.SetActiveAlertPolicies(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -120,11 +138,15 @@ func NewNamespaceCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewNamespaceCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["GetActiveAlertPolicies"] = ccl.doRPCGetActiveAlertPolicies
+
 	rpcFns["GetActiveNetworkPolicies"] = ccl.doRPCGetActiveNetworkPolicies
 
 	rpcFns["GetActiveServicePolicies"] = ccl.doRPCGetActiveServicePolicies
 
 	rpcFns["GetFastACLsForInternetVIPs"] = ccl.doRPCGetFastACLsForInternetVIPs
+
+	rpcFns["SetActiveAlertPolicies"] = ccl.doRPCSetActiveAlertPolicies
 
 	rpcFns["SetActiveNetworkPolicies"] = ccl.doRPCSetActiveNetworkPolicies
 
@@ -143,6 +165,82 @@ type NamespaceCustomAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *NamespaceCustomAPIRestClient) doRPCGetActiveAlertPolicies(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetActiveAlertPoliciesRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.GetActiveAlertPoliciesRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetActiveAlertPoliciesResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.GetActiveAlertPoliciesResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *NamespaceCustomAPIRestClient) doRPCGetActiveNetworkPolicies(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -364,6 +462,83 @@ func (c *NamespaceCustomAPIRestClient) doRPCGetFastACLsForInternetVIPs(ctx conte
 	pbRsp := &GetFastACLsForInternetVIPsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.GetFastACLsForInternetVIPsResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *NamespaceCustomAPIRestClient) doRPCSetActiveAlertPolicies(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &SetActiveAlertPoliciesRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.SetActiveAlertPoliciesRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post":
+		jsn, err := req.ToJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		newReq, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP POST request for custom API")
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("alert_policies", fmt.Sprintf("%v", req.AlertPolicies))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	if rsp.StatusCode != http.StatusOK {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &SetActiveAlertPoliciesResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, fmt.Errorf("JSON Response %s is not of type *ves.io.schema.namespace.SetActiveAlertPoliciesResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -628,11 +803,15 @@ func NewNamespaceCustomAPIRestClient(baseURL string, hc http.Client) server.Cust
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["GetActiveAlertPolicies"] = ccl.doRPCGetActiveAlertPolicies
+
 	rpcFns["GetActiveNetworkPolicies"] = ccl.doRPCGetActiveNetworkPolicies
 
 	rpcFns["GetActiveServicePolicies"] = ccl.doRPCGetActiveServicePolicies
 
 	rpcFns["GetFastACLsForInternetVIPs"] = ccl.doRPCGetFastACLsForInternetVIPs
+
+	rpcFns["SetActiveAlertPolicies"] = ccl.doRPCSetActiveAlertPolicies
 
 	rpcFns["SetActiveNetworkPolicies"] = ccl.doRPCSetActiveNetworkPolicies
 
@@ -652,6 +831,50 @@ type NamespaceCustomAPIInprocClient struct {
 	svc svcfw.Service
 }
 
+func (c *NamespaceCustomAPIInprocClient) GetActiveAlertPolicies(ctx context.Context, in *GetActiveAlertPoliciesRequest, opts ...grpc.CallOption) (*GetActiveAlertPoliciesResponse, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+	cah, ok := ah.(NamespaceCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPISrv", ah)
+	}
+
+	var (
+		rsp *GetActiveAlertPoliciesResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.namespace.GetActiveAlertPoliciesRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'NamespaceCustomAPI.GetActiveAlertPolicies' operation on 'namespace'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetActiveAlertPolicies(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.namespace.GetActiveAlertPoliciesResponse", rsp)...)
+
+	return rsp, nil
+}
 func (c *NamespaceCustomAPIInprocClient) GetActiveNetworkPolicies(ctx context.Context, in *GetActiveNetworkPoliciesRequest, opts ...grpc.CallOption) (*GetActiveNetworkPoliciesResponse, error) {
 	ah := c.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
 	cah, ok := ah.(NamespaceCustomAPIServer)
@@ -781,6 +1004,53 @@ func (c *NamespaceCustomAPIInprocClient) GetFastACLsForInternetVIPs(ctx context.
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.namespace.GetFastACLsForInternetVIPsResponse", rsp)...)
+
+	return rsp, nil
+}
+func (c *NamespaceCustomAPIInprocClient) SetActiveAlertPolicies(ctx context.Context, in *SetActiveAlertPoliciesRequest, opts ...grpc.CallOption) (*SetActiveAlertPoliciesResponse, error) {
+	ah := c.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+	cah, ok := ah.(NamespaceCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPISrv", ah)
+	}
+
+	var (
+		rsp *SetActiveAlertPoliciesResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, c.svc, "ves.io.schema.namespace.SetActiveAlertPoliciesRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'NamespaceCustomAPI.SetActiveAlertPolicies' operation on 'namespace'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+	if err := c.svc.CustomAPIProcessDRef(ctx, in); err != nil {
+		return nil, err
+	}
+
+	if c.svc.Config().EnableAPIValidation {
+		if rvFn := c.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.SetActiveAlertPolicies"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.SetActiveAlertPolicies(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, c.svc, "ves.io.schema.namespace.SetActiveAlertPoliciesResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -959,6 +1229,173 @@ var NamespaceCustomAPISwaggerJSON string = `{
     ],
     "tags": null,
     "paths": {
+        "/public/namespaces/{namespace}/active_alert_policies": {
+            "get": {
+                "summary": "GetActiveAlertPolicies",
+                "description": "GetActiveAlertPolicies resturn the list of active alert policies for the namespace",
+                "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/namespaceGetActiveAlertPoliciesResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "NamespaceCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-NamespaceCustomAPI-GetActiveAlertPolicies"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies"
+            },
+            "post": {
+                "summary": "SetActiveAlertPolicies",
+                "description": "SetActiveAlertPolicies sets the active alert policies for the namespace\nAn emtpy list in the request will clear the active alert policies for the namespace",
+                "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveAlertPolicies",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/namespaceSetActiveAlertPoliciesResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/namespaceSetActiveAlertPoliciesRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "NamespaceCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-NamespaceCustomAPI-SetActiveAlertPolicies"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveAlertPolicies"
+            },
+            "x-displayname": "NamespaceCustomAPI",
+            "x-ves-proto-service": "ves.io.schema.namespace.NamespaceCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/active_network_policies": {
             "get": {
                 "summary": "GetActiveNetworkPolicies",
@@ -1462,6 +1899,24 @@ var NamespaceCustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "namespaceGetActiveAlertPoliciesResponse": {
+            "type": "object",
+            "description": "GetActiveAlertPoliciesResponse is the shape of the response for GetActiveAlertPolicies.",
+            "title": "GetActiveAlertPoliciesResponse",
+            "x-displayname": "Response for GetActiveAlertPolicies",
+            "x-ves-proto-message": "ves.io.schema.namespace.GetActiveAlertPoliciesResponse",
+            "properties": {
+                "alert_policies": {
+                    "type": "array",
+                    "description": " A list of references to alert_policy objects.",
+                    "title": "alert_policies",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Alert Policies"
+                }
+            }
+        },
         "namespaceGetActiveNetworkPoliciesResponse": {
             "type": "object",
             "description": "GetActiveNetworkPoliciesResponse is the shape of the response for GetActiveNetworkPolicies.",
@@ -1516,6 +1971,38 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-ves-example": "list of refs"
                 }
             }
+        },
+        "namespaceSetActiveAlertPoliciesRequest": {
+            "type": "object",
+            "description": "SetActiveAlertPoliciesRequest is the shape of the request for SetActiveAlertPolicies.",
+            "title": "SetActiveAlertPoliciesRequest",
+            "x-displayname": "Request for SetActiveAlertPolicies",
+            "x-ves-proto-message": "ves.io.schema.namespace.SetActiveAlertPoliciesRequest",
+            "properties": {
+                "alert_policies": {
+                    "type": "array",
+                    "description": " A list of references to alert_policy objects.",
+                    "title": "alert_policies",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Alert Policies"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " The name of the namespace\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                }
+            }
+        },
+        "namespaceSetActiveAlertPoliciesResponse": {
+            "type": "object",
+            "description": "SetActiveAlertPoliciesResponse is the shape of the response for SetActiveAlertPolicies.",
+            "title": "SetActiveAlertPoliciesResponse",
+            "x-displayname": "Response for SetActiveAlertPolicies",
+            "x-ves-proto-message": "ves.io.schema.namespace.SetActiveAlertPoliciesResponse"
         },
         "namespaceSetActiveNetworkPoliciesRequest": {
             "type": "object",

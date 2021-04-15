@@ -16,6 +16,7 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_bgp "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 // resourceVolterraBgp is implementation of Volterra's Bgp resources
@@ -121,108 +122,296 @@ func resourceVolterraBgp() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 						},
+
+						"from_site": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"ip_address": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"local_address": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 					},
 				},
 			},
 
-			"bgp_peers": {
+			"peers": {
 
 				Type:     schema.TypeList,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
-						"asn": {
-							Type:     schema.TypeInt,
-							Optional: true,
-						},
-
-						"bgp_peer_address": {
+						"metadata": {
 
 							Type:     schema.TypeSet,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"ipv4": {
-
-										Type:     schema.TypeSet,
+									"description": {
+										Type:     schema.TypeString,
 										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"addr": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
 									},
 
-									"ipv6": {
-
-										Type:     schema.TypeSet,
+									"disable": {
+										Type:     schema.TypeBool,
 										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
+									},
 
-												"addr": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
 									},
 								},
 							},
 						},
 
-						"bgp_peer_address_key": {
+						"target_service": {
 							Type:     schema.TypeString,
 							Optional: true,
 						},
 
-						"bgp_peer_address_type": {
-							Type:     schema.TypeString,
+						"external": {
+
+							Type:     schema.TypeSet,
 							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"address": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"default_gateway": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"from_site": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"subnet_begin_offset": {
+
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"subnet_end_offset": {
+
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"asn": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"family_inet": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"disable": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"enable": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"inside_interfaces": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"interface": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"interface_list": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"interfaces": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"outside_interfaces": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"port": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+								},
+							},
 						},
 
-						"bgp_peer_subnet_offset": {
-							Type:     schema.TypeInt,
-							Optional: true,
-						},
+						"internal": {
 
-						"port": {
-							Type:     schema.TypeInt,
+							Type:     schema.TypeSet,
 							Optional: true,
-						},
-					},
-				},
-			},
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
 
-			"network_interface": {
+									"address": {
 
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
+										Type:     schema.TypeString,
+										Optional: true,
+									},
 
-						"kind": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
+									"dns_name": {
 
-						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-						"namespace": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-						"tenant": {
-							Type:     schema.TypeString,
-							Optional: true,
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"from_site": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"family_inetvpn": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"disable": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"enable": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"disable": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"enable": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"family_rtarget": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"disable": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"enable": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"port": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+								},
+							},
 						},
 					},
 				},
@@ -457,127 +646,467 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 
 			}
 
+			routerIdChoiceTypeFound := false
+
+			if v, ok := bgpParametersMapStrToI["from_site"]; ok && !isIntfNil(v) && !routerIdChoiceTypeFound {
+
+				routerIdChoiceTypeFound = true
+
+				if v.(bool) {
+					routerIdChoiceInt := &ves_io_schema_bgp.BgpParameters_FromSite{}
+					routerIdChoiceInt.FromSite = &ves_io_schema.Empty{}
+					bgpParameters.RouterIdChoice = routerIdChoiceInt
+				}
+
+			}
+
+			if v, ok := bgpParametersMapStrToI["ip_address"]; ok && !isIntfNil(v) && !routerIdChoiceTypeFound {
+
+				routerIdChoiceTypeFound = true
+				routerIdChoiceInt := &ves_io_schema_bgp.BgpParameters_IpAddress{}
+
+				bgpParameters.RouterIdChoice = routerIdChoiceInt
+
+				routerIdChoiceInt.IpAddress = v.(string)
+
+			}
+
+			if v, ok := bgpParametersMapStrToI["local_address"]; ok && !isIntfNil(v) && !routerIdChoiceTypeFound {
+
+				routerIdChoiceTypeFound = true
+
+				if v.(bool) {
+					routerIdChoiceInt := &ves_io_schema_bgp.BgpParameters_LocalAddress{}
+					routerIdChoiceInt.LocalAddress = &ves_io_schema.Empty{}
+					bgpParameters.RouterIdChoice = routerIdChoiceInt
+				}
+
+			}
+
 		}
 
 	}
 
-	//bgp_peers
-	if v, ok := d.GetOk("bgp_peers"); ok && !isIntfNil(v) {
+	//peers
+	if v, ok := d.GetOk("peers"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
-		bgpPeers := make([]*ves_io_schema_bgp.BgpPeer, len(sl))
-		createSpec.BgpPeers = bgpPeers
+		peers := make([]*ves_io_schema_bgp.Peer, len(sl))
+		createSpec.Peers = peers
 		for i, set := range sl {
-			bgpPeers[i] = &ves_io_schema_bgp.BgpPeer{}
-			bgpPeersMapStrToI := set.(map[string]interface{})
+			peers[i] = &ves_io_schema_bgp.Peer{}
+			peersMapStrToI := set.(map[string]interface{})
 
-			if w, ok := bgpPeersMapStrToI["asn"]; ok && !isIntfNil(w) {
-				bgpPeers[i].Asn = uint32(w.(int))
-			}
-
-			if v, ok := bgpPeersMapStrToI["bgp_peer_address"]; ok && !isIntfNil(v) {
+			if v, ok := peersMapStrToI["metadata"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
-				bgpPeerAddress := &ves_io_schema.IpAddressType{}
-				bgpPeers[i].BgpPeerAddress = bgpPeerAddress
+				metadata := &ves_io_schema.MessageMetaType{}
+				peers[i].Metadata = metadata
 				for _, set := range sl {
-					bgpPeerAddressMapStrToI := set.(map[string]interface{})
+					metadataMapStrToI := set.(map[string]interface{})
 
-					verTypeFound := false
-
-					if v, ok := bgpPeerAddressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
-
-						verTypeFound = true
-						verInt := &ves_io_schema.IpAddressType_Ipv4{}
-						verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
-						bgpPeerAddress.Ver = verInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-								verInt.Ipv4.Addr = v.(string)
-							}
-
-						}
-
+					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+						metadata.Description = w.(string)
 					}
 
-					if v, ok := bgpPeerAddressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+					if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+						metadata.Disable = w.(bool)
+					}
 
-						verTypeFound = true
-						verInt := &ves_io_schema.IpAddressType_Ipv6{}
-						verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
-						bgpPeerAddress.Ver = verInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-								verInt.Ipv6.Addr = v.(string)
-							}
-
-						}
-
+					if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+						metadata.Name = w.(string)
 					}
 
 				}
 
 			}
 
-			if w, ok := bgpPeersMapStrToI["bgp_peer_address_key"]; ok && !isIntfNil(w) {
-				bgpPeers[i].BgpPeerAddressKey = w.(string)
+			if w, ok := peersMapStrToI["target_service"]; ok && !isIntfNil(w) {
+				peers[i].TargetService = w.(string)
 			}
 
-			if v, ok := bgpPeersMapStrToI["bgp_peer_address_type"]; ok && !isIntfNil(v) {
+			typeChoiceTypeFound := false
 
-				bgpPeers[i].BgpPeerAddressType = ves_io_schema_bgp.BgpPeerAddressType(ves_io_schema_bgp.BgpPeerAddressType_value[v.(string)])
+			if v, ok := peersMapStrToI["external"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+				typeChoiceTypeFound = true
+				typeChoiceInt := &ves_io_schema_bgp.Peer_External{}
+				typeChoiceInt.External = &ves_io_schema_bgp.PeerExternal{}
+				peers[i].TypeChoice = typeChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					addressChoiceTypeFound := false
+
+					if v, ok := cs["address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+						addressChoiceTypeFound = true
+						addressChoiceInt := &ves_io_schema_bgp.PeerExternal_Address{}
+
+						typeChoiceInt.External.AddressChoice = addressChoiceInt
+
+						addressChoiceInt.Address = v.(string)
+
+					}
+
+					if v, ok := cs["default_gateway"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+						addressChoiceTypeFound = true
+
+						if v.(bool) {
+							addressChoiceInt := &ves_io_schema_bgp.PeerExternal_DefaultGateway{}
+							addressChoiceInt.DefaultGateway = &ves_io_schema.Empty{}
+							typeChoiceInt.External.AddressChoice = addressChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["from_site"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+						addressChoiceTypeFound = true
+
+						if v.(bool) {
+							addressChoiceInt := &ves_io_schema_bgp.PeerExternal_FromSite{}
+							addressChoiceInt.FromSite = &ves_io_schema.Empty{}
+							typeChoiceInt.External.AddressChoice = addressChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["subnet_begin_offset"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+						addressChoiceTypeFound = true
+						addressChoiceInt := &ves_io_schema_bgp.PeerExternal_SubnetBeginOffset{}
+
+						typeChoiceInt.External.AddressChoice = addressChoiceInt
+
+						addressChoiceInt.SubnetBeginOffset =
+							uint32(v.(int))
+
+					}
+
+					if v, ok := cs["subnet_end_offset"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+						addressChoiceTypeFound = true
+						addressChoiceInt := &ves_io_schema_bgp.PeerExternal_SubnetEndOffset{}
+
+						typeChoiceInt.External.AddressChoice = addressChoiceInt
+
+						addressChoiceInt.SubnetEndOffset =
+							uint32(v.(int))
+
+					}
+
+					if v, ok := cs["asn"]; ok && !isIntfNil(v) {
+
+						typeChoiceInt.External.Asn = uint32(v.(int))
+					}
+
+					if v, ok := cs["family_inet"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						familyInet := &ves_io_schema_bgp.FamilyInet{}
+						typeChoiceInt.External.FamilyInet = familyInet
+						for _, set := range sl {
+							familyInetMapStrToI := set.(map[string]interface{})
+
+							enableChoiceTypeFound := false
+
+							if v, ok := familyInetMapStrToI["disable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyInet_Disable{}
+									enableChoiceInt.Disable = &ves_io_schema.Empty{}
+									familyInet.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+							if v, ok := familyInetMapStrToI["enable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyInet_Enable{}
+									enableChoiceInt.Enable = &ves_io_schema.Empty{}
+									familyInet.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+					interfaceChoiceTypeFound := false
+
+					if v, ok := cs["inside_interfaces"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+						interfaceChoiceTypeFound = true
+
+						if v.(bool) {
+							interfaceChoiceInt := &ves_io_schema_bgp.PeerExternal_InsideInterfaces{}
+							interfaceChoiceInt.InsideInterfaces = &ves_io_schema.Empty{}
+							typeChoiceInt.External.InterfaceChoice = interfaceChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+						interfaceChoiceTypeFound = true
+						interfaceChoiceInt := &ves_io_schema_bgp.PeerExternal_Interface{}
+						interfaceChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
+						typeChoiceInt.External.InterfaceChoice = interfaceChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								interfaceChoiceInt.Interface.Name = v.(string)
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								interfaceChoiceInt.Interface.Namespace = v.(string)
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								interfaceChoiceInt.Interface.Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["interface_list"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+						interfaceChoiceTypeFound = true
+						interfaceChoiceInt := &ves_io_schema_bgp.PeerExternal_InterfaceList{}
+						interfaceChoiceInt.InterfaceList = &ves_io_schema_bgp.InterfaceList{}
+						typeChoiceInt.External.InterfaceChoice = interfaceChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["interfaces"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								interfacesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								interfaceChoiceInt.InterfaceList.Interfaces = interfacesInt
+								for i, ps := range sl {
+
+									iMapToStrVal := ps.(map[string]interface{})
+									interfacesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+									if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+										interfacesInt[i].Name = v.(string)
+									}
+
+									if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										interfacesInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										interfacesInt[i].Tenant = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["outside_interfaces"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+						interfaceChoiceTypeFound = true
+
+						if v.(bool) {
+							interfaceChoiceInt := &ves_io_schema_bgp.PeerExternal_OutsideInterfaces{}
+							interfaceChoiceInt.OutsideInterfaces = &ves_io_schema.Empty{}
+							typeChoiceInt.External.InterfaceChoice = interfaceChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["port"]; ok && !isIntfNil(v) {
+
+						typeChoiceInt.External.Port = uint32(v.(int))
+					}
+
+				}
 
 			}
 
-			if w, ok := bgpPeersMapStrToI["bgp_peer_subnet_offset"]; ok && !isIntfNil(w) {
-				bgpPeers[i].BgpPeerSubnetOffset = uint32(w.(int))
-			}
+			if v, ok := peersMapStrToI["internal"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
 
-			if w, ok := bgpPeersMapStrToI["port"]; ok && !isIntfNil(w) {
-				bgpPeers[i].Port = uint32(w.(int))
-			}
+				typeChoiceTypeFound = true
+				typeChoiceInt := &ves_io_schema_bgp.Peer_Internal{}
+				typeChoiceInt.Internal = &ves_io_schema_bgp.PeerInternal{}
+				peers[i].TypeChoice = typeChoiceInt
 
-		}
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
 
-	}
+					addressChoiceTypeFound := false
 
-	//network_interface
-	if v, ok := d.GetOk("network_interface"); ok && !isIntfNil(v) {
+					if v, ok := cs["address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
-		sl := v.([]interface{})
-		networkInterfaceInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-		createSpec.NetworkInterface = networkInterfaceInt
-		for i, ps := range sl {
+						addressChoiceTypeFound = true
+						addressChoiceInt := &ves_io_schema_bgp.PeerInternal_Address{}
 
-			niMapToStrVal := ps.(map[string]interface{})
-			networkInterfaceInt[i] = &ves_io_schema.ObjectRefType{}
+						typeChoiceInt.Internal.AddressChoice = addressChoiceInt
 
-			networkInterfaceInt[i].Kind = "network_interface"
+						addressChoiceInt.Address = v.(string)
 
-			if v, ok := niMapToStrVal["name"]; ok && !isIntfNil(v) {
-				networkInterfaceInt[i].Name = v.(string)
-			}
+					}
 
-			if v, ok := niMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				networkInterfaceInt[i].Namespace = v.(string)
-			}
+					if v, ok := cs["dns_name"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
-			if v, ok := niMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				networkInterfaceInt[i].Tenant = v.(string)
-			}
+						addressChoiceTypeFound = true
+						addressChoiceInt := &ves_io_schema_bgp.PeerInternal_DnsName{}
 
-			if v, ok := niMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				networkInterfaceInt[i].Uid = v.(string)
+						typeChoiceInt.Internal.AddressChoice = addressChoiceInt
+
+						addressChoiceInt.DnsName = v.(string)
+
+					}
+
+					if v, ok := cs["from_site"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+						addressChoiceTypeFound = true
+
+						if v.(bool) {
+							addressChoiceInt := &ves_io_schema_bgp.PeerInternal_FromSite{}
+							addressChoiceInt.FromSite = &ves_io_schema.Empty{}
+							typeChoiceInt.Internal.AddressChoice = addressChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["family_inetvpn"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						familyInetvpn := &ves_io_schema_bgp.FamilyInetvpn{}
+						typeChoiceInt.Internal.FamilyInetvpn = familyInetvpn
+						for _, set := range sl {
+							familyInetvpnMapStrToI := set.(map[string]interface{})
+
+							enableChoiceTypeFound := false
+
+							if v, ok := familyInetvpnMapStrToI["disable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyInetvpn_Disable{}
+									enableChoiceInt.Disable = &ves_io_schema.Empty{}
+									familyInetvpn.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+							if v, ok := familyInetvpnMapStrToI["enable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+								enableChoiceInt := &ves_io_schema_bgp.FamilyInetvpn_Enable{}
+								enableChoiceInt.Enable = &ves_io_schema_bgp.FamilyInetvpnParameters{}
+								familyInetvpn.EnableChoice = enableChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									srChoiceTypeFound := false
+
+									if v, ok := cs["disable"]; ok && !isIntfNil(v) && !srChoiceTypeFound {
+
+										srChoiceTypeFound = true
+
+										if v.(bool) {
+											srChoiceInt := &ves_io_schema_bgp.FamilyInetvpnParameters_Disable{}
+											srChoiceInt.Disable = &ves_io_schema.Empty{}
+											enableChoiceInt.Enable.SrChoice = srChoiceInt
+										}
+
+									}
+
+									if v, ok := cs["enable"]; ok && !isIntfNil(v) && !srChoiceTypeFound {
+
+										srChoiceTypeFound = true
+
+										if v.(bool) {
+											srChoiceInt := &ves_io_schema_bgp.FamilyInetvpnParameters_Enable{}
+											srChoiceInt.Enable = &ves_io_schema.Empty{}
+											enableChoiceInt.Enable.SrChoice = srChoiceInt
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["family_rtarget"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						familyRtarget := &ves_io_schema_bgp.FamilyRtarget{}
+						typeChoiceInt.Internal.FamilyRtarget = familyRtarget
+						for _, set := range sl {
+							familyRtargetMapStrToI := set.(map[string]interface{})
+
+							enableChoiceTypeFound := false
+
+							if v, ok := familyRtargetMapStrToI["disable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyRtarget_Disable{}
+									enableChoiceInt.Disable = &ves_io_schema.Empty{}
+									familyRtarget.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+							if v, ok := familyRtargetMapStrToI["enable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyRtarget_Enable{}
+									enableChoiceInt.Enable = &ves_io_schema.Empty{}
+									familyRtarget.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["port"]; ok && !isIntfNil(v) {
+
+						typeChoiceInt.Internal.Port = uint32(v.(int))
+					}
+
+				}
+
 			}
 
 		}
@@ -879,125 +1408,466 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 
 			}
 
+			routerIdChoiceTypeFound := false
+
+			if v, ok := bgpParametersMapStrToI["from_site"]; ok && !isIntfNil(v) && !routerIdChoiceTypeFound {
+
+				routerIdChoiceTypeFound = true
+
+				if v.(bool) {
+					routerIdChoiceInt := &ves_io_schema_bgp.BgpParameters_FromSite{}
+					routerIdChoiceInt.FromSite = &ves_io_schema.Empty{}
+					bgpParameters.RouterIdChoice = routerIdChoiceInt
+				}
+
+			}
+
+			if v, ok := bgpParametersMapStrToI["ip_address"]; ok && !isIntfNil(v) && !routerIdChoiceTypeFound {
+
+				routerIdChoiceTypeFound = true
+				routerIdChoiceInt := &ves_io_schema_bgp.BgpParameters_IpAddress{}
+
+				bgpParameters.RouterIdChoice = routerIdChoiceInt
+
+				routerIdChoiceInt.IpAddress = v.(string)
+
+			}
+
+			if v, ok := bgpParametersMapStrToI["local_address"]; ok && !isIntfNil(v) && !routerIdChoiceTypeFound {
+
+				routerIdChoiceTypeFound = true
+
+				if v.(bool) {
+					routerIdChoiceInt := &ves_io_schema_bgp.BgpParameters_LocalAddress{}
+					routerIdChoiceInt.LocalAddress = &ves_io_schema.Empty{}
+					bgpParameters.RouterIdChoice = routerIdChoiceInt
+				}
+
+			}
+
 		}
 
 	}
 
-	if v, ok := d.GetOk("bgp_peers"); ok && !isIntfNil(v) {
+	if v, ok := d.GetOk("peers"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
-		bgpPeers := make([]*ves_io_schema_bgp.BgpPeer, len(sl))
-		updateSpec.BgpPeers = bgpPeers
+		peers := make([]*ves_io_schema_bgp.Peer, len(sl))
+		updateSpec.Peers = peers
 		for i, set := range sl {
-			bgpPeers[i] = &ves_io_schema_bgp.BgpPeer{}
-			bgpPeersMapStrToI := set.(map[string]interface{})
+			peers[i] = &ves_io_schema_bgp.Peer{}
+			peersMapStrToI := set.(map[string]interface{})
 
-			if w, ok := bgpPeersMapStrToI["asn"]; ok && !isIntfNil(w) {
-				bgpPeers[i].Asn = uint32(w.(int))
-			}
-
-			if v, ok := bgpPeersMapStrToI["bgp_peer_address"]; ok && !isIntfNil(v) {
+			if v, ok := peersMapStrToI["metadata"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
-				bgpPeerAddress := &ves_io_schema.IpAddressType{}
-				bgpPeers[i].BgpPeerAddress = bgpPeerAddress
+				metadata := &ves_io_schema.MessageMetaType{}
+				peers[i].Metadata = metadata
 				for _, set := range sl {
-					bgpPeerAddressMapStrToI := set.(map[string]interface{})
+					metadataMapStrToI := set.(map[string]interface{})
 
-					verTypeFound := false
-
-					if v, ok := bgpPeerAddressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
-
-						verTypeFound = true
-						verInt := &ves_io_schema.IpAddressType_Ipv4{}
-						verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
-						bgpPeerAddress.Ver = verInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-								verInt.Ipv4.Addr = v.(string)
-							}
-
-						}
-
+					if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+						metadata.Description = w.(string)
 					}
 
-					if v, ok := bgpPeerAddressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+					if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+						metadata.Disable = w.(bool)
+					}
 
-						verTypeFound = true
-						verInt := &ves_io_schema.IpAddressType_Ipv6{}
-						verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
-						bgpPeerAddress.Ver = verInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["addr"]; ok && !isIntfNil(v) {
-
-								verInt.Ipv6.Addr = v.(string)
-							}
-
-						}
-
+					if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+						metadata.Name = w.(string)
 					}
 
 				}
 
 			}
 
-			if w, ok := bgpPeersMapStrToI["bgp_peer_address_key"]; ok && !isIntfNil(w) {
-				bgpPeers[i].BgpPeerAddressKey = w.(string)
+			if w, ok := peersMapStrToI["target_service"]; ok && !isIntfNil(w) {
+				peers[i].TargetService = w.(string)
 			}
 
-			if v, ok := bgpPeersMapStrToI["bgp_peer_address_type"]; ok && !isIntfNil(v) {
+			typeChoiceTypeFound := false
 
-				bgpPeers[i].BgpPeerAddressType = ves_io_schema_bgp.BgpPeerAddressType(ves_io_schema_bgp.BgpPeerAddressType_value[v.(string)])
+			if v, ok := peersMapStrToI["external"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
+
+				typeChoiceTypeFound = true
+				typeChoiceInt := &ves_io_schema_bgp.Peer_External{}
+				typeChoiceInt.External = &ves_io_schema_bgp.PeerExternal{}
+				peers[i].TypeChoice = typeChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					addressChoiceTypeFound := false
+
+					if v, ok := cs["address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+						addressChoiceTypeFound = true
+						addressChoiceInt := &ves_io_schema_bgp.PeerExternal_Address{}
+
+						typeChoiceInt.External.AddressChoice = addressChoiceInt
+
+						addressChoiceInt.Address = v.(string)
+
+					}
+
+					if v, ok := cs["default_gateway"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+						addressChoiceTypeFound = true
+
+						if v.(bool) {
+							addressChoiceInt := &ves_io_schema_bgp.PeerExternal_DefaultGateway{}
+							addressChoiceInt.DefaultGateway = &ves_io_schema.Empty{}
+							typeChoiceInt.External.AddressChoice = addressChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["from_site"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+						addressChoiceTypeFound = true
+
+						if v.(bool) {
+							addressChoiceInt := &ves_io_schema_bgp.PeerExternal_FromSite{}
+							addressChoiceInt.FromSite = &ves_io_schema.Empty{}
+							typeChoiceInt.External.AddressChoice = addressChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["subnet_begin_offset"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+						addressChoiceTypeFound = true
+						addressChoiceInt := &ves_io_schema_bgp.PeerExternal_SubnetBeginOffset{}
+
+						typeChoiceInt.External.AddressChoice = addressChoiceInt
+
+						addressChoiceInt.SubnetBeginOffset =
+							uint32(v.(int))
+
+					}
+
+					if v, ok := cs["subnet_end_offset"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+						addressChoiceTypeFound = true
+						addressChoiceInt := &ves_io_schema_bgp.PeerExternal_SubnetEndOffset{}
+
+						typeChoiceInt.External.AddressChoice = addressChoiceInt
+
+						addressChoiceInt.SubnetEndOffset =
+							uint32(v.(int))
+
+					}
+
+					if v, ok := cs["asn"]; ok && !isIntfNil(v) {
+
+						typeChoiceInt.External.Asn = uint32(v.(int))
+					}
+
+					if v, ok := cs["family_inet"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						familyInet := &ves_io_schema_bgp.FamilyInet{}
+						typeChoiceInt.External.FamilyInet = familyInet
+						for _, set := range sl {
+							familyInetMapStrToI := set.(map[string]interface{})
+
+							enableChoiceTypeFound := false
+
+							if v, ok := familyInetMapStrToI["disable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyInet_Disable{}
+									enableChoiceInt.Disable = &ves_io_schema.Empty{}
+									familyInet.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+							if v, ok := familyInetMapStrToI["enable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyInet_Enable{}
+									enableChoiceInt.Enable = &ves_io_schema.Empty{}
+									familyInet.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+					interfaceChoiceTypeFound := false
+
+					if v, ok := cs["inside_interfaces"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+						interfaceChoiceTypeFound = true
+
+						if v.(bool) {
+							interfaceChoiceInt := &ves_io_schema_bgp.PeerExternal_InsideInterfaces{}
+							interfaceChoiceInt.InsideInterfaces = &ves_io_schema.Empty{}
+							typeChoiceInt.External.InterfaceChoice = interfaceChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+						interfaceChoiceTypeFound = true
+						interfaceChoiceInt := &ves_io_schema_bgp.PeerExternal_Interface{}
+						interfaceChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
+						typeChoiceInt.External.InterfaceChoice = interfaceChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								interfaceChoiceInt.Interface.Name = v.(string)
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								interfaceChoiceInt.Interface.Namespace = v.(string)
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								interfaceChoiceInt.Interface.Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["interface_list"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+						interfaceChoiceTypeFound = true
+						interfaceChoiceInt := &ves_io_schema_bgp.PeerExternal_InterfaceList{}
+						interfaceChoiceInt.InterfaceList = &ves_io_schema_bgp.InterfaceList{}
+						typeChoiceInt.External.InterfaceChoice = interfaceChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["interfaces"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								interfacesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								interfaceChoiceInt.InterfaceList.Interfaces = interfacesInt
+								for i, ps := range sl {
+
+									iMapToStrVal := ps.(map[string]interface{})
+									interfacesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+									if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+										interfacesInt[i].Name = v.(string)
+									}
+
+									if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										interfacesInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										interfacesInt[i].Tenant = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["outside_interfaces"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+						interfaceChoiceTypeFound = true
+
+						if v.(bool) {
+							interfaceChoiceInt := &ves_io_schema_bgp.PeerExternal_OutsideInterfaces{}
+							interfaceChoiceInt.OutsideInterfaces = &ves_io_schema.Empty{}
+							typeChoiceInt.External.InterfaceChoice = interfaceChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["port"]; ok && !isIntfNil(v) {
+
+						typeChoiceInt.External.Port = uint32(v.(int))
+					}
+
+				}
 
 			}
 
-			if w, ok := bgpPeersMapStrToI["bgp_peer_subnet_offset"]; ok && !isIntfNil(w) {
-				bgpPeers[i].BgpPeerSubnetOffset = uint32(w.(int))
-			}
+			if v, ok := peersMapStrToI["internal"]; ok && !isIntfNil(v) && !typeChoiceTypeFound {
 
-			if w, ok := bgpPeersMapStrToI["port"]; ok && !isIntfNil(w) {
-				bgpPeers[i].Port = uint32(w.(int))
-			}
+				typeChoiceTypeFound = true
+				typeChoiceInt := &ves_io_schema_bgp.Peer_Internal{}
+				typeChoiceInt.Internal = &ves_io_schema_bgp.PeerInternal{}
+				peers[i].TypeChoice = typeChoiceInt
 
-		}
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
 
-	}
+					addressChoiceTypeFound := false
 
-	if v, ok := d.GetOk("network_interface"); ok && !isIntfNil(v) {
+					if v, ok := cs["address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
-		sl := v.([]interface{})
-		networkInterfaceInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-		updateSpec.NetworkInterface = networkInterfaceInt
-		for i, ps := range sl {
+						addressChoiceTypeFound = true
+						addressChoiceInt := &ves_io_schema_bgp.PeerInternal_Address{}
 
-			niMapToStrVal := ps.(map[string]interface{})
-			networkInterfaceInt[i] = &ves_io_schema.ObjectRefType{}
+						typeChoiceInt.Internal.AddressChoice = addressChoiceInt
 
-			networkInterfaceInt[i].Kind = "network_interface"
+						addressChoiceInt.Address = v.(string)
 
-			if v, ok := niMapToStrVal["name"]; ok && !isIntfNil(v) {
-				networkInterfaceInt[i].Name = v.(string)
-			}
+					}
 
-			if v, ok := niMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				networkInterfaceInt[i].Namespace = v.(string)
-			}
+					if v, ok := cs["dns_name"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
-			if v, ok := niMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				networkInterfaceInt[i].Tenant = v.(string)
-			}
+						addressChoiceTypeFound = true
+						addressChoiceInt := &ves_io_schema_bgp.PeerInternal_DnsName{}
 
-			if v, ok := niMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				networkInterfaceInt[i].Uid = v.(string)
+						typeChoiceInt.Internal.AddressChoice = addressChoiceInt
+
+						addressChoiceInt.DnsName = v.(string)
+
+					}
+
+					if v, ok := cs["from_site"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+						addressChoiceTypeFound = true
+
+						if v.(bool) {
+							addressChoiceInt := &ves_io_schema_bgp.PeerInternal_FromSite{}
+							addressChoiceInt.FromSite = &ves_io_schema.Empty{}
+							typeChoiceInt.Internal.AddressChoice = addressChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["family_inetvpn"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						familyInetvpn := &ves_io_schema_bgp.FamilyInetvpn{}
+						typeChoiceInt.Internal.FamilyInetvpn = familyInetvpn
+						for _, set := range sl {
+							familyInetvpnMapStrToI := set.(map[string]interface{})
+
+							enableChoiceTypeFound := false
+
+							if v, ok := familyInetvpnMapStrToI["disable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyInetvpn_Disable{}
+									enableChoiceInt.Disable = &ves_io_schema.Empty{}
+									familyInetvpn.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+							if v, ok := familyInetvpnMapStrToI["enable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+								enableChoiceInt := &ves_io_schema_bgp.FamilyInetvpn_Enable{}
+								enableChoiceInt.Enable = &ves_io_schema_bgp.FamilyInetvpnParameters{}
+								familyInetvpn.EnableChoice = enableChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									srChoiceTypeFound := false
+
+									if v, ok := cs["disable"]; ok && !isIntfNil(v) && !srChoiceTypeFound {
+
+										srChoiceTypeFound = true
+
+										if v.(bool) {
+											srChoiceInt := &ves_io_schema_bgp.FamilyInetvpnParameters_Disable{}
+											srChoiceInt.Disable = &ves_io_schema.Empty{}
+											enableChoiceInt.Enable.SrChoice = srChoiceInt
+										}
+
+									}
+
+									if v, ok := cs["enable"]; ok && !isIntfNil(v) && !srChoiceTypeFound {
+
+										srChoiceTypeFound = true
+
+										if v.(bool) {
+											srChoiceInt := &ves_io_schema_bgp.FamilyInetvpnParameters_Enable{}
+											srChoiceInt.Enable = &ves_io_schema.Empty{}
+											enableChoiceInt.Enable.SrChoice = srChoiceInt
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["family_rtarget"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						familyRtarget := &ves_io_schema_bgp.FamilyRtarget{}
+						typeChoiceInt.Internal.FamilyRtarget = familyRtarget
+						for _, set := range sl {
+							familyRtargetMapStrToI := set.(map[string]interface{})
+
+							enableChoiceTypeFound := false
+
+							if v, ok := familyRtargetMapStrToI["disable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyRtarget_Disable{}
+									enableChoiceInt.Disable = &ves_io_schema.Empty{}
+									familyRtarget.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+							if v, ok := familyRtargetMapStrToI["enable"]; ok && !isIntfNil(v) && !enableChoiceTypeFound {
+
+								enableChoiceTypeFound = true
+
+								if v.(bool) {
+									enableChoiceInt := &ves_io_schema_bgp.FamilyRtarget_Enable{}
+									enableChoiceInt.Enable = &ves_io_schema.Empty{}
+									familyRtarget.EnableChoice = enableChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["port"]; ok && !isIntfNil(v) {
+
+						typeChoiceInt.Internal.Port = uint32(v.(int))
+					}
+
+				}
+
 			}
 
 		}

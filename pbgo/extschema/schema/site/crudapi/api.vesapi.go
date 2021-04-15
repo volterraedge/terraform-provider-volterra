@@ -2788,6 +2788,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
+                },
                 "tenant": {
                     "type": "string",
                     "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
@@ -3005,6 +3013,35 @@ var APISwaggerJSON string = `{
                     "description": " information from /sys/class/dmi/id/board_version",
                     "title": "version",
                     "x-displayname": "Version"
+                }
+            }
+        },
+        "siteBondMembersType": {
+            "type": "object",
+            "description": "BondMembersType represents the bond interface members  along with the corresponding link state",
+            "title": "Bond Interface Members",
+            "x-displayname": "Bond Interface Members",
+            "x-ves-proto-message": "ves.io.schema.site.BondMembersType",
+            "properties": {
+                "link_speed": {
+                    "type": "integer",
+                    "description": " Link speed of Bond Interface Member in Mbps",
+                    "title": "Link Speed\nx-displayName: \"Link Speed in Mbps\"\nLink speed of Bond Interface Member in Mbps",
+                    "format": "int64",
+                    "x-displayname": "Link Speed in Mbps"
+                },
+                "link_state": {
+                    "type": "boolean",
+                    "description": " Link state of Bond Interface Member",
+                    "title": "Link State\nx-displayName: \"Link State\"\nLink state of Bond Interface Member",
+                    "format": "boolean",
+                    "x-displayname": "Link State"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the Bond Interface Member",
+                    "title": "Name\nx-displayName: \"Name\"\nName of the Bond Interface Member",
+                    "x-displayname": "Name"
                 }
             }
         },
@@ -3699,6 +3736,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteActiveState",
                     "x-displayname": "Active/Backup status"
                 },
+                "bond_members": {
+                    "type": "array",
+                    "description": " Members of the Bond interface along with the corresponding link state",
+                    "title": "Bond Interface Members\nx-displayName: \"Bond Members\"\nMembers of the Bond interface along with the corresponding link state",
+                    "items": {
+                        "$ref": "#/definitions/siteBondMembersType"
+                    },
+                    "x-displayname": "Bond Members"
+                },
                 "dhcp_server": {
                     "type": "boolean",
                     "description": " Indicate if DHCP server is configured on the interface",
@@ -4046,6 +4092,12 @@ var APISwaggerJSON string = `{
                     "title": "deployment_state",
                     "$ref": "#/definitions/siteDeploymentState",
                     "x-displayname": "Deployment State"
+                },
+                "nonconforming_state": {
+                    "type": "string",
+                    "description": " If nonconforming state is not empty, then current deployed OS version is nonconforming. Site should be upgrade to available version.",
+                    "title": "Nonconforming State",
+                    "x-displayname": "Nonconforming State"
                 }
             }
         },
@@ -4816,6 +4868,12 @@ var APISwaggerJSON string = `{
                     "title": "deployment_state",
                     "$ref": "#/definitions/siteDeploymentState",
                     "x-displayname": "Deployment State"
+                },
+                "nonconforming_state": {
+                    "type": "string",
+                    "description": " If nonconforming state is not empty, then current deployed SW version is nonconforming. Site should be upgrade to available version.",
+                    "title": "Nonconforming State",
+                    "x-displayname": "Nonconforming State"
                 }
             }
         }

@@ -370,6 +370,10 @@ var CustomStateAPISwaggerJSON string = `{
                 "tags": [
                     "CustomStateAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomStateAPI-SetState"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomStateAPI.SetState"
             },
             "x-displayname": "Site Status",

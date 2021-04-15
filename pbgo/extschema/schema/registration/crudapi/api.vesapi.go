@@ -2476,6 +2476,8 @@ var APISwaggerJSON string = `{
             "title": "Passport",
             "x-displayname": "Passport",
             "x-ves-displayorder": "1,2,9,7,8,4,5,6,10,3,11",
+            "x-ves-oneof-field-operating_system_version_choice": "[\"default_os_version\",\"operating_system_version\"]",
+            "x-ves-oneof-field-volterra_sw_version_choice": "[\"default_sw_version\",\"volterra_software_version\"]",
             "x-ves-proto-message": "ves.io.schema.registration.Passport",
             "properties": {
                 "cluster_name": {
@@ -2502,6 +2504,16 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "ce",
                     "x-ves-required": "true"
                 },
+                "default_os_version": {
+                    "description": "Exclusive with [operating_system_version]\nx-displayName: \"Default OS Version\"\nWill assign latest available OS version or version defined on parent object such as Fleet, VoltStack site, AWS, Azure, etc.",
+                    "title": "Default OS Version",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "default_sw_version": {
+                    "description": "Exclusive with [volterra_software_version]\nx-displayName: \"Default SW Version\"\nWill assign latest available SW version or version defined on parent object such as Fleet, VoltStack site, AWS, Azure, etc.",
+                    "title": "Default SW Version",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "latitude": {
                     "type": "number",
                     "description": " Geographic location of this site\n\nExample: - \"49.3156733\"-",
@@ -2518,12 +2530,22 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Longitude",
                     "x-ves-example": "14.2484333"
                 },
+                "operating_system_version": {
+                    "type": "string",
+                    "description": "Exclusive with [default_os_version]\nx-displayName: \"Operating System Version\"\nx-example: \"7.2009.10\"\nOperating System Version is optional parameter, which allows to specify target SW version for particular site e.g. 7.2009.10.",
+                    "title": "Operating System Version"
+                },
                 "private_network_name": {
                     "type": "string",
                     "description": " Private Network name for private access connectivity to Volterra ADN.\n It is used for PrivateLink, CloudLink and L3VPN.\n\nExample: - \"private-ntw\"-",
                     "title": "Private Network Name",
                     "x-displayname": "Private Network Name",
                     "x-ves-example": "private-ntw"
+                },
+                "volterra_software_version": {
+                    "type": "string",
+                    "description": "Exclusive with [default_sw_version]\nx-displayName: \"Volterra Software Version\"\nx-example: \"crt-20210329-1002\"\nVolterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.",
+                    "title": "Volterra Software Version"
                 },
                 "vpm_version": {
                     "type": "string",
@@ -2565,6 +2587,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "GC Spec"
                 }
             }
+        },
+        "schemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "schemaInitializerType": {
             "type": "object",
@@ -2825,6 +2854,14 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
                 },
                 "tenant": {
                     "type": "string",

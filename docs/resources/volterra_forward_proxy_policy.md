@@ -20,7 +20,7 @@ resource "volterra_forward_proxy_policy" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "any_proxy network_connector proxy_label_selector drp_http_connect" must be set
+  // One of the arguments from this list "network_connector proxy_label_selector drp_http_connect any_proxy" must be set
   any_proxy = true
 
   // One of the arguments from this list "allow_all allow_list deny_list rule_list" must be set

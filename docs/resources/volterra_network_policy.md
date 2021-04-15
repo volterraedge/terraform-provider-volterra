@@ -21,8 +21,8 @@ resource "volterra_network_policy" "example" {
   namespace = "staging"
 
   endpoint {
-    // One of the arguments from this list "prefix_list any outside_endpoints inside_endpoints interface namespace label_selector" must be set
-    inside_endpoints = true
+    // One of the arguments from this list "namespace label_selector prefix_list any outside_endpoints inside_endpoints interface" must be set
+    outside_endpoints = true
   }
 }
 
@@ -51,6 +51,12 @@ Argument Reference
 
 `rules` - (Optional) Network Policy Rules. See [Rules ](#rules) below for details.
 
+### Adv Action
+
+Advanced action to be taken at rule match. Currently supported actions are NoLog & Log.
+
+`action` - (Optional) Advanced action applied along with selection in NetworkPolicyRuleAction (`String`).
+
 ### All Tcp Traffic
 
 Select all TCP traffic to match.
@@ -78,6 +84,8 @@ Select Application traffic to match.
 Ordered list of rules applied to connections from policy endpoints..
 
 `action` - (Optional) Action to be taken at rule match. Currently supported actions are Allow and Deny (`String`).
+
+`adv_action` - (Optional) Advanced action to be taken at rule match. Currently supported actions are NoLog & Log. See [Adv Action ](#adv-action) below for details.
 
 `keys` - (Optional) can talk to "db" in site "abc" and can not talk to "db" in site "xyz" (`String`).
 
@@ -134,6 +142,8 @@ Policy is for set of endpoints defined, rules are applied to connections to or f
 Ordered list of rules applied to connections to policy endpoints..
 
 `action` - (Optional) Action to be taken at rule match. Currently supported actions are Allow and Deny (`String`).
+
+`adv_action` - (Optional) Advanced action to be taken at rule match. Currently supported actions are NoLog & Log. See [Adv Action ](#adv-action) below for details.
 
 `keys` - (Optional) can talk to "db" in site "abc" and can not talk to "db" in site "xyz" (`String`).
 

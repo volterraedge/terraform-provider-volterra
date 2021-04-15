@@ -361,6 +361,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-CustomAPI-GetDnsInfo"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.CustomAPI.GetDnsInfo"
             },
             "x-displayname": "Virtual Host Custom API",
