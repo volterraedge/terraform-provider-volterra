@@ -2304,7 +2304,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAdvertiseChoice(rulesAdvertiseChoice)
 	if err != nil {
@@ -2315,7 +2315,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
 	rulesChallengeType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChallengeType(rulesChallengeType)
 	if err != nil {
@@ -2326,7 +2326,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
 	if err != nil {
@@ -2337,7 +2337,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLoadbalancerType(rulesLoadbalancerType)
 	if err != nil {
@@ -2348,7 +2348,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
 	rulesRateLimitChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRateLimitChoice(rulesRateLimitChoice)
 	if err != nil {
@@ -2359,7 +2359,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
 	rulesServicePolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
 	if err != nil {
@@ -2370,7 +2370,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhWafChoice := v.WafChoiceValidationRuleHandler
 	rulesWafChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhWafChoice(rulesWafChoice)
 	if err != nil {
@@ -2880,7 +2880,7 @@ var DefaultDownstreamTlsParamsTypeValidator = func() *ValidateDownstreamTlsParam
 
 	vrhMtlsChoice := v.MtlsChoiceValidationRuleHandler
 	rulesMtlsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhMtlsChoice(rulesMtlsChoice)
 	if err != nil {
@@ -4408,7 +4408,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAdvertiseChoice(rulesAdvertiseChoice)
 	if err != nil {
@@ -4419,7 +4419,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
 	rulesChallengeType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChallengeType(rulesChallengeType)
 	if err != nil {
@@ -4430,7 +4430,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
 	if err != nil {
@@ -4441,7 +4441,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLoadbalancerType(rulesLoadbalancerType)
 	if err != nil {
@@ -4452,7 +4452,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
 	rulesRateLimitChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRateLimitChoice(rulesRateLimitChoice)
 	if err != nil {
@@ -4463,7 +4463,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
 	rulesServicePolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
 	if err != nil {
@@ -4474,7 +4474,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhWafChoice := v.WafChoiceValidationRuleHandler
 	rulesWafChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhWafChoice(rulesWafChoice)
 	if err != nil {
@@ -6092,7 +6092,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAdvertiseChoice(rulesAdvertiseChoice)
 	if err != nil {
@@ -6103,7 +6103,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
 	rulesChallengeType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChallengeType(rulesChallengeType)
 	if err != nil {
@@ -6114,7 +6114,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
 	if err != nil {
@@ -6137,7 +6137,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLoadbalancerType(rulesLoadbalancerType)
 	if err != nil {
@@ -6148,7 +6148,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
 	rulesRateLimitChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRateLimitChoice(rulesRateLimitChoice)
 	if err != nil {
@@ -6159,7 +6159,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
 	rulesServicePolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
 	if err != nil {
@@ -6170,7 +6170,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhWafChoice := v.WafChoiceValidationRuleHandler
 	rulesWafChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhWafChoice(rulesWafChoice)
 	if err != nil {
@@ -6998,7 +6998,7 @@ var DefaultPolicyBasedChallengeValidator = func() *ValidatePolicyBasedChallenge 
 
 	vrhChallengeChoice := v.ChallengeChoiceValidationRuleHandler
 	rulesChallengeChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChallengeChoice(rulesChallengeChoice)
 	if err != nil {
@@ -7513,7 +7513,7 @@ var DefaultProxyTypeHttpsAutoCertsValidator = func() *ValidateProxyTypeHttpsAuto
 
 	vrhMtlsChoice := v.MtlsChoiceValidationRuleHandler
 	rulesMtlsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhMtlsChoice(rulesMtlsChoice)
 	if err != nil {
@@ -7816,7 +7816,7 @@ var DefaultRateLimitConfigTypeValidator = func() *ValidateRateLimitConfigType {
 
 	vrhIpAllowedListChoice := v.IpAllowedListChoiceValidationRuleHandler
 	rulesIpAllowedListChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhIpAllowedListChoice(rulesIpAllowedListChoice)
 	if err != nil {
@@ -7827,7 +7827,7 @@ var DefaultRateLimitConfigTypeValidator = func() *ValidateRateLimitConfigType {
 
 	vrhPolicyChoice := v.PolicyChoiceValidationRuleHandler
 	rulesPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhPolicyChoice(rulesPolicyChoice)
 	if err != nil {
@@ -9187,7 +9187,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAdvertiseChoice(rulesAdvertiseChoice)
 	if err != nil {
@@ -9198,7 +9198,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
 	rulesChallengeType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChallengeType(rulesChallengeType)
 	if err != nil {
@@ -9209,7 +9209,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
 	if err != nil {
@@ -9220,7 +9220,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLoadbalancerType(rulesLoadbalancerType)
 	if err != nil {
@@ -9231,7 +9231,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
 	rulesRateLimitChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRateLimitChoice(rulesRateLimitChoice)
 	if err != nil {
@@ -9242,7 +9242,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
 	rulesServicePolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
 	if err != nil {
@@ -9253,7 +9253,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhWafChoice := v.WafChoiceValidationRuleHandler
 	rulesWafChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhWafChoice(rulesWafChoice)
 	if err != nil {
@@ -10311,7 +10311,7 @@ var DefaultRouteSimpleAdvancedOptionsValidator = func() *ValidateRouteSimpleAdva
 
 	vrhBufferChoice := v.BufferChoiceValidationRuleHandler
 	rulesBufferChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhBufferChoice(rulesBufferChoice)
 	if err != nil {
@@ -10322,7 +10322,7 @@ var DefaultRouteSimpleAdvancedOptionsValidator = func() *ValidateRouteSimpleAdva
 
 	vrhClusterRetractChoice := v.ClusterRetractChoiceValidationRuleHandler
 	rulesClusterRetractChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClusterRetractChoice(rulesClusterRetractChoice)
 	if err != nil {
@@ -10333,7 +10333,7 @@ var DefaultRouteSimpleAdvancedOptionsValidator = func() *ValidateRouteSimpleAdva
 
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
 	if err != nil {
@@ -10344,7 +10344,7 @@ var DefaultRouteSimpleAdvancedOptionsValidator = func() *ValidateRouteSimpleAdva
 
 	vrhMirroringChoice := v.MirroringChoiceValidationRuleHandler
 	rulesMirroringChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhMirroringChoice(rulesMirroringChoice)
 	if err != nil {
@@ -10355,7 +10355,7 @@ var DefaultRouteSimpleAdvancedOptionsValidator = func() *ValidateRouteSimpleAdva
 
 	vrhRetryPolicyChoice := v.RetryPolicyChoiceValidationRuleHandler
 	rulesRetryPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRetryPolicyChoice(rulesRetryPolicyChoice)
 	if err != nil {
@@ -10366,7 +10366,7 @@ var DefaultRouteSimpleAdvancedOptionsValidator = func() *ValidateRouteSimpleAdva
 
 	vrhRewriteChoice := v.RewriteChoiceValidationRuleHandler
 	rulesRewriteChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRewriteChoice(rulesRewriteChoice)
 	if err != nil {
@@ -10389,7 +10389,7 @@ var DefaultRouteSimpleAdvancedOptionsValidator = func() *ValidateRouteSimpleAdva
 
 	vrhSpdyChoice := v.SpdyChoiceValidationRuleHandler
 	rulesSpdyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSpdyChoice(rulesSpdyChoice)
 	if err != nil {
@@ -10400,7 +10400,7 @@ var DefaultRouteSimpleAdvancedOptionsValidator = func() *ValidateRouteSimpleAdva
 
 	vrhWafChoice := v.WafChoiceValidationRuleHandler
 	rulesWafChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhWafChoice(rulesWafChoice)
 	if err != nil {
@@ -10411,7 +10411,7 @@ var DefaultRouteSimpleAdvancedOptionsValidator = func() *ValidateRouteSimpleAdva
 
 	vrhWebsocketChoice := v.WebsocketChoiceValidationRuleHandler
 	rulesWebsocketChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhWebsocketChoice(rulesWebsocketChoice)
 	if err != nil {
@@ -10707,7 +10707,7 @@ var DefaultRouteTypeValidator = func() *ValidateRouteType {
 
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChoice(rulesChoice)
 	if err != nil {
@@ -11183,8 +11183,12 @@ func (v *ValidateRouteTypeSimple) HostRewriteParamsValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
-func (v *ValidateRouteTypeSimple) HostRewriteParamsAutoHostRewriteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
+func (v *ValidateRouteTypeSimple) HostRewriteParamsHostRewriteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_HostRewrite, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for host_rewrite")
+	}
+	return oValidatorFn_HostRewrite, nil
 }
 
 func (v *ValidateRouteTypeSimple) OriginPoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -11340,7 +11344,7 @@ var DefaultRouteTypeSimpleValidator = func() *ValidateRouteTypeSimple {
 
 	vrhHostRewriteParams := v.HostRewriteParamsValidationRuleHandler
 	rulesHostRewriteParams := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHostRewriteParams(rulesHostRewriteParams)
 	if err != nil {
@@ -11349,17 +11353,17 @@ var DefaultRouteTypeSimpleValidator = func() *ValidateRouteTypeSimple {
 	}
 	v.FldValidators["host_rewrite_params"] = vFn
 
-	vrhHostRewriteParamsAutoHostRewrite := v.HostRewriteParamsAutoHostRewriteValidationRuleHandler
-	rulesHostRewriteParamsAutoHostRewrite := map[string]string{
+	vrhHostRewriteParamsHostRewrite := v.HostRewriteParamsHostRewriteValidationRuleHandler
+	rulesHostRewriteParamsHostRewrite := map[string]string{
 		"ves.io.schema.rules.string.hostname": "true",
 	}
-	vFnMap["host_rewrite_params.auto_host_rewrite"], err = vrhHostRewriteParamsAutoHostRewrite(rulesHostRewriteParamsAutoHostRewrite)
+	vFnMap["host_rewrite_params.host_rewrite"], err = vrhHostRewriteParamsHostRewrite(rulesHostRewriteParamsHostRewrite)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RouteTypeSimple.host_rewrite_params_auto_host_rewrite: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RouteTypeSimple.host_rewrite_params_host_rewrite: %s", err)
 		panic(errMsg)
 	}
 
-	v.FldValidators["host_rewrite_params.auto_host_rewrite"] = vFnMap["host_rewrite_params.auto_host_rewrite"]
+	v.FldValidators["host_rewrite_params.host_rewrite"] = vFnMap["host_rewrite_params.host_rewrite"]
 
 	vrhOriginPools := v.OriginPoolsValidationRuleHandler
 	rulesOriginPools := map[string]string{
@@ -11433,8 +11437,12 @@ func (v *ValidateRouteTypeSimpleWithDefaultOriginPool) HostRewriteParamsValidati
 	return validatorFn, nil
 }
 
-func (v *ValidateRouteTypeSimpleWithDefaultOriginPool) HostRewriteParamsAutoHostRewriteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
+func (v *ValidateRouteTypeSimpleWithDefaultOriginPool) HostRewriteParamsHostRewriteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_HostRewrite, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for host_rewrite")
+	}
+	return oValidatorFn_HostRewrite, nil
 }
 
 func (v *ValidateRouteTypeSimpleWithDefaultOriginPool) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -11533,7 +11541,7 @@ var DefaultRouteTypeSimpleWithDefaultOriginPoolValidator = func() *ValidateRoute
 
 	vrhHostRewriteParams := v.HostRewriteParamsValidationRuleHandler
 	rulesHostRewriteParams := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHostRewriteParams(rulesHostRewriteParams)
 	if err != nil {
@@ -11542,17 +11550,17 @@ var DefaultRouteTypeSimpleWithDefaultOriginPoolValidator = func() *ValidateRoute
 	}
 	v.FldValidators["host_rewrite_params"] = vFn
 
-	vrhHostRewriteParamsAutoHostRewrite := v.HostRewriteParamsAutoHostRewriteValidationRuleHandler
-	rulesHostRewriteParamsAutoHostRewrite := map[string]string{
+	vrhHostRewriteParamsHostRewrite := v.HostRewriteParamsHostRewriteValidationRuleHandler
+	rulesHostRewriteParamsHostRewrite := map[string]string{
 		"ves.io.schema.rules.string.hostname": "true",
 	}
-	vFnMap["host_rewrite_params.auto_host_rewrite"], err = vrhHostRewriteParamsAutoHostRewrite(rulesHostRewriteParamsAutoHostRewrite)
+	vFnMap["host_rewrite_params.host_rewrite"], err = vrhHostRewriteParamsHostRewrite(rulesHostRewriteParamsHostRewrite)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RouteTypeSimpleWithDefaultOriginPool.host_rewrite_params_auto_host_rewrite: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RouteTypeSimpleWithDefaultOriginPool.host_rewrite_params_host_rewrite: %s", err)
 		panic(errMsg)
 	}
 
-	v.FldValidators["host_rewrite_params.auto_host_rewrite"] = vFnMap["host_rewrite_params.auto_host_rewrite"]
+	v.FldValidators["host_rewrite_params.host_rewrite"] = vFnMap["host_rewrite_params.host_rewrite"]
 
 	v.FldValidators["path"] = ves_io_schema.PathMatcherTypeValidator().Validate
 
@@ -11934,7 +11942,7 @@ var DefaultSimpleClientSrcRuleValidator = func() *ValidateSimpleClientSrcRule {
 
 	vrhClientSourceChoice := v.ClientSourceChoiceValidationRuleHandler
 	rulesClientSourceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClientSourceChoice(rulesClientSourceChoice)
 	if err != nil {

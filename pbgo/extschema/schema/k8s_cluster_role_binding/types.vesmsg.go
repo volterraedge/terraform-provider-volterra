@@ -251,6 +251,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "16",
 		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhSubjects(rulesSubjects)
 	if err != nil {
@@ -491,6 +492,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "16",
 		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhSubjects(rulesSubjects)
 	if err != nil {
@@ -750,6 +752,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "16",
 		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhSubjects(rulesSubjects)
 	if err != nil {
@@ -1002,6 +1005,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "16",
 		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhSubjects(rulesSubjects)
 	if err != nil {
@@ -1300,7 +1304,7 @@ var DefaultSubjectTypeValidator = func() *ValidateSubjectType {
 
 	vrhSubjectChoice := v.SubjectChoiceValidationRuleHandler
 	rulesSubjectChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSubjectChoice(rulesSubjectChoice)
 	if err != nil {

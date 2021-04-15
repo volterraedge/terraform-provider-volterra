@@ -1229,6 +1229,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
 
+	case GET_RSP_FORMAT_REFERRING_OBJECTS:
+		rsrcReq.RspInReferringObjectsForm = true
+
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1434,6 +1437,19 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	}
 	_ = buildStatusForm
+	buildReferringObjectsForm := func() {
+		for _, br := range rsrcRsp.ReferringObjects {
+			rsp.ReferringObjects = append(rsp.ReferringObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+
+	}
+	_ = buildReferringObjectsForm
 
 	switch req.ResponseFormat {
 
@@ -1458,6 +1474,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
+
+	case GET_RSP_FORMAT_REFERRING_OBJECTS:
+		buildReferringObjectsForm()
 
 	default:
 		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
@@ -1975,7 +1994,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1984,10 +2003,11 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_FOR_CREATE",
                             "GET_RSP_FORMAT_FOR_REPLACE",
                             "GET_RSP_FORMAT_STATUS",
-                            "GET_RSP_FORMAT_READ"
+                            "GET_RSP_FORMAT_READ",
+                            "GET_RSP_FORMAT_REFERRING_OBJECTS"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "GetSpecType format"
+                        "x-displayname": "Referring Objects"
                     }
                 ],
                 "tags": [
@@ -2108,30 +2128,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
         },
-        "malicious_user_mitigationCaptchaChallengeSettings": {
-            "type": "object",
-            "description": "Configuration to be used when a Captcha challenge is launched as mitigation action",
-            "title": "CaptchaChallengeSettings",
-            "x-displayname": "Captcha Challenge Settings",
-            "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.CaptchaChallengeSettings",
-            "properties": {
-                "cookie_expiry": {
-                    "type": "integer",
-                    "description": " Specifies, in seconds, cookie expiry duration.\n Expired cookie will cause loadbalancer to perform Captcha challenge\n Default cookie expiry is set as 1 hour\n\nExample: - 1000-\nRequired: YES",
-                    "title": "cookie_expiry",
-                    "format": "int64",
-                    "x-displayname": "Cookie Expiry period",
-                    "x-ves-required": "true"
-                },
-                "custom_page": {
-                    "type": "string",
-                    "description": " Custom message is of type uri_ref. Currently supported URL schemes is string:///.\n For string:/// scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Please Wait..\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Please Wait \u003c/p\u003e\". Base64 encoded string for this html is \"PHA+IFBsZWFzZSBXYWl0IDwvcD4=\"\n\nExample: - \"string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4=\"-",
-                    "title": "custom_page",
-                    "x-displayname": "Custom message for Captcha Challenge",
-                    "x-ves-example": "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-                }
-            }
-        },
         "malicious_user_mitigationCreateRequest": {
             "type": "object",
             "description": "This is the input message of the 'Create' RPC",
@@ -2182,28 +2178,12 @@ var APISwaggerJSON string = `{
             "description": "Create malicious_user_mitigation creates a new object in the storage backend for metadata.namespace.",
             "title": "Create malicious user mitigation",
             "x-displayname": "Create Malicious User Mitigation",
-            "x-ves-displayorder": "1,2,3,4",
             "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.CreateSpecType",
             "properties": {
-                "captcha_challenge_settings": {
-                    "description": " Configuration to be used when a captcha challenge is launched as mitigation action",
-                    "$ref": "#/definitions/malicious_user_mitigationCaptchaChallengeSettings",
-                    "x-displayname": "Captcha challenge settings"
-                },
-                "javascript_challenge_settings": {
-                    "description": " Configuration to be used when a Javascript challenge is launched as mitigation action",
-                    "$ref": "#/definitions/malicious_user_mitigationJavascriptChallengeSettings",
-                    "x-displayname": "Javascript challenge settings"
-                },
                 "mitigation_type": {
                     "description": " Malicious user mitigation type specifies the malicious user mitigation rules that define the actions to be taken for users mapped to different threat levels.\n A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.",
                     "$ref": "#/definitions/malicious_user_mitigationMaliciousUserMitigationType",
                     "x-displayname": "Malicious User Mitigation Type"
-                },
-                "temporary_blocking_settings": {
-                    "description": " Configuration to be used when a user is temporarily blocked",
-                    "$ref": "#/definitions/malicious_user_mitigationTemporaryBlockingSettings",
-                    "x-displayname": "Temporary Blocking Settings"
                 }
             }
         },
@@ -2261,6 +2241,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/malicious_user_mitigationObject",
                     "x-displayname": "Object"
                 },
+                "referring_objects": {
+                    "type": "array",
+                    "description": "The set of objects that are referring to this object in their spec",
+                    "title": "referring_objects",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Referring Objects"
+                },
                 "replace_form": {
                     "description": "Format to replace changeable values in object",
                     "title": "replace_form",
@@ -2299,14 +2288,15 @@ var APISwaggerJSON string = `{
         },
         "malicious_user_mitigationGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
                 "GET_RSP_FORMAT_FOR_CREATE",
                 "GET_RSP_FORMAT_FOR_REPLACE",
                 "GET_RSP_FORMAT_STATUS",
-                "GET_RSP_FORMAT_READ"
+                "GET_RSP_FORMAT_READ",
+                "GET_RSP_FORMAT_REFERRING_OBJECTS"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
@@ -2315,28 +2305,12 @@ var APISwaggerJSON string = `{
             "description": "Get malicious_user_mitigation reads a given object from storage backend for metadata.namespace.",
             "title": "Get malicious user mitigation",
             "x-displayname": "Get Malicious User Mitigation",
-            "x-ves-displayorder": "1,2,3,4",
             "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.GetSpecType",
             "properties": {
-                "captcha_challenge_settings": {
-                    "description": " Configuration to be used when a captcha challenge is launched as mitigation action",
-                    "$ref": "#/definitions/malicious_user_mitigationCaptchaChallengeSettings",
-                    "x-displayname": "Captcha challenge settings"
-                },
-                "javascript_challenge_settings": {
-                    "description": " Configuration to be used when a Javascript challenge is launched as mitigation action",
-                    "$ref": "#/definitions/malicious_user_mitigationJavascriptChallengeSettings",
-                    "x-displayname": "Javascript challenge settings"
-                },
                 "mitigation_type": {
                     "description": " Malicious user mitigation type specifies the malicious user mitigation rules that define the actions to be taken for users mapped to different threat levels.\n A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.",
                     "$ref": "#/definitions/malicious_user_mitigationMaliciousUserMitigationType",
                     "x-displayname": "Malicious User Mitigation Type"
-                },
-                "temporary_blocking_settings": {
-                    "description": " Configuration to be used when a user is temporarily blocked",
-                    "$ref": "#/definitions/malicious_user_mitigationTemporaryBlockingSettings",
-                    "x-displayname": "Temporary Blocking Settings"
                 }
             }
         },
@@ -2347,60 +2321,11 @@ var APISwaggerJSON string = `{
             "x-displayname": "Specification",
             "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.GlobalSpecType",
             "properties": {
-                "captcha_challenge_settings": {
-                    "description": " Configuration to be used when a captcha challenge is launched as mitigation action",
-                    "title": "Captcha Challenge Settings",
-                    "$ref": "#/definitions/malicious_user_mitigationCaptchaChallengeSettings",
-                    "x-displayname": "Captcha challenge settings"
-                },
-                "javascript_challenge_settings": {
-                    "description": " Configuration to be used when a Javascript challenge is launched as mitigation action",
-                    "title": "Javascript Challenge Settings",
-                    "$ref": "#/definitions/malicious_user_mitigationJavascriptChallengeSettings",
-                    "x-displayname": "Javascript challenge settings"
-                },
                 "mitigation_type": {
                     "description": " Malicious user mitigation type specifies the malicious user mitigation rules that define the actions to be taken for users mapped to different threat levels.\n A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.",
                     "title": "MaliciousUserMitigationType",
                     "$ref": "#/definitions/malicious_user_mitigationMaliciousUserMitigationType",
                     "x-displayname": "Malicious User Mitigation Type"
-                },
-                "temporary_blocking_settings": {
-                    "description": " Configuration to be used when a user is temporarily blocked",
-                    "title": "Temporary Blocking Settings",
-                    "$ref": "#/definitions/malicious_user_mitigationTemporaryBlockingSettings",
-                    "x-displayname": "Temporary Blocking Settings"
-                }
-            }
-        },
-        "malicious_user_mitigationJavascriptChallengeSettings": {
-            "type": "object",
-            "description": "x-displayName: Javascript Challenge Settings\nConfiguration to be used when a Javascript challenge is launched as mitigation action",
-            "title": "JavascriptChallengeSettings",
-            "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.JavascriptChallengeSettings",
-            "properties": {
-                "cookie_expiry": {
-                    "type": "integer",
-                    "description": " Specifies, in seconds, cookie expiry duration.\n Expired cookie will cause loadbalancer to perform Javascript challenge\n Default cookie expiry is set as 1 hour\n\nExample: - 1000-\nRequired: YES",
-                    "title": "cookie_expiry",
-                    "format": "int64",
-                    "x-displayname": "Cookie Expiry period",
-                    "x-ves-required": "true"
-                },
-                "custom_page": {
-                    "type": "string",
-                    "description": " Custom message is of type uri_ref. Currently supported URL schemes is string:///.\n For string:/// scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Please Wait..\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Please Wait \u003c/p\u003e\". Base64 encoded string for this html is \"PHA+IFBsZWFzZSBXYWl0IDwvcD4=\"\n\nExample: - \"string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4=\"-",
-                    "title": "custom_page",
-                    "x-displayname": "Custom Message for Javascript Challenge",
-                    "x-ves-example": "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-                },
-                "js_script_delay": {
-                    "type": "integer",
-                    "description": " Specifies, in milliseconds, the delay that Javascript introduces.\n Default delay is 5 seconds\n\nExample: - 1000-\nRequired: YES",
-                    "title": "js_script_delay",
-                    "format": "int64",
-                    "x-displayname": "Javascript Delay",
-                    "x-ves-required": "true"
                 }
             }
         },
@@ -2689,28 +2614,12 @@ var APISwaggerJSON string = `{
             "description": "Replace malicious_user_mitigation replaces an existing object in the storage backend for metadata.namespace.",
             "title": "Replace malicious user mitigation",
             "x-displayname": "Replace Malicious User Mitigation",
-            "x-ves-displayorder": "1,2,3,4",
             "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.ReplaceSpecType",
             "properties": {
-                "captcha_challenge_settings": {
-                    "description": " Configuration to be used when a captcha challenge is launched as mitigation action",
-                    "$ref": "#/definitions/malicious_user_mitigationCaptchaChallengeSettings",
-                    "x-displayname": "Captcha challenge settings"
-                },
-                "javascript_challenge_settings": {
-                    "description": " Configuration to be used when a Javascript challenge is launched as mitigation action",
-                    "$ref": "#/definitions/malicious_user_mitigationJavascriptChallengeSettings",
-                    "x-displayname": "Javascript challenge settings"
-                },
                 "mitigation_type": {
                     "description": " Malicious user mitigation type specifies the malicious user mitigation rules that define the actions to be taken for users mapped to different threat levels.\n A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.",
                     "$ref": "#/definitions/malicious_user_mitigationMaliciousUserMitigationType",
                     "x-displayname": "Malicious User Mitigation Type"
-                },
-                "temporary_blocking_settings": {
-                    "description": " Configuration to be used when a user is temporarily blocked",
-                    "$ref": "#/definitions/malicious_user_mitigationTemporaryBlockingSettings",
-                    "x-displayname": "Temporary Blocking Settings"
                 }
             }
         },
@@ -2758,22 +2667,6 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
-                }
-            }
-        },
-        "malicious_user_mitigationTemporaryBlockingSettings": {
-            "type": "object",
-            "description": "\nSpecifies configuration for temporary user blocking resulting from user behavior analysis.",
-            "title": "Temporary Blocking Settings",
-            "x-displayname": "Temporary Blocking Settings",
-            "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.TemporaryBlockingSettings",
-            "properties": {
-                "custom_page": {
-                    "type": "string",
-                    "description": " Custom message is of type -uri_ref-. Currently supported URL schemes is -string:///-.\n For -string:///- scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Blocked..\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Blocked \u003c/p\u003e\". Base64 encoded string for this html is \"PHA+IFBsZWFzZSBXYWl0IDwvcD4=\"\n\nExample: - \"string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4=\"-",
-                    "title": "custom_page",
-                    "x-displayname": "Custom Message for Temporary Blocking",
-                    "x-ves-example": "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
                 }
             }
         },
@@ -3388,6 +3281,14 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
                 },
                 "tenant": {
                     "type": "string",

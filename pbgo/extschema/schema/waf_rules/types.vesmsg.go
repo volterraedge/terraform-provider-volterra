@@ -278,7 +278,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhRuleIds := v.RuleIdsValidationRuleHandler
 	rulesRuleIds := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.max_items": "256",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhRuleIds(rulesRuleIds)
@@ -558,7 +558,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhRuleIds := v.RuleIdsValidationRuleHandler
 	rulesRuleIds := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.max_items": "256",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhRuleIds(rulesRuleIds)
@@ -902,7 +902,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhRuleIds := v.RuleIdsValidationRuleHandler
 	rulesRuleIds := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.max_items": "256",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhRuleIds(rulesRuleIds)
@@ -1182,7 +1182,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhRuleIds := v.RuleIdsValidationRuleHandler
 	rulesRuleIds := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.max_items": "256",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhRuleIds(rulesRuleIds)

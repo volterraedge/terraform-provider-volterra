@@ -2668,6 +2668,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
+                },
                 "tenant": {
                     "type": "string",
                     "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
@@ -3034,70 +3042,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Rule Mode",
             "x-ves-proto-enum": "ves.io.schema.waf_rules.RuleModeType"
         },
-        "waf_rulesRules": {
-            "type": "object",
-            "description": "Every WAF rule will have these properties associated",
-            "title": "Rule",
-            "x-displayname": "Rule",
-            "x-ves-proto-message": "ves.io.schema.waf_rules.Rules",
-            "properties": {
-                "description": {
-                    "type": "string",
-                    "description": " This is the brief description of the rule.\n\nExample: - \"IE XSS Filters - Attack Detected.\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "IE XSS Filters - Attack Detected."
-                },
-                "id": {
-                    "type": "integer",
-                    "description": " WAF rule ID which is a unique ID with in waf_rules object.\n Generated alerts will have the id displayed in alert.\n\nExample: - \"941210\"-",
-                    "title": "id",
-                    "format": "int64",
-                    "x-displayname": "ID",
-                    "x-ves-example": "941210"
-                },
-                "mode": {
-                    "description": " Whether the Rule is excluded or included",
-                    "title": "mode",
-                    "$ref": "#/definitions/waf_rulesRuleModeType",
-                    "x-displayname": "Mode"
-                },
-                "severity": {
-                    "description": " Severity of the rule.",
-                    "title": "severity",
-                    "$ref": "#/definitions/waf_rulesSeverityType",
-                    "x-displayname": "Severity"
-                },
-                "tags": {
-                    "type": "array",
-                    "description": "Tags are a set of string labels associated with a rule. For eg a particular rule may be under\n\"attack-sqli\" and \"attack-protocol\" tags. This is used by user to find out Tags associated with a\nRule.\n\nExample: - \"[\"attack-sqli\", \"attack-protocol\"]\"-",
-                    "title": "tags",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Tags",
-                    "x-ves-example": "[\"attack-sqli\", \"attack-protocol\"]"
-                }
-            }
-        },
-        "waf_rulesSeverityType": {
-            "type": "string",
-            "description": "Rule severity as defined in the rule\n\nEmergency Level\nAlert Level\nCritical Level\nError Level\nWarning Level\nNotice Level\nInfo Level\nDebug Level",
-            "title": "SeverityType",
-            "enum": [
-                "EMERGENCY",
-                "ALERT",
-                "CRITICAL",
-                "ERROR",
-                "WARNING",
-                "NOTICE",
-                "INFO",
-                "DEBUG"
-            ],
-            "default": "EMERGENCY",
-            "x-displayname": "Severity",
-            "x-ves-proto-enum": "ves.io.schema.waf_rules.SeverityType"
-        },
         "waf_rulesSpecType": {
             "type": "object",
             "description": "Shape of the WAF specification",
@@ -3119,14 +3063,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "WAF Rules Status Object",
             "x-ves-proto-message": "ves.io.schema.waf_rules.StatusObject",
             "properties": {
-                "anomaly_score_threshold": {
-                    "type": "integer",
-                    "description": " if anomaly score is same or above threshold , the req/resp will be blocked/alerted (depending\n on non_blocking_mode configuration)\n\nExample: - \"5\"-",
-                    "title": "anomaly score threshold",
-                    "format": "int64",
-                    "x-displayname": "Anomaly Score Threshold",
-                    "x-ves-example": "5"
-                },
                 "conditions": {
                     "type": "array",
                     "title": "conditions",
@@ -3141,12 +3077,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaStatusMetaType",
                     "x-displayname": "Metadata"
                 },
-                "mode": {
-                    "description": " WAF Mode is blocking or Alert",
-                    "title": "mode",
-                    "$ref": "#/definitions/schemaWafModeType",
-                    "x-displayname": "Mode"
-                },
                 "object_refs": {
                     "type": "array",
                     "description": " Object reference",
@@ -3155,23 +3085,6 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
-                },
-                "paranoia_level": {
-                    "type": "integer",
-                    "description": " Paranoia level\n\nExample: - \"3\"-",
-                    "title": "paranoia_level",
-                    "format": "int64",
-                    "x-displayname": "Paranoia Level",
-                    "x-ves-example": "3"
-                },
-                "rules": {
-                    "type": "array",
-                    "description": " WAF rules associated with this instance",
-                    "title": "rules",
-                    "items": {
-                        "$ref": "#/definitions/waf_rulesRules"
-                    },
-                    "x-displayname": "Rules"
                 }
             }
         }

@@ -787,6 +787,10 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "tags": [
                     "ApiepCustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-ApiepCustomAPI-GetAPIEndpointLearntSchema"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointLearntSchema"
             },
             "x-displayname": "API Endpoints by Virtual Host Custom API",
@@ -887,6 +891,10 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "tags": [
                     "ApiepCustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-ApiepCustomAPI-GetAPIEndpointPDF"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointPDF"
             },
             "x-displayname": "API Endpoints by Virtual Host Custom API",
@@ -1070,6 +1078,10 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "tags": [
                     "ApiepCustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-ApiepCustomAPI-GetSwaggerSpec"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetSwaggerSpec"
             },
             "x-displayname": "API Endpoints by Virtual Host Custom API",

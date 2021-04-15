@@ -906,6 +906,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
 
+	case GET_RSP_FORMAT_REFERRING_OBJECTS:
+		rsrcReq.RspInReferringObjectsForm = true
+
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1065,6 +1068,19 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	}
 	_ = buildStatusForm
+	buildReferringObjectsForm := func() {
+		for _, br := range rsrcRsp.ReferringObjects {
+			rsp.ReferringObjects = append(rsp.ReferringObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+
+	}
+	_ = buildReferringObjectsForm
 
 	switch req.ResponseFormat {
 
@@ -1080,6 +1096,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
+
+	case GET_RSP_FORMAT_REFERRING_OBJECTS:
+		buildReferringObjectsForm()
 
 	default:
 		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
@@ -1507,7 +1526,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1515,10 +1534,11 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_DEFAULT",
                             "GET_RSP_FORMAT_FOR_REPLACE",
                             "GET_RSP_FORMAT_STATUS",
-                            "GET_RSP_FORMAT_READ"
+                            "GET_RSP_FORMAT_READ",
+                            "GET_RSP_FORMAT_REFERRING_OBJECTS"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "GetSpecType format"
+                        "x-displayname": "Referring Objects"
                     }
                 ],
                 "tags": [
@@ -2218,6 +2238,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
+                },
                 "tenant": {
                     "type": "string",
                     "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
@@ -2435,6 +2463,35 @@ var APISwaggerJSON string = `{
                     "description": " information from /sys/class/dmi/id/board_version",
                     "title": "version",
                     "x-displayname": "Version"
+                }
+            }
+        },
+        "siteBondMembersType": {
+            "type": "object",
+            "description": "BondMembersType represents the bond interface members  along with the corresponding link state",
+            "title": "Bond Interface Members",
+            "x-displayname": "Bond Interface Members",
+            "x-ves-proto-message": "ves.io.schema.site.BondMembersType",
+            "properties": {
+                "link_speed": {
+                    "type": "integer",
+                    "description": " Link speed of Bond Interface Member in Mbps",
+                    "title": "Link Speed\nx-displayName: \"Link Speed in Mbps\"\nLink speed of Bond Interface Member in Mbps",
+                    "format": "int64",
+                    "x-displayname": "Link Speed in Mbps"
+                },
+                "link_state": {
+                    "type": "boolean",
+                    "description": " Link state of Bond Interface Member",
+                    "title": "Link State\nx-displayName: \"Link State\"\nLink state of Bond Interface Member",
+                    "format": "boolean",
+                    "x-displayname": "Link State"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the Bond Interface Member",
+                    "title": "Name\nx-displayName: \"Name\"\nName of the Bond Interface Member",
+                    "x-displayname": "Name"
                 }
             }
         },
@@ -2790,6 +2847,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteObject",
                     "x-displayname": "Object"
                 },
+                "referring_objects": {
+                    "type": "array",
+                    "description": "The set of objects that are referring to this object in their spec",
+                    "title": "referring_objects",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Referring Objects"
+                },
                 "replace_form": {
                     "description": "Format to replace changeable values in object",
                     "title": "replace_form",
@@ -2828,13 +2894,14 @@ var APISwaggerJSON string = `{
         },
         "siteGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
                 "GET_RSP_FORMAT_FOR_REPLACE",
                 "GET_RSP_FORMAT_STATUS",
-                "GET_RSP_FORMAT_READ"
+                "GET_RSP_FORMAT_READ",
+                "GET_RSP_FORMAT_REFERRING_OBJECTS"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
@@ -2903,6 +2970,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Desired Pool Count",
                     "x-ves-example": "0"
                 },
+                "global_access_k8s_enabled": {
+                    "type": "boolean",
+                    "format": "boolean"
+                },
                 "inside_nameserver": {
                     "type": "string",
                     "description": " Optional DNS server IP to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-",
@@ -2914,6 +2985,10 @@ var APISwaggerJSON string = `{
                     "description": " Optional Virtual IP to be used as automatic VIP for site local inside network.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP is used.\n When configured, this is used as VIP (depending on advertise policy configuration).\n When not configured, site local inside interface ip will be used as VIP.\n\nExample: - \"10.1.1.1\"-",
                     "x-displayname": "Inside VIP",
                     "x-ves-example": "10.1.1.1"
+                },
+                "local_access_k8s_enabled": {
+                    "type": "boolean",
+                    "format": "boolean"
                 },
                 "local_k8s_access_enabled": {
                     "type": "boolean",
@@ -3352,6 +3427,15 @@ var APISwaggerJSON string = `{
                     "title": "Active-Backup status\nx-displayName: \"Active/Backup status\"\nActive state for the interface",
                     "$ref": "#/definitions/siteActiveState",
                     "x-displayname": "Active/Backup status"
+                },
+                "bond_members": {
+                    "type": "array",
+                    "description": " Members of the Bond interface along with the corresponding link state",
+                    "title": "Bond Interface Members\nx-displayName: \"Bond Members\"\nMembers of the Bond interface along with the corresponding link state",
+                    "items": {
+                        "$ref": "#/definitions/siteBondMembersType"
+                    },
+                    "x-displayname": "Bond Members"
                 },
                 "dhcp_server": {
                     "type": "boolean",
@@ -3846,6 +3930,12 @@ var APISwaggerJSON string = `{
                     "title": "deployment_state",
                     "$ref": "#/definitions/siteDeploymentState",
                     "x-displayname": "Deployment State"
+                },
+                "nonconforming_state": {
+                    "type": "string",
+                    "description": " If nonconforming state is not empty, then current deployed OS version is nonconforming. Site should be upgrade to available version.",
+                    "title": "Nonconforming State",
+                    "x-displayname": "Nonconforming State"
                 }
             }
         },
@@ -4768,6 +4858,12 @@ var APISwaggerJSON string = `{
                     "title": "deployment_state",
                     "$ref": "#/definitions/siteDeploymentState",
                     "x-displayname": "Deployment State"
+                },
+                "nonconforming_state": {
+                    "type": "string",
+                    "description": " If nonconforming state is not empty, then current deployed SW version is nonconforming. Site should be upgrade to available version.",
+                    "title": "Nonconforming State",
+                    "x-displayname": "Nonconforming State"
                 }
             }
         }

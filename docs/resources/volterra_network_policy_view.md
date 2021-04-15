@@ -21,7 +21,7 @@ resource "volterra_network_policy_view" "example" {
   namespace = "staging"
 
   endpoint {
-    // One of the arguments from this list "outside_endpoints inside_endpoints interface namespace label_selector prefix_list any" must be set
+    // One of the arguments from this list "label_selector prefix_list any outside_endpoints inside_endpoints interface namespace" must be set
 
     prefix_list {
       prefixes = ["192.168.20.0/24"]
@@ -56,6 +56,10 @@ Argument Reference
 
 `ingress_rules` - (Optional) Ordered list of rules applied to connections to policy endpoints.. See [Ingress Rules ](#ingress-rules) below for details.
 
+### Adv Action
+
+Advanced action to be taken at rule match. Currently supported actions are NoLog & Log.
+
 ### All Tcp Traffic
 
 Select all TCP traffic to match.
@@ -83,6 +87,8 @@ Select Application traffic to match.
 Ordered list of rules applied to connections from policy endpoints..
 
 `action` - (Optional) Action to be taken at rule match. Currently supported actions are Allow and Deny (`String`).
+
+`adv_action` - (Optional) Advanced action to be taken at rule match. Currently supported actions are NoLog & Log. See [Adv Action ](#adv-action) below for details.
 
 `keys` - (Optional) can talk to "db" in site "abc" and can not talk to "db" in site "xyz" (`String`).
 
@@ -139,6 +145,8 @@ Policy is for set of endpoints defined, rules are applied to connections to or f
 Ordered list of rules applied to connections to policy endpoints..
 
 `action` - (Optional) Action to be taken at rule match. Currently supported actions are Allow and Deny (`String`).
+
+`adv_action` - (Optional) Advanced action to be taken at rule match. Currently supported actions are NoLog & Log. See [Adv Action ](#adv-action) below for details.
 
 `keys` - (Optional) can talk to "db" in site "abc" and can not talk to "db" in site "xyz" (`String`).
 

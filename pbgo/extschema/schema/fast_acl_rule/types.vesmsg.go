@@ -286,7 +286,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhSource := v.SourceValidationRuleHandler
 	rulesSource := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSource(rulesSource)
 	if err != nil {
@@ -747,7 +747,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhSource := v.SourceValidationRuleHandler
 	rulesSource := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSource(rulesSource)
 	if err != nil {
@@ -1049,7 +1049,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhSource := v.SourceValidationRuleHandler
 	rulesSource := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSource(rulesSource)
 	if err != nil {
@@ -1351,7 +1351,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhSource := v.SourceValidationRuleHandler
 	rulesSource := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSource(rulesSource)
 	if err != nil {

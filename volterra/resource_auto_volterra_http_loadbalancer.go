@@ -89,56 +89,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"private_network": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"private_network": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"kind": {
-																Type:     schema.TypeString,
-																Computed: true,
-															},
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-
-												"default_vip": {
-
-													Type:     schema.TypeBool,
-													Optional: true,
-												},
-
-												"specific_vip": {
-
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
 									"site": {
 
 										Type:     schema.TypeSet,
@@ -187,14 +137,26 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										},
 									},
 
-									"srv6_network": {
+									"virtual_network": {
 
 										Type:     schema.TypeSet,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
-												"private_network": {
+												"default_vip": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"specific_vip": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"virtual_network": {
 
 													Type:     schema.TypeSet,
 													Optional: true,
@@ -220,18 +182,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 															},
 														},
 													},
-												},
-
-												"default_vip": {
-
-													Type:     schema.TypeBool,
-													Optional: true,
-												},
-
-												"specific_vip": {
-
-													Type:     schema.TypeString,
-													Optional: true,
 												},
 											},
 										},
@@ -3685,70 +3635,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 					choiceTypeFound := false
 
-					if v, ok := advertiseWhereMapStrToI["private_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_PrivateNetwork{}
-						choiceInt.PrivateNetwork = &ves_io_schema_views.WherePrivateNetwork{}
-						advertiseWhere[i].Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								privateNetwork := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.PrivateNetwork.PrivateNetwork = privateNetwork
-								for _, set := range sl {
-									privateNetworkMapStrToI := set.(map[string]interface{})
-
-									if w, ok := privateNetworkMapStrToI["name"]; ok && !isIntfNil(w) {
-										privateNetwork.Name = w.(string)
-									}
-
-									if w, ok := privateNetworkMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										privateNetwork.Namespace = w.(string)
-									}
-
-									if w, ok := privateNetworkMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										privateNetwork.Tenant = w.(string)
-									}
-
-								}
-
-							}
-
-							vipChoiceTypeFound := false
-
-							if v, ok := cs["default_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
-
-								vipChoiceTypeFound = true
-
-								if v.(bool) {
-									vipChoiceInt := &ves_io_schema_views.WherePrivateNetwork_DefaultVip{}
-									vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
-									choiceInt.PrivateNetwork.VipChoice = vipChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
-
-								vipChoiceTypeFound = true
-								vipChoiceInt := &ves_io_schema_views.WherePrivateNetwork_SpecificVip{}
-
-								choiceInt.PrivateNetwork.VipChoice = vipChoiceInt
-
-								vipChoiceInt.SpecificVip = v.(string)
-
-							}
-
-						}
-
-					}
-
 					if v, ok := advertiseWhereMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 						choiceTypeFound = true
@@ -3799,40 +3685,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 					}
 
-					if v, ok := advertiseWhereMapStrToI["srv6_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+					if v, ok := advertiseWhereMapStrToI["virtual_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_Srv6Network{}
-						choiceInt.Srv6Network = &ves_io_schema_views.WhereSrv6Network{}
+						choiceInt := &ves_io_schema_views.WhereType_VirtualNetwork{}
+						choiceInt.VirtualNetwork = &ves_io_schema_views.WhereVirtualNetwork{}
 						advertiseWhere[i].Choice = choiceInt
 
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
-
-							if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								privateNetwork := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.Srv6Network.PrivateNetwork = privateNetwork
-								for _, set := range sl {
-									privateNetworkMapStrToI := set.(map[string]interface{})
-
-									if w, ok := privateNetworkMapStrToI["name"]; ok && !isIntfNil(w) {
-										privateNetwork.Name = w.(string)
-									}
-
-									if w, ok := privateNetworkMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										privateNetwork.Namespace = w.(string)
-									}
-
-									if w, ok := privateNetworkMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										privateNetwork.Tenant = w.(string)
-									}
-
-								}
-
-							}
 
 							vipChoiceTypeFound := false
 
@@ -3841,9 +3703,9 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								vipChoiceTypeFound = true
 
 								if v.(bool) {
-									vipChoiceInt := &ves_io_schema_views.WhereSrv6Network_DefaultVip{}
+									vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultVip{}
 									vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
-									choiceInt.Srv6Network.VipChoice = vipChoiceInt
+									choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
 								}
 
 							}
@@ -3851,11 +3713,35 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
 
 								vipChoiceTypeFound = true
-								vipChoiceInt := &ves_io_schema_views.WhereSrv6Network_SpecificVip{}
+								vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificVip{}
 
-								choiceInt.Srv6Network.VipChoice = vipChoiceInt
+								choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
 
 								vipChoiceInt.SpecificVip = v.(string)
+
+							}
+
+							if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								virtualNetwork := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.VirtualNetwork.VirtualNetwork = virtualNetwork
+								for _, set := range sl {
+									virtualNetworkMapStrToI := set.(map[string]interface{})
+
+									if w, ok := virtualNetworkMapStrToI["name"]; ok && !isIntfNil(w) {
+										virtualNetwork.Name = w.(string)
+									}
+
+									if w, ok := virtualNetworkMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										virtualNetwork.Namespace = w.(string)
+									}
+
+									if w, ok := virtualNetworkMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										virtualNetwork.Tenant = w.(string)
+									}
+
+								}
 
 							}
 
@@ -8368,70 +8254,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 					choiceTypeFound := false
 
-					if v, ok := advertiseWhereMapStrToI["private_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_PrivateNetwork{}
-						choiceInt.PrivateNetwork = &ves_io_schema_views.WherePrivateNetwork{}
-						advertiseWhere[i].Choice = choiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								privateNetwork := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.PrivateNetwork.PrivateNetwork = privateNetwork
-								for _, set := range sl {
-									privateNetworkMapStrToI := set.(map[string]interface{})
-
-									if w, ok := privateNetworkMapStrToI["name"]; ok && !isIntfNil(w) {
-										privateNetwork.Name = w.(string)
-									}
-
-									if w, ok := privateNetworkMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										privateNetwork.Namespace = w.(string)
-									}
-
-									if w, ok := privateNetworkMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										privateNetwork.Tenant = w.(string)
-									}
-
-								}
-
-							}
-
-							vipChoiceTypeFound := false
-
-							if v, ok := cs["default_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
-
-								vipChoiceTypeFound = true
-
-								if v.(bool) {
-									vipChoiceInt := &ves_io_schema_views.WherePrivateNetwork_DefaultVip{}
-									vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
-									choiceInt.PrivateNetwork.VipChoice = vipChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
-
-								vipChoiceTypeFound = true
-								vipChoiceInt := &ves_io_schema_views.WherePrivateNetwork_SpecificVip{}
-
-								choiceInt.PrivateNetwork.VipChoice = vipChoiceInt
-
-								vipChoiceInt.SpecificVip = v.(string)
-
-							}
-
-						}
-
-					}
-
 					if v, ok := advertiseWhereMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 						choiceTypeFound = true
@@ -8482,40 +8304,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 					}
 
-					if v, ok := advertiseWhereMapStrToI["srv6_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+					if v, ok := advertiseWhereMapStrToI["virtual_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 						choiceTypeFound = true
-						choiceInt := &ves_io_schema_views.WhereType_Srv6Network{}
-						choiceInt.Srv6Network = &ves_io_schema_views.WhereSrv6Network{}
+						choiceInt := &ves_io_schema_views.WhereType_VirtualNetwork{}
+						choiceInt.VirtualNetwork = &ves_io_schema_views.WhereVirtualNetwork{}
 						advertiseWhere[i].Choice = choiceInt
 
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
-
-							if v, ok := cs["private_network"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								privateNetwork := &ves_io_schema_views.ObjectRefType{}
-								choiceInt.Srv6Network.PrivateNetwork = privateNetwork
-								for _, set := range sl {
-									privateNetworkMapStrToI := set.(map[string]interface{})
-
-									if w, ok := privateNetworkMapStrToI["name"]; ok && !isIntfNil(w) {
-										privateNetwork.Name = w.(string)
-									}
-
-									if w, ok := privateNetworkMapStrToI["namespace"]; ok && !isIntfNil(w) {
-										privateNetwork.Namespace = w.(string)
-									}
-
-									if w, ok := privateNetworkMapStrToI["tenant"]; ok && !isIntfNil(w) {
-										privateNetwork.Tenant = w.(string)
-									}
-
-								}
-
-							}
 
 							vipChoiceTypeFound := false
 
@@ -8524,9 +8322,9 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								vipChoiceTypeFound = true
 
 								if v.(bool) {
-									vipChoiceInt := &ves_io_schema_views.WhereSrv6Network_DefaultVip{}
+									vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultVip{}
 									vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
-									choiceInt.Srv6Network.VipChoice = vipChoiceInt
+									choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
 								}
 
 							}
@@ -8534,11 +8332,35 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
 
 								vipChoiceTypeFound = true
-								vipChoiceInt := &ves_io_schema_views.WhereSrv6Network_SpecificVip{}
+								vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificVip{}
 
-								choiceInt.Srv6Network.VipChoice = vipChoiceInt
+								choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
 
 								vipChoiceInt.SpecificVip = v.(string)
+
+							}
+
+							if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								virtualNetwork := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.VirtualNetwork.VirtualNetwork = virtualNetwork
+								for _, set := range sl {
+									virtualNetworkMapStrToI := set.(map[string]interface{})
+
+									if w, ok := virtualNetworkMapStrToI["name"]; ok && !isIntfNil(w) {
+										virtualNetwork.Name = w.(string)
+									}
+
+									if w, ok := virtualNetworkMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										virtualNetwork.Namespace = w.(string)
+									}
+
+									if w, ok := virtualNetworkMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										virtualNetwork.Tenant = w.(string)
+									}
+
+								}
 
 							}
 

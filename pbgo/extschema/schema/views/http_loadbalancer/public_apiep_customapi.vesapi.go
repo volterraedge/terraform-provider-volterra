@@ -364,6 +364,10 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                 "tags": [
                     "ApiepLBCustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-ApiepLBCustomAPI-GetSwaggerSpec"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetSwaggerSpec"
             },
             "x-displayname": "HTTP loadbalancer Custom API",

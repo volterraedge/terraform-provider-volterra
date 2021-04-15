@@ -1202,6 +1202,22 @@ type ValidatePassport struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidatePassport) OperatingSystemVersionChoiceOperatingSystemVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_OperatingSystemVersion, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for operating_system_version")
+	}
+	return oValidatorFn_OperatingSystemVersion, nil
+}
+
+func (v *ValidatePassport) VolterraSwVersionChoiceVolterraSoftwareVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_VolterraSoftwareVersion, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for volterra_software_version")
+	}
+	return oValidatorFn_VolterraSoftwareVersion, nil
+}
+
 func (v *ValidatePassport) ClusterNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -1321,11 +1337,63 @@ func (v *ValidatePassport) Validate(ctx context.Context, pm interface{}, opts ..
 
 	}
 
+	switch m.GetOperatingSystemVersionChoice().(type) {
+	case *Passport_DefaultOsVersion:
+		if fv, exists := v.FldValidators["operating_system_version_choice.default_os_version"]; exists {
+			val := m.GetOperatingSystemVersionChoice().(*Passport_DefaultOsVersion).DefaultOsVersion
+			vOpts := append(opts,
+				db.WithValidateField("operating_system_version_choice"),
+				db.WithValidateField("default_os_version"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Passport_OperatingSystemVersion:
+		if fv, exists := v.FldValidators["operating_system_version_choice.operating_system_version"]; exists {
+			val := m.GetOperatingSystemVersionChoice().(*Passport_OperatingSystemVersion).OperatingSystemVersion
+			vOpts := append(opts,
+				db.WithValidateField("operating_system_version_choice"),
+				db.WithValidateField("operating_system_version"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["private_network_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("private_network_name"))
 		if err := fv(ctx, m.GetPrivateNetworkName(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetVolterraSwVersionChoice().(type) {
+	case *Passport_DefaultSwVersion:
+		if fv, exists := v.FldValidators["volterra_sw_version_choice.default_sw_version"]; exists {
+			val := m.GetVolterraSwVersionChoice().(*Passport_DefaultSwVersion).DefaultSwVersion
+			vOpts := append(opts,
+				db.WithValidateField("volterra_sw_version_choice"),
+				db.WithValidateField("default_sw_version"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Passport_VolterraSoftwareVersion:
+		if fv, exists := v.FldValidators["volterra_sw_version_choice.volterra_software_version"]; exists {
+			val := m.GetVolterraSwVersionChoice().(*Passport_VolterraSoftwareVersion).VolterraSoftwareVersion
+			vOpts := append(opts,
+				db.WithValidateField("volterra_sw_version_choice"),
+				db.WithValidateField("volterra_software_version"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1353,6 +1421,30 @@ var DefaultPassportValidator = func() *ValidatePassport {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhOperatingSystemVersionChoiceOperatingSystemVersion := v.OperatingSystemVersionChoiceOperatingSystemVersionValidationRuleHandler
+	rulesOperatingSystemVersionChoiceOperatingSystemVersion := map[string]string{
+		"ves.io.schema.rules.string.max_len": "20",
+	}
+	vFnMap["operating_system_version_choice.operating_system_version"], err = vrhOperatingSystemVersionChoiceOperatingSystemVersion(rulesOperatingSystemVersionChoiceOperatingSystemVersion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field Passport.operating_system_version_choice_operating_system_version: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["operating_system_version_choice.operating_system_version"] = vFnMap["operating_system_version_choice.operating_system_version"]
+
+	vrhVolterraSwVersionChoiceVolterraSoftwareVersion := v.VolterraSwVersionChoiceVolterraSoftwareVersionValidationRuleHandler
+	rulesVolterraSwVersionChoiceVolterraSoftwareVersion := map[string]string{
+		"ves.io.schema.rules.string.max_len": "20",
+	}
+	vFnMap["volterra_sw_version_choice.volterra_software_version"], err = vrhVolterraSwVersionChoiceVolterraSoftwareVersion(rulesVolterraSwVersionChoiceVolterraSoftwareVersion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field Passport.volterra_sw_version_choice_volterra_software_version: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["volterra_sw_version_choice.volterra_software_version"] = vFnMap["volterra_sw_version_choice.volterra_software_version"]
 
 	vrhClusterName := v.ClusterNameValidationRuleHandler
 	rulesClusterName := map[string]string{
@@ -1551,6 +1643,15 @@ func (v *ValidateWorkloadContext) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["app_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("app_name"))
+		if err := fv(ctx, m.GetAppName(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["params"]; exists {

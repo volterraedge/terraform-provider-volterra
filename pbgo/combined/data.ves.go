@@ -1035,6 +1035,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.FieldViewOptions"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "HiddenConditions",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.HiddenConditions"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "LabelKeyClassList",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -1364,7 +1371,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.address_allocator/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.address_allocator.crudapi.API.Create"] = rpcInfo
@@ -1377,7 +1384,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.address_allocator/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.address_allocator.crudapi.API.Delete"] = rpcInfo
@@ -1390,7 +1397,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.address_allocator/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.address_allocator.crudapi.API.Get"] = rpcInfo
@@ -1403,7 +1410,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.address_allocator/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.address_allocator.crudapi.API.List"] = rpcInfo
@@ -1416,7 +1423,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.address_allocator/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.address_allocator.crudapi.API.ListStream"] = rpcInfo
@@ -1429,7 +1436,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.address_allocator/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.address_allocator.crudapi.API.Replace"] = rpcInfo
@@ -1825,7 +1832,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.advertise_policy/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.advertise_policy.crudapi.API.Create"] = rpcInfo
@@ -1838,7 +1845,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.advertise_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.advertise_policy.crudapi.API.Delete"] = rpcInfo
@@ -1851,7 +1858,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.advertise_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.advertise_policy.crudapi.API.Get"] = rpcInfo
@@ -1864,7 +1871,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.advertise_policy/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.advertise_policy.crudapi.API.List"] = rpcInfo
@@ -1877,7 +1884,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.advertise_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.advertise_policy.crudapi.API.ListStream"] = rpcInfo
@@ -1890,7 +1897,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.advertise_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.advertise_policy.crudapi.API.Replace"] = rpcInfo
@@ -2335,7 +2342,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.alert_policy/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_policy.crudapi.API.Create"] = rpcInfo
@@ -2348,7 +2355,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.alert_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_policy.crudapi.API.Delete"] = rpcInfo
@@ -2361,7 +2368,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.alert_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_policy.crudapi.API.Get"] = rpcInfo
@@ -2374,7 +2381,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.alert_policy/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_policy.crudapi.API.List"] = rpcInfo
@@ -2387,7 +2394,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.alert_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_policy.crudapi.API.ListStream"] = rpcInfo
@@ -2400,7 +2407,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.alert_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_policy.crudapi.API.Replace"] = rpcInfo
@@ -2796,7 +2803,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.alert_policy_set/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_policy_set.crudapi.API.Create"] = rpcInfo
@@ -2809,7 +2816,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.alert_policy_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_policy_set.crudapi.API.Delete"] = rpcInfo
@@ -2822,7 +2829,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.alert_policy_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_policy_set.crudapi.API.Get"] = rpcInfo
@@ -2835,7 +2842,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.alert_policy_set/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_policy_set.crudapi.API.List"] = rpcInfo
@@ -2848,7 +2855,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.alert_policy_set/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_policy_set.crudapi.API.ListStream"] = rpcInfo
@@ -2861,7 +2868,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.alert_policy_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_policy_set.crudapi.API.Replace"] = rpcInfo
@@ -3405,7 +3412,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.alert_receiver/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_receiver.crudapi.API.Create"] = rpcInfo
@@ -3418,7 +3425,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.alert_receiver/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_receiver.crudapi.API.Delete"] = rpcInfo
@@ -3431,7 +3438,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.alert_receiver/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_receiver.crudapi.API.Get"] = rpcInfo
@@ -3444,7 +3451,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.alert_receiver/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_receiver.crudapi.API.List"] = rpcInfo
@@ -3457,7 +3464,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.alert_receiver/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_receiver.crudapi.API.ListStream"] = rpcInfo
@@ -3470,7 +3477,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.alert_receiver/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.alert_receiver.crudapi.API.Replace"] = rpcInfo
@@ -3661,7 +3668,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/private/custom/namespaces/{namespace}/validate/api_credentials"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ValidateToken")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.api_credential.CustomPrivateAPI.ValidateToken"] = rpcInfo
@@ -3961,7 +3968,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.api_credential/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.api_credential.crudapi.API.Create"] = rpcInfo
@@ -3974,7 +3981,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.api_credential/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.api_credential.crudapi.API.Delete"] = rpcInfo
@@ -3987,7 +3994,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.api_credential/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.api_credential.crudapi.API.Get"] = rpcInfo
@@ -4000,7 +4007,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.api_credential/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.api_credential.crudapi.API.List"] = rpcInfo
@@ -4013,7 +4020,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.api_credential/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.api_credential.crudapi.API.ListStream"] = rpcInfo
@@ -4026,7 +4033,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.api_credential/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.api_credential.crudapi.API.Replace"] = rpcInfo
@@ -4735,7 +4742,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.app_type/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.app_type.crudapi.API.Create"] = rpcInfo
@@ -4748,7 +4755,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.app_type/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.app_type.crudapi.API.Delete"] = rpcInfo
@@ -4761,7 +4768,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.app_type/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.app_type.crudapi.API.Get"] = rpcInfo
@@ -4774,7 +4781,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.app_type/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.app_type.crudapi.API.List"] = rpcInfo
@@ -4787,7 +4794,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.app_type/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.app_type.crudapi.API.ListStream"] = rpcInfo
@@ -4800,7 +4807,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.app_type/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.app_type.crudapi.API.Replace"] = rpcInfo
@@ -5231,7 +5238,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.authentication/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.authentication.crudapi.API.Create"] = rpcInfo
@@ -5244,7 +5251,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.authentication/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.authentication.crudapi.API.Delete"] = rpcInfo
@@ -5257,7 +5264,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.authentication/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.authentication.crudapi.API.Get"] = rpcInfo
@@ -5270,7 +5277,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.authentication/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.authentication.crudapi.API.List"] = rpcInfo
@@ -5283,7 +5290,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.authentication/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.authentication.crudapi.API.ListStream"] = rpcInfo
@@ -5296,7 +5303,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.authentication/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.authentication.crudapi.API.Replace"] = rpcInfo
@@ -5662,6 +5669,34 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.bgp.CreateSpecType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
+		Name:     "FamilyInet",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.bgp.FamilyInet"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "FamilyInetvpn",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.bgp.FamilyInetvpn"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "FamilyInetvpnParameters",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.bgp.FamilyInetvpnParameters"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "FamilyRtarget",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.bgp.FamilyRtarget"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "GetSpecType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -5674,6 +5709,41 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.bgp.GlobalSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "InterfaceList",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.bgp.InterfaceList"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "Peer",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.bgp.Peer"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "PeerExternal",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.bgp.PeerExternal"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "PeerFamilyParameters",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.bgp.PeerFamilyParameters"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "PeerInternal",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.bgp.PeerInternal"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "ReplaceSpecType",
@@ -5720,7 +5790,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.bgp/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.bgp.crudapi.API.Create"] = rpcInfo
@@ -5733,7 +5803,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.bgp/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.bgp.crudapi.API.Delete"] = rpcInfo
@@ -5746,7 +5816,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bgp/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.bgp.crudapi.API.Get"] = rpcInfo
@@ -5759,7 +5829,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bgp/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.bgp.crudapi.API.List"] = rpcInfo
@@ -5772,7 +5842,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bgp/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.bgp.crudapi.API.ListStream"] = rpcInfo
@@ -5785,7 +5855,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.bgp/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.bgp.crudapi.API.Replace"] = rpcInfo
@@ -6181,7 +6251,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.bgp_asn_set/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.bgp_asn_set.crudapi.API.Create"] = rpcInfo
@@ -6194,7 +6264,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.bgp_asn_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.bgp_asn_set.crudapi.API.Delete"] = rpcInfo
@@ -6207,7 +6277,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bgp_asn_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.bgp_asn_set.crudapi.API.Get"] = rpcInfo
@@ -6220,7 +6290,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bgp_asn_set/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.bgp_asn_set.crudapi.API.List"] = rpcInfo
@@ -6233,7 +6303,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bgp_asn_set/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.bgp_asn_set.crudapi.API.ListStream"] = rpcInfo
@@ -6246,7 +6316,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.bgp_asn_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.bgp_asn_set.crudapi.API.Replace"] = rpcInfo
@@ -6638,7 +6708,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.certified_hardware/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.certified_hardware.crudapi.API.Create"] = rpcInfo
@@ -6651,7 +6721,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.certified_hardware/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.certified_hardware.crudapi.API.Delete"] = rpcInfo
@@ -6664,7 +6734,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.certified_hardware/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.certified_hardware.crudapi.API.Get"] = rpcInfo
@@ -6677,7 +6747,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.certified_hardware/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.certified_hardware.crudapi.API.List"] = rpcInfo
@@ -6690,7 +6760,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.certified_hardware/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.certified_hardware.crudapi.API.ListStream"] = rpcInfo
@@ -6703,7 +6773,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.certified_hardware/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.certified_hardware.crudapi.API.Replace"] = rpcInfo
@@ -7132,7 +7202,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.cloud_credentials/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.cloud_credentials.crudapi.API.Create"] = rpcInfo
@@ -7145,7 +7215,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.cloud_credentials/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.cloud_credentials.crudapi.API.Delete"] = rpcInfo
@@ -7158,7 +7228,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.cloud_credentials/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.cloud_credentials.crudapi.API.Get"] = rpcInfo
@@ -7171,7 +7241,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.cloud_credentials/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.cloud_credentials.crudapi.API.List"] = rpcInfo
@@ -7184,7 +7254,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.cloud_credentials/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.cloud_credentials.crudapi.API.ListStream"] = rpcInfo
@@ -7197,7 +7267,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.cloud_credentials/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.cloud_credentials.crudapi.API.Replace"] = rpcInfo
@@ -7621,7 +7691,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.cluster/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.cluster.crudapi.API.Create"] = rpcInfo
@@ -7634,7 +7704,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.cluster/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.cluster.crudapi.API.Delete"] = rpcInfo
@@ -7647,7 +7717,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.cluster/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.cluster.crudapi.API.Get"] = rpcInfo
@@ -7660,7 +7730,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.cluster/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.cluster.crudapi.API.List"] = rpcInfo
@@ -7673,7 +7743,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.cluster/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.cluster.crudapi.API.ListStream"] = rpcInfo
@@ -7686,7 +7756,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.cluster/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.cluster.crudapi.API.Replace"] = rpcInfo
@@ -8151,7 +8221,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.dc_cluster_group/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.dc_cluster_group.crudapi.API.Create"] = rpcInfo
@@ -8164,7 +8234,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.dc_cluster_group/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.dc_cluster_group.crudapi.API.Delete"] = rpcInfo
@@ -8177,7 +8247,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.dc_cluster_group/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.dc_cluster_group.crudapi.API.Get"] = rpcInfo
@@ -8190,7 +8260,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.dc_cluster_group/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.dc_cluster_group.crudapi.API.List"] = rpcInfo
@@ -8203,7 +8273,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.dc_cluster_group/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.dc_cluster_group.crudapi.API.ListStream"] = rpcInfo
@@ -8216,7 +8286,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.dc_cluster_group/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.dc_cluster_group.crudapi.API.Replace"] = rpcInfo
@@ -8717,7 +8787,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.discovery/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.discovery.crudapi.API.Create"] = rpcInfo
@@ -8730,7 +8800,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.discovery/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.discovery.crudapi.API.Delete"] = rpcInfo
@@ -8743,7 +8813,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.discovery/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.discovery.crudapi.API.Get"] = rpcInfo
@@ -8756,7 +8826,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.discovery/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.discovery.crudapi.API.List"] = rpcInfo
@@ -8769,7 +8839,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.discovery/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.discovery.crudapi.API.ListStream"] = rpcInfo
@@ -8782,7 +8852,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.discovery/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.discovery.crudapi.API.Replace"] = rpcInfo
@@ -9227,7 +9297,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.endpoint/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.endpoint.crudapi.API.Create"] = rpcInfo
@@ -9240,7 +9310,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.endpoint/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.endpoint.crudapi.API.Delete"] = rpcInfo
@@ -9253,7 +9323,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.endpoint/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.endpoint.crudapi.API.Get"] = rpcInfo
@@ -9266,7 +9336,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.endpoint/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.endpoint.crudapi.API.List"] = rpcInfo
@@ -9279,7 +9349,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.endpoint/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.endpoint.crudapi.API.ListStream"] = rpcInfo
@@ -9292,7 +9362,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.endpoint/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.endpoint.crudapi.API.Replace"] = rpcInfo
@@ -9820,7 +9890,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.fast_acl/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl.crudapi.API.Create"] = rpcInfo
@@ -9833,7 +9903,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.fast_acl/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl.crudapi.API.Delete"] = rpcInfo
@@ -9846,7 +9916,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl.crudapi.API.Get"] = rpcInfo
@@ -9859,7 +9929,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl.crudapi.API.List"] = rpcInfo
@@ -9872,7 +9942,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl.crudapi.API.ListStream"] = rpcInfo
@@ -9885,7 +9955,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.fast_acl/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl.crudapi.API.Replace"] = rpcInfo
@@ -10288,7 +10358,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.fast_acl_rule/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl_rule.crudapi.API.Create"] = rpcInfo
@@ -10301,7 +10371,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.fast_acl_rule/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl_rule.crudapi.API.Delete"] = rpcInfo
@@ -10314,7 +10384,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl_rule/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl_rule.crudapi.API.Get"] = rpcInfo
@@ -10327,7 +10397,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl_rule/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl_rule.crudapi.API.List"] = rpcInfo
@@ -10340,7 +10410,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl_rule/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl_rule.crudapi.API.ListStream"] = rpcInfo
@@ -10353,7 +10423,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.fast_acl_rule/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl_rule.crudapi.API.Replace"] = rpcInfo
@@ -10749,7 +10819,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.fast_acl_set/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl_set.crudapi.API.Create"] = rpcInfo
@@ -10762,7 +10832,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.fast_acl_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl_set.crudapi.API.Delete"] = rpcInfo
@@ -10775,7 +10845,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl_set.crudapi.API.Get"] = rpcInfo
@@ -10788,7 +10858,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl_set/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl_set.crudapi.API.List"] = rpcInfo
@@ -10801,7 +10871,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl_set/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl_set.crudapi.API.ListStream"] = rpcInfo
@@ -10814,7 +10884,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.fast_acl_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fast_acl_set.crudapi.API.Replace"] = rpcInfo
@@ -11145,6 +11215,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
+		Name:     "BGPConfiguration",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.fleet.BGPConfiguration"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "BondLacpType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -11290,6 +11367,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.fleet.GlobalSpecType"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "LocalControlPlaneType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.fleet.LocalControlPlaneType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "NetworkingDeviceInstanceType",
@@ -11455,7 +11539,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.fleet/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fleet.crudapi.API.Create"] = rpcInfo
@@ -11468,7 +11552,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.fleet/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fleet.crudapi.API.Delete"] = rpcInfo
@@ -11481,7 +11565,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fleet/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fleet.crudapi.API.Get"] = rpcInfo
@@ -11494,7 +11578,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fleet/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fleet.crudapi.API.List"] = rpcInfo
@@ -11507,7 +11591,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fleet/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fleet.crudapi.API.ListStream"] = rpcInfo
@@ -11520,7 +11604,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.fleet/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.fleet.crudapi.API.Replace"] = rpcInfo
@@ -11930,7 +12014,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.healthcheck/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.healthcheck.crudapi.API.Create"] = rpcInfo
@@ -11943,7 +12027,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.healthcheck/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.healthcheck.crudapi.API.Delete"] = rpcInfo
@@ -11956,7 +12040,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.healthcheck/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.healthcheck.crudapi.API.Get"] = rpcInfo
@@ -11969,7 +12053,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.healthcheck/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.healthcheck.crudapi.API.List"] = rpcInfo
@@ -11982,7 +12066,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.healthcheck/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.healthcheck.crudapi.API.ListStream"] = rpcInfo
@@ -11995,7 +12079,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.healthcheck/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.healthcheck.crudapi.API.Replace"] = rpcInfo
@@ -12391,7 +12475,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.ip_prefix_set/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.ip_prefix_set.crudapi.API.Create"] = rpcInfo
@@ -12404,7 +12488,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.ip_prefix_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.ip_prefix_set.crudapi.API.Delete"] = rpcInfo
@@ -12417,7 +12501,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.ip_prefix_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.ip_prefix_set.crudapi.API.Get"] = rpcInfo
@@ -12430,7 +12514,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.ip_prefix_set/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.ip_prefix_set.crudapi.API.List"] = rpcInfo
@@ -12443,7 +12527,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.ip_prefix_set/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.ip_prefix_set.crudapi.API.ListStream"] = rpcInfo
@@ -12456,7 +12540,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.ip_prefix_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.ip_prefix_set.crudapi.API.Replace"] = rpcInfo
@@ -12915,7 +12999,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.k8s_cluster/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster.crudapi.API.Create"] = rpcInfo
@@ -12928,7 +13012,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.k8s_cluster/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster.crudapi.API.Delete"] = rpcInfo
@@ -12941,7 +13025,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster.crudapi.API.Get"] = rpcInfo
@@ -12954,7 +13038,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster.crudapi.API.List"] = rpcInfo
@@ -12967,7 +13051,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster.crudapi.API.ListStream"] = rpcInfo
@@ -12980,7 +13064,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.k8s_cluster/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster.crudapi.API.Replace"] = rpcInfo
@@ -13404,7 +13488,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.k8s_cluster_role/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster_role.crudapi.API.Create"] = rpcInfo
@@ -13417,7 +13501,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.k8s_cluster_role/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster_role.crudapi.API.Delete"] = rpcInfo
@@ -13430,7 +13514,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster_role/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster_role.crudapi.API.Get"] = rpcInfo
@@ -13443,7 +13527,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster_role/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster_role.crudapi.API.List"] = rpcInfo
@@ -13456,7 +13540,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster_role/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster_role.crudapi.API.ListStream"] = rpcInfo
@@ -13469,7 +13553,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.k8s_cluster_role/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster_role.crudapi.API.Replace"] = rpcInfo
@@ -13879,7 +13963,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.k8s_cluster_role_binding/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster_role_binding.crudapi.API.Create"] = rpcInfo
@@ -13892,7 +13976,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.k8s_cluster_role_binding/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster_role_binding.crudapi.API.Delete"] = rpcInfo
@@ -13905,7 +13989,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster_role_binding/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster_role_binding.crudapi.API.Get"] = rpcInfo
@@ -13918,7 +14002,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster_role_binding/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster_role_binding.crudapi.API.List"] = rpcInfo
@@ -13931,7 +14015,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_cluster_role_binding/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster_role_binding.crudapi.API.ListStream"] = rpcInfo
@@ -13944,7 +14028,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.k8s_cluster_role_binding/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_cluster_role_binding.crudapi.API.Replace"] = rpcInfo
@@ -14389,7 +14473,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.k8s_pod_security_policy/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_pod_security_policy.crudapi.API.Create"] = rpcInfo
@@ -14402,7 +14486,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.k8s_pod_security_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_pod_security_policy.crudapi.API.Delete"] = rpcInfo
@@ -14415,7 +14499,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_pod_security_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_pod_security_policy.crudapi.API.Get"] = rpcInfo
@@ -14428,7 +14512,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_pod_security_policy/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_pod_security_policy.crudapi.API.List"] = rpcInfo
@@ -14441,7 +14525,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.k8s_pod_security_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_pod_security_policy.crudapi.API.ListStream"] = rpcInfo
@@ -14454,7 +14538,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.k8s_pod_security_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.k8s_pod_security_policy.crudapi.API.Replace"] = rpcInfo
@@ -15591,13 +15675,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
-		Name:     "CaptchaChallengeSettings",
-		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
-	}
-	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.malicious_user_mitigation.CaptchaChallengeSettings"] = mInfo
-	}
-	mInfo = &svcfw.MsgInfo{
 		Name:     "CreateSpecType",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -15617,13 +15694,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.malicious_user_mitigation.GlobalSpecType"] = mInfo
-	}
-	mInfo = &svcfw.MsgInfo{
-		Name:     "JavascriptChallengeSettings",
-		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
-	}
-	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.malicious_user_mitigation.JavascriptChallengeSettings"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "MaliciousUserMitigationAction",
@@ -15659,13 +15729,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.malicious_user_mitigation.ReplaceSpecType"] = mInfo
-	}
-	mInfo = &svcfw.MsgInfo{
-		Name:     "TemporaryBlockingSettings",
-		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
-	}
-	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.malicious_user_mitigation.TemporaryBlockingSettings"] = mInfo
 	}
 
 	pInfo = &svcfw.PkgInfo{
@@ -15705,7 +15768,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.malicious_user_mitigation/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.malicious_user_mitigation.crudapi.API.Create"] = rpcInfo
@@ -15718,7 +15781,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.malicious_user_mitigation/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.malicious_user_mitigation.crudapi.API.Delete"] = rpcInfo
@@ -15731,7 +15794,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.malicious_user_mitigation/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.malicious_user_mitigation.crudapi.API.Get"] = rpcInfo
@@ -15744,7 +15807,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.malicious_user_mitigation/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.malicious_user_mitigation.crudapi.API.List"] = rpcInfo
@@ -15757,7 +15820,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.malicious_user_mitigation/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.malicious_user_mitigation.crudapi.API.ListStream"] = rpcInfo
@@ -15770,7 +15833,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.malicious_user_mitigation/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.malicious_user_mitigation.crudapi.API.Replace"] = rpcInfo
@@ -16170,6 +16233,19 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	rpcInfo = &svcfw.RPCInfo{
+		Name:         "GetActiveAlertPolicies",
+		InMsgType:    "ves.io.schema.namespace.GetActiveAlertPoliciesRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.namespace.GetActiveAlertPoliciesResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/active_alert_policies"}}
+	aInfo.RPCsInfo[svcfw.RPCName("GetActiveAlertPolicies")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
 		Name:         "GetActiveNetworkPolicies",
 		InMsgType:    "ves.io.schema.namespace.GetActiveNetworkPoliciesRequest",
 		InStreaming:  false,
@@ -16207,6 +16283,19 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	aInfo.RPCsInfo[svcfw.RPCName("GetFastACLsForInternetVIPs")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.namespace.NamespaceCustomAPI.GetFastACLsForInternetVIPs"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "SetActiveAlertPolicies",
+		InMsgType:    "ves.io.schema.namespace.SetActiveAlertPoliciesRequest",
+		InStreaming:  false,
+		OutMsgType:   "ves.io.schema.namespace.SetActiveAlertPoliciesResponse",
+		OutStreaming: false,
+		IsImmutable:  false,
+	}
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/active_alert_policies"}}
+	aInfo.RPCsInfo[svcfw.RPCName("SetActiveAlertPolicies")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.namespace.NamespaceCustomAPI.SetActiveAlertPolicies"] = rpcInfo
 	}
 	rpcInfo = &svcfw.RPCInfo{
 		Name:         "SetActiveNetworkPolicies",
@@ -16254,6 +16343,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
+		Name:     "GetActiveAlertPoliciesRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.GetActiveAlertPoliciesRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "GetActiveAlertPoliciesResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.GetActiveAlertPoliciesResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "GetActiveNetworkPoliciesRequest",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
@@ -16294,6 +16397,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.namespace.GetFastACLsForInternetVIPsResponse"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SetActiveAlertPoliciesRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.SetActiveAlertPoliciesRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SetActiveAlertPoliciesResponse",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.namespace.SetActiveAlertPoliciesResponse"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "SetActiveNetworkPoliciesRequest",
@@ -16424,7 +16541,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.namespace/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.namespace.crudapi.API.Create"] = rpcInfo
@@ -16437,7 +16554,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.namespace/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.namespace.crudapi.API.Delete"] = rpcInfo
@@ -16450,7 +16567,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.namespace/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.namespace.crudapi.API.Get"] = rpcInfo
@@ -16463,7 +16580,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.namespace/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.namespace.crudapi.API.List"] = rpcInfo
@@ -16476,7 +16593,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.namespace/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.namespace.crudapi.API.ListStream"] = rpcInfo
@@ -16489,7 +16606,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.namespace/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.namespace.crudapi.API.Replace"] = rpcInfo
@@ -16913,7 +17030,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.network_connector/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_connector.crudapi.API.Create"] = rpcInfo
@@ -16926,7 +17043,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.network_connector/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_connector.crudapi.API.Delete"] = rpcInfo
@@ -16939,7 +17056,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_connector/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_connector.crudapi.API.Get"] = rpcInfo
@@ -16952,7 +17069,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_connector/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_connector.crudapi.API.List"] = rpcInfo
@@ -16965,7 +17082,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_connector/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_connector.crudapi.API.ListStream"] = rpcInfo
@@ -16978,7 +17095,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.network_connector/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_connector.crudapi.API.Replace"] = rpcInfo
@@ -17402,7 +17519,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.network_firewall/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_firewall.crudapi.API.Create"] = rpcInfo
@@ -17415,7 +17532,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.network_firewall/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_firewall.crudapi.API.Delete"] = rpcInfo
@@ -17428,7 +17545,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_firewall/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_firewall.crudapi.API.Get"] = rpcInfo
@@ -17441,7 +17558,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_firewall/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_firewall.crudapi.API.List"] = rpcInfo
@@ -17454,7 +17571,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_firewall/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_firewall.crudapi.API.ListStream"] = rpcInfo
@@ -17467,7 +17584,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.network_firewall/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_firewall.crudapi.API.Replace"] = rpcInfo
@@ -17989,7 +18106,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.network_interface/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_interface.crudapi.API.Create"] = rpcInfo
@@ -18002,7 +18119,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.network_interface/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_interface.crudapi.API.Delete"] = rpcInfo
@@ -18015,7 +18132,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_interface/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_interface.crudapi.API.Get"] = rpcInfo
@@ -18028,7 +18145,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_interface/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_interface.crudapi.API.List"] = rpcInfo
@@ -18041,7 +18158,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_interface/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_interface.crudapi.API.ListStream"] = rpcInfo
@@ -18054,7 +18171,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.network_interface/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_interface.crudapi.API.Replace"] = rpcInfo
@@ -18568,7 +18685,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.network_policy/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy.crudapi.API.Create"] = rpcInfo
@@ -18581,7 +18698,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.network_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy.crudapi.API.Delete"] = rpcInfo
@@ -18594,7 +18711,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy.crudapi.API.Get"] = rpcInfo
@@ -18607,7 +18724,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_policy/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy.crudapi.API.List"] = rpcInfo
@@ -18620,7 +18737,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy.crudapi.API.ListStream"] = rpcInfo
@@ -18633,7 +18750,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.network_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy.crudapi.API.Replace"] = rpcInfo
@@ -19043,7 +19160,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.network_policy_rule/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy_rule.crudapi.API.Create"] = rpcInfo
@@ -19056,7 +19173,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.network_policy_rule/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy_rule.crudapi.API.Delete"] = rpcInfo
@@ -19069,7 +19186,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_policy_rule/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy_rule.crudapi.API.Get"] = rpcInfo
@@ -19082,7 +19199,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_policy_rule/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy_rule.crudapi.API.List"] = rpcInfo
@@ -19095,7 +19212,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_policy_rule/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy_rule.crudapi.API.ListStream"] = rpcInfo
@@ -19108,7 +19225,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.network_policy_rule/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy_rule.crudapi.API.Replace"] = rpcInfo
@@ -19504,7 +19621,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.network_policy_set/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy_set.crudapi.API.Create"] = rpcInfo
@@ -19517,7 +19634,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.network_policy_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy_set.crudapi.API.Delete"] = rpcInfo
@@ -19530,7 +19647,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_policy_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy_set.crudapi.API.Get"] = rpcInfo
@@ -19543,7 +19660,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_policy_set/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy_set.crudapi.API.List"] = rpcInfo
@@ -19556,7 +19673,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_policy_set/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy_set.crudapi.API.ListStream"] = rpcInfo
@@ -19569,7 +19686,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.network_policy_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.network_policy_set.crudapi.API.Replace"] = rpcInfo
@@ -19972,7 +20089,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.policer/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.policer.crudapi.API.Create"] = rpcInfo
@@ -19985,7 +20102,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.policer/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.policer.crudapi.API.Delete"] = rpcInfo
@@ -19998,7 +20115,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.policer/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.policer.crudapi.API.Get"] = rpcInfo
@@ -20011,7 +20128,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.policer/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.policer.crudapi.API.List"] = rpcInfo
@@ -20024,7 +20141,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.policer/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.policer.crudapi.API.ListStream"] = rpcInfo
@@ -20037,7 +20154,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.policer/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.policer.crudapi.API.Replace"] = rpcInfo
@@ -20665,7 +20782,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.protocol_policer/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.protocol_policer.crudapi.API.Create"] = rpcInfo
@@ -20678,7 +20795,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.protocol_policer/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.protocol_policer.crudapi.API.Delete"] = rpcInfo
@@ -20691,7 +20808,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.protocol_policer/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.protocol_policer.crudapi.API.Get"] = rpcInfo
@@ -20704,7 +20821,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.protocol_policer/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.protocol_policer.crudapi.API.List"] = rpcInfo
@@ -20717,7 +20834,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.protocol_policer/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.protocol_policer.crudapi.API.ListStream"] = rpcInfo
@@ -20730,7 +20847,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.protocol_policer/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.protocol_policer.crudapi.API.Replace"] = rpcInfo
@@ -21080,7 +21197,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.public_ip/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.public_ip.crudapi.API.Create"] = rpcInfo
@@ -21093,7 +21210,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.public_ip/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.public_ip.crudapi.API.Delete"] = rpcInfo
@@ -21106,7 +21223,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.public_ip/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.public_ip.crudapi.API.Get"] = rpcInfo
@@ -21119,7 +21236,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.public_ip/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.public_ip.crudapi.API.List"] = rpcInfo
@@ -21132,7 +21249,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.public_ip/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.public_ip.crudapi.API.ListStream"] = rpcInfo
@@ -21145,7 +21262,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.public_ip/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.public_ip.crudapi.API.Replace"] = rpcInfo
@@ -21548,7 +21665,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.rate_limiter/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.rate_limiter.crudapi.API.Create"] = rpcInfo
@@ -21561,7 +21678,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.rate_limiter/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.rate_limiter.crudapi.API.Delete"] = rpcInfo
@@ -21574,7 +21691,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.rate_limiter/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.rate_limiter.crudapi.API.Get"] = rpcInfo
@@ -21587,7 +21704,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.rate_limiter/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.rate_limiter.crudapi.API.List"] = rpcInfo
@@ -21600,7 +21717,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.rate_limiter/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.rate_limiter.crudapi.API.ListStream"] = rpcInfo
@@ -21613,7 +21730,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.rate_limiter/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.rate_limiter.crudapi.API.Replace"] = rpcInfo
@@ -22171,7 +22288,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.registration/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.registration.crudapi.API.Create"] = rpcInfo
@@ -22184,7 +22301,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.registration/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.registration.crudapi.API.Delete"] = rpcInfo
@@ -22197,7 +22314,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.registration/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.registration.crudapi.API.Get"] = rpcInfo
@@ -22210,7 +22327,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.registration/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.registration.crudapi.API.List"] = rpcInfo
@@ -22223,7 +22340,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.registration/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.registration.crudapi.API.ListStream"] = rpcInfo
@@ -22236,7 +22353,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.registration/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.registration.crudapi.API.Replace"] = rpcInfo
@@ -22761,7 +22878,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.role/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.role.crudapi.API.Create"] = rpcInfo
@@ -22774,7 +22891,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.role/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.role.crudapi.API.Delete"] = rpcInfo
@@ -22787,7 +22904,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.role/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.role.crudapi.API.Get"] = rpcInfo
@@ -22800,7 +22917,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.role/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.role.crudapi.API.List"] = rpcInfo
@@ -22813,7 +22930,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.role/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.role.crudapi.API.ListStream"] = rpcInfo
@@ -22826,7 +22943,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.role/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.role.crudapi.API.Replace"] = rpcInfo
@@ -23306,7 +23423,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.route/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.route.crudapi.API.Create"] = rpcInfo
@@ -23319,7 +23436,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.route/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.route.crudapi.API.Delete"] = rpcInfo
@@ -23332,7 +23449,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.route/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.route.crudapi.API.Get"] = rpcInfo
@@ -23345,7 +23462,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.route/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.route.crudapi.API.List"] = rpcInfo
@@ -23358,7 +23475,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.route/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.route.crudapi.API.ListStream"] = rpcInfo
@@ -23371,7 +23488,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.route/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.route.crudapi.API.Replace"] = rpcInfo
@@ -23767,7 +23884,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.secret_policy/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.secret_policy.crudapi.API.Create"] = rpcInfo
@@ -23780,7 +23897,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.secret_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.secret_policy.crudapi.API.Delete"] = rpcInfo
@@ -23793,7 +23910,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.secret_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.secret_policy.crudapi.API.Get"] = rpcInfo
@@ -23806,7 +23923,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.secret_policy/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.secret_policy.crudapi.API.List"] = rpcInfo
@@ -23819,7 +23936,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.secret_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.secret_policy.crudapi.API.ListStream"] = rpcInfo
@@ -23832,7 +23949,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.secret_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.secret_policy.crudapi.API.Replace"] = rpcInfo
@@ -24228,7 +24345,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.secret_policy_rule/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.secret_policy_rule.crudapi.API.Create"] = rpcInfo
@@ -24241,7 +24358,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.secret_policy_rule/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.secret_policy_rule.crudapi.API.Delete"] = rpcInfo
@@ -24254,7 +24371,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.secret_policy_rule/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.secret_policy_rule.crudapi.API.Get"] = rpcInfo
@@ -24267,7 +24384,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.secret_policy_rule/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.secret_policy_rule.crudapi.API.List"] = rpcInfo
@@ -24280,7 +24397,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.secret_policy_rule/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.secret_policy_rule.crudapi.API.ListStream"] = rpcInfo
@@ -24293,7 +24410,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.secret_policy_rule/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.secret_policy_rule.crudapi.API.Replace"] = rpcInfo
@@ -24813,7 +24930,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.service_policy/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy.crudapi.API.Create"] = rpcInfo
@@ -24826,7 +24943,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.service_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy.crudapi.API.Delete"] = rpcInfo
@@ -24839,7 +24956,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy.crudapi.API.Get"] = rpcInfo
@@ -24852,7 +24969,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy.crudapi.API.List"] = rpcInfo
@@ -24865,7 +24982,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy.crudapi.API.ListStream"] = rpcInfo
@@ -24878,7 +24995,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.service_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy.crudapi.API.Replace"] = rpcInfo
@@ -25288,7 +25405,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.service_policy_rule/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy_rule.crudapi.API.Create"] = rpcInfo
@@ -25301,7 +25418,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.service_policy_rule/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy_rule.crudapi.API.Delete"] = rpcInfo
@@ -25314,7 +25431,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy_rule/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy_rule.crudapi.API.Get"] = rpcInfo
@@ -25327,7 +25444,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy_rule/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy_rule.crudapi.API.List"] = rpcInfo
@@ -25340,7 +25457,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy_rule/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy_rule.crudapi.API.ListStream"] = rpcInfo
@@ -25353,7 +25470,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.service_policy_rule/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy_rule.crudapi.API.Replace"] = rpcInfo
@@ -25749,7 +25866,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.service_policy_set/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy_set.crudapi.API.Create"] = rpcInfo
@@ -25762,7 +25879,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.service_policy_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy_set.crudapi.API.Delete"] = rpcInfo
@@ -25775,7 +25892,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy_set.crudapi.API.Get"] = rpcInfo
@@ -25788,7 +25905,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy_set/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy_set.crudapi.API.List"] = rpcInfo
@@ -25801,7 +25918,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy_set/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy_set.crudapi.API.ListStream"] = rpcInfo
@@ -25814,7 +25931,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.service_policy_set/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.service_policy_set.crudapi.API.Replace"] = rpcInfo
@@ -26159,6 +26276,97 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ConfigMapList",
+		InMsgType:    "ves.io.schema.site.ConfigMapListRequest",
+		InStreaming:  false,
+		OutMsgType:   "k8s.io.api.core.v1.ConfigMapList",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/api/v1/configmaps", "/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/configmaps"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ConfigMapList")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.site.CustomDataK8SAPI.ConfigMapList"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "CronJobList",
+		InMsgType:    "ves.io.schema.site.CronJobListRequest",
+		InStreaming:  false,
+		OutMsgType:   "k8s.io.api.batch.v1beta1.CronJobList",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/apis/batch/v1beta1/cronjobs", "/public/namespaces/system/site/{site}/apis/batch/v1beta1/namespaces/{namespace}/cronjobs"}}
+	aInfo.RPCsInfo[svcfw.RPCName("CronJobList")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.site.CustomDataK8SAPI.CronJobList"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "DaemonSetList",
+		InMsgType:    "ves.io.schema.site.DaemonSetListRequest",
+		InStreaming:  false,
+		OutMsgType:   "k8s.io.api.apps.v1.DaemonSetList",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/apis/apps/v1/daemonsets", "/public/namespaces/system/site/{site}/apis/apps/v1/namespaces/{namespace}/daemonsets"}}
+	aInfo.RPCsInfo[svcfw.RPCName("DaemonSetList")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.site.CustomDataK8SAPI.DaemonSetList"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "DeploymentList",
+		InMsgType:    "ves.io.schema.site.DeploymentListRequest",
+		InStreaming:  false,
+		OutMsgType:   "k8s.io.api.apps.v1.DeploymentList",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/apis/apps/v1/deployments", "/public/namespaces/system/site/{site}/apis/apps/v1/namespaces/{namespace}/deployments"}}
+	aInfo.RPCsInfo[svcfw.RPCName("DeploymentList")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.site.CustomDataK8SAPI.DeploymentList"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "JobList",
+		InMsgType:    "ves.io.schema.site.JobListRequest",
+		InStreaming:  false,
+		OutMsgType:   "k8s.io.api.batch.v1.JobList",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/apis/batch/v1/jobs", "/public/namespaces/system/site/{site}/apis/batch/v1/namespaces/{namespace}/jobs"}}
+	aInfo.RPCsInfo[svcfw.RPCName("JobList")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.site.CustomDataK8SAPI.JobList"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "NamespaceList",
+		InMsgType:    "ves.io.schema.site.NamespaceListRequest",
+		InStreaming:  false,
+		OutMsgType:   "k8s.io.api.core.v1.NamespaceList",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/api/v1/namespaces"}}
+	aInfo.RPCsInfo[svcfw.RPCName("NamespaceList")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.site.CustomDataK8SAPI.NamespaceList"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "PersistentVolumeClaimList",
+		InMsgType:    "ves.io.schema.site.PersistentVolumeClaimListRequest",
+		InStreaming:  false,
+		OutMsgType:   "k8s.io.api.core.v1.PersistentVolumeClaimList",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/persistentvolumeclaims", "/public/namespaces/system/site/{site}/api/v1/persistentvolumeclaims"}}
+	aInfo.RPCsInfo[svcfw.RPCName("PersistentVolumeClaimList")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
 		Name:         "PodList",
 		InMsgType:    "ves.io.schema.site.PodListRequest",
 		InStreaming:  false,
@@ -26171,6 +26379,58 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.site.CustomDataK8SAPI.PodList"] = rpcInfo
 	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ReplicaSetList",
+		InMsgType:    "ves.io.schema.site.ReplicaSetListRequest",
+		InStreaming:  false,
+		OutMsgType:   "k8s.io.api.apps.v1.ReplicaSetList",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/apis/apps/v1/namespaces/{namespace}/replicasets", "/public/namespaces/system/site/{site}/apis/apps/v1/replicasets"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ReplicaSetList")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "SecretList",
+		InMsgType:    "ves.io.schema.site.SecretListRequest",
+		InStreaming:  false,
+		OutMsgType:   "k8s.io.api.core.v1.SecretList",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/secrets", "/public/namespaces/system/site/{site}/api/v1/secrets"}}
+	aInfo.RPCsInfo[svcfw.RPCName("SecretList")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.site.CustomDataK8SAPI.SecretList"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "ServiceList",
+		InMsgType:    "ves.io.schema.site.ServiceListRequest",
+		InStreaming:  false,
+		OutMsgType:   "k8s.io.api.core.v1.ServiceList",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/api/v1/namespaces/{namespace}/services", "/public/namespaces/system/site/{site}/api/v1/services"}}
+	aInfo.RPCsInfo[svcfw.RPCName("ServiceList")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.site.CustomDataK8SAPI.ServiceList"] = rpcInfo
+	}
+	rpcInfo = &svcfw.RPCInfo{
+		Name:         "StatefulSetList",
+		InMsgType:    "ves.io.schema.site.StatefulSetListRequest",
+		InStreaming:  false,
+		OutMsgType:   "k8s.io.api.apps.v1.StatefulSetList",
+		OutStreaming: false,
+		IsImmutable:  true,
+	}
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/site/{site}/apis/apps/v1/namespaces/{namespace}/statefulsets", "/public/namespaces/system/site/{site}/apis/apps/v1/statefulsets"}}
+	aInfo.RPCsInfo[svcfw.RPCName("StatefulSetList")] = rpcInfo
+	if mdr.RPCIdx != nil {
+		mdr.RPCIdx["ves.io.schema.site.CustomDataK8SAPI.StatefulSetList"] = rpcInfo
+	}
 
 	fInfo.APIsInfo["CustomDataK8SAPI"] = aInfo
 	if mdr.APIIdx != nil {
@@ -26178,11 +26438,88 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 
 	mInfo = &svcfw.MsgInfo{
+		Name:     "ConfigMapListRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.ConfigMapListRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "CronJobListRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.CronJobListRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DaemonSetListRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.DaemonSetListRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "DeploymentListRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.DeploymentListRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "JobListRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.JobListRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "NamespaceListRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.NamespaceListRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "PersistentVolumeClaimListRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.PersistentVolumeClaimListRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
 		Name:     "PodListRequest",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.site.PodListRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ReplicaSetListRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.ReplicaSetListRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "SecretListRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.SecretListRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "ServiceListRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.ServiceListRequest"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "StatefulSetListRequest",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.StatefulSetListRequest"] = mInfo
 	}
 
 	fInfo = &svcfw.FileInfo{
@@ -26463,6 +26800,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.site.Board"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "BondMembersType",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.site.BondMembersType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "Chassis",
@@ -26768,7 +27112,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.site/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.site.crudapi.API.Create"] = rpcInfo
@@ -26781,7 +27125,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.site.crudapi.API.Delete"] = rpcInfo
@@ -26794,7 +27138,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.site.crudapi.API.Get"] = rpcInfo
@@ -26807,7 +27151,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.site/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.site.crudapi.API.List"] = rpcInfo
@@ -26820,7 +27164,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.site/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.site.crudapi.API.ListStream"] = rpcInfo
@@ -26833,7 +27177,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.site.crudapi.API.Replace"] = rpcInfo
@@ -27236,7 +27580,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.site_mesh_group/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.site_mesh_group.crudapi.API.Create"] = rpcInfo
@@ -27249,7 +27593,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.site_mesh_group/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.site_mesh_group.crudapi.API.Delete"] = rpcInfo
@@ -27262,7 +27606,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.site_mesh_group/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.site_mesh_group.crudapi.API.Get"] = rpcInfo
@@ -27275,7 +27619,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.site_mesh_group/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.site_mesh_group.crudapi.API.List"] = rpcInfo
@@ -27288,7 +27632,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.site_mesh_group/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.site_mesh_group.crudapi.API.ListStream"] = rpcInfo
@@ -27301,7 +27645,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.site_mesh_group/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.site_mesh_group.crudapi.API.Replace"] = rpcInfo
@@ -27752,7 +28096,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.token/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.token.crudapi.API.Create"] = rpcInfo
@@ -27765,7 +28109,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.token/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.token.crudapi.API.Delete"] = rpcInfo
@@ -27778,7 +28122,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.token/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.token.crudapi.API.Get"] = rpcInfo
@@ -27791,7 +28135,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.token/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.token.crudapi.API.List"] = rpcInfo
@@ -27804,7 +28148,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.token/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.token.crudapi.API.ListStream"] = rpcInfo
@@ -27817,7 +28161,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.token/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.token.crudapi.API.Replace"] = rpcInfo
@@ -28269,7 +28613,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.tunnel/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.tunnel.crudapi.API.Create"] = rpcInfo
@@ -28282,7 +28626,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.tunnel/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.tunnel.crudapi.API.Delete"] = rpcInfo
@@ -28295,7 +28639,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.tunnel/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.tunnel.crudapi.API.Get"] = rpcInfo
@@ -28308,7 +28652,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.tunnel/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.tunnel.crudapi.API.List"] = rpcInfo
@@ -28321,7 +28665,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.tunnel/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.tunnel.crudapi.API.ListStream"] = rpcInfo
@@ -28334,7 +28678,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.tunnel/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.tunnel.crudapi.API.Replace"] = rpcInfo
@@ -28737,7 +29081,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.usb_policy/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.usb_policy.crudapi.API.Create"] = rpcInfo
@@ -28750,7 +29094,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.usb_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.usb_policy.crudapi.API.Delete"] = rpcInfo
@@ -28763,7 +29107,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.usb_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.usb_policy.crudapi.API.Get"] = rpcInfo
@@ -28776,7 +29120,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.usb_policy/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.usb_policy.crudapi.API.List"] = rpcInfo
@@ -28789,7 +29133,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.usb_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.usb_policy.crudapi.API.ListStream"] = rpcInfo
@@ -28802,7 +29146,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.usb_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.usb_policy.crudapi.API.Replace"] = rpcInfo
@@ -29499,7 +29843,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.user/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.user.crudapi.API.Create"] = rpcInfo
@@ -29512,7 +29856,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.user/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.user.crudapi.API.Delete"] = rpcInfo
@@ -29525,7 +29869,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.user/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.user.crudapi.API.Get"] = rpcInfo
@@ -29538,7 +29882,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.user/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.user.crudapi.API.List"] = rpcInfo
@@ -29551,7 +29895,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.user/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.user.crudapi.API.ListStream"] = rpcInfo
@@ -29564,7 +29908,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.user/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.user.crudapi.API.Replace"] = rpcInfo
@@ -29662,6 +30006,27 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	mdr.PkgsInfo["ves.io.schema.vesenv"] = pInfo
 
 	fInfo = &svcfw.FileInfo{
+		Name:        "ves.io/schema/vesenv/all_api_groups.proto",
+		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
+		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
+		ObjsInfo:    make(map[svcfw.ObjType]*svcfw.ObjInfo),
+		APIsInfo:    make(map[svcfw.APIName]*svcfw.APIInfo),
+		MsgsInfo:    make(map[string]*svcfw.MsgInfo),
+	}
+	pInfo.FilesInfo["ves.io/schema/vesenv/all_api_groups.proto"] = fInfo
+	if mdr.FileIdx != nil {
+		mdr.FileIdx["ves.io/schema/vesenv/all_api_groups.proto"] = fInfo
+	}
+
+	mInfo = &svcfw.MsgInfo{
+		Name:     "APIGroupChoice",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.vesenv.APIGroupChoice"] = mInfo
+	}
+
+	fInfo = &svcfw.FileInfo{
 		Name:        "ves.io/schema/vesenv/all_services.proto",
 		MetricsInfo: make(map[svcfw.MetricName]*svcfw.MetricInfo),
 		ConfsInfo:   make(map[svcfw.ConfName]*svcfw.ConfInfo),
@@ -29729,6 +30094,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.vesenv.BFSecretInfo"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "NameToUid",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.vesenv.NameToUid"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "QuotaResourceKeyInfo",
@@ -30103,25 +30475,11 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.views.TlsConfig"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
-		Name:     "WherePrivateNetwork",
-		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
-	}
-	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.views.WherePrivateNetwork"] = mInfo
-	}
-	mInfo = &svcfw.MsgInfo{
 		Name:     "WhereSite",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.WhereSite"] = mInfo
-	}
-	mInfo = &svcfw.MsgInfo{
-		Name:     "WhereSrv6Network",
-		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
-	}
-	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.views.WhereSrv6Network"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "WhereType",
@@ -30143,6 +30501,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	}
 	if mdr.MsgIdx != nil {
 		mdr.MsgIdx["ves.io.schema.views.WhereVK8SService"] = mInfo
+	}
+	mInfo = &svcfw.MsgInfo{
+		Name:     "WhereVirtualNetwork",
+		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
+	}
+	if mdr.MsgIdx != nil {
+		mdr.MsgIdx["ves.io.schema.views.WhereVirtualNetwork"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "WhereVirtualSite",
@@ -30652,7 +31017,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.aws_tgw_site/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.aws_tgw_site.crudapi.API.Create"] = rpcInfo
@@ -30665,7 +31030,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.aws_tgw_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.aws_tgw_site.crudapi.API.Delete"] = rpcInfo
@@ -30678,7 +31043,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.aws_tgw_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.aws_tgw_site.crudapi.API.Get"] = rpcInfo
@@ -30691,7 +31056,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.aws_tgw_site/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.aws_tgw_site.crudapi.API.List"] = rpcInfo
@@ -30704,7 +31069,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.aws_tgw_site/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.aws_tgw_site.crudapi.API.ListStream"] = rpcInfo
@@ -30717,7 +31082,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.aws_tgw_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.aws_tgw_site.crudapi.API.Replace"] = rpcInfo
@@ -31210,7 +31575,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.aws_vpc_site/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.aws_vpc_site.crudapi.API.Create"] = rpcInfo
@@ -31223,7 +31588,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.aws_vpc_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.aws_vpc_site.crudapi.API.Delete"] = rpcInfo
@@ -31236,7 +31601,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.aws_vpc_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.aws_vpc_site.crudapi.API.Get"] = rpcInfo
@@ -31249,7 +31614,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.aws_vpc_site/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.aws_vpc_site.crudapi.API.List"] = rpcInfo
@@ -31262,7 +31627,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.aws_vpc_site/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.aws_vpc_site.crudapi.API.ListStream"] = rpcInfo
@@ -31275,7 +31640,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.aws_vpc_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.aws_vpc_site.crudapi.API.Replace"] = rpcInfo
@@ -31713,7 +32078,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.azure_vnet_site/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.azure_vnet_site.crudapi.API.Create"] = rpcInfo
@@ -31726,7 +32091,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.azure_vnet_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.azure_vnet_site.crudapi.API.Delete"] = rpcInfo
@@ -31739,7 +32104,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.azure_vnet_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.azure_vnet_site.crudapi.API.Get"] = rpcInfo
@@ -31752,7 +32117,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.azure_vnet_site/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.azure_vnet_site.crudapi.API.List"] = rpcInfo
@@ -31765,7 +32130,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.azure_vnet_site/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.azure_vnet_site.crudapi.API.ListStream"] = rpcInfo
@@ -31778,7 +32143,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.azure_vnet_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.azure_vnet_site.crudapi.API.Replace"] = rpcInfo
@@ -32292,7 +32657,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.forward_proxy_policy/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.forward_proxy_policy.crudapi.API.Create"] = rpcInfo
@@ -32305,7 +32670,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.forward_proxy_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.forward_proxy_policy.crudapi.API.Delete"] = rpcInfo
@@ -32318,7 +32683,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.forward_proxy_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.forward_proxy_policy.crudapi.API.Get"] = rpcInfo
@@ -32331,7 +32696,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.forward_proxy_policy/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.forward_proxy_policy.crudapi.API.List"] = rpcInfo
@@ -32344,7 +32709,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.forward_proxy_policy/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.forward_proxy_policy.crudapi.API.ListStream"] = rpcInfo
@@ -32357,7 +32722,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.forward_proxy_policy/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.forward_proxy_policy.crudapi.API.Replace"] = rpcInfo
@@ -32795,7 +33160,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.gcp_vpc_site/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.gcp_vpc_site.crudapi.API.Create"] = rpcInfo
@@ -32808,7 +33173,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.gcp_vpc_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.gcp_vpc_site.crudapi.API.Delete"] = rpcInfo
@@ -32821,7 +33186,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.gcp_vpc_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.gcp_vpc_site.crudapi.API.Get"] = rpcInfo
@@ -32834,7 +33199,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.gcp_vpc_site/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.gcp_vpc_site.crudapi.API.List"] = rpcInfo
@@ -32847,7 +33212,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.gcp_vpc_site/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.gcp_vpc_site.crudapi.API.ListStream"] = rpcInfo
@@ -32860,7 +33225,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.gcp_vpc_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.gcp_vpc_site.crudapi.API.Replace"] = rpcInfo
@@ -33520,7 +33885,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.http_loadbalancer/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.http_loadbalancer.crudapi.API.Create"] = rpcInfo
@@ -33533,7 +33898,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.http_loadbalancer/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.http_loadbalancer.crudapi.API.Delete"] = rpcInfo
@@ -33546,7 +33911,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.http_loadbalancer/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.http_loadbalancer.crudapi.API.Get"] = rpcInfo
@@ -33559,7 +33924,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.http_loadbalancer/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.http_loadbalancer.crudapi.API.List"] = rpcInfo
@@ -33572,7 +33937,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.http_loadbalancer/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.http_loadbalancer.crudapi.API.ListStream"] = rpcInfo
@@ -33585,7 +33950,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.http_loadbalancer/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"] = rpcInfo
@@ -34057,7 +34422,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.network_policy_view/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.network_policy_view.crudapi.API.Create"] = rpcInfo
@@ -34070,7 +34435,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.network_policy_view/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.network_policy_view.crudapi.API.Delete"] = rpcInfo
@@ -34083,7 +34448,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.network_policy_view/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.network_policy_view.crudapi.API.Get"] = rpcInfo
@@ -34096,7 +34461,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.network_policy_view/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.network_policy_view.crudapi.API.List"] = rpcInfo
@@ -34109,7 +34474,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.network_policy_view/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.network_policy_view.crudapi.API.ListStream"] = rpcInfo
@@ -34122,7 +34487,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.network_policy_view/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.network_policy_view.crudapi.API.Replace"] = rpcInfo
@@ -34529,18 +34894,18 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		mdr.MsgIdx["ves.io.schema.views.origin_pool.OriginServerType"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
-		Name:     "OriginServerVirtualNetworkPrivateIP",
+		Name:     "OriginServerVirtualNetworkIP",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
 	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.views.origin_pool.OriginServerVirtualNetworkPrivateIP"] = mInfo
+		mdr.MsgIdx["ves.io.schema.views.origin_pool.OriginServerVirtualNetworkIP"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
-		Name:     "OriginServerVirtualNetworkPrivateName",
+		Name:     "OriginServerVirtualNetworkName",
 		FldsInfo: make(map[svcfw.FldName]*svcfw.FldInfo),
 	}
 	if mdr.MsgIdx != nil {
-		mdr.MsgIdx["ves.io.schema.views.origin_pool.OriginServerVirtualNetworkPrivateName"] = mInfo
+		mdr.MsgIdx["ves.io.schema.views.origin_pool.OriginServerVirtualNetworkName"] = mInfo
 	}
 	mInfo = &svcfw.MsgInfo{
 		Name:     "ReplaceSpecType",
@@ -34608,7 +34973,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.origin_pool/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.origin_pool.crudapi.API.Create"] = rpcInfo
@@ -34621,7 +34986,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.origin_pool/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.origin_pool.crudapi.API.Delete"] = rpcInfo
@@ -34634,7 +34999,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.origin_pool/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.origin_pool.crudapi.API.Get"] = rpcInfo
@@ -34647,7 +35012,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.origin_pool/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.origin_pool.crudapi.API.List"] = rpcInfo
@@ -34660,7 +35025,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.origin_pool/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.origin_pool.crudapi.API.ListStream"] = rpcInfo
@@ -34673,7 +35038,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.origin_pool/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.origin_pool.crudapi.API.Replace"] = rpcInfo
@@ -35188,7 +35553,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.tcp_loadbalancer/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.tcp_loadbalancer.crudapi.API.Create"] = rpcInfo
@@ -35201,7 +35566,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.tcp_loadbalancer/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.tcp_loadbalancer.crudapi.API.Delete"] = rpcInfo
@@ -35214,7 +35579,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.tcp_loadbalancer/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.tcp_loadbalancer.crudapi.API.Get"] = rpcInfo
@@ -35227,7 +35592,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.tcp_loadbalancer/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.tcp_loadbalancer.crudapi.API.List"] = rpcInfo
@@ -35240,7 +35605,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.tcp_loadbalancer/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.tcp_loadbalancer.crudapi.API.ListStream"] = rpcInfo
@@ -35253,7 +35618,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.tcp_loadbalancer/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.tcp_loadbalancer.crudapi.API.Replace"] = rpcInfo
@@ -35810,7 +36175,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.terraform_parameters/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.terraform_parameters.crudapi.API.Create"] = rpcInfo
@@ -35823,7 +36188,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.terraform_parameters/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.terraform_parameters.crudapi.API.Delete"] = rpcInfo
@@ -35836,7 +36201,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.terraform_parameters/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.terraform_parameters.crudapi.API.Get"] = rpcInfo
@@ -35849,7 +36214,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.terraform_parameters/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.terraform_parameters.crudapi.API.List"] = rpcInfo
@@ -35862,7 +36227,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.terraform_parameters/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.terraform_parameters.crudapi.API.ListStream"] = rpcInfo
@@ -35875,7 +36240,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.terraform_parameters/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.terraform_parameters.crudapi.API.Replace"] = rpcInfo
@@ -36341,7 +36706,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.voltstack_site/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.voltstack_site.crudapi.API.Create"] = rpcInfo
@@ -36354,7 +36719,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.voltstack_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.voltstack_site.crudapi.API.Delete"] = rpcInfo
@@ -36367,7 +36732,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.voltstack_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.voltstack_site.crudapi.API.Get"] = rpcInfo
@@ -36380,7 +36745,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.voltstack_site/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.voltstack_site.crudapi.API.List"] = rpcInfo
@@ -36393,7 +36758,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.voltstack_site/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.voltstack_site.crudapi.API.ListStream"] = rpcInfo
@@ -36406,7 +36771,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.voltstack_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.views.voltstack_site.crudapi.API.Replace"] = rpcInfo
@@ -37056,7 +37421,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.virtual_host/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_host.crudapi.API.Create"] = rpcInfo
@@ -37069,7 +37434,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.virtual_host/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_host.crudapi.API.Delete"] = rpcInfo
@@ -37082,7 +37447,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_host/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_host.crudapi.API.Get"] = rpcInfo
@@ -37095,7 +37460,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_host/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_host.crudapi.API.List"] = rpcInfo
@@ -37108,7 +37473,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_host/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_host.crudapi.API.ListStream"] = rpcInfo
@@ -37121,7 +37486,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.virtual_host/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_host.crudapi.API.Replace"] = rpcInfo
@@ -37304,7 +37669,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.virtual_host_dns_info/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_host_dns_info.crudapi.API.Create"] = rpcInfo
@@ -37317,7 +37682,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.virtual_host_dns_info/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_host_dns_info.crudapi.API.Delete"] = rpcInfo
@@ -37330,7 +37695,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_host_dns_info/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_host_dns_info.crudapi.API.Get"] = rpcInfo
@@ -37343,7 +37708,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_host_dns_info/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_host_dns_info.crudapi.API.List"] = rpcInfo
@@ -37356,7 +37721,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_host_dns_info/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_host_dns_info.crudapi.API.ListStream"] = rpcInfo
@@ -37369,7 +37734,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.virtual_host_dns_info/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_host_dns_info.crudapi.API.Replace"] = rpcInfo
@@ -37834,7 +38199,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.virtual_k8s/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_k8s.crudapi.API.Create"] = rpcInfo
@@ -37847,7 +38212,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.virtual_k8s/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_k8s.crudapi.API.Delete"] = rpcInfo
@@ -37860,7 +38225,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_k8s/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_k8s.crudapi.API.Get"] = rpcInfo
@@ -37873,7 +38238,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_k8s/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_k8s.crudapi.API.List"] = rpcInfo
@@ -37886,7 +38251,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_k8s/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_k8s.crudapi.API.ListStream"] = rpcInfo
@@ -37899,7 +38264,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.virtual_k8s/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_k8s.crudapi.API.Replace"] = rpcInfo
@@ -38393,7 +38758,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.virtual_network/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_network.crudapi.API.Create"] = rpcInfo
@@ -38406,7 +38771,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.virtual_network/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_network.crudapi.API.Delete"] = rpcInfo
@@ -38419,7 +38784,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_network/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_network.crudapi.API.Get"] = rpcInfo
@@ -38432,7 +38797,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_network/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_network.crudapi.API.List"] = rpcInfo
@@ -38445,7 +38810,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_network/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_network.crudapi.API.ListStream"] = rpcInfo
@@ -38458,7 +38823,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.virtual_network/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_network.crudapi.API.Replace"] = rpcInfo
@@ -38916,7 +39281,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.virtual_site/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_site.crudapi.API.Create"] = rpcInfo
@@ -38929,7 +39294,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.virtual_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_site.crudapi.API.Delete"] = rpcInfo
@@ -38942,7 +39307,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_site.crudapi.API.Get"] = rpcInfo
@@ -38955,7 +39320,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_site/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_site.crudapi.API.List"] = rpcInfo
@@ -38968,7 +39333,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_site/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_site.crudapi.API.ListStream"] = rpcInfo
@@ -38981,7 +39346,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.virtual_site/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.virtual_site.crudapi.API.Replace"] = rpcInfo
@@ -39610,7 +39975,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.waf/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf.crudapi.API.Create"] = rpcInfo
@@ -39623,7 +39988,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.waf/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf.crudapi.API.Delete"] = rpcInfo
@@ -39636,7 +40001,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf.crudapi.API.Get"] = rpcInfo
@@ -39649,7 +40014,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf.crudapi.API.List"] = rpcInfo
@@ -39662,7 +40027,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf.crudapi.API.ListStream"] = rpcInfo
@@ -39675,7 +40040,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.waf/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf.crudapi.API.Replace"] = rpcInfo
@@ -40071,7 +40436,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.waf_rule_list/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf_rule_list.crudapi.API.Create"] = rpcInfo
@@ -40084,7 +40449,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.waf_rule_list/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf_rule_list.crudapi.API.Delete"] = rpcInfo
@@ -40097,7 +40462,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf_rule_list/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf_rule_list.crudapi.API.Get"] = rpcInfo
@@ -40110,7 +40475,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf_rule_list/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf_rule_list.crudapi.API.List"] = rpcInfo
@@ -40123,7 +40488,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf_rule_list/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf_rule_list.crudapi.API.ListStream"] = rpcInfo
@@ -40136,7 +40501,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.waf_rule_list/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf_rule_list.crudapi.API.Replace"] = rpcInfo
@@ -40655,7 +41020,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.waf_rules/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf_rules.crudapi.API.Create"] = rpcInfo
@@ -40668,7 +41033,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.waf_rules/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf_rules.crudapi.API.Delete"] = rpcInfo
@@ -40681,7 +41046,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf_rules/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf_rules.crudapi.API.Get"] = rpcInfo
@@ -40694,7 +41059,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  true,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf_rules/Objects"}}
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf_rules.crudapi.API.List"] = rpcInfo
@@ -40707,7 +41072,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: true,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf_rules/Objects/stream"}}
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf_rules.crudapi.API.ListStream"] = rpcInfo
@@ -40720,7 +41085,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 		OutStreaming: false,
 		IsImmutable:  false,
 	}
-
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.waf_rules/Object/{object_uid}"}}
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
 	if mdr.RPCIdx != nil {
 		mdr.RPCIdx["ves.io.schema.waf_rules.crudapi.API.Replace"] = rpcInfo

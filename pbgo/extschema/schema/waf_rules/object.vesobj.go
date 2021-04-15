@@ -685,6 +685,19 @@ func (o *DBObject) SetObjDisable(d bool) error {
 	return nil
 }
 
+func (o *DBObject) GetObjSREDisable() bool {
+	return o.GetSystemMetadata().GetSreDisable()
+}
+
+func (o *DBObject) SetObjSREDisable(d bool) error {
+	m := o.GetSystemMetadata()
+	if m == nil {
+		m = &ves_io_schema.SystemObjectMetaType{}
+	}
+	m.SreDisable = d
+	return nil
+}
+
 func (o *DBObject) SetObjCreator(cls, inst string) error {
 	m := o.GetSystemMetadata()
 	if m == nil {
@@ -1158,16 +1171,6 @@ type ValidateStatusObject struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateStatusObject) ParanoiaLevelValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for paranoia_level")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	e, ok := pm.(*StatusObject)
 	if !ok {
@@ -1178,15 +1181,6 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 	}
 	if e == nil {
 		return nil
-	}
-
-	if fv, exists := v.FldValidators["anomaly_score_threshold"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("anomaly_score_threshold"))
-		if err := fv(ctx, e.GetAnomalyScoreThreshold(), vOpts...); err != nil {
-			return err
-		}
-
 	}
 
 	if fv, exists := v.FldValidators["conditions"]; exists {
@@ -1210,40 +1204,10 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
-	if fv, exists := v.FldValidators["mode"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("mode"))
-		if err := fv(ctx, e.GetMode(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["object_refs"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("object_refs"))
 		for idx, item := range e.GetObjectRefs() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["paranoia_level"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("paranoia_level"))
-		if err := fv(ctx, e.GetParanoiaLevel(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["rules"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("rules"))
-		for idx, item := range e.GetRules() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
@@ -1258,24 +1222,6 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 // Well-known symbol for default validator implementation
 var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 	v := &ValidateStatusObject{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-
-	vrhParanoiaLevel := v.ParanoiaLevelValidationRuleHandler
-	rulesParanoiaLevel := map[string]string{
-		"ves.io.schema.rules.uint32.gt":  "0",
-		"ves.io.schema.rules.uint32.lte": "4",
-	}
-	vFn, err = vrhParanoiaLevel(rulesParanoiaLevel)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for StatusObject.paranoia_level: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["paranoia_level"] = vFn
 
 	v.FldValidators["conditions"] = ves_io_schema.ConditionTypeValidator().Validate
 

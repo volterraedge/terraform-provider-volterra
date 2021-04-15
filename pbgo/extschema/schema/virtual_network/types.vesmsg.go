@@ -806,7 +806,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkChoice(rulesNetworkChoice)
 	if err != nil {
@@ -1289,7 +1289,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkChoice(rulesNetworkChoice)
 	if err != nil {
@@ -2155,7 +2155,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkChoice(rulesNetworkChoice)
 	if err != nil {
@@ -3174,7 +3174,7 @@ var DefaultPerSiteSrv6NetworkTypeValidator = func() *ValidatePerSiteSrv6NetworkT
 
 	vrhDefaultVipChoice := v.DefaultVipChoiceValidationRuleHandler
 	rulesDefaultVipChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDefaultVipChoice(rulesDefaultVipChoice)
 	if err != nil {
@@ -3197,7 +3197,7 @@ var DefaultPerSiteSrv6NetworkTypeValidator = func() *ValidatePerSiteSrv6NetworkT
 
 	vrhNamespaceChoice := v.NamespaceChoiceValidationRuleHandler
 	rulesNamespaceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNamespaceChoice(rulesNamespaceChoice)
 	if err != nil {
@@ -3208,7 +3208,7 @@ var DefaultPerSiteSrv6NetworkTypeValidator = func() *ValidatePerSiteSrv6NetworkT
 
 	vrhSnatPoolChoice := v.SnatPoolChoiceValidationRuleHandler
 	rulesSnatPoolChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSnatPoolChoice(rulesSnatPoolChoice)
 	if err != nil {
@@ -3746,7 +3746,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkChoice(rulesNetworkChoice)
 	if err != nil {
@@ -4671,7 +4671,7 @@ var DefaultStaticRouteViewTypeValidator = func() *ValidateStaticRouteViewType {
 
 	vrhNextHopChoice := v.NextHopChoiceValidationRuleHandler
 	rulesNextHopChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNextHopChoice(rulesNextHopChoice)
 	if err != nil {
@@ -5312,7 +5312,7 @@ var DefaultVoltADNPrivateNetworkTypeValidator = func() *ValidateVoltADNPrivateNe
 
 	vrhDedicatedVipChoice := v.DedicatedVipChoiceValidationRuleHandler
 	rulesDedicatedVipChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDedicatedVipChoice(rulesDedicatedVipChoice)
 	if err != nil {
@@ -5323,7 +5323,7 @@ var DefaultVoltADNPrivateNetworkTypeValidator = func() *ValidateVoltADNPrivateNe
 
 	vrhDnsChoice := v.DnsChoiceValidationRuleHandler
 	rulesDnsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDnsChoice(rulesDnsChoice)
 	if err != nil {
@@ -5334,7 +5334,7 @@ var DefaultVoltADNPrivateNetworkTypeValidator = func() *ValidateVoltADNPrivateNe
 
 	vrhPrivateAccessChoice := v.PrivateAccessChoiceValidationRuleHandler
 	rulesPrivateAccessChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhPrivateAccessChoice(rulesPrivateAccessChoice)
 	if err != nil {

@@ -23,18 +23,18 @@ resource "volterra_fleet" "example" {
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
 
-  // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
+  // One of the arguments from this list "dc_cluster_group dc_cluster_group_inside no_dc_cluster_group" must be set
 
-  dc_cluster_group_inside {
+  dc_cluster_group {
     name      = "test1"
     namespace = "staging"
     tenant    = "acmecorp"
   }
   fleet_label = ["sfo"]
   // One of the arguments from this list "disable_gpu enable_gpu" must be set
-  disable_gpu = true
+  enable_gpu = true
 
-  // One of the arguments from this list "default_config device_list interface_list" must be set
+  // One of the arguments from this list "device_list interface_list default_config" must be set
 
   interface_list {
     interfaces {
@@ -49,20 +49,12 @@ resource "volterra_fleet" "example" {
   default_storage_class = true
   // One of the arguments from this list "no_storage_device storage_device_list" must be set
   no_storage_device = true
-
-  // One of the arguments from this list "storage_interface_list no_storage_interfaces" must be set
-
-  storage_interface_list {
-    interfaces {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
+  no_storage_interfaces = true
   // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
   no_storage_static_routes = true
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
-  allow_all_usb = true
+  deny_all_usb = true
 }
 
 ```

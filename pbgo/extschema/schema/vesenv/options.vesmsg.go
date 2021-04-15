@@ -518,6 +518,15 @@ func (v *ValidateBFSecretInfo) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["policy_uid"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("policy_uid"))
+		if err := fv(ctx, m.GetPolicyUid(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -530,6 +539,93 @@ var DefaultBFSecretInfoValidator = func() *ValidateBFSecretInfo {
 
 func BFSecretInfoValidator() db.Validator {
 	return DefaultBFSecretInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NameToUid) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NameToUid) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NameToUid) DeepCopy() *NameToUid {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NameToUid{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NameToUid) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NameToUid) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NameToUidValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNameToUid struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNameToUid) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NameToUid)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NameToUid got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["uid"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("uid"))
+		if err := fv(ctx, m.GetUid(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNameToUidValidator = func() *ValidateNameToUid {
+	v := &ValidateNameToUid{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func NameToUidValidator() db.Validator {
+	return DefaultNameToUidValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1071,6 +1167,17 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("web"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_DeviceId:
+		if fv, exists := v.FldValidators["choice.device_id"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_DeviceId).DeviceId
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("device_id"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

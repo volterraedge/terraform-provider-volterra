@@ -559,6 +559,18 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["referring_objects"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("referring_objects"))
+		for idx, item := range m.GetReferringObjects() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["replace_form"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("replace_form"))

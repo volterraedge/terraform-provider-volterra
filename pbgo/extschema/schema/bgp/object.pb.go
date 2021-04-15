@@ -25,6 +25,15 @@
 		DeleteRequest
 		BgpParameters
 		BgpPeer
+		InterfaceList
+		FamilyInet
+		FamilyInetvpnParameters
+		FamilyInetvpn
+		FamilyRtarget
+		PeerFamilyParameters
+		PeerExternal
+		PeerInternal
+		Peer
 		GlobalSpecType
 		CreateSpecType
 		ReplaceSpecType

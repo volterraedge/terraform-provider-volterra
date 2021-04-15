@@ -815,7 +815,7 @@ var DefaultHashPolicyTypeValidator = func() *ValidateHashPolicyType {
 
 	vrhPolicySpecifier := v.PolicySpecifierValidationRuleHandler
 	rulesPolicySpecifier := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhPolicySpecifier(rulesPolicySpecifier)
 	if err != nil {
@@ -1635,6 +1635,16 @@ func (v *ValidateRouteDestinationList) DestinationsValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateRouteDestinationList) PrefixRewriteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for prefix_rewrite")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateRouteDestinationList) EndpointSubsetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemKeyRules := db.GetMapStringKeyRules(rules)
@@ -1882,7 +1892,7 @@ var DefaultRouteDestinationListValidator = func() *ValidateRouteDestinationList 
 
 	vrhHostRewriteParams := v.HostRewriteParamsValidationRuleHandler
 	rulesHostRewriteParams := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHostRewriteParams(rulesHostRewriteParams)
 	if err != nil {
@@ -1902,6 +1912,18 @@ var DefaultRouteDestinationListValidator = func() *ValidateRouteDestinationList 
 		panic(errMsg)
 	}
 	v.FldValidators["destinations"] = vFn
+
+	vrhPrefixRewrite := v.PrefixRewriteValidationRuleHandler
+	rulesPrefixRewrite := map[string]string{
+		"ves.io.schema.rules.string.http_path": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhPrefixRewrite(rulesPrefixRewrite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteDestinationList.prefix_rewrite: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["prefix_rewrite"] = vFn
 
 	vrhEndpointSubsets := v.EndpointSubsetsValidationRuleHandler
 	rulesEndpointSubsets := map[string]string{
@@ -2249,6 +2271,16 @@ type ValidateRouteRedirect struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateRouteRedirect) PathRedirectValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for path_redirect")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateRouteRedirect) ProtoRedirectValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -2381,6 +2413,18 @@ var DefaultRouteRedirectValidator = func() *ValidateRouteRedirect {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhPathRedirect := v.PathRedirectValidationRuleHandler
+	rulesPathRedirect := map[string]string{
+		"ves.io.schema.rules.string.http_path": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhPathRedirect(rulesPathRedirect)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteRedirect.path_redirect: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["path_redirect"] = vFn
 
 	vrhProtoRedirect := v.ProtoRedirectValidationRuleHandler
 	rulesProtoRedirect := map[string]string{
@@ -2857,7 +2901,7 @@ var DefaultRouteTypeValidator = func() *ValidateRouteType {
 
 	vrhRouteAction := v.RouteActionValidationRuleHandler
 	rulesRouteAction := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRouteAction(rulesRouteAction)
 	if err != nil {

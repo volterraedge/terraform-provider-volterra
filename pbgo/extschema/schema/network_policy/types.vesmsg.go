@@ -562,7 +562,7 @@ var DefaultEndpointChoiceTypeValidator = func() *ValidateEndpointChoiceType {
 
 	vrhEndpointChoice := v.EndpointChoiceValidationRuleHandler
 	rulesEndpointChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhEndpointChoice(rulesEndpointChoice)
 	if err != nil {
@@ -2112,6 +2112,15 @@ func (v *ValidateNetworkPolicyRuleType) Validate(ctx context.Context, pm interfa
 
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["adv_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("adv_action"))
+		if err := fv(ctx, m.GetAdvAction(), vOpts...); err != nil {
 			return err
 		}
 

@@ -324,6 +324,102 @@ func BoardValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *BondMembersType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BondMembersType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BondMembersType) DeepCopy() *BondMembersType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BondMembersType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BondMembersType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BondMembersType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BondMembersTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBondMembersType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBondMembersType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BondMembersType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BondMembersType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["link_speed"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("link_speed"))
+		if err := fv(ctx, m.GetLinkSpeed(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["link_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("link_state"))
+		if err := fv(ctx, m.GetLinkState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBondMembersTypeValidator = func() *ValidateBondMembersType {
+	v := &ValidateBondMembersType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func BondMembersTypeValidator() db.Validator {
+	return DefaultBondMembersTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *Chassis) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1491,7 +1587,7 @@ var DefaultDefaultUnderlayNetworkTypeValidator = func() *ValidateDefaultUnderlay
 
 	vrhPrivateAccessChoice := v.PrivateAccessChoiceValidationRuleHandler
 	rulesPrivateAccessChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhPrivateAccessChoice(rulesPrivateAccessChoice)
 	if err != nil {
@@ -2552,6 +2648,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["global_access_k8s_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("global_access_k8s_enabled"))
+		if err := fv(ctx, m.GetGlobalAccessK8SEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["inside_nameserver"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("inside_nameserver"))
@@ -2565,6 +2670,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("inside_vip"))
 		if err := fv(ctx, m.GetInsideVip(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["local_access_k8s_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_access_k8s_enabled"))
+		if err := fv(ctx, m.GetLocalAccessK8SEnabled(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4127,6 +4241,18 @@ func (v *ValidateInterfaceStatus) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["bond_members"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bond_members"))
+		for idx, item := range m.GetBondMembers() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["dhcp_server"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("dhcp_server"))
@@ -5333,6 +5459,16 @@ type ValidateOperatingSystemStatus struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateOperatingSystemStatus) NonconformingStateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for nonconforming_state")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateOperatingSystemStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*OperatingSystemStatus)
 	if !ok {
@@ -5365,12 +5501,40 @@ func (v *ValidateOperatingSystemStatus) Validate(ctx context.Context, pm interfa
 
 	}
 
+	if fv, exists := v.FldValidators["nonconforming_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nonconforming_state"))
+		if err := fv(ctx, m.GetNonconformingState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultOperatingSystemStatusValidator = func() *ValidateOperatingSystemStatus {
 	v := &ValidateOperatingSystemStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNonconformingState := v.NonconformingStateValidationRuleHandler
+	rulesNonconformingState := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhNonconformingState(rulesNonconformingState)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OperatingSystemStatus.nonconforming_state: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["nonconforming_state"] = vFn
 
 	return v
 }()
@@ -7230,6 +7394,16 @@ type ValidateVolterraSoftwareStatus struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateVolterraSoftwareStatus) NonconformingStateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for nonconforming_state")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateVolterraSoftwareStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*VolterraSoftwareStatus)
 	if !ok {
@@ -7262,12 +7436,40 @@ func (v *ValidateVolterraSoftwareStatus) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["nonconforming_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nonconforming_state"))
+		if err := fv(ctx, m.GetNonconformingState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultVolterraSoftwareStatusValidator = func() *ValidateVolterraSoftwareStatus {
 	v := &ValidateVolterraSoftwareStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNonconformingState := v.NonconformingStateValidationRuleHandler
+	rulesNonconformingState := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhNonconformingState(rulesNonconformingState)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VolterraSoftwareStatus.nonconforming_state: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["nonconforming_state"] = vFn
 
 	return v
 }()
@@ -7343,8 +7545,10 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.Coordinates = f.GetCoordinates()
 	m.DefaultUnderlayNetwork = f.GetDefaultUnderlayNetwork()
 	m.DesiredPoolCount = f.GetDesiredPoolCount()
+
 	m.InsideNameserver = f.GetInsideNameserver()
 	m.InsideVip = f.GetInsideVip()
+
 	m.LocalK8SAccessEnabled = f.GetLocalK8SAccessEnabled()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideNameserver = f.GetOutsideNameserver()
@@ -7376,8 +7580,10 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	f.Coordinates = m1.Coordinates
 	f.DefaultUnderlayNetwork = m1.DefaultUnderlayNetwork
 	f.DesiredPoolCount = m1.DesiredPoolCount
+
 	f.InsideNameserver = m1.InsideNameserver
 	f.InsideVip = m1.InsideVip
+
 	f.LocalK8SAccessEnabled = m1.LocalK8SAccessEnabled
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideNameserver = m1.OutsideNameserver

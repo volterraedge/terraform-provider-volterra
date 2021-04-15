@@ -21,16 +21,11 @@ resource "volterra_service_policy" "example" {
   namespace = "staging"
   algo      = ["algo"]
 
-  // One of the arguments from this list "deny_list rule_list legacy_rule_list allow_all_requests deny_all_requests internally_generated allow_list" must be set
-  deny_all_requests = true
+  // One of the arguments from this list "legacy_rule_list allow_all_requests deny_all_requests internally_generated allow_list deny_list rule_list" must be set
+  allow_all_requests = true
 
-  // One of the arguments from this list "any_server server_name server_selector server_name_matcher" must be set
-
-  server_name_matcher {
-    exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-    regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-  }
+  // One of the arguments from this list "server_name server_selector server_name_matcher any_server" must be set
+  server_name = "database.production.customer.volterra.us"
 }
 
 ```
@@ -368,10 +363,6 @@ List of references to service_policy_rule objects.
 
 `rules` - (Optional) The order of evaluation of the rules depends on the rule combining algorithm.. See [ref](#ref) below for details.
 
-### Malicious User Mitigation
-
-actions are taken for mitigation at different threat levels..
-
 ### Malicious User Mitigation Bypass
 
 the appropriate match conditions in the enclosing policy rule and setting malicious user mitigation bypass flag..
@@ -535,8 +526,6 @@ Specification for the rule including match predicates and actions..
 `l4_dest_matcher` - (Optional) IP matches one of the prefixes and the destination port belongs to the port range.. See [L4 Dest Matcher ](#l4-dest-matcher) below for details.
 
 `label_matcher` - (Optional) other labels do not matter.. See [Label Matcher ](#label-matcher) below for details.
-
-`malicious_user_mitigation` - (Optional) actions are taken for mitigation at different threat levels.. See [Malicious User Mitigation ](#malicious-user-mitigation) below for details.
 
 `malicious_user_mitigation_bypass` - (Optional) the appropriate match conditions in the enclosing policy rule and setting malicious user mitigation bypass flag. (bool).
 

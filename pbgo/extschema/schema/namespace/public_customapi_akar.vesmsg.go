@@ -28,6 +28,229 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *GetActiveAlertPoliciesRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetActiveAlertPoliciesRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetActiveAlertPoliciesRequest) DeepCopy() *GetActiveAlertPoliciesRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetActiveAlertPoliciesRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetActiveAlertPoliciesRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetActiveAlertPoliciesRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetActiveAlertPoliciesRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetActiveAlertPoliciesRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetActiveAlertPoliciesRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetActiveAlertPoliciesRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetActiveAlertPoliciesRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetActiveAlertPoliciesRequestValidator = func() *ValidateGetActiveAlertPoliciesRequest {
+	v := &ValidateGetActiveAlertPoliciesRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GetActiveAlertPoliciesRequestValidator() db.Validator {
+	return DefaultGetActiveAlertPoliciesRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetActiveAlertPoliciesResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetActiveAlertPoliciesResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetActiveAlertPoliciesResponse) DeepCopy() *GetActiveAlertPoliciesResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetActiveAlertPoliciesResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetActiveAlertPoliciesResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetActiveAlertPoliciesResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetActiveAlertPoliciesResponseValidator().Validate(ctx, m, opts...)
+}
+
+func (m *GetActiveAlertPoliciesResponse) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAlertPoliciesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *GetActiveAlertPoliciesResponse) GetAlertPoliciesDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, vref := range m.GetAlertPolicies() {
+		if vref == nil {
+			return nil, fmt.Errorf("GetActiveAlertPoliciesResponse.alert_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("alert_policy.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "alert_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "alert_policies",
+			Ref:        vdRef,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetAlertPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetActiveAlertPoliciesResponse) GetAlertPoliciesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "alert_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: alert_policy")
+	}
+	for i, vref := range m.GetAlertPolicies() {
+		if vref == nil {
+			return nil, fmt.Errorf("GetActiveAlertPoliciesResponse.alert_policies[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "alert_policy.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateGetActiveAlertPoliciesResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetActiveAlertPoliciesResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetActiveAlertPoliciesResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetActiveAlertPoliciesResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["alert_policies"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("alert_policies"))
+		for idx, item := range m.GetAlertPolicies() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetActiveAlertPoliciesResponseValidator = func() *ValidateGetActiveAlertPoliciesResponse {
+	v := &ValidateGetActiveAlertPoliciesResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["alert_policies"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func GetActiveAlertPoliciesResponseValidator() db.Validator {
+	return DefaultGetActiveAlertPoliciesResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetActiveNetworkPoliciesRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -693,6 +916,282 @@ var DefaultGetFastACLsForInternetVIPsResponseValidator = func() *ValidateGetFast
 
 func GetFastACLsForInternetVIPsResponseValidator() db.Validator {
 	return DefaultGetFastACLsForInternetVIPsResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SetActiveAlertPoliciesRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SetActiveAlertPoliciesRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SetActiveAlertPoliciesRequest) DeepCopy() *SetActiveAlertPoliciesRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SetActiveAlertPoliciesRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SetActiveAlertPoliciesRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SetActiveAlertPoliciesRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SetActiveAlertPoliciesRequestValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SetActiveAlertPoliciesRequest) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAlertPoliciesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *SetActiveAlertPoliciesRequest) GetAlertPoliciesDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, vref := range m.GetAlertPolicies() {
+		if vref == nil {
+			return nil, fmt.Errorf("SetActiveAlertPoliciesRequest.alert_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("alert_policy.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "alert_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "alert_policies",
+			Ref:        vdRef,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetAlertPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SetActiveAlertPoliciesRequest) GetAlertPoliciesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "alert_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: alert_policy")
+	}
+	for i, vref := range m.GetAlertPolicies() {
+		if vref == nil {
+			return nil, fmt.Errorf("SetActiveAlertPoliciesRequest.alert_policies[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "alert_policy.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateSetActiveAlertPoliciesRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSetActiveAlertPoliciesRequest) AlertPoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for alert_policies")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated alert_policies")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items alert_policies")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSetActiveAlertPoliciesRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SetActiveAlertPoliciesRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SetActiveAlertPoliciesRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["alert_policies"]; exists {
+		vOpts := append(opts, db.WithValidateField("alert_policies"))
+		if err := fv(ctx, m.GetAlertPolicies(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSetActiveAlertPoliciesRequestValidator = func() *ValidateSetActiveAlertPoliciesRequest {
+	v := &ValidateSetActiveAlertPoliciesRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAlertPolicies := v.AlertPoliciesValidationRuleHandler
+	rulesAlertPolicies := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+	}
+	vFn, err = vrhAlertPolicies(rulesAlertPolicies)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SetActiveAlertPoliciesRequest.alert_policies: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["alert_policies"] = vFn
+
+	return v
+}()
+
+func SetActiveAlertPoliciesRequestValidator() db.Validator {
+	return DefaultSetActiveAlertPoliciesRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SetActiveAlertPoliciesResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SetActiveAlertPoliciesResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SetActiveAlertPoliciesResponse) DeepCopy() *SetActiveAlertPoliciesResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SetActiveAlertPoliciesResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SetActiveAlertPoliciesResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SetActiveAlertPoliciesResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SetActiveAlertPoliciesResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSetActiveAlertPoliciesResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSetActiveAlertPoliciesResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SetActiveAlertPoliciesResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SetActiveAlertPoliciesResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSetActiveAlertPoliciesResponseValidator = func() *ValidateSetActiveAlertPoliciesResponse {
+	v := &ValidateSetActiveAlertPoliciesResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SetActiveAlertPoliciesResponseValidator() db.Validator {
+	return DefaultSetActiveAlertPoliciesResponseValidator
 }
 
 // augmented methods on protoc/std generated struct

@@ -834,7 +834,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhCloud := v.CloudValidationRuleHandler
 	rulesCloud := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhCloud(rulesCloud)
 	if err != nil {
@@ -1151,7 +1151,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhCloud := v.CloudValidationRuleHandler
 	rulesCloud := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhCloud(rulesCloud)
 	if err != nil {
@@ -1336,7 +1336,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhCloud := v.CloudValidationRuleHandler
 	rulesCloud := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhCloud(rulesCloud)
 	if err != nil {
@@ -1521,7 +1521,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhCloud := v.CloudValidationRuleHandler
 	rulesCloud := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhCloud(rulesCloud)
 	if err != nil {

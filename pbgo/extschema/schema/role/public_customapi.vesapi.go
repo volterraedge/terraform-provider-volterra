@@ -1024,10 +1024,6 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-role-CustomAPI-CustomReplace"
-                },
                 "x-ves-proto-rpc": "ves.io.schema.role.CustomAPI.CustomReplace"
             },
             "x-displayname": "Role",
@@ -1621,6 +1617,14 @@ var CustomAPISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
                 },
                 "tenant": {
                     "type": "string",

@@ -16,7 +16,6 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_malicious_user_mitigation "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation"
 	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
@@ -614,7 +613,7 @@ var DefaultChallengeRuleSpecValidator = func() *ValidateChallengeRuleSpec {
 
 	vrhChallengeAction := v.ChallengeActionValidationRuleHandler
 	rulesChallengeAction := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChallengeAction(rulesChallengeAction)
 	if err != nil {
@@ -1759,15 +1758,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["malicious_user_mitigation"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation"))
-		if err := fv(ctx, m.GetMaliciousUserMitigation(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["malicious_user_mitigation_bypass"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation_bypass"))
@@ -1881,7 +1871,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhAsnChoice := v.AsnChoiceValidationRuleHandler
 	rulesAsnChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAsnChoice(rulesAsnChoice)
 	if err != nil {
@@ -1892,7 +1882,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhClientChoice := v.ClientChoiceValidationRuleHandler
 	rulesClientChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClientChoice(rulesClientChoice)
 	if err != nil {
@@ -1915,7 +1905,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhIpChoice := v.IpChoiceValidationRuleHandler
 	rulesIpChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhIpChoice(rulesIpChoice)
 	if err != nil {
@@ -2070,8 +2060,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["virtual_host_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 
 	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
-
-	v.FldValidators["malicious_user_mitigation"] = ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationTypeValidator().Validate
 
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
 
@@ -3140,15 +3128,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["malicious_user_mitigation"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation"))
-		if err := fv(ctx, m.GetMaliciousUserMitigation(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["malicious_user_mitigation_bypass"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation_bypass"))
@@ -3262,7 +3241,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhAsnChoice := v.AsnChoiceValidationRuleHandler
 	rulesAsnChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAsnChoice(rulesAsnChoice)
 	if err != nil {
@@ -3273,7 +3252,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhClientChoice := v.ClientChoiceValidationRuleHandler
 	rulesClientChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClientChoice(rulesClientChoice)
 	if err != nil {
@@ -3296,7 +3275,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhIpChoice := v.IpChoiceValidationRuleHandler
 	rulesIpChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhIpChoice(rulesIpChoice)
 	if err != nil {
@@ -3451,8 +3430,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["virtual_host_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 
 	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
-
-	v.FldValidators["malicious_user_mitigation"] = ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationTypeValidator().Validate
 
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
 
@@ -4616,15 +4593,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["malicious_user_mitigation"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation"))
-		if err := fv(ctx, m.GetMaliciousUserMitigation(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["malicious_user_mitigation_bypass"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation_bypass"))
@@ -4738,7 +4706,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhAsnChoice := v.AsnChoiceValidationRuleHandler
 	rulesAsnChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAsnChoice(rulesAsnChoice)
 	if err != nil {
@@ -4749,7 +4717,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhClientChoice := v.ClientChoiceValidationRuleHandler
 	rulesClientChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClientChoice(rulesClientChoice)
 	if err != nil {
@@ -4772,7 +4740,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhIpChoice := v.IpChoiceValidationRuleHandler
 	rulesIpChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhIpChoice(rulesIpChoice)
 	if err != nil {
@@ -4938,8 +4906,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["virtual_host_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
 
 	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
-
-	v.FldValidators["malicious_user_mitigation"] = ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationTypeValidator().Validate
 
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
 
@@ -5236,7 +5202,7 @@ var DefaultRateLimiterRuleSpecValidator = func() *ValidateRateLimiterRuleSpec {
 
 	vrhActionChoice := v.ActionChoiceValidationRuleHandler
 	rulesActionChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhActionChoice(rulesActionChoice)
 	if err != nil {
@@ -6326,15 +6292,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["malicious_user_mitigation"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation"))
-		if err := fv(ctx, m.GetMaliciousUserMitigation(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["malicious_user_mitigation_bypass"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation_bypass"))
@@ -6448,7 +6405,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhAsnChoice := v.AsnChoiceValidationRuleHandler
 	rulesAsnChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAsnChoice(rulesAsnChoice)
 	if err != nil {
@@ -6459,7 +6416,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhClientChoice := v.ClientChoiceValidationRuleHandler
 	rulesClientChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClientChoice(rulesClientChoice)
 	if err != nil {
@@ -6482,7 +6439,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhIpChoice := v.IpChoiceValidationRuleHandler
 	rulesIpChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhIpChoice(rulesIpChoice)
 	if err != nil {
@@ -6637,8 +6594,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["virtual_host_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 
 	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
-
-	v.FldValidators["malicious_user_mitigation"] = ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationTypeValidator().Validate
 
 	v.FldValidators["url_matcher"] = ves_io_schema_policy.URLMatcherTypeValidator().Validate
 
@@ -7097,7 +7052,6 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetIpChoiceFromGlobalSpecType(f)
 	m.L4DestMatcher = f.GetL4DestMatcher()
 	m.LabelMatcher = f.GetLabelMatcher()
-	m.MaliciousUserMitigation = f.GetMaliciousUserMitigation()
 	m.MaliciousUserMitigationBypass = f.GetMaliciousUserMitigationBypass()
 	m.Path = f.GetPath()
 	m.PortMatcher = f.GetPortMatcher()
@@ -7157,7 +7111,6 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetIpChoiceToGlobalSpecType(f)
 	f.L4DestMatcher = m1.L4DestMatcher
 	f.LabelMatcher = m1.LabelMatcher
-	f.MaliciousUserMitigation = m1.MaliciousUserMitigation
 	f.MaliciousUserMitigationBypass = m1.MaliciousUserMitigationBypass
 	f.Path = m1.Path
 	f.PortMatcher = m1.PortMatcher
@@ -7435,7 +7388,6 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetIpChoiceFromGlobalSpecType(f)
 	m.L4DestMatcher = f.GetL4DestMatcher()
 	m.LabelMatcher = f.GetLabelMatcher()
-	m.MaliciousUserMitigation = f.GetMaliciousUserMitigation()
 	m.MaliciousUserMitigationBypass = f.GetMaliciousUserMitigationBypass()
 	m.Path = f.GetPath()
 	m.PortMatcher = f.GetPortMatcher()
@@ -7495,7 +7447,6 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetIpChoiceToGlobalSpecType(f)
 	f.L4DestMatcher = m1.L4DestMatcher
 	f.LabelMatcher = m1.LabelMatcher
-	f.MaliciousUserMitigation = m1.MaliciousUserMitigation
 	f.MaliciousUserMitigationBypass = m1.MaliciousUserMitigationBypass
 	f.Path = m1.Path
 	f.PortMatcher = m1.PortMatcher
@@ -7816,7 +7767,6 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetIpChoiceFromGlobalSpecType(f)
 	m.L4DestMatcher = f.GetL4DestMatcher()
 	m.LabelMatcher = f.GetLabelMatcher()
-	m.MaliciousUserMitigation = f.GetMaliciousUserMitigation()
 	m.MaliciousUserMitigationBypass = f.GetMaliciousUserMitigationBypass()
 	m.Path = f.GetPath()
 	m.PortMatcher = f.GetPortMatcher()
@@ -7876,7 +7826,6 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetIpChoiceToGlobalSpecType(f)
 	f.L4DestMatcher = m1.L4DestMatcher
 	f.LabelMatcher = m1.LabelMatcher
-	f.MaliciousUserMitigation = m1.MaliciousUserMitigation
 	f.MaliciousUserMitigationBypass = m1.MaliciousUserMitigationBypass
 	f.Path = m1.Path
 	f.PortMatcher = m1.PortMatcher

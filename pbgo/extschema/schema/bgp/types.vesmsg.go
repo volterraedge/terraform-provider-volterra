@@ -16,6 +16,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -66,27 +67,27 @@ type ValidateBgpParameters struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateBgpParameters) RouterIdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for router_id_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBgpParameters) RouterIdChoiceIpAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_IpAddress, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_address")
+	}
+	return oValidatorFn_IpAddress, nil
+}
+
 func (v *ValidateBgpParameters) AsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for asn")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateBgpParameters) BgpRouterIdTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	var conv db.EnumConvFn
-	conv = func(v interface{}) int32 {
-		i := v.(BgpRouterIdType)
-		return int32(i)
-	}
-	// BgpRouterIdType_name is generated in .pb.go
-	validatorFn, err := db.NewEnumValidationRuleHandler(rules, BgpRouterIdType_name, conv)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_router_id_type")
 	}
 
 	return validatorFn, nil
@@ -152,6 +153,53 @@ func (v *ValidateBgpParameters) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["router_id_choice"]; exists {
+		val := m.GetRouterIdChoice()
+		vOpts := append(opts,
+			db.WithValidateField("router_id_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRouterIdChoice().(type) {
+	case *BgpParameters_LocalAddress:
+		if fv, exists := v.FldValidators["router_id_choice.local_address"]; exists {
+			val := m.GetRouterIdChoice().(*BgpParameters_LocalAddress).LocalAddress
+			vOpts := append(opts,
+				db.WithValidateField("router_id_choice"),
+				db.WithValidateField("local_address"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BgpParameters_FromSite:
+		if fv, exists := v.FldValidators["router_id_choice.from_site"]; exists {
+			val := m.GetRouterIdChoice().(*BgpParameters_FromSite).FromSite
+			vOpts := append(opts,
+				db.WithValidateField("router_id_choice"),
+				db.WithValidateField("from_site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BgpParameters_IpAddress:
+		if fv, exists := v.FldValidators["router_id_choice.ip_address"]; exists {
+			val := m.GetRouterIdChoice().(*BgpParameters_IpAddress).IpAddress
+			vOpts := append(opts,
+				db.WithValidateField("router_id_choice"),
+				db.WithValidateField("ip_address"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -167,6 +215,29 @@ var DefaultBgpParametersValidator = func() *ValidateBgpParameters {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhRouterIdChoice := v.RouterIdChoiceValidationRuleHandler
+	rulesRouterIdChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRouterIdChoice(rulesRouterIdChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BgpParameters.router_id_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["router_id_choice"] = vFn
+
+	vrhRouterIdChoiceIpAddress := v.RouterIdChoiceIpAddressValidationRuleHandler
+	rulesRouterIdChoiceIpAddress := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFnMap["router_id_choice.ip_address"], err = vrhRouterIdChoiceIpAddress(rulesRouterIdChoiceIpAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field BgpParameters.router_id_choice_ip_address: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["router_id_choice.ip_address"] = vFnMap["router_id_choice.ip_address"]
+
 	vrhAsn := v.AsnValidationRuleHandler
 	rulesAsn := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -178,17 +249,6 @@ var DefaultBgpParametersValidator = func() *ValidateBgpParameters {
 		panic(errMsg)
 	}
 	v.FldValidators["asn"] = vFn
-
-	vrhBgpRouterIdType := v.BgpRouterIdTypeValidationRuleHandler
-	rulesBgpRouterIdType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhBgpRouterIdType(rulesBgpRouterIdType)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for BgpParameters.bgp_router_id_type: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["bgp_router_id_type"] = vFn
 
 	vrhBgpRouterIdKey := v.BgpRouterIdKeyValidationRuleHandler
 	rulesBgpRouterIdKey := map[string]string{
@@ -247,6 +307,58 @@ func (m *BgpPeer) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 	return BgpPeerValidator().Validate(ctx, m, opts...)
 }
 
+func (m *BgpPeer) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetInterfaceRefsDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *BgpPeer) GetInterfaceRefsDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, ref := range m.GetInterfaceRefs() {
+		if ref == nil {
+			return nil, fmt.Errorf("BgpPeer.interface_refs[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "interface_refs",
+			Ref:        ref,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetInterfaceRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *BgpPeer) GetInterfaceRefsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "network_interface.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
+	}
+	for _, ref := range m.GetInterfaceRefs() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
 type ValidateBgpPeer struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -256,22 +368,6 @@ func (v *ValidateBgpPeer) AsnValidationRuleHandler(rules map[string]string) (db.
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for asn")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateBgpPeer) BgpPeerAddressTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	var conv db.EnumConvFn
-	conv = func(v interface{}) int32 {
-		i := v.(BgpPeerAddressType)
-		return int32(i)
-	}
-	// BgpPeerAddressType_name is generated in .pb.go
-	validatorFn, err := db.NewEnumValidationRuleHandler(rules, BgpPeerAddressType_name, conv)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_peer_address_type")
 	}
 
 	return validatorFn, nil
@@ -307,6 +403,86 @@ func (v *ValidateBgpPeer) BgpPeerSubnetOffsetValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
+func (v *ValidateBgpPeer) FamiliesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*PeerFamilyParameters, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := PeerFamilyParametersValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for families")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*PeerFamilyParameters)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*PeerFamilyParameters, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated families")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items families")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBgpPeer) InterfaceRefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for interface_refs")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated interface_refs")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items interface_refs")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateBgpPeer) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*BgpPeer)
 	if !ok {
@@ -319,6 +495,24 @@ func (v *ValidateBgpPeer) Validate(ctx context.Context, pm interface{}, opts ...
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["all_inside_interfaces"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("all_inside_interfaces"))
+		if err := fv(ctx, m.GetAllInsideInterfaces(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["all_outside_interfaces"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("all_outside_interfaces"))
+		if err := fv(ctx, m.GetAllOutsideInterfaces(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["asn"]; exists {
@@ -366,6 +560,22 @@ func (v *ValidateBgpPeer) Validate(ctx context.Context, pm interface{}, opts ...
 
 	}
 
+	if fv, exists := v.FldValidators["families"]; exists {
+		vOpts := append(opts, db.WithValidateField("families"))
+		if err := fv(ctx, m.GetFamilies(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["interface_refs"]; exists {
+		vOpts := append(opts, db.WithValidateField("interface_refs"))
+		if err := fv(ctx, m.GetInterfaceRefs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["port"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("port"))
@@ -392,8 +602,7 @@ var DefaultBgpPeerValidator = func() *ValidateBgpPeer {
 
 	vrhAsn := v.AsnValidationRuleHandler
 	rulesAsn := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.gte": "1",
 	}
 	vFn, err = vrhAsn(rulesAsn)
 	if err != nil {
@@ -401,17 +610,6 @@ var DefaultBgpPeerValidator = func() *ValidateBgpPeer {
 		panic(errMsg)
 	}
 	v.FldValidators["asn"] = vFn
-
-	vrhBgpPeerAddressType := v.BgpPeerAddressTypeValidationRuleHandler
-	rulesBgpPeerAddressType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhBgpPeerAddressType(rulesBgpPeerAddressType)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for BgpPeer.bgp_peer_address_type: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["bgp_peer_address_type"] = vFn
 
 	vrhBgpPeerAddressKey := v.BgpPeerAddressKeyValidationRuleHandler
 	rulesBgpPeerAddressKey := map[string]string{
@@ -447,6 +645,28 @@ var DefaultBgpPeerValidator = func() *ValidateBgpPeer {
 		panic(errMsg)
 	}
 	v.FldValidators["bgp_peer_subnet_offset"] = vFn
+
+	vrhFamilies := v.FamiliesValidationRuleHandler
+	rulesFamilies := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "4",
+	}
+	vFn, err = vrhFamilies(rulesFamilies)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BgpPeer.families: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["families"] = vFn
+
+	vrhInterfaceRefs := v.InterfaceRefsValidationRuleHandler
+	rulesInterfaceRefs := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+	}
+	vFn, err = vrhInterfaceRefs(rulesInterfaceRefs)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BgpPeer.interface_refs: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["interface_refs"] = vFn
 
 	v.FldValidators["bgp_peer_address"] = ves_io_schema.IpAddressTypeValidator().Validate
 
@@ -767,7 +987,7 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 
 func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetNetworkInterfaceDRefInfo(); err != nil {
+	if fdrInfos, err := m.GetPeersDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -782,45 +1002,29 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
-func (m *CreateSpecType) GetNetworkInterfaceDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetNetworkInterface() {
-		if ref == nil {
-			return nil, fmt.Errorf("CreateSpecType.network_interface[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "network_interface.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "network_interface",
-			Ref:        ref,
-		})
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetPeers() == nil {
+		return []db.DRefInfo{}, nil
 	}
 
-	return drInfos, nil
-}
-
-// GetNetworkInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *CreateSpecType) GetNetworkInterfaceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "network_interface.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
-	}
-	for _, ref := range m.GetNetworkInterface() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	for idx, e := range m.GetPeers() {
+		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
+			return nil, err
 		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
+		for _, dri := range driSet {
+			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
+			drInfos = append(drInfos, dri)
 		}
 	}
 
-	return entries, nil
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -888,11 +1092,11 @@ func (v *ValidateCreateSpecType) BgpParametersValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) BgpPeersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateCreateSpecType) PeersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemsValidatorFn := func(ctx context.Context, elems []*BgpPeer, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*Peer, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
-			if err := BgpPeerValidator().Validate(ctx, el, opts...); err != nil {
+			if err := PeerValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -900,13 +1104,13 @@ func (v *ValidateCreateSpecType) BgpPeersValidationRuleHandler(rules map[string]
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for bgp_peers")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for peers")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*BgpPeer)
+		elems, ok := val.([]*Peer)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*BgpPeer, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*Peer, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -917,50 +1121,10 @@ func (v *ValidateCreateSpecType) BgpPeersValidationRuleHandler(rules map[string]
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated bgp_peers")
+			return errors.Wrap(err, "repeated peers")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items bgp_peers")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCreateSpecType) NetworkInterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for network_interface")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated network_interface")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items network_interface")
+			return errors.Wrap(err, "items peers")
 		}
 		return nil
 	}
@@ -991,17 +1155,9 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["bgp_peers"]; exists {
-		vOpts := append(opts, db.WithValidateField("bgp_peers"))
-		if err := fv(ctx, m.GetBgpPeers(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["network_interface"]; exists {
-		vOpts := append(opts, db.WithValidateField("network_interface"))
-		if err := fv(ctx, m.GetNetworkInterface(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["peers"]; exists {
+		vOpts := append(opts, db.WithValidateField("peers"))
+		if err := fv(ctx, m.GetPeers(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1053,35 +1209,554 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["bgp_parameters"] = vFn
 
-	vrhBgpPeers := v.BgpPeersValidationRuleHandler
-	rulesBgpPeers := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+	vrhPeers := v.PeersValidationRuleHandler
+	rulesPeers := map[string]string{
+		"ves.io.schema.rules.message.required":              "true",
+		"ves.io.schema.rules.repeated.max_items":            "8",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
-	vFn, err = vrhBgpPeers(rulesBgpPeers)
+	vFn, err = vrhPeers(rulesPeers)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.bgp_peers: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.peers: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["bgp_peers"] = vFn
-
-	vrhNetworkInterface := v.NetworkInterfaceValidationRuleHandler
-	rulesNetworkInterface := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "8",
-		"ves.io.schema.rules.repeated.min_items": "1",
-	}
-	vFn, err = vrhNetworkInterface(rulesNetworkInterface)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.network_interface: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["network_interface"] = vFn
+	v.FldValidators["peers"] = vFn
 
 	return v
 }()
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FamilyInet) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FamilyInet) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FamilyInet) DeepCopy() *FamilyInet {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FamilyInet{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FamilyInet) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FamilyInet) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FamilyInetValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFamilyInet struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFamilyInet) EnableChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for enable_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateFamilyInet) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FamilyInet)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FamilyInet got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["enable_choice"]; exists {
+		val := m.GetEnableChoice()
+		vOpts := append(opts,
+			db.WithValidateField("enable_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEnableChoice().(type) {
+	case *FamilyInet_Enable:
+		if fv, exists := v.FldValidators["enable_choice.enable"]; exists {
+			val := m.GetEnableChoice().(*FamilyInet_Enable).Enable
+			vOpts := append(opts,
+				db.WithValidateField("enable_choice"),
+				db.WithValidateField("enable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *FamilyInet_Disable:
+		if fv, exists := v.FldValidators["enable_choice.disable"]; exists {
+			val := m.GetEnableChoice().(*FamilyInet_Disable).Disable
+			vOpts := append(opts,
+				db.WithValidateField("enable_choice"),
+				db.WithValidateField("disable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFamilyInetValidator = func() *ValidateFamilyInet {
+	v := &ValidateFamilyInet{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhEnableChoice := v.EnableChoiceValidationRuleHandler
+	rulesEnableChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEnableChoice(rulesEnableChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FamilyInet.enable_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enable_choice"] = vFn
+
+	return v
+}()
+
+func FamilyInetValidator() db.Validator {
+	return DefaultFamilyInetValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FamilyInetvpn) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FamilyInetvpn) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FamilyInetvpn) DeepCopy() *FamilyInetvpn {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FamilyInetvpn{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FamilyInetvpn) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FamilyInetvpn) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FamilyInetvpnValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFamilyInetvpn struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFamilyInetvpn) EnableChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for enable_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateFamilyInetvpn) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FamilyInetvpn)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FamilyInetvpn got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["enable_choice"]; exists {
+		val := m.GetEnableChoice()
+		vOpts := append(opts,
+			db.WithValidateField("enable_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEnableChoice().(type) {
+	case *FamilyInetvpn_Enable:
+		if fv, exists := v.FldValidators["enable_choice.enable"]; exists {
+			val := m.GetEnableChoice().(*FamilyInetvpn_Enable).Enable
+			vOpts := append(opts,
+				db.WithValidateField("enable_choice"),
+				db.WithValidateField("enable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *FamilyInetvpn_Disable:
+		if fv, exists := v.FldValidators["enable_choice.disable"]; exists {
+			val := m.GetEnableChoice().(*FamilyInetvpn_Disable).Disable
+			vOpts := append(opts,
+				db.WithValidateField("enable_choice"),
+				db.WithValidateField("disable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFamilyInetvpnValidator = func() *ValidateFamilyInetvpn {
+	v := &ValidateFamilyInetvpn{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhEnableChoice := v.EnableChoiceValidationRuleHandler
+	rulesEnableChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEnableChoice(rulesEnableChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FamilyInetvpn.enable_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enable_choice"] = vFn
+
+	v.FldValidators["enable_choice.enable"] = FamilyInetvpnParametersValidator().Validate
+
+	return v
+}()
+
+func FamilyInetvpnValidator() db.Validator {
+	return DefaultFamilyInetvpnValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FamilyInetvpnParameters) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FamilyInetvpnParameters) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FamilyInetvpnParameters) DeepCopy() *FamilyInetvpnParameters {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FamilyInetvpnParameters{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FamilyInetvpnParameters) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FamilyInetvpnParameters) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FamilyInetvpnParametersValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFamilyInetvpnParameters struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFamilyInetvpnParameters) SrChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sr_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateFamilyInetvpnParameters) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FamilyInetvpnParameters)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FamilyInetvpnParameters got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["sr_choice"]; exists {
+		val := m.GetSrChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sr_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSrChoice().(type) {
+	case *FamilyInetvpnParameters_Enable:
+		if fv, exists := v.FldValidators["sr_choice.enable"]; exists {
+			val := m.GetSrChoice().(*FamilyInetvpnParameters_Enable).Enable
+			vOpts := append(opts,
+				db.WithValidateField("sr_choice"),
+				db.WithValidateField("enable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *FamilyInetvpnParameters_Disable:
+		if fv, exists := v.FldValidators["sr_choice.disable"]; exists {
+			val := m.GetSrChoice().(*FamilyInetvpnParameters_Disable).Disable
+			vOpts := append(opts,
+				db.WithValidateField("sr_choice"),
+				db.WithValidateField("disable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFamilyInetvpnParametersValidator = func() *ValidateFamilyInetvpnParameters {
+	v := &ValidateFamilyInetvpnParameters{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSrChoice := v.SrChoiceValidationRuleHandler
+	rulesSrChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSrChoice(rulesSrChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FamilyInetvpnParameters.sr_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sr_choice"] = vFn
+
+	return v
+}()
+
+func FamilyInetvpnParametersValidator() db.Validator {
+	return DefaultFamilyInetvpnParametersValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FamilyRtarget) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FamilyRtarget) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FamilyRtarget) DeepCopy() *FamilyRtarget {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FamilyRtarget{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FamilyRtarget) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FamilyRtarget) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FamilyRtargetValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFamilyRtarget struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFamilyRtarget) EnableChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for enable_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateFamilyRtarget) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FamilyRtarget)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FamilyRtarget got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["enable_choice"]; exists {
+		val := m.GetEnableChoice()
+		vOpts := append(opts,
+			db.WithValidateField("enable_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEnableChoice().(type) {
+	case *FamilyRtarget_Enable:
+		if fv, exists := v.FldValidators["enable_choice.enable"]; exists {
+			val := m.GetEnableChoice().(*FamilyRtarget_Enable).Enable
+			vOpts := append(opts,
+				db.WithValidateField("enable_choice"),
+				db.WithValidateField("enable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *FamilyRtarget_Disable:
+		if fv, exists := v.FldValidators["enable_choice.disable"]; exists {
+			val := m.GetEnableChoice().(*FamilyRtarget_Disable).Disable
+			vOpts := append(opts,
+				db.WithValidateField("enable_choice"),
+				db.WithValidateField("disable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFamilyRtargetValidator = func() *ValidateFamilyRtarget {
+	v := &ValidateFamilyRtarget{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhEnableChoice := v.EnableChoiceValidationRuleHandler
+	rulesEnableChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEnableChoice(rulesEnableChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FamilyRtarget.enable_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enable_choice"] = vFn
+
+	return v
+}()
+
+func FamilyRtargetValidator() db.Validator {
+	return DefaultFamilyRtargetValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1123,7 +1798,7 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 
 func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetNetworkInterfaceDRefInfo(); err != nil {
+	if fdrInfos, err := m.GetPeersDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -1138,45 +1813,29 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
-func (m *GetSpecType) GetNetworkInterfaceDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetNetworkInterface() {
-		if ref == nil {
-			return nil, fmt.Errorf("GetSpecType.network_interface[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "network_interface.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "network_interface",
-			Ref:        ref,
-		})
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetPeers() == nil {
+		return []db.DRefInfo{}, nil
 	}
 
-	return drInfos, nil
-}
-
-// GetNetworkInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GetSpecType) GetNetworkInterfaceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "network_interface.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
-	}
-	for _, ref := range m.GetNetworkInterface() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	for idx, e := range m.GetPeers() {
+		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
+			return nil, err
 		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
+		for _, dri := range driSet {
+			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
+			drInfos = append(drInfos, dri)
 		}
 	}
 
-	return entries, nil
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -1244,11 +1903,11 @@ func (v *ValidateGetSpecType) BgpParametersValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) BgpPeersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGetSpecType) PeersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemsValidatorFn := func(ctx context.Context, elems []*BgpPeer, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*Peer, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
-			if err := BgpPeerValidator().Validate(ctx, el, opts...); err != nil {
+			if err := PeerValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -1256,13 +1915,13 @@ func (v *ValidateGetSpecType) BgpPeersValidationRuleHandler(rules map[string]str
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for bgp_peers")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for peers")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*BgpPeer)
+		elems, ok := val.([]*Peer)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*BgpPeer, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*Peer, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -1273,50 +1932,10 @@ func (v *ValidateGetSpecType) BgpPeersValidationRuleHandler(rules map[string]str
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated bgp_peers")
+			return errors.Wrap(err, "repeated peers")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items bgp_peers")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateGetSpecType) NetworkInterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for network_interface")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated network_interface")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items network_interface")
+			return errors.Wrap(err, "items peers")
 		}
 		return nil
 	}
@@ -1347,17 +1966,9 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["bgp_peers"]; exists {
-		vOpts := append(opts, db.WithValidateField("bgp_peers"))
-		if err := fv(ctx, m.GetBgpPeers(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["network_interface"]; exists {
-		vOpts := append(opts, db.WithValidateField("network_interface"))
-		if err := fv(ctx, m.GetNetworkInterface(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["peers"]; exists {
+		vOpts := append(opts, db.WithValidateField("peers"))
+		if err := fv(ctx, m.GetPeers(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1409,29 +2020,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["bgp_parameters"] = vFn
 
-	vrhBgpPeers := v.BgpPeersValidationRuleHandler
-	rulesBgpPeers := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+	vrhPeers := v.PeersValidationRuleHandler
+	rulesPeers := map[string]string{
+		"ves.io.schema.rules.message.required":              "true",
+		"ves.io.schema.rules.repeated.max_items":            "8",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
-	vFn, err = vrhBgpPeers(rulesBgpPeers)
+	vFn, err = vrhPeers(rulesPeers)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.bgp_peers: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.peers: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["bgp_peers"] = vFn
-
-	vrhNetworkInterface := v.NetworkInterfaceValidationRuleHandler
-	rulesNetworkInterface := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "8",
-		"ves.io.schema.rules.repeated.min_items": "1",
-	}
-	vFn, err = vrhNetworkInterface(rulesNetworkInterface)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.network_interface: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["network_interface"] = vFn
+	v.FldValidators["peers"] = vFn
 
 	return v
 }()
@@ -1479,7 +2079,25 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 
 func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetBgpPeersDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetNetworkInterfaceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetPeersDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -1492,6 +2110,31 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetBgpPeersDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetBgpPeers() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	for idx, e := range m.GetBgpPeers() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, dri := range driSet {
+			dri.DRField = fmt.Sprintf("bgp_peers[%v].%s", idx, dri.DRField)
+			drInfos = append(drInfos, dri)
+		}
+	}
+
+	return drInfos, err
 }
 
 func (m *GlobalSpecType) GetNetworkInterfaceDRefInfo() ([]db.DRefInfo, error) {
@@ -1530,6 +2173,81 @@ func (m *GlobalSpecType) GetNetworkInterfaceDBEntries(ctx context.Context, d db.
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
+	}
+
+	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetPeers() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	for idx, e := range m.GetPeers() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, dri := range driSet {
+			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
+			drInfos = append(drInfos, dri)
+		}
+	}
+
+	return drInfos, err
+}
+
+func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("view_internal.Object")
+	drInfos = append(drInfos, db.DRefInfo{
+		RefdType:   "view_internal.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "view_internal",
+		Ref:        vdRef,
+	})
+
+	return drInfos, nil
+}
+
+// GetViewInternalDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "view_internal.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: view_internal")
+	}
+
+	vref := m.GetViewInternal()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "view_internal.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
 	}
 
 	return entries, nil
@@ -1680,6 +2398,46 @@ func (v *ValidateGlobalSpecType) NetworkInterfaceValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) PeersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*Peer, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := PeerValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for peers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*Peer)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*Peer, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated peers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items peers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -1714,6 +2472,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["network_interface"]; exists {
 		vOpts := append(opts, db.WithValidateField("network_interface"))
 		if err := fv(ctx, m.GetNetworkInterface(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["peers"]; exists {
+		vOpts := append(opts, db.WithValidateField("peers"))
+		if err := fv(ctx, m.GetPeers(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["view_internal"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("view_internal"))
+		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["view_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("view_version"))
+		if err := fv(ctx, m.GetViewVersion(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1767,7 +2551,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhBgpPeers := v.BgpPeersValidationRuleHandler
 	rulesBgpPeers := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhBgpPeers(rulesBgpPeers)
 	if err != nil {
@@ -1778,9 +2563,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhNetworkInterface := v.NetworkInterfaceValidationRuleHandler
 	rulesNetworkInterface := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "8",
-		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhNetworkInterface(rulesNetworkInterface)
 	if err != nil {
@@ -1789,11 +2573,1223 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["network_interface"] = vFn
 
+	vrhPeers := v.PeersValidationRuleHandler
+	rulesPeers := map[string]string{
+		"ves.io.schema.rules.message.required":              "true",
+		"ves.io.schema.rules.repeated.max_items":            "8",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhPeers(rulesPeers)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.peers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["peers"] = vFn
+
+	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
 	return v
 }()
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *InterfaceList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *InterfaceList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *InterfaceList) DeepCopy() *InterfaceList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &InterfaceList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *InterfaceList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *InterfaceList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return InterfaceListValidator().Validate(ctx, m, opts...)
+}
+
+func (m *InterfaceList) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetInterfacesDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+func (m *InterfaceList) GetInterfacesDRefInfo() ([]db.DRefInfo, error) {
+	drInfos := []db.DRefInfo{}
+	for i, vref := range m.GetInterfaces() {
+		if vref == nil {
+			return nil, fmt.Errorf("InterfaceList.interfaces[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_interface.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "interfaces",
+			Ref:        vdRef,
+		})
+	}
+
+	return drInfos, nil
+}
+
+// GetInterfacesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *InterfaceList) GetInterfacesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "network_interface.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
+	}
+	for i, vref := range m.GetInterfaces() {
+		if vref == nil {
+			return nil, fmt.Errorf("InterfaceList.interfaces[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "network_interface.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateInterfaceList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateInterfaceList) InterfacesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for interfaces")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated interfaces")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items interfaces")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateInterfaceList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*InterfaceList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *InterfaceList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["interfaces"]; exists {
+		vOpts := append(opts, db.WithValidateField("interfaces"))
+		if err := fv(ctx, m.GetInterfaces(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultInterfaceListValidator = func() *ValidateInterfaceList {
+	v := &ValidateInterfaceList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhInterfaces := v.InterfacesValidationRuleHandler
+	rulesInterfaces := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhInterfaces(rulesInterfaces)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for InterfaceList.interfaces: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["interfaces"] = vFn
+
+	return v
+}()
+
+func InterfaceListValidator() db.Validator {
+	return DefaultInterfaceListValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *Peer) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Peer) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Peer) DeepCopy() *Peer {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Peer{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Peer) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Peer) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PeerValidator().Validate(ctx, m, opts...)
+}
+
+func (m *Peer) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetTypeChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *Peer) GetTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetTypeChoice() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetTypeChoice().(type) {
+	case *Peer_External:
+		odrInfos, err = m.GetExternal().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "external." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *Peer_Internal:
+
+	}
+
+	return drInfos, err
+}
+
+type ValidatePeer struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePeer) TypeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for type_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidatePeer) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePeer) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Peer)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Peer got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["target_service"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("target_service"))
+		if err := fv(ctx, m.GetTargetService(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["type_choice"]; exists {
+		val := m.GetTypeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("type_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTypeChoice().(type) {
+	case *Peer_External:
+		if fv, exists := v.FldValidators["type_choice.external"]; exists {
+			val := m.GetTypeChoice().(*Peer_External).External
+			vOpts := append(opts,
+				db.WithValidateField("type_choice"),
+				db.WithValidateField("external"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Peer_Internal:
+		if fv, exists := v.FldValidators["type_choice.internal"]; exists {
+			val := m.GetTypeChoice().(*Peer_Internal).Internal
+			vOpts := append(opts,
+				db.WithValidateField("type_choice"),
+				db.WithValidateField("internal"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPeerValidator = func() *ValidatePeer {
+	v := &ValidatePeer{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTypeChoice := v.TypeChoiceValidationRuleHandler
+	rulesTypeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTypeChoice(rulesTypeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Peer.type_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["type_choice"] = vFn
+
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMetadata(rulesMetadata)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Peer.metadata: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metadata"] = vFn
+
+	v.FldValidators["type_choice.external"] = PeerExternalValidator().Validate
+	v.FldValidators["type_choice.internal"] = PeerInternalValidator().Validate
+
+	return v
+}()
+
+func PeerValidator() db.Validator {
+	return DefaultPeerValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PeerExternal) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PeerExternal) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PeerExternal) DeepCopy() *PeerExternal {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PeerExternal{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PeerExternal) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PeerExternal) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PeerExternalValidator().Validate(ctx, m, opts...)
+}
+
+func (m *PeerExternal) GetDRefInfo() ([]db.DRefInfo, error) {
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetInterfaceChoiceDRefInfo(); err != nil {
+		return nil, err
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *PeerExternal) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetInterfaceChoice() == nil {
+		return []db.DRefInfo{}, nil
+	}
+
+	var odrInfos []db.DRefInfo
+
+	switch m.GetInterfaceChoice().(type) {
+	case *PeerExternal_Interface:
+
+	case *PeerExternal_InterfaceList:
+		odrInfos, err = m.GetInterfaceList().GetDRefInfo()
+		if err != nil {
+			return nil, err
+		}
+		for _, odri := range odrInfos {
+			odri.DRField = "interface_list." + odri.DRField
+			drInfos = append(drInfos, odri)
+		}
+
+	case *PeerExternal_InsideInterfaces:
+
+	case *PeerExternal_OutsideInterfaces:
+
+	}
+
+	return drInfos, err
+}
+
+type ValidatePeerExternal struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePeerExternal) AddressChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for address_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidatePeerExternal) AddressChoiceAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Address, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+	return oValidatorFn_Address, nil
+}
+func (v *ValidatePeerExternal) AddressChoiceSubnetBeginOffsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_SubnetBeginOffset, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for subnet_begin_offset")
+	}
+	return oValidatorFn_SubnetBeginOffset, nil
+}
+func (v *ValidatePeerExternal) AddressChoiceSubnetEndOffsetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_SubnetEndOffset, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for subnet_end_offset")
+	}
+	return oValidatorFn_SubnetEndOffset, nil
+}
+
+func (v *ValidatePeerExternal) InterfaceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for interface_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidatePeerExternal) AsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for asn")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePeerExternal) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePeerExternal) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PeerExternal)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PeerExternal got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["address_choice"]; exists {
+		val := m.GetAddressChoice()
+		vOpts := append(opts,
+			db.WithValidateField("address_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAddressChoice().(type) {
+	case *PeerExternal_Address:
+		if fv, exists := v.FldValidators["address_choice.address"]; exists {
+			val := m.GetAddressChoice().(*PeerExternal_Address).Address
+			vOpts := append(opts,
+				db.WithValidateField("address_choice"),
+				db.WithValidateField("address"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PeerExternal_SubnetBeginOffset:
+		if fv, exists := v.FldValidators["address_choice.subnet_begin_offset"]; exists {
+			val := m.GetAddressChoice().(*PeerExternal_SubnetBeginOffset).SubnetBeginOffset
+			vOpts := append(opts,
+				db.WithValidateField("address_choice"),
+				db.WithValidateField("subnet_begin_offset"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PeerExternal_SubnetEndOffset:
+		if fv, exists := v.FldValidators["address_choice.subnet_end_offset"]; exists {
+			val := m.GetAddressChoice().(*PeerExternal_SubnetEndOffset).SubnetEndOffset
+			vOpts := append(opts,
+				db.WithValidateField("address_choice"),
+				db.WithValidateField("subnet_end_offset"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PeerExternal_FromSite:
+		if fv, exists := v.FldValidators["address_choice.from_site"]; exists {
+			val := m.GetAddressChoice().(*PeerExternal_FromSite).FromSite
+			vOpts := append(opts,
+				db.WithValidateField("address_choice"),
+				db.WithValidateField("from_site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PeerExternal_DefaultGateway:
+		if fv, exists := v.FldValidators["address_choice.default_gateway"]; exists {
+			val := m.GetAddressChoice().(*PeerExternal_DefaultGateway).DefaultGateway
+			vOpts := append(opts,
+				db.WithValidateField("address_choice"),
+				db.WithValidateField("default_gateway"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("asn"))
+		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["family_inet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("family_inet"))
+		if err := fv(ctx, m.GetFamilyInet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["interface_choice"]; exists {
+		val := m.GetInterfaceChoice()
+		vOpts := append(opts,
+			db.WithValidateField("interface_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetInterfaceChoice().(type) {
+	case *PeerExternal_Interface:
+		if fv, exists := v.FldValidators["interface_choice.interface"]; exists {
+			val := m.GetInterfaceChoice().(*PeerExternal_Interface).Interface
+			vOpts := append(opts,
+				db.WithValidateField("interface_choice"),
+				db.WithValidateField("interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PeerExternal_InterfaceList:
+		if fv, exists := v.FldValidators["interface_choice.interface_list"]; exists {
+			val := m.GetInterfaceChoice().(*PeerExternal_InterfaceList).InterfaceList
+			vOpts := append(opts,
+				db.WithValidateField("interface_choice"),
+				db.WithValidateField("interface_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PeerExternal_InsideInterfaces:
+		if fv, exists := v.FldValidators["interface_choice.inside_interfaces"]; exists {
+			val := m.GetInterfaceChoice().(*PeerExternal_InsideInterfaces).InsideInterfaces
+			vOpts := append(opts,
+				db.WithValidateField("interface_choice"),
+				db.WithValidateField("inside_interfaces"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PeerExternal_OutsideInterfaces:
+		if fv, exists := v.FldValidators["interface_choice.outside_interfaces"]; exists {
+			val := m.GetInterfaceChoice().(*PeerExternal_OutsideInterfaces).OutsideInterfaces
+			vOpts := append(opts,
+				db.WithValidateField("interface_choice"),
+				db.WithValidateField("outside_interfaces"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPeerExternalValidator = func() *ValidatePeerExternal {
+	v := &ValidatePeerExternal{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAddressChoice := v.AddressChoiceValidationRuleHandler
+	rulesAddressChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAddressChoice(rulesAddressChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PeerExternal.address_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["address_choice"] = vFn
+
+	vrhAddressChoiceAddress := v.AddressChoiceAddressValidationRuleHandler
+	rulesAddressChoiceAddress := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFnMap["address_choice.address"], err = vrhAddressChoiceAddress(rulesAddressChoiceAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PeerExternal.address_choice_address: %s", err)
+		panic(errMsg)
+	}
+	vrhAddressChoiceSubnetBeginOffset := v.AddressChoiceSubnetBeginOffsetValidationRuleHandler
+	rulesAddressChoiceSubnetBeginOffset := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "32",
+	}
+	vFnMap["address_choice.subnet_begin_offset"], err = vrhAddressChoiceSubnetBeginOffset(rulesAddressChoiceSubnetBeginOffset)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PeerExternal.address_choice_subnet_begin_offset: %s", err)
+		panic(errMsg)
+	}
+	vrhAddressChoiceSubnetEndOffset := v.AddressChoiceSubnetEndOffsetValidationRuleHandler
+	rulesAddressChoiceSubnetEndOffset := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "32",
+	}
+	vFnMap["address_choice.subnet_end_offset"], err = vrhAddressChoiceSubnetEndOffset(rulesAddressChoiceSubnetEndOffset)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PeerExternal.address_choice_subnet_end_offset: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["address_choice.address"] = vFnMap["address_choice.address"]
+	v.FldValidators["address_choice.subnet_begin_offset"] = vFnMap["address_choice.subnet_begin_offset"]
+	v.FldValidators["address_choice.subnet_end_offset"] = vFnMap["address_choice.subnet_end_offset"]
+
+	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
+	rulesInterfaceChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhInterfaceChoice(rulesInterfaceChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PeerExternal.interface_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["interface_choice"] = vFn
+
+	vrhAsn := v.AsnValidationRuleHandler
+	rulesAsn := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+	}
+	vFn, err = vrhAsn(rulesAsn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PeerExternal.asn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["asn"] = vFn
+
+	vrhPort := v.PortValidationRuleHandler
+	rulesPort := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhPort(rulesPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PeerExternal.port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port"] = vFn
+
+	v.FldValidators["interface_choice.interface"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["interface_choice.interface_list"] = InterfaceListValidator().Validate
+
+	v.FldValidators["family_inet"] = FamilyInetValidator().Validate
+
+	return v
+}()
+
+func PeerExternalValidator() db.Validator {
+	return DefaultPeerExternalValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PeerFamilyParameters) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PeerFamilyParameters) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PeerFamilyParameters) DeepCopy() *PeerFamilyParameters {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PeerFamilyParameters{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PeerFamilyParameters) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PeerFamilyParameters) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PeerFamilyParametersValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePeerFamilyParameters struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePeerFamilyParameters) FamilyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for family")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePeerFamilyParameters) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PeerFamilyParameters)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PeerFamilyParameters got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["enable_srv6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("enable_srv6"))
+		if err := fv(ctx, m.GetEnableSrv6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["family"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("family"))
+		if err := fv(ctx, m.GetFamily(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPeerFamilyParametersValidator = func() *ValidatePeerFamilyParameters {
+	v := &ValidatePeerFamilyParameters{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhFamily := v.FamilyValidationRuleHandler
+	rulesFamily := map[string]string{
+		"ves.io.schema.rules.string.max_len": "16",
+	}
+	vFn, err = vrhFamily(rulesFamily)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PeerFamilyParameters.family: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["family"] = vFn
+
+	return v
+}()
+
+func PeerFamilyParametersValidator() db.Validator {
+	return DefaultPeerFamilyParametersValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PeerInternal) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PeerInternal) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PeerInternal) DeepCopy() *PeerInternal {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PeerInternal{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PeerInternal) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PeerInternal) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PeerInternalValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePeerInternal struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePeerInternal) AddressChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for address_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidatePeerInternal) AddressChoiceAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Address, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+	return oValidatorFn_Address, nil
+}
+func (v *ValidatePeerInternal) AddressChoiceDnsNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_DnsName, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_name")
+	}
+	return oValidatorFn_DnsName, nil
+}
+
+func (v *ValidatePeerInternal) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePeerInternal) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PeerInternal)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PeerInternal got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["address_choice"]; exists {
+		val := m.GetAddressChoice()
+		vOpts := append(opts,
+			db.WithValidateField("address_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAddressChoice().(type) {
+	case *PeerInternal_Address:
+		if fv, exists := v.FldValidators["address_choice.address"]; exists {
+			val := m.GetAddressChoice().(*PeerInternal_Address).Address
+			vOpts := append(opts,
+				db.WithValidateField("address_choice"),
+				db.WithValidateField("address"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PeerInternal_FromSite:
+		if fv, exists := v.FldValidators["address_choice.from_site"]; exists {
+			val := m.GetAddressChoice().(*PeerInternal_FromSite).FromSite
+			vOpts := append(opts,
+				db.WithValidateField("address_choice"),
+				db.WithValidateField("from_site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PeerInternal_DnsName:
+		if fv, exists := v.FldValidators["address_choice.dns_name"]; exists {
+			val := m.GetAddressChoice().(*PeerInternal_DnsName).DnsName
+			vOpts := append(opts,
+				db.WithValidateField("address_choice"),
+				db.WithValidateField("dns_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["family_inetvpn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("family_inetvpn"))
+		if err := fv(ctx, m.GetFamilyInetvpn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["family_rtarget"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("family_rtarget"))
+		if err := fv(ctx, m.GetFamilyRtarget(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPeerInternalValidator = func() *ValidatePeerInternal {
+	v := &ValidatePeerInternal{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAddressChoice := v.AddressChoiceValidationRuleHandler
+	rulesAddressChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAddressChoice(rulesAddressChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PeerInternal.address_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["address_choice"] = vFn
+
+	vrhAddressChoiceAddress := v.AddressChoiceAddressValidationRuleHandler
+	rulesAddressChoiceAddress := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFnMap["address_choice.address"], err = vrhAddressChoiceAddress(rulesAddressChoiceAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PeerInternal.address_choice_address: %s", err)
+		panic(errMsg)
+	}
+	vrhAddressChoiceDnsName := v.AddressChoiceDnsNameValidationRuleHandler
+	rulesAddressChoiceDnsName := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+	}
+	vFnMap["address_choice.dns_name"], err = vrhAddressChoiceDnsName(rulesAddressChoiceDnsName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PeerInternal.address_choice_dns_name: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["address_choice.address"] = vFnMap["address_choice.address"]
+	v.FldValidators["address_choice.dns_name"] = vFnMap["address_choice.dns_name"]
+
+	vrhPort := v.PortValidationRuleHandler
+	rulesPort := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhPort(rulesPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PeerInternal.port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port"] = vFn
+
+	v.FldValidators["family_inetvpn"] = FamilyInetvpnValidator().Validate
+
+	v.FldValidators["family_rtarget"] = FamilyRtargetValidator().Validate
+
+	return v
+}()
+
+func PeerInternalValidator() db.Validator {
+	return DefaultPeerInternalValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1835,7 +3831,7 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 
 func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetNetworkInterfaceDRefInfo(); err != nil {
+	if fdrInfos, err := m.GetPeersDRefInfo(); err != nil {
 		return nil, err
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
@@ -1850,45 +3846,29 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	return drInfos, nil
 }
 
-func (m *ReplaceSpecType) GetNetworkInterfaceDRefInfo() ([]db.DRefInfo, error) {
-	drInfos := []db.DRefInfo{}
-	for i, ref := range m.GetNetworkInterface() {
-		if ref == nil {
-			return nil, fmt.Errorf("ReplaceSpecType.network_interface[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "network_interface.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "network_interface",
-			Ref:        ref,
-		})
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
+	var (
+		drInfos, driSet []db.DRefInfo
+		err             error
+	)
+	_ = driSet
+	if m.GetPeers() == nil {
+		return []db.DRefInfo{}, nil
 	}
 
-	return drInfos, nil
-}
-
-// GetNetworkInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *ReplaceSpecType) GetNetworkInterfaceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "network_interface.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
-	}
-	for _, ref := range m.GetNetworkInterface() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	for idx, e := range m.GetPeers() {
+		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
+			return nil, err
 		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
+		for _, dri := range driSet {
+			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
+			drInfos = append(drInfos, dri)
 		}
 	}
 
-	return entries, nil
+	return drInfos, err
 }
 
 // GetDRefInfo for the field's type
@@ -1956,11 +3936,11 @@ func (v *ValidateReplaceSpecType) BgpParametersValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) BgpPeersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateReplaceSpecType) PeersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemsValidatorFn := func(ctx context.Context, elems []*BgpPeer, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*Peer, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
-			if err := BgpPeerValidator().Validate(ctx, el, opts...); err != nil {
+			if err := PeerValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -1968,13 +3948,13 @@ func (v *ValidateReplaceSpecType) BgpPeersValidationRuleHandler(rules map[string
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for bgp_peers")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for peers")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*BgpPeer)
+		elems, ok := val.([]*Peer)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*BgpPeer, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*Peer, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -1985,50 +3965,10 @@ func (v *ValidateReplaceSpecType) BgpPeersValidationRuleHandler(rules map[string
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated bgp_peers")
+			return errors.Wrap(err, "repeated peers")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items bgp_peers")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateReplaceSpecType) NetworkInterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for network_interface")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated network_interface")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items network_interface")
+			return errors.Wrap(err, "items peers")
 		}
 		return nil
 	}
@@ -2059,17 +3999,9 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["bgp_peers"]; exists {
-		vOpts := append(opts, db.WithValidateField("bgp_peers"))
-		if err := fv(ctx, m.GetBgpPeers(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["network_interface"]; exists {
-		vOpts := append(opts, db.WithValidateField("network_interface"))
-		if err := fv(ctx, m.GetNetworkInterface(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["peers"]; exists {
+		vOpts := append(opts, db.WithValidateField("peers"))
+		if err := fv(ctx, m.GetPeers(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2121,29 +4053,18 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["bgp_parameters"] = vFn
 
-	vrhBgpPeers := v.BgpPeersValidationRuleHandler
-	rulesBgpPeers := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+	vrhPeers := v.PeersValidationRuleHandler
+	rulesPeers := map[string]string{
+		"ves.io.schema.rules.message.required":              "true",
+		"ves.io.schema.rules.repeated.max_items":            "8",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
-	vFn, err = vrhBgpPeers(rulesBgpPeers)
+	vFn, err = vrhPeers(rulesPeers)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.bgp_peers: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.peers: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["bgp_peers"] = vFn
-
-	vrhNetworkInterface := v.NetworkInterfaceValidationRuleHandler
-	rulesNetworkInterface := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "8",
-		"ves.io.schema.rules.repeated.min_items": "1",
-	}
-	vFn, err = vrhNetworkInterface(rulesNetworkInterface)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.network_interface: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["network_interface"] = vFn
+	v.FldValidators["peers"] = vFn
 
 	return v
 }()
@@ -2157,8 +4078,7 @@ func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m.BgpParameters = f.GetBgpParameters()
-	m.BgpPeers = f.GetBgpPeers()
-	m.NetworkInterface = f.GetNetworkInterface()
+	m.Peers = f.GetPeers()
 	m.Where = f.GetWhere()
 }
 
@@ -2169,8 +4089,7 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	f.BgpParameters = m1.BgpParameters
-	f.BgpPeers = m1.BgpPeers
-	f.NetworkInterface = m1.NetworkInterface
+	f.Peers = m1.Peers
 	f.Where = m1.Where
 }
 
@@ -2179,8 +4098,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m.BgpParameters = f.GetBgpParameters()
-	m.BgpPeers = f.GetBgpPeers()
-	m.NetworkInterface = f.GetNetworkInterface()
+	m.Peers = f.GetPeers()
 	m.Where = f.GetWhere()
 }
 
@@ -2191,8 +4109,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	f.BgpParameters = m1.BgpParameters
-	f.BgpPeers = m1.BgpPeers
-	f.NetworkInterface = m1.NetworkInterface
+	f.Peers = m1.Peers
 	f.Where = m1.Where
 }
 
@@ -2201,8 +4118,7 @@ func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	m.BgpParameters = f.GetBgpParameters()
-	m.BgpPeers = f.GetBgpPeers()
-	m.NetworkInterface = f.GetNetworkInterface()
+	m.Peers = f.GetPeers()
 	m.Where = f.GetWhere()
 }
 
@@ -2213,7 +4129,6 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 		return
 	}
 	f.BgpParameters = m1.BgpParameters
-	f.BgpPeers = m1.BgpPeers
-	f.NetworkInterface = m1.NetworkInterface
+	f.Peers = m1.Peers
 	f.Where = m1.Where
 }

@@ -1993,6 +1993,15 @@ func (v *ValidateMessageRules) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["required_oneof"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("required_oneof"))
+		if err := fv(ctx, m.GetRequiredOneof(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["skip"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("skip"))
@@ -3202,6 +3211,17 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("well_known"),
 				db.WithValidateField("k8s_label_selector"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_HttpPath:
+		if fv, exists := v.FldValidators["well_known.http_path"]; exists {
+			val := m.GetWellKnown().(*StringRules_HttpPath).HttpPath
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("http_path"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

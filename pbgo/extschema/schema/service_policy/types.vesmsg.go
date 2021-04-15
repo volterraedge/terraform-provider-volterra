@@ -383,7 +383,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRuleChoice(rulesRuleChoice)
 	if err != nil {
@@ -394,7 +394,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhServerChoice := v.ServerChoiceValidationRuleHandler
 	rulesServerChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhServerChoice(rulesServerChoice)
 	if err != nil {
@@ -972,7 +972,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRuleChoice(rulesRuleChoice)
 	if err != nil {
@@ -983,7 +983,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhServerChoice := v.ServerChoiceValidationRuleHandler
 	rulesServerChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhServerChoice(rulesServerChoice)
 	if err != nil {
@@ -1761,7 +1761,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRuleChoice(rulesRuleChoice)
 	if err != nil {
@@ -1772,7 +1772,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhServerChoice := v.ServerChoiceValidationRuleHandler
 	rulesServerChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhServerChoice(rulesServerChoice)
 	if err != nil {
@@ -2403,7 +2403,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhRuleChoice := v.RuleChoiceValidationRuleHandler
 	rulesRuleChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRuleChoice(rulesRuleChoice)
 	if err != nil {
@@ -2414,7 +2414,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhServerChoice := v.ServerChoiceValidationRuleHandler
 	rulesServerChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhServerChoice(rulesServerChoice)
 	if err != nil {
@@ -3793,7 +3793,7 @@ var DefaultSourceListValidator = func() *ValidateSourceList {
 
 	vrhDefaultActionChoice := v.DefaultActionChoiceValidationRuleHandler
 	rulesDefaultActionChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDefaultActionChoice(rulesDefaultActionChoice)
 	if err != nil {

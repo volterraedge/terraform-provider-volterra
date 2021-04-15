@@ -26,7 +26,18 @@
 		ListRequest
 		ListResponseItem
 		ListResponse
+		NamespaceListRequest
 		PodListRequest
+		PersistentVolumeClaimListRequest
+		ServiceListRequest
+		ConfigMapListRequest
+		SecretListRequest
+		DeploymentListRequest
+		DaemonSetListRequest
+		StatefulSetListRequest
+		ReplicaSetListRequest
+		JobListRequest
+		CronJobListRequest
 		SetStateReq
 		SetStateResp
 		UpgradeSWRequest
@@ -35,6 +46,7 @@
 		UpgradeOSResponse
 		SiteStatusMetricsRequest
 		SiteStatusMetricsResponse
+		BondMembersType
 		Coordinates
 		K8SApiServerParameters
 		DefaultUnderlayNetworkType

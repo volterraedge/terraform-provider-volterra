@@ -28,16 +28,9 @@ resource "volterra_aws_tgw_site" "example" {
       aws_az_name = "us-west-2a"
 
       // One of the arguments from this list "reserved_inside_subnet inside_subnet" must be set
+      reserved_inside_subnet = true
+      disk_size              = "disk_size"
 
-      inside_subnet {
-        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
-
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
-      }
-      disk_size = "disk_size"
       outside_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
@@ -46,6 +39,7 @@ resource "volterra_aws_tgw_site" "example" {
           ipv6 = "1234:568:abcd:9100::/64"
         }
       }
+
       workload_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
@@ -66,8 +60,16 @@ resource "volterra_aws_tgw_site" "example" {
     disk_size     = "80"
     instance_type = "a1.xlarge"
     nodes_per_az  = "2"
+
     // One of the arguments from this list "new_vpc vpc_id" must be set
-    vpc_id = "vpc-12345678901234567"
+
+    new_vpc {
+      allocate_ipv6 = true
+
+      // One of the arguments from this list "name_tag autogenerate" must be set
+      autogenerate = true
+      primary_ipv4 = "10.1.0.0/16"
+    }
     ssh_key = "ssh-rsa AAAAB..."
 
     // One of the arguments from this list "new_tgw existing_tgw" must be set
@@ -185,7 +187,7 @@ Only Single AZ or Three AZ(s) nodes are supported currently..
 
 `reserved_inside_subnet` - (Optional) Autogenerate and reserve a subnet from the Primary CIDR (bool).
 
-`disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`String`).
+`disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
 
 `outside_subnet` - (Required) Subnet for the outside interface of the node. See [Outside Subnet ](#outside-subnet) below for details.
 

@@ -294,6 +294,14 @@ func (t *namespaceCustomAPIServer) GetActiveNetworkPolicies(ctx context.Context,
 	return &ves_io_schema_ns.GetActiveNetworkPoliciesResponse{}, nil
 }
 
+func (t *namespaceCustomAPIServer) SetActiveAlertPolicies(ctx context.Context, req *ves_io_schema_ns.SetActiveAlertPoliciesRequest) (*ves_io_schema_ns.SetActiveAlertPoliciesResponse, error) {
+	return &ves_io_schema_ns.SetActiveAlertPoliciesResponse{}, nil
+
+}
+func (t *namespaceCustomAPIServer) GetActiveAlertPolicies(ctx context.Context, req *ves_io_schema_ns.GetActiveAlertPoliciesRequest) (*ves_io_schema_ns.GetActiveAlertPoliciesResponse, error) {
+	return &ves_io_schema_ns.GetActiveAlertPoliciesResponse{}, nil
+}
+
 var _ ves_io_schema_ns.NamespaceCustomAPIServer = &namespaceCustomAPIServer{}
 
 // ves.io.schema.namespace.NamespaceCustomAPI handling - end

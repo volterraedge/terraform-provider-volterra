@@ -25,6 +25,606 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *ConfigMapListRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ConfigMapListRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ConfigMapListRequest) DeepCopy() *ConfigMapListRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ConfigMapListRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ConfigMapListRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ConfigMapListRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ConfigMapListRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateConfigMapListRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateConfigMapListRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ConfigMapListRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ConfigMapListRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultConfigMapListRequestValidator = func() *ValidateConfigMapListRequest {
+	v := &ValidateConfigMapListRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ConfigMapListRequestValidator() db.Validator {
+	return DefaultConfigMapListRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CronJobListRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CronJobListRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CronJobListRequest) DeepCopy() *CronJobListRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CronJobListRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CronJobListRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CronJobListRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CronJobListRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCronJobListRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCronJobListRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CronJobListRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CronJobListRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCronJobListRequestValidator = func() *ValidateCronJobListRequest {
+	v := &ValidateCronJobListRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CronJobListRequestValidator() db.Validator {
+	return DefaultCronJobListRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DaemonSetListRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DaemonSetListRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DaemonSetListRequest) DeepCopy() *DaemonSetListRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DaemonSetListRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DaemonSetListRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DaemonSetListRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DaemonSetListRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDaemonSetListRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDaemonSetListRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DaemonSetListRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DaemonSetListRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDaemonSetListRequestValidator = func() *ValidateDaemonSetListRequest {
+	v := &ValidateDaemonSetListRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DaemonSetListRequestValidator() db.Validator {
+	return DefaultDaemonSetListRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DeploymentListRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DeploymentListRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DeploymentListRequest) DeepCopy() *DeploymentListRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DeploymentListRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DeploymentListRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DeploymentListRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DeploymentListRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDeploymentListRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDeploymentListRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DeploymentListRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DeploymentListRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDeploymentListRequestValidator = func() *ValidateDeploymentListRequest {
+	v := &ValidateDeploymentListRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DeploymentListRequestValidator() db.Validator {
+	return DefaultDeploymentListRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *JobListRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *JobListRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *JobListRequest) DeepCopy() *JobListRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &JobListRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *JobListRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *JobListRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return JobListRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateJobListRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateJobListRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*JobListRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *JobListRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultJobListRequestValidator = func() *ValidateJobListRequest {
+	v := &ValidateJobListRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func JobListRequestValidator() db.Validator {
+	return DefaultJobListRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NamespaceListRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NamespaceListRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NamespaceListRequest) DeepCopy() *NamespaceListRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NamespaceListRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NamespaceListRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NamespaceListRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NamespaceListRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNamespaceListRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNamespaceListRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NamespaceListRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NamespaceListRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNamespaceListRequestValidator = func() *ValidateNamespaceListRequest {
+	v := &ValidateNamespaceListRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func NamespaceListRequestValidator() db.Validator {
+	return DefaultNamespaceListRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PersistentVolumeClaimListRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PersistentVolumeClaimListRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PersistentVolumeClaimListRequest) DeepCopy() *PersistentVolumeClaimListRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PersistentVolumeClaimListRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PersistentVolumeClaimListRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PersistentVolumeClaimListRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PersistentVolumeClaimListRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePersistentVolumeClaimListRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePersistentVolumeClaimListRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PersistentVolumeClaimListRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PersistentVolumeClaimListRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPersistentVolumeClaimListRequestValidator = func() *ValidatePersistentVolumeClaimListRequest {
+	v := &ValidatePersistentVolumeClaimListRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func PersistentVolumeClaimListRequestValidator() db.Validator {
+	return DefaultPersistentVolumeClaimListRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *PodListRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -108,4 +708,352 @@ var DefaultPodListRequestValidator = func() *ValidatePodListRequest {
 
 func PodListRequestValidator() db.Validator {
 	return DefaultPodListRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ReplicaSetListRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ReplicaSetListRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ReplicaSetListRequest) DeepCopy() *ReplicaSetListRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ReplicaSetListRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ReplicaSetListRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ReplicaSetListRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ReplicaSetListRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateReplicaSetListRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateReplicaSetListRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ReplicaSetListRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ReplicaSetListRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultReplicaSetListRequestValidator = func() *ValidateReplicaSetListRequest {
+	v := &ValidateReplicaSetListRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ReplicaSetListRequestValidator() db.Validator {
+	return DefaultReplicaSetListRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SecretListRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SecretListRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SecretListRequest) DeepCopy() *SecretListRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SecretListRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SecretListRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SecretListRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SecretListRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSecretListRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSecretListRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SecretListRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SecretListRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSecretListRequestValidator = func() *ValidateSecretListRequest {
+	v := &ValidateSecretListRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SecretListRequestValidator() db.Validator {
+	return DefaultSecretListRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ServiceListRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ServiceListRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ServiceListRequest) DeepCopy() *ServiceListRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ServiceListRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ServiceListRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ServiceListRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ServiceListRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateServiceListRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateServiceListRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ServiceListRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ServiceListRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultServiceListRequestValidator = func() *ValidateServiceListRequest {
+	v := &ValidateServiceListRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ServiceListRequestValidator() db.Validator {
+	return DefaultServiceListRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *StatefulSetListRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *StatefulSetListRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *StatefulSetListRequest) DeepCopy() *StatefulSetListRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &StatefulSetListRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *StatefulSetListRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *StatefulSetListRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return StatefulSetListRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateStatefulSetListRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateStatefulSetListRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*StatefulSetListRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *StatefulSetListRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultStatefulSetListRequestValidator = func() *ValidateStatefulSetListRequest {
+	v := &ValidateStatefulSetListRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func StatefulSetListRequestValidator() db.Validator {
+	return DefaultStatefulSetListRequestValidator
 }

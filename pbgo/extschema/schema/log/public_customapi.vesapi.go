@@ -3110,6 +3110,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-AccessLogQueryV2"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AccessLogQueryV2"
             },
             "x-displayname": "Log",
@@ -3286,6 +3290,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-AccessLogScrollQuery"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AccessLogScrollQuery"
             },
             "x-displayname": "Log",
@@ -3372,6 +3380,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-AuditLogQueryV2"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AuditLogQueryV2"
             },
             "x-displayname": "Log",
@@ -3458,6 +3470,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-AuditLogAggregationQuery"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AuditLogAggregationQuery"
             },
             "x-displayname": "Log",
@@ -3544,6 +3560,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-AuditLogScrollQuery"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AuditLogScrollQuery"
             },
             "x-displayname": "Log",
@@ -4464,6 +4484,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-VK8SAuditLogQuery"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SAuditLogQuery"
             },
             "x-displayname": "Log",
@@ -4550,6 +4574,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-VK8SAuditLogAggregationQuery"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SAuditLogAggregationQuery"
             },
             "x-displayname": "Log",
@@ -4636,6 +4664,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-CustomAPI-VK8SAuditLogScrollQuery"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQuery"
             },
             "x-displayname": "Log",

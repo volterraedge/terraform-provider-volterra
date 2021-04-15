@@ -234,7 +234,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhHealthCheck := v.HealthCheckValidationRuleHandler
 	rulesHealthCheck := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHealthCheck(rulesHealthCheck)
 	if err != nil {
@@ -546,7 +546,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhHealthCheck := v.HealthCheckValidationRuleHandler
 	rulesHealthCheck := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHealthCheck(rulesHealthCheck)
 	if err != nil {
@@ -869,7 +869,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhHealthCheck := v.HealthCheckValidationRuleHandler
 	rulesHealthCheck := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHealthCheck(rulesHealthCheck)
 	if err != nil {
@@ -1217,7 +1217,7 @@ var DefaultHttpHealthCheckValidator = func() *ValidateHttpHealthCheck {
 
 	vrhHostHeaderChoice := v.HostHeaderChoiceValidationRuleHandler
 	rulesHostHeaderChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHostHeaderChoice(rulesHostHeaderChoice)
 	if err != nil {
@@ -1242,6 +1242,7 @@ var DefaultHttpHealthCheckValidator = func() *ValidateHttpHealthCheck {
 	vrhPath := v.PathValidationRuleHandler
 	rulesPath := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.http_path": "true",
 		"ves.io.schema.rules.string.max_len":   "2048",
 	}
 	vFn, err = vrhPath(rulesPath)
@@ -1496,7 +1497,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhHealthCheck := v.HealthCheckValidationRuleHandler
 	rulesHealthCheck := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHealthCheck(rulesHealthCheck)
 	if err != nil {

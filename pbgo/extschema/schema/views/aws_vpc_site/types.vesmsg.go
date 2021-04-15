@@ -537,7 +537,7 @@ var DefaultAWSVPCIngressEgressGwReplaceTypeValidator = func() *ValidateAWSVPCIng
 
 	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
 	rulesForwardProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
 	if err != nil {
@@ -548,7 +548,7 @@ var DefaultAWSVPCIngressEgressGwReplaceTypeValidator = func() *ValidateAWSVPCIng
 
 	vrhGlobalNetworkChoice := v.GlobalNetworkChoiceValidationRuleHandler
 	rulesGlobalNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhGlobalNetworkChoice(rulesGlobalNetworkChoice)
 	if err != nil {
@@ -559,7 +559,7 @@ var DefaultAWSVPCIngressEgressGwReplaceTypeValidator = func() *ValidateAWSVPCIng
 
 	vrhInsideStaticRouteChoice := v.InsideStaticRouteChoiceValidationRuleHandler
 	rulesInsideStaticRouteChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInsideStaticRouteChoice(rulesInsideStaticRouteChoice)
 	if err != nil {
@@ -570,7 +570,7 @@ var DefaultAWSVPCIngressEgressGwReplaceTypeValidator = func() *ValidateAWSVPCIng
 
 	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
 	rulesNetworkPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkPolicyChoice(rulesNetworkPolicyChoice)
 	if err != nil {
@@ -581,7 +581,7 @@ var DefaultAWSVPCIngressEgressGwReplaceTypeValidator = func() *ValidateAWSVPCIng
 
 	vrhOutsideStaticRouteChoice := v.OutsideStaticRouteChoiceValidationRuleHandler
 	rulesOutsideStaticRouteChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhOutsideStaticRouteChoice(rulesOutsideStaticRouteChoice)
 	if err != nil {
@@ -1183,7 +1183,7 @@ var DefaultAWSVPCIngressEgressGwTypeValidator = func() *ValidateAWSVPCIngressEgr
 
 	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
 	rulesForwardProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
 	if err != nil {
@@ -1194,7 +1194,7 @@ var DefaultAWSVPCIngressEgressGwTypeValidator = func() *ValidateAWSVPCIngressEgr
 
 	vrhGlobalNetworkChoice := v.GlobalNetworkChoiceValidationRuleHandler
 	rulesGlobalNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhGlobalNetworkChoice(rulesGlobalNetworkChoice)
 	if err != nil {
@@ -1205,7 +1205,7 @@ var DefaultAWSVPCIngressEgressGwTypeValidator = func() *ValidateAWSVPCIngressEgr
 
 	vrhInsideStaticRouteChoice := v.InsideStaticRouteChoiceValidationRuleHandler
 	rulesInsideStaticRouteChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInsideStaticRouteChoice(rulesInsideStaticRouteChoice)
 	if err != nil {
@@ -1216,7 +1216,7 @@ var DefaultAWSVPCIngressEgressGwTypeValidator = func() *ValidateAWSVPCIngressEgr
 
 	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
 	rulesNetworkPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkPolicyChoice(rulesNetworkPolicyChoice)
 	if err != nil {
@@ -1227,7 +1227,7 @@ var DefaultAWSVPCIngressEgressGwTypeValidator = func() *ValidateAWSVPCIngressEgr
 
 	vrhOutsideStaticRouteChoice := v.OutsideStaticRouteChoiceValidationRuleHandler
 	rulesOutsideStaticRouteChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhOutsideStaticRouteChoice(rulesOutsideStaticRouteChoice)
 	if err != nil {
@@ -1943,7 +1943,7 @@ var DefaultAWSVPCVoltstackClusterReplaceTypeValidator = func() *ValidateAWSVPCVo
 
 	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
 	rulesForwardProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
 	if err != nil {
@@ -1954,7 +1954,7 @@ var DefaultAWSVPCVoltstackClusterReplaceTypeValidator = func() *ValidateAWSVPCVo
 
 	vrhGlobalNetworkChoice := v.GlobalNetworkChoiceValidationRuleHandler
 	rulesGlobalNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhGlobalNetworkChoice(rulesGlobalNetworkChoice)
 	if err != nil {
@@ -1965,7 +1965,7 @@ var DefaultAWSVPCVoltstackClusterReplaceTypeValidator = func() *ValidateAWSVPCVo
 
 	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
 	rulesNetworkPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkPolicyChoice(rulesNetworkPolicyChoice)
 	if err != nil {
@@ -1976,7 +1976,7 @@ var DefaultAWSVPCVoltstackClusterReplaceTypeValidator = func() *ValidateAWSVPCVo
 
 	vrhOutsideStaticRouteChoice := v.OutsideStaticRouteChoiceValidationRuleHandler
 	rulesOutsideStaticRouteChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhOutsideStaticRouteChoice(rulesOutsideStaticRouteChoice)
 	if err != nil {
@@ -2539,7 +2539,7 @@ var DefaultAWSVPCVoltstackClusterTypeValidator = func() *ValidateAWSVPCVoltstack
 
 	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
 	rulesForwardProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
 	if err != nil {
@@ -2550,7 +2550,7 @@ var DefaultAWSVPCVoltstackClusterTypeValidator = func() *ValidateAWSVPCVoltstack
 
 	vrhGlobalNetworkChoice := v.GlobalNetworkChoiceValidationRuleHandler
 	rulesGlobalNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhGlobalNetworkChoice(rulesGlobalNetworkChoice)
 	if err != nil {
@@ -2561,7 +2561,7 @@ var DefaultAWSVPCVoltstackClusterTypeValidator = func() *ValidateAWSVPCVoltstack
 
 	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
 	rulesNetworkPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkPolicyChoice(rulesNetworkPolicyChoice)
 	if err != nil {
@@ -2572,7 +2572,7 @@ var DefaultAWSVPCVoltstackClusterTypeValidator = func() *ValidateAWSVPCVoltstack
 
 	vrhOutsideStaticRouteChoice := v.OutsideStaticRouteChoiceValidationRuleHandler
 	rulesOutsideStaticRouteChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhOutsideStaticRouteChoice(rulesOutsideStaticRouteChoice)
 	if err != nil {
@@ -2583,7 +2583,7 @@ var DefaultAWSVPCVoltstackClusterTypeValidator = func() *ValidateAWSVPCVoltstack
 
 	vrhStorageClassChoice := v.StorageClassChoiceValidationRuleHandler
 	rulesStorageClassChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhStorageClassChoice(rulesStorageClassChoice)
 	if err != nil {
@@ -3192,7 +3192,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhDeployment := v.DeploymentValidationRuleHandler
 	rulesDeployment := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDeployment(rulesDeployment)
 	if err != nil {
@@ -3203,7 +3203,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLogsReceiverChoice(rulesLogsReceiverChoice)
 	if err != nil {
@@ -3214,7 +3214,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSiteType(rulesSiteType)
 	if err != nil {
@@ -3272,7 +3272,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhDiskSize := v.DiskSizeValidationRuleHandler
 	rulesDiskSize := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "64000",
+		"ves.io.schema.rules.uint32.lte": "2048",
 	}
 	vFn, err = vrhDiskSize(rulesDiskSize)
 	if err != nil {
@@ -3817,6 +3817,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["site_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_state"))
+		if err := fv(ctx, m.GetSiteState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_type"]; exists {
 		val := m.GetSiteType()
 		vOpts := append(opts,
@@ -3908,7 +3917,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhDeployment := v.DeploymentValidationRuleHandler
 	rulesDeployment := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDeployment(rulesDeployment)
 	if err != nil {
@@ -3919,7 +3928,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLogsReceiverChoice(rulesLogsReceiverChoice)
 	if err != nil {
@@ -3930,7 +3939,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSiteType(rulesSiteType)
 	if err != nil {
@@ -4010,7 +4019,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhDiskSize := v.DiskSizeValidationRuleHandler
 	rulesDiskSize := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "64000",
+		"ves.io.schema.rules.uint32.lte": "2048",
 	}
 	vFn, err = vrhDiskSize(rulesDiskSize)
 	if err != nil {
@@ -4776,7 +4785,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhDeployment := v.DeploymentValidationRuleHandler
 	rulesDeployment := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDeployment(rulesDeployment)
 	if err != nil {
@@ -4787,7 +4796,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLogsReceiverChoice(rulesLogsReceiverChoice)
 	if err != nil {
@@ -4798,7 +4807,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSiteType(rulesSiteType)
 	if err != nil {
@@ -4878,7 +4887,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhDiskSize := v.DiskSizeValidationRuleHandler
 	rulesDiskSize := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "64000",
+		"ves.io.schema.rules.uint32.lte": "2048",
 	}
 	vFn, err = vrhDiskSize(rulesDiskSize)
 	if err != nil {
@@ -5280,7 +5289,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLogsReceiverChoice(rulesLogsReceiverChoice)
 	if err != nil {
@@ -5291,7 +5300,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSiteType(rulesSiteType)
 	if err != nil {
@@ -5995,6 +6004,7 @@ func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.NodesPerAz = f.GetNodesPerAz()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
+
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
@@ -6016,6 +6026,7 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.NodesPerAz = m1.NodesPerAz
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
+
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion

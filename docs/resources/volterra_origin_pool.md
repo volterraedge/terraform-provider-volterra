@@ -23,9 +23,9 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "private_ip k8s_service voltadn_private_name srv6_private_ip srv6_private_name public_ip private_name consul_service custom_endpoint_object voltadn_private_ip public_name" must be set
+    // One of the arguments from this list "public_name private_ip k8s_service consul_service public_ip custom_endpoint_object vn_private_ip vn_private_name private_name" must be set
 
-    srv6_private_name {
+    vn_private_name {
       dns_name = "dns_name"
 
       private_network {
@@ -43,28 +43,7 @@ resource "volterra_origin_pool" "example" {
   port = ["9080"]
 
   // One of the arguments from this list "no_tls use_tls" must be set
-
-  use_tls {
-    // One of the arguments from this list "no_mtls use_mtls" must be set
-    no_mtls = true
-
-    // One of the arguments from this list "use_server_verification skip_server_verification volterra_trusted_ca" must be set
-
-    use_server_verification {
-      trusted_ca_url = "trusted_ca_url"
-    }
-    // One of the arguments from this list "sni use_host_header_as_sni disable_sni" must be set
-    sni = "sni"
-    tls_config {
-      // One of the arguments from this list "default_security medium_security low_security custom_security" must be set
-
-      custom_security {
-        cipher_suites = ["cipher_suites"]
-        max_version   = "max_version"
-        min_version   = "min_version"
-      }
-    }
-  }
+  no_tls = true
 }
 
 ```
@@ -314,13 +293,9 @@ List of origin servers in this pool.
 
 `public_name` - (Optional) Specify origin server with public DNS name. See [Public Name ](#public-name) below for details.
 
-`srv6_private_ip` - (Optional) Specify origin server IP address on per site srv6 network. See [Srv6 Private Ip ](#srv6-private-ip) below for details.
+`vn_private_ip` - (Optional) Specify origin server IP address on virtual network other than inside or outside network. See [Vn Private Ip ](#vn-private-ip) below for details.
 
-`srv6_private_name` - (Optional) Specify origin server name on per site srv6 network. See [Srv6 Private Name ](#srv6-private-name) below for details.
-
-`voltadn_private_ip` - (Optional) Specify origin server IP address on VoltADN private network. See [Voltadn Private Ip ](#voltadn-private-ip) below for details.
-
-`voltadn_private_name` - (Optional) Specify origin server name on VoltADN private network. See [Voltadn Private Name ](#voltadn-private-name) below for details.
+`vn_private_name` - (Optional) Specify origin server name on virtual network other than inside or outside network. See [Vn Private Name ](#vn-private-name) below for details.
 
 `labels` - (Optional) Add Labels for this origin server, these labels can be used to form subset. (`String`).
 
@@ -416,22 +391,6 @@ Site or Virtual site where this origin server is located.
 
 Skip origin server verification.
 
-### Srv6 Private Ip
-
-Specify origin server IP address on per site srv6 network.
-
-`ip` - (Required) IP address (`String`).
-
-`virtual_network` - (Required) Virtual Network where this IP will be present. See [ref](#ref) below for details.
-
-### Srv6 Private Name
-
-Specify origin server name on per site srv6 network.
-
-`dns_name` - (Required) DNS Name (`String`).
-
-`private_network` - (Required) Virtual Network where this Name will be present. See [ref](#ref) below for details.
-
 ### Tls Certificates
 
 TLS Certificates.
@@ -510,17 +469,17 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 origin server are on vK8s network on the site.
 
-### Voltadn Private Ip
+### Vn Private Ip
 
-Specify origin server IP address on VoltADN private network.
+Specify origin server IP address on virtual network other than inside or outside network.
 
 `ip` - (Required) IP address (`String`).
 
 `virtual_network` - (Required) Virtual Network where this IP will be present. See [ref](#ref) below for details.
 
-### Voltadn Private Name
+### Vn Private Name
 
-Specify origin server name on VoltADN private network.
+Specify origin server name on virtual network other than inside or outside network.
 
 `dns_name` - (Required) DNS Name (`String`).
 

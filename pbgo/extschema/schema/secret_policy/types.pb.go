@@ -7,6 +7,7 @@ import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
 import math "math"
 import _ "github.com/gogo/protobuf/gogoproto"
+import google_protobuf1 "github.com/gogo/protobuf/types"
 import _ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 import ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 import ves_io_schema4 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
@@ -49,6 +50,13 @@ type GlobalSpecType struct {
 	// x-example: "true"
 	// if allow_volterra is set to true, it allows relevant volterra infrastructure services to decrypt the secret encrypted using this policy.
 	AllowVolterra bool `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
+	// Decrypt Cache Timeout
+	//
+	// x-displayName: "Decrypt Cache Timeout"
+	// x-example: "6h"
+	// decrypt_cache_timeout contains the amount of time a decrypted secret is cached in wingman.
+	// Value for this parameter is a string ending in the suffix "s" (indicating seconds), suffix "m" (indicating minutes) or suffix "h" (indicating hours)
+	DecryptCacheTimeout *google_protobuf1.Duration `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout" json:"decrypt_cache_timeout,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()                    { *m = GlobalSpecType{} }
@@ -76,14 +84,22 @@ func (m *GlobalSpecType) GetAllowVolterra() bool {
 	return false
 }
 
+func (m *GlobalSpecType) GetDecryptCacheTimeout() *google_protobuf1.Duration {
+	if m != nil {
+		return m.DecryptCacheTimeout
+	}
+	return nil
+}
+
 // Create Secret Policy
 //
 // x-displayName: "Create Secret Policy"
 // Create secret_policy creates a new object in the storage backend for metadata.namespace.
 type CreateSpecType struct {
-	Algo          ves_io_schema_policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
-	Rules         []*ves_io_schema4.ObjectRefType             `protobuf:"bytes,2,rep,name=rules" json:"rules,omitempty"`
-	AllowVolterra bool                                        `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
+	Algo                ves_io_schema_policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
+	Rules               []*ves_io_schema4.ObjectRefType             `protobuf:"bytes,2,rep,name=rules" json:"rules,omitempty"`
+	AllowVolterra       bool                                        `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
+	DecryptCacheTimeout *google_protobuf1.Duration                  `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout" json:"decrypt_cache_timeout,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()                    { *m = CreateSpecType{} }
@@ -111,14 +127,22 @@ func (m *CreateSpecType) GetAllowVolterra() bool {
 	return false
 }
 
+func (m *CreateSpecType) GetDecryptCacheTimeout() *google_protobuf1.Duration {
+	if m != nil {
+		return m.DecryptCacheTimeout
+	}
+	return nil
+}
+
 // Replace Secret Policy
 //
 // x-displayName: "Replace Secret Policy"
 // Replace secret_policy replaces an existing object in the storage backend for metadata.namespace.
 type ReplaceSpecType struct {
-	Algo          ves_io_schema_policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
-	Rules         []*ves_io_schema4.ObjectRefType             `protobuf:"bytes,2,rep,name=rules" json:"rules,omitempty"`
-	AllowVolterra bool                                        `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
+	Algo                ves_io_schema_policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
+	Rules               []*ves_io_schema4.ObjectRefType             `protobuf:"bytes,2,rep,name=rules" json:"rules,omitempty"`
+	AllowVolterra       bool                                        `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
+	DecryptCacheTimeout *google_protobuf1.Duration                  `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout" json:"decrypt_cache_timeout,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()                    { *m = ReplaceSpecType{} }
@@ -146,14 +170,22 @@ func (m *ReplaceSpecType) GetAllowVolterra() bool {
 	return false
 }
 
+func (m *ReplaceSpecType) GetDecryptCacheTimeout() *google_protobuf1.Duration {
+	if m != nil {
+		return m.DecryptCacheTimeout
+	}
+	return nil
+}
+
 // Get Secret Policy
 //
 // x-displayName: "Get Secret Policy"
 // Get secret_policy reads a given object from storage backend for metadata.namespace.
 type GetSpecType struct {
-	Algo          ves_io_schema_policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
-	Rules         []*ves_io_schema4.ObjectRefType             `protobuf:"bytes,2,rep,name=rules" json:"rules,omitempty"`
-	AllowVolterra bool                                        `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
+	Algo                ves_io_schema_policy.RuleCombiningAlgorithm `protobuf:"varint,1,opt,name=algo,proto3,enum=ves.io.schema.policy.RuleCombiningAlgorithm" json:"algo,omitempty"`
+	Rules               []*ves_io_schema4.ObjectRefType             `protobuf:"bytes,2,rep,name=rules" json:"rules,omitempty"`
+	AllowVolterra       bool                                        `protobuf:"varint,3,opt,name=allow_volterra,json=allowVolterra,proto3" json:"allow_volterra,omitempty"`
+	DecryptCacheTimeout *google_protobuf1.Duration                  `protobuf:"bytes,4,opt,name=decrypt_cache_timeout,json=decryptCacheTimeout" json:"decrypt_cache_timeout,omitempty"`
 }
 
 func (m *GetSpecType) Reset()                    { *m = GetSpecType{} }
@@ -179,6 +211,13 @@ func (m *GetSpecType) GetAllowVolterra() bool {
 		return m.AllowVolterra
 	}
 	return false
+}
+
+func (m *GetSpecType) GetDecryptCacheTimeout() *google_protobuf1.Duration {
+	if m != nil {
+		return m.DecryptCacheTimeout
+	}
+	return nil
 }
 
 func init() {
@@ -220,6 +259,9 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if this.AllowVolterra != that1.AllowVolterra {
 		return false
 	}
+	if !this.DecryptCacheTimeout.Equal(that1.DecryptCacheTimeout) {
+		return false
+	}
 	return true
 }
 func (this *CreateSpecType) Equal(that interface{}) bool {
@@ -253,6 +295,9 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 		}
 	}
 	if this.AllowVolterra != that1.AllowVolterra {
+		return false
+	}
+	if !this.DecryptCacheTimeout.Equal(that1.DecryptCacheTimeout) {
 		return false
 	}
 	return true
@@ -290,6 +335,9 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if this.AllowVolterra != that1.AllowVolterra {
 		return false
 	}
+	if !this.DecryptCacheTimeout.Equal(that1.DecryptCacheTimeout) {
+		return false
+	}
 	return true
 }
 func (this *GetSpecType) Equal(that interface{}) bool {
@@ -325,19 +373,25 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if this.AllowVolterra != that1.AllowVolterra {
 		return false
 	}
+	if !this.DecryptCacheTimeout.Equal(that1.DecryptCacheTimeout) {
+		return false
+	}
 	return true
 }
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 8)
 	s = append(s, "&secret_policy.GlobalSpecType{")
 	s = append(s, "Algo: "+fmt.Sprintf("%#v", this.Algo)+",\n")
 	if this.Rules != nil {
 		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
 	}
 	s = append(s, "AllowVolterra: "+fmt.Sprintf("%#v", this.AllowVolterra)+",\n")
+	if this.DecryptCacheTimeout != nil {
+		s = append(s, "DecryptCacheTimeout: "+fmt.Sprintf("%#v", this.DecryptCacheTimeout)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -345,13 +399,16 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 8)
 	s = append(s, "&secret_policy.CreateSpecType{")
 	s = append(s, "Algo: "+fmt.Sprintf("%#v", this.Algo)+",\n")
 	if this.Rules != nil {
 		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
 	}
 	s = append(s, "AllowVolterra: "+fmt.Sprintf("%#v", this.AllowVolterra)+",\n")
+	if this.DecryptCacheTimeout != nil {
+		s = append(s, "DecryptCacheTimeout: "+fmt.Sprintf("%#v", this.DecryptCacheTimeout)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -359,13 +416,16 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 8)
 	s = append(s, "&secret_policy.ReplaceSpecType{")
 	s = append(s, "Algo: "+fmt.Sprintf("%#v", this.Algo)+",\n")
 	if this.Rules != nil {
 		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
 	}
 	s = append(s, "AllowVolterra: "+fmt.Sprintf("%#v", this.AllowVolterra)+",\n")
+	if this.DecryptCacheTimeout != nil {
+		s = append(s, "DecryptCacheTimeout: "+fmt.Sprintf("%#v", this.DecryptCacheTimeout)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -373,13 +433,16 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 8)
 	s = append(s, "&secret_policy.GetSpecType{")
 	s = append(s, "Algo: "+fmt.Sprintf("%#v", this.Algo)+",\n")
 	if this.Rules != nil {
 		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
 	}
 	s = append(s, "AllowVolterra: "+fmt.Sprintf("%#v", this.AllowVolterra)+",\n")
+	if this.DecryptCacheTimeout != nil {
+		s = append(s, "DecryptCacheTimeout: "+fmt.Sprintf("%#v", this.DecryptCacheTimeout)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -433,6 +496,16 @@ func (m *GlobalSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i++
 	}
+	if m.DecryptCacheTimeout != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DecryptCacheTimeout.Size()))
+		n1, err := m.DecryptCacheTimeout.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n1
+	}
 	return i, nil
 }
 
@@ -477,6 +550,16 @@ func (m *CreateSpecType) MarshalTo(dAtA []byte) (int, error) {
 			dAtA[i] = 0
 		}
 		i++
+	}
+	if m.DecryptCacheTimeout != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DecryptCacheTimeout.Size()))
+		n2, err := m.DecryptCacheTimeout.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
 	}
 	return i, nil
 }
@@ -523,6 +606,16 @@ func (m *ReplaceSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i++
 	}
+	if m.DecryptCacheTimeout != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DecryptCacheTimeout.Size()))
+		n3, err := m.DecryptCacheTimeout.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
 	return i, nil
 }
 
@@ -568,6 +661,16 @@ func (m *GetSpecType) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i++
 	}
+	if m.DecryptCacheTimeout != nil {
+		dAtA[i] = 0x22
+		i++
+		i = encodeVarintTypes(dAtA, i, uint64(m.DecryptCacheTimeout.Size()))
+		n4, err := m.DecryptCacheTimeout.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n4
+	}
 	return i, nil
 }
 
@@ -595,6 +698,10 @@ func (m *GlobalSpecType) Size() (n int) {
 	if m.AllowVolterra {
 		n += 2
 	}
+	if m.DecryptCacheTimeout != nil {
+		l = m.DecryptCacheTimeout.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -612,6 +719,10 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	if m.AllowVolterra {
 		n += 2
+	}
+	if m.DecryptCacheTimeout != nil {
+		l = m.DecryptCacheTimeout.Size()
+		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -631,6 +742,10 @@ func (m *ReplaceSpecType) Size() (n int) {
 	if m.AllowVolterra {
 		n += 2
 	}
+	if m.DecryptCacheTimeout != nil {
+		l = m.DecryptCacheTimeout.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -648,6 +763,10 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.AllowVolterra {
 		n += 2
+	}
+	if m.DecryptCacheTimeout != nil {
+		l = m.DecryptCacheTimeout.Size()
+		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -673,6 +792,7 @@ func (this *GlobalSpecType) String() string {
 		`Algo:` + fmt.Sprintf("%v", this.Algo) + `,`,
 		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
 		`AllowVolterra:` + fmt.Sprintf("%v", this.AllowVolterra) + `,`,
+		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "google_protobuf1.Duration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -685,6 +805,7 @@ func (this *CreateSpecType) String() string {
 		`Algo:` + fmt.Sprintf("%v", this.Algo) + `,`,
 		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
 		`AllowVolterra:` + fmt.Sprintf("%v", this.AllowVolterra) + `,`,
+		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "google_protobuf1.Duration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -697,6 +818,7 @@ func (this *ReplaceSpecType) String() string {
 		`Algo:` + fmt.Sprintf("%v", this.Algo) + `,`,
 		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
 		`AllowVolterra:` + fmt.Sprintf("%v", this.AllowVolterra) + `,`,
+		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "google_protobuf1.Duration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -709,6 +831,7 @@ func (this *GetSpecType) String() string {
 		`Algo:` + fmt.Sprintf("%v", this.Algo) + `,`,
 		`Rules:` + strings.Replace(fmt.Sprintf("%v", this.Rules), "ObjectRefType", "ves_io_schema4.ObjectRefType", 1) + `,`,
 		`AllowVolterra:` + fmt.Sprintf("%v", this.AllowVolterra) + `,`,
+		`DecryptCacheTimeout:` + strings.Replace(fmt.Sprintf("%v", this.DecryptCacheTimeout), "Duration", "google_protobuf1.Duration", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -820,6 +943,39 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.AllowVolterra = bool(v != 0)
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DecryptCacheTimeout", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DecryptCacheTimeout == nil {
+				m.DecryptCacheTimeout = &google_protobuf1.Duration{}
+			}
+			if err := m.DecryptCacheTimeout.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -940,6 +1096,39 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.AllowVolterra = bool(v != 0)
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DecryptCacheTimeout", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DecryptCacheTimeout == nil {
+				m.DecryptCacheTimeout = &google_protobuf1.Duration{}
+			}
+			if err := m.DecryptCacheTimeout.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -1060,6 +1249,39 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.AllowVolterra = bool(v != 0)
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DecryptCacheTimeout", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DecryptCacheTimeout == nil {
+				m.DecryptCacheTimeout = &google_protobuf1.Duration{}
+			}
+			if err := m.DecryptCacheTimeout.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -1180,6 +1402,39 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.AllowVolterra = bool(v != 0)
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DecryptCacheTimeout", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DecryptCacheTimeout == nil {
+				m.DecryptCacheTimeout = &google_protobuf1.Duration{}
+			}
+			if err := m.DecryptCacheTimeout.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -1309,35 +1564,39 @@ var (
 func init() { proto.RegisterFile("ves.io/schema/secret_policy/types.proto", fileDescriptorTypes) }
 
 var fileDescriptorTypes = []byte{
-	// 477 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x54, 0x31, 0x6f, 0xd3, 0x40,
-	0x14, 0xce, 0x6b, 0xa0, 0x42, 0x8e, 0x08, 0xe0, 0x01, 0x85, 0xb4, 0x3a, 0x59, 0x91, 0x10, 0x19,
-	0x88, 0x2d, 0x95, 0x8d, 0x01, 0xd1, 0x44, 0xa2, 0x30, 0x20, 0x84, 0x1b, 0x21, 0xc4, 0x62, 0xd9,
-	0xee, 0x8b, 0x73, 0x70, 0xce, 0x3b, 0x9d, 0xcf, 0x2e, 0x19, 0x2a, 0x55, 0xe2, 0x0f, 0x20, 0x7e,
-	0x05, 0xe2, 0x27, 0xd0, 0x85, 0x11, 0x31, 0x75, 0x8c, 0x58, 0x20, 0xee, 0x40, 0xd9, 0xfa, 0x13,
-	0x50, 0xed, 0x06, 0xe1, 0xd2, 0x89, 0x09, 0x75, 0xbb, 0xbb, 0xef, 0x7b, 0xdf, 0xf7, 0xbe, 0x77,
-	0xd2, 0x33, 0x6e, 0x65, 0x98, 0xd8, 0x9c, 0x9c, 0x24, 0x1c, 0x63, 0xec, 0x3b, 0x09, 0x86, 0x0a,
-	0xb5, 0x27, 0x49, 0xf0, 0x70, 0xea, 0xe8, 0xa9, 0xc4, 0xc4, 0x96, 0x8a, 0x34, 0x99, 0x2b, 0x25,
-	0xd1, 0x2e, 0x89, 0x76, 0x85, 0xd8, 0xee, 0x45, 0x5c, 0x8f, 0xd3, 0xc0, 0x0e, 0x29, 0x76, 0x22,
-	0x8a, 0xc8, 0x29, 0x6a, 0x82, 0x74, 0x54, 0xdc, 0x8a, 0x4b, 0x71, 0x2a, 0xb5, 0xda, 0x2b, 0x55,
-	0x53, 0x92, 0x9a, 0xd3, 0xe4, 0xc4, 0xa8, 0x6d, 0x55, 0xc1, 0xbf, 0x5b, 0x69, 0xdf, 0xa8, 0x32,
-	0xfe, 0x84, 0x56, 0xab, 0x50, 0xe6, 0x0b, 0xbe, 0xe5, 0x6b, 0x3c, 0x5b, 0x3a, 0xe3, 0xb8, 0xed,
-	0x55, 0xcc, 0x3b, 0x3f, 0xc0, 0x68, 0x6e, 0x08, 0x0a, 0x7c, 0xb1, 0x29, 0x31, 0x1c, 0x4e, 0x25,
-	0x9a, 0xcf, 0x8d, 0x0b, 0xbe, 0x88, 0xa8, 0x05, 0x16, 0x74, 0x9b, 0x6b, 0xb7, 0xed, 0xea, 0x1c,
-	0xca, 0xf6, 0x6c, 0x37, 0x15, 0x38, 0xa0, 0x38, 0xe0, 0x13, 0x3e, 0x89, 0xd6, 0x45, 0x44, 0x8a,
-	0xeb, 0x71, 0xdc, 0xbf, 0x3e, 0xdb, 0x81, 0xaf, 0x7b, 0xd0, 0x78, 0xf0, 0xc8, 0xdd, 0x1c, 0x7a,
-	0x8f, 0xd7, 0x87, 0x83, 0x87, 0x87, 0x7b, 0x00, 0x6e, 0xa1, 0x68, 0x0e, 0x8d, 0x8b, 0x2a, 0x15,
-	0x98, 0xb4, 0x96, 0xac, 0x7a, 0xb7, 0xb1, 0xb6, 0x7a, 0x4a, 0xfa, 0x49, 0xf0, 0x12, 0x43, 0xed,
-	0xe2, 0xe8, 0xb8, 0x8d, 0xbe, 0xf5, 0x61, 0xc7, 0xac, 0x0c, 0xdd, 0x3b, 0xae, 0xfd, 0xf8, 0xf3,
-	0x53, 0x7d, 0xf9, 0x1d, 0xd4, 0xaf, 0xee, 0x2e, 0xb9, 0xa5, 0x98, 0x79, 0xd3, 0x68, 0xfa, 0x42,
-	0xd0, 0xb6, 0x97, 0x91, 0xd0, 0xa8, 0x94, 0xdf, 0xaa, 0x5b, 0xd0, 0xbd, 0xe4, 0x5e, 0x2e, 0x5e,
-	0x9f, 0x9d, 0x3c, 0x76, 0x72, 0x30, 0x9a, 0x03, 0x85, 0xbe, 0xc6, 0xdf, 0x49, 0xef, 0xff, 0x7b,
-	0xd2, 0xff, 0x20, 0xd1, 0xdd, 0x6b, 0x5f, 0xee, 0x9d, 0xfa, 0xbb, 0xce, 0x01, 0x18, 0x57, 0x5c,
-	0x94, 0xc2, 0x0f, 0xcf, 0x73, 0xca, 0x6f, 0x60, 0x34, 0x36, 0x50, 0x9f, 0xdf, 0x84, 0xfd, 0x37,
-	0xb0, 0x3f, 0x67, 0xb5, 0xd9, 0x9c, 0xd5, 0x8e, 0xe6, 0x0c, 0x76, 0x73, 0x06, 0xef, 0x73, 0x06,
-	0x9f, 0x73, 0x06, 0xfb, 0x39, 0x83, 0x59, 0xce, 0xe0, 0x7b, 0xce, 0xe0, 0x30, 0x67, 0xb5, 0xa3,
-	0x9c, 0xc1, 0xdb, 0x03, 0x56, 0x7b, 0xf1, 0x34, 0x22, 0xf9, 0x2a, 0xb2, 0x17, 0x56, 0x76, 0x9a,
-	0x38, 0xc5, 0x61, 0x44, 0x2a, 0xee, 0x49, 0x45, 0x19, 0xdf, 0x42, 0xd5, 0x5b, 0xc0, 0x8e, 0x0c,
-	0x22, 0x72, 0xf0, 0xb5, 0x5e, 0xec, 0xc1, 0x33, 0xd6, 0x61, 0xb0, 0x5c, 0xec, 0x88, 0x3b, 0xbf,
-	0x02, 0x00, 0x00, 0xff, 0xff, 0x17, 0xd8, 0x4e, 0x01, 0x34, 0x05, 0x00, 0x00,
+	// 543 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x55, 0x3d, 0x6f, 0xd3, 0x40,
+	0x18, 0xce, 0x39, 0xa5, 0x42, 0x8e, 0x08, 0x60, 0x04, 0x4a, 0xd3, 0xea, 0x64, 0x55, 0x42, 0x64,
+	0xa0, 0x67, 0x29, 0x6c, 0x0c, 0x88, 0x26, 0x88, 0xc2, 0x50, 0x21, 0xdc, 0x08, 0x21, 0x16, 0xcb,
+	0x76, 0xde, 0x38, 0x86, 0x73, 0xde, 0xd3, 0xf9, 0x9c, 0x92, 0xa1, 0x52, 0x25, 0xfe, 0x00, 0xe2,
+	0x57, 0x20, 0x06, 0x24, 0x18, 0x18, 0xe8, 0xc2, 0x88, 0x98, 0x3a, 0x46, 0x4c, 0xc4, 0x2c, 0x65,
+	0xeb, 0x4f, 0x40, 0xb1, 0x13, 0xc0, 0xa5, 0x43, 0xc5, 0x88, 0xba, 0xdd, 0xdd, 0xf3, 0xe1, 0xc7,
+	0xcf, 0x7b, 0xd2, 0xe9, 0xd7, 0x86, 0x10, 0xb3, 0x10, 0xad, 0xd8, 0xef, 0x43, 0xe4, 0x5a, 0x31,
+	0xf8, 0x12, 0x94, 0x23, 0x90, 0x87, 0xfe, 0xc8, 0x52, 0x23, 0x01, 0x31, 0x13, 0x12, 0x15, 0x1a,
+	0xcb, 0x39, 0x91, 0xe5, 0x44, 0x56, 0x20, 0xd6, 0xd7, 0x82, 0x50, 0xf5, 0x13, 0x8f, 0xf9, 0x18,
+	0x59, 0x01, 0x06, 0x68, 0x65, 0x1a, 0x2f, 0xe9, 0x65, 0xbb, 0x6c, 0x93, 0xad, 0x72, 0xaf, 0x3a,
+	0x0d, 0x10, 0x03, 0x0e, 0xbf, 0x59, 0xdd, 0x44, 0xba, 0x2a, 0xc4, 0xc1, 0x0c, 0x5f, 0x2e, 0x86,
+	0x42, 0x31, 0xc5, 0x66, 0x41, 0xea, 0x66, 0x11, 0xfc, 0x3b, 0x6a, 0x7d, 0xa9, 0xc8, 0xf8, 0x13,
+	0x5a, 0x29, 0x42, 0x43, 0x97, 0x87, 0x5d, 0x57, 0xc1, 0xf1, 0xd6, 0xc3, 0x10, 0xb6, 0x9d, 0xc2,
+	0xc7, 0x57, 0x3f, 0x68, 0x7a, 0x75, 0x83, 0xa3, 0xe7, 0xf2, 0x2d, 0x01, 0x7e, 0x67, 0x24, 0xc0,
+	0x78, 0xac, 0x2f, 0xb8, 0x3c, 0xc0, 0x1a, 0x31, 0x49, 0xa3, 0xda, 0xbc, 0xce, 0x8a, 0x3d, 0xe5,
+	0xf1, 0x98, 0x9d, 0x70, 0x68, 0x63, 0xe4, 0x85, 0x83, 0x70, 0x10, 0xac, 0xf3, 0x00, 0x65, 0xa8,
+	0xfa, 0x51, 0xeb, 0xca, 0x78, 0x87, 0x7c, 0xdd, 0x23, 0x95, 0xbb, 0xf7, 0xed, 0xad, 0x8e, 0xb3,
+	0xb9, 0xde, 0x69, 0xdf, 0x3b, 0xd8, 0x23, 0xc4, 0xce, 0x1c, 0x8d, 0x8e, 0x7e, 0x46, 0x26, 0x1c,
+	0xe2, 0x9a, 0x66, 0x96, 0x1b, 0x95, 0xe6, 0xca, 0x11, 0xeb, 0x07, 0xde, 0x53, 0xf0, 0x95, 0x0d,
+	0xbd, 0x69, 0x8c, 0x96, 0xf9, 0x66, 0xc7, 0x28, 0x0c, 0xc5, 0x99, 0x6a, 0x3f, 0xfe, 0xf8, 0x54,
+	0x5e, 0x7c, 0x45, 0xca, 0x17, 0x76, 0x35, 0x3b, 0x37, 0x33, 0xae, 0xea, 0x55, 0x97, 0x73, 0xdc,
+	0x76, 0x86, 0xc8, 0x15, 0x48, 0xe9, 0xd6, 0xca, 0x26, 0x69, 0x9c, 0xb5, 0xcf, 0x65, 0xa7, 0x8f,
+	0x66, 0x87, 0xc6, 0xa6, 0x7e, 0xb9, 0x0b, 0xbe, 0x1c, 0x09, 0xe5, 0xf8, 0xae, 0xdf, 0x07, 0x47,
+	0x85, 0x11, 0x60, 0xa2, 0x6a, 0x0b, 0x26, 0x69, 0x54, 0x9a, 0x4b, 0x2c, 0x9f, 0x21, 0x9b, 0xcf,
+	0x90, 0xdd, 0x99, 0xcd, 0xd0, 0xbe, 0x34, 0xd3, 0xb5, 0xa7, 0xb2, 0x4e, 0xae, 0x5a, 0x7d, 0xa7,
+	0xe9, 0xd5, 0xb6, 0x04, 0x57, 0xc1, 0xaf, 0xe2, 0x6e, 0xff, 0x7b, 0x71, 0xff, 0x5f, 0x41, 0x37,
+	0x2f, 0x7e, 0xb9, 0x75, 0xe4, 0x66, 0xad, 0xbe, 0xd7, 0xf4, 0xf3, 0x36, 0x08, 0xee, 0xfa, 0xa7,
+	0xa5, 0x9d, 0xb8, 0xb4, 0xb7, 0x9a, 0x5e, 0xd9, 0x00, 0x75, 0x5a, 0xd8, 0x09, 0x0b, 0x6b, 0xbd,
+	0x20, 0xfb, 0x13, 0x5a, 0x1a, 0x4f, 0x68, 0xe9, 0x70, 0x42, 0xc9, 0x6e, 0x4a, 0xc9, 0xeb, 0x94,
+	0x92, 0xcf, 0x29, 0x25, 0xfb, 0x29, 0x25, 0xe3, 0x94, 0x92, 0x6f, 0x29, 0x25, 0x07, 0x29, 0x2d,
+	0x1d, 0xa6, 0x94, 0xbc, 0xfc, 0x4e, 0x4b, 0x4f, 0x1e, 0x06, 0x28, 0x9e, 0x05, 0x6c, 0x9e, 0x9c,
+	0x25, 0xb1, 0x95, 0x2d, 0x7a, 0x28, 0xa3, 0x35, 0x21, 0x71, 0x18, 0x76, 0x41, 0xae, 0xcd, 0x61,
+	0x4b, 0x78, 0x01, 0x5a, 0xf0, 0x5c, 0xcd, 0xdf, 0x98, 0x63, 0x9e, 0x1a, 0x6f, 0x31, 0xfb, 0x81,
+	0x1b, 0x3f, 0x03, 0x00, 0x00, 0xff, 0xff, 0xdb, 0x26, 0x8e, 0x5c, 0x90, 0x06, 0x00, 0x00,
 }

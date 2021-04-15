@@ -328,7 +328,7 @@ var DefaultAuthenticationDetailsValidator = func() *ValidateAuthenticationDetail
 
 	vrhRedirectUrlChoice := v.RedirectUrlChoiceValidationRuleHandler
 	rulesRedirectUrlChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRedirectUrlChoice(rulesRedirectUrlChoice)
 	if err != nil {
@@ -2013,7 +2013,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
 	rulesChallengeType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChallengeType(rulesChallengeType)
 	if err != nil {
@@ -3617,7 +3617,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
 	rulesChallengeType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChallengeType(rulesChallengeType)
 	if err != nil {
@@ -5576,7 +5576,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
 	rulesChallengeType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChallengeType(rulesChallengeType)
 	if err != nil {
@@ -6335,7 +6335,7 @@ var DefaultPolicyBasedChallengeValidator = func() *ValidatePolicyBasedChallenge 
 
 	vrhChallengeChoice := v.ChallengeChoiceValidationRuleHandler
 	rulesChallengeChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChallengeChoice(rulesChallengeChoice)
 	if err != nil {
@@ -7576,7 +7576,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
 	rulesChallengeType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChallengeType(rulesChallengeType)
 	if err != nil {

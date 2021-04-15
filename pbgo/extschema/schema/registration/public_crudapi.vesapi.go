@@ -1215,6 +1215,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
 
+	case GET_RSP_FORMAT_REFERRING_OBJECTS:
+		rsrcReq.RspInReferringObjectsForm = true
+
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1412,6 +1415,19 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	}
 	_ = buildStatusForm
+	buildReferringObjectsForm := func() {
+		for _, br := range rsrcRsp.ReferringObjects {
+			rsp.ReferringObjects = append(rsp.ReferringObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+
+	}
+	_ = buildReferringObjectsForm
 
 	switch req.ResponseFormat {
 
@@ -1433,6 +1449,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
+
+	case GET_RSP_FORMAT_REFERRING_OBJECTS:
+		buildReferringObjectsForm()
 
 	default:
 		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
@@ -1939,7 +1958,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1947,10 +1966,11 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_DEFAULT",
                             "GET_RSP_FORMAT_FOR_CREATE",
                             "GET_RSP_FORMAT_FOR_REPLACE",
-                            "GET_RSP_FORMAT_READ"
+                            "GET_RSP_FORMAT_READ",
+                            "GET_RSP_FORMAT_REFERRING_OBJECTS"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "GetSpecType format"
+                        "x-displayname": "Referring Objects"
                     }
                 ],
                 "tags": [
@@ -2063,6 +2083,13 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "service Foo {\n      rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n    }\n\nThe JSON representation for -Empty- is empty JSON object -{}-.",
             "title": "A generic empty message that you can re-use to avoid defining duplicated\nempty messages in your APIs. A typical example is to use it as the request\nor the response type of an API method. For instance:"
+        },
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "ioschemaStatusType": {
             "type": "object",
@@ -2194,6 +2221,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/registrationObject",
                     "x-displayname": "Object"
                 },
+                "referring_objects": {
+                    "type": "array",
+                    "description": "The set of objects that are referring to this object in their spec",
+                    "title": "referring_objects",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Referring Objects"
+                },
                 "replace_form": {
                     "description": "Format to replace changeable values in object",
                     "title": "replace_form",
@@ -2223,13 +2259,14 @@ var APISwaggerJSON string = `{
         },
         "registrationGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
                 "GET_RSP_FORMAT_FOR_CREATE",
                 "GET_RSP_FORMAT_FOR_REPLACE",
-                "GET_RSP_FORMAT_READ"
+                "GET_RSP_FORMAT_READ",
+                "GET_RSP_FORMAT_REFERRING_OBJECTS"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
@@ -2548,6 +2585,8 @@ var APISwaggerJSON string = `{
             "title": "Passport",
             "x-displayname": "Passport",
             "x-ves-displayorder": "1,2,9,7,8,4,5,6,10,3,11",
+            "x-ves-oneof-field-operating_system_version_choice": "[\"default_os_version\",\"operating_system_version\"]",
+            "x-ves-oneof-field-volterra_sw_version_choice": "[\"default_sw_version\",\"volterra_software_version\"]",
             "x-ves-proto-message": "ves.io.schema.registration.Passport",
             "properties": {
                 "cluster_name": {
@@ -2574,6 +2613,16 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "ce",
                     "x-ves-required": "true"
                 },
+                "default_os_version": {
+                    "description": "Exclusive with [operating_system_version]\nx-displayName: \"Default OS Version\"\nWill assign latest available OS version or version defined on parent object such as Fleet, VoltStack site, AWS, Azure, etc.",
+                    "title": "Default OS Version",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "default_sw_version": {
+                    "description": "Exclusive with [volterra_software_version]\nx-displayName: \"Default SW Version\"\nWill assign latest available SW version or version defined on parent object such as Fleet, VoltStack site, AWS, Azure, etc.",
+                    "title": "Default SW Version",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "latitude": {
                     "type": "number",
                     "description": " Geographic location of this site\n\nExample: - \"49.3156733\"-",
@@ -2590,12 +2639,22 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Longitude",
                     "x-ves-example": "14.2484333"
                 },
+                "operating_system_version": {
+                    "type": "string",
+                    "description": "Exclusive with [default_os_version]\nx-displayName: \"Operating System Version\"\nx-example: \"7.2009.10\"\nOperating System Version is optional parameter, which allows to specify target SW version for particular site e.g. 7.2009.10.",
+                    "title": "Operating System Version"
+                },
                 "private_network_name": {
                     "type": "string",
                     "description": " Private Network name for private access connectivity to Volterra ADN.\n It is used for PrivateLink, CloudLink and L3VPN.\n\nExample: - \"private-ntw\"-",
                     "title": "Private Network Name",
                     "x-displayname": "Private Network Name",
                     "x-ves-example": "private-ntw"
+                },
+                "volterra_software_version": {
+                    "type": "string",
+                    "description": "Exclusive with [default_sw_version]\nx-displayName: \"Volterra Software Version\"\nx-example: \"crt-20210329-1002\"\nVolterra Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.",
+                    "title": "Volterra Software Version"
                 },
                 "vpm_version": {
                     "type": "string",
@@ -3153,6 +3212,14 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
                 },
                 "tenant": {
                     "type": "string",

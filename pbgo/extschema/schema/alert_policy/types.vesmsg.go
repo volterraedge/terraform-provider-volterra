@@ -1185,7 +1185,7 @@ var DefaultLabelMatcherValidator = func() *ValidateLabelMatcher {
 
 	vrhMatcherType := v.MatcherTypeValidationRuleHandler
 	rulesMatcherType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhMatcherType(rulesMatcherType)
 	if err != nil {
@@ -1366,7 +1366,7 @@ var DefaultNotificationParametersValidator = func() *ValidateNotificationParamet
 
 	vrhGroupBy := v.GroupByValidationRuleHandler
 	rulesGroupBy := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhGroupBy(rulesGroupBy)
 	if err != nil {
@@ -1837,7 +1837,7 @@ var DefaultRouteValidator = func() *ValidateRoute {
 
 	vrhAction := v.ActionValidationRuleHandler
 	rulesAction := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAction(rulesAction)
 	if err != nil {

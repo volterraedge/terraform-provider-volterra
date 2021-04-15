@@ -156,7 +156,7 @@ var DefaultAWSVPCOneInterfaceNodeTypeValidator = func() *ValidateAWSVPCOneInterf
 
 	vrhDiskSize := v.DiskSizeValidationRuleHandler
 	rulesDiskSize := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "64000",
+		"ves.io.schema.rules.uint32.lte": "2048",
 	}
 	vFn, err = vrhDiskSize(rulesDiskSize)
 	if err != nil {
@@ -326,7 +326,7 @@ var DefaultAWSVPCParamsTypeValidator = func() *ValidateAWSVPCParamsType {
 
 	vrhNameChoice := v.NameChoiceValidationRuleHandler
 	rulesNameChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNameChoice(rulesNameChoice)
 	if err != nil {
@@ -450,7 +450,7 @@ func (v *ValidateAWSVPCTwoInterfaceNodeType) OutsideSubnetValidationRuleHandler(
 
 func (v *ValidateAWSVPCTwoInterfaceNodeType) DiskSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for disk_size")
 	}
@@ -561,7 +561,7 @@ var DefaultAWSVPCTwoInterfaceNodeTypeValidator = func() *ValidateAWSVPCTwoInterf
 
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChoice(rulesChoice)
 	if err != nil {
@@ -595,7 +595,7 @@ var DefaultAWSVPCTwoInterfaceNodeTypeValidator = func() *ValidateAWSVPCTwoInterf
 
 	vrhDiskSize := v.DiskSizeValidationRuleHandler
 	rulesDiskSize := map[string]string{
-		"ves.io.schema.rules.string.max_len": "32",
+		"ves.io.schema.rules.uint32.lte": "2048",
 	}
 	vFn, err = vrhDiskSize(rulesDiskSize)
 	if err != nil {
@@ -739,7 +739,7 @@ var DefaultAWSVPCchoiceTypeValidator = func() *ValidateAWSVPCchoiceType {
 
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChoice(rulesChoice)
 	if err != nil {
@@ -893,7 +893,7 @@ var DefaultAzureSubnetChoiceTypeValidator = func() *ValidateAzureSubnetChoiceTyp
 
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChoice(rulesChoice)
 	if err != nil {
@@ -1201,7 +1201,7 @@ var DefaultAzureVnetChoiceTypeValidator = func() *ValidateAzureVnetChoiceType {
 
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChoice(rulesChoice)
 	if err != nil {
@@ -1273,7 +1273,7 @@ func (v *ValidateAzureVnetOneInterfaceNodeType) AzureAzValidationRuleHandler(rul
 
 func (v *ValidateAzureVnetOneInterfaceNodeType) DiskSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for disk_size")
 	}
@@ -1351,7 +1351,7 @@ var DefaultAzureVnetOneInterfaceNodeTypeValidator = func() *ValidateAzureVnetOne
 
 	vrhDiskSize := v.DiskSizeValidationRuleHandler
 	rulesDiskSize := map[string]string{
-		"ves.io.schema.rules.string.max_len": "32",
+		"ves.io.schema.rules.uint32.lte": "4095",
 	}
 	vFn, err = vrhDiskSize(rulesDiskSize)
 	if err != nil {
@@ -1512,7 +1512,7 @@ var DefaultAzureVnetParamsTypeValidator = func() *ValidateAzureVnetParamsType {
 
 	vrhNameChoice := v.NameChoiceValidationRuleHandler
 	rulesNameChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNameChoice(rulesNameChoice)
 	if err != nil {
@@ -1608,7 +1608,7 @@ func (v *ValidateAzureVnetTwoInterfaceNodeType) AzureAzValidationRuleHandler(rul
 
 func (v *ValidateAzureVnetTwoInterfaceNodeType) DiskSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for disk_size")
 	}
@@ -1695,7 +1695,7 @@ var DefaultAzureVnetTwoInterfaceNodeTypeValidator = func() *ValidateAzureVnetTwo
 
 	vrhDiskSize := v.DiskSizeValidationRuleHandler
 	rulesDiskSize := map[string]string{
-		"ves.io.schema.rules.string.max_len": "32",
+		"ves.io.schema.rules.uint32.lte": "4095",
 	}
 	vFn, err = vrhDiskSize(rulesDiskSize)
 	if err != nil {
@@ -2119,7 +2119,7 @@ var DefaultCloudSubnetTypeValidator = func() *ValidateCloudSubnetType {
 
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChoice(rulesChoice)
 	if err != nil {
@@ -2604,7 +2604,7 @@ var DefaultGCPVPCNetworkChoiceTypeValidator = func() *ValidateGCPVPCNetworkChoic
 
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChoice(rulesChoice)
 	if err != nil {
@@ -2957,7 +2957,7 @@ var DefaultGCPVPCSubnetChoiceTypeValidator = func() *ValidateGCPVPCSubnetChoiceT
 
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChoice(rulesChoice)
 	if err != nil {
@@ -3372,7 +3372,7 @@ var DefaultGlobalNetworkConnectionTypeValidator = func() *ValidateGlobalNetworkC
 
 	vrhConnectionChoice := v.ConnectionChoiceValidationRuleHandler
 	rulesConnectionChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhConnectionChoice(rulesConnectionChoice)
 	if err != nil {
@@ -3731,7 +3731,7 @@ var DefaultSiteStaticRoutesTypeValidator = func() *ValidateSiteStaticRoutesType 
 
 	vrhConfigModeChoice := v.ConfigModeChoiceValidationRuleHandler
 	rulesConfigModeChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhConfigModeChoice(rulesConfigModeChoice)
 	if err != nil {

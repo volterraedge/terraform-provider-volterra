@@ -192,7 +192,7 @@ var DefaultArgMatcherTypeValidator = func() *ValidateArgMatcherType {
 
 	vrhMatch := v.MatchValidationRuleHandler
 	rulesMatch := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhMatch(rulesMatch)
 	if err != nil {
@@ -719,7 +719,7 @@ var DefaultCookieMatcherTypeValidator = func() *ValidateCookieMatcherType {
 
 	vrhMatch := v.MatchValidationRuleHandler
 	rulesMatch := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhMatch(rulesMatch)
 	if err != nil {
@@ -1052,7 +1052,7 @@ var DefaultHeaderMatcherTypeValidator = func() *ValidateHeaderMatcherType {
 
 	vrhMatch := v.MatchValidationRuleHandler
 	rulesMatch := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhMatch(rulesMatch)
 	if err != nil {
@@ -2337,6 +2337,7 @@ var DefaultPathMatcherTypeValidator = func() *ValidatePathMatcherType {
 
 	vrhPrefixValues := v.PrefixValuesValidationRuleHandler
 	rulesPrefixValues := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.http_path": "true",
 		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
 		"ves.io.schema.rules.repeated.max_items":              "16",
 		"ves.io.schema.rules.repeated.unique":                 "true",
@@ -2350,6 +2351,7 @@ var DefaultPathMatcherTypeValidator = func() *ValidatePathMatcherType {
 
 	vrhExactValues := v.ExactValuesValidationRuleHandler
 	rulesExactValues := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.http_path": "true",
 		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
 		"ves.io.schema.rules.repeated.max_items":              "16",
 		"ves.io.schema.rules.repeated.unique":                 "true",
@@ -2861,7 +2863,7 @@ var DefaultQueryParameterMatcherTypeValidator = func() *ValidateQueryParameterMa
 
 	vrhMatch := v.MatchValidationRuleHandler
 	rulesMatch := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhMatch(rulesMatch)
 	if err != nil {
@@ -3293,7 +3295,7 @@ var DefaultSimpleWafExclusionRuleValidator = func() *ValidateSimpleWafExclusionR
 
 	vrhDomainChoice := v.DomainChoiceValidationRuleHandler
 	rulesDomainChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDomainChoice(rulesDomainChoice)
 	if err != nil {
@@ -3982,7 +3984,7 @@ var DefaultURLItemValidator = func() *ValidateURLItem {
 
 	vrhDomainChoice := v.DomainChoiceValidationRuleHandler
 	rulesDomainChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDomainChoice(rulesDomainChoice)
 	if err != nil {
@@ -4015,7 +4017,8 @@ var DefaultURLItemValidator = func() *ValidateURLItem {
 
 	vrhPathChoicePathValue := v.PathChoicePathValueValidationRuleHandler
 	rulesPathChoicePathValue := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.string.http_path": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
 	}
 	vFnMap["path_choice.path_value"], err = vrhPathChoicePathValue(rulesPathChoicePathValue)
 	if err != nil {
@@ -4034,7 +4037,8 @@ var DefaultURLItemValidator = func() *ValidateURLItem {
 	}
 	vrhPathChoicePathPrefix := v.PathChoicePathPrefixValidationRuleHandler
 	rulesPathChoicePathPrefix := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.string.http_path": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
 	}
 	vFnMap["path_choice.path_prefix"], err = vrhPathChoicePathPrefix(rulesPathChoicePathPrefix)
 	if err != nil {
@@ -4398,7 +4402,7 @@ var DefaultWafActionValidator = func() *ValidateWafAction {
 
 	vrhActionType := v.ActionTypeValidationRuleHandler
 	rulesActionType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhActionType(rulesActionType)
 	if err != nil {

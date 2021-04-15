@@ -142,6 +142,7 @@
 		ChoiceItem
 		ChoiceItemList
 		LabelKeyClassList
+		HiddenConditions
 		FieldViewOptions
 		MapOptions
 		RepeatedOptions

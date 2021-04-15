@@ -3355,6 +3355,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
+                },
                 "tenant": {
                     "type": "string",
                     "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
@@ -3725,7 +3733,7 @@ var APISwaggerJSON string = `{
             "description": "Parameters for creating Single interface Node in one AZ",
             "title": "Single Interface Node",
             "x-displayname": "Single Interface Node",
-            "x-ves-displayorder": "1,3,2",
+            "x-ves-displayorder": "1,4,2",
             "x-ves-proto-message": "ves.io.schema.views.AzureVnetOneInterfaceNodeType",
             "properties": {
                 "azure_az": {
@@ -3737,9 +3745,10 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "disk_size": {
-                    "type": "string",
+                    "type": "integer",
                     "description": " x-example \"80\"\n Disk size to be used for this instance in GiB. 80 is 80 GiB",
                     "title": "Cloud Disk size",
+                    "format": "int64",
                     "x-displayname": "Cloud Disk Size"
                 },
                 "local_subnet": {
@@ -3784,7 +3793,7 @@ var APISwaggerJSON string = `{
             "description": "Parameters for creating two interface Node in one AZ",
             "title": "Two Interface Node",
             "x-displayname": "Two Interface Node",
-            "x-ves-displayorder": "1,2,4,3",
+            "x-ves-displayorder": "1,2,5,3",
             "x-ves-proto-message": "ves.io.schema.views.AzureVnetTwoInterfaceNodeType",
             "properties": {
                 "azure_az": {
@@ -3796,9 +3805,10 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true"
                 },
                 "disk_size": {
-                    "type": "string",
+                    "type": "integer",
                     "description": " x-example \"80\"\n Disk size to be used for this instance in GiB. 80 is 80 GiB",
                     "title": "Cloud Disk size",
+                    "format": "int64",
                     "x-displayname": "Cloud Disk Size"
                 },
                 "inside_subnet": {

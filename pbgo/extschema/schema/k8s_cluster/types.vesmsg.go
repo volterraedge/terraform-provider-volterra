@@ -898,7 +898,7 @@ var DefaultClusterWideAppTypeValidator = func() *ValidateClusterWideAppType {
 
 	vrhAppChoice := v.AppChoiceValidationRuleHandler
 	rulesAppChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAppChoice(rulesAppChoice)
 	if err != nil {
@@ -1369,7 +1369,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhClusterRoleBindingsChoice := v.ClusterRoleBindingsChoiceValidationRuleHandler
 	rulesClusterRoleBindingsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClusterRoleBindingsChoice(rulesClusterRoleBindingsChoice)
 	if err != nil {
@@ -1380,7 +1380,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhClusterRoleChoice := v.ClusterRoleChoiceValidationRuleHandler
 	rulesClusterRoleChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClusterRoleChoice(rulesClusterRoleChoice)
 	if err != nil {
@@ -1391,7 +1391,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhGlobalAccessChoice := v.GlobalAccessChoiceValidationRuleHandler
 	rulesGlobalAccessChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhGlobalAccessChoice(rulesGlobalAccessChoice)
 	if err != nil {
@@ -1402,7 +1402,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhInsecureRegistriesChoice := v.InsecureRegistriesChoiceValidationRuleHandler
 	rulesInsecureRegistriesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInsecureRegistriesChoice(rulesInsecureRegistriesChoice)
 	if err != nil {
@@ -1413,7 +1413,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhLocalAccessChoice := v.LocalAccessChoiceValidationRuleHandler
 	rulesLocalAccessChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLocalAccessChoice(rulesLocalAccessChoice)
 	if err != nil {
@@ -1424,7 +1424,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhPodSecurityPolicyChoice := v.PodSecurityPolicyChoiceValidationRuleHandler
 	rulesPodSecurityPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhPodSecurityPolicyChoice(rulesPodSecurityPolicyChoice)
 	if err != nil {
@@ -1902,7 +1902,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhClusterRoleBindingsChoice := v.ClusterRoleBindingsChoiceValidationRuleHandler
 	rulesClusterRoleBindingsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClusterRoleBindingsChoice(rulesClusterRoleBindingsChoice)
 	if err != nil {
@@ -1913,7 +1913,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhClusterRoleChoice := v.ClusterRoleChoiceValidationRuleHandler
 	rulesClusterRoleChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClusterRoleChoice(rulesClusterRoleChoice)
 	if err != nil {
@@ -1924,7 +1924,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhGlobalAccessChoice := v.GlobalAccessChoiceValidationRuleHandler
 	rulesGlobalAccessChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhGlobalAccessChoice(rulesGlobalAccessChoice)
 	if err != nil {
@@ -1935,7 +1935,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhInsecureRegistriesChoice := v.InsecureRegistriesChoiceValidationRuleHandler
 	rulesInsecureRegistriesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInsecureRegistriesChoice(rulesInsecureRegistriesChoice)
 	if err != nil {
@@ -1946,7 +1946,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhLocalAccessChoice := v.LocalAccessChoiceValidationRuleHandler
 	rulesLocalAccessChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLocalAccessChoice(rulesLocalAccessChoice)
 	if err != nil {
@@ -1957,7 +1957,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhPodSecurityPolicyChoice := v.PodSecurityPolicyChoiceValidationRuleHandler
 	rulesPodSecurityPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhPodSecurityPolicyChoice(rulesPodSecurityPolicyChoice)
 	if err != nil {
@@ -2859,7 +2859,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhAppsChoice := v.AppsChoiceValidationRuleHandler
 	rulesAppsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAppsChoice(rulesAppsChoice)
 	if err != nil {
@@ -2870,7 +2870,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhClusterRoleBindingsChoice := v.ClusterRoleBindingsChoiceValidationRuleHandler
 	rulesClusterRoleBindingsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClusterRoleBindingsChoice(rulesClusterRoleBindingsChoice)
 	if err != nil {
@@ -2881,7 +2881,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhClusterRoleChoice := v.ClusterRoleChoiceValidationRuleHandler
 	rulesClusterRoleChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClusterRoleChoice(rulesClusterRoleChoice)
 	if err != nil {
@@ -2892,7 +2892,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhGlobalAccessChoice := v.GlobalAccessChoiceValidationRuleHandler
 	rulesGlobalAccessChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhGlobalAccessChoice(rulesGlobalAccessChoice)
 	if err != nil {
@@ -2903,7 +2903,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhInsecureRegistriesChoice := v.InsecureRegistriesChoiceValidationRuleHandler
 	rulesInsecureRegistriesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInsecureRegistriesChoice(rulesInsecureRegistriesChoice)
 	if err != nil {
@@ -2914,7 +2914,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhLocalAccessChoice := v.LocalAccessChoiceValidationRuleHandler
 	rulesLocalAccessChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLocalAccessChoice(rulesLocalAccessChoice)
 	if err != nil {
@@ -2925,7 +2925,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhPodSecurityPolicyChoice := v.PodSecurityPolicyChoiceValidationRuleHandler
 	rulesPodSecurityPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhPodSecurityPolicyChoice(rulesPodSecurityPolicyChoice)
 	if err != nil {
@@ -3277,7 +3277,7 @@ var DefaultLocalAccessConfigTypeValidator = func() *ValidateLocalAccessConfigTyp
 
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhPortChoice(rulesPortChoice)
 	if err != nil {
@@ -3972,7 +3972,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhClusterRoleBindingsChoice := v.ClusterRoleBindingsChoiceValidationRuleHandler
 	rulesClusterRoleBindingsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClusterRoleBindingsChoice(rulesClusterRoleBindingsChoice)
 	if err != nil {
@@ -3983,7 +3983,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhClusterRoleChoice := v.ClusterRoleChoiceValidationRuleHandler
 	rulesClusterRoleChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClusterRoleChoice(rulesClusterRoleChoice)
 	if err != nil {
@@ -3994,7 +3994,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhGlobalAccessChoice := v.GlobalAccessChoiceValidationRuleHandler
 	rulesGlobalAccessChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhGlobalAccessChoice(rulesGlobalAccessChoice)
 	if err != nil {
@@ -4005,7 +4005,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhInsecureRegistriesChoice := v.InsecureRegistriesChoiceValidationRuleHandler
 	rulesInsecureRegistriesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInsecureRegistriesChoice(rulesInsecureRegistriesChoice)
 	if err != nil {
@@ -4016,7 +4016,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhLocalAccessChoice := v.LocalAccessChoiceValidationRuleHandler
 	rulesLocalAccessChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhLocalAccessChoice(rulesLocalAccessChoice)
 	if err != nil {
@@ -4027,7 +4027,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhPodSecurityPolicyChoice := v.PodSecurityPolicyChoiceValidationRuleHandler
 	rulesPodSecurityPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhPodSecurityPolicyChoice(rulesPodSecurityPolicyChoice)
 	if err != nil {

@@ -1229,6 +1229,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
 
+	case GET_RSP_FORMAT_REFERRING_OBJECTS:
+		rsrcReq.RspInReferringObjectsForm = true
+
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1434,6 +1437,19 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	}
 	_ = buildStatusForm
+	buildReferringObjectsForm := func() {
+		for _, br := range rsrcRsp.ReferringObjects {
+			rsp.ReferringObjects = append(rsp.ReferringObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+
+	}
+	_ = buildReferringObjectsForm
 
 	switch req.ResponseFormat {
 
@@ -1458,6 +1474,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
+
+	case GET_RSP_FORMAT_REFERRING_OBJECTS:
+		buildReferringObjectsForm()
 
 	default:
 		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
@@ -1975,7 +1994,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1984,10 +2003,11 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_FOR_CREATE",
                             "GET_RSP_FORMAT_FOR_REPLACE",
                             "GET_RSP_FORMAT_STATUS",
-                            "GET_RSP_FORMAT_READ"
+                            "GET_RSP_FORMAT_READ",
+                            "GET_RSP_FORMAT_REFERRING_OBJECTS"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "GetSpecType format"
+                        "x-displayname": "Referring Objects"
                     }
                 ],
                 "tags": [
@@ -2713,6 +2733,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
+                },
                 "tenant": {
                     "type": "string",
                     "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
@@ -3304,6 +3332,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/waf_rulesObject",
                     "x-displayname": "Object"
                 },
+                "referring_objects": {
+                    "type": "array",
+                    "description": "The set of objects that are referring to this object in their spec",
+                    "title": "referring_objects",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Referring Objects"
+                },
                 "replace_form": {
                     "description": "Format to replace changeable values in object",
                     "title": "replace_form",
@@ -3342,14 +3379,15 @@ var APISwaggerJSON string = `{
         },
         "waf_rulesGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
                 "GET_RSP_FORMAT_FOR_CREATE",
                 "GET_RSP_FORMAT_FOR_REPLACE",
                 "GET_RSP_FORMAT_STATUS",
-                "GET_RSP_FORMAT_READ"
+                "GET_RSP_FORMAT_READ",
+                "GET_RSP_FORMAT_REFERRING_OBJECTS"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
@@ -3543,70 +3581,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Rule Mode",
             "x-ves-proto-enum": "ves.io.schema.waf_rules.RuleModeType"
         },
-        "waf_rulesRules": {
-            "type": "object",
-            "description": "Every WAF rule will have these properties associated",
-            "title": "Rule",
-            "x-displayname": "Rule",
-            "x-ves-proto-message": "ves.io.schema.waf_rules.Rules",
-            "properties": {
-                "description": {
-                    "type": "string",
-                    "description": " This is the brief description of the rule.\n\nExample: - \"IE XSS Filters - Attack Detected.\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "IE XSS Filters - Attack Detected."
-                },
-                "id": {
-                    "type": "integer",
-                    "description": " WAF rule ID which is a unique ID with in waf_rules object.\n Generated alerts will have the id displayed in alert.\n\nExample: - \"941210\"-",
-                    "title": "id",
-                    "format": "int64",
-                    "x-displayname": "ID",
-                    "x-ves-example": "941210"
-                },
-                "mode": {
-                    "description": " Whether the Rule is excluded or included",
-                    "title": "mode",
-                    "$ref": "#/definitions/waf_rulesRuleModeType",
-                    "x-displayname": "Mode"
-                },
-                "severity": {
-                    "description": " Severity of the rule.",
-                    "title": "severity",
-                    "$ref": "#/definitions/waf_rulesSeverityType",
-                    "x-displayname": "Severity"
-                },
-                "tags": {
-                    "type": "array",
-                    "description": "Tags are a set of string labels associated with a rule. For eg a particular rule may be under\n\"attack-sqli\" and \"attack-protocol\" tags. This is used by user to find out Tags associated with a\nRule.\n\nExample: - \"[\"attack-sqli\", \"attack-protocol\"]\"-",
-                    "title": "tags",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Tags",
-                    "x-ves-example": "[\"attack-sqli\", \"attack-protocol\"]"
-                }
-            }
-        },
-        "waf_rulesSeverityType": {
-            "type": "string",
-            "description": "Rule severity as defined in the rule\n\nEmergency Level\nAlert Level\nCritical Level\nError Level\nWarning Level\nNotice Level\nInfo Level\nDebug Level",
-            "title": "SeverityType",
-            "enum": [
-                "EMERGENCY",
-                "ALERT",
-                "CRITICAL",
-                "ERROR",
-                "WARNING",
-                "NOTICE",
-                "INFO",
-                "DEBUG"
-            ],
-            "default": "EMERGENCY",
-            "x-displayname": "Severity",
-            "x-ves-proto-enum": "ves.io.schema.waf_rules.SeverityType"
-        },
         "waf_rulesSpecType": {
             "type": "object",
             "description": "Shape of the WAF specification",
@@ -3628,14 +3602,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "WAF Rules Status Object",
             "x-ves-proto-message": "ves.io.schema.waf_rules.StatusObject",
             "properties": {
-                "anomaly_score_threshold": {
-                    "type": "integer",
-                    "description": " if anomaly score is same or above threshold , the req/resp will be blocked/alerted (depending\n on non_blocking_mode configuration)\n\nExample: - \"5\"-",
-                    "title": "anomaly score threshold",
-                    "format": "int64",
-                    "x-displayname": "Anomaly Score Threshold",
-                    "x-ves-example": "5"
-                },
                 "conditions": {
                     "type": "array",
                     "title": "conditions",
@@ -3650,12 +3616,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaStatusMetaType",
                     "x-displayname": "Metadata"
                 },
-                "mode": {
-                    "description": " WAF Mode is blocking or Alert",
-                    "title": "mode",
-                    "$ref": "#/definitions/schemaWafModeType",
-                    "x-displayname": "Mode"
-                },
                 "object_refs": {
                     "type": "array",
                     "description": " Object reference",
@@ -3664,23 +3624,6 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
-                },
-                "paranoia_level": {
-                    "type": "integer",
-                    "description": " Paranoia level\n\nExample: - \"3\"-",
-                    "title": "paranoia_level",
-                    "format": "int64",
-                    "x-displayname": "Paranoia Level",
-                    "x-ves-example": "3"
-                },
-                "rules": {
-                    "type": "array",
-                    "description": " WAF rules associated with this instance",
-                    "title": "rules",
-                    "items": {
-                        "$ref": "#/definitions/waf_rulesRules"
-                    },
-                    "x-displayname": "Rules"
                 }
             }
         }
