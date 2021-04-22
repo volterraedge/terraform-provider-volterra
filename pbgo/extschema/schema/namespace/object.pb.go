@@ -42,6 +42,10 @@
 		SetActiveNetworkPoliciesResponse
 		GetActiveNetworkPoliciesRequest
 		GetActiveNetworkPoliciesResponse
+		SetActiveAlertPoliciesRequest
+		SetActiveAlertPoliciesResponse
+		GetActiveAlertPoliciesRequest
+		GetActiveAlertPoliciesResponse
 		SubCA
 		GlobalSpecType
 		CreateSpecType

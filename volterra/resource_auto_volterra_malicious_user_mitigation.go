@@ -60,51 +60,6 @@ func resourceVolterraMaliciousUserMitigation() *schema.Resource {
 				ForceNew: true,
 			},
 
-			"captcha_challenge_settings": {
-
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"cookie_expiry": {
-							Type:     schema.TypeInt,
-							Optional: true,
-						},
-
-						"custom_page": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-					},
-				},
-			},
-
-			"javascript_challenge_settings": {
-
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"cookie_expiry": {
-							Type:     schema.TypeInt,
-							Optional: true,
-						},
-
-						"custom_page": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-
-						"js_script_delay": {
-							Type:     schema.TypeInt,
-							Optional: true,
-						},
-					},
-				},
-			},
-
 			"mitigation_type": {
 
 				Type:     schema.TypeSet,
@@ -192,21 +147,6 @@ func resourceVolterraMaliciousUserMitigation() *schema.Resource {
 					},
 				},
 			},
-
-			"temporary_blocking_settings": {
-
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"custom_page": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-					},
-				},
-			},
 		},
 	}
 }
@@ -262,52 +202,6 @@ func resourceVolterraMaliciousUserMitigationCreate(d *schema.ResourceData, meta 
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		createMeta.Namespace =
 			v.(string)
-	}
-
-	//captcha_challenge_settings
-	if v, ok := d.GetOk("captcha_challenge_settings"); ok && !isIntfNil(v) {
-
-		sl := v.(*schema.Set).List()
-		captchaChallengeSettings := &ves_io_schema_malicious_user_mitigation.CaptchaChallengeSettings{}
-		createSpec.CaptchaChallengeSettings = captchaChallengeSettings
-		for _, set := range sl {
-			captchaChallengeSettingsMapStrToI := set.(map[string]interface{})
-
-			if w, ok := captchaChallengeSettingsMapStrToI["cookie_expiry"]; ok && !isIntfNil(w) {
-				captchaChallengeSettings.CookieExpiry = uint32(w.(int))
-			}
-
-			if w, ok := captchaChallengeSettingsMapStrToI["custom_page"]; ok && !isIntfNil(w) {
-				captchaChallengeSettings.CustomPage = w.(string)
-			}
-
-		}
-
-	}
-
-	//javascript_challenge_settings
-	if v, ok := d.GetOk("javascript_challenge_settings"); ok && !isIntfNil(v) {
-
-		sl := v.(*schema.Set).List()
-		javascriptChallengeSettings := &ves_io_schema_malicious_user_mitigation.JavascriptChallengeSettings{}
-		createSpec.JavascriptChallengeSettings = javascriptChallengeSettings
-		for _, set := range sl {
-			javascriptChallengeSettingsMapStrToI := set.(map[string]interface{})
-
-			if w, ok := javascriptChallengeSettingsMapStrToI["cookie_expiry"]; ok && !isIntfNil(w) {
-				javascriptChallengeSettings.CookieExpiry = uint32(w.(int))
-			}
-
-			if w, ok := javascriptChallengeSettingsMapStrToI["custom_page"]; ok && !isIntfNil(w) {
-				javascriptChallengeSettings.CustomPage = w.(string)
-			}
-
-			if w, ok := javascriptChallengeSettingsMapStrToI["js_script_delay"]; ok && !isIntfNil(w) {
-				javascriptChallengeSettings.JsScriptDelay = uint32(w.(int))
-			}
-
-		}
-
 	}
 
 	//mitigation_type
@@ -460,23 +354,6 @@ func resourceVolterraMaliciousUserMitigationCreate(d *schema.ResourceData, meta 
 
 	}
 
-	//temporary_blocking_settings
-	if v, ok := d.GetOk("temporary_blocking_settings"); ok && !isIntfNil(v) {
-
-		sl := v.(*schema.Set).List()
-		temporaryBlockingSettings := &ves_io_schema_malicious_user_mitigation.TemporaryBlockingSettings{}
-		createSpec.TemporaryBlockingSettings = temporaryBlockingSettings
-		for _, set := range sl {
-			temporaryBlockingSettingsMapStrToI := set.(map[string]interface{})
-
-			if w, ok := temporaryBlockingSettingsMapStrToI["custom_page"]; ok && !isIntfNil(w) {
-				temporaryBlockingSettings.CustomPage = w.(string)
-			}
-
-		}
-
-	}
-
 	log.Printf("[DEBUG] Creating Volterra MaliciousUserMitigation object with struct: %+v", createReq)
 
 	createMaliciousUserMitigationResp, err := client.CreateObject(context.Background(), ves_io_schema_malicious_user_mitigation.ObjectType, createReq)
@@ -573,50 +450,6 @@ func resourceVolterraMaliciousUserMitigationUpdate(d *schema.ResourceData, meta 
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		updateMeta.Namespace =
 			v.(string)
-	}
-
-	if v, ok := d.GetOk("captcha_challenge_settings"); ok && !isIntfNil(v) {
-
-		sl := v.(*schema.Set).List()
-		captchaChallengeSettings := &ves_io_schema_malicious_user_mitigation.CaptchaChallengeSettings{}
-		updateSpec.CaptchaChallengeSettings = captchaChallengeSettings
-		for _, set := range sl {
-			captchaChallengeSettingsMapStrToI := set.(map[string]interface{})
-
-			if w, ok := captchaChallengeSettingsMapStrToI["cookie_expiry"]; ok && !isIntfNil(w) {
-				captchaChallengeSettings.CookieExpiry = uint32(w.(int))
-			}
-
-			if w, ok := captchaChallengeSettingsMapStrToI["custom_page"]; ok && !isIntfNil(w) {
-				captchaChallengeSettings.CustomPage = w.(string)
-			}
-
-		}
-
-	}
-
-	if v, ok := d.GetOk("javascript_challenge_settings"); ok && !isIntfNil(v) {
-
-		sl := v.(*schema.Set).List()
-		javascriptChallengeSettings := &ves_io_schema_malicious_user_mitigation.JavascriptChallengeSettings{}
-		updateSpec.JavascriptChallengeSettings = javascriptChallengeSettings
-		for _, set := range sl {
-			javascriptChallengeSettingsMapStrToI := set.(map[string]interface{})
-
-			if w, ok := javascriptChallengeSettingsMapStrToI["cookie_expiry"]; ok && !isIntfNil(w) {
-				javascriptChallengeSettings.CookieExpiry = uint32(w.(int))
-			}
-
-			if w, ok := javascriptChallengeSettingsMapStrToI["custom_page"]; ok && !isIntfNil(w) {
-				javascriptChallengeSettings.CustomPage = w.(string)
-			}
-
-			if w, ok := javascriptChallengeSettingsMapStrToI["js_script_delay"]; ok && !isIntfNil(w) {
-				javascriptChallengeSettings.JsScriptDelay = uint32(w.(int))
-			}
-
-		}
-
 	}
 
 	if v, ok := d.GetOk("mitigation_type"); ok && !isIntfNil(v) {
@@ -762,22 +595,6 @@ func resourceVolterraMaliciousUserMitigationUpdate(d *schema.ResourceData, meta 
 
 				}
 
-			}
-
-		}
-
-	}
-
-	if v, ok := d.GetOk("temporary_blocking_settings"); ok && !isIntfNil(v) {
-
-		sl := v.(*schema.Set).List()
-		temporaryBlockingSettings := &ves_io_schema_malicious_user_mitigation.TemporaryBlockingSettings{}
-		updateSpec.TemporaryBlockingSettings = temporaryBlockingSettings
-		for _, set := range sl {
-			temporaryBlockingSettingsMapStrToI := set.(map[string]interface{})
-
-			if w, ok := temporaryBlockingSettingsMapStrToI["custom_page"]; ok && !isIntfNil(w) {
-				temporaryBlockingSettings.CustomPage = w.(string)
 			}
 
 		}

@@ -22,25 +22,30 @@ resource "volterra_azure_vnet_site" "example" {
   azure_region = ["East US"]
 
   // One of the arguments from this list "azure_cred assisted" must be set
+  assisted = true
 
-  azure_cred {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
   resource_group          = ["my-resources"]
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
+  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
 
-  ingress_gw {
+  ingress_egress_gw {
     az_nodes {
       azure_az  = "1"
       disk_size = "disk_size"
 
-      local_subnet {
-        // One of the arguments from this list "subnet subnet_param" must be set
+      inside_subnet {
+        // One of the arguments from this list "subnet_param subnet" must be set
+
+        subnet_param {
+          ipv4 = "10.1.2.0/24"
+          ipv6 = "1234:568:abcd:9100::/64"
+        }
+      }
+
+      outside_subnet {
+        // One of the arguments from this list "subnet_param subnet" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -49,7 +54,28 @@ resource "volterra_azure_vnet_site" "example" {
       }
     }
 
-    azure_certified_hw = "azure-byol-voltmesh"
+    azure_certified_hw = "azure-byol-multi-nic-voltmesh"
+
+    // One of the arguments from this list "forward_proxy_allow_all no_forward_proxy active_forward_proxy_policies" must be set
+    no_forward_proxy = true
+
+    // One of the arguments from this list "no_global_network global_network_list" must be set
+    no_global_network = true
+
+    // One of the arguments from this list "inside_static_routes no_inside_static_routes" must be set
+    no_inside_static_routes = true
+
+    // One of the arguments from this list "no_network_policy active_network_policies" must be set
+
+    active_network_policies {
+      network_policies {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+    }
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+    no_outside_static_routes = true
   }
   vnet {
     // One of the arguments from this list "new_vnet existing_vnet" must be set
@@ -138,7 +164,7 @@ Only Single AZ or Three AZ(s) nodes are supported currently..
 
 `azure_az` - (Required) Azure availability zone. (`String`).
 
-`disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`String`).
+`disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
 
 `inside_subnet` - (Optional) Subnets for the inside interface of the node. See [Inside Subnet ](#inside-subnet) below for details.
 

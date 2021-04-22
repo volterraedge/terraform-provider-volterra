@@ -26,8 +26,8 @@
 		OriginServerPublicName
 		OriginServerPrivateIP
 		OriginServerPrivateName
-		OriginServerVirtualNetworkPrivateIP
-		OriginServerVirtualNetworkPrivateName
+		OriginServerVirtualNetworkIP
+		OriginServerVirtualNetworkName
 		OriginServerK8SService
 		OriginServerConsulService
 		OriginServerCustomEndpoint

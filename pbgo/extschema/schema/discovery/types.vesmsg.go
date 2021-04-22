@@ -560,7 +560,7 @@ var DefaultConsulVipDiscoveryInfoTypeValidator = func() *ValidateConsulVipDiscov
 
 	vrhPublishChoice := v.PublishChoiceValidationRuleHandler
 	rulesPublishChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhPublishChoice(rulesPublishChoice)
 	if err != nil {
@@ -770,7 +770,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhDiscoveryChoice := v.DiscoveryChoiceValidationRuleHandler
 	rulesDiscoveryChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDiscoveryChoice(rulesDiscoveryChoice)
 	if err != nil {
@@ -1369,7 +1369,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhDiscoveryChoice := v.DiscoveryChoiceValidationRuleHandler
 	rulesDiscoveryChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDiscoveryChoice(rulesDiscoveryChoice)
 	if err != nil {
@@ -1674,7 +1674,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhDiscoveryChoice := v.DiscoveryChoiceValidationRuleHandler
 	rulesDiscoveryChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDiscoveryChoice(rulesDiscoveryChoice)
 	if err != nil {
@@ -1909,7 +1909,7 @@ var DefaultK8SAccessInfoValidator = func() *ValidateK8SAccessInfo {
 
 	vrhConfigType := v.ConfigTypeValidationRuleHandler
 	rulesConfigType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhConfigType(rulesConfigType)
 	if err != nil {
@@ -1920,7 +1920,7 @@ var DefaultK8SAccessInfoValidator = func() *ValidateK8SAccessInfo {
 
 	vrhK8SPodNetworkChoice := v.K8SPodNetworkChoiceValidationRuleHandler
 	rulesK8SPodNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhK8SPodNetworkChoice(rulesK8SPodNetworkChoice)
 	if err != nil {
@@ -2502,7 +2502,7 @@ var DefaultK8SVipDiscoveryInfoTypeValidator = func() *ValidateK8SVipDiscoveryInf
 
 	vrhPublishChoice := v.PublishChoiceValidationRuleHandler
 	rulesPublishChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhPublishChoice(rulesPublishChoice)
 	if err != nil {
@@ -2802,7 +2802,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhDiscoveryChoice := v.DiscoveryChoiceValidationRuleHandler
 	rulesDiscoveryChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDiscoveryChoice(rulesDiscoveryChoice)
 	if err != nil {

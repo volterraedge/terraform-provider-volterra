@@ -470,7 +470,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhTlsChoice(rulesTlsChoice)
 	if err != nil {
@@ -993,7 +993,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhTlsChoice(rulesTlsChoice)
 	if err != nil {
@@ -1581,7 +1581,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhTlsChoice(rulesTlsChoice)
 	if err != nil {
@@ -1966,7 +1966,7 @@ var DefaultOriginPoolAdvancedOptionsValidator = func() *ValidateOriginPoolAdvanc
 
 	vrhCircuitBreakerChoice := v.CircuitBreakerChoiceValidationRuleHandler
 	rulesCircuitBreakerChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhCircuitBreakerChoice(rulesCircuitBreakerChoice)
 	if err != nil {
@@ -1977,7 +1977,7 @@ var DefaultOriginPoolAdvancedOptionsValidator = func() *ValidateOriginPoolAdvanc
 
 	vrhOutlierDetectionChoice := v.OutlierDetectionChoiceValidationRuleHandler
 	rulesOutlierDetectionChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhOutlierDetectionChoice(rulesOutlierDetectionChoice)
 	if err != nil {
@@ -1988,7 +1988,7 @@ var DefaultOriginPoolAdvancedOptionsValidator = func() *ValidateOriginPoolAdvanc
 
 	vrhPanicThresholdType := v.PanicThresholdTypeValidationRuleHandler
 	rulesPanicThresholdType := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhPanicThresholdType(rulesPanicThresholdType)
 	if err != nil {
@@ -2011,7 +2011,7 @@ var DefaultOriginPoolAdvancedOptionsValidator = func() *ValidateOriginPoolAdvanc
 
 	vrhSubsetChoice := v.SubsetChoiceValidationRuleHandler
 	rulesSubsetChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSubsetChoice(rulesSubsetChoice)
 	if err != nil {
@@ -2371,7 +2371,7 @@ var DefaultOriginPoolSubsetsValidator = func() *ValidateOriginPoolSubsets {
 
 	vrhFallbackPolicyChoice := v.FallbackPolicyChoiceValidationRuleHandler
 	rulesFallbackPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhFallbackPolicyChoice(rulesFallbackPolicyChoice)
 	if err != nil {
@@ -2599,7 +2599,7 @@ var DefaultOriginServerConsulServiceValidator = func() *ValidateOriginServerCons
 
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkChoice(rulesNetworkChoice)
 	if err != nil {
@@ -3026,7 +3026,7 @@ var DefaultOriginServerK8SServiceValidator = func() *ValidateOriginServerK8SServ
 
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkChoice(rulesNetworkChoice)
 	if err != nil {
@@ -3263,7 +3263,7 @@ var DefaultOriginServerPrivateIPValidator = func() *ValidateOriginServerPrivateI
 
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkChoice(rulesNetworkChoice)
 	if err != nil {
@@ -3501,7 +3501,7 @@ var DefaultOriginServerPrivateNameValidator = func() *ValidateOriginServerPrivat
 
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkChoice(rulesNetworkChoice)
 	if err != nil {
@@ -3873,43 +3873,23 @@ func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 			drInfos = append(drInfos, odri)
 		}
 
-	case *OriginServerType_VoltadnPrivateIp:
-		odrInfos, err = m.GetVoltadnPrivateIp().GetDRefInfo()
+	case *OriginServerType_VnPrivateIp:
+		odrInfos, err = m.GetVnPrivateIp().GetDRefInfo()
 		if err != nil {
 			return nil, err
 		}
 		for _, odri := range odrInfos {
-			odri.DRField = "voltadn_private_ip." + odri.DRField
+			odri.DRField = "vn_private_ip." + odri.DRField
 			drInfos = append(drInfos, odri)
 		}
 
-	case *OriginServerType_VoltadnPrivateName:
-		odrInfos, err = m.GetVoltadnPrivateName().GetDRefInfo()
+	case *OriginServerType_VnPrivateName:
+		odrInfos, err = m.GetVnPrivateName().GetDRefInfo()
 		if err != nil {
 			return nil, err
 		}
 		for _, odri := range odrInfos {
-			odri.DRField = "voltadn_private_name." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
-
-	case *OriginServerType_Srv6PrivateIp:
-		odrInfos, err = m.GetSrv6PrivateIp().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "srv6_private_ip." + odri.DRField
-			drInfos = append(drInfos, odri)
-		}
-
-	case *OriginServerType_Srv6PrivateName:
-		odrInfos, err = m.GetSrv6PrivateName().GetDRefInfo()
-		if err != nil {
-			return nil, err
-		}
-		for _, odri := range odrInfos {
-			odri.DRField = "srv6_private_name." + odri.DRField
+			odri.DRField = "vn_private_name." + odri.DRField
 			drInfos = append(drInfos, odri)
 		}
 
@@ -4032,45 +4012,23 @@ func (v *ValidateOriginServerType) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
-	case *OriginServerType_VoltadnPrivateIp:
-		if fv, exists := v.FldValidators["choice.voltadn_private_ip"]; exists {
-			val := m.GetChoice().(*OriginServerType_VoltadnPrivateIp).VoltadnPrivateIp
+	case *OriginServerType_VnPrivateIp:
+		if fv, exists := v.FldValidators["choice.vn_private_ip"]; exists {
+			val := m.GetChoice().(*OriginServerType_VnPrivateIp).VnPrivateIp
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("voltadn_private_ip"),
+				db.WithValidateField("vn_private_ip"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *OriginServerType_VoltadnPrivateName:
-		if fv, exists := v.FldValidators["choice.voltadn_private_name"]; exists {
-			val := m.GetChoice().(*OriginServerType_VoltadnPrivateName).VoltadnPrivateName
+	case *OriginServerType_VnPrivateName:
+		if fv, exists := v.FldValidators["choice.vn_private_name"]; exists {
+			val := m.GetChoice().(*OriginServerType_VnPrivateName).VnPrivateName
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("voltadn_private_name"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *OriginServerType_Srv6PrivateIp:
-		if fv, exists := v.FldValidators["choice.srv6_private_ip"]; exists {
-			val := m.GetChoice().(*OriginServerType_Srv6PrivateIp).Srv6PrivateIp
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("srv6_private_ip"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *OriginServerType_Srv6PrivateName:
-		if fv, exists := v.FldValidators["choice.srv6_private_name"]; exists {
-			val := m.GetChoice().(*OriginServerType_Srv6PrivateName).Srv6PrivateName
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("srv6_private_name"),
+				db.WithValidateField("vn_private_name"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -4108,7 +4066,7 @@ var DefaultOriginServerTypeValidator = func() *ValidateOriginServerType {
 
 	vrhChoice := v.ChoiceValidationRuleHandler
 	rulesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhChoice(rulesChoice)
 	if err != nil {
@@ -4124,10 +4082,8 @@ var DefaultOriginServerTypeValidator = func() *ValidateOriginServerType {
 	v.FldValidators["choice.k8s_service"] = OriginServerK8SServiceValidator().Validate
 	v.FldValidators["choice.consul_service"] = OriginServerConsulServiceValidator().Validate
 	v.FldValidators["choice.custom_endpoint_object"] = OriginServerCustomEndpointValidator().Validate
-	v.FldValidators["choice.voltadn_private_ip"] = OriginServerVirtualNetworkPrivateIPValidator().Validate
-	v.FldValidators["choice.voltadn_private_name"] = OriginServerVirtualNetworkPrivateNameValidator().Validate
-	v.FldValidators["choice.srv6_private_ip"] = OriginServerVirtualNetworkPrivateIPValidator().Validate
-	v.FldValidators["choice.srv6_private_name"] = OriginServerVirtualNetworkPrivateNameValidator().Validate
+	v.FldValidators["choice.vn_private_ip"] = OriginServerVirtualNetworkIPValidator().Validate
+	v.FldValidators["choice.vn_private_name"] = OriginServerVirtualNetworkNameValidator().Validate
 
 	return v
 }()
@@ -4138,15 +4094,15 @@ func OriginServerTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *OriginServerVirtualNetworkPrivateIP) ToJSON() (string, error) {
+func (m *OriginServerVirtualNetworkIP) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *OriginServerVirtualNetworkPrivateIP) ToYAML() (string, error) {
+func (m *OriginServerVirtualNetworkIP) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *OriginServerVirtualNetworkPrivateIP) DeepCopy() *OriginServerVirtualNetworkPrivateIP {
+func (m *OriginServerVirtualNetworkIP) DeepCopy() *OriginServerVirtualNetworkIP {
 	if m == nil {
 		return nil
 	}
@@ -4154,7 +4110,7 @@ func (m *OriginServerVirtualNetworkPrivateIP) DeepCopy() *OriginServerVirtualNet
 	if err != nil {
 		return nil
 	}
-	c := &OriginServerVirtualNetworkPrivateIP{}
+	c := &OriginServerVirtualNetworkIP{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -4162,18 +4118,18 @@ func (m *OriginServerVirtualNetworkPrivateIP) DeepCopy() *OriginServerVirtualNet
 	return c
 }
 
-func (m *OriginServerVirtualNetworkPrivateIP) DeepCopyProto() proto.Message {
+func (m *OriginServerVirtualNetworkIP) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *OriginServerVirtualNetworkPrivateIP) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return OriginServerVirtualNetworkPrivateIPValidator().Validate(ctx, m, opts...)
+func (m *OriginServerVirtualNetworkIP) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OriginServerVirtualNetworkIPValidator().Validate(ctx, m, opts...)
 }
 
-func (m *OriginServerVirtualNetworkPrivateIP) GetDRefInfo() ([]db.DRefInfo, error) {
+func (m *OriginServerVirtualNetworkIP) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetVirtualNetworkDRefInfo(); err != nil {
 		return nil, err
@@ -4184,7 +4140,7 @@ func (m *OriginServerVirtualNetworkPrivateIP) GetDRefInfo() ([]db.DRefInfo, erro
 	return drInfos, nil
 }
 
-func (m *OriginServerVirtualNetworkPrivateIP) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
+func (m *OriginServerVirtualNetworkIP) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
 	drInfos := []db.DRefInfo{}
 
 	vref := m.GetVirtualNetwork()
@@ -4206,7 +4162,7 @@ func (m *OriginServerVirtualNetworkPrivateIP) GetVirtualNetworkDRefInfo() ([]db.
 }
 
 // GetVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *OriginServerVirtualNetworkPrivateIP) GetVirtualNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+func (m *OriginServerVirtualNetworkIP) GetVirtualNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
 	refdType, err := d.TypeForEntryKind("", "", "virtual_network.Object")
 	if err != nil {
@@ -4234,11 +4190,11 @@ func (m *OriginServerVirtualNetworkPrivateIP) GetVirtualNetworkDBEntries(ctx con
 	return entries, nil
 }
 
-type ValidateOriginServerVirtualNetworkPrivateIP struct {
+type ValidateOriginServerVirtualNetworkIP struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateOriginServerVirtualNetworkPrivateIP) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateOriginServerVirtualNetworkIP) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -4248,7 +4204,7 @@ func (v *ValidateOriginServerVirtualNetworkPrivateIP) IpValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
-func (v *ValidateOriginServerVirtualNetworkPrivateIP) VirtualNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateOriginServerVirtualNetworkIP) VirtualNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4269,14 +4225,14 @@ func (v *ValidateOriginServerVirtualNetworkPrivateIP) VirtualNetworkValidationRu
 	return validatorFn, nil
 }
 
-func (v *ValidateOriginServerVirtualNetworkPrivateIP) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*OriginServerVirtualNetworkPrivateIP)
+func (v *ValidateOriginServerVirtualNetworkIP) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OriginServerVirtualNetworkIP)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *OriginServerVirtualNetworkPrivateIP got type %s", t)
+			return fmt.Errorf("Expected type *OriginServerVirtualNetworkIP got type %s", t)
 		}
 	}
 	if m == nil {
@@ -4305,8 +4261,8 @@ func (v *ValidateOriginServerVirtualNetworkPrivateIP) Validate(ctx context.Conte
 }
 
 // Well-known symbol for default validator implementation
-var DefaultOriginServerVirtualNetworkPrivateIPValidator = func() *ValidateOriginServerVirtualNetworkPrivateIP {
-	v := &ValidateOriginServerVirtualNetworkPrivateIP{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultOriginServerVirtualNetworkIPValidator = func() *ValidateOriginServerVirtualNetworkIP {
+	v := &ValidateOriginServerVirtualNetworkIP{FldValidators: map[string]db.ValidatorFunc{}}
 
 	var (
 		err error
@@ -4323,7 +4279,7 @@ var DefaultOriginServerVirtualNetworkPrivateIPValidator = func() *ValidateOrigin
 	}
 	vFn, err = vrhIp(rulesIp)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerVirtualNetworkPrivateIP.ip: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerVirtualNetworkIP.ip: %s", err)
 		panic(errMsg)
 	}
 	v.FldValidators["ip"] = vFn
@@ -4334,7 +4290,7 @@ var DefaultOriginServerVirtualNetworkPrivateIPValidator = func() *ValidateOrigin
 	}
 	vFn, err = vrhVirtualNetwork(rulesVirtualNetwork)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerVirtualNetworkPrivateIP.virtual_network: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerVirtualNetworkIP.virtual_network: %s", err)
 		panic(errMsg)
 	}
 	v.FldValidators["virtual_network"] = vFn
@@ -4342,21 +4298,21 @@ var DefaultOriginServerVirtualNetworkPrivateIPValidator = func() *ValidateOrigin
 	return v
 }()
 
-func OriginServerVirtualNetworkPrivateIPValidator() db.Validator {
-	return DefaultOriginServerVirtualNetworkPrivateIPValidator
+func OriginServerVirtualNetworkIPValidator() db.Validator {
+	return DefaultOriginServerVirtualNetworkIPValidator
 }
 
 // augmented methods on protoc/std generated struct
 
-func (m *OriginServerVirtualNetworkPrivateName) ToJSON() (string, error) {
+func (m *OriginServerVirtualNetworkName) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *OriginServerVirtualNetworkPrivateName) ToYAML() (string, error) {
+func (m *OriginServerVirtualNetworkName) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *OriginServerVirtualNetworkPrivateName) DeepCopy() *OriginServerVirtualNetworkPrivateName {
+func (m *OriginServerVirtualNetworkName) DeepCopy() *OriginServerVirtualNetworkName {
 	if m == nil {
 		return nil
 	}
@@ -4364,7 +4320,7 @@ func (m *OriginServerVirtualNetworkPrivateName) DeepCopy() *OriginServerVirtualN
 	if err != nil {
 		return nil
 	}
-	c := &OriginServerVirtualNetworkPrivateName{}
+	c := &OriginServerVirtualNetworkName{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -4372,18 +4328,18 @@ func (m *OriginServerVirtualNetworkPrivateName) DeepCopy() *OriginServerVirtualN
 	return c
 }
 
-func (m *OriginServerVirtualNetworkPrivateName) DeepCopyProto() proto.Message {
+func (m *OriginServerVirtualNetworkName) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *OriginServerVirtualNetworkPrivateName) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return OriginServerVirtualNetworkPrivateNameValidator().Validate(ctx, m, opts...)
+func (m *OriginServerVirtualNetworkName) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OriginServerVirtualNetworkNameValidator().Validate(ctx, m, opts...)
 }
 
-func (m *OriginServerVirtualNetworkPrivateName) GetDRefInfo() ([]db.DRefInfo, error) {
+func (m *OriginServerVirtualNetworkName) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetPrivateNetworkDRefInfo(); err != nil {
 		return nil, err
@@ -4394,7 +4350,7 @@ func (m *OriginServerVirtualNetworkPrivateName) GetDRefInfo() ([]db.DRefInfo, er
 	return drInfos, nil
 }
 
-func (m *OriginServerVirtualNetworkPrivateName) GetPrivateNetworkDRefInfo() ([]db.DRefInfo, error) {
+func (m *OriginServerVirtualNetworkName) GetPrivateNetworkDRefInfo() ([]db.DRefInfo, error) {
 	drInfos := []db.DRefInfo{}
 
 	vref := m.GetPrivateNetwork()
@@ -4416,7 +4372,7 @@ func (m *OriginServerVirtualNetworkPrivateName) GetPrivateNetworkDRefInfo() ([]d
 }
 
 // GetPrivateNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *OriginServerVirtualNetworkPrivateName) GetPrivateNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+func (m *OriginServerVirtualNetworkName) GetPrivateNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
 	refdType, err := d.TypeForEntryKind("", "", "virtual_network.Object")
 	if err != nil {
@@ -4444,11 +4400,11 @@ func (m *OriginServerVirtualNetworkPrivateName) GetPrivateNetworkDBEntries(ctx c
 	return entries, nil
 }
 
-type ValidateOriginServerVirtualNetworkPrivateName struct {
+type ValidateOriginServerVirtualNetworkName struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateOriginServerVirtualNetworkPrivateName) DnsNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateOriginServerVirtualNetworkName) DnsNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -4458,7 +4414,7 @@ func (v *ValidateOriginServerVirtualNetworkPrivateName) DnsNameValidationRuleHan
 	return validatorFn, nil
 }
 
-func (v *ValidateOriginServerVirtualNetworkPrivateName) PrivateNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateOriginServerVirtualNetworkName) PrivateNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4479,14 +4435,14 @@ func (v *ValidateOriginServerVirtualNetworkPrivateName) PrivateNetworkValidation
 	return validatorFn, nil
 }
 
-func (v *ValidateOriginServerVirtualNetworkPrivateName) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*OriginServerVirtualNetworkPrivateName)
+func (v *ValidateOriginServerVirtualNetworkName) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OriginServerVirtualNetworkName)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *OriginServerVirtualNetworkPrivateName got type %s", t)
+			return fmt.Errorf("Expected type *OriginServerVirtualNetworkName got type %s", t)
 		}
 	}
 	if m == nil {
@@ -4515,8 +4471,8 @@ func (v *ValidateOriginServerVirtualNetworkPrivateName) Validate(ctx context.Con
 }
 
 // Well-known symbol for default validator implementation
-var DefaultOriginServerVirtualNetworkPrivateNameValidator = func() *ValidateOriginServerVirtualNetworkPrivateName {
-	v := &ValidateOriginServerVirtualNetworkPrivateName{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultOriginServerVirtualNetworkNameValidator = func() *ValidateOriginServerVirtualNetworkName {
+	v := &ValidateOriginServerVirtualNetworkName{FldValidators: map[string]db.ValidatorFunc{}}
 
 	var (
 		err error
@@ -4532,7 +4488,7 @@ var DefaultOriginServerVirtualNetworkPrivateNameValidator = func() *ValidateOrig
 	}
 	vFn, err = vrhDnsName(rulesDnsName)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerVirtualNetworkPrivateName.dns_name: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerVirtualNetworkName.dns_name: %s", err)
 		panic(errMsg)
 	}
 	v.FldValidators["dns_name"] = vFn
@@ -4543,7 +4499,7 @@ var DefaultOriginServerVirtualNetworkPrivateNameValidator = func() *ValidateOrig
 	}
 	vFn, err = vrhPrivateNetwork(rulesPrivateNetwork)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerVirtualNetworkPrivateName.private_network: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerVirtualNetworkName.private_network: %s", err)
 		panic(errMsg)
 	}
 	v.FldValidators["private_network"] = vFn
@@ -4551,8 +4507,8 @@ var DefaultOriginServerVirtualNetworkPrivateNameValidator = func() *ValidateOrig
 	return v
 }()
 
-func OriginServerVirtualNetworkPrivateNameValidator() db.Validator {
-	return DefaultOriginServerVirtualNetworkPrivateNameValidator
+func OriginServerVirtualNetworkNameValidator() db.Validator {
+	return DefaultOriginServerVirtualNetworkNameValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -4998,7 +4954,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
 	rulesTlsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhTlsChoice(rulesTlsChoice)
 	if err != nil {
@@ -5455,7 +5411,7 @@ var DefaultUpstreamTlsParametersValidator = func() *ValidateUpstreamTlsParameter
 
 	vrhMtlsChoice := v.MtlsChoiceValidationRuleHandler
 	rulesMtlsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhMtlsChoice(rulesMtlsChoice)
 	if err != nil {
@@ -5466,7 +5422,7 @@ var DefaultUpstreamTlsParametersValidator = func() *ValidateUpstreamTlsParameter
 
 	vrhServerValidationChoice := v.ServerValidationChoiceValidationRuleHandler
 	rulesServerValidationChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhServerValidationChoice(rulesServerValidationChoice)
 	if err != nil {
@@ -5477,7 +5433,7 @@ var DefaultUpstreamTlsParametersValidator = func() *ValidateUpstreamTlsParameter
 
 	vrhSniChoice := v.SniChoiceValidationRuleHandler
 	rulesSniChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSniChoice(rulesSniChoice)
 	if err != nil {

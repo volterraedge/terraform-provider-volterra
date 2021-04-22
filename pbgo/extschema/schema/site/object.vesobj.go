@@ -685,6 +685,19 @@ func (o *DBObject) SetObjDisable(d bool) error {
 	return nil
 }
 
+func (o *DBObject) GetObjSREDisable() bool {
+	return o.GetSystemMetadata().GetSreDisable()
+}
+
+func (o *DBObject) SetObjSREDisable(d bool) error {
+	m := o.GetSystemMetadata()
+	if m == nil {
+		m = &ves_io_schema.SystemObjectMetaType{}
+	}
+	m.SreDisable = d
+	return nil
+}
+
 func (o *DBObject) SetObjCreator(cls, inst string) error {
 	m := o.GetSystemMetadata()
 	if m == nil {
@@ -1303,6 +1316,10 @@ var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 	v.FldValidators["conditions"] = ves_io_schema.ConditionTypeValidator().Validate
 
 	v.FldValidators["ver_status"] = VerStatusTypeValidator().Validate
+
+	v.FldValidators["volterra_software_status"] = VolterraSoftwareStatusValidator().Validate
+
+	v.FldValidators["operating_system_status"] = OperatingSystemStatusValidator().Validate
 
 	return v
 }()

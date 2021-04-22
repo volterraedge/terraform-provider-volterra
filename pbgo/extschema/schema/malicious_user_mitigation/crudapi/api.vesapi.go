@@ -2265,30 +2265,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "malicious_user_mitigationCaptchaChallengeSettings": {
-            "type": "object",
-            "description": "Configuration to be used when a Captcha challenge is launched as mitigation action",
-            "title": "CaptchaChallengeSettings",
-            "x-displayname": "Captcha Challenge Settings",
-            "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.CaptchaChallengeSettings",
-            "properties": {
-                "cookie_expiry": {
-                    "type": "integer",
-                    "description": " Specifies, in seconds, cookie expiry duration.\n Expired cookie will cause loadbalancer to perform Captcha challenge\n Default cookie expiry is set as 1 hour\n\nExample: - 1000-\nRequired: YES",
-                    "title": "cookie_expiry",
-                    "format": "int64",
-                    "x-displayname": "Cookie Expiry period",
-                    "x-ves-required": "true"
-                },
-                "custom_page": {
-                    "type": "string",
-                    "description": " Custom message is of type uri_ref. Currently supported URL schemes is string:///.\n For string:/// scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Please Wait..\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Please Wait \u003c/p\u003e\". Base64 encoded string for this html is \"PHA+IFBsZWFzZSBXYWl0IDwvcD4=\"\n\nExample: - \"string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4=\"-",
-                    "title": "custom_page",
-                    "x-displayname": "Custom message for Captcha Challenge",
-                    "x-ves-example": "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-                }
-            }
-        },
         "malicious_user_mitigationGlobalSpecType": {
             "type": "object",
             "description": "Shape of malicious_user_mitigation in the storage backend.",
@@ -2296,60 +2272,11 @@ var APISwaggerJSON string = `{
             "x-displayname": "Specification",
             "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.GlobalSpecType",
             "properties": {
-                "captcha_challenge_settings": {
-                    "description": " Configuration to be used when a captcha challenge is launched as mitigation action",
-                    "title": "Captcha Challenge Settings",
-                    "$ref": "#/definitions/malicious_user_mitigationCaptchaChallengeSettings",
-                    "x-displayname": "Captcha challenge settings"
-                },
-                "javascript_challenge_settings": {
-                    "description": " Configuration to be used when a Javascript challenge is launched as mitigation action",
-                    "title": "Javascript Challenge Settings",
-                    "$ref": "#/definitions/malicious_user_mitigationJavascriptChallengeSettings",
-                    "x-displayname": "Javascript challenge settings"
-                },
                 "mitigation_type": {
                     "description": " Malicious user mitigation type specifies the malicious user mitigation rules that define the actions to be taken for users mapped to different threat levels.\n A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.",
                     "title": "MaliciousUserMitigationType",
                     "$ref": "#/definitions/malicious_user_mitigationMaliciousUserMitigationType",
                     "x-displayname": "Malicious User Mitigation Type"
-                },
-                "temporary_blocking_settings": {
-                    "description": " Configuration to be used when a user is temporarily blocked",
-                    "title": "Temporary Blocking Settings",
-                    "$ref": "#/definitions/malicious_user_mitigationTemporaryBlockingSettings",
-                    "x-displayname": "Temporary Blocking Settings"
-                }
-            }
-        },
-        "malicious_user_mitigationJavascriptChallengeSettings": {
-            "type": "object",
-            "description": "x-displayName: Javascript Challenge Settings\nConfiguration to be used when a Javascript challenge is launched as mitigation action",
-            "title": "JavascriptChallengeSettings",
-            "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.JavascriptChallengeSettings",
-            "properties": {
-                "cookie_expiry": {
-                    "type": "integer",
-                    "description": " Specifies, in seconds, cookie expiry duration.\n Expired cookie will cause loadbalancer to perform Javascript challenge\n Default cookie expiry is set as 1 hour\n\nExample: - 1000-\nRequired: YES",
-                    "title": "cookie_expiry",
-                    "format": "int64",
-                    "x-displayname": "Cookie Expiry period",
-                    "x-ves-required": "true"
-                },
-                "custom_page": {
-                    "type": "string",
-                    "description": " Custom message is of type uri_ref. Currently supported URL schemes is string:///.\n For string:/// scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Please Wait..\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Please Wait \u003c/p\u003e\". Base64 encoded string for this html is \"PHA+IFBsZWFzZSBXYWl0IDwvcD4=\"\n\nExample: - \"string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4=\"-",
-                    "title": "custom_page",
-                    "x-displayname": "Custom Message for Javascript Challenge",
-                    "x-ves-example": "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-                },
-                "js_script_delay": {
-                    "type": "integer",
-                    "description": " Specifies, in milliseconds, the delay that Javascript introduces.\n Default delay is 5 seconds\n\nExample: - 1000-\nRequired: YES",
-                    "title": "js_script_delay",
-                    "format": "int64",
-                    "x-displayname": "Javascript Delay",
-                    "x-ves-required": "true"
                 }
             }
         },
@@ -2499,22 +2426,6 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
-                }
-            }
-        },
-        "malicious_user_mitigationTemporaryBlockingSettings": {
-            "type": "object",
-            "description": "\nSpecifies configuration for temporary user blocking resulting from user behavior analysis.",
-            "title": "Temporary Blocking Settings",
-            "x-displayname": "Temporary Blocking Settings",
-            "x-ves-proto-message": "ves.io.schema.malicious_user_mitigation.TemporaryBlockingSettings",
-            "properties": {
-                "custom_page": {
-                    "type": "string",
-                    "description": " Custom message is of type -uri_ref-. Currently supported URL schemes is -string:///-.\n For -string:///- scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Blocked..\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Blocked \u003c/p\u003e\". Base64 encoded string for this html is \"PHA+IFBsZWFzZSBXYWl0IDwvcD4=\"\n\nExample: - \"string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4=\"-",
-                    "title": "custom_page",
-                    "x-displayname": "Custom Message for Temporary Blocking",
-                    "x-ves-example": "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
                 }
             }
         },
@@ -2927,6 +2838,14 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
                 },
                 "tenant": {
                     "type": "string",

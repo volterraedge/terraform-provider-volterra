@@ -622,6 +622,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf_rules-CustomAPI-Rules"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.waf_rules.CustomAPI.Rules"
             },
             "x-displayname": "WAF Rules",
@@ -706,6 +710,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf_rules-CustomAPI-WafRulesStatus"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.waf_rules.CustomAPI.WafRulesStatus"
             },
             "x-displayname": "WAF Rules",
@@ -790,6 +798,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf_rules-CustomAPI-VirtualHostWafRulesStatus"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.waf_rules.CustomAPI.VirtualHostWafRulesStatus"
             },
             "x-displayname": "WAF Rules",

@@ -465,7 +465,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhAuthTypeChoice := v.AuthTypeChoiceValidationRuleHandler
 	rulesAuthTypeChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAuthTypeChoice(rulesAuthTypeChoice)
 	if err != nil {
@@ -681,7 +681,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhAuthTypeChoice := v.AuthTypeChoiceValidationRuleHandler
 	rulesAuthTypeChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAuthTypeChoice(rulesAuthTypeChoice)
 	if err != nil {
@@ -897,7 +897,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhAuthTypeChoice := v.AuthTypeChoiceValidationRuleHandler
 	rulesAuthTypeChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAuthTypeChoice(rulesAuthTypeChoice)
 	if err != nil {
@@ -1679,7 +1679,7 @@ var DefaultOIDCAuthTypeValidator = func() *ValidateOIDCAuthType {
 
 	vrhAuthParamsChoice := v.AuthParamsChoiceValidationRuleHandler
 	rulesAuthParamsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAuthParamsChoice(rulesAuthParamsChoice)
 	if err != nil {
@@ -1922,7 +1922,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhAuthTypeChoice := v.AuthTypeChoiceValidationRuleHandler
 	rulesAuthTypeChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAuthTypeChoice(rulesAuthTypeChoice)
 	if err != nil {

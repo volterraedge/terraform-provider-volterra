@@ -27,12 +27,27 @@ resource "volterra_alert_policy" "example" {
   }
 
   routes {
-    // One of the arguments from this list "dont_send send" must be set
-    send = true
+    // One of the arguments from this list "send dont_send" must be set
+    dont_send = true
 
     // One of the arguments from this list "any severity group alertname alertname_regex custom" must be set
-    alertname_regex = "alertname_regex"
 
+    custom {
+      alertname {
+        // One of the arguments from this list "exact_match regex_match" must be set
+        exact_match = "Major"
+      }
+
+      group {
+        // One of the arguments from this list "exact_match regex_match" must be set
+        exact_match = "Major"
+      }
+
+      severity {
+        // One of the arguments from this list "regex_match exact_match" must be set
+        exact_match = "Major"
+      }
+    }
     notification_parameters {
       // One of the arguments from this list "default individual ves_io_group custom" must be set
       default         = true

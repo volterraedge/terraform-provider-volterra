@@ -2078,6 +2078,330 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "bgpBgpParameters": {
+            "type": "object",
+            "description": "BGP parameters for the local site",
+            "title": "BGP Parameters",
+            "x-displayname": "BGP Parameters",
+            "x-ves-displayorder": "1,5",
+            "x-ves-oneof-field-router_id_choice": "[\"from_site\",\"ip_address\",\"local_address\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.BgpParameters",
+            "properties": {
+                "asn": {
+                    "type": "integer",
+                    "description": " Autonomous System Number\n\nExample: - 64512-\nRequired: YES",
+                    "title": "ASN",
+                    "format": "int64",
+                    "x-displayname": "ASN",
+                    "x-ves-required": "true"
+                },
+                "bgp_router_id": {
+                    "description": " If Router ID Type is set to \"From IP Address\", this is used as Router ID. Else, this is ignored.",
+                    "title": "Router ID",
+                    "$ref": "#/definitions/schemaIpAddressType",
+                    "x-displayname": "Router ID"
+                },
+                "bgp_router_id_key": {
+                    "type": "string",
+                    "description": " If Router ID Type is set to \"From Site Template\", this is used to lookup BGP router ID\n from site template parameters map in site object. Else, this is ignored.",
+                    "title": "Router ID Key",
+                    "x-displayname": "Router ID Key"
+                },
+                "bgp_router_id_type": {
+                    "description": " Decides how BGP router id is derived",
+                    "title": "Router ID Type",
+                    "$ref": "#/definitions/bgpBgpRouterIdType",
+                    "x-displayname": "Router ID Type"
+                },
+                "from_site": {
+                    "description": "Exclusive with [ip_address local_address]\nx-displayName: \"From Site\"\nUse the Router ID field from the site object.",
+                    "title": "from_site",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "ip_address": {
+                    "type": "string",
+                    "description": "Exclusive with [from_site local_address]\nx-displayName: \"IP Address\"\nUse the configured IPv4 Address as Router ID.",
+                    "title": "ip_address"
+                },
+                "local_address": {
+                    "description": "Exclusive with [from_site ip_address]\nx-displayName: \"From Interface Address\"\nUse an interface address of the site as the Router ID.",
+                    "title": "local_address",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "bgpBgpRouterIdType": {
+            "type": "string",
+            "description": "Dictates how BGP router id is derived\n\nUse IP address of interface on which BGP is configured as BGP router ID\nUse BGP Router ID from BGP Parameters as BGP router ID\nUse BGP Router ID from corresponding site object as BGP router ID\nUse BGP Router ID Key from corresponding site's Site Template Parameters as BGP router ID.\nThis is not currently supported.",
+            "title": "BGP Router ID",
+            "enum": [
+                "BGP_ROUTER_ID_FROM_INTERFACE",
+                "BGP_ROUTER_ID_FROM_IP_ADDRESS",
+                "BGP_ROUTER_ID_FROM_SITE_OBJECT",
+                "BGP_ROUTER_ID_FROM_SITE_TEMPLATE_PARAMETERS"
+            ],
+            "default": "BGP_ROUTER_ID_FROM_INTERFACE",
+            "x-displayname": "BGP Router ID",
+            "x-ves-proto-enum": "ves.io.schema.bgp.BgpRouterIdType"
+        },
+        "bgpFamilyInet": {
+            "type": "object",
+            "description": "Parameters for inet family.",
+            "title": "FamilyInet",
+            "x-displayname": "BGP Family Inet",
+            "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.FamilyInet",
+            "properties": {
+                "disable": {
+                    "description": "Exclusive with [enable]\nx-displayName: \"Disable IPv4 Unicast\"\nDisable the IPv4 Unicast family.",
+                    "title": "disable",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable": {
+                    "description": "Exclusive with [disable]\nx-displayName: \"Enable IPv4 Unicast\"\nEnable the IPv4 Unicast family.",
+                    "title": "enable",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "bgpFamilyInetvpn": {
+            "type": "object",
+            "description": "Parameters for inetvpn family.",
+            "title": "FamilyInetvpn",
+            "x-displayname": "BGP Family Inetvpn",
+            "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.FamilyInetvpn",
+            "properties": {
+                "disable": {
+                    "description": "Exclusive with [enable]\nx-displayName: \"Disable IPv4 VPN Unicast\"\nDisable the IPv4 Unicast family.",
+                    "title": "disable",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable": {
+                    "description": "Exclusive with [disable]\nx-displayName: \"Enable IPv4 VPN Unicast\"\nEnable the IPv4 Unicast family.",
+                    "title": "enable",
+                    "$ref": "#/definitions/bgpFamilyInetvpnParameters"
+                }
+            }
+        },
+        "bgpFamilyInetvpnParameters": {
+            "type": "object",
+            "description": "Parameters for inetvpn family.",
+            "title": "FamilyInetvpnParameters",
+            "x-displayname": "BGP Family Inetvpn",
+            "x-ves-oneof-field-sr_choice": "[\"disable\",\"enable\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.FamilyInetvpnParameters",
+            "properties": {
+                "disable": {
+                    "description": "Exclusive with [enable]\nx-displayName: \"Disable IPv4 VPN Unicast\"\nDisable the IPv4 Unicast family.",
+                    "title": "disable",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable": {
+                    "description": "Exclusive with [disable]\nx-displayName: \"Enable IPv4 VPN Unicast\"\nEnable the IPv4 Unicast family.",
+                    "title": "enable",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "bgpFamilyRtarget": {
+            "type": "object",
+            "description": "Parameters for rtarget family.",
+            "title": "FamilyRtarget",
+            "x-displayname": "BGP Family Route Target",
+            "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.FamilyRtarget",
+            "properties": {
+                "disable": {
+                    "description": "Exclusive with [enable]\nx-displayName: \"Disable Route Target\"\nDisable the Route Target family.",
+                    "title": "disable",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable": {
+                    "description": "Exclusive with [disable]\nx-displayName: \"Enable Route Target\"\nEnable the Route Target family.",
+                    "title": "enable",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "bgpInterfaceList": {
+            "type": "object",
+            "description": "List of network interfaces.",
+            "title": "InterfaceList",
+            "x-displayname": "Interface List",
+            "x-ves-proto-message": "ves.io.schema.bgp.InterfaceList",
+            "properties": {
+                "interfaces": {
+                    "type": "array",
+                    "description": " List of network interfaces.\nRequired: YES",
+                    "title": "interface_list",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Interface List",
+                    "x-ves-required": "true"
+                }
+            }
+        },
+        "bgpPeer": {
+            "type": "object",
+            "description": "BGP Peer parameters",
+            "title": "Peer",
+            "x-displayname": "BGP Peer",
+            "x-ves-displayorder": "1,2",
+            "x-ves-oneof-field-type_choice": "[\"external\",\"internal\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.Peer",
+            "properties": {
+                "external": {
+                    "description": "Exclusive with [internal]\nx-displayName: \"External\"\nExternal BGP peer.",
+                    "title": "external",
+                    "$ref": "#/definitions/bgpPeerExternal"
+                },
+                "internal": {
+                    "description": "Exclusive with [external]\nx-displayName: \"External\"\nExternal BGP peer.",
+                    "title": "external",
+                    "$ref": "#/definitions/bgpPeerInternal"
+                },
+                "metadata": {
+                    "description": " Common attributes for the peer including name and description.\nRequired: YES",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true"
+                },
+                "target_service": {
+                    "type": "string",
+                    "description": " Specify whether this peer should be configured in \"phobos\" or \"frr\".",
+                    "title": "target_service",
+                    "x-displayname": "Target Service"
+                }
+            }
+        },
+        "bgpPeerExternal": {
+            "type": "object",
+            "description": "External BGP Peer parameters.",
+            "title": "PeerExternal",
+            "x-displayname": "External BGP Peer",
+            "x-ves-displayorder": "1,2,10,11",
+            "x-ves-oneof-field-address_choice": "[\"address\",\"default_gateway\",\"from_site\",\"subnet_begin_offset\",\"subnet_end_offset\"]",
+            "x-ves-oneof-field-interface_choice": "[\"inside_interfaces\",\"interface\",\"interface_list\",\"outside_interfaces\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.PeerExternal",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "description": "Exclusive with [default_gateway from_site subnet_begin_offset subnet_end_offset]\nx-displayName: \"Peer Address\"\nSpecify peer address.",
+                    "title": "address"
+                },
+                "asn": {
+                    "type": "integer",
+                    "description": " Autonomous System Number for BGP peer\n\nExample: - 64512-\nRequired: YES",
+                    "title": "ASN",
+                    "format": "int64",
+                    "x-displayname": "ASN",
+                    "x-ves-required": "true"
+                },
+                "default_gateway": {
+                    "description": "Exclusive with [address from_site subnet_begin_offset subnet_end_offset]\nx-displayName: \"Use default gateway\"\nUse the default gateway address.",
+                    "title": "default_gateway",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "family_inet": {
+                    "description": " Parameters for IPv4 Unicast family.",
+                    "title": "family_inet",
+                    "$ref": "#/definitions/bgpFamilyInet",
+                    "x-displayname": "Family IPv4 Unicast"
+                },
+                "from_site": {
+                    "description": "Exclusive with [address default_gateway subnet_begin_offset subnet_end_offset]\nx-displayName: \"Use address from site object\"\nUse the address specified in the site object.",
+                    "title": "from_site",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "inside_interfaces": {
+                    "description": "Exclusive with [interface interface_list outside_interfaces]\nx-displayName: \"Site Local Inside Interfaces\"\nAll interfaces in the site local inside network.",
+                    "title": "inside_interfaces",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "interface": {
+                    "description": "Exclusive with [inside_interfaces interface_list outside_interfaces]\nx-displayName: \"Interface\"\nSpecify interface.",
+                    "title": "interface",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "interface_list": {
+                    "description": "Exclusive with [inside_interfaces interface outside_interfaces]\nx-displayName: \"Interface List\"\nList of network interfaces.",
+                    "title": "interface_list",
+                    "$ref": "#/definitions/bgpInterfaceList"
+                },
+                "outside_interfaces": {
+                    "description": "Exclusive with [inside_interfaces interface interface_list]\nx-displayName: \"Site Local Interfaces\"\nAll interfaces in the site local outside network.",
+                    "title": "outside_interfaces",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Peer TCP port number.\n\nExample: - 179-",
+                    "title": "Peer Port",
+                    "format": "int64",
+                    "x-displayname": "Peer Port"
+                },
+                "subnet_begin_offset": {
+                    "type": "integer",
+                    "description": "Exclusive with [address default_gateway from_site subnet_end_offset]\nx-displayName: \"Use offset from beginning of subnet\"\nCalculate peer address using offset from the beginning of the subnet.",
+                    "title": "subnet_begin_offset",
+                    "format": "int64"
+                },
+                "subnet_end_offset": {
+                    "type": "integer",
+                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset]\nx-displayName: \"Use offset from end of subnet\"\nCalculate peer address using offset from the end of the subnet.",
+                    "title": "subnet_end_offset",
+                    "format": "int64"
+                }
+            }
+        },
+        "bgpPeerInternal": {
+            "type": "object",
+            "description": "Internal BGP Peer parameters.",
+            "title": "PeerInternal",
+            "x-displayname": "Internal BGP Peer",
+            "x-ves-displayorder": "2,10,11",
+            "x-ves-oneof-field-address_choice": "[\"address\",\"dns_name\",\"from_site\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.PeerInternal",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "description": "Exclusive with [dns_name from_site]\nx-displayName: \"Peer Address\"\nSpecify peer address.",
+                    "title": "address"
+                },
+                "dns_name": {
+                    "type": "string",
+                    "description": "Exclusive with [address from_site]\nx-displayName: \"Use address for DNS name\"\nUse the addresse by resolving the given DNS name.",
+                    "title": "dns_name"
+                },
+                "family_inetvpn": {
+                    "description": " Parameters for IPv4 VPN Unicast family.",
+                    "title": "family_inetvpn",
+                    "$ref": "#/definitions/bgpFamilyInetvpn",
+                    "x-displayname": "Family IPv4 VPN Unicast"
+                },
+                "family_rtarget": {
+                    "description": " Parameters for Route Target family.",
+                    "title": "family_rtarget",
+                    "$ref": "#/definitions/bgpFamilyRtarget",
+                    "x-displayname": "Family Route Target"
+                },
+                "from_site": {
+                    "description": "Exclusive with [address dns_name]\nx-displayName: \"Use address from site object\"\nUse the address specified in the site object.",
+                    "title": "from_site",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Peer TCP port number.\n\nExample: - 179-",
+                    "title": "port",
+                    "format": "int64",
+                    "x-displayname": "Peer Port"
+                }
+            }
+        },
         "crudapiErrorCode": {
             "type": "string",
             "enum": [
@@ -2262,6 +2586,31 @@ var APISwaggerJSON string = `{
                 },
                 "system_metadata": {
                     "$ref": "#/definitions/schemaSystemObjectMetaType"
+                }
+            }
+        },
+        "fleetBGPConfiguration": {
+            "type": "object",
+            "description": "BGP configuration parameters",
+            "title": "BGP Configuration",
+            "x-displayname": "BGP Configuration",
+            "x-ves-proto-message": "ves.io.schema.fleet.BGPConfiguration",
+            "properties": {
+                "bgp_parameters": {
+                    "description": " BGP parameters for local site\nRequired: YES",
+                    "title": "BGP Parameters",
+                    "$ref": "#/definitions/bgpBgpParameters",
+                    "x-displayname": "Common Parameters",
+                    "x-ves-required": "true"
+                },
+                "peers": {
+                    "type": "array",
+                    "description": " BGP parameters for peer",
+                    "title": "BGP Peers",
+                    "items": {
+                        "$ref": "#/definitions/bgpPeer"
+                    },
+                    "x-displayname": "Peers"
                 }
             }
         },
@@ -2833,238 +3182,29 @@ var APISwaggerJSON string = `{
             "x-displayname": "Fleet Type",
             "x-ves-proto-enum": "ves.io.schema.fleet.FleetType"
         },
-        "fleetGlobalSpecType": {
+        "fleetLocalControlPlaneType": {
             "type": "object",
-            "description": "Fleet specifications",
-            "title": "Global Specifications",
-            "x-displayname": "Global Specifications",
-            "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
-            "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group\",\"dc_cluster_group_inside\",\"no_dc_cluster_group\"]",
-            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
-            "x-ves-oneof-field-interface_choice": "[\"default_interfaces\",\"interface_list\",\"legacy_devices\"]",
-            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
-            "x-ves-oneof-field-storage_class_choice": "[\"default_storage_class\",\"storage_class_list\"]",
-            "x-ves-oneof-field-storage_device_choice": "[\"no_storage_device\",\"storage_device_list\"]",
-            "x-ves-oneof-field-storage_interface_choice": "[\"no_storage_interfaces\",\"storage_interface_list\"]",
-            "x-ves-oneof-field-storage_static_routes_choice": "[\"no_storage_static_routes\",\"storage_static_routes\"]",
-            "x-ves-oneof-field-usb_policy_choice": "[\"allow_all_usb\",\"deny_all_usb\",\"usb_policy\"]",
-            "x-ves-proto-message": "ves.io.schema.fleet.GlobalSpecType",
+            "description": "Enable local control plane for L3VPN, SRV6, EVPN etc",
+            "title": "Local Control Plane",
+            "x-displayname": "Local Control Plane",
+            "x-ves-oneof-field-network_choice": "[\"inside_vn\",\"outside_vn\"]",
+            "x-ves-proto-message": "ves.io.schema.fleet.LocalControlPlaneType",
             "properties": {
-                "allow_all_usb": {
-                    "description": "Exclusive with [deny_all_usb usb_policy]\nx-displayName: \"Allow All USB Devices\"\nAll USB devices are allowed",
-                    "title": "Allow All USB Devices",
+                "bgp_config": {
+                    "description": " BGP configuration for local control plane",
+                    "title": "BGP configuration",
+                    "$ref": "#/definitions/fleetBGPConfiguration",
+                    "x-displayname": "BGP Configuration"
+                },
+                "inside_vn": {
+                    "description": "Exclusive with [outside_vn]\nx-displayName: \"Inside Network\"\nLocal control plane will work on inside network",
+                    "title": "Inside Network",
                     "$ref": "#/definitions/schemaEmpty"
                 },
-                "bond_device_list": {
-                    "description": "Exclusive with [no_bond_devices]\nx-displayName: \"Configure Bond Interfaces\"\nConfigure Bond Devices for this fleet",
-                    "title": "Configure Bond Devices",
-                    "$ref": "#/definitions/fleetFleetBondDevicesListType"
-                },
-                "dc_cluster_group": {
-                    "description": "Exclusive with [dc_cluster_group_inside no_dc_cluster_group]\nx-displayName: \"Member of DC cluster Group, Site Local\"\nThis fleet is member of dc cluster group via site local network",
-                    "title": "Member of DC cluster Group",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
-                "dc_cluster_group_inside": {
-                    "description": "Exclusive with [dc_cluster_group no_dc_cluster_group]\nx-displayName: \"Member of DC cluster Group, Inside Network\"\nThis fleet is member of dc cluster group via site local inside network",
-                    "title": "Member of DC cluster Group",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
-                "default_interfaces": {
-                    "description": "Exclusive with [interface_list legacy_devices]\nx-displayName: \"Default Interface Config\"\nUse default configuration for interfaces belonging to this fleet",
-                    "title": "No Interfaces",
+                "outside_vn": {
+                    "description": "Exclusive with [inside_vn]\nx-displayName: \"Outside Network\"\nLocal control plane will work on outside network",
+                    "title": "Outside Network",
                     "$ref": "#/definitions/schemaEmpty"
-                },
-                "default_storage_class": {
-                    "description": "Exclusive with [storage_class_list]\nx-displayName: \"Default Storage Class\"\nUse only default storage class in kubernetes",
-                    "title": "Default Storage Class",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "deny_all_usb": {
-                    "description": "Exclusive with [allow_all_usb usb_policy]\nx-displayName: \"Deny All USB Devices\"\nAll USB devices are denied",
-                    "title": "Deny All USB Devices",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "devices": {
-                    "type": "array",
-                    "description": " Configuration for all devices in the fleet.\n Examples of devices are - network interfaces, cameras, scanners etc.\n Configuration a device is applied on VER node if the VER node is member of this fleet and\n has an corresponding interface/device. The mapping from device configured in fleet with\n interface/device in VER node depends on the type of device and is documented in\n device instance specific sections",
-                    "title": "Devices",
-                    "items": {
-                        "$ref": "#/definitions/fleetDeviceInstanceType"
-                    },
-                    "x-displayname": "Devices"
-                },
-                "disable_gpu": {
-                    "description": "Exclusive with [enable_gpu]\nx-displayName: \"GPU Disabled\"\nGPU is not enabled for this fleet",
-                    "title": "GPU Disabled",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "enable_default_fleet_config_download": {
-                    "type": "boolean",
-                    "description": " Enable default fleet config, It must be set for storage config and gpu config",
-                    "title": "Enable default fleet config download",
-                    "format": "boolean",
-                    "x-displayname": "Enable Default Fleet Config Download"
-                },
-                "enable_gpu": {
-                    "description": "Exclusive with [disable_gpu]\nx-displayName: \"GPU Enabled\"\nGPU is enabled for this fleet",
-                    "title": "Member of DC cluster Group",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "etcd_cluster_network": {
-                    "description": " Decided which network is used for etcd clustering",
-                    "title": "Etcd Clustering Network",
-                    "$ref": "#/definitions/fleetEtcdClusterNetworkType",
-                    "x-displayname": "Etcd Clustering Network"
-                },
-                "fleet_label": {
-                    "type": "string",
-                    "description": " fleet_label value is used to create known_label \"ves.io/fleet=\u003cfleet_label\u003e\"\n The known_label is created in the \"shared\" namespace for the tenant.\n\n A virtual_site object with name \u003cfleet_label\u003e is also created in \"shared\" namespace for tenant. \n The virtual_site object will select all sites configured with the known_label above\n fleet_label with \"sfo\" will create a known_label \"ves.io/fleet=sfo\" in tenant for the fleet\n\nExample: - \"sfo\"-\nRequired: YES",
-                    "title": "fleet_label",
-                    "x-displayname": "Fleet Label Value",
-                    "x-ves-example": "sfo",
-                    "x-ves-required": "true"
-                },
-                "fleet_type": {
-                    "description": " Fleet Type can be fleet of single site or multiple sites. Corresponding virtual site is not created\n for single site fleet.",
-                    "title": "Fleet type",
-                    "$ref": "#/definitions/fleetFleetType",
-                    "x-displayname": "Fleet Type"
-                },
-                "inside_virtual_network": {
-                    "type": "array",
-                    "description": " Default inside (site local) virtual network for the fleet",
-                    "title": "Inside Virtual Network",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Site Local Inside Virtual Network"
-                },
-                "interface_list": {
-                    "description": "Exclusive with [default_interfaces legacy_devices]\nx-displayName: \"List of Interfaces\"\nAdd all interfaces belonging to this fleet",
-                    "title": "List of Interfaces",
-                    "$ref": "#/definitions/fleetFleetInterfaceListType"
-                },
-                "k8s_cluster": {
-                    "description": " Local K8s cluster access is enabled, using config k8s_cluster object",
-                    "title": "Enable Local K8s Cluster access",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Enable Local K8s Cluster access"
-                },
-                "legacy_devices": {
-                    "description": "Exclusive with [default_interfaces interface_list]\nx-displayName: \"Legacy Device List\"\nAdd device for all interfaces belonging to this fleet",
-                    "title": "Legacy Device Config",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "log_receiver": {
-                    "description": "Exclusive with [logs_streaming_disabled]\nx-displayName: \"Enable Logs Streaming\"\nSelect log receiver for logs streaming",
-                    "title": "Disable Logs Streaming",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
-                "logs_streaming_disabled": {
-                    "description": "Exclusive with [log_receiver]\nx-displayName: \"Disable Logs Streaming\"\nLogs Streaming is disabled",
-                    "title": "Disable Logs Receiver",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "network_connectors": {
-                    "type": "array",
-                    "description": " Network Connector defines connection between two virtual networks in a given site.\n Fleet defines one or more such network connectors.\n The network connectors configuration is applied on all sites that are member of the fleet.",
-                    "title": "Network Connectors",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Network Connectors"
-                },
-                "network_firewall": {
-                    "type": "array",
-                    "description": " Network Firewall defines firewall to be applied for the virtual networks in the fleet.\n The network firewall configuration is applied on all sites that are member of the fleet.\n\n Constraints\n The Network Firewall is applied on Virtual Networks of type site local network and site local inside network",
-                    "title": "Network Firewall",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Network Firewall"
-                },
-                "no_bond_devices": {
-                    "description": "Exclusive with [bond_device_list]\nx-displayName: \"No Bond Devices\"\nNo Bond Devices configured for this Fleet",
-                    "title": "No Bond Devices",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "no_dc_cluster_group": {
-                    "description": "Exclusive with [dc_cluster_group dc_cluster_group_inside]\nx-displayName: \"Not a Member\"\nThis fleet is not a member of a DC cluster group",
-                    "title": "Not a Member",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "no_storage_device": {
-                    "description": "Exclusive with [storage_device_list]\nx-displayName: \"No Storage Devices\"\nThis fleet does not have any storage devices",
-                    "title": "No Storage Devices",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "no_storage_interfaces": {
-                    "description": "Exclusive with [storage_interface_list]\nx-displayName: \"No Storage Interfaces\"\nThis fleet does not have any storage interfaces",
-                    "title": "No Storage Interfaces",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "no_storage_static_routes": {
-                    "description": "Exclusive with [storage_static_routes]\nx-displayName: \"No Storage Static Routes\"\nThis fleet does not have any storage static routes",
-                    "title": "No Storage Static Routes",
-                    "$ref": "#/definitions/schemaEmpty"
-                },
-                "operating_system_version": {
-                    "type": "string",
-                    "description": " Desired Operating System version that is applied to all sites that are member of the fleet.\n Current Operating System version can be overridden via site config.\n\nExample: - \"value\"-",
-                    "title": "Operating System Version",
-                    "x-displayname": "Operating System Version",
-                    "x-ves-example": "value"
-                },
-                "outside_virtual_network": {
-                    "type": "array",
-                    "description": " Default outside (site local) virtual network for the fleet",
-                    "title": "Outside Virtual Network",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Outside (Site Local) Virtual Network"
-                },
-                "single_site": {
-                    "type": "array",
-                    "description": " Vega should use this ref when when fleet type is single site fleet",
-                    "title": "Single Site Fleet Site",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Single Site Fleet Site"
-                },
-                "storage_class_list": {
-                    "description": "Exclusive with [default_storage_class]\nx-displayName: \"Add Custom Storage Class\"\nAdd additional custom storage classes in kubernetes for this fleet",
-                    "title": "Custom Storage Class",
-                    "$ref": "#/definitions/fleetFleetStorageClassListType"
-                },
-                "storage_device_list": {
-                    "description": "Exclusive with [no_storage_device]\nx-displayName: \"List of Storage Devices\"\nAdd all storage devices belonging to this fleet",
-                    "title": "List of Storage Interfaces",
-                    "$ref": "#/definitions/fleetFleetStorageDeviceListType"
-                },
-                "storage_interface_list": {
-                    "description": "Exclusive with [no_storage_interfaces]\nx-displayName: \"List of Storage Interface\"\nAdd all storage interfaces belonging to this fleet",
-                    "title": "List of Storage Interfaces",
-                    "$ref": "#/definitions/fleetFleetInterfaceListType"
-                },
-                "storage_static_routes": {
-                    "description": "Exclusive with [no_storage_static_routes]\nx-displayName: \"List of Storage Static Routes\"\nAdd all storage storage static routes",
-                    "title": "List of Storage Interfaces",
-                    "$ref": "#/definitions/fleetFleetStorageStaticRoutesListType"
-                },
-                "usb_policy": {
-                    "description": "Exclusive with [allow_all_usb deny_all_usb]\nx-displayName: \"USB Device Policy\"\nAllow only specific USB devices",
-                    "title": "USB Device Policy",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
-                "volterra_software_version": {
-                    "type": "string",
-                    "description": " Volterra software version is human readable string matching released set of version components.\n The given software version is applied to all sites that are member of the fleet.\n Current software installed can be overridden via site config.\n\nExample: - \"value\"-",
-                    "title": "Software Version",
-                    "x-displayname": "Software Version",
-                    "x-ves-example": "value"
                 }
             }
         },
@@ -3300,7 +3440,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "gc_spec": {
                     "title": "gc_spec",
-                    "$ref": "#/definitions/fleetGlobalSpecType",
+                    "$ref": "#/definitions/schemafleetGlobalSpecType",
                     "x-displayname": "GC Spec"
                 }
             }
@@ -4146,6 +4286,38 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaMessageMetaType": {
+            "type": "object",
+            "description": "MessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
+            "title": "MessageMetaType",
+            "x-displayname": "Message Metadata",
+            "x-ves-proto-message": "ves.io.schema.MessageMetaType",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " Human readable description.\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "title": "description",
+                    "x-displayname": "Description",
+                    "x-ves-example": "Virtual Host for acmecorp website"
+                },
+                "disable": {
+                    "type": "boolean",
+                    "description": " A value of true will administratively disable the object that corresponds to the containing message.\n\nExample: - \"true\"-",
+                    "title": "disable",
+                    "format": "boolean",
+                    "x-displayname": "Disable",
+                    "x-ves-example": "true"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " This is the name of the message.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\nRequired: YES",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-required": "true"
+                }
+            }
+        },
         "schemaNextHopType": {
             "type": "object",
             "description": "Identifies the next-hop for a route",
@@ -4540,6 +4712,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
+                },
                 "tenant": {
                     "type": "string",
                     "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
@@ -4661,6 +4841,253 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Name",
                     "x-ves-example": "ChargeBack-API-Key",
                     "x-ves-required": "true"
+                }
+            }
+        },
+        "schemafleetGlobalSpecType": {
+            "type": "object",
+            "description": "Fleet specifications",
+            "title": "Global Specifications",
+            "x-displayname": "Global Specifications",
+            "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
+            "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group\",\"dc_cluster_group_inside\",\"no_dc_cluster_group\"]",
+            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\"]",
+            "x-ves-oneof-field-interface_choice": "[\"default_interfaces\",\"interface_list\",\"legacy_devices\"]",
+            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
+            "x-ves-oneof-field-storage_class_choice": "[\"default_storage_class\",\"storage_class_list\"]",
+            "x-ves-oneof-field-storage_device_choice": "[\"no_storage_device\",\"storage_device_list\"]",
+            "x-ves-oneof-field-storage_interface_choice": "[\"no_storage_interfaces\",\"storage_interface_list\"]",
+            "x-ves-oneof-field-storage_static_routes_choice": "[\"no_storage_static_routes\",\"storage_static_routes\"]",
+            "x-ves-oneof-field-usb_policy_choice": "[\"allow_all_usb\",\"deny_all_usb\",\"usb_policy\"]",
+            "x-ves-proto-message": "ves.io.schema.fleet.GlobalSpecType",
+            "properties": {
+                "allow_all_usb": {
+                    "description": "Exclusive with [deny_all_usb usb_policy]\nx-displayName: \"Allow All USB Devices\"\nAll USB devices are allowed",
+                    "title": "Allow All USB Devices",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "bond_device_list": {
+                    "description": "Exclusive with [no_bond_devices]\nx-displayName: \"Configure Bond Interfaces\"\nConfigure Bond Devices for this fleet",
+                    "title": "Configure Bond Devices",
+                    "$ref": "#/definitions/fleetFleetBondDevicesListType"
+                },
+                "dc_cluster_group": {
+                    "description": "Exclusive with [dc_cluster_group_inside no_dc_cluster_group]\nx-displayName: \"Member of DC cluster Group, Site Local\"\nThis fleet is member of dc cluster group via site local network",
+                    "title": "Member of DC cluster Group",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "dc_cluster_group_inside": {
+                    "description": "Exclusive with [dc_cluster_group no_dc_cluster_group]\nx-displayName: \"Member of DC cluster Group, Inside Network\"\nThis fleet is member of dc cluster group via site local inside network",
+                    "title": "Member of DC cluster Group",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "default_interfaces": {
+                    "description": "Exclusive with [interface_list legacy_devices]\nx-displayName: \"Default Interface Config\"\nUse default configuration for interfaces belonging to this fleet",
+                    "title": "No Interfaces",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "default_storage_class": {
+                    "description": "Exclusive with [storage_class_list]\nx-displayName: \"Default Storage Class\"\nUse only default storage class in kubernetes",
+                    "title": "Default Storage Class",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "deny_all_usb": {
+                    "description": "Exclusive with [allow_all_usb usb_policy]\nx-displayName: \"Deny All USB Devices\"\nAll USB devices are denied",
+                    "title": "Deny All USB Devices",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "devices": {
+                    "type": "array",
+                    "description": " Configuration for all devices in the fleet.\n Examples of devices are - network interfaces, cameras, scanners etc.\n Configuration a device is applied on VER node if the VER node is member of this fleet and\n has an corresponding interface/device. The mapping from device configured in fleet with\n interface/device in VER node depends on the type of device and is documented in\n device instance specific sections",
+                    "title": "Devices",
+                    "items": {
+                        "$ref": "#/definitions/fleetDeviceInstanceType"
+                    },
+                    "x-displayname": "Devices"
+                },
+                "disable_gpu": {
+                    "description": "Exclusive with [enable_gpu]\nx-displayName: \"GPU Disabled\"\nGPU is not enabled for this fleet",
+                    "title": "GPU Disabled",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable_default_fleet_config_download": {
+                    "type": "boolean",
+                    "description": " Enable default fleet config, It must be set for storage config and gpu config",
+                    "title": "Enable default fleet config download",
+                    "format": "boolean",
+                    "x-displayname": "Enable Default Fleet Config Download"
+                },
+                "enable_gpu": {
+                    "description": "Exclusive with [disable_gpu]\nx-displayName: \"GPU Enabled\"\nGPU is enabled for this fleet",
+                    "title": "Member of DC cluster Group",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "etcd_cluster_network": {
+                    "description": " Decided which network is used for etcd clustering",
+                    "title": "Etcd Clustering Network",
+                    "$ref": "#/definitions/fleetEtcdClusterNetworkType",
+                    "x-displayname": "Etcd Clustering Network"
+                },
+                "fleet_label": {
+                    "type": "string",
+                    "description": " fleet_label value is used to create known_label \"ves.io/fleet=\u003cfleet_label\u003e\"\n The known_label is created in the \"shared\" namespace for the tenant.\n\n A virtual_site object with name \u003cfleet_label\u003e is also created in \"shared\" namespace for tenant. \n The virtual_site object will select all sites configured with the known_label above\n fleet_label with \"sfo\" will create a known_label \"ves.io/fleet=sfo\" in tenant for the fleet\n\nExample: - \"sfo\"-\nRequired: YES",
+                    "title": "fleet_label",
+                    "x-displayname": "Fleet Label Value",
+                    "x-ves-example": "sfo",
+                    "x-ves-required": "true"
+                },
+                "fleet_type": {
+                    "description": " Fleet Type can be fleet of single site or multiple sites. Corresponding virtual site is not created\n for single site fleet.",
+                    "title": "Fleet type",
+                    "$ref": "#/definitions/fleetFleetType",
+                    "x-displayname": "Fleet Type"
+                },
+                "inside_virtual_network": {
+                    "type": "array",
+                    "description": " Default inside (site local) virtual network for the fleet",
+                    "title": "Inside Virtual Network",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Site Local Inside Virtual Network"
+                },
+                "interface_list": {
+                    "description": "Exclusive with [default_interfaces legacy_devices]\nx-displayName: \"List of Interfaces\"\nAdd all interfaces belonging to this fleet",
+                    "title": "List of Interfaces",
+                    "$ref": "#/definitions/fleetFleetInterfaceListType"
+                },
+                "k8s_cluster": {
+                    "description": " Local K8s cluster access is enabled, using config k8s_cluster object",
+                    "title": "Enable Local K8s Cluster access",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Enable Local K8s Cluster access"
+                },
+                "legacy_devices": {
+                    "description": "Exclusive with [default_interfaces interface_list]\nx-displayName: \"Legacy Device List\"\nAdd device for all interfaces belonging to this fleet",
+                    "title": "Legacy Device Config",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "local_control_plane": {
+                    "description": " Enable local control plane for L3VPN, SRV6, EVPN etc",
+                    "title": "Local Control Plane",
+                    "$ref": "#/definitions/fleetLocalControlPlaneType",
+                    "x-displayname": "Local Control Plane"
+                },
+                "log_receiver": {
+                    "description": "Exclusive with [logs_streaming_disabled]\nx-displayName: \"Enable Logs Streaming\"\nSelect log receiver for logs streaming",
+                    "title": "Disable Logs Streaming",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "logs_streaming_disabled": {
+                    "description": "Exclusive with [log_receiver]\nx-displayName: \"Disable Logs Streaming\"\nLogs Streaming is disabled",
+                    "title": "Disable Logs Receiver",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "network_connectors": {
+                    "type": "array",
+                    "description": " Network Connector defines connection between two virtual networks in a given site.\n Fleet defines one or more such network connectors.\n The network connectors configuration is applied on all sites that are member of the fleet.",
+                    "title": "Network Connectors",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Network Connectors"
+                },
+                "network_firewall": {
+                    "type": "array",
+                    "description": " Network Firewall defines firewall to be applied for the virtual networks in the fleet.\n The network firewall configuration is applied on all sites that are member of the fleet.\n\n Constraints\n The Network Firewall is applied on Virtual Networks of type site local network and site local inside network",
+                    "title": "Network Firewall",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Network Firewall"
+                },
+                "no_bond_devices": {
+                    "description": "Exclusive with [bond_device_list]\nx-displayName: \"No Bond Devices\"\nNo Bond Devices configured for this Fleet",
+                    "title": "No Bond Devices",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "no_dc_cluster_group": {
+                    "description": "Exclusive with [dc_cluster_group dc_cluster_group_inside]\nx-displayName: \"Not a Member\"\nThis fleet is not a member of a DC cluster group",
+                    "title": "Not a Member",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "no_storage_device": {
+                    "description": "Exclusive with [storage_device_list]\nx-displayName: \"No Storage Devices\"\nThis fleet does not have any storage devices",
+                    "title": "No Storage Devices",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "no_storage_interfaces": {
+                    "description": "Exclusive with [storage_interface_list]\nx-displayName: \"No Storage Interfaces\"\nThis fleet does not have any storage interfaces",
+                    "title": "No Storage Interfaces",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "no_storage_static_routes": {
+                    "description": "Exclusive with [storage_static_routes]\nx-displayName: \"No Storage Static Routes\"\nThis fleet does not have any storage static routes",
+                    "title": "No Storage Static Routes",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "operating_system_version": {
+                    "type": "string",
+                    "description": " Desired Operating System version that is applied to all sites that are member of the fleet.\n Current Operating System version can be overridden via site config.\n\nExample: - \"value\"-",
+                    "title": "Operating System Version",
+                    "x-displayname": "Operating System Version",
+                    "x-ves-example": "value"
+                },
+                "outside_virtual_network": {
+                    "type": "array",
+                    "description": " Default outside (site local) virtual network for the fleet",
+                    "title": "Outside Virtual Network",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Outside (Site Local) Virtual Network"
+                },
+                "single_site": {
+                    "type": "array",
+                    "description": " Vega should use this ref when when fleet type is single site fleet",
+                    "title": "Single Site Fleet Site",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Single Site Fleet Site"
+                },
+                "storage_class_list": {
+                    "description": "Exclusive with [default_storage_class]\nx-displayName: \"Add Custom Storage Class\"\nAdd additional custom storage classes in kubernetes for this fleet",
+                    "title": "Custom Storage Class",
+                    "$ref": "#/definitions/fleetFleetStorageClassListType"
+                },
+                "storage_device_list": {
+                    "description": "Exclusive with [no_storage_device]\nx-displayName: \"List of Storage Devices\"\nAdd all storage devices belonging to this fleet",
+                    "title": "List of Storage Interfaces",
+                    "$ref": "#/definitions/fleetFleetStorageDeviceListType"
+                },
+                "storage_interface_list": {
+                    "description": "Exclusive with [no_storage_interfaces]\nx-displayName: \"List of Storage Interface\"\nAdd all storage interfaces belonging to this fleet",
+                    "title": "List of Storage Interfaces",
+                    "$ref": "#/definitions/fleetFleetInterfaceListType"
+                },
+                "storage_static_routes": {
+                    "description": "Exclusive with [no_storage_static_routes]\nx-displayName: \"List of Storage Static Routes\"\nAdd all storage storage static routes",
+                    "title": "List of Storage Interfaces",
+                    "$ref": "#/definitions/fleetFleetStorageStaticRoutesListType"
+                },
+                "usb_policy": {
+                    "description": "Exclusive with [allow_all_usb deny_all_usb]\nx-displayName: \"USB Device Policy\"\nAllow only specific USB devices",
+                    "title": "USB Device Policy",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "view_internal": {
+                    "description": " Reference to view internal object",
+                    "title": "view_internal",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "View Internal"
+                },
+                "volterra_software_version": {
+                    "type": "string",
+                    "description": " Volterra software version is human readable string matching released set of version components.\n The given software version is applied to all sites that are member of the fleet.\n Current software installed can be overridden via site config.\n\nExample: - \"value\"-",
+                    "title": "Software Version",
+                    "x-displayname": "Software Version",
+                    "x-ves-example": "value"
                 }
             }
         },

@@ -29,20 +29,22 @@ resource "volterra_voltstack_site" "example" {
   // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
   no_k8s_cluster = true
 
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  // One of the arguments from this list "no_local_control_plane local_control_plane" must be set
+  no_local_control_plane = true
 
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  logs_streaming_disabled = true
+
   master_nodes = ["master-0"]
-  // One of the arguments from this list "default_network_config custom_network_config" must be set
+
+  // One of the arguments from this list "custom_network_config default_network_config" must be set
   default_network_config = true
+
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
-  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
-  allow_all_usb         = true
+
+  // One of the arguments from this list "usb_policy deny_all_usb allow_all_usb" must be set
+  deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
 }
 
@@ -82,6 +84,10 @@ Argument Reference
 `k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
+
+`local_control_plane` - (Optional) Site Local control plane is enabled. See [Local Control Plane ](#local-control-plane) below for details.
+
+`no_local_control_plane` - (Optional) Site Local control plane is disabled (bool).
 
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
@@ -130,6 +136,18 @@ Assign automatically from End of the first network in the list.
 ### Automatic From Start
 
 Assign automatically from start of the first network in the list.
+
+### Bgp Config
+
+BGP configuration for local control plane.
+
+`bgp_parameters` - (Required) BGP parameters for local site. See [Bgp Parameters ](#bgp-parameters) below for details.
+
+`peers` - (Optional) BGP parameters for peer. See [Peers ](#peers) below for details.
+
+### Bgp Parameters
+
+BGP parameters for local site.
 
 ### Blindfold Secret Info
 
@@ -477,6 +495,10 @@ List of global network connections.
 
 `global_network_connections` - (Required) Global network connections. See [Global Network Connections ](#global-network-connections) below for details.
 
+### Inside Vn
+
+Local control plane will work on inside network.
+
 ### Interception Rules
 
 List of ordered rules to enable or disable for TLS interception.
@@ -528,6 +550,16 @@ Configure LACP (802.3ad) based bond device.
 ### Last Address
 
 Last usable address from the network prefix is chosen as default gateway.
+
+### Local Control Plane
+
+Site Local control plane is enabled.
+
+`bgp_config` - (Optional) BGP configuration for local control plane. See [Bgp Config ](#bgp-config) below for details.
+
+`inside_vn` - (Optional) Local control plane will work on inside network (bool).
+
+`outside_vn` - (Optional) Local control plane will work on outside network (bool).
 
 ### Monitor
 
@@ -598,6 +630,14 @@ Storage class Device configuration for OpenEBS Enterprise.
 `protocol` - (Optional) Defines type of transport protocol used to mount the PV to the worker node hosting the associated application pod (NVMe-oF) (`String`).
 
 `replication` - (Optional) Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3. (`Int`).
+
+### Outside Vn
+
+Local control plane will work on outside network.
+
+### Peers
+
+BGP parameters for peer.
 
 ### Policy
 

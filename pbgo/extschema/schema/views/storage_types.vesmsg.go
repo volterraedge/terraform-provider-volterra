@@ -410,7 +410,7 @@ var DefaultStorageClassTypeValidator = func() *ValidateStorageClassType {
 
 	vrhDeviceChoice := v.DeviceChoiceValidationRuleHandler
 	rulesDeviceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDeviceChoice(rulesDeviceChoice)
 	if err != nil {

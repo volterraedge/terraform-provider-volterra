@@ -57,6 +57,8 @@
 		FleetBondDeviceType
 		FleetBondDevicesListType
 		FleetStorageStaticRoutesListType
+		BGPConfiguration
+		LocalControlPlaneType
 		GlobalSpecType
 		CreateSpecType
 		ReplaceSpecType

@@ -20,21 +20,37 @@ resource "volterra_network_interface" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "dedicated_interface ethernet_interface tunnel_interface legacy_interface dedicated_management_interface" must be set
+  // One of the arguments from this list "tunnel_interface legacy_interface dedicated_management_interface dedicated_interface ethernet_interface" must be set
 
-  dedicated_interface {
-    device = "eth0"
+  tunnel_interface {
+    mtu = "1450"
 
-    // One of the arguments from this list "monitor_disabled monitor" must be set
-    monitor_disabled = true
-    mtu              = "1450"
+    // One of the arguments from this list "site_local_network site_local_inside_network inside_network" must be set
 
+    inside_network {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
     // One of the arguments from this list "cluster node" must be set
-    cluster = true
+    cluster  = true
+    priority = "42"
+    static_ip {
+      // One of the arguments from this list "node_static_ip cluster_static_ip fleet_static_ip" must be set
 
-    // One of the arguments from this list "not_primary is_primary" must be set
-    is_primary = true
-    priority   = "42"
+      cluster_static_ip {
+        interface_ip_map {
+          default_gw = "192.168.20.1"
+          dns_server = "192.168.20.1"
+          ip_address = "192.168.20.1/24"
+        }
+      }
+    }
+    tunnel {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
   }
 }
 

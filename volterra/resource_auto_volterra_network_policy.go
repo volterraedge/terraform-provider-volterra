@@ -178,6 +178,21 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 										Optional: true,
 									},
 
+									"adv_action": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"action": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"keys": {
 
 										Type: schema.TypeList,
@@ -401,6 +416,21 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 									"action": {
 										Type:     schema.TypeString,
 										Optional: true,
+									},
+
+									"adv_action": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"action": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
 									},
 
 									"keys": {
@@ -841,6 +871,24 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 
 					}
 
+					if v, ok := egressRulesMapStrToI["adv_action"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						advAction := &ves_io_schema_network_policy_rule.NetworkPolicyRuleAdvancedAction{}
+						egressRules[i].AdvAction = advAction
+						for _, set := range sl {
+							advActionMapStrToI := set.(map[string]interface{})
+
+							if v, ok := advActionMapStrToI["action"]; ok && !isIntfNil(v) {
+
+								advAction.Action = ves_io_schema_network_policy_rule.LogAction(ves_io_schema_network_policy_rule.LogAction_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
 					if w, ok := egressRulesMapStrToI["keys"]; ok && !isIntfNil(w) {
 						ls := make([]string, len(w.([]interface{})))
 						for i, v := range w.([]interface{}) {
@@ -1136,6 +1184,24 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 					if v, ok := ingressRulesMapStrToI["action"]; ok && !isIntfNil(v) {
 
 						ingressRules[i].Action = ves_io_schema_network_policy_rule.NetworkPolicyRuleAction(ves_io_schema_network_policy_rule.NetworkPolicyRuleAction_value[v.(string)])
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["adv_action"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						advAction := &ves_io_schema_network_policy_rule.NetworkPolicyRuleAdvancedAction{}
+						ingressRules[i].AdvAction = advAction
+						for _, set := range sl {
+							advActionMapStrToI := set.(map[string]interface{})
+
+							if v, ok := advActionMapStrToI["action"]; ok && !isIntfNil(v) {
+
+								advAction.Action = ves_io_schema_network_policy_rule.LogAction(ves_io_schema_network_policy_rule.LogAction_value[v.(string)])
+
+							}
+
+						}
 
 					}
 
@@ -1772,6 +1838,24 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 
 					}
 
+					if v, ok := egressRulesMapStrToI["adv_action"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						advAction := &ves_io_schema_network_policy_rule.NetworkPolicyRuleAdvancedAction{}
+						egressRules[i].AdvAction = advAction
+						for _, set := range sl {
+							advActionMapStrToI := set.(map[string]interface{})
+
+							if v, ok := advActionMapStrToI["action"]; ok && !isIntfNil(v) {
+
+								advAction.Action = ves_io_schema_network_policy_rule.LogAction(ves_io_schema_network_policy_rule.LogAction_value[v.(string)])
+
+							}
+
+						}
+
+					}
+
 					if w, ok := egressRulesMapStrToI["keys"]; ok && !isIntfNil(w) {
 						ls := make([]string, len(w.([]interface{})))
 						for i, v := range w.([]interface{}) {
@@ -2067,6 +2151,24 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 					if v, ok := ingressRulesMapStrToI["action"]; ok && !isIntfNil(v) {
 
 						ingressRules[i].Action = ves_io_schema_network_policy_rule.NetworkPolicyRuleAction(ves_io_schema_network_policy_rule.NetworkPolicyRuleAction_value[v.(string)])
+
+					}
+
+					if v, ok := ingressRulesMapStrToI["adv_action"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						advAction := &ves_io_schema_network_policy_rule.NetworkPolicyRuleAdvancedAction{}
+						ingressRules[i].AdvAction = advAction
+						for _, set := range sl {
+							advActionMapStrToI := set.(map[string]interface{})
+
+							if v, ok := advActionMapStrToI["action"]; ok && !isIntfNil(v) {
+
+								advAction.Action = ves_io_schema_network_policy_rule.LogAction(ves_io_schema_network_policy_rule.LogAction_value[v.(string)])
+
+							}
+
+						}
 
 					}
 

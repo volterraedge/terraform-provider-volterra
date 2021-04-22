@@ -239,7 +239,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInterfaceChoice(rulesInterfaceChoice)
 	if err != nil {
@@ -789,7 +789,7 @@ var DefaultDHCPNetworkTypeValidator = func() *ValidateDHCPNetworkType {
 
 	vrhDnsChoice := v.DnsChoiceValidationRuleHandler
 	rulesDnsChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDnsChoice(rulesDnsChoice)
 	if err != nil {
@@ -812,7 +812,7 @@ var DefaultDHCPNetworkTypeValidator = func() *ValidateDHCPNetworkType {
 
 	vrhGatewayChoice := v.GatewayChoiceValidationRuleHandler
 	rulesGatewayChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhGatewayChoice(rulesGatewayChoice)
 	if err != nil {
@@ -835,7 +835,7 @@ var DefaultDHCPNetworkTypeValidator = func() *ValidateDHCPNetworkType {
 
 	vrhNetworkPrefixChoice := v.NetworkPrefixChoiceValidationRuleHandler
 	rulesNetworkPrefixChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkPrefixChoice(rulesNetworkPrefixChoice)
 	if err != nil {
@@ -1317,7 +1317,7 @@ var DefaultDHCPServerParametersTypeValidator = func() *ValidateDHCPServerParamet
 
 	vrhInterfacesAddressingChoice := v.InterfacesAddressingChoiceValidationRuleHandler
 	rulesInterfacesAddressingChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInterfacesAddressingChoice(rulesInterfacesAddressingChoice)
 	if err != nil {
@@ -1625,7 +1625,7 @@ var DefaultDedicatedInterfaceTypeValidator = func() *ValidateDedicatedInterfaceT
 
 	vrhNodeChoice := v.NodeChoiceValidationRuleHandler
 	rulesNodeChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNodeChoice(rulesNodeChoice)
 	if err != nil {
@@ -1649,7 +1649,7 @@ var DefaultDedicatedInterfaceTypeValidator = func() *ValidateDedicatedInterfaceT
 
 	vrhPrimaryChoice := v.PrimaryChoiceValidationRuleHandler
 	rulesPrimaryChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhPrimaryChoice(rulesPrimaryChoice)
 	if err != nil {
@@ -1863,7 +1863,7 @@ var DefaultDedicatedManagementInterfaceTypeValidator = func() *ValidateDedicated
 
 	vrhNodeChoice := v.NodeChoiceValidationRuleHandler
 	rulesNodeChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNodeChoice(rulesNodeChoice)
 	if err != nil {
@@ -2524,7 +2524,7 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 
 	vrhAddressChoice := v.AddressChoiceValidationRuleHandler
 	rulesAddressChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAddressChoice(rulesAddressChoice)
 	if err != nil {
@@ -2535,7 +2535,7 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkChoice(rulesNetworkChoice)
 	if err != nil {
@@ -2546,7 +2546,7 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 
 	vrhNodeChoice := v.NodeChoiceValidationRuleHandler
 	rulesNodeChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNodeChoice(rulesNodeChoice)
 	if err != nil {
@@ -2570,7 +2570,7 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 
 	vrhPrimaryChoice := v.PrimaryChoiceValidationRuleHandler
 	rulesPrimaryChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhPrimaryChoice(rulesPrimaryChoice)
 	if err != nil {
@@ -2581,7 +2581,7 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 
 	vrhVlanChoice := v.VlanChoiceValidationRuleHandler
 	rulesVlanChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhVlanChoice(rulesVlanChoice)
 	if err != nil {
@@ -2865,7 +2865,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInterfaceChoice(rulesInterfaceChoice)
 	if err != nil {
@@ -3776,7 +3776,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInterfaceChoice(rulesInterfaceChoice)
 	if err != nil {
@@ -5378,7 +5378,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhInterfaceChoice(rulesInterfaceChoice)
 	if err != nil {
@@ -5571,7 +5571,7 @@ var DefaultStaticIPParametersTypeValidator = func() *ValidateStaticIPParametersT
 
 	vrhNetworkPrefixChoice := v.NetworkPrefixChoiceValidationRuleHandler
 	rulesNetworkPrefixChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkPrefixChoice(rulesNetworkPrefixChoice)
 	if err != nil {
@@ -6506,7 +6506,7 @@ var DefaultTunnelInterfaceTypeValidator = func() *ValidateTunnelInterfaceType {
 
 	vrhNetworkChoice := v.NetworkChoiceValidationRuleHandler
 	rulesNetworkChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNetworkChoice(rulesNetworkChoice)
 	if err != nil {
@@ -6517,7 +6517,7 @@ var DefaultTunnelInterfaceTypeValidator = func() *ValidateTunnelInterfaceType {
 
 	vrhNodeChoice := v.NodeChoiceValidationRuleHandler
 	rulesNodeChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhNodeChoice(rulesNodeChoice)
 	if err != nil {

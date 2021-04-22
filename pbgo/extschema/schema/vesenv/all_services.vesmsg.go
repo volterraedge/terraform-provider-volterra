@@ -398,6 +398,17 @@ func (v *ValidateServiceChoice) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
+	case *ServiceChoice_Shape:
+		if fv, exists := v.FldValidators["choice.shape"]; exists {
+			val := m.GetChoice().(*ServiceChoice_Shape).Shape
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("shape"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

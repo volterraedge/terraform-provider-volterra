@@ -233,7 +233,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 									},
 
 									"disk_size": {
-										Type:     schema.TypeString,
+										Type:     schema.TypeInt,
 										Optional: true,
 									},
 
@@ -2415,7 +2415,7 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 					}
 
 					if w, ok := azNodesMapStrToI["disk_size"]; ok && !isIntfNil(w) {
-						azNodes[i].DiskSize = w.(string)
+						azNodes[i].DiskSize = uint32(w.(int))
 					}
 
 					if v, ok := azNodesMapStrToI["outside_subnet"]; ok && !isIntfNil(v) {

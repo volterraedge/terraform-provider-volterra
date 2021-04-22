@@ -1559,6 +1559,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-CustomAPI-APIEndpointPDF"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.APIEndpointPDF"
             },
             "x-displayname": "API Endpoint API(s)",
@@ -1838,6 +1842,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-CustomAPI-OverridePop"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.OverridePop"
             },
             "x-displayname": "API Endpoint API(s)",
@@ -1930,6 +1938,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-CustomAPI-OverridePush"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.OverridePush"
             },
             "x-displayname": "API Endpoint API(s)",
@@ -2014,6 +2026,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-CustomAPI-Overrides"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.Overrides"
             },
             "x-displayname": "API Endpoint API(s)",
@@ -2112,6 +2128,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-CustomAPI-GetServiceAPIEndpointPDF"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.GetServiceAPIEndpointPDF"
             },
             "x-displayname": "API Endpoint API(s)",
@@ -2210,6 +2230,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-CustomAPI-GetServiceAPIEndpoints"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.GetServiceAPIEndpoints"
             },
             "x-displayname": "API Endpoint API(s)",

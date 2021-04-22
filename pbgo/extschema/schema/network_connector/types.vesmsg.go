@@ -326,7 +326,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhConnectorChoice := v.ConnectorChoiceValidationRuleHandler
 	rulesConnectorChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhConnectorChoice(rulesConnectorChoice)
 	if err != nil {
@@ -337,7 +337,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
 	rulesForwardProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
 	if err != nil {
@@ -861,7 +861,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhConnectorChoice := v.ConnectorChoiceValidationRuleHandler
 	rulesConnectorChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhConnectorChoice(rulesConnectorChoice)
 	if err != nil {
@@ -872,7 +872,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
 	rulesForwardProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
 	if err != nil {
@@ -2134,7 +2134,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhConnectorChoice := v.ConnectorChoiceValidationRuleHandler
 	rulesConnectorChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhConnectorChoice(rulesConnectorChoice)
 	if err != nil {
@@ -2145,7 +2145,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
 	rulesForwardProxyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
 	if err != nil {
@@ -2416,7 +2416,7 @@ var DefaultSnatConnectorTypeValidator = func() *ValidateSnatConnectorType {
 
 	vrhPoolChoice := v.PoolChoiceValidationRuleHandler
 	rulesPoolChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhPoolChoice(rulesPoolChoice)
 	if err != nil {
@@ -2427,7 +2427,7 @@ var DefaultSnatConnectorTypeValidator = func() *ValidateSnatConnectorType {
 
 	vrhRoutingChoice := v.RoutingChoiceValidationRuleHandler
 	rulesRoutingChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRoutingChoice(rulesRoutingChoice)
 	if err != nil {

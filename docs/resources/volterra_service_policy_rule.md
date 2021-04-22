@@ -25,15 +25,28 @@ resource "volterra_service_policy_rule" "example" {
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "client_name_matcher any_client client_name client_selector" must be set
+  // One of the arguments from this list "any_client client_name client_selector client_name_matcher" must be set
   any_client = true
 
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
-  any_ip = true
 
+  ip_prefix_list {
+    invert_match = true
+
+    ip_prefixes = ["192.168.20.0/24"]
+  }
   waf_action {
-    // One of the arguments from this list "waf_skip_processing waf_rule_control waf_inline_rule_control waf_in_monitoring_mode none" must be set
-    none = true
+    // One of the arguments from this list "waf_in_monitoring_mode none waf_skip_processing waf_rule_control waf_inline_rule_control" must be set
+
+    waf_rule_control {
+      exclude_rule_ids {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+
+      monitoring_mode = true
+    }
   }
 }
 
@@ -118,8 +131,6 @@ Argument Reference
 
 `label_matcher` - (Optional) other labels do not matter.. See [Label Matcher ](#label-matcher) below for details.
 
-`malicious_user_mitigation` - (Optional) actions are taken for mitigation at different threat levels.. See [Malicious User Mitigation ](#malicious-user-mitigation) below for details.
-
 `malicious_user_mitigation_bypass` - (Optional) the appropriate match conditions in the enclosing policy rule and setting malicious user mitigation bypass flag. (bool).
 
 `path` - (Optional) The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.. See [Path ](#path) below for details.
@@ -141,10 +152,6 @@ Argument Reference
 `virtual_host_matcher` - (Optional) Hidden because this will be used only in system generated rate limiting service_policy_sets.. See [Virtual Host Matcher ](#virtual-host-matcher) below for details.
 
 `waf_action` - (Required) App Firewall action to be enforced if the input request matches the rule.. See [Waf Action ](#waf-action) below for details.
-
-### Alert Only
-
-Generate alert while not taking any invasive actions.
 
 ### Api Group Matcher
 
@@ -182,10 +189,6 @@ The predicate evaluates to true if the origin ASN is present in one of the BGP A
 
 `asn_sets` - (Required) A list of references to bgp_asn_set objects.. See [ref](#ref) below for details.
 
-### Block Temporarily
-
-If temporary blocking is not configured for the virtual host, a software default configuration is used.
-
 ### Body Matcher
 
 The actual request body value is extracted from the request API as a string..
@@ -195,10 +198,6 @@ The actual request body value is extracted from the request API as a string..
 `regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
 
 `transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
-
-### Captcha Challenge
-
-If Captcha Challenge is not configured for the virtual host, a software default configuration is used.
 
 ### Check Not Present
 
@@ -296,10 +295,6 @@ Note that all specified header predicates must evaluate to true..
 
 `name` - (Required) A case-insensitive HTTP header name. (`String`).
 
-### High
-
-User estimated to be high threat.
-
 ### Http Method
 
 The predicate evaluates to true if the actual HTTP method belongs is present in the list of expected values..
@@ -334,10 +329,6 @@ Criteria for matching the values for the Arg. The match is successful if any of 
 
 `transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
 
-### Javascript Challenge
-
-If Javascript Challenge is not configured for the virtual host, a software default configuration is used.
-
 ### L4 Dest Matcher
 
 IP matches one of the prefixes and the destination port belongs to the port range..
@@ -360,37 +351,9 @@ other labels do not matter..
 
 `keys` - (Optional) The list of label key names that have to match (`String`).
 
-### Low
-
-User estimated to be low threat.
-
-### Malicious User Mitigation
-
-actions are taken for mitigation at different threat levels..
-
-`rules` - (Required) A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation.. See [Rules ](#rules) below for details.
-
-### Medium
-
-User estimated to be medium threat.
-
-### Mitigation Action
-
-The action to be taken at the specified threat level.
-
-`alert_only` - (Optional) Generate alert while not taking any invasive actions (bool).
-
-`block_temporarily` - (Optional) If temporary blocking is not configured for the virtual host, a software default configuration is used (bool).
-
-`captcha_challenge` - (Optional) If Captcha Challenge is not configured for the virtual host, a software default configuration is used (bool).
-
-`javascript_challenge` - (Optional) If Javascript Challenge is not configured for the virtual host, a software default configuration is used (bool).
-
-`none` - (Optional) No mitigation actions (bool).
-
 ### None
 
-No mitigation actions.
+Perform normal App Firewall processing for this request.
 
 ### Path
 
@@ -438,29 +401,11 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Rules
-
-A threat level is calculated for every user identified using config specified in user_identification by analyzing their activity and reputation..
-
-`mitigation_action` - (Required) The action to be taken at the specified threat level. See [Mitigation Action ](#mitigation-action) below for details.
-
-`threat_level` - (Required) The threat level at which mitigation actions will be taken. See [Threat Level ](#threat-level) below for details.
-
 ### Server Selector
 
 The predicate evaluates to true if the expressions in the label selector are true for the server labels..
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
-
-### Threat Level
-
-The threat level at which mitigation actions will be taken.
-
-`high` - (Optional) User estimated to be high threat (bool).
-
-`low` - (Optional) User estimated to be low threat (bool).
-
-`medium` - (Optional) User estimated to be medium threat (bool).
 
 ### Tls Fingerprint Matcher
 

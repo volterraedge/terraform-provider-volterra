@@ -23,12 +23,12 @@ resource "volterra_http_loadbalancer" "example" {
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
   do_not_advertise = true
 
-  // One of the arguments from this list "js_challenge captcha_challenge policy_based_challenge no_challenge" must be set
+  // One of the arguments from this list "policy_based_challenge no_challenge js_challenge captcha_challenge" must be set
   no_challenge = true
 
   domains = ["www.foo.com"]
 
-  // One of the arguments from this list "cookie_stickiness ring_hash round_robin least_active random source_ip_stickiness" must be set
+  // One of the arguments from this list "random source_ip_stickiness cookie_stickiness ring_hash round_robin least_active" must be set
   round_robin = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
@@ -36,14 +36,14 @@ resource "volterra_http_loadbalancer" "example" {
   http {
     dns_volterra_managed = true
   }
-  // One of the arguments from this list "rate_limit disable_rate_limit" must be set
+  // One of the arguments from this list "disable_rate_limit rate_limit" must be set
   disable_rate_limit = true
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-  no_service_policies = true
+  service_policies_from_namespace = true
 
-  // One of the arguments from this list "waf waf_rule disable_waf" must be set
+  // One of the arguments from this list "disable_waf waf waf_rule" must be set
 
-  waf_rule {
+  waf {
     name      = "test1"
     namespace = "staging"
     tenant    = "acmecorp"
@@ -225,11 +225,9 @@ Advertise this loadbalancer on public network.
 
 Where should this load balancer be available.
 
-`private_network` - (Optional) Advertise on a VoltADN private network. See [Private Network ](#private-network) below for details.
-
 `site` - (Optional) Advertise on a customer site and a given network. . See [Site ](#site) below for details.
 
-`srv6_network` - (Optional) Advertise on a Per site srv6 network. See [Srv6 Network ](#srv6-network) below for details.
+`virtual_network` - (Optional) Advertise on a virtual network. See [Virtual Network ](#virtual-network) below for details.
 
 `virtual_site` - (Optional) Advertise on a customer virtual site and a given network.. See [Virtual Site ](#virtual-site) below for details.
 
@@ -545,7 +543,7 @@ Use default parameters.
 
 ### Default Vip
 
-Use the default VIP, system allocated or configured in the VoltADN Private Network.
+Use the default VIP, system allocated or configured in the virtual network.
 
 ### Direct Response Route
 
@@ -909,16 +907,6 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
-### Private Network
-
-Advertise on a VoltADN private network.
-
-`private_network` - (Required) Select VoltADN private network reference. See [ref](#ref) below for details.
-
-`default_vip` - (Optional) Use the default VIP, system allocated or configured in the VoltADN Private Network (bool).
-
-`specific_vip` - (Optional) Use given IP address as VIP on VoltADN private Network (`String`).
-
 ### Query Params
 
 query_params.
@@ -1169,16 +1157,6 @@ Configure hash policy specific for this route.
 
 `hash_policy` - (Required) route the request. See [Hash Policy ](#hash-policy) below for details.
 
-### Srv6 Network
-
-Advertise on a Per site srv6 network.
-
-`private_network` - (Required) Select per site srv6 network. See [ref](#ref) below for details.
-
-`default_vip` - (Optional) Use the default VIP, system allocated or configured in the VoltADN Private Network (bool).
-
-`specific_vip` - (Optional) Use given IP address as VIP on VoltADN private Network (`String`).
-
 ### Strip Query Params
 
 Specifies the list of query params to be removed. Not supported.
@@ -1270,6 +1248,16 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 `secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
+
+### Virtual Network
+
+Advertise on a virtual network.
+
+`default_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (bool).
+
+`specific_vip` - (Optional) Use given IP address as VIP on VoltADN private Network (`String`).
+
+`virtual_network` - (Required) Select virtual network reference. See [ref](#ref) below for details.
 
 ### Virtual Site
 

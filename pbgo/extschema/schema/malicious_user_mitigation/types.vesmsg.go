@@ -25,145 +25,6 @@ var (
 
 // augmented methods on protoc/std generated struct
 
-func (m *CaptchaChallengeSettings) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *CaptchaChallengeSettings) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *CaptchaChallengeSettings) DeepCopy() *CaptchaChallengeSettings {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &CaptchaChallengeSettings{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *CaptchaChallengeSettings) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *CaptchaChallengeSettings) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return CaptchaChallengeSettingsValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateCaptchaChallengeSettings struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateCaptchaChallengeSettings) CookieExpiryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for cookie_expiry")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCaptchaChallengeSettings) CustomPageValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for custom_page")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCaptchaChallengeSettings) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*CaptchaChallengeSettings)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *CaptchaChallengeSettings got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["cookie_expiry"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("cookie_expiry"))
-		if err := fv(ctx, m.GetCookieExpiry(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["custom_page"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("custom_page"))
-		if err := fv(ctx, m.GetCustomPage(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultCaptchaChallengeSettingsValidator = func() *ValidateCaptchaChallengeSettings {
-	v := &ValidateCaptchaChallengeSettings{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhCookieExpiry := v.CookieExpiryValidationRuleHandler
-	rulesCookieExpiry := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.lte":       "86400",
-	}
-	vFn, err = vrhCookieExpiry(rulesCookieExpiry)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CaptchaChallengeSettings.cookie_expiry: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["cookie_expiry"] = vFn
-
-	vrhCustomPage := v.CustomPageValidationRuleHandler
-	rulesCustomPage := map[string]string{
-		"ves.io.schema.rules.string.max_len": "8192",
-		"ves.io.schema.rules.string.uri_ref": "true",
-	}
-	vFn, err = vrhCustomPage(rulesCustomPage)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CaptchaChallengeSettings.custom_page: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["custom_page"] = vFn
-
-	return v
-}()
-
-func CaptchaChallengeSettingsValidator() db.Validator {
-	return DefaultCaptchaChallengeSettingsValidator
-}
-
-// augmented methods on protoc/std generated struct
-
 func (m *CreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -217,37 +78,10 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["captcha_challenge_settings"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("captcha_challenge_settings"))
-		if err := fv(ctx, m.GetCaptchaChallengeSettings(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["javascript_challenge_settings"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("javascript_challenge_settings"))
-		if err := fv(ctx, m.GetJavascriptChallengeSettings(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["mitigation_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("mitigation_type"))
 		if err := fv(ctx, m.GetMitigationType(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["temporary_blocking_settings"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("temporary_blocking_settings"))
-		if err := fv(ctx, m.GetTemporaryBlockingSettings(), vOpts...); err != nil {
 			return err
 		}
 
@@ -261,12 +95,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["mitigation_type"] = MaliciousUserMitigationTypeValidator().Validate
-
-	v.FldValidators["javascript_challenge_settings"] = JavascriptChallengeSettingsValidator().Validate
-
-	v.FldValidators["captcha_challenge_settings"] = CaptchaChallengeSettingsValidator().Validate
-
-	v.FldValidators["temporary_blocking_settings"] = TemporaryBlockingSettingsValidator().Validate
 
 	return v
 }()
@@ -330,37 +158,10 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["captcha_challenge_settings"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("captcha_challenge_settings"))
-		if err := fv(ctx, m.GetCaptchaChallengeSettings(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["javascript_challenge_settings"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("javascript_challenge_settings"))
-		if err := fv(ctx, m.GetJavascriptChallengeSettings(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["mitigation_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("mitigation_type"))
 		if err := fv(ctx, m.GetMitigationType(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["temporary_blocking_settings"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("temporary_blocking_settings"))
-		if err := fv(ctx, m.GetTemporaryBlockingSettings(), vOpts...); err != nil {
 			return err
 		}
 
@@ -374,12 +175,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["mitigation_type"] = MaliciousUserMitigationTypeValidator().Validate
-
-	v.FldValidators["javascript_challenge_settings"] = JavascriptChallengeSettingsValidator().Validate
-
-	v.FldValidators["captcha_challenge_settings"] = CaptchaChallengeSettingsValidator().Validate
-
-	v.FldValidators["temporary_blocking_settings"] = TemporaryBlockingSettingsValidator().Validate
 
 	return v
 }()
@@ -443,37 +238,10 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["captcha_challenge_settings"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("captcha_challenge_settings"))
-		if err := fv(ctx, m.GetCaptchaChallengeSettings(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["javascript_challenge_settings"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("javascript_challenge_settings"))
-		if err := fv(ctx, m.GetJavascriptChallengeSettings(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["mitigation_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("mitigation_type"))
 		if err := fv(ctx, m.GetMitigationType(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["temporary_blocking_settings"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("temporary_blocking_settings"))
-		if err := fv(ctx, m.GetTemporaryBlockingSettings(), vOpts...); err != nil {
 			return err
 		}
 
@@ -488,187 +256,11 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["mitigation_type"] = MaliciousUserMitigationTypeValidator().Validate
 
-	v.FldValidators["javascript_challenge_settings"] = JavascriptChallengeSettingsValidator().Validate
-
-	v.FldValidators["captcha_challenge_settings"] = CaptchaChallengeSettingsValidator().Validate
-
-	v.FldValidators["temporary_blocking_settings"] = TemporaryBlockingSettingsValidator().Validate
-
 	return v
 }()
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *JavascriptChallengeSettings) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *JavascriptChallengeSettings) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *JavascriptChallengeSettings) DeepCopy() *JavascriptChallengeSettings {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &JavascriptChallengeSettings{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *JavascriptChallengeSettings) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *JavascriptChallengeSettings) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return JavascriptChallengeSettingsValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateJavascriptChallengeSettings struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateJavascriptChallengeSettings) JsScriptDelayValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for js_script_delay")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateJavascriptChallengeSettings) CookieExpiryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for cookie_expiry")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateJavascriptChallengeSettings) CustomPageValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for custom_page")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateJavascriptChallengeSettings) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*JavascriptChallengeSettings)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *JavascriptChallengeSettings got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["cookie_expiry"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("cookie_expiry"))
-		if err := fv(ctx, m.GetCookieExpiry(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["custom_page"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("custom_page"))
-		if err := fv(ctx, m.GetCustomPage(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["js_script_delay"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("js_script_delay"))
-		if err := fv(ctx, m.GetJsScriptDelay(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultJavascriptChallengeSettingsValidator = func() *ValidateJavascriptChallengeSettings {
-	v := &ValidateJavascriptChallengeSettings{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhJsScriptDelay := v.JsScriptDelayValidationRuleHandler
-	rulesJsScriptDelay := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.lte":       "60000",
-	}
-	vFn, err = vrhJsScriptDelay(rulesJsScriptDelay)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for JavascriptChallengeSettings.js_script_delay: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["js_script_delay"] = vFn
-
-	vrhCookieExpiry := v.CookieExpiryValidationRuleHandler
-	rulesCookieExpiry := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.lte":       "86400",
-	}
-	vFn, err = vrhCookieExpiry(rulesCookieExpiry)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for JavascriptChallengeSettings.cookie_expiry: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["cookie_expiry"] = vFn
-
-	vrhCustomPage := v.CustomPageValidationRuleHandler
-	rulesCustomPage := map[string]string{
-		"ves.io.schema.rules.string.max_len": "8192",
-		"ves.io.schema.rules.string.uri_ref": "true",
-	}
-	vFn, err = vrhCustomPage(rulesCustomPage)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for JavascriptChallengeSettings.custom_page: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["custom_page"] = vFn
-
-	return v
-}()
-
-func JavascriptChallengeSettingsValidator() db.Validator {
-	return DefaultJavascriptChallengeSettingsValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -820,7 +412,7 @@ var DefaultMaliciousUserMitigationActionValidator = func() *ValidateMaliciousUse
 
 	vrhMitigationAction := v.MitigationActionValidationRuleHandler
 	rulesMitigationAction := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhMitigationAction(rulesMitigationAction)
 	if err != nil {
@@ -1260,7 +852,7 @@ var DefaultMaliciousUserThreatLevelValidator = func() *ValidateMaliciousUserThre
 
 	vrhThreatLevel := v.ThreatLevelValidationRuleHandler
 	rulesThreatLevel := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhThreatLevel(rulesThreatLevel)
 	if err != nil {
@@ -1331,37 +923,10 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["captcha_challenge_settings"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("captcha_challenge_settings"))
-		if err := fv(ctx, m.GetCaptchaChallengeSettings(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["javascript_challenge_settings"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("javascript_challenge_settings"))
-		if err := fv(ctx, m.GetJavascriptChallengeSettings(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["mitigation_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("mitigation_type"))
 		if err := fv(ctx, m.GetMitigationType(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["temporary_blocking_settings"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("temporary_blocking_settings"))
-		if err := fv(ctx, m.GetTemporaryBlockingSettings(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1376,12 +941,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["mitigation_type"] = MaliciousUserMitigationTypeValidator().Validate
 
-	v.FldValidators["javascript_challenge_settings"] = JavascriptChallengeSettingsValidator().Validate
-
-	v.FldValidators["captcha_challenge_settings"] = CaptchaChallengeSettingsValidator().Validate
-
-	v.FldValidators["temporary_blocking_settings"] = TemporaryBlockingSettingsValidator().Validate
-
 	return v
 }()
 
@@ -1389,122 +948,11 @@ func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
 }
 
-// augmented methods on protoc/std generated struct
-
-func (m *TemporaryBlockingSettings) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *TemporaryBlockingSettings) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *TemporaryBlockingSettings) DeepCopy() *TemporaryBlockingSettings {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &TemporaryBlockingSettings{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *TemporaryBlockingSettings) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *TemporaryBlockingSettings) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return TemporaryBlockingSettingsValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateTemporaryBlockingSettings struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateTemporaryBlockingSettings) CustomPageValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for custom_page")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateTemporaryBlockingSettings) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*TemporaryBlockingSettings)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *TemporaryBlockingSettings got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["custom_page"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("custom_page"))
-		if err := fv(ctx, m.GetCustomPage(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultTemporaryBlockingSettingsValidator = func() *ValidateTemporaryBlockingSettings {
-	v := &ValidateTemporaryBlockingSettings{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhCustomPage := v.CustomPageValidationRuleHandler
-	rulesCustomPage := map[string]string{
-		"ves.io.schema.rules.string.max_len": "8192",
-		"ves.io.schema.rules.string.uri_ref": "true",
-	}
-	vFn, err = vrhCustomPage(rulesCustomPage)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for TemporaryBlockingSettings.custom_page: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["custom_page"] = vFn
-
-	return v
-}()
-
-func TemporaryBlockingSettingsValidator() db.Validator {
-	return DefaultTemporaryBlockingSettingsValidator
-}
-
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	m.CaptchaChallengeSettings = f.GetCaptchaChallengeSettings()
-	m.JavascriptChallengeSettings = f.GetJavascriptChallengeSettings()
 	m.MitigationType = f.GetMitigationType()
-	m.TemporaryBlockingSettings = f.GetTemporaryBlockingSettings()
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -1513,20 +961,14 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	f.CaptchaChallengeSettings = m1.CaptchaChallengeSettings
-	f.JavascriptChallengeSettings = m1.JavascriptChallengeSettings
 	f.MitigationType = m1.MitigationType
-	f.TemporaryBlockingSettings = m1.TemporaryBlockingSettings
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	m.CaptchaChallengeSettings = f.GetCaptchaChallengeSettings()
-	m.JavascriptChallengeSettings = f.GetJavascriptChallengeSettings()
 	m.MitigationType = f.GetMitigationType()
-	m.TemporaryBlockingSettings = f.GetTemporaryBlockingSettings()
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -1535,20 +977,14 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	f.CaptchaChallengeSettings = m1.CaptchaChallengeSettings
-	f.JavascriptChallengeSettings = m1.JavascriptChallengeSettings
 	f.MitigationType = m1.MitigationType
-	f.TemporaryBlockingSettings = m1.TemporaryBlockingSettings
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	m.CaptchaChallengeSettings = f.GetCaptchaChallengeSettings()
-	m.JavascriptChallengeSettings = f.GetJavascriptChallengeSettings()
 	m.MitigationType = f.GetMitigationType()
-	m.TemporaryBlockingSettings = f.GetTemporaryBlockingSettings()
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -1557,8 +993,5 @@ func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 	if f == nil {
 		return
 	}
-	f.CaptchaChallengeSettings = m1.CaptchaChallengeSettings
-	f.JavascriptChallengeSettings = m1.JavascriptChallengeSettings
 	f.MitigationType = m1.MitigationType
-	f.TemporaryBlockingSettings = m1.TemporaryBlockingSettings
 }

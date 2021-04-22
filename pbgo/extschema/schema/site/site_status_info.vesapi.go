@@ -373,6 +373,10 @@ var CustomSiteStatusAPISwaggerJSON string = `{
                 "tags": [
                     "CustomSiteStatusAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-CustomSiteStatusAPI-SiteStatusMetrics"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomSiteStatusAPI.SiteStatusMetrics"
             },
             "x-displayname": "Site Status API",

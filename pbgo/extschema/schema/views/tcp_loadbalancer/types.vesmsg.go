@@ -504,7 +504,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAdvertiseChoice(rulesAdvertiseChoice)
 	if err != nil {
@@ -515,7 +515,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhClusterRetractChoice := v.ClusterRetractChoiceValidationRuleHandler
 	rulesClusterRetractChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClusterRetractChoice(rulesClusterRetractChoice)
 	if err != nil {
@@ -526,7 +526,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
 	if err != nil {
@@ -1184,7 +1184,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAdvertiseChoice(rulesAdvertiseChoice)
 	if err != nil {
@@ -1195,7 +1195,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhClusterRetractChoice := v.ClusterRetractChoiceValidationRuleHandler
 	rulesClusterRetractChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClusterRetractChoice(rulesClusterRetractChoice)
 	if err != nil {
@@ -1206,7 +1206,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
 	if err != nil {
@@ -1943,7 +1943,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAdvertiseChoice(rulesAdvertiseChoice)
 	if err != nil {
@@ -1954,7 +1954,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhClusterRetractChoice := v.ClusterRetractChoiceValidationRuleHandler
 	rulesClusterRetractChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClusterRetractChoice(rulesClusterRetractChoice)
 	if err != nil {
@@ -1965,7 +1965,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
 	if err != nil {
@@ -2618,7 +2618,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
 	rulesAdvertiseChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAdvertiseChoice(rulesAdvertiseChoice)
 	if err != nil {
@@ -2629,7 +2629,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhClusterRetractChoice := v.ClusterRetractChoiceValidationRuleHandler
 	rulesClusterRetractChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhClusterRetractChoice(rulesClusterRetractChoice)
 	if err != nil {
@@ -2640,7 +2640,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhHashPolicyChoice := v.HashPolicyChoiceValidationRuleHandler
 	rulesHashPolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhHashPolicyChoice(rulesHashPolicyChoice)
 	if err != nil {

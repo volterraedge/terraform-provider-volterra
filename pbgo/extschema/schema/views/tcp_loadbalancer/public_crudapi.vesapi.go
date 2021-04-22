@@ -1229,6 +1229,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	case GET_RSP_FORMAT_STATUS:
 		rsrcReq.RspInStatusForm = true
 
+	case GET_RSP_FORMAT_REFERRING_OBJECTS:
+		rsrcReq.RspInReferringObjectsForm = true
+
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1434,6 +1437,19 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	}
 	_ = buildStatusForm
+	buildReferringObjectsForm := func() {
+		for _, br := range rsrcRsp.ReferringObjects {
+			rsp.ReferringObjects = append(rsp.ReferringObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+
+	}
+	_ = buildReferringObjectsForm
 
 	switch req.ResponseFormat {
 
@@ -1458,6 +1474,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
+
+	case GET_RSP_FORMAT_REFERRING_OBJECTS:
+		buildReferringObjectsForm()
 
 	default:
 		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
@@ -1975,7 +1994,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1984,10 +2003,11 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_FOR_CREATE",
                             "GET_RSP_FORMAT_FOR_REPLACE",
                             "GET_RSP_FORMAT_STATUS",
-                            "GET_RSP_FORMAT_READ"
+                            "GET_RSP_FORMAT_READ",
+                            "GET_RSP_FORMAT_REFERRING_OBJECTS"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "GetSpecType format"
+                        "x-displayname": "Referring Objects"
                     }
                 ],
                 "tags": [
@@ -2720,6 +2740,14 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
+                },
                 "tenant": {
                     "type": "string",
                     "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
@@ -3006,6 +3034,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewstcp_loadbalancerObject",
                     "x-displayname": "Object"
                 },
+                "referring_objects": {
+                    "type": "array",
+                    "description": "The set of objects that are referring to this object in their spec",
+                    "title": "referring_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Referring Objects"
+                },
                 "replace_form": {
                     "description": "Format to replace changeable values in object",
                     "title": "replace_form",
@@ -3044,14 +3081,15 @@ var APISwaggerJSON string = `{
         },
         "tcp_loadbalancerGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
                 "GET_RSP_FORMAT_FOR_CREATE",
                 "GET_RSP_FORMAT_FOR_REPLACE",
                 "GET_RSP_FORMAT_STATUS",
-                "GET_RSP_FORMAT_READ"
+                "GET_RSP_FORMAT_READ",
+                "GET_RSP_FORMAT_REFERRING_OBJECTS"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
@@ -3542,34 +3580,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Site Network",
             "x-ves-proto-enum": "ves.io.schema.views.SiteNetwork"
         },
-        "viewsWherePrivateNetwork": {
-            "type": "object",
-            "description": "Parameters to advertise on a Given VoltADN Private Network",
-            "title": "WherePrivateNetwork",
-            "x-displayname": "VoltADN Private Network",
-            "x-ves-displayorder": "1,2",
-            "x-ves-oneof-field-vip_choice": "[\"default_vip\",\"specific_vip\"]",
-            "x-ves-proto-message": "ves.io.schema.views.WherePrivateNetwork",
-            "properties": {
-                "default_vip": {
-                    "description": "Exclusive with [specific_vip]\nx-displayName: \"Default VIP for VoltADN Private Network\"\nUse the default VIP, system allocated or configured in the VoltADN Private Network",
-                    "title": "Default VIP for VoltADN Private Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "private_network": {
-                    "description": " Select VoltADN private network reference\nRequired: YES",
-                    "title": "VoltADN Private Network",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "VoltADN Private Network",
-                    "x-ves-required": "true"
-                },
-                "specific_vip": {
-                    "type": "string",
-                    "description": "Exclusive with [default_vip]\nx-displayName: \"Specific VIP\"\nUse given IP address as VIP on VoltADN private Network",
-                    "title": "Specific VIP"
-                }
-            }
-        },
         "viewsWhereSite": {
             "type": "object",
             "description": "This defines a reference to a CE site along with network type and an optional ip address where a load balancer could be advertised",
@@ -3600,41 +3610,13 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "viewsWhereSrv6Network": {
-            "type": "object",
-            "description": "Parameters to advertise on a given per site srv6 network",
-            "title": "WhereSrv6Network",
-            "x-displayname": "Per Site Srv6 Network",
-            "x-ves-displayorder": "1,2",
-            "x-ves-oneof-field-vip_choice": "[\"default_vip\",\"specific_vip\"]",
-            "x-ves-proto-message": "ves.io.schema.views.WhereSrv6Network",
-            "properties": {
-                "default_vip": {
-                    "description": "Exclusive with [specific_vip]\nx-displayName: \"Default VIP for VoltADN Private Network\"\nUse the default VIP, system allocated or configured in the VoltADN Private Network",
-                    "title": "Default VIP for VoltADN Private Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "private_network": {
-                    "description": " Select per site srv6 network\nRequired: YES",
-                    "title": "Per Site Srv6 Network",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Per Site Srv6 Network",
-                    "x-ves-required": "true"
-                },
-                "specific_vip": {
-                    "type": "string",
-                    "description": "Exclusive with [default_vip]\nx-displayName: \"Specific VIP\"\nUse given IP address as VIP on VoltADN private Network",
-                    "title": "Specific VIP"
-                }
-            }
-        },
         "viewsWhereType": {
             "type": "object",
             "description": "This defines various options where a Loadbalancer could be advertised",
             "title": "WhereType",
             "x-displayname": "Select Where to Advertise",
             "x-ves-displayorder": "4,5",
-            "x-ves-oneof-field-choice": "[\"private_network\",\"site\",\"srv6_network\",\"virtual_site\",\"vk8s_service\"]",
+            "x-ves-oneof-field-choice": "[\"site\",\"virtual_network\",\"virtual_site\",\"vk8s_service\"]",
             "x-ves-oneof-field-port_choice": "[\"port\",\"use_default_port\"]",
             "x-ves-proto-message": "ves.io.schema.views.WhereType",
             "properties": {
@@ -3644,33 +3626,28 @@ var APISwaggerJSON string = `{
                     "title": "TCP port to listen",
                     "format": "int64"
                 },
-                "private_network": {
-                    "description": "Exclusive with [site srv6_network virtual_site vk8s_service]\nx-displayName: \"VoltADN Private Network\"\nAdvertise on a VoltADN private network",
-                    "title": "VoltADN Private Network",
-                    "$ref": "#/definitions/viewsWherePrivateNetwork"
-                },
                 "site": {
-                    "description": "Exclusive with [private_network srv6_network virtual_site vk8s_service]\nx-displayName: \"Site\"\nAdvertise on a customer site and a given network.",
+                    "description": "Exclusive with [virtual_network virtual_site vk8s_service]\nx-displayName: \"Site\"\nAdvertise on a customer site and a given network.",
                     "title": "Site",
                     "$ref": "#/definitions/viewsWhereSite"
-                },
-                "srv6_network": {
-                    "description": "Exclusive with [private_network site virtual_site vk8s_service]\nx-displayName: \"Per Site Srv6 Network\"\nAdvertise on a Per site srv6 network",
-                    "title": "Per Site Srv6 Network",
-                    "$ref": "#/definitions/viewsWhereSrv6Network"
                 },
                 "use_default_port": {
                     "description": "Exclusive with [port]\nx-displayName: \"Use Default TCP Listen Port\"\nFor HTTP, default is 80. For HTTPS/SNI, default is 443.",
                     "title": "Use Default port",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "virtual_network": {
+                    "description": "Exclusive with [site virtual_site vk8s_service]\nx-displayName: \"Virtual Network\"\nAdvertise on a virtual network",
+                    "title": "Virtual Network",
+                    "$ref": "#/definitions/viewsWhereVirtualNetwork"
+                },
                 "virtual_site": {
-                    "description": "Exclusive with [private_network site srv6_network vk8s_service]\nx-displayName: \"Virtual Site\"\nAdvertise on a customer virtual site and a given network.",
+                    "description": "Exclusive with [site virtual_network vk8s_service]\nx-displayName: \"Virtual Site\"\nAdvertise on a customer virtual site and a given network.",
                     "title": "Virtual Site",
                     "$ref": "#/definitions/viewsWhereVirtualSite"
                 },
                 "vk8s_service": {
-                    "description": "Exclusive with [private_network site srv6_network virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vK8s Service Network on RE.",
+                    "description": "Exclusive with [site virtual_network virtual_site]\nx-displayName: \"vK8s Service Network on RE\"\nAdvertise on vK8s Service Network on RE.",
                     "title": "vK8s services network",
                     "$ref": "#/definitions/viewsWhereVK8SService"
                 }
@@ -3694,6 +3671,34 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [site]\nx-displayName: \"Virtual Site Reference\"\nReference to virtual site object",
                     "title": "Virtual Site",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
+                }
+            }
+        },
+        "viewsWhereVirtualNetwork": {
+            "type": "object",
+            "description": "Parameters to advertise on a given virtual network",
+            "title": "WhereVirtualNetwork",
+            "x-displayname": "Virtual Network",
+            "x-ves-displayorder": "1,2",
+            "x-ves-oneof-field-vip_choice": "[\"default_vip\",\"specific_vip\"]",
+            "x-ves-proto-message": "ves.io.schema.views.WhereVirtualNetwork",
+            "properties": {
+                "default_vip": {
+                    "description": "Exclusive with [specific_vip]\nx-displayName: \"Default VIP\"\nUse the default VIP, system allocated or configured in the virtual network",
+                    "title": "Default VIP for VoltADN Private Network",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "specific_vip": {
+                    "type": "string",
+                    "description": "Exclusive with [default_vip]\nx-displayName: \"Specific VIP\"\nUse given IP address as VIP on VoltADN private Network",
+                    "title": "Specific VIP"
+                },
+                "virtual_network": {
+                    "description": " Select virtual network reference\nRequired: YES",
+                    "title": "Virtual Network",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Virtual Network",
+                    "x-ves-required": "true"
                 }
             }
         },

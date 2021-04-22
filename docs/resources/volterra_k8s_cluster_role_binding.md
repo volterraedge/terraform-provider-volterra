@@ -28,7 +28,7 @@ resource "volterra_k8s_cluster_role_binding" "example" {
 
   subjects {
     // One of the arguments from this list "user service_account group" must be set
-    user = "user1@example.com"
+    group = "group1"
   }
 }
 
@@ -55,7 +55,7 @@ Argument Reference
 
 `k8s_cluster_role` - (Required) K8s Cluster Role for which bindings are defined.. See [ref](#ref) below for details.
 
-`subjects` - (Required) List of subjects (user, group or service account) to which this role is bonded. See [Subjects ](#subjects) below for details.
+`subjects` - (Required) List of subjects (user, group or service account) to which this role is bound. See [Subjects ](#subjects) below for details.
 
 ### Ref
 
@@ -77,7 +77,7 @@ Name and Namespace of the service account.
 
 ### Subjects
 
-List of subjects (user, group or service account) to which this role is bonded.
+List of subjects (user, group or service account) to which this role is bound.
 
 `group` - (Optional) Group id of the user group (`String`).
 

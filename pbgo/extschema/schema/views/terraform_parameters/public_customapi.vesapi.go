@@ -707,6 +707,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-CustomAPI-Get"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.CustomAPI.Get"
             },
             "x-displayname": "View Terraform Parameters",
@@ -797,6 +801,10 @@ var CustomAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-CustomAPI-GetStatus"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.CustomAPI.GetStatus"
             },
             "x-displayname": "View Terraform Parameters",
@@ -1933,6 +1941,10 @@ var CustomActionAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-CustomAPI-Get"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.CustomAPI.Get"
             },
             "x-displayname": "View Terraform Parameters",
@@ -2023,6 +2035,10 @@ var CustomActionAPISwaggerJSON string = `{
                 "tags": [
                     "CustomAPI"
                 ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-CustomAPI-GetStatus"
+                },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.CustomAPI.GetStatus"
             },
             "x-displayname": "View Terraform Parameters",

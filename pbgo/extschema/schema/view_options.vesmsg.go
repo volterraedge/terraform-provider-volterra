@@ -457,6 +457,99 @@ func FieldViewOptionsValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *HiddenConditions) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HiddenConditions) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HiddenConditions) DeepCopy() *HiddenConditions {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HiddenConditions{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HiddenConditions) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HiddenConditions) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HiddenConditionsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHiddenConditions struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHiddenConditions) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HiddenConditions)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HiddenConditions got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ancestor_message_in"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ancestor_message_in"))
+		for idx, item := range m.GetAncestorMessageIn() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["root_object_in"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("root_object_in"))
+		for idx, item := range m.GetRootObjectIn() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHiddenConditionsValidator = func() *ValidateHiddenConditions {
+	v := &ValidateHiddenConditions{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func HiddenConditionsValidator() db.Validator {
+	return DefaultHiddenConditionsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *LabelKeyClassList) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

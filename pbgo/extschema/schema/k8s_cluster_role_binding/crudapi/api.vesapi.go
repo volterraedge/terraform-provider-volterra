@@ -2331,7 +2331,7 @@ var APISwaggerJSON string = `{
                 },
                 "subjects": {
                     "type": "array",
-                    "description": " List of subjects (user, group or service account) to which this role is bonded\nRequired: YES",
+                    "description": " List of subjects (user, group or service account) to which this role is bound\nRequired: YES",
                     "title": "Subjects",
                     "items": {
                         "$ref": "#/definitions/k8s_cluster_role_bindingSubjectType"
@@ -2793,6 +2793,14 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "sre_disable": {
+                    "type": "boolean",
+                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
+                    "title": "sre_disable",
+                    "format": "boolean",
+                    "x-displayname": "SRE Disable",
+                    "x-ves-example": "true"
                 },
                 "tenant": {
                     "type": "string",

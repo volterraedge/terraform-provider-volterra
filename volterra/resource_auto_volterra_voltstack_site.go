@@ -204,6 +204,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 				Optional: true,
 			},
 
+			"no_local_control_plane": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"log_receiver": {
 
 				Type:     schema.TypeSet,
@@ -4575,6 +4581,22 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 			k8SClusterChoiceInt := &ves_io_schema_views_voltstack_site.CreateSpecType_NoK8SCluster{}
 			k8SClusterChoiceInt.NoK8SCluster = &ves_io_schema.Empty{}
 			createSpec.K8SClusterChoice = k8SClusterChoiceInt
+		}
+
+	}
+
+	//local_control_plane_choice
+
+	localControlPlaneChoiceTypeFound := false
+
+	if v, ok := d.GetOk("no_local_control_plane"); ok && !localControlPlaneChoiceTypeFound {
+
+		localControlPlaneChoiceTypeFound = true
+
+		if v.(bool) {
+			localControlPlaneChoiceInt := &ves_io_schema_views_voltstack_site.CreateSpecType_NoLocalControlPlane{}
+			localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+			createSpec.LocalControlPlaneChoice = localControlPlaneChoiceInt
 		}
 
 	}
@@ -10320,6 +10342,20 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 			k8SClusterChoiceInt := &ves_io_schema_views_voltstack_site.ReplaceSpecType_NoK8SCluster{}
 			k8SClusterChoiceInt.NoK8SCluster = &ves_io_schema.Empty{}
 			updateSpec.K8SClusterChoice = k8SClusterChoiceInt
+		}
+
+	}
+
+	localControlPlaneChoiceTypeFound := false
+
+	if v, ok := d.GetOk("no_local_control_plane"); ok && !localControlPlaneChoiceTypeFound {
+
+		localControlPlaneChoiceTypeFound = true
+
+		if v.(bool) {
+			localControlPlaneChoiceInt := &ves_io_schema_views_voltstack_site.ReplaceSpecType_NoLocalControlPlane{}
+			localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+			updateSpec.LocalControlPlaneChoice = localControlPlaneChoiceInt
 		}
 
 	}

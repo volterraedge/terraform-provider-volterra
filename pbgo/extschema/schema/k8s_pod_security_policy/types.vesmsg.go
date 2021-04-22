@@ -288,7 +288,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhConfigMethodChoice := v.ConfigMethodChoiceValidationRuleHandler
 	rulesConfigMethodChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhConfigMethodChoice(rulesConfigMethodChoice)
 	if err != nil {
@@ -443,7 +443,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhConfigMethodChoice := v.ConfigMethodChoiceValidationRuleHandler
 	rulesConfigMethodChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhConfigMethodChoice(rulesConfigMethodChoice)
 	if err != nil {
@@ -617,7 +617,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhConfigMethodChoice := v.ConfigMethodChoiceValidationRuleHandler
 	rulesConfigMethodChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhConfigMethodChoice(rulesConfigMethodChoice)
 	if err != nil {
@@ -1984,7 +1984,7 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 
 	vrhAllowedCapabilitiesChoice := v.AllowedCapabilitiesChoiceValidationRuleHandler
 	rulesAllowedCapabilitiesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhAllowedCapabilitiesChoice(rulesAllowedCapabilitiesChoice)
 	if err != nil {
@@ -1995,7 +1995,7 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 
 	vrhDefaultCapabilitiesChoice := v.DefaultCapabilitiesChoiceValidationRuleHandler
 	rulesDefaultCapabilitiesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDefaultCapabilitiesChoice(rulesDefaultCapabilitiesChoice)
 	if err != nil {
@@ -2006,7 +2006,7 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 
 	vrhDropCapabilitiesChoice := v.DropCapabilitiesChoiceValidationRuleHandler
 	rulesDropCapabilitiesChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhDropCapabilitiesChoice(rulesDropCapabilitiesChoice)
 	if err != nil {
@@ -2017,7 +2017,7 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 
 	vrhFsGroupChoice := v.FsGroupChoiceValidationRuleHandler
 	rulesFsGroupChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhFsGroupChoice(rulesFsGroupChoice)
 	if err != nil {
@@ -2028,7 +2028,7 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 
 	vrhGroupChoice := v.GroupChoiceValidationRuleHandler
 	rulesGroupChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhGroupChoice(rulesGroupChoice)
 	if err != nil {
@@ -2039,7 +2039,7 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 
 	vrhRuntimeClassChoice := v.RuntimeClassChoiceValidationRuleHandler
 	rulesRuntimeClassChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhRuntimeClassChoice(rulesRuntimeClassChoice)
 	if err != nil {
@@ -2050,7 +2050,7 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 
 	vrhSeLinuxChoice := v.SeLinuxChoiceValidationRuleHandler
 	rulesSeLinuxChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSeLinuxChoice(rulesSeLinuxChoice)
 	if err != nil {
@@ -2061,7 +2061,7 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 
 	vrhSupplementalGroupChoice := v.SupplementalGroupChoiceValidationRuleHandler
 	rulesSupplementalGroupChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhSupplementalGroupChoice(rulesSupplementalGroupChoice)
 	if err != nil {
@@ -2072,7 +2072,7 @@ var DefaultPodSecurityPolicySpecTypeValidator = func() *ValidatePodSecurityPolic
 
 	vrhUserChoice := v.UserChoiceValidationRuleHandler
 	rulesUserChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhUserChoice(rulesUserChoice)
 	if err != nil {
@@ -2331,7 +2331,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhConfigMethodChoice := v.ConfigMethodChoiceValidationRuleHandler
 	rulesConfigMethodChoice := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
 	vFn, err = vrhConfigMethodChoice(rulesConfigMethodChoice)
 	if err != nil {
