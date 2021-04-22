@@ -46,6 +46,7 @@ signs:
       - "${artifact}"
 release:
   # If you want to manually examine the release before its live, uncomment this line:
-  # draft: true
+  #draft: true
+  prerelease: auto
 changelog:
   skip: true
